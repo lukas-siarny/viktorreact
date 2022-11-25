@@ -104,6 +104,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				date,
 				timeFrom,
 				timeTo,
+				eventType: extendedProps?.eventType,
 				employee: {
 					key: employeeId
 				},

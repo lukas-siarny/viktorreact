@@ -30818,108 +30818,6 @@ declare namespace Paths {
              * 906047188
              */
             phone?: string | null; // ^\d+$
-            serviceIDs?: [
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?
-            ] | null;
             /**
              * example:
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
@@ -31345,6 +31243,143 @@ declare namespace Paths {
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
                 };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1EmployeesEmployeeIdServices {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type EmployeeID = string; // uuid
+        }
+        export interface PathParameters {
+            employeeID: Parameters.EmployeeID /* uuid */;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            rootCategoryID: string; // uuid
+            serviceIDs: [
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
+            ];
+        }
+        namespace Responses {
+            export interface $200 {
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
@@ -59743,7 +59778,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.Responses.$200>
   /**
-   * patchApiB2BAdminEmployeesEmployeeIdServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, USER_ROLE_EDIT]</li></ul>
+   * patchApiB2BAdminEmployeesEmployeeIdServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
    */
   'patchApiB2BAdminEmployeesEmployeeIdServicesServiceId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
@@ -60183,7 +60218,15 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdRole.Responses.$200>
   /**
-   * patchApiB2BV1EmployeesEmployeeIdServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, USER_ROLE_EDIT]</li></ul>
+   * patchApiB2BV1EmployeesEmployeeIdServices - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+   */
+  'patchApiB2BV1EmployeesEmployeeIdServices'(
+    parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdServices.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdServices.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1EmployeesEmployeeIdServices.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdServices.Responses.$200>
+  /**
+   * patchApiB2BV1EmployeesEmployeeIdServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
    */
   'patchApiB2BV1EmployeesEmployeeIdServicesServiceId'(
     parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
@@ -61981,7 +62024,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/employees/{employeeID}/services/{serviceID}']: {
     /**
-     * patchApiB2BAdminEmployeesEmployeeIdServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, USER_ROLE_EDIT]</li></ul>
+     * patchApiB2BAdminEmployeesEmployeeIdServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
@@ -62497,9 +62540,19 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdRole.Responses.$200>
   }
+  ['/api/b2b/v1/employees/{employeeID}/services']: {
+    /**
+     * patchApiB2BV1EmployeesEmployeeIdServices - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdServices.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdServices.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1EmployeesEmployeeIdServices.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdServices.Responses.$200>
+  }
   ['/api/b2b/v1/employees/{employeeID}/services/{serviceID}']: {
     /**
-     * patchApiB2BV1EmployeesEmployeeIdServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, USER_ROLE_EDIT]</li></ul>
+     * patchApiB2BV1EmployeesEmployeeIdServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,

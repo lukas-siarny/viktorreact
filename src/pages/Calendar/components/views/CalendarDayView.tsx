@@ -58,6 +58,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	)
 	const resources = useMemo(() => composeDayViewResources(shiftsTimeOffs, employees), [shiftsTimeOffs, employees])
 
+	console.log('rerender')
+
 	return (
 		<FullCalendar
 			ref={ref}

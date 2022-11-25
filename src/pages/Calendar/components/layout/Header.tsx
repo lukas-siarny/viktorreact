@@ -114,7 +114,7 @@ const CalendarHeader: FC<Props> = (props) => {
 	const isSmallerDevice = useMedia(['(max-width: 1200px)'], [true], false)
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	const setSelectedDateDebounced = useCallback(debounce(setSelectedDate, CALENDAR_DEBOUNCE_DELAY), [])
+	const setSelectedDateDebounced = useCallback(debounce(setSelectedDate, CALENDAR_DEBOUNCE_DELAY), [query])
 
 	const changeSelectedDate = (newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT, debounced = false) => {
 		let newQueryDate: string | dayjs.Dayjs = newDate

@@ -1,18 +1,18 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useMemo, useState, useEffect, useCallback } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
 import useResizeObserver from '@react-hook/resize-observer'
 
 // full calendar
-import FullCalendar, { AllowFunc, DateSpanApi, EventApi, EventContentArg, EventDropArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
-import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
+import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
+import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
 import CalendarEvent from '../CalendarEvent'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW } from '../../../../utils/enums'
 import { composeWeekResources, composeWeekViewEvents, eventAllow, getWeekDays, getWeekViewSelectedDate } from '../../calendarHelpers'
 
 // types
@@ -109,14 +109,6 @@ interface ICalendarWeekView extends ICalendarView {}
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
 	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventChange } = props
 
-	const handleDateClick = useCallback((arg: DateClickArg) => {
-		console.log({ arg })
-	}, [])
-
-	const handleSelect = (info: any) => {
-		const { start, end, resource = {} } = info
-	}
-
 	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
 	const weekViewSelectedDate = getWeekViewSelectedDate(selectedDate, weekDays)
 
@@ -163,14 +155,14 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				slotLabelContent={slotLabelContent}
 				eventContent={(data: EventContentArg) => <CalendarEvent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} />}
 				// handlers
-				select={handleSelect}
-				dateClick={handleDateClick}
 				eventAllow={eventAllow}
-				eventDrop={(arg) => onEventChange(CALENDAR_VIEW.WEEK, 'drop', arg)}
-				eventResize={(arg) => onEventChange(CALENDAR_VIEW.WEEK, 'resize', arg)}
+				eventDrop={(arg) => onEventChange(CALENDAR_VIEW.WEEK, arg)}
+				eventResize={(arg) => onEventChange(CALENDAR_VIEW.WEEK, arg)}
 			/>
 		</div>
 	)
 })
 
-export default React.memo(CalendarWeekView)
+export default React.memo(CalendarWeekView, (prevProps, nextProps) => {
+	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
+})

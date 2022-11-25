@@ -69,7 +69,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	}))
 
 	const onEventChange = useCallback(
-		(calendarView: CALENDAR_VIEW, changeType: 'drop' | 'resize', arg: EventDropArg | EventResizeDoneArg) => {
+		(calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
 			const { event } = arg
 			const { start, end, extendedProps } = event
 			const { newResource } = arg as EventDropArg
@@ -184,9 +184,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			<Spin spinning={loading}>
 				<div id={'nc-content-overlay'} />
 				{getView()}
-				{/* <div className={'nc-content-animate'} key={`${selectedDate} ${view} ${eventsViewType}`}>
-					{getView()}
-				</div> */}
 			</Spin>
 		</Content>
 	)

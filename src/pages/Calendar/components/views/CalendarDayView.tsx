@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 
 // full calendar
 import FullCalendar, { SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
-import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
+import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
@@ -58,8 +58,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	)
 	const resources = useMemo(() => composeDayViewResources(shiftsTimeOffs, employees), [shiftsTimeOffs, employees])
 
-	console.log('rerender')
-
 	return (
 		<FullCalendar
 			ref={ref}
@@ -97,10 +95,12 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			slotLabelContent={slotLabelContent}
 			// handlers
 			eventAllow={eventAllow}
-			eventDrop={(arg) => onEventChange(CALENDAR_VIEW.DAY, 'drop', arg)}
-			eventResize={(arg) => onEventChange(CALENDAR_VIEW.DAY, 'resize', arg)}
+			eventDrop={(arg) => onEventChange(CALENDAR_VIEW.DAY, arg)}
+			eventResize={(arg) => onEventChange(CALENDAR_VIEW.DAY, arg)}
 		/>
 	)
 })
 
-export default React.memo(CalendarDayView)
+export default React.memo(CalendarDayView, (prevProps, nextProps) => {
+	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
+})

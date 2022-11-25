@@ -173,6 +173,10 @@ export interface ICalendarEventForm {
 	calendarBulkEventID?: string
 }
 
+export interface IEventTypeFilterForm {
+	eventType: CALENDAR_EVENT_TYPE
+}
+
 export interface ISupportContactForm {
 	id: string | null
 	note: string
@@ -318,6 +322,7 @@ export interface IEmployeeForm {
 	phonePrefixCountryCode?: string
 	phone?: string
 	services?: any
+	service?: string[]
 	avatar?: any
 	role: number
 }

@@ -1,4 +1,5 @@
-import React, { useCallback, useImperativeHandle, useRef } from 'react'
+import React, { useCallback, useImperativeHandle, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { Content } from 'antd/lib/layout/layout'
 import { Spin } from 'antd'
 import dayjs from 'dayjs'
@@ -18,7 +19,8 @@ import CalendarWeekView from '../views/CalendarWeekView'
 import CalendarEmptyState from '../CalendarEmptyState'
 
 // types
-import { Employees, ICalendarEventForm, ICalendarEventsPayload, ICalendarReservationForm } from '../../../../types/interfaces'
+import { CalendarEvent, Employees, ICalendarEventForm, ICalendarEventsPayload, ICalendarReservationForm } from '../../../../types/interfaces'
+import { updateCalendarEvent } from '../../../../reducers/calendar/calendarActions'
 
 type Props = {
 	view: CALENDAR_VIEW
@@ -69,8 +71,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		/* [CALENDAR_VIEW.MONTH]: monthView?.current */
 	}))
 
-	const handleSubmitReservationDebounced = useCallback(debounce(handleSubmitReservation, 1000), [handleSubmitReservation])
-	const handleSubmitEventDebounced = useCallback(debounce(handleSubmitEvent, 1000), [handleSubmitEvent])
+	// const handleSubmitReservationDebounced = useCallback(debounce(handleSubmitReservation, 1000), [handleSubmitReservation])
+	// const handleSubmitEventDebounced = useCallback(debounce(handleSubmitEvent, 1000), [handleSubmitEvent])
 
 	const onEventChange = useCallback(
 		(calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
@@ -120,16 +122,42 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				arg.revert()
 			}
 
+			/* const startTime = {
+				minutes: dayjs(start).minute(),
+				seconds: dayjs(start).second()
+			}
+
+			const endTime = {
+				minutes: dayjs(end).minute(),
+				seconds: dayjs(end).second()
+			}
+
+			const updatedEvent = {
+				...((extendedProps.originalEvent as CalendarEvent) || {}),
+				start: {
+					date,
+					time: timeFrom
+				},
+				end: {
+					date,
+					time: timeTo
+				},
+				startDateTime: dayjs(date).add(startTime.minutes, 'minute').add(startTime.seconds, 'second').toISOString(),
+				endDateTime: dayjs(date).add(endTime.minutes, 'minute').add(endTime.seconds, 'second').toISOString()
+			}
+
+			dispatch(updateCalendarEvent(updatedEvent)) */
+
 			if (extendedProps.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
 				const customerId = extendedProps?.originalEvent?.customer?.id
 				const serviceId = extendedProps?.originalEvent?.service?.id
 
-				handleSubmitReservationDebounced({ ...values, customer: { key: customerId }, service: { key: serviceId } } as any, onError)
+				handleSubmitReservation({ ...values, customer: { key: customerId }, service: { key: serviceId } } as any, onError)
 				return
 			}
-			handleSubmitEventDebounced({ ...values, calendarBulkEventID } as ICalendarEventForm, onError)
+			handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm, onError)
 		},
-		[handleSubmitEventDebounced, handleSubmitReservationDebounced]
+		[handleSubmitEvent, handleSubmitReservation]
 	)
 
 	const getView = () => {

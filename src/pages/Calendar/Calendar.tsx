@@ -94,14 +94,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const services = useSelector((state: RootState) => state.service.services)
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
 	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS])
+	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
+	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
-	const [isRemoving, setIsRemoving] = useState(false)
 	const [visibleBulkModal, setVisibleBulkModal] = useState<{ requestType: REQUEST_TYPE; eventType?: CALENDAR_EVENT_TYPE } | null>(null)
+	const [isRemoving, setIsRemoving] = useState(false)
+	const [isUpdatingEvent, setIsUpdateingEvent] = useState(false)
 
-	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading
-	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
-	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
+	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || isUpdatingEvent
 
 	const formValuesBulkForm: Partial<IBulkConfirmForm> = useSelector((state: RootState) => getFormValues(FORM.CONFIRM_BULK_FORM)(state))
 	const formValuesDetailEvent: Partial<ICalendarEventForm & ICalendarReservationForm> = useSelector((state: RootState) =>
@@ -418,8 +419,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			const eventId = query.eventId || values.eventId // ak je z query ide sa detail drawer ak je values ide sa cez drag and drop alebo resize
 			// NOTE: ak existuje actionType tak sa klikl v modali na moznost bulk / single a uz bol modal submitnuty
 
-			console.log({ values })
-
 			if (values.calendarBulkEventID && !formValuesBulkForm?.actionType) {
 				dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
 				setVisibleBulkModal({ requestType: REQUEST_TYPE.PATCH, eventType: values.eventType })
@@ -428,6 +427,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 			try {
 				// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
+				setIsUpdateingEvent(true)
 				const repeatEvent = values.recurring
 					? {
 							untilDate: computeUntilDate(values.end as ENDS_EVENT, values.date),
@@ -502,6 +502,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
+				setIsUpdateingEvent(false)
 				if (onError) {
 					onError()
 				}

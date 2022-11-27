@@ -304,7 +304,7 @@ const SelectField = (props: Props) => {
 		backgroundColor,
 		clearIcon,
 		className,
-		optionLabelProp = 'label',
+		optionLabelProp,
 		open,
 		showArrow,
 		menuItemSelectedIcon,

@@ -105,6 +105,7 @@ const CalendarShiftForm: FC<Props> = (props) => {
 							placeholder={t('loc:Vyberte zamestnanca')}
 							name={'employee'}
 							size={'large'}
+							optionLabelProp={'label'}
 							update={(itemKey: number, ref: any) => ref.blur()}
 							filterOption={false}
 							allowInfinityScroll

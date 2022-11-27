@@ -112,6 +112,7 @@ const CalendarBreakForm: FC<Props> = (props) => {
 							allowInfinityScroll
 							showSearch
 							required
+							optionLabelProp={'label'}
 							disabled={eventId} // NOTE: ak je detail tak sa neda menit zamestnanec
 							className={'pb-0'}
 							labelInValue

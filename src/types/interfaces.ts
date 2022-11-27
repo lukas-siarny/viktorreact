@@ -572,6 +572,7 @@ export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmplo
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]
+type CalendarEmployee = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0]
 export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
 export type CalendarEvent = CalendarEvents[0] & {
 	startDateTime: string
@@ -580,7 +581,7 @@ export type CalendarEvent = CalendarEvents[0] & {
 	isFirstMultiDayEventInCurrentRange?: boolean
 	isLastMultiDaylEventInCurrentRange?: boolean
 	originalEvent?: CalendarEvent
-	employee: Employee
+	employee: CalendarEmployee
 }
 
 export interface ICalendarEventsPayload {
@@ -600,12 +601,41 @@ export interface ICalendarView {
 
 export interface IEventCardProps {
 	calendarView: CALENDAR_VIEW
-	data: EventContentArg
+	resourceId: string
+	start: Date | null
+	end: Date | null
 	diff: number
 	timeText: string
 	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
+	isMultiDayEvent?: boolean
+	isLastMultiDaylEventInCurrentRange?: boolean
+	isFirstMultiDayEventInCurrentRange?: boolean
+	employee?: CalendarEvent['employee']
+	backgroundColor?: string
+	originalEventData: {
+		id?: CalendarEvent['id']
+		start?: CalendarEvent['start']
+		end?: CalendarEvent['end']
+		startDateTime?: CalendarEvent['startDateTime']
+		endDateTime?: CalendarEvent['endDateTime']
+	}
 }
 
 export interface IBulkConfirmForm {
 	actionType: CONFIRM_BULK
+}
+
+export interface EventExtenedProps {
+	eventData?: CalendarEvent
+}
+
+export interface ICalendarEventCardData {
+	id: string
+	resourceId: string
+	start: string
+	end: string
+	editable: boolean
+	resourceEditable: boolean
+	allDay: boolean
+	eventData: CalendarEvent
 }

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, FC } from 'react'
 import dayjs from 'dayjs'
 
 // full calendar
@@ -20,25 +20,38 @@ import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-
 // components
 import CalendarEvent from '../CalendarEvent'
 
-const resourceLabelContent = (data: any) => {
-	const { resource } = data || {}
-	const extendedProps = resource?.extendedProps
-	const color = resource?.eventBackgroundColor
+interface IResourceLabel {
+	image?: string
+	color?: string
+	name?: string
+	description?: string
+	isTimeOff?: boolean
+}
 
+const ResourceLabel: FC<IResourceLabel> = React.memo((props) => {
+	const { image, color, name, description, isTimeOff } = props
 	return (
 		<div className={'nc-day-resource-label'}>
-			<div className={'image w-6 h-6 bg-notino-gray bg-cover'} style={{ backgroundImage: `url("${extendedProps.image}")`, borderColor: color }} />
+			<div className={'image w-6 h-6 bg-notino-gray bg-cover'} style={{ backgroundImage: `url("${image}")`, borderColor: color }} />
 			<div className={'info flex flex-col justify-start text-xs font-normal min-w-0'}>
-				<span className={'name'}>{extendedProps.name}</span>
-				<span className={'description'}>{extendedProps.description}</span>
+				<span className={'name'}>{name}</span>
+				<span className={'description'}>{description}</span>
 			</div>
-			{extendedProps.isTimeOff && (
+			{isTimeOff && (
 				<div className={'absence-icon'}>
 					<AbsenceIcon />
 				</div>
 			)}
 		</div>
 	)
+})
+
+const resourceLabelContent = (data: any) => {
+	const { resource } = data || {}
+	const extendedProps = resource?.extendedProps
+	const color = resource?.eventBackgroundColor
+
+	return <ResourceLabel image={extendedProps?.image} color={color} isTimeOff={extendedProps?.isTimeOff} name={extendedProps?.name} description={extendedProps?.description} />
 }
 
 const slotLabelContent = (data: SlotLabelContentArg) => {
@@ -67,7 +80,9 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			allDay: false,
 			resourceId: arg.resource?.id,
 			extendedProps: {
-				eventType: CALENDAR_EVENT_TYPE.RESERVATION
+				eventData: {
+					eventType: CALENDAR_EVENT_TYPE.RESERVATION
+				}
 			}
 		}
 
@@ -89,15 +104,16 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 					editable: true,
 					resourceId,
 					extendedProps: {
-						eventType: CALENDAR_EVENT_TYPE.RESERVATION,
-						editable: true
+						eventData: {
+							eventType: CALENDAR_EVENT_TYPE.RESERVATION
+						}
 					}
 				}
 				calnedar.addEvent(newEvent)
 			} else {
-				placeholder.setDates(arg.start, arg.end)
-				placeholder.setResources([resourceId])
-				// placeholder.remove()
+				// placeholder.setDates(arg.start, arg.end)
+				// placeholder.setResources([resourceId])
+				placeholder.remove()
 			}
 		}
 	}

@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import { ThunkResult } from '../index'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { CalendarEvent, Employee, ICalendarEventsPayload } from '../../types/interfaces'
+import { CalendarEvent, ICalendarEventsPayload } from '../../types/interfaces'
 
 // enums
 import { EVENTS, EVENT_DETAIL, UPDATE_EVENT } from './calendarTypes'

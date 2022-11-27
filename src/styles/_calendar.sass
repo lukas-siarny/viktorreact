@@ -885,7 +885,7 @@
 				&.check
 					color: $textColor-notino-success
 				&.question-mark
-					color: $textColor-notino-pink
+					color: $textColor-notino-red
 	&.multiday-event
 		.time
 			display: inline-flex
@@ -915,44 +915,58 @@
 		min-height: 12px // ak sa zmeni vyska dielka v tabulke, je potrebne upravit aj tuto min-height (15px (vyska riadika .fc-timegrid-slot) - 2*2px (margin-top + bottom .fc-timegrid-event-harness))
 		.event-content
 			width: 100%
-			position: sticky
+			// position: sticky
 			top: 0
 			max-height: 100%
 			z-index: 3
 			word-break: break-all
 			.time
 				font-weight: 400
-				color: $textColor-notino-black
+				color: $textColor-notino-grayDark
 				flex: 0 0 auto
+				white-space: nowrap
 			.desc
 				color: $textColor-notino-grayDarker
 				font-weight: 400
-			/* .title
-				font-weight: 600
-				color: $textColor-notino-black
 		&.reservation
 			.event-content
-				padding: 2px 8px
+				padding: 2px 2px 2px 8px
+				min-width: 0
+				overflow: hidden
 				.event-info
 					display: flex
 					flex-direction: column
 					align-items: flex-start
 					gap: 4px
-					contain: paint
+					min-width: 0
+					overflow: hidden
+					max-width: 100%
 					.title-wrapper
 						display: inline-flex
 						align-items: flex-start
-						margin-right: 10px
 						gap: 4px
+						min-width: 0
+						overflow: hidden
+						max-width: calc(100% - 10px)
+						.title
+							white-space: nowrap
+							overflow: hidden
+							text-overflow: ellipsis
+							max-width: 100%
 						.state
 							margin-top: 3px
 							border-radius: 50%
+					.desc
+						white-space: nowrap
+						overflow: hidden
+						text-overflow: ellipsis
+						max-width: 100%
 			.icons
 				position: absolute
-				right: 4px
+				right: 2px
 				top: 2px
 				display: flex
-				gap: 4px
+				gap: 2px
 			&.min-15
 				.event-content
 					padding-top: 0
@@ -1050,11 +1064,11 @@
 					display: inline-flex
 					align-items: flex-start
 					padding-right: 14px
-					position: sticky
+					// position: sticky
 					left: 2px
 					min-width: 0
-					max-width: 100%
 					margin-bottom: 4px
+					max-width: 100%
 					.title
 						max-width: 100%
 						white-space: nowrap
@@ -1073,7 +1087,7 @@
 					overflow: hidden
 					text-overflow: ellipsis
 					overflow: hidden
-					position: sticky
+					// position: sticky
 					left: 2px
 					display: inline-block
 					min-width: 0
@@ -1139,7 +1153,7 @@
 						align-items: center
 						gap: 4px
 						min-width: 0
-						position: sticky
+						// position: sticky
 						left: 2px
 						margin-right: 4px
 						.time
@@ -1201,7 +1215,7 @@
 						margin-left: unset
 						word-break: break-all
 						white-space: normal
-						position: sticky
+						// position: sticky
 						left: 0
 						text-align: center
 	// reservation state specific styles
@@ -1244,7 +1258,7 @@
 				.event-content
 					.event-info
 						.title-wrapper
-							margin-right: 24px
+							max-width: calc(100% - 26px)
 				&.min-15
 					.event-content
 						.event-info

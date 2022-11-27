@@ -1,9 +1,7 @@
-import React, { useCallback, useImperativeHandle, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useCallback, useImperativeHandle, useRef } from 'react'
 import { Content } from 'antd/lib/layout/layout'
 import { Spin } from 'antd'
 import dayjs from 'dayjs'
-import { debounce } from 'lodash'
 
 // fullcalendar
 import FullCalendar, { EventDropArg } from '@fullcalendar/react'
@@ -19,8 +17,7 @@ import CalendarWeekView from '../views/CalendarWeekView'
 import CalendarEmptyState from '../CalendarEmptyState'
 
 // types
-import { CalendarEvent, Employees, ICalendarEventForm, ICalendarEventsPayload, ICalendarReservationForm } from '../../../../types/interfaces'
-import { updateCalendarEvent } from '../../../../reducers/calendar/calendarActions'
+import { Employees, EventExtenedProps, ICalendarEventForm, ICalendarEventsPayload, ICalendarReservationForm } from '../../../../types/interfaces'
 
 type Props = {
 	view: CALENDAR_VIEW
@@ -77,14 +74,16 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const onEventChange = useCallback(
 		(calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
 			const { event } = arg
-			const { start, end, extendedProps } = event
+			const { start, end } = event
 			const { newResource } = arg as EventDropArg
+			const eventExtenedProps = (event.extendedProps as EventExtenedProps) || {}
+			const eventData = eventExtenedProps?.eventData
 
-			const eventId = extendedProps.originalEvent?.id
-			const calendarBulkEventID = extendedProps.originalEvent?.calendarBulkEvent?.id
+			const eventId = eventData?.id
+			const calendarBulkEventID = eventData?.calendarBulkEvent?.id || eventData?.calendarBulkEvent
 
 			// ak sa zmenil resource, tak updatenut resource (to sa bude diat len pri drope)
-			const employeeId = newResource ? newResource.extendedProps?.employee?.id : extendedProps?.originalEvent?.employee?.id
+			const employeeId = newResource ? newResource.extendedProps?.employee?.id : eventData?.employee.id
 
 			// zatial predpokladame, ze nebudu viacdnove eventy - takze start a end date by mal byt rovnaky
 			const startDajys = dayjs(start)
@@ -100,7 +99,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				date = newResource ? newResource.extendedProps?.day : resource?.extendedProps?.day
 			}
 
-			if (!eventId && !employeeId) {
+			if (!eventId || !employeeId) {
 				// ak nahodou nemam eventID alebo employeeId tak to vrati na povodne miesto
 				arg.revert()
 				return
@@ -110,7 +109,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				date,
 				timeFrom,
 				timeTo,
-				eventType: extendedProps?.eventType,
+				eventType: eventData?.eventType,
 				employee: {
 					key: employeeId
 				},
@@ -122,35 +121,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				arg.revert()
 			}
 
-			/* const startTime = {
-				minutes: dayjs(start).minute(),
-				seconds: dayjs(start).second()
-			}
-
-			const endTime = {
-				minutes: dayjs(end).minute(),
-				seconds: dayjs(end).second()
-			}
-
-			const updatedEvent = {
-				...((extendedProps.originalEvent as CalendarEvent) || {}),
-				start: {
-					date,
-					time: timeFrom
-				},
-				end: {
-					date,
-					time: timeTo
-				},
-				startDateTime: dayjs(date).add(startTime.minutes, 'minute').add(startTime.seconds, 'second').toISOString(),
-				endDateTime: dayjs(date).add(endTime.minutes, 'minute').add(endTime.seconds, 'second').toISOString()
-			}
-
-			dispatch(updateCalendarEvent(updatedEvent)) */
-
-			if (extendedProps.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
-				const customerId = extendedProps?.originalEvent?.customer?.id
-				const serviceId = extendedProps?.originalEvent?.service?.id
+			if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
+				const customerId = eventData.customer?.id
+				const serviceId = eventData.service?.id
 
 				handleSubmitReservation({ ...values, customer: { key: customerId }, service: { key: serviceId } } as any, onError)
 				return
@@ -221,4 +194,4 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	)
 })
 
-export default React.memo(CalendarContent)
+export default CalendarContent

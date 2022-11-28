@@ -33,6 +33,7 @@ import { RootState } from '../../../reducers'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import InputsArrayField from '../../../atoms/InputsArrayField'
 import CheckboxGroupNestedField from '../../IndustriesPage/components/CheckboxGroupNestedField'
+import CheckboxField from '../../../atoms/CheckboxField'
 
 type ComponentProps = {
 	salonID: string
@@ -70,7 +71,12 @@ const ReservationSystemSettingsForm = (props: Props) => {
 
 	const treeData = map(groupedServicesByCategory, (level1) => {
 		return {
-			title: level1.category?.name,
+			title: (
+				<div className={'flex justify-between'} style={{ color: 'red' }}>
+					<div>{level1.category?.name}</div>
+					<Field component={CheckboxField} name={'maxDaysB2cCreateReservation'} size={'large'} disabled={disabled} min={1} className='flex-1' />
+				</div>
+			),
 			id: level1.category?.id,
 			children: map(level1.category?.children, (level2) => {
 				return {
@@ -247,7 +253,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					</div>
 					<Divider className={'mt-1 mb-3'} />
 					<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Vyberte služby, ktoré bude možné rezervovať si online a ktoré budú automaticky potvrdené.')}</p>
-					<Field name={'categoryIDs'} component={CheckboxGroupNestedField} dataTree={treeData} />
+					<Field name={'categoryIDs'} component={CheckboxGroupNestedField} dataTree={treeData} checkable={false} />
 				</div>
 			</Row>
 			{hasPermission && (

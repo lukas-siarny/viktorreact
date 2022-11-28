@@ -101,7 +101,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const [visibleBulkModal, setVisibleBulkModal] = useState<{ requestType: REQUEST_TYPE; eventType?: CALENDAR_EVENT_TYPE } | null>(null)
 	const [isRemoving, setIsRemoving] = useState(false)
 	const [isUpdatingEvent, setIsUpdateingEvent] = useState(false)
-
+	const [tempValues, setTempValues] = useState<ICalendarEventForm | null>(null)
 	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || isUpdatingEvent
 
 	const formValuesBulkForm: Partial<IBulkConfirmForm> = useSelector((state: RootState) => getFormValues(FORM.CONFIRM_BULK_FORM)(state))
@@ -168,6 +168,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				timeFrom: data?.start.time,
 				timeTo: data?.end.time,
 				note: data?.note,
+				eventType: data?.eventType,
 				calendarBulkEventID: data?.calendarBulkEvent?.id,
 				allDay: data?.start.time === CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT.startTime && data?.end.time === CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT.endTime,
 				employee: {
@@ -418,31 +419,37 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		async (values: ICalendarEventForm, onError?: () => void) => {
 			const eventId = query.eventId || values.eventId // ak je z query ide sa detail drawer ak je values ide sa cez drag and drop alebo resize
 			// NOTE: ak existuje actionType tak sa klikl v modali na moznost bulk / single a uz bol modal submitnuty
-
 			if (values.calendarBulkEventID && !formValuesBulkForm?.actionType) {
+				setTempValues(values)
 				dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
 				setVisibleBulkModal({ requestType: REQUEST_TYPE.PATCH, eventType: values.eventType })
 				return
 			}
-
+			setTempValues(null)
+			// dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: null }))
 			try {
 				// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
 				setIsUpdateingEvent(true)
-				const repeatEvent = values.recurring
-					? {
-							untilDate: computeUntilDate(values.end as ENDS_EVENT, values.date),
-							days: {
-								MONDAY: includes(values.repeatOn, DAY.MONDAY),
-								TUESDAY: includes(values.repeatOn, DAY.TUESDAY),
-								WEDNESDAY: includes(values.repeatOn, DAY.WEDNESDAY),
-								THURSDAY: includes(values.repeatOn, DAY.THURSDAY),
-								FRIDAY: includes(values.repeatOn, DAY.FRIDAY),
-								SATURDAY: includes(values.repeatOn, DAY.SATURDAY),
-								SUNDAY: includes(values.repeatOn, DAY.SUNDAY)
-							},
-							week: values.every === EVERY_REPEAT.TWO_WEEKS ? 2 : (1 as 1 | 2 | undefined)
-					  }
-					: undefined
+				let repeatEvent
+				if (values.customRepeatOptions) {
+					repeatEvent = values.customRepeatOptions
+				} else {
+					repeatEvent = values.recurring
+						? {
+								untilDate: computeUntilDate(values.end as ENDS_EVENT, values.date),
+								days: {
+									MONDAY: includes(values.repeatOn, DAY.MONDAY),
+									TUESDAY: includes(values.repeatOn, DAY.TUESDAY),
+									WEDNESDAY: includes(values.repeatOn, DAY.WEDNESDAY),
+									THURSDAY: includes(values.repeatOn, DAY.THURSDAY),
+									FRIDAY: includes(values.repeatOn, DAY.FRIDAY),
+									SATURDAY: includes(values.repeatOn, DAY.SATURDAY),
+									SUNDAY: includes(values.repeatOn, DAY.SUNDAY)
+								},
+								week: values.every === EVERY_REPEAT.TWO_WEEKS ? 2 : (1 as 1 | 2 | undefined)
+						  }
+						: undefined
+				}
 				const reqData = {
 					eventType: values.eventType as any,
 					start: {
@@ -511,24 +518,40 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		[dispatch, fetchEvents, formValuesBulkForm?.actionType, query.eventId, salonID, setEventManagement]
 	)
 
-	const handleSubmitConfirmModal = () => {
+	const handleSubmitConfirmModal = async (values: IBulkConfirmForm) => {
 		// EDIT
 		if (visibleBulkModal?.requestType === REQUEST_TYPE.PATCH) {
-			switch (visibleBulkModal.eventType) {
-				case CALENDAR_EVENT_TYPE.RESERVATION:
-					dispatch(submit(FORM.CALENDAR_RESERVATION_FORM))
-					break
-				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-					dispatch(submit(FORM.CALENDAR_EMPLOYEE_BREAK_FORM))
-					break
-				case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-					dispatch(submit(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM))
-					break
-				case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-					dispatch(submit(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM))
-					break
-				default:
-					break
+			// NOTE: Uprava detailu cez form
+			if (query.sidebarView) {
+				switch (visibleBulkModal.eventType) {
+					case CALENDAR_EVENT_TYPE.RESERVATION:
+						dispatch(submit(FORM.CALENDAR_RESERVATION_FORM))
+						break
+					case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
+						dispatch(submit(FORM.CALENDAR_EMPLOYEE_BREAK_FORM))
+						break
+					case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
+						dispatch(submit(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM))
+						break
+					case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
+						dispatch(submit(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM))
+						break
+					default:
+						break
+				}
+				// Uprava detailu cez drag and drop / resize
+			} else if (values.actionType === CONFIRM_BULK.BULK && !query.sidebarView) {
+				const event = await dispatch(getCalendarEventDetail(salonID, tempValues?.eventId as string))
+				// event repeat + values
+				const customRepeatOptions = event.data?.calendarBulkEvent?.repeatOptions
+				const data = {
+					...tempValues,
+					customRepeatOptions
+				}
+				await handleSubmitEvent(data as ICalendarEventForm)
+			} else {
+				// SINGLE edit - tempvalues z drag and drop / resize
+				await handleSubmitEvent(tempValues as ICalendarEventForm)
 			}
 			// DELETE
 		} else {

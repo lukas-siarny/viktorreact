@@ -4,7 +4,10 @@ import { PaginationProps } from 'antd'
 import { EventContentArg, EventDropArg } from '@fullcalendar/react'
 
 // utils
-import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT, ENDS_EVENT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK } from '../utils/enums'
+import {
+	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT,
+	ENDS_EVENT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK, DAY
+} from '../utils/enums'
 
 // types
 import { Paths } from './api'
@@ -163,8 +166,22 @@ export interface ICalendarEventForm {
 	timeFrom: string
 	timeTo: string
 	eventType: CALENDAR_EVENT_TYPE
+	// pri drag and drope sa dotahuju z detailu eventu a nie z formu
+	customRepeatOptions?: {
+		untilDate: string,
+		days: {
+			[DAY.MONDAY]: boolean,
+			[DAY.TUESDAY]: boolean,
+			[DAY.WEDNESDAY]: boolean,
+			[DAY.THURSDAY]: boolean,
+			[DAY.FRIDAY]: boolean,
+			[DAY.SATURDAY]: boolean,
+			[DAY.SUNDAY]: boolean
+		},
+		week: 2 | 1
+	} | undefined
 	recurring?: boolean
-	repeatOn?: any
+	repeatOn?: DAY[]
 	every?: EVERY_REPEAT
 	end?: ENDS_EVENT
 	note?: string

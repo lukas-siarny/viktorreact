@@ -191,6 +191,8 @@ export interface ICalendarEventForm {
 	calendarBulkEventID?: string
 }
 
+export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null
+
 export interface IEventTypeFilterForm {
 	eventType: CALENDAR_EVENT_TYPE
 }
@@ -612,8 +614,9 @@ export interface ICalendarView {
 	shiftsTimeOffs: ICalendarEventsPayload['data']
 	employees: Employees
 	salonID: string
+	onAddEvent: (event: INewCalendarEvent) => void
 	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
-	onEventChange: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
+	onEventChange?: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
 }
 
 export interface IEventCardProps {

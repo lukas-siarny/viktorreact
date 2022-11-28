@@ -1,19 +1,17 @@
 import React, { FC, useCallback, useEffect } from 'react'
 import Sider from 'antd/lib/layout/Sider'
-import { map, omit } from 'lodash'
+import { compact, map, omit } from 'lodash'
 import cx from 'classnames'
-
-// enums
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
 import { getFormValues, initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { StringParam, useQueryParams } from 'use-query-params'
-import { CALENDAR_EVENT_TYPE, CALENDAR_EVENTS_VIEW_TYPE, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT, EVENT_NAMES, FORM, STRINGS } from '../../../../utils/enums'
+import { CalendarApi, EventInput } from '@fullcalendar/react'
 
 // types
-import { ICalendarEventForm, ICalendarReservationForm } from '../../../../types/interfaces'
+import { ICalendarEventForm, ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'
 
 // components
 import ReservationForm from '../forms/ReservationForm'
@@ -23,11 +21,25 @@ import BreakForm from '../forms/BreakForm'
 
 // utils
 import { getReq } from '../../../../utils/request'
-import { formatLongQueryString, getAssignedUserLabel } from '../../../../utils/helper'
+import { computeEndDate, formatLongQueryString, getAssignedUserLabel, getDateTime } from '../../../../utils/helper'
 import EventTypeFilterForm from '../forms/EventTypeFilterForm'
 import DeleteButton from '../../../../components/DeleteButton'
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
+import {
+	CALENDAR_EVENT_TYPE,
+	CALENDAR_EVENTS_VIEW_TYPE,
+	DEFAULT_DATE_INIT_FORMAT,
+	DEFAULT_TIME_FORMAT,
+	EVENT_NAMES,
+	FORM,
+	STRINGS,
+	CALENDAR_COMMON_SETTINGS,
+	EVERY_REPEAT
+} from '../../../../utils/enums'
+
+// redux
 import { RootState } from '../../../../reducers'
+import { getCalendarEventDetail } from '../../../../reducers/calendar/calendarActions'
 
 type Props = {
 	salonID: string
@@ -36,23 +48,145 @@ type Props = {
 	handleSubmitReservation: (values: ICalendarReservationForm) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
 	handleDeleteEvent: () => any
+	newEventData?: INewCalendarEvent | null
 	eventId?: string | null
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
+	calendarApi?: CalendarApi
 }
 
 const SiderEventManagement: FC<Props> = (props) => {
-	const { setCollapsed, handleSubmitReservation, handleSubmitEvent, salonID, sidebarView, handleDeleteEvent, eventId, eventsViewType } = props
+	const { setCollapsed, handleSubmitReservation, handleSubmitEvent, salonID, sidebarView, handleDeleteEvent, eventId, eventsViewType, newEventData, calendarApi } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
 	const [query, setQuery] = useQueryParams({
-		sidebarView: StringParam
+		sidebarView: StringParam,
+		eventId: StringParam,
+		date: StringParam
 	})
 
 	const breakFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_BREAK_FORM)(state))
 	const timeOffFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM)(state))
 	const shiftFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM)(state))
 	const reservationFormValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
+
+	const initUpdateEventForm = async () => {
+		try {
+			const { data } = await dispatch(getCalendarEventDetail(salonID, query.eventId as string))
+			const repeatOptions = data?.calendarBulkEvent?.repeatOptions
+				? {
+						recurring: true,
+						repeatOn: compact(map(data?.calendarBulkEvent?.repeatOptions?.days as any, (item, index) => (item ? index : undefined))),
+						every: data.calendarBulkEvent.repeatOptions.week === 1 ? EVERY_REPEAT.ONE_WEEK : EVERY_REPEAT.TWO_WEEKS,
+						end: computeEndDate(data?.start.date, data?.calendarBulkEvent?.repeatOptions.untilDate)
+				  }
+				: undefined
+			const initData = {
+				date: data?.start.date,
+				timeFrom: data?.start.time,
+				timeTo: data?.end.time,
+				note: data?.note,
+				eventType: data?.eventType,
+				calendarBulkEventID: data?.calendarBulkEvent?.id,
+				allDay: data?.start.time === CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT.startTime && data?.end.time === CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT.endTime,
+				employee: {
+					value: data?.employee.id,
+					key: data?.employee.id,
+					label: getAssignedUserLabel({
+						id: data?.employee.id as string,
+						firstName: data?.employee.firstName,
+						lastName: data?.employee.lastName,
+						email: data?.employee.email
+					})
+				},
+				...repeatOptions
+			}
+			if (!data) {
+				// NOTE: ak by bolo zle ID (zmazane alebo nenajdene) tak zatvorit drawer + zmaz eventId
+				setCollapsed(undefined)
+				return
+			}
+			switch (data.eventType) {
+				case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
+					dispatch(initialize(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM, initData))
+					break
+				case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
+					dispatch(initialize(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM, initData))
+					break
+				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
+					dispatch(initialize(FORM.CALENDAR_EMPLOYEE_BREAK_FORM, initData))
+					break
+				case CALENDAR_EVENT_TYPE.RESERVATION:
+					dispatch(
+						initialize(FORM.CALENDAR_RESERVATION_FORM, {
+							...initData,
+							service: {
+								id: data?.service?.id,
+								key: data?.service?.id,
+								value: data?.service?.name
+							},
+							customer: {
+								value: data?.customer?.id,
+								key: data?.customer?.id,
+								label: getAssignedUserLabel({
+									id: data?.customer?.id as string,
+									firstName: data?.customer?.firstName,
+									lastName: data?.customer?.lastName,
+									email: data?.customer?.email
+								})
+							}
+						})
+					)
+					break
+				default:
+					break
+			}
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		}
+	}
+
+	useEffect(() => {
+		// init pre UPDATE form ak eventId existuje
+		if (query.eventId) {
+			initUpdateEventForm()
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [query.eventId, query.sidebarView])
+
+	const updateCalendar = (initData: Partial<ICalendarEventForm>) => {
+		if (calendarApi && initData.date && initData.timeFrom && initData.employee) {
+			const start = getDateTime(initData.date, initData.timeFrom)
+			const eventInput: EventInput = {
+				start,
+				end: initData.timeTo ? getDateTime(initData.date, initData.timeTo) : dayjs(start).add(15, 'minutes').toISOString(),
+				allDay: false,
+				resourceId: initData.employee?.key ? `${initData.employee?.key}` : undefined,
+				extendedProps: {
+					eventData: {
+						eventType: query.sidebarView
+					}
+				}
+			}
+
+			console.log('🚀 ~ file: SiderEventManagement.tsx ~ line 162 ~ updateCalendar ~ eventInput', eventInput)
+			const newEvent = calendarApi.addEvent(eventInput)
+			console.log('🚀 ~ file: SiderEventManagement.tsx ~ line 175 ~ updateCalendar ~ newEvent', newEvent)
+			if (newEvent) {
+				// eslint-disable-next-line no-underscore-dangle
+				const generatedId = newEvent?._def.defId
+				console.log('🚀 ~ file: SiderEventManagement.tsx ~ line 178 ~ updateCalendar ~ generatedId', generatedId)
+
+				let fromCalendar = calendarApi.getEventById(generatedId)
+				console.log('🚀 ~ file: SiderEventManagement.tsx ~ line 181 ~ Before ID assign ~ fromCalendar', fromCalendar)
+
+				newEvent.setProp('id', generatedId)
+				fromCalendar = calendarApi.getEventById(generatedId)
+				console.log('🚀 ~ file: SiderEventManagement.tsx ~ line 185 ~ After ID assign ~ fromCalendar', fromCalendar)
+			}
+		}
+	}
 
 	const initCreateEventForm = (eventForm: FORM, eventType: CALENDAR_EVENT_TYPE) => {
 		const prevEventType = sidebarView
@@ -73,14 +207,19 @@ const SiderEventManagement: FC<Props> = (props) => {
 			sidebarView: eventType
 		})
 		// Initne sa event / reservation formular
-		const initData = {
-			date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-			timeFrom: dayjs().format(DEFAULT_TIME_FORMAT),
+		const initData: Partial<ICalendarEventForm> = {
+			date: newEventData?.date || query.date || dayjs().format(DEFAULT_DATE_INIT_FORMAT),
+			timeFrom: newEventData?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT),
+			timeTo: newEventData?.timeTo,
+			employee: newEventData?.employee,
 			...omit(prevInitData, 'eventType'),
 			eventType
 		}
+
 		dispatch(initialize(FORM.EVENT_TYPE_FILTER_FORM, { eventType }))
 		dispatch(initialize(eventForm, initData))
+
+		updateCalendar(initData)
 	}
 
 	// Zmena selectu event type v draweri

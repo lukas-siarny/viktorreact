@@ -1,16 +1,15 @@
-import React, { useMemo, FC } from 'react'
 import dayjs from 'dayjs'
+import React, { FC, useMemo } from 'react'
 
 // full calendar
-import FullCalendar, { DateSelectArg, EventInput, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
-import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
+import FullCalendar, { DateSelectArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
+import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
-import { StringParam, useQueryParams } from 'use-query-params'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, DEFAULT_DATE_INPUT_FORMAT, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
 import { composeDayViewEvents, composeDayViewResources, eventAllow } from '../../calendarHelpers'
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
 
 // types
 import { ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -65,18 +64,84 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 interface ICalendarDayView extends ICalendarView {}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange } = props
-
-	const [query, setQuery] = useQueryParams({
-		sidebarView: StringParam
-	})
+	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange, onAddEvent } = props
 
 	const events = useMemo(
-		() => composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees),
+		() => [
+			composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees),
+			[
+				{
+					start: '2022-11-28T19:30:00.000Z',
+					end: '2022-11-28T21:45:00.000Z',
+					allDay: false,
+					resourceId: '6e93336d-624e-4fcb-9726-d9ba396db64c',
+					extendedProps: {
+						eventData: {
+							eventType: 'RESERVATION'
+						}
+					}
+				},
+				{
+					start: '2022-11-28T07:15:00.000Z',
+					end: '2022-11-28T10:30:00.000Z',
+					allDay: false,
+					resourceId: '70b4c2aa-9c5f-4d8f-8663-c002d00de1bb',
+					extendedProps: {
+						eventData: {
+							eventType: 'RESERVATION'
+						}
+					}
+				},
+				{
+					start: '2022-11-28T07:45:00.000Z',
+					end: '2022-11-28T10:15:00.000Z',
+					allDay: false,
+					resourceId: '212a96c5-d012-4f13-bcb8-d5ab923e83c4',
+					extendedProps: {
+						eventData: {
+							eventType: 'RESERVATION'
+						}
+					}
+				}
+			]
+		],
 		[selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees]
 	)
+
+	// {
+	// 	"start": "2022-11-28T19:30:00.000Z",
+	// 	"end": "2022-11-28T21:45:00.000Z",
+	// 	"allDay": false,
+	// 	"resourceId": "6e93336d-624e-4fcb-9726-d9ba396db64c",
+	// 	"extendedProps": {
+	// 		"eventData": {
+	// 			"eventType": "RESERVATION"
+	// 		}
+	// 	}
+	// }
+
 	const resources = useMemo(() => composeDayViewResources(shiftsTimeOffs, employees), [shiftsTimeOffs, employees])
 
+	const handleNewEvent = (event: DateSelectArg) => {
+		if (event.resource) {
+			console.log('🚀 ~ file: CalendarDayView.tsx ~ line 81 ~ handleNewEvent ~ event', event)
+			// eslint-disable-next-line no-underscore-dangle
+			const { employee } = event.resource._resource.extendedProps
+
+			onAddEvent({
+				date: dayjs(event.startStr).format(DEFAULT_DATE_INIT_FORMAT),
+				timeFrom: dayjs(event.startStr).format(DEFAULT_TIME_FORMAT),
+				timeTo: dayjs(event.endStr).format(DEFAULT_TIME_FORMAT),
+				employee: {
+					value: employee.id,
+					key: employee.id,
+					label: employee.name
+				}
+			})
+		}
+	}
+
+	/*
 	const handleDateCellClick = (arg: DateClickArg) => {
 		const calnedar = arg.view.calendar
 
@@ -124,6 +189,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			}
 		}
 	}
+	*/
 
 	return (
 		<FullCalendar
@@ -148,13 +214,13 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			eventMinHeight={0}
 			dayMinWidth={120}
 			editable
-			selectable
 			weekends
 			nowIndicator
 			allDaySlot={false}
 			stickyFooterScrollbar
 			// data sources
-			events={events}
+			// events={events}
+			eventSources={events}
 			resources={resources}
 			// render hooks
 			resourceLabelContent={resourceLabelContent}
@@ -162,10 +228,11 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			slotLabelContent={slotLabelContent}
 			// handlers
 			eventAllow={eventAllow}
-			// dateClick={handleDateCellClick}
-			select={handleDateSelect}
-			eventDrop={(arg) => onEventChange(CALENDAR_VIEW.DAY, arg)}
-			eventResize={(arg) => onEventChange(CALENDAR_VIEW.DAY, arg)}
+			eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
+			eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
+			// select
+			selectable
+			select={handleNewEvent}
 		/>
 	)
 })

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useState, FC, useCallback } from 'react'
+import React, { useState, FC, useCallback, useEffect } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
 
@@ -75,6 +75,37 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 	} = props
 
 	const [isCardPopoverOpen, setIsCardPopoverOpen] = useState(false)
+
+	// const clearIndicator = () => {
+	// 	const visible = window.localStorage.getItem('showPopover')
+	// 	if (visible) {
+	// 		window.localStorage.removeItem('showPopover')
+	// 	}
+	// }
+
+	useEffect(() => {
+		// if (isCardPopoverOpen) {
+		// 	console.log('🚀 ~ file: ReservationCard.tsx ~ line 78 ~ isCardPopoverOpen', isCardPopoverOpen)
+		// 	console.log('🚀 ~ file: ReservationCard.tsx ~ line 84 ~ useEffect ~ originalEventData', originalEventData)
+		// 	window.localStorage.setItem('showPopover', originalEventData.id as string)
+		// } else {
+		// 	const visibleID = window.localStorage.getItem('showPopover')
+		// 	if (visibleID) {
+		// 		if (visibleID === originalEventData.id) {
+		// 			console.log('🚀 ~ file: ReservationCard.tsx ~ line 95 ~ useEffect ~ show popover for:', visibleID)
+		// 			setIsCardPopoverOpen(true)
+		// 		}
+		// 	}
+		// }
+
+		return () => {
+			if (isCardPopoverOpen) {
+				// clearIndicator()
+				console.log('🚀 ~ file: ReservationCard.tsx ~ line 88 ~ return ~ reservationData', reservationData)
+				console.log('Component will unmount')
+			}
+		}
+	}, [isCardPopoverOpen])
 
 	const isPast = dayjs(originalEventData?.endDateTime || end).isBefore(dayjs())
 	const isPending = reservationData?.state === RESERVATION_STATE.PENDING
@@ -170,7 +201,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 					}}
 				/>
 				<div className={'event-background'} style={{ backgroundColor: bgColor }} />
-				<div className={'event-content'}>
+				<div id={originalEventData?.id} className={'event-content'}>
 					{(() => {
 						switch (calendarView) {
 							case CALENDAR_VIEW.WEEK: {

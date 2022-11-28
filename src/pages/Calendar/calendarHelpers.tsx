@@ -131,21 +131,25 @@ const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeO
 	}
 }
 
-const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string, end: string): ICalendarEventCardData => ({
-	id: event.id,
-	resourceId,
-	start,
-	end,
-	editable: !event.isMultiDayEvent,
-	resourceEditable: !event.isMultiDayEvent,
-	allDay: false,
-	eventData: {
-		...(event.originalEvent || event || {}),
-		isMultiDayEvent: event.isMultiDayEvent,
-		isLastMultiDaylEventInCurrentRange: event.isLastMultiDaylEventInCurrentRange,
-		isFirstMultiDayEventInCurrentRange: event.isFirstMultiDayEventInCurrentRange
+const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string, end: string): ICalendarEventCardData => {
+	console.log('🚀 ~ file: calendarHelpers.tsx ~ line 135 ~ createBaseEvent ~ event', event)
+
+	return {
+		id: event.id,
+		resourceId,
+		start,
+		end,
+		editable: !event.isMultiDayEvent,
+		resourceEditable: !event.isMultiDayEvent,
+		allDay: false,
+		eventData: {
+			...(event.originalEvent || event || {}),
+			isMultiDayEvent: event.isMultiDayEvent,
+			isLastMultiDaylEventInCurrentRange: event.isLastMultiDaylEventInCurrentRange,
+			isFirstMultiDayEventInCurrentRange: event.isFirstMultiDayEventInCurrentRange
+		}
 	}
-})
+}
 
 /**
  * Daily view helpers

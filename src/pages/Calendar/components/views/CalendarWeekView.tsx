@@ -5,18 +5,18 @@ import dayjs from 'dayjs'
 import useResizeObserver from '@react-hook/resize-observer'
 
 // full calendar
-import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { EventContentArg, SlotLabelContentArg, DateSelectArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
 import CalendarEvent from '../CalendarEvent'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
 import { composeWeekResources, composeWeekViewEvents, eventAllow, getWeekDays, getWeekViewSelectedDate } from '../../calendarHelpers'
 
 // types
-import { ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/interfaces'
+import { ICalendarView, IWeekViewResourceExtenedProps, INewCalendarEvent } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
@@ -110,7 +110,7 @@ const NowIndicator = () => {
 interface ICalendarWeekView extends ICalendarView {}
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventChange } = props
+	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventChange, onAddEvent } = props
 
 	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
 	const weekViewSelectedDate = getWeekViewSelectedDate(selectedDate, weekDays)
@@ -120,6 +120,25 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		[weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees]
 	)
 	const resources = useMemo(() => composeWeekResources(weekDays, shiftsTimeOffs, employees), [weekDays, shiftsTimeOffs, employees])
+
+	const handleNewEvent = (event: DateSelectArg) => {
+		if (event.resource) {
+			console.log('🚀 ~ file: CalendarWeekView.tsx ~ line 126 ~ handleNewEvent ~ event', event)
+			// eslint-disable-next-line no-underscore-dangle
+			const { day, employee } = event.resource._resource.extendedProps
+
+			onAddEvent({
+				date: day,
+				timeFrom: dayjs(event.startStr).format(DEFAULT_TIME_FORMAT),
+				timeTo: dayjs(event.endStr).format(DEFAULT_TIME_FORMAT),
+				employee: {
+					value: employee.id,
+					key: employee.id,
+					label: employee.name
+				}
+			})
+		}
+	}
 
 	return (
 		<div className={'nc-calendar-week-wrapper'}>
@@ -146,7 +165,6 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				initialDate={weekViewSelectedDate}
 				weekends={true}
 				editable
-				selectable
 				stickyFooterScrollbar
 				nowIndicator
 				nowIndicatorContent={() => <NowIndicator />}
@@ -159,8 +177,11 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				eventContent={(data: EventContentArg) => <CalendarEvent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} />}
 				// handlers
 				eventAllow={eventAllow}
-				eventDrop={(arg) => onEventChange(CALENDAR_VIEW.WEEK, arg)}
-				eventResize={(arg) => onEventChange(CALENDAR_VIEW.WEEK, arg)}
+				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
+				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
+				// select
+				selectable
+				select={(selectedEvent) => handleNewEvent(selectedEvent)}
 			/>
 		</div>
 	)

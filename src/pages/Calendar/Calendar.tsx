@@ -1,24 +1,23 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
+import { Modal } from 'antd'
+import Layout from 'antd/lib/layout/layout'
+import dayjs from 'dayjs'
+import { includes, isEmpty } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import Layout from 'antd/lib/layout/layout'
+import { getFormValues, initialize, submit, destroy } from 'redux-form'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import dayjs from 'dayjs'
-import { compact, includes, isEmpty, map } from 'lodash'
-import { getFormValues, initialize, submit } from 'redux-form'
-import { Modal, message } from 'antd'
 
 // utils
-import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
+import { useTranslation } from 'react-i18next'
 
 // utils
 import {
-	CALENDAR_COMMON_SETTINGS,
 	CALENDAR_DATE_FORMAT,
-	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_KEYS,
 	CALENDAR_EVENTS_VIEW_TYPE,
+	CALENDAR_EVENT_TYPE,
 	CALENDAR_VIEW,
 	CONFIRM_BULK,
 	DAY,
@@ -28,15 +27,14 @@ import {
 	NOTIFICATION_TYPE,
 	PERMISSION,
 	REQUEST_TYPE,
-	STRINGS,
-	REFRESH_CALENDAR_INTERVAL,
-	DEFAULT_DATE_INIT_FORMAT
+	STRINGS
 } from '../../utils/enums'
+import { computeUntilDate } from '../../utils/helper'
 import { withPermissions } from '../../utils/Permissions'
-import { computeEndDate, computeUntilDate, getAssignedUserLabel, setIntervalImmediately } from '../../utils/helper'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 
 // reducers
+import { RootState } from '../../reducers'
 import {
 	clearCalendarReservations,
 	clearCalendarShiftsTimeoffs,
@@ -44,22 +42,21 @@ import {
 	getCalendarReservations,
 	getCalendarShiftsTimeoff
 } from '../../reducers/calendar/calendarActions'
-import { RootState } from '../../reducers'
 import { getEmployees } from '../../reducers/employees/employeesActions'
 import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
 
 // components
-import CalendarHeader from './components/layout/Header'
-import SiderFilter from './components/layout/SiderFilter'
-import SiderEventManagement from './components/layout/SiderEventManagement'
-import CalendarContent, { CalendarRefs } from './components/layout/Content'
 import ConfirmBulkForm from './components/forms/ConfirmBulkForm'
+import CalendarContent, { CalendarRefs } from './components/layout/CalendarContent'
+import CalendarHeader from './components/layout/Header'
+import SiderEventManagement from './components/layout/SiderEventManagement'
+import SiderFilter from './components/layout/SiderFilter'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
 
 // types
-import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, IEmployeesPayload, SalonSubPageProps } from '../../types/interfaces'
+import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, IEmployeesPayload, INewCalendarEvent, SalonSubPageProps } from '../../types/interfaces'
 import { getWeekDays, getWeekViewSelectedDate } from './calendarHelpers'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
@@ -104,10 +101,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [visibleBulkModal, setVisibleBulkModal] = useState<{ requestType: REQUEST_TYPE; eventType?: CALENDAR_EVENT_TYPE } | null>(null)
 	const [isRemoving, setIsRemoving] = useState(false)
-	// const [fetchInterval, setFetchInterval] = useState<number | undefined>(undefined)
-	const [loadInBackground, setLoadInBackground] = useState<boolean>(false)
 	const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)
 	const [tempValues, setTempValues] = useState<ICalendarEventForm | null>(null)
+	const [newEventData, setNewEventData] = useState<INewCalendarEvent | null | undefined>(null)
 
 	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || isUpdatingEvent
 
@@ -116,6 +112,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		getFormValues(`CALENDAR_${query.sidebarView}_FORM`)(state)
 	)
 
+	/*
+	const [loadInBackground, setLoadInBackground] = useState<boolean>(false)
 	const fetchInterval = useRef<number | undefined>()
 
 	const restartFetchInterval = async () => {
@@ -139,6 +137,18 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		fetchInterval.current = interval
 	}
 
+	useEffect(() => {
+		// clear on unmount
+		return () => {
+			if (fetchInterval.current) {
+				window.clearInterval(fetchInterval.current)
+				message.destroy()
+			}
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+	*/
+
 	// fetch new events
 	const fetchEvents: any = useCallback(
 		async (restartInterval = true) => {
@@ -153,32 +163,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				await dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW, true))
 			}
 
-			if (restartInterval) {
-				restartFetchInterval()
-			}
+			// if (restartInterval) {
+			// 	restartFetchInterval()
+			// }
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[dispatch, salonID, query.date, query.employeeIDs, query.categoryIDs, query.view, query.eventsViewType]
 	)
-
-	useEffect(() => {
-		// clear on unmount
-		return () => {
-			if (fetchInterval.current) {
-				window.clearInterval(fetchInterval.current)
-				message.destroy()
-			}
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
-
-	const initCreateEventForm = (eventForm: FORM, eventType: CALENDAR_EVENT_TYPE) => {
-		const initData = {
-			date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-			eventType
-		}
-		dispatch(initialize(eventForm, initData))
-	}
 
 	const setNewSelectedDate = (newDate: string) => {
 		setQuery({ ...query, date: newDate })
@@ -194,6 +185,46 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const updateCalendarSize = useRef(() => calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.updateSize())
+
+	useEffect(() => {
+		dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
+		dispatch(getServices({ salonID }))
+	}, [dispatch, salonID])
+
+	useEffect(() => {
+		;(async () => {
+			// clear previous events
+			await dispatch(clearCalendarReservations())
+			await dispatch(clearCalendarShiftsTimeoffs())
+
+			// if user uncheck all values from one of the filters => don't fetch new events => just clear store
+			if (query?.categoryIDs === null || query?.employeeIDs === null) {
+				return
+			}
+			// fetch new events
+			fetchEvents()
+		})()
+	}, [dispatch, query.employeeIDs, query.categoryIDs, query.date, query.eventsViewType, fetchEvents])
+
+	useEffect(() => {
+		dispatch(
+			initialize(FORM.CALENDAR_FILTER, {
+				eventsViewType: query.eventsViewType,
+				categoryIDs: query?.categoryIDs === undefined ? getCategoryIDs(services?.categoriesOptions) : query?.categoryIDs,
+				employeeIDs: query?.employeeIDs === undefined ? getEmployeeIDs(employees?.options) : query?.employeeIDs
+			})
+		)
+		// only on onmount
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [employees?.options, services?.categoriesOptions])
+
+	useEffect(() => {
+		// update calendar size when main layout sider change
+		// wait for the end of sider menu animation and then update size of the calendar
+		const timeout = setTimeout(updateCalendarSize.current, 300)
+		return () => clearTimeout(timeout)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isMainLayoutSiderCollapsed])
 
 	const setEventManagement = useCallback(
 		(newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string) => {
@@ -221,83 +252,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		[query, setQuery]
 	)
 
-	const initUpdateEventForm = async () => {
-		try {
-			const { data } = await dispatch(getCalendarEventDetail(salonID, query.eventId as string))
-			const repeatOptions = data?.calendarBulkEvent?.repeatOptions
-				? {
-						recurring: true,
-						repeatOn: compact(map(data?.calendarBulkEvent?.repeatOptions?.days as any, (item, index) => (item ? index : undefined))),
-						every: data.calendarBulkEvent.repeatOptions.week === 1 ? EVERY_REPEAT.ONE_WEEK : EVERY_REPEAT.TWO_WEEKS,
-						end: computeEndDate(data?.start.date, data?.calendarBulkEvent?.repeatOptions.untilDate)
-				  }
-				: undefined
-			const initData = {
-				date: data?.start.date,
-				timeFrom: data?.start.time,
-				timeTo: data?.end.time,
-				note: data?.note,
-				eventType: data?.eventType,
-				calendarBulkEventID: data?.calendarBulkEvent?.id,
-				allDay: data?.start.time === CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT.startTime && data?.end.time === CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT.endTime,
-				employee: {
-					value: data?.employee.id,
-					key: data?.employee.id,
-					label: getAssignedUserLabel({
-						id: data?.employee.id as string,
-						firstName: data?.employee.firstName,
-						lastName: data?.employee.lastName,
-						email: data?.employee.email
-					})
-				},
-				...repeatOptions
-			}
-			if (!data) {
-				// NOTE: ak by bolo zle ID (zmazane alebo nenajdene) tak zatvorit drawer + zmaz eventId
-				setEventManagement(undefined)
-				return
-			}
-			switch (data.eventType) {
-				case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-					dispatch(initialize(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM, initData))
-					break
-				case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-					dispatch(initialize(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM, initData))
-					break
-				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-					dispatch(initialize(FORM.CALENDAR_EMPLOYEE_BREAK_FORM, initData))
-					break
-				case CALENDAR_EVENT_TYPE.RESERVATION:
-					dispatch(
-						initialize(FORM.CALENDAR_RESERVATION_FORM, {
-							...initData,
-							service: {
-								id: data?.service?.id,
-								key: data?.service?.id,
-								value: data?.service?.name
-							},
-							customer: {
-								value: data?.customer?.id,
-								key: data?.customer?.id,
-								label: getAssignedUserLabel({
-									id: data?.customer?.id as string,
-									firstName: data?.customer?.firstName,
-									lastName: data?.customer?.lastName,
-									email: data?.customer?.email
-								})
-							}
-						})
-					)
-					break
-				default:
-					break
-			}
-		} catch (e) {
-			// eslint-disable-next-line no-console
-			console.error(e)
-		}
-	}
-
 	const filteredEmployees = useCallback(() => {
 		// filter employees based on employeeIDs in the url queryParams (if there are any)
 		if (!isEmpty(query.employeeIDs)) {
@@ -307,55 +261,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// null means empty filter otherwise return all employes as default value
 		return query?.employeeIDs === null ? [] : employees?.data?.employees
 	}, [employees?.data?.employees, query.employeeIDs])
-
-	useEffect(() => {
-		// init pre UPDATE form ak eventId existuje
-		if (query.eventId) {
-			initUpdateEventForm()
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [query.eventId, query.sidebarView])
-
-	useEffect(() => {
-		dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
-		dispatch(getServices({ salonID }))
-	}, [dispatch, salonID])
-
-	useEffect(() => {
-		;(async () => {
-			// clear previous events
-			await dispatch(clearCalendarReservations())
-			await dispatch(clearCalendarShiftsTimeoffs())
-
-			// if user uncheck all values from one of the filters => don't fetch new events => just clear store
-			if (query?.categoryIDs === null || query?.employeeIDs === null) {
-				return
-			}
-			// fetch new events
-			fetchEvents()
-		})()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, query.employeeIDs, query.categoryIDs, query.date, query.eventsViewType])
-
-	useEffect(() => {
-		dispatch(
-			initialize(FORM.CALENDAR_FILTER, {
-				eventsViewType: query.eventsViewType,
-				categoryIDs: query?.categoryIDs === undefined ? getCategoryIDs(services?.categoriesOptions) : query?.categoryIDs,
-				employeeIDs: query?.employeeIDs === undefined ? getEmployeeIDs(employees?.options) : query?.employeeIDs
-			})
-		)
-		// only on onmount
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [employees?.options, services?.categoriesOptions])
-
-	useEffect(() => {
-		// update calendar size when main layout sider change
-		// wait for the end of sider menu animation and then update size of the calendar
-		const timeout = setTimeout(updateCalendarSize.current, 300)
-		return () => clearTimeout(timeout)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isMainLayoutSiderCollapsed])
 
 	const handleSubmitFilter = (values: ICalendarFilter) => {
 		setQuery({
@@ -473,7 +378,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				setIsUpdatingEvent(false)
 			}
 		},
-		[query.eventId, salonID, setEventManagement]
+		[query.eventId, salonID, setEventManagement, fetchEvents]
 	)
 
 	const handleSubmitEvent = useCallback(
@@ -622,6 +527,24 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		setVisibleBulkModal(null)
 	}
 
+	const handleAddEvent = (initialData?: INewCalendarEvent) => {
+		setNewEventData(initialData)
+
+		if (query.eventId) {
+			setEventManagement(undefined)
+		}
+		// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastv pracovnu zmenu
+		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
+			dispatch(destroy(FORM.CALENDAR_RESERVATION_FORM))
+			setEventManagement(CALENDAR_EVENT_TYPE.RESERVATION)
+		} else {
+			dispatch(destroy(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM))
+			dispatch(destroy(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM))
+			dispatch(destroy(FORM.CALENDAR_EMPLOYEE_BREAK_FORM))
+			setEventManagement(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
+		}
+	}
+
 	const modals = (
 		<>
 			<Modal
@@ -643,9 +566,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			<div role={'button'} onClick={() => setEventManagement(undefined)} id={'overlay'} className={cx({ block: query.sidebarView, hidden: !query.sidebarView })} />
 			<Layout className='noti-calendar-layout'>
 				<CalendarHeader
-					setCollapsed={setEventManagement}
 					selectedDate={query.date}
-					eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 					calendarView={query.view as CALENDAR_VIEW}
 					siderFilterCollapsed={siderFilterCollapsed}
 					setCalendarView={(newView) => {
@@ -658,6 +579,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							setTimeout(updateCalendarSize.current, 0)
 						}
 					}}
+					onAddEvent={handleAddEvent}
 				/>
 				<Layout hasSider className={'noti-calendar-main-section'}>
 					<SiderFilter
@@ -673,7 +595,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						view={query.view as CALENDAR_VIEW}
 						reservations={reservations?.data || []}
 						shiftsTimeOffs={shiftsTimeOffs?.data || []}
-						loading={loadingData && !loadInBackground}
+						loading={loadingData}
 						eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 						employees={filteredEmployees() || []}
 						showEmptyState={query?.employeeIDs === null}
@@ -691,6 +613,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						}}
 						handleSubmitReservation={handleSubmitReservation}
 						handleSubmitEvent={handleSubmitEvent}
+						onAddEvent={handleAddEvent}
 					/>
 					<SiderEventManagement
 						salonID={salonID}
@@ -701,6 +624,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						setCollapsed={setEventManagement}
 						handleSubmitReservation={handleSubmitReservation}
 						handleSubmitEvent={handleSubmitEvent}
+						newEventData={newEventData}
+						calendarApi={calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()}
 					/>
 				</Layout>
 			</Layout>

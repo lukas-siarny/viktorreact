@@ -257,6 +257,19 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 		originalEventData
 	} = props
 
+	useEffect(() => {
+		if (isOpen) {
+			console.log('Popover is open', reservationData)
+		}
+
+		return () => {
+			if (isOpen) {
+				console.log('🚀 ~ file: CalendarReservationPopover.tsx ~ line 267 ~ return ~ reservationData', reservationData)
+				console.log('Component will unmount')
+			}
+		}
+	}, [isOpen, reservationData])
+
 	const { id } = originalEventData || {}
 
 	const [t] = useTranslation()
@@ -512,7 +525,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 	return (
 		<Popover
 			visible={isOpen}
-			destroyTooltipOnHide={{ keepParent: false }}
+			destroyTooltipOnHide={{ keepParent: true }}
 			trigger={'click'}
 			placement={placement}
 			overlayClassName={`${overlayClassName} nc-event-popover-overlay`}

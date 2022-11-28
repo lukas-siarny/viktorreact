@@ -1,15 +1,15 @@
-import React, { useCallback, useImperativeHandle, useRef } from 'react'
-import { Content } from 'antd/lib/layout/layout'
 import { Spin } from 'antd'
+import { Content } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
 import { debounce } from 'lodash'
+import React, { useCallback, useImperativeHandle, useRef } from 'react'
 
 // fullcalendar
-import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 import { EventResizeDoneArg } from '@fullcalendar/interaction'
+import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
@@ -19,30 +19,22 @@ import CalendarEmptyState from '../CalendarEmptyState'
 
 // types
 import {
-	Employees,
-	IEventExtenedProps,
 	ICalendarEventForm,
-	ICalendarEventsPayload,
 	ICalendarReservationForm,
-	IWeekViewResourceExtenedProps,
-	IDayViewResourceExtenedProps
+	ICalendarView,
+	IDayViewResourceExtenedProps,
+	IEventExtenedProps,
+	IWeekViewResourceExtenedProps
 } from '../../../../types/interfaces'
 
 type Props = {
 	view: CALENDAR_VIEW
-	selectedDate: string
 	loading: boolean
-	reservations: ICalendarEventsPayload['data']
-	shiftsTimeOffs: ICalendarEventsPayload['data']
-	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
-	employees: Employees
 	onShowAllEmployees: () => void
 	showEmptyState: boolean
-	salonID: string
-	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
 	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
 	handleSubmitEvent: (values: ICalendarEventForm, onError?: () => void) => void
-}
+} & ICalendarView
 
 export type CalendarRefs = {
 	[CALENDAR_VIEW.DAY]?: InstanceType<typeof FullCalendar> | null
@@ -62,6 +54,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		onShowAllEmployees,
 		showEmptyState,
 		salonID,
+		onAddEvent,
 		onEditEvent,
 		handleSubmitReservation,
 		handleSubmitEvent
@@ -166,6 +159,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		if (view === CALENDAR_VIEW.WEEK) {
 			return (
 				<CalendarWeekView
+					{...props}
 					ref={weekView}
 					selectedDate={selectedDate}
 					reservations={reservations}
@@ -173,6 +167,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					employees={employees}
 					eventsViewType={eventsViewType}
 					salonID={salonID}
+					onAddEvent={onAddEvent}
 					onEditEvent={onEditEvent}
 					onEventChange={onEventChange}
 				/>
@@ -181,6 +176,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 		return (
 			<CalendarDayView
+				{...props}
 				ref={dayView}
 				selectedDate={selectedDate}
 				reservations={reservations}
@@ -188,6 +184,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				employees={employees}
 				eventsViewType={eventsViewType}
 				salonID={salonID}
+				onAddEvent={onAddEvent}
 				onEditEvent={onEditEvent}
 				onEventChange={onEventChange}
 			/>

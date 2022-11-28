@@ -30,6 +30,7 @@ import {
 import { withPermissions } from '../../utils/Permissions'
 import { computeEndDate, computeUntilDate, getAssignedUserLabel } from '../../utils/helper'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
+import { getWeekDays, getWeekViewSelectedDate } from './calendarHelpers'
 
 // reducers
 import {
@@ -56,7 +57,6 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg
 
 // types
 import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, IEmployeesPayload, SalonSubPageProps } from '../../types/interfaces'
-import { getWeekDays, getWeekViewSelectedDate } from './calendarHelpers'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -302,7 +302,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		// ak ma uzivatel otvoreny modal na bulk akcie a refreshne tab, tak sa neprecistia data z formularu
-		// nasledny edit bulkoveho eventu sa bez precistenia dat nespraval korektne
+		// nasledny edit bulkoveho eventu sa bez precistenia dat nesprava korektne
 		const destroyBulkForm = () => {
 			dispatch(destroy(FORM.CONFIRM_BULK_FORM))
 		}

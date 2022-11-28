@@ -9,6 +9,8 @@ import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalenda
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
+
+// components
 import CalendarEventContent from '../CalendarEventContent'
 
 // utils

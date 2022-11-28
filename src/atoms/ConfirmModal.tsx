@@ -25,7 +25,7 @@ const ConfirmModal: FC<IConfirmkModal> = (props) => {
 					{t('loc:Zrušiť')}
 				</Button>
 				<Button type={'primary'} size={'middle'} className={cx('noti-btn w-1/2')} htmlType={'button'} onClick={onOk} disabled={disabled} loading={loading}>
-					{t('loc:Ok')}
+					{'Ok'}
 				</Button>
 			</div>
 		</Modal>

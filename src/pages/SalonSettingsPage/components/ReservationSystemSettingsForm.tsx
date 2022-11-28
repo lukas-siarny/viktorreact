@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Button, Col, Collapse, Divider, Form, Row, Tooltip } from 'antd'
 
 // atoms
+import { map } from 'lodash'
 import SwitchField from '../../../atoms/SwitchField'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SelectField from '../../../atoms/SelectField'
@@ -31,6 +32,7 @@ import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon-32.s
 import { RootState } from '../../../reducers'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import InputsArrayField from '../../../atoms/InputsArrayField'
+import CheckboxGroupNestedField from '../../IndustriesPage/components/CheckboxGroupNestedField'
 
 type ComponentProps = {
 	salonID: string
@@ -62,8 +64,28 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const dispatch = useDispatch()
 	const disabled = submitting
 	const hasPermission = true // TODO: permissions?
+	const groupedServicesByCategory = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 	// const { enabledReservations } = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state)) as any
 	// const disabled = false // enabledReservations !== true
+
+	const treeData = map(groupedServicesByCategory, (level1) => {
+		return {
+			title: level1.category?.name,
+			id: level1.category?.id,
+			children: map(level1.category?.children, (level2) => {
+				return {
+					id: level2.category?.id,
+					title: level2.category?.name,
+					children: map(level2.category?.children, (level3) => {
+						return {
+							id: level3.category.id,
+							title: level3.category.name
+						}
+					})
+				}
+			})
+		}
+	})
 
 	const getNotificationTitle = useCallback((title: string, tooltip: string) => {
 		return (
@@ -225,6 +247,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					</div>
 					<Divider className={'mt-1 mb-3'} />
 					<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Vyberte služby, ktoré bude možné rezervovať si online a ktoré budú automaticky potvrdené.')}</p>
+					<Field name={'categoryIDs'} component={CheckboxGroupNestedField} dataTree={treeData} />
 				</div>
 			</Row>
 			{hasPermission && (

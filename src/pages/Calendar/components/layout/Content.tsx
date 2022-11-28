@@ -77,9 +77,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		/* [CALENDAR_VIEW.MONTH]: monthView?.current */
 	}))
 
-	const handleSubmitReservationDebounced = useCallback(debounce(handleSubmitReservation, 1000), [handleSubmitReservation])
-	const handleSubmitEventDebounced = useCallback(debounce(handleSubmitEvent, 1000), [handleSubmitEvent])
-
 	const onEventChange = useCallback(
 		(calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
 			const { event } = arg
@@ -126,7 +123,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				eventId
 			}
 
-			const onError = () => {
+			const revertEvent = () => {
 				// ak neprejde request tak to vrati na pôvodne miesto
 				arg.revert()
 			}
@@ -135,12 +132,12 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				const customerId = eventData.customer?.id
 				const serviceId = eventData.service?.id
 
-				handleSubmitReservationDebounced({ ...values, customer: { key: customerId }, service: { key: serviceId } } as any, onError)
+				handleSubmitReservation({ ...values, customer: { key: customerId }, service: { key: serviceId } } as any, revertEvent)
 				return
 			}
-			handleSubmitEventDebounced({ ...values, calendarBulkEventID } as ICalendarEventForm, onError)
+			handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm, revertEvent)
 		},
-		[handleSubmitReservationDebounced, handleSubmitEventDebounced]
+		[handleSubmitReservation, handleSubmitEvent]
 	)
 
 	const getView = () => {

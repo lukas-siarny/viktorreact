@@ -19,7 +19,7 @@ import { ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/i
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
 
 // components
-import CalendarEvent from '../CalendarEvent'
+import CalendarEvent from '../CalendarEventContent'
 
 interface IResourceLabel {
 	image?: string
@@ -76,24 +76,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		[selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees]
 	)
 	const resources = useMemo(() => composeDayViewResources(shiftsTimeOffs, employees), [shiftsTimeOffs, employees])
-
-	const handleDateCellClick = (arg: DateClickArg) => {
-		const calnedar = arg.view.calendar
-
-		const newEvent: EventInput = {
-			start: arg.date,
-			end: dayjs(arg.date).add(60, 'minutes').toISOString(),
-			allDay: false,
-			resourceId: arg.resource?.id,
-			extendedProps: {
-				eventData: {
-					eventType: CALENDAR_EVENT_TYPE.RESERVATION
-				}
-			}
-		}
-
-		calnedar.addEvent(newEvent)
-	}
 
 	const handleDateSelect = (arg: DateSelectArg) => {
 		const calnedar = arg.view.calendar
@@ -162,7 +144,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			slotLabelContent={slotLabelContent}
 			// handlers
 			eventAllow={eventAllow}
-			// dateClick={handleDateCellClick}
 			select={handleDateSelect}
 			eventDrop={(arg) => onEventChange(CALENDAR_VIEW.DAY, arg)}
 			eventResize={(arg) => onEventChange(CALENDAR_VIEW.DAY, arg)}

@@ -614,6 +614,7 @@ export interface ICalendarView {
 	salonID: string
 	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
 	onEventChange: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
+	loading?: boolean
 }
 
 export interface IEventCardProps {

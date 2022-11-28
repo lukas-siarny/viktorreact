@@ -98,7 +98,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
-	const [visibleBulkModal, setVisibleBulkModal] = useState<{ requestType: REQUEST_TYPE; eventType?: CALENDAR_EVENT_TYPE } | null>(null)
+	const [visibleBulkModal, setVisibleBulkModal] = useState<{ requestType: REQUEST_TYPE; eventType?: CALENDAR_EVENT_TYPE; revertEvent?: () => void } | null>(null)
 	const [isRemoving, setIsRemoving] = useState(false)
 	const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)
 	const [tempValues, setTempValues] = useState<ICalendarEventForm | null>(null)
@@ -369,7 +369,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const handleSubmitReservation = useCallback(
-		async (values: ICalendarReservationForm, onError?: () => void) => {
+		async (values: ICalendarReservationForm, revertEvent?: () => void) => {
 			// NOTE: ak je eventID z values tak sa funkcia vola z drag and drop / resize ak ide z query tak je otvoreny detail cez URL / kliknutim na bunku
 			const eventId = values.eventId ? values.eventId : query.eventId
 
@@ -409,8 +409,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
-				if (onError) {
-					onError()
+				if (revertEvent) {
+					revertEvent()
 				}
 			} finally {
 				setIsUpdatingEvent(false)
@@ -420,13 +420,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	)
 
 	const handleSubmitEvent = useCallback(
-		async (values: ICalendarEventForm, onError?: () => void) => {
+		async (values: ICalendarEventForm, revertEvent?: () => void) => {
 			const eventId = query.eventId || values.eventId // ak je z query ide sa detail drawer ak je values ide sa cez drag and drop alebo resize
 			// NOTE: ak existuje actionType tak sa klikl v modali na moznost bulk / single a uz bol modal submitnuty
 			if (values.calendarBulkEventID && !formValuesBulkForm?.actionType) {
 				setTempValues(values)
 				dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
-				setVisibleBulkModal({ requestType: REQUEST_TYPE.PATCH, eventType: values.eventType })
+				setVisibleBulkModal({ requestType: REQUEST_TYPE.PATCH, eventType: values.eventType, revertEvent })
 				return
 			}
 			setTempValues(null)
@@ -513,8 +513,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
-				if (onError) {
-					onError()
+				if (revertEvent) {
+					revertEvent()
 				}
 			} finally {
 				setIsUpdatingEvent(false)
@@ -570,7 +570,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			<Modal
 				title={visibleBulkModal?.requestType === REQUEST_TYPE.PATCH ? STRINGS(t).edit(t('loc:záznam')) : STRINGS(t).delete(t('loc:záznam'))}
 				visible={!!visibleBulkModal?.requestType}
-				onCancel={() => setVisibleBulkModal(null)}
+				onCancel={() => {
+					if (visibleBulkModal?.revertEvent) {
+						visibleBulkModal.revertEvent()
+					}
+					setVisibleBulkModal(null)
+				}}
 				onOk={() => dispatch(submit(FORM.CONFIRM_BULK_FORM))}
 				closeIcon={<CloseIcon />}
 				destroyOnClose

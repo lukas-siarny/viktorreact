@@ -9,7 +9,7 @@ import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalenda
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
-import CalendarEvent from '../CalendarEvent'
+import CalendarEventContent from '../CalendarEventContent'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW } from '../../../../utils/enums'
@@ -156,7 +156,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				resourceAreaColumns={resourceAreaColumns}
 				// render hooks
 				slotLabelContent={slotLabelContent}
-				eventContent={(data: EventContentArg) => <CalendarEvent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} />}
+				eventContent={(data: EventContentArg) => <CalendarEventContent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} />}
 				// handlers
 				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange(CALENDAR_VIEW.WEEK, arg)}

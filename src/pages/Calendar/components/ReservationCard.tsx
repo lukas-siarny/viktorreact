@@ -18,21 +18,65 @@ import { ReactComponent as AvatarIcon } from '../../../assets/icons/avatar-10.sv
 import CalendarReservationPopover from './CalendarReservationPopover'
 
 // types
-import { IEventCardProps } from '../../../types/interfaces'
+import { CalendarEvent, IEventCardProps } from '../../../types/interfaces'
 import { patchReq } from '../../../utils/request'
 
 interface IReservationCardProps extends IEventCardProps {
 	salonID: string
+	customer?: CalendarEvent['customer']
+	service?: CalendarEvent['service']
+	reservationData?: CalendarEvent['reservationData']
+	note?: CalendarEvent['note']
+	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
 }
 
-const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeText, salonID, diff, onEditEvent }) => {
-	const { event, backgroundColor } = data || {}
-	const { extendedProps } = event || {}
-	const { reservationData, customer, service, originalEvent, isMultiDayEvent, isLastMultiDaylEventInCurrentRange, isFirstMultiDayEventInCurrentRange } = extendedProps || {}
+const getIcon = ({ isPast, isRealized, isApproved, service }: { isPast?: boolean; isRealized?: boolean; isApproved?: boolean; service?: any }) => {
+	if (isPast) {
+		if (isRealized) {
+			return <CheckIcon className={'icon check'} />
+		}
+
+		if (isApproved) {
+			return <QuestionMarkIcon className={'icon question-mark'} />
+		}
+	}
+
+	if (isRealized) {
+		return <CheckIcon className={'icon check'} />
+	}
+
+	return service?.icon?.resizedImages ? (
+		<img src={service.icon.resizedImages.thumbnail} alt={service?.name} width={10} height={10} className={'object-contain'} />
+	) : (
+		<ServiceIcon />
+	)
+}
+
+const ReservationCard: FC<IReservationCardProps> = (props) => {
+	const {
+		start,
+		end,
+		backgroundColor,
+		reservationData,
+		customer,
+		service,
+		employee,
+		isMultiDayEvent,
+		isLastMultiDaylEventInCurrentRange,
+		isFirstMultiDayEventInCurrentRange,
+		calendarView,
+		timeText,
+		salonID,
+		diff,
+		onEditEvent,
+		originalEventData,
+		note,
+		noteFromB2CCustomer
+	} = props
 
 	const [isCardPopoverOpen, setIsCardPopoverOpen] = useState(false)
 
-	const isPast = dayjs(originalEvent.endDateTime).isBefore(dayjs())
+	const isPast = dayjs(originalEventData?.endDateTime || end).isBefore(dayjs())
 	const isPending = reservationData?.state === RESERVATION_STATE.PENDING
 	const isApproved = reservationData?.state === RESERVATION_STATE.APPROVED
 	const isRealized = reservationData?.state === RESERVATION_STATE.REALIZED || reservationData?.state === RESERVATION_STATE.NOT_REALIZED
@@ -41,37 +85,16 @@ const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeTe
 
 	const bgColor = !isPast ? backgroundColor : undefined
 
-	// NOTE: prehodit logiku, teraz len pre dev uceli vymenena
-	const onlineIndicatior = reservationData?.createSourceType !== RESERVATION_SOURCE_TYPE.ONLINE ? <div className={'state'} style={{ backgroundColor: bgColor }} /> : null
+	const onlineIndicatior = reservationData?.createSourceType === RESERVATION_SOURCE_TYPE.ONLINE ? <div className={'state'} style={{ backgroundColor: bgColor }} /> : null
 
 	const customerName = getAssignedUserLabel({
-		id: customer?.id,
+		id: customer?.id || '-',
 		firstName: customer?.firstName,
 		lastName: customer?.lastName,
 		email: customer?.email
 	})
 
-	const getIcon = () => {
-		if (isPast) {
-			if (isRealized) {
-				return <CheckIcon className={'icon check'} />
-			}
-
-			if (isApproved) {
-				return <QuestionMarkIcon className={'icon question-mark'} />
-			}
-		}
-
-		if (isRealized) {
-			return <CheckIcon className={'icon check'} />
-		}
-
-		return service?.icon?.resizedImages ? (
-			<img src={service.icon.resizedImages.thumbnail} alt={service?.name} width={10} height={10} className={'object-contain'} />
-		) : (
-			<ServiceIcon />
-		)
-	}
+	const icon = getIcon({ isPast, isApproved, isRealized, service })
 
 	const handleUpdateReservationState = useCallback(
 		async (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
@@ -95,9 +118,15 @@ const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeTe
 
 	return (
 		<CalendarReservationPopover
-			event={originalEvent}
-			start={event.start}
-			end={event.end}
+			start={start}
+			end={end}
+			service={service}
+			employee={employee}
+			customer={customer}
+			reservationData={reservationData}
+			note={note}
+			noteFromB2CCustomer={noteFromB2CCustomer}
+			originalEventData={originalEventData}
 			isOpen={isCardPopoverOpen}
 			color={backgroundColor}
 			setIsOpen={setIsCardPopoverOpen}
@@ -154,7 +183,7 @@ const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeTe
 										{service?.name && <span className={'desc'}>{service.name}</span>}
 										<div className={'icons'}>
 											<AvatarIcon className={'icon employee'} />
-											{getIcon()}
+											{icon}
 											{onlineIndicatior}
 										</div>
 									</>
@@ -174,7 +203,7 @@ const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeTe
 										</div>
 										<div className={'icons'}>
 											<AvatarIcon className={'icon employee'} />
-											{getIcon()}
+											{icon}
 										</div>
 									</>
 								)
@@ -187,4 +216,6 @@ const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeTe
 	)
 }
 
-export default ReservationCard
+export default React.memo(ReservationCard, (prevProps, nextProps) => {
+	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
+})

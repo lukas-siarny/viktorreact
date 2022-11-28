@@ -6,22 +6,20 @@ import useResizeObserver from '@react-hook/resize-observer'
 
 // full calendar
 import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
-import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
+import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
+import CalendarEvent from '../CalendarEvent'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW } from '../../../../utils/enums'
-import { composeWeekResources, composeWeekViewEvents, getWeekDays, getWeekViewSelectedDate } from '../../calendarHelpers'
+import { composeWeekResources, composeWeekViewEvents, eventAllow, getWeekDays, getWeekViewSelectedDate } from '../../calendarHelpers'
 
 // types
-import { ICalendarView } from '../../../../types/interfaces'
+import { ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
-
-// components
-import CalendarEvent from '../CalendarEvent'
 
 const getTodayLabelId = (date: string | dayjs.Dayjs) => `${dayjs(date).format(CALENDAR_DATE_FORMAT.QUERY)}-is-today`
 
@@ -55,14 +53,15 @@ const resourceAreaColumns = [
 		width: 145,
 		cellContent: (args: any) => {
 			const { resource } = args || {}
-			const { extendedProps, eventBackgroundColor } = resource || {}
-			const employee = extendedProps.employee || {}
+			const { eventBackgroundColor } = resource || {}
+			const extendedProps = resource?.extendedProps as IWeekViewResourceExtenedProps
+			const employee = extendedProps?.employee
 
 			return (
 				<div className={'nc-week-label-resource'}>
-					<div className={'image'} style={{ backgroundImage: `url("${employee.image}")`, borderColor: eventBackgroundColor }} />
-					<span className={'info block text-xs font-normal min-w-0 truncate max-w-full'}>{employee.name}</span>
-					{employee.isTimeOff && (
+					<div className={'image'} style={{ backgroundImage: `url("${employee?.image}")`, borderColor: eventBackgroundColor }} />
+					<span className={'info block text-xs font-normal min-w-0 truncate max-w-full'}>{employee?.name}</span>
+					{employee?.isTimeOff && (
 						<div className={'absence-icon'}>
 							<AbsenceIcon />
 						</div>
@@ -73,10 +72,12 @@ const resourceAreaColumns = [
 	}
 ]
 
+const LabelContent = React.memo(({ labelDate }: { labelDate: string }) => <div className={'nc-week-slot-label'}>{labelDate}</div>)
+
 const slotLabelContent = (data: SlotLabelContentArg) => {
 	const { date } = data || {}
 
-	return <div className={'nc-week-slot-label'}>{dayjs(date).format('HH:mm')}</div>
+	return <LabelContent labelDate={dayjs(date).format('HH:mm')} />
 }
 
 const NowIndicator = () => {
@@ -109,18 +110,16 @@ const NowIndicator = () => {
 interface ICalendarWeekView extends ICalendarView {}
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent } = props
-
-	const handleDateClick = (arg: DateClickArg) => {
-		console.log({ arg })
-	}
-
-	const handleSelect = (info: any) => {
-		const { start, end, resource = {} } = info
-	}
+	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventChange } = props
 
 	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
 	const weekViewSelectedDate = getWeekViewSelectedDate(selectedDate, weekDays)
+
+	const events = useMemo(
+		() => composeWeekViewEvents(weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees),
+		[weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees]
+	)
+	const resources = useMemo(() => composeWeekResources(weekDays, shiftsTimeOffs, employees), [weekDays, shiftsTimeOffs, employees])
 
 	return (
 		<div className={'nc-calendar-week-wrapper'}>
@@ -152,18 +151,21 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				nowIndicator
 				nowIndicatorContent={() => <NowIndicator />}
 				// data sources
-				events={composeWeekViewEvents(weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees)}
-				resources={composeWeekResources(weekDays, shiftsTimeOffs, employees)}
+				events={events}
+				resources={resources}
 				resourceAreaColumns={resourceAreaColumns}
 				// render hooks
 				slotLabelContent={slotLabelContent}
 				eventContent={(data: EventContentArg) => <CalendarEvent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} />}
 				// handlers
-				select={handleSelect}
-				dateClick={handleDateClick}
+				eventAllow={eventAllow}
+				eventDrop={(arg) => onEventChange(CALENDAR_VIEW.WEEK, arg)}
+				eventResize={(arg) => onEventChange(CALENDAR_VIEW.WEEK, arg)}
 			/>
 		</div>
 	)
 })
 
-export default CalendarWeekView
+export default React.memo(CalendarWeekView, (prevProps, nextProps) => {
+	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
+})

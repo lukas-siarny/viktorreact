@@ -217,7 +217,7 @@ const CalendarHeader: FC<Props> = (props) => {
 				<Button
 					type={'primary'}
 					onClick={() => {
-						// Ak je otvoreny detail a klikne sa na pridat button tak sa detail vynujluje
+						// Ak je otvoreny detail a klikne sa na pridat button tak sa detail vynuluje
 						if (query.eventId) {
 							setCollapsed(undefined)
 						}

@@ -12,6 +12,7 @@ import { getTimeText } from '../calendarHelpers'
 // components
 import AbsenceCard from './AbsenceCard'
 import ReservationCard from './ReservationCard'
+import { IEventExtenedProps } from '../../../types/interfaces'
 
 interface ICalendarEventProps {
 	calendarView: CALENDAR_VIEW
@@ -20,39 +21,105 @@ interface ICalendarEventProps {
 	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
 }
 
+const InverseBackgroundEvent = React.memo(() => <div className={cx('nc-bg-event not-set-availability')} />)
+
+const BackgroundEvent: FC<{ eventType?: CALENDAR_EVENT_TYPE }> = React.memo(({ eventType }) => (
+	<div
+		className={cx('nc-bg-event', {
+			break: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
+			timeoff: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
+		})}
+	/>
+))
+
 const CalendarEvent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, onEditEvent }) => {
-	const { event } = data || {}
-	const { extendedProps } = event || {}
-	const { eventType } = extendedProps || {}
+	const { event, backgroundColor } = data || {}
+	const { start, end } = event || {}
+	const { eventData } = (event.extendedProps as IEventExtenedProps) || {}
+	const {
+		id,
+		start: eventStart,
+		end: eventEnd,
+		startDateTime,
+		endDateTime,
+		eventType,
+		reservationData,
+		service,
+		customer,
+		employee,
+		isFirstMultiDayEventInCurrentRange,
+		isLastMultiDaylEventInCurrentRange,
+		isMultiDayEvent
+	} = eventData || {}
 
 	// background events
 	if (event.display === 'inverse-background') {
-		return <div className={cx('nc-bg-event not-set-availability')} />
+		return <InverseBackgroundEvent />
 	}
 
 	if (event.display === 'background') {
-		return (
-			<div
-				className={cx('nc-bg-event', {
-					break: event.extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
-					timeoff: event.extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
-				})}
-			/>
-		)
+		return <BackgroundEvent eventType={eventType as CALENDAR_EVENT_TYPE} />
 	}
 
 	const diff = dayjs(event.end).diff(event.start, 'minutes')
 	const timeText = getTimeText(event.start, event.end)
+	const resourceId = ''
+	const originalEventData = {
+		id,
+		start: eventStart,
+		end: eventEnd,
+		startDateTime,
+		endDateTime
+	}
 
 	// normal events
 	switch (eventType) {
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-			return <AbsenceCard calendarView={calendarView} diff={diff} timeText={timeText} data={data} onEditEvent={onEditEvent} />
-		case CALENDAR_EVENT_TYPE.RESERVATION:
+			return (
+				<AbsenceCard
+					calendarView={calendarView}
+					diff={diff}
+					timeText={timeText}
+					resourceId={resourceId}
+					start={start}
+					end={end}
+					employee={employee}
+					backgroundColor={backgroundColor}
+					isMultiDayEvent={isMultiDayEvent}
+					isFirstMultiDayEventInCurrentRange={isFirstMultiDayEventInCurrentRange}
+					isLastMultiDaylEventInCurrentRange={isLastMultiDaylEventInCurrentRange}
+					onEditEvent={onEditEvent}
+					originalEventData={originalEventData}
+					eventType={eventType as CALENDAR_EVENT_TYPE}
+				/>
+			)
+		case CALENDAR_EVENT_TYPE.RESERVATION: {
+			return (
+				<ReservationCard
+					calendarView={calendarView}
+					resourceId={resourceId}
+					start={start}
+					end={end}
+					diff={diff}
+					timeText={timeText}
+					salonID={salonID}
+					reservationData={reservationData}
+					customer={customer}
+					service={service}
+					employee={employee}
+					backgroundColor={backgroundColor}
+					isMultiDayEvent={isMultiDayEvent}
+					isFirstMultiDayEventInCurrentRange={isFirstMultiDayEventInCurrentRange}
+					isLastMultiDaylEventInCurrentRange={isLastMultiDaylEventInCurrentRange}
+					onEditEvent={onEditEvent}
+					originalEventData={originalEventData}
+				/>
+			)
+		}
 		default:
-			return <ReservationCard calendarView={calendarView} diff={diff} timeText={timeText} data={data} salonID={salonID} onEditEvent={onEditEvent} />
+			return null
 	}
 }
 

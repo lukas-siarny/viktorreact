@@ -15,12 +15,24 @@ import { ReactComponent as BreakIcon } from '../../../assets/icons/break-icon-16
 import { IEventCardProps } from '../../../types/interfaces'
 import { getAssignedUserLabel } from '../../../utils/helper'
 
-interface IAbsenceCardProps extends IEventCardProps {}
+interface IAbsenceCardProps extends IEventCardProps {
+	eventType: CALENDAR_EVENT_TYPE
+}
 
-const AbsenceCard: FC<IAbsenceCardProps> = ({ calendarView, data, diff, timeText, onEditEvent }) => {
-	const { event, backgroundColor } = data || {}
-	const { extendedProps } = event || {}
-	const { eventType, originalEvent, isMultiDayEvent, isLastMultiDaylEventInCurrentRange, isFirstMultiDayEventInCurrentRange, employee } = extendedProps || {}
+const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
+	const {
+		eventType,
+		isMultiDayEvent,
+		isLastMultiDaylEventInCurrentRange,
+		isFirstMultiDayEventInCurrentRange,
+		employee,
+		calendarView,
+		diff,
+		timeText,
+		onEditEvent,
+		originalEventData,
+		backgroundColor
+	} = props
 
 	const duration = parseTimeFromMinutes(diff)
 
@@ -40,7 +52,11 @@ const AbsenceCard: FC<IAbsenceCardProps> = ({ calendarView, data, diff, timeText
 				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
 				'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45
 			})}
-			onClick={() => onEditEvent(originalEvent.id || event.id, eventType)}
+			onClick={() => {
+				if (originalEventData?.id) {
+					onEditEvent(originalEventData.id, eventType)
+				}
+			}}
 		>
 			{(() => {
 				switch (calendarView) {
@@ -74,7 +90,7 @@ const AbsenceCard: FC<IAbsenceCardProps> = ({ calendarView, data, diff, timeText
 													firstName: employee?.firstName,
 													lastName: employee?.lastName,
 													email: employee?.email,
-													id: employee?.id
+													id: employee?.id || '-'
 												})}
 											</span>
 										)}
@@ -91,4 +107,6 @@ const AbsenceCard: FC<IAbsenceCardProps> = ({ calendarView, data, diff, timeText
 	)
 }
 
-export default AbsenceCard
+export default React.memo(AbsenceCard, (prevProps, nextProps) => {
+	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
+})

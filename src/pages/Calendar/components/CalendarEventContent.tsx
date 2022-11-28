@@ -19,6 +19,7 @@ interface ICalendarEventProps {
 	data: EventContentArg
 	salonID: string
 	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
+	refetchData: () => void
 }
 
 const InverseBackgroundEvent = React.memo(() => <div className={cx('nc-bg-event not-set-availability')} />)
@@ -32,7 +33,7 @@ const BackgroundEvent: FC<{ eventType?: CALENDAR_EVENT_TYPE }> = React.memo(({ e
 	/>
 ))
 
-const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, onEditEvent }) => {
+const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, onEditEvent, refetchData }) => {
 	const { event, backgroundColor } = data || {}
 	const { start, end } = event || {}
 	const { eventData } = (event.extendedProps as IEventExtenedProps) || {}
@@ -49,7 +50,8 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 		employee,
 		isFirstMultiDayEventInCurrentRange,
 		isLastMultiDaylEventInCurrentRange,
-		isMultiDayEvent
+		isMultiDayEvent,
+		calendarBulkEvent
 	} = eventData || {}
 
 	// background events
@@ -93,6 +95,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					onEditEvent={onEditEvent}
 					originalEventData={originalEventData}
 					eventType={eventType as CALENDAR_EVENT_TYPE}
+					isBulkEvent={!!calendarBulkEvent?.id}
 				/>
 			)
 		case CALENDAR_EVENT_TYPE.RESERVATION: {
@@ -115,6 +118,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					isLastMultiDaylEventInCurrentRange={isLastMultiDaylEventInCurrentRange}
 					onEditEvent={onEditEvent}
 					originalEventData={originalEventData}
+					refetchData={refetchData}
 				/>
 			)
 		}

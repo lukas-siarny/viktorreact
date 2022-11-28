@@ -100,17 +100,13 @@ const NowIndicator = () => {
 		}
 	}, [size])
 
-	return (
-		<div className={'fc-week-now-indicator'} style={{ top: indicatorDimmensions.top, height: indicatorDimmensions.height }}>
-			<div className={'head'} />
-		</div>
-	)
+	return <div className={'fc-week-now-indicator'} style={{ top: indicatorDimmensions.top, height: indicatorDimmensions.height }} />
 }
 
 interface ICalendarWeekView extends ICalendarView {}
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventChange } = props
+	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventChange, refetchData } = props
 
 	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
 	const weekViewSelectedDate = getWeekViewSelectedDate(selectedDate, weekDays)
@@ -156,7 +152,9 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				resourceAreaColumns={resourceAreaColumns}
 				// render hooks
 				slotLabelContent={slotLabelContent}
-				eventContent={(data: EventContentArg) => <CalendarEventContent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} />}
+				eventContent={(data: EventContentArg) => (
+					<CalendarEventContent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} refetchData={refetchData} />
+				)}
 				// handlers
 				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange(CALENDAR_VIEW.WEEK, arg)}

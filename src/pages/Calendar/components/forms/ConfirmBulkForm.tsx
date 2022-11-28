@@ -37,13 +37,13 @@ const ConfirmBulkForm: FC<Props> = (props) => {
 		}
 	]
 	return (
-		<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
+		<Form layout='vertical' className='w-full h-full flex flex-col gap-2' onSubmitCapture={handleSubmit}>
 			<p>
 				{requestType === REQUEST_TYPE.PATCH
 					? t('loc:Úpravujete záznam, ktorý sa opakuje. Aktualizácia nadchádzajúcich zmien prepíše prebiehajúce plánovanie')
 					: t('loc:Odstráňujete záznam, ktorý sa opakuje. Odstránenie nadchádzajúcich zmien prepíše prebiehajúce plánovanie')}
 			</p>
-			<Field className={'p-0 m-0 nc-radio-event-type'} component={RadioGroupField} name={'actionType'} options={options} direction={'vertical'} size={'small'} />
+			<Field className={'p-0 m-0 nc-radio-event-type'} component={RadioGroupField} name={'actionType'} options={options} direction={'vertical'} />
 		</Form>
 	)
 }

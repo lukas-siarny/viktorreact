@@ -5,8 +5,7 @@ import Layout from 'antd/lib/layout/layout'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
 import { compact, includes, isEmpty, map } from 'lodash'
-import { getFormValues, initialize, submit } from 'redux-form'
-import { Modal } from 'antd'
+import { destroy, getFormValues, initialize, submit } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 
@@ -50,6 +49,7 @@ import SiderFilter from './components/layout/SiderFilter'
 import SiderEventManagement from './components/layout/SiderEventManagement'
 import CalendarContent, { CalendarRefs } from './components/layout/Content'
 import ConfirmBulkForm from './components/forms/ConfirmBulkForm'
+import ConfirmModal from '../../atoms/ConfirmModal'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
@@ -300,6 +300,16 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMainLayoutSiderCollapsed])
 
+	useEffect(() => {
+		// ak ma uzivatel otvoreny modal na bulk akcie a refreshne tab, tak sa neprecistia data z formularu
+		// nasledny edit bulkoveho eventu sa bez precistenia dat nespraval korektne
+		const destroyBulkForm = () => {
+			dispatch(destroy(FORM.CONFIRM_BULK_FORM))
+		}
+		window.addEventListener('beforeunload', destroyBulkForm)
+		return () => window.removeEventListener('beforeunload', destroyBulkForm)
+	}, [dispatch])
+
 	const handleSubmitFilter = (values: ICalendarFilter) => {
 		setQuery({
 			...query,
@@ -430,7 +440,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				return
 			}
 			setTempValues(null)
-			// dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: null }))
 			try {
 				// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
 				setIsUpdatingEvent(true)
@@ -567,7 +576,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const modals = (
 		<>
-			<Modal
+			<ConfirmModal
 				title={visibleBulkModal?.requestType === REQUEST_TYPE.PATCH ? STRINGS(t).edit(t('loc:záznam')) : STRINGS(t).delete(t('loc:záznam'))}
 				visible={!!visibleBulkModal?.requestType}
 				onCancel={() => {
@@ -577,11 +586,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					setVisibleBulkModal(null)
 				}}
 				onOk={() => dispatch(submit(FORM.CONFIRM_BULK_FORM))}
+				loading={loadingData}
+				disabled={loadingData}
 				closeIcon={<CloseIcon />}
 				destroyOnClose
 			>
 				<ConfirmBulkForm requestType={visibleBulkModal?.requestType as REQUEST_TYPE} onSubmit={handleSubmitConfirmModal} />
-			</Modal>
+			</ConfirmModal>
 		</>
 	)
 
@@ -637,11 +648,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 								sidebarView: eventType
 							})
 						}}
+						refetchData={fetchEvents}
 						handleSubmitReservation={handleSubmitReservation}
 						handleSubmitEvent={handleSubmitEvent}
 					/>
 					<SiderEventManagement
 						salonID={salonID}
+						selectedDate={query.date}
 						eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 						eventId={query.eventId}
 						handleDeleteEvent={handleDeleteEvent}

@@ -32,6 +32,7 @@ import { RootState } from '../../../../reducers'
 type Props = {
 	salonID: string
 	sidebarView: CALENDAR_EVENT_TYPE
+	selectedDate: string
 	setCollapsed: (view: CALENDAR_EVENT_TYPE | undefined) => void
 	handleSubmitReservation: (values: ICalendarReservationForm) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
@@ -41,7 +42,7 @@ type Props = {
 }
 
 const SiderEventManagement: FC<Props> = (props) => {
-	const { setCollapsed, handleSubmitReservation, handleSubmitEvent, salonID, sidebarView, handleDeleteEvent, eventId, eventsViewType } = props
+	const { setCollapsed, handleSubmitReservation, handleSubmitEvent, salonID, sidebarView, handleDeleteEvent, eventId, eventsViewType, selectedDate } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -74,7 +75,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 		})
 		// Initne sa event / reservation formular
 		const initData = {
-			date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
+			date: dayjs(selectedDate).format(DEFAULT_DATE_INIT_FORMAT),
 			timeFrom: dayjs().format(DEFAULT_TIME_FORMAT),
 			...omit(prevInitData, 'eventType'),
 			eventType

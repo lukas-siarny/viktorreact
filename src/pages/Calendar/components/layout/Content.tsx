@@ -42,6 +42,7 @@ type Props = {
 	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
 	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
 	handleSubmitEvent: (values: ICalendarEventForm, onError?: () => void) => void
+	refetchData: () => void
 }
 
 export type CalendarRefs = {
@@ -64,7 +65,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		salonID,
 		onEditEvent,
 		handleSubmitReservation,
-		handleSubmitEvent
+		handleSubmitEvent,
+		refetchData
 	} = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -124,7 +126,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			}
 
 			const revertEvent = () => {
-				// ak neprejde request tak to vrati na pôvodne miesto
+				// ak neprejde request alebo uzivatel zrusi bulk modal tak to vrati na pôvodne miesto
 				arg.revert()
 			}
 
@@ -172,6 +174,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					salonID={salonID}
 					onEditEvent={onEditEvent}
 					onEventChange={onEventChange}
+					refetchData={refetchData}
 				/>
 			)
 		}
@@ -187,6 +190,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				salonID={salonID}
 				onEditEvent={onEditEvent}
 				onEventChange={onEventChange}
+				refetchData={refetchData}
 			/>
 		)
 	}

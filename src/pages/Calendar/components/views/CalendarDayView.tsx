@@ -3,14 +3,13 @@ import dayjs from 'dayjs'
 
 // full calendar
 import FullCalendar, { DateSelectArg, EventInput, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
-import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
+import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
-import { StringParam, useQueryParams } from 'use-query-params'
 import { composeDayViewEvents, composeDayViewResources, eventAllow } from '../../calendarHelpers'
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
 
 // types
 import { ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -19,7 +18,7 @@ import { ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/i
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
 
 // components
-import CalendarEvent from '../CalendarEventContent'
+import CalendarEventContent from '../CalendarEventContent'
 
 interface IResourceLabel {
 	image?: string
@@ -65,11 +64,7 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 interface ICalendarDayView extends ICalendarView {}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange } = props
-
-	const [query, setQuery] = useQueryParams({
-		sidebarView: StringParam
-	})
+	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange, refetchData } = props
 
 	const events = useMemo(
 		() => composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees),
@@ -98,7 +93,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 					}
 				}
 				calnedar.addEvent(newEvent)
-				setQuery({ ...query, sidebarView: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION })
 			} else {
 				// placeholder.setDates(arg.start, arg.end)
 				// placeholder.setResources([resourceId])
@@ -140,7 +134,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			resources={resources}
 			// render hooks
 			resourceLabelContent={resourceLabelContent}
-			eventContent={(data) => <CalendarEvent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} />}
+			eventContent={(data) => <CalendarEventContent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} refetchData={refetchData} />}
 			slotLabelContent={slotLabelContent}
 			// handlers
 			eventAllow={eventAllow}

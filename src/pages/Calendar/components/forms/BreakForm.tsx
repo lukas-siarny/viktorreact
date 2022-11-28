@@ -39,7 +39,7 @@ type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentPr
 const formName = FORM.CALENDAR_EMPLOYEE_BREAK_FORM
 
 const CalendarBreakForm: FC<Props> = (props) => {
-	const { handleSubmit, eventId, searchEmployes } = props
+	const { handleSubmit, eventId, searchEmployes, pristine } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const formValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(formName)(state))

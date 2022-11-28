@@ -393,7 +393,6 @@
 
 .fc .fc-highlight
 	background: rgba($backgroundColor-notino-grayLight, 0.3)
-	// background: transparent
 
 .nc-bg-event
 	position: relative
@@ -431,6 +430,8 @@
 	> table.fc-scrollgrid
 		border-color: transparent
 		.fc-timegrid-now-indicator-arrow
+			display: none
+		/* .fc-timegrid-now-indicator-arrow
 			left: unset
 			right: 1px
 			width: 10px
@@ -743,7 +744,7 @@
 	height: 0
 	background-color: $backgroundColor-notino-pink
 	transform: translateX(-50%)
-	.head
+	/*.head
 		width: 10px
 		height: 10px
 		border-radius: 50%

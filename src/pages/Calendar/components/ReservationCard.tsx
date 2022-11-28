@@ -28,6 +28,7 @@ interface IReservationCardProps extends IEventCardProps {
 	reservationData?: CalendarEvent['reservationData']
 	note?: CalendarEvent['note']
 	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
+	refetchData: () => void
 }
 
 const getIcon = ({ isPast, isRealized, isApproved, service }: { isPast?: boolean; isRealized?: boolean; isApproved?: boolean; service?: any }) => {
@@ -71,7 +72,8 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		onEditEvent,
 		originalEventData,
 		note,
-		noteFromB2CCustomer
+		noteFromB2CCustomer,
+		refetchData
 	} = props
 
 	const [isCardPopoverOpen, setIsCardPopoverOpen] = useState(false)
@@ -107,7 +109,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 					NOTIFICATION_TYPE.NOTIFICATION,
 					true
 				)
-				// TODO: load refresh dat po zmene stavu
+				refetchData()
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)

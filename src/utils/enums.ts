@@ -841,3 +841,83 @@ export const ERROR_BOUNDARY_TEXTS = () => ({
 		labelSubmit: i18next.t('loc:Odoslať hlásenie o chybe')
 	}
 })
+
+/**
+ * Reservation system (RS)
+ */
+
+// relevant types for settings
+export enum RS_NOTIFICATION {
+	RESERVATION_AWAITING_APPROVAL = 'RESERVATION_AWAITING_APPROVAL',
+	RESERVATION_CONFIRMED = 'RESERVATION_CONFIRMED',
+	RESERVATION_CHANGED = 'RESERVATION_CHANGED',
+	RESERVATION_REJECTED = 'RESERVATION_REJECTED',
+	RESERVATION_CANCELLED = 'RESERVATION_CANCELLED',
+	RESERVATION_REMINDER = 'RESERVATION_REMINDER'
+}
+
+// NOTE: order definition reflect order of options in UI
+export enum RS_NOTIFICATION_TYPE {
+	EMAIL = 'EMAIL',
+	PUSH = 'PUSH'
+}
+
+export enum NOTIFICATION_CHANNEL {
+	B2B = 'B2B',
+	B2C = 'B2C'
+}
+
+export const RS_NOTIFICATION_FIELD_TEXTS = (notificationType: RS_NOTIFICATION, channel: NOTIFICATION_CHANNEL) => {
+	const entity = i18next.t(channel === NOTIFICATION_CHANNEL.B2B ? 'loc:Zamestnanec' : 'loc:Zákazník')
+
+	const result = {
+		title: undefined,
+		tooltip: undefined
+	}
+
+	switch (notificationType) {
+		case RS_NOTIFICATION.RESERVATION_AWAITING_APPROVAL:
+			result.title = i18next.t('loc:Rezervácia čakajúca na schválenie')
+			result.tooltip = i18next.t(
+				channel === NOTIFICATION_CHANNEL.B2C
+					? 'loc:Zákazník dostane notifikáciu, že jeho rezervácia čaká na schválenie salónom.'
+					: 'loc:Zamestnanec dostane notifikáciu, že rezervácia vytvorená zákazníkom čaká na schválenie.'
+			)
+			break
+
+		case RS_NOTIFICATION.RESERVATION_CONFIRMED:
+			result.title = i18next.t('loc:Potvrdenie rezervácie')
+			result.tooltip = i18next.t('loc:{{entity}} dostane notifikáciu, že jeho rezervácia bola potvrdená.', { entity })
+			break
+
+		case RS_NOTIFICATION.RESERVATION_CHANGED:
+			result.title = i18next.t('loc:Zmena rezervácie')
+			result.tooltip = i18next.t(
+				channel === NOTIFICATION_CHANNEL.B2C
+					? 'loc:Zákazník dostane notifikáciu, že jeho rezervácia bola zmenená salónom.'
+					: 'loc:Zamestnanec dostane notifikáciu, že jeho rezervácia bola zmenená.'
+			)
+			break
+
+		case RS_NOTIFICATION.RESERVATION_CANCELLED:
+			result.title = i18next.t('loc:Zrušenie rezervácie')
+			result.tooltip = i18next.t('loc:{{entity}} dostane notifikáciu, že jeho rezervácia bola zrušená.', { entity })
+			break
+
+		case RS_NOTIFICATION.RESERVATION_REJECTED:
+			// NOTE: zobrazene iba pre B2C channel
+			result.title = i18next.t('loc:Zamietnutie rezervácie')
+			result.tooltip = i18next.t('loc:{{entity}} dostane notifikáciu, že jeho rezervácia bola zamietnutá salónom.', { entity })
+			break
+
+		case RS_NOTIFICATION.RESERVATION_REMINDER:
+			result.title = i18next.t('loc:Pripomenutie rezervácie')
+			result.tooltip = i18next.t('loc:{{entity}} dostane deň vopred notifikáciu o blížiacom sa termíne rezervácie.', { entity })
+			break
+
+		default:
+			break
+	}
+
+	return result
+}

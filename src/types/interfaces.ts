@@ -2,7 +2,7 @@ import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 
 // utils
-import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT, ENDS_EVENT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK } from '../utils/enums'
+import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT, ENDS_EVENT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK,  RS_NOTIFICATION, RS_NOTIFICATION_TYPE } from '../utils/enums'
 
 // types
 import { Paths } from './api'
@@ -470,12 +470,24 @@ export interface IIndustryForm {
 	categoryIDs: string[]
 }
 
+export interface IReservationsSettingsNotification {
+	b2bChannels: {
+		[key in RS_NOTIFICATION_TYPE]?: boolean
+	}[]
+	b2cChannels: {
+		[key in RS_NOTIFICATION_TYPE]?: boolean
+	}[]
+}
+
 export interface IReservationSystemSettingsForm {
 	enabledReservations?: boolean | null
 	maxDaysB2cCreateReservation?: number | null
 	maxHoursB2cCreateReservationBeforeStart?: number | null
 	maxHoursB2cCancelReservationBeforeStart?: number | null
-	// TODO: ostatne typy
+	minutesIntervalBetweenB2CReservations?: number | null
+	disabledNotifications: {
+		[key in RS_NOTIFICATION]: IReservationsSettingsNotification
+	}
 }
 
 export type NameLocalizationsItem = {

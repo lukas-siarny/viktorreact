@@ -1,5 +1,4 @@
-import React, { useCallback, useImperativeHandle, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useCallback, useImperativeHandle, useRef } from 'react'
 import { Content } from 'antd/lib/layout/layout'
 import { Spin } from 'antd'
 import dayjs from 'dayjs'
@@ -19,8 +18,15 @@ import CalendarWeekView from '../views/CalendarWeekView'
 import CalendarEmptyState from '../CalendarEmptyState'
 
 // types
-import { CalendarEvent, Employees, ICalendarEventForm, ICalendarEventsPayload, ICalendarReservationForm } from '../../../../types/interfaces'
-import { updateCalendarEvent } from '../../../../reducers/calendar/calendarActions'
+import {
+	Employees,
+	IEventExtenedProps,
+	ICalendarEventForm,
+	ICalendarEventsPayload,
+	ICalendarReservationForm,
+	IWeekViewResourceExtenedProps,
+	IDayViewResourceExtenedProps
+} from '../../../../types/interfaces'
 
 type Props = {
 	view: CALENDAR_VIEW
@@ -71,20 +77,23 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		/* [CALENDAR_VIEW.MONTH]: monthView?.current */
 	}))
 
-	// const handleSubmitReservationDebounced = useCallback(debounce(handleSubmitReservation, 1000), [handleSubmitReservation])
-	// const handleSubmitEventDebounced = useCallback(debounce(handleSubmitEvent, 1000), [handleSubmitEvent])
+	const handleSubmitReservationDebounced = useCallback(debounce(handleSubmitReservation, 1000), [handleSubmitReservation])
+	const handleSubmitEventDebounced = useCallback(debounce(handleSubmitEvent, 1000), [handleSubmitEvent])
 
 	const onEventChange = useCallback(
 		(calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
 			const { event } = arg
-			const { start, end, extendedProps } = event
+			const { start, end } = event
 			const { newResource } = arg as EventDropArg
+			const eventExtenedProps = (event.extendedProps as IEventExtenedProps) || {}
+			const eventData = eventExtenedProps?.eventData
+			const newResourceExtendedProps = newResource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
 
-			const eventId = extendedProps.originalEvent?.id
-			const calendarBulkEventID = extendedProps.originalEvent?.calendarBulkEvent?.id
+			const eventId = eventData?.id
+			const calendarBulkEventID = eventData?.calendarBulkEvent?.id || eventData?.calendarBulkEvent
 
 			// ak sa zmenil resource, tak updatenut resource (to sa bude diat len pri drope)
-			const employeeId = newResource ? newResource.extendedProps?.employee?.id : extendedProps?.originalEvent?.employee?.id
+			const employeeId = newResource ? newResourceExtendedProps?.employee?.id : eventData?.employee.id
 
 			// zatial predpokladame, ze nebudu viacdnove eventy - takze start a end date by mal byt rovnaky
 			const startDajys = dayjs(start)
@@ -97,10 +106,10 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
 				// (to sa bude diat len pri drope)
 				const resource = event.getResources()[0]
-				date = newResource ? newResource.extendedProps?.day : resource?.extendedProps?.day
+				date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
 			}
 
-			if (!eventId && !employeeId) {
+			if (!eventId || !employeeId) {
 				// ak nahodou nemam eventID alebo employeeId tak to vrati na povodne miesto
 				arg.revert()
 				return
@@ -110,7 +119,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				date,
 				timeFrom,
 				timeTo,
-				eventType: extendedProps?.eventType,
+				eventType: eventData?.eventType,
 				employee: {
 					key: employeeId
 				},
@@ -122,42 +131,16 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				arg.revert()
 			}
 
-			/* const startTime = {
-				minutes: dayjs(start).minute(),
-				seconds: dayjs(start).second()
-			}
+			if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
+				const customerId = eventData.customer?.id
+				const serviceId = eventData.service?.id
 
-			const endTime = {
-				minutes: dayjs(end).minute(),
-				seconds: dayjs(end).second()
-			}
-
-			const updatedEvent = {
-				...((extendedProps.originalEvent as CalendarEvent) || {}),
-				start: {
-					date,
-					time: timeFrom
-				},
-				end: {
-					date,
-					time: timeTo
-				},
-				startDateTime: dayjs(date).add(startTime.minutes, 'minute').add(startTime.seconds, 'second').toISOString(),
-				endDateTime: dayjs(date).add(endTime.minutes, 'minute').add(endTime.seconds, 'second').toISOString()
-			}
-
-			dispatch(updateCalendarEvent(updatedEvent)) */
-
-			if (extendedProps.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
-				const customerId = extendedProps?.originalEvent?.customer?.id
-				const serviceId = extendedProps?.originalEvent?.service?.id
-
-				handleSubmitReservation({ ...values, customer: { key: customerId }, service: { key: serviceId } } as any, onError)
+				handleSubmitReservationDebounced({ ...values, customer: { key: customerId }, service: { key: serviceId } } as any, onError)
 				return
 			}
-			handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm, onError)
+			handleSubmitEventDebounced({ ...values, calendarBulkEventID } as ICalendarEventForm, onError)
 		},
-		[handleSubmitEvent, handleSubmitReservation]
+		[handleSubmitReservationDebounced, handleSubmitEventDebounced]
 	)
 
 	const getView = () => {
@@ -221,4 +204,4 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	)
 })
 
-export default React.memo(CalendarContent)
+export default CalendarContent

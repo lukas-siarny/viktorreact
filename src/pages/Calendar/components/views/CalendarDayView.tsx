@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, FC } from 'react'
 import dayjs from 'dayjs'
 
 // full calendar
@@ -8,11 +8,12 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
+import { StringParam, useQueryParams } from 'use-query-params'
 import { composeDayViewEvents, composeDayViewResources, eventAllow } from '../../calendarHelpers'
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
 
 // types
-import { ICalendarView } from '../../../../types/interfaces'
+import { ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
@@ -20,25 +21,39 @@ import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-
 // components
 import CalendarEvent from '../CalendarEvent'
 
-const resourceLabelContent = (data: any) => {
-	const { resource } = data || {}
-	const extendedProps = resource?.extendedProps
-	const color = resource?.eventBackgroundColor
+interface IResourceLabel {
+	image?: string
+	color?: string
+	name?: string
+	description?: string
+	isTimeOff?: boolean
+}
 
+const ResourceLabel: FC<IResourceLabel> = React.memo((props) => {
+	const { image, color, name, description, isTimeOff } = props
 	return (
 		<div className={'nc-day-resource-label'}>
-			<div className={'image w-6 h-6 bg-notino-gray bg-cover'} style={{ backgroundImage: `url("${extendedProps.image}")`, borderColor: color }} />
+			<div className={'image w-6 h-6 bg-notino-gray bg-cover'} style={{ backgroundImage: `url("${image}")`, borderColor: color }} />
 			<div className={'info flex flex-col justify-start text-xs font-normal min-w-0'}>
-				<span className={'name'}>{extendedProps.name}</span>
-				<span className={'description'}>{extendedProps.description}</span>
+				<span className={'name'}>{name}</span>
+				<span className={'description'}>{description}</span>
 			</div>
-			{extendedProps.isTimeOff && (
+			{isTimeOff && (
 				<div className={'absence-icon'}>
 					<AbsenceIcon />
 				</div>
 			)}
 		</div>
 	)
+})
+
+const resourceLabelContent = (data: any) => {
+	const { resource } = data || {}
+	const extendedProps = resource?.extendedProps as IDayViewResourceExtenedProps
+	const { employee } = extendedProps || {}
+	const color = resource?.eventBackgroundColor
+
+	return <ResourceLabel image={employee?.image} color={color} isTimeOff={employee?.isTimeOff} name={employee?.name} description={employee?.description} />
 }
 
 const slotLabelContent = (data: SlotLabelContentArg) => {
@@ -51,6 +66,10 @@ interface ICalendarDayView extends ICalendarView {}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
 	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange } = props
+
+	const [query, setQuery] = useQueryParams({
+		sidebarView: StringParam
+	})
 
 	const events = useMemo(
 		() => composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees),
@@ -67,7 +86,9 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			allDay: false,
 			resourceId: arg.resource?.id,
 			extendedProps: {
-				eventType: CALENDAR_EVENT_TYPE.RESERVATION
+				eventData: {
+					eventType: CALENDAR_EVENT_TYPE.RESERVATION
+				}
 			}
 		}
 
@@ -89,15 +110,17 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 					editable: true,
 					resourceId,
 					extendedProps: {
-						eventType: CALENDAR_EVENT_TYPE.RESERVATION,
-						editable: true
+						eventData: {
+							eventType: CALENDAR_EVENT_TYPE.RESERVATION
+						}
 					}
 				}
 				calnedar.addEvent(newEvent)
+				setQuery({ ...query, sidebarView: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION })
 			} else {
-				placeholder.setDates(arg.start, arg.end)
-				placeholder.setResources([resourceId])
-				// placeholder.remove()
+				// placeholder.setDates(arg.start, arg.end)
+				// placeholder.setResources([resourceId])
+				placeholder.remove()
 			}
 		}
 	}

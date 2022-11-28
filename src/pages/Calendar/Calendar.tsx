@@ -100,8 +100,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [visibleBulkModal, setVisibleBulkModal] = useState<{ requestType: REQUEST_TYPE; eventType?: CALENDAR_EVENT_TYPE } | null>(null)
 	const [isRemoving, setIsRemoving] = useState(false)
-	const [isUpdatingEvent, setIsUpdateingEvent] = useState(false)
+	const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)
 	const [tempValues, setTempValues] = useState<ICalendarEventForm | null>(null)
+
 	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || isUpdatingEvent
 
 	const formValuesBulkForm: Partial<IBulkConfirmForm> = useSelector((state: RootState) => getFormValues(FORM.CONFIRM_BULK_FORM)(state))
@@ -373,6 +374,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			const eventId = values.eventId ? values.eventId : query.eventId
 
 			try {
+				setIsUpdatingEvent(true)
 				const reqData = {
 					start: {
 						date: values.date,
@@ -410,6 +412,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				if (onError) {
 					onError()
 				}
+			} finally {
+				setIsUpdatingEvent(false)
 			}
 		},
 		[query.eventId, salonID, setEventManagement]
@@ -429,7 +433,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			// dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: null }))
 			try {
 				// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
-				setIsUpdateingEvent(true)
+				setIsUpdatingEvent(true)
 				let repeatEvent
 				if (values.customRepeatOptions) {
 					repeatEvent = values.customRepeatOptions
@@ -509,10 +513,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
-				setIsUpdateingEvent(false)
 				if (onError) {
 					onError()
 				}
+			} finally {
+				setIsUpdatingEvent(false)
 			}
 		},
 		[dispatch, fetchEvents, formValuesBulkForm?.actionType, query.eventId, salonID, setEventManagement]

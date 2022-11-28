@@ -1,11 +1,20 @@
 /* eslint-disable import/no-cycle */
-import { DateSpanApi, EventApi, EventDropArg } from '@fullcalendar/react'
+import { DateSpanApi, EventApi } from '@fullcalendar/react'
 import dayjs from 'dayjs'
 import { t } from 'i18next'
 import { uniqueId } from 'lodash'
 
 // types
-import { CalendarEvent, ICalendarEventsPayload, Employees } from '../../types/interfaces'
+import {
+	CalendarEvent,
+	ICalendarEventsPayload,
+	Employees,
+	ICalendarEventCardData,
+	IEventExtenedProps,
+	IResourceEmployee,
+	IWeekViewResourceExtenedProps,
+	IDayViewResourceExtenedProps
+} from '../../types/interfaces'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../utils/enums'
@@ -106,24 +115,20 @@ const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, sele
 const getBgEventEnd = (start: string, end: string) =>
 	dayjs(end).diff(start, 'minutes') < CALENDAR_COMMON_SETTINGS.EVENT_MIN_DURATION ? dayjs(start).add(CALENDAR_COMMON_SETTINGS.EVENT_MIN_DURATION, 'minutes').toISOString() : end
 
-export interface ICalendarEventCardData {
-	id: string
-	resourceId: string
-	start: string
-	end: string
-	eventType: CALENDAR_EVENT_TYPE
-	editable: boolean
-	resourceEditable: boolean
-	allDay: boolean
-	isMultiDayEvent?: boolean
-	isLastMultiDaylEventInCurrentRange?: boolean
-	isFirstMultiDayEventInCurrentRange?: boolean
-	employee?: CalendarEvent['employee']
-	reservationData?: CalendarEvent['reservationData']
-	service?: CalendarEvent['service']
-	customer?: CalendarEvent['customer']
-	note?: CalendarEvent['note']
-	originalEvent: CalendarEvent
+const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeOff: boolean, description?: string): IResourceEmployee => {
+	return {
+		id: employee.id,
+		name: getAssignedUserLabel({
+			id: employee.id,
+			firstName: employee.firstName,
+			lastName: employee?.lastName,
+			email: employee.email
+		}),
+		color: employee.color,
+		image: employee.image.resizedImages.thumbnail,
+		description,
+		isTimeOff
+	}
 }
 
 const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string, end: string): ICalendarEventCardData => ({
@@ -131,15 +136,15 @@ const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string
 	resourceId,
 	start,
 	end,
-	eventType: event.eventType as CALENDAR_EVENT_TYPE,
 	editable: !event.isMultiDayEvent,
 	resourceEditable: !event.isMultiDayEvent,
 	allDay: false,
-	employee: event.employee,
-	isMultiDayEvent: event.isMultiDayEvent,
-	isLastMultiDaylEventInCurrentRange: event.isLastMultiDaylEventInCurrentRange,
-	isFirstMultiDayEventInCurrentRange: event.isFirstMultiDayEventInCurrentRange,
-	originalEvent: event.originalEvent || event
+	eventData: {
+		...(event.originalEvent || event || {}),
+		isMultiDayEvent: event.isMultiDayEvent,
+		isLastMultiDaylEventInCurrentRange: event.isLastMultiDaylEventInCurrentRange,
+		isFirstMultiDayEventInCurrentRange: event.isFirstMultiDayEventInCurrentRange
+	}
 })
 
 /**
@@ -167,7 +172,7 @@ const composeDayViewReservations = (selectedDate: string, reservations: ICalenda
 			const calendarEvent = createBaseEvent(event, employeeID, start, end)
 			const bgEventEnd = getBgEventEnd(start, end)
 
-			switch (calendarEvent.eventType) {
+			switch (calendarEvent.eventData.eventType) {
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
 					composedEvents.push({
 						...calendarEvent,
@@ -196,19 +201,12 @@ const composeDayViewReservations = (selectedDate: string, reservations: ICalenda
 					break
 				}
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
+				case CALENDAR_EVENT_TYPE.RESERVATION:
 					composedEvents.push({
 						...calendarEvent
 					})
 					break
-				case CALENDAR_EVENT_TYPE.RESERVATION:
 				default:
-					composedEvents.push({
-						...calendarEvent,
-						reservationData: event.reservationData,
-						service: event.service,
-						customer: event.customer,
-						note: event.note
-					})
 					break
 			}
 		}
@@ -297,17 +295,8 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 
 		return {
 			id: employee.id,
-			name: getAssignedUserLabel({
-				id: employee.id,
-				firstName: employee.firstName,
-				lastName: employee?.lastName,
-				email: employee.email
-			}),
 			eventBackgroundColor: employee.color,
-			image: employee.image.resizedImages.thumbnail,
-			description,
-			isTimeOff: !!employeeTimeOff.length,
-			employee
+			employee: createEmployeeResourceData(employee, !!employeeTimeOff.length, description)
 		}
 	})
 }
@@ -354,15 +343,9 @@ export const composeWeekResources = (weekDays: string[], shiftsTimeOffs: ICalend
 		const weekDayEmployees = employees.map((employee) => {
 			return {
 				id: getWeekDayResourceID(employee.id, weekDay),
-				day: weekDay,
 				eventBackgroundColor: employee.color,
-				employee: {
-					id: employee.id,
-					name: `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.inviteEmail || employee.id,
-					image: employee.image.resizedImages.thumbnail,
-					isTimeOff: !!timeOffsWeekDay?.filter((timeOff) => timeOff.employee?.id === employee.id).length,
-					employee
-				}
+				day: weekDay,
+				employee: createEmployeeResourceData(employee, !!timeOffsWeekDay?.filter((timeOff) => timeOff.employee?.id === employee.id).length)
 			}
 		})
 		return [...resources, ...weekDayEmployees]
@@ -410,7 +393,7 @@ const composeWeekViewReservations = (
 			const calendarEvent = createBaseEvent(event, resourceId, start, end)
 			const bgEventEnd = getBgEventEnd(start, end)
 
-			switch (calendarEvent.eventType) {
+			switch (calendarEvent.eventData.eventType) {
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
 					composedEvents.push({
 						...calendarEvent,
@@ -439,19 +422,12 @@ const composeWeekViewReservations = (
 					break
 				}
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
+				case CALENDAR_EVENT_TYPE.RESERVATION:
 					composedEvents.push({
 						...calendarEvent
 					})
 					break
-				case CALENDAR_EVENT_TYPE.RESERVATION:
 				default:
-					composedEvents.push({
-						...calendarEvent,
-						reservationData: event.reservationData,
-						service: event.service,
-						customer: event.customer,
-						note: event.note
-					})
 					break
 			}
 		}
@@ -501,14 +477,17 @@ export const composeWeekViewEvents = (
 }
 
 export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null) => {
-	const isReservation = movingEvent?.extendedProps?.eventType === CALENDAR_EVENT_TYPE.RESERVATION
+	const extenedProps: IEventExtenedProps | undefined = movingEvent?.extendedProps
+	const { eventData } = extenedProps || {}
+	const isReservation = eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION
+	const resourceExtenedProps = dropInfo?.resource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
 
 	if (isReservation) {
 		return true
 	}
 
-	const resourceEmployeeId = dropInfo?.resource?.extendedProps?.employee?.id
-	const eventEmployeeId = movingEvent?.extendedProps.employee?.id
+	const resourceEmployeeId = resourceExtenedProps?.employee?.id
+	const eventEmployeeId = eventData?.employee?.id
 
 	return resourceEmployeeId === eventEmployeeId
 }

@@ -1,22 +1,24 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Field, FieldArray, getFormValues, InjectedFormProps, reduxForm, WrappedFieldArrayProps } from 'redux-form'
+import { Field, FieldArray, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Col, Collapse, Divider, Form, Row, Tooltip } from 'antd'
+import { Button, Divider, Form, Row } from 'antd'
 
 // atoms
+import { map } from 'lodash'
 import SwitchField from '../../../atoms/SwitchField'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SelectField from '../../../atoms/SelectField'
 
 // components
 import NotificationArrayFields from './NotificationArrayFields'
+import CheckboxGroupNestedField from '../../IndustriesPage/components/CheckboxGroupNestedField'
 
 // types
 import { IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
-import { FORM, RS_NOTIFICATION_TYPE, RS_NOTIFICATION, RS_NOTIFICATION_FIELD_TEXTS, NOTIFICATION_CHANNEL } from '../../../utils/enums'
+import { FORM, RS_NOTIFICATION, NOTIFICATION_CHANNEL } from '../../../utils/enums'
 import { showErrorNotification /* , showServiceCategory, validationNumberMin */ } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -28,7 +30,6 @@ import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as SettingsIcon } from '../../../assets/icons/setting.svg'
 import { ReactComponent as BellIcon } from '../../../assets/icons/bell-24.svg'
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg'
-import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon-32.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 
 // redux
@@ -39,6 +40,8 @@ const getFrequencyOption = (minutes: number): ISelectOptionItem => {
 }
 
 const FREQUENCIES: ISelectOptionItem[] = [getFrequencyOption(15), getFrequencyOption(20), getFrequencyOption(30), getFrequencyOption(60)]
+
+const NOTIFICATIONS = Object.keys(RS_NOTIFICATION)
 
 type ComponentProps = {
 	salonID: string
@@ -53,9 +56,28 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const dispatch = useDispatch()
 	const disabled = submitting
 	const hasPermission = true // TODO: permissions?
-	const formValues: any = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
+	const groupedServicesByCategory = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 	// const { enabledReservations } = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state)) as any
 	// const disabled = false // enabledReservations !== true
+
+	const treeData = map(groupedServicesByCategory, (level1) => {
+		return {
+			title: level1.category?.name,
+			id: level1.category?.id,
+			children: map(level1.category?.children, (level2) => {
+				return {
+					id: level2.category?.id,
+					title: level2.category?.name,
+					children: map(level2.category?.children, (level3) => {
+						return {
+							id: level3.category.id,
+							title: level3.category.name
+						}
+					})
+				}
+			})
+		}
+	})
 
 	return (
 		<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
@@ -175,7 +197,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						<div className={'w-9/20'}>
 							<h4 className={'mb-0 mt-0 '}>{t('loc:Zákaznícke notifikácie')}</h4>
 							<Divider className={'mt-3 mb-1-5'} />
-							{Object.keys(RS_NOTIFICATION).map((key, index) => (
+							{NOTIFICATIONS.map((key, index) => (
 								<FieldArray
 									key={index}
 									name={`disabledNotifications[${key}].b2cChannels` as string}
@@ -190,7 +212,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						<div className={'w-9/20'}>
 							<h4 className={'mb-0 mt-0 '}>{t('loc:Interné notifikácie')}</h4>
 							<Divider className={'mt-3 mb-1-5'} />
-							{Object.keys(RS_NOTIFICATION).flatMap((key) => {
+							{NOTIFICATIONS.flatMap((key) => {
 								return excludedB2BNotifications.includes(key)
 									? []
 									: [
@@ -217,6 +239,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					</div>
 					<Divider className={'mt-1 mb-3'} />
 					<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Vyberte služby, ktoré bude možné rezervovať si online a ktoré budú automaticky potvrdené.')}</p>
+					<Field name={'categoryIDs'} component={CheckboxGroupNestedField} dataTree={treeData} />
 				</div>
 			</Row>
 			{hasPermission && (

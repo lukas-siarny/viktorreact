@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Field, FieldArray, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Col, Collapse, Divider, Form, Row, Tooltip } from 'antd'
+import { Button, Divider, Form, Row } from 'antd'
 
 // atoms
 import { map } from 'lodash'
@@ -10,11 +10,15 @@ import SwitchField from '../../../atoms/SwitchField'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SelectField from '../../../atoms/SelectField'
 
+// components
+import NotificationArrayFields from './NotificationArrayFields'
+import CheckboxGroupNestedField from '../../IndustriesPage/components/CheckboxGroupNestedField'
+
 // types
 import { IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { FORM, RS_NOTIFICATION, NOTIFICATION_CHANNEL } from '../../../utils/enums'
 import { showErrorNotification /* , showServiceCategory, validationNumberMin */ } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -26,7 +30,7 @@ import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as SettingsIcon } from '../../../assets/icons/setting.svg'
 import { ReactComponent as BellIcon } from '../../../assets/icons/bell-24.svg'
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg'
-import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon-32.svg'
+import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 
 // redux
 import { RootState } from '../../../reducers'
@@ -47,20 +51,17 @@ const getFrequencyOption = (minutes: number): ISelectOptionItem => {
 
 const FREQUENCIES: ISelectOptionItem[] = [getFrequencyOption(15), getFrequencyOption(20), getFrequencyOption(30), getFrequencyOption(60)]
 
-// TODO: otifikacia fieldy
-const NotificationFields = (param: any) => {
-	const [t] = useTranslation()
-	const disabled = false
-	const items = param.fields.map((field: any, index: any) => (
-		<div key={field} className={'flex items-center bg-gray-50 rounded mr-2 px-1'}>
-			<Field component={SwitchField} label={t('loc:SMS')} name={`${field}.sms`} size={'middle'} disabled={disabled} />
-		</div>
-	))
+const NOTIFICATIONS = Object.keys(RS_NOTIFICATION)
 
-	return <div className={'flex items-center'}>{items}</div>
+type ComponentProps = {
+	salonID: string
+	excludedB2BNotifications: string[]
 }
+
+type Props = InjectedFormProps<IReservationSystemSettingsForm, ComponentProps> & ComponentProps
+
 const ReservationSystemSettingsForm = (props: Props) => {
-	const { salonID, handleSubmit, pristine, submitting } = props
+	const { salonID, handleSubmit, pristine, submitting, excludedB2BNotifications } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const disabled = submitting
@@ -92,19 +93,6 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			})
 		}
 	})
-
-	const getNotificationTitle = useCallback((title: string, tooltip: string) => {
-		return (
-			<div className={'flex my-6'}>
-				<div className={'mb-0 mt-0 flex items-center justify-between'}>
-					<span className='base-semibold'>{title}</span>
-					<Tooltip title={tooltip} className={'cursor-pointer'}>
-						<InfoIcon width={16} height={16} className={'text-notino-grayDark'} />
-					</Tooltip>
-				</div>
-			</div>
-		)
-	}, [])
 
 	return (
 		<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
@@ -175,7 +163,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							component={InputNumberField}
 							label={t('loc:Zrušenie rezervácie')}
 							placeholder={t('loc:Zadajte počet hodín pred termínom')}
-							name={'minHoursB2cCancelReservationBeforeStart'}
+							name={'maxHoursB2cCancelReservationBeforeStart'}
 							size={'large'}
 							disabled={disabled}
 							className='flex-1'
@@ -212,33 +200,46 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						</h3>
 					</div>
 					<Divider className={'mt-1 mb-3'} />
-					<div className={'flex'}>
+					{/* NOTE: ready for future implementation when SMS will be supported */}
+					{/* <div className={'flex'}>
 						<div className='w-full s-regular flex items-center bg-notino-red bg-opacity-5 p-2'>
 							<InfoIcon className={'text-notino-red mr-2'} width={16} height={16} />
 							<span>{t('loc:SMS notifikácie sú spoplatnené podľa aktuálneho cenníka Notino.')}</span>
 						</div>
-					</div>
+					</div> */}
 					<Row justify={'space-between'} className='mt-7'>
 						{/* Client's notifications */}
 						<div className={'w-9/20'}>
 							<h4 className={'mb-0 mt-0 '}>{t('loc:Zákaznícke notifikácie')}</h4>
-							<Divider className={'mt-3'} />
-							{getNotificationTitle(
-								t('loc:Rezervácie čakajúce na schválenie'),
-								t('loc:Zákazník dostane notifikáciu, že jeho rezervácia čaká na schválenie salónom.')
-							)}
+							<Divider className={'mt-3 mb-1-5'} />
+							{NOTIFICATIONS.map((key, index) => (
+								<FieldArray
+									key={index}
+									name={`disabledNotifications[${key}].b2cChannels` as string}
+									component={NotificationArrayFields as any}
+									notificationType={key}
+									channel={NOTIFICATION_CHANNEL.B2C}
+								/>
+							))}
 						</div>
 
 						{/* Internal notifications */}
 						<div className={'w-9/20'}>
 							<h4 className={'mb-0 mt-0 '}>{t('loc:Interné notifikácie')}</h4>
-							<Divider className={'mt-3'} />
-							{getNotificationTitle(
-								t('loc:Rezervácie čakajúce na schválenie'),
-								t('loc:Zákazník dostane notifikáciu, že jeho rezervácia čaká na schválenie salónom.')
-							)}
-							{/* // TODO: doriesit array field */}
-							<FieldArray component={NotificationFields} name={'emails'} />
+							<Divider className={'mt-3 mb-1-5'} />
+							{NOTIFICATIONS.flatMap((key) => {
+								return excludedB2BNotifications.includes(key)
+									? []
+									: [
+											<FieldArray
+												key={key}
+												name={`disabledNotifications[${key}].b2bChannels` as string}
+												component={NotificationArrayFields as any}
+												notificationType={key}
+												channel={NOTIFICATION_CHANNEL.B2B}
+											/>
+									  ]
+							})}
 						</div>
 					</Row>
 				</div>

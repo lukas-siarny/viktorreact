@@ -625,8 +625,26 @@ export interface IBulkConfirmForm {
 	actionType: CONFIRM_BULK
 }
 
-export interface EventExtenedProps {
+export interface IEventExtenedProps {
 	eventData?: CalendarEvent
+}
+
+export interface IResourceEmployee {
+	id: string
+	image: string,
+	name: string
+	isTimeOff: boolean
+	color?: string
+	description?: string
+}
+
+export interface IDayViewResourceExtenedProps {
+	employee?: IResourceEmployee
+}
+
+export interface IWeekViewResourceExtenedProps {
+	day?: string
+	employee?: IResourceEmployee
 }
 
 export interface ICalendarEventCardData {

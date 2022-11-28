@@ -12,7 +12,7 @@ import { getTimeText } from '../calendarHelpers'
 // components
 import AbsenceCard from './AbsenceCard'
 import ReservationCard from './ReservationCard'
-import { EventExtenedProps } from '../../../types/interfaces'
+import { IEventExtenedProps } from '../../../types/interfaces'
 
 interface ICalendarEventProps {
 	calendarView: CALENDAR_VIEW
@@ -35,7 +35,7 @@ const BackgroundEvent: FC<{ eventType?: CALENDAR_EVENT_TYPE }> = React.memo(({ e
 const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, onEditEvent }) => {
 	const { event, backgroundColor } = data || {}
 	const { start, end } = event || {}
-	const { eventData } = (event.extendedProps as EventExtenedProps) || {}
+	const { eventData } = (event.extendedProps as IEventExtenedProps) || {}
 	const {
 		id,
 		start: eventStart,

@@ -5,7 +5,16 @@ import { t } from 'i18next'
 import { uniqueId } from 'lodash'
 
 // types
-import { CalendarEvent, ICalendarEventsPayload, Employees, ICalendarEventCardData, EventExtenedProps } from '../../types/interfaces'
+import {
+	CalendarEvent,
+	ICalendarEventsPayload,
+	Employees,
+	ICalendarEventCardData,
+	IEventExtenedProps,
+	IResourceEmployee,
+	IWeekViewResourceExtenedProps,
+	IDayViewResourceExtenedProps
+} from '../../types/interfaces'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../utils/enums'
@@ -105,6 +114,22 @@ const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, sele
 // ak je dlzka bg eventu mensia ako min dielik v kalendari (u nas 15 minut), tak ho to vytvorime ako 15 minutovy, lebo to vyzera divne potom
 const getBgEventEnd = (start: string, end: string) =>
 	dayjs(end).diff(start, 'minutes') < CALENDAR_COMMON_SETTINGS.EVENT_MIN_DURATION ? dayjs(start).add(CALENDAR_COMMON_SETTINGS.EVENT_MIN_DURATION, 'minutes').toISOString() : end
+
+const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeOff: boolean, description?: string): IResourceEmployee => {
+	return {
+		id: employee.id,
+		name: getAssignedUserLabel({
+			id: employee.id,
+			firstName: employee.firstName,
+			lastName: employee?.lastName,
+			email: employee.email
+		}),
+		color: employee.color,
+		image: employee.image.resizedImages.thumbnail,
+		description,
+		isTimeOff
+	}
+}
 
 const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string, end: string): ICalendarEventCardData => ({
 	id: event.id,
@@ -270,17 +295,8 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 
 		return {
 			id: employee.id,
-			name: getAssignedUserLabel({
-				id: employee.id,
-				firstName: employee.firstName,
-				lastName: employee?.lastName,
-				email: employee.email
-			}),
 			eventBackgroundColor: employee.color,
-			image: employee.image.resizedImages.thumbnail,
-			description,
-			isTimeOff: !!employeeTimeOff.length,
-			employee
+			employee: createEmployeeResourceData(employee, !!employeeTimeOff.length, description)
 		}
 	})
 }
@@ -327,15 +343,9 @@ export const composeWeekResources = (weekDays: string[], shiftsTimeOffs: ICalend
 		const weekDayEmployees = employees.map((employee) => {
 			return {
 				id: getWeekDayResourceID(employee.id, weekDay),
-				day: weekDay,
 				eventBackgroundColor: employee.color,
-				employee: {
-					id: employee.id,
-					name: `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.inviteEmail || employee.id,
-					image: employee.image.resizedImages.thumbnail,
-					isTimeOff: !!timeOffsWeekDay?.filter((timeOff) => timeOff.employee?.id === employee.id).length,
-					employee
-				}
+				day: weekDay,
+				employee: createEmployeeResourceData(employee, !!timeOffsWeekDay?.filter((timeOff) => timeOff.employee?.id === employee.id).length)
 			}
 		})
 		return [...resources, ...weekDayEmployees]
@@ -467,15 +477,16 @@ export const composeWeekViewEvents = (
 }
 
 export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null) => {
-	const extenedProps: EventExtenedProps | undefined = movingEvent?.extendedProps
+	const extenedProps: IEventExtenedProps | undefined = movingEvent?.extendedProps
 	const { eventData } = extenedProps || {}
 	const isReservation = eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION
+	const resourceExtenedProps = dropInfo?.resource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
 
 	if (isReservation) {
 		return true
 	}
 
-	const resourceEmployeeId = dropInfo?.resource?.extendedProps?.employee?.id
+	const resourceEmployeeId = resourceExtenedProps?.employee?.id
 	const eventEmployeeId = eventData?.employee?.id
 
 	return resourceEmployeeId === eventEmployeeId

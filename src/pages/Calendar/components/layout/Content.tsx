@@ -17,7 +17,15 @@ import CalendarWeekView from '../views/CalendarWeekView'
 import CalendarEmptyState from '../CalendarEmptyState'
 
 // types
-import { Employees, EventExtenedProps, ICalendarEventForm, ICalendarEventsPayload, ICalendarReservationForm } from '../../../../types/interfaces'
+import {
+	Employees,
+	IEventExtenedProps,
+	ICalendarEventForm,
+	ICalendarEventsPayload,
+	ICalendarReservationForm,
+	IWeekViewResourceExtenedProps,
+	IDayViewResourceExtenedProps
+} from '../../../../types/interfaces'
 
 type Props = {
 	view: CALENDAR_VIEW
@@ -76,14 +84,15 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			const { event } = arg
 			const { start, end } = event
 			const { newResource } = arg as EventDropArg
-			const eventExtenedProps = (event.extendedProps as EventExtenedProps) || {}
+			const eventExtenedProps = (event.extendedProps as IEventExtenedProps) || {}
 			const eventData = eventExtenedProps?.eventData
+			const newResourceExtendedProps = newResource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
 
 			const eventId = eventData?.id
 			const calendarBulkEventID = eventData?.calendarBulkEvent?.id || eventData?.calendarBulkEvent
 
 			// ak sa zmenil resource, tak updatenut resource (to sa bude diat len pri drope)
-			const employeeId = newResource ? newResource.extendedProps?.employee?.id : eventData?.employee.id
+			const employeeId = newResource ? newResourceExtendedProps?.employee?.id : eventData?.employee.id
 
 			// zatial predpokladame, ze nebudu viacdnove eventy - takze start a end date by mal byt rovnaky
 			const startDajys = dayjs(start)
@@ -96,7 +105,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
 				// (to sa bude diat len pri drope)
 				const resource = event.getResources()[0]
-				date = newResource ? newResource.extendedProps?.day : resource?.extendedProps?.day
+				date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
 			}
 
 			if (!eventId || !employeeId) {

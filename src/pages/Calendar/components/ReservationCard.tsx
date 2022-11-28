@@ -123,6 +123,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 			service={service}
 			employee={employee}
 			customer={customer}
+			reservationData={reservationData}
 			note={note}
 			noteFromB2CCustomer={noteFromB2CCustomer}
 			originalEventData={originalEventData}

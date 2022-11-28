@@ -16,7 +16,7 @@ import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW } from '.
 import { composeWeekResources, composeWeekViewEvents, eventAllow, getWeekDays, getWeekViewSelectedDate } from '../../calendarHelpers'
 
 // types
-import { ICalendarView } from '../../../../types/interfaces'
+import { ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
@@ -53,14 +53,15 @@ const resourceAreaColumns = [
 		width: 145,
 		cellContent: (args: any) => {
 			const { resource } = args || {}
-			const { extendedProps, eventBackgroundColor } = resource || {}
-			const employee = extendedProps.employee || {}
+			const { eventBackgroundColor } = resource || {}
+			const extendedProps = resource?.extendedProps as IWeekViewResourceExtenedProps
+			const employee = extendedProps?.employee
 
 			return (
 				<div className={'nc-week-label-resource'}>
-					<div className={'image'} style={{ backgroundImage: `url("${employee.image}")`, borderColor: eventBackgroundColor }} />
-					<span className={'info block text-xs font-normal min-w-0 truncate max-w-full'}>{employee.name}</span>
-					{employee.isTimeOff && (
+					<div className={'image'} style={{ backgroundImage: `url("${employee?.image}")`, borderColor: eventBackgroundColor }} />
+					<span className={'info block text-xs font-normal min-w-0 truncate max-w-full'}>{employee?.name}</span>
+					{employee?.isTimeOff && (
 						<div className={'absence-icon'}>
 							<AbsenceIcon />
 						</div>

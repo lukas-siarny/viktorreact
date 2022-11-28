@@ -8,11 +8,12 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
+import { StringParam, useQueryParams } from 'use-query-params'
 import { composeDayViewEvents, composeDayViewResources, eventAllow } from '../../calendarHelpers'
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
 
 // types
-import { ICalendarView } from '../../../../types/interfaces'
+import { ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
@@ -48,10 +49,11 @@ const ResourceLabel: FC<IResourceLabel> = React.memo((props) => {
 
 const resourceLabelContent = (data: any) => {
 	const { resource } = data || {}
-	const extendedProps = resource?.extendedProps
+	const extendedProps = resource?.extendedProps as IDayViewResourceExtenedProps
+	const { employee } = extendedProps || {}
 	const color = resource?.eventBackgroundColor
 
-	return <ResourceLabel image={extendedProps?.image} color={color} isTimeOff={extendedProps?.isTimeOff} name={extendedProps?.name} description={extendedProps?.description} />
+	return <ResourceLabel image={employee?.image} color={color} isTimeOff={employee?.isTimeOff} name={employee?.name} description={employee?.description} />
 }
 
 const slotLabelContent = (data: SlotLabelContentArg) => {
@@ -64,6 +66,10 @@ interface ICalendarDayView extends ICalendarView {}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
 	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange } = props
+
+	const [query, setQuery] = useQueryParams({
+		sidebarView: StringParam
+	})
 
 	const events = useMemo(
 		() => composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees),
@@ -110,6 +116,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 					}
 				}
 				calnedar.addEvent(newEvent)
+				setQuery({ ...query, sidebarView: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION })
 			} else {
 				// placeholder.setDates(arg.start, arg.end)
 				// placeholder.setResources([resourceId])

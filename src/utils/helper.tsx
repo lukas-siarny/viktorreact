@@ -791,10 +791,8 @@ export const sortData = (a?: any, b?: any) => {
 export const optionRenderNotiPinkCheckbox = (text: any, checked: any) => {
 	return (
 		<div
-			style={{ border: checked ? '1px solid #DC0069' : '1px solid #BFBFBF' }}
-			className={cx('border border-b-danger w-5 h-5 flex-center bg-notino-grayLighter rounded-full hover:border-b-danger', {
-				'bg-notino-pink': checked,
-				'text-notino-white': checked
+			className={cx('custom-rounded-checkbox', {
+				checked
 			})}
 		>
 			{text}

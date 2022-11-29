@@ -1,11 +1,11 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Field, FieldArray, FormSection, InjectedFormProps, reduxForm } from 'redux-form'
+import { change, Field, FieldArray, FormSection, InjectedFormProps, reduxForm } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Divider, Form, Row } from 'antd'
 
 // atoms
-import { map } from 'lodash'
+import { forEach, map } from 'lodash'
 import SwitchField from '../../../atoms/SwitchField'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SelectField from '../../../atoms/SelectField'
@@ -61,10 +61,49 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	// const { enabledReservations } = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state)) as any
 	// const disabled = false // enabledReservations !== true
 
+	const onChangeIndustryCheck = (checked: boolean, type: SERVICE_TYPE) => {
+		forEach(groupedServicesByCategory, (level1) =>
+			forEach(level1.category?.children, (level2) =>
+				forEach(level2.category?.children, (level3) => dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${type}][${level3.service.id}]`, checked)))
+			)
+		)
+	}
+
 	const treeData = map(groupedServicesByCategory, (level1) => {
 		// LEVEL 1
 		return {
 			title: level1.category?.name,
+			// title: (
+			// 	<div id={`level3-${level1.category?.id}`} className={'flex justify-between'}>
+			// 		<div>{level1.category?.name}</div>
+			// 		<div className={'flex'}>
+			// 			<FormSection name={SERVICE_TYPE.ONLINE_BOOKING}>
+			// 				<Field
+			// 					component={CheckboxField}
+			// 					key={`level1-${SERVICE_TYPE.ONLINE_BOOKING}-${level1.category?.id}`}
+			// 					name={level1.category?.id}
+			// 					onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeIndustryCheck(e.target.checked, SERVICE_TYPE.ONLINE_BOOKING)}
+			// 					disabled={disabled}
+			// 					hideChecker
+			// 					optionRender={optionRenderNotiPinkCheckbox}
+			// 					className={'p-0 h-6'}
+			// 				/>
+			// 			</FormSection>
+			// 			<FormSection name={SERVICE_TYPE.AUTO_CONFIRM}>
+			// 				<Field
+			// 					component={CheckboxField}
+			// 					onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeIndustryCheck(e.target.checked, SERVICE_TYPE.AUTO_CONFIRM)}
+			// 					key={`level1-${SERVICE_TYPE.AUTO_CONFIRM}-${level1.category?.id}`}
+			// 					name={level1.category?.id}
+			// 					disabled={disabled}
+			// 					hideChecker
+			// 					optionRender={optionRenderNotiPinkCheckbox}
+			// 					className={'p-0 h-6'}
+			// 				/>
+			// 			</FormSection>
+			// 		</div>
+			// 	</div>
+			// ),
 			className: `noti-tree-node-${1} text-lg`,
 			switcherIcon: (props2: any) => {
 				return props2?.expanded ? <ChevronDown style={{ transform: 'rotate(180deg)' }} /> : <ChevronDown />
@@ -283,9 +322,37 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					</div>
 					<Divider className={'mt-1 mb-3'} />
 					<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Vyberte služby, ktoré bude možné rezervovať si online a ktoré budú automaticky potvrdené.')}</p>
-					<div className={'text-xs flex'}>
-						<div>Online booking</div>
-						<div>Auto confirm</div>
+					<div className={''}>
+						<div className={'text-xs absolute'}>
+							<div>{t('loc:Online rezervácia')}</div>
+							<div>{t('loc:Automatické potvrdenie')}</div>
+						</div>
+						<div className={'flex justify-end pr-4'}>
+							<FormSection name={SERVICE_TYPE.ONLINE_BOOKING}>
+								<Field
+									component={CheckboxField}
+									key={`level1-${SERVICE_TYPE.ONLINE_BOOKING}`}
+									name={`level1-${SERVICE_TYPE.ONLINE_BOOKING}`}
+									onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeIndustryCheck(e.target.checked, SERVICE_TYPE.ONLINE_BOOKING)}
+									disabled={disabled}
+									hideChecker
+									optionRender={optionRenderNotiPinkCheckbox}
+									className={'p-0 h-6'}
+								/>
+							</FormSection>
+							<FormSection name={SERVICE_TYPE.AUTO_CONFIRM}>
+								<Field
+									component={CheckboxField}
+									onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeIndustryCheck(e.target.checked, SERVICE_TYPE.AUTO_CONFIRM)}
+									key={`level1-${SERVICE_TYPE.AUTO_CONFIRM}`}
+									name={`level1-${SERVICE_TYPE.AUTO_CONFIRM}`}
+									disabled={disabled}
+									hideChecker
+									optionRender={optionRenderNotiPinkCheckbox}
+									className={'p-0 h-6'}
+								/>
+							</FormSection>
+						</div>
 					</div>
 					<FormSection name={'servicesSettings'}>
 						<Field name={'services'} component={CheckboxGroupNestedField} dataTree={treeData} checkable={false} />

@@ -6,14 +6,14 @@ import cx from 'classnames'
 // assets
 import { ReactComponent as CloseIcon } from '../assets/icons/close-icon-2.svg'
 
-interface IConfirmkModal extends ModalProps {
+interface IConfirmModal extends ModalProps {
 	loading?: boolean
 	disabled?: boolean
 	onOk: () => void
 	onCancel: () => void
 }
 
-const ConfirmModal: FC<IConfirmkModal> = (props) => {
+const ConfirmModal: FC<IConfirmModal> = (props) => {
 	const { loading, disabled, onOk, onCancel, children, ...restProps } = props
 	const [t] = useTranslation()
 

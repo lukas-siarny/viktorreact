@@ -536,6 +536,7 @@ const ServiceForm: FC<Props> = (props) => {
 									allowClear
 									placeholder={t('loc:Vyberte zamestnancov')}
 									name={'employee'}
+									optionLabelProp={'label'}
 									onSearch={searchEmployees}
 									filterOption={true}
 									options={employees?.options}

@@ -167,6 +167,7 @@ const ReservationForm: FC<Props> = (props) => {
 									name={'customer'}
 									className={'pb-0'}
 									size={'large'}
+									optionLabelProp={'label'}
 									suffixIcon={<ProfileIcon />}
 									update={(itemKey: number, ref: any) => ref.blur()}
 									filterOption={false}
@@ -228,6 +229,7 @@ const ReservationForm: FC<Props> = (props) => {
 							suffixIcon={<ProfileIcon />}
 							placeholder={t('loc:Vyber zamestnanca')}
 							name={'employee'}
+							optionLabelProp={'label'}
 							size={'large'}
 							update={(itemKey: number, ref: any) => ref.blur()}
 							filterOption={false}

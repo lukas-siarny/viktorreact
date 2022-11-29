@@ -5,7 +5,7 @@ import Layout from 'antd/lib/layout/layout'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
 import { compact, includes, isEmpty, map } from 'lodash'
-import { destroy, getFormValues, initialize, submit } from 'redux-form'
+import { getFormValues, initialize, submit } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 
@@ -300,16 +300,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMainLayoutSiderCollapsed])
 
-	useEffect(() => {
-		// ak ma uzivatel otvoreny modal na bulk akcie a refreshne tab, tak sa neprecistia data z formularu
-		// nasledny edit bulkoveho eventu sa bez precistenia dat nesprava korektne
-		const destroyBulkForm = () => {
-			dispatch(destroy(FORM.CONFIRM_BULK_FORM))
-		}
-		window.addEventListener('beforeunload', destroyBulkForm)
-		return () => window.removeEventListener('beforeunload', destroyBulkForm)
-	}, [dispatch])
-
 	const handleSubmitFilter = (values: ICalendarFilter) => {
 		setQuery({
 			...query,
@@ -419,6 +409,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
+				// ak neprejde request, tak sa event v kalendari vráti na pôvodne miesto
 				if (revertEvent) {
 					revertEvent()
 				}
@@ -522,6 +513,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
+				// ak neprejde request, tak sa event v kalendari vráti na pôvodne miesto
 				if (revertEvent) {
 					revertEvent()
 				}
@@ -581,6 +573,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				visible={!!visibleBulkModal?.requestType}
 				onCancel={() => {
 					if (visibleBulkModal?.revertEvent) {
+						// ak uzivatel zrusi vykonanie akcie, tak sa event v kalendari vrati na pôvodne miesto
 						visibleBulkModal.revertEvent()
 					}
 					setVisibleBulkModal(null)

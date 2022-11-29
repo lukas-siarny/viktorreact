@@ -126,7 +126,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			}
 
 			const revertEvent = () => {
-				// ak neprejde request alebo uzivatel zrusi bulk modal tak to vrati na pôvodne miesto
 				arg.revert()
 			}
 

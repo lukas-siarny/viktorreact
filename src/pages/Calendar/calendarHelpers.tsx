@@ -479,12 +479,12 @@ export const composeWeekViewEvents = (
 export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null) => {
 	const extenedProps: IEventExtenedProps | undefined = movingEvent?.extendedProps
 	const { eventData } = extenedProps || {}
-	const isReservation = eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION
-	const resourceExtenedProps = dropInfo?.resource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
 
-	if (isReservation) {
+	if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
 		return true
 	}
+
+	const resourceExtenedProps = dropInfo?.resource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
 
 	const resourceEmployeeId = resourceExtenedProps?.employee?.id
 	const eventEmployeeId = eventData?.employee?.id

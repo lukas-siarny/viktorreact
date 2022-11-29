@@ -612,7 +612,7 @@ export interface ICalendarView {
 	shiftsTimeOffs: ICalendarEventsPayload['data']
 	employees: Employees
 	salonID: string
-	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
+	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	onEventChange: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
 	loading?: boolean
 	refetchData: () => void
@@ -625,12 +625,14 @@ export interface IEventCardProps {
 	end: Date | null
 	diff: number
 	timeText: string
-	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
+	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	isMultiDayEvent?: boolean
 	isLastMultiDaylEventInCurrentRange?: boolean
 	isFirstMultiDayEventInCurrentRange?: boolean
 	employee?: CalendarEvent['employee']
 	backgroundColor?: string
+	isPlaceholder?: boolean
+	isEdit?: boolean
 	originalEventData: {
 		id?: CalendarEvent['id']
 		start?: CalendarEvent['start']
@@ -646,6 +648,7 @@ export interface IBulkConfirmForm {
 
 export interface IEventExtenedProps {
 	eventData?: CalendarEvent
+	isPlaceholder?: boolean
 }
 
 export interface IResourceEmployee {
@@ -674,5 +677,6 @@ export interface ICalendarEventCardData {
 	editable: boolean
 	resourceEditable: boolean
 	allDay: boolean
+	isPlaceholder?: boolean
 	eventData: CalendarEvent
 }

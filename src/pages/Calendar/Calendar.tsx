@@ -635,11 +635,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 								employeeIDs: getEmployeeIDs(employees?.options)
 							})
 						}}
-						onEditEvent={(eventId: string, eventType: CALENDAR_EVENT_TYPE) => {
+						onEditEvent={(eventType: CALENDAR_EVENT_TYPE, eventId: string) => {
 							setQuery({
+								...query,
 								eventId,
 								sidebarView: eventType
 							})
+							if (query.view === CALENDAR_VIEW.DAY) {
+								setTimeout(updateCalendarSize.current, 0)
+							}
 						}}
 						refetchData={fetchEvents}
 						handleSubmitReservation={handleSubmitReservation}

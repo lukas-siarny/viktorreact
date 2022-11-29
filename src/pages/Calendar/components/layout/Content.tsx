@@ -43,7 +43,7 @@ type Props = {
 	onShowAllEmployees: () => void
 	showEmptyState: boolean
 	salonID: string
-	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
+	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
 	handleSubmitEvent: (values: ICalendarEventForm, onError?: () => void) => void
 	refetchData: () => void

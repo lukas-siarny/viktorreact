@@ -3,6 +3,7 @@
 import React, { useState, FC, useCallback } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
+import { StringParam, useQueryParams } from 'use-query-params'
 
 // utils
 import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NOTIFICATION_TYPE, RESERVATION_PAYMENT_METHOD } from '../../../utils/enums'
@@ -31,7 +32,7 @@ interface IReservationCardProps extends IEventCardProps {
 	refetchData: () => void
 }
 
-const getIcon = ({ isPast, isRealized, isApproved, service }: { isPast?: boolean; isRealized?: boolean; isApproved?: boolean; service?: any }) => {
+const getIcon = ({ isPast, isRealized, isApproved, service }: { isPast?: boolean; isRealized?: boolean; isApproved?: boolean; service?: CalendarEvent['service'] }) => {
 	if (isPast) {
 		if (isRealized) {
 			return <CheckIcon className={'icon check'} />
@@ -73,7 +74,9 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		originalEventData,
 		note,
 		noteFromB2CCustomer,
-		refetchData
+		refetchData,
+		isPlaceholder,
+		isEdit
 	} = props
 
 	const [isCardPopoverOpen, setIsCardPopoverOpen] = useState(false)
@@ -115,6 +118,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 				console.error(e)
 			}
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[salonID]
 	)
 
@@ -154,11 +158,13 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 					'state-pending': isPending,
 					'state-approved': isApproved,
 					'state-realized': isRealized,
-					'is-autoassigned': isEmployeeAutoassigned
+					'is-autoassigned': isEmployeeAutoassigned,
+					placeholder: isPlaceholder,
+					edit: isEdit || isPlaceholder
 				})}
 				onClick={() => setIsCardPopoverOpen(true)}
 				style={{
-					outlineColor: isPending && !isPast ? backgroundColor : undefined
+					outlineColor: (isPending || isEdit) && !isPast ? backgroundColor : undefined
 				}}
 			>
 				<div

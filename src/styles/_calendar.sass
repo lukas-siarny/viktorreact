@@ -475,23 +475,22 @@
 					border-bottom-color: transparent
 					> .fc-scroller-harness
 						transform: translateY(-58px) // vyska hlavicky 56px + 2px nejake bordre
-						height: calc(100% + 58px) // vyska hlavicky 56px + 2px nejake bordre
-						&::before,
-						&::after
+						/*&::before,
+						/*&::after
 							content: ''
 							position: absolute
 							left: 0
 							right: 0
 							height: 30px
 							z-index: 3
-						&::after
+						/*&::after
 							bottom: 0
 							background: linear-gradient(0deg, rgba(255,255,255,1) 38%, rgba(255,255,255,0.47102591036414565) 80%, rgba(255,255,255,0.3981967787114846) 100%)
-						&::before
+						/*&::before
 							top: 0
 							background: linear-gradient(180deg, rgba(255,255,255,1) 38%, rgba(255,255,255,0.47102591036414565) 80%, rgba(255,255,255,0.3981967787114846) 100%)
 						.fc-scroller
-							padding-top: 58px
+							// padding-top: 58px
 							.fc-timegrid-axis-chunk
 								table tbody
 									tr

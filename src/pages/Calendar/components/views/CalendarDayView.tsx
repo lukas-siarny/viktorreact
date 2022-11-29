@@ -66,44 +66,46 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	const hasResources = !!employees.length
 
 	return (
-		<FullCalendar
-			ref={ref}
-			// plugins
-			plugins={[interactionPlugin, resourceTimeGridPlugin, scrollGrid]}
-			// settings
-			schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
-			timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
-			eventTimeFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
-			height='100%'
-			headerToolbar={false}
-			initialView={'resourceTimeGridDay'}
-			initialDate={selectedDate}
-			scrollTime={CALENDAR_COMMON_SETTINGS.SCROLL_TIME}
-			slotDuration={CALENDAR_COMMON_SETTINGS.SLOT_DURATION}
-			slotLabelInterval={CALENDAR_COMMON_SETTINGS.SLOT_LABEL_INTERVAL}
-			fixedMirrorParent={CALENDAR_COMMON_SETTINGS.FIXED_MIRROR_PARENT}
-			eventConstraint={CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT}
-			// je potrebne nechat nastavene na 0, pretoze potom to zle rendruje background eventy, ktore su po 23:45 (snazi sa tam spravit min 15 minutovu vysku aj ked ma event len 1 minutu)
-			// pre bezne eventy je potom nastavena min-height cez cssko .nc-day-event
-			eventMinHeight={0}
-			dayMinWidth={120}
-			editable={hasResources}
-			selectable={hasResources}
-			weekends
-			nowIndicator
-			allDaySlot={false}
-			stickyFooterScrollbar
-			// data sources
-			events={composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees)}
-			resources={composeDayViewResources(shiftsTimeOffs, employees)}
-			// render hooks
-			resourceLabelContent={resourceLabelContent}
-			eventContent={(data) => <CalendarEvent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} />}
-			slotLabelContent={slotLabelContent}
-			// handlers
-			select={handleSelect}
-			dateClick={handleDateClick}
-		/>
+		<div className={'nc-calendar-week-wrapper'}>
+			<FullCalendar
+				ref={ref}
+				// plugins
+				plugins={[interactionPlugin, resourceTimeGridPlugin, scrollGrid]}
+				// settings
+				schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
+				timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
+				eventTimeFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
+				height='auto'
+				headerToolbar={false}
+				initialView={'resourceTimeGridDay'}
+				initialDate={selectedDate}
+				scrollTime={CALENDAR_COMMON_SETTINGS.SCROLL_TIME}
+				slotDuration={CALENDAR_COMMON_SETTINGS.SLOT_DURATION}
+				slotLabelInterval={CALENDAR_COMMON_SETTINGS.SLOT_LABEL_INTERVAL}
+				fixedMirrorParent={CALENDAR_COMMON_SETTINGS.FIXED_MIRROR_PARENT}
+				eventConstraint={CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT}
+				// je potrebne nechat nastavene na 0, pretoze potom to zle rendruje background eventy, ktore su po 23:45 (snazi sa tam spravit min 15 minutovu vysku aj ked ma event len 1 minutu)
+				// pre bezne eventy je potom nastavena min-height cez cssko .nc-day-event
+				eventMinHeight={0}
+				dayMinWidth={120}
+				editable={hasResources}
+				selectable={hasResources}
+				weekends
+				nowIndicator
+				allDaySlot={false}
+				stickyFooterScrollbar
+				// data sources
+				events={composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees)}
+				resources={composeDayViewResources(shiftsTimeOffs, employees)}
+				// render hooks
+				resourceLabelContent={resourceLabelContent}
+				eventContent={(data) => <CalendarEvent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} />}
+				slotLabelContent={slotLabelContent}
+				// handlers
+				select={handleSelect}
+				dateClick={handleDateClick}
+			/>
+		</div>
 	)
 })
 

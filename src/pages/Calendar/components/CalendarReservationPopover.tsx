@@ -6,6 +6,9 @@ import { ItemType } from 'antd/lib/menu/hooks/useItems'
 import { useSelector } from 'react-redux'
 import dayjs from 'dayjs'
 import colors from 'tailwindcss/colors'
+import { TooltipPlacement } from 'antd/es/tooltip'
+import i18next from 'i18next'
+import { ButtonProps } from 'antd/es/button'
 
 // assets
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon-16.svg'
@@ -27,22 +30,30 @@ import Ellipsis from '../../../atoms/Ellipsis'
 
 // types
 import { RootState } from '../../../reducers'
-import { CalendarEvent } from '../../../types/interfaces'
+import { CalendarEvent, IEventCardProps } from '../../../types/interfaces'
 
 /// utils
-import { CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_STATE } from '../../../utils/enums'
+import { CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE } from '../../../utils/enums'
 import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
 import { parseTimeFromMinutes, getTimeText } from '../calendarHelpers'
 
 type Props = {
+	salonID: string
 	isOpen: boolean
 	setIsOpen: (isOpen: boolean) => void
 	start: Date | null
 	end: Date | null
-	event: CalendarEvent
-	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string) => void
+	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => void
 	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
 	color?: string
+	placement?: TooltipPlacement
+	service?: CalendarEvent['service']
+	customer?: CalendarEvent['customer']
+	employee?: CalendarEvent['employee']
+	reservationData?: CalendarEvent['reservationData']
+	originalEventData: IEventCardProps['originalEventData']
+	note?: CalendarEvent['note']
+	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
 }
 
 type PopoverNote = {
@@ -62,10 +73,34 @@ type ContentProps = {
 	footerButtons?: React.ReactNode[]
 	service?: CalendarEvent['service']
 	customer?: CalendarEvent['customer']
-	employee?: any // TODO: ked bude api hotove odkomentovat
-	// employee?: CalendarEvent['employee']
+	employee?: CalendarEvent['employee']
 	color?: string
 	notes?: PopoverNote[]
+}
+
+const getPaymentMethodHeaderProps = (method?: NonNullable<CalendarEvent['reservationData']>['paymentMethod']) => {
+	switch (method) {
+		case RESERVATION_PAYMENT_METHOD.CARD:
+			return {
+				headerIcon: <CreditCardIcon className={'text-notino-success'} />,
+				headerState: i18next.t('loc:Platba kartou')
+			}
+		case RESERVATION_PAYMENT_METHOD.CASH:
+			return {
+				headerIcon: <WalletIcon className={'text-notino-success'} />,
+				headerState: i18next.t('loc:Platba v hotovosti')
+			}
+		case RESERVATION_PAYMENT_METHOD.OTHER:
+			return {
+				headerIcon: <DollarIcon className={'text-notino-success'} />,
+				headerState: i18next.t('loc:Iné spôsoby platby')
+			}
+		default:
+			return {
+				headerIcon: <DollarIcon className={'text-notino-success'} />,
+				headerState: i18next.t('loc:Zaplatená')
+			}
+	}
 }
 
 const PopoverContent: FC<ContentProps> = (props) => {
@@ -115,7 +150,6 @@ const PopoverContent: FC<ContentProps> = (props) => {
 					<>
 						<section className={'flex py-4'}>
 							<Col flex={'32px'}>
-								{/* TODO: BE musi posielat image */}
 								<UserAvatar size={24} className={'shrink-0'} src={customer.profileImage.resizedImages.thumbnail} />
 							</Col>
 							<Col flex={'auto'} className={'flex flex-col gap-2'}>
@@ -184,7 +218,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 									<Col flex={'auto'}>
 										<Row className={'gap-1'} align={'top'}>
 											<Ellipsis text={note.text} className={'m-0 p-0 whitespace-pre-wrap flex-1'} />
-											{note.internal && <Tag className={'nc-event-popover-tag'}>{t('loc:Interna')}</Tag>}
+											{note.internal && <Tag className={'nc-event-popover-tag'}>{t('loc:Interná')}</Tag>}
 										</Row>
 									</Col>
 								</div>
@@ -204,8 +238,26 @@ const PopoverContent: FC<ContentProps> = (props) => {
 }
 
 const CalendarReservationPopover: FC<Props> = (props) => {
-	const { isOpen, setIsOpen, children, event, start, end, color, handleUpdateReservationState, onEditEvent } = props
-	const { id, reservationData, service, customer, employee, note, noteFromB2CCustomer } = event || {}
+	const {
+		isOpen,
+		setIsOpen,
+		children,
+		start,
+		end,
+		color,
+		handleUpdateReservationState,
+		onEditEvent,
+		placement = 'left',
+		reservationData,
+		service,
+		customer,
+		employee,
+		note,
+		noteFromB2CCustomer,
+		originalEventData
+	} = props
+
+	const { id } = originalEventData || {}
 
 	const [t] = useTranslation()
 
@@ -244,18 +296,16 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 	}, [isOpen, overlayClassName, setIsOpen])
 
 	const handleUpdateState = useCallback(
-		(state: RESERVATION_STATE, closeAfterUpdate = true) => {
-			handleUpdateReservationState(id, state)
-			if (closeAfterUpdate) {
-				setIsOpen(false)
+		(state: RESERVATION_STATE, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
+			if (id) {
+				handleUpdateReservationState(id, state, undefined, paymentMethod)
 			}
+			setIsOpen(false)
 		},
 		[id, handleUpdateReservationState, setIsOpen]
 	)
 
 	const getFooterCheckoutButton = () => {
-		// TODO: zatial hardcoded kym to BE neupravi
-		/*
 		const items = []
 
 		if (selectedSalon?.data?.payByCard) {
@@ -264,7 +314,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 				label: t('loc:Kartou'),
 				icon: <CreditCardIcon />,
 				className: itemClassName,
-				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
+				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED, RESERVATION_PAYMENT_METHOD.CARD)
 			})
 		}
 
@@ -274,69 +324,44 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 				label: t('loc:Hotovosťou'),
 				icon: <WalletIcon />,
 				className: itemClassName,
-				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
+				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED, RESERVATION_PAYMENT_METHOD.CASH)
 			})
 		}
 
 		if (selectedSalon?.data?.otherPaymentMethods) {
 			items.push({
-				key: 'realized-cash',
-				label: selectedSalon?.data?.otherPaymentMethods,
-				icon: <WalletIcon />,
-				className: itemClassName,
-				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
-			})
-		} */
-
-		const items = [
-			{
-				key: 'realized-card',
-				label: t('loc:Kartou'),
-				icon: <CreditCardIcon />,
-				className: itemClassName,
-				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
-			},
-			{
-				key: 'realized-cash',
-				label: t('loc:Hotovosťou'),
-				icon: <WalletIcon />,
-				className: itemClassName,
-				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
-			},
-			{
 				key: 'realized-other',
 				label: t('loc:Iným spôsobom'),
 				icon: <DollarIcon />,
 				className: itemClassName,
-				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
-			}
-		]
+				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED, RESERVATION_PAYMENT_METHOD.OTHER)
+			})
+		}
 
-		return (
+		const button = (buttonBrops?: ButtonProps & { key: string }) => (
+			<Button type={'primary'} size={'middle'} className={'noti-btn w-1/2'} htmlType={'button'} onClick={(e) => e.preventDefault()} {...buttonBrops}>
+				{t('loc:Zaplatená')}
+			</Button>
+		)
+
+		return items?.length ? (
 			<Dropdown
 				key={'footer-checkout-dropdown'}
-				overlay={<Menu className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'} style={{ width: 200 }} items={items} />}
+				overlay={<Menu className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'} items={items} />}
 				placement='bottomRight'
 				trigger={['click']}
 			>
-				<Button
-					type={'primary'}
-					icon={<ChevronDown className={'filter-invert max'} />}
-					size={'middle'}
-					className={'noti-btn w-1/2'}
-					htmlType={'button'}
-					onClick={(e) => e.preventDefault()}
-				>
-					{t('loc:Zaplatená')}
-				</Button>
+				{button({ key: 'checkout-button-dropdown', icon: <ChevronDown className={'filter-invert max'} /> })}
 			</Dropdown>
+		) : (
+			button({ key: 'checkout-button-realized', onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED) })
 		)
 	}
 
-	const getFooterCancelButton = (label: string, state: RESERVATION_STATE, popconfirmText?: string) => {
+	const getFooterCancelButton = (key: string, label: string, state: RESERVATION_STATE, popconfirmText?: string) => {
 		const button = (
 			<Button
-				key={'cancel-button'}
+				key={key}
 				type={'dashed'}
 				size={'middle'}
 				className={'noti-btn w-1/2'}
@@ -349,6 +374,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 
 		return popconfirmText ? (
 			<Popconfirm
+				key={key}
 				placement={'bottom'}
 				title={popconfirmText}
 				okButtonProps={{
@@ -363,7 +389,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 				onConfirm={() => handleUpdateState(state)}
 				cancelText={t('loc:Zrušiť')}
 			>
-				<Button key={'cancel-button'} type={'dashed'} size={'middle'} className={'noti-btn w-1/2'} htmlType={'button'}>
+				<Button type={'dashed'} size={'middle'} className={'noti-btn w-1/2'} htmlType={'button'}>
 					{label}
 				</Button>
 			</Popconfirm>
@@ -423,7 +449,12 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 					headerState: t('loc:Potvrdená'),
 					moreMenuItems: [headerMoreItems.cancel_by_salon],
 					footerButtons: [
-						getFooterCancelButton(t('loc:Nezrealizovaná'), RESERVATION_STATE.NOT_REALIZED, t('loc:Naozaj chcete označiť rezerváciu za nezrealizovanú?')),
+						getFooterCancelButton(
+							'cancel-button-not-realized',
+							t('loc:Nezrealizovaná'),
+							RESERVATION_STATE.NOT_REALIZED,
+							t('loc:Naozaj chcete označiť rezerváciu za nezrealizovanú?')
+						),
 						getFooterCheckoutButton()
 					]
 				}
@@ -434,7 +465,12 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 					headerState: t('loc:Čakajúca'),
 					moreMenuItems: [headerMoreItems.cancel_by_salon],
 					footerButtons: [
-						getFooterCancelButton(t('loc:Zamietnuť'), RESERVATION_STATE.DECLINED, t('loc:Naozaj chcete zamietnuť rezerváciu? Klient dostane notifikáciu.')),
+						getFooterCancelButton(
+							'cancel-button-declined',
+							t('loc:Zamietnuť'),
+							RESERVATION_STATE.DECLINED,
+							t('loc:Naozaj chcete zamietnuť rezerváciu? Klient dostane notifikáciu.')
+						),
 						<Button
 							key={'confirm-button'}
 							type={'dashed'}
@@ -448,10 +484,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 					]
 				}
 			case RESERVATION_STATE.REALIZED:
-				return {
-					headerIcon: <CreditCardIcon className={'text-notino-success'} />,
-					headerState: t('loc:Zaplatená')
-				}
+				return getPaymentMethodHeaderProps(reservationData?.paymentMethod)
 			case RESERVATION_STATE.NOT_REALIZED:
 			default:
 				return {
@@ -481,7 +514,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 			visible={isOpen}
 			destroyTooltipOnHide={{ keepParent: false }}
 			trigger={'click'}
-			placement={'left'}
+			placement={placement}
 			overlayClassName={`${overlayClassName} nc-event-popover-overlay`}
 			content={
 				<PopoverContent
@@ -492,7 +525,9 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 					customer={customer}
 					employee={employee}
 					onEdit={() => {
-						onEditEvent(id, event.eventType as CALENDAR_EVENT_TYPE)
+						if (id) {
+							onEditEvent(id, CALENDAR_EVENT_TYPE.RESERVATION)
+						}
 						setIsOpen(false)
 					}}
 					onClose={() => setIsOpen(false)}

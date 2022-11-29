@@ -117,12 +117,37 @@ export const permitted = (userPermissions: _Permissions = [], salonsPermissions:
 	return (hasSalonPermissions || isAdmin(userPermissions)) && hasSystemPermissions
 }
 
+export const ForbiddenModal: FC<{ visible: boolean; onCancel: () => void; item?: any }> = (props) => {
+	const [t] = useTranslation()
+
+	const { visible, onCancel, item } = props
+
+	return (
+		<>
+			<Modal title={t('loc:Upozornenie')} visible={visible} getContainer={() => document.body} onCancel={onCancel} footer={null}>
+				<Result
+					status='warning'
+					title={t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')}
+					extra={
+						<Button className={'noti-btn'} onClick={onCancel} type='primary'>
+							{t('loc:Zatvoriť')}
+						</Button>
+					}
+				/>
+			</Modal>
+			{item}
+		</>
+	)
+}
+
 const Permissions: FC<Props> = (props) => {
 	const { render, allowed, except, children } = props
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 
 	const hasPermissions = permitted(authUserPermissions, selectedSalon?.uniqPermissions, allowed, except)
+
+	// console.log({ authUserPermissions, allowed })
 
 	const [visibleModal, setVisibleModal] = useState(false)
 	const [t] = useTranslation()
@@ -140,22 +165,7 @@ const Permissions: FC<Props> = (props) => {
 			},
 			checkPermissions: (allowedPermissions: _Permissions) => checkPermissions(authUserPermissions, allowedPermissions)
 		})
-		const modal: any = (
-			<>
-				<Modal title={t('loc:Upozornenie')} visible={visibleModal} getContainer={() => document.body} onCancel={() => setVisibleModal(false)} footer={null}>
-					<Result
-						status='warning'
-						title={t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')}
-						extra={
-							<Button className={'noti-btn'} onClick={() => setVisibleModal(false)} type='primary'>
-								{t('loc:Zatvoriť')}
-							</Button>
-						}
-					/>
-				</Modal>
-				{item}
-			</>
-		)
+		const modal: any = <ForbiddenModal visible={visibleModal} onCancel={() => setVisibleModal(false)} item={item} />
 		return modal
 	}
 

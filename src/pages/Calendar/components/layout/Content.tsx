@@ -1,15 +1,15 @@
-import React, { useCallback, useImperativeHandle, useRef } from 'react'
+import React, { useCallback, useImperativeHandle, useRef, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Content } from 'antd/lib/layout/layout'
 import { Spin } from 'antd'
 import dayjs from 'dayjs'
-import { debounce } from 'lodash'
 
 // fullcalendar
 import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 import { EventResizeDoneArg } from '@fullcalendar/interaction'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
@@ -27,6 +27,8 @@ import {
 	IWeekViewResourceExtenedProps,
 	IDayViewResourceExtenedProps
 } from '../../../../types/interfaces'
+import { RootState } from '../../../../reducers'
+import { ForbiddenModal, permitted } from '../../../../utils/Permissions'
 
 type Props = {
 	view: CALENDAR_VIEW
@@ -79,8 +81,25 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		/* [CALENDAR_VIEW.MONTH]: monthView?.current */
 	}))
 
+	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
+	const selectedSalonuniqPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions)
+
+	const [visibleForbiddenModal, setVisibleForbiddenModal] = useState(false)
+
 	const onEventChange = useCallback(
 		(calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
+			const hasPermissions = permitted(authUserPermissions || [], selectedSalonuniqPermissions, UPDATE_EVENT_PERMISSIONS)
+
+			const revertEvent = () => {
+				arg.revert()
+			}
+
+			if (!hasPermissions) {
+				setVisibleForbiddenModal(true)
+				revertEvent()
+				return
+			}
+
 			const { event } = arg
 			const { start, end } = event
 			const { newResource } = arg as EventDropArg
@@ -93,6 +112,12 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 			// ak sa zmenil resource, tak updatenut resource (to sa bude diat len pri drope)
 			const employeeId = newResource ? newResourceExtendedProps?.employee?.id : eventData?.employee.id
+
+			if (!eventId || !employeeId) {
+				// ak nahodou nemam eventID alebo employeeId tak to vrati na povodne miesto
+				revertEvent()
+				return
+			}
 
 			// zatial predpokladame, ze nebudu viacdnove eventy - takze start a end date by mal byt rovnaky
 			const startDajys = dayjs(start)
@@ -108,12 +133,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
 			}
 
-			if (!eventId || !employeeId) {
-				// ak nahodou nemam eventID alebo employeeId tak to vrati na povodne miesto
-				arg.revert()
-				return
-			}
-
 			const values = {
 				date,
 				timeFrom,
@@ -125,10 +144,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				eventId
 			}
 
-			const revertEvent = () => {
-				arg.revert()
-			}
-
 			if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
 				const customerId = eventData.customer?.id
 				const serviceId = eventData.service?.id
@@ -138,7 +153,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			}
 			handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm, revertEvent)
 		},
-		[handleSubmitReservation, handleSubmitEvent]
+		[handleSubmitReservation, handleSubmitEvent, authUserPermissions, selectedSalonuniqPermissions]
 	)
 
 	const getView = () => {
@@ -200,6 +215,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				<div id={'nc-content-overlay'} />
 				{getView()}
 			</Spin>
+			<ForbiddenModal visible={visibleForbiddenModal} onCancel={() => setVisibleForbiddenModal(false)} />
 		</Content>
 	)
 })

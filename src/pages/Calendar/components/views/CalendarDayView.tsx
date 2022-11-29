@@ -2,14 +2,14 @@ import React, { useMemo, FC } from 'react'
 import dayjs from 'dayjs'
 
 // full calendar
-import FullCalendar, { DateSelectArg, EventInput, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
 import { composeDayViewEvents, composeDayViewResources, eventAllow } from '../../calendarHelpers'
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW } from '../../../../utils/enums'
 
 // types
 import { ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -72,35 +72,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	)
 	const resources = useMemo(() => composeDayViewResources(shiftsTimeOffs, employees), [shiftsTimeOffs, employees])
 
-	const handleDateSelect = (arg: DateSelectArg) => {
-		const calnedar = arg.view.calendar
-		const placeholder = calnedar.getEventById('placeholder')
-		const resourceId = arg.resource?.id
-
-		if (resourceId) {
-			if (!placeholder) {
-				const newEvent: EventInput = {
-					id: 'placeholder',
-					start: arg.start,
-					end: arg.end,
-					allDay: false,
-					editable: true,
-					resourceId,
-					extendedProps: {
-						eventData: {
-							eventType: CALENDAR_EVENT_TYPE.RESERVATION
-						}
-					}
-				}
-				calnedar.addEvent(newEvent)
-			} else {
-				// placeholder.setDates(arg.start, arg.end)
-				// placeholder.setResources([resourceId])
-				placeholder.remove()
-			}
-		}
-	}
-
 	return (
 		<FullCalendar
 			ref={ref}
@@ -138,7 +109,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			slotLabelContent={slotLabelContent}
 			// handlers
 			eventAllow={eventAllow}
-			select={handleDateSelect}
 			eventDrop={(arg) => onEventChange(CALENDAR_VIEW.DAY, arg)}
 			eventResize={(arg) => onEventChange(CALENDAR_VIEW.DAY, arg)}
 		/>

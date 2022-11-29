@@ -554,10 +554,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					...tempValues,
 					customRepeatOptions
 				}
-				await handleSubmitEvent(data as ICalendarEventForm)
+				await handleSubmitEvent(data as ICalendarEventForm, visibleBulkModal.revertEvent)
 			} else {
 				// SINGLE edit - tempvalues z drag and drop / resize
-				await handleSubmitEvent(tempValues as ICalendarEventForm)
+				await handleSubmitEvent(tempValues as ICalendarEventForm, visibleBulkModal.revertEvent)
 			}
 			// DELETE
 		} else {

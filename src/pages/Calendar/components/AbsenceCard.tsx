@@ -3,7 +3,6 @@
 import React, { FC } from 'react'
 import cx from 'classnames'
 import { useTranslation } from 'react-i18next'
-import { StringParam, useQueryParams } from 'use-query-params'
 
 // utils
 import { CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../utils/enums'
@@ -37,7 +36,7 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 		originalEventData,
 		backgroundColor,
 		isBulkEvent,
-		isPlaceholder = false,
+		isPlaceholder,
 		isEdit
 	} = props
 

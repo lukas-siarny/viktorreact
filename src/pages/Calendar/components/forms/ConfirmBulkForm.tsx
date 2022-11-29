@@ -1,7 +1,8 @@
-import React, { FC } from 'react'
-import { Field, InjectedFormProps, reduxForm } from 'redux-form'
+import React, { FC, useEffect } from 'react'
+import { destroy, Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 
 // utils
 import { showErrorNotification } from '../../../../utils/helper'
@@ -23,6 +24,17 @@ const formName = FORM.CONFIRM_BULK_FORM
 const ConfirmBulkForm: FC<Props> = (props) => {
 	const { handleSubmit, requestType } = props
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		// ak ma uzivatel otvoreny modal na bulk akcie a refreshne tab, tak sa neprecistia data z formularu
+		// nasledny edit bulkoveho eventu sa bez precistenia dat nesprava korektne
+		const destroyBulkForm = () => {
+			dispatch(destroy(FORM.CONFIRM_BULK_FORM))
+		}
+		window.addEventListener('beforeunload', destroyBulkForm)
+		return () => window.removeEventListener('beforeunload', destroyBulkForm)
+	}, [dispatch])
 
 	const options = [
 		{

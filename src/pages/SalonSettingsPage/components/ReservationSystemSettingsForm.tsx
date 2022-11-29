@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Field, FieldArray, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, FieldArray, FormSection, InjectedFormProps, reduxForm } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Divider, Form, Row } from 'antd'
 
@@ -18,9 +18,8 @@ import CheckboxGroupNestedField from '../../IndustriesPage/components/CheckboxGr
 import { IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
-import { FORM, RS_NOTIFICATION, NOTIFICATION_CHANNEL } from '../../../utils/enums'
-import { showErrorNotification /* , showServiceCategory, validationNumberMin */ } from '../../../utils/helper'
-import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
+import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE } from '../../../utils/enums'
+import { optionRenderNotiPinkCheckbox, showErrorNotification } from '../../../utils/helper'
 
 // validations
 import validateReservationSystemSettingsForm from './validateReservationSystemSettingsForm'
@@ -34,14 +33,8 @@ import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 
 // redux
 import { RootState } from '../../../reducers'
-import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
-import InputsArrayField from '../../../atoms/InputsArrayField'
-import CheckboxGroupNestedField from '../../IndustriesPage/components/CheckboxGroupNestedField'
 import CheckboxField from '../../../atoms/CheckboxField'
-
-type ComponentProps = {
-	salonID: string
-}
+import { ReactComponent as ChevronDown } from '../../../assets/icons/chevron-down.svg'
 
 type Props = InjectedFormProps<IReservationSystemSettingsForm, ComponentProps> & ComponentProps
 
@@ -58,8 +51,6 @@ type ComponentProps = {
 	excludedB2BNotifications: string[]
 }
 
-type Props = InjectedFormProps<IReservationSystemSettingsForm, ComponentProps> & ComponentProps
-
 const ReservationSystemSettingsForm = (props: Props) => {
 	const { salonID, handleSubmit, pristine, submitting, excludedB2BNotifications } = props
 	const [t] = useTranslation()
@@ -71,22 +62,60 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	// const disabled = false // enabledReservations !== true
 
 	const treeData = map(groupedServicesByCategory, (level1) => {
+		// LEVEL 1
 		return {
-			title: (
-				<div className={'flex justify-between'} style={{ color: 'red' }}>
-					<div>{level1.category?.name}</div>
-					<Field component={CheckboxField} name={'maxDaysB2cCreateReservation'} size={'large'} disabled={disabled} min={1} className='flex-1' />
-				</div>
-			),
+			title: level1.category?.name,
+			className: `noti-tree-node-${1} text-lg`,
+			switcherIcon: (props2: any) => {
+				return props2?.expanded ? <ChevronDown style={{ transform: 'rotate(180deg)' }} /> : <ChevronDown />
+			},
 			id: level1.category?.id,
+			// LEVEL 2
 			children: map(level1.category?.children, (level2) => {
 				return {
 					id: level2.category?.id,
+					className: `noti-tree-node-${1} font-semibold ml-6`,
 					title: level2.category?.name,
+					switcherIcon: (props2: any) => {
+						return props2?.expanded ? <ChevronDown style={{ transform: 'rotate(180deg)' }} /> : <ChevronDown />
+					},
+					// LEVEL 3
 					children: map(level2.category?.children, (level3) => {
 						return {
 							id: level3.category.id,
-							title: level3.category.name
+							className: `noti-tree-node-${2} ml-6`,
+							// switcherIcon: (props2: any) => {
+							// 	return props2?.expanded ? <ChevronDown style={{ transform: 'rotate(180deg)' }} /> : <ChevronDown />
+							// },
+							title: (
+								<div id={`level3-${level3.category?.id}`} className={'flex justify-between'}>
+									<div>{level3.category?.name}</div>
+									<div className={'flex'}>
+										<FormSection name={SERVICE_TYPE.ONLINE_BOOKING}>
+											<Field
+												component={CheckboxField}
+												key={`level3-${SERVICE_TYPE.ONLINE_BOOKING}-${level3.service.id}`}
+												name={level3.service.id}
+												disabled={disabled}
+												hideChecker
+												optionRender={optionRenderNotiPinkCheckbox}
+												className={'p-0 h-6'}
+											/>
+										</FormSection>
+										<FormSection name={SERVICE_TYPE.AUTO_CONFIRM}>
+											<Field
+												component={CheckboxField}
+												key={`level3-${SERVICE_TYPE.AUTO_CONFIRM}-${level3.service.id}`}
+												name={level3.service.id}
+												disabled={disabled}
+												hideChecker
+												optionRender={optionRenderNotiPinkCheckbox}
+												className={'p-0 h-6'}
+											/>
+										</FormSection>
+									</div>
+								</div>
+							)
 						}
 					})
 				}
@@ -254,7 +283,13 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					</div>
 					<Divider className={'mt-1 mb-3'} />
 					<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Vyberte služby, ktoré bude možné rezervovať si online a ktoré budú automaticky potvrdené.')}</p>
-					<Field name={'categoryIDs'} component={CheckboxGroupNestedField} dataTree={treeData} checkable={false} />
+					<div className={'text-xs flex'}>
+						<div>Online booking</div>
+						<div>Auto confirm</div>
+					</div>
+					<FormSection name={'servicesSettings'}>
+						<Field name={'services'} component={CheckboxGroupNestedField} dataTree={treeData} checkable={false} />
+					</FormSection>
 				</div>
 			</Row>
 			{hasPermission && (

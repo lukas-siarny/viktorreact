@@ -3,14 +3,15 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { Col, Row, Spin } from 'antd'
-import { reduce } from 'lodash'
+import { compact, forEach, get, includes, map, reduce } from 'lodash'
 
 // components
+import { log } from 'util'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ReservationSystemSettingsForm from './components/ReservationSystemSettingsForm'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, RS_NOTIFICATION, RS_NOTIFICATION_TYPE } from '../../utils/enums'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -21,6 +22,7 @@ import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { Paths } from '../../types/api'
 import { IBreadcrumbs, SalonSubPageProps, IReservationSystemSettingsForm, IReservationsSettingsNotification } from '../../types/interfaces'
 import { postReq } from '../../utils/request'
+import { getServices } from '../../reducers/services/serviceActions'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -85,9 +87,8 @@ const SalonSettingsPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const { salonID, parentPath } = props
-
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-
+	const groupedSettings = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
@@ -98,6 +99,8 @@ const SalonSettingsPage = (props: SalonSubPageProps) => {
 
 	useEffect(() => {
 		dispatch(selectSalon(salonID))
+		dispatch(getServices({ salonID })) // TODO: nebolo by lepsie spravit separatny EP pre settingy aby sa nemuselo volat cele services?
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
@@ -117,8 +120,30 @@ const SalonSettingsPage = (props: SalonSubPageProps) => {
 			)
 		}
 	}, [salon.data, dispatch])
+	const handleSubmitSettings = async (formData: IReservationSystemSettingsForm) => {
+		// Settings
+		const allIds: any = []
+		forEach(groupedSettings, (level1) => forEach(level1.category?.children, (level2) => forEach(level2.category?.children, (level3) => allIds.push(level3.service.id))))
+		const allowedAutoConfirmIds: string[] = []
+		const allowedOnlineBookingIds: string[] = []
+		forEach(get(formData, `servicesSettings[${SERVICE_TYPE.AUTO_CONFIRM}]`), (item, index) => (item ? allowedAutoConfirmIds.push(index) : undefined))
+		forEach(get(formData, `servicesSettings[${SERVICE_TYPE.ONLINE_BOOKING}]`), (item, index) => (item ? allowedOnlineBookingIds.push(index) : undefined))
 
-	const submitSettings = async (formData: IReservationSystemSettingsForm) => {
+		const servicesSettings: any[] = []
+		forEach(allIds, (serviceID) => {
+			const enabledB2cReservations = includes(allowedOnlineBookingIds, serviceID)
+			const autoApproveReservatons = includes(allowedAutoConfirmIds, serviceID)
+			if (enabledB2cReservations || autoApproveReservatons) {
+				servicesSettings.push({
+					id: serviceID,
+					settings: {
+						enabledB2cReservations, // ONLINE_BOOKING
+						autoApproveReservatons // AUTO_CONFIRM
+					}
+				})
+			}
+		})
+		// Notifications
 		// find notification which are OFF - relevant for API
 		const disabledNotifications = NOTIFICATIONS.map((type: string) => {
 			return {
@@ -135,7 +160,8 @@ const SalonSettingsPage = (props: SalonSubPageProps) => {
 				{ salonID },
 				{
 					...formData,
-					disabledNotifications
+					disabledNotifications,
+					servicesSettings
 				}
 			)
 
@@ -156,7 +182,7 @@ const SalonSettingsPage = (props: SalonSubPageProps) => {
 					<div className='content-body'>
 						<Spin spinning={salon.isLoading}>
 							{/* <Permissions allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_CREATE]} render={() => <ServicesFilter onSubmit={handleSubmit} />} /> */}
-							<ReservationSystemSettingsForm onSubmit={submitSettings} salonID={salonID} excludedB2BNotifications={EXCLUDED_NOTIFICATIONS_B2B} />
+							<ReservationSystemSettingsForm onSubmit={handleSubmitSettings} salonID={salonID} excludedB2BNotifications={EXCLUDED_NOTIFICATIONS_B2B} />
 						</Spin>
 					</div>
 				</Col>

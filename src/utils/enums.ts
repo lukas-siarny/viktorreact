@@ -801,6 +801,11 @@ export enum RESERVATION_PAYMENT_METHOD {
 	OTHER = 'OTHER'
 }
 
+export enum SERVICE_TYPE {
+	ONLINE_BOOKING = 'ONLINE_BOOKING',
+	AUTO_CONFIRM = 'AUTO_CONFIRM'
+}
+
 export const CALENDAR_DEBOUNCE_DELAY = 300 // in ms
 
 export const getDayNameFromNumber = (day: number) => {
@@ -878,11 +883,10 @@ export const RS_NOTIFICATION_FIELD_TEXTS = (notificationType: RS_NOTIFICATION, c
 	switch (notificationType) {
 		case RS_NOTIFICATION.RESERVATION_AWAITING_APPROVAL:
 			result.title = i18next.t('loc:Rezervácia čakajúca na schválenie')
-			result.tooltip = i18next.t(
+			result.tooltip =
 				channel === NOTIFICATION_CHANNEL.B2C
-					? 'loc:Zákazník dostane notifikáciu, že jeho rezervácia čaká na schválenie salónom.'
-					: 'loc:Zamestnanec dostane notifikáciu, že rezervácia vytvorená zákazníkom čaká na schválenie.'
-			)
+					? i18next.t('loc:Zákazník dostane notifikáciu, že jeho rezervácia čaká na schválenie salónom.')
+					: i18next.t('loc:Zamestnanec dostane notifikáciu, že rezervácia vytvorená zákazníkom čaká na schválenie.')
 			break
 
 		case RS_NOTIFICATION.RESERVATION_CONFIRMED:
@@ -892,11 +896,10 @@ export const RS_NOTIFICATION_FIELD_TEXTS = (notificationType: RS_NOTIFICATION, c
 
 		case RS_NOTIFICATION.RESERVATION_CHANGED:
 			result.title = i18next.t('loc:Zmena rezervácie')
-			result.tooltip = i18next.t(
+			result.tooltip =
 				channel === NOTIFICATION_CHANNEL.B2C
-					? 'loc:Zákazník dostane notifikáciu, že jeho rezervácia bola zmenená salónom.'
-					: 'loc:Zamestnanec dostane notifikáciu, že jeho rezervácia bola zmenená.'
-			)
+					? i18next.t('loc:Zákazník dostane notifikáciu, že jeho rezervácia bola zmenená salónom.')
+					: i18next.t('loc:Zamestnanec dostane notifikáciu, že jeho rezervácia bola zmenená.')
 			break
 
 		case RS_NOTIFICATION.RESERVATION_CANCELLED:

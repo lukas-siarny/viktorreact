@@ -38,6 +38,7 @@ import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
 import { ArgsProps } from 'antd/lib/notification'
+import cx from 'classnames'
 import showNotifications from './tsxHelpers'
 import {
 	ADMIN_PERMISSIONS,
@@ -785,6 +786,20 @@ export const sortData = (a?: any, b?: any) => {
 	}
 
 	return 0
+}
+
+export const optionRenderNotiPinkCheckbox = (text: any, checked: any) => {
+	return (
+		<div
+			style={{ border: checked ? '1px solid #DC0069' : '1px solid #BFBFBF' }}
+			className={cx('border border-b-danger w-5 h-5 flex-center bg-notino-grayLighter rounded-full hover:border-b-danger', {
+				'bg-notino-pink': checked,
+				'text-notino-white': checked
+			})}
+		>
+			{text}
+		</div>
+	)
 }
 
 export const optionRenderWithImage = (itemData: any, fallbackIcon?: React.ReactNode, imageWidth = 24, imageHeight = 24) => {

@@ -28,6 +28,8 @@ import {
 	IDayViewResourceExtenedProps
 } from '../../../../types/interfaces'
 import { RootState } from '../../../../reducers'
+
+// utils
 import { ForbiddenModal, permitted } from '../../../../utils/Permissions'
 
 type Props = {

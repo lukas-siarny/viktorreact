@@ -10,7 +10,17 @@ import dayjs from 'dayjs'
 import { getFormValues, initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { StringParam, useQueryParams } from 'use-query-params'
-import { CALENDAR_EVENT_TYPE, CALENDAR_EVENTS_VIEW_TYPE, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT, EVENT_NAMES, FORM, STRINGS } from '../../../../utils/enums'
+import {
+	CALENDAR_EVENT_TYPE,
+	CALENDAR_EVENTS_VIEW_TYPE,
+	DEFAULT_DATE_INIT_FORMAT,
+	DEFAULT_TIME_FORMAT,
+	EVENT_NAMES,
+	FORM,
+	STRINGS,
+	DELETE_EVENT_PERMISSIONS
+} from '../../../../utils/enums'
+import Permissions from '../../../../utils/Permissions'
 
 // types
 import { ICalendarEventForm, ICalendarReservationForm } from '../../../../types/interfaces'
@@ -32,6 +42,7 @@ import { RootState } from '../../../../reducers'
 type Props = {
 	salonID: string
 	sidebarView: CALENDAR_EVENT_TYPE
+	selectedDate: string
 	setCollapsed: (view: CALENDAR_EVENT_TYPE | undefined) => void
 	handleSubmitReservation: (values: ICalendarReservationForm) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
@@ -41,7 +52,7 @@ type Props = {
 }
 
 const SiderEventManagement: FC<Props> = (props) => {
-	const { setCollapsed, handleSubmitReservation, handleSubmitEvent, salonID, sidebarView, handleDeleteEvent, eventId, eventsViewType } = props
+	const { setCollapsed, handleSubmitReservation, handleSubmitEvent, salonID, sidebarView, handleDeleteEvent, eventId, eventsViewType, selectedDate } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -74,7 +85,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 		})
 		// Initne sa event / reservation formular
 		const initData = {
-			date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
+			date: dayjs(selectedDate).format(DEFAULT_DATE_INIT_FORMAT),
 			timeFrom: dayjs().format(DEFAULT_TIME_FORMAT),
 			...omit(prevInitData, 'eventType'),
 			eventType
@@ -145,14 +156,25 @@ const SiderEventManagement: FC<Props> = (props) => {
 				<div className={'font-semibold'}>{eventId ? STRINGS(t).edit(EVENT_NAMES(sidebarView)) : STRINGS(t).createRecord(EVENT_NAMES(sidebarView))}</div>
 				<div className={'flex-center'}>
 					{eventId && (
-						<DeleteButton
-							placement={'bottom'}
-							entityName={t('loc:prestávku')}
-							className={'bg-transparent mr-4'}
-							onConfirm={handleDeleteEvent}
-							onlyIcon
-							smallIcon
-							size={'small'}
+						<Permissions
+							allowed={DELETE_EVENT_PERMISSIONS}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<DeleteButton
+									placement={'bottom'}
+									entityName={t('loc:prestávku')}
+									className={'bg-transparent mr-4'}
+									onConfirm={(e) => {
+										if (hasPermission) {
+											handleDeleteEvent()
+										} else {
+											openForbiddenModal()
+										}
+									}}
+									onlyIcon
+									smallIcon
+									size={'small'}
+								/>
+							)}
 						/>
 					)}
 					<Button

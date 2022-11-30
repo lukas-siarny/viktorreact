@@ -12,7 +12,7 @@ import validateReservationForm from './validateReservationForm'
 import { formatLongQueryString, getAssignedUserLabel, getCountryPrefix, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { getReq, postReq } from '../../../../utils/request'
-import { ENUMERATIONS_KEYS, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
+import { CREATE_EVENT_PERMISSIONS, ENUMERATIONS_KEYS, FORM, SALON_PERMISSION, STRINGS, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // types
 import { ICalendarReservationForm, ICustomerForm } from '../../../../types/interfaces'
@@ -167,6 +167,7 @@ const ReservationForm: FC<Props> = (props) => {
 									name={'customer'}
 									className={'pb-0'}
 									size={'large'}
+									optionLabelProp={'label'}
 									suffixIcon={<ProfileIcon />}
 									update={(itemKey: number, ref: any) => ref.blur()}
 									filterOption={false}
@@ -228,6 +229,7 @@ const ReservationForm: FC<Props> = (props) => {
 							suffixIcon={<ProfileIcon />}
 							placeholder={t('loc:Vyber zamestnanca')}
 							name={'employee'}
+							optionLabelProp={'label'}
 							size={'large'}
 							update={(itemKey: number, ref: any) => ref.blur()}
 							filterOption={false}
@@ -243,9 +245,27 @@ const ReservationForm: FC<Props> = (props) => {
 				</Spin>
 			</div>
 			<div className={'nc-sider-event-management-footer'}>
-				<Button onClick={() => dispatch(submit(formName))} htmlType={'submit'} type={'primary'} block className={'noti-btn self-end'}>
-					{eventId ? STRINGS(t).edit(t('loc:rezerváciu')) : STRINGS(t).createRecord(t('loc:rezerváciu'))}
-				</Button>
+				<Permissions
+					allowed={eventId ? UPDATE_EVENT_PERMISSIONS : CREATE_EVENT_PERMISSIONS}
+					render={(hasPermission, { openForbiddenModal }) => (
+						<Button
+							onClick={(e) => {
+								if (hasPermission) {
+									dispatch(submit(formName))
+								} else {
+									e.preventDefault()
+									openForbiddenModal()
+								}
+							}}
+							htmlType={'submit'}
+							type={'primary'}
+							block
+							className={'noti-btn self-end'}
+						>
+							{eventId ? STRINGS(t).edit(t('loc:rezerváciu')) : STRINGS(t).createRecord(t('loc:rezerváciu'))}
+						</Button>
+					)}
+				/>
 			</div>
 		</>
 	)

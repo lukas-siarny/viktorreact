@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import React, { FC, useEffect, useCallback, useState } from 'react'
-import { Button, Col, Divider, Dropdown, Menu, Popconfirm, Popover, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Divider, Dropdown, Menu, Popconfirm, Popover, Row, Tag } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { ItemType } from 'antd/lib/menu/hooks/useItems'
 import { useSelector } from 'react-redux'
@@ -8,10 +8,9 @@ import dayjs from 'dayjs'
 import colors from 'tailwindcss/colors'
 import { TooltipPlacement } from 'antd/es/tooltip'
 import i18next from 'i18next'
+import { ButtonProps } from 'antd/es/button'
 
 // assets
-import { ButtonProps } from 'antd/es/button'
-import { Link } from 'react-router-dom'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon-16.svg'
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-16.svg'
 import { ReactComponent as DotsIcon } from '../../../assets/icons/more-info-horizontal-icon.svg'
@@ -31,7 +30,7 @@ import Ellipsis from '../../../atoms/Ellipsis'
 
 // types
 import { RootState } from '../../../reducers'
-import { CalendarEvent } from '../../../types/interfaces'
+import { CalendarEvent, IEventCardProps } from '../../../types/interfaces'
 
 /// utils
 import { CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE } from '../../../utils/enums'
@@ -44,11 +43,17 @@ type Props = {
 	setIsOpen: (isOpen: boolean) => void
 	start: Date | null
 	end: Date | null
-	event: CalendarEvent
 	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => void
-	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
+	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	color?: string
 	placement?: TooltipPlacement
+	service?: CalendarEvent['service']
+	customer?: CalendarEvent['customer']
+	employee?: CalendarEvent['employee']
+	reservationData?: CalendarEvent['reservationData']
+	originalEventData: IEventCardProps['originalEventData']
+	note?: CalendarEvent['note']
+	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
 }
 
 type PopoverNote = {
@@ -68,8 +73,7 @@ type ContentProps = {
 	footerButtons?: React.ReactNode[]
 	service?: CalendarEvent['service']
 	customer?: CalendarEvent['customer']
-	employee?: any // TODO: ked bude api hotove odkomentovat
-	// employee?: CalendarEvent['employee']
+	employee?: CalendarEvent['employee']
 	color?: string
 	notes?: PopoverNote[]
 }
@@ -146,7 +150,6 @@ const PopoverContent: FC<ContentProps> = (props) => {
 					<>
 						<section className={'flex py-4'}>
 							<Col flex={'32px'}>
-								{/* TODO: BE musi posielat image */}
 								<UserAvatar size={24} className={'shrink-0'} src={customer.profileImage.resizedImages.thumbnail} />
 							</Col>
 							<Col flex={'auto'} className={'flex flex-col gap-2'}>
@@ -215,7 +218,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 									<Col flex={'auto'}>
 										<Row className={'gap-1'} align={'top'}>
 											<Ellipsis text={note.text} className={'m-0 p-0 whitespace-pre-wrap flex-1'} />
-											{note.internal && <Tag className={'nc-event-popover-tag'}>{t('loc:Interna')}</Tag>}
+											{note.internal && <Tag className={'nc-event-popover-tag'}>{t('loc:Interná')}</Tag>}
 										</Row>
 									</Col>
 								</div>
@@ -235,8 +238,26 @@ const PopoverContent: FC<ContentProps> = (props) => {
 }
 
 const CalendarReservationPopover: FC<Props> = (props) => {
-	const { isOpen, setIsOpen, children, event, start, end, color, handleUpdateReservationState, onEditEvent, salonID, placement = 'left' } = props
-	const { id, reservationData, service, customer, employee, note, noteFromB2CCustomer } = event || {}
+	const {
+		isOpen,
+		setIsOpen,
+		children,
+		start,
+		end,
+		color,
+		handleUpdateReservationState,
+		onEditEvent,
+		placement = 'left',
+		reservationData,
+		service,
+		customer,
+		employee,
+		note,
+		noteFromB2CCustomer,
+		originalEventData
+	} = props
+
+	const { id } = originalEventData || {}
 
 	const [t] = useTranslation()
 
@@ -276,7 +297,9 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 
 	const handleUpdateState = useCallback(
 		(state: RESERVATION_STATE, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
-			handleUpdateReservationState(id, state, undefined, paymentMethod)
+			if (id) {
+				handleUpdateReservationState(id, state, undefined, paymentMethod)
+			}
 			setIsOpen(false)
 		},
 		[id, handleUpdateReservationState, setIsOpen]
@@ -315,7 +338,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 			})
 		}
 
-		const button = (buttonBrops?: ButtonProps) => (
+		const button = (buttonBrops?: ButtonProps & { key: string }) => (
 			<Button type={'primary'} size={'middle'} className={'noti-btn w-1/2'} htmlType={'button'} onClick={(e) => e.preventDefault()} {...buttonBrops}>
 				{t('loc:Zaplatená')}
 			</Button>
@@ -328,28 +351,17 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 				placement='bottomRight'
 				trigger={['click']}
 			>
-				{button({ icon: <ChevronDown className={'filter-invert max'} /> })}
+				{button({ key: 'checkout-button-dropdown', icon: <ChevronDown className={'filter-invert max'} /> })}
 			</Dropdown>
 		) : (
-			<Tooltip
-				title={
-					<span>
-						{t('loc:Je potrebné mať nastavané možnosti platby v')}{' '}
-						<Link to={`${t('paths:salons')}/${salonID}`} className={'text-notino-white underline hover:text-notino-pink'}>
-							{t('loc:detaile salónu')}
-						</Link>
-					</span>
-				}
-			>
-				{button()}
-			</Tooltip>
+			button({ key: 'checkout-button-realized', onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED) })
 		)
 	}
 
-	const getFooterCancelButton = (label: string, state: RESERVATION_STATE, popconfirmText?: string) => {
+	const getFooterCancelButton = (key: string, label: string, state: RESERVATION_STATE, popconfirmText?: string) => {
 		const button = (
 			<Button
-				key={'cancel-button'}
+				key={key}
 				type={'dashed'}
 				size={'middle'}
 				className={'noti-btn w-1/2'}
@@ -362,6 +374,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 
 		return popconfirmText ? (
 			<Popconfirm
+				key={key}
 				placement={'bottom'}
 				title={popconfirmText}
 				okButtonProps={{
@@ -376,7 +389,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 				onConfirm={() => handleUpdateState(state)}
 				cancelText={t('loc:Zrušiť')}
 			>
-				<Button key={'cancel-button'} type={'dashed'} size={'middle'} className={'noti-btn w-1/2'} htmlType={'button'}>
+				<Button type={'dashed'} size={'middle'} className={'noti-btn w-1/2'} htmlType={'button'}>
 					{label}
 				</Button>
 			</Popconfirm>
@@ -436,7 +449,12 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 					headerState: t('loc:Potvrdená'),
 					moreMenuItems: [headerMoreItems.cancel_by_salon],
 					footerButtons: [
-						getFooterCancelButton(t('loc:Nezrealizovaná'), RESERVATION_STATE.NOT_REALIZED, t('loc:Naozaj chcete označiť rezerváciu za nezrealizovanú?')),
+						getFooterCancelButton(
+							'cancel-button-not-realized',
+							t('loc:Nezrealizovaná'),
+							RESERVATION_STATE.NOT_REALIZED,
+							t('loc:Naozaj chcete označiť rezerváciu za nezrealizovanú?')
+						),
 						getFooterCheckoutButton()
 					]
 				}
@@ -447,7 +465,12 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 					headerState: t('loc:Čakajúca'),
 					moreMenuItems: [headerMoreItems.cancel_by_salon],
 					footerButtons: [
-						getFooterCancelButton(t('loc:Zamietnuť'), RESERVATION_STATE.DECLINED, t('loc:Naozaj chcete zamietnuť rezerváciu? Klient dostane notifikáciu.')),
+						getFooterCancelButton(
+							'cancel-button-declined',
+							t('loc:Zamietnuť'),
+							RESERVATION_STATE.DECLINED,
+							t('loc:Naozaj chcete zamietnuť rezerváciu? Klient dostane notifikáciu.')
+						),
 						<Button
 							key={'confirm-button'}
 							type={'dashed'}
@@ -502,7 +525,9 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 					customer={customer}
 					employee={employee}
 					onEdit={() => {
-						onEditEvent(id, event.eventType as CALENDAR_EVENT_TYPE)
+						if (id) {
+							onEditEvent(CALENDAR_EVENT_TYPE.RESERVATION, id)
+						}
 						setIsOpen(false)
 					}}
 					onClose={() => setIsOpen(false)}

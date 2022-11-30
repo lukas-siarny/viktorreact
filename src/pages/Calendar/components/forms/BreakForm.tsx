@@ -11,7 +11,19 @@ import validateBreakForm from './validateBreakForm'
 
 // utils
 import { optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
-import { ENDS_EVENT, ENDS_EVENT_OPTIONS, EVERY_REPEAT, EVERY_REPEAT_OPTIONS, FORM, getDayNameFromNumber, SHORTCUT_DAYS_OPTIONS, STRINGS } from '../../../../utils/enums'
+import {
+	CREATE_EVENT_PERMISSIONS,
+	ENDS_EVENT,
+	ENDS_EVENT_OPTIONS,
+	EVERY_REPEAT,
+	EVERY_REPEAT_OPTIONS,
+	FORM,
+	getDayNameFromNumber,
+	SHORTCUT_DAYS_OPTIONS,
+	STRINGS,
+	UPDATE_EVENT_PERMISSIONS
+} from '../../../../utils/enums'
+import Permissions from '../../../../utils/Permissions'
 
 // types
 import { ICalendarEventForm } from '../../../../types/interfaces'
@@ -112,6 +124,7 @@ const CalendarBreakForm: FC<Props> = (props) => {
 							allowInfinityScroll
 							showSearch
 							required
+							optionLabelProp={'label'}
 							disabled={eventId} // NOTE: ak je detail tak sa neda menit zamestnanec
 							className={'pb-0'}
 							labelInValue
@@ -153,9 +166,27 @@ const CalendarBreakForm: FC<Props> = (props) => {
 				</Spin>
 			</div>
 			<div className={'nc-sider-event-management-footer'}>
-				<Button onClick={() => dispatch(submit(formName))} htmlType={'submit'} type={'primary'} block className={'noti-btn self-end'}>
-					{eventId ? STRINGS(t).edit(t('loc:prestávku')) : STRINGS(t).createRecord(t('loc:prestávku'))}
-				</Button>
+				<Permissions
+					allowed={eventId ? UPDATE_EVENT_PERMISSIONS : CREATE_EVENT_PERMISSIONS}
+					render={(hasPermission, { openForbiddenModal }) => (
+						<Button
+							onClick={(e) => {
+								if (hasPermission) {
+									dispatch(submit(formName))
+								} else {
+									e.preventDefault()
+									openForbiddenModal()
+								}
+							}}
+							htmlType={'submit'}
+							type={'primary'}
+							block
+							className={'noti-btn self-end'}
+						>
+							{eventId ? STRINGS(t).edit(t('loc:prestávku')) : STRINGS(t).createRecord(t('loc:prestávku'))}
+						</Button>
+					)}
+				/>
 			</div>
 		</>
 	)

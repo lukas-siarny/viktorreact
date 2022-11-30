@@ -5,10 +5,10 @@ import dayjs from 'dayjs'
 import { ThunkResult } from '../index'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { CalendarEvent, Employee, ICalendarEventsPayload } from '../../types/interfaces'
+import { CalendarEvent, ICalendarEventsPayload } from '../../types/interfaces'
 
 // enums
-import { EVENTS, EVENT_DETAIL } from './calendarTypes'
+import { EVENTS, EVENT_DETAIL, UPDATE_EVENT } from './calendarTypes'
 import { CALENDAR_EVENTS_KEYS, CALENDAR_VIEW, CALENDAR_EVENT_TYPE, DATE_TIME_PARSER_DATE_FORMAT, RESERVATION_STATE } from '../../utils/enums'
 
 // utils
@@ -67,12 +67,10 @@ export const getCalendarEvents =
 		view: CALENDAR_VIEW,
 		splitMultidayEventsIntoOneDayEvents = false
 	): ThunkResult<Promise<ICalendarEventsPayload>> =>
-	async (dispatch, getState) => {
+	async (dispatch) => {
 		dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
 
 		let payload = {} as ICalendarEventsPayload
-
-		const state = getState()
 
 		try {
 			const { start, end } = getSelectedDateRange(view, queryParams.date)
@@ -87,13 +85,13 @@ export const getCalendarEvents =
 				reservationStates: queryParams.reservationStates
 			}
 
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams)
+
 			// employees z Reduxu, budu sa mapovat do eventov
 			const employees = {} as any
-			state.employees.employees.data?.employees.forEach((employee: Employee) => {
+			data.employees.forEach((employee) => {
 				employees[employee.id] = employee
 			})
-
-			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams)
 
 			const editedEvents = data.calendarEvents.reduce((newEventsArray, event) => {
 				const editedEvent: CalendarEvent = {
@@ -227,4 +225,19 @@ export const getCalendarEventDetail =
 		}
 
 		return payload
+	}
+
+export const updateCalendarEvent =
+	(updatedEvent: CalendarEvent): ThunkResult<Promise<CalendarEvent[]>> =>
+	async (dispatch, getState) => {
+		const events = getState().calendar.events.data || []
+		const newEvents = events.map((event) => {
+			if (event.id === updatedEvent.id) {
+				return { ...event, ...updatedEvent }
+			}
+			return event
+		})
+
+		dispatch({ type: UPDATE_EVENT, newEvents })
+		return newEvents
 	}

@@ -56,7 +56,7 @@ import ConfirmModal from '../../atoms/ConfirmModal'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
 
 // types
-import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, IEmployeesPayload, ISelectOptionItem, SalonSubPageProps } from '../../types/interfaces'
+import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, IEmployeesPayload, SalonSubPageProps } from '../../types/interfaces'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -306,8 +306,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		dispatch(
 			initialize(FORM.CALENDAR_FILTER, {
 				eventsViewType: query.eventsViewType,
-				// ak su vybrati vsetci zamestnanci alebo vsetky kategorie, tak je zbytocne posielat na BE vsetky IDcka
-				// BE vrati rovnake zaznamy ako ked sa tam neposle nic
 				categoryIDs: query?.categoryIDs === undefined ? getCategoryIDs(services?.categoriesOptions) : getFullCategoryIdsFromUrl(query?.categoryIDs),
 				employeeIDs: query?.employeeIDs === undefined ? getEmployeeIDs(employees?.options) : query?.employeeIDs
 			})
@@ -326,9 +324,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		setQuery({
 			...query,
 			...values,
+			// ak su vybrati vsetci zamestnanci alebo vsetky kategorie, tak je zbytocne posielat na BE vsetky IDcka
+			// BE vrati rovnake zaznamy ako ked sa tam neposle nic
 			employeeIDs: values?.employeeIDs?.length === employees?.options?.length ? undefined : values.employeeIDs,
-			// NOTE: v URL sa pouzivaju skratene ID kategorii, pretoze ich moze byt dost vela a original IDcka su dost dhle
-			// tak aby sa nahodu nestalo ze sa tam nevojdu v niektorom z prehliadacov
 			categoryIDs: values?.categoryIDs?.length === services?.categoriesOptions?.length ? undefined : getShortCategoryIdsForUrl(values.categoryIDs),
 			eventId: undefined,
 			sidebarView: undefined

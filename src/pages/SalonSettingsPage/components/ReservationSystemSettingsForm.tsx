@@ -128,7 +128,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 													onChangeServiceCheck(e.target.checked, SERVICE_TYPE.ONLINE_BOOKING, level3.service.id)
 												}
 												optionRender={optionRenderNotiPinkCheckbox}
-												className={'p-0 h-6'}
+												className={'p-0 h-6 mr-8'}
 											/>
 										</FormSection>
 										<FormSection name={SERVICE_TYPE.AUTO_CONFIRM}>
@@ -315,9 +315,12 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					</div>
 					<Divider className={'mt-1 mb-3'} />
 					<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Vyberte služby, ktoré bude možné rezervovať si online a ktoré budú automaticky potvrdené.')}</p>
-					<div className={''}>
-						<div className={'text-xs w-full text-right'}>
-							<div>{t('loc:Online rezervácia / Automatické potvrdenie')}</div>
+					<div>
+						<div className={'flex w-full justify-end mb-4'}>
+							<div style={{ width: 140 }} className={'flex text-xs'}>
+								<div className={'mr-2 text-center'}>{t('loc:Online rezervacia')}</div>
+								<div className={'text-center'}>{t('loc:Automatické potvrdenie')}</div>
+							</div>
 						</div>
 						<div className={'flex justify-end pr-4'}>
 							<Field
@@ -328,7 +331,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 								disabled={disabled}
 								hideChecker
 								optionRender={optionRenderNotiPinkCheckbox}
-								className={'p-0 h-6'}
+								className={'p-0 h-6 mr-8'}
 							/>
 
 							<Field

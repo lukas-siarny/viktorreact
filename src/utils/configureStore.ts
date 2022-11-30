@@ -5,12 +5,11 @@ import { createLogger } from 'redux-logger'
 import { persistStore } from 'redux-persist'
 
 import i18next from 'i18next'
-import { IMAGE_UPLOADING_PROP, MSG_TYPE, NOTIFICATION_TYPE, HANDLE_CALENDAR_FORMS, CALENDAR_FORM_HANDLER } from './enums'
+import { IMAGE_UPLOADING_PROP, MSG_TYPE, NOTIFICATION_TYPE, CALENDAR_FORM_HANDLER, HANDLE_CALENDAR_FORMS } from './enums'
 // eslint-disable-next-line import/no-cycle
 import showNotifications from './tsxHelpers'
 import { updateEvents } from '../reducers/virtualEvents/virtualEventsActions'
 
-const RELEVANT_CALENDAR_FORMS = Object.keys(HANDLE_CALENDAR_FORMS)
 const RELEVANT_CALENDAR_ACTIONS = Object.keys(CALENDAR_FORM_HANDLER)
 
 /**
@@ -38,11 +37,11 @@ const preventSubmitFormDuringUpload = (store: any) => (next: any) => (action: an
 }
 
 const handleCalendarFormsChanges = (store: any) => (next: any) => (action: any) => {
-	if (RELEVANT_CALENDAR_FORMS.includes(action?.meta?.form)) {
+	if (HANDLE_CALENDAR_FORMS.includes(action?.meta?.form)) {
 		// eslint-disable-next-line no-restricted-syntax
 		for (const actionType of RELEVANT_CALENDAR_ACTIONS) {
 			if (action.type.endsWith(actionType)) {
-				store.dispatch(updateEvents(HANDLE_CALENDAR_FORMS[action.meta.form], actionType, action.payload))
+				store.dispatch(updateEvents(actionType, action.payload))
 				return
 			}
 		}

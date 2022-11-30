@@ -132,8 +132,6 @@ const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeO
 }
 
 const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string, end: string): ICalendarEventCardData => {
-	console.log('🚀 ~ file: calendarHelpers.tsx ~ line 135 ~ createBaseEvent ~ event', event)
-
 	return {
 		id: event.id,
 		resourceId,

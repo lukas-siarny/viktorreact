@@ -87,12 +87,14 @@ const SiderEventManagement: FC<Props> = (props) => {
 				  }
 				: undefined
 			const initData = {
+				id: data?.id,
 				date: data?.start.date,
 				timeFrom: data?.start.time,
 				timeTo: data?.end.time,
 				note: data?.note,
 				eventType: data?.eventType,
 				calendarBulkEventID: data?.calendarBulkEvent?.id,
+				calendarApi,
 				allDay: data?.start.time === CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT.startTime && data?.end.time === CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT.endTime,
 				employee: {
 					value: data?.employee.id,
@@ -171,7 +173,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 				extendedProps: {
 					eventData: {
 						eventType: query.sidebarView
-					}
+					},
+					isPlaceholder: true
 				}
 			}
 
@@ -217,6 +220,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 			timeFrom: newEventData?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT),
 			timeTo: newEventData?.timeTo,
 			employee: newEventData?.employee,
+			calendarApi,
 			...omit(prevInitData, 'eventType'),
 			eventType
 		}

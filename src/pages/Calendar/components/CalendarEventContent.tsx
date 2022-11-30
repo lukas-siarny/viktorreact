@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
+import { StringParam, useQueryParams } from 'use-query-params'
 
 // full calendar
 import { EventContentArg } from '@fullcalendar/react' // must go before plugins
@@ -18,7 +19,7 @@ interface ICalendarEventProps {
 	calendarView: CALENDAR_VIEW
 	data: EventContentArg
 	salonID: string
-	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
+	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	refetchData: () => void
 }
 
@@ -36,7 +37,7 @@ const BackgroundEvent: FC<{ eventType?: CALENDAR_EVENT_TYPE }> = React.memo(({ e
 const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, onEditEvent, refetchData }) => {
 	const { event, backgroundColor } = data || {}
 	const { start, end } = event || {}
-	const { eventData } = (event.extendedProps as IEventExtenedProps) || {}
+	const { eventData, isPlaceholder } = (event.extendedProps as IEventExtenedProps) || {}
 	const {
 		id,
 		start: eventStart,
@@ -53,6 +54,10 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 		isMultiDayEvent,
 		calendarBulkEvent
 	} = eventData || {}
+
+	const [query] = useQueryParams({
+		eventId: StringParam
+	})
 
 	// background events
 	if (event.display === 'inverse-background') {
@@ -73,6 +78,8 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 		startDateTime,
 		endDateTime
 	}
+
+	const isEdit = query?.eventId === originalEventData.id
 
 	// normal events
 	switch (eventType) {
@@ -96,6 +103,8 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					originalEventData={originalEventData}
 					eventType={eventType as CALENDAR_EVENT_TYPE}
 					isBulkEvent={!!calendarBulkEvent?.id}
+					isPlaceholder={isPlaceholder}
+					isEdit={isEdit}
 				/>
 			)
 		case CALENDAR_EVENT_TYPE.RESERVATION: {
@@ -119,6 +128,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					onEditEvent={onEditEvent}
 					originalEventData={originalEventData}
 					refetchData={refetchData}
+					isEdit={isEdit}
 				/>
 			)
 		}

@@ -1,6 +1,6 @@
-import React, { useMemo, FC, useEffect } from 'react'
+import React, { useMemo, FC } from 'react'
 import dayjs from 'dayjs'
-import Scroll, { Element } from 'react-scroll'
+import { Element } from 'react-scroll'
 
 // full calendar
 import FullCalendar, { SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
@@ -63,8 +63,8 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 	const scrollId = getTimeScrollId(date.hour())
 
 	return (
-		<Element name={scrollId}>
-			<div className={'nc-day-slot-label'}>{date.format(CALENDAR_DATE_FORMAT.TIME)}</div>
+		<Element name={scrollId} className={'nc-day-slot-label'}>
+			{date.format(CALENDAR_DATE_FORMAT.TIME)}
 		</Element>
 	)
 }
@@ -80,13 +80,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	)
 	const resources = useMemo(() => composeDayViewResources(shiftsTimeOffs, employees), [shiftsTimeOffs, employees])
 
-	useEffect(() => {
-		Scroll.scroller.scrollTo(getTimeScrollId(8), {
-			containerId: 'nc-calendar-day-wrapper',
-			offset: -80
-		})
-	}, [selectedDate])
-
 	return (
 		<div className={'nc-calendar-wrapper'} id={'nc-calendar-day-wrapper'}>
 			<FullCalendar
@@ -97,11 +90,10 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
 				timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
 				eventTimeFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
-				height='auto'
+				height={'auto'}
 				headerToolbar={false}
 				initialView={'resourceTimeGridDay'}
 				initialDate={selectedDate}
-				scrollTime={CALENDAR_COMMON_SETTINGS.SCROLL_TIME}
 				slotDuration={CALENDAR_COMMON_SETTINGS.SLOT_DURATION}
 				slotLabelInterval={CALENDAR_COMMON_SETTINGS.SLOT_LABEL_INTERVAL}
 				fixedMirrorParent={CALENDAR_COMMON_SETTINGS.FIXED_MIRROR_PARENT}

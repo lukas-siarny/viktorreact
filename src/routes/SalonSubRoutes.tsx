@@ -230,7 +230,7 @@ const SalonSubRoutes: FC = (props) => {
 				layout={MainLayout}
 				page={PAGE.CALENDAR}
 				extra={{
-					contentClassName: null
+					contentClassName: 'z-30'
 				}}
 				preventShowDeletedSalon
 			/>

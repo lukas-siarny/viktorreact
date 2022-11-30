@@ -3,6 +3,7 @@ import React, { useMemo, useState, useEffect } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
 import useResizeObserver from '@react-hook/resize-observer'
+import { Element } from 'react-scroll'
 
 // full calendar
 import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
@@ -42,10 +43,10 @@ const resourceAreaColumns = [
 			const isToday = dayjs(date).isToday()
 
 			return (
-				<div className={cx('nc-week-label-day', { 'is-today': isToday })} id={isToday ? getTodayLabelId(date) : undefined}>
+				<Element name={date} className={cx('nc-week-label-day', { 'is-today': isToday })} id={isToday ? getTodayLabelId(date) : undefined}>
 					<span>{dayName}</span>
 					{dayNumber}
-				</div>
+				</Element>
 			)
 		}
 	},
@@ -120,7 +121,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 	const resources = useMemo(() => composeWeekResources(weekDays, shiftsTimeOffs, employees), [weekDays, shiftsTimeOffs, employees])
 
 	return (
-		<div className={'nc-calendar-wrapper'}>
+		<div className={'nc-calendar-wrapper'} id={'nc-calendar-week-wrapper'}>
 			<FullCalendar
 				ref={ref}
 				// plugins

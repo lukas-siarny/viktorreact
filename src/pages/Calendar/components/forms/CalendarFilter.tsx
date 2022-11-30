@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Collapse, Form, Spin } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -18,7 +18,6 @@ import { CALENDAR_DEBOUNCE_DELAY, CALENDAR_EVENTS_VIEW_TYPE, FORM } from '../../
 import { history } from '../../../../utils/history'
 
 // atoms
-import RadioGroupField from '../../../../atoms/RadioGroupField'
 import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
 // types
@@ -34,7 +33,6 @@ type Props = InjectedFormProps<ICalendarFilter, ComponentProps> & ComponentProps
 const { Panel } = Collapse
 
 enum PANEL_KEY {
-	EVENT_TYPE = 'EVENT_TYPE',
 	EMPLOYEES = 'EMPLOYEES',
 	CATEGORIES = 'CATEGORIES'
 }
@@ -60,49 +58,15 @@ const CalendarFilter = (props: Props) => {
 	const services = useSelector((state: RootState) => state.service.services)
 	const employees = useSelector((state: RootState) => state.employees.employees)
 
-	const eventsViewTypeOptions = useMemo(
-		() => [
-			{
-				key: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
-				value: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
-				label: t('loc:Rezervácia')
-			},
-			{
-				key: CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF,
-				value: CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF,
-				label: t('loc:Zmena / absencia')
-			}
-		],
-		[t]
-	)
-
-	const defaultActiveKeys = useMemo(
-		() =>
-			eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF
-				? [PANEL_KEY.EVENT_TYPE, PANEL_KEY.EMPLOYEES]
-				: [PANEL_KEY.EVENT_TYPE, PANEL_KEY.EMPLOYEES, PANEL_KEY.CATEGORIES],
-		[eventsViewType]
-	)
-
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'p-4'}>
 			<Collapse
 				className={'nc-collapse'}
 				bordered={false}
-				defaultActiveKey={defaultActiveKeys}
+				defaultActiveKey={[PANEL_KEY.EMPLOYEES, PANEL_KEY.CATEGORIES]}
 				expandIconPosition={'end'}
 				expandIcon={({ isActive }) => <ChevronDownIcon className={cx({ 'is-active': isActive })} />}
 			>
-				<Panel key={PANEL_KEY.EVENT_TYPE} header={t('loc:Zobrazenie')} className={'nc-collapse-panel'}>
-					<Field
-						className={'p-0 m-0 nc-radio-event-type'}
-						component={RadioGroupField}
-						name={'eventsViewType'}
-						options={eventsViewTypeOptions}
-						direction={'vertical'}
-						size={'small'}
-					/>
-				</Panel>
 				<Panel key={PANEL_KEY.EMPLOYEES} header={t('loc:Zamestnanci')} className={'nc-collapse-panel'}>
 					<Spin spinning={employees?.isLoading}>
 						<Field

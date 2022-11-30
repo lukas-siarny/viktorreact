@@ -10,7 +10,17 @@ import dayjs from 'dayjs'
 import { getFormValues, initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { StringParam, useQueryParams } from 'use-query-params'
-import { CALENDAR_EVENT_TYPE, CALENDAR_EVENTS_VIEW_TYPE, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT, EVENT_NAMES, FORM, STRINGS } from '../../../../utils/enums'
+import {
+	CALENDAR_EVENT_TYPE,
+	CALENDAR_EVENTS_VIEW_TYPE,
+	DEFAULT_DATE_INIT_FORMAT,
+	DEFAULT_TIME_FORMAT,
+	EVENT_NAMES,
+	FORM,
+	STRINGS,
+	DELETE_EVENT_PERMISSIONS
+} from '../../../../utils/enums'
+import Permissions from '../../../../utils/Permissions'
 
 // types
 import { ICalendarEventForm, ICalendarReservationForm } from '../../../../types/interfaces'
@@ -28,6 +38,9 @@ import EventTypeFilterForm from '../forms/EventTypeFilterForm'
 import DeleteButton from '../../../../components/DeleteButton'
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 import { RootState } from '../../../../reducers'
+
+// hooks
+import useKeyUp from '../../../../hooks/useKeyUp'
 
 type Props = {
 	salonID: string
@@ -97,6 +110,12 @@ const SiderEventManagement: FC<Props> = (props) => {
 		}
 	}, [sidebarView])
 
+	const handleCloseSider = () => {
+		setCollapsed(undefined)
+	}
+
+	useKeyUp('Escape', handleCloseSider)
+
 	const searchEmployes = useCallback(
 		async (search: string, page: number) => {
 			try {
@@ -146,22 +165,28 @@ const SiderEventManagement: FC<Props> = (props) => {
 				<div className={'font-semibold'}>{eventId ? STRINGS(t).edit(EVENT_NAMES(sidebarView)) : STRINGS(t).createRecord(EVENT_NAMES(sidebarView))}</div>
 				<div className={'flex-center'}>
 					{eventId && (
-						<DeleteButton
-							placement={'bottom'}
-							entityName={t('loc:prestávku')}
-							className={'bg-transparent mr-4'}
-							onConfirm={handleDeleteEvent}
-							onlyIcon
-							smallIcon
-							size={'small'}
+						<Permissions
+							allowed={DELETE_EVENT_PERMISSIONS}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<DeleteButton
+									placement={'bottom'}
+									entityName={t('loc:prestávku')}
+									className={'bg-transparent mr-4'}
+									onConfirm={(e) => {
+										if (hasPermission) {
+											handleDeleteEvent()
+										} else {
+											openForbiddenModal()
+										}
+									}}
+									onlyIcon
+									smallIcon
+									size={'small'}
+								/>
+							)}
 						/>
 					)}
-					<Button
-						className='button-transparent'
-						onClick={() => {
-							setCollapsed(undefined)
-						}}
-					>
+					<Button className='button-transparent' onClick={handleCloseSider}>
 						<CloseIcon />
 					</Button>
 				</div>

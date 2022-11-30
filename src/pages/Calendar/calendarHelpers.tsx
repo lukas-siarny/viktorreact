@@ -88,8 +88,8 @@ type ResourceMap = {
 	[key: string]: number
 }
 
-const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, selectedDate: string) =>
-	Object.entries({ ...resourcesMap }).reduce((acc, [key, value]) => {
+const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, selectedDate: string) => {
+	return Object.entries({ ...resourcesMap }).reduce((acc, [key, value]) => {
 		if (!value) {
 			return [
 				...acc,
@@ -106,6 +106,7 @@ const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, sele
 		}
 		return acc
 	}, [] as any[])
+}
 
 /* const isAllDayEvent = (selectedDate: string, eventStart: string, eventEnd: string) => {
 	const startOfSelectedDate = dayjs(selectedDate).startOf('day')
@@ -292,7 +293,7 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 			}, {} as { start: string; end: string })
 			description = `${dayjs(employeeWorkingHours.start).format(CALENDAR_DATE_FORMAT.TIME)}-${dayjs(employeeWorkingHours.end).format(CALENDAR_DATE_FORMAT.TIME)}`
 		} else if (employeeTimeOff.length && !employeeShifts.length) {
-			description = t('loc:Dovolenka')
+			description = t('loc:Voľno')
 		}
 
 		return {
@@ -492,4 +493,19 @@ export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null) 
 	const eventEmployeeId = eventData?.employee?.id
 
 	return resourceEmployeeId === eventEmployeeId
+}
+
+export const getSelectedDateForCalendar = (view: CALENDAR_VIEW, selectedDate: string) => {
+	switch (view) {
+		case CALENDAR_VIEW.WEEK: {
+			// v tyzdenom view je potrebne skontrolovat, ci sa vramci novo nastaveneho tyzdnoveho rangu nachadza dnesok
+			// ak ano, je potrebne ho nastavit ako aktualny den do kalendara, aby sa ukazal now indicator
+			// kedze realne sa na tyzdenne view pouziva denne view
+			const weekDays = getWeekDays(selectedDate)
+			return getWeekViewSelectedDate(selectedDate, weekDays)
+		}
+		case CALENDAR_VIEW.DAY:
+		default:
+			return selectedDate
+	}
 }

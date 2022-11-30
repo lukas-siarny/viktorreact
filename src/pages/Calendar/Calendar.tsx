@@ -56,7 +56,7 @@ import ConfirmModal from '../../atoms/ConfirmModal'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
 
 // types
-import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, IEmployeesPayload, SalonSubPageProps } from '../../types/interfaces'
+import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, IEmployeesPayload, ISelectOptionItem, SalonSubPageProps } from '../../types/interfaces'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -81,11 +81,6 @@ const getShortCategoryIdsForUrl = (ids?: (string | null)[] | null) => {
 		return cv
 	}, [] as string[])
 }
-
-// pre presnejsie porovnanie ci su vybrate vsetky options vo filtri
-/* const areAllItemsSelected = (selectedOptions?: string[], data?: ISelectOptionItem[]) => {
-	return !data?.some((option) => !selectedOptions?.includes(option.value as string))
-} */
 
 const Calendar: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath = '' } = props

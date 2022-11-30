@@ -66,6 +66,11 @@ const getEmployeeIDs = (data: IEmployeesPayload['options']) => {
 	return data?.map((employee) => employee.value) as string[]
 }
 
+// pre presnejsie porovnanie ci su vybrate vsetky options vo filtri
+/* const areAllItemsSelected = (selectedOptions?: string[], data?: ISelectOptionItem[]) => {
+	return !data?.some((option) => !selectedOptions?.includes(option.value as string))
+} */
+
 const Calendar: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath = '' } = props
 	const calendarRefs = useRef<CalendarRefs>(null)
@@ -250,7 +255,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
-		dispatch(getServices({ salonID }))
+		// Note: pouzivaju sa skratene categoryIDs (funkcia z helpers: shortenCategoryID()) aby neboli dlhe URL
+		// pre requesty je potom potrebne zparsovat naspat original category url (funkcia z helpers: getFullCategoryId())
+		dispatch(getServices({ salonID }, true))
 	}, [dispatch, salonID])
 
 	const fetchEvents = () => {
@@ -302,6 +309,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		setQuery({
 			...query,
 			...values,
+			employeeIDs: values?.employeeIDs?.length === employees?.options?.length ? undefined : values.employeeIDs,
+			categoryIDs: values?.categoryIDs?.length === services?.categoriesOptions?.length ? undefined : values.categoryIDs,
 			eventId: undefined,
 			sidebarView: undefined
 		})
@@ -630,7 +639,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						onShowAllEmployees={() => {
 							setQuery({
 								...query,
-								employeeIDs: getEmployeeIDs(employees?.options)
+								employeeIDs: undefined
 							})
 						}}
 						onEditEvent={(eventType: CALENDAR_EVENT_TYPE, eventId: string) => {

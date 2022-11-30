@@ -10,7 +10,7 @@ import { IUserAvatar, ISearchableWithoutPagination, ISelectOptionItem } from '..
 
 // utils
 import { getReq } from '../../utils/request'
-import { decodePrice, getServiceRange } from '../../utils/helper'
+import { decodePrice, getServiceRange, shortenCategoryID } from '../../utils/helper'
 
 export type IServiceActions = IResetStore | IGetServices | IGetService | IGetServiceRootCategory
 
@@ -63,7 +63,7 @@ export interface IServiceRootCategoryPayload {
 }
 
 export const getServices =
-	(queryParams: IGetServicesQueryParams): ThunkResult<Promise<IServicesPayload>> =>
+	(queryParams: IGetServicesQueryParams, shortenCategoryIDs = false): ThunkResult<Promise<IServicesPayload>> =>
 	async (dispatch, getState) => {
 		let payload = {} as IServicesPayload
 		const state = getState()
@@ -118,10 +118,11 @@ export const getServices =
 			data.groupedServicesByCategory.forEach((firstCategory) =>
 				firstCategory?.category?.children.forEach((secondCategory) => {
 					if (secondCategory?.category) {
+						const categoryID = shortenCategoryIDs ? shortenCategoryID(secondCategory.category.id) : secondCategory.category.id
 						categoriesOptions.push({
-							key: secondCategory.category.id,
-							label: secondCategory.category.name || secondCategory.category.id,
-							value: secondCategory.category.id
+							key: categoryID,
+							label: secondCategory.category.name || categoryID,
+							value: categoryID
 						})
 					}
 					secondCategory.category?.children.forEach((service) => {

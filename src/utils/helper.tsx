@@ -1051,3 +1051,10 @@ export const computeEndDate = (startDate: any, endDate: any) => {
 	}
 	return endsIn
 }
+
+export const shortenCategoryID = (id: string) => {
+	const splittedId = id.split('-')
+	return splittedId[splittedId.length - 1]
+}
+
+export const getFullCategoryId = (shortenedId?: string) => (shortenedId?.split('-')?.length === 1 ? `00000000-0000-0000-0000-${shortenedId}` : shortenedId)

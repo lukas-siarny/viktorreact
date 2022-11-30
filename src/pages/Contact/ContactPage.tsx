@@ -125,7 +125,7 @@ const ContactPage: FC<Props> = () => {
 					<Select
 						id={'noti-country-select'}
 						onChange={handleCountryChange}
-						value={selectedContact?.id}
+						value={{ value: selectedContact?.id }}
 						className={'noti-select-input w-full'}
 						size={'large'}
 						dropdownClassName={'noti-select-dropdown dropdown-match-select-width'}
@@ -156,7 +156,7 @@ const ContactPage: FC<Props> = () => {
 					}
 					if (view === 'default') {
 						return (
-							<Collapse className={'noti-collapse noti-support-collapse mt-0'} bordered={false} defaultActiveKey={1} accordion expandIconPosition={'right'}>
+							<Collapse className={'noti-collapse noti-support-collapse mt-0'} bordered={false} defaultActiveKey={1} accordion expandIconPosition={'end'}>
 								<Panel
 									header={
 										<h3 className={'flex items-center text-lg my-2'}>

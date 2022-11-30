@@ -39,6 +39,9 @@ const App = () => {
 			document.documentElement.setAttribute('lang', language)
 			setAntdLocale(locale.antD)
 			dayjs.locale(locale.ISO_639)
+			dayjs.updateLocale(locale.ISO_639, {
+				weekStart: 1
+			})
 		})
 	}, [])
 

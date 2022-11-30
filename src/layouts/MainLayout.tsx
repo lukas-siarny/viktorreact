@@ -3,6 +3,7 @@ import { Layout, Row, Button, Dropdown, Menu } from 'antd'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
+import { ItemType } from 'antd/lib/menu/hooks/useItems'
 
 // components
 import { Header } from 'antd/lib/layout/layout'
@@ -31,40 +32,64 @@ const { Content } = Layout
 
 type Props = LayoutSiderProps & {
 	children: ReactNode
+	extra?: {
+		contentClassName?: string | null
+	}
 }
 
 const MainLayout: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { children } = props
+	const { children, extra } = props
+	const { contentClassName = 'p-4 px-10 main-background' } = extra || {}
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 	const salonID = selectedSalon?.id
 	const salonOptions = useSelector((state: RootState) => state.selectedSalon.selectionOptions.data) || []
 	const [backUrl] = useBackUrl(t('paths:salons'))
 
-	const SALONS_MENU = (
-		<Menu className='shadow-md max-w-xs min-w-0 mt-5 noti-dropdown-header'>
-			<div className={'px-2 pt-2 pb-0'} style={{ height: salonOptions?.length > 8 ? 400 : 'auto', maxHeight: 'calc(100vh - 170px)', overflowY: 'auto' }}>
-				{salonOptions.map((item) => (
-					<Menu.Item
-						key={item.key}
-						className={cx({ 'ant-menu-item-selected': selectedSalon?.id === item.value }, 'py-2-5 px-2 mb-2 font-medium min-w-0')}
-						onClick={() => {
-							history.push(t('paths:salons/{{salonID}}', { salonID: item.value }))
-						}}
-					>
-						<AvatarComponents src={item.logo || SalonDefaultAvatar} fallBackSrc={SalonDefaultAvatar} size={24} className={'mr-2-5 header-avatar'} />
-						{item.label}
-					</Menu.Item>
-				))}
-			</div>
-			<div className={'px-2 pb-2'}>
-				<Menu.Divider className={'m-0'} />
-				<Menu.Item key='add-salon' className={'mt-2 p-2 font-medium button-add'} icon={<AddPurple />} onClick={() => history.push(t('paths:salons/create'))}>
-					{t('loc:Pridať salón')}
-				</Menu.Item>
-			</div>
-		</Menu>
-	)
+	const getSalonMenuItems = (): ItemType[] => {
+		const salonMenuItems: ItemType[] = salonOptions.map((item) => ({
+			key: item.key,
+			label: (
+				<>
+					<AvatarComponents src={item.logo || SalonDefaultAvatar} fallBackSrc={SalonDefaultAvatar} size={24} className={'mr-2-5 header-avatar'} /> {item.label}
+				</>
+			),
+			onClick: () => history.push(t('paths:salons/{{salonID}}', { salonID: item.value })),
+			className: cx({ 'ant-menu-item-selected': selectedSalon?.id === item.value }, 'py-2-5 px-2 mb-2 font-medium min-w-0')
+		}))
+
+		return [
+			{
+				type: 'group',
+				key: 'group-salons',
+				children: salonMenuItems,
+				// maxHeight - 100vh - 170px - je potrebné zaistiť aby na nejakom menšom responzívnom zobrazení nešlo menu mimo obrazovku
+				// čiže odratá sa vyška headera, výška buttonu "Pridať salón" + nejake marginy, paddingy
+				style: { height: salonOptions?.length > 8 ? 400 : 'auto', maxHeight: 'calc(100vh - 170px)', overflowY: 'auto' }
+			},
+			{
+				type: 'group',
+				key: 'group-add-salon',
+				className: '',
+				children: [
+					{
+						type: 'divider',
+						key: 'divider1',
+						className: 'm-0'
+					},
+					{
+						key: 'add-salon',
+						className: 'font-medium button-add',
+						icon: <AddPurple />,
+						onClick: () => history.push(t('paths:salons/create')),
+						label: t('loc:Pridať salón')
+					}
+				]
+			}
+		]
+	}
+
+	const SALONS_MENU = <Menu className='shadow-md max-w-xs min-w-0 mt-5 noti-dropdown-header' items={getSalonMenuItems()} />
 
 	const getSelectedSalonLabel = (hasPermision: boolean) => {
 		const content = (
@@ -125,7 +150,7 @@ const MainLayout: FC<Props> = (props) => {
 					allowed={[PERMISSION.PARTNER]}
 					render={(hasPermission) =>
 						(hasPermission || !!salonID) && (
-							<Header className='shadow-md bg-notino-white sticky top-0 px-4 flex items-center w-full z-50' id={'noti-header'}>
+							<Header className='shadow-md bg-notino-white sticky top-0 px-4 flex items-center w-full z-40' id={'noti-header'}>
 								<Row className={cx({ 'justify-end': hasPermission, 'justify-between': !hasPermission }, 'min-w-0 w-full')} wrap={false}>
 									{!hasPermission && (
 										<Button
@@ -148,7 +173,7 @@ const MainLayout: FC<Props> = (props) => {
 						)
 					}
 				/>
-				<Content className='p-4 px-10 main-background'>{children}</Content>
+				<Content className={contentClassName || undefined}>{children}</Content>
 			</Layout>
 		</Layout>
 	)

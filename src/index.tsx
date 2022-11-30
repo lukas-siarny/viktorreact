@@ -11,6 +11,10 @@ import isBetween from 'dayjs/plugin/isBetween'
 import minMax from 'dayjs/plugin/minMax'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import localeData from 'dayjs/plugin/localeData'
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+import updateLocale from 'dayjs/plugin/updateLocale'
+import isToday from 'dayjs/plugin/isToday'
 
 import App from './App'
 // load theme styles with webpack
@@ -31,6 +35,10 @@ dayjs.extend(timezonePlugin)
 dayjs.extend(minMax)
 dayjs.extend(relativeTime)
 dayjs.extend(localeData)
+dayjs.extend(isSameOrBefore)
+dayjs.extend(isSameOrAfter)
+dayjs.extend(updateLocale)
+dayjs.extend(isToday)
 
 Sentry.init({
 	release: process.env.REACT_APP_VERSION,

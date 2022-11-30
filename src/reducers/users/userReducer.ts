@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
 // eslint-disable-next-line import/no-cycle
 import { IUserActions, IUserPayload, IUsersPayload, IPendingInvitesPayload, INotinoUsersPayload } from './userActions'

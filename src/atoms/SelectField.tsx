@@ -117,21 +117,44 @@ const renderMenuItemSelectedIcon = (
 	return icon
 }
 
-const getOptions = (optionRender: any, options: any) =>
-	map(options, (option) => (
-		<Option
-			key={option.key}
-			value={option.value}
-			disabled={option.disabled}
-			label={option.label}
-			extra={option.extra}
-			className={option.className}
-			style={option.level ? { paddingLeft: 16 * option.level } : undefined}
-		>
-			{optionRender ? optionRender(option) : option.label}
-		</Option>
-	))
-
+const getOptions = (optionRender: any, options: any) => {
+	// NOTE: ak existuje v optione children pole tak to zneman ze ma vnorene optiony a bude sa pouzivat OptGroup a druha uroven ako Option
+	return map(options, (option) => {
+		if (option.children) {
+			return (
+				<Select.OptGroup key={option.key} label={option.label}>
+					{map(option.children, (childrenOpt) => {
+						return (
+							<Option
+								key={childrenOpt.key}
+								value={childrenOpt.value}
+								disabled={childrenOpt.disabled}
+								label={childrenOpt.label}
+								className={childrenOpt.className}
+								style={childrenOpt.level ? { paddingLeft: 16 * childrenOpt.level } : undefined}
+							>
+								{optionRender ? optionRender(childrenOpt) : childrenOpt.label}
+							</Option>
+						)
+					})}
+				</Select.OptGroup>
+			)
+		}
+		return (
+			<Option
+				key={option.key}
+				value={option.value}
+				disabled={option.disabled}
+				label={option.label}
+				extra={option.extra}
+				className={option.className}
+				style={option.level ? { paddingLeft: 16 * option.level } : undefined}
+			>
+				{optionRender ? optionRender(option) : option.label}
+			</Option>
+		)
+	})
+}
 const customDropdown = (actions: Action[] | null | undefined, menu: React.ReactElement, fetching: boolean | undefined) => {
 	const divider = isEmpty(actions) ? null : <Divider style={{ margin: 0 }} />
 
@@ -146,7 +169,15 @@ const customDropdown = (actions: Action[] | null | undefined, menu: React.ReactE
 			<div className={'w-11/12 m-auto'}>{divider}</div>
 			{map(actions, (item, index) => (
 				<div className={'flex items-center h-12'} key={index}>
-					<Button key={item.title} type='link' size={'large'} htmlType='button' className={'noti-btn'} icon={item.icon || <PlusIcon />} onClick={item.onAction}>
+					<Button
+						key={item.title}
+						type='link'
+						size={'large'}
+						htmlType='button'
+						className={'noti-btn text-notino-pink'}
+						icon={item.icon || <PlusIcon />}
+						onClick={item.onAction}
+					>
 						{item.title}
 					</Button>
 				</div>
@@ -344,7 +375,6 @@ const SelectField = (props: Props) => {
 		},
 		[selectState, allowInfinityScroll, dataSourcePath, props.onSearch]
 	)
-
 	const onSearchDebounced = useMemo(() => debounce(handleSearch, 300), [handleSearch])
 
 	const onChange = useCallback(
@@ -466,7 +496,6 @@ const SelectField = (props: Props) => {
 	}, [input.value, selectState.data])
 
 	const localFilterOption = (inputValue: any, option: any) => createSlug(option.label.toLowerCase()).indexOf(createSlug(inputValue.toLowerCase())) >= 0
-
 	const value = input.value === null || input.value === '' ? undefined : input.value
 
 	let opt = options
@@ -503,7 +532,6 @@ const SelectField = (props: Props) => {
 	if (emptyText || selectState.emptyText) {
 		notFound = <Empty className={'m-4'} image={Empty.PRESENTED_IMAGE_SIMPLE} description={selectState.emptyText || emptyText} />
 	}
-
 	const select = (
 		<Select
 			bordered={bordered}

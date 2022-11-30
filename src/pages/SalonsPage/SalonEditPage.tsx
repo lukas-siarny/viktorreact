@@ -34,8 +34,8 @@ import { IBreadcrumbs, INoteForm, INoteModal, INotinoUserForm, ISalonForm, Salon
 import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { formFieldID } from '../../utils/helper'
-import { getSalonDataForSubmission, initSalonFormData, getAssignedUserLabel } from './components/salonUtils'
+import { formFieldID, getAssignedUserLabel } from '../../utils/helper'
+import { getSalonDataForSubmission, initSalonFormData } from './components/salonUtils'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
@@ -504,7 +504,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		[t, salon?.data?.publicationDeclineReason, hiddenSalon]
 	)
 
-	const renderContentHeaderPartner = () => infoMessage && <div className={'content-header z-40'}>{infoMessage}</div>
+	const renderContentHeaderPartner = () => infoMessage && <div className={'content-header z-10'}>{infoMessage}</div>
 
 	const renderContentHeaderAdmin = () =>
 		(infoMessage || isPendingPublication) && (

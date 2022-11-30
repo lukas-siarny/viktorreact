@@ -53,7 +53,7 @@ const CustomPagination = (props: IPagination) => {
 
 	const pageSizeChangerRef = useRef<HTMLDivElement | null>(null)
 
-	useOnClickOutside(pageSizeChangerRef, () => {
+	useOnClickOutside([pageSizeChangerRef], () => {
 		setIsSizeChangerOpen(false)
 	})
 

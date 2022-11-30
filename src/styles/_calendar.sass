@@ -1,0 +1,1399 @@
+@import tailwind-variables
+@import "variables"
+
+$box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25px -5px rgba(0, 0, 0, 0.1)
+
+@keyframes content-animation
+	0%
+		transform: translateX(-50px)
+		opacity: 0
+	100%
+		transform: translateX(0)
+		opacity: 1
+
+@keyframes calendar-select-panel-animation
+	0%
+		transform: translateX(100%)
+	100%
+		transform: translateX(0)
+
+
+@mixin scrollbar-styles
+	@media (pointer:fine)
+		&::-webkit-scrollbar
+			background: transparent
+			// height: 8px
+			// width: 8px
+		&::-webkit-scrollbar-thumb
+			border-bottom: 4px solid #fff
+			border-left: 4px solid #fff
+			border-right: 4px solid #fff
+			border-top: 4px solid #fff
+		&::-webkit-scrollbar-thumb
+			border: none
+			box-shadow: none
+			background: $backgroundColor-notino-white
+			min-height: 40px
+			// border-radius: 8px
+		&::-webkit-scrollbar-track
+			background: #fff
+
+
+@mixin hide-scrollbar
+	&::-webkit-scrollbar
+		display: none
+
+@mixin arrow-right($color: $borderColor-notino-grayDarker, $size: 4px)
+	width: 0
+	height: 0
+	border-top: $size solid transparent
+	border-bottom: $size solid transparent
+	border-left: $size solid $color
+
+@mixin arrow-left($color: $borderColor-notino-grayDarker, $size: 4px)
+	width: 0
+	height: 0
+	border-top: $size solid transparent
+	border-bottom: $size solid transparent
+	border-right: $size solid  $color
+
+@mixin edit-circle($week: false)
+	content: ''
+	position: absolute
+	width: 8px
+	height: 8px
+	border: 1px solid $borderColor-notino-grayDark
+	border-radius: 50%
+	background-color: $backgroundColor-notino-white
+
+@mixin event-hatch($color)
+	background-image: linear-gradient(135deg, $color 12.50%, transparent 12.50%, transparent 50%, $color 62.50%, $color 62.50%, transparent 60%, transparent 100%)
+
+// calendar layout
+.noti-calendar-layout
+	height: 100%
+
+	// header
+	.nc-header
+		background: $backgroundColor-notino-white
+		height: 80px
+		display: flex
+		align-items: center
+		padding: 16px
+		border-bottom: 1px solid $borderColor-notino-grayLight
+		line-height: unset
+		gap: 8px
+		position: sticky
+		top: 64px
+		z-index: 3
+		.nav-left
+			flex: 1 1 50%
+			display: flex
+			align-items: center
+			gap: 16px
+		.nav-middle
+			display: flex
+			align-items: center
+		.nav-right
+			flex: 1 1 50%
+			display: flex
+			align-items: center
+			justify-content: flex-end
+		.nc-header-date-picker
+			height: 0
+			line-height: 0
+			padding-bottom: 0
+			.ant-form-item-row
+				height: 0
+			.ant-form-item-control,
+			.ant-form-item-control-input,
+			.ant-form-item-control-input-content
+				line-height: 0
+				min-height: 0
+			.ant-picker
+				padding: 0
+				border: 0
+				.ant-picker-input
+					display: none
+
+	// main section
+	.noti-calendar-main-section
+		height: calc(100vh - 144px)
+		overflow-y: hidden
+		position: sticky
+		top: 144px
+		z-index: 2
+
+		// sider filter
+		.nc-sider-filter
+			background: $backgroundColor-notino-white
+			height: 100%
+			overflow-y: auto
+			overflow-x: hidden
+			transition: none
+			position: relative
+			border-right: 1px solid $backgroundColor-notino-grayLight
+			margin-left: 1px
+
+		// sider event management
+		.nc-sider-event-management
+			background: $backgroundColor-notino-white
+			height: 100%
+			overflow: hidden
+			transition: none
+			position: relative
+			&::after
+				content: ''
+				display: block
+				position: absolute
+				width: 1px
+				left: 0
+				top: 0
+				bottom: 0
+				background: $backgroundColor-notino-grayLight
+			.nc-sider-event-management-header
+				display: flex
+				align-items: center
+				gap: 8px
+				height: 50px
+				padding: 16px
+				h2
+					margin: 0
+					font-size: 16px
+					line-height: 18px
+					white-space: nowrap
+					overflow: hidden
+					text-overflow: ellipsis
+				.button-transparent
+					box-shadow: none
+					padding: 0
+					border: 0
+					height: 16px
+					svg
+						width: 16px
+						height: 16px
+			&.edit
+				.nc-sider-event-management-content
+					&.main-panel
+						height: calc(100% - 114px)
+			.nc-sider-event-management-content
+				height: calc(100% - 50px) // 100% - .nc-sider-event-management-header + event filter height
+				overflow-y: auto
+				overflow-x: hidden
+				padding: 0 16px 16px 16px
+				&.main-panel
+					height: calc(100% - (114px + 116px)) // 100% - .nc-sider-event-management-header - .nc-sider-event-management-footer
+			.nc-sider-event-management-footer
+				height: 64px
+				padding: 8px 16px 16px 16px
+				> button
+					height: 40px
+			.nc-select-options-panel
+				position: absolute
+				top: 0
+				bottom: 0
+				right: 0
+				left: 0
+				background: $backgroundColor-notino-white
+				transform: translateY(100%)
+				animation: calendar-select-panel-animation 150ms ease-in-out forwards
+
+		// main content
+		.nc-content
+			background: $backgroundColor-notino-white
+			height: 100%
+			overflow: hidden
+			position: relative
+			.ant-spin-nested-loading
+				position: absolute
+				top: 0
+				left: 0
+				right: 0
+				bottom: 0
+				width: 100%
+				height: 100%
+				.ant-spin-container
+					height: 100%
+			#nc-content-overlay
+				position: absolute
+				top: 0
+				right: 0
+				bottom: 0
+				left: 0
+				background: transparent
+				overflow: hidden
+				z-index: 3
+				display: none
+			.nc-content-animate
+				position: absolute
+				top: 0
+				right: 0
+				bottom: 0
+				left: 0
+				opacity: 0
+				animation: content-animation 250ms ease-out forwards
+				overflow: hidden
+			.nc-calendar-week-wrapper
+				position: absolute
+				top: 0
+				left: 0
+				right: 0
+				bottom: 0
+				width: 100%
+				height: 100%
+				overflow-y: auto
+				overflow-x: visible
+	// other
+	.nc-collapse
+		background: transparent
+		.nc-collapse-panel
+			padding-bottom: 16px
+			.ant-collapse-header
+				padding: 4px 8px
+				background: $backgroundColor-notino-grayLighter
+				min-height: 0
+				.ant-collapse-header-text
+					font-size: 14px
+					line-height: 16px
+					font-weight: 600
+					overflow: hidden
+					text-overflow: ellipsis
+					white-space: nowrap
+					min-height: 0
+					max-width: calc(100% - 24px)
+				.ant-collapse-expand-icon
+					svg
+						right: 8px
+						width: 12px
+						height: 12px
+						transform: translateY(-50%)
+						transform-origin: center
+						transition: transform 250ms ease-in-out
+						&.is-active
+							transform: translateY(-50%) rotate(180deg)
+			.ant-collapse-content-box
+				padding: 8px 0 0 8px
+	.nc-button
+		padding: 8px
+		outline: none
+		border-radius: 4px
+		color: $textColor-notino-black
+		font-size: 14px
+		line-height: 16px
+		font-weight: 400
+		cursor: pointer
+		transition: all 300ms ease-in-out
+		height: 32px
+		white-space: nowrap
+
+		&.light
+			background: $backgroundColor-notino-grayLighter
+			border: none
+			&:hover,
+			&:focus-visible
+				background-color: $backgroundColor-notino-grayLight
+		&.bordered
+			background: $backgroundColor-notino-white
+			border: 1px solid $textColor-notino-grayLight
+			&:hover,
+			&:focus-visible
+				background-color: $backgroundColor-notino-grayLight
+
+	.nc-button-group
+		background: $backgroundColor-notino-grayLighter
+		padding: 2px
+		border-radius: 4px
+		button
+			color: $textColor-notino-black
+			background: transparent
+			border-radius: 4px
+			font-size: 14px
+			line-height: 16px
+			font-weight: 400
+			border: none
+			outline: none
+			padding: 6px 10px
+			cursor: pointer
+			height: 28px
+			transition: all 300ms ease-in-out
+			&:not(.active)
+				&:hover,
+				&:focus-visible
+					background-color: $backgroundColor-notino-grayLight
+			&.active
+				background: $backgroundColor-notino-white
+				box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05)
+
+	.nc-button-date
+		color: $textColor-notino-black
+		background: transparent
+		border: 1px dashed transparent
+		font-size: 16px
+		line-height: 19px
+		font-weight: 600
+		outline: none
+		display: flex
+		align-items: center
+		height: 32px
+		gap: 4px
+		white-space: nowrap
+		cursor: pointer
+		text-transform: capitalize
+		transition: all 300ms ease-in-out
+		&:focus-visible
+			border-color: $borderColor-notino-gray
+
+	.nc-select
+		.nc-select-button
+			min-height: 40px
+			display: flex
+			gap: 4px
+			width: 100%
+			padding: 12px
+			font-size: 14px
+			line-height: 16px
+			font-weight: 400
+			border-radius: 8px
+			background: $backgroundColor-notino-grayLighter
+			outline: none
+			border: none
+			cursor: pointer
+			transition: all 300ms ease-in-out
+			position: relative
+			text-align: left
+			&:hover,
+			&:focus-visible
+				background-color: $backgroundColor-notino-grayLight
+			svg
+				width: 16px
+				height: 16px
+				flex: 0 0 auto
+			&::after
+				content: url('../assets/icons/chevron-right-gray-dark-16.svg')
+				margin-left: auto
+				width: 16px
+				height: 16px
+				align-self: center
+
+.noti-fc-empty
+	.image-wrapper
+		width: 100%
+		max-width: 440px
+		.image-wrapper-inner
+			width: 100%
+			height: 0
+			position: relative
+			padding-bottom: 63.5%
+			img
+				position: absolute
+				top: 0
+				left: 0
+				width: 100%
+				height: 100%
+
+
+// full calendar
+.fc-timegrid-body
+	background: $backgroundColor-notino-white
+
+.fc .fc-timegrid-slot-minor
+	border-top-color: transparent
+
+.fc-theme-standard td
+	border-color: $borderColor-notino-grayLight
+
+.fc-day-today
+	background: transparent !important
+
+.fc .fc-highlight
+	background: rgba($backgroundColor-notino-grayLight, 0.3)
+
+.nc-bg-event
+	position: relative
+	width: 100%
+	height: 100%
+	background-position: top left
+	&.not-set-availability
+		opacity: 0.4
+		background-size: 32px 32px
+		background-image: url("../assets/images/gray-pattern-background.png")
+	&.timeoff
+		opacity: 0.4
+		background-size: 100px 50px
+		background-image: url("../assets/images/gray-bold-background-pattern-dark.png")
+
+.fc-timegrid-col-bg
+	.fc-timegrid-bg-harness
+		.fc-bg-event
+			opacity: 1
+			background-color: transparent !important
+
+// daily view
+.fc-resourceTimeGridDay-view
+	// vyska najmenjsieho casoveho intervalu - teda ak mam nastavenych 15minut - tak cela hodina bude 60px vysoka (4 x 15px)
+	// ak zmeminme tuto vysku, je potrebne upravit aj min-height eventu .nc-day-event
+	font-size: 15px
+	line-height: 15px
+	.fc-timegrid-slot
+		line-height: 15px
+		height: 15px
+	.fc-scrollgrid-section-sticky
+		position: sticky
+		background: white
+		z-index: 20
+	> table.fc-scrollgrid
+		border-color: transparent
+		.fc-timegrid-now-indicator-arrow
+			display: none
+		/* .fc-timegrid-now-indicator-arrow
+			left: unset
+			right: 1px
+			width: 10px
+			height: 10px
+			background: $backgroundColor-notino-pink
+			border-radius: 50%
+			border: none
+			transform: translateY(1px)
+		.fc-timegrid-now-indicator-container
+			right: -1px
+			.fc-timegrid-now-indicator-line
+				border-color: $backgroundColor-notino-pink
+				border-top-width: 2px
+		.fc-scrollgrid-section-header
+			background: transparent
+			.fc-col-header-cell
+				border-bottom-color: transparent
+			.fc-col-header-cell-cushion
+				display: block
+				width: 100%
+				height: 100%
+				padding: 0
+			> th
+				line-height: 1
+				&:first-of-type
+					background: transparent
+					.fc-timegrid-axis
+						border-color: transparent
+				&:last-of-type
+					border-right: 1px solid transparent
+					border-bottom: 1px solid $borderColor-notino-grayLight
+					> .fc-scroller-harness
+						> .fc-scroller
+							@include scrollbar-styles
+		> tbody
+			> tr.fc-scrollgrid-section-body
+				> td:first-of-type
+					border-bottom-color: transparent
+					> .fc-scroller-harness
+						transform: translateY(-58px) // vyska hlavicky 56px + 2px nejake bordre
+						height: calc(100% + 58px) // vyska hlavicky 56px + 2px nejake bordre
+						&::before,
+						&::after
+							content: ''
+							position: absolute
+							left: 0
+							right: 0
+							height: 30px
+							z-index: 3
+						&::after
+							bottom: 0
+							background: linear-gradient(0deg, rgba(255,255,255,1) 38%, rgba(255,255,255,0.47102591036414565) 80%, rgba(255,255,255,0.3981967787114846) 100%)
+						&::before
+							top: 0
+							background: linear-gradient(180deg, rgba(255,255,255,1) 38%, rgba(255,255,255,0.47102591036414565) 80%, rgba(255,255,255,0.3981967787114846) 100%)
+						.fc-scroller
+							padding-top: 58px
+							.fc-timegrid-axis-chunk
+								table tbody
+									tr
+										line-height: 15px
+										height: 15px
+										.fc-timegrid-slot
+											border-color: transparent
+											// transform: translateY(-50%)
+											.fc-timegrid-slot-label-frame
+												.fc-timegrid-slot-label-cushion
+													color: $textColor-notino-grayDarker
+													font-size: 10px
+													line-height: 12px
+													padding: 0
+				> td:last-of-type
+					border-color: transparent
+					> .fc-scroller-harness
+						> .fc-scroller
+							.fc-timegrid-body
+								line-height: 15px
+							.fc-timegrid-cols
+								> table
+									tr
+										line-height: 15px
+										height: 15px
+								.fc-timegrid-col
+									.fc-timegrid-col-frame
+										.fc-timegrid-col-events
+											.fc-timegrid-event-harness
+												margin: 2px 4px 2px 2px
+												min-height: 13px
+		> tfoot
+			> tr.fc-scrollgrid-section-footer
+				> th:first-of-type
+					> .fc-scroller-harness
+						> .fc-scroller
+							@include scrollbar-styles
+
+.fc-timegrid-event-harness-inset .fc-timegrid-event,
+.fc-timegrid-event.fc-event-mirror, .fc-timegrid-more-link
+	box-shadow: none
+.fc-timegrid-event
+	background-color: transparent !important
+	border: none
+	box-shadow: none
+	margin-bottom: 0
+	&:focus
+		&::before
+			display: none
+		&::after
+			display: none
+	&:focus-visible
+		.fc-event-main
+			.nc-day-event
+				box-shadow: $boxShadow-2xl
+	.fc-event-main
+		padding: 0
+
+.nc-day-resource-label
+	display: flex
+	gap: 8px
+	overflow: hidden
+	align-items: center
+	min-width: 0
+	width: 100%
+	text-align: left
+	padding: 16px
+	height: 56px
+	.image
+		border-radius: 50%
+		flex: 0 0 auto
+		border: 2px solid $borderColor-notino-grayLight
+		background-position: center
+	.name
+		min-width: 0
+		white-space: nowrap
+		overflow: hidden
+		text-overflow: ellipsis
+		max-width: 100%
+		line-height: 13px
+	.description
+		font-size: 10px
+		color: $textColor-notino-grayDark
+		white-space: nowrap
+		overflow: hidden
+		text-overflow: ellipsis
+		max-width: 100%
+		line-height: 11px
+		font-weight: 400
+	.absence-icon
+		margin-left: auto
+		height: 16px
+		align-self: center
+
+.nc-day-slot-label
+	width: 60px
+	text-align: center
+
+// weekly view
+.fc-resource-timeline
+	.fc-timeline-slot-minor
+		border-color: transparent
+	.fc-datagrid-cell-resizer
+		display: none
+	> table.fc-scrollgrid
+		border: none
+		.fc-scrollgrid-section-header
+			> th:first-of-type
+				border-right-color: transparent !important
+				background: transparent
+				> .fc-scroller-harness
+					&::before
+						content: ''
+						position: absolute
+						left: 0
+						width: 55px
+						height: 25px
+						z-index: 3
+						top: 0
+						background: linear-gradient(180deg, rgba(255,255,255,1) 38%, rgba(255,255,255,0.47102591036414565) 80%, rgba(255,255,255,0.3981967787114846) 100%)
+					> .fc-scroller
+						overflow: visible !important
+						> table.fc-datagrid-header
+							> thead
+								> tr
+									> th.fc-datagrid-cell:first-of-type
+										border-bottom-color: transparent
+										width: 60px !important
+			> td.fc-resource-timeline-divider
+				user-select: none
+				-moz-user-select: -moz-none
+				visibility: hidden
+				width: 0
+			> th:last-of-type
+				border-right-color: transparent !important
+				> .fc-scroller-harness
+					margin-left: -145px
+					background: $backgroundColor-notino-white
+					border-bottom: 1px solid $borderColor-notino-grayLight
+					&::before,
+					&::after
+						content: ''
+						position: absolute
+						top: 0
+						bottom: 0
+						width: 30px
+						z-index: 3
+					&::after
+						left: 0
+						background: linear-gradient(90deg, rgba(255,255,255,1) 38%, rgba(255,255,255,0.47102591036414565) 80%, rgba(255,255,255,0.3981967787114846) 100%)
+					&::before
+						right: 0
+						background: linear-gradient(270deg, rgba(255,255,255,1) 38%, rgba(255,255,255,0.47102591036414565) 80%, rgba(255,255,255,0.3981967787114846) 100%)
+					> .fc-scroller
+						padding-left: 145px
+						@include hide-scrollbar
+						table.fc-scrollgrid-sync-table
+							.fc-timeline-header-row
+								.fc-timeline-slot-label
+									border-left-color: transparent
+									border-bottom-color: transparent
+									.fc-timeline-slot-frame
+										overflow: visible
+										.fc-timeline-slot-cushion
+											display: block
+											cursor: default
+											pointer-events: none
+											padding: 0
+											width: 100%
+											height: 100%
+
+		.fc-scrollgrid-section-body
+			> td:first-of-type
+				/* position: relative
+				/* &::before
+					content: ''
+					position: absolute
+					top: 0
+					left: 54px
+					width: 1px
+					bottom: 0
+					background: $borderColor-notino-grayLight
+				> .fc-scroller-harness
+					> .fc-scroller
+						@include scrollbar-styles
+						overflow: visible !important
+						table.fc-datagrid-body
+							> tbody > tr
+								> .fc-datagrid-cell
+									&:first-of-type:not(:last-of-type)
+										position: relative
+										.fc-datagrid-cell-frame
+											position: absolute
+											top: 0
+											left: 0
+											right: 0
+											bottom: 0
+											.fc-datagrid-cell-cushion
+												width: 100%
+												height: 100%
+												padding: 0
+												position: static
+									&:last-of-type
+										.fc-datagrid-cell-frame
+											.fc-datagrid-cell-cushion
+												padding: 0
+												// min-height: 45px
+												min-height: 40px
+												.fc-datagrid-cell-main
+													// height: 100%
+													// display: block
+			> td.fc-resource-timeline-divider
+				user-select: none
+				-moz-user-select: -moz-none
+				visibility: hidden
+				width: 0
+			> td:last-of-type
+				border-right-color: transparent !important
+				/*> .fc-scroller-harness
+					> .fc-scroller
+						> .fc-timeline-body
+							> .fc-timeline-slots
+								.fc-timeline-slot-minor
+									border-color: transaprent !important
+				.fc-timeline-lane-frame
+					min-height: 40px
+					.fc-timeline-events
+						padding-bottom: 5px
+						.fc-timeline-event-harness
+							// padding: 3px 4px 0 5px
+					.fc-timeline-bg
+						.fc-timeline-bg-harness
+							.fc-bg-event
+								background-color: transparent !important
+								opacity: 1
+		/* > tfoot
+			> tr.fc-scrollgrid-section-footer
+				> th:last-of-type
+					> .fc-scroller-harness
+						transform: translateX(-200px) // 200px - width of resourceArea
+						width: 100%
+						> .fc-scroller
+							width: calc(100%)
+							// @include scrollbar-styles
+
+.fc .fc-timeline-now-indicator-arrow
+	display: none
+.fc .fc-timeline-now-indicator-line
+	border-color: transparent
+.fc-week-now-indicator
+	position: absolute
+	width: 2px
+	top: 0
+	height: 0
+	background-color: $backgroundColor-notino-pink
+	transform: translateX(-50%)
+	/*.head
+		width: 10px
+		height: 10px
+		border-radius: 50%
+		background-color: $backgroundColor-notino-pink
+		transform: translate(calc((100% - 2px) / -2), -50%)
+
+.fc-timeline-event
+	background-color: transparent !important
+	// height: 37px
+	height: 30px
+	padding: 0
+	border: 0
+	margin: 3px 4px 0 3px
+	&::before
+		display: none
+	&:focus
+		&::before
+			display: none
+		&::after
+			display: none
+	&:focus-visible
+		.fc-event-main
+			.nc-week-event
+				box-shadow: $boxShadow-2xl
+	.fc-event-main
+		width: 100%
+		height: 100%
+
+
+.nc-week-slot-label
+	color: $textColor-notino-grayDarker
+	font-size: 10px
+	line-height: 12px
+	height: 24px
+	display: flex
+	align-items: center
+	font-weight: 400
+	width: fit-content
+	transform: translateX(-50%)
+
+.nc-week-label-day
+	width: 100%
+	height: 100%
+	display: flex
+	flex-direction: column
+	justify-content: center
+	align-items: center
+	text-align: center
+	font-size: 10px
+	line-height: 11px
+	font-weight: 400
+	text-transform: capitalize
+	span
+		display: block
+	&.is-today
+		color: $textColor-notino-pink
+		font-weight: 500
+
+.nc-week-label-resource
+	display: flex
+	gap: 4px
+	overflow: hidden
+	align-items: center
+	min-width: 0
+	width: 100%
+	text-align: left
+	padding: 0 8px
+	// min-height: 45px
+	min-height: 40px
+	.image
+		border-radius: 50%
+		flex: 0 0 auto
+		border: 2px solid $borderColor-notino-grayLight
+		background-position: center
+		background-size: cover
+		background-color: $backgroundColor-notino-gray
+		width: 16px
+		height: 16px
+	.info
+		line-height: 16px
+	.absence-icon
+		margin-left: auto
+		align-self: center
+
+// event card
+.nc-event
+	width: 100%
+	height: 100%
+	background: $backgroundColor-notino-white
+	position: relative
+	border-radius: 4px
+	color: $textColor-notino-black
+	font-size: 10px
+	line-height: 11px
+	box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05)
+	outline: 1px solid transparent
+	outline-offset: -1px
+	&.focused
+		box-shadow: $boxShadow-2xl
+	.event-background
+		content: ''
+		position: absolute
+		top: 0
+		right: 0
+		left: 0
+		bottom: 0
+		background: $backgroundColor-notino-black
+		z-index: 1
+		opacity: 0.05
+	.event-accent
+		content: ''
+		background: $backgroundColor-notino-black
+		position: absolute
+		top: 0
+		bottom: 0
+		left: 0
+		width: 4px
+		border-top-left-radius: 4px
+		border-bottom-left-radius: 4px
+		z-index: 2
+	&.reservation
+		.title
+			font-weight: 600
+			color: $textColor-notino-black
+		.state
+			width: 4px
+			height: 4px
+			border-radius: 50%
+			background-color: $backgroundColor-notino-black
+			flex: 0 0 auto
+		.icons
+			.icon
+				width: 10px
+				height: 10px
+				&.employee
+					color: $textColor-notino-black
+					display: none
+				&.service
+					color: $textColor-notino-black
+				&.check
+					color: $textColor-notino-success
+				&.question-mark
+					color: $textColor-notino-red
+	&.multiday-event
+		.time
+			display: inline-flex
+			align-items: center
+			gap: 2px
+		&:not(.multiday-event-first):not(.multiday-event-last)
+			.time
+				&::before
+					content: ''
+					@include arrow-left
+				&::after
+					content: ''
+					@include arrow-right
+		&.multiday-event-first
+			.time
+				&::after
+					content: ''
+					@include arrow-right
+		&.multiday-event-last
+			.time
+				&::before
+					content: ''
+					@include arrow-left
+	&.edit
+		outline-style: dashed
+		outline-width: 1px
+		outline-color: $borderColor-notino-grayDark
+		box-shadow: $box-shadow-selected-event
+		&.nc-day-event
+			&::after
+				@include edit-circle
+				bottom: 0
+				right: 50%
+				transform: translate(50%, 50%)
+		&.nc-week-event
+			&::after
+				@include edit-circle
+				right: 0
+				top: 50%
+				transform: translate(50%, -50%)
+	// event daily view
+	&.nc-day-event
+		min-height: 12px // ak sa zmeni vyska dielka v tabulke, je potrebne upravit aj tuto min-height (15px (vyska riadika .fc-timegrid-slot) - 2*2px (margin-top + bottom .fc-timegrid-event-harness))
+		.event-content
+			width: 100%
+			// position: sticky
+			top: 0
+			max-height: 100%
+			z-index: 3
+			word-break: break-all
+			.time
+				font-weight: 400
+				color: $textColor-notino-grayDark
+				flex: 0 0 auto
+				white-space: nowrap
+			.desc
+				color: $textColor-notino-grayDarker
+				font-weight: 400
+		&.reservation
+			.event-content
+				padding: 2px 2px 2px 8px
+				min-width: 0
+				overflow: hidden
+				.event-info
+					display: flex
+					flex-direction: column
+					align-items: flex-start
+					gap: 4px
+					min-width: 0
+					overflow: hidden
+					max-width: 100%
+					.title-wrapper
+						display: inline-flex
+						align-items: flex-start
+						gap: 4px
+						min-width: 0
+						overflow: hidden
+						max-width: calc(100% - 10px)
+						.title
+							white-space: nowrap
+							overflow: hidden
+							text-overflow: ellipsis
+							max-width: 100%
+						.state
+							margin-top: 3px
+							border-radius: 50%
+					.desc
+						white-space: nowrap
+						overflow: hidden
+						text-overflow: ellipsis
+						max-width: 100%
+			.icons
+				position: absolute
+				right: 2px
+				top: 2px
+				display: flex
+				gap: 2px
+			&.min-15
+				.event-content
+					padding-top: 0
+					padding-bottom: 0
+					.event-info
+						flex-direction: row
+						margin-right: 10px
+						.title-wrapper
+							margin-right: 0
+						.desc
+							display: none
+				.icons
+					top: 0
+		&.shift,
+		&.timeoff,
+		&.break
+			.event-content
+				display: flex
+				flex-direction: column
+				gap: 4px
+				.event-info
+					display: flex
+					min-width: 0
+					justify-content: space-between
+					gap: 4px
+					.title
+						word-break: keep-all
+						white-space: nowrap
+						overflow: hidden
+						text-overflow: ellipsis
+						line-height: 11px
+					.time
+						color: $textColor-notino-grayDark
+					.color
+						flex: 0 0 auto
+						width: 6px
+						height: 6px
+						border-radius: 50%
+					.icon
+						flex: 0 0 auto
+						width: 16px
+						height: 16px
+						color: $textColor-notino-black
+					.duration
+						display: inline-block
+						white-space: nowrap
+						word-break: keep-all
+						color: $textColor-notino-grayDark
+			&.min-15
+				.event-content
+					padding: 0 4px
+					.event-info
+						.title
+							margin-top: 0
+						.icon
+							width: 11px
+							height: 11px
+						.duration
+							margin-top: 0
+
+		&.shift
+			.event-content
+				padding: 2px 4px
+		&.timeoff,
+		&.break
+			background: url("../assets/images/gray-bold-background-pattern.png")
+			background-size: 100px 50px
+			.event-content
+				padding: 4px
+				.event-info
+					.time
+						color: $textColor-notino-grayDarker
+	// event weekly view
+	&.nc-week-event
+		min-width: 21px // ak sa zmeni minimalna sirka najmenjsieho dielika, je potrebne aj toto upravit!!
+		.event-content
+			width: 100%
+			height: 100%
+			position: relative
+			z-index: 3
+			.time
+				white-space: nowrap
+				position: relative
+		&.reservation
+			.event-content
+				padding: 2px 4px 2px 8px
+				display: flex
+				flex-direction: column
+				align-items: flex-start
+				min-width: 0
+				.title-wrapper
+					display: inline-flex
+					align-items: flex-start
+					padding-right: 14px
+					// position: sticky
+					left: 2px
+					min-width: 0
+					margin-bottom: 4px
+					max-width: 100%
+					.title
+						max-width: 100%
+						white-space: nowrap
+						overflow: hidden
+						text-overflow: ellipsis
+						display: inline-block
+						min-width: 0
+						min-height: 11px
+						&:not(:empty):not(:last-child)
+							margin-right: 4px
+					.state
+						margin-top: 3px
+				.desc
+					max-width: 100%
+					white-space: nowrap
+					overflow: hidden
+					text-overflow: ellipsis
+					overflow: hidden
+					// position: sticky
+					left: 2px
+					display: inline-block
+					min-width: 0
+				.icons
+					position: absolute
+					right: 4px
+					top: 2px
+					display: flex
+					align-items: center
+					gap: 4px
+					.state
+						display: none
+			&.min-15,
+			&.min-30,
+			&.min-45
+				.event-content
+					.title-wrapper
+						padding-right: 0
+						margin-bottom: 0
+						.title
+							min-height: 0
+							&:not(:empty)
+								margin-bottom: 4px
+						.state
+							display: none
+					.desc
+						display: none
+					.icons
+						top: unset
+						right: unset
+						position: relative
+						display: flex
+						align-items: center
+						gap: 4px
+						flex-direction: row-reverse
+						.state
+							display: block
+			&.min-15
+				.event-content
+					height: 100%
+					padding-bottom: 6px
+					flex-direction: row
+					.title-wrapper
+						display: none
+					.icons
+						height: 100%
+						flex-direction: column
+						align-items: flex-start
+						justify-content: space-between
+		&.shift,
+		&.timeoff,
+		&.break
+			.event-content
+				padding: 4px
+				display: flex
+				align-items: center
+				.sticky-container
+					flex: 1
+					.event-info
+						display: inline-flex
+						align-items: center
+						gap: 4px
+						min-width: 0
+						// position: sticky
+						left: 2px
+						margin-right: 4px
+						.time
+							color: $textColor-notino-black
+						.color
+							flex: 0 0 auto
+							width: 6px
+							height: 6px
+							border-radius: 50%
+						.icon
+							flex: 0 0 auto
+				.duration
+					display: inline-block
+					white-space: nowrap
+					word-break: keep-all
+					color: $textColor-notino-grayDark
+					margin-left: auto
+			&.min-15,
+			&.min-45,
+			&.min-30
+				.event-content
+					padding-left: 2px
+					padding-right: 2px
+					.sticky-container
+						.event-info
+							margin-right: 0
+							.color
+								display: none
+							.time
+								display: none
+			&.min-75
+				.event-content
+					.sticky-container
+						.event-info
+							.time
+								display: none
+		&.timeoff,
+		&.break
+			background: url("../assets/images/gray-bold-background-pattern.png")
+			&.min-15,
+			&.min-30
+				.event-content
+					.sticky-container
+						display: flex
+						justify-content: center
+					.duration
+						display: none
+		&.shift
+			&.min-45,
+			&.min-30,
+			&.min-15
+				.event-content
+					justify-content: center
+					.sticky-container
+						display: none
+					.duration
+						margin-left: unset
+						word-break: break-all
+						white-space: normal
+						// position: sticky
+						left: 0
+						text-align: center
+	// reservation state specific styles
+	&.reservation
+		&.is-past
+			background-color: #EEF0F1
+			.event-background
+				display: none
+			.event-accent
+				background-color: #C6CAD1
+			.time
+				color: $textColor-notino-black
+			.state
+				background-color: #8B94A1
+			&.edit
+				outline-color: $borderColor-notino-grayDark
+				.event-accent
+					background-color: $backgroundColor-notino-grayDark
+		&.state-pending
+			outline-style: dashed
+			.event-accent
+				background-color: transparent
+				background-size: 5px 5px
+			.title
+				color: $textColor-notino-grayDark
+			.time
+				color: #9F9F9F
+			.desc
+				color: #9F9F9F
+			.icons
+				.employee
+					color: $textColor-notino-grayDark
+				.service
+					color: $textColor-notino-grayDark
+			&.is-past
+				outline-color: #6D7483
+				.event-accent
+					background-color: transparent
+					@include event-hatch(#6d7483)
+				&.edit
+					outline-color: $borderColor-notino-grayDark
+					.event-accent
+						@include event-hatch($backgroundColor-notino-grayDark)
+		&.is-autoassigned
+			.icons
+				.employee
+					display: block
+			&.nc-day-event
+				.event-content
+					.event-info
+						.title-wrapper
+							max-width: calc(100% - 26px)
+				&.min-15
+					.event-content
+						.event-info
+							margin-right: 24px
+			&.nc-week-event
+				.event-content
+					.title-wrapper
+						padding-right: 26px
+				&.min-15,
+				&.min-30,
+				&.min-45
+					.event-content
+						.title-wrapper
+							padding-right: 0
+				&.min-30,
+				&.min-15
+					.icons
+						.employee
+							display: none
+	// absences specific styles
+	&.shift,
+	&.timeoff,
+	&.break
+		&:not(.edit)
+			outline-color: $borderColor-notino-grayLight
+		&.placeholder
+			.color
+				background-color: $backgroundColor-notino-gray
+
+// event popover
+.nc-event-popover-overlay
+	padding: 16px
+	&::before
+		content: ''
+		position: fixed
+		inset: 0
+	.ant-popover-content
+		padding: 0
+	.ant-popover-inner
+		box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)
+		background-color: $backgroundColor-notino-white
+		border-radius: 6px
+	.ant-popover-inner-content
+		padding: 0
+// detail event
+#overlay
+	position: absolute
+	display: none
+	width: calc(100% - 240px) /* 100% - 240px (drawer width) */
+	height: 100%
+	top: 0
+	left: 0
+	right: 0
+	bottom: 0
+	background-color: $backgroundColor-notino-gray
+	opacity: .3
+	z-index: $z-index-overlay
+
+.nc-event-popover-content
+	overflow: hidden
+	> header
+		.state-wrapper
+			svg
+				width: 16px
+				height: 16px
+	.nc-event-popover-tag
+		font-size: 10px
+		line-height: 11px
+		border: none
+		padding: 4px 8px
+		border-radius: 4px
+		background-color: $backgroundColor-notino-grayLight
+		color: $textColor-notino-grayDarker
+		min-width: unset
+		margin: 0
+		&.tag-new
+			// TODO: tailwind colors
+			color: #0E7090
+			background-color: #ECFDFF
+
+	.nc-event-popover-header-button
+		outline: none
+		border-radius: 4px
+		color: $textColor-notino-black
+		font-size: 16px
+		line-height: 16px
+		cursor: pointer
+		transition: all 300ms ease-in-out
+		height: 20px
+		width: 20px
+		white-space: nowrap
+		background: $backgroundColor-notino-white
+		border: none
+		display: flex
+		align-items: center
+		justify-content: center
+		svg
+			width: 16px
+			height: 16px
+			flex: 0 0 auto
+		&:hover,
+		&:focus-visible
+			background-color: $backgroundColor-notino-grayLight

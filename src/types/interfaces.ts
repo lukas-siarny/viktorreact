@@ -1,9 +1,13 @@
+import { EventResizeDoneArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
+import { EventContentArg, EventDropArg } from '@fullcalendar/react'
 
 // utils
-import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
-import { SALON_STATES } from './../utils/enums'
+import {
+	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT,
+	ENDS_EVENT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK, DAY
+} from '../utils/enums'
 
 // types
 import { Paths } from './api'
@@ -145,6 +149,52 @@ export interface IServiceForm {
 	employees: any
 }
 
+export interface ICalendarReservationForm {
+	customer: ISelectOptionItem
+	service: ISelectOptionItem
+	employee: ISelectOptionItem
+	date: string
+	timeFrom: string
+	timeTo: string
+	note?: string
+	eventId?: string
+}
+
+export interface ICalendarEventForm {
+	employee: ISelectOptionItem
+	date: string
+	timeFrom: string
+	timeTo: string
+	eventType: CALENDAR_EVENT_TYPE
+	// pri drag and drope sa dotahuju z detailu eventu a nie z formu
+	customRepeatOptions?: {
+		untilDate: string,
+		days: {
+			[DAY.MONDAY]: boolean,
+			[DAY.TUESDAY]: boolean,
+			[DAY.WEDNESDAY]: boolean,
+			[DAY.THURSDAY]: boolean,
+			[DAY.FRIDAY]: boolean,
+			[DAY.SATURDAY]: boolean,
+			[DAY.SUNDAY]: boolean
+		},
+		week: 2 | 1
+	} | undefined
+	recurring?: boolean
+	repeatOn?: DAY[]
+	every?: EVERY_REPEAT
+	end?: ENDS_EVENT
+	note?: string
+	allDay?: boolean
+	// NOTE: pre akcie resize a drag and drop
+	eventId?: string
+	calendarBulkEventID?: string
+}
+
+export interface IEventTypeFilterForm {
+	eventType: CALENDAR_EVENT_TYPE
+}
+
 export interface ISupportContactForm {
 	id: string | null
 	note: string
@@ -277,9 +327,9 @@ export interface ICustomerForm {
 	street?: string
 	streetNumber?: string
 	countryCode?: string
-	salonID: string
-	gallery: any
-	avatar: any
+	salonID?: string
+	gallery?: any
+	avatar?: any
 }
 
 export interface IEmployeeForm {
@@ -290,6 +340,7 @@ export interface IEmployeeForm {
 	phonePrefixCountryCode?: string
 	phone?: string
 	services?: any
+	service?: string[]
 	avatar?: any
 	role: number
 }
@@ -526,4 +577,106 @@ export interface TimeStatsData {
 
 export interface TimeStats extends ILoadingAndFailure {
 	data: TimeStatsData | null
+}
+
+export interface ICalendarFilter {
+	employeeIDs?: string[]
+	categoryIDs?: string[]
+	eventsViewType?: CALENDAR_EVENTS_VIEW_TYPE
+}
+
+export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {}
+export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
+
+export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]
+type CalendarEmployee = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0]
+export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
+export type CalendarEvent = CalendarEvents[0] & {
+	startDateTime: string
+	endDateTime: string
+	isMultiDayEvent?: boolean
+	isFirstMultiDayEventInCurrentRange?: boolean
+	isLastMultiDaylEventInCurrentRange?: boolean
+	originalEvent?: CalendarEvent
+	employee: CalendarEmployee
+}
+
+export interface ICalendarEventsPayload {
+	data: CalendarEvent[] | null
+}
+
+export interface ICalendarView {
+	selectedDate: string
+	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
+	reservations: ICalendarEventsPayload['data']
+	shiftsTimeOffs: ICalendarEventsPayload['data']
+	employees: Employees
+	salonID: string
+	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
+	onEventChange: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
+	loading?: boolean
+	refetchData: () => void
+}
+
+export interface IEventCardProps {
+	calendarView: CALENDAR_VIEW
+	resourceId: string
+	start: Date | null
+	end: Date | null
+	diff: number
+	timeText: string
+	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
+	isMultiDayEvent?: boolean
+	isLastMultiDaylEventInCurrentRange?: boolean
+	isFirstMultiDayEventInCurrentRange?: boolean
+	employee?: CalendarEvent['employee']
+	backgroundColor?: string
+	isPlaceholder?: boolean
+	isEdit?: boolean
+	originalEventData: {
+		id?: CalendarEvent['id']
+		start?: CalendarEvent['start']
+		end?: CalendarEvent['end']
+		startDateTime?: CalendarEvent['startDateTime']
+		endDateTime?: CalendarEvent['endDateTime']
+	}
+}
+
+export interface IBulkConfirmForm {
+	actionType: CONFIRM_BULK
+}
+
+export interface IEventExtenedProps {
+	eventData?: CalendarEvent
+	isPlaceholder?: boolean
+}
+
+export interface IResourceEmployee {
+	id: string
+	image: string,
+	name: string
+	isTimeOff: boolean
+	color?: string
+	description?: string
+}
+
+export interface IDayViewResourceExtenedProps {
+	employee?: IResourceEmployee
+}
+
+export interface IWeekViewResourceExtenedProps {
+	day?: string
+	employee?: IResourceEmployee
+}
+
+export interface ICalendarEventCardData {
+	id: string
+	resourceId: string
+	start: string
+	end: string
+	editable: boolean
+	resourceEditable: boolean
+	allDay: boolean
+	isPlaceholder?: boolean
+	eventData: CalendarEvent
 }

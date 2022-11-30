@@ -286,6 +286,96 @@ declare namespace Paths {
             }
         }
     }
+    namespace DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarBulkEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarBulkEventID: Parameters.CalendarBulkEventID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -488,6 +578,96 @@ declare namespace Paths {
             }
         }
     }
+    namespace DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarBulkEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarBulkEventID: Parameters.CalendarBulkEventID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace DeleteApiB2BV1ServicesServiceId {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -548,6 +728,25 @@ declare namespace Paths {
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
                 }[];
             }
+        }
+    }
+    namespace DeleteApiB2CV1PushNotificationsUnsubscribeDeviceId {
+        namespace Parameters {
+            /**
+             * example:
+             * 12DXXS
+             */
+            export type DeviceID = string;
+        }
+        export interface PathParameters {
+            deviceID: /**
+             * example:
+             * 12DXXS
+             */
+            Parameters.DeviceID;
+        }
+        namespace Responses {
+            export type $200 = "";
         }
     }
     namespace GetApiB2BAdminCustomers {
@@ -664,6 +863,7 @@ declare namespace Paths {
                     phone: string; // ^\d+$
                     gender?: "MALE" | "FEMALE";
                     note?: string;
+                    label?: "NEW" | "VIP" | "LIGHT_BLACKLIST";
                     address: {
                         countryCode?: string;
                         zipCode?: string;
@@ -764,13 +964,14 @@ declare namespace Paths {
                     lastName?: string;
                     email?: string;
                     inviteEmail?: string;
+                    phonePrefixCountryCode?: string;
+                    phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                    hasActiveAccount: boolean;
                     role?: {
                         id: string; // uuid
                         name: string;
                     };
-                    phonePrefixCountryCode?: string;
-                    phone?: string; // ^\d+$
-                    hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
                         name?: string;
@@ -859,6 +1060,7 @@ declare namespace Paths {
                     inviteEmail?: string;
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                     hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
@@ -972,7 +1174,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -995,11 +1197,10 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
-                        disabledNotificationTypes?: ("TEST")[];
                         image?: {
                             id: string; // uuid
                             original: string;
@@ -1012,6 +1213,8 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        assignedCountryCode?: string;
+                        icalSubscribeLink?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
                         deletedAt?: string; // date-time
@@ -1021,7 +1224,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -1863,6 +2066,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            export type CountryCode = string | null;
+        }
+        export interface QueryParameters {
+            countryCode?: Parameters.CountryCode;
         }
         namespace Responses {
             export interface $200 {
@@ -1898,12 +2105,14 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Month = number;
+            export type CountryCode = string | null;
+            export type Month = null | number;
             export type Year = number;
         }
         export interface QueryParameters {
             month?: Parameters.Month;
             year: Parameters.Year;
+            countryCode?: Parameters.CountryCode;
         }
         namespace Responses {
             export interface $200 {
@@ -1948,7 +2157,7 @@ declare namespace Paths {
                     }[];
                     permissions: {
                         id: string; // uuid
-                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                     }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -1983,7 +2192,7 @@ declare namespace Paths {
                     }[];
                     permissions: {
                         id: string; // uuid
-                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                     }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -2588,6 +2797,24 @@ declare namespace Paths {
                         firstName?: string;
                         lastName?: string;
                     };
+                    settings: {
+                        enabledReservations: boolean;
+                        enabledB2cReservations: boolean;
+                        maxDaysB2cCreateReservation: number;
+                        maxHoursB2cCreateReservationBeforeStart: number;
+                        maxHoursB2cCancelReservationBeforeStart: number;
+                        enabledCustomerReservationNotes: boolean;
+                        minutesIntervalBetweenB2CReservations: number;
+                        disabledNotifications: {
+                            /**
+                             * example:
+                             * CREATE_USER
+                             */
+                            eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                            b2bChannels: ("EMAIL" | "PUSH")[];
+                            b2cChannels: ("EMAIL" | "PUSH")[];
+                        }[];
+                    };
                     premiumSourceUserType?: "NOTINO" | "PARTNER";
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -2647,6 +2874,483 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2BAdminSalonsSalonIdCalendarEvents {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CategoryIDs = [
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
+            ];
+            export type DateFrom = string; // date-time
+            export type DateTo = string; // date-time
+            export type EmployeeIDs = [
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
+            ];
+            export type EventTypes = ("RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF")[];
+            export type ReservationStates = ("PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED")[];
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            dateFrom: Parameters.DateFrom /* date-time */;
+            dateTo: Parameters.DateTo /* date-time */;
+            eventTypes?: Parameters.EventTypes;
+            employeeIDs?: Parameters.EmployeeIDs;
+            categoryIDs?: Parameters.CategoryIDs;
+            reservationStates?: Parameters.ReservationStates;
+        }
+        namespace Responses {
+            export interface $200 {
+                employees: {
+                    id: string; // uuid
+                    firstName?: string;
+                    lastName?: string;
+                    email?: string;
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                    image: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                }[];
+                calendarEvents: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    note?: string;
+                    noteFromB2CCustomer?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                        note?: string;
+                        profileImage: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    employee: {
+                        id: string; // uuid
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                calendarEvent: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    note?: string;
+                    noteFromB2CCustomer?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                        note?: string;
+                        profileImage: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    employee: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    serviceCategoryParameterValue?: {
+                        id: string; // uuid
+                        categoryParameterValue: {
+                            id: string; // uuid
+                            value?: string;
+                        };
+                    };
+                    calendarBulkEvent?: {
+                        id: string; // uuid
+                        repeatOptions: {
+                            untilDate: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            days: {
+                                MONDAY: boolean;
+                                TUESDAY: boolean;
+                                WEDNESDAY: boolean;
+                                THURSDAY: boolean;
+                                FRIDAY: boolean;
+                                SATURDAY: boolean;
+                                SUNDAY: boolean;
+                            };
+                            week: 1 | 2;
+                        };
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                };
+            }
+        }
+    }
     namespace GetApiB2BAdminSalonsSalonIdDashboard {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -2692,6 +3396,7 @@ declare namespace Paths {
                         firstName?: string;
                         lastName?: string;
                         email?: string; // email
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                         image: {
                             id: string; // uuid
                             original: string;
@@ -2835,6 +3540,41 @@ declare namespace Paths {
                                                 significand: number;
                                             };
                                         };
+                                        serviceCategoryParameter?: {
+                                            /**
+                                             * example:
+                                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+                                             */
+                                            id: string; // uuid
+                                            valueType: "ENUM" | "TIME";
+                                            unitType?: "MINUTES";
+                                            name?: string;
+                                            values: {
+                                                id: string; // uuid
+                                                categoryParameterValueID: string; // uuid
+                                                value?: string;
+                                                priceAndDurationData: {
+                                                    durationFrom?: number;
+                                                    durationTo?: number;
+                                                    priceFrom?: {
+                                                        currency: string;
+                                                        currencySymbol: string;
+                                                        exponent: number;
+                                                        significand: number;
+                                                    };
+                                                    priceTo?: {
+                                                        currency: string;
+                                                        currencySymbol: string;
+                                                        exponent: number;
+                                                        significand: number;
+                                                    };
+                                                };
+                                            }[];
+                                        };
+                                        settings: {
+                                            enabledB2cReservations: boolean;
+                                            autoApproveReservatons: boolean;
+                                        };
                                         employeesCount: number;
                                         employees: {
                                             id: string; // uuid
@@ -2842,6 +3582,7 @@ declare namespace Paths {
                                             lastName: string;
                                             email?: string;
                                             inviteEmail?: string;
+                                            color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                                             image: {
                                                 id: string; // uuid
                                                 original: string;
@@ -2959,12 +3700,17 @@ declare namespace Paths {
                             significand: number;
                         };
                     };
+                    settings: {
+                        enabledB2cReservations: boolean;
+                        autoApproveReservatons: boolean;
+                    };
                     employees: {
                         id: string; // uuid
                         hasActiveAccount: boolean;
                         fullName?: string;
                         email?: string;
                         inviteEmail?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                         image: {
                             id: string; // uuid
                             original: string;
@@ -3093,6 +3839,7 @@ declare namespace Paths {
                     lastName?: string;
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
+                    assignedCountryCode?: string;
                     roles: {
                         id: string; // uuid
                         name?: string;
@@ -3189,7 +3936,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -3212,11 +3959,10 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -3229,6 +3975,8 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    assignedCountryCode?: string;
+                    icalSubscribeLink?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -3305,7 +4053,7 @@ declare namespace Paths {
                         }[];
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -3313,6 +4061,28 @@ declare namespace Paths {
                     };
                 }[];
             }
+        }
+    }
+    namespace GetApiB2BV1CalendarSyncIcalEvents {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        namespace Responses {
+            /**
+             * Response is .ics file buffer
+             */
+            export type $200 = any;
         }
     }
     namespace GetApiB2BV1Customers {
@@ -3429,6 +4199,7 @@ declare namespace Paths {
                     phone: string; // ^\d+$
                     gender?: "MALE" | "FEMALE";
                     note?: string;
+                    label?: "NEW" | "VIP" | "LIGHT_BLACKLIST";
                     address: {
                         countryCode?: string;
                         zipCode?: string;
@@ -3529,13 +4300,14 @@ declare namespace Paths {
                     lastName?: string;
                     email?: string;
                     inviteEmail?: string;
+                    phonePrefixCountryCode?: string;
+                    phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                    hasActiveAccount: boolean;
                     role?: {
                         id: string; // uuid
                         name: string;
                     };
-                    phonePrefixCountryCode?: string;
-                    phone?: string; // ^\d+$
-                    hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
                         name?: string;
@@ -3614,6 +4386,7 @@ declare namespace Paths {
                     inviteEmail?: string;
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                     hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
@@ -3727,7 +4500,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -3750,11 +4523,10 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
-                        disabledNotificationTypes?: ("TEST")[];
                         image?: {
                             id: string; // uuid
                             original: string;
@@ -3767,6 +4539,8 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        assignedCountryCode?: string;
+                        icalSubscribeLink?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
                         deletedAt?: string; // date-time
@@ -3776,7 +4550,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -4398,7 +5172,7 @@ declare namespace Paths {
                     }[];
                     permissions: {
                         id: string; // uuid
-                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                     }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -5932,6 +6706,26 @@ declare namespace Paths {
                             }?
                         ];
                     };
+                    settingsSegment: {
+                        settings: {
+                            enabledReservations: boolean;
+                            enabledB2cReservations: boolean;
+                            maxDaysB2cCreateReservation: number;
+                            maxHoursB2cCreateReservationBeforeStart: number;
+                            maxHoursB2cCancelReservationBeforeStart: number;
+                            enabledCustomerReservationNotes: boolean;
+                            minutesIntervalBetweenB2CReservations: number;
+                            disabledNotifications: {
+                                /**
+                                 * example:
+                                 * CREATE_USER
+                                 */
+                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                                b2bChannels: ("EMAIL" | "PUSH")[];
+                                b2cChannels: ("EMAIL" | "PUSH")[];
+                            }[];
+                        };
+                    };
                     permissions: {
                         salon: {
                             salonUpdate: boolean;
@@ -6013,6 +6807,483 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2BV1SalonsSalonIdCalendarEvents {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CategoryIDs = [
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
+            ];
+            export type DateFrom = string; // date-time
+            export type DateTo = string; // date-time
+            export type EmployeeIDs = [
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
+            ];
+            export type EventTypes = ("RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF")[];
+            export type ReservationStates = ("PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED")[];
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            dateFrom: Parameters.DateFrom /* date-time */;
+            dateTo: Parameters.DateTo /* date-time */;
+            eventTypes?: Parameters.EventTypes;
+            employeeIDs?: Parameters.EmployeeIDs;
+            categoryIDs?: Parameters.CategoryIDs;
+            reservationStates?: Parameters.ReservationStates;
+        }
+        namespace Responses {
+            export interface $200 {
+                employees: {
+                    id: string; // uuid
+                    firstName?: string;
+                    lastName?: string;
+                    email?: string;
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                    image: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                }[];
+                calendarEvents: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    note?: string;
+                    noteFromB2CCustomer?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                        note?: string;
+                        profileImage: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    employee: {
+                        id: string; // uuid
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                calendarEvent: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    note?: string;
+                    noteFromB2CCustomer?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                        note?: string;
+                        profileImage: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    employee: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    serviceCategoryParameterValue?: {
+                        id: string; // uuid
+                        categoryParameterValue: {
+                            id: string; // uuid
+                            value?: string;
+                        };
+                    };
+                    calendarBulkEvent?: {
+                        id: string; // uuid
+                        repeatOptions: {
+                            untilDate: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            days: {
+                                MONDAY: boolean;
+                                TUESDAY: boolean;
+                                WEDNESDAY: boolean;
+                                THURSDAY: boolean;
+                                FRIDAY: boolean;
+                                SATURDAY: boolean;
+                                SUNDAY: boolean;
+                            };
+                            week: 1 | 2;
+                        };
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                };
+            }
+        }
+    }
     namespace GetApiB2BV1SalonsSalonIdDashboard {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -6058,6 +7329,7 @@ declare namespace Paths {
                         firstName?: string;
                         lastName?: string;
                         email?: string; // email
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                         image: {
                             id: string; // uuid
                             original: string;
@@ -6142,6 +7414,41 @@ declare namespace Paths {
                                                 significand: number;
                                             };
                                         };
+                                        serviceCategoryParameter?: {
+                                            /**
+                                             * example:
+                                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+                                             */
+                                            id: string; // uuid
+                                            valueType: "ENUM" | "TIME";
+                                            unitType?: "MINUTES";
+                                            name?: string;
+                                            values: {
+                                                id: string; // uuid
+                                                categoryParameterValueID: string; // uuid
+                                                value?: string;
+                                                priceAndDurationData: {
+                                                    durationFrom?: number;
+                                                    durationTo?: number;
+                                                    priceFrom?: {
+                                                        currency: string;
+                                                        currencySymbol: string;
+                                                        exponent: number;
+                                                        significand: number;
+                                                    };
+                                                    priceTo?: {
+                                                        currency: string;
+                                                        currencySymbol: string;
+                                                        exponent: number;
+                                                        significand: number;
+                                                    };
+                                                };
+                                            }[];
+                                        };
+                                        settings: {
+                                            enabledB2cReservations: boolean;
+                                            autoApproveReservatons: boolean;
+                                        };
                                         employeesCount: number;
                                         employees: {
                                             id: string; // uuid
@@ -6149,6 +7456,7 @@ declare namespace Paths {
                                             lastName: string;
                                             email?: string;
                                             inviteEmail?: string;
+                                            color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                                             image: {
                                                 id: string; // uuid
                                                 original: string;
@@ -6266,12 +7574,17 @@ declare namespace Paths {
                             significand: number;
                         };
                     };
+                    settings: {
+                        enabledB2cReservations: boolean;
+                        autoApproveReservatons: boolean;
+                    };
                     employees: {
                         id: string; // uuid
                         hasActiveAccount: boolean;
                         fullName?: string;
                         email?: string;
                         inviteEmail?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                         image: {
                             id: string; // uuid
                             original: string;
@@ -6437,7 +7750,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -6460,11 +7773,10 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -6477,6 +7789,8 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    assignedCountryCode?: string;
+                    icalSubscribeLink?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -6553,13 +7867,313 @@ declare namespace Paths {
                         }[];
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
                         deletedAt?: string; // date-time
                     };
                 }[];
+            }
+        }
+    }
+    namespace GetApiB2CV1CalendarEventsReservations {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type DateFrom = string; // date-time
+            export type DateTo = string; // date-time
+        }
+        export interface QueryParameters {
+            dateFrom: Parameters.DateFrom /* date-time */;
+            dateTo: Parameters.DateTo /* date-time */;
+        }
+        namespace Responses {
+            export interface $200 {
+                reservations: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    noteFromB2CCustomer?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    };
+                    employee: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
+                    };
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                        rating?: number; // float
+                        logo?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        images: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                            orderIndex: number;
+                            isCover: boolean;
+                        }[];
+                        phones: {
+                            id: string; // uuid
+                            phonePrefixCountryCode: string;
+                            phone: string; // ^\d+$
+                        }[];
+                        formattedAddress?: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2CV1CalendarEventsReservationsCalendarEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+        }
+        export interface PathParameters {
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                reservation: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    noteFromB2CCustomer?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    };
+                    employee: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    serviceCategoryParameterValue?: {
+                        id: string; // uuid
+                        categoryParameterValue: {
+                            id: string; // uuid
+                            value?: string;
+                        };
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
+                    };
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                        rating?: number; // float
+                        logo?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        images: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                            orderIndex: number;
+                            isCover: boolean;
+                        }[];
+                        phones: {
+                            id: string; // uuid
+                            phonePrefixCountryCode: string;
+                            phone: string; // ^\d+$
+                        }[];
+                        address?: {
+                            countryCode?: string;
+                            zipCode?: string;
+                            city?: string;
+                            street?: string;
+                            streetNumber?: string;
+                            latitude?: number; // float
+                            longitude?: number; // float
+                        };
+                        formattedAddress?: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                };
             }
         }
     }
@@ -6870,6 +8484,40 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                 };
+            }
+        }
+    }
+    namespace GetApiB2CV1EnumsCountries {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        namespace Responses {
+            export interface $200 {
+                countries: {
+                    code: string;
+                    name?: string;
+                    nameLocalizations: {
+                        language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                        value: string | null;
+                    }[];
+                    currencyCode: string | null;
+                    flag?: string;
+                    phonePrefix: string;
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
             }
         }
     }
@@ -8121,6 +9769,49 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type DateFrom = string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            export type DateTo = string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            export type EmployeeID = string | null; // uuid
+            export type SalonID = string; // uuid
+            export type ServiceCategoryParameterValueID = string | null; // uuid
+            export type ServiceID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            dateFrom: Parameters.DateFrom /* ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$ */;
+            dateTo: Parameters.DateTo /* ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$ */;
+            employeeID?: Parameters.EmployeeID /* uuid */;
+            serviceID: Parameters.ServiceID /* uuid */;
+            serviceCategoryParameterValueID?: Parameters.ServiceCategoryParameterValueID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                availableReservations: {
+                    date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    items: {
+                        from: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        to: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    }[];
+                }[];
+            }
+        }
+    }
     namespace GetApiB2CV1SalonsSalonIdEmployees {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -8250,6 +9941,37 @@ declare namespace Paths {
                                                 significand: number;
                                             };
                                         };
+                                        serviceCategoryParameter?: {
+                                            /**
+                                             * example:
+                                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+                                             */
+                                            id: string; // uuid
+                                            valueType: "ENUM" | "TIME";
+                                            unitType?: "MINUTES";
+                                            name?: string;
+                                            values: {
+                                                id: string; // uuid
+                                                categoryParameterValueID: string; // uuid
+                                                value?: string;
+                                                priceAndDurationData: {
+                                                    durationFrom?: number;
+                                                    durationTo?: number;
+                                                    priceFrom?: {
+                                                        currency: string;
+                                                        currencySymbol: string;
+                                                        exponent: number;
+                                                        significand: number;
+                                                    };
+                                                    priceTo?: {
+                                                        currency: string;
+                                                        currencySymbol: string;
+                                                        exponent: number;
+                                                        significand: number;
+                                                    };
+                                                };
+                                            }[];
+                                        };
                                         createdAt: string; // date-time
                                         updatedAt: string; // date-time
                                         deletedAt?: string; // date-time
@@ -8336,6 +10058,492 @@ declare namespace Paths {
                 rating?: {
                     rate: 1 | 2 | 3 | 4 | 5; // float
                     userName: string;
+                };
+            }
+        }
+    }
+    namespace GetApiB2CV1ServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ServiceID = string; // uuid
+        }
+        export interface PathParameters {
+            serviceID: Parameters.ServiceID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                service: {
+                    id: string; // uuid
+                    useCategoryParameter: boolean;
+                    noteForPriceAndDuration?: string;
+                    priceAndDurationData: {
+                        durationFrom?: number;
+                        durationTo?: number;
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                    };
+                    serviceCategoryParameter?: {
+                        /**
+                         * example:
+                         * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+                         */
+                        id: string; // uuid
+                        valueType: "ENUM" | "TIME";
+                        unitType?: "MINUTES";
+                        name?: string;
+                        values: {
+                            id: string; // uuid
+                            categoryParameterValueID: string; // uuid
+                            value?: string;
+                            priceAndDurationData: {
+                                durationFrom?: number;
+                                durationTo?: number;
+                                priceFrom?: {
+                                    currency: string;
+                                    currencySymbol: string;
+                                    exponent: number;
+                                    significand: number;
+                                };
+                                priceTo?: {
+                                    currency: string;
+                                    currencySymbol: string;
+                                    exponent: number;
+                                    significand: number;
+                                };
+                            };
+                        }[];
+                    };
+                    rangePriceAndDurationData: {
+                        durationFrom?: number;
+                        durationTo?: number;
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                    };
+                    settings: {
+                        enabledB2cReservations: boolean;
+                        autoApproveReservatons: boolean;
+                    };
+                    employees: {
+                        id: string; // uuid
+                        hasActiveAccount: boolean;
+                        fullName?: string;
+                        email?: string;
+                        inviteEmail?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        hasOverriddenPricesAndDurationData: boolean;
+                        priceAndDurationData: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                            priceTo?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                        };
+                        serviceCategoryParameter?: {
+                            /**
+                             * example:
+                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+                             */
+                            id: string; // uuid
+                            valueType: "ENUM" | "TIME";
+                            unitType?: "MINUTES";
+                            name?: string;
+                            values: {
+                                id: string; // uuid
+                                categoryParameterValueID: string; // uuid
+                                value?: string;
+                                priceAndDurationData: {
+                                    durationFrom?: number;
+                                    durationTo?: number;
+                                    priceFrom?: {
+                                        currency: string;
+                                        currencySymbol: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                    priceTo?: {
+                                        currency: string;
+                                        currencySymbol: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                };
+                            }[];
+                        };
+                    }[];
+                    category: {
+                        id: string; // uuid
+                        description?: string;
+                        name?: string;
+                        child: {
+                            id: string; // uuid
+                            description?: string;
+                            name?: string;
+                            child?: {
+                                id: string; // uuid
+                                description?: string;
+                                name?: string;
+                            };
+                        };
+                    };
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                };
+            }
+        }
+    }
+    namespace GetApiB2CWebCalendarEventsReservations {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type DateFrom = string; // date-time
+            export type DateTo = string; // date-time
+        }
+        export interface QueryParameters {
+            dateFrom: Parameters.DateFrom /* date-time */;
+            dateTo: Parameters.DateTo /* date-time */;
+        }
+        namespace Responses {
+            export interface $200 {
+                reservations: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    noteFromB2CCustomer?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    };
+                    employee: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
+                    };
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                        rating?: number; // float
+                        logo?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        images: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                            orderIndex: number;
+                            isCover: boolean;
+                        }[];
+                        phones: {
+                            id: string; // uuid
+                            phonePrefixCountryCode: string;
+                            phone: string; // ^\d+$
+                        }[];
+                        formattedAddress?: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2CWebCalendarEventsReservationsCalendarEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+        }
+        export interface PathParameters {
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                reservation: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    noteFromB2CCustomer?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    };
+                    employee: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    serviceCategoryParameterValue?: {
+                        id: string; // uuid
+                        categoryParameterValue: {
+                            id: string; // uuid
+                            value?: string;
+                        };
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
+                    };
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                        rating?: number; // float
+                        logo?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        images: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                            orderIndex: number;
+                            isCover: boolean;
+                        }[];
+                        phones: {
+                            id: string; // uuid
+                            phonePrefixCountryCode: string;
+                            phone: string; // ^\d+$
+                        }[];
+                        address?: {
+                            countryCode?: string;
+                            zipCode?: string;
+                            city?: string;
+                            street?: string;
+                            streetNumber?: string;
+                            latitude?: number; // float
+                            longitude?: number; // float
+                        };
+                        formattedAddress?: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
             }
         }
@@ -9217,6 +11425,49 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type DateFrom = string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            export type DateTo = string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            export type EmployeeID = string | null; // uuid
+            export type SalonID = string; // uuid
+            export type ServiceCategoryParameterValueID = string | null; // uuid
+            export type ServiceID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            dateFrom: Parameters.DateFrom /* ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$ */;
+            dateTo: Parameters.DateTo /* ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$ */;
+            employeeID?: Parameters.EmployeeID /* uuid */;
+            serviceID: Parameters.ServiceID /* uuid */;
+            serviceCategoryParameterValueID?: Parameters.ServiceCategoryParameterValueID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                availableReservations: {
+                    date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    items: {
+                        from: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        to: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    }[];
+                }[];
+            }
+        }
+    }
     namespace GetApiB2CWebSalonsSalonIdEmployees {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -9346,6 +11597,37 @@ declare namespace Paths {
                                                 significand: number;
                                             };
                                         };
+                                        serviceCategoryParameter?: {
+                                            /**
+                                             * example:
+                                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+                                             */
+                                            id: string; // uuid
+                                            valueType: "ENUM" | "TIME";
+                                            unitType?: "MINUTES";
+                                            name?: string;
+                                            values: {
+                                                id: string; // uuid
+                                                categoryParameterValueID: string; // uuid
+                                                value?: string;
+                                                priceAndDurationData: {
+                                                    durationFrom?: number;
+                                                    durationTo?: number;
+                                                    priceFrom?: {
+                                                        currency: string;
+                                                        currencySymbol: string;
+                                                        exponent: number;
+                                                        significand: number;
+                                                    };
+                                                    priceTo?: {
+                                                        currency: string;
+                                                        currencySymbol: string;
+                                                        exponent: number;
+                                                        significand: number;
+                                                    };
+                                                };
+                                            }[];
+                                        };
                                         createdAt: string; // date-time
                                         updatedAt: string; // date-time
                                         deletedAt?: string; // date-time
@@ -9436,7 +11718,7 @@ declare namespace Paths {
             }
         }
     }
-    namespace GetApiB2CWebSalonsSeaSlugName {
+    namespace GetApiB2CWebSalonsSeoSlugName {
         export interface HeaderParameters {
             "accept-language"?: /**
              * example:
@@ -9450,10 +11732,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SeaSlugName = string;
+            export type SeoSlugName = string;
         }
         export interface PathParameters {
-            seaSlugName: Parameters.SeaSlugName;
+            seoSlugName: Parameters.SeoSlugName;
         }
         namespace Responses {
             export interface $200 {
@@ -10151,6 +12433,192 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2CWebServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ServiceID = string; // uuid
+        }
+        export interface PathParameters {
+            serviceID: Parameters.ServiceID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                service: {
+                    id: string; // uuid
+                    useCategoryParameter: boolean;
+                    noteForPriceAndDuration?: string;
+                    priceAndDurationData: {
+                        durationFrom?: number;
+                        durationTo?: number;
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                    };
+                    serviceCategoryParameter?: {
+                        /**
+                         * example:
+                         * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+                         */
+                        id: string; // uuid
+                        valueType: "ENUM" | "TIME";
+                        unitType?: "MINUTES";
+                        name?: string;
+                        values: {
+                            id: string; // uuid
+                            categoryParameterValueID: string; // uuid
+                            value?: string;
+                            priceAndDurationData: {
+                                durationFrom?: number;
+                                durationTo?: number;
+                                priceFrom?: {
+                                    currency: string;
+                                    currencySymbol: string;
+                                    exponent: number;
+                                    significand: number;
+                                };
+                                priceTo?: {
+                                    currency: string;
+                                    currencySymbol: string;
+                                    exponent: number;
+                                    significand: number;
+                                };
+                            };
+                        }[];
+                    };
+                    rangePriceAndDurationData: {
+                        durationFrom?: number;
+                        durationTo?: number;
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                    };
+                    settings: {
+                        enabledB2cReservations: boolean;
+                        autoApproveReservatons: boolean;
+                    };
+                    employees: {
+                        id: string; // uuid
+                        hasActiveAccount: boolean;
+                        fullName?: string;
+                        email?: string;
+                        inviteEmail?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        hasOverriddenPricesAndDurationData: boolean;
+                        priceAndDurationData: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                            priceTo?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                        };
+                        serviceCategoryParameter?: {
+                            /**
+                             * example:
+                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+                             */
+                            id: string; // uuid
+                            valueType: "ENUM" | "TIME";
+                            unitType?: "MINUTES";
+                            name?: string;
+                            values: {
+                                id: string; // uuid
+                                categoryParameterValueID: string; // uuid
+                                value?: string;
+                                priceAndDurationData: {
+                                    durationFrom?: number;
+                                    durationTo?: number;
+                                    priceFrom?: {
+                                        currency: string;
+                                        currencySymbol: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                    priceTo?: {
+                                        currency: string;
+                                        currencySymbol: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                };
+                            }[];
+                        };
+                    }[];
+                    category: {
+                        id: string; // uuid
+                        description?: string;
+                        name?: string;
+                        child: {
+                            id: string; // uuid
+                            description?: string;
+                            name?: string;
+                            child?: {
+                                id: string; // uuid
+                                description?: string;
+                                name?: string;
+                            };
+                        };
+                    };
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                };
+            }
+        }
+    }
     namespace GetApiMaintenanceHealth {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -10271,6 +12739,11 @@ declare namespace Paths {
              * Poznámka
              */
             note?: string | null;
+            /**
+             * example:
+             * VIP
+             */
+            label?: "NEW" | "VIP" | "LIGHT_BLACKLIST";
             /**
              * example:
              * SK
@@ -10585,6 +13058,7 @@ declare namespace Paths {
                     inviteEmail?: string;
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                     hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
@@ -10698,7 +13172,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -10721,11 +13195,10 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
-                        disabledNotificationTypes?: ("TEST")[];
                         image?: {
                             id: string; // uuid
                             original: string;
@@ -10738,6 +13211,8 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        assignedCountryCode?: string;
+                        icalSubscribeLink?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
                         deletedAt?: string; // date-time
@@ -10747,7 +13222,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -10806,6 +13281,7 @@ declare namespace Paths {
                     inviteEmail?: string;
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                     hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
@@ -10919,7 +13395,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -10942,11 +13418,10 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
-                        disabledNotificationTypes?: ("TEST")[];
                         image?: {
                             id: string; // uuid
                             original: string;
@@ -10959,6 +13434,8 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        assignedCountryCode?: string;
+                        icalSubscribeLink?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
                         deletedAt?: string; // date-time
@@ -10968,7 +13445,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -18978,6 +21455,196 @@ declare namespace Paths {
             }
         }
     }
+    namespace PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarBulkEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarBulkEventID: Parameters.CalendarBulkEventID /* uuid */;
+        }
+        export interface RequestBody {
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            repeatEvent: {
+                untilDate: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                days: {
+                    MONDAY: boolean;
+                    TUESDAY: boolean;
+                    WEDNESDAY: boolean;
+                    THURSDAY: boolean;
+                    FRIDAY: boolean;
+                    SATURDAY: boolean;
+                    SUNDAY: boolean;
+                };
+                week?: 1 | 2;
+            };
+            note?: string | null;
+        }
+        namespace Responses {
+            export interface $200 {
+                calendarBulkEvent: {
+                    id: string; // uuid
+                };
+                calendarEvents: {
+                    id: string; // uuid
+                }[];
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface RequestBody {
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            note?: string | null;
+        }
+        namespace Responses {
+            export interface $200 {
+                calendarEvent: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface RequestBody {
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            note?: string | null;
+            customerID: string; // uuid
+            employeeID?: string | null; // uuid
+            serviceID: string; // uuid
+            serviceCategoryParameterValueID?: string | null; // uuid
+        }
+        namespace Responses {
+            export interface $200 {
+                reservationCalendarEvent: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface RequestBody {
+            state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+            reason?: string;
+            paymentMethod?: "CASH" | "CARD" | "OTHER";
+        }
+        namespace Responses {
+            export interface $200 {
+                reservationCalendarEvent: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PatchApiB2BAdminSalonsSalonIdCategories {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -19460,6 +22127,957 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminSalonsSalonIdSettings {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            settings?: {
+                enabledReservations?: boolean | null;
+                enabledB2cReservations?: boolean | null;
+                maxDaysB2cCreateReservation?: null | number;
+                maxHoursB2cCreateReservationBeforeStart?: null | number;
+                maxHoursB2cCancelReservationBeforeStart?: null | number;
+                enabledCustomerReservationNotes?: boolean | null;
+                minutesIntervalBetweenB2CReservations?: null | number;
+                disabledNotifications?: [
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?
+                ] | null;
+            } | null;
+            servicesSettings?: {
+                id: string; // uuid
+                settings?: {
+                    enabledB2cReservations?: boolean | null;
+                    autoApproveReservatons?: boolean | null;
+                } | null;
+            }[] | null;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: string; // uuid
+                };
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
@@ -27397,6 +31015,10 @@ declare namespace Paths {
                     };
                 }?
             ];
+            settings?: {
+                enabledB2cReservations?: boolean | null;
+                autoApproveReservatons?: boolean | null;
+            } | null;
             employeeIDs?: [
                 string?,
                 string?,
@@ -27569,12 +31191,17 @@ declare namespace Paths {
                             significand: number;
                         };
                     };
+                    settings: {
+                        enabledB2cReservations: boolean;
+                        autoApproveReservatons: boolean;
+                    };
                     employees: {
                         id: string; // uuid
                         hasActiveAccount: boolean;
                         fullName?: string;
                         email?: string;
                         inviteEmail?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                         image: {
                             id: string; // uuid
                             original: string;
@@ -27711,6 +31338,11 @@ declare namespace Paths {
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
             imageID?: string | null; // uuid
+            /**
+             * example:
+             * SK
+             */
+            assignedCountryCode?: string | null;
         }
         namespace Responses {
             export interface $200 {
@@ -27729,7 +31361,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -27752,11 +31384,10 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -27769,6 +31400,8 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    assignedCountryCode?: string;
+                    icalSubscribeLink?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -27918,6 +31551,11 @@ declare namespace Paths {
              * Poznámka
              */
             note?: string | null;
+            /**
+             * example:
+             * VIP
+             */
+            label?: "NEW" | "VIP" | "LIGHT_BLACKLIST";
             /**
              * example:
              * SK
@@ -28113,7 +31751,450 @@ declare namespace Paths {
              * 906047188
              */
             phone?: string | null; // ^\d+$
-            serviceIDs?: [
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            imageID?: string | null; // uuid
+        }
+        namespace Responses {
+            export interface $200 {
+                employee: {
+                    id: string; // uuid
+                    firstName?: string;
+                    lastName?: string;
+                    description?: string;
+                    email?: string;
+                    inviteEmail?: string;
+                    phonePrefixCountryCode?: string;
+                    phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                    hasActiveAccount: boolean;
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                    };
+                    totalServicesCount: number;
+                    categories: {
+                        id: string; // uuid
+                        name?: string;
+                        description?: string;
+                        parentID?: string; // uuid
+                        image?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        } | {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        orderIndex: number;
+                        totalThirdLevelCategoriesCount: number;
+                        usedThirdLevelCategoriesCount: number;
+                        children: {
+                            id: string; // uuid
+                            name?: string;
+                            children: {
+                                id: string; // uuid
+                                isComplete: boolean;
+                                priceAndDurationData: {
+                                    durationFrom?: number;
+                                    durationTo?: number;
+                                    priceFrom?: {
+                                        currency: string;
+                                        currencySymbol: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                    priceTo?: {
+                                        currency: string;
+                                        currencySymbol: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                };
+                                hasOverriddenPricesAndDurationData: boolean;
+                                category: {
+                                    id: string; // uuid
+                                    name?: string;
+                                    description?: string;
+                                };
+                                employees: {
+                                    id: string; // uuid
+                                    fullName?: string;
+                                    hasActiveAccount: boolean;
+                                    inviteEmail?: string;
+                                    image: {
+                                        id: string; // uuid
+                                        original: string;
+                                        fileName: string;
+                                        resizedImages: {
+                                            thumbnail: string;
+                                            small: string;
+                                            medium: string;
+                                            large: string;
+                                        };
+                                        isAutogenerated: boolean;
+                                    };
+                                }[];
+                            }[];
+                        }[];
+                    }[];
+                    image: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                    user?: {
+                        id: string; // uuid
+                        email?: string;
+                        lastAccess?: string; // date-time
+                        activateAt?: string; // date-time
+                        firstName?: string;
+                        lastName?: string;
+                        phonePrefixCountryCode?: string;
+                        phone?: string; // ^\d+$
+                        hasBasicInfo: boolean;
+                        roles: {
+                            id: string; // uuid
+                            name?: string;
+                            permissions: {
+                                id: string; // uuid
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
+                            }[];
+                        }[];
+                        salons: {
+                            id: string; // uuid
+                            name?: string;
+                            logo?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                            employeeID: string; // uuid
+                            role?: {
+                                id: string; // uuid
+                                permissions: {
+                                    id: string; // uuid
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
+                                }[];
+                            };
+                        }[];
+                        image?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        assignedCountryCode?: string;
+                        icalSubscribeLink?: string;
+                        createdAt: string; // date-time
+                        updatedAt: string; // date-time
+                        deletedAt?: string; // date-time
+                    };
+                    role?: {
+                        id: string; // uuid
+                        name?: string;
+                        permissions: {
+                            id: string; // uuid
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
+                        }[];
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1EmployeesEmployeeIdRole {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            export type EmployeeID = string; // uuid
+        }
+        export interface PathParameters {
+            employeeID: /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            Parameters.EmployeeID /* uuid */;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            roleID: string; // uuid
+        }
+        namespace Responses {
+            export interface $200 {
+                employee: {
+                    id: string; // uuid
+                    firstName?: string;
+                    lastName?: string;
+                    description?: string;
+                    email?: string;
+                    inviteEmail?: string;
+                    phonePrefixCountryCode?: string;
+                    phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                    hasActiveAccount: boolean;
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                    };
+                    totalServicesCount: number;
+                    categories: {
+                        id: string; // uuid
+                        name?: string;
+                        description?: string;
+                        parentID?: string; // uuid
+                        image?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        } | {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        orderIndex: number;
+                        totalThirdLevelCategoriesCount: number;
+                        usedThirdLevelCategoriesCount: number;
+                        children: {
+                            id: string; // uuid
+                            name?: string;
+                            children: {
+                                id: string; // uuid
+                                isComplete: boolean;
+                                priceAndDurationData: {
+                                    durationFrom?: number;
+                                    durationTo?: number;
+                                    priceFrom?: {
+                                        currency: string;
+                                        currencySymbol: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                    priceTo?: {
+                                        currency: string;
+                                        currencySymbol: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                };
+                                hasOverriddenPricesAndDurationData: boolean;
+                                category: {
+                                    id: string; // uuid
+                                    name?: string;
+                                    description?: string;
+                                };
+                                employees: {
+                                    id: string; // uuid
+                                    fullName?: string;
+                                    hasActiveAccount: boolean;
+                                    inviteEmail?: string;
+                                    image: {
+                                        id: string; // uuid
+                                        original: string;
+                                        fileName: string;
+                                        resizedImages: {
+                                            thumbnail: string;
+                                            small: string;
+                                            medium: string;
+                                            large: string;
+                                        };
+                                        isAutogenerated: boolean;
+                                    };
+                                }[];
+                            }[];
+                        }[];
+                    }[];
+                    image: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                    user?: {
+                        id: string; // uuid
+                        email?: string;
+                        lastAccess?: string; // date-time
+                        activateAt?: string; // date-time
+                        firstName?: string;
+                        lastName?: string;
+                        phonePrefixCountryCode?: string;
+                        phone?: string; // ^\d+$
+                        hasBasicInfo: boolean;
+                        roles: {
+                            id: string; // uuid
+                            name?: string;
+                            permissions: {
+                                id: string; // uuid
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
+                            }[];
+                        }[];
+                        salons: {
+                            id: string; // uuid
+                            name?: string;
+                            logo?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                            employeeID: string; // uuid
+                            role?: {
+                                id: string; // uuid
+                                permissions: {
+                                    id: string; // uuid
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
+                                }[];
+                            };
+                        }[];
+                        image?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        assignedCountryCode?: string;
+                        icalSubscribeLink?: string;
+                        createdAt: string; // date-time
+                        updatedAt: string; // date-time
+                        deletedAt?: string; // date-time
+                    };
+                    role?: {
+                        id: string; // uuid
+                        name?: string;
+                        permissions: {
+                            id: string; // uuid
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
+                        }[];
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1EmployeesEmployeeIdServices {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type EmployeeID = string; // uuid
+        }
+        export interface PathParameters {
+            employeeID: Parameters.EmployeeID /* uuid */;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            rootCategoryID: string; // uuid
+            serviceIDs: [
                 string?,
                 string?,
                 string?,
@@ -28214,414 +32295,10 @@ declare namespace Paths {
                 string?,
                 string?,
                 string?
-            ] | null;
-            /**
-             * example:
-             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-             */
-            imageID?: string | null; // uuid
+            ];
         }
         namespace Responses {
             export interface $200 {
-                employee: {
-                    id: string; // uuid
-                    firstName?: string;
-                    lastName?: string;
-                    description?: string;
-                    email?: string;
-                    inviteEmail?: string;
-                    phonePrefixCountryCode?: string;
-                    phone?: string; // ^\d+$
-                    hasActiveAccount: boolean;
-                    salon: {
-                        id: string; // uuid
-                        name?: string;
-                    };
-                    totalServicesCount: number;
-                    categories: {
-                        id: string; // uuid
-                        name?: string;
-                        description?: string;
-                        parentID?: string; // uuid
-                        image?: {
-                            id: string; // uuid
-                            original: string;
-                            fileName: string;
-                            resizedImages: {
-                                thumbnail: string;
-                                small: string;
-                                medium: string;
-                                large: string;
-                            };
-                            isAutogenerated: boolean;
-                        } | {
-                            id: string; // uuid
-                            original: string;
-                            fileName: string;
-                            resizedImages: {
-                                thumbnail: string;
-                                small: string;
-                                medium: string;
-                                large: string;
-                            };
-                            isAutogenerated: boolean;
-                        };
-                        orderIndex: number;
-                        totalThirdLevelCategoriesCount: number;
-                        usedThirdLevelCategoriesCount: number;
-                        children: {
-                            id: string; // uuid
-                            name?: string;
-                            children: {
-                                id: string; // uuid
-                                isComplete: boolean;
-                                priceAndDurationData: {
-                                    durationFrom?: number;
-                                    durationTo?: number;
-                                    priceFrom?: {
-                                        currency: string;
-                                        currencySymbol: string;
-                                        exponent: number;
-                                        significand: number;
-                                    };
-                                    priceTo?: {
-                                        currency: string;
-                                        currencySymbol: string;
-                                        exponent: number;
-                                        significand: number;
-                                    };
-                                };
-                                hasOverriddenPricesAndDurationData: boolean;
-                                category: {
-                                    id: string; // uuid
-                                    name?: string;
-                                    description?: string;
-                                };
-                                employees: {
-                                    id: string; // uuid
-                                    fullName?: string;
-                                    hasActiveAccount: boolean;
-                                    inviteEmail?: string;
-                                    image: {
-                                        id: string; // uuid
-                                        original: string;
-                                        fileName: string;
-                                        resizedImages: {
-                                            thumbnail: string;
-                                            small: string;
-                                            medium: string;
-                                            large: string;
-                                        };
-                                        isAutogenerated: boolean;
-                                    };
-                                }[];
-                            }[];
-                        }[];
-                    }[];
-                    image: {
-                        id: string; // uuid
-                        original: string;
-                        fileName: string;
-                        resizedImages: {
-                            thumbnail: string;
-                            small: string;
-                            medium: string;
-                            large: string;
-                        };
-                        isAutogenerated: boolean;
-                    };
-                    user?: {
-                        id: string; // uuid
-                        email?: string;
-                        lastAccess?: string; // date-time
-                        activateAt?: string; // date-time
-                        firstName?: string;
-                        lastName?: string;
-                        phonePrefixCountryCode?: string;
-                        phone?: string; // ^\d+$
-                        hasBasicInfo: boolean;
-                        roles: {
-                            id: string; // uuid
-                            name?: string;
-                            permissions: {
-                                id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
-                            }[];
-                        }[];
-                        salons: {
-                            id: string; // uuid
-                            name?: string;
-                            logo?: {
-                                id: string; // uuid
-                                original: string;
-                                fileName: string;
-                                resizedImages: {
-                                    thumbnail: string;
-                                    small: string;
-                                    medium: string;
-                                    large: string;
-                                };
-                                isAutogenerated: boolean;
-                            };
-                            employeeID: string; // uuid
-                            role?: {
-                                id: string; // uuid
-                                permissions: {
-                                    id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
-                                }[];
-                            };
-                        }[];
-                        disabledNotificationTypes?: ("TEST")[];
-                        image?: {
-                            id: string; // uuid
-                            original: string;
-                            fileName: string;
-                            resizedImages: {
-                                thumbnail: string;
-                                small: string;
-                                medium: string;
-                                large: string;
-                            };
-                            isAutogenerated: boolean;
-                        };
-                        createdAt: string; // date-time
-                        updatedAt: string; // date-time
-                        deletedAt?: string; // date-time
-                    };
-                    role?: {
-                        id: string; // uuid
-                        name?: string;
-                        permissions: {
-                            id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
-                        }[];
-                    };
-                    createdAt: string; // date-time
-                    updatedAt: string; // date-time
-                    deletedAt?: string; // date-time
-                };
-                messages: {
-                    message: string;
-                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
-                }[];
-            }
-        }
-    }
-    namespace PatchApiB2BV1EmployeesEmployeeIdRole {
-        export interface HeaderParameters {
-            "accept-language"?: /**
-             * example:
-             * sk
-             */
-            Parameters.AcceptLanguage;
-        }
-        namespace Parameters {
-            /**
-             * example:
-             * sk
-             */
-            export type AcceptLanguage = string;
-            /**
-             * example:
-             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-             */
-            export type EmployeeID = string; // uuid
-        }
-        export interface PathParameters {
-            employeeID: /**
-             * example:
-             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-             */
-            Parameters.EmployeeID /* uuid */;
-        }
-        export interface RequestBody {
-            /**
-             * example:
-             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-             */
-            roleID: string; // uuid
-        }
-        namespace Responses {
-            export interface $200 {
-                employee: {
-                    id: string; // uuid
-                    firstName?: string;
-                    lastName?: string;
-                    description?: string;
-                    email?: string;
-                    inviteEmail?: string;
-                    phonePrefixCountryCode?: string;
-                    phone?: string; // ^\d+$
-                    hasActiveAccount: boolean;
-                    salon: {
-                        id: string; // uuid
-                        name?: string;
-                    };
-                    totalServicesCount: number;
-                    categories: {
-                        id: string; // uuid
-                        name?: string;
-                        description?: string;
-                        parentID?: string; // uuid
-                        image?: {
-                            id: string; // uuid
-                            original: string;
-                            fileName: string;
-                            resizedImages: {
-                                thumbnail: string;
-                                small: string;
-                                medium: string;
-                                large: string;
-                            };
-                            isAutogenerated: boolean;
-                        } | {
-                            id: string; // uuid
-                            original: string;
-                            fileName: string;
-                            resizedImages: {
-                                thumbnail: string;
-                                small: string;
-                                medium: string;
-                                large: string;
-                            };
-                            isAutogenerated: boolean;
-                        };
-                        orderIndex: number;
-                        totalThirdLevelCategoriesCount: number;
-                        usedThirdLevelCategoriesCount: number;
-                        children: {
-                            id: string; // uuid
-                            name?: string;
-                            children: {
-                                id: string; // uuid
-                                isComplete: boolean;
-                                priceAndDurationData: {
-                                    durationFrom?: number;
-                                    durationTo?: number;
-                                    priceFrom?: {
-                                        currency: string;
-                                        currencySymbol: string;
-                                        exponent: number;
-                                        significand: number;
-                                    };
-                                    priceTo?: {
-                                        currency: string;
-                                        currencySymbol: string;
-                                        exponent: number;
-                                        significand: number;
-                                    };
-                                };
-                                hasOverriddenPricesAndDurationData: boolean;
-                                category: {
-                                    id: string; // uuid
-                                    name?: string;
-                                    description?: string;
-                                };
-                                employees: {
-                                    id: string; // uuid
-                                    fullName?: string;
-                                    hasActiveAccount: boolean;
-                                    inviteEmail?: string;
-                                    image: {
-                                        id: string; // uuid
-                                        original: string;
-                                        fileName: string;
-                                        resizedImages: {
-                                            thumbnail: string;
-                                            small: string;
-                                            medium: string;
-                                            large: string;
-                                        };
-                                        isAutogenerated: boolean;
-                                    };
-                                }[];
-                            }[];
-                        }[];
-                    }[];
-                    image: {
-                        id: string; // uuid
-                        original: string;
-                        fileName: string;
-                        resizedImages: {
-                            thumbnail: string;
-                            small: string;
-                            medium: string;
-                            large: string;
-                        };
-                        isAutogenerated: boolean;
-                    };
-                    user?: {
-                        id: string; // uuid
-                        email?: string;
-                        lastAccess?: string; // date-time
-                        activateAt?: string; // date-time
-                        firstName?: string;
-                        lastName?: string;
-                        phonePrefixCountryCode?: string;
-                        phone?: string; // ^\d+$
-                        hasBasicInfo: boolean;
-                        roles: {
-                            id: string; // uuid
-                            name?: string;
-                            permissions: {
-                                id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
-                            }[];
-                        }[];
-                        salons: {
-                            id: string; // uuid
-                            name?: string;
-                            logo?: {
-                                id: string; // uuid
-                                original: string;
-                                fileName: string;
-                                resizedImages: {
-                                    thumbnail: string;
-                                    small: string;
-                                    medium: string;
-                                    large: string;
-                                };
-                                isAutogenerated: boolean;
-                            };
-                            employeeID: string; // uuid
-                            role?: {
-                                id: string; // uuid
-                                permissions: {
-                                    id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
-                                }[];
-                            };
-                        }[];
-                        disabledNotificationTypes?: ("TEST")[];
-                        image?: {
-                            id: string; // uuid
-                            original: string;
-                            fileName: string;
-                            resizedImages: {
-                                thumbnail: string;
-                                small: string;
-                                medium: string;
-                                large: string;
-                            };
-                            isAutogenerated: boolean;
-                        };
-                        createdAt: string; // date-time
-                        updatedAt: string; // date-time
-                        deletedAt?: string; // date-time
-                    };
-                    role?: {
-                        id: string; // uuid
-                        name?: string;
-                        permissions: {
-                            id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
-                        }[];
-                    };
-                    createdAt: string; // date-time
-                    updatedAt: string; // date-time
-                    deletedAt?: string; // date-time
-                };
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
@@ -33526,6 +37203,26 @@ declare namespace Paths {
                             }?
                         ];
                     };
+                    settingsSegment: {
+                        settings: {
+                            enabledReservations: boolean;
+                            enabledB2cReservations: boolean;
+                            maxDaysB2cCreateReservation: number;
+                            maxHoursB2cCreateReservationBeforeStart: number;
+                            maxHoursB2cCancelReservationBeforeStart: number;
+                            enabledCustomerReservationNotes: boolean;
+                            minutesIntervalBetweenB2CReservations: number;
+                            disabledNotifications: {
+                                /**
+                                 * example:
+                                 * CREATE_USER
+                                 */
+                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                                b2bChannels: ("EMAIL" | "PUSH")[];
+                                b2cChannels: ("EMAIL" | "PUSH")[];
+                            }[];
+                        };
+                    };
                     permissions: {
                         salon: {
                             salonUpdate: boolean;
@@ -33639,6 +37336,196 @@ declare namespace Paths {
                         streetNumber?: string;
                     };
                 };
+            }
+        }
+    }
+    namespace PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarBulkEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarBulkEventID: Parameters.CalendarBulkEventID /* uuid */;
+        }
+        export interface RequestBody {
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            repeatEvent: {
+                untilDate: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                days: {
+                    MONDAY: boolean;
+                    TUESDAY: boolean;
+                    WEDNESDAY: boolean;
+                    THURSDAY: boolean;
+                    FRIDAY: boolean;
+                    SATURDAY: boolean;
+                    SUNDAY: boolean;
+                };
+                week?: 1 | 2;
+            };
+            note?: string | null;
+        }
+        namespace Responses {
+            export interface $200 {
+                calendarBulkEvent: {
+                    id: string; // uuid
+                };
+                calendarEvents: {
+                    id: string; // uuid
+                }[];
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface RequestBody {
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            note?: string | null;
+        }
+        namespace Responses {
+            export interface $200 {
+                calendarEvent: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface RequestBody {
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            note?: string | null;
+            customerID: string; // uuid
+            employeeID?: string | null; // uuid
+            serviceID: string; // uuid
+            serviceCategoryParameterValueID?: string | null; // uuid
+        }
+        namespace Responses {
+            export interface $200 {
+                reservationCalendarEvent: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface RequestBody {
+            state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+            reason?: string;
+            paymentMethod?: "CASH" | "CARD" | "OTHER";
+        }
+        namespace Responses {
+            export interface $200 {
+                reservationCalendarEvent: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
             }
         }
     }
@@ -34500,6 +38387,26 @@ declare namespace Paths {
                             }?
                         ];
                     };
+                    settingsSegment: {
+                        settings: {
+                            enabledReservations: boolean;
+                            enabledB2cReservations: boolean;
+                            maxDaysB2cCreateReservation: number;
+                            maxHoursB2cCreateReservationBeforeStart: number;
+                            maxHoursB2cCancelReservationBeforeStart: number;
+                            enabledCustomerReservationNotes: boolean;
+                            minutesIntervalBetweenB2CReservations: number;
+                            disabledNotifications: {
+                                /**
+                                 * example:
+                                 * CREATE_USER
+                                 */
+                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                                b2bChannels: ("EMAIL" | "PUSH")[];
+                                b2cChannels: ("EMAIL" | "PUSH")[];
+                            }[];
+                        };
+                    };
                     permissions: {
                         salon: {
                             salonUpdate: boolean;
@@ -34697,6 +38604,957 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1SalonsSalonIdSettings {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            settings?: {
+                enabledReservations?: boolean | null;
+                enabledB2cReservations?: boolean | null;
+                maxDaysB2cCreateReservation?: null | number;
+                maxHoursB2cCreateReservationBeforeStart?: null | number;
+                maxHoursB2cCancelReservationBeforeStart?: null | number;
+                enabledCustomerReservationNotes?: boolean | null;
+                minutesIntervalBetweenB2CReservations?: null | number;
+                disabledNotifications?: [
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?,
+                    {
+                        /**
+                         * example:
+                         * CREATE_USER
+                         */
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                        b2bChannels: ("EMAIL" | "PUSH")[];
+                        b2cChannels: ("EMAIL" | "PUSH")[];
+                    }?
+                ] | null;
+            } | null;
+            servicesSettings?: {
+                id: string; // uuid
+                settings?: {
+                    enabledB2cReservations?: boolean | null;
+                    autoApproveReservatons?: boolean | null;
+                } | null;
+            }[] | null;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: string; // uuid
+                };
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
@@ -42634,6 +47492,10 @@ declare namespace Paths {
                     };
                 }?
             ];
+            settings?: {
+                enabledB2cReservations?: boolean | null;
+                autoApproveReservatons?: boolean | null;
+            } | null;
             employeeIDs?: [
                 string?,
                 string?,
@@ -42806,12 +47668,17 @@ declare namespace Paths {
                             significand: number;
                         };
                     };
+                    settings: {
+                        enabledB2cReservations: boolean;
+                        autoApproveReservatons: boolean;
+                    };
                     employees: {
                         id: string; // uuid
                         hasActiveAccount: boolean;
                         fullName?: string;
                         email?: string;
                         inviteEmail?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                         image: {
                             id: string; // uuid
                             original: string;
@@ -42943,108 +47810,6 @@ declare namespace Paths {
              * 906047188
              */
             phone?: string | null; // ^\d+$
-            disabledNotificationTypes?: [
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?
-            ];
             /**
              * example:
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
@@ -43068,7 +47833,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -43091,11 +47856,10 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -43108,10 +47872,42 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    assignedCountryCode?: string;
+                    icalSubscribeLink?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
                 };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+        }
+        export interface PathParameters {
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface RequestBody {
+        }
+        namespace Responses {
+            export interface $200 {
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
@@ -43173,6 +47969,36 @@ declare namespace Paths {
             rate: 1 | 2 | 3 | 4 | 5; // float
             userName: string;
             deviceID: string;
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+        }
+        export interface PathParameters {
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface RequestBody {
         }
         namespace Responses {
             export interface $200 {
@@ -43324,7 +48150,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -43347,11 +48173,10 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -43364,6 +48189,8 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    assignedCountryCode?: string;
+                    icalSubscribeLink?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -43463,7 +48290,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -43486,11 +48313,10 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -43503,10 +48329,48 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    assignedCountryCode?: string;
+                    icalSubscribeLink?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
                 };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2BAdminCalendarSyncSyncToken {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * Refresh token of appropriate calendar
+             */
+            refreshToken: string;
+            /**
+             * Enum defining type of calendar
+             * example:
+             * GOOGLE
+             */
+            calendarType: "GOOGLE" | "MICROSOFT" | "APPLE";
+        }
+        namespace Responses {
+            export interface $200 {
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
@@ -43561,6 +48425,11 @@ declare namespace Paths {
              * Poznámka
              */
             note?: string | null;
+            /**
+             * example:
+             * VIP
+             */
+            label?: "NEW" | "VIP" | "LIGHT_BLACKLIST";
             /**
              * example:
              * SK
@@ -43703,6 +48572,9 @@ declare namespace Paths {
             export interface $200 {
                 customer?: {
                     id: string; // uuid
+                    firstName: string;
+                    lastName: string;
+                    email?: string; // email
                 };
                 messages: {
                     message: string;
@@ -43881,6 +48753,7 @@ declare namespace Paths {
                     inviteEmail?: string;
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                     hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
@@ -43994,7 +48867,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -44017,11 +48890,10 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
-                        disabledNotificationTypes?: ("TEST")[];
                         image?: {
                             id: string; // uuid
                             original: string;
@@ -44034,6 +48906,8 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        assignedCountryCode?: string;
+                        icalSubscribeLink?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
                         deletedAt?: string; // date-time
@@ -44043,7 +48917,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -49628,6 +54502,112 @@ declare namespace Paths {
             }
         }
     }
+    namespace PostApiB2BAdminSalonsSalonIdCalendarEvents {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            eventType: "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            repeatEvent?: {
+                untilDate: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                days: {
+                    MONDAY: boolean;
+                    TUESDAY: boolean;
+                    WEDNESDAY: boolean;
+                    THURSDAY: boolean;
+                    FRIDAY: boolean;
+                    SATURDAY: boolean;
+                    SUNDAY: boolean;
+                };
+                week?: 1 | 2;
+            } | null;
+            note?: string | null;
+            employeeID: string; // uuid
+        }
+        namespace Responses {
+            export interface $200 {
+                calendarBulkEvent?: {
+                    id: string; // uuid
+                };
+                calendarEvents: {
+                    id: string; // uuid
+                }[];
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2BAdminSalonsSalonIdCalendarEventsReservations {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            note?: string | null;
+            customerID: string; // uuid
+            employeeID?: string | null; // uuid
+            serviceID: string; // uuid
+            serviceCategoryParameterValueID?: string | null; // uuid
+        }
+        namespace Responses {
+            export interface $200 {
+                reservationCalendarEvent: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PostApiB2BAdminServicesCategoryServiceSuggest {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -49706,6 +54686,11 @@ declare namespace Paths {
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
             imageID?: string | null; // uuid
+            /**
+             * example:
+             * SK
+             */
+            assignedCountryCode?: string | null;
         }
         namespace Responses {
             export interface $200 {
@@ -49758,7 +54743,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -49781,11 +54766,10 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -49798,6 +54782,8 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    assignedCountryCode?: string;
+                    icalSubscribeLink?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -49886,6 +54872,11 @@ declare namespace Paths {
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
             imageID?: string | null; // uuid
+            /**
+             * example:
+             * SK
+             */
+            assignedCountryCode?: string | null;
         }
         namespace Responses {
             export interface $200 {
@@ -49906,7 +54897,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -49929,11 +54920,10 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -49946,6 +54936,8 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    assignedCountryCode?: string;
+                    icalSubscribeLink?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -50030,7 +55022,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -50053,11 +55045,10 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -50070,6 +55061,8 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    assignedCountryCode?: string;
+                    icalSubscribeLink?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -50179,7 +55172,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -50202,11 +55195,10 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -50219,6 +55211,8 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    assignedCountryCode?: string;
+                    icalSubscribeLink?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -50277,6 +55271,11 @@ declare namespace Paths {
              * Poznámka
              */
             note?: string | null;
+            /**
+             * example:
+             * VIP
+             */
+            label?: "NEW" | "VIP" | "LIGHT_BLACKLIST";
             /**
              * example:
              * SK
@@ -50419,6 +55418,9 @@ declare namespace Paths {
             export interface $200 {
                 customer?: {
                     id: string; // uuid
+                    firstName: string;
+                    lastName: string;
+                    email?: string; // email
                 };
                 messages: {
                     message: string;
@@ -50597,6 +55599,7 @@ declare namespace Paths {
                     inviteEmail?: string;
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                     hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
@@ -50710,7 +55713,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -50733,11 +55736,10 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
-                        disabledNotificationTypes?: ("TEST")[];
                         image?: {
                             id: string; // uuid
                             original: string;
@@ -50750,6 +55752,8 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        assignedCountryCode?: string;
+                        icalSubscribeLink?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
                         deletedAt?: string; // date-time
@@ -50759,7 +55763,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -52609,52 +57613,6 @@ declare namespace Paths {
             }
         }
     }
-    namespace PostApiB2BV1PushNotificationsSubscribe {
-        export interface HeaderParameters {
-            "accept-language": /**
-             * example:
-             * sk
-             */
-            Parameters.AcceptLanguage;
-        }
-        namespace Parameters {
-            /**
-             * example:
-             * sk
-             */
-            export type AcceptLanguage = string;
-        }
-        export interface RequestBody {
-            /**
-             * example:
-             * 12DXXS
-             */
-            deviceID: string;
-            /**
-             * example:
-             * abc
-             */
-            token: string;
-            /**
-             * example:
-             * ANDROID
-             */
-            platform: "IOS" | "ANDROID";
-            /**
-             * example:
-             * DEBUG
-             */
-            mode: "DEBUG" | "RELEASE";
-            /**
-             * example:
-             * Samsung A50
-             */
-            name?: string | null;
-        }
-        namespace Responses {
-            export type $200 = "";
-        }
-    }
     namespace PostApiB2BV1Salons {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -53298,6 +58256,26 @@ declare namespace Paths {
                             }?
                         ];
                     };
+                    settingsSegment: {
+                        settings: {
+                            enabledReservations: boolean;
+                            enabledB2cReservations: boolean;
+                            maxDaysB2cCreateReservation: number;
+                            maxHoursB2cCreateReservationBeforeStart: number;
+                            maxHoursB2cCancelReservationBeforeStart: number;
+                            enabledCustomerReservationNotes: boolean;
+                            minutesIntervalBetweenB2CReservations: number;
+                            disabledNotifications: {
+                                /**
+                                 * example:
+                                 * CREATE_USER
+                                 */
+                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
+                                b2bChannels: ("EMAIL" | "PUSH")[];
+                                b2cChannels: ("EMAIL" | "PUSH")[];
+                            }[];
+                        };
+                    };
                     permissions: {
                         salon: {
                             salonUpdate: boolean;
@@ -53324,6 +58302,112 @@ declare namespace Paths {
                     createdAt?: string; // date-time
                     updatedAt?: string; // date-time
                     deletedAt?: string; // date-time
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2BV1SalonsSalonIdCalendarEvents {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            eventType: "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            repeatEvent?: {
+                untilDate: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                days: {
+                    MONDAY: boolean;
+                    TUESDAY: boolean;
+                    WEDNESDAY: boolean;
+                    THURSDAY: boolean;
+                    FRIDAY: boolean;
+                    SATURDAY: boolean;
+                    SUNDAY: boolean;
+                };
+                week?: 1 | 2;
+            } | null;
+            note?: string | null;
+            employeeID: string; // uuid
+        }
+        namespace Responses {
+            export interface $200 {
+                calendarBulkEvent?: {
+                    id: string; // uuid
+                };
+                calendarEvents: {
+                    id: string; // uuid
+                }[];
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2BV1SalonsSalonIdCalendarEventsReservations {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            note?: string | null;
+            customerID: string; // uuid
+            employeeID?: string | null; // uuid
+            serviceID: string; // uuid
+            serviceCategoryParameterValueID?: string | null; // uuid
+        }
+        namespace Responses {
+            export interface $200 {
+                reservationCalendarEvent: {
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -53447,7 +58531,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -53470,11 +58554,10 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -53487,6 +58570,8 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    assignedCountryCode?: string;
+                    icalSubscribeLink?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -53575,6 +58660,11 @@ declare namespace Paths {
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
             imageID?: string | null; // uuid
+            /**
+             * example:
+             * SK
+             */
+            assignedCountryCode?: string | null;
         }
         namespace Responses {
             export interface $200 {
@@ -53595,7 +58685,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -53618,11 +58708,10 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -53635,6 +58724,8 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    assignedCountryCode?: string;
+                    icalSubscribeLink?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -53642,9 +58733,601 @@ declare namespace Paths {
             }
         }
     }
+    namespace PostApiB2CV1SalonsSalonIdCalendarEventsReservations {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            customerNote?: string | null;
+            customer: {
+                firstName: string;
+                lastName: string;
+                email: string; // email
+                /**
+                 * example:
+                 * SK
+                 */
+                phonePrefixCountryCode: string;
+                /**
+                 * example:
+                 * 906047188
+                 */
+                phone: string; // ^\d+$
+            };
+            employeeID?: string | null; // uuid
+            serviceID: string; // uuid
+            serviceCategoryParameterValueID?: string | null; // uuid
+        }
+        namespace Responses {
+            export interface $200 {
+                reservationCalendarEvent: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    noteFromB2CCustomer?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    };
+                    employee: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    serviceCategoryParameterValue?: {
+                        id: string; // uuid
+                        categoryParameterValue: {
+                            id: string; // uuid
+                            value?: string;
+                        };
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
+                    };
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                        rating?: number; // float
+                        logo?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        images: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                            orderIndex: number;
+                            isCover: boolean;
+                        }[];
+                        phones: {
+                            id: string; // uuid
+                            phonePrefixCountryCode: string;
+                            phone: string; // ^\d+$
+                        }[];
+                        address?: {
+                            countryCode?: string;
+                            zipCode?: string;
+                            city?: string;
+                            street?: string;
+                            streetNumber?: string;
+                            latitude?: number; // float
+                            longitude?: number; // float
+                        };
+                        formattedAddress?: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2CWebSalonsSalonIdCalendarEventsReservations {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            customerNote?: string | null;
+            customer: {
+                firstName: string;
+                lastName: string;
+                email: string; // email
+                /**
+                 * example:
+                 * SK
+                 */
+                phonePrefixCountryCode: string;
+                /**
+                 * example:
+                 * 906047188
+                 */
+                phone: string; // ^\d+$
+            };
+            employeeID?: string | null; // uuid
+            serviceID: string; // uuid
+            serviceCategoryParameterValueID?: string | null; // uuid
+        }
+        namespace Responses {
+            export interface $200 {
+                reservationCalendarEvent: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    noteFromB2CCustomer?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    };
+                    employee: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    serviceCategoryParameterValue?: {
+                        id: string; // uuid
+                        categoryParameterValue: {
+                            id: string; // uuid
+                            value?: string;
+                        };
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
+                    };
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                        rating?: number; // float
+                        logo?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        images: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                            orderIndex: number;
+                            isCover: boolean;
+                        }[];
+                        phones: {
+                            id: string; // uuid
+                            phonePrefixCountryCode: string;
+                            phone: string; // ^\d+$
+                        }[];
+                        address?: {
+                            countryCode?: string;
+                            zipCode?: string;
+                            city?: string;
+                            street?: string;
+                            streetNumber?: string;
+                            latitude?: number; // float
+                            longitude?: number; // float
+                        };
+                        formattedAddress?: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PostApiMaintenanceNotifications {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            notificationType: "EMAIL" | "PUSH";
+            bulkNotifications?: {
+                language: string;
+                recipient: {
+                    email?: any;
+                    token?: any;
+                    platform?: any;
+                };
+            };
+            notifications?: {
+                type: ("CREATE_USER" | "EMPLOYEE_INVITE" | "FORGOT_PASSWORD" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "PARTNER_CONTACT_FORM" | "RESEND_USER_ACTIVATION" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "SUGGEST_CATEGORY_SERVICE" | "UNPUBLISH_SALON" | "USER_INVITE" | "USER_REGISTRATION" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CANCELLED" | "RESERVATION_CHANGED" | "RESERVATION_CONFIRMED" | "RESERVATION_REJECTED" | "RESERVATION_REMINDER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER") | ("RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CANCELLED" | "RESERVATION_CHANGED" | "RESERVATION_CONFIRMED" | "RESERVATION_REJECTED" | "RESERVATION_REMINDER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER");
+                language: string;
+                recipient: {
+                    email?: string;
+                    token?: string;
+                    platform?: string;
+                };
+                data?: {
+                    token: string;
+                } | {
+                    salonName: string;
+                } | {
+                    token: string;
+                } | {
+                    attachments?: {
+                        filename?: string;
+                        content?: any;
+                    }[];
+                    globalErrors: string[];
+                } | {
+                    email: string; // email
+                    attachments?: {
+                        filename?: string;
+                        content?: any;
+                    }[];
+                } | {
+                    attachments?: {
+                        filename?: string;
+                        content?: any;
+                    }[];
+                } | {
+                    salonName: string;
+                    partnerFullname: string;
+                    email: string; // email
+                    phone: string;
+                    vatNumber?: string;
+                } | {
+                    code: string;
+                } | {
+                    salonName: string;
+                } | {
+                    salonName: string;
+                    reason: string;
+                } | {
+                    salonName: string;
+                    servicesSuggestionEmails: string /* email */[];
+                    email: string; // email
+                    phone: string;
+                    description: string;
+                } | {
+                    salonName: string;
+                    reason: string;
+                } | {
+                    salonName: string;
+                } | {
+                    code: string;
+                    attachments?: {
+                        filename?: string;
+                        content?: any;
+                    }[];
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                };
+            }[];
+        }
+        namespace Responses {
+            export interface $200 {
+            }
+        }
+    }
+    namespace PutApiB2BV1PushNotificationsSubscribe {
+        export interface HeaderParameters {
+            "accept-language": /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 12DXXS
+             */
+            deviceID: string;
+            /**
+             * example:
+             * abc
+             */
+            token: string;
+            /**
+             * example:
+             * ANDROID
+             */
+            platform: "IOS" | "ANDROID";
+            /**
+             * example:
+             * DEBUG
+             */
+            mode: "DEBUG" | "RELEASE";
+            /**
+             * example:
+             * Samsung A50
+             */
+            name?: string | null;
+        }
+        namespace Responses {
+            export type $200 = "";
+        }
+    }
+    namespace PutApiB2CV1PushNotificationsSubscribe {
+        export interface HeaderParameters {
+            "accept-language": /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 12DXXS
+             */
+            deviceID: string;
+            /**
+             * example:
+             * abc
+             */
+            token: string;
+            /**
+             * example:
+             * ANDROID
+             */
+            platform: "IOS" | "ANDROID";
+            /**
+             * example:
+             * DEBUG
+             */
+            mode: "DEBUG" | "RELEASE";
+            /**
+             * example:
+             * Samsung A50
+             */
+            name?: string | null;
+        }
+        namespace Responses {
+            export type $200 = "";
+        }
+    }
 }
 
 export interface OperationMethods {
+  /**
+   * postApiMaintenanceNotifications - permissions: NO
+   */
+  'postApiMaintenanceNotifications'(
+    parameters?: Parameters<Paths.PostApiMaintenanceNotifications.HeaderParameters> | null,
+    data?: Paths.PostApiMaintenanceNotifications.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiMaintenanceNotifications.Responses.$200>
   /**
    * postApiB2BAdminAuthLogin - permissions: NO
    */
@@ -53693,30 +59376,6 @@ export interface OperationMethods {
     data?: Paths.PatchApiB2BAdminAuthChangePassword.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminAuthChangePassword.Responses.$200>
-  /**
-   * getApiB2BAdminUsersUserId - permissions: NO
-   */
-  'getApiB2BAdminUsersUserId'(
-    parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters & Paths.GetApiB2BAdminUsersUserId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
-  /**
-   * patchApiB2BAdminUsersUserId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_EDIT]</li></ul>
-   */
-  'patchApiB2BAdminUsersUserId'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
-  /**
-   * deleteApiB2BAdminUsersUserId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_DELETE]</li></ul>
-   */
-  'deleteApiB2BAdminUsersUserId'(
-    parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserId.Responses.$200>
   /**
    * postApiB2BAdminUsersRegistration - permissions: NO
    */
@@ -54046,30 +59705,6 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1AuthChangePassword.Responses.$200>
   /**
-   * getApiB2BV1UsersUserId - permissions: NO
-   */
-  'getApiB2BV1UsersUserId'(
-    parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters & Paths.GetApiB2BV1UsersUserId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BV1UsersUserId.Responses.$200>
-  /**
-   * patchApiB2BV1UsersUserId - permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BV1UsersUserId'(
-    parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters & Paths.PatchApiB2BV1UsersUserId.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BV1UsersUserId.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
-  /**
-   * deleteApiB2BV1UsersUserId - permissions:<ul><li>user</li></ul>
-   */
-  'deleteApiB2BV1UsersUserId'(
-    parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserId.PathParameters & Paths.DeleteApiB2BV1UsersUserId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.DeleteApiB2BV1UsersUserId.Responses.$200>
-  /**
    * postApiB2BV1UsersRegistration - permissions: NO
    */
   'postApiB2BV1UsersRegistration'(
@@ -54174,13 +59809,13 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EnumsCurrencies.Responses.$200>
   /**
-   * postApiB2BV1PushNotificationsSubscribe - permissions: NO
+   * putApiB2BV1PushNotificationsSubscribe - permissions: NO
    */
-  'postApiB2BV1PushNotificationsSubscribe'(
-    parameters?: Parameters<Paths.PostApiB2BV1PushNotificationsSubscribe.HeaderParameters> | null,
-    data?: Paths.PostApiB2BV1PushNotificationsSubscribe.RequestBody,
+  'putApiB2BV1PushNotificationsSubscribe'(
+    parameters?: Parameters<Paths.PutApiB2BV1PushNotificationsSubscribe.HeaderParameters> | null,
+    data?: Paths.PutApiB2BV1PushNotificationsSubscribe.RequestBody,
     config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BV1PushNotificationsSubscribe.Responses.$200>
+  ): OperationResponse<Paths.PutApiB2BV1PushNotificationsSubscribe.Responses.$200>
   /**
    * deleteApiB2BV1PushNotificationsUnsubscribeDeviceId - permissions: NO
    */
@@ -54197,6 +59832,30 @@ export interface OperationMethods {
     data?: Paths.PostApiB2BV1PartnerContactForm.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1PartnerContactForm.Responses.$200>
+  /**
+   * getApiB2BV1CalendarSyncIcalEvents - permissions: NO
+   */
+  'getApiB2BV1CalendarSyncIcalEvents'(
+    parameters?: Parameters<Paths.GetApiB2BV1CalendarSyncIcalEvents.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1CalendarSyncIcalEvents.Responses.$200>
+  /**
+   * getApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
+   */
+  'getApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable'(
+    parameters?: Parameters<Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.PathParameters & Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.QueryParameters & Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.Responses.$200>
+  /**
+   * postApiB2CWebSalonsSalonIdCalendarEventsReservations - permissions: NO
+   */
+  'postApiB2CWebSalonsSalonIdCalendarEventsReservations'(
+    parameters?: Parameters<Paths.PostApiB2CWebSalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2CWebSalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
+    data?: Paths.PostApiB2CWebSalonsSalonIdCalendarEventsReservations.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2CWebSalonsSalonIdCalendarEventsReservations.Responses.$200>
   /**
    * getApiB2CWebSalons - permissions: NO
    */
@@ -54238,13 +59897,13 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CWebSalonsFilterCitiesPlaceId.Responses.$200>
   /**
-   * getApiB2CWebSalonsSeaSlugName - permissions: NO
+   * getApiB2CWebSalonsSeoSlugName - permissions: NO
    */
-  'getApiB2CWebSalonsSeaSlugName'(
-    parameters?: Parameters<Paths.GetApiB2CWebSalonsSeaSlugName.PathParameters & Paths.GetApiB2CWebSalonsSeaSlugName.HeaderParameters> | null,
+  'getApiB2CWebSalonsSeoSlugName'(
+    parameters?: Parameters<Paths.GetApiB2CWebSalonsSeoSlugName.PathParameters & Paths.GetApiB2CWebSalonsSeoSlugName.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2CWebSalonsSeaSlugName.Responses.$200>
+  ): OperationResponse<Paths.GetApiB2CWebSalonsSeoSlugName.Responses.$200>
   /**
    * getApiB2CWebSalonsSalonIdServices - permissions: NO
    */
@@ -54357,6 +60016,54 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CWebEnumsCountries.Responses.$200>
+  /**
+   * getApiB2CWebServicesServiceId - permissions: NO
+   */
+  'getApiB2CWebServicesServiceId'(
+    parameters?: Parameters<Paths.GetApiB2CWebServicesServiceId.PathParameters & Paths.GetApiB2CWebServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebServicesServiceId.Responses.$200>
+  /**
+   * getApiB2CWebCalendarEventsReservations - permissions: NO
+   */
+  'getApiB2CWebCalendarEventsReservations'(
+    parameters?: Parameters<Paths.GetApiB2CWebCalendarEventsReservations.QueryParameters & Paths.GetApiB2CWebCalendarEventsReservations.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebCalendarEventsReservations.Responses.$200>
+  /**
+   * getApiB2CWebCalendarEventsReservationsCalendarEventId - permissions: NO
+   */
+  'getApiB2CWebCalendarEventsReservationsCalendarEventId'(
+    parameters?: Parameters<Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.PathParameters & Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.Responses.$200>
+  /**
+   * patchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel - permissions: NO
+   */
+  'patchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel'(
+    parameters?: Parameters<Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.PathParameters & Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.HeaderParameters> | null,
+    data?: Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.Responses.$200>
+  /**
+   * getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
+   */
+  'getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable'(
+    parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.PathParameters & Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.Responses.$200>
+  /**
+   * postApiB2CV1SalonsSalonIdCalendarEventsReservations - permissions: NO
+   */
+  'postApiB2CV1SalonsSalonIdCalendarEventsReservations'(
+    parameters?: Parameters<Paths.PostApiB2CV1SalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2CV1SalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
+    data?: Paths.PostApiB2CV1SalonsSalonIdCalendarEventsReservations.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2CV1SalonsSalonIdCalendarEventsReservations.Responses.$200>
   /**
    * getApiB2CV1Salons - permissions: NO
    */
@@ -54510,6 +60217,62 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1EnumsLanguagesLanguageId.Responses.$200>
   /**
+   * getApiB2CV1EnumsCountries - permissions: NO
+   */
+  'getApiB2CV1EnumsCountries'(
+    parameters?: Parameters<Paths.GetApiB2CV1EnumsCountries.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1EnumsCountries.Responses.$200>
+  /**
+   * putApiB2CV1PushNotificationsSubscribe - permissions: NO
+   */
+  'putApiB2CV1PushNotificationsSubscribe'(
+    parameters?: Parameters<Paths.PutApiB2CV1PushNotificationsSubscribe.HeaderParameters> | null,
+    data?: Paths.PutApiB2CV1PushNotificationsSubscribe.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PutApiB2CV1PushNotificationsSubscribe.Responses.$200>
+  /**
+   * deleteApiB2CV1PushNotificationsUnsubscribeDeviceId - permissions: NO
+   */
+  'deleteApiB2CV1PushNotificationsUnsubscribeDeviceId'(
+    parameters?: Parameters<Paths.DeleteApiB2CV1PushNotificationsUnsubscribeDeviceId.PathParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2CV1PushNotificationsUnsubscribeDeviceId.Responses.$200>
+  /**
+   * getApiB2CV1ServicesServiceId - permissions: NO
+   */
+  'getApiB2CV1ServicesServiceId'(
+    parameters?: Parameters<Paths.GetApiB2CV1ServicesServiceId.PathParameters & Paths.GetApiB2CV1ServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1ServicesServiceId.Responses.$200>
+  /**
+   * getApiB2CV1CalendarEventsReservations - permissions: NO
+   */
+  'getApiB2CV1CalendarEventsReservations'(
+    parameters?: Parameters<Paths.GetApiB2CV1CalendarEventsReservations.QueryParameters & Paths.GetApiB2CV1CalendarEventsReservations.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1CalendarEventsReservations.Responses.$200>
+  /**
+   * getApiB2CV1CalendarEventsReservationsCalendarEventId - permissions: NO
+   */
+  'getApiB2CV1CalendarEventsReservationsCalendarEventId'(
+    parameters?: Parameters<Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.PathParameters & Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.Responses.$200>
+  /**
+   * patchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel - permissions: NO
+   */
+  'patchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel'(
+    parameters?: Parameters<Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.PathParameters & Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.HeaderParameters> | null,
+    data?: Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.Responses.$200>
+  /**
    * getApiMaintenanceHealth - permissions: NO
    */
   'getApiMaintenanceHealth'(
@@ -54541,6 +60304,30 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminUsersNotinoUsers.Responses.$200>
+  /**
+   * getApiB2BAdminUsersUserId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+   */
+  'getApiB2BAdminUsersUserId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters & Paths.GetApiB2BAdminUsersUserId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
+  /**
+   * patchApiB2BAdminUsersUserId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_EDIT]</li></ul>
+   */
+  'patchApiB2BAdminUsersUserId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
+  /**
+   * deleteApiB2BAdminUsersUserId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_DELETE]</li></ul>
+   */
+  'deleteApiB2BAdminUsersUserId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserId.Responses.$200>
   /**
    * getApiB2BAdminUsersUserIdPendingEmployeeInvites - permissions:<ul><li>user</li></ul>
    */
@@ -54589,6 +60376,94 @@ export interface OperationMethods {
     data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
+  /**
+   * postApiB2BAdminSalonsSalonIdCalendarEventsReservations - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_CREATE]</li></ul>
+   */
+  'postApiB2BAdminSalonsSalonIdCalendarEventsReservations'(
+    parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
+  /**
+   * deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
+   */
+  'deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonIdCalendarEvents - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonIdCalendarEvents'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
+  /**
+   * postApiB2BAdminSalonsSalonIdCalendarEvents - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_CREATE]</li></ul>
+   */
+  'postApiB2BAdminSalonsSalonIdCalendarEvents'(
+    parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_READ]</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+  /**
+   * deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
+   */
+  'deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+  /**
+   * deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
+   */
+  'deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
   /**
    * getApiB2BAdminSalons - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
    */
@@ -54758,6 +60633,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.Responses.$200>
   /**
+   * patchApiB2BAdminSalonsSalonIdSettings - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdSettings'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdSettings.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdSettings.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdSettings.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdSettings.Responses.$200>
+  /**
    * deleteApiB2BAdminSalonsSalonIdRejectedSuggestions - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
    */
   'deleteApiB2BAdminSalonsSalonIdRejectedSuggestions'(
@@ -54902,7 +60785,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.Responses.$200>
   /**
-   * patchApiB2BAdminEmployeesEmployeeIdServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, USER_ROLE_EDIT]</li></ul>
+   * patchApiB2BAdminEmployeesEmployeeIdServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
    */
   'patchApiB2BAdminEmployeesEmployeeIdServicesServiceId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
@@ -54921,7 +60804,7 @@ export interface OperationMethods {
    * getApiB2BAdminNotinoDashboard - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
    */
   'getApiB2BAdminNotinoDashboard'(
-    parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboard.HeaderParameters> | null,
+    parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboard.QueryParameters & Paths.GetApiB2BAdminNotinoDashboard.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboard.Responses.$200>
@@ -54934,6 +60817,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.Responses.$200>
   /**
+   * postApiB2BAdminCalendarSyncSyncToken - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li></ul>
+   */
+  'postApiB2BAdminCalendarSyncSyncToken'(
+    parameters?: Parameters<Paths.PostApiB2BAdminCalendarSyncSyncToken.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminCalendarSyncSyncToken.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminCalendarSyncSyncToken.Responses.$200>
+  /**
    * getApiB2BV1UsersPartners - permissions:<ul><li>user: [NOTINO_ADMIN, LOGIN_AS_PARTNER]</li></ul>
    */
   'getApiB2BV1UsersPartners'(
@@ -54941,6 +60832,30 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1UsersPartners.Responses.$200>
+  /**
+   * getApiB2BV1UsersUserId - permissions:<ul><li>user</li></ul>
+   */
+  'getApiB2BV1UsersUserId'(
+    parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters & Paths.GetApiB2BV1UsersUserId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1UsersUserId.Responses.$200>
+  /**
+   * patchApiB2BV1UsersUserId - permissions:<ul><li>user</li></ul>
+   */
+  'patchApiB2BV1UsersUserId'(
+    parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters & Paths.PatchApiB2BV1UsersUserId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1UsersUserId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
+  /**
+   * deleteApiB2BV1UsersUserId - permissions:<ul><li>user</li></ul>
+   */
+  'deleteApiB2BV1UsersUserId'(
+    parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserId.PathParameters & Paths.DeleteApiB2BV1UsersUserId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BV1UsersUserId.Responses.$200>
   /**
    * getApiB2BV1UsersUserIdPendingEmployeeInvites - permissions:<ul><li>user</li></ul>
    */
@@ -54957,6 +60872,94 @@ export interface OperationMethods {
     data?: Paths.PostApiB2BV1FilesSignUrls.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1FilesSignUrls.Responses.$200>
+  /**
+   * postApiB2BV1SalonsSalonIdCalendarEventsReservations - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+   */
+  'postApiB2BV1SalonsSalonIdCalendarEventsReservations'(
+    parameters?: Parameters<Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+   */
+  'patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
+  /**
+   * deleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+   */
+  'deleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId'(
+    parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+   */
+  'patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
+  /**
+   * getApiB2BV1SalonsSalonIdCalendarEvents - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+   */
+  'getApiB2BV1SalonsSalonIdCalendarEvents'(
+    parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.PathParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.Responses.$200>
+  /**
+   * postApiB2BV1SalonsSalonIdCalendarEvents - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+   */
+  'postApiB2BV1SalonsSalonIdCalendarEvents'(
+    parameters?: Parameters<Paths.PostApiB2BV1SalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BV1SalonsSalonIdCalendarEvents.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1SalonsSalonIdCalendarEvents.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1SalonsSalonIdCalendarEvents.Responses.$200>
+  /**
+   * getApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+   */
+  'getApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId'(
+    parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+   */
+  'patchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+  /**
+   * deleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+   */
+  'deleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId'(
+    parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+   */
+  'patchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+  /**
+   * deleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+   */
+  'deleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
+    parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
   /**
    * getApiB2BV1Salons - permissions:<ul><li>user: [PARTNER]</li></ul>
    */
@@ -55102,7 +61105,15 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.Responses.$200>
   /**
-   * getApiB2BV1Services - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li></ul>
+   * patchApiB2BV1SalonsSalonIdSettings - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+   */
+  'patchApiB2BV1SalonsSalonIdSettings'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdSettings.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdSettings.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdSettings.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdSettings.Responses.$200>
+  /**
+   * getApiB2BV1Services - permissions:<ul><li>user: [PARTNER]</li></ul>
    */
   'getApiB2BV1Services'(
     parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
@@ -55110,7 +61121,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
   /**
-   * getApiB2BV1ServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * getApiB2BV1ServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
    */
   'getApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -55118,7 +61129,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
   /**
-   * patchApiB2BV1ServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
+   * patchApiB2BV1ServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
    */
   'patchApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -55126,7 +61137,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
   /**
-   * deleteApiB2BV1ServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_DELETE]</li></ul>
+   * deleteApiB2BV1ServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_DELETE]</li></ul>
    */
   'deleteApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -55134,7 +61145,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
   /**
-   * postApiB2BV1ServicesCategoryServiceSuggest - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
+   * postApiB2BV1ServicesCategoryServiceSuggest - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
    */
   'postApiB2BV1ServicesCategoryServiceSuggest'(
     parameters?: Parameters<Paths.PostApiB2BV1ServicesCategoryServiceSuggest.HeaderParameters> | null,
@@ -55238,7 +61249,15 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdRole.Responses.$200>
   /**
-   * patchApiB2BV1EmployeesEmployeeIdServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, USER_ROLE_EDIT]</li></ul>
+   * patchApiB2BV1EmployeesEmployeeIdServices - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+   */
+  'patchApiB2BV1EmployeesEmployeeIdServices'(
+    parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdServices.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdServices.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1EmployeesEmployeeIdServices.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdServices.Responses.$200>
+  /**
+   * patchApiB2BV1EmployeesEmployeeIdServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
    */
   'patchApiB2BV1EmployeesEmployeeIdServicesServiceId'(
     parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
@@ -55256,6 +61275,16 @@ export interface OperationMethods {
 }
 
 export interface PathsDictionary {
+  ['/api/maintenance/notifications']: {
+    /**
+     * postApiMaintenanceNotifications - permissions: NO
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiMaintenanceNotifications.HeaderParameters> | null,
+      data?: Paths.PostApiMaintenanceNotifications.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiMaintenanceNotifications.Responses.$200>
+  }
   ['/api/b2b/admin/auth/login']: {
     /**
      * postApiB2BAdminAuthLogin - permissions: NO
@@ -55315,32 +61344,6 @@ export interface PathsDictionary {
       data?: Paths.PatchApiB2BAdminAuthChangePassword.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminAuthChangePassword.Responses.$200>
-  }
-  ['/api/b2b/admin/users/{userID}']: {
-    /**
-     * getApiB2BAdminUsersUserId - permissions: NO
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters & Paths.GetApiB2BAdminUsersUserId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
-    /**
-     * patchApiB2BAdminUsersUserId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_EDIT]</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
-    /**
-     * deleteApiB2BAdminUsersUserId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_DELETE]</li></ul>
-     */
-    'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserId.Responses.$200>
   }
   ['/api/b2b/admin/users/registration']: {
     /**
@@ -55716,32 +61719,6 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1AuthChangePassword.Responses.$200>
   }
-  ['/api/b2b/v1/users/{userID}']: {
-    /**
-     * getApiB2BV1UsersUserId - permissions: NO
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters & Paths.GetApiB2BV1UsersUserId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BV1UsersUserId.Responses.$200>
-    /**
-     * patchApiB2BV1UsersUserId - permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters & Paths.PatchApiB2BV1UsersUserId.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BV1UsersUserId.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
-    /**
-     * deleteApiB2BV1UsersUserId - permissions:<ul><li>user</li></ul>
-     */
-    'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserId.PathParameters & Paths.DeleteApiB2BV1UsersUserId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.DeleteApiB2BV1UsersUserId.Responses.$200>
-  }
   ['/api/b2b/v1/users/registration']: {
     /**
      * postApiB2BV1UsersRegistration - permissions: NO
@@ -55874,13 +61851,13 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/push-notifications/subscribe']: {
     /**
-     * postApiB2BV1PushNotificationsSubscribe - permissions: NO
+     * putApiB2BV1PushNotificationsSubscribe - permissions: NO
      */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BV1PushNotificationsSubscribe.HeaderParameters> | null,
-      data?: Paths.PostApiB2BV1PushNotificationsSubscribe.RequestBody,
+    'put'(
+      parameters?: Parameters<Paths.PutApiB2BV1PushNotificationsSubscribe.HeaderParameters> | null,
+      data?: Paths.PutApiB2BV1PushNotificationsSubscribe.RequestBody,
       config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BV1PushNotificationsSubscribe.Responses.$200>
+    ): OperationResponse<Paths.PutApiB2BV1PushNotificationsSubscribe.Responses.$200>
   }
   ['/api/b2b/v1/push-notifications/unsubscribe/{deviceID}']: {
     /**
@@ -55901,6 +61878,36 @@ export interface PathsDictionary {
       data?: Paths.PostApiB2BV1PartnerContactForm.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1PartnerContactForm.Responses.$200>
+  }
+  ['/api/b2b/v1/calendar-sync/ical/events']: {
+    /**
+     * getApiB2BV1CalendarSyncIcalEvents - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1CalendarSyncIcalEvents.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1CalendarSyncIcalEvents.Responses.$200>
+  }
+  ['/api/b2c/web/salons/{salonID}/calendar-events/reservations/available']: {
+    /**
+     * getApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.PathParameters & Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.QueryParameters & Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.Responses.$200>
+  }
+  ['/api/b2c/web/salons/{salonID}/calendar-events/reservations/']: {
+    /**
+     * postApiB2CWebSalonsSalonIdCalendarEventsReservations - permissions: NO
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2CWebSalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2CWebSalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
+      data?: Paths.PostApiB2CWebSalonsSalonIdCalendarEventsReservations.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2CWebSalonsSalonIdCalendarEventsReservations.Responses.$200>
   }
   ['/api/b2c/web/salons/']: {
     /**
@@ -55952,15 +61959,15 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CWebSalonsFilterCitiesPlaceId.Responses.$200>
   }
-  ['/api/b2c/web/salons/{seaSlugName}']: {
+  ['/api/b2c/web/salons/{seoSlugName}']: {
     /**
-     * getApiB2CWebSalonsSeaSlugName - permissions: NO
+     * getApiB2CWebSalonsSeoSlugName - permissions: NO
      */
     'get'(
-      parameters?: Parameters<Paths.GetApiB2CWebSalonsSeaSlugName.PathParameters & Paths.GetApiB2CWebSalonsSeaSlugName.HeaderParameters> | null,
+      parameters?: Parameters<Paths.GetApiB2CWebSalonsSeoSlugName.PathParameters & Paths.GetApiB2CWebSalonsSeoSlugName.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2CWebSalonsSeaSlugName.Responses.$200>
+    ): OperationResponse<Paths.GetApiB2CWebSalonsSeoSlugName.Responses.$200>
   }
   ['/api/b2c/web/salons/{salonID}/services']: {
     /**
@@ -56099,6 +62106,66 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CWebEnumsCountries.Responses.$200>
+  }
+  ['/api/b2c/web/services/{serviceID}']: {
+    /**
+     * getApiB2CWebServicesServiceId - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebServicesServiceId.PathParameters & Paths.GetApiB2CWebServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebServicesServiceId.Responses.$200>
+  }
+  ['/api/b2c/web/calendar-events/reservations/']: {
+    /**
+     * getApiB2CWebCalendarEventsReservations - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebCalendarEventsReservations.QueryParameters & Paths.GetApiB2CWebCalendarEventsReservations.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebCalendarEventsReservations.Responses.$200>
+  }
+  ['/api/b2c/web/calendar-events/reservations/{calendarEventID}']: {
+    /**
+     * getApiB2CWebCalendarEventsReservationsCalendarEventId - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.PathParameters & Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.Responses.$200>
+  }
+  ['/api/b2c/web/calendar-events/reservations/{calendarEventID}/cancel']: {
+    /**
+     * patchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel - permissions: NO
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.PathParameters & Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.HeaderParameters> | null,
+      data?: Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/{salonID}/calendar-events/reservations/available']: {
+    /**
+     * getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.PathParameters & Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/{salonID}/calendar-events/reservations/']: {
+    /**
+     * postApiB2CV1SalonsSalonIdCalendarEventsReservations - permissions: NO
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2CV1SalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2CV1SalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
+      data?: Paths.PostApiB2CV1SalonsSalonIdCalendarEventsReservations.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2CV1SalonsSalonIdCalendarEventsReservations.Responses.$200>
   }
   ['/api/b2c/v1/salons/']: {
     /**
@@ -56288,6 +62355,76 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1EnumsLanguagesLanguageId.Responses.$200>
   }
+  ['/api/b2c/v1/enums/countries/']: {
+    /**
+     * getApiB2CV1EnumsCountries - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1EnumsCountries.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CV1EnumsCountries.Responses.$200>
+  }
+  ['/api/b2c/v1/push-notifications/subscribe']: {
+    /**
+     * putApiB2CV1PushNotificationsSubscribe - permissions: NO
+     */
+    'put'(
+      parameters?: Parameters<Paths.PutApiB2CV1PushNotificationsSubscribe.HeaderParameters> | null,
+      data?: Paths.PutApiB2CV1PushNotificationsSubscribe.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PutApiB2CV1PushNotificationsSubscribe.Responses.$200>
+  }
+  ['/api/b2c/v1/push-notifications/unsubscribe/{deviceID}']: {
+    /**
+     * deleteApiB2CV1PushNotificationsUnsubscribeDeviceId - permissions: NO
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2CV1PushNotificationsUnsubscribeDeviceId.PathParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2CV1PushNotificationsUnsubscribeDeviceId.Responses.$200>
+  }
+  ['/api/b2c/v1/services/{serviceID}']: {
+    /**
+     * getApiB2CV1ServicesServiceId - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1ServicesServiceId.PathParameters & Paths.GetApiB2CV1ServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CV1ServicesServiceId.Responses.$200>
+  }
+  ['/api/b2c/v1/calendar-events/reservations/']: {
+    /**
+     * getApiB2CV1CalendarEventsReservations - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1CalendarEventsReservations.QueryParameters & Paths.GetApiB2CV1CalendarEventsReservations.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CV1CalendarEventsReservations.Responses.$200>
+  }
+  ['/api/b2c/v1/calendar-events/reservations/{calendarEventID}']: {
+    /**
+     * getApiB2CV1CalendarEventsReservationsCalendarEventId - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.PathParameters & Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.Responses.$200>
+  }
+  ['/api/b2c/v1/calendar-events/reservations/{calendarEventID}/cancel']: {
+    /**
+     * patchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel - permissions: NO
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.PathParameters & Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.HeaderParameters> | null,
+      data?: Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.Responses.$200>
+  }
   ['/api/maintenance/health']: {
     /**
      * getApiMaintenanceHealth - permissions: NO
@@ -56325,6 +62462,32 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminUsersNotinoUsers.Responses.$200>
+  }
+  ['/api/b2b/admin/users/{userID}']: {
+    /**
+     * getApiB2BAdminUsersUserId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters & Paths.GetApiB2BAdminUsersUserId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
+    /**
+     * patchApiB2BAdminUsersUserId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_EDIT]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
+    /**
+     * deleteApiB2BAdminUsersUserId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_DELETE]</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserId.Responses.$200>
   }
   ['/api/b2b/admin/users/{userID}/pending-employee-invites']: {
     /**
@@ -56385,6 +62548,106 @@ export interface PathsDictionary {
       data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/reservations/']: {
+    /**
+     * postApiB2BAdminSalonsSalonIdCalendarEventsReservations - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_CREATE]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
+    /**
+     * deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdCalendarEvents - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
+    /**
+     * postApiB2BAdminSalonsSalonIdCalendarEvents - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_CREATE]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_READ]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+    /**
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+    /**
+     * deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+    /**
+     * deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
   }
   ['/api/b2b/admin/salons/']: {
     /**
@@ -56590,6 +62853,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.Responses.$200>
   }
+  ['/api/b2b/admin/salons/{salonID}/settings']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdSettings - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdSettings.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdSettings.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdSettings.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdSettings.Responses.$200>
+  }
   ['/api/b2b/admin/salons/{salonID}/rejected-suggestions']: {
     /**
      * deleteApiB2BAdminSalonsSalonIdRejectedSuggestions - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
@@ -56756,7 +63029,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/employees/{employeeID}/services/{serviceID}']: {
     /**
-     * patchApiB2BAdminEmployeesEmployeeIdServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, USER_ROLE_EDIT]</li></ul>
+     * patchApiB2BAdminEmployeesEmployeeIdServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
@@ -56779,7 +63052,7 @@ export interface PathsDictionary {
      * getApiB2BAdminNotinoDashboard - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
      */
     'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboard.HeaderParameters> | null,
+      parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboard.QueryParameters & Paths.GetApiB2BAdminNotinoDashboard.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboard.Responses.$200>
@@ -56794,6 +63067,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.Responses.$200>
   }
+  ['/api/b2b/admin/calendar-sync/sync-token']: {
+    /**
+     * postApiB2BAdminCalendarSyncSyncToken - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminCalendarSyncSyncToken.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminCalendarSyncSyncToken.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminCalendarSyncSyncToken.Responses.$200>
+  }
   ['/api/b2b/v1/users/partners']: {
     /**
      * getApiB2BV1UsersPartners - permissions:<ul><li>user: [NOTINO_ADMIN, LOGIN_AS_PARTNER]</li></ul>
@@ -56803,6 +63086,32 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1UsersPartners.Responses.$200>
+  }
+  ['/api/b2b/v1/users/{userID}']: {
+    /**
+     * getApiB2BV1UsersUserId - permissions:<ul><li>user</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters & Paths.GetApiB2BV1UsersUserId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1UsersUserId.Responses.$200>
+    /**
+     * patchApiB2BV1UsersUserId - permissions:<ul><li>user</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters & Paths.PatchApiB2BV1UsersUserId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1UsersUserId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
+    /**
+     * deleteApiB2BV1UsersUserId - permissions:<ul><li>user</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserId.PathParameters & Paths.DeleteApiB2BV1UsersUserId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BV1UsersUserId.Responses.$200>
   }
   ['/api/b2b/v1/users/{userID}/pending-employee-invites']: {
     /**
@@ -56823,6 +63132,106 @@ export interface PathsDictionary {
       data?: Paths.PostApiB2BV1FilesSignUrls.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1FilesSignUrls.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/calendar-events/reservations/']: {
+    /**
+     * postApiB2BV1SalonsSalonIdCalendarEventsReservations - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/calendar-events/reservations/{calendarEventID}']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
+    /**
+     * deleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/calendar-events/']: {
+    /**
+     * getApiB2BV1SalonsSalonIdCalendarEvents - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.PathParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.Responses.$200>
+    /**
+     * postApiB2BV1SalonsSalonIdCalendarEvents - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1SalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BV1SalonsSalonIdCalendarEvents.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1SalonsSalonIdCalendarEvents.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BV1SalonsSalonIdCalendarEvents.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/calendar-events/{calendarEventID}']: {
+    /**
+     * getApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+    /**
+     * patchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+    /**
+     * deleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+    /**
+     * deleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
   }
   ['/api/b2b/v1/salons/']: {
     /**
@@ -56998,9 +63407,19 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.Responses.$200>
   }
+  ['/api/b2b/v1/salons/{salonID}/settings']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdSettings - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdSettings.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdSettings.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdSettings.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdSettings.Responses.$200>
+  }
   ['/api/b2b/v1/services/']: {
     /**
-     * getApiB2BV1Services - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li></ul>
+     * getApiB2BV1Services - permissions:<ul><li>user: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
@@ -57010,7 +63429,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/services/{serviceID}']: {
     /**
-     * getApiB2BV1ServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * getApiB2BV1ServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -57018,7 +63437,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
     /**
-     * patchApiB2BV1ServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
+     * patchApiB2BV1ServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -57026,7 +63445,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
     /**
-     * deleteApiB2BV1ServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_DELETE]</li></ul>
+     * deleteApiB2BV1ServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_DELETE]</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -57036,7 +63455,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/services/category-service-suggest']: {
     /**
-     * postApiB2BV1ServicesCategoryServiceSuggest - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
+     * postApiB2BV1ServicesCategoryServiceSuggest - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1ServicesCategoryServiceSuggest.HeaderParameters> | null,
@@ -57152,9 +63571,19 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdRole.Responses.$200>
   }
+  ['/api/b2b/v1/employees/{employeeID}/services']: {
+    /**
+     * patchApiB2BV1EmployeesEmployeeIdServices - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdServices.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdServices.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1EmployeesEmployeeIdServices.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdServices.Responses.$200>
+  }
   ['/api/b2b/v1/employees/{employeeID}/services/{serviceID}']: {
     /**
-     * patchApiB2BV1EmployeesEmployeeIdServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, USER_ROLE_EDIT]</li></ul>
+     * patchApiB2BV1EmployeesEmployeeIdServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,

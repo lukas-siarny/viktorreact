@@ -22,6 +22,8 @@ import categoryParamsReducer from './categoryParams/categoryParamsReducer'
 import languagesReducer from './languages/languagesReducer'
 import dashboardReducer from './dashboard/dashboardReducer'
 import specialistContactsReducer from './specialistContacts/specialistContactsReducer'
+import calendarReducer from './calendar/calendarReducer'
+import helperSettingsReducer from './helperSettings/helperSettingsReducer'
 
 export const REDUCER_KEYS = {
 	FORMS: 'FORMS',
@@ -39,7 +41,9 @@ export const REDUCER_KEYS = {
 	COSMETICS: 'COSMETICS',
 	CATEGORY_PARAMETERS: 'CATEGORY_PARAMETERS',
 	LANGUAGES: 'LANGUAGES',
-	DASHBOARD: 'DASHBOARD'
+	DASHBOARD: 'DASHBOARD',
+	CALENDAR: 'CALENDAR',
+	HELPER_SETTINGS: 'HELPER_SETTINGS'
 }
 
 const rootReducer = combineReducers({
@@ -154,6 +158,20 @@ const rootReducer = combineReducers({
 			storage: storageSession
 		},
 		dashboardReducer
+	),
+	calendar: persistReducer(
+		{
+			key: REDUCER_KEYS.CALENDAR,
+			storage: storageSession
+		},
+		calendarReducer
+	),
+	helperSettings: persistReducer(
+		{
+			key: REDUCER_KEYS.HELPER_SETTINGS,
+			storage: storageSession
+		},
+		helperSettingsReducer
 	)
 })
 

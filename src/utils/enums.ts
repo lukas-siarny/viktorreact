@@ -1,6 +1,7 @@
-import { orderBy } from 'lodash'
+import { filter, orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
+import { FormatterInput } from '@fullcalendar/react'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
@@ -49,6 +50,14 @@ export enum MSG_TYPE {
 export enum FIELD_MODE {
 	INPUT = 'INPUT',
 	FILTER = 'FILTER'
+}
+
+export enum REQUEST_TYPE {
+	DELETE = 'DELETE',
+	PATCH = 'PATCH',
+	PUT = 'PUT',
+	GET = 'GET',
+	POST = 'POST'
 }
 
 export enum FILTER_ENTITY {
@@ -106,6 +115,7 @@ export enum FORM {
 	ROLE_FORM = 'ROLE_FORM',
 	ADMIN_CREATE_USER = 'ADMIN_CREATE_USER',
 	ADMIN_UPDATE_USER = 'ADMIN_UPDATE_USER',
+	EDIT_USER_ROLE = 'EDIT_USER_ROLE',
 	SERVICE_FORM = 'SERVICE_FORM',
 	REQUEST_NEW_SERVICE_FORM = 'REQUEST_NEW_SERVICE_FORM',
 	CUSTOMERS_FILTER = 'CUSTOMERS_FILTER',
@@ -128,7 +138,13 @@ export enum FORM {
 	SPECIALIST_CONTACT_FILTER = 'SPECIALIST_CONTACT_FILTER',
 	SALON_BILLING_INFO = 'SALON_BILLING_INFO',
 	FILTER_REJECTED_SUGGESTIONS = 'FILTER_REJECTED_SUGGESTIONS',
-	EDIT_USER_ROLE = 'EDIT_USER_ROLE'
+	CALENDAR_FILTER = 'CALENDAR_FILTER',
+	CALENDAR_RESERVATION_FORM = 'CALENDAR_RESERVATION_FORM',
+	CALENDAR_EMPLOYEE_SHIFT_FORM = 'CALENDAR_EMPLOYEE_SHIFT_FORM',
+	CALENDAR_EMPLOYEE_TIME_OFF_FORM = 'CALENDAR_EMPLOYEE_TIME_OFF_FORM',
+	CALENDAR_EMPLOYEE_BREAK_FORM = 'CALENDAR_EMPLOYEE_BREAK_FORM',
+	CONFIRM_BULK_FORM = 'CONFIRM_BULK_FORM',
+	EVENT_TYPE_FILTER_FORM = 'EVENT_TYPE_FILTER_FORM'
 }
 
 // System permissions
@@ -158,7 +174,10 @@ export enum SALON_PERMISSION {
 	EMPLOYEE_CREATE = 'EMPLOYEE_CREATE',
 	EMPLOYEE_UPDATE = 'EMPLOYEE_UPDATE',
 	EMPLOYEE_DELETE = 'EMPLOYEE_DELETE',
-	USER_ROLE_EDIT = 'USER_ROLE_EDIT'
+	USER_ROLE_EDIT = 'USER_ROLE_EDIT',
+	CALENDAR_EVENT_CREATE = 'CALENDAR_EVENT_CREATE',
+	CALENDAR_EVENT_UPDATE = 'CALENDAR_EVENT_UPDATE',
+	CALENDAR_EVENT_DELETE = 'CALENDAR_EVENT_DELETE'
 }
 
 export const ADMIN_PERMISSIONS: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
@@ -217,7 +236,8 @@ export enum PAGE {
 	SERVICES_SETTINGS = 'SERVICES_SETTINGS',
 	PENDING_INVITES = 'PENDING_INVITES',
 	SPECIALIST_CONTACTS = 'SPECIALIST_CONTACTS',
-	BILLING_INFO = 'BILLING_INFO'
+	BILLING_INFO = 'BILLING_INFO',
+	CALENDAR = 'CALENDAR'
 }
 
 export enum PARAMETER_TYPE {
@@ -231,13 +251,22 @@ export const DEFAULT_DATE_INIT_FORMAT = 'YYYY-MM-DD'
 
 export const DEFAULT_TIME_FORMAT = 'HH:mm'
 
+export const DEFAULT_TIME_FORMAT_MINUTES = 'mm'
+
+export const DEFAULT_TIME_FORMAT_HOURS = 'HH'
+
 export const DEFAULT_DATE_FORMAT = 'DD.MM.YYYY'
+
+export const DEFAULT_DAYJS_FORMAT = 'MM.DD.YYYY'
 
 export const DEFAULT_DATE_WITH_TIME_FORMAT = 'DD.MM.YYYY HH:mm'
 
 export const EN_DATE_WITH_TIME_FORMAT = 'MMM DD YYYY HH:mm'
 
 export const EN_DATE_WITHOUT_TIME_FORMAT = 'DD.MM.YYYY'
+
+export const DATE_TIME_PARSER_DATE_FORMAT = 'YYYY-MM-DD'
+export const DATE_TIME_PARSER_FORMAT = `${DATE_TIME_PARSER_DATE_FORMAT}:HH:mm`
 
 export const INVALID_DATE_FORMAT = 'INVALID_DATE_FORMAT'
 
@@ -573,6 +602,232 @@ export enum TIME_STATS_SOURCE_TYPE {
 	YEAR = 'YEAR'
 }
 
+// CALENDAR ENUMS
+export const CALENDAR_COMMON_SETTINGS = {
+	LICENSE_KEY: 'CC-Attribution-NonCommercial-NoDerivatives',
+	TIME_ZONE: 'local',
+	TIME_FORMAT: {
+		hour: '2-digit',
+		minute: '2-digit',
+		separator: '-',
+		hour12: false
+	} as FormatterInput,
+	SCROLL_TIME: '08:00:00',
+	SLOT_DURATION: '00:15:00',
+	EVENT_MIN_DURATION: 15, // znaci, aky najuzzsi event zobrazime v kalendari (v minutach) (teda ak bude mat event 10 minut, zobrazi v kalendari ako 15 minutovy - jeho realny casovy rozsah to ale neovplyvni, jedna sa len o vizualne zobrazenie)
+	SLOT_LABEL_INTERVAL: '01:00:00',
+	FIXED_MIRROR_PARENT: document.body,
+	EVENT_CONSTRAINT: {
+		startTime: '00:00',
+		endTime: '23:59'
+	}
+}
+
+export enum CALENDAR_VIEW {
+	// eslint-disable-next-line @typescript-eslint/no-shadow
+	DAY = 'DAY',
+	WEEK = 'WEEK' /* ,
+	MONTH = 'MONTH' */
+}
+
+export enum CALENDAR_EVENT_TYPE {
+	RESERVATION = 'RESERVATION',
+	EMPLOYEE_SHIFT = 'EMPLOYEE_SHIFT',
+	EMPLOYEE_TIME_OFF = 'EMPLOYEE_TIME_OFF',
+	EMPLOYEE_BREAK = 'EMPLOYEE_BREAK'
+}
+
+export enum CALENDAR_EVENTS_VIEW_TYPE {
+	RESERVATION = 'RESERVATION',
+	EMPLOYEE_SHIFT_TIME_OFF = 'EMPLOYEE_SHIFT_TIME_OFF'
+}
+
+export enum CALENDAR_DATE_FORMAT {
+	QUERY = 'YYYY-MM-DD',
+	HEADER_DAY = 'ddd, D MMM YY',
+	HEADER_WEEK_START = 'D',
+	HEADER_WEEK_END = 'D MMM YY',
+	HEADER_WEEK_START_TURN_OF_THE_MONTH = 'D MMM',
+	HEADER_WEEK_END_TURN_OF_THE_MONTH = 'D MMM YY',
+	HEADER_MONTH = 'MMMM YY',
+	TIME = 'HH:mm'
+}
+
+export enum CALENDAR_SET_NEW_DATE {
+	FIND_START_ADD = 'ADD',
+	FIND_START_SUBSTRACT = 'SUBTRACT',
+	FIND_START = 'FIND_START',
+	DEFAULT = 'DEFAULT'
+}
+
+export enum ENDS_EVENT {
+	WEEK = 'WEEK',
+	MONTH = 'MONTH',
+	THREE_MONTHS = 'THREE_MONTHS',
+	SIX_MONTHS = 'SIX_MONTHS',
+	YEAR = 'YEAR'
+}
+
+export enum EVERY_REPEAT {
+	ONE_WEEK = 'ONE_WEEK',
+	TWO_WEEKS = 'TWO_WEEKS'
+}
+
+export const EVERY_REPEAT_OPTIONS = () => [
+	{
+		key: EVERY_REPEAT.ONE_WEEK,
+		label: i18next.t('loc:Týždeň')
+	},
+	{
+		key: EVERY_REPEAT.TWO_WEEKS,
+		label: i18next.t('loc:Druhý týždeň')
+	}
+]
+
+export const ENDS_EVENT_OPTIONS = () => [
+	{
+		key: ENDS_EVENT.WEEK,
+		label: i18next.t('loc:Týždeň')
+	},
+	{
+		key: ENDS_EVENT.MONTH,
+		label: i18next.t('loc:Mesiac')
+	},
+	{
+		key: ENDS_EVENT.THREE_MONTHS,
+		label: i18next.t('loc:Tri mesiace')
+	},
+	{
+		key: ENDS_EVENT.SIX_MONTHS,
+		label: i18next.t('loc:Šesť mesiacov')
+	},
+	{
+		key: ENDS_EVENT.YEAR,
+		label: i18next.t('loc:Rok')
+	}
+]
+
+export const EVENT_NAMES = (eventType: CALENDAR_EVENT_TYPE) => {
+	switch (eventType) {
+		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
+			return i18next.t('loc:prestávku')
+		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
+			return i18next.t('loc:zmenu')
+
+		case CALENDAR_EVENT_TYPE.RESERVATION:
+			return i18next.t('loc:rezerváciu')
+
+		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
+			return i18next.t('loc:dovolenku')
+		default:
+			return ''
+	}
+}
+
+export const EVENT_TYPE_OPTIONS = (eventType?: CALENDAR_EVENTS_VIEW_TYPE) => {
+	const options = [
+		{
+			key: CALENDAR_EVENT_TYPE.RESERVATION,
+			label: i18next.t('loc:Rezervácia')
+		},
+		{
+			key: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
+			label: i18next.t('loc:Pracovná zmena')
+		},
+		{
+			key: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
+			label: i18next.t('loc:Dovolenka')
+		},
+		{
+			key: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
+			label: i18next.t('loc:Prestávka')
+		}
+	]
+	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
+		// rezervacia a break
+		return filter(options, (item) => item.key === CALENDAR_EVENT_TYPE.RESERVATION || item.key === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK)
+	}
+	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
+		// shift, break a vacation
+		return filter(options, (item) => item.key !== CALENDAR_EVENT_TYPE.RESERVATION)
+	}
+	// vsetky optiony
+	return options
+}
+
+export const SHORTCUT_DAYS_OPTIONS = (length = 2) => [
+	{ label: i18next.t('loc:Pondelok').substring(0, length), value: DAY.MONDAY },
+	{ label: i18next.t('loc:Utorok').substring(0, length), value: DAY.TUESDAY },
+	{ label: i18next.t('loc:Streda').substring(0, length), value: DAY.WEDNESDAY },
+	{ label: i18next.t('loc:Štvrtok').substring(0, length), value: DAY.THURSDAY },
+	{ label: i18next.t('loc:Piatok').substring(0, length), value: DAY.FRIDAY },
+	{ label: i18next.t('loc:Sobota').substring(0, length), value: DAY.SATURDAY },
+	{ label: i18next.t('loc:Nedeľa').substring(0, length), value: DAY.SUNDAY }
+]
+
+export enum CALENDAR_EVENTS_KEYS {
+	EVENTS = 'events',
+	RESERVATIONS = 'reservations',
+	SHIFTS_TIME_OFFS = 'shiftsTimeOffs'
+}
+
+export enum CONFIRM_BULK {
+	BULK = 'BULK',
+	SINGLE_RECORD = 'SINGLE_RECORD'
+}
+
+export enum RESERVATION_STATE {
+	PENDING = 'PENDING',
+	APPROVED = 'APPROVED',
+	DECLINED = 'DECLINED',
+	CANCEL_BY_SALON = 'CANCEL_BY_SALON',
+	CANCEL_BY_CUSTOMER = 'CANCEL_BY_CUSTOMER',
+	REALIZED = 'REALIZED',
+	NOT_REALIZED = 'NOT_REALIZED'
+}
+
+export enum RESERVATION_SOURCE_TYPE {
+	ONLINE = 'ONLINE',
+	OFFLINE = 'OFFLINE'
+}
+
+export enum RESERVATION_ASSIGNMENT_TYPE {
+	SYSTEM = 'SYSTEM',
+	USER = 'USER'
+}
+
+export enum RESERVATION_PAYMENT_METHOD {
+	CASH = 'CASH',
+	CARD = 'CARD',
+	OTHER = 'OTHER'
+}
+
+export const CALENDAR_DEBOUNCE_DELAY = 300 // in ms
+
+export const CREATE_EVENT_PERMISSIONS = [...ADMIN_PERMISSIONS, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CALENDAR_EVENT_CREATE]
+export const UPDATE_EVENT_PERMISSIONS = [...ADMIN_PERMISSIONS, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CALENDAR_EVENT_UPDATE]
+export const DELETE_EVENT_PERMISSIONS = [...ADMIN_PERMISSIONS, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CALENDAR_EVENT_DELETE]
+
+export const getDayNameFromNumber = (day: number) => {
+	switch (day) {
+		case 0: // prvy den dayjs.day() -> nedela
+			return DAY.SUNDAY
+		case 1:
+			return DAY.MONDAY
+		case 2:
+			return DAY.TUESDAY
+		case 3:
+			return DAY.WEDNESDAY
+		case 4:
+			return DAY.THURSDAY
+		case 5:
+			return DAY.FRIDAY
+		case 6:
+			return DAY.SATURDAY
+		default:
+			return null
+	}
+}
 /**
  * @returns localized texts for Sentry report dialog and common EN texts for result view
  */

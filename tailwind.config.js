@@ -58,7 +58,7 @@ module.exports = {
 			source: {
 				import: colors.cyan[700],
 				notino: '#DC0069', // notino.pink
-				partner: colors.fuchsia[700] 
+				partner: colors.fuchsia[700]
 			},
 			// Tailwind colors
 			black: colors.black,
@@ -93,8 +93,10 @@ module.exports = {
 			10: '2.5rem',
 			11: '2.75rem',
 			12: '3rem',
+			13: '3.25rem',
 			14: '3.5rem',
 			16: '4rem',
+			18: '4.5rem',
 			20: '5rem',
 			21: '5.25rem',
 			24: '6rem',

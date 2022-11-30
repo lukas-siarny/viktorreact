@@ -11,7 +11,7 @@ type UserAvatarProps = AvatarProps & {
 }
 
 const UserAvatar = (props: UserAvatarProps) => {
-	const { alt, gap, icon, shape, size, src, srcSet, draggable, crossOrigin, onError, text, className, fallBackSrc } = props
+	const { alt, gap, icon, shape, size, src, srcSet, draggable, crossOrigin, onError, text, className, fallBackSrc, style } = props
 
 	return (
 		<>
@@ -28,11 +28,23 @@ const UserAvatar = (props: UserAvatarProps) => {
 					draggable={draggable}
 					crossOrigin={crossOrigin}
 					onError={onError}
+					style={style}
 				>
 					<img src={fallBackSrc} alt={'avatar'} />
 				</Avatar>
 			) : (
-				<Avatar className={className} alt={alt} gap={gap} icon={icon} shape={shape} size={size} draggable={draggable} crossOrigin={crossOrigin} onError={onError}>
+				<Avatar
+					className={className}
+					alt={alt}
+					gap={gap}
+					icon={icon}
+					shape={shape}
+					size={size}
+					draggable={draggable}
+					crossOrigin={crossOrigin}
+					onError={onError}
+					style={style}
+				>
 					{text}
 				</Avatar>
 			)}

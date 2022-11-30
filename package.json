@@ -1,6 +1,6 @@
 {
   "name": "notino_b2b_web",
-  "version": "1.2.0",
+  "version": "2.0.0-rc.2",
   "main": "src/index.ts",
   "repository": "git@bitbucket.org:GoodRequest/notino_b2b_web.git",
   "author": "Jan Cvencek <jan.cvencek@goodrequest.com>",
@@ -32,7 +32,7 @@
     "type-check": "tsc --noEmit",
     "normalize-apidoc": "node scripts/normalizeApidoc.js",
     "typegen": "typegen apidoc/apidoc-normalize.json > src/types/api.d.ts",
-    "download:apidoc": "cross-env APIDOC=https://gr-dev.notino.dev/api/doc/data.json node scripts/downloadApidoc.js",
+    "download:apidoc": "cross-env APIDOC=https://notino-admin.goodrequest.dev/api/doc/data.json node scripts/downloadApidoc.js",
     "generate-ts-api": "npm run download:apidoc && npm run normalize-apidoc && npm run typegen",
     "translations-csv-to-json": "npx convert-csv-to-json GoodRequest/i18nextJsonToCsv",
     "translations-json-to-csv": "npx convert-json-to-csv GoodRequest/i18nextJsonToCsv",
@@ -42,6 +42,13 @@
     "generate-runtime-env": "cross-env env-cmd runtime-env-cra --config-name=./public/runtime-env.js --env-file=.env.template"
   },
   "dependencies": {
+    "@fullcalendar/daygrid": "5.11.3",
+    "@fullcalendar/interaction": "5.11.3",
+    "@fullcalendar/react": "5.11.2",
+    "@fullcalendar/resource-timegrid": "5.11.3",
+    "@fullcalendar/resource-timeline": "5.11.3",
+    "@fullcalendar/scrollgrid": "5.11.3",
+    "@react-hook/resize-observer": "1.2.6",
     "@sentry/cli": "1.71.0",
     "@sentry/react": "6.19.6",
     "@sentry/tracing": "6.19.6",

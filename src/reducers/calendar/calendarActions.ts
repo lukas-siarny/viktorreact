@@ -77,7 +77,7 @@ export const getCalendarEvents =
 
 			const queryParamsEditedForRequest = {
 				salonID: queryParams.salonID,
-				categoryIDs: queryParams.categoryIDs?.map((shortenedId) => (shortenedId ? getFullCategoryId(shortenedId) : undefined)),
+				categoryIDs: queryParams.categoryIDs?.map((shortenedId) => getFullCategoryId(shortenedId || undefined)),
 				employeeIDs: queryParams.employeeIDs,
 				eventTypes: queryParams.eventTypes,
 				dateFrom: start,

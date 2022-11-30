@@ -14,7 +14,7 @@ import { CALENDAR_EVENTS_KEYS, CALENDAR_VIEW, CALENDAR_EVENT_TYPE, DATE_TIME_PAR
 // utils
 import { getReq } from '../../utils/request'
 import { getSelectedDateRange } from '../../pages/Calendar/calendarHelpers'
-import { getDateTime, getFullCategoryId, normalizeQueryParams } from '../../utils/helper'
+import { getDateTime, normalizeQueryParams } from '../../utils/helper'
 
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
 
@@ -77,7 +77,7 @@ export const getCalendarEvents =
 
 			const queryParamsEditedForRequest = {
 				salonID: queryParams.salonID,
-				categoryIDs: queryParams.categoryIDs?.map((shortenedId) => getFullCategoryId(shortenedId || undefined)),
+				categoryIDs: queryParams.categoryIDs,
 				employeeIDs: queryParams.employeeIDs,
 				eventTypes: queryParams.eventTypes,
 				dateFrom: start,

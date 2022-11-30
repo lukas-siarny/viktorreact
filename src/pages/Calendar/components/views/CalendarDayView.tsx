@@ -71,8 +71,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees),
 			[
 				{
-					start: '2022-11-28T19:30:00.000Z',
-					end: '2022-11-28T21:45:00.000Z',
+					start: '2022-11-29T19:30:00.000Z',
+					end: '2022-11-29T21:45:00.000Z',
 					allDay: false,
 					resourceId: '6e93336d-624e-4fcb-9726-d9ba396db64c',
 					extendedProps: {
@@ -82,8 +82,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 					}
 				},
 				{
-					start: '2022-11-28T07:15:00.000Z',
-					end: '2022-11-28T10:30:00.000Z',
+					start: '2022-11-29T07:15:00.000Z',
+					end: '2022-11-29T10:30:00.000Z',
 					allDay: false,
 					resourceId: '70b4c2aa-9c5f-4d8f-8663-c002d00de1bb',
 					extendedProps: {
@@ -93,8 +93,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 					}
 				},
 				{
-					start: '2022-11-28T07:45:00.000Z',
-					end: '2022-11-28T10:15:00.000Z',
+					start: '2022-11-29T07:45:00.000Z',
+					end: '2022-11-29T10:15:00.000Z',
 					allDay: false,
 					resourceId: '212a96c5-d012-4f13-bcb8-d5ab923e83c4',
 					extendedProps: {
@@ -108,23 +108,10 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		[selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees]
 	)
 
-	// {
-	// 	"start": "2022-11-28T19:30:00.000Z",
-	// 	"end": "2022-11-28T21:45:00.000Z",
-	// 	"allDay": false,
-	// 	"resourceId": "6e93336d-624e-4fcb-9726-d9ba396db64c",
-	// 	"extendedProps": {
-	// 		"eventData": {
-	// 			"eventType": "RESERVATION"
-	// 		}
-	// 	}
-	// }
-
 	const resources = useMemo(() => composeDayViewResources(shiftsTimeOffs, employees), [shiftsTimeOffs, employees])
 
 	const handleNewEvent = (event: DateSelectArg) => {
 		if (event.resource) {
-			console.log('🚀 ~ file: CalendarDayView.tsx ~ line 81 ~ handleNewEvent ~ event', event)
 			// eslint-disable-next-line no-underscore-dangle
 			const { employee } = event.resource._resource.extendedProps
 

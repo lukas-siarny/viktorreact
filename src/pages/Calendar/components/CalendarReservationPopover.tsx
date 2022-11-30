@@ -211,7 +211,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 						<React.Fragment key={note.key}>
 							<Divider className={'m-0'} />
 							<section className={'py-4'}>
-								<div className={'note flex break-all text-sm leading-4 break-all'}>
+								<div className={'note flex break-all text-sm leading-4'}>
 									<Col flex={'32px'} className={'flex justify-center'}>
 										<NoteIcon className={'shrink-0 text-notino-grayDark'} />
 									</Col>
@@ -256,19 +256,6 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 		noteFromB2CCustomer,
 		originalEventData
 	} = props
-
-	useEffect(() => {
-		if (isOpen) {
-			console.log('Popover is open', reservationData)
-		}
-
-		return () => {
-			if (isOpen) {
-				console.log('🚀 ~ file: CalendarReservationPopover.tsx ~ line 267 ~ return ~ reservationData', reservationData)
-				console.log('Component will unmount')
-			}
-		}
-	}, [isOpen, reservationData])
 
 	const { id } = originalEventData || {}
 

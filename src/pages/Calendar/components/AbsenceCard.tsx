@@ -35,11 +35,15 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 		onEditEvent,
 		originalEventData,
 		backgroundColor,
-		isBulkEvent
+		isBulkEvent,
+		isPlaceholder,
+		isEdit
 	} = props
 
 	const duration = parseTimeFromMinutes(diff)
 	const [t] = useTranslation()
+
+	const employeeColorIndicator = <span className={'color'} style={{ backgroundColor: isPlaceholder ? undefined : backgroundColor }} />
 
 	return (
 		<div
@@ -55,11 +59,13 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 				'min-15': Math.abs(diff) <= 15,
 				'min-30': Math.abs(diff) <= 30 && Math.abs(diff) > 15,
 				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
-				'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45
+				'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
+				placeholder: isPlaceholder,
+				edit: isEdit || isPlaceholder
 			})}
 			onClick={() => {
 				if (originalEventData?.id) {
-					onEditEvent(originalEventData.id, eventType)
+					onEditEvent(eventType, originalEventData.id)
 				}
 			}}
 		>
@@ -70,7 +76,7 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 							<div className={'event-content'}>
 								<div className={'sticky-container'}>
 									<div className={'event-info'}>
-										<span className={'color'} style={{ backgroundColor }} />
+										{employeeColorIndicator}
 										{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF && <AbsenceIcon className={'icon'} />}
 										{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <BreakIcon className={'icon'} />}
 										{eventType !== CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <span className={'time'}>{timeText}</span>}
@@ -86,7 +92,7 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 							<div className={'event-content'}>
 								<div className={'event-info'}>
 									<div className={'flex items-center gap-1 min-w-0'}>
-										<span className={'color'} style={{ backgroundColor }} />
+										{employeeColorIndicator}
 										{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF && <AbsenceIcon className={'icon'} />}
 										{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <BreakIcon className={'icon'} />}
 										{eventType !== CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && (

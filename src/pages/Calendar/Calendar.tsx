@@ -552,10 +552,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					...tempValues,
 					customRepeatOptions
 				}
-				await handleSubmitEvent(data as ICalendarEventForm)
+				await handleSubmitEvent(data as ICalendarEventForm, visibleBulkModal.revertEvent)
 			} else {
 				// SINGLE edit - tempvalues z drag and drop / resize
-				await handleSubmitEvent(tempValues as ICalendarEventForm)
+				await handleSubmitEvent(tempValues as ICalendarEventForm, visibleBulkModal.revertEvent)
 			}
 			// DELETE
 		} else {
@@ -633,11 +633,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 								employeeIDs: getEmployeeIDs(employees?.options)
 							})
 						}}
-						onEditEvent={(eventId: string, eventType: CALENDAR_EVENT_TYPE) => {
+						onEditEvent={(eventType: CALENDAR_EVENT_TYPE, eventId: string) => {
 							setQuery({
+								...query,
 								eventId,
 								sidebarView: eventType
 							})
+							if (query.view === CALENDAR_VIEW.DAY) {
+								setTimeout(updateCalendarSize.current, 0)
+							}
 						}}
 						refetchData={fetchEvents}
 						handleSubmitReservation={handleSubmitReservation}

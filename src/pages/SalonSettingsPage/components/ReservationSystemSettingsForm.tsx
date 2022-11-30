@@ -52,14 +52,12 @@ type ComponentProps = {
 }
 
 const ReservationSystemSettingsForm = (props: Props) => {
-	const { salonID, handleSubmit, pristine, submitting, excludedB2BNotifications } = props
+	const { handleSubmit, pristine, submitting, excludedB2BNotifications } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const disabled = submitting
 	const hasPermission = true // TODO: permissions?
 	const groupedServicesByCategory = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
-	// const { enabledReservations } = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state)) as any
-	// const disabled = false // enabledReservations !== true
 
 	const onChangeIndustryCheck = (checked: boolean, type: SERVICE_TYPE) => {
 		forEach(groupedServicesByCategory, (level1) =>
@@ -69,44 +67,17 @@ const ReservationSystemSettingsForm = (props: Props) => {
 		)
 	}
 
+	const onChangeServiceCheck = (checked: boolean, type: SERVICE_TYPE) => {
+		console.log('checked', checked, type)
+	}
+
 	const treeData = map(groupedServicesByCategory, (level1) => {
 		// LEVEL 1
 		return {
 			title: level1.category?.name,
-			// title: (
-			// 	<div id={`level3-${level1.category?.id}`} className={'flex justify-between'}>
-			// 		<div>{level1.category?.name}</div>
-			// 		<div className={'flex'}>
-			// 			<FormSection name={SERVICE_TYPE.ONLINE_BOOKING}>
-			// 				<Field
-			// 					component={CheckboxField}
-			// 					key={`level1-${SERVICE_TYPE.ONLINE_BOOKING}-${level1.category?.id}`}
-			// 					name={level1.category?.id}
-			// 					onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeIndustryCheck(e.target.checked, SERVICE_TYPE.ONLINE_BOOKING)}
-			// 					disabled={disabled}
-			// 					hideChecker
-			// 					optionRender={optionRenderNotiPinkCheckbox}
-			// 					className={'p-0 h-6'}
-			// 				/>
-			// 			</FormSection>
-			// 			<FormSection name={SERVICE_TYPE.AUTO_CONFIRM}>
-			// 				<Field
-			// 					component={CheckboxField}
-			// 					onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeIndustryCheck(e.target.checked, SERVICE_TYPE.AUTO_CONFIRM)}
-			// 					key={`level1-${SERVICE_TYPE.AUTO_CONFIRM}-${level1.category?.id}`}
-			// 					name={level1.category?.id}
-			// 					disabled={disabled}
-			// 					hideChecker
-			// 					optionRender={optionRenderNotiPinkCheckbox}
-			// 					className={'p-0 h-6'}
-			// 				/>
-			// 			</FormSection>
-			// 		</div>
-			// 	</div>
-			// ),
 			className: `noti-tree-node-${1} text-lg`,
-			switcherIcon: (props2: any) => {
-				return props2?.expanded ? <ChevronDown style={{ transform: 'rotate(180deg)' }} /> : <ChevronDown />
+			switcherIcon: (propsLevel1: any) => {
+				return propsLevel1?.expanded ? <ChevronDown style={{ transform: 'rotate(180deg)' }} /> : <ChevronDown />
 			},
 			id: level1.category?.id,
 			// LEVEL 2
@@ -115,17 +86,14 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					id: level2.category?.id,
 					className: `noti-tree-node-${1} font-semibold ml-6`,
 					title: level2.category?.name,
-					switcherIcon: (props2: any) => {
-						return props2?.expanded ? <ChevronDown style={{ transform: 'rotate(180deg)' }} /> : <ChevronDown />
+					switcherIcon: (propsLevel2: any) => {
+						return propsLevel2?.expanded ? <ChevronDown style={{ transform: 'rotate(180deg)' }} /> : <ChevronDown />
 					},
 					// LEVEL 3
 					children: map(level2.category?.children, (level3) => {
 						return {
 							id: level3.category.id,
 							className: `noti-tree-node-${2} ml-6`,
-							// switcherIcon: (props2: any) => {
-							// 	return props2?.expanded ? <ChevronDown style={{ transform: 'rotate(180deg)' }} /> : <ChevronDown />
-							// },
 							title: (
 								<div id={`level3-${level3.category?.id}`} className={'flex justify-between'}>
 									<div>{level3.category?.name}</div>
@@ -137,6 +105,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 												name={level3.service.id}
 												disabled={disabled}
 												hideChecker
+												onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeServiceCheck(e.target.checked, SERVICE_TYPE.ONLINE_BOOKING)}
 												optionRender={optionRenderNotiPinkCheckbox}
 												className={'p-0 h-6'}
 											/>
@@ -148,6 +117,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 												name={level3.service.id}
 												disabled={disabled}
 												hideChecker
+												onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeServiceCheck(e.target.checked, SERVICE_TYPE.ONLINE_BOOKING)}
 												optionRender={optionRenderNotiPinkCheckbox}
 												className={'p-0 h-6'}
 											/>
@@ -323,9 +293,8 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					<Divider className={'mt-1 mb-3'} />
 					<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Vyberte služby, ktoré bude možné rezervovať si online a ktoré budú automaticky potvrdené.')}</p>
 					<div className={''}>
-						<div className={'text-xs absolute'}>
-							<div>{t('loc:Online rezervácia')}</div>
-							<div>{t('loc:Automatické potvrdenie')}</div>
+						<div className={'text-xs w-full text-right'}>
+							<div>{t('loc:Online rezervácia / Automatické potvrdenie')}</div>
 						</div>
 						<div className={'flex justify-end pr-4'}>
 							<FormSection name={SERVICE_TYPE.ONLINE_BOOKING}>

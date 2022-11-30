@@ -4,7 +4,11 @@ import { PaginationProps } from 'antd'
 import { EventContentArg, EventDropArg } from '@fullcalendar/react'
 
 // utils
-import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT, ENDS_EVENT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK,  RS_NOTIFICATION, RS_NOTIFICATION_TYPE, DAY } from '../utils/enums'
+import {
+	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT,
+	ENDS_EVENT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, DAY,
+	SERVICE_TYPE
+} from '../utils/enums'
 
 // types
 import { Paths } from './api'
@@ -502,6 +506,11 @@ export interface IReservationSystemSettingsForm {
 	minutesIntervalBetweenB2CReservations?: number | null
 	disabledNotifications: {
 		[key in RS_NOTIFICATION]: IReservationsSettingsNotification
+	}
+	servicesSettings: {
+		[key in SERVICE_TYPE]: {
+			[key in string]: boolean
+		}
 	}
 }
 

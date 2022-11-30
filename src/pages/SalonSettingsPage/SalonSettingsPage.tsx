@@ -3,26 +3,24 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { Col, Row, Spin } from 'antd'
-import { compact, forEach, get, includes, map, reduce } from 'lodash'
+import { forEach, includes, reduce } from 'lodash'
 
 // components
-import { log } from 'util'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ReservationSystemSettingsForm from './components/ReservationSystemSettingsForm'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
 import { RootState } from '../../reducers'
 import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
+import { getServices } from '../../reducers/services/serviceActions'
 
 // types
-import { Paths } from '../../types/api'
-import { IBreadcrumbs, SalonSubPageProps, IReservationSystemSettingsForm, IReservationsSettingsNotification } from '../../types/interfaces'
-import { postReq } from '../../utils/request'
-import { getServices } from '../../reducers/services/serviceActions'
+import { IBreadcrumbs, IReservationSystemSettingsForm, SalonSubPageProps } from '../../types/interfaces'
+import { patchReq } from '../../utils/request'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -66,7 +64,6 @@ const initDisabledNotifications = (notifications: any[]): IReservationSystemSett
 		},
 		{}
 	)
-
 	return reduce(
 		NOTIFICATIONS,
 		(data: any, key) => {
@@ -86,9 +83,10 @@ const initDisabledNotifications = (notifications: any[]): IReservationSystemSett
 const SalonSettingsPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { salonID, parentPath } = props
+	const { salonID } = props
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const groupedSettings = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
+
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
@@ -97,75 +95,115 @@ const SalonSettingsPage = (props: SalonSubPageProps) => {
 		]
 	}
 
-	useEffect(() => {
-		dispatch(selectSalon(salonID))
-		dispatch(getServices({ salonID })) // TODO: nebolo by lepsie spravit separatny EP pre settingy aby sa nemuselo volat cele services?
+	const fetchData = async () => {
+		const salonRes = await dispatch(selectSalon(salonID))
+		const servicesRes = await dispatch(getServices({ salonID }))
 
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+		if (salonRes?.data?.settings) {
+			const autoConfirmItems: any = []
+			const onlineReservationItems: any = []
+			forEach(servicesRes.data?.groupedServicesByCategory, (level1) =>
+				forEach(level1.category?.children, (level2) =>
+					forEach(level2.category?.children, (level3) => {
+						autoConfirmItems.push({
+							[level3.service.id]: level3.service.settings.autoApproveReservatons
+						})
+						onlineReservationItems.push({
+							[level3.service.id]: level3.service.settings.enabledB2cReservations
+						})
+					})
+				)
+			)
 
-	useEffect(() => {
-		if (salon.data?.settings) {
-			const { settings } = salon.data
+			const autoConfirmSettings = reduce(
+				autoConfirmItems,
+				(prev: any, item: any) => {
+					return { ...prev, ...item }
+				},
+				{}
+			)
+
+			const onlineBookingSettings = reduce(
+				onlineReservationItems,
+				(prev: any, item: any) => {
+					return { ...prev, ...item }
+				},
+				{}
+			)
+
+			const servicesSettings = {
+				[SERVICE_TYPE.AUTO_CONFIRM]: autoConfirmSettings,
+				[SERVICE_TYPE.ONLINE_BOOKING]: onlineBookingSettings
+			}
 
 			dispatch(
 				initialize(FORM.RESEVATION_SYSTEM_SETTINGS, {
-					enabledReservations: settings.enabledReservations,
-					maxDaysB2cCreateReservation: settings.maxDaysB2cCreateReservation,
-					maxHoursB2cCreateReservationBeforeStart: settings.maxHoursB2cCreateReservationBeforeStart,
-					maxHoursB2cCancelReservationBeforeStart: settings.maxHoursB2cCancelReservationBeforeStart,
-					minutesIntervalBetweenB2CReservations: settings.minutesIntervalBetweenB2CReservations,
-					disabledNotifications: initDisabledNotifications(settings.disabledNotifications)
+					enabledReservations: salonRes?.data?.settings?.enabledReservations,
+					maxDaysB2cCreateReservation: salonRes?.data?.settings?.maxDaysB2cCreateReservation,
+					maxHoursB2cCreateReservationBeforeStart: salonRes?.data?.settings?.maxHoursB2cCreateReservationBeforeStart,
+					maxHoursB2cCancelReservationBeforeStart: salonRes?.data?.settings?.maxHoursB2cCancelReservationBeforeStart,
+					minutesIntervalBetweenB2CReservations: salonRes?.data?.settings?.minutesIntervalBetweenB2CReservations,
+					disabledNotifications: initDisabledNotifications(salonRes?.data?.settings?.disabledNotifications),
+					servicesSettings
 				})
 			)
 		}
-	}, [salon.data, dispatch])
-	const handleSubmitSettings = async (formData: IReservationSystemSettingsForm) => {
+	}
+
+	useEffect(() => {
+		// on mount init
+		fetchData()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
+	const handleSubmitSettings = async (values: IReservationSystemSettingsForm) => {
 		// Settings
 		const allIds: any = []
 		forEach(groupedSettings, (level1) => forEach(level1.category?.children, (level2) => forEach(level2.category?.children, (level3) => allIds.push(level3.service.id))))
+
 		const allowedAutoConfirmIds: string[] = []
 		const allowedOnlineBookingIds: string[] = []
-		forEach(get(formData, `servicesSettings[${SERVICE_TYPE.AUTO_CONFIRM}]`), (item, index) => (item ? allowedAutoConfirmIds.push(index) : undefined))
-		forEach(get(formData, `servicesSettings[${SERVICE_TYPE.ONLINE_BOOKING}]`), (item, index) => (item ? allowedOnlineBookingIds.push(index) : undefined))
+		forEach(values.servicesSettings.AUTO_CONFIRM, (item, index) => (item ? allowedAutoConfirmIds.push(index) : undefined))
+		forEach(values.servicesSettings.ONLINE_BOOKING, (item, index) => (item ? allowedOnlineBookingIds.push(index) : undefined))
 
 		const servicesSettings: any[] = []
 		forEach(allIds, (serviceID) => {
 			const enabledB2cReservations = includes(allowedOnlineBookingIds, serviceID)
 			const autoApproveReservatons = includes(allowedAutoConfirmIds, serviceID)
-			if (enabledB2cReservations || autoApproveReservatons) {
-				servicesSettings.push({
-					id: serviceID,
-					settings: {
-						enabledB2cReservations, // ONLINE_BOOKING
-						autoApproveReservatons // AUTO_CONFIRM
-					}
-				})
-			}
+			servicesSettings.push({
+				id: serviceID,
+				settings: {
+					enabledB2cReservations: enabledB2cReservations || false, // ONLINE_BOOKING
+					autoApproveReservatons: autoApproveReservatons || false // AUTO_CONFIRM
+				}
+			})
 		})
 		// Notifications
 		// find notification which are OFF - relevant for API
 		const disabledNotifications = NOTIFICATIONS.map((type: string) => {
 			return {
 				eventType: type,
-				b2bChannels: transformNotificationsChannelForRequest(formData.disabledNotifications[type as RS_NOTIFICATION].b2bChannels),
-				b2cChannels: transformNotificationsChannelForRequest(formData.disabledNotifications[type as RS_NOTIFICATION].b2cChannels)
+				b2bChannels: transformNotificationsChannelForRequest(values.disabledNotifications[type as RS_NOTIFICATION].b2bChannels),
+				b2cChannels: transformNotificationsChannelForRequest(values.disabledNotifications[type as RS_NOTIFICATION].b2cChannels)
 			}
 		})
 
-		try {
-			// TODO: aktualne mi to vracia 404 :/
-			await postReq(
-				'/api/b2b/admin/salons/{salonID}/settings' as any,
-				{ salonID },
-				{
-					...formData,
-					disabledNotifications,
-					servicesSettings
-				}
-			)
+		const reqData = {
+			settings: {
+				enabledReservations: values.enabledReservations,
+				maxDaysB2cCreateReservation: values.maxDaysB2cCreateReservation,
+				maxHoursB2cCancelReservationBeforeStart: values.maxHoursB2cCancelReservationBeforeStart,
+				maxHoursB2cCreateReservationBeforeStart: values.maxHoursB2cCreateReservationBeforeStart,
+				minutesIntervalBetweenB2CReservations: values.minutesIntervalBetweenB2CReservations,
+				disabledNotifications
+			},
+			servicesSettings
+		}
 
-			dispatch(selectSalon(salonID))
+		try {
+			await patchReq('/api/b2b/admin/salons/{salonID}/settings' as any, { salonID }, reqData)
+			// await dispatch(selectSalon(salonID))
+			fetchData()
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

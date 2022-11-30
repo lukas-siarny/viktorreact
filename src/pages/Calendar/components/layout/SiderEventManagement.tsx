@@ -18,13 +18,12 @@ import ReservationForm from '../forms/ReservationForm'
 import ShiftForm from '../forms/ShiftForm'
 import TimeOffForm from '../forms/TimeOffForm'
 import BreakForm from '../forms/BreakForm'
+import EventTypeFilterForm from '../forms/EventTypeFilterForm'
+import DeleteButton from '../../../../components/DeleteButton'
 
 // utils
 import { getReq } from '../../../../utils/request'
 import { computeEndDate, formatLongQueryString, getAssignedUserLabel, getDateTime } from '../../../../utils/helper'
-import EventTypeFilterForm from '../forms/EventTypeFilterForm'
-import DeleteButton from '../../../../components/DeleteButton'
-import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 import {
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_VIEW_TYPE,
@@ -34,8 +33,13 @@ import {
 	FORM,
 	STRINGS,
 	CALENDAR_COMMON_SETTINGS,
-	EVERY_REPEAT
+	EVERY_REPEAT,
+	DELETE_EVENT_PERMISSIONS
 } from '../../../../utils/enums'
+import Permissions from '../../../../utils/Permissions'
+
+// assets
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 
 // redux
 import { RootState } from '../../../../reducers'
@@ -44,6 +48,7 @@ import { getCalendarEventDetail } from '../../../../reducers/calendar/calendarAc
 type Props = {
 	salonID: string
 	sidebarView: CALENDAR_EVENT_TYPE
+	selectedDate: string
 	setCollapsed: (view: CALENDAR_EVENT_TYPE | undefined) => void
 	handleSubmitReservation: (values: ICalendarReservationForm) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
@@ -284,14 +289,25 @@ const SiderEventManagement: FC<Props> = (props) => {
 				<div className={'font-semibold'}>{eventId ? STRINGS(t).edit(EVENT_NAMES(sidebarView)) : STRINGS(t).createRecord(EVENT_NAMES(sidebarView))}</div>
 				<div className={'flex-center'}>
 					{eventId && (
-						<DeleteButton
-							placement={'bottom'}
-							entityName={t('loc:prestávku')}
-							className={'bg-transparent mr-4'}
-							onConfirm={handleDeleteEvent}
-							onlyIcon
-							smallIcon
-							size={'small'}
+						<Permissions
+							allowed={DELETE_EVENT_PERMISSIONS}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<DeleteButton
+									placement={'bottom'}
+									entityName={t('loc:prestávku')}
+									className={'bg-transparent mr-4'}
+									onConfirm={() => {
+										if (hasPermission) {
+											handleDeleteEvent()
+										} else {
+											openForbiddenModal()
+										}
+									}}
+									onlyIcon
+									smallIcon
+									size={'small'}
+								/>
+							)}
 						/>
 					)}
 					<Button

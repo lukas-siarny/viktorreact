@@ -2,13 +2,13 @@ import dayjs from 'dayjs'
 import React, { FC, useMemo } from 'react'
 
 // full calendar
-import FullCalendar, { DateSelectArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { SlotLabelContentArg, DateSelectArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, DEFAULT_DATE_INPUT_FORMAT, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
 import { composeDayViewEvents, composeDayViewResources, eventAllow } from '../../calendarHelpers'
 
 // types
@@ -18,7 +18,7 @@ import { ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/i
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
 
 // components
-import CalendarEvent from '../CalendarEvent'
+import CalendarEventContent from '../CalendarEventContent'
 
 interface IResourceLabel {
 	image?: string
@@ -64,7 +64,7 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 interface ICalendarDayView extends ICalendarView {}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange, onAddEvent } = props
+	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange, refetchData, onAddEvent } = props
 
 	const events = useMemo(
 		() => [
@@ -211,7 +211,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			resources={resources}
 			// render hooks
 			resourceLabelContent={resourceLabelContent}
-			eventContent={(data) => <CalendarEvent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} />}
+			eventContent={(data) => <CalendarEventContent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} refetchData={refetchData} />}
 			slotLabelContent={slotLabelContent}
 			// handlers
 			eventAllow={eventAllow}

@@ -44,7 +44,7 @@ type Props = {
 	start: Date | null
 	end: Date | null
 	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => void
-	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
+	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	color?: string
 	placement?: TooltipPlacement
 	service?: CalendarEvent['service']
@@ -526,7 +526,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 					employee={employee}
 					onEdit={() => {
 						if (id) {
-							onEditEvent(id, CALENDAR_EVENT_TYPE.RESERVATION)
+							onEditEvent(CALENDAR_EVENT_TYPE.RESERVATION, id)
 						}
 						setIsOpen(false)
 					}}

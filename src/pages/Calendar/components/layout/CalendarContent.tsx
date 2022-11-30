@@ -1,15 +1,15 @@
+import React, { useCallback, useImperativeHandle, useRef, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Spin } from 'antd'
 import { Content } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
-import { debounce } from 'lodash'
-import React, { useCallback, useImperativeHandle, useRef } from 'react'
 
 // fullcalendar
 import { EventResizeDoneArg } from '@fullcalendar/interaction'
 import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
@@ -26,6 +26,10 @@ import {
 	IEventExtenedProps,
 	IWeekViewResourceExtenedProps
 } from '../../../../types/interfaces'
+import { RootState } from '../../../../reducers'
+
+// utils
+import { ForbiddenModal, permitted } from '../../../../utils/Permissions'
 
 type Props = {
 	view: CALENDAR_VIEW
@@ -57,7 +61,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		onAddEvent,
 		onEditEvent,
 		handleSubmitReservation,
-		handleSubmitEvent
+		handleSubmitEvent,
+		refetchData
 	} = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -70,11 +75,25 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		/* [CALENDAR_VIEW.MONTH]: monthView?.current */
 	}))
 
-	const handleSubmitReservationDebounced = useCallback(debounce(handleSubmitReservation, 1000), [handleSubmitReservation])
-	const handleSubmitEventDebounced = useCallback(debounce(handleSubmitEvent, 1000), [handleSubmitEvent])
+	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
+	const selectedSalonuniqPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions)
+
+	const [visibleForbiddenModal, setVisibleForbiddenModal] = useState(false)
 
 	const onEventChange = useCallback(
 		(calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
+			const hasPermissions = permitted(authUserPermissions || [], selectedSalonuniqPermissions, UPDATE_EVENT_PERMISSIONS)
+
+			const revertEvent = () => {
+				arg.revert()
+			}
+
+			if (!hasPermissions) {
+				setVisibleForbiddenModal(true)
+				revertEvent()
+				return
+			}
+
 			const { event } = arg
 			const { start, end } = event
 			const { newResource } = arg as EventDropArg
@@ -87,6 +106,12 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 			// ak sa zmenil resource, tak updatenut resource (to sa bude diat len pri drope)
 			const employeeId = newResource ? newResourceExtendedProps?.employee?.id : eventData?.employee.id
+
+			if (!eventId || !employeeId) {
+				// ak nahodou nemam eventID alebo employeeId tak to vrati na povodne miesto
+				revertEvent()
+				return
+			}
 
 			// zatial predpokladame, ze nebudu viacdnove eventy - takze start a end date by mal byt rovnaky
 			const startDajys = dayjs(start)
@@ -102,12 +127,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
 			}
 
-			if (!eventId || !employeeId) {
-				// ak nahodou nemam eventID alebo employeeId tak to vrati na povodne miesto
-				arg.revert()
-				return
-			}
-
 			const values = {
 				date,
 				timeFrom,
@@ -119,21 +138,16 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				eventId
 			}
 
-			const onError = () => {
-				// ak neprejde request tak to vrati na pôvodne miesto
-				arg.revert()
-			}
-
 			if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
 				const customerId = eventData.customer?.id
 				const serviceId = eventData.service?.id
 
-				handleSubmitReservationDebounced({ ...values, customer: { key: customerId }, service: { key: serviceId } } as any, onError)
+				handleSubmitReservation({ ...values, customer: { key: customerId }, service: { key: serviceId } } as any, revertEvent)
 				return
 			}
-			handleSubmitEventDebounced({ ...values, calendarBulkEventID } as ICalendarEventForm, onError)
+			handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm, revertEvent)
 		},
-		[handleSubmitReservationDebounced, handleSubmitEventDebounced]
+		[handleSubmitReservation, handleSubmitEvent, authUserPermissions, selectedSalonuniqPermissions]
 	)
 
 	const getView = () => {
@@ -170,6 +184,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					onAddEvent={onAddEvent}
 					onEditEvent={onEditEvent}
 					onEventChange={onEventChange}
+					refetchData={refetchData}
 				/>
 			)
 		}
@@ -187,6 +202,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				onAddEvent={onAddEvent}
 				onEditEvent={onEditEvent}
 				onEventChange={onEventChange}
+				refetchData={refetchData}
 			/>
 		)
 	}
@@ -197,6 +213,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				<div id={'nc-content-overlay'} />
 				{getView()}
 			</Spin>
+			<ForbiddenModal visible={visibleForbiddenModal} onCancel={() => setVisibleForbiddenModal(false)} />
 		</Content>
 	)
 })

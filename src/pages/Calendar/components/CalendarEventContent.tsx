@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
+import { StringParam, useQueryParams } from 'use-query-params'
 
 // full calendar
 import { EventContentArg } from '@fullcalendar/react' // must go before plugins
@@ -18,7 +19,8 @@ interface ICalendarEventProps {
 	calendarView: CALENDAR_VIEW
 	data: EventContentArg
 	salonID: string
-	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
+	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
+	refetchData: () => void
 }
 
 const InverseBackgroundEvent = React.memo(() => <div className={cx('nc-bg-event not-set-availability')} />)
@@ -32,10 +34,10 @@ const BackgroundEvent: FC<{ eventType?: CALENDAR_EVENT_TYPE }> = React.memo(({ e
 	/>
 ))
 
-const CalendarEvent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, onEditEvent }) => {
+const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, onEditEvent, refetchData }) => {
 	const { event, backgroundColor } = data || {}
 	const { start, end } = event || {}
-	const { eventData } = (event.extendedProps as IEventExtenedProps) || {}
+	const { eventData, isPlaceholder } = (event.extendedProps as IEventExtenedProps) || {}
 	const {
 		id,
 		start: eventStart,
@@ -49,8 +51,13 @@ const CalendarEvent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, o
 		employee,
 		isFirstMultiDayEventInCurrentRange,
 		isLastMultiDaylEventInCurrentRange,
-		isMultiDayEvent
+		isMultiDayEvent,
+		calendarBulkEvent
 	} = eventData || {}
+
+	const [query] = useQueryParams({
+		eventId: StringParam
+	})
 
 	// background events
 	if (event.display === 'inverse-background') {
@@ -71,6 +78,8 @@ const CalendarEvent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, o
 		startDateTime,
 		endDateTime
 	}
+
+	const isEdit = query?.eventId === originalEventData.id
 
 	// normal events
 	switch (eventType) {
@@ -93,6 +102,9 @@ const CalendarEvent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, o
 					onEditEvent={onEditEvent}
 					originalEventData={originalEventData}
 					eventType={eventType as CALENDAR_EVENT_TYPE}
+					isBulkEvent={!!calendarBulkEvent?.id}
+					isPlaceholder={isPlaceholder}
+					isEdit={isEdit}
 				/>
 			)
 		case CALENDAR_EVENT_TYPE.RESERVATION: {
@@ -115,6 +127,8 @@ const CalendarEvent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, o
 					isLastMultiDaylEventInCurrentRange={isLastMultiDaylEventInCurrentRange}
 					onEditEvent={onEditEvent}
 					originalEventData={originalEventData}
+					refetchData={refetchData}
+					isEdit={isEdit}
 				/>
 			)
 		}
@@ -125,6 +139,6 @@ const CalendarEvent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, o
 
 // export default CalendarEvent
 
-export default React.memo(CalendarEvent, (prevProps, nextProps) => {
+export default React.memo(CalendarEventContent, (prevProps, nextProps) => {
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
 })

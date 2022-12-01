@@ -174,6 +174,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	)
 
 	const setNewSelectedDate = (newDate: string) => {
+		if (dayjs(newDate).isSame(query.date)) {
+			return
+		}
+
 		setQuery({ ...query, date: newDate })
 		let newCalendarDate = newDate
 		if (query.view === CALENDAR_VIEW.WEEK) {
@@ -183,7 +187,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			const weekDays = getWeekDays(newDate)
 			newCalendarDate = getWeekViewSelectedDate(newDate, weekDays)
 		}
-		calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.gotoDate(newCalendarDate)
+
+		if (!dayjs(newDate).isSame(calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.getDate())) {
+			calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.gotoDate(newCalendarDate)
+		}
 	}
 
 	const updateCalendarSize = useRef(() => calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.updateSize())
@@ -237,7 +244,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				})
 			} else {
 				const newEventType = newView === CALENDAR_EVENT_TYPE.RESERVATION ? CALENDAR_EVENTS_VIEW_TYPE.RESERVATION : CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF
-
 				setQuery({
 					...query,
 					eventId,
@@ -245,6 +251,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					sidebarView: newView // siderbar view je rezervacia / volno / prestavka / pracovna zmena
 				})
 			}
+
 			if (query.view === CALENDAR_VIEW.DAY) {
 				setTimeout(updateCalendarSize.current, 0)
 			}
@@ -628,6 +635,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						handleSubmitReservation={handleSubmitReservation}
 						handleSubmitEvent={handleSubmitEvent}
 						onAddEvent={handleAddEvent}
+						datesSet={setNewSelectedDate}
 					/>
 					<SiderEventManagement
 						salonID={salonID}

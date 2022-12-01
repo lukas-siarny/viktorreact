@@ -1,8 +1,7 @@
 import { EventResizeDoneArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
-import { EventContentArg, EventDropArg } from '@fullcalendar/react'
-import { CalendarApi, EventInput } from '@fullcalendar/react'
+import { EventDropArg } from '@fullcalendar/react'
 
 // utils
 import {
@@ -188,10 +187,8 @@ export interface ICalendarEventForm {
 	note?: string
 	allDay?: boolean
 	// NOTE: pre akcie resize a drag and drop
-	eventId?: string
+	eventId?: string | null
 	calendarBulkEventID?: string
-	// NOTE: pre reflektovanie zmien v kalendari podla formularu
-	calendarApi?: CalendarApi
 }
 
 export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null
@@ -622,6 +619,7 @@ export interface ICalendarView {
 	onEventChange?: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
 	loading?: boolean
 	refetchData: () => void
+	datesSet: (newDate: string | any) => void
 }
 
 export interface IEventCardProps {

@@ -108,7 +108,7 @@ const NowIndicator = () => {
 interface ICalendarWeekView extends ICalendarView {}
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventChange, refetchData, onAddEvent } = props
+	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventChange, refetchData, onAddEvent, datesSet } = props
 
 	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
 	const weekViewSelectedDate = getWeekViewSelectedDate(selectedDate, weekDays)
@@ -181,6 +181,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				// select
 				selectable
 				select={(selectedEvent) => handleNewEvent(selectedEvent)}
+				datesSet={datesSet}
 			/>
 		</div>
 	)

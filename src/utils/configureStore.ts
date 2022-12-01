@@ -5,12 +5,12 @@ import { createLogger } from 'redux-logger'
 import { persistStore } from 'redux-persist'
 
 import i18next from 'i18next'
-import { IMAGE_UPLOADING_PROP, MSG_TYPE, NOTIFICATION_TYPE, CALENDAR_FORM_HANDLER, HANDLE_CALENDAR_FORMS } from './enums'
+import { IMAGE_UPLOADING_PROP, MSG_TYPE, NOTIFICATION_TYPE, HANDLE_CALENDAR_ACTIONS, HANDLE_CALENDAR_FORMS } from './enums'
 // eslint-disable-next-line import/no-cycle
 import showNotifications from './tsxHelpers'
-import { updateEvents } from '../reducers/virtualEvents/virtualEventsActions'
+import { updateEvent } from './virtualEvents'
 
-const RELEVANT_CALENDAR_ACTIONS = Object.keys(CALENDAR_FORM_HANDLER)
+const RELEVANT_CALENDAR_ACTIONS = Object.keys(HANDLE_CALENDAR_ACTIONS)
 
 /**
  * OnSubmit validate if IMAGE_UPLOADING_PROP is true -> indicates uploading
@@ -37,17 +37,21 @@ const preventSubmitFormDuringUpload = (store: any) => (next: any) => (action: an
 }
 
 const handleCalendarFormsChanges = (store: any) => (next: any) => (action: any) => {
+	next(action)
+
 	if (HANDLE_CALENDAR_FORMS.includes(action?.meta?.form)) {
+		const { form } = store.getState()
+		const submittedForm = form[action.meta.form]
+
 		// eslint-disable-next-line no-restricted-syntax
 		for (const actionType of RELEVANT_CALENDAR_ACTIONS) {
 			if (action.type.endsWith(actionType)) {
-				store.dispatch(updateEvents(actionType, action.payload))
-				return
+				// NOTE: 600ms je cas, kym zacne existovat instancia CalendarAPI, aby vedela zobrazit data, ked sa inituje form
+				setTimeout(() => updateEvent(actionType, submittedForm?.values), 600)
+				break
 			}
 		}
 	}
-
-	next(action)
 }
 
 const loggerFilter = (getState: any, action: any) => {

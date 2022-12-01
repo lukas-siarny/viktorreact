@@ -194,6 +194,11 @@ export const getCalendarShiftsTimeoff = (
 		splitMultidayEventsIntoOneDayEvents
 	)
 
+export const refreshEvents = (): ThunkResult<void> => (dispatch) => {
+	Object.keys(CALENDAR_EVENTS_KEYS).forEach((enumType) => dispatch({ type: EVENTS.EVENTS_REFRESH, enumType }))
+}
+
+// NOTE: L.Siarny toto nema handle v reduceri, aky to ma vyznam?
 export const clearCalendarEvents =
 	(enumType: CALENDAR_EVENTS_KEYS = CALENDAR_EVENTS_KEYS.EVENTS): ThunkResult<Promise<void>> =>
 	async (dispatch) => {

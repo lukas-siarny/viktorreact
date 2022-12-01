@@ -64,47 +64,10 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 interface ICalendarDayView extends ICalendarView {}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange, refetchData, onAddEvent } = props
+	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange, refetchData, onAddEvent, datesSet } = props
 
 	const events = useMemo(
-		() => [
-			composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees),
-			[
-				{
-					start: '2022-11-29T19:30:00.000Z',
-					end: '2022-11-29T21:45:00.000Z',
-					allDay: false,
-					resourceId: '6e93336d-624e-4fcb-9726-d9ba396db64c',
-					extendedProps: {
-						eventData: {
-							eventType: 'RESERVATION'
-						}
-					}
-				},
-				{
-					start: '2022-11-29T07:15:00.000Z',
-					end: '2022-11-29T10:30:00.000Z',
-					allDay: false,
-					resourceId: '70b4c2aa-9c5f-4d8f-8663-c002d00de1bb',
-					extendedProps: {
-						eventData: {
-							eventType: 'RESERVATION'
-						}
-					}
-				},
-				{
-					start: '2022-11-29T07:45:00.000Z',
-					end: '2022-11-29T10:15:00.000Z',
-					allDay: false,
-					resourceId: '212a96c5-d012-4f13-bcb8-d5ab923e83c4',
-					extendedProps: {
-						eventData: {
-							eventType: 'RESERVATION'
-						}
-					}
-				}
-			]
-		],
+		() => composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees),
 		[selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees]
 	)
 
@@ -206,8 +169,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			allDaySlot={false}
 			stickyFooterScrollbar
 			// data sources
-			// events={events}
-			eventSources={events}
+			events={events}
 			resources={resources}
 			// render hooks
 			resourceLabelContent={resourceLabelContent}
@@ -220,6 +182,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			// select
 			selectable
 			select={handleNewEvent}
+			datesSet={datesSet}
 		/>
 	)
 })

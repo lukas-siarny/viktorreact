@@ -6,10 +6,10 @@ import dayjs from 'dayjs'
 
 // fullcalendar
 import { EventResizeDoneArg } from '@fullcalendar/interaction'
-import FullCalendar, { EventDropArg } from '@fullcalendar/react'
+import FullCalendar, { EventDropArg, DatesSetArg } from '@fullcalendar/react'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
@@ -62,7 +62,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		onEditEvent,
 		handleSubmitReservation,
 		handleSubmitEvent,
-		refetchData
+		refetchData,
+		datesSet
 	} = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -150,6 +151,10 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		[handleSubmitReservation, handleSubmitEvent, authUserPermissions, selectedSalonuniqPermissions]
 	)
 
+	const handleCalendarChangeDate = (arg: DatesSetArg) => {
+		datesSet(dayjs(arg.startStr).format(CALENDAR_DATE_FORMAT.QUERY))
+	}
+
 	const getView = () => {
 		if (showEmptyState) {
 			return <CalendarEmptyState onButtonClick={onShowAllEmployees} />
@@ -185,6 +190,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					onEditEvent={onEditEvent}
 					onEventChange={onEventChange}
 					refetchData={refetchData}
+					datesSet={handleCalendarChangeDate}
 				/>
 			)
 		}
@@ -203,6 +209,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				onEditEvent={onEditEvent}
 				onEventChange={onEventChange}
 				refetchData={refetchData}
+				datesSet={handleCalendarChangeDate}
 			/>
 		)
 	}

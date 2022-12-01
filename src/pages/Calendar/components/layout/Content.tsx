@@ -158,7 +158,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		[handleSubmitReservation, handleSubmitEvent, authUserPermissions, selectedSalonuniqPermissions]
 	)
 
-	const onEventsSet = () => {
+	const updateCalendarSize = () => {
 		weekView.current?.getApi().updateSize()
 	}
 
@@ -195,7 +195,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					onEditEvent={onEditEvent}
 					onEventChange={onEventChange}
 					refetchData={refetchData}
-					onEventsSet={() => weekView.current?.render()}
+					updateCalendarSize={() => weekView.current?.getApi().updateSize()}
 				/>
 			)
 		}
@@ -212,7 +212,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				onEditEvent={onEditEvent}
 				onEventChange={onEventChange}
 				refetchData={refetchData}
-				onEventsSet={() => dayView.current?.render()}
 			/>
 		)
 	}

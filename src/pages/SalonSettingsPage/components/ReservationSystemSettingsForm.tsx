@@ -333,7 +333,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					<div>
 						<div className={'flex w-full justify-end mb-4'}>
 							<div style={{ width: 140 }} className={'flex text-xs'}>
-								<div className={'mr-2 text-center'}>{t('loc:Online rezervacia')}</div>
+								<div className={'mr-2 text-center'}>{t('loc:Online rezervácia')}</div>
 								<div className={'text-center'}>{t('loc:Automatické potvrdenie')}</div>
 							</div>
 						</div>

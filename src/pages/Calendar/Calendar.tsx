@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useRef, useState, useMemo } from 're
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import Layout from 'antd/lib/layout/layout'
-import { DelimitedArrayParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
+import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
 import { compact, includes, isEmpty, map } from 'lodash'
 import { getFormValues, initialize, submit } from 'redux-form'
@@ -91,8 +91,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		categoryIDs: DelimitedArrayParam,
 		sidebarView: StringParam,
 		eventId: StringParam,
-		eventsViewType: withDefault(StringParam, CALENDAR_EVENTS_VIEW_TYPE.RESERVATION),
-		scrollTime: withDefault(NumberParam, 8 /* dayjs().hour() */)
+		eventsViewType: withDefault(StringParam, CALENDAR_EVENTS_VIEW_TYPE.RESERVATION)
 	})
 
 	const validSelectedDate = useMemo(() => (dayjs(query.date).isValid() ? query.date : dayjs().format(CALENDAR_DATE_FORMAT.QUERY)), [query.date])
@@ -246,37 +245,25 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
+	const scrollToTime = useCallback(
+		(hour: number) => {
+			const scrollTimeId = getTimeScrollId(Math.max(hour - 2, 0))
+			if (validCalendarView === CALENDAR_VIEW.DAY) {
+				Scroll.scroller.scrollTo(scrollTimeId, {
+					containerId: 'nc-calendar-day-wrapper',
+					offset: -80 // - hlavicka
+				})
+			} else {
+				calendarRefs?.current?.[validCalendarView as CALENDAR_VIEW]?.getApi().scrollToTime(scrollTimeId)
+			}
+		},
+		[validCalendarView]
+	)
+
+	// scroll to time after initialization
 	useEffect(() => {
-		if (validCalendarView === CALENDAR_VIEW.DAY) {
-			Scroll.scroller.scrollTo(getTimeScrollId(query.scrollTime), {
-				containerId: 'nc-calendar-day-wrapper',
-				offset: -80 // - hlavicka
-			})
-		} else {
-			calendarRefs?.current?.[validCalendarView as CALENDAR_VIEW]?.getApi().scrollToTime(getTimeScrollId(query.scrollTime))
-		}
-
-		/* if (validCalendarView === CALENDAR_VIEW.WEEK && resourcesSet) {
-			Scroll.scroller.scrollTo(validSelectedDate, {
-				containerId: 'nc-calendar-week-wrapper',
-				offset: -25, // - hlavicka
-				smooth: true,
-				duration: 500
-			})
-		} */
-	}, [validSelectedDate, query.scrollTime, validEventsViewType, validCalendarView])
-
-	/* useEffect(() => {
-		const scrollTimeId = getTimeScrollId(dayjs().hour())
-		if (validCalendarView === CALENDAR_VIEW.DAY) {
-			Scroll.scroller.scrollTo(scrollTimeId, {
-				containerId: 'nc-calendar-day-wrapper',
-				offset: -80 // - hlavicka
-			})
-		} else {
-			calendarRefs?.current?.[validCalendarView as CALENDAR_VIEW]?.getApi().scrollToTime(scrollTimeId)
-		}
-	}, [validEventsViewType, validCalendarView]) */
+		scrollToTime(dayjs().hour())
+	}, [scrollToTime])
 
 	useEffect(() => {
 		// init pre UPDATE form ak eventId existuje

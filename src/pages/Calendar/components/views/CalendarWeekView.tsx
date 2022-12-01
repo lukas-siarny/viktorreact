@@ -16,7 +16,7 @@ import CalendarEventContent from '../CalendarEventContent'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW } from '../../../../utils/enums'
-import { composeWeekResources, composeWeekViewEvents, eventAllow, getWeekDays, getWeekViewSelectedDate } from '../../calendarHelpers'
+import { composeWeekResources, composeWeekViewEvents, eventAllow, getTimeScrollId, getWeekDays, getWeekViewSelectedDate } from '../../calendarHelpers'
 
 // types
 import { ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -131,11 +131,11 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
 				slotLabelFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
 				eventTimeFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
-				scrollTime={CALENDAR_COMMON_SETTINGS.SCROLL_TIME}
 				slotDuration={CALENDAR_COMMON_SETTINGS.SLOT_DURATION}
 				slotLabelInterval={CALENDAR_COMMON_SETTINGS.SLOT_LABEL_INTERVAL}
 				fixedMirrorParent={CALENDAR_COMMON_SETTINGS.FIXED_MIRROR_PARENT}
 				eventConstraint={CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT}
+				scrollTimeReset={false}
 				height='auto'
 				slotMinWidth={25} // ak sa zmeni tato hodnota, je potrebne upravit min-width v _calendar.sass => .nc-week-event
 				eventMinWidth={25}
@@ -148,7 +148,6 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				selectable
 				stickyFooterScrollbar
 				nowIndicator
-				nowIndicatorContent={() => <NowIndicator />}
 				// data sources
 				events={events}
 				resources={resources}
@@ -158,6 +157,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				eventContent={(data: EventContentArg) => (
 					<CalendarEventContent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} refetchData={refetchData} />
 				)}
+				nowIndicatorContent={() => <NowIndicator />}
 				// handlers
 				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange(CALENDAR_VIEW.WEEK, arg)}

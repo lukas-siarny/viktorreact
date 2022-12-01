@@ -69,10 +69,12 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 	)
 }
 
-interface ICalendarDayView extends ICalendarView {}
+interface ICalendarDayView extends ICalendarView {
+	onEventsSet: () => void
+}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange, refetchData } = props
+	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange, refetchData, onEventsSet } = props
 
 	const events = useMemo(
 		() => composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees),
@@ -119,6 +121,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange(CALENDAR_VIEW.DAY, arg)}
 				eventResize={(arg) => onEventChange(CALENDAR_VIEW.DAY, arg)}
+				eventsSet={onEventsSet}
 			/>
 		</div>
 	)

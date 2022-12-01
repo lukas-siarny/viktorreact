@@ -36,6 +36,9 @@ import SelectField from '../../../../atoms/SelectField'
 import useOnClickOutside from '../../../../hooks/useClickOutside'
 import useMedia from '../../../../hooks/useMedia'
 
+// utils
+import { getSelectedDateForCalendar } from '../../calendarHelpers'
+
 const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 	switch (view) {
 		case CALENDAR_VIEW.WEEK: {
@@ -237,7 +240,7 @@ const CalendarHeader: FC<Props> = (props) => {
 				</Dropdown>
 				<button
 					type={'button'}
-					className={cx('nc-button', { active: dayjs(selectedDate).isToday() })}
+					className={cx('nc-button', { active: dayjs(getSelectedDateForCalendar(calendarView, selectedDate)).isToday() })}
 					onClick={() => changeSelectedDate(dayjs(), CALENDAR_SET_NEW_DATE.FIND_START)}
 				>
 					{t('loc:Dnes')}

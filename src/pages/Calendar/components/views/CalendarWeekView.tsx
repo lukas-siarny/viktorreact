@@ -16,7 +16,7 @@ import CalendarEventContent from '../CalendarEventContent'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW } from '../../../../utils/enums'
-import { composeWeekResources, composeWeekViewEvents, eventAllow, getTimeScrollId, getWeekDays, getWeekViewSelectedDate } from '../../calendarHelpers'
+import { composeWeekResources, composeWeekViewEvents, eventAllow, getSelectedDateForCalendar, getTimeScrollId, getWeekDays, getWeekViewSelectedDate } from '../../calendarHelpers'
 
 // types
 import { ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -106,13 +106,15 @@ const NowIndicator = () => {
 	return <div className={'fc-week-now-indicator'} style={{ top: indicatorDimmensions.top, height: indicatorDimmensions.height }} />
 }
 
-interface ICalendarWeekView extends ICalendarView {}
+interface ICalendarWeekView extends ICalendarView {
+	onEventsSet: () => void
+}
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventChange, refetchData } = props
+	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventChange, refetchData, onEventsSet } = props
 
 	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
-	const weekViewSelectedDate = getWeekViewSelectedDate(selectedDate, weekDays)
+	const weekViewSelectedDate = getSelectedDateForCalendar(CALENDAR_VIEW.WEEK, selectedDate)
 
 	const events = useMemo(
 		() => composeWeekViewEvents(weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees),
@@ -162,6 +164,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				eventResize={(arg) => onEventChange(CALENDAR_VIEW.WEEK, arg)}
+				eventsSet={onEventsSet}
 			/>
 		</div>
 	)

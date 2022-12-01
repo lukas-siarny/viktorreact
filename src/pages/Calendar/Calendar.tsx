@@ -67,6 +67,22 @@ const getEmployeeIDs = (data: IEmployeesPayload['options']) => {
 	return data?.map((employee) => employee.value) as string[]
 }
 
+// NOTE: v URL sa pouzivaju skratene ID kategorii, pretoze ich moze byt dost vela a original IDcka su dost dhle
+// tak aby sa nahodu nestalo ze sa tam nevojdu v niektorom z prehliadacov
+const getFullCategoryIdsFromUrl = (ids?: (string | null)[] | null) => {
+	return ids?.reduce((cv, id) => (id ? [...cv, `00000000-0000-0000-0000-${id}`] : cv), [] as string[])
+}
+
+const getShortCategoryIdsForUrl = (ids?: (string | null)[] | null) => {
+	return ids?.reduce((cv, id) => {
+		if (id) {
+			const splittedId = id.split('-')
+			return [...cv, splittedId[splittedId.length - 1]]
+		}
+		return cv
+	}, [] as string[])
+}
+
 const CALENDAR_VIEWS = Object.keys(CALENDAR_VIEW)
 const CALENDAR_EVENTS_VIEW_TYPES = Object.keys(CALENDAR_EVENTS_VIEW_TYPE)
 
@@ -285,7 +301,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			Promise.all([
 				dispatch(
 					getCalendarReservations(
-						{ salonID, date: validSelectedDate, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs },
+						{ salonID, date: validSelectedDate, employeeIDs: query.employeeIDs, categoryIDs: getFullCategoryIdsFromUrl(query?.categoryIDs) },
 						validCalendarView as CALENDAR_VIEW,
 						true
 					)
@@ -315,6 +331,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	useEffect(() => {
 		dispatch(
 			initialize(FORM.CALENDAR_FILTER, {
+				eventsViewType: query.eventsViewType,
 				categoryIDs: query?.categoryIDs === undefined ? getCategoryIDs(services?.categoriesOptions) : query?.categoryIDs,
 				employeeIDs: query?.employeeIDs === undefined ? getEmployeeIDs(employees?.options) : query?.employeeIDs
 			})
@@ -333,6 +350,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		setQuery({
 			...query,
 			...values,
+			// ak su vybrati vsetci zamestnanci alebo vsetky kategorie, tak je zbytocne posielat na BE vsetky IDcka
+			// BE vrati rovnake zaznamy ako ked sa tam neposle nic
+			employeeIDs: values?.employeeIDs?.length === employees?.options?.length ? undefined : values.employeeIDs,
+			categoryIDs: values?.categoryIDs?.length === services?.categoriesOptions?.length ? undefined : getShortCategoryIdsForUrl(values.categoryIDs),
 			eventId: undefined,
 			sidebarView: undefined
 		})
@@ -662,7 +683,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						onShowAllEmployees={() => {
 							setQuery({
 								...query,
-								employeeIDs: getEmployeeIDs(employees?.options)
+								employeeIDs: undefined
 							})
 						}}
 						onEditEvent={(eventType: CALENDAR_EVENT_TYPE, eventId: string) => {

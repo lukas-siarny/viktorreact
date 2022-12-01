@@ -6,7 +6,8 @@ import { EventContentArg, EventDropArg } from '@fullcalendar/react'
 // utils
 import {
 	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT,
-	ENDS_EVENT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK, DAY
+	ENDS_EVENT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, DAY,
+	SERVICE_TYPE
 } from '../utils/enums'
 
 // types
@@ -56,6 +57,7 @@ export interface ICreateUserForm {
 	phonePrefixCountryCode: string
 	phone: string
 	roleID: string
+	assignedCountryCode: string
 }
 
 export interface IEditUserRoleForm {
@@ -65,16 +67,10 @@ export interface IEditUserRoleForm {
 export interface IUserAccountForm {
 	firstName: string
 	lastName: string
-	email: string
-	phone: string
 	phonePrefixCountryCode: string
-	companyName?: string
-	businessID?: string
-	vatID?: string
-	zipCode?: string
-	city?: string
-	street?: string
-	countryCode?: string
+	phone: string
+	avatar: any
+	assignedCountryCode: string
 }
 
 // type of BE opening hours data
@@ -147,6 +143,10 @@ export interface IServiceForm {
 	useCategoryParameter: boolean
 	serviceCategoryParameter: any
 	employees: any
+	settings: {
+		enabledB2cReservations: boolean
+		autoApproveReservatons: boolean
+	}
 }
 
 export interface ICalendarReservationForm {
@@ -486,6 +486,34 @@ export interface IIndustriesForm {
 
 export interface IIndustryForm {
 	categoryIDs: string[]
+}
+
+export interface IReservationsSettingsNotification {
+	b2bChannels: {
+		[key in RS_NOTIFICATION_TYPE]?: boolean
+	}[]
+	b2cChannels: {
+		[key in RS_NOTIFICATION_TYPE]?: boolean
+	}[]
+}
+
+export interface IReservationSystemSettingsForm {
+	enabledReservations?: boolean | null
+	maxDaysB2cCreateReservation?: number | null
+	maxHoursB2cCreateReservationBeforeStart?: number | null
+	maxHoursB2cCancelReservationBeforeStart?: number | null
+	minutesIntervalBetweenB2CReservations?: number | null
+	// Pomocne checky pre chekcnutie all hodnot pre BOOKING / AUTO CONFIRM
+	autoConfirmAll: boolean
+	onlineBookingAll: boolean
+	disabledNotifications: {
+		[key in RS_NOTIFICATION]: IReservationsSettingsNotification
+	}
+	servicesSettings: {
+		[key in SERVICE_TYPE]: {
+			[key: string]: boolean
+		}
+	}
 }
 
 export type NameLocalizationsItem = {

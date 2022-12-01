@@ -1,14 +1,13 @@
 import React from 'react'
 import { WrappedFieldProps } from 'redux-form'
 import { Tree } from 'antd'
-import { DataNode } from 'antd/lib/tree'
+import { DataNode, TreeProps } from 'antd/lib/tree'
 
-type ComponentProps = {
+type ComponentProps = TreeProps & {
 	checkboxGroupStyles?: React.CSSProperties
 	horizontal?: boolean
 	large?: boolean
 	dataTree?: DataNode[]
-	label?: string
 }
 
 type Props = WrappedFieldProps & ComponentProps
@@ -25,7 +24,7 @@ export type NestedMultiselectDataItem = {
 }[]
 
 const CheckboxGroupNestedField = (props: Props) => {
-	const { dataTree, input } = props
+	const { dataTree, input, checkable = true, defaultExpandedKeys } = props
 
 	const onCheck = (
 		checked:
@@ -41,9 +40,10 @@ const CheckboxGroupNestedField = (props: Props) => {
 	return (
 		<Tree
 			className={'noti-services-tree'}
-			checkable
+			checkable={checkable}
 			blockNode
 			onCheck={onCheck}
+			defaultExpandedKeys={defaultExpandedKeys}
 			checkedKeys={input.value}
 			selectable={false}
 			treeData={dataTree}

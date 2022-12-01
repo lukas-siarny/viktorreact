@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useEffect } from 'react'
+import React, { useMemo, useCallback } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Col, Divider, Form, Row, Tag } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -11,7 +11,6 @@ import Filters from '../../../../components/Filters'
 
 // reducers
 import { RootState } from '../../../../reducers'
-import { setSelectedCountry } from '../../../../reducers/selectedCountry/selectedCountryActions'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../../assets/icons/plus-icon.svg'
@@ -104,13 +103,6 @@ const SalonsFilterActive = (props: Props) => {
 		},
 		[dispatch]
 	)
-
-	useEffect(() => {
-		if (form?.values?.countryCode) {
-			// set selected country code based on filter changed
-			dispatch(setSelectedCountry(form.values.countryCode))
-		}
-	}, [dispatch, form?.values?.countryCode])
 
 	const publishedOptions = useMemo(
 		() => [

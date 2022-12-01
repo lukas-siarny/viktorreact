@@ -12,6 +12,7 @@ import ReservationSystemSettingsForm from './components/ReservationSystemSetting
 // utils
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
+import { patchReq } from '../../utils/request'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -20,7 +21,6 @@ import { getServices } from '../../reducers/services/serviceActions'
 
 // types
 import { IBreadcrumbs, IReservationSystemSettingsForm, SalonSubPageProps } from '../../types/interfaces'
-import { patchReq } from '../../utils/request'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -114,7 +114,6 @@ const SalonSettingsPage = (props: SalonSubPageProps) => {
 					})
 				)
 			)
-
 			const autoConfirmSettings = reduce(
 				autoConfirmItems,
 				(prev: any, item: any) => {
@@ -131,6 +130,9 @@ const SalonSettingsPage = (props: SalonSubPageProps) => {
 				{}
 			)
 
+			const autoConfirmSettingsHasFalse = includes(Object.values(autoConfirmSettings), false)
+			const onlineBookingSettingsHasFalse = includes(Object.values(onlineBookingSettings), false)
+
 			const servicesSettings = {
 				[SERVICE_TYPE.AUTO_CONFIRM]: autoConfirmSettings,
 				[SERVICE_TYPE.ONLINE_BOOKING]: onlineBookingSettings
@@ -144,7 +146,9 @@ const SalonSettingsPage = (props: SalonSubPageProps) => {
 					maxHoursB2cCancelReservationBeforeStart: salonRes?.data?.settings?.maxHoursB2cCancelReservationBeforeStart,
 					minutesIntervalBetweenB2CReservations: salonRes?.data?.settings?.minutesIntervalBetweenB2CReservations,
 					disabledNotifications: initDisabledNotifications(salonRes?.data?.settings?.disabledNotifications),
-					servicesSettings
+					servicesSettings,
+					onlineBookingAll: !onlineBookingSettingsHasFalse,
+					autoConfirmAll: !autoConfirmSettingsHasFalse
 				})
 			)
 		}
@@ -218,7 +222,6 @@ const SalonSettingsPage = (props: SalonSubPageProps) => {
 				<Col span={24}>
 					<div className='content-body'>
 						<Spin spinning={salon.isLoading}>
-							{/* <Permissions allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_CREATE]} render={() => <ServicesFilter onSubmit={handleSubmit} />} /> */}
 							<ReservationSystemSettingsForm onSubmit={handleSubmitSettings} salonID={salonID} excludedB2BNotifications={EXCLUDED_NOTIFICATIONS_B2B} />
 						</Spin>
 					</div>

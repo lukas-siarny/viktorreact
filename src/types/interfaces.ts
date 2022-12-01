@@ -508,12 +508,15 @@ export interface IReservationSystemSettingsForm {
 	maxHoursB2cCreateReservationBeforeStart?: number | null
 	maxHoursB2cCancelReservationBeforeStart?: number | null
 	minutesIntervalBetweenB2CReservations?: number | null
+	// Pomocne checky pre chekcnutie all hodnot pre BOOKING / AUTO CONFIRM
+	autoConfirmAll: boolean
+	onlineBookingAll: boolean
 	disabledNotifications: {
 		[key in RS_NOTIFICATION]: IReservationsSettingsNotification
 	}
 	servicesSettings: {
 		[key in SERVICE_TYPE]: {
-			[key in string]: boolean
+			[key: string]: boolean
 		}
 	}
 }

@@ -24,7 +24,7 @@ export type NestedMultiselectDataItem = {
 }[]
 
 const CheckboxGroupNestedField = (props: Props) => {
-	const { dataTree, input, checkable = true } = props
+	const { dataTree, input, checkable = true, defaultExpandedKeys } = props
 
 	const onCheck = (
 		checked:
@@ -43,6 +43,7 @@ const CheckboxGroupNestedField = (props: Props) => {
 			checkable={checkable}
 			blockNode
 			onCheck={onCheck}
+			defaultExpandedKeys={defaultExpandedKeys}
 			checkedKeys={input.value}
 			selectable={false}
 			treeData={dataTree}

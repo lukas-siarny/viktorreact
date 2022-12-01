@@ -3,10 +3,16 @@ import { Checkbox, Row, Form } from 'antd'
 import { WrappedFieldProps } from 'redux-form'
 import { InputProps } from 'antd/lib/input'
 import { FormItemLabelProps } from 'antd/lib/form/FormItemLabel'
+import cx from 'classnames'
 
 const { Item } = Form
 
-type Props = WrappedFieldProps & InputProps & FormItemLabelProps
+type Props = WrappedFieldProps &
+	InputProps &
+	FormItemLabelProps & {
+		optionRender?: (option: any, isChecked: boolean) => React.ReactNode
+		hideChecker?: boolean
+	}
 
 const CheckboxField = (props: Props) => {
 	const {
@@ -16,14 +22,24 @@ const CheckboxField = (props: Props) => {
 		disabled,
 		meta: { error, touched },
 		placeholder,
-		style
+		style,
+		className,
+		hideChecker,
+		optionRender
 	} = props
 
 	return (
-		<Item required={required} label={label} help={touched && error} validateStatus={error && touched ? 'error' : undefined} style={style}>
+		<Item
+			className={cx(className, 'noti-checkbox', { 'noti-checkbox-hidden': hideChecker })}
+			required={required}
+			label={label}
+			help={touched && error}
+			validateStatus={error && touched ? 'error' : undefined}
+			style={style}
+		>
 			<Row>
 				<Checkbox {...input} checked={!!input.value} disabled={disabled}>
-					{placeholder}
+					{optionRender ? optionRender(placeholder, !!input.value) : placeholder}
 				</Checkbox>
 			</Row>
 		</Item>

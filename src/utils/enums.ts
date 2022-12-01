@@ -727,37 +727,6 @@ export const EVENT_NAMES = (eventType: CALENDAR_EVENT_TYPE) => {
 	}
 }
 
-export const EVENT_TYPE_OPTIONS = (eventType?: CALENDAR_EVENTS_VIEW_TYPE) => {
-	const options = [
-		{
-			key: CALENDAR_EVENT_TYPE.RESERVATION,
-			label: i18next.t('loc:Rezervácia')
-		},
-		{
-			key: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
-			label: i18next.t('loc:Pracovná zmena')
-		},
-		{
-			key: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
-			label: i18next.t('loc:Voľno')
-		},
-		{
-			key: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
-			label: i18next.t('loc:Prestávka')
-		}
-	]
-	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-		// rezervacia a break
-		return filter(options, (item) => item.key === CALENDAR_EVENT_TYPE.RESERVATION || item.key === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK)
-	}
-	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
-		// shift, break a vacation
-		return filter(options, (item) => item.key !== CALENDAR_EVENT_TYPE.RESERVATION)
-	}
-	// vsetky optiony
-	return options
-}
-
 export const SHORTCUT_DAYS_OPTIONS = (length = 2) => [
 	{ label: i18next.t('loc:Pondelok').substring(0, length), value: DAY.MONDAY },
 	{ label: i18next.t('loc:Utorok').substring(0, length), value: DAY.TUESDAY },

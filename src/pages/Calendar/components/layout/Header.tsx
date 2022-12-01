@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useRef, useState, useMemo } from 'react'
+import React, { FC, useCallback, useRef, useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 import { Header } from 'antd/lib/layout/layout'
@@ -116,6 +116,8 @@ const CalendarHeader: FC<Props> = (props) => {
 	})
 
 	const isSmallerDevice = useMedia(['(max-width: 1200px)'], [true], false)
+
+	useEffect(() => setCurrentDate(selectedDate), [selectedDate])
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const setSelectedDateDebounced = useCallback(debounce(setSelectedDate, 500), [setSelectedDate])

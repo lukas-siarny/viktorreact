@@ -11,7 +11,7 @@ import CreateUserAccountForm from './components/CreateUserAccountForm'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // types
-import { IBreadcrumbs } from '../../types/interfaces'
+import { IBreadcrumbs, ICreateUserForm } from '../../types/interfaces'
 
 // utils
 import { history } from '../../utils/history'
@@ -66,7 +66,7 @@ const CreateUserPage = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [phonePrefixes])
 
-	const createUser = async (formData: any) => {
+	const createUser = async (formData: ICreateUserForm) => {
 		try {
 			setSubmitting(true)
 
@@ -74,7 +74,8 @@ const CreateUserPage = () => {
 				email: formData?.email,
 				phone: formData?.phone,
 				phonePrefixCountryCode: formData?.phonePrefixCountryCode,
-				roleID: formData?.roleID
+				roleID: formData?.roleID,
+				assignedCountryCode: formData?.assignedCountryCode
 			})
 
 			const userID = data.user.id

@@ -57,6 +57,7 @@ export interface ICreateUserForm {
 	phonePrefixCountryCode: string
 	phone: string
 	roleID: string
+	assignedCountryCode: string
 }
 
 export interface IEditUserRoleForm {
@@ -66,16 +67,10 @@ export interface IEditUserRoleForm {
 export interface IUserAccountForm {
 	firstName: string
 	lastName: string
-	email: string
-	phone: string
 	phonePrefixCountryCode: string
-	companyName?: string
-	businessID?: string
-	vatID?: string
-	zipCode?: string
-	city?: string
-	street?: string
-	countryCode?: string
+	phone: string
+	avatar: any
+	assignedCountryCode: string
 }
 
 // type of BE opening hours data

@@ -19,8 +19,11 @@ import { RootState } from '../../../reducers'
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
 // utils
-import { FORM } from '../../../utils/enums'
-import { showErrorNotification } from '../../../utils/helper'
+import { ENUMERATIONS_KEYS, FORM } from '../../../utils/enums'
+import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
+
+// assets
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 
 type ComponentProps = {}
 
@@ -29,7 +32,9 @@ type Props = InjectedFormProps<ICreateUserForm, ComponentProps> & ComponentProps
 const CreateUserAccountForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit } = props
+
 	const roles = useSelector((state: RootState) => state.roles.systemRoles)
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -45,7 +50,20 @@ const CreateUserAccountForm: FC<Props> = (props) => {
 						prefixName={'phonePrefixCountryCode'}
 						phoneName={'phone'}
 						formName={FORM.ADMIN_CREATE_USER}
-						required
+					/>
+					<Field
+						component={SelectField}
+						optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
+						name={'assignedCountryCode'}
+						label={t('loc:Predvolená krajina')}
+						placeholder={t('loc:Vyberte krajinu')}
+						allowClear
+						size={'large'}
+						filterOptions
+						onDidMountSearch
+						options={countries?.enumerationsOptions}
+						loading={countries?.isLoading}
+						disabled={countries?.isLoading}
 					/>
 					<Field
 						component={SelectField}

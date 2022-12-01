@@ -147,6 +147,10 @@ export interface IServiceForm {
 	useCategoryParameter: boolean
 	serviceCategoryParameter: any
 	employees: any
+	settings: {
+		enabledB2cReservations: boolean
+		autoApproveReservatons: boolean
+	}
 }
 
 export interface ICalendarReservationForm {

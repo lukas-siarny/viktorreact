@@ -1,7 +1,7 @@
 import React, { MouseEventHandler, ReactNode, useCallback, useState, FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
-import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, FieldArray, FormSection, InjectedFormProps, reduxForm } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Col, Collapse, Divider, Form, Row, Space, Spin, Tag } from 'antd'
 import { isEmpty, get, isNil } from 'lodash'
@@ -39,6 +39,7 @@ import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
 import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.svg'
 import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline.svg'
 import { ReactComponent as EmployeesIcon } from '../../../assets/icons/employees.svg'
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
 
 const { Panel } = Collapse
@@ -417,7 +418,7 @@ const ServiceForm: FC<Props> = (props) => {
 						<div className={'service-badge'}>{service.data?.service?.category?.child?.name}</div>
 						<div className={'service-badge'}>{service.data?.service?.category?.child?.child?.name}</div>
 					</div>
-					<Space className={'w-full'} direction='vertical' size={36}>
+					<Space className={'w-full'} direction='vertical'>
 						<div>
 							<h3 className={'mb-0 mt-0 flex items-center'}>
 								<SettingIcon className={'text-notino-black mr-2'} />
@@ -427,47 +428,31 @@ const ServiceForm: FC<Props> = (props) => {
 							{!isEmpty(formValues?.serviceCategoryParameter) && (
 								<Field className={'mb-0'} component={SwitchField} label={t('loc:Použiť parameter')} name={'useCategoryParameter'} size={'middle'} />
 							)}
-							{formValues?.useCategoryParameter ? (
-								<div className={'my-2'}>
-									<FieldArray
-										component={renderParameterValues}
-										name={'serviceCategoryParameter'}
-										salon={salon}
-										showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
-										form={form}
-										// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
-										// dispatch={dispatch}
-									/>
-								</div>
-							) : (
-								<div className={'mt-2'}>
-									<Row gutter={8} align='top' justify='center'>
-										<Col className={'mt-5'} span={8}>
-											<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={'variableDuration'} size={'middle'} />
-										</Col>
-										<Col span={variableDuration ? 8 : 16}>
-											<Field
-												component={InputNumberField}
-												label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
-												placeholder={t('loc:min')}
-												name='durationFrom'
-												precision={0}
-												step={1}
-												min={0}
-												max={999}
-												size={'large'}
-												validate={[numberMin0]}
-												required
-											/>
-										</Col>
-
-										{variableDuration && (
-											<Col span={8}>
+							<>
+								{formValues?.useCategoryParameter ? (
+									<div className={'my-2'}>
+										<FieldArray
+											component={renderParameterValues}
+											name={'serviceCategoryParameter'}
+											salon={salon}
+											showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
+											form={form}
+											// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
+											// dispatch={dispatch}
+										/>
+									</div>
+								) : (
+									<div className={'mt-2'}>
+										<Row gutter={8} align='top' justify='center'>
+											<Col className={'mt-5'} span={8}>
+												<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={'variableDuration'} size={'middle'} />
+											</Col>
+											<Col span={variableDuration ? 8 : 16}>
 												<Field
 													component={InputNumberField}
-													label={t('loc:Trvanie do (minúty)')}
+													label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
 													placeholder={t('loc:min')}
-													name='durationTo'
+													name='durationFrom'
 													precision={0}
 													step={1}
 													min={0}
@@ -477,37 +462,39 @@ const ServiceForm: FC<Props> = (props) => {
 													required
 												/>
 											</Col>
-										)}
-									</Row>
-									<Row gutter={8} align='top' justify='center'>
-										<Col className={'mt-5'} span={8}>
-											<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={'variablePrice'} size={'middle'} />
-										</Col>
-										<Col span={variablePrice ? 8 : 16}>
-											<Field
-												component={InputNumberField}
-												label={
-													variablePrice
-														? t('loc:Cena od ({{symbol}})', { symbol: salon.data?.currency.symbol })
-														: t('loc:Cena ({{symbol}})', { symbol: salon.data?.currency.symbol })
-												}
-												placeholder={salon.data?.currency.symbol}
-												name='priceFrom'
-												precision={2}
-												step={1}
-												min={0}
-												size={'large'}
-												validate={[numberMin0]}
-												required
-											/>
-										</Col>
-										{variablePrice && (
-											<Col span={8}>
+
+											{variableDuration && (
+												<Col span={8}>
+													<Field
+														component={InputNumberField}
+														label={t('loc:Trvanie do (minúty)')}
+														placeholder={t('loc:min')}
+														name='durationTo'
+														precision={0}
+														step={1}
+														min={0}
+														max={999}
+														size={'large'}
+														validate={[numberMin0]}
+														required
+													/>
+												</Col>
+											)}
+										</Row>
+										<Row gutter={8} align='top' justify='center'>
+											<Col className={'mt-5'} span={8}>
+												<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={'variablePrice'} size={'middle'} />
+											</Col>
+											<Col span={variablePrice ? 8 : 16}>
 												<Field
 													component={InputNumberField}
-													label={t('loc:Cena do ({{symbol}})', { symbol: salon.data?.currency.symbol })}
+													label={
+														variablePrice
+															? t('loc:Cena od ({{symbol}})', { symbol: salon.data?.currency.symbol })
+															: t('loc:Cena ({{symbol}})', { symbol: salon.data?.currency.symbol })
+													}
 													placeholder={salon.data?.currency.symbol}
-													name='priceTo'
+													name='priceFrom'
 													precision={2}
 													step={1}
 													min={0}
@@ -516,10 +503,66 @@ const ServiceForm: FC<Props> = (props) => {
 													required
 												/>
 											</Col>
-										)}
-									</Row>{' '}
+											{variablePrice && (
+												<Col span={8}>
+													<Field
+														component={InputNumberField}
+														label={t('loc:Cena do ({{symbol}})', { symbol: salon.data?.currency.symbol })}
+														placeholder={salon.data?.currency.symbol}
+														name='priceTo'
+														precision={2}
+														step={1}
+														min={0}
+														size={'large'}
+														validate={[numberMin0]}
+														required
+													/>
+												</Col>
+											)}
+										</Row>
+									</div>
+								)}
+								<div>
+									<h3 className={'mb-0 mt-0 flex items-center'}>
+										<GlobeIcon className={'text-notino-black mr-2'} />
+										{t('loc:Online rezervácia')}
+									</h3>
+									<Divider className={'mb-3 mt-3'} />
+									<div className={'text-xs text-notino-grayDark mb-4'}>
+										{t('loc:Zapnutím rezervačného systému sa aktivuje kalendár na spravovanie rezervácií a zmien zamestnancov vo vašom salóne.')}
+									</div>
+									<FormSection name={'settings'}>
+										<Row gutter={[8, 8]}>
+											<Col span={12}>
+												<Field
+													className={'pb-0'}
+													component={SwitchField}
+													label={t('loc:Online rezervácia')}
+													name={'enabledB2cReservations'}
+													size={'middle'}
+												/>
+												<div className={'text-xs text-notino-grayDark mt-2'}>
+													{t('loc:Klienti budú mať možnosť rezervovať si vybranú službu v aplikácii.')}
+												</div>
+											</Col>
+											<Col span={12}>
+												<Field
+													className={'pb-0'}
+													component={SwitchField}
+													label={t('loc:Automatické potvrdenie')}
+													name={'autoApproveReservatons'}
+													size={'middle'}
+												/>
+												<div className={'text-xs text-notino-grayDark mt-2'}>
+													{t(
+														'loc:Online rezervácia bude automaticky schválená, už ju nemusíte potvrdzovať ručne. Rezervácia sa zobrazí vo vašom kalendári ako potvrdená.'
+													)}
+												</div>
+											</Col>
+										</Row>
+									</FormSection>
 								</div>
-							)}
+							</>
 						</div>
 						<div>
 							<h3 className={'mb-0 mt-0 flex items-center'}>

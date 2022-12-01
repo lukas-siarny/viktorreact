@@ -186,7 +186,6 @@ const ServiceEditPage = (props: Props) => {
 			const parameterValues = unionBy(data.service?.serviceCategoryParameter?.values, categoryParameterValues as any, 'categoryParameterValueID')
 			// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
 			const { /* activeKeys, */ serviceCategoryParameter } = parseParameterValuesInit(parameterValues)
-
 			initData = {
 				id: data.service.id,
 				serviceCategoryParameterType: data.service.serviceCategoryParameter?.valueType,
@@ -198,7 +197,8 @@ const ServiceEditPage = (props: Props) => {
 				priceTo: decodePrice(data.service.priceAndDurationData.priceTo),
 				variablePrice: !!data.service.priceAndDurationData.priceTo,
 				employees: parseEmployeesInit(data?.service?.employees),
-				useCategoryParameter: data.service.useCategoryParameter
+				useCategoryParameter: data.service.useCategoryParameter,
+				settings: data.service.settings
 				// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
 				/* activeKeys */
 			}
@@ -227,7 +227,8 @@ const ServiceEditPage = (props: Props) => {
 							priceTo: values.variablePrice ? encodePrice(values.priceTo) : null
 					  }) as any,
 				categoryParameterValues: parseParameterValuesCreateAndUpdate(values.serviceCategoryParameter),
-				employeeIDs: parseEmployeeCreateAndUpdate(values.employees)
+				employeeIDs: parseEmployeeCreateAndUpdate(values.employees),
+				settings: values.settings
 			}
 			await patchReq('/api/b2b/admin/services/{serviceID}', { serviceID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			history.push(parentPath)

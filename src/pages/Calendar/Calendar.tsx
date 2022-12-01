@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 import Layout from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
-import { includes, isEmpty } from 'lodash'
+import { includes, isEmpty, omit } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { getFormValues, initialize, submit, destroy } from 'redux-form'
@@ -172,13 +172,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[dispatch, salonID, query.date, query.employeeIDs, query.categoryIDs, query.view, query.eventsViewType]
 	)
-
 	const setNewSelectedDate = (newDate: string) => {
 		if (dayjs(newDate).isSame(query.date)) {
 			return
 		}
 
-		setQuery({ ...query, date: newDate })
+		setQuery({
+			...omit(query, ['eventId', 'sidebarView']),
+			date: newDate
+		})
 		let newCalendarDate = newDate
 		if (query.view === CALENDAR_VIEW.WEEK) {
 			// v tyzdenom view je potrebne skontrolovat, ci sa vramci novo nastaveneho tyzdnoveho rangu nachadza dnesok

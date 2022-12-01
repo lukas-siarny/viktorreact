@@ -5,7 +5,7 @@ import { compose } from 'redux'
 import { ArrayParam, BooleanParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Modal, Progress, Row, Spin, Image, Tooltip } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
-import { initialize, reset } from 'redux-form'
+import { initialize, isPristine, reset } from 'redux-form'
 
 // components
 import { isEmpty } from 'lodash'
@@ -37,6 +37,7 @@ import { IBreadcrumbs, IDataUploadForm, Columns } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
 
@@ -58,7 +59,9 @@ const SalonsPage = () => {
 	const [tabKey, setTabKey] = useState<TAB_KEYS | undefined>()
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON_IMPORTS_FORM]?.values)
+	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	const { data } = useSelector((state: RootState) => state.categories.categories)
+	const isFormPristine = useSelector((state: RootState) => isPristine(FORM.SALONS_FILTER_ACITVE)(state))
 	// transform root categories (industries) into object, where ID is key of record, and content is { image, name }
 	const industries: { [key: string]: any } = useMemo(
 		() => data?.reduce((result, industry) => ({ ...result, [industry.id]: { image: industry.image?.resizedImages?.thumbnail, name: industry.name } }), {}) || {},
@@ -101,7 +104,8 @@ const SalonsPage = () => {
 			limit: undefined,
 			page: 1,
 			order: 'createdAt:DESC',
-			countryCode: undefined,
+			// get default selected country form redux store
+			countryCode: selectedCountry,
 			createType: undefined,
 			lastUpdatedAtFrom: undefined,
 			lastUpdatedAtTo: undefined,
@@ -116,7 +120,7 @@ const SalonsPage = () => {
 	const isAdmin = useMemo(() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUserPermissions])
 
 	useEffect(() => {
-		const salonsQueries = {
+		let salonsQueries = {
 			page: query.page,
 			limit: query.limit,
 			order: query.order,
@@ -136,6 +140,14 @@ const SalonsPage = () => {
 			assignedUserID: query.assignedUserID
 		}
 
+		// on init SalonFilterActive data get selected country from redux store
+		if (isFormPristine) {
+			salonsQueries = {
+				...salonsQueries,
+				countryCode: selectedCountry
+			}
+		}
+
 		switch (query.salonState) {
 			case TAB_KEYS.DELETED:
 				setTabKey(TAB_KEYS.DELETED)
@@ -143,7 +155,7 @@ const SalonsPage = () => {
 					initialize(FORM.SALONS_FILTER_DELETED, {
 						search: query.search,
 						categoryFirstLevelIDs: query.categoryFirstLevelIDs,
-						countryCode: query.countryCode
+						countryCode: salonsQueries.countryCode
 					})
 				)
 				dispatch(getSalons(salonsQueries))
@@ -164,7 +176,7 @@ const SalonsPage = () => {
 						statuses_published: query.statuses_published,
 						statuses_changes: query.statuses_changes,
 						categoryFirstLevelIDs: query.categoryFirstLevelIDs,
-						countryCode: query.countryCode,
+						countryCode: salonsQueries.countryCode,
 						createType: query.createType,
 						dateFromTo: {
 							dateFrom: query.lastUpdatedAtFrom,
@@ -179,6 +191,7 @@ const SalonsPage = () => {
 				dispatch(getSalons(salonsQueries))
 				break
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		dispatch,
 		query.page,
@@ -197,7 +210,8 @@ const SalonsPage = () => {
 		query.hasSetOpeningHours,
 		query.sourceType,
 		query.premiumSourceUserType,
-		query.assignedUserID
+		query.assignedUserID,
+		selectedCountry
 	])
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
@@ -223,6 +237,9 @@ const SalonsPage = () => {
 	const handleSubmitActive = (values: ISalonsFilterActive) => {
 		const { dateFromTo, ...restValues } = values
 
+		// update selected country globally based on filter
+		dispatch(setSelectedCountry(restValues?.countryCode || undefined))
+
 		const newQuery = {
 			...query,
 			...restValues,
@@ -235,6 +252,9 @@ const SalonsPage = () => {
 	}
 
 	const handleSubmitDeleted = (values: ISalonsFilterDeleted) => {
+		// update selected country globally based on filter
+		dispatch(setSelectedCountry(values?.countryCode || undefined))
+
 		const newQuery = {
 			...query,
 			...values,

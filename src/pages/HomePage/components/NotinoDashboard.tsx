@@ -174,13 +174,14 @@ const NotinoDashboard: FC = () => {
 	const [annualStatsDate, setAnnualStatsDate] = useState<Dayjs>(now)
 	const [monthStatsDate, setMonthStatsDate] = useState<Dayjs>(now)
 	const { notino, salonsAnnualStats, salonsMonthStats } = useSelector((state: RootState) => state.dashboard)
+	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 
 	useEffect(() => {
-		dispatch(getNotinoDashboard())
+		dispatch(getNotinoDashboard(selectedCountry))
 		// months are indexed from 0 and API has indexed months from 1
-		dispatch(getSalonsMonthStats(now.year(), now.month() + 1))
-		dispatch(getSalonsAnnualStats(now.year()))
-	}, [dispatch])
+		dispatch(getSalonsMonthStats(now.year(), now.month() + 1, selectedCountry))
+		dispatch(getSalonsAnnualStats(now.year(), selectedCountry))
+	}, [dispatch, selectedCountry])
 
 	const annualStats: TimeStats = useMemo(() => {
 		return transformToStatsData(salonsAnnualStats.data, salonsAnnualStats.isLoading, salonsAnnualStats.isFailure, annualStatsDate)

@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row } from 'antd'
+import { useSelector } from 'react-redux'
 
 // types
 import { IUserAccountForm } from '../../../types/interfaces'
@@ -12,16 +13,21 @@ import validateUserAccountForm from './validateUserAccountForm'
 // atoms
 import InputField from '../../../atoms/InputField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
+import SelectField from '../../../atoms/SelectField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
 // utils
-import { showErrorNotification } from '../../../utils/helper'
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
+import { ENUMERATIONS_KEYS, FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 
 // assets
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+
+// reducers
+import { RootState } from '../../../reducers'
 
 type ComponentProps = {}
 
@@ -30,6 +36,8 @@ type Props = InjectedFormProps<IUserAccountForm, ComponentProps> & ComponentProp
 const UserAccountForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit } = props
+
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	return (
 		<Form layout={'vertical'} id={`${FORM.USER_ACCOUNT}-form`} className={'form'} onSubmitCapture={handleSubmit}>
@@ -64,6 +72,20 @@ const UserAccountForm: FC<Props> = (props) => {
 						prefixName={'phonePrefixCountryCode'}
 						phoneName={'phone'}
 						formName={FORM.USER_ACCOUNT}
+					/>
+					<Field
+						component={SelectField}
+						optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
+						name={'assignedCountryCode'}
+						label={t('loc:Predvolená krajina')}
+						placeholder={t('loc:Vyberte krajinu')}
+						allowClear
+						size={'large'}
+						filterOptions
+						onDidMountSearch
+						options={countries?.enumerationsOptions}
+						loading={countries?.isLoading}
+						disabled={countries?.isLoading}
 					/>
 				</Row>
 			</Col>

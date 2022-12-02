@@ -120,7 +120,7 @@ const CalendarHeader: FC<Props> = (props) => {
 	useEffect(() => setCurrentDate(selectedDate), [selectedDate])
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	const setSelectedDateDebounced = useCallback(debounce(setSelectedDate, 500), [setSelectedDate])
+	const setSelectedDateDebounced = useCallback(debounce(setSelectedDate, CALENDAR_DEBOUNCE_DELAY), [setSelectedDate])
 
 	const changeSelectedDate = (newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT, debounced = false) => {
 		let newQueryDate: string | dayjs.Dayjs = newDate
@@ -234,6 +234,7 @@ const CalendarHeader: FC<Props> = (props) => {
 					trigger={['click']}
 					getPopupContainer={() => document.querySelector('#noti-calendar-header') as HTMLElement}
 					visible={isCalendarOpen}
+					destroyPopupOnHide
 				>
 					<button type={'button'} className={'nc-button-date mx-1'} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>
 						{formatHeaderDate(currentDate, calendarView)}

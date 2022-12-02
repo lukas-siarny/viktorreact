@@ -22,7 +22,8 @@ export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvent
 
 interface ICalendarEventsQueryParams {
 	salonID: string
-	date: string
+	start: string
+	end: string
 	employeeIDs?: (string | null)[] | null
 	categoryIDs?: (string | null)[] | null
 	eventTypes?: (string | null)[] | null
@@ -31,7 +32,8 @@ interface ICalendarEventsQueryParams {
 
 interface ICalendarReservationsQueryParams {
 	salonID: string
-	date: string
+	start: string
+	end: string
 	employeeIDs?: (string | null)[] | null
 	categoryIDs?: (string | null)[] | null
 	reservationStates?: (string | null)[] | null
@@ -39,7 +41,8 @@ interface ICalendarReservationsQueryParams {
 
 interface ICalendarShiftsTimeOffQueryParams {
 	salonID: string
-	date: string
+	start: string
+	end: string
 	employeeIDs?: (string | null)[] | null
 }
 
@@ -73,15 +76,13 @@ export const getCalendarEvents =
 		let payload = {} as ICalendarEventsPayload
 
 		try {
-			const { start, end } = getSelectedDateRange(view, queryParams.date)
-
 			const queryParamsEditedForRequest = {
 				salonID: queryParams.salonID,
 				categoryIDs: queryParams.categoryIDs,
 				employeeIDs: queryParams.employeeIDs,
 				eventTypes: queryParams.eventTypes,
-				dateFrom: start,
-				dateTo: end,
+				dateFrom: queryParams.start,
+				dateTo: queryParams.end,
 				reservationStates: queryParams.reservationStates
 			}
 
@@ -109,8 +110,8 @@ export const getCalendarEvents =
 					if (isMultipleDayEvent) {
 						// kontrola, ci je zaciatok a konec multidnoveho eventu vacsi alebo mensi ako aktualne vybraty rozsah
 						// staci nam vytvorit eventy len pre vybrany rozsah
-						const rangeStart = dayjs.max(dayjs(start).startOf('day'), eventStartStartOfDay)
-						const rangeEnd = dayjs.min(dayjs(end).startOf('day'), eventEndStartOfDay)
+						const rangeStart = dayjs.max(dayjs(queryParams.start).startOf('day'), eventStartStartOfDay)
+						const rangeEnd = dayjs.min(dayjs(queryParams.end).startOf('day'), eventEndStartOfDay)
 						// rozdiel zaciatku multidnoveho eventu a zaciatku vybrateho rozsahu
 						const startDifference = rangeStart.diff(eventStartStartOfDay, 'days')
 						// rozdiel konca multidnoveho eventu a konca vybrateho rozsahu

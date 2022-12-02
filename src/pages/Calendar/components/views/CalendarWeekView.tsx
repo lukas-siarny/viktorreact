@@ -1,12 +1,12 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo, useState, useEffect, useRef } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
 import useResizeObserver from '@react-hook/resize-observer'
-import { Element } from 'react-scroll'
+import Scroll, { Element } from 'react-scroll'
 
 // full calendar
-import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { CalendarApi, EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
@@ -16,7 +16,7 @@ import CalendarEventContent from '../CalendarEventContent'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW } from '../../../../utils/enums'
-import { composeWeekResources, composeWeekViewEvents, eventAllow, getSelectedDateForCalendar, getTimeScrollId, getWeekDays, getWeekViewSelectedDate } from '../../calendarHelpers'
+import { composeWeekResources, composeWeekViewEvents, eventAllow } from '../../calendarHelpers'
 
 // types
 import { ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -108,17 +108,15 @@ const NowIndicator = () => {
 
 interface ICalendarWeekView extends ICalendarView {
 	updateCalendarSize: () => void
+	weekDays: string[]
 }
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventChange, refetchData, updateCalendarSize } = props
-
-	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
-	const weekViewSelectedDate = getSelectedDateForCalendar(CALENDAR_VIEW.WEEK, selectedDate)
+	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventChange, refetchData, weekDays, updateCalendarSize } = props
 
 	const events = useMemo(
-		() => composeWeekViewEvents(weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees),
-		[weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees]
+		() => composeWeekViewEvents(selectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees),
+		[selectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees]
 	)
 	const resources = useMemo(() => composeWeekResources(weekDays, shiftsTimeOffs, employees), [weekDays, shiftsTimeOffs, employees])
 
@@ -144,7 +142,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				resourceAreaWidth={200}
 				headerToolbar={false}
 				initialView='resourceTimelineDay'
-				initialDate={weekViewSelectedDate}
+				initialDate={selectedDate}
 				weekends={true}
 				editable
 				selectable
@@ -164,8 +162,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				eventResize={(arg) => onEventChange(CALENDAR_VIEW.WEEK, arg)}
-				eventsSet={() => setTimeout(updateCalendarSize, 0)}
 				resourcesSet={() => setTimeout(updateCalendarSize, 0)}
+				eventsSet={() => setTimeout(updateCalendarSize, 0)}
 			/>
 		</div>
 	)

@@ -34,13 +34,7 @@ import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
 
 // reducers
-import {
-	clearCalendarReservations,
-	clearCalendarShiftsTimeoffs,
-	getCalendarEventDetail,
-	getCalendarReservations,
-	getCalendarShiftsTimeoff
-} from '../../reducers/calendar/calendarActions'
+import { getCalendarEventDetail, getCalendarReservations, getCalendarShiftsTimeoff } from '../../reducers/calendar/calendarActions'
 import { RootState } from '../../reducers'
 import { getEmployees } from '../../reducers/employees/employeesActions'
 import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
@@ -141,6 +135,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const [t] = useTranslation()
 
+	const initialScroll = useRef(false)
+	const scrollToDateTimeout = useRef<any>(null)
+
 	const setNewSelectedDate = (newDate: string) => {
 		// query sa nastavi vzdy ked sa zmeni datum
 		setQuery({ ...query, date: newDate })
@@ -151,27 +148,34 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			setCurrentRange(getSelectedDateRange(validCalendarView as CALENDAR_VIEW, newDate))
 			const newCalendarDate = getSelectedDateForCalendar(validCalendarView as CALENDAR_VIEW, newDate)
 			calendarRefs?.current?.[validCalendarView as CALENDAR_VIEW]?.getApi()?.gotoDate(newCalendarDate)
+			initialScroll.current = false
 			return
 		}
 
 		// ak sa novy datum nachadza v rovnakom rangi ako predtym, tak sa v tyzdenom view len zascrolluje na jeho poziciu
-		/* if (query.view === CALENDAR_VIEW.WEEK) {
-			scrollToSelectedDate(newDate /* , { smooth: true })
-		} */
+		// nenacitavaju nove data a netreba cakat na opatovne vykreslenie kalenadara
+		if (query.view === CALENDAR_VIEW.WEEK) {
+			scrollToSelectedDate(newDate, { smooth: true, duration: 300 })
+		}
 	}
 
-	const scrollToDateTimeout = useRef<any>(null)
-
 	useEffect(() => {
-		if (!loadingData && query.view === CALENDAR_VIEW.WEEK) {
-			clearTimeout(scrollToDateTimeout.current)
-
+		// zmenil sa range, je potrebne pockat na nacitanie novych dat a opatovne vykrelsenie kalenara a az tak zascrollovat na datum
+		if (validCalendarView === CALENDAR_VIEW.WEEK && !loadingData && !initialScroll.current) {
 			scrollToDateTimeout.current = setTimeout(() => {
-				scrollToSelectedDate(validSelectedDate)
+				scrollToSelectedDate(validSelectedDate, { smooth: true, duration: 300 })
+				initialScroll.current = true
 			}, 500)
 		}
+
 		return () => clearTimeout(scrollToDateTimeout.current)
-	}, [loadingData, validSelectedDate, validEventsViewType, query.view])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [loadingData, validSelectedDate, query.view, currentRange.start, currentRange.end])
+
+	const setCalendarView = (newView: CALENDAR_VIEW) => {
+		setQuery({ ...query, view: newView })
+		setCurrentRange(getSelectedDateRange(newView, query.date))
+	}
 
 	const updateCalendarSize = useRef(() => calendarRefs?.current?.[validCalendarView as CALENDAR_VIEW]?.getApi()?.updateSize())
 
@@ -350,12 +354,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		;(async () => {
-			// clear previous events
-			// await dispatch(clearCalendarReservations())
-			// await dispatch(clearCalendarShiftsTimeoffs())
-
-			// console.log({ dontFetchNewData: dontFetchNewData.current })
-
 			// if user uncheck all values from one of the filters => don't fetch new events => just clear store
 			if (query?.categoryIDs === null || query?.employeeIDs === null) {
 				return
@@ -687,9 +685,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 					calendarView={validCalendarView as CALENDAR_VIEW}
 					siderFilterCollapsed={siderFilterCollapsed}
-					setCalendarView={(newView) => {
-						setQuery({ ...query, view: newView })
-					}}
+					setCalendarView={setCalendarView}
 					setEventsViewType={(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => setQuery({ ...query, eventsViewType })}
 					setSelectedDate={setNewSelectedDate}
 					setSiderFilterCollapsed={() => {

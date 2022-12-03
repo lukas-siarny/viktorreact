@@ -136,9 +136,6 @@ const CalendarHeader: FC<Props> = (props) => {
 					.startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
 					.subtract(1, calendarView.toLowerCase() as dayjs.OpUnitType)
 				break
-			case CALENDAR_SET_NEW_DATE.FIND_START:
-				newQueryDate = dayjs(newDate).startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
-				break
 			default:
 				break
 		}
@@ -244,7 +241,7 @@ const CalendarHeader: FC<Props> = (props) => {
 				<button
 					type={'button'}
 					className={cx('nc-button', { active: dayjs(getSelectedDateForCalendar(calendarView, selectedDate)).isToday() })}
-					onClick={() => changeSelectedDate(dayjs(), CALENDAR_SET_NEW_DATE.FIND_START)}
+					onClick={() => changeSelectedDate(dayjs())}
 				>
 					{t('loc:Dnes')}
 				</button>

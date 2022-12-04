@@ -17,6 +17,12 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 	100%
 		transform: translateX(0)
 
+@keyframes opacity-animation
+	0%
+		opacity: 0
+	100%
+		opacity: 1
+
 
 @mixin scrollbar-styles
 	@media (pointer:fine)
@@ -588,6 +594,35 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 	text-align: center
 
 // weekly view
+.nc-resource-group-label-bg,
+.nc-resource-group-lane-bg
+	height: 12px
+	background: $backgroundColor-notino-white
+	position: absolute
+	right: 0
+	left: 0
+	z-index: 1
+	border-bottom: 1px solid $borderColor-notino-grayLight
+.nc-resource-group-label-bg
+	left: 55px
+
+@-moz-document url-prefix()
+	.nc-resource-group-label-bg,
+	.nc-resource-group-lane-bg
+		border-top: 1px solid $borderColor-notino-grayLight
+
+.nc-resource-group-label-content,
+.nc-resource-group-lane-content
+	height: 11px
+
+.fc-datagrid-expander
+	display: none
+.fc-icon
+	display: none
+
+.fc .fc-datagrid-cell-cushion
+	padding: 0
+
 .fc-resource-timeline
 	.fc-timeline-slot-minor
 		border-color: $backgroundColor-notino-grayLighter
@@ -612,6 +647,7 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 						background: linear-gradient(180deg, rgba(255,255,255,1) 38%, rgba(255,255,255,0.47102591036414565) 80%, rgba(255,255,255,0.3981967787114846) 100%)
 					> .fc-scroller
 						overflow: visible !important
+						z-index: 4
 						> table.fc-datagrid-header
 							> thead
 								> tr
@@ -662,45 +698,42 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 											height: 100%
 
 		.fc-scrollgrid-section-body
+			.fc-cell-shaded
+				background: white
+				border-bottom-color: transparent
+				.fc-datagrid-cell-cushion
+					min-height: 11px !important
 			> td:first-of-type
-				/* position: relative
-				/* &::before
-					content: ''
-					position: absolute
-					top: 0
-					left: 54px
-					width: 1px
-					bottom: 0
-					background: $borderColor-notino-grayLight
+				border-right: none
 				> .fc-scroller-harness
 					> .fc-scroller
 						@include scrollbar-styles
 						overflow: visible !important
 						table.fc-datagrid-body
 							> tbody > tr
+								&:first-of-type
+									display: none
 								> .fc-datagrid-cell
 									&:first-of-type:not(:last-of-type)
 										position: relative
+										border-bottom-color: transparent
 										.fc-datagrid-cell-frame
 											position: absolute
 											top: 0
 											left: 0
 											right: 0
 											bottom: 0
-											.fc-datagrid-cell-cushion
-												width: 100%
+									&:nth-of-type(2)
+										.fc-datagrid-cell-cushion
+											position: relative
+											&::after
+												position: absolute
+												content: ''
+												top: 0
+												width: 1px
+												right: 0px
 												height: 100%
-												padding: 0
-												position: static
-									&:last-of-type
-										.fc-datagrid-cell-frame
-											.fc-datagrid-cell-cushion
-												padding: 0
-												// min-height: 45px
-												min-height: 40px
-												.fc-datagrid-cell-main
-													// height: 100%
-													// display: block
+												background: $borderColor-notino-grayLight
 			> td.fc-resource-timeline-divider
 				user-select: none
 				-moz-user-select: -moz-none
@@ -725,15 +758,16 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 							.fc-bg-event
 								background-color: transparent !important
 								opacity: 1
-		/* > tfoot
-			> tr.fc-scrollgrid-section-footer
-				> th:last-of-type
-					> .fc-scroller-harness
-						transform: translateX(-200px) // 200px - width of resourceArea
-						width: 100%
-						> .fc-scroller
-							width: calc(100%)
-							// @include scrollbar-styles
+				.fc-timeline-body
+					> table.fc-scrollgrid-sync-table
+						> tbody > tr:first-of-type
+							display: none
+		.fc-scrollgrid-section-footer
+			.fc-resource-timeline-divider
+				user-select: none
+				-moz-user-select: -moz-none
+				visibility: hidden
+				width: 0
 
 .fc .fc-timeline-now-indicator-arrow
 	display: none
@@ -788,18 +822,23 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 	transform: translateX(-50%)
 
 .nc-week-label-day
-	width: 100%
-	height: 100%
-	display: flex
-	flex-direction: column
-	justify-content: center
-	align-items: center
 	text-align: center
 	font-size: 10px
 	line-height: 11px
 	font-weight: 400
 	text-transform: capitalize
-	span
+	width: 54px
+	height: 100%
+	position: absolute
+	top: 0
+	right: 146px
+	display: flex
+	justify-content: center
+	align-items: center
+	flex-direction: column
+	animation: opacity-animation 300ms ease-in-out forwards
+	z-index: 3
+	.day-name
 		display: block
 	&.is-today
 		color: $textColor-notino-pink
@@ -1382,3 +1421,18 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 		&:hover,
 		&:focus-visible
 			background-color: $backgroundColor-notino-grayLight
+
+@-moz-document url-prefix()
+	.fc-resource-timeline
+		> table.fc-scrollgrid
+			.fc-scrollgrid-section-body
+				> td:first-of-type
+					> .fc-scroller-harness
+						> .fc-scroller
+							table.fc-datagrid-body
+								tbody > tr
+									> .fc-datagrid-cell
+										&:nth-of-type(2)
+											.fc-datagrid-cell-cushion
+												&::after
+													display: none

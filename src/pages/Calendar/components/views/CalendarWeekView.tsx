@@ -1,9 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useMemo, useState, useEffect } from 'react'
-import cx from 'classnames'
 import dayjs from 'dayjs'
 import useResizeObserver from '@react-hook/resize-observer'
-import { Element } from 'react-scroll'
 
 // full calendar
 import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
@@ -26,29 +24,30 @@ import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-
 
 const getTodayLabelId = (date: string | dayjs.Dayjs) => `${dayjs(date).format(CALENDAR_DATE_FORMAT.QUERY)}-is-today`
 
+const resourceGroupLabelContent = () => {
+	return (
+		<>
+			<div className={'nc-resource-group-label-bg'} />
+			<div className={'nc-resource-group-label-content'} />
+		</>
+	)
+}
+
+const resourceGroupLaneContent = () => {
+	return (
+		<>
+			<div className={'nc-resource-group-lane-bg'} />
+			<div className={'nc-resource-group-lane-content'} />
+		</>
+	)
+}
+
 const resourceAreaColumns = [
 	{
-		group: true,
 		field: 'day',
 		headerContent: null,
 		width: 55,
-		cellContent: (args: any) => {
-			const { groupValue, fieldValue } = args || {}
-
-			// ked je len jeden zamestnanec tak to posiela fieldValue, ak viacero tak groupValue
-			const date = groupValue || fieldValue
-
-			const dayName = dayjs(date).format('ddd')
-			const dayNumber = dayjs(date).format('D')
-			const isToday = dayjs(date).isToday()
-
-			return (
-				<Element name={date} className={cx('nc-week-label-day', { 'is-today': isToday })} id={isToday ? getTodayLabelId(date) : undefined}>
-					<span>{dayName}</span>
-					{dayNumber}
-				</Element>
-			)
-		}
+		cellContent: () => null
 	},
 	{
 		field: 'employee',
@@ -106,6 +105,39 @@ const NowIndicator = () => {
 	return <div className={'fc-week-now-indicator'} style={{ top: indicatorDimmensions.top, height: indicatorDimmensions.height }} />
 }
 
+const createDayLabelElement = (resourceElemenet: HTMLElement, employeesLength: number) => {
+	const td = document.createElement('td')
+	td.setAttribute('rowspan', employeesLength.toString())
+	td.setAttribute('style', 'position: relative; width: 1px;')
+
+	const div = document.createElement('div')
+	div.classList.add('nc-week-label-day')
+
+	const { resourceId } = resourceElemenet.dataset || {}
+	const date = resourceId?.split('_')[0]
+
+	if (date) {
+		div.setAttribute('name', date)
+
+		if (dayjs(date).isToday()) {
+			div.classList.add('is-today')
+			div.setAttribute('id', getTodayLabelId(date))
+		}
+
+		const dayNumber = document.createElement('span')
+		dayNumber.innerHTML = dayjs(date).format('D')
+
+		const dayName = document.createElement('span')
+		dayName.classList.add('day-name')
+		dayName.innerHTML = dayjs(date).format('ddd')
+
+		div.appendChild(dayNumber)
+		div.appendChild(dayName)
+		td.appendChild(div)
+	}
+	return td
+}
+
 interface ICalendarWeekView extends ICalendarView {
 	updateCalendarSize: () => void
 	weekDays: string[]
@@ -120,9 +152,32 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 	)
 	const resources = useMemo(() => composeWeekResources(weekDays, shiftsTimeOffs, employees), [weekDays, shiftsTimeOffs, employees])
 
+	useEffect(() => {
+		if (employees.length) {
+			;(() =>
+				setTimeout(() => {
+					const dataGridBody = document.querySelector('.fc-datagrid-body')
+					const rows = dataGridBody?.querySelectorAll('tr')
+					rows?.forEach((row, i) => {
+						if (i % (employees.length + 1) === 1) {
+							row.classList.add('is-first-row')
+							const resourceElemenet = row.querySelector('[data-resource-id]')
+							const dayLabelAleradyExsit = !!row.children[2]
+
+							if (resourceElemenet && resourceElemenet instanceof HTMLElement && !dayLabelAleradyExsit) {
+								const resourceDayLabel = createDayLabelElement(resourceElemenet, employees.length)
+								row.appendChild(resourceDayLabel)
+							}
+						}
+					})
+				}, 0))()
+		}
+	}, [employees.length, selectedDate])
+
 	return (
 		<div className={'nc-calendar-wrapper'} id={'nc-calendar-week-wrapper'}>
 			<FullCalendar
+				key={'nc-calendar-week'}
 				ref={ref}
 				// plugins
 				plugins={[interactionPlugin, scrollGrid, resourceTimelinePlugin]}
@@ -154,6 +209,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				resources={resources}
 				resourceAreaColumns={resourceAreaColumns}
 				// render hooks
+				resourceGroupLaneContent={resourceGroupLaneContent}
+				resourceGroupLabelContent={resourceGroupLabelContent}
 				slotLabelContent={slotLabelContent}
 				eventContent={(data: EventContentArg) => (
 					<CalendarEventContent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} refetchData={refetchData} />

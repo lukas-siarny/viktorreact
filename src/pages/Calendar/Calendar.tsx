@@ -26,7 +26,8 @@ import {
 	NOTIFICATION_TYPE,
 	PERMISSION,
 	REQUEST_TYPE,
-	STRINGS
+	STRINGS,
+	CALENDAR_INIT_TIME
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { computeEndDate, computeUntilDate, getAssignedUserLabel } from '../../utils/helper'
@@ -113,8 +114,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const [currentRange, setCurrentRange] = useState(getSelectedDateRange(validCalendarView as CALENDAR_VIEW, validSelectedDate))
 
-	console.log({ currentRange })
-
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const services = useSelector((state: RootState) => state.service.services)
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
@@ -166,12 +165,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			scrollToDateTimeout.current = setTimeout(() => {
 				scrollToSelectedDate(validSelectedDate, { smooth: true, duration: 300 })
 				initialScroll.current = true
-			}, 500)
+			}, CALENDAR_INIT_TIME)
 		}
 
 		return () => clearTimeout(scrollToDateTimeout.current)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [loadingData, validSelectedDate, query.view, currentRange.start, currentRange.end])
+	}, [loadingData, validSelectedDate, query.view, currentRange.start, currentRange.end, validCalendarView])
 
 	const setCalendarView = (newView: CALENDAR_VIEW) => {
 		setQuery({ ...query, view: newView })
@@ -213,7 +211,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				setTimeout(updateCalendarSize.current, 0)
 			}
 		},
-		[query, setQuery]
+		[query, setQuery, validCalendarView]
 	)
 
 	const initUpdateEventForm = async () => {
@@ -295,6 +293,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const scrollToTime = useCallback(
 		(hour: number) => {
+			// scrollID je hodina, na ktoru chceme zascrollovat
+			// od nej sa este odrataju 2 hodiny, aby bolo vidiet aj co sa deje pred tymto casom
 			const scrollTimeId = getTimeScrollId(Math.max(hour - 2, 0))
 			if (validCalendarView === CALENDAR_VIEW.DAY) {
 				Scroll.scroller.scrollTo(scrollTimeId, {
@@ -369,7 +369,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// wait for the end of sider menu animation and then update size of the calendar
 		const timeout = setTimeout(updateCalendarSize.current, 300)
 		return () => clearTimeout(timeout)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMainLayoutSiderCollapsed])
 
 	const handleSubmitFilter = (values: ICalendarFilter) => {

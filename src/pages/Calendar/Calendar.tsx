@@ -143,7 +143,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		setQuery({ ...query, date: newDate })
 
 		// datum v kalendari a current range sa nastavi len vtedy, ked sa novy datum nenachadza v aktualnom rangi
-		// zabrani sa tym zbytocnym prendrovaniam, hlavne v tyzdenom view, kde je tych eventov vela
 		if (!isDateInRange(currentRange.start, currentRange.end, newDate)) {
 			setCurrentRange(getSelectedDateRange(validCalendarView as CALENDAR_VIEW, newDate))
 			const newCalendarDate = getSelectedDateForCalendar(validCalendarView as CALENDAR_VIEW, newDate)
@@ -354,7 +353,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		;(async () => {
-			// if user uncheck all values from one of the filters => don't fetch new events => just clear store
+			// if user uncheck all values from one of the filters => don't fetch new events
 			if (query?.categoryIDs === null || query?.employeeIDs === null) {
 				return
 			}

@@ -8,7 +8,7 @@ import i18next from 'i18next'
 import { IMAGE_UPLOADING_PROP, MSG_TYPE, NOTIFICATION_TYPE, HANDLE_CALENDAR_ACTIONS, HANDLE_CALENDAR_FORMS } from './enums'
 // eslint-disable-next-line import/no-cycle
 import showNotifications from './tsxHelpers'
-import { updateEvent } from './virtualEvents'
+import { addOrUpdateEvent } from '../reducers/virtualEvent/virtualEventActions'
 
 const RELEVANT_CALENDAR_ACTIONS = Object.keys(HANDLE_CALENDAR_ACTIONS)
 
@@ -40,14 +40,14 @@ const handleCalendarFormsChanges = (store: any) => (next: any) => (action: any) 
 	next(action)
 
 	if (HANDLE_CALENDAR_FORMS.includes(action?.meta?.form)) {
-		const { form } = store.getState()
-		const submittedForm = form[action.meta.form]
+		// const { form } = store.getState()
+		// const submittedForm = form[action.meta.form]
 
 		// eslint-disable-next-line no-restricted-syntax
 		for (const actionType of RELEVANT_CALENDAR_ACTIONS) {
 			if (action.type.endsWith(actionType)) {
 				// NOTE: 600ms je cas, kym zacne existovat instancia CalendarAPI, aby vedela zobrazit data, ked sa inituje form
-				setTimeout(() => updateEvent(actionType, submittedForm?.values), 600)
+				setTimeout(() => store.dispatch(addOrUpdateEvent(actionType, action.meta.form /* submittedForm?.values */)), 600)
 				break
 			}
 		}

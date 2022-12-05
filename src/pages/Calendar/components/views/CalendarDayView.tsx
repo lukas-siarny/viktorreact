@@ -64,11 +64,18 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 interface ICalendarDayView extends ICalendarView {}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange, refetchData, onAddEvent, datesSet } = props
+	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange, refetchData, onAddEvent, datesSet, virtualEvent } = props
 
 	const events = useMemo(
-		() => composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees),
-		[selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees]
+		() => {
+			const data = composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees)
+			const result = virtualEvent ? [...data, virtualEvent] : data
+			return result
+		},
+		// virtualEvent
+		// 	? [composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees), [virtualEvent]]
+		// 	: [],
+		[selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, virtualEvent]
 	)
 
 	const resources = useMemo(() => composeDayViewResources(shiftsTimeOffs, employees), [shiftsTimeOffs, employees])
@@ -170,6 +177,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			stickyFooterScrollbar
 			// data sources
 			events={events}
+			// eventSources={events}
 			resources={resources}
 			// render hooks
 			resourceLabelContent={resourceLabelContent}

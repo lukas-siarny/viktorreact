@@ -23,7 +23,7 @@ import DeleteButton from '../../../../components/DeleteButton'
 
 // utils
 import { getReq } from '../../../../utils/request'
-import { computeEndDate, formatLongQueryString, getAssignedUserLabel, getDateTime } from '../../../../utils/helper'
+import { computeEndDate, formatLongQueryString, getAssignedUserLabel } from '../../../../utils/helper'
 import {
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_VIEW_TYPE,
@@ -38,14 +38,14 @@ import {
 	DAY
 } from '../../../../utils/enums'
 import Permissions from '../../../../utils/Permissions'
-import { initVirtualHandler, resetEvents } from '../../../../utils/virtualEvents'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 
 // redux
 import { RootState } from '../../../../reducers'
-import { getCalendarEventDetail, refreshEvents } from '../../../../reducers/calendar/calendarActions'
+import { getCalendarEventDetail } from '../../../../reducers/calendar/calendarActions'
+import { setCalendarApi, clearEvent } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 type Props = {
 	salonID: string
@@ -78,10 +78,12 @@ const SiderEventManagement: FC<Props> = (props) => {
 	const reservationFormValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
 
 	useEffect(() => {
-		initVirtualHandler(dispatch, calendarApi)
+		// initVirtualHandler(dispatch, calendarApi)
+		setCalendarApi(calendarApi)
 
 		return () => {
-			initVirtualHandler(dispatch)
+			// initVirtualHandler(dispatch)
+			setCalendarApi()
 		}
 	}, [calendarApi])
 
@@ -175,37 +177,6 @@ const SiderEventManagement: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query.eventId, query.sidebarView])
 
-	/*
-	const updateCalendar = (initData: Partial<ICalendarEventForm>) => {
-		if (calendarApi && initData.date && initData.timeFrom && initData.employee) {
-			const start = getDateTime(initData.date, initData.timeFrom)
-			const eventInput: EventInput = {
-				start,
-				end: initData.timeTo ? getDateTime(initData.date, initData.timeTo) : dayjs(start).add(15, 'minutes').toISOString(),
-				allDay: false,
-				resourceId: initData.employee?.key ? `${initData.employee?.key}` : undefined,
-				extendedProps: {
-					eventData: {
-						eventType: query.sidebarView
-					},
-					isPlaceholder: true
-				}
-			}
-
-			const newEvent = calendarApi.addEvent(eventInput)
-
-			if (newEvent) {
-				// eslint-disable-next-line no-underscore-dangle
-				const generatedId = newEvent?._def.defId
-
-				let fromCalendar = calendarApi.getEventById(generatedId)
-
-				newEvent.setProp('id', generatedId)
-				fromCalendar = calendarApi.getEventById(generatedId)
-			}
-		}
-	}
-	*/
 	const initCreateEventForm = (eventForm: FORM, eventType: CALENDAR_EVENT_TYPE) => {
 		const prevEventType = sidebarView
 		// Mergnut predchadzajuce data ktore boli vybrane pred zmenou eventTypu
@@ -237,8 +208,6 @@ const SiderEventManagement: FC<Props> = (props) => {
 
 		dispatch(initialize(FORM.EVENT_TYPE_FILTER_FORM, { eventType }))
 		dispatch(initialize(eventForm, initData))
-
-		// updateCalendar(initData)
 	}
 
 	// Zmena selectu event type v draweri
@@ -251,11 +220,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 		if (sidebarView !== undefined) {
 			// initnutie defaultu sidebaru pri nacitani bude COLLAPSED a ak bude existovat typ formu tak sa initne dany FORM (pri skopirovani URL na druhy tab)
 			onChangeEventType(sidebarView as CALENDAR_EVENT_TYPE)
-		} else {
-			// sidebar je collapsnuty -> ak existuje virtual event, odstrani ho
-			// resetEvents()
-			dispatch(refreshEvents())
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sidebarView])
 
 	const searchEmployes = useCallback(
@@ -332,6 +298,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 						className='button-transparent'
 						onClick={() => {
 							setCollapsed(undefined)
+							dispatch(clearEvent())
 						}}
 					>
 						<CloseIcon />

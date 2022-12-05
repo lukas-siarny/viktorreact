@@ -153,16 +153,21 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	// fetch new events
 	const fetchEvents: any = useCallback(
-		async (restartInterval = true) => {
+		async (clearVirtualEvent?: boolean, restartInterval = true) => {
 			if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 				await Promise.all([
 					dispatch(
-						getCalendarReservations({ salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs }, query.view as CALENDAR_VIEW, true)
+						getCalendarReservations(
+							{ salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs },
+							query.view as CALENDAR_VIEW,
+							true,
+							clearVirtualEvent
+						)
 					),
-					dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW, true))
+					dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW, true, clearVirtualEvent))
 				])
 			} else {
-				await dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW, true))
+				await dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW, true, clearVirtualEvent))
 			}
 
 			// if (restartInterval) {
@@ -190,7 +195,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			newCalendarDate = getWeekViewSelectedDate(newDate, weekDays)
 		}
 
-		if (!dayjs(newDate).isSame(calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.getDate())) {
+		if (!dayjs(newCalendarDate).isSame(calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.getDate())) {
 			calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.gotoDate(newCalendarDate)
 		}
 	}
@@ -212,8 +217,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			if (query?.categoryIDs === null || query?.employeeIDs === null) {
 				return
 			}
+
 			// fetch new events
-			fetchEvents()
+			fetchEvents(false)
 		})()
 	}, [dispatch, query.employeeIDs, query.categoryIDs, query.date, query.eventsViewType, fetchEvents])
 
@@ -374,9 +380,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					// CREATE
 					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 				}
+
+				fetchEvents()
 				// Po CREATE / UPDATE rezervacie dotiahnut eventy + zatvorit drawer
 				setEventManagement(undefined)
-				fetchEvents()
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
@@ -478,9 +485,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					// CREATE event shift
 					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 				}
+
+				fetchEvents()
 				// Po CREATE / UPDATE eventu dotiahnut eventy + zatvorit drawer
 				setEventManagement(undefined)
-				fetchEvents()
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)

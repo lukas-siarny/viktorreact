@@ -315,7 +315,7 @@ export const getWeekDays = (selectedDate: string) => {
 	return weekDays
 }
 
-const getWeekDayResourceID = (employeeID: string, weekDay: string) => `${weekDay}_${employeeID}`
+export const getWeekDayResourceID = (employeeID: string, weekDay: string) => `${weekDay}_${employeeID}`
 
 interface EmployeeWeekResource {
 	id: string

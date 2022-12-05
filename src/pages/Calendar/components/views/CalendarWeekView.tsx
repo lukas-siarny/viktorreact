@@ -15,7 +15,7 @@ import CalendarEventContent from '../CalendarEventContent'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
-import { composeWeekResources, composeWeekViewEvents, eventAllow, getWeekDays, getWeekViewSelectedDate } from '../../calendarHelpers'
+import { composeWeekResources, composeWeekViewEvents, eventAllow, getWeekDays, getWeekViewSelectedDate, getWeekDayResourceID } from '../../calendarHelpers'
 
 // types
 import { ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -108,15 +108,37 @@ const NowIndicator = () => {
 interface ICalendarWeekView extends ICalendarView {}
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventChange, refetchData, onAddEvent, datesSet } = props
+	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventChange, refetchData, onAddEvent, datesSet, virtualEvent } = props
 
 	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
 	const weekViewSelectedDate = getWeekViewSelectedDate(selectedDate, weekDays)
 
-	const events = useMemo(
-		() => composeWeekViewEvents(weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees),
-		[weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees]
-	)
+	const events = useMemo(() => {
+		const data = composeWeekViewEvents(weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees)
+		console.log('🚀 ~ file: CalendarWeekView.tsx:118 ~ events ~ virtualEvent', virtualEvent)
+
+		if (virtualEvent) {
+			const { extendedProps, ...otherProps } = virtualEvent
+			const newEvent = {
+				...otherProps,
+				eventData: {
+					...extendedProps?.eventData,
+					resourceId: getWeekDayResourceID(virtualEvent.resourceId as string, extendedProps?.eventData.date)
+				},
+				resourceId: getWeekDayResourceID(virtualEvent.resourceId as string, extendedProps?.eventData.date)
+			}
+
+			console.log('🚀 ~ file: CalendarWeekView.tsx:124 ~ events ~ newEvent', newEvent)
+
+			return [newEvent, ...data]
+		}
+
+		// const result = virtualEvent ? [newEvent, ...data] : data
+		return data
+		// console.log('🚀 ~ file: CalendarWeekView.tsx:120 ~ events ~ result', result)
+		// return result
+	}, [weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees, virtualEvent])
+
 	const resources = useMemo(() => composeWeekResources(weekDays, shiftsTimeOffs, employees), [weekDays, shiftsTimeOffs, employees])
 
 	const handleNewEvent = (event: DateSelectArg) => {
@@ -167,6 +189,10 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				nowIndicatorContent={() => <NowIndicator />}
 				// data sources
 				events={events}
+				eventsSet={(event: any[]) => {
+					console.log('🚀 ~ file: CalendarWeekView.tsx:183 ~ callback ~ eventsSet:', event)
+				}}
+				// eventSources={events}
 				resources={resources}
 				resourceAreaColumns={resourceAreaColumns}
 				// render hooks

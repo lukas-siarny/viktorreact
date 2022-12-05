@@ -1,7 +1,7 @@
 import { EventResizeDoneArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
-import { EventDropArg } from '@fullcalendar/react'
+import { EventDropArg, EventInput } from '@fullcalendar/react'
 
 // utils
 import {
@@ -620,6 +620,7 @@ export interface ICalendarView {
 	loading?: boolean
 	refetchData: () => void
 	datesSet: (newDate: string | any) => void
+	virtualEvent?: EventInput
 }
 
 export interface IEventCardProps {

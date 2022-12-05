@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useMemo, useState, useEffect } from 'react'
-import cx from 'classnames'
 import dayjs from 'dayjs'
 import useResizeObserver from '@react-hook/resize-observer'
 
@@ -15,7 +14,7 @@ import CalendarEventContent from '../CalendarEventContent'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
-import { composeWeekResources, composeWeekViewEvents, eventAllow, getWeekDays, getWeekViewSelectedDate, getWeekDayResourceID } from '../../calendarHelpers'
+import { composeWeekResources, composeWeekViewEvents, eventAllow, getWeekDayResourceID } from '../../calendarHelpers'
 
 // types
 import { ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -25,29 +24,30 @@ import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-
 
 const getTodayLabelId = (date: string | dayjs.Dayjs) => `${dayjs(date).format(CALENDAR_DATE_FORMAT.QUERY)}-is-today`
 
+const resourceGroupLabelContent = () => {
+	return (
+		<>
+			<div className={'nc-resource-group-label-bg'} />
+			<div className={'nc-resource-group-label-content'} />
+		</>
+	)
+}
+
+const resourceGroupLaneContent = () => {
+	return (
+		<>
+			<div className={'nc-resource-group-lane-bg'} />
+			<div className={'nc-resource-group-lane-content'} />
+		</>
+	)
+}
+
 const resourceAreaColumns = [
 	{
-		group: true,
 		field: 'day',
 		headerContent: null,
 		width: 55,
-		cellContent: (args: any) => {
-			const { groupValue, fieldValue } = args || {}
-
-			// ked je len jeden zamestnanec tak to posiela fieldValue, ak viacero tak groupValue
-			const date = groupValue || fieldValue
-
-			const dayName = dayjs(date).format('ddd')
-			const dayNumber = dayjs(date).format('D')
-			const isToday = dayjs(date).isToday()
-
-			return (
-				<div className={cx('nc-week-label-day', { 'is-today': isToday })} id={isToday ? getTodayLabelId(date) : undefined}>
-					<span>{dayName}</span>
-					{dayNumber}
-				</div>
-			)
-		}
+		cellContent: () => null
 	},
 	{
 		field: 'employee',
@@ -105,16 +105,64 @@ const NowIndicator = () => {
 	return <div className={'fc-week-now-indicator'} style={{ top: indicatorDimmensions.top, height: indicatorDimmensions.height }} />
 }
 
-interface ICalendarWeekView extends ICalendarView {}
+const createDayLabelElement = (resourceElemenet: HTMLElement, employeesLength: number) => {
+	const td = document.createElement('td')
+	td.setAttribute('rowspan', employeesLength.toString())
+	td.setAttribute('style', 'position: relative; width: 1px;')
+
+	const div = document.createElement('div')
+	div.classList.add('nc-week-label-day')
+
+	const { resourceId } = resourceElemenet.dataset || {}
+	const date = resourceId?.split('_')[0]
+
+	if (date) {
+		div.setAttribute('name', date)
+
+		if (dayjs(date).isToday()) {
+			div.classList.add('is-today')
+			div.setAttribute('id', getTodayLabelId(date))
+		}
+
+		const dayNumber = document.createElement('span')
+		dayNumber.innerHTML = dayjs(date).format('D')
+
+		const dayName = document.createElement('span')
+		dayName.classList.add('day-name')
+		dayName.innerHTML = dayjs(date).format('ddd')
+
+		div.appendChild(dayNumber)
+		div.appendChild(dayName)
+		td.appendChild(div)
+	}
+	return td
+}
+
+interface ICalendarWeekView extends ICalendarView {
+	updateCalendarSize: () => void
+	weekDays: string[]
+}
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventChange, refetchData, onAddEvent, datesSet, virtualEvent } = props
-
-	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
-	const weekViewSelectedDate = getWeekViewSelectedDate(selectedDate, weekDays)
+	const {
+		salonID,
+		selectedDate,
+		eventsViewType,
+		shiftsTimeOffs,
+		reservations,
+		employees,
+		onEditEvent,
+		onEventChange,
+		refetchData,
+		weekDays,
+		updateCalendarSize,
+		onAddEvent,
+		virtualEvent,
+		datesSet
+	} = props
 
 	const events = useMemo(() => {
-		const data = composeWeekViewEvents(weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees)
+		const data = composeWeekViewEvents(selectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees)
 		console.log('🚀 ~ file: CalendarWeekView.tsx:118 ~ events ~ virtualEvent', virtualEvent)
 
 		if (virtualEvent) {
@@ -129,17 +177,16 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 			}
 
 			console.log('🚀 ~ file: CalendarWeekView.tsx:124 ~ events ~ newEvent', newEvent)
+			console.log('🚀 ~ file: CalendarWeekView.tsx:184 ~ events ~ data', data)
 
-			return [newEvent, ...data]
+			return [...data, newEvent]
 		}
 
 		// const result = virtualEvent ? [newEvent, ...data] : data
 		return data
 		// console.log('🚀 ~ file: CalendarWeekView.tsx:120 ~ events ~ result', result)
 		// return result
-	}, [weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees, virtualEvent])
-
-	const resources = useMemo(() => composeWeekResources(weekDays, shiftsTimeOffs, employees), [weekDays, shiftsTimeOffs, employees])
+	}, [selectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees, virtualEvent])
 
 	const handleNewEvent = (event: DateSelectArg) => {
 		if (event.resource) {
@@ -159,9 +206,34 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		}
 	}
 
+	const resources = useMemo(() => composeWeekResources(weekDays, shiftsTimeOffs, employees), [weekDays, shiftsTimeOffs, employees])
+
+	useEffect(() => {
+		if (employees.length) {
+			;(() =>
+				setTimeout(() => {
+					const dataGridBody = document.querySelector('.fc-datagrid-body')
+					const rows = dataGridBody?.querySelectorAll('tr')
+					rows?.forEach((row, i) => {
+						if (i % (employees.length + 1) === 1) {
+							row.classList.add('is-first-row')
+							const resourceElemenet = row.querySelector('[data-resource-id]')
+							const dayLabelAleradyExsit = !!row.children[2]
+
+							if (resourceElemenet && resourceElemenet instanceof HTMLElement && !dayLabelAleradyExsit) {
+								const resourceDayLabel = createDayLabelElement(resourceElemenet, employees.length)
+								row.appendChild(resourceDayLabel)
+							}
+						}
+					})
+				}, 0))()
+		}
+	}, [employees.length, selectedDate])
+
 	return (
-		<div className={'nc-calendar-week-wrapper'}>
+		<div className={'nc-calendar-wrapper'} id={'nc-calendar-week-wrapper'}>
 			<FullCalendar
+				key={'nc-calendar-week'}
 				ref={ref}
 				// plugins
 				plugins={[interactionPlugin, scrollGrid, resourceTimelinePlugin]}
@@ -170,36 +242,36 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
 				slotLabelFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
 				eventTimeFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
-				scrollTime={CALENDAR_COMMON_SETTINGS.SCROLL_TIME}
 				slotDuration={CALENDAR_COMMON_SETTINGS.SLOT_DURATION}
 				slotLabelInterval={CALENDAR_COMMON_SETTINGS.SLOT_LABEL_INTERVAL}
 				fixedMirrorParent={CALENDAR_COMMON_SETTINGS.FIXED_MIRROR_PARENT}
 				eventConstraint={CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT}
+				scrollTimeReset={false}
+				resourceGroupField={'day'}
 				height='auto'
 				slotMinWidth={25} // ak sa zmeni tato hodnota, je potrebne upravit min-width v _calendar.sass => .nc-week-event
 				eventMinWidth={25}
 				resourceAreaWidth={200}
 				headerToolbar={false}
 				initialView='resourceTimelineDay'
-				initialDate={weekViewSelectedDate}
+				initialDate={selectedDate}
 				weekends={true}
 				editable
 				stickyFooterScrollbar
 				nowIndicator
-				nowIndicatorContent={() => <NowIndicator />}
 				// data sources
 				events={events}
-				eventsSet={(event: any[]) => {
-					console.log('🚀 ~ file: CalendarWeekView.tsx:183 ~ callback ~ eventsSet:', event)
-				}}
 				// eventSources={events}
 				resources={resources}
 				resourceAreaColumns={resourceAreaColumns}
 				// render hooks
+				resourceGroupLaneContent={resourceGroupLaneContent}
+				resourceGroupLabelContent={resourceGroupLabelContent}
 				slotLabelContent={slotLabelContent}
 				eventContent={(data: EventContentArg) => (
 					<CalendarEventContent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} refetchData={refetchData} />
 				)}
+				nowIndicatorContent={() => <NowIndicator />}
 				// handlers
 				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
@@ -207,12 +279,20 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				// select
 				selectable
 				select={(selectedEvent) => handleNewEvent(selectedEvent)}
-				datesSet={datesSet}
+				resourcesSet={() => setTimeout(updateCalendarSize, 0)}
+				eventsSet={(eventtt: any[]) => {
+					setTimeout(() => {
+						console.log('🚀 ~ file: CalendarWeekView.tsx:284 ~ callback ~ eventsSet:', eventtt)
+						updateCalendarSize()
+					}, 0)
+				}}
 			/>
 		</div>
 	)
 })
 
 export default React.memo(CalendarWeekView, (prevProps, nextProps) => {
-	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
+	const isSame = JSON.stringify(prevProps) === JSON.stringify(nextProps)
+	console.log('🚀 ~ file: CalendarWeekView.tsx:295 ~ React.memo ~ isSame', isSame)
+	return isSame
 })

@@ -44,7 +44,8 @@ const TimeRangeField = (props: Props) => {
 		size,
 		itemClassName,
 		timeFormat = DEFAULT_TIME_FORMAT,
-		hideHelp
+		hideHelp,
+		suffixIcon
 	} = props
 
 	return (
@@ -111,7 +112,7 @@ const TimeRangeField = (props: Props) => {
 								className={'w-full noti-date-input noti-time-input'}
 								popupClassName={'noti-time-dropdown'}
 								size={size}
-								suffixIcon={<TimerIcon className={'text-notino-black'} />}
+								suffixIcon={suffixIcon || <TimerIcon className={'text-notino-black'} />}
 								placeholder={placeholders[index] as any}
 								disabled={disabled}
 								clearIcon={clearIcon || <RemoveIcon className={'text-notino-black'} />}

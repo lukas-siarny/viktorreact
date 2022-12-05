@@ -45,6 +45,9 @@ import BillingInfoPage from '../pages/BillingInfoPage/BillingInfoPage'
 // calendar
 import Calendar from '../pages/Calendar/Calendar'
 
+// salon-settings
+import SalonSettingsPage from '../pages/SalonSettingsPage/SalonSettingsPage'
+
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 
@@ -230,8 +233,19 @@ const SalonSubRoutes: FC = (props) => {
 				layout={MainLayout}
 				page={PAGE.CALENDAR}
 				extra={{
-					contentClassName: null
+					contentClassName: 'z-30'
 				}}
+				preventShowDeletedSalon
+			/>
+			<AuthRoute
+				exact
+				path={getPath(t('paths:salon-settings'))}
+				component={SalonSettingsPage}
+				parentPath={url}
+				translatePathKey={getPath(t('paths:salon-settings'))}
+				salonID={salonID}
+				layout={MainLayout}
+				page={PAGE.SALON_SETTINGS}
 				preventShowDeletedSalon
 			/>
 			<AuthRoute

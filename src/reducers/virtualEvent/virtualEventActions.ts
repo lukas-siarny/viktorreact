@@ -21,6 +21,8 @@ const NEW_ID_PREFIX = 'NEW'
 
 let calendarApi: CalendarApi | undefined
 
+let changeCalendarDate: any
+
 interface IChangeVirtualEvents {
 	type: VIRTUAL_EVENT
 	payload: IVirtualEventPayload
@@ -37,6 +39,10 @@ export interface IVirtualEventPayload {
 
 export const setCalendarApi = (api?: CalendarApi) => {
 	calendarApi = api
+}
+
+export const setCalendarDateHandler = (handler: (newDate: string) => void) => {
+	changeCalendarDate = handler
 }
 
 export const clearEvent = (): ThunkResult<void> => (dispatch, getState) => {
@@ -63,6 +69,11 @@ export const addOrUpdateEvent =
 			return
 		}
 
+		// if (formAction === HANDLE_CALENDAR_ACTIONS.SUBMIT) {
+		// 	dispatch(clearEvent())
+		// 	return
+		// }
+
 		console.log('🚀 ~ file: virtualEventActions.ts:61 ~ formAction', formAction)
 		console.log('🚀 ~ file: virtualEventActions.ts:63 ~ formData', formName)
 
@@ -77,11 +88,6 @@ export const addOrUpdateEvent =
 		if (!formData) {
 			return
 		}
-
-		// if (formAction === HANDLE_CALENDAR_ACTIONS.SUBMIT) {
-		// 	dispatch(clearEvent())
-		// 	return
-		// }
 
 		const { date, timeFrom, timeTo, employee, eventType, customer, service } = formData
 
@@ -103,8 +109,8 @@ export const addOrUpdateEvent =
 			const calendarViewDate = dayjs(calendarApi.getDate())
 			const newDate = dayjs(date)
 
-			if (!calendarViewDate.isSame(newDate)) {
-				calendarApi?.gotoDate(date)
+			if (!calendarViewDate.isSame(newDate) && changeCalendarDate) {
+				changeCalendarDate(date)
 			}
 
 			const eventInput: EventInput = {
@@ -126,7 +132,7 @@ export const addOrUpdateEvent =
 						service: service
 							? {
 									id: service.key,
-									name: service.label
+									name: service.label || service.value
 							  }
 							: undefined
 					},

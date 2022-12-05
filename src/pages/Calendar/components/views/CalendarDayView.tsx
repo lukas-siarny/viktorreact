@@ -1,5 +1,6 @@
-import dayjs from 'dayjs'
 import React, { FC, useMemo } from 'react'
+import { Element } from 'react-scroll'
+import dayjs from 'dayjs'
 
 // full calendar
 import FullCalendar, { SlotLabelContentArg, DateSelectArg } from '@fullcalendar/react' // must go before plugins
@@ -9,7 +10,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
-import { composeDayViewEvents, composeDayViewResources, eventAllow } from '../../calendarHelpers'
+import { composeDayViewEvents, composeDayViewResources, eventAllow, getTimeScrollId } from '../../calendarHelpers'
 
 // types
 import { ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -58,7 +59,14 @@ const resourceLabelContent = (data: any) => {
 const slotLabelContent = (data: SlotLabelContentArg) => {
 	const { time } = data || {}
 
-	return <div className={'nc-day-slot-label'}>{dayjs().startOf('day').add(time.milliseconds, 'millisecond').format(CALENDAR_DATE_FORMAT.TIME)}</div>
+	const date = dayjs().startOf('day').add(time.milliseconds, 'millisecond')
+	const scrollId = getTimeScrollId(date.hour())
+
+	return (
+		<Element name={scrollId} className={'nc-day-slot-label'}>
+			{date.format(CALENDAR_DATE_FORMAT.TIME)}
+		</Element>
+	)
 }
 
 interface ICalendarDayView extends ICalendarView {}
@@ -149,49 +157,50 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	*/
 
 	return (
-		<FullCalendar
-			ref={ref}
-			// plugins
-			plugins={[interactionPlugin, resourceTimeGridPlugin, scrollGrid]}
-			// settings
-			schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
-			timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
-			eventTimeFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
-			height='100%'
-			headerToolbar={false}
-			initialView={'resourceTimeGridDay'}
-			initialDate={selectedDate}
-			scrollTime={CALENDAR_COMMON_SETTINGS.SCROLL_TIME}
-			slotDuration={CALENDAR_COMMON_SETTINGS.SLOT_DURATION}
-			slotLabelInterval={CALENDAR_COMMON_SETTINGS.SLOT_LABEL_INTERVAL}
-			fixedMirrorParent={CALENDAR_COMMON_SETTINGS.FIXED_MIRROR_PARENT}
-			eventConstraint={CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT}
-			// je potrebne nechat nastavene na 0, pretoze potom to zle rendruje background eventy, ktore su po 23:45 (snazi sa tam spravit min 15 minutovu vysku aj ked ma event len 1 minutu)
-			// pre bezne eventy je potom nastavena min-height cez cssko .nc-day-event
-			eventMinHeight={0}
-			dayMinWidth={120}
-			editable
-			weekends
-			nowIndicator
-			allDaySlot={false}
-			stickyFooterScrollbar
-			// data sources
-			events={events}
-			// eventSources={events}
-			resources={resources}
-			// render hooks
-			resourceLabelContent={resourceLabelContent}
-			eventContent={(data) => <CalendarEventContent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} refetchData={refetchData} />}
-			slotLabelContent={slotLabelContent}
-			// handlers
-			eventAllow={eventAllow}
-			eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
-			eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
-			// select
-			selectable
-			select={handleNewEvent}
-			datesSet={datesSet}
-		/>
+		<div className={'nc-calendar-wrapper'} id={'nc-calendar-day-wrapper'}>
+			<FullCalendar
+				ref={ref}
+				// plugins
+				plugins={[interactionPlugin, resourceTimeGridPlugin, scrollGrid]}
+				// settings
+				schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
+				timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
+				eventTimeFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
+				height='auto'
+				headerToolbar={false}
+				initialView={'resourceTimeGridDay'}
+				initialDate={selectedDate}
+				slotDuration={CALENDAR_COMMON_SETTINGS.SLOT_DURATION}
+				slotLabelInterval={CALENDAR_COMMON_SETTINGS.SLOT_LABEL_INTERVAL}
+				fixedMirrorParent={CALENDAR_COMMON_SETTINGS.FIXED_MIRROR_PARENT}
+				eventConstraint={CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT}
+				// je potrebne nechat nastavene na 0, pretoze potom to zle rendruje background eventy, ktore su po 23:45 (snazi sa tam spravit min 15 minutovu vysku aj ked ma event len 1 minutu)
+				// pre bezne eventy je potom nastavena min-height cez cssko .nc-day-event
+				eventMinHeight={0}
+				dayMinWidth={120}
+				editable
+				weekends
+				nowIndicator
+				allDaySlot={false}
+				stickyFooterScrollbar
+				// data sources
+				events={events}
+				// eventSources={events}
+				resources={resources}
+				// render hooks
+				resourceLabelContent={resourceLabelContent}
+				eventContent={(data) => <CalendarEventContent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} refetchData={refetchData} />}
+				slotLabelContent={slotLabelContent}
+				// handlers
+				eventAllow={eventAllow}
+				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
+				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
+				// select
+				selectable
+				select={handleNewEvent}
+				datesSet={datesSet}
+			/>
+		</div>
 	)
 })
 

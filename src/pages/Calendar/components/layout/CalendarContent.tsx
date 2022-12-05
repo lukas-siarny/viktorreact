@@ -1,4 +1,4 @@
-import React, { useCallback, useImperativeHandle, useRef, useState, useMemo } from 'react'
+import React, { useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Spin } from 'antd'
 import { Content } from 'antd/lib/layout/layout'
@@ -24,13 +24,13 @@ import {
 	ICalendarView,
 	IDayViewResourceExtenedProps,
 	IEventExtenedProps,
-	IWeekViewResourceExtenedProps,
-	ICalendarEventsPayload
+	IWeekViewResourceExtenedProps
 } from '../../../../types/interfaces'
 import { RootState } from '../../../../reducers'
 
 // utils
 import { ForbiddenModal, permitted } from '../../../../utils/Permissions'
+import { getSelectedDateForCalendar, getWeekDays } from '../../calendarHelpers'
 
 type Props = {
 	view: CALENDAR_VIEW
@@ -48,7 +48,7 @@ export type CalendarRefs = {
 }
 
 const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
-	const { view, loading, reservations, shiftsTimeOffs, onShowAllEmployees, showEmptyState, handleSubmitReservation, handleSubmitEvent, datesSet } = props
+	const { view, loading, reservations, shiftsTimeOffs, onShowAllEmployees, showEmptyState, handleSubmitReservation, handleSubmitEvent, selectedDate } = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -86,6 +86,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 		return allSources
 	}, [reservations, shiftsTimeOffs, virtualEvent])
+
+	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
+	const calendarSelectedDate = getSelectedDateForCalendar(view, selectedDate)
 
 	const onEventChange = useCallback(
 		(calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
@@ -158,7 +161,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	)
 
 	const handleCalendarChangeDate = (arg: DatesSetArg) => {
-		datesSet(dayjs(arg.startStr).format(CALENDAR_DATE_FORMAT.QUERY))
+		// datesSet(dayjs(arg.startStr).format(CALENDAR_DATE_FORMAT.QUERY))
 	}
 
 	const getView = () => {
@@ -191,6 +194,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					virtualEvent={sources.virtualEvent}
 					onEventChange={onEventChange}
 					datesSet={handleCalendarChangeDate}
+					weekDays={weekDays}
+					selectedDate={calendarSelectedDate}
+					updateCalendarSize={() => weekView?.current?.getApi().updateSize()}
 				/>
 			)
 		}
@@ -202,6 +208,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				reservations={sources.reservations}
 				shiftsTimeOffs={sources.shiftsTimeOffs}
 				virtualEvent={sources.virtualEvent}
+				selectedDate={calendarSelectedDate}
 				onEventChange={onEventChange}
 				datesSet={handleCalendarChangeDate}
 			/>

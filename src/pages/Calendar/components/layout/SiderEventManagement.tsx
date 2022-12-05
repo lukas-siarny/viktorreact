@@ -8,18 +8,11 @@ import dayjs from 'dayjs'
 import { getFormValues, initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { StringParam, useQueryParams } from 'use-query-params'
-import { CalendarApi, EventInput } from '@fullcalendar/react'
+import { CalendarApi } from '@fullcalendar/react'
 
 // types
 import { ICalendarEventForm, ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'
-
-// components
-import ReservationForm from '../forms/ReservationForm'
-import ShiftForm from '../forms/ShiftForm'
-import TimeOffForm from '../forms/TimeOffForm'
-import BreakForm from '../forms/BreakForm'
-import EventTypeFilterForm from '../forms/EventTypeFilterForm'
-import DeleteButton from '../../../../components/DeleteButton'
+import { RootState } from '../../../../reducers'
 
 // utils
 import { getReq } from '../../../../utils/request'
@@ -39,13 +32,23 @@ import {
 } from '../../../../utils/enums'
 import Permissions from '../../../../utils/Permissions'
 
+// redux
+import { getCalendarEventDetail } from '../../../../reducers/calendar/calendarActions'
+import { setCalendarApi, clearEvent, setCalendarDateHandler } from '../../../../reducers/virtualEvent/virtualEventActions'
+
+// components
+import ReservationForm from '../forms/ReservationForm'
+import ShiftForm from '../forms/ShiftForm'
+import TimeOffForm from '../forms/TimeOffForm'
+import BreakForm from '../forms/BreakForm'
+import DeleteButton from '../../../../components/DeleteButton'
+import TabsComponent from '../../../../components/TabsComponent'
+
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 
-// redux
-import { RootState } from '../../../../reducers'
-import { getCalendarEventDetail } from '../../../../reducers/calendar/calendarActions'
-import { setCalendarApi, clearEvent } from '../../../../reducers/virtualEvent/virtualEventActions'
+// hooks
+import useKeyUp from '../../../../hooks/useKeyUp'
 
 type Props = {
 	salonID: string
@@ -59,10 +62,23 @@ type Props = {
 	eventId?: string | null
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	calendarApi?: CalendarApi
+	changeCalendarDate: (newDate: string) => void
 }
 
 const SiderEventManagement: FC<Props> = (props) => {
-	const { setCollapsed, handleSubmitReservation, handleSubmitEvent, salonID, sidebarView, handleDeleteEvent, eventId, eventsViewType, newEventData, calendarApi } = props
+	const {
+		setCollapsed,
+		handleSubmitReservation,
+		handleSubmitEvent,
+		salonID,
+		sidebarView,
+		handleDeleteEvent,
+		eventId,
+		eventsViewType,
+		newEventData,
+		calendarApi,
+		changeCalendarDate
+	} = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -80,12 +96,13 @@ const SiderEventManagement: FC<Props> = (props) => {
 	useEffect(() => {
 		// initVirtualHandler(dispatch, calendarApi)
 		setCalendarApi(calendarApi)
+		setCalendarDateHandler(changeCalendarDate)
 
 		return () => {
 			// initVirtualHandler(dispatch)
 			setCalendarApi()
 		}
-	}, [calendarApi])
+	}, [calendarApi, changeCalendarDate])
 
 	const initUpdateEventForm = async () => {
 		try {
@@ -211,8 +228,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 	}
 
 	// Zmena selectu event type v draweri
-	const onChangeEventType = (type: CALENDAR_EVENT_TYPE) => {
-		initCreateEventForm(`CALENDAR_${type}_FORM` as FORM, type)
+	const onChangeEventType = (type: string) => {
+		initCreateEventForm(`CALENDAR_${type}_FORM` as FORM, type as CALENDAR_EVENT_TYPE)
 	}
 
 	useEffect(() => {
@@ -223,6 +240,13 @@ const SiderEventManagement: FC<Props> = (props) => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sidebarView])
+
+	const handleCloseSider = () => {
+		dispatch(clearEvent())
+		setCollapsed(undefined)
+	}
+
+	useKeyUp('Escape', handleCloseSider)
 
 	const searchEmployes = useCallback(
 		async (search: string, page: number) => {
@@ -252,19 +276,42 @@ const SiderEventManagement: FC<Props> = (props) => {
 		[salonID]
 	)
 
-	const getSiderContent = () => {
-		switch (sidebarView) {
-			case CALENDAR_EVENT_TYPE.RESERVATION:
-				return <ReservationForm salonID={salonID} eventId={eventId} searchEmployes={searchEmployes} onSubmit={handleSubmitReservation} />
-			case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-				return <ShiftForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
-			case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-				return <TimeOffForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
-			case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-				return <BreakForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
-			default:
-				return null
+	const forms = {
+		[CALENDAR_EVENT_TYPE.RESERVATION]: <ReservationForm salonID={salonID} eventId={eventId} searchEmployes={searchEmployes} onSubmit={handleSubmitReservation} />,
+		[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: <ShiftForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />,
+		[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: <TimeOffForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />,
+		[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: <BreakForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
+	}
+
+	const getTabContent = () => {
+		const tabs = {
+			[CALENDAR_EVENT_TYPE.RESERVATION]: {
+				tabKey: CALENDAR_EVENT_TYPE.RESERVATION,
+				tab: <>{t('loc:Rezervácia')}</>,
+				tabPaneContent: forms[CALENDAR_EVENT_TYPE.RESERVATION]
+			},
+			[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: {
+				tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
+				tab: <>{t('loc:Zmena')}</>,
+				tabPaneContent: forms[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]
+			},
+			[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: {
+				tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
+				tab: <>{t('loc:Voľno')}</>,
+				tabPaneContent: forms[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]
+			},
+			[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: {
+				tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
+				tab: <>{t('loc:Prestávka')}</>,
+				tabPaneContent: forms[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]
+			}
 		}
+
+		if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
+			return [tabs[CALENDAR_EVENT_TYPE.RESERVATION], tabs[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]]
+		}
+
+		return [tabs[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT], tabs[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF], tabs[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]]
 	}
 
 	return (
@@ -294,23 +341,22 @@ const SiderEventManagement: FC<Props> = (props) => {
 							)}
 						/>
 					)}
-					<Button
-						className='button-transparent'
-						onClick={() => {
-							setCollapsed(undefined)
-							dispatch(clearEvent())
-						}}
-					>
+					<Button className='button-transparent' onClick={handleCloseSider}>
 						<CloseIcon />
 					</Button>
 				</div>
 			</div>
-			{!eventId && (
-				<div className={'p-4'}>
-					<EventTypeFilterForm eventsViewType={eventsViewType} onChangeEventType={onChangeEventType} />
-				</div>
+			{eventId ? (
+				forms[sidebarView]
+			) : (
+				<TabsComponent
+					className={'nc-sider-event-management-tabs'}
+					activeKey={sidebarView}
+					onChange={onChangeEventType}
+					tabsContent={getTabContent()}
+					destroyInactiveTabPane
+				/>
 			)}
-			{getSiderContent()}
 		</Sider>
 	)
 }

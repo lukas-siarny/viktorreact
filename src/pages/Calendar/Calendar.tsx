@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
+import React, { FC, useCallback, useEffect, useRef, useState, useMemo } from 'react'
 import Layout from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
 import { includes, isEmpty, omit } from 'lodash'
@@ -6,10 +6,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { getFormValues, initialize, submit, destroy } from 'redux-form'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-
-// utils
 import cx from 'classnames'
 import { useTranslation } from 'react-i18next'
+import Scroll from 'react-scroll'
 
 // utils
 import {
@@ -31,17 +30,11 @@ import {
 import { computeUntilDate } from '../../utils/helper'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { getWeekDays, getWeekViewSelectedDate } from './calendarHelpers'
+import { getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
 
 // reducers
+import { getCalendarEventDetail, getCalendarReservations, getCalendarShiftsTimeoff } from '../../reducers/calendar/calendarActions'
 import { RootState } from '../../reducers'
-import {
-	clearCalendarReservations,
-	clearCalendarShiftsTimeoffs,
-	getCalendarEventDetail,
-	getCalendarReservations,
-	getCalendarShiftsTimeoff
-} from '../../reducers/calendar/calendarActions'
 import { getEmployees } from '../../reducers/employees/employeesActions'
 import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
 
@@ -69,6 +62,25 @@ const getEmployeeIDs = (data: IEmployeesPayload['options']) => {
 	return data?.map((employee) => employee.value) as string[]
 }
 
+// NOTE: v URL sa pouzivaju skratene ID kategorii, pretoze ich moze byt dost vela a original IDcka su dost dhle
+// tak aby sa nahodu nestalo ze sa tam nevojdu v niektorom z prehliadacov
+const getFullCategoryIdsFromUrl = (ids?: (string | null)[] | null) => {
+	return ids?.reduce((cv, id) => (id ? [...cv, `00000000-0000-0000-0000-${id}`] : cv), [] as string[])
+}
+
+const getShortCategoryIdsForUrl = (ids?: (string | null)[] | null) => {
+	return ids?.reduce((cv, id) => {
+		if (id) {
+			const splittedId = id.split('-')
+			return [...cv, splittedId[splittedId.length - 1]]
+		}
+		return cv
+	}, [] as string[])
+}
+
+const CALENDAR_VIEWS = Object.keys(CALENDAR_VIEW)
+const CALENDAR_EVENTS_VIEW_TYPES = Object.keys(CALENDAR_EVENTS_VIEW_TYPE)
+
 const Calendar: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath = '' } = props
 	const calendarRefs = useRef<CalendarRefs>(null)
@@ -92,6 +104,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		eventId: StringParam,
 		eventsViewType: withDefault(StringParam, CALENDAR_EVENTS_VIEW_TYPE.RESERVATION)
 	})
+
+	const validSelectedDate = useMemo(() => (dayjs(query.date).isValid() ? query.date : dayjs().format(CALENDAR_DATE_FORMAT.QUERY)), [query.date])
+	const validCalendarView = useMemo(() => (CALENDAR_VIEWS.includes(query.view) ? query.view : CALENDAR_VIEW.DAY), [query.view])
+	const validEventsViewType = useMemo(
+		() => (CALENDAR_EVENTS_VIEW_TYPES.includes(query.eventsViewType) ? query.eventsViewType : CALENDAR_EVENTS_VIEW_TYPE.RESERVATION),
+		[query.eventsViewType]
+	)
+
+	const [currentRange, setCurrentRange] = useState(getSelectedDateRange(validCalendarView as CALENDAR_VIEW, validSelectedDate))
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const services = useSelector((state: RootState) => state.service.services)
@@ -135,16 +156,84 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			setLoadInBackground(false)
 			message.destroy()
 		}, REFRESH_CALENDAR_INTERVAL)
+	*/
 
-		fetchInterval.current = interval
+	const initialScroll = useRef(false)
+	const scrollToDateTimeout = useRef<any>(null)
+
+	const setNewSelectedDate = (newDate: string) => {
+		// query sa nastavi vzdy ked sa zmeni datum
+		setQuery({ ...query, date: newDate })
+
+		const calendarView: CALENDAR_VIEW = validCalendarView as CALENDAR_VIEW
+
+		// datum v kalendari a current range sa nastavi len vtedy, ked sa novy datum nenachadza v aktualnom rangi
+		if (!isDateInRange(currentRange.start, currentRange.end, newDate)) {
+			setCurrentRange(getSelectedDateRange(calendarView, newDate))
+			const newCalendarDate = getSelectedDateForCalendar(calendarView, newDate)
+
+			if (!dayjs(newCalendarDate).isSame(calendarRefs?.current?.[calendarView]?.getApi()?.getDate())) {
+				calendarRefs?.current?.[calendarView]?.getApi()?.gotoDate(newCalendarDate)
+			}
+
+			// calendarRefs?.current?.[calendarView]?.getApi()?.gotoDate(newCalendarDate)
+			initialScroll.current = false
+			return
+		}
+
+		// ak sa novy datum nachadza v rovnakom rangi ako predtym, tak sa v tyzdenom view len zascrolluje na jeho poziciu
+		// nenacitavaju nove data a netreba cakat na opatovne vykreslenie kalenadara
+		if (calendarView === CALENDAR_VIEW.WEEK) {
+			scrollToSelectedDate(newDate, { smooth: true, duration: 300 })
+		}
 	}
 
+	useEffect(() => {
+		// zmenil sa range, je potrebne pockat na nacitanie novych dat a opatovne vykrelsenie kalenara a az tak zascrollovat na datum
+		if (validCalendarView === CALENDAR_VIEW.WEEK && !loadingData && !initialScroll.current) {
+			scrollToDateTimeout.current = setTimeout(() => {
+				scrollToSelectedDate(validSelectedDate, { smooth: true, duration: 300 })
+				initialScroll.current = true
+			}, 500)
+		}
+
+		return () => clearTimeout(scrollToDateTimeout.current)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [loadingData, validSelectedDate, query.view, currentRange.start, currentRange.end])
+
+	const setCalendarView = (newView: CALENDAR_VIEW) => {
+		setQuery({ ...query, view: newView })
+		setCurrentRange(getSelectedDateRange(newView, query.date))
+	}
+
+	const updateCalendarSize = useRef(() => calendarRefs?.current?.[validCalendarView as CALENDAR_VIEW]?.getApi()?.updateSize())
+
+	const filteredEmployees = useCallback(() => {
+		// filter employees based on employeeIDs in the url queryParams (if there are any)
+		if (!isEmpty(query.employeeIDs)) {
+			return employees?.data?.employees.filter((employee: any) => query.employeeIDs?.includes(employee.id))
+		}
+
+		// null means empty filter otherwise return all employes as default value
+		return query?.employeeIDs === null ? [] : employees?.data?.employees
+	}, [employees?.data?.employees, query.employeeIDs])
+
+	/*
 	useEffect(() => {
 		// clear on unmount
 		return () => {
 			if (fetchInterval.current) {
 				window.clearInterval(fetchInterval.current)
 				message.destroy()
+				setQuery({
+					...query,
+					eventId,
+					eventsViewType: newEventType, // Filter v kalendari je bud rezervaci alebo volno
+					sidebarView: newView // siderbar view je rezervacia / volno / prestavka / pracovna zmena
+				})
+			}
+			if (validCalendarView === CALENDAR_VIEW.DAY) {
+				setTimeout(updateCalendarSize.current, 0)
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -154,20 +243,40 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	// fetch new events
 	const fetchEvents: any = useCallback(
 		async (clearVirtualEvent?: boolean, restartInterval = true) => {
-			if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-				await Promise.all([
+			if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
+				Promise.all([
 					dispatch(
 						getCalendarReservations(
-							{ salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs },
-							query.view as CALENDAR_VIEW,
+							{
+								salonID,
+								start: currentRange.start,
+								end: currentRange.end,
+								employeeIDs: query.employeeIDs,
+								categoryIDs: getFullCategoryIdsFromUrl(query?.categoryIDs)
+							},
+							validCalendarView as CALENDAR_VIEW,
 							true,
 							clearVirtualEvent
 						)
 					),
-					dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW, true, clearVirtualEvent))
+					dispatch(
+						getCalendarShiftsTimeoff(
+							{ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs },
+							validCalendarView as CALENDAR_VIEW,
+							true,
+							clearVirtualEvent
+						)
+					)
 				])
-			} else {
-				await dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW, true, clearVirtualEvent))
+			} else if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
+				dispatch(
+					getCalendarShiftsTimeoff(
+						{ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs },
+						validCalendarView as CALENDAR_VIEW,
+						true,
+						clearVirtualEvent
+					)
+				)
 			}
 
 			// if (restartInterval) {
@@ -175,8 +284,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			// }
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[dispatch, salonID, query.date, query.employeeIDs, query.categoryIDs, query.view, query.eventsViewType]
+		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validCalendarView, validEventsViewType]
 	)
+	/*
 	const setNewSelectedDate = (newDate: string) => {
 		if (dayjs(newDate).isSame(query.date)) {
 			return
@@ -199,8 +309,27 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.gotoDate(newCalendarDate)
 		}
 	}
+	*/
 
-	const updateCalendarSize = useRef(() => calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.updateSize())
+	const scrollToTime = useCallback(
+		(hour: number) => {
+			const scrollTimeId = getTimeScrollId(Math.max(hour - 2, 0))
+			if (validCalendarView === CALENDAR_VIEW.DAY) {
+				Scroll.scroller.scrollTo(scrollTimeId, {
+					containerId: 'nc-calendar-day-wrapper',
+					offset: -80 // - hlavicka
+				})
+			} else {
+				calendarRefs?.current?.[validCalendarView as CALENDAR_VIEW]?.getApi().scrollToTime(scrollTimeId)
+			}
+		},
+		[validCalendarView]
+	)
+
+	// scroll to time after initialization
+	useEffect(() => {
+		scrollToTime(dayjs().hour())
+	}, [scrollToTime])
 
 	useEffect(() => {
 		dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
@@ -209,11 +338,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		;(async () => {
-			// clear previous events
-			await dispatch(clearCalendarReservations())
-			await dispatch(clearCalendarShiftsTimeoffs())
-
-			// if user uncheck all values from one of the filters => don't fetch new events => just clear store
+			// if user uncheck all values from one of the filters => don't fetch new events
 			if (query?.categoryIDs === null || query?.employeeIDs === null) {
 				return
 			}
@@ -221,17 +346,17 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			// fetch new events
 			fetchEvents(false)
 		})()
-	}, [dispatch, query.employeeIDs, query.categoryIDs, query.date, query.eventsViewType, fetchEvents])
+	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents])
 
 	useEffect(() => {
 		dispatch(
 			initialize(FORM.CALENDAR_FILTER, {
-				eventsViewType: query.eventsViewType,
+				eventsViewType: validEventsViewType,
 				categoryIDs: query?.categoryIDs === undefined ? getCategoryIDs(services?.categoriesOptions) : query?.categoryIDs,
 				employeeIDs: query?.employeeIDs === undefined ? getEmployeeIDs(employees?.options) : query?.employeeIDs
 			})
 		)
-	}, [dispatch, employees?.options, services?.categoriesOptions, query.categoryIDs, query.employeeIDs, query.eventsViewType])
+	}, [dispatch, employees?.options, services?.categoriesOptions, query.categoryIDs, query.employeeIDs, validEventsViewType])
 
 	useEffect(() => {
 		// update calendar size when main layout sider change
@@ -267,20 +392,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		[query, setQuery]
 	)
 
-	const filteredEmployees = useCallback(() => {
-		// filter employees based on employeeIDs in the url queryParams (if there are any)
-		if (!isEmpty(query.employeeIDs)) {
-			return employees?.data?.employees.filter((employee: any) => query.employeeIDs?.includes(employee.id))
-		}
-
-		// null means empty filter otherwise return all employes as default value
-		return query?.employeeIDs === null ? [] : employees?.data?.employees
-	}, [employees?.data?.employees, query.employeeIDs])
-
 	const handleSubmitFilter = (values: ICalendarFilter) => {
 		setQuery({
 			...query,
 			...values,
+			// ak su vybrati vsetci zamestnanci alebo vsetky kategorie, tak je zbytocne posielat na BE vsetky IDcka
+			// BE vrati rovnake zaznamy ako ked sa tam neposle nic
+			employeeIDs: values?.employeeIDs?.length === employees?.options?.length ? undefined : values.employeeIDs,
+			categoryIDs: values?.categoryIDs?.length === services?.categoriesOptions?.length ? undefined : getShortCategoryIdsForUrl(values.categoryIDs),
 			eventId: undefined,
 			sidebarView: undefined
 		})
@@ -551,7 +670,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		if (query.eventId) {
 			setEventManagement(undefined)
 		}
-		// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastv pracovnu zmenu
+		// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastav pracovnu zmenu
 		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 			dispatch(destroy(FORM.CALENDAR_RESERVATION_FORM))
 			setEventManagement(CALENDAR_EVENT_TYPE.RESERVATION)
@@ -592,16 +711,16 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			<div role={'button'} onClick={() => setEventManagement(undefined)} id={'overlay'} className={cx({ block: query.sidebarView, hidden: !query.sidebarView })} />
 			<Layout className='noti-calendar-layout'>
 				<CalendarHeader
-					selectedDate={query.date}
-					calendarView={query.view as CALENDAR_VIEW}
+					selectedDate={validSelectedDate}
+					eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
+					calendarView={validCalendarView as CALENDAR_VIEW}
 					siderFilterCollapsed={siderFilterCollapsed}
-					setCalendarView={(newView) => {
-						setQuery({ ...query, view: newView })
-					}}
+					setCalendarView={setCalendarView}
+					setEventsViewType={(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => setQuery({ ...query, eventsViewType })}
 					setSelectedDate={setNewSelectedDate}
 					setSiderFilterCollapsed={() => {
 						setSiderFilterCollapsed(!siderFilterCollapsed)
-						if (query.view === CALENDAR_VIEW.DAY) {
+						if (validCalendarView === CALENDAR_VIEW.DAY) {
 							setTimeout(updateCalendarSize.current, 0)
 						}
 					}}
@@ -612,23 +731,23 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						collapsed={siderFilterCollapsed}
 						handleSubmit={handleSubmitFilter}
 						parentPath={parentPath}
-						eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
+						eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 					/>
 					<CalendarContent
 						salonID={salonID}
 						ref={calendarRefs}
-						selectedDate={query.date}
-						view={query.view as CALENDAR_VIEW}
+						selectedDate={validSelectedDate}
+						view={validCalendarView as CALENDAR_VIEW}
 						reservations={reservations?.data || []}
 						shiftsTimeOffs={shiftsTimeOffs?.data || []}
 						loading={loadingData}
-						eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
+						eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 						employees={filteredEmployees() || []}
 						showEmptyState={query?.employeeIDs === null}
 						onShowAllEmployees={() => {
 							setQuery({
 								...query,
-								employeeIDs: getEmployeeIDs(employees?.options)
+								employeeIDs: undefined
 							})
 						}}
 						onEditEvent={(eventType: CALENDAR_EVENT_TYPE, eventId: string) => {
@@ -637,7 +756,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 								eventId,
 								sidebarView: eventType
 							})
-							if (query.view === CALENDAR_VIEW.DAY) {
+							if (validCalendarView === CALENDAR_VIEW.DAY) {
 								setTimeout(updateCalendarSize.current, 0)
 							}
 						}}
@@ -649,8 +768,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					/>
 					<SiderEventManagement
 						salonID={salonID}
-						selectedDate={query.date}
-						eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
+						selectedDate={validSelectedDate}
+						eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 						eventId={query.eventId}
 						handleDeleteEvent={handleDeleteEvent}
 						sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE}
@@ -659,6 +778,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						handleSubmitEvent={handleSubmitEvent}
 						newEventData={newEventData}
 						calendarApi={calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()}
+						changeCalendarDate={setNewSelectedDate}
 					/>
 				</Layout>
 			</Layout>

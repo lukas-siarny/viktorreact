@@ -23,6 +23,7 @@ import { ReactComponent as WalletIcon } from '../../../assets/icons/wallet.svg'
 import { ReactComponent as DollarIcon } from '../../../assets/icons/dollar.svg'
 import { ReactComponent as AlertIcon } from '../../../assets/icons/alert-circle.svg'
 import { ReactComponent as ClockIcon } from '../../../assets/icons/clock.svg'
+import { ReactComponent as CrossedIcon } from '../../../assets/icons/crossed-red-16.svg'
 
 // components
 import UserAvatar from '../../../components/AvatarComponents'
@@ -36,6 +37,9 @@ import { CalendarEvent, IEventCardProps } from '../../../types/interfaces'
 import { CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE } from '../../../utils/enums'
 import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
 import { parseTimeFromMinutes, getTimeText } from '../calendarHelpers'
+
+// hooks
+import useKeyUp from '../../../hooks/useKeyUp'
 
 type Props = {
 	salonID: string
@@ -295,6 +299,10 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 		}
 	}, [isOpen, overlayClassName, setIsOpen])
 
+	const handleClosePopover = () => setIsOpen(false)
+
+	useKeyUp('Escape', handleClosePopover)
+
 	const handleUpdateState = useCallback(
 		(state: RESERVATION_STATE, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
 			if (id) {
@@ -385,9 +393,9 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 					type: 'primary',
 					className: 'noti-btn'
 				}}
-				okText={t('loc:Potvrdiť')}
 				onConfirm={() => handleUpdateState(state)}
-				cancelText={t('loc:Zrušiť')}
+				cancelText={t('loc:Nie')}
+				okText={t('loc:Áno')}
 			>
 				<Button type={'dashed'} size={'middle'} className={'noti-btn w-1/2'} htmlType={'button'}>
 					{label}
@@ -407,7 +415,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 				<Popconfirm
 					visible={cancelPopconfirm}
 					placement={'bottom'}
-					title={t('loc:Naozaj chcete zrušiť rezerváciu? Klient dostane notifikáciu.')}
+					title={t('loc:Naozaj chcete zrušiť rezerváciu?')}
 					okButtonProps={{
 						type: 'default',
 						className: 'noti-btn'
@@ -416,7 +424,8 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 						type: 'primary',
 						className: 'noti-btn'
 					}}
-					okText={t('loc:Potvrdiť')}
+					cancelText={t('loc:Nie')}
+					okText={t('loc:Áno')}
 					onCancel={() => {
 						setCancelPopconfirm(false)
 					}}
@@ -425,18 +434,17 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 						setIsOpen(false)
 						setCancelPopconfirm(false)
 					}}
-					cancelText={t('loc:Zrušiť')}
 				>
 					<button
 						type={'button'}
-						className={'bg-transparent p-0 pl-8 m-0 outline-none cursor-pointer border-none inset-0 flex absolute items-center'}
+						className={'bg-transparent p-0 pl-8 m-0 outline-none cursor-pointer border-none inset-0 flex absolute items-center text-notino-red'}
 						onClick={() => setCancelPopconfirm(true)}
 					>
 						{t('loc:Zrušiť rezerváciu')}
 					</button>
 				</Popconfirm>
 			),
-			icon: <AlertIcon />,
+			icon: <CrossedIcon />,
 			className: itemClassName
 		}
 	}
@@ -465,12 +473,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 					headerState: t('loc:Čakajúca'),
 					moreMenuItems: [headerMoreItems.cancel_by_salon],
 					footerButtons: [
-						getFooterCancelButton(
-							'cancel-button-declined',
-							t('loc:Zamietnuť'),
-							RESERVATION_STATE.DECLINED,
-							t('loc:Naozaj chcete zamietnuť rezerváciu? Klient dostane notifikáciu.')
-						),
+						getFooterCancelButton('cancel-button-declined', t('loc:Zamietnuť'), RESERVATION_STATE.DECLINED, t('loc:Naozaj chcete zamietnuť rezerváciu?')),
 						<Button
 							key={'confirm-button'}
 							type={'dashed'}
@@ -530,7 +533,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 						}
 						setIsOpen(false)
 					}}
-					onClose={() => setIsOpen(false)}
+					onClose={handleClosePopover}
 					notes={getNotes()}
 					{...getPopoverContentSpecificProps()}
 				/>

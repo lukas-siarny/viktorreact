@@ -38,6 +38,7 @@ import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
 import { ArgsProps } from 'antd/lib/notification'
+import cx from 'classnames'
 import showNotifications from './tsxHelpers'
 import {
 	ADMIN_PERMISSIONS,
@@ -787,9 +788,22 @@ export const sortData = (a?: any, b?: any) => {
 	return 0
 }
 
+export const optionRenderNotiPinkCheckbox = (text: any, checked: any) => {
+	return (
+		<div
+			className={cx('custom-rounded-checkbox', {
+				checked
+			})}
+		>
+			{text}
+		</div>
+	)
+}
+
 export const optionRenderWithImage = (itemData: any, fallbackIcon?: React.ReactNode, imageWidth = 24, imageHeight = 24) => {
 	const { label, extra } = itemData
 	const style = { width: imageWidth, height: imageHeight }
+
 	return (
 		<div className='flex items-center'>
 			{extra?.image ? (

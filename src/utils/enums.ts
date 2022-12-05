@@ -146,7 +146,9 @@ export enum FORM {
 	CALENDAR_EMPLOYEE_TIME_OFF_FORM = 'CALENDAR_EMPLOYEE_TIME_OFF_FORM',
 	CALENDAR_EMPLOYEE_BREAK_FORM = 'CALENDAR_EMPLOYEE_BREAK_FORM',
 	CONFIRM_BULK_FORM = 'CONFIRM_BULK_FORM',
-	EVENT_TYPE_FILTER_FORM = 'EVENT_TYPE_FILTER_FORM'
+	EVENT_TYPE_FILTER_FORM = 'EVENT_TYPE_FILTER_FORM',
+	RESEVATION_SYSTEM_SETTINGS = 'RESEVATION_SYSTEM_SETTINGS',
+	HEADER_COUNTRY_FORM = 'HEADER_COUNTRY_FORM'
 }
 
 // System permissions
@@ -239,7 +241,8 @@ export enum PAGE {
 	PENDING_INVITES = 'PENDING_INVITES',
 	SPECIALIST_CONTACTS = 'SPECIALIST_CONTACTS',
 	BILLING_INFO = 'BILLING_INFO',
-	CALENDAR = 'CALENDAR'
+	CALENDAR = 'CALENDAR',
+	SALON_SETTINGS = 'SALON_SETTINGS'
 }
 
 export enum PARAMETER_TYPE {
@@ -720,41 +723,10 @@ export const EVENT_NAMES = (eventType: CALENDAR_EVENT_TYPE) => {
 			return i18next.t('loc:rezerváciu')
 
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-			return i18next.t('loc:dovolenku')
+			return i18next.t('loc:voľno')
 		default:
 			return ''
 	}
-}
-
-export const EVENT_TYPE_OPTIONS = (eventType?: CALENDAR_EVENTS_VIEW_TYPE) => {
-	const options = [
-		{
-			key: CALENDAR_EVENT_TYPE.RESERVATION,
-			label: i18next.t('loc:Rezervácia')
-		},
-		{
-			key: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
-			label: i18next.t('loc:Pracovná zmena')
-		},
-		{
-			key: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
-			label: i18next.t('loc:Dovolenka')
-		},
-		{
-			key: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
-			label: i18next.t('loc:Prestávka')
-		}
-	]
-	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-		// rezervacia a break
-		return filter(options, (item) => item.key === CALENDAR_EVENT_TYPE.RESERVATION || item.key === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK)
-	}
-	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
-		// shift, break a vacation
-		return filter(options, (item) => item.key !== CALENDAR_EVENT_TYPE.RESERVATION)
-	}
-	// vsetky optiony
-	return options
 }
 
 export const SHORTCUT_DAYS_OPTIONS = (length = 2) => [
@@ -804,12 +776,16 @@ export enum RESERVATION_PAYMENT_METHOD {
 	OTHER = 'OTHER'
 }
 
+export enum SERVICE_TYPE {
+	ONLINE_BOOKING = 'ONLINE_BOOKING',
+	AUTO_CONFIRM = 'AUTO_CONFIRM'
+}
+
 export const CALENDAR_DEBOUNCE_DELAY = 300 // in ms
 
 export const HANDLE_CALENDAR_FORMS = [FORM.CALENDAR_RESERVATION_FORM, FORM.CALENDAR_EMPLOYEE_SHIFT_FORM, FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM, FORM.CALENDAR_EMPLOYEE_BREAK_FORM]
 
 export enum HANDLE_CALENDAR_ACTIONS {
-	SUBMIT = 'SUBMIT',
 	CHANGE = 'CHANGE',
 	INITIALIZE = 'INITIALIZE'
 }
@@ -855,3 +831,81 @@ export const ERROR_BOUNDARY_TEXTS = () => ({
 		labelSubmit: i18next.t('loc:Odoslať hlásenie o chybe')
 	}
 })
+
+/**
+ * Reservation system (RS)
+ */
+
+// relevant types for settings
+export enum RS_NOTIFICATION {
+	RESERVATION_AWAITING_APPROVAL = 'RESERVATION_AWAITING_APPROVAL',
+	RESERVATION_CONFIRMED = 'RESERVATION_CONFIRMED',
+	RESERVATION_CHANGED = 'RESERVATION_CHANGED',
+	RESERVATION_REJECTED = 'RESERVATION_REJECTED',
+	RESERVATION_CANCELLED = 'RESERVATION_CANCELLED',
+	RESERVATION_REMINDER = 'RESERVATION_REMINDER'
+}
+
+// NOTE: order definition reflect order of options in UI
+export enum RS_NOTIFICATION_TYPE {
+	EMAIL = 'EMAIL',
+	PUSH = 'PUSH'
+}
+
+export enum NOTIFICATION_CHANNEL {
+	B2B = 'B2B',
+	B2C = 'B2C'
+}
+
+export const RS_NOTIFICATION_FIELD_TEXTS = (notificationType: RS_NOTIFICATION, channel: NOTIFICATION_CHANNEL) => {
+	const entity = i18next.t(channel === NOTIFICATION_CHANNEL.B2B ? 'loc:Zamestnanec' : 'loc:Zákazník')
+
+	const result = {
+		title: undefined,
+		tooltip: undefined
+	}
+
+	switch (notificationType) {
+		case RS_NOTIFICATION.RESERVATION_AWAITING_APPROVAL:
+			result.title = i18next.t('loc:Rezervácia čakajúca na schválenie')
+			result.tooltip =
+				channel === NOTIFICATION_CHANNEL.B2C
+					? i18next.t('loc:Zákazník dostane notifikáciu, že jeho rezervácia čaká na schválenie salónom.')
+					: i18next.t('loc:Zamestnanec dostane notifikáciu, že rezervácia vytvorená zákazníkom čaká na schválenie.')
+			break
+
+		case RS_NOTIFICATION.RESERVATION_CONFIRMED:
+			result.title = i18next.t('loc:Potvrdenie rezervácie')
+			result.tooltip = i18next.t('loc:{{entity}} dostane notifikáciu, že jeho rezervácia bola potvrdená.', { entity })
+			break
+
+		case RS_NOTIFICATION.RESERVATION_CHANGED:
+			result.title = i18next.t('loc:Zmena rezervácie')
+			result.tooltip =
+				channel === NOTIFICATION_CHANNEL.B2C
+					? i18next.t('loc:Zákazník dostane notifikáciu, že jeho rezervácia bola zmenená salónom.')
+					: i18next.t('loc:Zamestnanec dostane notifikáciu, že jeho rezervácia bola zmenená.')
+			break
+
+		case RS_NOTIFICATION.RESERVATION_CANCELLED:
+			result.title = i18next.t('loc:Zrušenie rezervácie')
+			result.tooltip = i18next.t('loc:{{entity}} dostane notifikáciu, že jeho rezervácia bola zrušená.', { entity })
+			break
+
+		case RS_NOTIFICATION.RESERVATION_REJECTED:
+			// NOTE: zobrazene iba pre B2C channel
+			result.title = i18next.t('loc:Zamietnutie rezervácie')
+			result.tooltip = i18next.t('loc:{{entity}} dostane notifikáciu, že jeho rezervácia bola zamietnutá salónom.', { entity })
+			break
+
+		case RS_NOTIFICATION.RESERVATION_REMINDER:
+			result.title = i18next.t('loc:Pripomenutie rezervácie')
+			result.tooltip = i18next.t('loc:{{entity}} dostane deň vopred notifikáciu o blížiacom sa termíne rezervácie.', { entity })
+			break
+
+		default:
+			break
+	}
+
+	return result
+}

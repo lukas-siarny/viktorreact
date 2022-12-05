@@ -55,6 +55,7 @@
 								height: 7px
 								border-width: 2px
 						& + span
+							padding-right: 0
 							font-size: 12px
 	&.noti-checkbox-group-rounded
 		.ant-checkbox-group
@@ -65,10 +66,12 @@
 					&::after
 						border-radius: 50%
 	&.noti-checkbox-group-horizontal
-		.ant-checkbox-group
-			.ant-checkbox-wrapper
-				margin-left: 0
-				width: unset
+		.ant-form-item-control-input-content
+			.ant-checkbox-group
+				gap: 8px
+				.ant-checkbox-wrapper
+					margin-left: 0
+					width: unset
 	&.noti-checkbox-group-hidden
 		.ant-checkbox-group
 			.ant-checkbox-wrapper

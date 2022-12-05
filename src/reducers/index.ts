@@ -15,6 +15,7 @@ import serviceReducer from './services/serviceReducer'
 import salonsReducer from './salons/salonsReducer'
 import customerReducer from './customers/customerReducer'
 import employeesReducer from './employees/employeesReducer'
+import selectedCountryReducer from './selectedCountry/selectedCountryReducer'
 import selectedSalonReducer from './selectedSalon/selectedSalonReducer'
 import supportContactsReducer from './supportContacts/supportContactsReducer'
 import cosmeticsReducer from './cosmetics/cosmeticsReducer'
@@ -36,6 +37,7 @@ export const REDUCER_KEYS = {
 	SALONS: 'SALONS',
 	CUSTOMERS: 'CUSTOMERS',
 	EMPLOYEES: 'EMPLOYEES',
+	SELECTED_COUNTRY: 'SELECTED_COUNTRY',
 	SELECTED_SALON: 'SELECTED_SALON',
 	SUPPORT_CONTACTS: 'SUPPORT_CONTACTS',
 	SPECIALIST_CONTACTS: 'SPECIALIST_CONTACTS',
@@ -146,6 +148,13 @@ const rootReducer = combineReducers({
 			storage: storageSession
 		},
 		employeesReducer
+	),
+	selectedCountry: persistReducer(
+		{
+			key: REDUCER_KEYS.SELECTED_COUNTRY,
+			storage: storageLocal
+		},
+		selectedCountryReducer
 	),
 	selectedSalon: persistReducer(
 		{

@@ -9,11 +9,10 @@ import { CalendarEvent, ICalendarEventsPayload } from '../../types/interfaces'
 
 // enums
 import { EVENTS, EVENT_DETAIL, UPDATE_EVENT } from './calendarTypes'
-import { CALENDAR_EVENTS_KEYS, CALENDAR_VIEW, CALENDAR_EVENT_TYPE, DATE_TIME_PARSER_DATE_FORMAT, RESERVATION_STATE } from '../../utils/enums'
+import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, DATE_TIME_PARSER_DATE_FORMAT, RESERVATION_STATE } from '../../utils/enums'
 
 // utils
 import { getReq } from '../../utils/request'
-import { getSelectedDateRange } from '../../pages/Calendar/calendarHelpers'
 import { getDateTime, normalizeQueryParams } from '../../utils/helper'
 
 import { clearEvent } from '../virtualEvent/virtualEventActions'
@@ -69,7 +68,6 @@ export const getCalendarEvents =
 	(
 		enumType: CALENDAR_EVENTS_KEYS = CALENDAR_EVENTS_KEYS.EVENTS,
 		queryParams: ICalendarEventsQueryParams,
-		view: CALENDAR_VIEW,
 		splitMultidayEventsIntoOneDayEvents = false,
 		clearVirtualEvent = true
 	): ThunkResult<Promise<ICalendarEventsPayload>> =>
@@ -177,7 +175,6 @@ export const getCalendarEvents =
 
 export const getCalendarReservations = (
 	queryParams: ICalendarReservationsQueryParams,
-	view: CALENDAR_VIEW,
 	splitMultidayEventsIntoOneDayEvents = false,
 	clearVirtualEvent?: boolean
 ): ThunkResult<Promise<ICalendarEventsPayload>> =>
@@ -188,21 +185,18 @@ export const getCalendarReservations = (
 			eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
 			reservationStates: [RESERVATION_STATE.APPROVED, RESERVATION_STATE.PENDING, RESERVATION_STATE.REALIZED, RESERVATION_STATE.NOT_REALIZED]
 		},
-		view,
 		splitMultidayEventsIntoOneDayEvents,
 		clearVirtualEvent
 	)
 
 export const getCalendarShiftsTimeoff = (
 	queryParams: ICalendarShiftsTimeOffQueryParams,
-	view: CALENDAR_VIEW,
 	splitMultidayEventsIntoOneDayEvents = false,
 	clearVirtualEvent?: boolean
 ): ThunkResult<Promise<ICalendarEventsPayload>> =>
 	getCalendarEvents(
 		CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS,
 		{ ...queryParams, eventTypes: [CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF, CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK] },
-		view,
 		splitMultidayEventsIntoOneDayEvents,
 		clearVirtualEvent
 	)

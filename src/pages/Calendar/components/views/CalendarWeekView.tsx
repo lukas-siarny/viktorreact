@@ -152,6 +152,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		reservations,
 		employees,
 		onEditEvent,
+		onReservationClick,
 		onEventChange,
 		refetchData,
 		weekDays,
@@ -255,8 +256,9 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				headerToolbar={false}
 				initialView='resourceTimelineDay'
 				initialDate={selectedDate}
-				weekends={true}
+				weekends
 				editable
+				selectable
 				stickyFooterScrollbar
 				nowIndicator
 				// data sources
@@ -269,15 +271,20 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				resourceGroupLabelContent={resourceGroupLabelContent}
 				slotLabelContent={slotLabelContent}
 				eventContent={(data: EventContentArg) => (
-					<CalendarEventContent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} refetchData={refetchData} />
+					<CalendarEventContent
+						calendarView={CALENDAR_VIEW.WEEK}
+						data={data}
+						salonID={salonID}
+						onEditEvent={onEditEvent}
+						onReservationClick={onReservationClick}
+						refetchData={refetchData}
+					/>
 				)}
 				nowIndicatorContent={() => <NowIndicator />}
 				// handlers
 				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
-				// select
-				selectable
 				select={(selectedEvent) => handleNewEvent(selectedEvent)}
 				resourcesSet={() => setTimeout(updateCalendarSize, 0)}
 				eventsSet={(eventtt: any[]) => {

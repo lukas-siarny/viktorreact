@@ -7,11 +7,14 @@ import { EventDropArg, EventInput } from '@fullcalendar/react'
 import {
 	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT,
 	ENDS_EVENT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, DAY,
-	SERVICE_TYPE
+	SERVICE_TYPE,
+	RESERVATION_STATE,
+	RESERVATION_PAYMENT_METHOD
 } from '../utils/enums'
 
 // types
 import { Paths } from './api'
+import { TooltipPlacement } from 'antd/es/tooltip'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -643,6 +646,7 @@ export interface ICalendarView {
 	salonID: string
 	onAddEvent: (event: INewCalendarEvent) => void
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
+	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
 	onEventChange?: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
 	loading?: boolean
 	refetchData: () => void
@@ -657,7 +661,6 @@ export interface IEventCardProps {
 	end: Date | null
 	diff: number
 	timeText: string
-	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	isMultiDayEvent?: boolean
 	isLastMultiDaylEventInCurrentRange?: boolean
 	isFirstMultiDayEventInCurrentRange?: boolean
@@ -672,6 +675,35 @@ export interface IEventCardProps {
 		startDateTime?: CalendarEvent['startDateTime']
 		endDateTime?: CalendarEvent['endDateTime']
 	}
+}
+
+export interface ICalendarReservationPopover {
+	data: ReservationPopoverData | null
+	position: ReservationPopoverPosition | null
+	setIsOpen: (isOpen: boolean) => void
+	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => void
+	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
+	placement: TooltipPlacement
+}
+
+export type ReservationPopoverPosition = {
+	top: number
+	left: number
+	width: number
+	height: number
+}
+
+export type ReservationPopoverData = {
+	start: Date | null
+	end: Date | null
+	color?: string
+	service?: CalendarEvent['service']
+	customer?: CalendarEvent['customer']
+	employee?: CalendarEvent['employee']
+	reservationData?: CalendarEvent['reservationData']
+	originalEventData: IEventCardProps['originalEventData']
+	note?: CalendarEvent['note']
+	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
 }
 
 export interface IBulkConfirmForm {

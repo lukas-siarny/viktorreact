@@ -6,7 +6,6 @@ import { ItemType } from 'antd/lib/menu/hooks/useItems'
 import { useSelector } from 'react-redux'
 import dayjs from 'dayjs'
 import colors from 'tailwindcss/colors'
-import { TooltipPlacement } from 'antd/es/tooltip'
 import i18next from 'i18next'
 import { ButtonProps } from 'antd/es/button'
 
@@ -31,7 +30,7 @@ import Ellipsis from '../../../atoms/Ellipsis'
 
 // types
 import { RootState } from '../../../reducers'
-import { CalendarEvent, IEventCardProps } from '../../../types/interfaces'
+import { CalendarEvent, ICalendarReservationPopover } from '../../../types/interfaces'
 
 /// utils
 import { CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE } from '../../../utils/enums'
@@ -40,25 +39,6 @@ import { parseTimeFromMinutes, getTimeText } from '../calendarHelpers'
 
 // hooks
 import useKeyUp from '../../../hooks/useKeyUp'
-
-type Props = {
-	salonID: string
-	isOpen: boolean
-	setIsOpen: (isOpen: boolean) => void
-	start: Date | null
-	end: Date | null
-	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => void
-	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
-	color?: string
-	placement?: TooltipPlacement
-	service?: CalendarEvent['service']
-	customer?: CalendarEvent['customer']
-	employee?: CalendarEvent['employee']
-	reservationData?: CalendarEvent['reservationData']
-	originalEventData: IEventCardProps['originalEventData']
-	note?: CalendarEvent['note']
-	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
-}
 
 type PopoverNote = {
 	key: string
@@ -241,27 +221,16 @@ const PopoverContent: FC<ContentProps> = (props) => {
 	)
 }
 
-const CalendarReservationPopover: FC<Props> = (props) => {
-	const {
-		isOpen,
-		setIsOpen,
-		children,
-		start,
-		end,
-		color,
-		handleUpdateReservationState,
-		onEditEvent,
-		placement = 'left',
-		reservationData,
-		service,
-		customer,
-		employee,
-		note,
-		noteFromB2CCustomer,
-		originalEventData
-	} = props
+const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
+	const { data, position, setIsOpen, handleUpdateReservationState, onEditEvent, placement } = props
+
+	console.log({ position })
+
+	const { start, end, color, reservationData, service, customer, employee, note, noteFromB2CCustomer, originalEventData } = data || {}
 
 	const { id } = originalEventData || {}
+
+	const isOpen = !!position
 
 	const [t] = useTranslation()
 
@@ -305,7 +274,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 
 	const handleUpdateState = useCallback(
 		(state: RESERVATION_STATE, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
-			if (id) {
+			if (id && handleUpdateReservationState) {
 				handleUpdateReservationState(id, state, undefined, paymentMethod)
 			}
 			setIsOpen(false)
@@ -521,8 +490,8 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 			overlayClassName={`${overlayClassName} nc-event-popover-overlay`}
 			content={
 				<PopoverContent
-					start={start}
-					end={end}
+					start={start || null}
+					end={end || null}
 					service={service}
 					color={color}
 					customer={customer}
@@ -539,7 +508,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 				/>
 			}
 		>
-			{children}
+			<div className={''} style={{ top: position?.top, left: position?.left, width: position?.width, height: position?.height, position: 'fixed' }} />
 		</Popover>
 	)
 }

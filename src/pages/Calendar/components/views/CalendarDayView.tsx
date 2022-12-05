@@ -72,7 +72,21 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 interface ICalendarDayView extends ICalendarView {}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange, refetchData, onAddEvent, datesSet, virtualEvent } = props
+	const {
+		salonID,
+		selectedDate,
+		eventsViewType,
+		reservations,
+		shiftsTimeOffs,
+		employees,
+		onEditEvent,
+		onEventChange,
+		refetchData,
+		onAddEvent,
+		datesSet,
+		virtualEvent,
+		onReservationClick
+	} = props
 
 	const events = useMemo(
 		() => {
@@ -179,6 +193,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				eventMinHeight={0}
 				dayMinWidth={120}
 				editable
+				selectable
 				weekends
 				nowIndicator
 				allDaySlot={false}
@@ -189,14 +204,21 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				resources={resources}
 				// render hooks
 				resourceLabelContent={resourceLabelContent}
-				eventContent={(data) => <CalendarEventContent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} refetchData={refetchData} />}
+				eventContent={(data) => (
+					<CalendarEventContent
+						calendarView={CALENDAR_VIEW.DAY}
+						data={data}
+						salonID={salonID}
+						onEditEvent={onEditEvent}
+						onReservationClick={onReservationClick}
+						refetchData={refetchData}
+					/>
+				)}
 				slotLabelContent={slotLabelContent}
 				// handlers
 				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
-				// select
-				selectable
 				select={handleNewEvent}
 				datesSet={datesSet}
 			/>

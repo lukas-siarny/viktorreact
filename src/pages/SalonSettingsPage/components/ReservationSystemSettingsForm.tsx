@@ -280,7 +280,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					{/* <div className={'flex'}>
 						<div className='w-full s-regular flex items-center bg-notino-red bg-opacity-5 p-2'>
 							<InfoIcon className={'text-notino-red mr-2'} width={16} height={16} />
-							<span>{t('loc:SMS notifikácie sú spoplatnené podľa aktuálneho cenníka Notino.')}</span>
+							<span>SMS notifikácie sú spoplatnené podľa aktuálneho cenníka Notino.</span>
 						</div>
 					</div> */}
 					<Row justify={'space-between'} className='mt-7'>

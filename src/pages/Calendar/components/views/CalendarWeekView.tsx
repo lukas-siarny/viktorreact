@@ -152,8 +152,6 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 	)
 	const resources = useMemo(() => composeWeekResources(weekDays, shiftsTimeOffs, employees), [weekDays, shiftsTimeOffs, employees])
 
-	console.log({ events })
-
 	useEffect(() => {
 		if (employees.length) {
 			;(() =>

@@ -113,6 +113,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const [currentRange, setCurrentRange] = useState(getSelectedDateRange(validCalendarView as CALENDAR_VIEW, validSelectedDate))
 
+	console.log({ currentRange })
+
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const services = useSelector((state: RootState) => state.service.services)
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
@@ -324,32 +326,22 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		dispatch(getServices({ salonID }))
 	}, [dispatch, salonID])
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	const fetchEvents = () => {
+	const fetchEvents = useCallback(() => {
 		// fetch new events
 		if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 			Promise.all([
 				dispatch(
 					getCalendarReservations(
 						{ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs, categoryIDs: getFullCategoryIdsFromUrl(query?.categoryIDs) },
-						validCalendarView as CALENDAR_VIEW,
 						true
 					)
 				),
-				dispatch(
-					getCalendarShiftsTimeoff(
-						{ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs },
-						validCalendarView as CALENDAR_VIEW,
-						true
-					)
-				)
+				dispatch(getCalendarShiftsTimeoff({ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs }, true))
 			])
 		} else if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
-			dispatch(
-				getCalendarShiftsTimeoff({ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs }, validCalendarView as CALENDAR_VIEW, true)
-			)
+			dispatch(getCalendarShiftsTimeoff({ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs }, true))
 		}
-	}
+	}, [query.categoryIDs, query.employeeIDs, currentRange.start, currentRange.end, validEventsViewType, dispatch, salonID])
 
 	useEffect(() => {
 		;(async () => {
@@ -360,17 +352,17 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			// fetch new events
 			fetchEvents()
 		})()
-	}, [dispatch, salonID, validCalendarView, validEventsViewType, query.employeeIDs, query.categoryIDs, currentRange.start])
+	}, [dispatch, fetchEvents, query.employeeIDs, query.categoryIDs])
 
 	useEffect(() => {
 		dispatch(
 			initialize(FORM.CALENDAR_FILTER, {
-				eventsViewType: query.eventsViewType,
+				eventsViewType: validEventsViewType,
 				categoryIDs: query?.categoryIDs === undefined ? getCategoryIDs(services?.categoriesOptions) : query?.categoryIDs,
 				employeeIDs: query?.employeeIDs === undefined ? getEmployeeIDs(employees?.options) : query?.employeeIDs
 			})
 		)
-	}, [dispatch, employees?.options, services?.categoriesOptions, query.categoryIDs, query.employeeIDs])
+	}, [dispatch, employees?.options, services?.categoriesOptions, query.categoryIDs, query.employeeIDs, validEventsViewType])
 
 	useEffect(() => {
 		// update calendar size when main layout sider change
@@ -501,7 +493,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				setIsUpdatingEvent(false)
 			}
 		},
-		[query.eventId, salonID, setEventManagement]
+		[query.eventId, salonID, setEventManagement, fetchEvents]
 	)
 
 	const handleSubmitEvent = useCallback(

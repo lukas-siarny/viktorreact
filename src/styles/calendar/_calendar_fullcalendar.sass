@@ -1,0 +1,343 @@
+@import "../tailwind-variables"
+@import "../variables"
+
+@mixin scrollbar-styles
+	@media (pointer:fine)
+		&::-webkit-scrollbar
+			background: transparent
+			// height: 8px
+			// width: 8px
+		&::-webkit-scrollbar-thumb
+			border-bottom: 4px solid #fff
+			border-left: 4px solid #fff
+			border-right: 4px solid #fff
+			border-top: 4px solid #fff
+		&::-webkit-scrollbar-thumb
+			border: none
+			box-shadow: none
+			background: $backgroundColor-notino-white
+			min-height: 40px
+			// border-radius: 8px
+		&::-webkit-scrollbar-track
+			background: #fff
+
+
+@mixin hide-scrollbar
+	&::-webkit-scrollbar
+		display: none
+
+.fc-timegrid-body
+	background: $backgroundColor-notino-white
+
+.fc .fc-timegrid-slot-minor
+	border-top: 1px dashed $backgroundColor-notino-grayLighter
+
+.fc-theme-standard td
+	border-color: $borderColor-notino-grayLight
+
+.fc-day-today
+	background: transparent !important
+
+.fc .fc-highlight
+	background: rgba($backgroundColor-notino-pink, 0.1)
+
+// daily view
+.fc-timegrid-col-bg
+	.fc-timegrid-bg-harness
+		.fc-bg-event
+			opacity: 1
+			background-color: transparent !important
+.fc-timegrid-event-harness-inset .fc-timegrid-event,
+.fc-timegrid-event.fc-event-mirror, .fc-timegrid-more-link
+	box-shadow: none
+.fc-timegrid-event
+	background-color: transparent !important
+	border: none
+	box-shadow: none
+	margin-bottom: 0
+	&:focus
+		&::before
+			display: none
+		&::after
+			display: none
+	&:focus-visible
+		.fc-event-main
+			.nc-day-event
+				box-shadow: $boxShadow-2xl
+	.fc-event-main
+		padding: 0
+.fc-resourceTimeGridDay-view
+	// vyska najmenjsieho casoveho intervalu - teda ak mam nastavenych 15minut - tak cela hodina bude 60px vysoka (4 x 15px)
+	// ak zmeminme tuto vysku, je potrebne upravit aj min-height eventu .nc-day-event
+	font-size: 15px
+	line-height: 15px
+	.fc-timegrid-slot
+		line-height: 15px
+		height: 15px
+	.fc-scrollgrid-section-sticky
+		position: sticky
+		background: white
+		z-index: 20
+	> table.fc-scrollgrid
+		border: none
+		.fc-timegrid-now-indicator-arrow
+			display: none
+		.fc-timegrid-now-indicator-container
+			right: -1px
+			.fc-timegrid-now-indicator-line
+				border-color: $backgroundColor-notino-pink
+				border-top-width: 2px
+		.fc-scrollgrid-section-header
+			background: transparent
+			.fc-col-header-cell
+				border-bottom-color: transparent
+			.fc-col-header-cell-cushion
+				display: block
+				width: 100%
+				height: 100%
+				padding: 0
+			> th
+				line-height: 1
+				&:first-of-type
+					background: transparent
+					.fc-timegrid-axis
+						border-color: transparent
+				&:last-of-type
+					border-right: 1px solid transparent
+					border-bottom: 1px solid $borderColor-notino-grayLight
+					> .fc-scroller-harness
+						> .fc-scroller
+							@include scrollbar-styles
+		> tbody
+			> tr.fc-scrollgrid-section-body
+				> td:first-of-type
+					border-bottom-color: transparent
+					> .fc-scroller-harness
+						.fc-scroller
+							.fc-timegrid-axis-chunk
+								table tbody
+									tr
+										line-height: 15px
+										height: 15px
+										.fc-timegrid-slot
+											border-color: transparent
+											// transform: translateY(-50%)
+											.fc-timegrid-slot-label-frame
+												.fc-timegrid-slot-label-cushion
+													color: $textColor-notino-grayDarker
+													font-size: 10px
+													line-height: 12px
+													padding: 0
+				> td:last-of-type
+					border-color: transparent
+					> .fc-scroller-harness
+						> .fc-scroller
+							.fc-timegrid-body
+								line-height: 15px
+							.fc-timegrid-cols
+								> table
+									tr
+										line-height: 15px
+										height: 15px
+								.fc-timegrid-col
+									.fc-timegrid-col-frame
+										.fc-timegrid-col-events
+											.fc-timegrid-event-harness
+												margin: 2px 4px 2px 2px
+												min-height: 13px
+		> tfoot
+			> tr.fc-scrollgrid-section-footer
+				> th:first-of-type
+					> .fc-scroller-harness
+						> .fc-scroller
+							@include scrollbar-styles
+
+// weekly view
+.fc .fc-timeline-now-indicator-arrow
+	display: none
+.fc .fc-timeline-now-indicator-line
+	border-color: transparent
+.fc-week-now-indicator
+	position: absolute
+	width: 2px
+	top: 0
+	height: 0
+	background-color: $backgroundColor-notino-pink
+	transform: translateX(-50%)
+.fc-datagrid-expander
+	display: none
+.fc-icon
+	display: none
+.fc .fc-datagrid-cell-cushion
+	padding: 0
+.fc-timeline-event
+	background-color: transparent !important
+	height: 30px
+	padding: 0
+	border: 0
+	margin: 3px 4px 0 3px
+	&::before
+		display: none
+	&:focus
+		&::before
+			display: none
+		&::after
+			display: none
+	&:focus-visible
+		.fc-event-main
+			.nc-week-event
+				box-shadow: $boxShadow-2xl
+	.fc-event-main
+		width: 100%
+		height: 100%
+.fc-resource-timeline
+	.fc-timeline-slot-minor
+		border-color: $backgroundColor-notino-grayLighter
+		border-style: dashed
+	.fc-datagrid-cell-resizer
+		display: none
+	> table.fc-scrollgrid
+		border: none
+		.fc-scrollgrid-section-header
+			> th:first-of-type
+				border-right-color: transparent !important
+				background: transparent
+				> .fc-scroller-harness
+					&::before
+						content: ''
+						position: absolute
+						left: 0
+						width: 55px
+						height: 25px
+						z-index: 3
+						top: 0
+						background: linear-gradient(180deg, rgba(255,255,255,1) 38%, rgba(255,255,255,0.47102591036414565) 80%, rgba(255,255,255,0.3981967787114846) 100%)
+					> .fc-scroller
+						overflow: visible !important
+						z-index: 4
+						> table.fc-datagrid-header
+							> thead
+								> tr
+									> th.fc-datagrid-cell:first-of-type
+										border-bottom-color: transparent
+										width: 60px !important
+			> td.fc-resource-timeline-divider
+				user-select: none
+				-moz-user-select: -moz-none
+				visibility: hidden
+				width: 0
+			> th:last-of-type
+				border-right-color: transparent !important
+				> .fc-scroller-harness
+					margin-left: -145px
+					background: $backgroundColor-notino-white
+					border-bottom: 1px solid $borderColor-notino-grayLight
+					&::before,
+					&::after
+						content: ''
+						position: absolute
+						top: 0
+						bottom: 0
+						width: 30px
+						z-index: 3
+					&::after
+						left: 0
+						background: linear-gradient(90deg, rgba(255,255,255,1) 38%, rgba(255,255,255,0.47102591036414565) 80%, rgba(255,255,255,0.3981967787114846) 100%)
+					&::before
+						right: 0
+						background: linear-gradient(270deg, rgba(255,255,255,1) 38%, rgba(255,255,255,0.47102591036414565) 80%, rgba(255,255,255,0.3981967787114846) 100%)
+					> .fc-scroller
+						padding-left: 145px
+						@include hide-scrollbar
+						table.fc-scrollgrid-sync-table
+							.fc-timeline-header-row
+								.fc-timeline-slot-label
+									border-left-color: transparent
+									border-bottom-color: transparent
+									.fc-timeline-slot-frame
+										overflow: visible
+										.fc-timeline-slot-cushion
+											display: block
+											cursor: default
+											pointer-events: none
+											padding: 0
+											width: 100%
+											height: 100%
+		.fc-scrollgrid-section-body
+			.fc-cell-shaded
+				background: white
+				border-bottom-color: transparent
+				.fc-datagrid-cell-cushion
+					min-height: 11px !important
+			> td:first-of-type
+				border-right: none
+				> .fc-scroller-harness
+					> .fc-scroller
+						@include scrollbar-styles
+						overflow: visible !important
+						table.fc-datagrid-body
+							> tbody > tr
+								&:first-of-type
+									display: none
+								> .fc-datagrid-cell
+									&:first-of-type:not(:last-of-type)
+										position: relative
+										border-bottom-color: transparent
+										.fc-datagrid-cell-frame
+											position: absolute
+											top: 0
+											left: 0
+											right: 0
+											bottom: 0
+									&:nth-of-type(2)
+										.fc-datagrid-cell-cushion
+											position: relative
+											&::after
+												position: absolute
+												content: ''
+												top: 0
+												width: 1px
+												right: 0px
+												height: 100%
+												background: $borderColor-notino-grayLight
+			> td.fc-resource-timeline-divider
+				user-select: none
+				-moz-user-select: -moz-none
+				visibility: hidden
+				width: 0
+			> td:last-of-type
+				border-right-color: transparent !important
+				.fc-timeline-lane-frame
+					min-height: 40px
+					.fc-timeline-events
+						padding-bottom: 5px
+					.fc-timeline-bg
+						.fc-timeline-bg-harness
+							.fc-bg-event
+								background-color: transparent !important
+								opacity: 1
+				.fc-timeline-body
+					> table.fc-scrollgrid-sync-table
+						> tbody > tr:first-of-type
+							display: none
+		.fc-scrollgrid-section-footer
+			.fc-resource-timeline-divider
+				user-select: none
+				-moz-user-select: -moz-none
+				visibility: hidden
+				width: 0
+
+@-moz-document url-prefix()
+	.fc-resource-timeline
+		> table.fc-scrollgrid
+			.fc-scrollgrid-section-body
+				> td:first-of-type
+					> .fc-scroller-harness
+						> .fc-scroller
+							table.fc-datagrid-body
+								tbody > tr
+									> .fc-datagrid-cell
+										&:nth-of-type(2)
+											.fc-datagrid-cell-cushion
+												&::after
+													display: none

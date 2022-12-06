@@ -9,6 +9,8 @@ import { EventResizeDoneArg } from '@fullcalendar/interaction'
 import FullCalendar, { EventDropArg, DatesSetArg } from '@fullcalendar/react'
 
 // enums
+import cx from 'classnames'
+import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // components
@@ -39,6 +41,7 @@ type Props = {
 	showEmptyState: boolean
 	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
 	handleSubmitEvent: (values: ICalendarEventForm, onError?: () => void) => void
+	setEventManagement: any
 } & ICalendarView
 
 export type CalendarRefs = {
@@ -48,7 +51,11 @@ export type CalendarRefs = {
 }
 
 const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
-	const { view, loading, reservations, shiftsTimeOffs, onShowAllEmployees, showEmptyState, handleSubmitReservation, handleSubmitEvent, selectedDate } = props
+	const { view, loading, reservations, shiftsTimeOffs, onShowAllEmployees, showEmptyState, handleSubmitReservation, handleSubmitEvent, selectedDate, setEventManagement } = props
+
+	const [query, setQuery] = useQueryParams({
+		sidebarView: StringParam
+	})
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -209,6 +216,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	return (
 		<Content className={'nc-content'}>
+			{/* // TODO: tato maska by sa mohla zrusit uplne */}
+			{/* <div role={'button'} onClick={() => setEventManagement(undefined)} id={'overlay'} className={cx({ block: query.sidebarView, hidden: !query.sidebarView })} /> */}
 			<Spin spinning={loading}>
 				<div id={'nc-content-overlay'} />
 				{getView()}

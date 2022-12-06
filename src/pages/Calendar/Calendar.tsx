@@ -54,6 +54,7 @@ import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReserva
 
 // atoms
 import ConfirmModal from '../../atoms/ConfirmModal'
+import { clearEvent } from '../../reducers/virtualEvent/virtualEventActions'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -329,6 +330,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const setEventManagement = useCallback(
 		(newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string) => {
+			console.log('newView', newView)
 			// NOTE: ak je collapsed (newView je undefined) tak nastavit sidebarView na COLLAPSED a vynulovat eventId
 			if (!newView) {
 				setQuery({
@@ -670,7 +672,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	return (
 		<>
 			{modals}
-			<div role={'button'} onClick={() => setEventManagement(undefined)} id={'overlay'} className={cx({ block: query.sidebarView, hidden: !query.sidebarView })} />
+			{/* <div role={'button'} onClick={() => setEventManagement(undefined)} id={'overlay'} className={cx({ block: query.sidebarView, hidden: !query.sidebarView })} /> */}
 			<Layout className='noti-calendar-layout'>
 				<CalendarHeader
 					selectedDate={validSelectedDate}
@@ -678,7 +680,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					calendarView={validCalendarView as CALENDAR_VIEW}
 					siderFilterCollapsed={siderFilterCollapsed}
 					setCalendarView={setCalendarView}
-					setEventsViewType={(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => setQuery({ ...query, eventsViewType })}
+					setEventsViewType={(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => {
+						// NOTE: Ak je otvoreny CREATE sidebar tak pri prepnuti filtra ho zrusit pri EDIT ostane + zmazat virtualny event ak bol vytvoreny
+						dispatch(clearEvent())
+						setQuery({ ...query, eventsViewType, sidebarView: query.eventId ? query.sidebarView : undefined })
+					}}
 					setSelectedDate={setNewSelectedDate}
 					setSiderFilterCollapsed={() => {
 						setSiderFilterCollapsed(!siderFilterCollapsed)
@@ -697,6 +703,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					/>
 					<CalendarContent
 						salonID={salonID}
+						setEventManagement={setEventManagement}
 						ref={calendarRefs}
 						selectedDate={validSelectedDate}
 						view={validCalendarView as CALENDAR_VIEW}

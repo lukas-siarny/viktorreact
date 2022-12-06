@@ -62,7 +62,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 
 	const defaultExpandedKeys: any = []
 	forEach(groupedServicesByCategory, (level1) => forEach(level1.category?.children, (level2) => defaultExpandedKeys.push(level2?.category?.id)))
-	// TODO: opravit fieldnames cez pomlcku
+
 	const handleCheckParent = (type: SERVICE_TYPE, checked: boolean, id: string) => {
 		// Ak je ONLINE_BOOKING false tak sa nastavi na false aj AUTO_CONFIRM
 		if (type === SERVICE_TYPE.ONLINE_BOOKING && !checked) {
@@ -79,27 +79,9 @@ const ReservationSystemSettingsForm = (props: Props) => {
 
 	const onChangeCheckAll = (checked: boolean, type: SERVICE_TYPE) => {
 		forEach(groupedServicesByCategory, (level1) => {
-			if (type === SERVICE_TYPE.ONLINE_BOOKING && !checked) {
-				dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.ONLINE_BOOKING}-${level1?.category?.id}]`, false))
-				dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.AUTO_CONFIRM}-${level1?.category?.id}]`, false))
-			} else if (type === SERVICE_TYPE.AUTO_CONFIRM && checked) {
-				dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.ONLINE_BOOKING}-${level1?.category?.id}]`, true))
-				dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.AUTO_CONFIRM}-${level1?.category?.id}]`, true))
-			} else {
-				dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${type}-${level1?.category?.id}]`, checked))
-			}
+			handleCheckParent(type, checked, level1?.category?.id as string)
 			forEach(level1.category?.children, (level2) => {
-				// handleCheckParent(type, checked, level2?.category?.id as string)
-				if (type === SERVICE_TYPE.ONLINE_BOOKING && !checked) {
-					dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.ONLINE_BOOKING}-${level2?.category?.id}]`, false))
-					dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.AUTO_CONFIRM}-${level2?.category?.id}]`, false))
-				} else if (type === SERVICE_TYPE.AUTO_CONFIRM && checked) {
-					dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.ONLINE_BOOKING}-${level2?.category?.id}]`, true))
-					dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.AUTO_CONFIRM}-${level2?.category?.id}]`, true))
-				} else {
-					dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${type}-${level2?.category?.id}]`, checked))
-				}
-
+				handleCheckParent(type, checked, level1?.category?.id as string)
 				forEach(level2.category?.children, (level3) => {
 					// handleCheckParent(type, checked, level3?.service?.id as string)
 					// Ak je ONLINE_BOOKING false tak sa nastavi na false aj AUTO_CONFIRM
@@ -118,45 +100,26 @@ const ReservationSystemSettingsForm = (props: Props) => {
 		})
 	}
 
-	const onChangeGroupCheck = (checked: boolean, type: SERVICE_TYPE, id: string, level: 1 | 2) => {
-		forEach(groupedServicesByCategory, (level1) => {
-			if (id === level1?.category?.id && level === 1) {
-				forEach(level1.category?.children, (level2) => {
-					forEach(level2?.category?.children, (level3) => {
-						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${type}-${level2?.category?.id}]`, checked))
-						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${type}][${level3.service.id}]`, checked))
-					})
-				})
-			} else {
-				forEach(level1.category?.children, (level2) => {
-					if (id === level2?.category?.id && level === 2) {
-						forEach(level2.category?.children, (level3) => {
-							dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${type}][${level3.service.id}]`, checked))
-						})
-					}
-				})
-			}
-		})
-	}
-
 	useEffect(() => {
-		const onlineBookingValues = Object.values(formValues?.servicesSettings?.[SERVICE_TYPE.ONLINE_BOOKING] as {})
-		const autoConfirmValues = Object.values(formValues?.servicesSettings?.[SERVICE_TYPE.AUTO_CONFIRM] as {})
-		// Najnizzsi children ci ma false hodnotu
-		const hasOnlineBookingFalsyValue = includes(onlineBookingValues, false)
-		const hasAutoConfirmFalsyValue = includes(autoConfirmValues, false)
-		// Nastavenie true false hodnot pre check all parentov podla toho ked ma children true / false Level 1 + Level 2
-		// SERVICE_TYPE.ONLINE_BOOKING
-		if (!hasOnlineBookingFalsyValue) {
-			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'onlineBookingAll', true))
-		} else {
-			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'onlineBookingAll', false))
-		}
-		// AUTO_CONFIRM
-		if (!hasAutoConfirmFalsyValue) {
-			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'autoConfirmAll', true))
-		} else {
-			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'autoConfirmAll', false))
+		if (formValues?.servicesSettings) {
+			const onlineBookingValues = Object.values(formValues?.servicesSettings?.[SERVICE_TYPE.ONLINE_BOOKING] as any)
+			const autoConfirmValues = Object.values(formValues?.servicesSettings?.[SERVICE_TYPE.AUTO_CONFIRM] as any)
+			// Najnizzsi children ci ma false hodnotu
+			const hasOnlineBookingFalsyValue = includes(onlineBookingValues, false)
+			const hasAutoConfirmFalsyValue = includes(autoConfirmValues, false)
+			// Nastavenie true false hodnot pre check all parentov podla toho ked ma children true / false Level 1 + Level 2
+			// SERVICE_TYPE.ONLINE_BOOKING
+			if (!hasOnlineBookingFalsyValue) {
+				dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'onlineBookingAll', true))
+			} else {
+				dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'onlineBookingAll', false))
+			}
+			// AUTO_CONFIRM
+			if (!hasAutoConfirmFalsyValue) {
+				dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'autoConfirmAll', true))
+			} else {
+				dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'autoConfirmAll', false))
+			}
 		}
 	}, [dispatch, formValues?.servicesSettings])
 

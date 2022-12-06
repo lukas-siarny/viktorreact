@@ -93,7 +93,7 @@ const ReservationForm: FC<Props> = (props) => {
 						value: customer.id,
 						key: customer.id,
 						label: customer.firstName && customer.lastName ? `${customer.firstName} ${customer.lastName}` : customer.email,
-						thumbNail: customer.profileImage.resizedImages.thumbnail,
+						thumbNail: customer?.profileImage?.resizedImages?.thumbnail,
 						extraContent: (
 							<span className={'text-notino-grayDark text-xs'}>
 								{prefix} {customer.phone}

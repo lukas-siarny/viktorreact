@@ -1,4 +1,4 @@
-import React, { useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Spin } from 'antd'
 import { Content } from 'antd/lib/layout/layout'
@@ -53,9 +53,20 @@ export type CalendarRefs = {
 const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const { view, loading, reservations, shiftsTimeOffs, onShowAllEmployees, showEmptyState, handleSubmitReservation, handleSubmitEvent, selectedDate, setEventManagement } = props
 
-	const [query, setQuery] = useQueryParams({
+	const [query] = useQueryParams({
 		sidebarView: StringParam
 	})
+
+	// TODO: ked sa bude rusit maska tak tento kod zmazat
+	useEffect(() => {
+		if (query?.sidebarView) {
+			const body = document.getElementsByClassName('fc-timeline-body')[0]
+			body.classList.add('active')
+		} else {
+			const body = document.getElementsByClassName('fc-timeline-body')[0]
+			body.classList.remove('active')
+		}
+	}, [query?.sidebarView])
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -189,6 +200,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			return (
 				<CalendarWeekView
 					{...props}
+					isOpenSidebar={!!query.sidebarView}
 					ref={weekView}
 					reservations={sources.reservations}
 					shiftsTimeOffs={sources.shiftsTimeOffs}
@@ -204,6 +216,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		return (
 			<CalendarDayView
 				{...props}
+				isOpenSidebar={!!query.sidebarView}
 				ref={dayView}
 				reservations={sources.reservations}
 				shiftsTimeOffs={sources.shiftsTimeOffs}

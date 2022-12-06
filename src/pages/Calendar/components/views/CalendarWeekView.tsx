@@ -142,6 +142,7 @@ const createDayLabelElement = (resourceElemenet: HTMLElement, employeesLength: n
 interface ICalendarWeekView extends ICalendarView {
 	updateCalendarSize: () => void
 	weekDays: string[]
+	isOpenSidebar?: boolean
 }
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
@@ -158,7 +159,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		weekDays,
 		updateCalendarSize,
 		onAddEvent,
-		virtualEvent
+		virtualEvent,
+		isOpenSidebar
 	} = props
 
 	const events = useMemo(() => {
@@ -257,7 +259,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				initialView='resourceTimelineDay'
 				initialDate={selectedDate}
 				weekends={true}
-				editable
+				editable={!isOpenSidebar}
 				stickyFooterScrollbar
 				nowIndicator
 				// data sources
@@ -278,7 +280,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				// select
-				selectable
+				selectable={!isOpenSidebar}
 				select={(selectedEvent) => handleNewEvent(selectedEvent)}
 				resourcesSet={() => setTimeout(updateCalendarSize, 0)}
 				eventsSet={() => setTimeout(updateCalendarSize, 0)}

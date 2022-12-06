@@ -10,7 +10,6 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
 import { useDispatch } from 'react-redux'
-import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
 import { composeDayViewEvents, composeDayViewResources, eventAllow, getTimeScrollId } from '../../calendarHelpers'
 
@@ -30,6 +29,7 @@ interface IResourceLabel {
 	name?: string
 	description?: string
 	isTimeOff?: boolean
+	isOpenSidebar?: boolean
 }
 
 const ResourceLabel: FC<IResourceLabel> = React.memo((props) => {
@@ -74,6 +74,7 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 
 interface ICalendarDayView extends ICalendarView {
 	setEventManagement: any
+	isOpenSidebar?: boolean
 }
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
@@ -89,7 +90,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		refetchData,
 		onAddEvent,
 		virtualEvent,
-		setEventManagement
+		setEventManagement,
+		isOpenSidebar
 	} = props
 	const dispatch = useDispatch()
 	const events = useMemo(() => {
@@ -99,10 +101,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	}, [selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, virtualEvent])
 
 	const resources = useMemo(() => composeDayViewResources(shiftsTimeOffs, employees), [shiftsTimeOffs, employees])
-	const [query, setQuery] = useQueryParams({
-		sidebarView: StringParam,
-		eventId: StringParam
-	})
 	/**
 	 * Spracuje input z calendara click/select a vytvori z neho init data, ktore vyuzije form v SiderEventManager
 	 */
@@ -150,7 +148,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				// pre bezne eventy je potom nastavena min-height cez cssko .nc-day-event
 				eventMinHeight={0}
 				dayMinWidth={120}
-				editable
+				editable={!isOpenSidebar}
 				weekends
 				nowIndicator
 				allDaySlot={false}
@@ -168,7 +166,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
 				// select
-				selectable
+				selectable={!isOpenSidebar}
 				select={handleNewEvent}
 			/>
 		</div>

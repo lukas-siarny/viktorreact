@@ -43,7 +43,7 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 	const duration = parseTimeFromMinutes(diff)
 	const [t] = useTranslation()
 
-	const employeeColorIndicator = <span className={'color'} style={{ backgroundColor: isPlaceholder ? undefined : backgroundColor }} />
+	const employeeColorIndicator = <span className={'color'} style={{ backgroundColor }} />
 
 	return (
 		<div
@@ -69,6 +69,7 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 				}
 			}}
 		>
+			{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT && <div className={'event-background'} style={{ backgroundColor }} />}
 			{(() => {
 				switch (calendarView) {
 					case CALENDAR_VIEW.WEEK: {

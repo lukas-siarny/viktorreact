@@ -721,41 +721,10 @@ export const EVENT_NAMES = (eventType: CALENDAR_EVENT_TYPE) => {
 			return i18next.t('loc:rezerváciu')
 
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-			return i18next.t('loc:dovolenku')
+			return i18next.t('loc:voľno')
 		default:
 			return ''
 	}
-}
-
-export const EVENT_TYPE_OPTIONS = (eventType?: CALENDAR_EVENTS_VIEW_TYPE) => {
-	const options = [
-		{
-			key: CALENDAR_EVENT_TYPE.RESERVATION,
-			label: i18next.t('loc:Rezervácia')
-		},
-		{
-			key: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
-			label: i18next.t('loc:Pracovná zmena')
-		},
-		{
-			key: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
-			label: i18next.t('loc:Dovolenka')
-		},
-		{
-			key: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
-			label: i18next.t('loc:Prestávka')
-		}
-	]
-	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-		// rezervacia a break
-		return filter(options, (item) => item.key === CALENDAR_EVENT_TYPE.RESERVATION || item.key === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK)
-	}
-	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
-		// shift, break a vacation
-		return filter(options, (item) => item.key !== CALENDAR_EVENT_TYPE.RESERVATION)
-	}
-	// vsetky optiony
-	return options
 }
 
 export const SHORTCUT_DAYS_OPTIONS = (length = 2) => [
@@ -811,6 +780,7 @@ export enum SERVICE_TYPE {
 }
 
 export const CALENDAR_DEBOUNCE_DELAY = 300 // in ms
+export const CALENDAR_INIT_TIME = 500 // in ms
 
 export const CREATE_EVENT_PERMISSIONS = [...ADMIN_PERMISSIONS, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CALENDAR_EVENT_CREATE]
 export const UPDATE_EVENT_PERMISSIONS = [...ADMIN_PERMISSIONS, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CALENDAR_EVENT_UPDATE]

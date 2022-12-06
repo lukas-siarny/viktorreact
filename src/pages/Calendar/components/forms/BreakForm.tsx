@@ -29,7 +29,9 @@ import Permissions from '../../../../utils/Permissions'
 import { ICalendarEventForm } from '../../../../types/interfaces'
 
 // assets
-import { ReactComponent as ProfileIcon } from '../../../../assets/icons/profile-icon.svg'
+import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-16-current-color.svg'
+import { ReactComponent as TimerIcon } from '../../../../assets/icons/clock-icon.svg'
+import { ReactComponent as DateSuffixIcon } from '../../../../assets/icons/date-suffix-icon.svg'
 
 // components / atoms
 import SelectField from '../../../../atoms/SelectField'
@@ -108,14 +110,14 @@ const CalendarBreakForm: FC<Props> = (props) => {
 
 	return (
 		<>
-			<div className={'nc-sider-event-management-content main-panel'}>
+			<div className={'nc-sider-event-management-content'}>
 				<Spin spinning={eventDetail.isLoading} size='large'>
 					<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 						<Field
 							component={SelectField}
 							optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}
 							label={t('loc:Zamestnanec')}
-							suffixIcon={<ProfileIcon />}
+							suffixIcon={<EmployeesIcon className={'text-notino-grayDark'} />}
 							placeholder={t('loc:Vyberte zamestnanca')}
 							name={'employee'}
 							size={'large'}
@@ -141,6 +143,8 @@ const CalendarBreakForm: FC<Props> = (props) => {
 							placement={'bottomRight'}
 							dropdownAlign={{ points: ['tr', 'br'] }}
 							required
+							size={'large'}
+							suffixIcon={<DateSuffixIcon className={'text-notino-grayDark'} />}
 						/>
 						<Fields
 							names={['timeFrom', 'timeTo']}
@@ -151,6 +155,8 @@ const CalendarBreakForm: FC<Props> = (props) => {
 							allowClear
 							itemClassName={'m-0 pb-0'}
 							minuteStep={15}
+							size={'large'}
+							suffixIcon={<TimerIcon className={'text-notino-grayDark'} />}
 						/>
 						<Field
 							name={'recurring'}

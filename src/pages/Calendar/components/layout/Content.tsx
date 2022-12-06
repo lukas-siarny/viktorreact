@@ -1,4 +1,4 @@
-import React, { useCallback, useImperativeHandle, useRef, useState } from 'react'
+import React, { useCallback, useImperativeHandle, useMemo, useRef, useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Content } from 'antd/lib/layout/layout'
 import { Spin } from 'antd'
@@ -31,6 +31,7 @@ import { RootState } from '../../../../reducers'
 
 // utils
 import { ForbiddenModal, permitted } from '../../../../utils/Permissions'
+import { getSelectedDateForCalendar, getWeekDays } from '../../calendarHelpers'
 
 type Props = {
 	view: CALENDAR_VIEW
@@ -87,6 +88,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const selectedSalonuniqPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions)
 
 	const [visibleForbiddenModal, setVisibleForbiddenModal] = useState(false)
+
+	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
+	const calendarSelectedDate = getSelectedDateForCalendar(view, selectedDate)
 
 	const onEventChange = useCallback(
 		(calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
@@ -182,7 +186,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			return (
 				<CalendarWeekView
 					ref={weekView}
-					selectedDate={selectedDate}
+					weekDays={weekDays}
+					selectedDate={calendarSelectedDate}
 					reservations={reservations}
 					shiftsTimeOffs={shiftsTimeOffs}
 					employees={employees}
@@ -191,6 +196,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					onEditEvent={onEditEvent}
 					onEventChange={onEventChange}
 					refetchData={refetchData}
+					updateCalendarSize={() => weekView?.current?.getApi().updateSize()}
 				/>
 			)
 		}
@@ -198,7 +204,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		return (
 			<CalendarDayView
 				ref={dayView}
-				selectedDate={selectedDate}
+				selectedDate={calendarSelectedDate}
 				reservations={reservations}
 				shiftsTimeOffs={shiftsTimeOffs}
 				employees={employees}

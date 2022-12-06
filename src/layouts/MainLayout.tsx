@@ -1,4 +1,4 @@
-import React, { ReactNode, FC } from 'react'
+import React, { ReactNode, FC, useEffect } from 'react'
 import { Layout, Row, Button, Dropdown, Menu } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -53,7 +53,9 @@ const MainLayout: FC<Props> = (props) => {
 	const [backUrl] = useBackUrl(t('paths:salons'))
 
 	// init selected country to header select
-	dispatch(initialize(FORM.HEADER_COUNTRY_FORM, { countryCode: selectedCountry }))
+	useEffect(() => {
+		dispatch(initialize(FORM.HEADER_COUNTRY_FORM, { countryCode: selectedCountry }))
+	}, [dispatch, selectedCountry])
 
 	const getSalonMenuItems = (): ItemType[] => {
 		const salonMenuItems: ItemType[] = salonOptions.map((item) => ({

@@ -3,6 +3,7 @@ import { DateSpanApi, EventApi } from '@fullcalendar/react'
 import dayjs from 'dayjs'
 import { t } from 'i18next'
 import { uniqueId } from 'lodash'
+import Scroll from 'react-scroll'
 
 // types
 import {
@@ -27,7 +28,7 @@ import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
  * vrati klasicky zaciatok a koniec mesiaca
  */
 
-export const getSelectedDateRange = (view: CALENDAR_VIEW, selectedDate: string, monthViewFull = true, format: string | false = CALENDAR_DATE_FORMAT.QUERY) => {
+export const getSelectedDateRange = (view: CALENDAR_VIEW, selectedDate: string, monthViewFull = false, format: string | false = CALENDAR_DATE_FORMAT.QUERY) => {
 	let result = {
 		view,
 		start: dayjs(selectedDate).startOf('day'),
@@ -66,9 +67,11 @@ export const getSelectedDateRange = (view: CALENDAR_VIEW, selectedDate: string, 
 	}
 }
 
+export const isDateInRange = (start: string, end: string, date: string | dayjs.Dayjs) => dayjs(date).isSameOrAfter(start) && dayjs(date).isSameOrBefore(end)
+
 export const isRangeAleardySelected = (view: CALENDAR_VIEW, currentSelectedDate: string, newSelectedDate: string | dayjs.Dayjs) => {
 	const { start, end } = getSelectedDateRange(view, currentSelectedDate, false)
-	return dayjs(newSelectedDate).isSameOrAfter(start) && dayjs(newSelectedDate).isSameOrBefore(end)
+	return isDateInRange(start, end, newSelectedDate)
 }
 
 export const parseTimeFromMinutes = (minutes: number) => {
@@ -82,12 +85,14 @@ export const parseTimeFromMinutes = (minutes: number) => {
 
 export const getTimeText = (start: Date | null, end: Date | null) => `${dayjs(start).format(CALENDAR_DATE_FORMAT.TIME)}-${dayjs(end).format(CALENDAR_DATE_FORMAT.TIME)}`
 
+export const getTimeScrollId = (hour: number) => dayjs().startOf('day').add(Math.floor(hour), 'hour').format('HH:mm:ss')
+
 type ResourceMap = {
 	[key: string]: number
 }
 
-const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, selectedDate: string) =>
-	Object.entries({ ...resourcesMap }).reduce((acc, [key, value]) => {
+const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, selectedDate: string) => {
+	return Object.entries({ ...resourcesMap }).reduce((acc, [key, value]) => {
 		if (!value) {
 			return [
 				...acc,
@@ -104,6 +109,7 @@ const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, sele
 		}
 		return acc
 	}, [] as any[])
+}
 
 /* const isAllDayEvent = (selectedDate: string, eventStart: string, eventEnd: string) => {
 	const startOfSelectedDate = dayjs(selectedDate).startOf('day')
@@ -290,7 +296,7 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 			}, {} as { start: string; end: string })
 			description = `${dayjs(employeeWorkingHours.start).format(CALENDAR_DATE_FORMAT.TIME)}-${dayjs(employeeWorkingHours.end).format(CALENDAR_DATE_FORMAT.TIME)}`
 		} else if (employeeTimeOff.length && !employeeShifts.length) {
-			description = t('loc:Dovolenka')
+			description = t('loc:Voľno')
 		}
 
 		return {
@@ -352,9 +358,9 @@ export const composeWeekResources = (weekDays: string[], shiftsTimeOffs: ICalend
 	}, [] as any[])
 }
 
-export const getWeekViewSelectedDate = (selectedDate: string, weekDays: string[]) => {
+export const getWeekViewSelectedDate = (weekDays: string[]) => {
 	const today = dayjs().startOf('day')
-	return weekDays.some((day) => dayjs(day).startOf('day').isSame(today)) ? today.format(CALENDAR_DATE_FORMAT.QUERY) : selectedDate
+	return weekDays.some((day) => dayjs(day).startOf('day').isSame(today)) ? today.format(CALENDAR_DATE_FORMAT.QUERY) : weekDays[0]
 }
 
 const composeWeekViewReservations = (
@@ -490,4 +496,28 @@ export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null) 
 	const eventEmployeeId = eventData?.employee?.id
 
 	return resourceEmployeeId === eventEmployeeId
+}
+
+export const getSelectedDateForCalendar = (view: CALENDAR_VIEW, selectedDate: string) => {
+	switch (view) {
+		case CALENDAR_VIEW.WEEK: {
+			// v tyzdenom view je potrebne skontrolovat, ci sa vramci novo nastaveneho tyzdnoveho rangu nachadza dnesok
+			// ak ano, je potrebne ho nastavit ako aktualny den do kalendara, aby sa ukazal now indicator
+			// kedze realne sa na tyzdenne view pouziva denne view
+			const weekDays = getWeekDays(selectedDate)
+			return getWeekViewSelectedDate(weekDays)
+		}
+		case CALENDAR_VIEW.DAY:
+		default:
+			return selectedDate
+	}
+}
+
+export const scrollToSelectedDate = (scrollId: string, options?: Object) => {
+	// scroll ID je datum v tvare YYYY-MM-DD
+	Scroll.scroller.scrollTo(scrollId, {
+		containerId: 'nc-calendar-week-wrapper',
+		offset: -25, // - hlavicka
+		...(options || {})
+	})
 }

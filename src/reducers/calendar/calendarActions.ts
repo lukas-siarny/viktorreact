@@ -9,11 +9,10 @@ import { CalendarEvent, ICalendarEventsPayload } from '../../types/interfaces'
 
 // enums
 import { EVENTS, EVENT_DETAIL, UPDATE_EVENT } from './calendarTypes'
-import { CALENDAR_EVENTS_KEYS, CALENDAR_VIEW, CALENDAR_EVENT_TYPE, DATE_TIME_PARSER_DATE_FORMAT, RESERVATION_STATE } from '../../utils/enums'
+import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, DATE_TIME_PARSER_DATE_FORMAT, RESERVATION_STATE } from '../../utils/enums'
 
 // utils
 import { getReq } from '../../utils/request'
-import { getSelectedDateRange } from '../../pages/Calendar/calendarHelpers'
 import { getDateTime, normalizeQueryParams } from '../../utils/helper'
 
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
@@ -22,7 +21,8 @@ export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvent
 
 interface ICalendarEventsQueryParams {
 	salonID: string
-	date: string
+	start: string
+	end: string
 	employeeIDs?: (string | null)[] | null
 	categoryIDs?: (string | null)[] | null
 	eventTypes?: (string | null)[] | null
@@ -31,7 +31,8 @@ interface ICalendarEventsQueryParams {
 
 interface ICalendarReservationsQueryParams {
 	salonID: string
-	date: string
+	start: string
+	end: string
 	employeeIDs?: (string | null)[] | null
 	categoryIDs?: (string | null)[] | null
 	reservationStates?: (string | null)[] | null
@@ -39,7 +40,8 @@ interface ICalendarReservationsQueryParams {
 
 interface ICalendarShiftsTimeOffQueryParams {
 	salonID: string
-	date: string
+	start: string
+	end: string
 	employeeIDs?: (string | null)[] | null
 }
 
@@ -64,7 +66,6 @@ export const getCalendarEvents =
 	(
 		enumType: CALENDAR_EVENTS_KEYS = CALENDAR_EVENTS_KEYS.EVENTS,
 		queryParams: ICalendarEventsQueryParams,
-		view: CALENDAR_VIEW,
 		splitMultidayEventsIntoOneDayEvents = false
 	): ThunkResult<Promise<ICalendarEventsPayload>> =>
 	async (dispatch) => {
@@ -73,15 +74,13 @@ export const getCalendarEvents =
 		let payload = {} as ICalendarEventsPayload
 
 		try {
-			const { start, end } = getSelectedDateRange(view, queryParams.date)
-
 			const queryParamsEditedForRequest = {
 				salonID: queryParams.salonID,
 				categoryIDs: queryParams.categoryIDs,
 				employeeIDs: queryParams.employeeIDs,
 				eventTypes: queryParams.eventTypes,
-				dateFrom: start,
-				dateTo: end,
+				dateFrom: queryParams.start,
+				dateTo: queryParams.end,
 				reservationStates: queryParams.reservationStates
 			}
 
@@ -109,8 +108,8 @@ export const getCalendarEvents =
 					if (isMultipleDayEvent) {
 						// kontrola, ci je zaciatok a konec multidnoveho eventu vacsi alebo mensi ako aktualne vybraty rozsah
 						// staci nam vytvorit eventy len pre vybrany rozsah
-						const rangeStart = dayjs.max(dayjs(start).startOf('day'), eventStartStartOfDay)
-						const rangeEnd = dayjs.min(dayjs(end).startOf('day'), eventEndStartOfDay)
+						const rangeStart = dayjs.max(dayjs(queryParams.start).startOf('day'), eventStartStartOfDay)
+						const rangeEnd = dayjs.min(dayjs(queryParams.end).startOf('day'), eventEndStartOfDay)
 						// rozdiel zaciatku multidnoveho eventu a zaciatku vybrateho rozsahu
 						const startDifference = rangeStart.diff(eventStartStartOfDay, 'days')
 						// rozdiel konca multidnoveho eventu a konca vybrateho rozsahu
@@ -166,11 +165,7 @@ export const getCalendarEvents =
 		return payload
 	}
 
-export const getCalendarReservations = (
-	queryParams: ICalendarReservationsQueryParams,
-	view: CALENDAR_VIEW,
-	splitMultidayEventsIntoOneDayEvents = false
-): ThunkResult<Promise<ICalendarEventsPayload>> =>
+export const getCalendarReservations = (queryParams: ICalendarReservationsQueryParams, splitMultidayEventsIntoOneDayEvents = false): ThunkResult<Promise<ICalendarEventsPayload>> =>
 	getCalendarEvents(
 		CALENDAR_EVENTS_KEYS.RESERVATIONS,
 		{
@@ -178,19 +173,16 @@ export const getCalendarReservations = (
 			eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
 			reservationStates: [RESERVATION_STATE.APPROVED, RESERVATION_STATE.PENDING, RESERVATION_STATE.REALIZED, RESERVATION_STATE.NOT_REALIZED]
 		},
-		view,
 		splitMultidayEventsIntoOneDayEvents
 	)
 
 export const getCalendarShiftsTimeoff = (
 	queryParams: ICalendarShiftsTimeOffQueryParams,
-	view: CALENDAR_VIEW,
 	splitMultidayEventsIntoOneDayEvents = false
 ): ThunkResult<Promise<ICalendarEventsPayload>> =>
 	getCalendarEvents(
 		CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS,
 		{ ...queryParams, eventTypes: [CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF, CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK] },
-		view,
 		splitMultidayEventsIntoOneDayEvents
 	)
 

@@ -109,9 +109,9 @@ export const addOrUpdateEvent =
 				end,
 				allDay: false,
 				resourceId: String(employee.key),
-				isPlaceholder: true,
 				eventData: {
 					eventType,
+					isPlaceholder: true,
 					date,
 					startDateTime: start,
 					endDateTime: end,

@@ -37,7 +37,9 @@ const BackgroundEvent: FC<{ eventType?: CALENDAR_EVENT_TYPE }> = React.memo(({ e
 const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, onEditEvent, refetchData }) => {
 	const { event, backgroundColor } = data || {}
 	const { start, end } = event || {}
-	const { eventData, isPlaceholder } = (event.extendedProps as IEventExtenedProps) || {}
+
+	const { eventData } = (event.extendedProps as IEventExtenedProps) || {}
+
 	const {
 		id,
 		start: eventStart,
@@ -52,7 +54,8 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 		isFirstMultiDayEventInCurrentRange,
 		isLastMultiDaylEventInCurrentRange,
 		isMultiDayEvent,
-		calendarBulkEvent
+		calendarBulkEvent,
+		isPlaceholder
 	} = eventData || {}
 
 	const [query] = useQueryParams({
@@ -129,6 +132,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					originalEventData={originalEventData}
 					refetchData={refetchData}
 					isEdit={isEdit}
+					isPlaceholder={isPlaceholder}
 				/>
 			)
 		}

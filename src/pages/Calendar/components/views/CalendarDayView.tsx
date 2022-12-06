@@ -72,22 +72,19 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 interface ICalendarDayView extends ICalendarView {}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange, refetchData, onAddEvent, datesSet, virtualEvent } = props
+	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange, refetchData, onAddEvent, virtualEvent } = props
 
-	const events = useMemo(
-		() => {
-			const data = composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees)
-			const result = virtualEvent ? [...data, virtualEvent] : data
-			return result
-		},
-		// virtualEvent
-		// 	? [composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees), [virtualEvent]]
-		// 	: [],
-		[selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, virtualEvent]
-	)
+	const events = useMemo(() => {
+		const data = composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees)
+		// ak je virtualEvent definovany, zaradi sa do zdroja eventov pre Calendar
+		return virtualEvent ? [...data, virtualEvent] : data
+	}, [selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, virtualEvent])
 
 	const resources = useMemo(() => composeDayViewResources(shiftsTimeOffs, employees), [shiftsTimeOffs, employees])
 
+	/**
+	 * Spracuje input z calendara click/select a vytvori z neho init data, ktore vyuzije form v SiderEventManager
+	 */
 	const handleNewEvent = (event: DateSelectArg) => {
 		if (event.resource) {
 			// eslint-disable-next-line no-underscore-dangle
@@ -105,56 +102,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			})
 		}
 	}
-
-	/*
-	const handleDateCellClick = (arg: DateClickArg) => {
-		const calnedar = arg.view.calendar
-
-		const newEvent: EventInput = {
-			start: arg.date,
-			end: dayjs(arg.date).add(60, 'minutes').toISOString(),
-			allDay: false,
-			resourceId: arg.resource?.id,
-			extendedProps: {
-				eventData: {
-					eventType: CALENDAR_EVENT_TYPE.RESERVATION
-				}
-			}
-		}
-
-		calnedar.addEvent(newEvent)
-	}
-
-	const handleDateSelect = (arg: DateSelectArg) => {
-		const calnedar = arg.view.calendar
-		const placeholder = calnedar.getEventById('placeholder')
-		const resourceId = arg.resource?.id
-
-		if (resourceId) {
-			if (!placeholder) {
-				const newEvent: EventInput = {
-					id: 'placeholder',
-					start: arg.start,
-					end: arg.end,
-					allDay: false,
-					editable: true,
-					resourceId,
-					extendedProps: {
-						eventData: {
-							eventType: CALENDAR_EVENT_TYPE.RESERVATION
-						}
-					}
-				}
-				calnedar.addEvent(newEvent)
-				setQuery({ ...query, sidebarView: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION })
-			} else {
-				// placeholder.setDates(arg.start, arg.end)
-				// placeholder.setResources([resourceId])
-				placeholder.remove()
-			}
-		}
-	}
-	*/
 
 	return (
 		<div className={'nc-calendar-wrapper'} id={'nc-calendar-day-wrapper'}>
@@ -198,7 +145,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				// select
 				selectable
 				select={handleNewEvent}
-				datesSet={datesSet}
 			/>
 		</div>
 	)

@@ -665,6 +665,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const handleAddEvent = (initialData?: INewCalendarEvent) => {
+		// Event data ziskane z kalendara, sluzia pre init formularu v SiderEventManagement
 		setNewEventData(initialData)
 
 		if (query.eventId) {
@@ -764,7 +765,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						handleSubmitReservation={handleSubmitReservation}
 						handleSubmitEvent={handleSubmitEvent}
 						onAddEvent={handleAddEvent}
-						datesSet={setNewSelectedDate}
 					/>
 					<SiderEventManagement
 						salonID={salonID}

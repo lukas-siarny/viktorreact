@@ -94,12 +94,12 @@ const SiderEventManagement: FC<Props> = (props) => {
 	const reservationFormValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
 
 	useEffect(() => {
-		// initVirtualHandler(dispatch, calendarApi)
+		// nastavuje referenciu na CalendarApi, musi sa update-ovat, ked sa meni View, aby bola aktualna vo virtalEventActions
 		setCalendarApi(calendarApi)
+		// handler pre prepnutie datumu
 		setCalendarDateHandler(changeCalendarDate)
 
 		return () => {
-			// initVirtualHandler(dispatch)
 			setCalendarApi()
 		}
 	}, [calendarApi, changeCalendarDate])

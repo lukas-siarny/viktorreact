@@ -646,7 +646,6 @@ export interface ICalendarView {
 	onEventChange?: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
 	loading?: boolean
 	refetchData: () => void
-	datesSet: (newDate: string | any) => void
 	virtualEvent?: EventInput
 }
 

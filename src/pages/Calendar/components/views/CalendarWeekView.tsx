@@ -15,6 +15,7 @@ import CalendarEventContent from '../CalendarEventContent'
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
 import { composeWeekResources, composeWeekViewEvents, eventAllow, getWeekDayResourceID } from '../../calendarHelpers'
+import { getDateTime } from '../../../../utils/helper'
 
 // types
 import { ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -157,35 +158,34 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		weekDays,
 		updateCalendarSize,
 		onAddEvent,
-		virtualEvent,
-		datesSet
+		virtualEvent
 	} = props
 
 	const events = useMemo(() => {
 		const data = composeWeekViewEvents(selectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees)
-		console.log('🚀 ~ file: CalendarWeekView.tsx:118 ~ events ~ virtualEvent', virtualEvent)
 
 		if (virtualEvent) {
-			const { extendedProps, ...otherProps } = virtualEvent
+			const { eventData, ...otherProps } = virtualEvent
+			// pre WeekView sa musi resourceId upravit do tvaru Date_ResourceID, lebo skrz tieto ID su mapovane eventy do prislusnych dni
+			const resourceId = getWeekDayResourceID(virtualEvent.resourceId as string, eventData.date)
+
+			// NOTE: start a end na root urovni su vzdy rovnakeho datumu, lebo Week View je v podstate Daily View (inak vyskladane).
+			// Pozor! Tieto hodnoty su iba pre ucely FullCalendar, aby vedel korektne vyrenderovat eventy. Realne datumy (zobrazene aj v SiderForme) odpovedaju hodnotam v evenData: date, startDateTime, endDateTime, start, end
 			const newEvent = {
 				...otherProps,
 				eventData: {
-					...extendedProps?.eventData,
-					resourceId: getWeekDayResourceID(virtualEvent.resourceId as string, extendedProps?.eventData.date)
+					...eventData,
+					resourceId
 				},
-				resourceId: getWeekDayResourceID(virtualEvent.resourceId as string, extendedProps?.eventData.date)
+				resourceId,
+				start: getDateTime(selectedDate, eventData.start.time),
+				end: getDateTime(selectedDate, eventData.end.time)
 			}
-
-			console.log('🚀 ~ file: CalendarWeekView.tsx:124 ~ events ~ newEvent', newEvent)
-			console.log('🚀 ~ file: CalendarWeekView.tsx:184 ~ events ~ data', data)
 
 			return [...data, newEvent]
 		}
 
-		// const result = virtualEvent ? [newEvent, ...data] : data
 		return data
-		// console.log('🚀 ~ file: CalendarWeekView.tsx:120 ~ events ~ result', result)
-		// return result
 	}, [selectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees, virtualEvent])
 
 	const handleNewEvent = (event: DateSelectArg) => {
@@ -193,6 +193,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 			// eslint-disable-next-line no-underscore-dangle
 			const { day, employee } = event.resource._resource.extendedProps
 
+			// korektny datum, na ktory prislucha dany event sa zoberie z EventData - suvis s logikou popisanou v commente vyssie L:172
 			onAddEvent({
 				date: day,
 				timeFrom: dayjs(event.startStr).format(DEFAULT_TIME_FORMAT),
@@ -280,19 +281,12 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				selectable
 				select={(selectedEvent) => handleNewEvent(selectedEvent)}
 				resourcesSet={() => setTimeout(updateCalendarSize, 0)}
-				eventsSet={(eventtt: any[]) => {
-					setTimeout(() => {
-						console.log('🚀 ~ file: CalendarWeekView.tsx:284 ~ callback ~ eventsSet:', eventtt)
-						updateCalendarSize()
-					}, 0)
-				}}
+				eventsSet={() => setTimeout(updateCalendarSize, 0)}
 			/>
 		</div>
 	)
 })
 
 export default React.memo(CalendarWeekView, (prevProps, nextProps) => {
-	const isSame = JSON.stringify(prevProps) === JSON.stringify(nextProps)
-	console.log('🚀 ~ file: CalendarWeekView.tsx:295 ~ React.memo ~ isSame', isSame)
-	return isSame
+	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
 })

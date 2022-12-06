@@ -56,6 +56,15 @@ export default (state = initState, action: ICalendarActions) => {
 					data: action.payload.data
 				}
 			}
+
+		case EVENTS.EVENTS_REFRESH:
+			return {
+				...state,
+				[action.enumType]: {
+					...state[action.enumType]
+				}
+			}
+
 		// Event detail
 		case EVENT_DETAIL.EVENT_DETAIL_LOAD_START:
 			return {

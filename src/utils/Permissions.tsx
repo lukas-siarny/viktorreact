@@ -147,8 +147,6 @@ const Permissions: FC<Props> = (props) => {
 
 	const hasPermissions = permitted(authUserPermissions, selectedSalon?.uniqPermissions, allowed, except)
 
-	// console.log({ authUserPermissions, allowed })
-
 	const [visibleModal, setVisibleModal] = useState(false)
 	const [t] = useTranslation()
 

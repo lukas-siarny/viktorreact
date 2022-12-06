@@ -1,7 +1,7 @@
 import { EventResizeDoneArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
-import { EventContentArg, EventDropArg } from '@fullcalendar/react'
+import { EventDropArg, EventInput } from '@fullcalendar/react'
 
 // utils
 import {
@@ -187,9 +187,11 @@ export interface ICalendarEventForm {
 	note?: string
 	allDay?: boolean
 	// NOTE: pre akcie resize a drag and drop
-	eventId?: string
+	eventId?: string | null
 	calendarBulkEventID?: string
 }
+
+export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null
 
 export interface IEventTypeFilterForm {
 	eventType: CALENDAR_EVENT_TYPE
@@ -626,6 +628,7 @@ export type CalendarEvent = CalendarEvents[0] & {
 	isLastMultiDaylEventInCurrentRange?: boolean
 	originalEvent?: CalendarEvent
 	employee: CalendarEmployee
+	isPlaceholder?: boolean
 }
 
 export interface ICalendarEventsPayload {
@@ -639,10 +642,12 @@ export interface ICalendarView {
 	shiftsTimeOffs: ICalendarEventsPayload['data']
 	employees: Employees
 	salonID: string
+	onAddEvent: (event: INewCalendarEvent) => void
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
-	onEventChange: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
+	onEventChange?: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
 	loading?: boolean
 	refetchData: () => void
+	virtualEvent?: EventInput
 }
 
 export interface IEventCardProps {
@@ -675,7 +680,6 @@ export interface IBulkConfirmForm {
 
 export interface IEventExtenedProps {
 	eventData?: CalendarEvent
-	isPlaceholder?: boolean
 }
 
 export interface IResourceEmployee {

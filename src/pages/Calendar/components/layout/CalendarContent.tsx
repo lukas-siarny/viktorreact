@@ -1,15 +1,15 @@
-import React, { useCallback, useImperativeHandle, useMemo, useRef, useState, useEffect } from 'react'
+import React, { useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Content } from 'antd/lib/layout/layout'
 import { Spin } from 'antd'
+import { Content } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
 
 // fullcalendar
-import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 import { EventResizeDoneArg } from '@fullcalendar/interaction'
+import FullCalendar, { EventDropArg, DatesSetArg } from '@fullcalendar/react'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
@@ -19,13 +19,12 @@ import CalendarEmptyState from '../CalendarEmptyState'
 
 // types
 import {
-	Employees,
-	IEventExtenedProps,
 	ICalendarEventForm,
-	ICalendarEventsPayload,
 	ICalendarReservationForm,
-	IWeekViewResourceExtenedProps,
-	IDayViewResourceExtenedProps
+	ICalendarView,
+	IDayViewResourceExtenedProps,
+	IEventExtenedProps,
+	IWeekViewResourceExtenedProps
 } from '../../../../types/interfaces'
 import { RootState } from '../../../../reducers'
 
@@ -35,20 +34,12 @@ import { getSelectedDateForCalendar, getWeekDays } from '../../calendarHelpers'
 
 type Props = {
 	view: CALENDAR_VIEW
-	selectedDate: string
 	loading: boolean
-	reservations: ICalendarEventsPayload['data']
-	shiftsTimeOffs: ICalendarEventsPayload['data']
-	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
-	employees: Employees
 	onShowAllEmployees: () => void
 	showEmptyState: boolean
-	salonID: string
-	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
 	handleSubmitEvent: (values: ICalendarEventForm, onError?: () => void) => void
-	refetchData: () => void
-}
+} & ICalendarView
 
 export type CalendarRefs = {
 	[CALENDAR_VIEW.DAY]?: InstanceType<typeof FullCalendar> | null
@@ -57,22 +48,7 @@ export type CalendarRefs = {
 }
 
 const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
-	const {
-		view,
-		selectedDate,
-		loading,
-		eventsViewType,
-		reservations,
-		shiftsTimeOffs,
-		employees,
-		onShowAllEmployees,
-		showEmptyState,
-		salonID,
-		onEditEvent,
-		handleSubmitReservation,
-		handleSubmitEvent,
-		refetchData
-	} = props
+	const { view, loading, reservations, shiftsTimeOffs, onShowAllEmployees, showEmptyState, handleSubmitReservation, handleSubmitEvent, selectedDate } = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -84,10 +60,30 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		/* [CALENDAR_VIEW.MONTH]: monthView?.current */
 	}))
 
+	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const selectedSalonuniqPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions)
 
 	const [visibleForbiddenModal, setVisibleForbiddenModal] = useState(false)
+
+	const sources = useMemo(() => {
+		// eventy, ktore sa posielaju o uroven nizsie do View, sa v pripade, ze existuje virtualEvent odfiltruju
+		const allSources = {
+			reservations,
+			shiftsTimeOffs,
+			virtualEvent: virtualEvent?.event
+		}
+
+		if (virtualEvent?.id && !virtualEvent?.isNew) {
+			if (virtualEvent.type === CALENDAR_EVENT_TYPE.RESERVATION) {
+				allSources.reservations = reservations?.filter((item) => item.id !== virtualEvent.id) ?? []
+			} else {
+				allSources.shiftsTimeOffs = shiftsTimeOffs?.filter((item) => item.id !== virtualEvent.id) ?? []
+			}
+		}
+
+		return allSources
+	}, [reservations, shiftsTimeOffs, virtualEvent])
 
 	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
 	const calendarSelectedDate = getSelectedDateForCalendar(view, selectedDate)
@@ -185,17 +181,14 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		if (view === CALENDAR_VIEW.WEEK) {
 			return (
 				<CalendarWeekView
+					{...props}
 					ref={weekView}
+					reservations={sources.reservations}
+					shiftsTimeOffs={sources.shiftsTimeOffs}
+					virtualEvent={sources.virtualEvent}
+					onEventChange={onEventChange}
 					weekDays={weekDays}
 					selectedDate={calendarSelectedDate}
-					reservations={reservations}
-					shiftsTimeOffs={shiftsTimeOffs}
-					employees={employees}
-					eventsViewType={eventsViewType}
-					salonID={salonID}
-					onEditEvent={onEditEvent}
-					onEventChange={onEventChange}
-					refetchData={refetchData}
 					updateCalendarSize={() => weekView?.current?.getApi().updateSize()}
 				/>
 			)
@@ -203,16 +196,13 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 		return (
 			<CalendarDayView
+				{...props}
 				ref={dayView}
+				reservations={sources.reservations}
+				shiftsTimeOffs={sources.shiftsTimeOffs}
+				virtualEvent={sources.virtualEvent}
 				selectedDate={calendarSelectedDate}
-				reservations={reservations}
-				shiftsTimeOffs={shiftsTimeOffs}
-				employees={employees}
-				eventsViewType={eventsViewType}
-				salonID={salonID}
-				onEditEvent={onEditEvent}
 				onEventChange={onEventChange}
-				refetchData={refetchData}
 			/>
 		)
 	}

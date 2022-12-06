@@ -137,21 +137,23 @@ const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeO
 	}
 }
 
-const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string, end: string): ICalendarEventCardData => ({
-	id: event.id,
-	resourceId,
-	start,
-	end,
-	editable: !event.isMultiDayEvent,
-	resourceEditable: !event.isMultiDayEvent,
-	allDay: false,
-	eventData: {
-		...(event.originalEvent || event || {}),
-		isMultiDayEvent: event.isMultiDayEvent,
-		isLastMultiDaylEventInCurrentRange: event.isLastMultiDaylEventInCurrentRange,
-		isFirstMultiDayEventInCurrentRange: event.isFirstMultiDayEventInCurrentRange
+const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string, end: string): ICalendarEventCardData => {
+	return {
+		id: event.id,
+		resourceId,
+		start,
+		end,
+		editable: !event.isMultiDayEvent,
+		resourceEditable: !event.isMultiDayEvent,
+		allDay: false,
+		eventData: {
+			...(event.originalEvent || event || {}),
+			isMultiDayEvent: event.isMultiDayEvent,
+			isLastMultiDaylEventInCurrentRange: event.isLastMultiDaylEventInCurrentRange,
+			isFirstMultiDayEventInCurrentRange: event.isFirstMultiDayEventInCurrentRange
+		}
 	}
-})
+}
 
 /**
  * Daily view helpers
@@ -319,7 +321,7 @@ export const getWeekDays = (selectedDate: string) => {
 	return weekDays
 }
 
-const getWeekDayResourceID = (employeeID: string, weekDay: string) => `${weekDay}_${employeeID}`
+export const getWeekDayResourceID = (employeeID: string, weekDay: string) => `${weekDay}_${employeeID}`
 
 interface EmployeeWeekResource {
 	id: string

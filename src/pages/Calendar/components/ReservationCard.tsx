@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useState, FC, useCallback } from 'react'
+import React, { useState, FC, useCallback, useEffect } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
 
@@ -177,7 +177,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 					}}
 				/>
 				<div className={'event-background'} style={{ backgroundColor: bgColor }} />
-				<div className={'event-content'}>
+				<div id={originalEventData?.id} className={'event-content'}>
 					{(() => {
 						switch (calendarView) {
 							case CALENDAR_VIEW.WEEK: {

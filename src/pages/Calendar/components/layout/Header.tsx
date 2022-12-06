@@ -1,32 +1,21 @@
 import React, { FC, useCallback, useRef, useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
-import { Header } from 'antd/lib/layout/layout'
 import { Button, Dropdown } from 'antd'
-import dayjs from 'dayjs'
-import { destroy, WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
 import Tooltip from 'antd/es/tooltip'
-import { useDispatch } from 'react-redux'
+import { Header } from 'antd/lib/layout/layout'
+import dayjs from 'dayjs'
 import { debounce } from 'lodash'
-import { StringParam, useQueryParams } from 'use-query-params'
+import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
 
 // enums
-import {
-	CALENDAR_DATE_FORMAT,
-	CALENDAR_EVENT_TYPE,
-	CALENDAR_EVENTS_VIEW_TYPE,
-	CALENDAR_SET_NEW_DATE,
-	CALENDAR_VIEW,
-	STRINGS,
-	CALENDAR_DEBOUNCE_DELAY,
-	FORM
-} from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, STRINGS, CALENDAR_DEBOUNCE_DELAY } from '../../../../utils/enums'
 
 // assets
-import { ReactComponent as NavIcon } from '../../../../assets/icons/navicon-16.svg'
-import { ReactComponent as ChevronLeft } from '../../../../assets/icons/chevron-left-16.svg'
-import { ReactComponent as CreateIcon } from '../../../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronDownGrayDark } from '../../../../assets/icons/chevron-down-grayDark-12.svg'
+import { ReactComponent as ChevronLeft } from '../../../../assets/icons/chevron-left-16.svg'
+import { ReactComponent as NavIcon } from '../../../../assets/icons/navicon-16.svg'
+import { ReactComponent as CreateIcon } from '../../../../assets/icons/plus-icon.svg'
 
 // components
 import DateField from '../../../../atoms/DateField'
@@ -89,17 +78,16 @@ type Props = {
 	siderFilterCollapsed: boolean
 	setCalendarView: (newView: CALENDAR_VIEW) => void
 	setSiderFilterCollapsed: () => void
-	setCollapsed: (view: CALENDAR_EVENT_TYPE | undefined) => void
 	setSelectedDate: (newDate: string) => void
+	onAddEvent: () => void
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	setEventsViewType: (newViewType: CALENDAR_EVENTS_VIEW_TYPE) => void
 }
 
 const CalendarHeader: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
 
-	const { setSiderFilterCollapsed, calendarView, setCalendarView, selectedDate, setSelectedDate, setCollapsed, siderFilterCollapsed, eventsViewType, setEventsViewType } = props
+	const { setSiderFilterCollapsed, calendarView, setCalendarView, selectedDate, setSelectedDate, siderFilterCollapsed, eventsViewType, setEventsViewType, onAddEvent } = props
 
 	const [currentDate, setCurrentDate] = useState(selectedDate)
 
@@ -110,9 +98,6 @@ const CalendarHeader: FC<Props> = (props) => {
 
 	useOnClickOutside([calendarDropdownRef, dateButtonRef], () => {
 		setIsCalendarOpen(false)
-	})
-	const [query] = useQueryParams({
-		eventId: StringParam
 	})
 
 	const isSmallerDevice = useMedia(['(max-width: 1200px)'], [true], false)
@@ -247,28 +232,7 @@ const CalendarHeader: FC<Props> = (props) => {
 				</button>
 			</div>
 			<div className={'nav-right'}>
-				<Button
-					type={'primary'}
-					onClick={() => {
-						// Ak je otvoreny detail a klikne sa na pridat button tak sa detail vynuluje
-						if (query.eventId) {
-							setCollapsed(undefined)
-						}
-						// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastv pracovnu zmenu
-						if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-							dispatch(destroy(FORM.CALENDAR_RESERVATION_FORM))
-							setCollapsed(CALENDAR_EVENT_TYPE.RESERVATION)
-						} else {
-							dispatch(destroy(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM))
-							dispatch(destroy(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM))
-							dispatch(destroy(FORM.CALENDAR_EMPLOYEE_BREAK_FORM))
-							setCollapsed(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
-						}
-					}}
-					icon={<CreateIcon />}
-					htmlType={'button'}
-					className={'noti-btn'}
-				>
+				<Button type={'primary'} onClick={onAddEvent} icon={<CreateIcon />} htmlType={'button'} className={'noti-btn'}>
 					{STRINGS(t).addRecord('')}
 				</Button>
 			</div>

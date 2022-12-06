@@ -215,7 +215,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 						<React.Fragment key={note.key}>
 							<Divider className={'m-0'} />
 							<section className={'py-4'}>
-								<div className={'note flex break-all text-sm leading-4 break-all'}>
+								<div className={'note flex break-all text-sm leading-4'}>
 									<Col flex={'32px'} className={'flex justify-center'}>
 										<NoteIcon className={'shrink-0 text-notino-grayDark'} />
 									</Col>
@@ -515,7 +515,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 	return (
 		<Popover
 			visible={isOpen}
-			destroyTooltipOnHide={{ keepParent: false }}
+			destroyTooltipOnHide={{ keepParent: true }}
 			trigger={'click'}
 			placement={placement}
 			overlayClassName={`${overlayClassName} nc-event-popover-overlay`}

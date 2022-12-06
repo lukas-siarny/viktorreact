@@ -9,6 +9,8 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
+import { useDispatch } from 'react-redux'
+import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
 import { composeDayViewEvents, composeDayViewResources, eventAllow, getTimeScrollId } from '../../calendarHelpers'
 
@@ -20,6 +22,7 @@ import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-
 
 // components
 import CalendarEventContent from '../CalendarEventContent'
+import { clearEvent } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 interface IResourceLabel {
 	image?: string
@@ -69,11 +72,26 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 	)
 }
 
-interface ICalendarDayView extends ICalendarView {}
+interface ICalendarDayView extends ICalendarView {
+	setEventManagement: any
+}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange, refetchData, onAddEvent, virtualEvent } = props
-
+	const {
+		salonID,
+		selectedDate,
+		eventsViewType,
+		reservations,
+		shiftsTimeOffs,
+		employees,
+		onEditEvent,
+		onEventChange,
+		refetchData,
+		onAddEvent,
+		virtualEvent,
+		setEventManagement
+	} = props
+	const dispatch = useDispatch()
 	const events = useMemo(() => {
 		const data = composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees)
 		// ak je virtualEvent definovany, zaradi sa do zdroja eventov pre Calendar
@@ -81,15 +99,22 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	}, [selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, virtualEvent])
 
 	const resources = useMemo(() => composeDayViewResources(shiftsTimeOffs, employees), [shiftsTimeOffs, employees])
-
+	const [query, setQuery] = useQueryParams({
+		sidebarView: StringParam,
+		eventId: StringParam
+	})
 	/**
 	 * Spracuje input z calendara click/select a vytvori z neho init data, ktore vyuzije form v SiderEventManager
 	 */
 	const handleNewEvent = (event: DateSelectArg) => {
+		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
+		dispatch(clearEvent())
+		setEventManagement(undefined)
 		if (event.resource) {
+			console.log('called 55')
 			// eslint-disable-next-line no-underscore-dangle
 			const { employee } = event.resource._resource.extendedProps
-
+			console.log('event', event)
 			onAddEvent({
 				date: dayjs(event.startStr).format(DEFAULT_DATE_INIT_FORMAT),
 				timeFrom: dayjs(event.startStr).format(DEFAULT_TIME_FORMAT),

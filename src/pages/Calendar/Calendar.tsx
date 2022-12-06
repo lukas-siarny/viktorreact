@@ -55,7 +55,6 @@ import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReserva
 
 // atoms
 import ConfirmModal from '../../atoms/ConfirmModal'
-import { clearEvent } from '../../reducers/virtualEvent/virtualEventActions'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]

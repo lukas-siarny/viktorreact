@@ -628,6 +628,7 @@ export type CalendarEvent = CalendarEvents[0] & {
 	isLastMultiDaylEventInCurrentRange?: boolean
 	originalEvent?: CalendarEvent
 	employee: CalendarEmployee
+	isPlaceholder?: boolean
 }
 
 export interface ICalendarEventsPayload {
@@ -679,7 +680,6 @@ export interface IBulkConfirmForm {
 
 export interface IEventExtenedProps {
 	eventData?: CalendarEvent
-	isPlaceholder?: boolean
 }
 
 export interface IResourceEmployee {

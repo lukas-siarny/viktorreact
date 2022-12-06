@@ -609,7 +609,8 @@ export enum TIME_STATS_SOURCE_TYPE {
 
 // CALENDAR ENUMS
 export const CALENDAR_COMMON_SETTINGS = {
-	LICENSE_KEY: 'CC-Attribution-NonCommercial-NoDerivatives',
+	// eslint-disable-next-line no-underscore-dangle
+	LICENSE_KEY: `${window.__RUNTIME_CONFIG__.FULLCALENDAR_LICENSE_KEY}`,
 	TIME_ZONE: 'local',
 	TIME_FORMAT: {
 		hour: '2-digit',

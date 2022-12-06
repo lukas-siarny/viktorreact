@@ -2,8 +2,7 @@
 @import "../variables"
 
 // TODO: ked sa bude rusit maska tak tento kod zmazat
-.fc-timeline-body
-	position: relative
+.fc-timegrid-cols, .fc-timeline-body
 	&.active::after
 		display: block
 	&::after
@@ -19,6 +18,7 @@
 		background-color: $backgroundColor-notino-gray
 		opacity: .3
 		z-index: $z-index-overlay
+
 .noti-calendar-layout
 	height: 100%
 

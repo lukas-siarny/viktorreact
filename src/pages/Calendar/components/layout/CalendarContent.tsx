@@ -57,17 +57,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		sidebarView: StringParam
 	})
 
-	// TODO: ked sa bude rusit maska tak tento kod zmazat
-	useEffect(() => {
-		if (query?.sidebarView) {
-			const body = document.getElementsByClassName('fc-timeline-body')[0]
-			body.classList.add('active')
-		} else {
-			const body = document.getElementsByClassName('fc-timeline-body')[0]
-			body.classList.remove('active')
-		}
-	}, [query?.sidebarView])
-
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
 	// const monthView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -200,7 +189,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			return (
 				<CalendarWeekView
 					{...props}
-					isOpenSidebar={!!query.sidebarView}
 					ref={weekView}
 					reservations={sources.reservations}
 					shiftsTimeOffs={sources.shiftsTimeOffs}
@@ -216,7 +204,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		return (
 			<CalendarDayView
 				{...props}
-				isOpenSidebar={!!query.sidebarView}
 				ref={dayView}
 				reservations={sources.reservations}
 				shiftsTimeOffs={sources.shiftsTimeOffs}
@@ -229,8 +216,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	return (
 		<Content className={'nc-content'}>
-			{/* // TODO: tato maska by sa mohla zrusit uplne */}
-			{/* <div role={'button'} onClick={() => setEventManagement(undefined)} id={'overlay'} className={cx({ block: query.sidebarView, hidden: !query.sidebarView })} /> */}
 			<Spin spinning={loading}>
 				<div id={'nc-content-overlay'} />
 				{getView()}

@@ -10,6 +10,7 @@ import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // components
+import { StringParam, useQueryParams } from 'use-query-params'
 import CalendarEventContent from '../CalendarEventContent'
 
 // utils
@@ -142,7 +143,6 @@ const createDayLabelElement = (resourceElemenet: HTMLElement, employeesLength: n
 interface ICalendarWeekView extends ICalendarView {
 	updateCalendarSize: () => void
 	weekDays: string[]
-	isOpenSidebar?: boolean
 }
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
@@ -159,9 +159,12 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		weekDays,
 		updateCalendarSize,
 		onAddEvent,
-		virtualEvent,
-		isOpenSidebar
+		virtualEvent
 	} = props
+
+	const [query] = useQueryParams({
+		sidebarView: StringParam
+	})
 
 	const events = useMemo(() => {
 		const data = composeWeekViewEvents(selectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees)
@@ -233,6 +236,17 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		}
 	}, [employees.length, selectedDate])
 
+	// TODO: ked sa bude rusit maska tak tento kod zmazat
+	useEffect(() => {
+		if (query?.sidebarView) {
+			const body = document.getElementsByClassName('fc-timeline-body')[0]
+			body.classList.add('active')
+		} else {
+			const body = document.getElementsByClassName('fc-timeline-body')[0]
+			body.classList.remove('active')
+		}
+	}, [query?.sidebarView])
+
 	return (
 		<div className={'nc-calendar-wrapper'} id={'nc-calendar-week-wrapper'}>
 			<FullCalendar
@@ -259,7 +273,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				initialView='resourceTimelineDay'
 				initialDate={selectedDate}
 				weekends={true}
-				editable={!isOpenSidebar}
+				editable={!query.sidebarView}
 				stickyFooterScrollbar
 				nowIndicator
 				// data sources
@@ -280,7 +294,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				// select
-				selectable={!isOpenSidebar}
+				selectable={!query.sidebarView}
 				select={(selectedEvent) => handleNewEvent(selectedEvent)}
 				resourcesSet={() => setTimeout(updateCalendarSize, 0)}
 				eventsSet={() => setTimeout(updateCalendarSize, 0)}

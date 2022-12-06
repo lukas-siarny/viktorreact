@@ -25,7 +25,8 @@ import {
 	NOTIFICATION_TYPE,
 	PERMISSION,
 	REQUEST_TYPE,
-	STRINGS
+	STRINGS,
+	CALENDAR_INIT_TIME
 } from '../../utils/enums'
 import { computeUntilDate } from '../../utils/helper'
 import { withPermissions } from '../../utils/Permissions'
@@ -194,12 +195,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			scrollToDateTimeout.current = setTimeout(() => {
 				scrollToSelectedDate(validSelectedDate, { smooth: true, duration: 300 })
 				initialScroll.current = true
-			}, 500)
+			}, CALENDAR_INIT_TIME)
 		}
 
 		return () => clearTimeout(scrollToDateTimeout.current)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [loadingData, validSelectedDate, query.view, currentRange.start, currentRange.end])
+	}, [loadingData, validSelectedDate, query.view, currentRange.start, currentRange.end, validCalendarView])
 
 	const setCalendarView = (newView: CALENDAR_VIEW) => {
 		setQuery({ ...query, view: newView })
@@ -254,29 +254,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 								employeeIDs: query.employeeIDs,
 								categoryIDs: getFullCategoryIdsFromUrl(query?.categoryIDs)
 							},
-							validCalendarView as CALENDAR_VIEW,
 							true,
 							clearVirtualEvent
 						)
 					),
-					dispatch(
-						getCalendarShiftsTimeoff(
-							{ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs },
-							validCalendarView as CALENDAR_VIEW,
-							true,
-							clearVirtualEvent
-						)
-					)
+					dispatch(getCalendarShiftsTimeoff({ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs }, true, clearVirtualEvent))
 				])
 			} else if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
-				dispatch(
-					getCalendarShiftsTimeoff(
-						{ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs },
-						validCalendarView as CALENDAR_VIEW,
-						true,
-						clearVirtualEvent
-					)
-				)
+				dispatch(getCalendarShiftsTimeoff({ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs }, true, clearVirtualEvent))
 			}
 
 			// if (restartInterval) {
@@ -286,33 +271,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validCalendarView, validEventsViewType]
 	)
-	/*
-	const setNewSelectedDate = (newDate: string) => {
-		if (dayjs(newDate).isSame(query.date)) {
-			return
-		}
-
-		setQuery({
-			...omit(query, ['eventId', 'sidebarView']),
-			date: newDate
-		})
-		let newCalendarDate = newDate
-		if (query.view === CALENDAR_VIEW.WEEK) {
-			// v tyzdenom view je potrebne skontrolovat, ci sa vramci novo nastaveneho tyzdnoveho rangu nachadza dnesok
-			// ak ano, je potrebne ho nastavit ako aktualny den do kalendara, aby sa ukazal now indicator
-			// kedze realne sa na tyzdenne view pouziva denne view
-			const weekDays = getWeekDays(newDate)
-			newCalendarDate = getWeekViewSelectedDate(newDate, weekDays)
-		}
-
-		if (!dayjs(newCalendarDate).isSame(calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.getDate())) {
-			calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.gotoDate(newCalendarDate)
-		}
-	}
-	*/
 
 	const scrollToTime = useCallback(
 		(hour: number) => {
+			// scrollID je hodina, na ktoru chceme zascrollovat
+			// od nej sa este odrataju 2 hodiny, aby bolo vidiet aj co sa deje pred tymto casom
 			const scrollTimeId = getTimeScrollId(Math.max(hour - 2, 0))
 			if (validCalendarView === CALENDAR_VIEW.DAY) {
 				Scroll.scroller.scrollTo(scrollTimeId, {
@@ -363,7 +326,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// wait for the end of sider menu animation and then update size of the calendar
 		const timeout = setTimeout(updateCalendarSize.current, 300)
 		return () => clearTimeout(timeout)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMainLayoutSiderCollapsed])
 
 	const setEventManagement = useCallback(

@@ -3,7 +3,6 @@
 import React, { useState, FC, useCallback, useEffect } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
-import { StringParam, useQueryParams } from 'use-query-params'
 
 // utils
 import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NOTIFICATION_TYPE, RESERVATION_PAYMENT_METHOD } from '../../../utils/enums'

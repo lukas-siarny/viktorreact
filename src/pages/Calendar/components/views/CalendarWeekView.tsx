@@ -164,7 +164,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 
 	const events = useMemo(() => {
 		const data = composeWeekViewEvents(selectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees)
-		console.log('🚀 ~ file: CalendarWeekView.tsx:118 ~ events ~ virtualEvent', virtualEvent)
+
+		console.log('rebder week view')
 
 		if (virtualEvent) {
 			const { extendedProps, ...otherProps } = virtualEvent
@@ -176,9 +177,6 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				},
 				resourceId: getWeekDayResourceID(virtualEvent.resourceId as string, extendedProps?.eventData.date)
 			}
-
-			console.log('🚀 ~ file: CalendarWeekView.tsx:124 ~ events ~ newEvent', newEvent)
-			console.log('🚀 ~ file: CalendarWeekView.tsx:184 ~ events ~ data', data)
 
 			return [...data, newEvent]
 		}
@@ -289,7 +287,6 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				resourcesSet={() => setTimeout(updateCalendarSize, 0)}
 				eventsSet={(eventtt: any[]) => {
 					setTimeout(() => {
-						console.log('🚀 ~ file: CalendarWeekView.tsx:284 ~ callback ~ eventsSet:', eventtt)
 						updateCalendarSize()
 					}, 0)
 				}}
@@ -300,6 +297,5 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 
 export default React.memo(CalendarWeekView, (prevProps, nextProps) => {
 	const isSame = JSON.stringify(prevProps) === JSON.stringify(nextProps)
-	console.log('🚀 ~ file: CalendarWeekView.tsx:295 ~ React.memo ~ isSame', isSame)
 	return isSame
 })

@@ -126,13 +126,19 @@ export const addOrUpdateEvent =
 					customer: customer
 						? {
 								id: customer.key,
-								email: customer.label
+								email: customer.label || customer.value
 						  }
 						: undefined,
 					service: service
 						? {
 								id: service.key,
 								name: service.label || service.value
+						  }
+						: undefined,
+					employee: employee
+						? {
+								id: employee.key,
+								email: employee.label || employee.value
 						  }
 						: undefined
 				}

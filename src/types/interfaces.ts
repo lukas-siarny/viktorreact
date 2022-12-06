@@ -610,7 +610,6 @@ export interface TimeStats extends ILoadingAndFailure {
 export interface ICalendarFilter {
 	employeeIDs?: string[]
 	categoryIDs?: string[]
-	eventsViewType?: CALENDAR_EVENTS_VIEW_TYPE
 }
 
 export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {}

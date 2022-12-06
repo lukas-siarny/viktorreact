@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useRef, useState } from 'react'
+import React, { FC, useCallback, useRef, useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 import { Header } from 'antd/lib/layout/layout'
@@ -8,9 +8,9 @@ import { destroy, WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-fo
 import Tooltip from 'antd/es/tooltip'
 import { useDispatch } from 'react-redux'
 import { debounce } from 'lodash'
+import { StringParam, useQueryParams } from 'use-query-params'
 
 // enums
-import { StringParam, useQueryParams } from 'use-query-params'
 import {
 	CALENDAR_DATE_FORMAT,
 	CALENDAR_EVENT_TYPE,
@@ -30,15 +30,17 @@ import { ReactComponent as ChevronDownGrayDark } from '../../../../assets/icons/
 
 // components
 import DateField from '../../../../atoms/DateField'
+import SelectField from '../../../../atoms/SelectField'
 
 // hooks
 import useOnClickOutside from '../../../../hooks/useClickOutside'
 import useMedia from '../../../../hooks/useMedia'
 
+// utils
+import { getSelectedDateForCalendar } from '../../calendarHelpers'
+
 const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 	switch (view) {
-		case CALENDAR_VIEW.DAY:
-			return dayjs(date).format(CALENDAR_DATE_FORMAT.HEADER_DAY)
 		case CALENDAR_VIEW.WEEK: {
 			const firstDayOfWeek = dayjs(date).startOf('week')
 			const lastDayOfWeek = dayjs(date).endOf('week')
@@ -55,8 +57,9 @@ const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 		/* case CALENDAR_VIEW.MONTH: {
 			return dayjs(date).startOf('month').format(CALENDAR_DATE_FORMAT.HEADER_MONTH)
 		} */
+		case CALENDAR_VIEW.DAY:
 		default:
-			return ''
+			return dayjs(date).format(CALENDAR_DATE_FORMAT.HEADER_DAY)
 	}
 }
 
@@ -89,13 +92,14 @@ type Props = {
 	setCollapsed: (view: CALENDAR_EVENT_TYPE | undefined) => void
 	setSelectedDate: (newDate: string) => void
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
+	setEventsViewType: (newViewType: CALENDAR_EVENTS_VIEW_TYPE) => void
 }
 
 const CalendarHeader: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const { setSiderFilterCollapsed, calendarView, setCalendarView, selectedDate, setSelectedDate, setCollapsed, siderFilterCollapsed, eventsViewType } = props
+	const { setSiderFilterCollapsed, calendarView, setCalendarView, selectedDate, setSelectedDate, setCollapsed, siderFilterCollapsed, eventsViewType, setEventsViewType } = props
 
 	const [currentDate, setCurrentDate] = useState(selectedDate)
 
@@ -113,6 +117,8 @@ const CalendarHeader: FC<Props> = (props) => {
 
 	const isSmallerDevice = useMedia(['(max-width: 1200px)'], [true], false)
 
+	useEffect(() => setCurrentDate(selectedDate), [selectedDate])
+
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const setSelectedDateDebounced = useCallback(debounce(setSelectedDate, CALENDAR_DEBOUNCE_DELAY), [setSelectedDate])
 
@@ -129,9 +135,6 @@ const CalendarHeader: FC<Props> = (props) => {
 				newQueryDate = dayjs(newDate)
 					.startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
 					.subtract(1, calendarView.toLowerCase() as dayjs.OpUnitType)
-				break
-			case CALENDAR_SET_NEW_DATE.FIND_START:
-				newQueryDate = dayjs(newDate).startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
 				break
 			default:
 				break
@@ -163,38 +166,63 @@ const CalendarHeader: FC<Props> = (props) => {
 		)
 	}
 
+	const calendarViewOptions = useMemo(
+		() => [
+			{
+				key: CALENDAR_VIEW.DAY,
+				label: t('loc:Deň'),
+				value: CALENDAR_VIEW.DAY
+			},
+			{
+				key: CALENDAR_VIEW.WEEK,
+				label: t('loc:Týždeň'),
+				value: CALENDAR_VIEW.WEEK
+			}
+		],
+		[t]
+	)
+
 	return (
 		<Header className={'nc-header'} id={'noti-calendar-header'}>
 			<div className={'nav-left'}>
-				<button type={'button'} className={'nc-button light'} onClick={() => setSiderFilterCollapsed()}>
+				<button type={'button'} className={cx('nc-button', { active: !siderFilterCollapsed })} onClick={() => setSiderFilterCollapsed()}>
 					<NavIcon style={{ transform: siderFilterCollapsed ? 'rotate(180deg)' : undefined }} />
 				</button>
+				<div>
+					<SelectField
+						input={
+							{
+								value: calendarView,
+								onChange: (value: CALENDAR_VIEW) => setCalendarView(value)
+							} as any
+						}
+						meta={{} as any}
+						onChange={(value) => setCalendarView(value)}
+						className={'p-0'}
+						options={calendarViewOptions}
+						dropdownMatchSelectWidth={false}
+					/>
+				</div>
 				<div className={'nc-button-group'}>
 					<SwitchViewButton
-						label={t('loc:Deň')}
-						className={cx({ active: calendarView === CALENDAR_VIEW.DAY })}
-						onClick={() => setCalendarView(CALENDAR_VIEW.DAY)}
+						label={t('loc:Rezervácie')}
+						className={cx({ active: eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION })}
+						onClick={() => setEventsViewType(CALENDAR_EVENTS_VIEW_TYPE.RESERVATION)}
 						isSmallerDevice={isSmallerDevice}
 					/>
 					<SwitchViewButton
-						label={t('loc:Týždeň')}
-						className={cx({ active: calendarView === CALENDAR_VIEW.WEEK })}
-						onClick={() => setCalendarView(CALENDAR_VIEW.WEEK)}
+						label={t('loc:Zmeny')}
+						className={cx({ active: eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF })}
+						onClick={() => setEventsViewType(CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF)}
 						isSmallerDevice={isSmallerDevice}
 					/>
-					{/* <SwitchViewButton
-						label={t('loc:Mesiac')}
-						className={cx({ active: calendarView === CALENDAR_VIEW.MONTH })}
-						onClick={() => setCalendarView(CALENDAR_VIEW.MONTH)}
-						isSmallerDevice={isSmallerDevice}
-					/> */}
 				</div>
 			</div>
 			<div className={'nav-middle'}>
-				<button type={'button'} className={'nc-button bordered w-8 mr-2'} onClick={() => changeSelectedDate(currentDate, CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT, true)}>
+				<button type={'button'} className={'nc-button w-8 mr-2'} onClick={() => changeSelectedDate(currentDate, CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT, true)}>
 					<ChevronLeft />
 				</button>
-				<button type={'button'} className={'nc-button bordered w-8'} onClick={() => changeSelectedDate(currentDate, CALENDAR_SET_NEW_DATE.FIND_START_ADD, true)}>
+				<button type={'button'} className={'nc-button w-8'} onClick={() => changeSelectedDate(currentDate, CALENDAR_SET_NEW_DATE.FIND_START_ADD, true)}>
 					<ChevronLeft style={{ transform: 'rotate(180deg)' }} />
 				</button>
 				<Dropdown
@@ -203,13 +231,18 @@ const CalendarHeader: FC<Props> = (props) => {
 					trigger={['click']}
 					getPopupContainer={() => document.querySelector('#noti-calendar-header') as HTMLElement}
 					visible={isCalendarOpen}
+					destroyPopupOnHide
 				>
 					<button type={'button'} className={'nc-button-date mx-1'} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>
 						{formatHeaderDate(currentDate, calendarView)}
 						<ChevronDownGrayDark />
 					</button>
 				</Dropdown>
-				<button type={'button'} className={'nc-button light'} onClick={() => changeSelectedDate(dayjs(), CALENDAR_SET_NEW_DATE.FIND_START)}>
+				<button
+					type={'button'}
+					className={cx('nc-button', { active: dayjs(getSelectedDateForCalendar(calendarView, selectedDate)).isToday() })}
+					onClick={() => changeSelectedDate(dayjs())}
+				>
 					{t('loc:Dnes')}
 				</button>
 			</div>
@@ -236,7 +269,7 @@ const CalendarHeader: FC<Props> = (props) => {
 					htmlType={'button'}
 					className={'noti-btn'}
 				>
-					{isSmallerDevice ? STRINGS(t).addRecord('') : STRINGS(t).addRecord(t('loc:novú'))}
+					{STRINGS(t).addRecord('')}
 				</Button>
 			</div>
 		</Header>

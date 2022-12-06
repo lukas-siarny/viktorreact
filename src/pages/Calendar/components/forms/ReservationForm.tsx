@@ -19,8 +19,11 @@ import { ICalendarReservationForm, ICustomerForm } from '../../../../types/inter
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
-import { ReactComponent as ProfileIcon } from '../../../../assets/icons/profile-icon.svg'
 import { ReactComponent as ServiceIcon } from '../../../../assets/icons/services-24-icon.svg'
+import { ReactComponent as CustomerIcon } from '../../../../assets/icons/customer-24-icon.svg'
+import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-16-current-color.svg'
+import { ReactComponent as TimerIcon } from '../../../../assets/icons/clock-icon.svg'
+import { ReactComponent as DateSuffixIcon } from '../../../../assets/icons/date-suffix-icon.svg'
 
 // components
 import DateField from '../../../../atoms/DateField'
@@ -153,7 +156,7 @@ const ReservationForm: FC<Props> = (props) => {
 	return (
 		<>
 			{modals}
-			<div className={'nc-sider-event-management-content main-panel'}>
+			<div className={'nc-sider-event-management-content'}>
 				<Spin spinning={eventDetail.isLoading} size='large'>
 					<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 						<Permissions
@@ -168,7 +171,7 @@ const ReservationForm: FC<Props> = (props) => {
 									className={'pb-0'}
 									size={'large'}
 									optionLabelProp={'label'}
-									suffixIcon={<ProfileIcon />}
+									suffixIcon={<CustomerIcon className={'text-notino-grayDark'} width={16} height={16} />}
 									update={(itemKey: number, ref: any) => ref.blur()}
 									filterOption={false}
 									allowInfinityScroll
@@ -188,11 +191,11 @@ const ReservationForm: FC<Props> = (props) => {
 						<Field
 							component={SelectField}
 							label={t('loc:Služba')}
-							suffixIcon={<ServiceIcon />}
+							suffixIcon={<ServiceIcon className={'text-notino-grayDark'} width={16} height={16} />}
 							placeholder={t('loc:Vyber službu')}
 							name={'service'}
 							size={'large'}
-							update={(itemKey: number, ref: any) => ref.blur()}
+							update={(_itemKey: number, ref: any) => ref.blur()}
 							filterOption={false}
 							allowInfinityScroll
 							className={'pb-0'}
@@ -210,6 +213,8 @@ const ReservationForm: FC<Props> = (props) => {
 							showInReservationDrawer
 							placement={'bottomRight'}
 							dropdownAlign={{ points: ['tr', 'br'] }}
+							size={'large'}
+							suffixIcon={<DateSuffixIcon className={'text-notino-grayDark'} />}
 							required
 						/>
 						<Fields
@@ -221,17 +226,19 @@ const ReservationForm: FC<Props> = (props) => {
 							allowClear
 							itemClassName={'m-0 pb-0'}
 							minuteStep={15}
+							suffixIcon={<TimerIcon className={'text-notino-grayDark'} />}
+							size={'large'}
 						/>
 						<Field
 							component={SelectField}
 							optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}
 							label={t('loc:Zamestnanec')}
-							suffixIcon={<ProfileIcon />}
+							suffixIcon={<EmployeesIcon className={'text-notino-grayDark'} />}
 							placeholder={t('loc:Vyber zamestnanca')}
 							name={'employee'}
 							optionLabelProp={'label'}
 							size={'large'}
-							update={(itemKey: number, ref: any) => ref.blur()}
+							update={(_itemKey: number, ref: any) => ref.blur()}
 							filterOption={false}
 							allowInfinityScroll
 							showSearch

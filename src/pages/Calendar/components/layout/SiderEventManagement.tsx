@@ -2,14 +2,14 @@ import React, { FC, useCallback, useEffect } from 'react'
 import Sider from 'antd/lib/layout/Sider'
 import { map, omit } from 'lodash'
 import cx from 'classnames'
-
-// enums
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
 import { getFormValues, initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { StringParam, useQueryParams } from 'use-query-params'
+
+// enums
 import {
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_VIEW_TYPE,
@@ -20,24 +20,31 @@ import {
 	STRINGS,
 	DELETE_EVENT_PERMISSIONS
 } from '../../../../utils/enums'
-import Permissions from '../../../../utils/Permissions'
 
 // types
 import { ICalendarEventForm, ICalendarReservationForm } from '../../../../types/interfaces'
+import { RootState } from '../../../../reducers'
 
 // components
 import ReservationForm from '../forms/ReservationForm'
 import ShiftForm from '../forms/ShiftForm'
 import TimeOffForm from '../forms/TimeOffForm'
 import BreakForm from '../forms/BreakForm'
+import TabsComponent from '../../../../components/TabsComponent'
 
 // utils
 import { getReq } from '../../../../utils/request'
 import { formatLongQueryString, getAssignedUserLabel } from '../../../../utils/helper'
-import EventTypeFilterForm from '../forms/EventTypeFilterForm'
+import Permissions from '../../../../utils/Permissions'
+
+// components
 import DeleteButton from '../../../../components/DeleteButton'
+
+// assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
-import { RootState } from '../../../../reducers'
+
+// hooks
+import useKeyUp from '../../../../hooks/useKeyUp'
 
 type Props = {
 	salonID: string
@@ -95,8 +102,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 	}
 
 	// Zmena selectu event type v draweri
-	const onChangeEventType = (type: CALENDAR_EVENT_TYPE) => {
-		initCreateEventForm(`CALENDAR_${type}_FORM` as FORM, type)
+	const onChangeEventType = (type: string) => {
+		initCreateEventForm(`CALENDAR_${type}_FORM` as FORM, type as CALENDAR_EVENT_TYPE)
 	}
 
 	useEffect(() => {
@@ -106,6 +113,12 @@ const SiderEventManagement: FC<Props> = (props) => {
 			onChangeEventType(sidebarView as CALENDAR_EVENT_TYPE)
 		}
 	}, [sidebarView])
+
+	const handleCloseSider = () => {
+		setCollapsed(undefined)
+	}
+
+	useKeyUp('Escape', handleCloseSider)
 
 	const searchEmployes = useCallback(
 		async (search: string, page: number) => {
@@ -135,19 +148,42 @@ const SiderEventManagement: FC<Props> = (props) => {
 		[salonID]
 	)
 
-	const getSiderContent = () => {
-		switch (sidebarView) {
-			case CALENDAR_EVENT_TYPE.RESERVATION:
-				return <ReservationForm salonID={salonID} eventId={eventId} searchEmployes={searchEmployes} onSubmit={handleSubmitReservation} />
-			case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-				return <ShiftForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
-			case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-				return <TimeOffForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
-			case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-				return <BreakForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
-			default:
-				return null
+	const forms = {
+		[CALENDAR_EVENT_TYPE.RESERVATION]: <ReservationForm salonID={salonID} eventId={eventId} searchEmployes={searchEmployes} onSubmit={handleSubmitReservation} />,
+		[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: <ShiftForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />,
+		[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: <TimeOffForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />,
+		[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: <BreakForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
+	}
+
+	const getTabContent = () => {
+		const tabs = {
+			[CALENDAR_EVENT_TYPE.RESERVATION]: {
+				tabKey: CALENDAR_EVENT_TYPE.RESERVATION,
+				tab: <>{t('loc:Rezervácia')}</>,
+				tabPaneContent: forms[CALENDAR_EVENT_TYPE.RESERVATION]
+			},
+			[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: {
+				tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
+				tab: <>{t('loc:Zmena')}</>,
+				tabPaneContent: forms[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]
+			},
+			[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: {
+				tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
+				tab: <>{t('loc:Voľno')}</>,
+				tabPaneContent: forms[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]
+			},
+			[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: {
+				tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
+				tab: <>{t('loc:Prestávka')}</>,
+				tabPaneContent: forms[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]
+			}
 		}
+
+		if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
+			return [tabs[CALENDAR_EVENT_TYPE.RESERVATION], tabs[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]]
+		}
+
+		return [tabs[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT], tabs[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF], tabs[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]]
 	}
 
 	return (
@@ -163,7 +199,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 									placement={'bottom'}
 									entityName={t('loc:prestávku')}
 									className={'bg-transparent mr-4'}
-									onConfirm={(e) => {
+									onConfirm={() => {
 										if (hasPermission) {
 											handleDeleteEvent()
 										} else {
@@ -177,22 +213,22 @@ const SiderEventManagement: FC<Props> = (props) => {
 							)}
 						/>
 					)}
-					<Button
-						className='button-transparent'
-						onClick={() => {
-							setCollapsed(undefined)
-						}}
-					>
+					<Button className='button-transparent' onClick={handleCloseSider}>
 						<CloseIcon />
 					</Button>
 				</div>
 			</div>
-			{!eventId && (
-				<div className={'p-4'}>
-					<EventTypeFilterForm eventsViewType={eventsViewType} onChangeEventType={onChangeEventType} />
-				</div>
+			{eventId ? (
+				forms[sidebarView]
+			) : (
+				<TabsComponent
+					className={'nc-sider-event-management-tabs'}
+					activeKey={sidebarView}
+					onChange={onChangeEventType}
+					tabsContent={getTabContent()}
+					destroyInactiveTabPane
+				/>
 			)}
-			{getSiderContent()}
 		</Sider>
 	)
 }

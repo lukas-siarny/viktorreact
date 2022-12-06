@@ -188,7 +188,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.CUSTOMERS,
 							label: t('loc:Zákazníci'),
 							onClick: () => history.push(getPath(t('paths:customers'))),
-							icon: <CustomerIcon />
+							icon: <CustomerIcon className={'text-black'} />
 						},
 						{
 							key: PAGE.EMPLOYEES,

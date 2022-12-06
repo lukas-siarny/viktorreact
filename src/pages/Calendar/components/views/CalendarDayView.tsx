@@ -30,7 +30,6 @@ interface IResourceLabel {
 	name?: string
 	description?: string
 	isTimeOff?: boolean
-	isOpenSidebar?: boolean
 }
 
 const ResourceLabel: FC<IResourceLabel> = React.memo((props) => {

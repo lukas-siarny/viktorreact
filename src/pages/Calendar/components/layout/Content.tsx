@@ -92,77 +92,73 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
 	const calendarSelectedDate = getSelectedDateForCalendar(view, selectedDate)
 
-	const onEventChange = useCallback(
-		(calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
-			const hasPermissions = permitted(authUserPermissions || [], selectedSalonuniqPermissions, UPDATE_EVENT_PERMISSIONS)
+	const onEventChange = (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
+		const hasPermissions = permitted(authUserPermissions || [], selectedSalonuniqPermissions, UPDATE_EVENT_PERMISSIONS)
 
-			const revertEvent = () => {
-				arg.revert()
-			}
+		const revertEvent = () => {
+			arg.revert()
+		}
 
-			if (!hasPermissions) {
-				setVisibleForbiddenModal(true)
-				revertEvent()
-				return
-			}
+		if (!hasPermissions) {
+			setVisibleForbiddenModal(true)
+			revertEvent()
+			return
+		}
 
-			const { event } = arg
-			const { start, end } = event
-			const { newResource } = arg as EventDropArg
-			const eventExtenedProps = (event.extendedProps as IEventExtenedProps) || {}
-			const eventData = eventExtenedProps?.eventData
-			const newResourceExtendedProps = newResource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
+		const { event } = arg
+		const { start, end } = event
+		const { newResource } = arg as EventDropArg
+		const eventExtenedProps = (event.extendedProps as IEventExtenedProps) || {}
+		const eventData = eventExtenedProps?.eventData
+		const newResourceExtendedProps = newResource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
 
-			const eventId = eventData?.id
-			const calendarBulkEventID = eventData?.calendarBulkEvent?.id || eventData?.calendarBulkEvent
+		const eventId = eventData?.id
+		const calendarBulkEventID = eventData?.calendarBulkEvent?.id || eventData?.calendarBulkEvent
 
-			// ak sa zmenil resource, tak updatenut resource (to sa bude diat len pri drope)
-			const employeeId = newResource ? newResourceExtendedProps?.employee?.id : eventData?.employee.id
+		// ak sa zmenil resource, tak updatenut resource (to sa bude diat len pri drope)
+		const employeeId = newResource ? newResourceExtendedProps?.employee?.id : eventData?.employee.id
 
-			if (!eventId || !employeeId) {
-				// ak nahodou nemam eventID alebo employeeId tak to vrati na povodne miesto
-				revertEvent()
-				return
-			}
+		if (!eventId || !employeeId) {
+			// ak nahodou nemam eventID alebo employeeId tak to vrati na povodne miesto
+			revertEvent()
+			return
+		}
 
-			// zatial predpokladame, ze nebudu viacdnove eventy - takze start a end date by mal byt rovnaky
-			const startDajys = dayjs(start)
-			const timeFrom = startDajys.format(CALENDAR_DATE_FORMAT.TIME)
-			const timeTo = dayjs(end).format(CALENDAR_DATE_FORMAT.TIME)
+		// zatial predpokladame, ze nebudu viacdnove eventy - takze start a end date by mal byt rovnaky
+		const startDajys = dayjs(start)
+		const timeFrom = startDajys.format(CALENDAR_DATE_FORMAT.TIME)
+		const timeTo = dayjs(end).format(CALENDAR_DATE_FORMAT.TIME)
 
-			let date = startDajys.format(CALENDAR_DATE_FORMAT.QUERY)
+		let date = startDajys.format(CALENDAR_DATE_FORMAT.QUERY)
 
-			if (calendarView === CALENDAR_VIEW.WEEK) {
-				// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
-				// (to sa bude diat len pri drope)
-				const resource = event.getResources()[0]
-				date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
-			}
+		if (calendarView === CALENDAR_VIEW.WEEK) {
+			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
+			// (to sa bude diat len pri drope)
+			const resource = event.getResources()[0]
+			date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
+		}
 
-			const values = {
-				date,
-				timeFrom,
-				timeTo,
-				eventType: eventData?.eventType,
-				employee: {
-					key: employeeId
-				},
-				eventId,
-				revertEvent
-			}
+		const values = {
+			date,
+			timeFrom,
+			timeTo,
+			eventType: eventData?.eventType,
+			employee: {
+				key: employeeId
+			},
+			eventId,
+			revertEvent
+		}
 
-			if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
-				const customerId = eventData.customer?.id
-				const serviceId = eventData.service?.id
+		if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
+			const customerId = eventData.customer?.id
+			const serviceId = eventData.service?.id
 
-				handleSubmitReservation({ ...values, customer: { key: customerId }, service: { key: serviceId } } as any)
-				return
-			}
-			handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm)
-		},
-		[handleSubmitReservation, handleSubmitEvent, authUserPermissions, selectedSalonuniqPermissions]
-	)
-
+			handleSubmitReservation({ ...values, customer: { key: customerId }, service: { key: serviceId } } as any)
+			return
+		}
+		handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm)
+	}
 	const getView = () => {
 		if (showEmptyState) {
 			return <CalendarEmptyState onButtonClick={onShowAllEmployees} />

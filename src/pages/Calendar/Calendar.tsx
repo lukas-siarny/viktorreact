@@ -5,7 +5,7 @@ import Layout from 'antd/lib/layout/layout'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
 import { compact, includes, isEmpty, map } from 'lodash'
-import { getFormValues, initialize, submit } from 'redux-form'
+import { destroy, getFormValues, initialize, submit } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 import Scroll from 'react-scroll'
@@ -495,43 +495,58 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		[query.eventId, salonID, setEventManagement, fetchEvents]
 	)
 
-	const handleSubmitEvent = useCallback(
-		async (values: ICalendarEventForm) => {
-			const eventId = query.eventId || values.eventId // ak je z query ide sa detail drawer ak je values ide sa cez drag and drop alebo resize
-			const revertEvent = values?.revertEvent
-			// NOTE: ak existuje actionType tak sa klikl v modali na moznost bulk / single a uz bol modal submitnuty
-			if (values.calendarBulkEventID && !formValuesBulkForm?.actionType) {
-				setTempValues(values)
-				dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
-				setVisibleBulkModal({ requestType: REQUEST_TYPE.PATCH, eventType: values.eventType, revertEvent })
-				return
+	const handleSubmitEvent = async (values: ICalendarEventForm) => {
+		const eventId = query.eventId || values.eventId // ak je z query ide sa detail drawer ak je values ide sa cez drag and drop alebo resize
+		const revertEvent = values?.revertEvent
+		// NOTE: ak existuje actionType tak sa kliklo v modali na moznost bulk / single a uz bol modal submitnuty
+
+		if (values.calendarBulkEventID && !formValuesBulkForm?.actionType) {
+			setTempValues(values)
+			dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
+			setVisibleBulkModal({ requestType: REQUEST_TYPE.PATCH, eventType: values.eventType, revertEvent })
+			return
+		}
+		setTempValues(null)
+		try {
+			// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
+			setIsUpdatingEvent(true)
+			let repeatEvent
+			if (values.customRepeatOptions) {
+				repeatEvent = values.customRepeatOptions
+			} else {
+				repeatEvent = values.recurring
+					? {
+							untilDate: computeUntilDate(values.end as ENDS_EVENT, values.date),
+							days: {
+								MONDAY: includes(values.repeatOn, DAY.MONDAY),
+								TUESDAY: includes(values.repeatOn, DAY.TUESDAY),
+								WEDNESDAY: includes(values.repeatOn, DAY.WEDNESDAY),
+								THURSDAY: includes(values.repeatOn, DAY.THURSDAY),
+								FRIDAY: includes(values.repeatOn, DAY.FRIDAY),
+								SATURDAY: includes(values.repeatOn, DAY.SATURDAY),
+								SUNDAY: includes(values.repeatOn, DAY.SUNDAY)
+							},
+							week: values.every === EVERY_REPEAT.TWO_WEEKS ? 2 : (1 as 1 | 2 | undefined)
+					  }
+					: undefined
 			}
-			setTempValues(null)
-			try {
-				// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
-				setIsUpdatingEvent(true)
-				let repeatEvent
-				if (values.customRepeatOptions) {
-					repeatEvent = values.customRepeatOptions
-				} else {
-					repeatEvent = values.recurring
-						? {
-								untilDate: computeUntilDate(values.end as ENDS_EVENT, values.date),
-								days: {
-									MONDAY: includes(values.repeatOn, DAY.MONDAY),
-									TUESDAY: includes(values.repeatOn, DAY.TUESDAY),
-									WEDNESDAY: includes(values.repeatOn, DAY.WEDNESDAY),
-									THURSDAY: includes(values.repeatOn, DAY.THURSDAY),
-									FRIDAY: includes(values.repeatOn, DAY.FRIDAY),
-									SATURDAY: includes(values.repeatOn, DAY.SATURDAY),
-									SUNDAY: includes(values.repeatOn, DAY.SUNDAY)
-								},
-								week: values.every === EVERY_REPEAT.TWO_WEEKS ? 2 : (1 as 1 | 2 | undefined)
-						  }
-						: undefined
-				}
-				const reqData = {
-					eventType: values.eventType as any,
+			const reqData = {
+				eventType: values.eventType as any,
+				start: {
+					date: values.date,
+					time: values.timeFrom
+				},
+				end: {
+					date: values.date,
+					time: values.timeTo
+				},
+				employeeID: values.employee.key as string,
+				repeatEvent,
+				note: values.note
+			}
+			// UPDATE event shift
+			if (eventId) {
+				const reqDataUpdate = {
 					start: {
 						date: values.date,
 						time: values.timeFrom
@@ -540,66 +555,49 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						date: values.date,
 						time: values.timeTo
 					},
-					employeeID: values.employee.key as string,
-					repeatEvent,
 					note: values.note
 				}
-				// UPDATE event shift
-				if (eventId) {
-					const reqDataUpdate = {
-						start: {
-							date: values.date,
-							time: values.timeFrom
-						},
-						end: {
-							date: values.date,
-							time: values.timeTo
-						},
-						note: values.note
-					}
-					if (formValuesBulkForm?.actionType === CONFIRM_BULK.BULK && values.calendarBulkEventID) {
-						// BULK UPDATE
-						await patchReq(
-							'/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}',
-							{ salonID, calendarBulkEventID: values.calendarBulkEventID },
-							{ ...reqDataUpdate, repeatEvent: repeatEvent as any },
-							undefined,
-							NOTIFICATION_TYPE.NOTIFICATION,
-							true
-						)
-					} else {
-						// SINGLE RECORD UPDATE
-						// NOTE: ak existuje eventId je otvoreny detail a bude sa patchovat
-						await patchReq(
-							'/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}',
-							{ salonID, calendarEventID: eventId },
-							reqDataUpdate,
-							undefined,
-							NOTIFICATION_TYPE.NOTIFICATION,
-							true
-						)
-					}
+				if (formValuesBulkForm?.actionType === CONFIRM_BULK.BULK && values.calendarBulkEventID) {
+					// BULK UPDATE
+					await patchReq(
+						'/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}',
+						{ salonID, calendarBulkEventID: values.calendarBulkEventID },
+						{ ...reqDataUpdate, repeatEvent: repeatEvent as any },
+						undefined,
+						NOTIFICATION_TYPE.NOTIFICATION,
+						true
+					)
 				} else {
-					// CREATE event shift
-					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+					// SINGLE RECORD UPDATE
+					// NOTE: ak existuje eventId je otvoreny detail a bude sa patchovat
+					await patchReq(
+						'/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}',
+						{ salonID, calendarEventID: eventId },
+						reqDataUpdate,
+						undefined,
+						NOTIFICATION_TYPE.NOTIFICATION,
+						true
+					)
 				}
-				// Po CREATE / UPDATE eventu dotiahnut eventy + zatvorit drawer
-				setEventManagement(undefined)
-				fetchEvents()
-			} catch (e) {
-				// eslint-disable-next-line no-console
-				console.error(e)
-				// ak neprejde request, tak sa event v kalendari vráti na pôvodne miesto
-				if (revertEvent) {
-					revertEvent()
-				}
-			} finally {
-				setIsUpdatingEvent(false)
+			} else {
+				// CREATE event shift
+				await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			}
-		},
-		[dispatch, fetchEvents, formValuesBulkForm?.actionType, query.eventId, salonID, setEventManagement]
-	)
-
+			dispatch(destroy(FORM.CONFIRM_BULK_FORM))
+			// Po CREATE / UPDATE eventu dotiahnut eventy + zatvorit drawer
+			setEventManagement(undefined)
+			fetchEvents()
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+			// ak neprejde request, tak sa event v kalendari vráti na pôvodne miesto
+			if (revertEvent) {
+				revertEvent()
+			}
+		} finally {
+			setIsUpdatingEvent(false)
+		}
+	}
 	const handleSubmitConfirmModal = async (values: IBulkConfirmForm) => {
 		// EDIT
 		if (visibleBulkModal?.requestType === REQUEST_TYPE.PATCH) {

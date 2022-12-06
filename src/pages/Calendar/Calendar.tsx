@@ -330,7 +330,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const setEventManagement = useCallback(
 		(newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string) => {
-			console.log('newView', newView)
 			// NOTE: ak je collapsed (newView je undefined) tak nastavit sidebarView na COLLAPSED a vynulovat eventId
 			if (!newView) {
 				setQuery({
@@ -677,7 +676,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	return (
 		<>
 			{modals}
-			{/* <div role={'button'} onClick={() => setEventManagement(undefined)} id={'overlay'} className={cx({ block: query.sidebarView, hidden: !query.sidebarView })} /> */}
 			<Layout className='noti-calendar-layout'>
 				<CalendarHeader
 					selectedDate={validSelectedDate}

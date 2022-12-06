@@ -1,6 +1,8 @@
 import React, { FC, useEffect, useMemo } from 'react'
 import { Element } from 'react-scroll'
 import dayjs from 'dayjs'
+import { useDispatch } from 'react-redux'
+import { StringParam, useQueryParams } from 'use-query-params'
 
 // full calendar
 import FullCalendar, { SlotLabelContentArg, DateSelectArg } from '@fullcalendar/react' // must go before plugins
@@ -9,9 +11,7 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
-import { useDispatch } from 'react-redux'
-import { StringParam, useQueryParams } from 'use-query-params'
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
 import { composeDayViewEvents, composeDayViewResources, eventAllow, getTimeScrollId } from '../../calendarHelpers'
 
 // types
@@ -74,7 +74,7 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 }
 
 interface ICalendarDayView extends ICalendarView {
-	setEventManagement: any
+	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
 }
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
@@ -108,10 +108,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		dispatch(clearEvent())
 		setEventManagement(undefined)
 		if (event.resource) {
-			console.log('called 55')
 			// eslint-disable-next-line no-underscore-dangle
 			const { employee } = event.resource._resource.extendedProps
-			console.log('event', event)
 			onAddEvent({
 				date: dayjs(event.startStr).format(DEFAULT_DATE_INIT_FORMAT),
 				timeFrom: dayjs(event.startStr).format(DEFAULT_TIME_FORMAT),

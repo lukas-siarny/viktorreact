@@ -46,7 +46,7 @@ type Props = {
 	salonID: string
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
-	handleSubmitEvent: (values: ICalendarEventForm, onError?: () => void) => void
+	handleSubmitEvent: (values: ICalendarEventForm) => void
 	refetchData: () => void
 }
 
@@ -147,17 +147,18 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				employee: {
 					key: employeeId
 				},
-				eventId
+				eventId,
+				revertEvent
 			}
 
 			if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
 				const customerId = eventData.customer?.id
 				const serviceId = eventData.service?.id
 
-				handleSubmitReservation({ ...values, customer: { key: customerId }, service: { key: serviceId } } as any, revertEvent)
+				handleSubmitReservation({ ...values, customer: { key: customerId }, service: { key: serviceId } } as any)
 				return
 			}
-			handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm, revertEvent)
+			handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm)
 		},
 		[handleSubmitReservation, handleSubmitEvent, authUserPermissions, selectedSalonuniqPermissions]
 	)

@@ -496,8 +496,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	)
 
 	const handleSubmitEvent = useCallback(
-		async (values: ICalendarEventForm, revertEvent?: () => void) => {
+		async (values: ICalendarEventForm) => {
 			const eventId = query.eventId || values.eventId // ak je z query ide sa detail drawer ak je values ide sa cez drag and drop alebo resize
+			const revertEvent = values?.revertEvent
 			// NOTE: ak existuje actionType tak sa klikl v modali na moznost bulk / single a uz bol modal submitnuty
 			if (values.calendarBulkEventID && !formValuesBulkForm?.actionType) {
 				setTempValues(values)
@@ -629,10 +630,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					...tempValues,
 					customRepeatOptions
 				}
-				await handleSubmitEvent(data as ICalendarEventForm, visibleBulkModal.revertEvent)
+				await handleSubmitEvent({ ...data, revertEvent: visibleBulkModal.revertEvent } as ICalendarEventForm)
 			} else {
 				// SINGLE edit - tempvalues z drag and drop / resize
-				await handleSubmitEvent(tempValues as ICalendarEventForm, visibleBulkModal.revertEvent)
+				await handleSubmitEvent({ ...tempValues, revertEvent: visibleBulkModal.revertEvent } as ICalendarEventForm)
 			}
 			// DELETE
 		} else {

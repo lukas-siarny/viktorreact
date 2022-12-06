@@ -189,6 +189,7 @@ export interface ICalendarEventForm {
 	// NOTE: pre akcie resize a drag and drop
 	eventId?: string
 	calendarBulkEventID?: string
+	revertEvent?: () => void
 }
 
 export interface IEventTypeFilterForm {

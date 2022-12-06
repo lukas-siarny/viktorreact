@@ -63,40 +63,65 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const defaultExpandedKeys: any = []
 	forEach(groupedServicesByCategory, (level1) => forEach(level1.category?.children, (level2) => defaultExpandedKeys.push(level2?.category?.id)))
 
+	const handleCheckParent = (type: SERVICE_TYPE, checked: boolean, id: string) => {
+		// Ak je ONLINE_BOOKING false tak sa nastavi na false aj AUTO_CONFIRM
+		if (type === SERVICE_TYPE.ONLINE_BOOKING && !checked) {
+			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.ONLINE_BOOKING}-${id}]`, false))
+			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.AUTO_CONFIRM}-${id}]`, false))
+			// Ak je AUTO_CONFIRM true tak sa nastavi aj ONINE_BOOKING na true
+		} else if (type === SERVICE_TYPE.AUTO_CONFIRM && checked) {
+			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.ONLINE_BOOKING}-${id}]`, true))
+			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.AUTO_CONFIRM}-${id}]`, true))
+		} else {
+			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${type}-${id}]`, checked))
+		}
+	}
+
 	const onChangeCheckAll = (checked: boolean, type: SERVICE_TYPE) => {
 		forEach(groupedServicesByCategory, (level1) =>
-			forEach(level1.category?.children, (level2) =>
+			forEach(level1.category?.children, (level2) => {
+				console.log('level', level2)
+				// handleCheckParent(type, checked, level2?.category?.id as string)
+				if (type === SERVICE_TYPE.ONLINE_BOOKING && !checked) {
+					dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.ONLINE_BOOKING}-${level2?.category?.id}]`, false))
+					dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.AUTO_CONFIRM}-${level2?.category?.id}]`, false))
+				} else if (type === SERVICE_TYPE.AUTO_CONFIRM && checked) {
+					dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.ONLINE_BOOKING}-${level2?.category?.id}]`, true))
+					dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.AUTO_CONFIRM}-${level2?.category?.id}]`, true))
+				} else {
+					dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${type}-${level2?.category?.id}]`, checked))
+				}
+
 				forEach(level2.category?.children, (level3) => {
+					// handleCheckParent(type, checked, level3?.service?.id as string)
+					// Ak je ONLINE_BOOKING false tak sa nastavi na false aj AUTO_CONFIRM
 					if (type === SERVICE_TYPE.ONLINE_BOOKING && !checked) {
 						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.ONLINE_BOOKING}][${level3.service.id}]`, false))
 						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.AUTO_CONFIRM}][${level3.service.id}]`, false))
-						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'onlineBookingAll', false))
-						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'autoConfirmAll', false))
+						// Ak je AUTO_CONFIRM true tak sa nastavi aj ONINE_BOOKING na true
 					} else if (type === SERVICE_TYPE.AUTO_CONFIRM && checked) {
 						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.ONLINE_BOOKING}][${level3.service.id}]`, true))
 						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.AUTO_CONFIRM}][${level3.service.id}]`, true))
-						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'autoConfirmAll', true))
-						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'onlineBookingAll', true))
 					} else {
 						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${type}][${level3.service.id}]`, checked))
 					}
 				})
-			)
+			})
 		)
 	}
-	// const onChangeGroupCheck = (checked: boolean, type: SERVICE_TYPE, id: string) => {
-	// 	forEach(groupedServicesByCategory, (level1) =>
-	// 		forEach(level1.category?.children, (level2) => {
-	// 			console.log('level2', level2)
-	// 			if (id === level2?.category?.id) {
-	// 				forEach(level2.category?.children, (level3) => {
-	// 					dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${type}][${level3.service.id}]`, checked))
-	// 				})
-	// 			}
-	// 		})
-	// 	)
-	// 	console.log('called', checked, type, id)
-	// }
+	const onChangeGroupCheck = (checked: boolean, type: SERVICE_TYPE, id: string) => {
+		forEach(groupedServicesByCategory, (level1) =>
+			forEach(level1.category?.children, (level2) => {
+				console.log('level2', level2)
+				if (id === level2?.category?.id) {
+					forEach(level2.category?.children, (level3) => {
+						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${type}][${level3.service.id}]`, checked))
+					})
+				}
+			})
+		)
+		console.log('called', checked, type, id)
+	}
 
 	useEffect(() => {
 		const onlineBookingValues = Object.values(formValues?.servicesSettings?.[SERVICE_TYPE.ONLINE_BOOKING] as {})
@@ -104,12 +129,14 @@ const ReservationSystemSettingsForm = (props: Props) => {
 		// Najnizzsi children ci ma false hodnotu
 		const hasOnlineBookingFalsyValue = includes(onlineBookingValues, false)
 		const hasAutoConfirmFalsyValue = includes(autoConfirmValues, false)
-
+		// Nastavenie true false hodnot pre check all parentov podla toho ked ma children true / false Level 1 + Level 2
+		// SERVICE_TYPE.ONLINE_BOOKING
 		if (!hasOnlineBookingFalsyValue) {
 			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'onlineBookingAll', true))
 		} else {
 			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'onlineBookingAll', false))
 		}
+		// AUTO_CONFIRM
 		if (!hasAutoConfirmFalsyValue) {
 			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'autoConfirmAll', true))
 		} else {
@@ -138,7 +165,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 		// 		dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'autoConfirmAll', false))
 		// 	}
 		// }
-
+		console.log('formValues', formValues)
 		console.log('onlineBookingValues', onlineBookingValues)
 		console.log('autoConfirmValues', autoConfirmValues)
 		console.log('hasOnlineBookingFalsyValue', hasOnlineBookingFalsyValue)
@@ -195,42 +222,42 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					id: level2.category?.id,
 					key: level2.category?.id,
 					className: `noti-tree-node-1 font-semibold ml-6`,
-					title: level2.category?.name,
-					// title: (
-					// 	<div id={`level2-${level2.category?.id}`} className={'flex justify-between'}>
-					// 		<div>{level2.category?.name}</div>
-					// 		<div className={'flex'}>
-					// 			<FormSection name={SERVICE_TYPE.ONLINE_BOOKING}>
-					// 				<Field
-					// 					component={CheckboxField}
-					// 					key={`level3-${SERVICE_TYPE.ONLINE_BOOKING}-${level2?.category?.id}`}
-					// 					name={level2?.category?.id}
-					// 					disabled={disabled}
-					// 					hideChecker
-					// 					onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-					// 						onChangeGroupCheck(e.target.checked, SERVICE_TYPE.ONLINE_BOOKING, level2?.category?.id as string)
-					// 					}
-					// 					optionRender={optionRenderNotiPinkCheckbox}
-					// 					className={'p-0 h-6 mr-8'}
-					// 				/>
-					// 			</FormSection>
-					// 			<FormSection name={SERVICE_TYPE.AUTO_CONFIRM}>
-					// 				<Field
-					// 					component={CheckboxField}
-					// 					key={`level2-${SERVICE_TYPE.AUTO_CONFIRM}-${level2?.category?.id}`}
-					// 					name={level2?.category?.id}
-					// 					disabled={disabled}
-					// 					hideChecker
-					// 					onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-					// 						onChangeGroupCheck(e.target.checked, SERVICE_TYPE.AUTO_CONFIRM, level2?.category?.id as string)
-					// 					}
-					// 					optionRender={optionRenderNotiPinkCheckbox}
-					// 					className={'p-0 h-6'}
-					// 				/>
-					// 			</FormSection>
-					// 		</div>
-					// 	</div>
-					// ),
+					// title: level2.category?.name,
+					title: (
+						<div id={`level2-${level2.category?.id}`} className={'flex justify-between'}>
+							<div>{level2.category?.name}</div>
+							<div className={'flex'}>
+								{/* <FormSection name={SERVICE_TYPE.ONLINE_BOOKING}> */}
+								<Field
+									component={CheckboxField}
+									key={`${SERVICE_TYPE.ONLINE_BOOKING}-${level2?.category?.id}`}
+									name={`${SERVICE_TYPE.ONLINE_BOOKING}-${level2?.category?.id}`}
+									disabled={disabled}
+									hideChecker
+									onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+										onChangeGroupCheck(e.target.checked, SERVICE_TYPE.ONLINE_BOOKING, level2?.category?.id as string)
+									}
+									optionRender={optionRenderNotiPinkCheckbox}
+									className={'p-0 h-6 mr-8'}
+								/>
+								{/* </FormSection> */}
+								{/* <FormSection name={SERVICE_TYPE.AUTO_CONFIRM}> */}
+								<Field
+									component={CheckboxField}
+									key={`${SERVICE_TYPE.AUTO_CONFIRM}-${level2?.category?.id}`}
+									name={`${SERVICE_TYPE.AUTO_CONFIRM}-${level2?.category?.id}`}
+									disabled={disabled}
+									hideChecker
+									onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+										onChangeGroupCheck(e.target.checked, SERVICE_TYPE.AUTO_CONFIRM, level2?.category?.id as string)
+									}
+									optionRender={optionRenderNotiPinkCheckbox}
+									className={'p-0 h-6'}
+								/>
+								{/* </FormSection> */}
+							</div>
+						</div>
+					),
 					switcherIcon: (propsLevel2: any) => {
 						return propsLevel2?.expanded ? <ChevronDown style={{ transform: 'rotate(180deg)' }} /> : <ChevronDown />
 					},

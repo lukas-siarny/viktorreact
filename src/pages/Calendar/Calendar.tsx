@@ -38,6 +38,7 @@ import { getCalendarEventDetail, getCalendarReservations, getCalendarShiftsTimeo
 import { RootState } from '../../reducers'
 import { getEmployees } from '../../reducers/employees/employeesActions'
 import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
+import { clearEvent } from '../../reducers/virtualEvent/virtualEventActions'
 
 // components
 import ConfirmBulkForm from './components/forms/ConfirmBulkForm'
@@ -353,6 +354,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		[query, setQuery]
 	)
 
+	const closeSiderForm = useCallback(() => {
+		dispatch(clearEvent())
+		setEventManagement(undefined)
+	}, [dispatch, setEventManagement])
+
 	const handleSubmitFilter = (values: ICalendarFilter) => {
 		setQuery({
 			...query,
@@ -395,7 +401,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				await deleteReq('/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}', { salonID, calendarEventID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			}
 
-			setEventManagement(undefined)
+			closeSiderForm()
 			fetchEvents()
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -412,7 +418,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		query?.eventId,
 		query?.sidebarView,
 		salonID,
-		setEventManagement
+		closeSiderForm
 	])
 
 	const handleDeleteEvent = async () => {
@@ -463,7 +469,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 				fetchEvents()
 				// Po CREATE / UPDATE rezervacie dotiahnut eventy + zatvorit drawer
-				setEventManagement(undefined)
+				closeSiderForm()
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
@@ -475,7 +481,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				setIsUpdatingEvent(false)
 			}
 		},
-		[query.eventId, salonID, setEventManagement, fetchEvents]
+		[query.eventId, salonID, closeSiderForm, fetchEvents]
 	)
 
 	const handleSubmitEvent = useCallback(
@@ -568,7 +574,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 				fetchEvents()
 				// Po CREATE / UPDATE eventu dotiahnut eventy + zatvorit drawer
-				setEventManagement(undefined)
+				closeSiderForm()
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
@@ -580,7 +586,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				setIsUpdatingEvent(false)
 			}
 		},
-		[dispatch, fetchEvents, formValuesBulkForm?.actionType, query.eventId, salonID, setEventManagement]
+		[dispatch, fetchEvents, formValuesBulkForm?.actionType, query.eventId, salonID, closeSiderForm]
 	)
 
 	const handleSubmitConfirmModal = async (values: IBulkConfirmForm) => {
@@ -630,7 +636,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		setNewEventData(initialData)
 
 		if (query.eventId) {
-			setEventManagement(undefined)
+			closeSiderForm()
 		}
 		// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastav pracovnu zmenu
 		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
@@ -670,7 +676,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	return (
 		<>
 			{modals}
-			<div role={'button'} onClick={() => setEventManagement(undefined)} id={'overlay'} className={cx({ block: query.sidebarView, hidden: !query.sidebarView })} />
+			<div role={'button'} onClick={closeSiderForm} id={'overlay'} className={cx({ block: query.sidebarView, hidden: !query.sidebarView })} />
 			<Layout className='noti-calendar-layout'>
 				<CalendarHeader
 					selectedDate={validSelectedDate}
@@ -734,7 +740,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						eventId={query.eventId}
 						handleDeleteEvent={handleDeleteEvent}
 						sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE}
-						setCollapsed={setEventManagement}
+						onCloseSider={closeSiderForm}
 						handleSubmitReservation={handleSubmitReservation}
 						handleSubmitEvent={handleSubmitEvent}
 						newEventData={newEventData}

@@ -34,7 +34,7 @@ import Permissions from '../../../../utils/Permissions'
 
 // redux
 import { getCalendarEventDetail } from '../../../../reducers/calendar/calendarActions'
-import { setCalendarApi, clearEvent, setCalendarDateHandler } from '../../../../reducers/virtualEvent/virtualEventActions'
+import { setCalendarApi, setCalendarDateHandler } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 // components
 import ReservationForm from '../forms/ReservationForm'
@@ -54,7 +54,7 @@ type Props = {
 	salonID: string
 	sidebarView: CALENDAR_EVENT_TYPE
 	selectedDate: string
-	setCollapsed: (view: CALENDAR_EVENT_TYPE | undefined) => void
+	onCloseSider: () => void
 	handleSubmitReservation: (values: ICalendarReservationForm) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
 	handleDeleteEvent: () => any
@@ -67,7 +67,7 @@ type Props = {
 
 const SiderEventManagement: FC<Props> = (props) => {
 	const {
-		setCollapsed,
+		onCloseSider,
 		handleSubmitReservation,
 		handleSubmitEvent,
 		salonID,
@@ -110,7 +110,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 
 			if (!data) {
 				// NOTE: ak by bolo zle ID (zmazane alebo nenajdene) tak zatvorit drawer + zmaz eventId
-				setCollapsed(undefined)
+				onCloseSider()
 				return
 			}
 
@@ -241,12 +241,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sidebarView])
 
-	const handleCloseSider = () => {
-		dispatch(clearEvent())
-		setCollapsed(undefined)
-	}
-
-	useKeyUp('Escape', handleCloseSider)
+	useKeyUp('Escape', onCloseSider)
 
 	const searchEmployes = useCallback(
 		async (search: string, page: number) => {
@@ -341,7 +336,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 							)}
 						/>
 					)}
-					<Button className='button-transparent' onClick={handleCloseSider}>
+					<Button className='button-transparent' onClick={onCloseSider}>
 						<CloseIcon />
 					</Button>
 				</div>

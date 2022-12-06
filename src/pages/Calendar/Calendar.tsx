@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useRef, useState, useMemo } from 'react'
 import Layout from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
-import { includes, isEmpty, omit } from 'lodash'
+import { includes, isEmpty } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { getFormValues, initialize, submit, destroy } from 'redux-form'
@@ -177,7 +177,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				calendarRefs?.current?.[calendarView]?.getApi()?.gotoDate(newCalendarDate)
 			}
 
-			// calendarRefs?.current?.[calendarView]?.getApi()?.gotoDate(newCalendarDate)
 			initialScroll.current = false
 			return
 		}

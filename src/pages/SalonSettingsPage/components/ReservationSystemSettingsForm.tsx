@@ -284,7 +284,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							label={t('loc:Intervaly medzi online rezerváciami')}
 							placeholder={t('loc:Vyberte interval')}
 							options={FREQUENCIES}
-							name={'minutesIntervalBetweenB2CReservations'}
+							name={'minutesIntervalB2CReservations'}
 							size={'large'}
 							allowClear
 							className='flex-1'

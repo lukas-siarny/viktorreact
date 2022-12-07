@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { getFormValues, initialize, submit, destroy } from 'redux-form'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import cx from 'classnames'
 import { useTranslation } from 'react-i18next'
 import Scroll from 'react-scroll'
 
@@ -676,7 +675,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	return (
 		<>
 			{modals}
-			<div role={'button'} onClick={closeSiderForm} id={'overlay'} className={cx({ block: query.sidebarView, hidden: !query.sidebarView })} />
 			<Layout className='noti-calendar-layout'>
 				<CalendarHeader
 					selectedDate={validSelectedDate}
@@ -684,7 +682,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					calendarView={validCalendarView as CALENDAR_VIEW}
 					siderFilterCollapsed={siderFilterCollapsed}
 					setCalendarView={setCalendarView}
-					setEventsViewType={(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => setQuery({ ...query, eventsViewType })}
+					setEventsViewType={(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => {
+						// NOTE: Ak je otvoreny CREATE sidebar tak pri prepnuti filtra ho zrusit pri EDIT ostane + zmazat virtualny event ak bol vytvoreny
+						dispatch(clearEvent())
+						setQuery({ ...query, eventsViewType, sidebarView: query.eventId ? query.sidebarView : undefined })
+					}}
 					setSelectedDate={setNewSelectedDate}
 					setSiderFilterCollapsed={() => {
 						setSiderFilterCollapsed(!siderFilterCollapsed)
@@ -703,6 +705,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					/>
 					<CalendarContent
 						salonID={salonID}
+						setEventManagement={setEventManagement}
 						ref={calendarRefs}
 						selectedDate={validSelectedDate}
 						view={validCalendarView as CALENDAR_VIEW}

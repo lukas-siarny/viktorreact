@@ -1,4 +1,4 @@
-import { filter, orderBy } from 'lodash'
+import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
 import { FormatterInput } from '@fullcalendar/react'

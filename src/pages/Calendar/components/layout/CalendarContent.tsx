@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 
 // fullcalendar
 import { EventResizeDoneArg } from '@fullcalendar/interaction'
-import FullCalendar, { EventDropArg, DatesSetArg } from '@fullcalendar/react'
+import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 
 // enums
 import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
@@ -39,6 +39,7 @@ type Props = {
 	showEmptyState: boolean
 	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
 	handleSubmitEvent: (values: ICalendarEventForm, onError?: () => void) => void
+	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
 } & ICalendarView
 
 export type CalendarRefs = {
@@ -48,7 +49,7 @@ export type CalendarRefs = {
 }
 
 const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
-	const { view, loading, reservations, shiftsTimeOffs, onShowAllEmployees, showEmptyState, handleSubmitReservation, handleSubmitEvent, selectedDate } = props
+	const { view, loading, reservations, shiftsTimeOffs, onShowAllEmployees, showEmptyState, handleSubmitReservation, handleSubmitEvent, selectedDate, setEventManagement } = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -183,6 +184,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				<CalendarWeekView
 					{...props}
 					ref={weekView}
+					setEventManagement={setEventManagement}
 					reservations={sources.reservations}
 					shiftsTimeOffs={sources.shiftsTimeOffs}
 					virtualEvent={sources.virtualEvent}
@@ -197,6 +199,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		return (
 			<CalendarDayView
 				{...props}
+				setEventManagement={setEventManagement}
 				ref={dayView}
 				reservations={sources.reservations}
 				shiftsTimeOffs={sources.shiftsTimeOffs}

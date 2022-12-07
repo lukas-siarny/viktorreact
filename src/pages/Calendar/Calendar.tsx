@@ -38,7 +38,7 @@ import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
 
 // reducers
-import { getCalendarEventDetail, getCalendarReservations, getCalendarShiftsTimeoff } from '../../reducers/calendar/calendarActions'
+import { getCalendarEventDetail, getCalendarReservations, getCalendarShiftsTimeoff, refreshEvents } from '../../reducers/calendar/calendarActions'
 import { RootState } from '../../reducers'
 import { getEmployees } from '../../reducers/employees/employeesActions'
 import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
@@ -135,6 +135,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const services = useSelector((state: RootState) => state.service.services)
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
 	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS])
+	const isRefreshingEvents = useSelector((state: RootState) => state.calendar.isRefreshingEvents)
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
 
@@ -156,26 +157,22 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		position: null
 	})
 
-	// const [loadInBackground, setLoadInBackground] = useState<boolean>(false)
 	const fetchInterval = useRef<number | undefined>()
-	let loadInBackground = false
+
+	const cleaRestartFetchInterval = () => window.clearInterval(fetchInterval.current)
 
 	const restartFetchInterval = async () => {
 		if (fetchInterval.current) {
-			window.clearInterval(fetchInterval.current)
+			cleaRestartFetchInterval()
 		}
 
 		const interval = window.setInterval(async () => {
-			loadInBackground = true
 			message.open({
 				type: 'loading',
 				content: t('loc:Kalendár sa aktualizuje'),
 				duration: 0
 			})
-			// eslint-disable-next-line @typescript-eslint/no-use-before-define
-			await fetchEvents(false, false)
-			loadInBackground = false
-			console.log('🚀 ~ file: Calendar.tsx:177 ~ interval ~ setLoadInBackground', loadInBackground)
+			await dispatch(refreshEvents(validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE))
 			message.destroy()
 		}, REFRESH_CALENDAR_INTERVAL)
 
@@ -270,6 +267,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				await restartFetchInterval()
 			}
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validEventsViewType]
 	)
 
@@ -359,7 +357,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// clear on unmount
 		return () => {
 			if (fetchInterval.current) {
-				window.clearInterval(fetchInterval.current)
+				cleaRestartFetchInterval()
 				message.destroy()
 			}
 		}
@@ -713,8 +711,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	console.log({ loadingData, background: !loadInBackground })
-
 	return (
 		<>
 			{modals}
@@ -750,7 +746,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						view={validCalendarView as CALENDAR_VIEW}
 						reservations={reservations?.data || []}
 						shiftsTimeOffs={shiftsTimeOffs?.data || []}
-						loading={loadingData && !loadInBackground}
+						loading={isRefreshingEvents ? false : loadingData}
 						eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 						employees={filteredEmployees() || []}
 						showEmptyState={query?.employeeIDs === null}

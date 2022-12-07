@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { change, Field, FieldArray, FormSection, InjectedFormProps, reduxForm } from 'redux-form'
+import { change, Field, FieldArray, FormSection, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Divider, Form, Row } from 'antd'
-import { forEach, map } from 'lodash'
+import { forEach, includes, map } from 'lodash'
 
 // atoms
 import SwitchField from '../../../atoms/SwitchField'
@@ -55,41 +55,73 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const disabled = submitting
 	const groupedServicesByCategory = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 	const groupedServicesByCategoryLoading = useSelector((state: RootState) => state.service.services.isLoading)
+	const formValues: Partial<IReservationSystemSettingsForm> = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
 
 	const defaultExpandedKeys: any = []
 	forEach(groupedServicesByCategory, (level1) => forEach(level1.category?.children, (level2) => defaultExpandedKeys.push(level2?.category?.id)))
 
-	const onChangeIndustryCheck = (checked: boolean, type: SERVICE_TYPE) => {
-		forEach(groupedServicesByCategory, (level1) =>
-			forEach(level1.category?.children, (level2) =>
+	const handleCheckParent = (type: SERVICE_TYPE, checked: boolean, id: string) => {
+		// Ak je ONLINE_BOOKING false tak sa nastavi na false aj AUTO_CONFIRM
+		if (type === SERVICE_TYPE.ONLINE_BOOKING && !checked) {
+			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.ONLINE_BOOKING}-${id}]`, false))
+			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.AUTO_CONFIRM}-${id}]`, false))
+			// Ak je AUTO_CONFIRM true tak sa nastavi aj ONINE_BOOKING na true
+		} else if (type === SERVICE_TYPE.AUTO_CONFIRM && checked) {
+			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.ONLINE_BOOKING}-${id}]`, true))
+			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.AUTO_CONFIRM}-${id}]`, true))
+		} else {
+			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${type}-${id}]`, checked))
+		}
+	}
+
+	const onChangeCheckAll = (checked: boolean, type: SERVICE_TYPE) => {
+		forEach(groupedServicesByCategory, (level1) => {
+			handleCheckParent(type, checked, level1?.category?.id as string)
+			forEach(level1.category?.children, (level2) => {
+				handleCheckParent(type, checked, level1?.category?.id as string)
 				forEach(level2.category?.children, (level3) => {
+					// handleCheckParent(type, checked, level3?.service?.id as string)
+					// Ak je ONLINE_BOOKING false tak sa nastavi na false aj AUTO_CONFIRM
 					if (type === SERVICE_TYPE.ONLINE_BOOKING && !checked) {
 						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.ONLINE_BOOKING}][${level3.service.id}]`, false))
 						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.AUTO_CONFIRM}][${level3.service.id}]`, false))
-						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'onlineBookingAll', false))
-						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'autoConfirmAll', false))
+						// Ak je AUTO_CONFIRM true tak sa nastavi aj ONINE_BOOKING na true
 					} else if (type === SERVICE_TYPE.AUTO_CONFIRM && checked) {
 						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.ONLINE_BOOKING}][${level3.service.id}]`, true))
 						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${SERVICE_TYPE.AUTO_CONFIRM}][${level3.service.id}]`, true))
-						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'autoConfirmAll', true))
-						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'onlineBookingAll', true))
 					} else {
 						dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings[${type}][${level3.service.id}]`, checked))
 					}
 				})
-			)
-		)
+			})
+		})
 	}
 
-	const onChangeServiceCheck = (checked: boolean, type: SERVICE_TYPE, id: string) => {
-		// Ak je BOOKING false tak sa musi aj CONFIRM dat na false
-		if (!checked) {
-			if (type === SERVICE_TYPE.ONLINE_BOOKING) {
+	useEffect(() => {
+		if (formValues?.servicesSettings) {
+			const onlineBookingValues = Object.values(formValues?.servicesSettings?.[SERVICE_TYPE.ONLINE_BOOKING] as any)
+			const autoConfirmValues = Object.values(formValues?.servicesSettings?.[SERVICE_TYPE.AUTO_CONFIRM] as any)
+			// Najnizzsi children ci ma false hodnotu
+			const hasOnlineBookingFalsyValue = includes(onlineBookingValues, false)
+			const hasAutoConfirmFalsyValue = includes(autoConfirmValues, false)
+			// Nastavenie true false hodnot pre check all parentov podla toho ked ma children true / false Level 1 + Level 2
+			// SERVICE_TYPE.ONLINE_BOOKING
+			if (!hasOnlineBookingFalsyValue) {
+				dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'onlineBookingAll', true))
+			} else {
 				dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'onlineBookingAll', false))
+			}
+			// AUTO_CONFIRM
+			if (!hasAutoConfirmFalsyValue) {
+				dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'autoConfirmAll', true))
 			} else {
 				dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, 'autoConfirmAll', false))
 			}
 		}
+	}, [dispatch, formValues?.servicesSettings])
+
+	const onChangeServiceCheck = (checked: boolean, type: SERVICE_TYPE, id: string) => {
+		// Ak je BOOKING false tak sa musi aj CONFIRM dat na false
 		if (type === SERVICE_TYPE.ONLINE_BOOKING && !checked) {
 			dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings.${SERVICE_TYPE.AUTO_CONFIRM}.${id}`, false))
 			// Ak je CONFIRM true tak BOOKING sa da tiez na true
@@ -131,13 +163,13 @@ const ReservationSystemSettingsForm = (props: Props) => {
 										<FormSection name={SERVICE_TYPE.ONLINE_BOOKING}>
 											<Field
 												component={CheckboxField}
-												key={`level3-${SERVICE_TYPE.ONLINE_BOOKING}-${level3.service.id}`}
+												key={`${SERVICE_TYPE.ONLINE_BOOKING}-${level3.service.id}`}
 												name={level3.service.id}
 												disabled={disabled}
 												hideChecker
-												onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+												onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 													onChangeServiceCheck(e.target.checked, SERVICE_TYPE.ONLINE_BOOKING, level3.service.id)
-												}
+												}}
 												optionRender={optionRenderNotiPinkCheckbox}
 												className={'p-0 h-6 mr-8'}
 											/>
@@ -145,13 +177,13 @@ const ReservationSystemSettingsForm = (props: Props) => {
 										<FormSection name={SERVICE_TYPE.AUTO_CONFIRM}>
 											<Field
 												component={CheckboxField}
-												key={`level3-${SERVICE_TYPE.AUTO_CONFIRM}-${level3.service.id}`}
+												key={`${SERVICE_TYPE.AUTO_CONFIRM}-${level3.service.id}`}
 												name={level3.service.id}
 												disabled={disabled}
 												hideChecker
-												onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+												onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 													onChangeServiceCheck(e.target.checked, SERVICE_TYPE.AUTO_CONFIRM, level3.service.id)
-												}
+												}}
 												optionRender={optionRenderNotiPinkCheckbox}
 												className={'p-0 h-6'}
 											/>
@@ -338,16 +370,16 @@ const ReservationSystemSettingsForm = (props: Props) => {
 								component={CheckboxField}
 								key={'onlineBookingAll'}
 								name={'onlineBookingAll'}
-								onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeIndustryCheck(e.target.checked, SERVICE_TYPE.ONLINE_BOOKING)}
+								onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeCheckAll(e.target.checked, SERVICE_TYPE.ONLINE_BOOKING)}
 								disabled={disabled}
 								hideChecker
 								optionRender={optionRenderNotiPinkCheckbox}
-								className={'p-0 h-6 mr-8'}
+								className={'p-0 h-6 mr-8 check-all'}
 							/>
 
 							<Field
 								component={CheckboxField}
-								onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeIndustryCheck(e.target.checked, SERVICE_TYPE.AUTO_CONFIRM)}
+								onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeCheckAll(e.target.checked, SERVICE_TYPE.AUTO_CONFIRM)}
 								key={'autoConfirmAll'}
 								name={'autoConfirmAll'}
 								disabled={disabled}

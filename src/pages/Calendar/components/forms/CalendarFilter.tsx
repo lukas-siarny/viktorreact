@@ -56,7 +56,6 @@ const CalendarFilter = (props: Props) => {
 
 	const services = useSelector((state: RootState) => state.service.services)
 	const employees = useSelector((state: RootState) => state.employees.employees)
-	console.log('services?.categoriesOptions', services?.categoriesOptions)
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'p-4'}>

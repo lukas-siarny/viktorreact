@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useRef, useState, useMemo } from 'react'
 import Layout from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
-import { compact, includes, isEmpty, map } from 'lodash'
+import { includes, isEmpty } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { getFormValues, initialize, submit, destroy } from 'redux-form'
@@ -121,6 +121,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS])
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
+	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [visibleBulkModal, setVisibleBulkModal] = useState<{ requestType: REQUEST_TYPE; eventType?: CALENDAR_EVENT_TYPE; revertEvent?: () => void } | null>(null)
@@ -310,13 +311,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		})()
 	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents])
 
-	console.log('init data', services?.categoriesOptions)
 	useEffect(() => {
-		// TODO:
 		dispatch(
 			initialize(FORM.CALENDAR_FILTER, {
 				eventsViewType: validEventsViewType,
-				categoryIDs: query?.categoryIDs === undefined ? getCategoryIDs(services?.categoriesOptions) : query?.categoryIDs,
+				categoryIDs: query?.categoryIDs === undefined ? getCategoryIDs(services?.categoriesOptions) : getFullCategoryIdsFromUrl(query?.categoryIDs),
 				employeeIDs: query?.employeeIDs === undefined ? getEmployeeIDs(employees?.options) : query?.employeeIDs
 			})
 		)
@@ -361,10 +360,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}, [dispatch, setEventManagement])
 
 	useEffect(() => {
-		console.log('called')
+		// NOTE: zmaze sa ruzove pozadie pri zruseni sidebaru cez ESC
 		const highlight = document.getElementsByClassName('fc-highlight')[0]
 		if (highlight) highlight.remove()
-	}, [closeSiderForm])
+	}, [])
 
 	const handleSubmitFilter = (values: ICalendarFilter) => {
 		setQuery({
@@ -469,14 +468,17 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						NOTIFICATION_TYPE.NOTIFICATION,
 						true
 					)
+					fetchEvents(false) // Po PATCHi vponechat virtualny event ak bol vytvoreny
 				} else {
 					// CREATE
 					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+					fetchEvents(true) // Po CREATe zmazat virtualny event aby neostali ten tkory sa dotiahne z BE a sucasne aj virualny
 				}
 
-				fetchEvents()
-				// Po CREATE / UPDATE rezervacie dotiahnut eventy + zatvorit drawer
-				closeSiderForm()
+				// Po UPDATE rezervacie dotiahnut eventy + zatvorit drawer, pri CREATE ostane otvoreny sider pcoas updatu len
+				if (query.eventId) {
+					closeSiderForm()
+				}
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
@@ -564,6 +566,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							NOTIFICATION_TYPE.NOTIFICATION,
 							true
 						)
+						fetchEvents(false) // Po PATCHi vponechat virtualny event ak bol vytvoreny
 					} else {
 						// SINGLE RECORD UPDATE
 						// NOTE: ak existuje eventId je otvoreny detail a bude sa patchovat
@@ -575,15 +578,18 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							NOTIFICATION_TYPE.NOTIFICATION,
 							true
 						)
+						fetchEvents(false) // Po PATCHi vponechat virtualny event ak bol vytvoreny
 					}
 				} else {
 					// CREATE event shift
 					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+					fetchEvents(true) // Po CREATe zmazat virtualny event aby neostali ten tkory sa dotiahne z BE a sucasne aj virualny
 				}
 				dispatch(destroy(FORM.CONFIRM_BULK_FORM))
-				// Po CREATE / UPDATE eventu dotiahnut eventy + zatvorit drawer
-				fetchEvents()
-				closeSiderForm()
+				// Po UPDATE eventu dotiahnut eventy + zatvorit drawer, pri CREATE ostane otvoreny sider pcoas updatu len
+				if (query.eventId) {
+					closeSiderForm()
+				}
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
@@ -641,6 +647,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const handleAddEvent = (initialData?: INewCalendarEvent) => {
+		// NOTE: ak existuje vytvoreny virualny event a pouzivatel vytvori dalsi klikom na tlacidlo Pridat tak ho zmaze a otvori init create form eventu
+		if (virtualEvent) {
+			dispatch(clearEvent())
+			setEventManagement(undefined)
+		}
+
 		// Event data ziskane z kalendara, sluzia pre init formularu v SiderEventManagement
 		setNewEventData(initialData)
 
@@ -693,9 +705,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					siderFilterCollapsed={siderFilterCollapsed}
 					setCalendarView={setCalendarView}
 					setEventsViewType={(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => {
-						// NOTE: Ak je otvoreny CREATE sidebar tak pri prepnuti filtra ho zrusit pri EDIT ostane + zmazat virtualny event ak bol vytvoreny
+						// NOTE: Ak je otvoreny CREATE / EDIT sidebar tak pri prepnuti filtra ho zrusit + zmaze virtual event
 						dispatch(clearEvent())
-						setQuery({ ...query, eventsViewType, sidebarView: query.eventId ? query.sidebarView : undefined })
+						setQuery({ ...query, eventsViewType, sidebarView: undefined })
 					}}
 					setSelectedDate={setNewSelectedDate}
 					setSiderFilterCollapsed={() => {

@@ -200,6 +200,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
 		dispatch(clearEvent())
 		setEventManagement(undefined)
+
 		if (event.resource) {
 			// eslint-disable-next-line no-underscore-dangle
 			const { day, employee } = event.resource._resource.extendedProps

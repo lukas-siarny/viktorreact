@@ -105,6 +105,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
 		dispatch(clearEvent())
 		setEventManagement(undefined)
+
 		if (event.resource) {
 			// eslint-disable-next-line no-underscore-dangle
 			const { employee } = event.resource._resource.extendedProps

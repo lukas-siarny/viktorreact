@@ -62,8 +62,6 @@ export const clearEvent = (): ThunkResult<void> => (dispatch, getState) => {
 			}
 		}
 	}
-	// const highlight = document.getElementsByClassName('fc-highlight')[0]
-	// if (highlight) highlight.remove()
 }
 
 export const addOrUpdateEvent =

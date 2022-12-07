@@ -50,13 +50,13 @@ const checkboxOptionRender = (option: any, checked?: boolean) => {
 		</div>
 	)
 }
-
 const CalendarFilter = (props: Props) => {
 	const { handleSubmit, parentPath, eventsViewType } = props
 	const [t] = useTranslation()
 
 	const services = useSelector((state: RootState) => state.service.services)
 	const employees = useSelector((state: RootState) => state.employees.employees)
+	console.log('services?.categoriesOptions', services?.categoriesOptions)
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'p-4'}>

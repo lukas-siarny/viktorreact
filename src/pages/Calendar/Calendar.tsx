@@ -310,7 +310,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		})()
 	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents])
 
+	console.log('init data', services?.categoriesOptions)
 	useEffect(() => {
+		// TODO:
 		dispatch(
 			initialize(FORM.CALENDAR_FILTER, {
 				eventsViewType: validEventsViewType,
@@ -357,6 +359,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		dispatch(clearEvent())
 		setEventManagement(undefined)
 	}, [dispatch, setEventManagement])
+
+	useEffect(() => {
+		console.log('called')
+		const highlight = document.getElementsByClassName('fc-highlight')[0]
+		if (highlight) highlight.remove()
+	}, [closeSiderForm])
 
 	const handleSubmitFilter = (values: ICalendarFilter) => {
 		setQuery({

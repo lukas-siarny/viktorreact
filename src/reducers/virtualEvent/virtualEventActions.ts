@@ -84,7 +84,7 @@ export const addOrUpdateEvent =
 			return
 		}
 
-		const { date, timeFrom, timeTo, employee, eventType, customer, service } = formData
+		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID } = formData
 
 		if (date && timeFrom && employee && eventType) {
 			let { eventId } = formData
@@ -126,7 +126,7 @@ export const addOrUpdateEvent =
 					customer: customer
 						? {
 								id: customer.key,
-								email: customer.label
+								email: customer.label || customer.value
 						  }
 						: undefined,
 					service: service
@@ -134,7 +134,16 @@ export const addOrUpdateEvent =
 								id: service.key,
 								name: service.label || service.value
 						  }
-						: undefined
+						: undefined,
+					employee: employee
+						? {
+								id: employee.key,
+								email: employee.label || employee.value
+						  }
+						: undefined,
+					calendarBulkEvent: {
+						id: calendarBulkEventID
+					}
 				}
 			}
 

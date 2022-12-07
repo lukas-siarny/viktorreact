@@ -1,5 +1,6 @@
 import React, { FC, useCallback, useEffect, useRef, useState, useMemo } from 'react'
 import Layout from 'antd/lib/layout/layout'
+import { message } from 'antd'
 import dayjs from 'dayjs'
 import { includes, isEmpty } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
@@ -28,7 +29,8 @@ import {
 	STRINGS,
 	CALENDAR_INIT_TIME,
 	RESERVATION_STATE,
-	RESERVATION_PAYMENT_METHOD
+	RESERVATION_PAYMENT_METHOD,
+	REFRESH_CALENDAR_INTERVAL
 } from '../../utils/enums'
 import { computeUntilDate } from '../../utils/helper'
 import { withPermissions } from '../../utils/Permissions'
@@ -40,6 +42,7 @@ import { getCalendarEventDetail, getCalendarReservations, getCalendarShiftsTimeo
 import { RootState } from '../../reducers'
 import { getEmployees } from '../../reducers/employees/employeesActions'
 import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
+import { clearEvent } from '../../reducers/virtualEvent/virtualEventActions'
 
 // components
 import ConfirmBulkForm from './components/forms/ConfirmBulkForm'
@@ -142,21 +145,20 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const [tempValues, setTempValues] = useState<ICalendarEventForm | null>(null)
 	const [newEventData, setNewEventData] = useState<INewCalendarEvent | null | undefined>(null)
 
-	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || isUpdatingEvent
-
 	const formValuesBulkForm: Partial<IBulkConfirmForm> = useSelector((state: RootState) => getFormValues(FORM.CONFIRM_BULK_FORM)(state))
 	const formValuesDetailEvent: Partial<ICalendarEventForm & ICalendarReservationForm> = useSelector((state: RootState) =>
 		getFormValues(`CALENDAR_${query.sidebarView}_FORM`)(state)
 	)
 
-	const [reservationPopover, setReservationPopover] = useState<{ data: ReservationPopoverData | null; position: ReservationPopoverPosition | null }>({
+	const [reservationPopover, setReservationPopover] = useState<{ isOpen: boolean; data: ReservationPopoverData | null; position: ReservationPopoverPosition | null }>({
+		isOpen: false,
 		data: null,
 		position: null
 	})
 
-	/*
-	const [loadInBackground, setLoadInBackground] = useState<boolean>(false)
+	// const [loadInBackground, setLoadInBackground] = useState<boolean>(false)
 	const fetchInterval = useRef<number | undefined>()
+	let loadInBackground = false
 
 	const restartFetchInterval = async () => {
 		if (fetchInterval.current) {
@@ -164,18 +166,23 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 
 		const interval = window.setInterval(async () => {
-			setLoadInBackground(true)
+			loadInBackground = true
 			message.open({
 				type: 'loading',
 				content: t('loc:Kalendár sa aktualizuje'),
 				duration: 0
 			})
 			// eslint-disable-next-line @typescript-eslint/no-use-before-define
-			await fetchEvents(false)
-			setLoadInBackground(false)
+			await fetchEvents(false, false)
+			loadInBackground = false
+			console.log('🚀 ~ file: Calendar.tsx:177 ~ interval ~ setLoadInBackground', loadInBackground)
 			message.destroy()
 		}, REFRESH_CALENDAR_INTERVAL)
-	*/
+
+		fetchInterval.current = interval
+	}
+
+	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || isUpdatingEvent
 
 	const initialScroll = useRef(false)
 	const scrollToDateTimeout = useRef<any>(null)
@@ -195,7 +202,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				calendarRefs?.current?.[calendarView]?.getApi()?.gotoDate(newCalendarDate)
 			}
 
-			// calendarRefs?.current?.[calendarView]?.getApi()?.gotoDate(newCalendarDate)
 			initialScroll.current = false
 			return
 		}
@@ -236,30 +242,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		return query?.employeeIDs === null ? [] : employees?.data?.employees
 	}, [employees?.data?.employees, query.employeeIDs])
 
-	/* useEffect(() => {
-		// clear on unmount
-		return () => {
-			if (fetchInterval.current) {
-				window.clearInterval(fetchInterval.current)
-				message.destroy()
-				setQuery({
-					...query,
-					eventId,
-					eventsViewType: newEventType, // Filter v kalendari je bud rezervaci alebo volno
-					sidebarView: newView // siderbar view je rezervacia / volno / prestavka / pracovna zmena
-				})
-			}
-			if (validCalendarView === CALENDAR_VIEW.DAY) {
-				setTimeout(updateCalendarSize.current, 0)
-			}
-		},
-		[query, setQuery, validCalendarView]
-	) */
-
 	// fetch new events
 	const fetchEvents: any = useCallback(
 		async (clearVirtualEvent?: boolean, restartInterval = true) => {
-			console.log('fetch start')
 			if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 				Promise.all([
 					dispatch(
@@ -281,12 +266,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				dispatch(getCalendarShiftsTimeoff({ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs }, true, clearVirtualEvent))
 			}
 
-			// if (restartInterval) {
-			// 	restartFetchInterval()
-			// }
+			if (restartInterval) {
+				await restartFetchInterval()
+			}
 		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validCalendarView, validEventsViewType]
+		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validEventsViewType]
 	)
 
 	const scrollToTime = useCallback(
@@ -326,7 +310,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			// fetch new events
 			fetchEvents(false)
 		})()
-	}, [dispatch, fetchEvents, query.employeeIDs, query.categoryIDs])
+	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents])
 
 	useEffect(() => {
 		dispatch(
@@ -371,6 +355,22 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		[query, setQuery]
 	)
 
+	useEffect(() => {
+		// clear on unmount
+		return () => {
+			if (fetchInterval.current) {
+				window.clearInterval(fetchInterval.current)
+				message.destroy()
+			}
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
+	const closeSiderForm = useCallback(() => {
+		dispatch(clearEvent())
+		setEventManagement(undefined)
+	}, [dispatch, setEventManagement])
+
 	const handleSubmitFilter = (values: ICalendarFilter) => {
 		setQuery({
 			...query,
@@ -413,7 +413,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				await deleteReq('/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}', { salonID, calendarEventID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			}
 
-			setEventManagement(undefined)
+			closeSiderForm()
 			fetchEvents()
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -430,7 +430,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		query?.eventId,
 		query?.sidebarView,
 		salonID,
-		setEventManagement
+		closeSiderForm
 	])
 
 	const handleDeleteEvent = async () => {
@@ -481,7 +481,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 				fetchEvents()
 				// Po CREATE / UPDATE rezervacie dotiahnut eventy + zatvorit drawer
-				setEventManagement(undefined)
+				closeSiderForm()
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
@@ -493,7 +493,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				setIsUpdatingEvent(false)
 			}
 		},
-		[query.eventId, salonID, setEventManagement, fetchEvents]
+		[query.eventId, salonID, closeSiderForm, fetchEvents]
 	)
 
 	const handleSubmitEvent = useCallback(
@@ -586,7 +586,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 				fetchEvents()
 				// Po CREATE / UPDATE eventu dotiahnut eventy + zatvorit drawer
-				setEventManagement(undefined)
+				closeSiderForm()
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
@@ -598,7 +598,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				setIsUpdatingEvent(false)
 			}
 		},
-		[dispatch, fetchEvents, formValuesBulkForm?.actionType, query.eventId, salonID, setEventManagement]
+		[dispatch, fetchEvents, formValuesBulkForm?.actionType, query.eventId, salonID, closeSiderForm]
 	)
 
 	const handleSubmitConfirmModal = async (values: IBulkConfirmForm) => {
@@ -644,10 +644,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const handleAddEvent = (initialData?: INewCalendarEvent) => {
+		// Event data ziskane z kalendara, sluzia pre init formularu v SiderEventManagement
 		setNewEventData(initialData)
 
 		if (query.eventId) {
-			setEventManagement(undefined)
+			closeSiderForm()
 		}
 		// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastav pracovnu zmenu
 		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
@@ -712,10 +713,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
+	console.log({ loadingData, background: !loadInBackground })
+
 	return (
 		<>
 			{modals}
-			<div role={'button'} onClick={() => setEventManagement(undefined)} id={'overlay'} className={cx({ block: query.sidebarView, hidden: !query.sidebarView })} />
+			<div role={'button'} onClick={closeSiderForm} id={'overlay'} className={cx({ block: query.sidebarView, hidden: !query.sidebarView })} />
 			<Layout className='noti-calendar-layout'>
 				<CalendarHeader
 					selectedDate={validSelectedDate}
@@ -747,7 +750,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						view={validCalendarView as CALENDAR_VIEW}
 						reservations={reservations?.data || []}
 						shiftsTimeOffs={shiftsTimeOffs?.data || []}
-						loading={loadingData}
+						loading={loadingData && !loadInBackground}
 						eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 						employees={filteredEmployees() || []}
 						showEmptyState={query?.employeeIDs === null}
@@ -760,6 +763,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						onEditEvent={onEditEvent}
 						onReservationClick={(data?: ReservationPopoverData, position?: ReservationPopoverPosition) => {
 							setReservationPopover({
+								isOpen: true,
 								data: data || null,
 								position: position || null
 							})
@@ -768,7 +772,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						handleSubmitReservation={handleSubmitReservation}
 						handleSubmitEvent={handleSubmitEvent}
 						onAddEvent={handleAddEvent}
-						datesSet={setNewSelectedDate}
 					/>
 					<SiderEventManagement
 						salonID={salonID}
@@ -777,7 +780,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						eventId={query.eventId}
 						handleDeleteEvent={handleDeleteEvent}
 						sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE}
-						setCollapsed={setEventManagement}
+						onCloseSider={closeSiderForm}
 						handleSubmitReservation={handleSubmitReservation}
 						handleSubmitEvent={handleSubmitEvent}
 						newEventData={newEventData}
@@ -789,7 +792,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			<CalendarReservationPopover
 				data={reservationPopover.data}
 				position={reservationPopover.position}
-				setIsOpen={() => setReservationPopover({ data: null, position: null })}
+				isOpen={reservationPopover.isOpen}
+				setIsOpen={() => setReservationPopover((prevState) => ({ ...prevState, isOpen: false, position: null }))}
 				handleUpdateReservationState={handleUpdateReservationState}
 				onEditEvent={onEditEvent}
 				placement={validCalendarView === CALENDAR_VIEW.WEEK ? 'bottom' : 'left'}

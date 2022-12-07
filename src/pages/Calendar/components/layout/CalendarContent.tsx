@@ -61,19 +61,18 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	}))
 
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
-
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const selectedSalonuniqPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions)
 
 	const [visibleForbiddenModal, setVisibleForbiddenModal] = useState(false)
 
 	const sources = useMemo(() => {
+		// eventy, ktore sa posielaju o uroven nizsie do View, sa v pripade, ze existuje virtualEvent odfiltruju
 		const allSources = {
 			reservations,
 			shiftsTimeOffs,
 			virtualEvent: virtualEvent?.event
 		}
-		console.log('🚀 ~ file: CalendarContent.tsx:76 ~ sources ~ virtualEvent', virtualEvent)
 
 		if (virtualEvent?.id && !virtualEvent?.isNew) {
 			if (virtualEvent.type === CALENDAR_EVENT_TYPE.RESERVATION) {
@@ -81,7 +80,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			} else {
 				allSources.shiftsTimeOffs = shiftsTimeOffs?.filter((item) => item.id !== virtualEvent.id) ?? []
 			}
-			console.log('🚀 ~ file: CalendarContent.tsx:84 ~ sources ~ allSources.reservations', allSources.reservations)
 		}
 
 		return allSources
@@ -160,10 +158,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		[handleSubmitReservation, handleSubmitEvent, authUserPermissions, selectedSalonuniqPermissions]
 	)
 
-	const handleCalendarChangeDate = (arg: DatesSetArg) => {
-		// datesSet(dayjs(arg.startStr).format(CALENDAR_DATE_FORMAT.QUERY))
-	}
-
 	const getView = () => {
 		if (showEmptyState) {
 			return <CalendarEmptyState onButtonClick={onShowAllEmployees} />
@@ -193,7 +187,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					shiftsTimeOffs={sources.shiftsTimeOffs}
 					virtualEvent={sources.virtualEvent}
 					onEventChange={onEventChange}
-					datesSet={handleCalendarChangeDate}
 					weekDays={weekDays}
 					selectedDate={calendarSelectedDate}
 					updateCalendarSize={() => weekView?.current?.getApi().updateSize()}
@@ -210,7 +203,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				virtualEvent={sources.virtualEvent}
 				selectedDate={calendarSelectedDate}
 				onEventChange={onEventChange}
-				datesSet={handleCalendarChangeDate}
 			/>
 		)
 	}

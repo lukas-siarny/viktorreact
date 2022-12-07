@@ -222,15 +222,11 @@ const PopoverContent: FC<ContentProps> = (props) => {
 }
 
 const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
-	const { data, position, setIsOpen, handleUpdateReservationState, onEditEvent, placement } = props
-
-	console.log({ position })
+	const { data, position, setIsOpen, handleUpdateReservationState, onEditEvent, placement, isOpen } = props
 
 	const { start, end, color, reservationData, service, customer, employee, note, noteFromB2CCustomer, originalEventData } = data || {}
 
 	const { id } = originalEventData || {}
-
-	const isOpen = !!position
 
 	const [t] = useTranslation()
 

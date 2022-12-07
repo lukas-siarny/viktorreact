@@ -103,6 +103,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 				start,
 				end,
 				originalEventData,
+				customer,
 				employee,
 				service,
 				color: backgroundColor,

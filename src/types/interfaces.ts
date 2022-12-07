@@ -631,6 +631,7 @@ export type CalendarEvent = CalendarEvents[0] & {
 	isLastMultiDaylEventInCurrentRange?: boolean
 	originalEvent?: CalendarEvent
 	employee: CalendarEmployee
+	isPlaceholder?: boolean
 }
 
 export interface ICalendarEventsPayload {
@@ -650,7 +651,6 @@ export interface ICalendarView {
 	onEventChange?: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
 	loading?: boolean
 	refetchData: () => void
-	datesSet: (newDate: string | any) => void
 	virtualEvent?: EventInput
 }
 
@@ -680,6 +680,7 @@ export interface IEventCardProps {
 export interface ICalendarReservationPopover {
 	data: ReservationPopoverData | null
 	position: ReservationPopoverPosition | null
+	isOpen: boolean
 	setIsOpen: (isOpen: boolean) => void
 	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => void
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
@@ -712,7 +713,6 @@ export interface IBulkConfirmForm {
 
 export interface IEventExtenedProps {
 	eventData?: CalendarEvent
-	isPlaceholder?: boolean
 }
 
 export interface IResourceEmployee {

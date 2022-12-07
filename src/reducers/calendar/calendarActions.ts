@@ -73,7 +73,6 @@ export const getCalendarEvents =
 	): ThunkResult<Promise<ICalendarEventsPayload>> =>
 	async (dispatch) => {
 		dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
-		console.log('load start')
 
 		let payload = {} as ICalendarEventsPayload
 

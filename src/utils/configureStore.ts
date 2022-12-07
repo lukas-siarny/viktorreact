@@ -5,7 +5,7 @@ import { createLogger } from 'redux-logger'
 import { persistStore } from 'redux-persist'
 
 import i18next from 'i18next'
-import { IMAGE_UPLOADING_PROP, MSG_TYPE, NOTIFICATION_TYPE, HANDLE_CALENDAR_ACTIONS, HANDLE_CALENDAR_FORMS } from './enums'
+import { IMAGE_UPLOADING_PROP, MSG_TYPE, NOTIFICATION_TYPE, HANDLE_CALENDAR_ACTIONS, HANDLE_CALENDAR_FORMS, CALENDAR_INIT_TIME } from './enums'
 // eslint-disable-next-line import/no-cycle
 import showNotifications from './tsxHelpers'
 import { addOrUpdateEvent } from '../reducers/virtualEvent/virtualEventActions'
@@ -36,18 +36,20 @@ const preventSubmitFormDuringUpload = (store: any) => (next: any) => (action: an
 	next(action)
 }
 
+/**
+ * Middleware pre spracovanie form akcii HANDLE_CALENDAR_ACTIONS relevantnych pre kalendarove formulare.
+ */
 const handleCalendarFormsChanges = (store: any) => (next: any) => (action: any) => {
 	next(action)
 
+	// check ci sa jedna o relevantny Calendar form (Reservation, Shift, Break, TimeOff)
 	if (HANDLE_CALENDAR_FORMS.includes(action?.meta?.form)) {
-		// const { form } = store.getState()
-		// const submittedForm = form[action.meta.form]
-
 		// eslint-disable-next-line no-restricted-syntax
 		for (const actionType of RELEVANT_CALENDAR_ACTIONS) {
+			// check ci sa vykonala relevantna akcia (INIT, CHANGE)
 			if (action.type.endsWith(actionType)) {
 				// NOTE: 600ms je cas, kym zacne existovat instancia CalendarAPI, aby vedela zobrazit data, ked sa inituje form
-				setTimeout(() => store.dispatch(addOrUpdateEvent(actionType, action.meta.form /* submittedForm?.values */)), 600)
+				setTimeout(() => store.dispatch(addOrUpdateEvent(actionType, action.meta.form)), CALENDAR_INIT_TIME)
 				break
 			}
 		}

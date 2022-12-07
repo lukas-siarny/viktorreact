@@ -158,6 +158,7 @@ export interface ICalendarReservationForm {
 	timeTo: string
 	note?: string
 	eventId?: string
+	revertEvent?: () => void
 }
 
 export interface ICalendarEventForm {

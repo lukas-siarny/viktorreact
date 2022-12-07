@@ -124,6 +124,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [visibleBulkModal, setVisibleBulkModal] = useState<{ requestType: REQUEST_TYPE; eventType?: CALENDAR_EVENT_TYPE; revertEvent?: () => void } | null>(null)
+	const [reservationConfirmModal, setReservationConfirmModal] = useState<{ visible: boolean; data: ICalendarReservationForm | null; eventId?: string }>({
+		visible: false,
+		data: null
+	})
 	const [isRemoving, setIsRemoving] = useState(false)
 	const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)
 	const [tempValues, setTempValues] = useState<ICalendarEventForm | null>(null)
@@ -430,58 +434,70 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const handleSubmitReservation = useCallback(
-		async (values: ICalendarReservationForm, revertEvent?: () => void) => {
-			// NOTE: ak je eventID z values tak sa funkcia vola z drag and drop / resize ak ide z query tak je otvoreny detail cez URL / kliknutim na bunku
-			const eventId = values.eventId ? values.eventId : query.eventId
+	const clearReservationConfirmationModal = () => setReservationConfirmModal({ visible: false, data: null, eventId: undefined })
 
-			try {
-				setIsUpdatingEvent(true)
-				const reqData = {
-					start: {
-						date: values.date,
-						time: values.timeFrom
-					},
-					end: {
-						date: values.date,
-						time: values.timeTo
-					},
-					note: values.note,
-					customerID: values.customer.key as string,
-					employeeID: values.employee.key as string,
-					serviceID: values.service.key as string
-				}
-				if (eventId) {
-					// UPDATE
-					await patchReq(
-						'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}',
-						{ salonID, calendarEventID: eventId },
-						reqData,
-						undefined,
-						NOTIFICATION_TYPE.NOTIFICATION,
-						true
-					)
-				} else {
-					// CREATE
-					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-				}
+	const processSubmitReservation = async (values: ICalendarReservationForm, eventId?: string) => {
+		const revertEvent = values?.revertEvent
 
-				fetchEvents()
-				// Po CREATE / UPDATE rezervacie dotiahnut eventy + zatvorit drawer
-				closeSiderForm()
-			} catch (e) {
-				// eslint-disable-next-line no-console
-				console.error(e)
-				// ak neprejde request, tak sa event v kalendari vráti na pôvodne miesto
-				if (revertEvent) {
-					revertEvent()
-				}
-			} finally {
-				setIsUpdatingEvent(false)
+		try {
+			setIsUpdatingEvent(true)
+			const reqData = {
+				start: {
+					date: values.date,
+					time: values.timeFrom
+				},
+				end: {
+					date: values.date,
+					time: values.timeTo
+				},
+				note: values.note,
+				customerID: values.customer.key as string,
+				employeeID: values.employee.key as string,
+				serviceID: values.service.key as string
 			}
-		},
-		[query.eventId, salonID, closeSiderForm, fetchEvents]
-	)
+			if (eventId) {
+				// UPDATE
+				await patchReq(
+					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}',
+					{ salonID, calendarEventID: eventId },
+					reqData,
+					undefined,
+					NOTIFICATION_TYPE.NOTIFICATION,
+					true
+				)
+			} else {
+				// CREATE
+				await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			}
+
+			fetchEvents()
+			// Po CREATE / UPDATE rezervacie dotiahnut eventy + zatvorit drawer
+			closeSiderForm()
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+			// ak neprejde request, tak sa event v kalendari vráti na pôvodne miesto
+			if (revertEvent) {
+				revertEvent()
+			}
+		} finally {
+			setIsUpdatingEvent(false)
+			clearReservationConfirmationModal()
+		}
+	}
+
+	const handleSubmitReservation = async (values: ICalendarReservationForm) => {
+		// NOTE: ak je eventID z values tak sa funkcia vola z drag and drop / resize ak ide z query tak je otvoreny detail cez URL / kliknutim na bunku
+		const eventId = values.eventId ? values.eventId : query.eventId || undefined
+
+		if (eventId) {
+			// pri editacii sa najprv otvori konfirmacny modal a az tak sa zavola processSubmitReservation
+			setReservationConfirmModal({ visible: true, data: values, eventId })
+		} else {
+			// pri vytvarani rezervacie sa to zavola rovno
+			processSubmitReservation(values, eventId)
+		}
+	}
 
 	const handleSubmitEvent = useCallback(
 		async (values: ICalendarEventForm) => {
@@ -653,6 +669,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const modals = (
 		<>
+			{/* Confirm bulk modal */}
 			<ConfirmModal
 				title={visibleBulkModal?.requestType === REQUEST_TYPE.PATCH ? STRINGS(t).edit(t('loc:záznam')) : STRINGS(t).delete(t('loc:záznam'))}
 				visible={!!visibleBulkModal?.requestType}
@@ -670,6 +687,29 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				destroyOnClose
 			>
 				<ConfirmBulkForm requestType={visibleBulkModal?.requestType as REQUEST_TYPE} onSubmit={handleSubmitConfirmModal} />
+			</ConfirmModal>
+			{/* Confirm reservation modal */}
+			<ConfirmModal
+				title={STRINGS(t).edit(t('loc:rezerváciu'))}
+				visible={reservationConfirmModal.visible}
+				onCancel={() => {
+					if (reservationConfirmModal?.data?.revertEvent) {
+						// ak uzivatel zrusi vykonanie akcie, tak sa event v kalendari vrati na pôvodne miesto
+						reservationConfirmModal.data?.revertEvent()
+					}
+					clearReservationConfirmationModal()
+				}}
+				onOk={() => {
+					if (reservationConfirmModal.data) {
+						processSubmitReservation(reservationConfirmModal.data, reservationConfirmModal.eventId)
+					}
+				}}
+				loading={loadingData}
+				disabled={loadingData}
+				closeIcon={<CloseIcon />}
+				destroyOnClose
+			>
+				{t('loc:Nieco o ulozenych zmenach.. zistit zo settings o notifikaciach')}
 			</ConfirmModal>
 		</>
 	)

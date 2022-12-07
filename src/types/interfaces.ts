@@ -505,7 +505,7 @@ export interface IReservationSystemSettingsForm {
 	maxDaysB2cCreateReservation?: number | null
 	maxHoursB2cCreateReservationBeforeStart?: number | null
 	maxHoursB2cCancelReservationBeforeStart?: number | null
-	minutesIntervalBetweenB2CReservations?: number | null
+	minutesIntervalB2CReservations?: number | null
 	// Pomocne checky pre chekcnutie all hodnot pre BOOKING / AUTO CONFIRM
 	autoConfirmAll: boolean
 	onlineBookingAll: boolean

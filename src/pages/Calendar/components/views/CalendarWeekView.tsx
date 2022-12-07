@@ -98,12 +98,15 @@ const NowIndicator = () => {
 	useResizeObserver(datagridBody as HTMLElement | null, (entry) => setSize(entry.contentRect.height))
 
 	useEffect(() => {
-		const todayLabel = document.getElementById(getTodayLabelId(dayjs()))
-		if (todayLabel) {
-			const top = todayLabel?.parentElement?.parentElement?.parentElement?.parentElement?.offsetTop as number
-			const height = todayLabel?.clientHeight
-			setIndicatorDimmensions({ top, height })
-		}
+		setTimeout(() => {
+			const todayLabel = document.getElementById(getTodayLabelId(dayjs()))
+
+			if (todayLabel) {
+				const top = todayLabel?.parentElement?.parentElement?.offsetTop as number
+				const height = todayLabel?.clientHeight
+				setIndicatorDimmensions({ top, height })
+			}
+		}, 0)
 	}, [size])
 
 	return <div className={'fc-week-now-indicator'} style={{ top: indicatorDimmensions.top, height: indicatorDimmensions.height }} />

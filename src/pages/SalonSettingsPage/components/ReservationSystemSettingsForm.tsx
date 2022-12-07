@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { change, Field, FieldArray, FormSection, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
+import { change, Field, FieldArray, FormSection, InjectedFormProps, reduxForm } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Divider, Form, Row } from 'antd'
 import { forEach, map } from 'lodash'
@@ -21,9 +21,6 @@ import { IReservationSystemSettingsForm, ISelectOptionItem } from '../../../type
 // utils
 import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE } from '../../../utils/enums'
 import { optionRenderNotiPinkCheckbox, showErrorNotification } from '../../../utils/helper'
-
-// validations
-import validateReservationSystemSettingsForm from './validateReservationSystemSettingsForm'
 
 // assets
 import { ReactComponent as ChevronDown } from '../../../assets/icons/chevron-down.svg'
@@ -58,7 +55,6 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const disabled = submitting
 	const groupedServicesByCategory = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 	const groupedServicesByCategoryLoading = useSelector((state: RootState) => state.service.services.isLoading)
-	const formValues: Partial<IReservationSystemSettingsForm> = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
 
 	const defaultExpandedKeys: any = []
 	forEach(groupedServicesByCategory, (level1) => forEach(level1.category?.children, (level2) => defaultExpandedKeys.push(level2?.category?.id)))
@@ -385,8 +381,7 @@ const form = reduxForm<IReservationSystemSettingsForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	onSubmitFail: showErrorNotification,
-	validate: validateReservationSystemSettingsForm
+	onSubmitFail: showErrorNotification
 })(ReservationSystemSettingsForm)
 
 export default form

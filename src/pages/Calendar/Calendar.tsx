@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { getFormValues, initialize, submit, destroy } from 'redux-form'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import cx from 'classnames'
 import { useTranslation } from 'react-i18next'
 import Scroll from 'react-scroll'
 

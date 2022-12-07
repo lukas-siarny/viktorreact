@@ -12,7 +12,6 @@ import { ISelectOptionItem, IPermissions, ICurrency, _Permissions } from '../../
 import { getReq } from '../../utils/request'
 import { ENUMERATIONS_KEYS, DEFAULT_CURRENCY, PERMISSION } from '../../utils/enums'
 import { checkPermissions } from '../../utils/Permissions'
-import { IServicesPayload } from '../services/serviceActions'
 
 export type ISelectedSalonActions = IResetStore | IGetSelectedSalon | ISalonOptions
 

@@ -106,7 +106,7 @@ const ReservationForm: FC<Props> = (props) => {
 				return { pagination: null, data: [] }
 			}
 		},
-		[salonID]
+		[countriesData?.data, salonID]
 	)
 
 	const handleSubmitCustomer = async (values: ICustomerForm) => {

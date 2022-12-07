@@ -652,6 +652,7 @@ export interface ICalendarView {
 	loading?: boolean
 	refetchData: () => void
 	virtualEvent?: EventInput
+	clearRestartInterval: () => void
 }
 
 export interface IEventCardProps {

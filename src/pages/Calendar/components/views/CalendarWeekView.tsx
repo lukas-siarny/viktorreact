@@ -159,7 +159,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		weekDays,
 		updateCalendarSize,
 		onAddEvent,
-		virtualEvent
+		virtualEvent,
+		clearRestartInterval
 	} = props
 
 	const events = useMemo(() => {
@@ -235,7 +236,6 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 	return (
 		<div className={'nc-calendar-wrapper'} id={'nc-calendar-week-wrapper'}>
 			<FullCalendar
-				key={'nc-calendar-week'}
 				ref={ref}
 				// plugins
 				plugins={[interactionPlugin, scrollGrid, resourceTimelinePlugin]}
@@ -286,6 +286,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
+				eventDragStart={() => clearRestartInterval()}
+				eventResizeStart={() => clearRestartInterval()}
 				select={(selectedEvent) => handleNewEvent(selectedEvent)}
 				resourcesSet={() => setTimeout(updateCalendarSize, 0)}
 				eventsSet={() => {

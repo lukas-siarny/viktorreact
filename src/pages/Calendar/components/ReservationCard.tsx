@@ -73,8 +73,6 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		onReservationClick
 	} = props
 
-	const [isCardPopoverOpen, setIsCardPopoverOpen] = useState(false)
-
 	const isPast = dayjs(originalEventData?.endDateTime || end).isBefore(dayjs())
 	const isPending = reservationData?.state === RESERVATION_STATE.PENDING
 	const isApproved = reservationData?.state === RESERVATION_STATE.APPROVED
@@ -121,7 +119,6 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 				height: clientRect.bottom - clientRect.top
 			}
 			onReservationClick(data, position)
-			setIsCardPopoverOpen(true)
 		}
 	}
 
@@ -138,7 +135,6 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 				'min-30': Math.abs(diff) <= 30 && Math.abs(diff) > 15,
 				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
 				'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
-				focused: isCardPopoverOpen,
 				'is-past': isPast,
 				'is-online': isOnline,
 				'state-pending': isPending,

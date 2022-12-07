@@ -123,13 +123,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	})
 
 	const validSelectedDate = useMemo(() => (dayjs(query.date).isValid() ? query.date : dayjs().format(CALENDAR_DATE_FORMAT.QUERY)), [query.date])
-	const validCalendarView = useMemo(() => (CALENDAR_VIEWS.includes(query.view) ? query.view : CALENDAR_VIEW.DAY), [query.view])
+	const validCalendarView = useMemo(() => (CALENDAR_VIEWS.includes(query.view) ? query.view : CALENDAR_VIEW.DAY), [query.view]) as CALENDAR_VIEW
 	const validEventsViewType = useMemo(
 		() => (CALENDAR_EVENTS_VIEW_TYPES.includes(query.eventsViewType) ? query.eventsViewType : CALENDAR_EVENTS_VIEW_TYPE.RESERVATION),
 		[query.eventsViewType]
-	)
+	) as CALENDAR_EVENTS_VIEW_TYPE
 
-	const [currentRange, setCurrentRange] = useState(getSelectedDateRange(validCalendarView as CALENDAR_VIEW, validSelectedDate))
+	const [currentRange, setCurrentRange] = useState(getSelectedDateRange(validCalendarView, validSelectedDate))
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const services = useSelector((state: RootState) => state.service.services)
@@ -159,11 +159,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const fetchInterval = useRef<number | undefined>()
 
-	const cleaRestartFetchInterval = () => window.clearInterval(fetchInterval.current)
+	const clearRestartFetchInterval = () => window.clearInterval(fetchInterval.current)
 
 	const restartFetchInterval = async () => {
 		if (fetchInterval.current) {
-			cleaRestartFetchInterval()
+			clearRestartFetchInterval()
 		}
 
 		const interval = window.setInterval(async () => {
@@ -172,7 +172,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				content: t('loc:Kalendár sa aktualizuje'),
 				duration: 0
 			})
-			await dispatch(refreshEvents(validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE))
+			await dispatch(refreshEvents(validEventsViewType))
 			message.destroy()
 		}, REFRESH_CALENDAR_INTERVAL)
 
@@ -188,15 +188,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// query sa nastavi vzdy ked sa zmeni datum
 		setQuery({ ...query, date: newDate })
 
-		const calendarView: CALENDAR_VIEW = validCalendarView as CALENDAR_VIEW
-
 		// datum v kalendari a current range sa nastavi len vtedy, ked sa novy datum nenachadza v aktualnom rangi
 		if (!isDateInRange(currentRange.start, currentRange.end, newDate)) {
-			setCurrentRange(getSelectedDateRange(calendarView, newDate))
-			const newCalendarDate = getSelectedDateForCalendar(calendarView, newDate)
+			setCurrentRange(getSelectedDateRange(validCalendarView, newDate))
+			const newCalendarDate = getSelectedDateForCalendar(validCalendarView, newDate)
 
-			if (!dayjs(newCalendarDate).isSame(calendarRefs?.current?.[calendarView]?.getApi()?.getDate())) {
-				calendarRefs?.current?.[calendarView]?.getApi()?.gotoDate(newCalendarDate)
+			if (!dayjs(newCalendarDate).isSame(calendarRefs?.current?.[validCalendarView]?.getApi()?.getDate())) {
+				calendarRefs?.current?.[validCalendarView]?.getApi()?.gotoDate(newCalendarDate)
 			}
 
 			initialScroll.current = false
@@ -205,7 +203,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 		// ak sa novy datum nachadza v rovnakom rangi ako predtym, tak sa v tyzdenom view len zascrolluje na jeho poziciu
 		// nenacitavaju nove data a netreba cakat na opatovne vykreslenie kalenadara
-		if (calendarView === CALENDAR_VIEW.WEEK) {
+		if (validCalendarView === CALENDAR_VIEW.WEEK) {
 			scrollToSelectedDate(newDate, { smooth: true, duration: 300 })
 		}
 	}
@@ -227,7 +225,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		setCurrentRange(getSelectedDateRange(newView, query.date))
 	}
 
-	const updateCalendarSize = useRef(() => calendarRefs?.current?.[validCalendarView as CALENDAR_VIEW]?.getApi()?.updateSize())
+	const updateCalendarSize = useRef(() => calendarRefs?.current?.[validCalendarView]?.getApi()?.updateSize())
 
 	const filteredEmployees = useCallback(() => {
 		// filter employees based on employeeIDs in the url queryParams (if there are any)
@@ -282,7 +280,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					offset: -80 // - hlavicka
 				})
 			} else {
-				calendarRefs?.current?.[validCalendarView as CALENDAR_VIEW]?.getApi().scrollToTime(scrollTimeId)
+				calendarRefs?.current?.[validCalendarView]?.getApi().scrollToTime(scrollTimeId)
 			}
 		},
 		[validCalendarView]
@@ -357,7 +355,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// clear on unmount
 		return () => {
 			if (fetchInterval.current) {
-				cleaRestartFetchInterval()
+				clearRestartFetchInterval()
 				message.destroy()
 			}
 		}
@@ -718,8 +716,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			<Layout className='noti-calendar-layout'>
 				<CalendarHeader
 					selectedDate={validSelectedDate}
-					eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
-					calendarView={validCalendarView as CALENDAR_VIEW}
+					eventsViewType={validEventsViewType}
+					calendarView={validCalendarView}
 					siderFilterCollapsed={siderFilterCollapsed}
 					setCalendarView={setCalendarView}
 					setEventsViewType={(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => setQuery({ ...query, eventsViewType })}
@@ -733,21 +731,16 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					onAddEvent={handleAddEvent}
 				/>
 				<Layout hasSider className={'noti-calendar-main-section'}>
-					<SiderFilter
-						collapsed={siderFilterCollapsed}
-						handleSubmit={handleSubmitFilter}
-						parentPath={parentPath}
-						eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
-					/>
+					<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} parentPath={parentPath} eventsViewType={validEventsViewType} />
 					<CalendarContent
 						salonID={salonID}
 						ref={calendarRefs}
 						selectedDate={validSelectedDate}
-						view={validCalendarView as CALENDAR_VIEW}
+						view={validCalendarView}
 						reservations={reservations?.data || []}
 						shiftsTimeOffs={shiftsTimeOffs?.data || []}
 						loading={isRefreshingEvents ? false : loadingData}
-						eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
+						eventsViewType={validEventsViewType}
 						employees={filteredEmployees() || []}
 						showEmptyState={query?.employeeIDs === null}
 						onShowAllEmployees={() => {
@@ -768,11 +761,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						handleSubmitReservation={handleSubmitReservation}
 						handleSubmitEvent={handleSubmitEvent}
 						onAddEvent={handleAddEvent}
+						clearRestartInterval={clearRestartFetchInterval}
 					/>
 					<SiderEventManagement
 						salonID={salonID}
 						selectedDate={validSelectedDate}
-						eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
+						eventsViewType={validEventsViewType}
 						eventId={query.eventId}
 						handleDeleteEvent={handleDeleteEvent}
 						sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE}

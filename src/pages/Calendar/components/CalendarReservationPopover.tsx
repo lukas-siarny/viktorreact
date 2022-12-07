@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import React, { FC, useEffect, useCallback, useState } from 'react'
+import React, { FC, useEffect, useCallback, useState, useRef } from 'react'
 import { Button, Col, Divider, Dropdown, Menu, Popconfirm, Popover, Row, Tag } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { ItemType } from 'antd/lib/menu/hooks/useItems'
@@ -33,7 +33,7 @@ import { RootState } from '../../../reducers'
 import { CalendarEvent, ICalendarReservationPopover } from '../../../types/interfaces'
 
 /// utils
-import { CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE } from '../../../utils/enums'
+import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE } from '../../../utils/enums'
 import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
 import { parseTimeFromMinutes, getTimeText } from '../calendarHelpers'
 
@@ -235,6 +235,9 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 	const overlayClassName = `nc-event-popover-overlay_${id || ''}`
 	const itemClassName = 'p-2 font-medium min-w-0 h-9 w-full relative'
 
+	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS]).data
+	const prevReservations = useRef(reservations)
+
 	useEffect(() => {
 		// TODO: toto by este potom chcelo trochu prerobit, teraz to je cez dva overlay spravene
 		// jeden zaistuje ze sa po kliku na neho zavrie popoover (cez &::before na popover elemente)
@@ -263,6 +266,18 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 			document.removeEventListener('touchstart', listener)
 		}
 	}, [isOpen, overlayClassName, setIsOpen])
+
+	useEffect(() => {
+		if (isOpen) {
+			const prevEventData = prevReservations?.current?.find((prevEvent) => prevEvent.originalEvent?.id || prevEvent.id === originalEventData?.id)
+			const currentEventData = reservations?.find((currentEvent) => currentEvent.originalEvent?.id || currentEvent.id === originalEventData?.id)
+			if (JSON.stringify(prevEventData) !== JSON.stringify(currentEventData)) {
+				setIsOpen(false)
+			}
+		}
+		prevReservations.current = reservations
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [reservations, isOpen, originalEventData?.id])
 
 	const handleClosePopover = () => setIsOpen(false)
 

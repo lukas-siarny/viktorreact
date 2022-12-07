@@ -84,7 +84,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		refetchData,
 		onAddEvent,
 		virtualEvent,
-		onReservationClick
+		onReservationClick,
+		clearRestartInterval
 	} = props
 
 	const events = useMemo(() => {
@@ -146,7 +147,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				stickyFooterScrollbar
 				// data sources
 				events={events}
-				// eventSources={events}
 				resources={resources}
 				// render hooks
 				resourceLabelContent={resourceLabelContent}
@@ -165,6 +165,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
+				eventDragStart={() => clearRestartInterval()}
+				eventResizeStart={() => clearRestartInterval()}
 				select={handleNewEvent}
 			/>
 		</div>

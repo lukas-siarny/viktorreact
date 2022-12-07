@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { change, Field, FieldArray, FormSection, InjectedFormProps, reduxForm } from 'redux-form'
+import { change, Field, FieldArray, FormSection, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Divider, Form, Row } from 'antd'
 import { forEach, includes, map } from 'lodash'
@@ -55,6 +55,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const disabled = submitting
 	const groupedServicesByCategory = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 	const groupedServicesByCategoryLoading = useSelector((state: RootState) => state.service.services.isLoading)
+	const formValues: Partial<IReservationSystemSettingsForm> = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
 
 	const defaultExpandedKeys: any = []
 	forEach(groupedServicesByCategory, (level1) => forEach(level1.category?.children, (level2) => defaultExpandedKeys.push(level2?.category?.id)))

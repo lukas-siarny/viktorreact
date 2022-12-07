@@ -1,10 +1,12 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import dayjs from 'dayjs'
 import useResizeObserver from '@react-hook/resize-observer'
+import { StringParam, useQueryParams } from 'use-query-params'
+import { useDispatch } from 'react-redux'
 
 // full calendar
-import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { DateSelectArg, EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
@@ -13,14 +15,16 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 import CalendarEventContent from '../CalendarEventContent'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW } from '../../../../utils/enums'
-import { composeWeekResources, composeWeekViewEvents, eventAllow } from '../../calendarHelpers'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
+import { composeWeekResources, composeWeekViewEvents, eventAllow, getWeekDayResourceID } from '../../calendarHelpers'
+import { getDateTime } from '../../../../utils/helper'
 
 // types
 import { ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
+import { clearEvent } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 const getTodayLabelId = (date: string | dayjs.Dayjs) => `${dayjs(date).format(CALENDAR_DATE_FORMAT.QUERY)}-is-today`
 
@@ -144,15 +148,80 @@ const createDayLabelElement = (resourceElemenet: HTMLElement, employeesLength: n
 interface ICalendarWeekView extends ICalendarView {
 	updateCalendarSize: () => void
 	weekDays: string[]
+	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
 }
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventChange, refetchData, weekDays, updateCalendarSize } = props
+	const {
+		salonID,
+		selectedDate,
+		eventsViewType,
+		shiftsTimeOffs,
+		reservations,
+		employees,
+		onEditEvent,
+		onEventChange,
+		refetchData,
+		weekDays,
+		updateCalendarSize,
+		onAddEvent,
+		virtualEvent,
+		setEventManagement
+	} = props
 
-	const events = useMemo(
-		() => composeWeekViewEvents(selectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees),
-		[selectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees]
-	)
+	const [query] = useQueryParams({
+		sidebarView: StringParam
+	})
+	const dispatch = useDispatch()
+	const events = useMemo(() => {
+		const data = composeWeekViewEvents(selectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees)
+
+		if (virtualEvent) {
+			const { eventData, ...otherProps } = virtualEvent
+			// pre WeekView sa musi resourceId upravit do tvaru Date_ResourceID, lebo skrz tieto ID su mapovane eventy do prislusnych dni
+			const resourceId = getWeekDayResourceID(virtualEvent.resourceId as string, eventData.date)
+
+			// NOTE: start a end na root urovni su vzdy rovnakeho datumu, lebo Week View je v podstate Daily View (inak vyskladane).
+			// Pozor! Tieto hodnoty su iba pre ucely FullCalendar, aby vedel korektne vyrenderovat eventy. Realne datumy (zobrazene aj v SiderForme) odpovedaju hodnotam v evenData: date, startDateTime, endDateTime, start, end
+			const newEvent = {
+				...otherProps,
+				eventData: {
+					...eventData,
+					resourceId
+				},
+				resourceId,
+				start: getDateTime(selectedDate, eventData.start.time),
+				end: getDateTime(selectedDate, eventData.end.time)
+			}
+
+			return [...data, newEvent]
+		}
+
+		return data
+	}, [selectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees, virtualEvent])
+
+	const handleNewEvent = (event: DateSelectArg) => {
+		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
+		dispatch(clearEvent())
+		setEventManagement(undefined)
+		if (event.resource) {
+			// eslint-disable-next-line no-underscore-dangle
+			const { day, employee } = event.resource._resource.extendedProps
+
+			// korektny datum, na ktory prislucha dany event sa zoberie z EventData - suvis s logikou popisanou v commente vyssie L:172
+			onAddEvent({
+				date: day,
+				timeFrom: dayjs(event.startStr).format(DEFAULT_TIME_FORMAT),
+				timeTo: dayjs(event.endStr).format(DEFAULT_TIME_FORMAT),
+				employee: {
+					value: employee.id,
+					key: employee.id,
+					label: employee.name
+				}
+			})
+		}
+	}
+
 	const resources = useMemo(() => composeWeekResources(weekDays, shiftsTimeOffs, employees), [weekDays, shiftsTimeOffs, employees])
 
 	useEffect(() => {
@@ -176,6 +245,17 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				}, 0))()
 		}
 	}, [employees.length, selectedDate])
+
+	// TODO: ked sa bude rusit maska tak tento kod zmazat
+	useEffect(() => {
+		if (query?.sidebarView) {
+			const body = document.getElementsByClassName('fc-timeline-body')[0]
+			body.classList.add('active')
+		} else {
+			const body = document.getElementsByClassName('fc-timeline-body')[0]
+			body.classList.remove('active')
+		}
+	}, [query?.sidebarView])
 
 	return (
 		<div className={'nc-calendar-wrapper'} id={'nc-calendar-week-wrapper'}>
@@ -203,12 +283,12 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				initialView='resourceTimelineDay'
 				initialDate={selectedDate}
 				weekends={true}
-				editable
-				selectable
+				editable={!query.sidebarView}
 				stickyFooterScrollbar
 				nowIndicator
 				// data sources
 				events={events}
+				// eventSources={events}
 				resources={resources}
 				resourceAreaColumns={resourceAreaColumns}
 				// render hooks
@@ -221,8 +301,11 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				nowIndicatorContent={() => <NowIndicator />}
 				// handlers
 				eventAllow={eventAllow}
-				eventDrop={(arg) => onEventChange(CALENDAR_VIEW.WEEK, arg)}
-				eventResize={(arg) => onEventChange(CALENDAR_VIEW.WEEK, arg)}
+				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
+				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
+				// select
+				selectable={!query.sidebarView}
+				select={(selectedEvent) => handleNewEvent(selectedEvent)}
 				resourcesSet={() => setTimeout(updateCalendarSize, 0)}
 				eventsSet={() => setTimeout(updateCalendarSize, 0)}
 			/>

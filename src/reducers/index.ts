@@ -25,6 +25,7 @@ import dashboardReducer from './dashboard/dashboardReducer'
 import specialistContactsReducer from './specialistContacts/specialistContactsReducer'
 import calendarReducer from './calendar/calendarReducer'
 import helperSettingsReducer from './helperSettings/helperSettingsReducer'
+import virtualEventReducer from './virtualEvent/virtualEventReducer'
 
 export const REDUCER_KEYS = {
 	FORMS: 'FORMS',
@@ -45,7 +46,8 @@ export const REDUCER_KEYS = {
 	LANGUAGES: 'LANGUAGES',
 	DASHBOARD: 'DASHBOARD',
 	CALENDAR: 'CALENDAR',
-	HELPER_SETTINGS: 'HELPER_SETTINGS'
+	HELPER_SETTINGS: 'HELPER_SETTINGS',
+	VIRTUAL_EVENT: 'VIRTUAL_EVENT'
 }
 
 const rootReducer = combineReducers({
@@ -181,6 +183,13 @@ const rootReducer = combineReducers({
 			storage: storageSession
 		},
 		helperSettingsReducer
+	),
+	virtualEvent: persistReducer(
+		{
+			key: REDUCER_KEYS.VIRTUAL_EVENT,
+			storage: storageSession
+		},
+		virtualEventReducer
 	)
 })
 

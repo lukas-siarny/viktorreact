@@ -177,7 +177,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 					}}
 				/>
 				<div className={'event-background'} style={{ backgroundColor: bgColor }} />
-				<div className={'event-content'}>
+				<div id={originalEventData?.id} className={'event-content'}>
 					{(() => {
 						switch (calendarView) {
 							case CALENDAR_VIEW.WEEK: {

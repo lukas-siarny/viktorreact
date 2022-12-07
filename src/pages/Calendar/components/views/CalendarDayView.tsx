@@ -1,16 +1,18 @@
-import React, { useMemo, FC } from 'react'
-import dayjs from 'dayjs'
+import React, { FC, useEffect, useMemo } from 'react'
 import { Element } from 'react-scroll'
+import dayjs from 'dayjs'
+import { useDispatch } from 'react-redux'
+import { StringParam, useQueryParams } from 'use-query-params'
 
 // full calendar
-import FullCalendar, { SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { SlotLabelContentArg, DateSelectArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
 import { composeDayViewEvents, composeDayViewResources, eventAllow, getTimeScrollId } from '../../calendarHelpers'
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW } from '../../../../utils/enums'
 
 // types
 import { ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -20,6 +22,7 @@ import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-
 
 // components
 import CalendarEventContent from '../CalendarEventContent'
+import { clearEvent } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 interface IResourceLabel {
 	image?: string
@@ -69,16 +72,70 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 	)
 }
 
-interface ICalendarDayView extends ICalendarView {}
+interface ICalendarDayView extends ICalendarView {
+	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
+}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange, refetchData } = props
+	const {
+		salonID,
+		selectedDate,
+		eventsViewType,
+		reservations,
+		shiftsTimeOffs,
+		employees,
+		onEditEvent,
+		onEventChange,
+		refetchData,
+		onAddEvent,
+		virtualEvent,
+		setEventManagement
+	} = props
+	const dispatch = useDispatch()
+	const events = useMemo(() => {
+		const data = composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees)
+		// ak je virtualEvent definovany, zaradi sa do zdroja eventov pre Calendar
+		return virtualEvent ? [...data, virtualEvent] : data
+	}, [selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, virtualEvent])
 
-	const events = useMemo(
-		() => composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees),
-		[selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees]
-	)
 	const resources = useMemo(() => composeDayViewResources(shiftsTimeOffs, employees), [shiftsTimeOffs, employees])
+	/**
+	 * Spracuje input z calendara click/select a vytvori z neho init data, ktore vyuzije form v SiderEventManager
+	 */
+	const handleNewEvent = (event: DateSelectArg) => {
+		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
+		dispatch(clearEvent())
+		setEventManagement(undefined)
+		if (event.resource) {
+			// eslint-disable-next-line no-underscore-dangle
+			const { employee } = event.resource._resource.extendedProps
+			onAddEvent({
+				date: dayjs(event.startStr).format(DEFAULT_DATE_INIT_FORMAT),
+				timeFrom: dayjs(event.startStr).format(DEFAULT_TIME_FORMAT),
+				timeTo: dayjs(event.endStr).format(DEFAULT_TIME_FORMAT),
+				employee: {
+					value: employee.id,
+					key: employee.id,
+					label: employee.name
+				}
+			})
+		}
+	}
+
+	const [query] = useQueryParams({
+		sidebarView: StringParam
+	})
+
+	// TODO: ked sa bude rusit maska tak tento kod zmazat
+	useEffect(() => {
+		if (query?.sidebarView) {
+			const body = document.getElementsByClassName('fc-timegrid-cols')[0]
+			body.classList.add('active')
+		} else {
+			const body = document.getElementsByClassName('fc-timegrid-cols')[0]
+			body.classList.remove('active')
+		}
+	}, [query?.sidebarView])
 
 	return (
 		<div className={'nc-calendar-wrapper'} id={'nc-calendar-day-wrapper'}>
@@ -90,7 +147,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
 				timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
 				eventTimeFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
-				height={'auto'}
+				height='auto'
 				headerToolbar={false}
 				initialView={'resourceTimeGridDay'}
 				initialDate={selectedDate}
@@ -102,14 +159,14 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				// pre bezne eventy je potom nastavena min-height cez cssko .nc-day-event
 				eventMinHeight={0}
 				dayMinWidth={120}
-				editable
-				selectable
+				editable={!query.sidebarView}
 				weekends
 				nowIndicator
 				allDaySlot={false}
 				stickyFooterScrollbar
 				// data sources
 				events={events}
+				// eventSources={events}
 				resources={resources}
 				// render hooks
 				resourceLabelContent={resourceLabelContent}
@@ -117,8 +174,11 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				slotLabelContent={slotLabelContent}
 				// handlers
 				eventAllow={eventAllow}
-				eventDrop={(arg) => onEventChange(CALENDAR_VIEW.DAY, arg)}
-				eventResize={(arg) => onEventChange(CALENDAR_VIEW.DAY, arg)}
+				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
+				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
+				// select
+				selectable={!query.sidebarView}
+				select={handleNewEvent}
 			/>
 		</div>
 	)

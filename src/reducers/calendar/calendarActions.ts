@@ -15,6 +15,8 @@ import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, DATE_TIME_PARSER_DATE_FORMAT
 import { getReq } from '../../utils/request'
 import { getDateTime, normalizeQueryParams } from '../../utils/helper'
 
+import { clearEvent } from '../virtualEvent/virtualEventActions'
+
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
 
 export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
@@ -66,7 +68,8 @@ export const getCalendarEvents =
 	(
 		enumType: CALENDAR_EVENTS_KEYS = CALENDAR_EVENTS_KEYS.EVENTS,
 		queryParams: ICalendarEventsQueryParams,
-		splitMultidayEventsIntoOneDayEvents = false
+		splitMultidayEventsIntoOneDayEvents = false,
+		clearVirtualEvent = true
 	): ThunkResult<Promise<ICalendarEventsPayload>> =>
 	async (dispatch) => {
 		dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
@@ -162,10 +165,19 @@ export const getCalendarEvents =
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}
+
+		if (clearVirtualEvent) {
+			dispatch(clearEvent())
+		}
+
 		return payload
 	}
 
-export const getCalendarReservations = (queryParams: ICalendarReservationsQueryParams, splitMultidayEventsIntoOneDayEvents = false): ThunkResult<Promise<ICalendarEventsPayload>> =>
+export const getCalendarReservations = (
+	queryParams: ICalendarReservationsQueryParams,
+	splitMultidayEventsIntoOneDayEvents = false,
+	clearVirtualEvent?: boolean
+): ThunkResult<Promise<ICalendarEventsPayload>> =>
 	getCalendarEvents(
 		CALENDAR_EVENTS_KEYS.RESERVATIONS,
 		{
@@ -173,18 +185,25 @@ export const getCalendarReservations = (queryParams: ICalendarReservationsQueryP
 			eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
 			reservationStates: [RESERVATION_STATE.APPROVED, RESERVATION_STATE.PENDING, RESERVATION_STATE.REALIZED, RESERVATION_STATE.NOT_REALIZED]
 		},
-		splitMultidayEventsIntoOneDayEvents
+		splitMultidayEventsIntoOneDayEvents,
+		clearVirtualEvent
 	)
 
 export const getCalendarShiftsTimeoff = (
 	queryParams: ICalendarShiftsTimeOffQueryParams,
-	splitMultidayEventsIntoOneDayEvents = false
+	splitMultidayEventsIntoOneDayEvents = false,
+	clearVirtualEvent?: boolean
 ): ThunkResult<Promise<ICalendarEventsPayload>> =>
 	getCalendarEvents(
 		CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS,
 		{ ...queryParams, eventTypes: [CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF, CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK] },
-		splitMultidayEventsIntoOneDayEvents
+		splitMultidayEventsIntoOneDayEvents,
+		clearVirtualEvent
 	)
+
+export const refreshEvents = (): ThunkResult<void> => (dispatch) => {
+	Object.keys(CALENDAR_EVENTS_KEYS).forEach((enumType) => dispatch({ type: EVENTS.EVENTS_REFRESH, enumType }))
+}
 
 export const clearCalendarEvents =
 	(enumType: CALENDAR_EVENTS_KEYS = CALENDAR_EVENTS_KEYS.EVENTS): ThunkResult<Promise<void>> =>

@@ -1,5 +1,4 @@
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 
 // full calendar
 import FullCalendar from '@fullcalendar/react' // must go before plugins

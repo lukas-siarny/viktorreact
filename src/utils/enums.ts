@@ -1,4 +1,4 @@
-import { filter, orderBy } from 'lodash'
+import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
 import { FormatterInput } from '@fullcalendar/react'
@@ -25,6 +25,8 @@ export enum LANGUAGE {
 export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
 
 export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hours
+
+export const REFRESH_CALENDAR_INTERVAL = 1000 * 15 // 60 * 2 // 2 minutes
 
 export const DEFAULT_LANGUAGE = LANGUAGE.EN
 
@@ -607,7 +609,8 @@ export enum TIME_STATS_SOURCE_TYPE {
 
 // CALENDAR ENUMS
 export const CALENDAR_COMMON_SETTINGS = {
-	LICENSE_KEY: 'CC-Attribution-NonCommercial-NoDerivatives',
+	// eslint-disable-next-line no-underscore-dangle
+	LICENSE_KEY: `${window.__RUNTIME_CONFIG__.FULLCALENDAR_LICENSE_KEY}`,
 	TIME_ZONE: 'local',
 	TIME_FORMAT: {
 		hour: '2-digit',
@@ -782,6 +785,12 @@ export enum SERVICE_TYPE {
 export const CALENDAR_DEBOUNCE_DELAY = 300 // in ms
 export const CALENDAR_INIT_TIME = 500 // in ms
 
+export const HANDLE_CALENDAR_FORMS = [FORM.CALENDAR_RESERVATION_FORM, FORM.CALENDAR_EMPLOYEE_SHIFT_FORM, FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM, FORM.CALENDAR_EMPLOYEE_BREAK_FORM]
+
+export enum HANDLE_CALENDAR_ACTIONS {
+	CHANGE = 'CHANGE',
+	INITIALIZE = 'INITIALIZE'
+}
 export const CREATE_EVENT_PERMISSIONS = [...ADMIN_PERMISSIONS, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CALENDAR_EVENT_CREATE]
 export const UPDATE_EVENT_PERMISSIONS = [...ADMIN_PERMISSIONS, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CALENDAR_EVENT_UPDATE]
 export const DELETE_EVENT_PERMISSIONS = [...ADMIN_PERMISSIONS, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CALENDAR_EVENT_DELETE]

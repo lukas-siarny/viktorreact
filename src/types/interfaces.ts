@@ -192,6 +192,7 @@ export interface ICalendarEventForm {
 	// NOTE: pre akcie resize a drag and drop
 	eventId?: string | null
 	calendarBulkEventID?: string
+	revertEvent?: () => void
 }
 
 export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null

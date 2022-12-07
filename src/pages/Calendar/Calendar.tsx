@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { getFormValues, initialize, submit, destroy } from 'redux-form'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import cx from 'classnames'
 import { useTranslation } from 'react-i18next'
 import Scroll from 'react-scroll'
 
@@ -493,9 +492,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	)
 
 	const handleSubmitEvent = useCallback(
-		async (values: ICalendarEventForm, revertEvent?: () => void) => {
+		async (values: ICalendarEventForm) => {
 			const eventId = query.eventId || values.eventId // ak je z query ide sa detail drawer ak je values ide sa cez drag and drop alebo resize
-			// NOTE: ak existuje actionType tak sa klikl v modali na moznost bulk / single a uz bol modal submitnuty
+			const revertEvent = values?.revertEvent
+			// NOTE: ak existuje actionType tak sa kliklo v modali na moznost bulk / single a uz bol modal submitnuty
+
 			if (values.calendarBulkEventID && !formValuesBulkForm?.actionType) {
 				setTempValues(values)
 				dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
@@ -579,9 +580,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					// CREATE event shift
 					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 				}
-
-				fetchEvents()
+				dispatch(destroy(FORM.CONFIRM_BULK_FORM))
 				// Po CREATE / UPDATE eventu dotiahnut eventy + zatvorit drawer
+				fetchEvents()
 				closeSiderForm()
 			} catch (e) {
 				// eslint-disable-next-line no-console
@@ -627,10 +628,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					...tempValues,
 					customRepeatOptions
 				}
-				await handleSubmitEvent(data as ICalendarEventForm, visibleBulkModal.revertEvent)
+				await handleSubmitEvent({ ...data, revertEvent: visibleBulkModal.revertEvent } as ICalendarEventForm)
 			} else {
 				// SINGLE edit - tempvalues z drag and drop / resize
-				await handleSubmitEvent(tempValues as ICalendarEventForm, visibleBulkModal.revertEvent)
+				await handleSubmitEvent({ ...tempValues, revertEvent: visibleBulkModal.revertEvent } as ICalendarEventForm)
 			}
 			// DELETE
 		} else {
@@ -712,7 +713,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	return (
 		<>
 			{modals}
-			<div role={'button'} onClick={closeSiderForm} id={'overlay'} className={cx({ block: query.sidebarView, hidden: !query.sidebarView })} />
 			<Layout className='noti-calendar-layout'>
 				<CalendarHeader
 					selectedDate={validSelectedDate}
@@ -720,7 +720,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					calendarView={validCalendarView}
 					siderFilterCollapsed={siderFilterCollapsed}
 					setCalendarView={setCalendarView}
-					setEventsViewType={(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => setQuery({ ...query, eventsViewType })}
+					setEventsViewType={(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => {
+						// NOTE: Ak je otvoreny CREATE sidebar tak pri prepnuti filtra ho zrusit pri EDIT ostane + zmazat virtualny event ak bol vytvoreny
+						dispatch(clearEvent())
+						setQuery({ ...query, eventsViewType, sidebarView: query.eventId ? query.sidebarView : undefined })
+					}}
 					setSelectedDate={setNewSelectedDate}
 					setSiderFilterCollapsed={() => {
 						setSiderFilterCollapsed(!siderFilterCollapsed)
@@ -734,6 +738,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} parentPath={parentPath} eventsViewType={validEventsViewType} />
 					<CalendarContent
 						salonID={salonID}
+						setEventManagement={setEventManagement}
 						ref={calendarRefs}
 						selectedDate={validSelectedDate}
 						view={validCalendarView}

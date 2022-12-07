@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { change, Field, FieldArray, FormSection, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
+import { change, Field, FieldArray, FormSection, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Divider, Form, Row } from 'antd'
 import { forEach, includes, map } from 'lodash'
@@ -21,9 +21,6 @@ import { IReservationSystemSettingsForm, ISelectOptionItem } from '../../../type
 // utils
 import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE } from '../../../utils/enums'
 import { optionRenderNotiPinkCheckbox, showErrorNotification } from '../../../utils/helper'
-
-// validations
-import validateReservationSystemSettingsForm from './validateReservationSystemSettingsForm'
 
 // assets
 import { ReactComponent as ChevronDown } from '../../../assets/icons/chevron-down.svg'
@@ -416,8 +413,7 @@ const form = reduxForm<IReservationSystemSettingsForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	onSubmitFail: showErrorNotification,
-	validate: validateReservationSystemSettingsForm
+	onSubmitFail: showErrorNotification
 })(ReservationSystemSettingsForm)
 
 export default form

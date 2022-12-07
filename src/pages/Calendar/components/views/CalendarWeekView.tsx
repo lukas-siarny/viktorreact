@@ -162,7 +162,6 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		onEditEvent,
 		onReservationClick,
 		onEventChange,
-		refetchData,
 		weekDays,
 		updateCalendarSize,
 		onAddEvent,
@@ -298,14 +297,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				resourceGroupLabelContent={resourceGroupLabelContent}
 				slotLabelContent={slotLabelContent}
 				eventContent={(data: EventContentArg) => (
-					<CalendarEventContent
-						calendarView={CALENDAR_VIEW.WEEK}
-						data={data}
-						salonID={salonID}
-						onEditEvent={onEditEvent}
-						onReservationClick={onReservationClick}
-						refetchData={refetchData}
-					/>
+					<CalendarEventContent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} onReservationClick={onReservationClick} />
 				)}
 				nowIndicatorContent={() => <NowIndicator />}
 				// handlers

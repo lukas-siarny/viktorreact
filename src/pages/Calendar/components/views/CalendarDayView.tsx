@@ -86,7 +86,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		employees,
 		onEditEvent,
 		onEventChange,
-		refetchData,
 		onAddEvent,
 		virtualEvent,
 		onReservationClick,
@@ -174,14 +173,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				// render hooks
 				resourceLabelContent={resourceLabelContent}
 				eventContent={(data) => (
-					<CalendarEventContent
-						calendarView={CALENDAR_VIEW.DAY}
-						data={data}
-						salonID={salonID}
-						onEditEvent={onEditEvent}
-						onReservationClick={onReservationClick}
-						refetchData={refetchData}
-					/>
+					<CalendarEventContent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} onReservationClick={onReservationClick} />
 				)}
 				slotLabelContent={slotLabelContent}
 				// handlers

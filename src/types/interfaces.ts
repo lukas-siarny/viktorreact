@@ -651,7 +651,6 @@ export interface ICalendarView {
 	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
 	onEventChange?: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
 	loading?: boolean
-	refetchData: () => void
 	virtualEvent?: EventInput
 	clearRestartInterval: () => void
 }

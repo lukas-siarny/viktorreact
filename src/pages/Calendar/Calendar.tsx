@@ -762,7 +762,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 								position: position || null
 							})
 						}}
-						refetchData={fetchEvents}
 						handleSubmitReservation={handleSubmitReservation}
 						handleSubmitEvent={handleSubmitEvent}
 						onAddEvent={handleAddEvent}

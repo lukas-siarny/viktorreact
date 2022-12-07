@@ -24,7 +24,6 @@ interface IReservationCardProps extends IEventCardProps {
 	reservationData?: CalendarEvent['reservationData']
 	note?: CalendarEvent['note']
 	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
-	refetchData: () => void
 	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
 }
 

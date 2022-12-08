@@ -2804,7 +2804,7 @@ declare namespace Paths {
                         maxHoursB2cCreateReservationBeforeStart: number;
                         maxHoursB2cCancelReservationBeforeStart: number;
                         enabledCustomerReservationNotes: boolean;
-                        minutesIntervalBetweenB2CReservations: number;
+                        minutesIntervalB2CReservations: 15 | 20 | 30 | 60;
                         disabledNotifications: {
                             /**
                              * example:
@@ -3541,10 +3541,6 @@ declare namespace Paths {
                                             };
                                         };
                                         serviceCategoryParameter?: {
-                                            /**
-                                             * example:
-                                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-                                             */
                                             id: string; // uuid
                                             valueType: "ENUM" | "TIME";
                                             unitType?: "MINUTES";
@@ -3654,10 +3650,6 @@ declare namespace Paths {
                         };
                     };
                     serviceCategoryParameter?: {
-                        /**
-                         * example:
-                         * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-                         */
                         id: string; // uuid
                         valueType: "ENUM" | "TIME";
                         unitType?: "MINUTES";
@@ -3741,10 +3733,6 @@ declare namespace Paths {
                             };
                         };
                         serviceCategoryParameter?: {
-                            /**
-                             * example:
-                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-                             */
                             id: string; // uuid
                             valueType: "ENUM" | "TIME";
                             unitType?: "MINUTES";
@@ -6714,7 +6702,7 @@ declare namespace Paths {
                             maxHoursB2cCreateReservationBeforeStart: number;
                             maxHoursB2cCancelReservationBeforeStart: number;
                             enabledCustomerReservationNotes: boolean;
-                            minutesIntervalBetweenB2CReservations: number;
+                            minutesIntervalB2CReservations: 15 | 20 | 30 | 60;
                             disabledNotifications: {
                                 /**
                                  * example:
@@ -7415,10 +7403,6 @@ declare namespace Paths {
                                             };
                                         };
                                         serviceCategoryParameter?: {
-                                            /**
-                                             * example:
-                                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-                                             */
                                             id: string; // uuid
                                             valueType: "ENUM" | "TIME";
                                             unitType?: "MINUTES";
@@ -7528,10 +7512,6 @@ declare namespace Paths {
                         };
                     };
                     serviceCategoryParameter?: {
-                        /**
-                         * example:
-                         * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-                         */
                         id: string; // uuid
                         valueType: "ENUM" | "TIME";
                         unitType?: "MINUTES";
@@ -7615,10 +7595,6 @@ declare namespace Paths {
                             };
                         };
                         serviceCategoryParameter?: {
-                            /**
-                             * example:
-                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-                             */
                             id: string; // uuid
                             valueType: "ENUM" | "TIME";
                             unitType?: "MINUTES";
@@ -8656,7 +8632,7 @@ declare namespace Paths {
             export type CategoryIDs = string /* uuid */[];
             export type CosmeticIDs = string /* uuid */[];
             export type CreateType = "NON_BASIC" | "BASIC";
-            export type ExactRating = number[];
+            export type ExactRating = (1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5) /* float */[];
             export type LanguageIDs = string /* uuid */[];
             export type Lat = number; // float
             export type LatMy = number; // float
@@ -8997,7 +8973,7 @@ declare namespace Paths {
             export type CategoryIDs = string /* uuid */[];
             export type CosmeticIDs = string /* uuid */[];
             export type CreateType = "NON_BASIC" | "BASIC";
-            export type ExactRating = number[];
+            export type ExactRating = (1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5) /* float */[];
             export type LanguageIDs = string /* uuid */[];
             export type LatMy = number; // float
             export type LatNW = number; // float
@@ -9976,10 +9952,6 @@ declare namespace Paths {
                                             };
                                         };
                                         serviceCategoryParameter?: {
-                                            /**
-                                             * example:
-                                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-                                             */
                                             id: string; // uuid
                                             valueType: "ENUM" | "TIME";
                                             unitType?: "MINUTES";
@@ -10138,10 +10110,6 @@ declare namespace Paths {
                         };
                     };
                     serviceCategoryParameter?: {
-                        /**
-                         * example:
-                         * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-                         */
                         id: string; // uuid
                         valueType: "ENUM" | "TIME";
                         unitType?: "MINUTES";
@@ -10225,10 +10193,6 @@ declare namespace Paths {
                             };
                         };
                         serviceCategoryParameter?: {
-                            /**
-                             * example:
-                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-                             */
                             id: string; // uuid
                             valueType: "ENUM" | "TIME";
                             unitType?: "MINUTES";
@@ -11027,7 +10991,7 @@ declare namespace Paths {
             export type CategoryIDs = string /* uuid */[];
             export type CosmeticIDs = string /* uuid */[];
             export type CreateType = "NON_BASIC" | "BASIC";
-            export type ExactRating = number[];
+            export type ExactRating = (1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5) /* float */[];
             export type LanguageIDs = string /* uuid */[];
             export type Lat = number; // float
             export type LatMy = number; // float
@@ -11368,7 +11332,7 @@ declare namespace Paths {
             export type CategoryIDs = string /* uuid */[];
             export type CosmeticIDs = string /* uuid */[];
             export type CreateType = "NON_BASIC" | "BASIC";
-            export type ExactRating = number[];
+            export type ExactRating = (1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5) /* float */[];
             export type LanguageIDs = string /* uuid */[];
             export type LatMy = number; // float
             export type LatNW = number; // float
@@ -11632,10 +11596,6 @@ declare namespace Paths {
                                             };
                                         };
                                         serviceCategoryParameter?: {
-                                            /**
-                                             * example:
-                                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-                                             */
                                             id: string; // uuid
                                             valueType: "ENUM" | "TIME";
                                             unitType?: "MINUTES";
@@ -12509,10 +12469,6 @@ declare namespace Paths {
                         };
                     };
                     serviceCategoryParameter?: {
-                        /**
-                         * example:
-                         * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-                         */
                         id: string; // uuid
                         valueType: "ENUM" | "TIME";
                         unitType?: "MINUTES";
@@ -12596,10 +12552,6 @@ declare namespace Paths {
                             };
                         };
                         serviceCategoryParameter?: {
-                            /**
-                             * example:
-                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-                             */
                             id: string; // uuid
                             valueType: "ENUM" | "TIME";
                             unitType?: "MINUTES";
@@ -21627,7 +21579,6 @@ declare namespace Paths {
             customerID: string; // uuid
             employeeID?: string | null; // uuid
             serviceID: string; // uuid
-            serviceCategoryParameterValueID?: string | null; // uuid
         }
         namespace Responses {
             export interface $200 {
@@ -22195,7 +22146,7 @@ declare namespace Paths {
                 maxHoursB2cCreateReservationBeforeStart?: null | number;
                 maxHoursB2cCancelReservationBeforeStart?: null | number;
                 enabledCustomerReservationNotes?: boolean | null;
-                minutesIntervalBetweenB2CReservations?: null | number;
+                minutesIntervalB2CReservations?: 15 | 20 | 30 | 60;
                 disabledNotifications?: [
                     {
                         /**
@@ -31179,10 +31130,6 @@ declare namespace Paths {
                         };
                     };
                     serviceCategoryParameter?: {
-                        /**
-                         * example:
-                         * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-                         */
                         id: string; // uuid
                         valueType: "ENUM" | "TIME";
                         unitType?: "MINUTES";
@@ -31266,10 +31213,6 @@ declare namespace Paths {
                             };
                         };
                         serviceCategoryParameter?: {
-                            /**
-                             * example:
-                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-                             */
                             id: string; // uuid
                             valueType: "ENUM" | "TIME";
                             unitType?: "MINUTES";
@@ -37245,7 +37188,7 @@ declare namespace Paths {
                             maxHoursB2cCreateReservationBeforeStart: number;
                             maxHoursB2cCancelReservationBeforeStart: number;
                             enabledCustomerReservationNotes: boolean;
-                            minutesIntervalBetweenB2CReservations: number;
+                            minutesIntervalB2CReservations: 15 | 20 | 30 | 60;
                             disabledNotifications: {
                                 /**
                                  * example:
@@ -37511,7 +37454,6 @@ declare namespace Paths {
             customerID: string; // uuid
             employeeID?: string | null; // uuid
             serviceID: string; // uuid
-            serviceCategoryParameterValueID?: string | null; // uuid
         }
         namespace Responses {
             export interface $200 {
@@ -38429,7 +38371,7 @@ declare namespace Paths {
                             maxHoursB2cCreateReservationBeforeStart: number;
                             maxHoursB2cCancelReservationBeforeStart: number;
                             enabledCustomerReservationNotes: boolean;
-                            minutesIntervalBetweenB2CReservations: number;
+                            minutesIntervalB2CReservations: 15 | 20 | 30 | 60;
                             disabledNotifications: {
                                 /**
                                  * example:
@@ -38672,7 +38614,7 @@ declare namespace Paths {
                 maxHoursB2cCreateReservationBeforeStart?: null | number;
                 maxHoursB2cCancelReservationBeforeStart?: null | number;
                 enabledCustomerReservationNotes?: boolean | null;
-                minutesIntervalBetweenB2CReservations?: null | number;
+                minutesIntervalB2CReservations?: 15 | 20 | 30 | 60;
                 disabledNotifications?: [
                     {
                         /**
@@ -47656,10 +47598,6 @@ declare namespace Paths {
                         };
                     };
                     serviceCategoryParameter?: {
-                        /**
-                         * example:
-                         * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-                         */
                         id: string; // uuid
                         valueType: "ENUM" | "TIME";
                         unitType?: "MINUTES";
@@ -47743,10 +47681,6 @@ declare namespace Paths {
                             };
                         };
                         serviceCategoryParameter?: {
-                            /**
-                             * example:
-                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-                             */
                             id: string; // uuid
                             valueType: "ENUM" | "TIME";
                             unitType?: "MINUTES";
@@ -54628,7 +54562,6 @@ declare namespace Paths {
             customerID: string; // uuid
             employeeID?: string | null; // uuid
             serviceID: string; // uuid
-            serviceCategoryParameterValueID?: string | null; // uuid
         }
         namespace Responses {
             export interface $200 {
@@ -58298,7 +58231,7 @@ declare namespace Paths {
                             maxHoursB2cCreateReservationBeforeStart: number;
                             maxHoursB2cCancelReservationBeforeStart: number;
                             enabledCustomerReservationNotes: boolean;
-                            minutesIntervalBetweenB2CReservations: number;
+                            minutesIntervalB2CReservations: 15 | 20 | 30 | 60;
                             disabledNotifications: {
                                 /**
                                  * example:
@@ -58436,7 +58369,6 @@ declare namespace Paths {
             customerID: string; // uuid
             employeeID?: string | null; // uuid
             serviceID: string; // uuid
-            serviceCategoryParameterValueID?: string | null; // uuid
         }
         namespace Responses {
             export interface $200 {

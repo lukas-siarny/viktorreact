@@ -82,12 +82,24 @@ type Props = {
 	onAddEvent: () => void
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	setEventsViewType: (newViewType: CALENDAR_EVENTS_VIEW_TYPE) => void
+	enabledSalonReservations?: boolean
 }
 
 const CalendarHeader: FC<Props> = (props) => {
 	const [t] = useTranslation()
 
-	const { setSiderFilterCollapsed, calendarView, setCalendarView, selectedDate, setSelectedDate, siderFilterCollapsed, eventsViewType, setEventsViewType, onAddEvent } = props
+	const {
+		setSiderFilterCollapsed,
+		calendarView,
+		setCalendarView,
+		selectedDate,
+		setSelectedDate,
+		siderFilterCollapsed,
+		eventsViewType,
+		setEventsViewType,
+		onAddEvent,
+		enabledSalonReservations
+	} = props
 
 	const [currentDate, setCurrentDate] = useState(selectedDate)
 
@@ -232,7 +244,7 @@ const CalendarHeader: FC<Props> = (props) => {
 				</button>
 			</div>
 			<div className={'nav-right'}>
-				<Button type={'primary'} onClick={onAddEvent} icon={<CreateIcon />} htmlType={'button'} className={'noti-btn'}>
+				<Button type={'primary'} onClick={onAddEvent} icon={<CreateIcon />} disabled={!enabledSalonReservations} htmlType={'button'} className={'noti-btn'}>
 					{STRINGS(t).addRecord('')}
 				</Button>
 			</div>

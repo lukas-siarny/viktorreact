@@ -41,6 +41,7 @@ type Props = {
 	handleSubmitEvent: (values: ICalendarEventForm) => void
 	refetchData: () => void
 	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
+	enabledSalonReservations?: boolean
 } & ICalendarView
 
 export type CalendarRefs = {
@@ -50,7 +51,19 @@ export type CalendarRefs = {
 }
 
 const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
-	const { view, loading, reservations, shiftsTimeOffs, onShowAllEmployees, showEmptyState, handleSubmitReservation, handleSubmitEvent, selectedDate, setEventManagement } = props
+	const {
+		view,
+		loading,
+		reservations,
+		shiftsTimeOffs,
+		onShowAllEmployees,
+		showEmptyState,
+		handleSubmitReservation,
+		handleSubmitEvent,
+		selectedDate,
+		setEventManagement,
+		enabledSalonReservations
+	} = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -65,7 +78,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const selectedSalonuniqPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions)
-
 	const [visibleForbiddenModal, setVisibleForbiddenModal] = useState(false)
 
 	const sources = useMemo(() => {
@@ -182,6 +194,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				<CalendarWeekView
 					{...props}
 					ref={weekView}
+					enabledSalonReservations={enabledSalonReservations}
 					setEventManagement={setEventManagement}
 					reservations={sources.reservations}
 					shiftsTimeOffs={sources.shiftsTimeOffs}
@@ -197,6 +210,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		return (
 			<CalendarDayView
 				{...props}
+				enabledSalonReservations={enabledSalonReservations}
 				setEventManagement={setEventManagement}
 				ref={dayView}
 				reservations={sources.reservations}

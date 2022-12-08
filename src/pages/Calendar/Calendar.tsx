@@ -122,6 +122,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
+	const enabledSalonReservations = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.settings?.enabledReservations)
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [visibleBulkModal, setVisibleBulkModal] = useState<{ requestType: REQUEST_TYPE; eventType?: CALENDAR_EVENT_TYPE; revertEvent?: () => void } | null>(null)
@@ -699,6 +700,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			{modals}
 			<Layout className='noti-calendar-layout'>
 				<CalendarHeader
+					enabledSalonReservations={enabledSalonReservations}
 					selectedDate={validSelectedDate}
 					eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 					calendarView={validCalendarView as CALENDAR_VIEW}
@@ -727,6 +729,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					/>
 					<CalendarContent
 						salonID={salonID}
+						enabledSalonReservations={enabledSalonReservations}
 						setEventManagement={setEventManagement}
 						ref={calendarRefs}
 						selectedDate={validSelectedDate}
@@ -758,20 +761,22 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						handleSubmitEvent={handleSubmitEvent}
 						onAddEvent={handleAddEvent}
 					/>
-					<SiderEventManagement
-						salonID={salonID}
-						selectedDate={validSelectedDate}
-						eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
-						eventId={query.eventId}
-						handleDeleteEvent={handleDeleteEvent}
-						sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE}
-						onCloseSider={closeSiderForm}
-						handleSubmitReservation={handleSubmitReservation}
-						handleSubmitEvent={handleSubmitEvent}
-						newEventData={newEventData}
-						calendarApi={calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()}
-						changeCalendarDate={setNewSelectedDate}
-					/>
+					{enabledSalonReservations && (
+						<SiderEventManagement
+							salonID={salonID}
+							selectedDate={validSelectedDate}
+							eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
+							eventId={query.eventId}
+							handleDeleteEvent={handleDeleteEvent}
+							sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE}
+							onCloseSider={closeSiderForm}
+							handleSubmitReservation={handleSubmitReservation}
+							handleSubmitEvent={handleSubmitEvent}
+							newEventData={newEventData}
+							calendarApi={calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()}
+							changeCalendarDate={setNewSelectedDate}
+						/>
+					)}
 				</Layout>
 			</Layout>
 		</>

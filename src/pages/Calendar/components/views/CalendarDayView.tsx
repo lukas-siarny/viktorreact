@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react'
+import React, { FC, useEffect, useMemo } from 'react'
 import { Element } from 'react-scroll'
 import dayjs from 'dayjs'
 import { useDispatch } from 'react-redux'
@@ -73,6 +73,7 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 
 interface ICalendarDayView extends ICalendarView {
 	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
+	enabledSalonReservations?: boolean
 }
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
@@ -88,7 +89,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		refetchData,
 		onAddEvent,
 		virtualEvent,
-		setEventManagement
+		setEventManagement,
+		enabledSalonReservations
 	} = props
 	const dispatch = useDispatch()
 	const events = useMemo(() => {
@@ -122,6 +124,14 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		}
 	}
 
+	useEffect(() => {
+		// NOTE: ak neni je povoleny online booking tak sa nastavi disabled state nad kalendarom
+		if (!enabledSalonReservations) {
+			const body = document.getElementsByClassName('fc-timegrid-cols')[0]
+			body.classList.add('active')
+		}
+	}, [enabledSalonReservations])
+
 	return (
 		<div className={'nc-calendar-wrapper'} id={'nc-calendar-day-wrapper'}>
 			<FullCalendar
@@ -144,7 +154,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				// pre bezne eventy je potom nastavena min-height cez cssko .nc-day-event
 				eventMinHeight={0}
 				dayMinWidth={120}
-				editable
+				editable={enabledSalonReservations}
 				weekends
 				nowIndicator
 				allDaySlot={false}
@@ -162,7 +172,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
 				// select
-				selectable
+				selectable={enabledSalonReservations}
 				select={handleNewEvent}
 			/>
 		</div>

@@ -148,6 +148,7 @@ interface ICalendarWeekView extends ICalendarView {
 	updateCalendarSize: () => void
 	weekDays: string[]
 	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
+	enabledSalonReservations?: boolean
 }
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
@@ -165,7 +166,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		updateCalendarSize,
 		onAddEvent,
 		virtualEvent,
-		setEventManagement
+		setEventManagement,
+		enabledSalonReservations
 	} = props
 
 	const dispatch = useDispatch()
@@ -243,6 +245,13 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		}
 	}, [employees.length, selectedDate])
 
+	useEffect(() => {
+		if (!enabledSalonReservations) {
+			const body = document.getElementsByClassName('fc-timeline-body')[0]
+			body.classList.add('active')
+		}
+	}, [])
+
 	return (
 		<div className={'nc-calendar-wrapper'} id={'nc-calendar-week-wrapper'}>
 			<FullCalendar
@@ -269,7 +278,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				initialView='resourceTimelineDay'
 				initialDate={selectedDate}
 				weekends={true}
-				editable
+				editable={enabledSalonReservations}
 				stickyFooterScrollbar
 				nowIndicator
 				// data sources
@@ -290,7 +299,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				// select
-				selectable
+				selectable={enabledSalonReservations}
 				select={(selectedEvent) => handleNewEvent(selectedEvent)}
 				resourcesSet={() => setTimeout(updateCalendarSize, 0)}
 				eventsSet={() => setTimeout(updateCalendarSize, 0)}

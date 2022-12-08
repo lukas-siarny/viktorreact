@@ -209,7 +209,7 @@ pipelines:
               - npm install --legacy-peer-deps
               - docker-compose up -d
               # needs to check/implement -> how to hold context of wait-for-it for DB service in backend
-              - sleep 90
+              - sleep 105
               - mkdir docker_logs && docker-compose logs --no-color >& docker_logs/logs.txt
               - npm run test:CI
             artifacts: # store cypress images, videos and BE logs

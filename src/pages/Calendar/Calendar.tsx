@@ -25,7 +25,8 @@ import {
 	PERMISSION,
 	REQUEST_TYPE,
 	STRINGS,
-	CALENDAR_INIT_TIME
+	CALENDAR_INIT_TIME,
+	CALENDAR_SUBMIT_TYPE
 } from '../../utils/enums'
 import { computeUntilDate } from '../../utils/helper'
 import { withPermissions } from '../../utils/Permissions'
@@ -50,10 +51,21 @@ import SiderFilter from './components/layout/SiderFilter'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
 
 // types
-import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, IEmployeesPayload, SalonSubPageProps, INewCalendarEvent } from '../../types/interfaces'
+import {
+	IBulkConfirmForm,
+	ICalendarEventForm,
+	ICalendarFilter,
+	ICalendarReservationForm,
+	IEmployeesPayload,
+	SalonSubPageProps,
+	INewCalendarEvent,
+	ICalendarHandleSubmitData,
+	ICalendarConfirmModal
+} from '../../types/interfaces'
 
 // atoms
 import ConfirmModal from '../../atoms/ConfirmModal'
+import CalendarConfirmModal from './components/CalendarConfirmModal'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -123,15 +135,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
-	const [visibleBulkModal, setVisibleBulkModal] = useState<{ requestType: REQUEST_TYPE; eventType?: CALENDAR_EVENT_TYPE; revertEvent?: () => void } | null>(null)
-	const [reservationConfirmModal, setReservationConfirmModal] = useState<{ visible: boolean; data: ICalendarReservationForm | null; eventId?: string }>({
-		visible: false,
-		data: null
-	})
 	const [isRemoving, setIsRemoving] = useState(false)
 	const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)
-	const [tempValues, setTempValues] = useState<ICalendarEventForm | null>(null)
 	const [newEventData, setNewEventData] = useState<INewCalendarEvent | null | undefined>(null)
+	const [confirmModal, setConfirmModal] = useState<ICalendarConfirmModal>({
+		visible: false,
+		values: undefined,
+		eventId: undefined,
+		handleSubmitData: undefined
+	})
 
 	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || isUpdatingEvent
 
@@ -139,29 +151,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const formValuesDetailEvent: Partial<ICalendarEventForm & ICalendarReservationForm> = useSelector((state: RootState) =>
 		getFormValues(`CALENDAR_${query.sidebarView}_FORM`)(state)
 	)
-
-	/*
-	const [loadInBackground, setLoadInBackground] = useState<boolean>(false)
-	const fetchInterval = useRef<number | undefined>()
-
-	const restartFetchInterval = async () => {
-		if (fetchInterval.current) {
-			window.clearInterval(fetchInterval.current)
-		}
-
-		const interval = window.setInterval(async () => {
-			setLoadInBackground(true)
-			message.open({
-				type: 'loading',
-				content: t('loc:Kalendár sa aktualizuje'),
-				duration: 0
-			})
-			// eslint-disable-next-line @typescript-eslint/no-use-before-define
-			await fetchEvents(false)
-			setLoadInBackground(false)
-			message.destroy()
-		}, REFRESH_CALENDAR_INTERVAL)
-	*/
 
 	const initialScroll = useRef(false)
 	const scrollToDateTimeout = useRef<any>(null)
@@ -220,28 +209,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// null means empty filter otherwise return all employes as default value
 		return query?.employeeIDs === null ? [] : employees?.data?.employees
 	}, [employees?.data?.employees, query.employeeIDs])
-
-	/*
-	useEffect(() => {
-		// clear on unmount
-		return () => {
-			if (fetchInterval.current) {
-				window.clearInterval(fetchInterval.current)
-				message.destroy()
-				setQuery({
-					...query,
-					eventId,
-					eventsViewType: newEventType, // Filter v kalendari je bud rezervaci alebo volno
-					sidebarView: newView // siderbar view je rezervacia / volno / prestavka / pracovna zmena
-				})
-			}
-			if (validCalendarView === CALENDAR_VIEW.DAY) {
-				setTimeout(updateCalendarSize.current, 0)
-			}
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
-	*/
 
 	// fetch new events
 	const fetchEvents: any = useCallback(
@@ -374,69 +341,27 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			sidebarView: undefined
 		})
 	}
-	const deleteEventWrapper = useCallback(async () => {
-		if (isRemoving) {
-			return
-		}
-		try {
-			setIsRemoving(true)
-			const calendarEventID = query.eventId as string
-			// DELETE reservation
-			if (query.sidebarView === CALENDAR_EVENT_TYPE.RESERVATION) {
-				await deleteReq(
-					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}',
-					{ salonID, calendarEventID },
-					undefined,
-					NOTIFICATION_TYPE.NOTIFICATION,
-					true
-				)
-				// DELETE BULK event
-			} else if (eventDetail.data?.calendarBulkEvent?.id && formValuesBulkForm.actionType === CONFIRM_BULK.BULK) {
-				await deleteReq(
-					'/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}',
-					{ salonID, calendarBulkEventID: formValuesDetailEvent?.calendarBulkEventID as string },
-					undefined,
-					NOTIFICATION_TYPE.NOTIFICATION,
-					true
-				)
-			} else {
-				// DELETE single event
-				await deleteReq('/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}', { salonID, calendarEventID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			}
 
+	const handleAddEvent = (initialData?: INewCalendarEvent) => {
+		// Event data ziskane z kalendara, sluzia pre init formularu v SiderEventManagement
+		setNewEventData(initialData)
+
+		if (query.eventId) {
 			closeSiderForm()
-			fetchEvents()
-		} catch (error: any) {
-			// eslint-disable-next-line no-console
-			console.error(error.message)
-		} finally {
-			setIsRemoving(false)
 		}
-	}, [
-		eventDetail?.data?.calendarBulkEvent?.id,
-		fetchEvents,
-		formValuesBulkForm?.actionType,
-		formValuesDetailEvent?.calendarBulkEventID,
-		isRemoving,
-		query?.eventId,
-		query?.sidebarView,
-		salonID,
-		closeSiderForm
-	])
-
-	const handleDeleteEvent = async () => {
-		// Ak existuje bulkID otvorit modal pre dodatocne potvrdenie zmazanie medzi BULK / SINGLE
-		if (formValuesDetailEvent?.calendarBulkEventID) {
-			dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
-			setVisibleBulkModal({ requestType: REQUEST_TYPE.DELETE })
+		// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastav pracovnu zmenu
+		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
+			dispatch(destroy(FORM.CALENDAR_RESERVATION_FORM))
+			setEventManagement(CALENDAR_EVENT_TYPE.RESERVATION)
 		} else {
-			deleteEventWrapper()
+			dispatch(destroy(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM))
+			dispatch(destroy(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM))
+			dispatch(destroy(FORM.CALENDAR_EMPLOYEE_BREAK_FORM))
+			setEventManagement(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
 		}
 	}
 
-	const clearReservationConfirmationModal = () => setReservationConfirmModal({ visible: false, data: null, eventId: undefined })
-
-	const processSubmitReservation = async (values: ICalendarReservationForm, eventId?: string) => {
+	const handleSubmitReservation = async (values: ICalendarReservationForm, eventId?: string) => {
 		const revertEvent = values?.revertEvent
 
 		try {
@@ -482,36 +407,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			}
 		} finally {
 			setIsUpdatingEvent(false)
-			clearReservationConfirmationModal()
-		}
-	}
-
-	const handleSubmitReservation = async (values: ICalendarReservationForm) => {
-		// NOTE: ak je eventID z values tak sa funkcia vola z drag and drop / resize ak ide z query tak je otvoreny detail cez URL / kliknutim na bunku
-		const eventId = values.eventId ? values.eventId : query.eventId || undefined
-
-		if (eventId) {
-			// pri editacii sa najprv otvori konfirmacny modal a az tak sa zavola processSubmitReservation
-			setReservationConfirmModal({ visible: true, data: values, eventId })
-		} else {
-			// pri vytvarani rezervacie sa to zavola rovno
-			processSubmitReservation(values, eventId)
 		}
 	}
 
 	const handleSubmitEvent = useCallback(
-		async (values: ICalendarEventForm) => {
-			const eventId = query.eventId || values.eventId // ak je z query ide sa detail drawer ak je values ide sa cez drag and drop alebo resize
+		async (values: ICalendarEventForm, eventId?: string) => {
 			const revertEvent = values?.revertEvent
-			// NOTE: ak existuje actionType tak sa kliklo v modali na moznost bulk / single a uz bol modal submitnuty
 
-			if (values.calendarBulkEventID && !formValuesBulkForm?.actionType) {
-				setTempValues(values)
-				dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
-				setVisibleBulkModal({ requestType: REQUEST_TYPE.PATCH, eventType: values.eventType, revertEvent })
-				return
-			}
-			setTempValues(null)
 			try {
 				// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
 				setIsUpdatingEvent(true)
@@ -588,7 +490,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					// CREATE event shift
 					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 				}
-				dispatch(destroy(FORM.CONFIRM_BULK_FORM))
 				// Po CREATE / UPDATE eventu dotiahnut eventy + zatvorit drawer
 				fetchEvents()
 				closeSiderForm()
@@ -603,115 +504,117 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				setIsUpdatingEvent(false)
 			}
 		},
-		[dispatch, fetchEvents, formValuesBulkForm?.actionType, query.eventId, salonID, closeSiderForm]
+		[fetchEvents, formValuesBulkForm?.actionType, salonID, closeSiderForm]
 	)
 
-	const handleSubmitConfirmModal = async (values: IBulkConfirmForm) => {
-		// EDIT
-		if (visibleBulkModal?.requestType === REQUEST_TYPE.PATCH) {
-			// NOTE: Uprava detailu cez form
-			if (query.sidebarView) {
-				switch (visibleBulkModal.eventType) {
-					case CALENDAR_EVENT_TYPE.RESERVATION:
-						dispatch(submit(FORM.CALENDAR_RESERVATION_FORM))
-						break
-					case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-						dispatch(submit(FORM.CALENDAR_EMPLOYEE_BREAK_FORM))
-						break
-					case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-						dispatch(submit(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM))
-						break
-					case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-						dispatch(submit(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM))
-						break
-					default:
-						break
-				}
-				// Uprava detailu cez drag and drop / resize
-			} else if (values.actionType === CONFIRM_BULK.BULK && !query.sidebarView) {
-				const event = await dispatch(getCalendarEventDetail(salonID, tempValues?.eventId as string))
-				// event repeat + values
-				const customRepeatOptions = event.data?.calendarBulkEvent?.repeatOptions
-				const data = {
-					...tempValues,
-					customRepeatOptions
-				}
-				await handleSubmitEvent({ ...data, revertEvent: visibleBulkModal.revertEvent } as ICalendarEventForm)
-			} else {
-				// SINGLE edit - tempvalues z drag and drop / resize
-				await handleSubmitEvent({ ...tempValues, revertEvent: visibleBulkModal.revertEvent } as ICalendarEventForm)
+	const handleDeleteEvent = useCallback(
+		async (calendarEventID: string) => {
+			if (isRemoving) {
+				return
 			}
-			// DELETE
-		} else {
-			deleteEventWrapper()
-		}
-		setVisibleBulkModal(null)
-	}
+			try {
+				setIsRemoving(true)
+				// DELETE reservation
+				if (query.sidebarView === CALENDAR_EVENT_TYPE.RESERVATION) {
+					await deleteReq(
+						'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}',
+						{ salonID, calendarEventID },
+						undefined,
+						NOTIFICATION_TYPE.NOTIFICATION,
+						true
+					)
+					// DELETE BULK event
+				} else if (eventDetail.data?.calendarBulkEvent?.id && formValuesBulkForm.actionType === CONFIRM_BULK.BULK) {
+					await deleteReq(
+						'/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}',
+						{ salonID, calendarBulkEventID: formValuesDetailEvent?.calendarBulkEventID as string },
+						undefined,
+						NOTIFICATION_TYPE.NOTIFICATION,
+						true
+					)
+				} else {
+					// DELETE single event
+					await deleteReq(
+						'/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}',
+						{ salonID, calendarEventID },
+						undefined,
+						NOTIFICATION_TYPE.NOTIFICATION,
+						true
+					)
+				}
 
-	const handleAddEvent = (initialData?: INewCalendarEvent) => {
-		// Event data ziskane z kalendara, sluzia pre init formularu v SiderEventManagement
-		setNewEventData(initialData)
+				closeSiderForm()
+				fetchEvents()
+			} catch (error: any) {
+				// eslint-disable-next-line no-console
+				console.error(error.message)
+			} finally {
+				setIsRemoving(false)
+			}
+		},
+		[
+			eventDetail?.data?.calendarBulkEvent?.id,
+			fetchEvents,
+			formValuesBulkForm?.actionType,
+			formValuesDetailEvent?.calendarBulkEventID,
+			isRemoving,
+			query?.sidebarView,
+			salonID,
+			closeSiderForm
+		]
+	)
 
-		if (query.eventId) {
-			closeSiderForm()
-		}
-		// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastav pracovnu zmenu
-		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-			dispatch(destroy(FORM.CALENDAR_RESERVATION_FORM))
-			setEventManagement(CALENDAR_EVENT_TYPE.RESERVATION)
-		} else {
-			dispatch(destroy(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM))
-			dispatch(destroy(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM))
-			dispatch(destroy(FORM.CALENDAR_EMPLOYEE_BREAK_FORM))
-			setEventManagement(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
+	const handleSubmitDataWrapper = (type: CALENDAR_SUBMIT_TYPE, values?: any) => {
+		// NOTE: ak je eventID z values tak sa funkcia vola z drag and drop / resize ak ide z query tak je otvoreny detail cez URL / kliknutim na bunku
+		const eventId = values?.eventId || query.eventId || undefined
+		const commonModalProps = { visible: true, values, eventId }
+
+		switch (type) {
+			case CALENDAR_SUBMIT_TYPE.SUBMIT_RESERVATON: {
+				if (eventId) {
+					setConfirmModal({ ...commonModalProps, handleSubmitData: handleSubmitReservation })
+				} else {
+					handleSubmitReservation(values, eventId)
+				}
+				break
+			}
+			case CALENDAR_SUBMIT_TYPE.SUBMIT_EVENT: {
+				if (values.calendarBulkEventID) {
+					setConfirmModal({ ...commonModalProps, handleSubmitData: handleSubmitEvent })
+				} else {
+					handleSubmitEvent(values, eventId)
+				}
+				break
+			}
+			case CALENDAR_SUBMIT_TYPE.DELETE: {
+				if (formValuesDetailEvent?.calendarBulkEventID) {
+					setConfirmModal({ ...commonModalProps, handleSubmitData: handleSubmitEvent })
+				} else {
+					handleDeleteEvent(eventId)
+				}
+				break
+			}
+			case CALENDAR_SUBMIT_TYPE.UPDATE_EVENT_STATE: {
+				if (formValuesDetailEvent?.calendarBulkEventID) {
+					setConfirmModal({ ...commonModalProps, handleSubmitData: handleDeleteEvent })
+				} else {
+					handleDeleteEvent(eventId)
+				}
+				break
+			}
+			default:
+				break
 		}
 	}
 
 	const modals = (
-		<>
-			{/* Confirm bulk modal */}
-			<ConfirmModal
-				title={visibleBulkModal?.requestType === REQUEST_TYPE.PATCH ? STRINGS(t).edit(t('loc:záznam')) : STRINGS(t).delete(t('loc:záznam'))}
-				visible={!!visibleBulkModal?.requestType}
-				onCancel={() => {
-					if (visibleBulkModal?.revertEvent) {
-						// ak uzivatel zrusi vykonanie akcie, tak sa event v kalendari vrati na pôvodne miesto
-						visibleBulkModal.revertEvent()
-					}
-					setVisibleBulkModal(null)
-				}}
-				onOk={() => dispatch(submit(FORM.CONFIRM_BULK_FORM))}
-				loading={loadingData}
-				disabled={loadingData}
-				closeIcon={<CloseIcon />}
-				destroyOnClose
-			>
-				<ConfirmBulkForm requestType={visibleBulkModal?.requestType as REQUEST_TYPE} onSubmit={handleSubmitConfirmModal} />
-			</ConfirmModal>
-			{/* Confirm reservation modal */}
-			<ConfirmModal
-				title={STRINGS(t).edit(t('loc:rezerváciu'))}
-				visible={reservationConfirmModal.visible}
-				onCancel={() => {
-					if (reservationConfirmModal?.data?.revertEvent) {
-						// ak uzivatel zrusi vykonanie akcie, tak sa event v kalendari vrati na pôvodne miesto
-						reservationConfirmModal.data?.revertEvent()
-					}
-					clearReservationConfirmationModal()
-				}}
-				onOk={() => {
-					if (reservationConfirmModal.data) {
-						processSubmitReservation(reservationConfirmModal.data, reservationConfirmModal.eventId)
-					}
-				}}
-				loading={loadingData}
-				disabled={loadingData}
-				closeIcon={<CloseIcon />}
-				destroyOnClose
-			>
-				{t('loc:Nieco o ulozenych zmenach.. zistit zo settings o notifikaciach')}
-			</ConfirmModal>
-		</>
+		<CalendarConfirmModal
+			visible={confirmModal.visible}
+			values={confirmModal.values}
+			eventId={confirmModal.eventId}
+			type={confirmModal.type}
+			onClose={() => console.log('close')}
+		/>
 	)
 
 	return (

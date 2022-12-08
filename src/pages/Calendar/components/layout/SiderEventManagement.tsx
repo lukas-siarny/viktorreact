@@ -242,7 +242,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sidebarView])
 
-	useKeyUp('Escape', onCloseSider)
+	useKeyUp('Escape', query.sidebarView ? onCloseSider : undefined)
 
 	const searchEmployes = useCallback(
 		async (search: string, page: number) => {

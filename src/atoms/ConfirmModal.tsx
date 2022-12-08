@@ -12,7 +12,7 @@ export interface IConfirmModal extends ModalProps {
 }
 
 const ConfirmModal: FC<IConfirmModal> = (props) => {
-	const { loading, disabled, onOk, onCancel, children, ...restProps } = props
+	const { loading, disabled, onOk, onCancel, children, okText, cancelText, ...restProps } = props
 	const [t] = useTranslation()
 
 	return (
@@ -20,10 +20,10 @@ const ConfirmModal: FC<IConfirmModal> = (props) => {
 			{children}
 			<div className={'flex gap-4 mt-6'}>
 				<Button type={'dashed'} size={'middle'} className={cx('noti-btn w-1/2')} htmlType={'button'} onClick={onCancel} disabled={disabled} loading={loading}>
-					{t('loc:Zrušiť')}
+					{cancelText || t('loc:Zrušiť')}
 				</Button>
 				<Button type={'primary'} size={'middle'} className={cx('noti-btn w-1/2')} htmlType={'button'} onClick={onOk} disabled={disabled} loading={loading}>
-					{'Ok'}
+					{okText || 'Ok'}
 				</Button>
 			</div>
 		</Modal>

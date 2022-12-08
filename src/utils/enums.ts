@@ -433,8 +433,8 @@ export const STRINGS = (t: TFunction) => ({
 	save: (entity: string) => t('loc:Uložiť {{entity}}', { entity }),
 	edit: (entity: string) => t('loc:Upraviť {{entity}}', { entity }),
 	createRecord: (entity: string) => t('loc:Vytvoriť {{entity}}', { entity }),
-	cancel: t('loc:Zrušiť'),
-
+	cancel: (entity: string) => t('loc:Zrušiť {{entity}}', { entity }),
+	decline: (entity: string) => t('loc:Zamietnuť {{entity}}', { entity }),
 	select: (entity: string) => t('loc:Vyberte {{entity}}', { entity }), // non searchable select field
 	search: (entity: string) => t('loc:Vyhľadajte {{entity}}', { entity }), // searchable select field
 	searchBy: (entity: string) => t('loc:Vyhľadajte podľa {{entity}}', { entity }), // input field vyhladavaci
@@ -922,4 +922,10 @@ export enum CALENDAR_SUBMIT_TYPE {
 export enum CALENDAR_CONFIRM_MODAL_TYPE {
 	EDIT_RESERVATION = 'EDIT_RESERVATION',
 	CANCEL_RESERVATION = 'CANCEL_RESERVATION'
+}
+
+export enum CALENDAR_DISABLED_NOTIFICATION_TYPE {
+	RESERVATION_CHANGED = 'RESERVATION_CHANGED',
+	RESERVATION_REJECTED = 'RESERVATION_REJECTED',
+	RESERVATION_CANCELLED = 'RESERVATION_CANCELLED'
 }

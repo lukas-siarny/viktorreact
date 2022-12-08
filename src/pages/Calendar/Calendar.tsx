@@ -30,12 +30,13 @@ import {
 	CALENDAR_SUBMIT_TYPE,
 	RESERVATION_STATE,
 	RESERVATION_PAYMENT_METHOD,
-	REFRESH_CALENDAR_INTERVAL
+	REFRESH_CALENDAR_INTERVAL,
+	CALENDAR_DISABLED_NOTIFICATION_TYPE
 } from '../../utils/enums'
 import { computeUntilDate } from '../../utils/helper'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
+import { getConfirmModalText, getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
 
 // reducers
 import { getCalendarEventDetail, getCalendarReservations, getCalendarShiftsTimeoff, refreshEvents } from '../../reducers/calendar/calendarActions'
@@ -72,7 +73,6 @@ import {
 
 // atoms
 import ConfirmModal, { IConfirmModal } from '../../atoms/ConfirmModal'
-import CalendarConfirmModal from './components/CalendarConfirmModal'
 import CalendarReservationPopover from './components/CalendarReservationPopover'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
@@ -152,9 +152,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
 	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS])
 	const isRefreshingEvents = useSelector((state: RootState) => state.calendar.isRefreshingEvents)
-	// const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 	const formValuesBulkForm: Partial<IBulkConfirmForm> = useSelector((state: RootState) => getFormValues(FORM.CONFIRM_BULK_FORM)(state))
+	console.log("🚀 ~ file: Calendar.tsx:156 ~ formValuesBulkForm", formValuesBulkForm)
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
+	const disabledNotifications = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.settings?.disabledNotifications)
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState(false)
@@ -166,10 +167,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		data: null,
 		position: null
 	})
-
-	/* const formValuesDetailEvent: Partial<ICalendarEventForm & ICalendarReservationForm> = useSelector((state: RootState) =>
-		getFormValues(`CALENDAR_${query.sidebarView}_FORM`)(state)
-	) */
 
 	const clearConfirmModal = () => setConfirmModal(INIT_CONFIRM_MODAL_VALUES)
 
@@ -470,9 +467,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const handleSubmitEvent = useCallback(
 		async (values: ICalendarEventForm, calendarEventID?: string, calendarBulkEventID?: string) => {
-			if (!values) {
-				return
-			}
 			const { revertEvent } = values
 
 			try {
@@ -575,13 +569,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const handleDeleteEvent = useCallback(
 		async (calendarEventID: string, calendarBulkEventID?: string) => {
-			if (isRemoving || !calendarEventID) {
+			if (isRemoving) {
 				return
 			}
 			try {
 				setIsRemoving(true)
-				// DELETE reservation
 				if (query.sidebarView === CALENDAR_EVENT_TYPE.RESERVATION) {
+					// DELETE reservation
 					await deleteReq(
 						'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}',
 						{ salonID, calendarEventID },
@@ -589,8 +583,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						NOTIFICATION_TYPE.NOTIFICATION,
 						true
 					)
-					// DELETE BULK event
 				} else if (calendarBulkEventID) {
+					// DELETE BULK event
 					await deleteReq(
 						'/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}',
 						{ salonID, calendarBulkEventID },
@@ -636,6 +630,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
+		} finally {
+			clearConfirmModal()
+			setReservationPopover((prevProps) => ({ ...prevProps, isOpen: false, position: null }))
 		}
 	}
 
@@ -655,7 +652,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					}
 					clearConfirmModal()
 				},
-				content: 'some text edit reservation'
+				content: getConfirmModalText(t('loc:Naozaj chcete upraviť rezerváciu?'), CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CHANGED, disabledNotifications)
 			})
 		} else {
 			handleSubmitReservation(values, eventId)
@@ -668,10 +665,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		const eventId = values?.eventId || query.eventId || undefined
 
 		if (values.calendarBulkEventID) {
+			dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
 			setConfirmModal({
 				visible: true,
 				title: STRINGS(t).edit(t('loc:záznam')),
-				onOk: () => handleSubmitEvent(values, eventId, formValuesBulkForm.actionType === CONFIRM_BULK.BULK ? values.calendarBulkEventID : undefined),
+				onOk: () => handleSubmitEvent(values, eventId, formValuesBulkForm?.actionType === CONFIRM_BULK.BULK ? values.calendarBulkEventID : undefined),
 				onCancel: () => {
 					if (values.revertEvent) {
 						values.revertEvent()
@@ -688,10 +686,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const handleDeleteEventWrapper = (eventId: string, calendarBulkEventID?: string) => {
 		// wrapper ktory rozhoduje, ci je potrebne potvrdit event alebo rovno submitnut
 		if (calendarBulkEventID) {
+			dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
 			setConfirmModal({
 				visible: true,
 				title: STRINGS(t).delete(t('loc:záznam')),
-				onOk: () => handleDeleteEvent(eventId, formValuesBulkForm.actionType === CONFIRM_BULK.BULK ? calendarBulkEventID : undefined),
+				onOk: () => handleDeleteEvent(eventId, formValuesBulkForm?.actionType === CONFIRM_BULK.BULK ? calendarBulkEventID : undefined),
 				onCancel: () => clearConfirmModal(),
 				content: <ConfirmBulkForm requestType={REQUEST_TYPE.DELETE} />
 			})
@@ -703,12 +702,41 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const handleUpdateReservationStateWrapper = (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
 		// wrapper ktory rozhoduje, ci je potrebne potvrdit event alebo rovno submitnut
 		if (state === RESERVATION_STATE.DECLINED || state === RESERVATION_STATE.NOT_REALIZED || state === RESERVATION_STATE.CANCEL_BY_SALON) {
+			let modalProps: IConfirmModalState = {} as IConfirmModalState
+
+			switch (state) {
+				case RESERVATION_STATE.DECLINED:
+					modalProps = {
+						...modalProps,
+						title: STRINGS(t).decline(t('loc:rezerváciu')),
+						content: getConfirmModalText(t('loc:Naozaj chcete zamietnuť rezerváciu?'), CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_REJECTED, disabledNotifications)
+					}
+					break
+				case RESERVATION_STATE.CANCEL_BY_SALON:
+					modalProps = {
+						...modalProps,
+						title: STRINGS(t).cancel(t('loc:rezerváciu')),
+						content: getConfirmModalText(t('loc:Naozaj chcete zrušiť rezerváciu?'), CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CANCELLED, disabledNotifications)
+					}
+					break
+				case RESERVATION_STATE.NOT_REALIZED:
+					modalProps = {
+						...modalProps,
+						title: t('loc:Nezrealizovaná'),
+						content: t('loc:Naozaj chcete označiť rezerváciu za nezrealizovanú?')
+					}
+					break
+				default:
+					break
+			}
+
 			setConfirmModal({
 				visible: true,
-				title: STRINGS(t).edit(t('loc:rezerváciu')),
 				onOk: () => handleUpdateReservationState(calendarEventID, state, reason, paymentMethod),
 				onCancel: () => clearConfirmModal(),
-				content: 'some text update reservation'
+				okText: t('loc:Áno'),
+				cancelText: t('loc:Nie'),
+				...modalProps
 			})
 		} else {
 			handleUpdateReservationState(calendarEventID, state, reason, paymentMethod)
@@ -768,7 +796,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	} */
 
 	const modals = (
-		<ConfirmModal loading={loadingData} disabled={loadingData} closeIcon={<CloseIcon />} destroyOnClose {...confirmModal}>
+		<ConfirmModal loading={loadingData} disabled={loadingData} closeIcon={<CloseIcon />} destroyOnClose zIndex={2000} {...confirmModal}>
 			{confirmModal.content}
 		</ConfirmModal>
 	)
@@ -861,7 +889,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				data={reservationPopover.data}
 				position={reservationPopover.position}
 				isOpen={reservationPopover.isOpen}
-				setIsOpen={() => setReservationPopover((prevState) => ({ ...prevState, isOpen: false, position: null }))}
+				setIsOpen={(isOpen: boolean) => setReservationPopover((prevState) => ({ ...prevState, isOpen, position: null }))}
 				handleUpdateReservationState={handleUpdateReservationStateWrapper}
 				onEditEvent={onEditEvent}
 				placement={validCalendarView === CALENDAR_VIEW.WEEK ? 'bottom' : 'left'}

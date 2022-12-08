@@ -1,8 +1,7 @@
-import React, { FC, useEffect, useMemo } from 'react'
+import React, { FC, useMemo } from 'react'
 import { Element } from 'react-scroll'
 import dayjs from 'dayjs'
 import { useDispatch } from 'react-redux'
-import { StringParam, useQueryParams } from 'use-query-params'
 
 // full calendar
 import FullCalendar, { SlotLabelContentArg, DateSelectArg } from '@fullcalendar/react' // must go before plugins
@@ -106,6 +105,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
 		dispatch(clearEvent())
 		setEventManagement(undefined)
+
 		if (event.resource) {
 			// eslint-disable-next-line no-underscore-dangle
 			const { employee } = event.resource._resource.extendedProps
@@ -121,21 +121,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			})
 		}
 	}
-
-	const [query] = useQueryParams({
-		sidebarView: StringParam
-	})
-
-	// TODO: ked sa bude rusit maska tak tento kod zmazat
-	useEffect(() => {
-		if (query?.sidebarView) {
-			const body = document.getElementsByClassName('fc-timegrid-cols')[0]
-			body.classList.add('active')
-		} else {
-			const body = document.getElementsByClassName('fc-timegrid-cols')[0]
-			body.classList.remove('active')
-		}
-	}, [query?.sidebarView])
 
 	return (
 		<div className={'nc-calendar-wrapper'} id={'nc-calendar-day-wrapper'}>
@@ -159,7 +144,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				// pre bezne eventy je potom nastavena min-height cez cssko .nc-day-event
 				eventMinHeight={0}
 				dayMinWidth={120}
-				editable={!query.sidebarView}
+				editable
 				weekends
 				nowIndicator
 				allDaySlot={false}
@@ -177,7 +162,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
 				// select
-				selectable={!query.sidebarView}
+				selectable
 				select={handleNewEvent}
 			/>
 		</div>

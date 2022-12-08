@@ -503,7 +503,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				} else {
 					repeatEvent = values.recurring
 						? {
-								untilDate: values.end as any,
+								untilDate: values.end as string,
 								days: {
 									MONDAY: includes(values.repeatOn, DAY.MONDAY),
 									TUESDAY: includes(values.repeatOn, DAY.TUESDAY),

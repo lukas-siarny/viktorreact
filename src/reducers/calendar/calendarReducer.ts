@@ -2,7 +2,7 @@
 import { RESET_STORE } from '../generalTypes'
 import { ICalendarActions, ICalendarEventDetailPayload } from './calendarActions'
 import { ICalendarEventsPayload, ILoadingAndFailure } from '../../types/interfaces'
-import { EVENTS, EVENT_DETAIL } from './calendarTypes'
+import { EVENTS, EVENT_DETAIL, SET_IS_REFRESHING_EVENTS } from './calendarTypes'
 import { CALENDAR_EVENTS_KEYS } from '../../utils/enums'
 
 export const initState = {
@@ -25,7 +25,8 @@ export const initState = {
 		data: null,
 		isLoading: false,
 		isFailure: false
-	} as ICalendarEventDetailPayload & ILoadingAndFailure
+	} as ICalendarEventDetailPayload & ILoadingAndFailure,
+	isRefreshingEvents: false
 }
 
 // eslint-disable-next-line default-param-last
@@ -89,6 +90,12 @@ export default (state = initState, action: ICalendarActions) => {
 					...initState.eventDetail,
 					data: action.payload.data
 				}
+			}
+		// Refreshing events
+		case SET_IS_REFRESHING_EVENTS:
+			return {
+				...state,
+				isRefreshingEvents: action.payload
 			}
 		case RESET_STORE:
 			return initState

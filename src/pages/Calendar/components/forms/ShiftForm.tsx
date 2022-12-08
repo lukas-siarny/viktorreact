@@ -87,14 +87,14 @@ const CalendarShiftForm: FC<Props> = (props) => {
 				className={'pb-0'}
 				pickerClassName={'w-full'}
 				component={DateField}
-				disablePast
-				// TODO: spravit max 365 dni
 				showInReservationDrawer
 				placement={'bottomRight'}
 				dropdownAlign={{ points: ['tr', 'br'] }}
 				required
 				size={'large'}
 				suffixIcon={<DateSuffixIcon className={'text-notino-grayDark'} />}
+				compareFrom1={dayjs()}
+				compareTo1={dayjs().add(1, 'year')}
 			/>
 		</>
 	)

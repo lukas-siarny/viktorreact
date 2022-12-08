@@ -6,7 +6,7 @@ import { EventDropArg, EventInput } from '@fullcalendar/react'
 // utils
 import {
 	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT,
-	ENDS_EVENT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, DAY,
+	CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, DAY,
 	SERVICE_TYPE
 } from '../utils/enums'
 
@@ -183,7 +183,7 @@ export interface ICalendarEventForm {
 	recurring?: boolean
 	repeatOn?: DAY[]
 	every?: EVERY_REPEAT
-	end?: ENDS_EVENT
+	end?: string
 	note?: string
 	allDay?: boolean
 	// NOTE: pre akcie resize a drag and drop

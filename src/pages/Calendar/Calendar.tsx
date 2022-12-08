@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useRef, useState, useMemo } from 'react'
 import Layout from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
-import { compact, includes, isEmpty, map } from 'lodash'
+import { includes, isEmpty } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { getFormValues, initialize, submit, destroy } from 'redux-form'
@@ -18,7 +18,6 @@ import {
 	CALENDAR_VIEW,
 	CONFIRM_BULK,
 	DAY,
-	ENDS_EVENT,
 	EVERY_REPEAT,
 	FORM,
 	NOTIFICATION_TYPE,
@@ -27,7 +26,6 @@ import {
 	STRINGS,
 	CALENDAR_INIT_TIME
 } from '../../utils/enums'
-import { computeUntilDate } from '../../utils/helper'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
@@ -505,7 +503,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				} else {
 					repeatEvent = values.recurring
 						? {
-								untilDate: computeUntilDate(values.end as ENDS_EVENT, values.date),
+								untilDate: values.end as any,
 								days: {
 									MONDAY: includes(values.repeatOn, DAY.MONDAY),
 									TUESDAY: includes(values.repeatOn, DAY.TUESDAY),

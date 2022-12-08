@@ -13,8 +13,6 @@ import validateBreakForm from './validateBreakForm'
 import { optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import {
 	CREATE_EVENT_PERMISSIONS,
-	ENDS_EVENT,
-	ENDS_EVENT_OPTIONS,
 	EVERY_REPEAT,
 	EVERY_REPEAT_OPTIONS,
 	FORM,
@@ -85,16 +83,20 @@ const CalendarBreakForm: FC<Props> = (props) => {
 				options={EVERY_REPEAT_OPTIONS()}
 				className={'pb-0'}
 			/>
-
 			<Field
-				component={SelectField}
-				label={t('loc:Koniec')}
-				placeholder={t('loc:Vyberte koniec')}
 				name={'end'}
-				size={'large'}
-				allowInfinityScroll
-				options={ENDS_EVENT_OPTIONS()}
+				label={t('loc:Konie opakovania')}
 				className={'pb-0'}
+				pickerClassName={'w-full'}
+				component={DateField}
+				disablePast
+				// TODO: spravit max 365 dni
+				showInReservationDrawer
+				placement={'bottomRight'}
+				dropdownAlign={{ points: ['tr', 'br'] }}
+				required
+				size={'large'}
+				suffixIcon={<DateSuffixIcon className={'text-notino-grayDark'} />}
 			/>
 		</>
 	)
@@ -103,7 +105,6 @@ const CalendarBreakForm: FC<Props> = (props) => {
 		if (checked) {
 			const repeatDay = getDayNameFromNumber(dayjs(formValues?.date).day()) // NOTE: .day() vrati cislo od 0 do 6 co predstavuje nedela az sobota
 			dispatch(change(formName, 'every', EVERY_REPEAT.ONE_WEEK))
-			dispatch(change(formName, 'end', ENDS_EVENT.WEEK))
 			dispatch(change(formName, 'repeatOn', repeatDay))
 		}
 	}

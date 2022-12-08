@@ -16,7 +16,7 @@ import { RootState } from '../../../../reducers'
 
 // utils
 import { getReq } from '../../../../utils/request'
-import { computeEndDate, formatLongQueryString, getAssignedUserLabel } from '../../../../utils/helper'
+import { formatLongQueryString, getAssignedUserLabel } from '../../../../utils/helper'
 import {
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_VIEW_TYPE,
@@ -119,7 +119,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 						recurring: true,
 						repeatOn: compact(map(data.calendarBulkEvent.repeatOptions?.days as any, (item, index) => (item ? index : undefined))) as DAY[],
 						every: data.calendarBulkEvent.repeatOptions.week === 1 ? EVERY_REPEAT.ONE_WEEK : EVERY_REPEAT.TWO_WEEKS,
-						end: computeEndDate(data?.start.date, data?.calendarBulkEvent?.repeatOptions.untilDate)
+						end: data?.calendarBulkEvent?.repeatOptions.untilDate
 				  }
 				: {}
 

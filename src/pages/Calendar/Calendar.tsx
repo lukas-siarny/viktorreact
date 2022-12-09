@@ -696,7 +696,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	)
 
 	const handleDeleteEventWrapper = useCallback(
-		(eventId: string, calendarBulkEventID?: string) => {
+		(eventId: string, calendarBulkEventID?: string, eventType?: CALENDAR_EVENT_TYPE) => {
 			// wrapper ktory rozhoduje, ci je potrebne potvrdit event alebo rovno submitnut
 			// v tomto pripade zatial vyskoci vzdy konfirmacny modal
 			let modalProps: IConfirmModalState = {} as IConfirmModalState
@@ -710,13 +710,17 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 				modalProps = {
 					...modalProps,
-					content: <ConfirmBulkForm requestType={REQUEST_TYPE.DELETE} onSubmit={handleSubmitConfirmBulkForm} />,
+					content: <ConfirmBulkForm requestType={REQUEST_TYPE.DELETE} eventType={eventType} onSubmit={handleSubmitConfirmBulkForm} />,
 					onOk: () => dispatch(submit(FORM.CONFIRM_BULK_FORM))
 				}
 			} else {
+				const deleteMessage = STRINGS(t).areYouSureDelete(t('loc:záznam'))
 				modalProps = {
 					...modalProps,
-					content: STRINGS(t).areYouSureDelete(t('loc:záznam')),
+					content:
+						eventType === CALENDAR_EVENT_TYPE.RESERVATION
+							? getConfirmModalText(deleteMessage, CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CANCELLED, disabledNotifications)
+							: deleteMessage,
 					onOk: () => handleDeleteEvent(eventId, calendarBulkEventID)
 				}
 			}
@@ -728,7 +732,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				...modalProps
 			})
 		},
-		[dispatch, handleDeleteEvent, t]
+		[dispatch, handleDeleteEvent, t, disabledNotifications]
 	)
 
 	const handleUpdateReservationStateWrapper = useCallback(

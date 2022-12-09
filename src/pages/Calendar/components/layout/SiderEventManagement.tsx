@@ -57,7 +57,7 @@ type Props = {
 	onCloseSider: () => void
 	handleSubmitReservation: (values: ICalendarReservationForm) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
-	handleDeleteEvent: (calendarEventId: string, calendarEventBulkId?: string) => any
+	handleDeleteEvent: (calendarEventId: string, calendarEventBulkId?: string, eventType?: CALENDAR_EVENT_TYPE) => any
 	newEventData?: INewCalendarEvent | null
 	eventId?: string | null
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
@@ -326,7 +326,11 @@ const SiderEventManagement: FC<Props> = (props) => {
 									onClick={() => {
 										if (hasPermission) {
 											if (eventDetail.data?.id) {
-												handleDeleteEvent(eventDetail.data?.id, eventDetail.data?.calendarBulkEvent?.id)
+												handleDeleteEvent(
+													eventDetail.data?.id,
+													eventDetail.data?.calendarBulkEvent?.id,
+													eventDetail?.data?.eventType as CALENDAR_EVENT_TYPE
+												)
 											}
 										} else {
 											openForbiddenModal()

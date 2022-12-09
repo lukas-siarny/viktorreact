@@ -33,7 +33,7 @@ import { RootState } from '../../../reducers'
 import { CalendarEvent, ICalendarReservationPopover } from '../../../types/interfaces'
 
 /// utils
-import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE } from '../../../utils/enums'
+import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE, STRINGS } from '../../../utils/enums'
 import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
 import { parseTimeFromMinutes, getTimeText } from '../calendarHelpers'
 
@@ -353,7 +353,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 	const headerMoreItems = {
 		cancel_by_salon: {
 			key: 'cancel-by-salon',
-			label: <span className={'text-notino-red'}>{t('loc:Zrušiť rezerváciu')}</span>,
+			label: <span className={'text-notino-red'}>{STRINGS(t).cancel(t('loc:rezerváciu'))}</span>,
 			icon: <CrossedIcon />,
 			className: itemClassName,
 			onClick: () => handleUpdateState(RESERVATION_STATE.CANCEL_BY_SALON)

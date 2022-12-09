@@ -8,8 +8,6 @@ import {
 	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT,
 	ENDS_EVENT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, DAY,
 	SERVICE_TYPE,
-	CALENDAR_CONFIRM_MODAL_TYPE,
-	CALENDAR_SUBMIT_TYPE,
 	RESERVATION_STATE,
 	RESERVATION_PAYMENT_METHOD
 } from '../utils/enums'
@@ -747,19 +745,4 @@ export interface ICalendarEventCardData {
 	allDay: boolean
 	isPlaceholder?: boolean
 	eventData: CalendarEvent
-}
-
-export type CalendarSubmitValues = ICalendarReservationForm & ICalendarEventForm
-
-export interface ICalendarHandleSubmitData {
-	type: CALENDAR_SUBMIT_TYPE,
-	values?: CalendarSubmitValues
-}
-
-export interface ICalendarConfirmModal {
-	visible: boolean
-	type?: CALENDAR_SUBMIT_TYPE
-	values?: CalendarSubmitValues
-	eventId?: string
-	submitHandler?: (evnetId?: string, values?: CalendarSubmitValues) => void
 }

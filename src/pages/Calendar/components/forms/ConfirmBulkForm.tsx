@@ -24,17 +24,6 @@ const formName = FORM.CONFIRM_BULK_FORM
 const ConfirmBulkForm: FC<Props> = (props) => {
 	const { handleSubmit, requestType } = props
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
-
-	/* useEffect(() => {
-		// ak ma uzivatel otvoreny modal na bulk akcie a refreshne tab, tak sa neprecistia data z formularu
-		// nasledny edit bulkoveho eventu sa bez precistenia dat nesprava korektne
-		const destroyBulkForm = () => {
-			dispatch(destroy(FORM.CONFIRM_BULK_FORM))
-		}
-		window.addEventListener('beforeunload', destroyBulkForm)
-		return () => window.removeEventListener('beforeunload', destroyBulkForm)
-	}, [dispatch]) */
 
 	const options = [
 		{

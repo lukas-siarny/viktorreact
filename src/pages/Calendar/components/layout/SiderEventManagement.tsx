@@ -323,7 +323,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 									placement={'bottom'}
 									entityName={t('loc:prestávku')}
 									className={'bg-transparent mr-4'}
-									onConfirm={() => {
+									noConfirm
+									onClick={() => {
 										if (hasPermission) {
 											if (eventDetail.data?.id) {
 												handleDeleteEvent(eventDetail.data?.id, eventDetail.data?.calendarBulkEvent?.id)

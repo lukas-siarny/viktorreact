@@ -411,6 +411,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			if (!values) {
 				return
 			}
+
 			const { revertEvent } = values
 
 			try {

@@ -224,7 +224,6 @@ const SiderEventManagement: FC<Props> = (props) => {
 			eventType
 		}
 
-		dispatch(initialize(FORM.EVENT_TYPE_FILTER_FORM, { eventType }))
 		dispatch(initialize(eventForm, initData))
 	}
 

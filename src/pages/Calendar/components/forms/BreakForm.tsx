@@ -85,7 +85,7 @@ const CalendarBreakForm: FC<Props> = (props) => {
 			/>
 			<Field
 				name={'end'}
-				label={t('loc:Konie opakovania')}
+				label={t('loc:Koniec opakovania')}
 				className={'pb-0'}
 				pickerClassName={'w-full'}
 				component={DateField}

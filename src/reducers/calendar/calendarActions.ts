@@ -1,5 +1,6 @@
-/* eslint-disable import/no-cycle */
 import dayjs from 'dayjs'
+import { CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, DATE_TIME_PARSER_DATE_FORMAT, RESERVATION_STATE } from '../../utils/enums'
+/* eslint-disable import/no-cycle */
 
 // types
 import { ThunkResult } from '../index'
@@ -8,8 +9,7 @@ import { Paths } from '../../types/api'
 import { CalendarEvent, ICalendarEventsPayload } from '../../types/interfaces'
 
 // enums
-import { EVENTS, EVENT_DETAIL, UPDATE_EVENT } from './calendarTypes'
-import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, DATE_TIME_PARSER_DATE_FORMAT, RESERVATION_STATE } from '../../utils/enums'
+import { EVENTS, EVENT_DETAIL, SET_IS_REFRESHING_EVENTS, UPDATE_EVENT } from './calendarTypes'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -47,7 +47,7 @@ interface ICalendarShiftsTimeOffQueryParams {
 	employeeIDs?: (string | null)[] | null
 }
 
-export type ICalendarActions = IResetStore | IGetCalendarEvents | IGetCalendarEventDetail
+export type ICalendarActions = IResetStore | IGetCalendarEvents | IGetCalendarEventDetail | ISetIsRefreshingEvents
 
 interface IGetCalendarEvents {
 	type: EVENTS
@@ -64,12 +64,23 @@ export interface ICalendarEventDetailPayload {
 	data: CalendarEventDetail | null
 }
 
+interface ISetIsRefreshingEvents {
+	type: typeof SET_IS_REFRESHING_EVENTS
+	payload: boolean
+}
+
+const storedPreviousParams: any = {
+	[CALENDAR_EVENTS_KEYS.RESERVATIONS]: {},
+	[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS]: {}
+}
+
 export const getCalendarEvents =
 	(
 		enumType: CALENDAR_EVENTS_KEYS = CALENDAR_EVENTS_KEYS.EVENTS,
 		queryParams: ICalendarEventsQueryParams,
 		splitMultidayEventsIntoOneDayEvents = false,
-		clearVirtualEvent = true
+		clearVirtualEvent = true,
+		storePreviousParams = true
 	): ThunkResult<Promise<ICalendarEventsPayload>> =>
 	async (dispatch) => {
 		dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
@@ -159,6 +170,14 @@ export const getCalendarEvents =
 				data: editedEvents
 			}
 
+			if (storePreviousParams) {
+				storedPreviousParams[enumType] = {
+					queryParams,
+					splitMultidayEventsIntoOneDayEvents,
+					clearVirtualEvent
+				}
+			}
+
 			dispatch({ type: EVENTS.EVENTS_LOAD_DONE, enumType, payload })
 		} catch (err) {
 			dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType })
@@ -200,10 +219,6 @@ export const getCalendarShiftsTimeoff = (
 		splitMultidayEventsIntoOneDayEvents,
 		clearVirtualEvent
 	)
-
-export const refreshEvents = (): ThunkResult<void> => (dispatch) => {
-	Object.keys(CALENDAR_EVENTS_KEYS).forEach((enumType) => dispatch({ type: EVENTS.EVENTS_REFRESH, enumType }))
-}
 
 export const clearCalendarEvents =
 	(enumType: CALENDAR_EVENTS_KEYS = CALENDAR_EVENTS_KEYS.EVENTS): ThunkResult<Promise<void>> =>
@@ -251,4 +266,22 @@ export const updateCalendarEvent =
 
 		dispatch({ type: UPDATE_EVENT, newEvents })
 		return newEvents
+	}
+
+export const refreshEvents =
+	(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE): ThunkResult<Promise<void>> =>
+	async (dispatch) => {
+		const reservation = storedPreviousParams[CALENDAR_EVENTS_KEYS.RESERVATIONS]
+		const shiftsTimeOff = storedPreviousParams[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS]
+
+		dispatch({ type: SET_IS_REFRESHING_EVENTS, payload: true })
+		if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
+			await Promise.all([
+				dispatch(getCalendarReservations(reservation.queryParams, reservation.splitMultidayEventsIntoOneDayEvents, reservation.clearVirtualEvent)),
+				dispatch(getCalendarShiftsTimeoff(shiftsTimeOff.queryParams, shiftsTimeOff.splitMultidayEventsIntoOneDayEvents, shiftsTimeOff.clearVirtualEvent))
+			])
+		} else if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
+			await dispatch(getCalendarShiftsTimeoff(shiftsTimeOff.queryParams, shiftsTimeOff.splitMultidayEventsIntoOneDayEvents, shiftsTimeOff.clearVirtualEvent))
+		}
+		dispatch({ type: SET_IS_REFRESHING_EVENTS, payload: false })
 	}

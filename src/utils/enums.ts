@@ -26,7 +26,7 @@ export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
 
 export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hours
 
-export const REFRESH_CALENDAR_INTERVAL = 1000 * 15 // 60 * 2 // 2 minutes
+export const REFRESH_CALENDAR_INTERVAL = 1000 * 60 * 2 // 2 minutes
 
 export const DEFAULT_LANGUAGE = LANGUAGE.EN
 
@@ -146,7 +146,6 @@ export enum FORM {
 	CALENDAR_EMPLOYEE_TIME_OFF_FORM = 'CALENDAR_EMPLOYEE_TIME_OFF_FORM',
 	CALENDAR_EMPLOYEE_BREAK_FORM = 'CALENDAR_EMPLOYEE_BREAK_FORM',
 	CONFIRM_BULK_FORM = 'CONFIRM_BULK_FORM',
-	EVENT_TYPE_FILTER_FORM = 'EVENT_TYPE_FILTER_FORM',
 	RESEVATION_SYSTEM_SETTINGS = 'RESEVATION_SYSTEM_SETTINGS',
 	HEADER_COUNTRY_FORM = 'HEADER_COUNTRY_FORM'
 }
@@ -433,8 +432,8 @@ export const STRINGS = (t: TFunction) => ({
 	save: (entity: string) => t('loc:Uložiť {{entity}}', { entity }),
 	edit: (entity: string) => t('loc:Upraviť {{entity}}', { entity }),
 	createRecord: (entity: string) => t('loc:Vytvoriť {{entity}}', { entity }),
-	cancel: t('loc:Zrušiť'),
-
+	cancel: (entity: string) => t('loc:Zrušiť {{entity}}', { entity }),
+	decline: (entity: string) => t('loc:Zamietnuť {{entity}}', { entity }),
 	select: (entity: string) => t('loc:Vyberte {{entity}}', { entity }), // non searchable select field
 	search: (entity: string) => t('loc:Vyhľadajte {{entity}}', { entity }), // searchable select field
 	searchBy: (entity: string) => t('loc:Vyhľadajte podľa {{entity}}', { entity }), // input field vyhladavaci
@@ -687,7 +686,7 @@ export const EVENT_NAMES = (eventType: CALENDAR_EVENT_TYPE) => {
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 			return i18next.t('loc:prestávku')
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-			return i18next.t('loc:zmenu')
+			return i18next.t('loc:shift-akuzativ')
 
 		case CALENDAR_EVENT_TYPE.RESERVATION:
 			return i18next.t('loc:rezerváciu')
@@ -879,4 +878,17 @@ export const RS_NOTIFICATION_FIELD_TEXTS = (notificationType: RS_NOTIFICATION, c
 	}
 
 	return result
+}
+
+export enum CALENDAR_DISABLED_NOTIFICATION_TYPE {
+	RESERVATION_CHANGED = 'RESERVATION_CHANGED',
+	RESERVATION_REJECTED = 'RESERVATION_REJECTED',
+	RESERVATION_CANCELLED = 'RESERVATION_CANCELLED'
+}
+
+export enum CONFIRM_MODAL_DATA_TYPE {
+	RESERVATION = 'RESERVATION',
+	EVENT = 'EVENT',
+	DELETE_EVENT = 'DELETE_EVENT',
+	UPDATE_RESERVATION_STATE = 'UPDATE_RESERVATION_STATE'
 }

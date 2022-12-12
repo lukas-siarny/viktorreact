@@ -39,7 +39,6 @@ type Props = {
 	showEmptyState: boolean
 	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
-	refetchData: () => void
 	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
 } & ICalendarView
 
@@ -50,11 +49,31 @@ export type CalendarRefs = {
 }
 
 const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
-	const { view, loading, reservations, shiftsTimeOffs, onShowAllEmployees, showEmptyState, handleSubmitReservation, handleSubmitEvent, selectedDate, setEventManagement } = props
+	const {
+		view,
+		loading,
+		reservations,
+		shiftsTimeOffs,
+		onShowAllEmployees,
+		showEmptyState,
+		handleSubmitReservation,
+		handleSubmitEvent,
+		selectedDate,
+		setEventManagement,
+		salonID,
+		eventsViewType,
+		employees,
+		onAddEvent,
+		onEditEvent,
+		onReservationClick,
+		clearRestartInterval
+	} = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
 	// const monthView = useRef<InstanceType<typeof FullCalendar>>(null)
+
+	const [disableRender, setDisableRender] = useState(false)
 
 	useImperativeHandle(ref, () => ({
 		[CALENDAR_VIEW.DAY]: dayView?.current,
@@ -93,9 +112,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const onEventChange = (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
 		const hasPermissions = permitted(authUserPermissions || [], selectedSalonuniqPermissions, UPDATE_EVENT_PERMISSIONS)
 
-		const revertEvent = () => {
-			arg.revert()
-		}
+		const revertEvent = () => arg.revert()
 
 		if (!hasPermissions) {
 			setVisibleForbiddenModal(true)
@@ -145,7 +162,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				key: employeeId
 			},
 			eventId,
-			revertEvent
+			revertEvent,
+			enableCalendarRender: () => setDisableRender(false)
 		}
 
 		if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
@@ -157,6 +175,12 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		}
 		handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm)
 	}
+
+	const onEventChangeStart = () => {
+		clearRestartInterval()
+		setDisableRender(true)
+	}
+
 	const getView = () => {
 		if (showEmptyState) {
 			return <CalendarEmptyState onButtonClick={onShowAllEmployees} />
@@ -180,15 +204,23 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		if (view === CALENDAR_VIEW.WEEK) {
 			return (
 				<CalendarWeekView
-					{...props}
 					ref={weekView}
-					setEventManagement={setEventManagement}
+					disableRender={disableRender}
 					reservations={sources.reservations}
 					shiftsTimeOffs={sources.shiftsTimeOffs}
 					virtualEvent={sources.virtualEvent}
-					onEventChange={onEventChange}
+					employees={employees}
 					weekDays={weekDays}
 					selectedDate={calendarSelectedDate}
+					salonID={salonID}
+					eventsViewType={eventsViewType}
+					onEditEvent={onEditEvent}
+					onReservationClick={onReservationClick}
+					onAddEvent={onAddEvent}
+					clearRestartInterval={clearRestartInterval}
+					setEventManagement={setEventManagement}
+					onEventChange={onEventChange}
+					onEventChangeStart={onEventChangeStart}
 					updateCalendarSize={() => weekView?.current?.getApi().updateSize()}
 				/>
 			)
@@ -196,14 +228,22 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 		return (
 			<CalendarDayView
-				{...props}
-				setEventManagement={setEventManagement}
 				ref={dayView}
+				disableRender={disableRender}
 				reservations={sources.reservations}
 				shiftsTimeOffs={sources.shiftsTimeOffs}
 				virtualEvent={sources.virtualEvent}
 				selectedDate={calendarSelectedDate}
+				employees={employees}
+				salonID={salonID}
+				eventsViewType={eventsViewType}
+				onAddEvent={onAddEvent}
+				onEditEvent={onEditEvent}
+				onReservationClick={onReservationClick}
+				clearRestartInterval={clearRestartInterval}
+				setEventManagement={setEventManagement}
 				onEventChange={onEventChange}
+				onEventChangeStart={onEventChangeStart}
 			/>
 		)
 	}

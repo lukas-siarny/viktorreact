@@ -187,7 +187,7 @@ const CalendarShiftForm: FC<Props> = (props) => {
 							block
 							className={'noti-btn self-end'}
 						>
-							{eventId ? STRINGS(t).edit(t('loc:zmenu')) : STRINGS(t).createRecord(t('loc:zmenu'))}
+							{eventId ? STRINGS(t).edit(t('loc:shift-akuzativ')) : STRINGS(t).createRecord(t('loc:shift-akuzativ'))}
 						</Button>
 					)}
 				/>

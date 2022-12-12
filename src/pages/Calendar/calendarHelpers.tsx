@@ -2,7 +2,7 @@
 import { DateSpanApi, EventApi } from '@fullcalendar/react'
 import dayjs from 'dayjs'
 import { t } from 'i18next'
-import { uniqueId } from 'lodash'
+import { startsWith, uniqueId } from 'lodash'
 import Scroll from 'react-scroll'
 
 // types
@@ -18,7 +18,7 @@ import {
 } from '../../types/interfaces'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, NEW_ID_PREFIX } from '../../utils/enums'
 import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
 
 /*
@@ -488,7 +488,7 @@ export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null) 
 	const extenedProps: IEventExtenedProps | undefined = movingEvent?.extendedProps
 	const { eventData } = extenedProps || {}
 
-	if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
+	if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION || startsWith(movingEvent?.id, NEW_ID_PREFIX)) {
 		return true
 	}
 

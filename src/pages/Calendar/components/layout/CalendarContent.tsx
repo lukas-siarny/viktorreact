@@ -122,9 +122,16 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 		let date = startDajys.format(CALENDAR_DATE_FORMAT.QUERY)
 
+		if (calendarView === CALENDAR_VIEW.WEEK) {
+			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
+			// (to sa bude diat len pri drope)
+			const resource = event.getResources()[0]
+			date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
+		}
+
 		// ak sa zmenil resource, tak updatenut resource (to sa bude diat len pri drope)
 		const employee = newResource ? newResourceExtendedProps?.employee : eventData?.employee
-
+		console.log('employee', employee)
 		const values = {
 			date,
 			timeFrom,
@@ -136,17 +143,14 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			eventId,
 			revertEvent
 		}
-
-		if ((!eventId || !employee?.id) && !virtualEvent) {
-			// ak nahodou nemam eventID alebo employeeId tak to vrati na povodne miesto
-			revertEvent()
-			return
-		}
-		console.log('called 1')
+		//
+		// if (!employee?.id || !virtualEvent) {
+		// 	// ak nahodou nemam eventID alebo employeeId tak to vrati na povodne miesto
+		// 	revertEvent()
+		// 	return
+		// }
 		// Ak existuje virualny event a isPlaceholder z eventu je true tak sa ejdna o virtualny even a bude sa rovbit change nad formularmi a nezavola sa request na BE
 		if (virtualEvent && startsWith(event.id, NEW_ID_PREFIX)) {
-			console.log('called 2')
-
 			const formName = `CALENDAR_${eventData?.eventType}_FORM` // TODO: ked sa spravi refacor bude len RESERVATION a EVENT forms
 			// TODO: ked budu dva formy tak spravit cez init s tym ze sa budu predchadzajuce data zistovat a tie sa mergnu s novymi prevetne sa voci zbytocnemu volaniu change - ked sa spravi NOT-3624
 			batch(() => {
@@ -154,15 +158,13 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				dispatch(change(formName, 'timeFrom', timeFrom))
 				dispatch(change(formName, 'timeTo', timeTo))
 				// Menit virtualny event medzi employees sa da len v Rezervacii
-				if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
-					dispatch(
-						change(FORM.CALENDAR_RESERVATION_FORM, 'employee', {
-							value: employee?.id as string,
-							key: employee?.id as string,
-							label: newResource ? newResourceExtendedProps?.employee?.name : eventData?.employee.email
-						})
-					)
-				}
+				dispatch(
+					change(formName, 'employee', {
+						value: employee?.id as string,
+						key: employee?.id as string,
+						label: newResource ? newResourceExtendedProps?.employee?.name : eventData?.employee.email
+					})
+				)
 			})
 
 			return

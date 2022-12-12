@@ -26,7 +26,7 @@ export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
 
 export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hours
 
-export const REFRESH_CALENDAR_INTERVAL = 1000 * 15 // 60 * 2 // 2 minutes
+export const REFRESH_CALENDAR_INTERVAL = 1000 * 60 * 2 // 2 minutes
 
 export const DEFAULT_LANGUAGE = LANGUAGE.EN
 
@@ -717,7 +717,7 @@ export const EVENT_NAMES = (eventType: CALENDAR_EVENT_TYPE) => {
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 			return i18next.t('loc:prestávku')
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-			return i18next.t('loc:zmenu')
+			return i18next.t('loc:shift-akuzativ')
 
 		case CALENDAR_EVENT_TYPE.RESERVATION:
 			return i18next.t('loc:rezerváciu')

@@ -1,12 +1,11 @@
 /* eslint-disable import/no-cycle */
-import React, { FC, useEffect, useCallback, useState } from 'react'
+import React, { FC, useEffect, useCallback, useState, useRef } from 'react'
 import { Button, Col, Divider, Dropdown, Menu, Popconfirm, Popover, Row, Tag } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { ItemType } from 'antd/lib/menu/hooks/useItems'
 import { useSelector } from 'react-redux'
 import dayjs from 'dayjs'
 import colors from 'tailwindcss/colors'
-import { TooltipPlacement } from 'antd/es/tooltip'
 import i18next from 'i18next'
 import { ButtonProps } from 'antd/es/button'
 
@@ -31,34 +30,15 @@ import Ellipsis from '../../../atoms/Ellipsis'
 
 // types
 import { RootState } from '../../../reducers'
-import { CalendarEvent, IEventCardProps } from '../../../types/interfaces'
+import { CalendarEvent, ICalendarReservationPopover } from '../../../types/interfaces'
 
 /// utils
-import { CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE } from '../../../utils/enums'
+import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE } from '../../../utils/enums'
 import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
 import { parseTimeFromMinutes, getTimeText } from '../calendarHelpers'
 
 // hooks
 import useKeyUp from '../../../hooks/useKeyUp'
-
-type Props = {
-	salonID: string
-	isOpen: boolean
-	setIsOpen: (isOpen: boolean) => void
-	start: Date | null
-	end: Date | null
-	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => void
-	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
-	color?: string
-	placement?: TooltipPlacement
-	service?: CalendarEvent['service']
-	customer?: CalendarEvent['customer']
-	employee?: CalendarEvent['employee']
-	reservationData?: CalendarEvent['reservationData']
-	originalEventData: IEventCardProps['originalEventData']
-	note?: CalendarEvent['note']
-	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
-}
 
 type PopoverNote = {
 	key: string
@@ -241,25 +221,10 @@ const PopoverContent: FC<ContentProps> = (props) => {
 	)
 }
 
-const CalendarReservationPopover: FC<Props> = (props) => {
-	const {
-		isOpen,
-		setIsOpen,
-		children,
-		start,
-		end,
-		color,
-		handleUpdateReservationState,
-		onEditEvent,
-		placement = 'left',
-		reservationData,
-		service,
-		customer,
-		employee,
-		note,
-		noteFromB2CCustomer,
-		originalEventData
-	} = props
+const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
+	const { data, position, setIsOpen, handleUpdateReservationState, onEditEvent, placement, isOpen } = props
+
+	const { start, end, color, reservationData, service, customer, employee, note, noteFromB2CCustomer, originalEventData } = data || {}
 
 	const { id } = originalEventData || {}
 
@@ -269,6 +234,9 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 
 	const overlayClassName = `nc-event-popover-overlay_${id || ''}`
 	const itemClassName = 'p-2 font-medium min-w-0 h-9 w-full relative'
+
+	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS]).data
+	const prevReservations = useRef(reservations)
 
 	useEffect(() => {
 		// TODO: toto by este potom chcelo trochu prerobit, teraz to je cez dva overlay spravene
@@ -299,13 +267,25 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 		}
 	}, [isOpen, overlayClassName, setIsOpen])
 
+	useEffect(() => {
+		if (isOpen) {
+			const prevEventData = prevReservations?.current?.find((prevEvent) => prevEvent.originalEvent?.id || prevEvent.id === originalEventData?.id)
+			const currentEventData = reservations?.find((currentEvent) => currentEvent.originalEvent?.id || currentEvent.id === originalEventData?.id)
+			if (JSON.stringify(prevEventData) !== JSON.stringify(currentEventData)) {
+				setIsOpen(false)
+			}
+		}
+		prevReservations.current = reservations
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [reservations, isOpen, originalEventData?.id])
+
 	const handleClosePopover = () => setIsOpen(false)
 
 	useKeyUp('Escape', handleClosePopover)
 
 	const handleUpdateState = useCallback(
 		(state: RESERVATION_STATE, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
-			if (id) {
+			if (id && handleUpdateReservationState) {
 				handleUpdateReservationState(id, state, undefined, paymentMethod)
 			}
 			setIsOpen(false)
@@ -521,8 +501,8 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 			overlayClassName={`${overlayClassName} nc-event-popover-overlay`}
 			content={
 				<PopoverContent
-					start={start}
-					end={end}
+					start={start || null}
+					end={end || null}
 					service={service}
 					color={color}
 					customer={customer}
@@ -539,7 +519,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 				/>
 			}
 		>
-			{children}
+			<div className={''} style={{ top: position?.top, left: position?.left, width: position?.width, height: position?.height, position: 'fixed' }} />
 		</Popover>
 	)
 }

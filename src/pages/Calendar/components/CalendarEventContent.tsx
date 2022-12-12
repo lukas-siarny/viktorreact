@@ -13,14 +13,14 @@ import { getTimeText } from '../calendarHelpers'
 // components
 import AbsenceCard from './AbsenceCard'
 import ReservationCard from './ReservationCard'
-import { IEventExtenedProps } from '../../../types/interfaces'
+import { IEventExtenedProps, ReservationPopoverData, ReservationPopoverPosition } from '../../../types/interfaces'
 
 interface ICalendarEventProps {
 	calendarView: CALENDAR_VIEW
 	data: EventContentArg
 	salonID: string
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
-	refetchData: () => void
+	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
 }
 
 const InverseBackgroundEvent = React.memo(() => <div className={cx('nc-bg-event not-set-availability')} />)
@@ -34,7 +34,7 @@ const BackgroundEvent: FC<{ eventType?: CALENDAR_EVENT_TYPE }> = React.memo(({ e
 	/>
 ))
 
-const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, onEditEvent, refetchData }) => {
+const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, onEditEvent, onReservationClick }) => {
 	const { event, backgroundColor } = data || {}
 	const { start, end } = event || {}
 
@@ -114,6 +114,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 			return (
 				<ReservationCard
 					calendarView={calendarView}
+					onReservationClick={onReservationClick}
 					resourceId={resourceId}
 					start={start}
 					end={end}
@@ -128,9 +129,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					isMultiDayEvent={isMultiDayEvent}
 					isFirstMultiDayEventInCurrentRange={isFirstMultiDayEventInCurrentRange}
 					isLastMultiDaylEventInCurrentRange={isLastMultiDaylEventInCurrentRange}
-					onEditEvent={onEditEvent}
 					originalEventData={originalEventData}
-					refetchData={refetchData}
 					isEdit={isEdit}
 					isPlaceholder={isPlaceholder}
 				/>

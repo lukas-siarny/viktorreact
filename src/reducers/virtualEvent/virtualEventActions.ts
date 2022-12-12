@@ -10,13 +10,11 @@ import { ThunkResult } from '../index'
 import { ICalendarEventForm, ICalendarReservationForm } from '../../types/interfaces'
 
 // utils
-import { CALENDAR_EVENT_TYPE, HANDLE_CALENDAR_ACTIONS, HANDLE_CALENDAR_FORMS } from '../../utils/enums'
+import { CALENDAR_EVENT_TYPE, HANDLE_CALENDAR_ACTIONS, HANDLE_CALENDAR_FORMS, NEW_ID_PREFIX } from '../../utils/enums'
 import { getDateTime } from '../../utils/helper'
 // import { createBaseEvent } from '../../pages/Calendar/calendarHelpers'
 
 export type IVirtualEventActions = IResetStore | IChangeVirtualEvents
-
-const NEW_ID_PREFIX = 'NEW'
 
 // NOTE: treba, aby calendarApi a changeCalendarDate boli setnute 'z vonku' z komponentu
 let calendarApi: CalendarApi | undefined

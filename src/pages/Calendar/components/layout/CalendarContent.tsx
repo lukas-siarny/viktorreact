@@ -1,5 +1,5 @@
 import React, { useImperativeHandle, useMemo, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector, batch } from 'react-redux'
 import { Spin } from 'antd'
 import { Content } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
@@ -9,7 +9,18 @@ import { EventResizeDoneArg } from '@fullcalendar/interaction'
 import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import { change, initialize } from 'redux-form'
+import { startsWith } from 'lodash'
+import {
+	CALENDAR_DATE_FORMAT,
+	CALENDAR_EVENT_TYPE,
+	CALENDAR_VIEW,
+	DEFAULT_DATE_INIT_FORMAT,
+	DEFAULT_TIME_FORMAT,
+	FORM,
+	NEW_ID_PREFIX,
+	UPDATE_EVENT_PERMISSIONS
+} from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
@@ -52,6 +63,7 @@ export type CalendarRefs = {
 const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const { view, loading, reservations, shiftsTimeOffs, onShowAllEmployees, showEmptyState, handleSubmitReservation, handleSubmitEvent, selectedDate, setEventManagement } = props
 
+	const dispatch = useDispatch()
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
 	// const monthView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -89,8 +101,10 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
 	const calendarSelectedDate = getSelectedDateForCalendar(view, selectedDate)
+	// TODO: ak existuje virual event tak nebreaknut a updatnut data vo forme cez onAddEvent + nezavoalt handleSubmit
 
 	const onEventChange = (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
+		console.log('virtualEvent', virtualEvent)
 		const hasPermissions = permitted(authUserPermissions || [], selectedSalonuniqPermissions, UPDATE_EVENT_PERMISSIONS)
 
 		const revertEvent = () => {
@@ -109,18 +123,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		const eventExtenedProps = (event.extendedProps as IEventExtenedProps) || {}
 		const eventData = eventExtenedProps?.eventData
 		const newResourceExtendedProps = newResource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
-
+		console.log('event', event)
 		const eventId = eventData?.id
 		const calendarBulkEventID = eventData?.calendarBulkEvent?.id || eventData?.calendarBulkEvent
-
-		// ak sa zmenil resource, tak updatenut resource (to sa bude diat len pri drope)
-		const employeeId = newResource ? newResourceExtendedProps?.employee?.id : eventData?.employee.id
-
-		if (!eventId || !employeeId) {
-			// ak nahodou nemam eventID alebo employeeId tak to vrati na povodne miesto
-			revertEvent()
-			return
-		}
 
 		// zatial predpokladame, ze nebudu viacdnove eventy - takze start a end date by mal byt rovnaky
 		const startDajys = dayjs(start)
@@ -129,12 +134,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 		let date = startDajys.format(CALENDAR_DATE_FORMAT.QUERY)
 
-		if (calendarView === CALENDAR_VIEW.WEEK) {
-			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
-			// (to sa bude diat len pri drope)
-			const resource = event.getResources()[0]
-			date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
-		}
+		// ak sa zmenil resource, tak updatenut resource (to sa bude diat len pri drope)
+		const employee = newResource ? newResourceExtendedProps?.employee : eventData?.employee
 
 		const values = {
 			date,
@@ -142,12 +143,44 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			timeTo,
 			eventType: eventData?.eventType,
 			employee: {
-				key: employeeId
+				key: employee?.id
 			},
 			eventId,
 			revertEvent
 		}
 
+		if ((!eventId || !employee?.id) && !virtualEvent) {
+			// ak nahodou nemam eventID alebo employeeId tak to vrati na povodne miesto
+			revertEvent()
+			return
+		}
+
+		// Ak existuje virualny event a isPlaceholder z eventu je true tak sa ejdna o virtualny even a bude sa rovbit change nad formularmi a nezavola sa request na BE
+		if (virtualEvent && startsWith(event.id, NEW_ID_PREFIX)) {
+			const formName = `CALENDAR_${eventData?.eventType}_FORM` // TODO: ked sa spravi refacor bude len RESERVATION a EVENT forms
+			batch(() => {
+				dispatch(change(formName, 'date', date))
+				dispatch(change(formName, 'timeFrom', timeFrom))
+				dispatch(change(formName, 'timeTo', timeTo))
+				// Menit employee sa da len pri rezervacii
+				dispatch(
+					change(FORM.CALENDAR_RESERVATION_FORM, 'employee', {
+						value: employee?.id as string,
+						key: employee?.id as string,
+						label: 'test' // TODO:
+					})
+				)
+			})
+
+			return
+		}
+
+		if (calendarView === CALENDAR_VIEW.WEEK) {
+			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
+			// (to sa bude diat len pri drope)
+			const resource = event.getResources()[0]
+			date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
+		}
 		if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
 			const customerId = eventData.customer?.id
 			const serviceId = eventData.service?.id

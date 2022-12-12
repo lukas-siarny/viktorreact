@@ -32,19 +32,6 @@ import { RootState } from '../../../reducers'
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-2.svg'
 
 export type ConfirmModalData = {
-	/* reservation: { values: ICalendarReservationForm } | null
-	event: { values: ICalendarEventForm } | null
-	deleteEvent: {
-		eventId: string
-		calendarBulkEventID?: string
-		eventType?: CALENDAR_EVENT_TYPE
-	} | null
-	updateReservation: {
-		calendarEventID: string
-		state: RESERVATION_STATE
-		reason?: string
-		paymentMethod?: RESERVATION_PAYMENT_METHOD
-	} | null */
 	dataType: CONFIRM_MODAL_DATA_TYPE
 	dataValues: ConfirmModalDataValues
 } | null
@@ -217,30 +204,25 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 	}
 
 	useEffect(() => {
-		if (!data) {
-			setConfirmModal(INIT_CONFIRM_MODAL_VALUES)
-		}
 		switch (dataType) {
 			case CONFIRM_MODAL_DATA_TYPE.RESERVATION:
 				handleSubmitReservationWrapper((dataValues as ConfirmModalReservationData)?.values)
-				return
+				break
 			case CONFIRM_MODAL_DATA_TYPE.EVENT:
 				handleSubmitEventWrapper((dataValues as ConfirmModalEventnData)?.values)
-				return
+				break
 			case CONFIRM_MODAL_DATA_TYPE.DELETE_EVENT: {
 				const values = dataValues as ConfirmModalDeleteEventData
 				handleDeleteEventWrapper(values?.eventId, values?.calendarBulkEventID, values?.eventType)
-				return
+				break
 			}
 			case CONFIRM_MODAL_DATA_TYPE.UPDATE_RESERVATION_STATE: {
 				const values = dataValues as ConfirmModalUpdateReservationData
 				handleUpdateReservationStateWrapper(values?.calendarEventID, values?.state, values?.reason, values?.paymentMethod)
-				// eslint-disable-next-line no-useless-return
-				return
+				break
 			}
 			default:
-				// eslint-disable-next-line no-useless-return
-				return
+				setConfirmModal(INIT_CONFIRM_MODAL_VALUES)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data])

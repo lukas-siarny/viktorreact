@@ -222,8 +222,6 @@ const SiderEventManagement: FC<Props> = (props) => {
 			...omit(prevInitData, 'eventType'),
 			eventType
 		}
-
-		dispatch(initialize(FORM.EVENT_TYPE_FILTER_FORM, { eventType }))
 		dispatch(initialize(eventForm, initData))
 	}
 
@@ -283,22 +281,22 @@ const SiderEventManagement: FC<Props> = (props) => {
 			[CALENDAR_EVENT_TYPE.RESERVATION]: {
 				tabKey: CALENDAR_EVENT_TYPE.RESERVATION,
 				tab: <>{t('loc:Rezervácia')}</>,
-				tabPaneContent: forms[CALENDAR_EVENT_TYPE.RESERVATION]
+				tabPaneContent: null
 			},
 			[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: {
 				tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
 				tab: <>{t('loc:Shift')}</>,
-				tabPaneContent: forms[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]
+				tabPaneContent: null
 			},
 			[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: {
 				tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
 				tab: <>{t('loc:Voľno')}</>,
-				tabPaneContent: forms[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]
+				tabPaneContent: null
 			},
 			[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: {
 				tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
 				tab: <>{t('loc:Prestávka')}</>,
-				tabPaneContent: forms[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]
+				tabPaneContent: null
 			}
 		}
 
@@ -341,9 +339,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 					</Button>
 				</div>
 			</div>
-			{eventId ? (
-				forms[sidebarView]
-			) : (
+			{!eventId && (
 				<TabsComponent
 					className={'nc-sider-event-management-tabs'}
 					activeKey={sidebarView}
@@ -352,6 +348,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 					destroyInactiveTabPane
 				/>
 			)}
+			{forms[sidebarView]}
 		</Sider>
 	)
 }

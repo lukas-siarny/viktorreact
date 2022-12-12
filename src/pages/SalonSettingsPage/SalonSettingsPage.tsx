@@ -144,7 +144,7 @@ const SalonSettingsPage = (props: SalonSubPageProps) => {
 					maxDaysB2cCreateReservation: salonRes?.data?.settings?.maxDaysB2cCreateReservation,
 					maxHoursB2cCreateReservationBeforeStart: salonRes?.data?.settings?.maxHoursB2cCreateReservationBeforeStart,
 					maxHoursB2cCancelReservationBeforeStart: salonRes?.data?.settings?.maxHoursB2cCancelReservationBeforeStart,
-					minutesIntervalBetweenB2CReservations: salonRes?.data?.settings?.minutesIntervalBetweenB2CReservations,
+					minutesIntervalB2CReservations: salonRes?.data?.settings?.minutesIntervalB2CReservations,
 					disabledNotifications: initDisabledNotifications(salonRes?.data?.settings?.disabledNotifications),
 					servicesSettings,
 					onlineBookingAll: !onlineBookingSettingsHasFalse,
@@ -198,7 +198,7 @@ const SalonSettingsPage = (props: SalonSubPageProps) => {
 				maxDaysB2cCreateReservation: values.maxDaysB2cCreateReservation,
 				maxHoursB2cCancelReservationBeforeStart: values.maxHoursB2cCancelReservationBeforeStart,
 				maxHoursB2cCreateReservationBeforeStart: values.maxHoursB2cCreateReservationBeforeStart,
-				minutesIntervalBetweenB2CReservations: values.minutesIntervalBetweenB2CReservations,
+				minutesIntervalB2CReservations: values.minutesIntervalB2CReservations,
 				disabledNotifications
 			},
 			servicesSettings

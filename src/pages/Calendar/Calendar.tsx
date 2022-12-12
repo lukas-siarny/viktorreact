@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import { includes, isEmpty } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { initialize, submit, destroy } from 'redux-form'
+import { initialize, destroy } from 'redux-form'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { useTranslation } from 'react-i18next'
 import Scroll from 'react-scroll'
@@ -17,25 +17,22 @@ import {
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_VIEW,
-	CONFIRM_BULK,
 	DAY,
 	ENDS_EVENT,
 	EVERY_REPEAT,
 	FORM,
 	NOTIFICATION_TYPE,
 	PERMISSION,
-	REQUEST_TYPE,
-	STRINGS,
 	CALENDAR_INIT_TIME,
 	RESERVATION_STATE,
 	RESERVATION_PAYMENT_METHOD,
 	REFRESH_CALENDAR_INTERVAL,
-	CALENDAR_DISABLED_NOTIFICATION_TYPE
+	CONFIRM_MODAL_DATA_TYPE
 } from '../../utils/enums'
 import { computeUntilDate } from '../../utils/helper'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { getConfirmModalText, getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
+import { getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
 
 // reducers
 import { getCalendarEventDetail, getCalendarReservations, getCalendarShiftsTimeoff, refreshEvents } from '../../reducers/calendar/calendarActions'
@@ -45,18 +42,13 @@ import { getServices, IServicesPayload } from '../../reducers/services/serviceAc
 import { clearEvent } from '../../reducers/virtualEvent/virtualEventActions'
 
 // components
-import ConfirmBulkForm from './components/forms/ConfirmBulkForm'
 import CalendarContent, { CalendarRefs } from './components/layout/CalendarContent'
 import CalendarHeader from './components/layout/Header'
 import SiderEventManagement from './components/layout/SiderEventManagement'
 import SiderFilter from './components/layout/SiderFilter'
 
-// assets
-import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
-
 // types
 import {
-	IBulkConfirmForm,
 	ICalendarEventForm,
 	ICalendarFilter,
 	ICalendarReservationForm,
@@ -68,8 +60,8 @@ import {
 } from '../../types/interfaces'
 
 // atoms
-import ConfirmModal, { IConfirmModal } from '../../atoms/ConfirmModal'
 import CalendarReservationPopover from './components/CalendarReservationPopover'
+import CalendarConfirmModal, { ConfirmModalData } from './components/CalendarConfirmModal'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -97,18 +89,6 @@ const getShortCategoryIdsForUrl = (ids?: (string | null)[] | null) => {
 
 const CALENDAR_VIEWS = Object.keys(CALENDAR_VIEW)
 const CALENDAR_EVENTS_VIEW_TYPES = Object.keys(CALENDAR_EVENTS_VIEW_TYPE)
-
-interface IConfirmModalState extends IConfirmModal {
-	content: React.ReactNode
-}
-
-const INIT_CONFIRM_MODAL_VALUES = {
-	visible: false,
-	onOk: undefined,
-	onCancel: undefined,
-	content: null,
-	title: undefined
-}
 
 const Calendar: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath = '' } = props
@@ -142,6 +122,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	) as CALENDAR_EVENTS_VIEW_TYPE
 
 	const [currentRange, setCurrentRange] = useState(getSelectedDateRange(validCalendarView, validSelectedDate))
+	const [confirmModalData, setConfirmModalData] = useState<ConfirmModalData | null>(null)
+
+	const clearConfirmModal = () => setConfirmModalData(null)
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const services = useSelector((state: RootState) => state.service.services)
@@ -149,20 +132,16 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS])
 	const isRefreshingEvents = useSelector((state: RootState) => state.calendar.isRefreshingEvents)
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
-	const disabledNotifications = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.settings?.disabledNotifications)
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState(false)
 	const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)
 	const [newEventData, setNewEventData] = useState<INewCalendarEvent | null | undefined>(null)
-	const [confirmModal, setConfirmModal] = useState<IConfirmModalState>(INIT_CONFIRM_MODAL_VALUES)
 	const [reservationPopover, setReservationPopover] = useState<{ isOpen: boolean; data: ReservationPopoverData | null; position: ReservationPopoverPosition | null }>({
 		isOpen: false,
 		data: null,
 		position: null
 	})
-
-	const clearConfirmModal = () => setConfirmModal(INIT_CONFIRM_MODAL_VALUES)
 
 	const fetchInterval = useRef<number | undefined>()
 
@@ -636,170 +615,33 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				// eslint-disable-next-line no-console
 				console.error(e)
 			} finally {
-				clearConfirmModal()
 				setReservationPopover((prevProps) => ({ ...prevProps, isOpen: false, position: null }))
+				clearConfirmModal()
 			}
 		},
 		[fetchEvents, salonID]
 	)
 
-	const handleSubmitReservationWrapper = useCallback(
-		(values: ICalendarReservationForm) => {
-			// wrapper ktory rozhoduje, ci je potrebne potvrdit event alebo rovno submitnut
-			// NOTE: ak je eventID z values tak sa funkcia vola z drag and drop / resize ak ide z query tak je otvoreny detail cez URL / kliknutim na bunku
-			const eventId = values?.eventId || query.eventId || undefined
+	const handleSubmitReservationWrapper = (values: ICalendarReservationForm) => setConfirmModalData({ dataType: CONFIRM_MODAL_DATA_TYPE.RESERVATION, dataValues: { values } })
 
-			if (eventId) {
-				setConfirmModal({
-					visible: true,
-					title: STRINGS(t).edit(t('loc:rezerváciu')),
-					onOk: () => handleSubmitReservation(values, eventId),
-					onCancel: () => {
-						if (values.revertEvent) {
-							values.revertEvent()
-						}
-						clearConfirmModal()
-					},
-					content: getConfirmModalText(t('loc:Naozaj chcete upraviť rezerváciu?'), CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CHANGED, disabledNotifications)
-				})
-			} else {
-				handleSubmitReservation(values, eventId)
-			}
-		},
-		[handleSubmitReservation, disabledNotifications, query.eventId, t]
-	)
+	const handleSubmitEventWrapper = (values: ICalendarEventForm) => setConfirmModalData({ dataType: CONFIRM_MODAL_DATA_TYPE.EVENT, dataValues: { values } })
 
-	const handleSubmitEventWrapper = useCallback(
-		(values: ICalendarEventForm) => {
-			// wrapper ktory rozhoduje, ci je potrebne potvrdit event alebo rovno submitnut
-			// NOTE: ak je eventID z values tak sa funkcia vola z drag and drop / resize ak ide z query tak je otvoreny detail cez URL / kliknutim na bunku
-			const eventId = values?.eventId || query.eventId || undefined
+	const handleDeleteEventWrapper = (eventId: string, calendarBulkEventID?: string, eventType?: CALENDAR_EVENT_TYPE) =>
+		setConfirmModalData({ dataType: CONFIRM_MODAL_DATA_TYPE.DELETE_EVENT, dataValues: { eventId, calendarBulkEventID, eventType } })
 
-			if (values.calendarBulkEventID) {
-				dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
-
-				const handleSubmitConfirmBulkForm = (bulkFormValues: IBulkConfirmForm) => {
-					handleSubmitEvent(values, eventId, bulkFormValues.actionType === CONFIRM_BULK.BULK ? values.calendarBulkEventID : undefined)
-				}
-
-				setConfirmModal({
-					visible: true,
-					title: STRINGS(t).edit(t('loc:záznam')),
-					onOk: () => dispatch(submit(FORM.CONFIRM_BULK_FORM)),
-					onCancel: () => {
-						if (values.revertEvent) {
-							values.revertEvent()
-						}
-						clearConfirmModal()
-					},
-					content: <ConfirmBulkForm requestType={REQUEST_TYPE.PATCH} onSubmit={handleSubmitConfirmBulkForm} />
-				})
-			} else {
-				handleSubmitEvent(values, eventId)
-			}
-		},
-		[dispatch, handleSubmitEvent, t, query.eventId]
-	)
-
-	const handleDeleteEventWrapper = useCallback(
-		(eventId: string, calendarBulkEventID?: string, eventType?: CALENDAR_EVENT_TYPE) => {
-			// wrapper ktory rozhoduje, ci je potrebne potvrdit event alebo rovno submitnut
-			// v tomto pripade zatial vyskoci vzdy konfirmacny modal
-			let modalProps: IConfirmModalState = {} as IConfirmModalState
-
-			if (calendarBulkEventID) {
-				dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
-
-				const handleSubmitConfirmBulkForm = (bulkFormValues: IBulkConfirmForm) => {
-					handleDeleteEvent(eventId, bulkFormValues.actionType === CONFIRM_BULK.BULK ? calendarBulkEventID : undefined)
-				}
-
-				modalProps = {
-					...modalProps,
-					content: <ConfirmBulkForm requestType={REQUEST_TYPE.DELETE} eventType={eventType} onSubmit={handleSubmitConfirmBulkForm} />,
-					onOk: () => dispatch(submit(FORM.CONFIRM_BULK_FORM))
-				}
-			} else {
-				const deleteMessage = STRINGS(t).areYouSureDelete(t('loc:záznam'))
-				modalProps = {
-					...modalProps,
-					content:
-						eventType === CALENDAR_EVENT_TYPE.RESERVATION
-							? getConfirmModalText(deleteMessage, CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CANCELLED, disabledNotifications)
-							: deleteMessage,
-					onOk: () => handleDeleteEvent(eventId, calendarBulkEventID)
-				}
-			}
-
-			setConfirmModal({
-				visible: true,
-				title: STRINGS(t).delete(t('loc:záznam')),
-				onCancel: () => clearConfirmModal(),
-				...modalProps
-			})
-		},
-		[dispatch, handleDeleteEvent, t, disabledNotifications]
-	)
-
-	const handleUpdateReservationStateWrapper = useCallback(
-		(calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
-			// wrapper ktory rozhoduje, ci je potrebne potvrdit event alebo rovno submitnut
-			if (state === RESERVATION_STATE.DECLINED || state === RESERVATION_STATE.NOT_REALIZED || state === RESERVATION_STATE.CANCEL_BY_SALON) {
-				let modalProps: IConfirmModalState = {} as IConfirmModalState
-
-				switch (state) {
-					case RESERVATION_STATE.DECLINED:
-						modalProps = {
-							...modalProps,
-							title: STRINGS(t).decline(t('loc:rezerváciu')),
-							content: getConfirmModalText(
-								t('loc:Naozaj chcete zamietnuť rezerváciu?'),
-								CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_REJECTED,
-								disabledNotifications
-							)
-						}
-						break
-					case RESERVATION_STATE.CANCEL_BY_SALON:
-						modalProps = {
-							...modalProps,
-							title: STRINGS(t).cancel(t('loc:rezerváciu')),
-							content: getConfirmModalText(
-								t('loc:Naozaj chcete zrušiť rezerváciu?'),
-								CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CANCELLED,
-								disabledNotifications
-							)
-						}
-						break
-					case RESERVATION_STATE.NOT_REALIZED:
-						modalProps = {
-							...modalProps,
-							title: t('loc:Nezrealizovaná'),
-							content: t('loc:Naozaj chcete označiť rezerváciu za nezrealizovanú?')
-						}
-						break
-					default:
-						break
-				}
-
-				setConfirmModal({
-					visible: true,
-					onOk: () => handleUpdateReservationState(calendarEventID, state, reason, paymentMethod),
-					onCancel: () => clearConfirmModal(),
-					okText: t('loc:Áno'),
-					cancelText: t('loc:Nie'),
-					...modalProps
-				})
-			} else {
-				handleUpdateReservationState(calendarEventID, state, reason, paymentMethod)
-			}
-		},
-		[disabledNotifications, t, handleUpdateReservationState]
-	)
+	const handleUpdateReservationStateWrapper = (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) =>
+		setConfirmModalData({ dataType: CONFIRM_MODAL_DATA_TYPE.UPDATE_RESERVATION_STATE, dataValues: { calendarEventID, state, reason, paymentMethod } })
 
 	const modals = (
-		<ConfirmModal loading={loadingData} disabled={loadingData} closeIcon={<CloseIcon />} destroyOnClose zIndex={2000} {...confirmModal}>
-			{confirmModal.content}
-		</ConfirmModal>
+		<CalendarConfirmModal
+			data={confirmModalData}
+			loadingData={loadingData}
+			queryEventId={query.eventId}
+			handleSubmitReservation={handleSubmitReservation}
+			handleSubmitEvent={handleSubmitEvent}
+			handleUpdateReservationState={handleUpdateReservationState}
+			handleDeleteEvent={handleDeleteEvent}
+		/>
 	)
 
 	const onEditEvent = (eventType: CALENDAR_EVENT_TYPE, eventId: string) => {

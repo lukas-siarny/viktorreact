@@ -750,3 +750,17 @@ export interface ICalendarEventCardData {
 	isPlaceholder?: boolean
 	eventData: CalendarEvent
 }
+
+export type ConfirmModalReservationData = { values: ICalendarReservationForm }
+export type ConfirmModalEventnData = { values: ICalendarEventForm }
+export type ConfirmModalDeleteEventData = {
+	eventId: string
+	calendarBulkEventID?: string
+	eventType?: CALENDAR_EVENT_TYPE }
+export type ConfirmModalUpdateReservationData = {
+	calendarEventID: string
+	state: RESERVATION_STATE
+	reason?: string
+	paymentMethod?: RESERVATION_PAYMENT_METHOD }
+
+export type ConfirmModalDataValues = ConfirmModalReservationData | ConfirmModalEventnData | ConfirmModalDeleteEventData | ConfirmModalUpdateReservationData

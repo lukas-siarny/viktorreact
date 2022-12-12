@@ -504,6 +504,7 @@
   "Zadajte číslo": "Enter number",
   "Zamestnanci": "Employees",
   "Zamestnanec": "Employee",
+  "Zamestnanec aj zákazník dostanú notifikáciu.": "Employee and customer receives a notification.",
   "Zamestnanec dostane notifikáciu, že jeho rezervácia bola zmenená.": "The employee receives a notification that his reservation has been changed.",
   "Zamestnanec dostane notifikáciu, že rezervácia vytvorená zákazníkom čaká na schválenie.": "The employee receives a notification that the reservation created by the customer is awaiting approval",
   "Zamestnanec {{ name }} je už priradený!": "Employee {{ name }} is already assigned!",

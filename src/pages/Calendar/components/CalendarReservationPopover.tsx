@@ -442,7 +442,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 				/>
 			}
 		>
-			<div className={''} style={{ top: position?.top, left: position?.left, width: position?.width, height: position?.height, position: 'fixed' }} />
+			<div style={{ top: position?.top, left: position?.left, width: position?.width, height: position?.height, position: 'fixed' }} />
 		</Popover>
 	)
 }

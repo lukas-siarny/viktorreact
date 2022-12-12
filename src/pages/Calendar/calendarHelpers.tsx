@@ -543,15 +543,15 @@ export const getConfirmModalText = (
 	const notifiactionText = (entity: string) => i18next.t('loc:{{entity}} dostane notifikáciu.', { entity })
 
 	if (isCustomerNotified && isEmployeeNotified) {
-		return `${baseText} ${notifiactionText(i18next.t('Zamestnanec aj zákazník'))}`
+		return `${baseText} ${i18next.t('loc:Zamestnanec aj zákazník dostanú notifikáciu.')}`
 	}
 
 	if (isCustomerNotified) {
-		return `${baseText} ${notifiactionText(i18next.t('Zákazník'))}`
+		return `${baseText} ${notifiactionText(i18next.t('loc:Zákazník'))}`
 	}
 
 	if (isEmployeeNotified) {
-		return `${baseText} ${notifiactionText(i18next.t('Zamestnanec'))}`
+		return `${baseText} ${notifiactionText(i18next.t('loc:Zamestnanec'))}`
 	}
 
 	return baseText

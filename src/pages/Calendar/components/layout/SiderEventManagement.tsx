@@ -287,7 +287,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 			},
 			[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: {
 				tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
-				tab: <>{t('loc:Zmena')}</>,
+				tab: <>{t('loc:Shift')}</>,
 				tabPaneContent: forms[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]
 			},
 			[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: {

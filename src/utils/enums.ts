@@ -718,7 +718,7 @@ export const EVENT_NAMES = (eventType: CALENDAR_EVENT_TYPE) => {
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 			return i18next.t('loc:prestávku')
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-			return i18next.t('loc:zmenu')
+			return i18next.t('loc:shift-akuzativ')
 
 		case CALENDAR_EVENT_TYPE.RESERVATION:
 			return i18next.t('loc:rezerváciu')

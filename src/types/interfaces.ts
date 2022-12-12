@@ -1,4 +1,4 @@
-import { EventResizeDoneArg } from '@fullcalendar/interaction'
+import { EventDragStartArg, EventResizeDoneArg, EventResizeStartArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 import { EventDropArg, EventInput } from '@fullcalendar/react'
@@ -161,6 +161,8 @@ export interface ICalendarReservationForm {
 	timeTo: string
 	note?: string
 	eventId?: string
+	revertEvent?: () => void
+	enableCalendarRender?: () => void
 }
 
 export interface ICalendarEventForm {
@@ -193,6 +195,7 @@ export interface ICalendarEventForm {
 	eventId?: string | null
 	calendarBulkEventID?: string
 	revertEvent?: () => void
+	enableCalendarRender?: () => void
 }
 
 export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null
@@ -650,9 +653,11 @@ export interface ICalendarView {
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
 	onEventChange?: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
+	onEventChangeStart?: () => void
 	loading?: boolean
 	virtualEvent?: EventInput
 	clearRestartInterval: () => void
+	disableRender?: boolean
 }
 
 export interface IEventCardProps {

@@ -57,7 +57,7 @@ type Props = {
 	onCloseSider: () => void
 	handleSubmitReservation: (values: ICalendarReservationForm) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
-	handleDeleteEvent: () => any
+	handleDeleteEvent: (calendarEventId: string, calendarEventBulkId?: string, eventType?: CALENDAR_EVENT_TYPE) => any
 	newEventData?: INewCalendarEvent | null
 	eventId?: string | null
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
@@ -92,6 +92,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 	const timeOffFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM)(state))
 	const shiftFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM)(state))
 	const reservationFormValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
+	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 
 	useEffect(() => {
 		// nastavuje referenciu na CalendarApi, musi sa update-ovat, ked sa meni View, aby bola aktualna vo virtalEventActions
@@ -239,7 +240,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sidebarView])
 
-	useKeyUp('Escape', onCloseSider)
+	useKeyUp('Escape', query.sidebarView ? onCloseSider : undefined)
 
 	const searchEmployes = useCallback(
 		async (search: string, page: number) => {
@@ -320,9 +321,16 @@ const SiderEventManagement: FC<Props> = (props) => {
 									placement={'bottom'}
 									entityName={t('loc:prestávku')}
 									className={'bg-transparent mr-4'}
-									onConfirm={() => {
+									noConfirm
+									onClick={() => {
 										if (hasPermission) {
-											handleDeleteEvent()
+											if (eventDetail.data?.id) {
+												handleDeleteEvent(
+													eventDetail.data?.id,
+													eventDetail.data?.calendarBulkEvent?.id,
+													eventDetail?.data?.eventType as CALENDAR_EVENT_TYPE
+												)
+											}
 										} else {
 											openForbiddenModal()
 										}

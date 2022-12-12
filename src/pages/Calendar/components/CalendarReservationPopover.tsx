@@ -33,7 +33,7 @@ import { RootState } from '../../../reducers'
 import { CalendarEvent, ICalendarReservationPopover } from '../../../types/interfaces'
 
 /// utils
-import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE } from '../../../utils/enums'
+import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE, STRINGS } from '../../../utils/enums'
 import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
 import { parseTimeFromMinutes, getTimeText } from '../calendarHelpers'
 
@@ -238,6 +238,8 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS]).data
 	const prevReservations = useRef(reservations)
 
+	const handleClosePopover = useCallback(() => setIsOpen(false), [setIsOpen])
+
 	useEffect(() => {
 		// TODO: toto by este potom chcelo trochu prerobit, teraz to je cez dva overlay spravene
 		// jeden zaistuje ze sa po kliku na neho zavrie popoover (cez &::before na popover elemente)
@@ -247,7 +249,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 		const listener = (e: Event) => {
 			const overlayElement = document.querySelector(`.${overlayClassName}`)
 			if (overlayElement && (e?.target as HTMLElement)?.classList?.contains(overlayClassName)) {
-				setIsOpen(false)
+				handleClosePopover()
 			}
 		}
 
@@ -265,32 +267,28 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 			document.removeEventListener('mousedown', listener)
 			document.removeEventListener('touchstart', listener)
 		}
-	}, [isOpen, overlayClassName, setIsOpen])
+	}, [isOpen, overlayClassName, handleClosePopover])
 
 	useEffect(() => {
 		if (isOpen) {
 			const prevEventData = prevReservations?.current?.find((prevEvent) => prevEvent.originalEvent?.id || prevEvent.id === originalEventData?.id)
 			const currentEventData = reservations?.find((currentEvent) => currentEvent.originalEvent?.id || currentEvent.id === originalEventData?.id)
 			if (JSON.stringify(prevEventData) !== JSON.stringify(currentEventData)) {
-				setIsOpen(false)
+				handleClosePopover()
 			}
 		}
 		prevReservations.current = reservations
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [reservations, isOpen, originalEventData?.id])
+	}, [reservations, isOpen, originalEventData?.id, handleClosePopover])
 
-	const handleClosePopover = () => setIsOpen(false)
-
-	useKeyUp('Escape', handleClosePopover)
+	useKeyUp('Escape', isOpen ? handleClosePopover : undefined)
 
 	const handleUpdateState = useCallback(
 		(state: RESERVATION_STATE, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
 			if (id && handleUpdateReservationState) {
 				handleUpdateReservationState(id, state, undefined, paymentMethod)
 			}
-			setIsOpen(false)
 		},
-		[id, handleUpdateReservationState, setIsOpen]
+		[id, handleUpdateReservationState]
 	)
 
 	const getFooterCheckoutButton = () => {
@@ -346,86 +344,19 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 		)
 	}
 
-	const getFooterCancelButton = (key: string, label: string, state: RESERVATION_STATE, popconfirmText?: string) => {
-		const button = (
-			<Button
-				key={key}
-				type={'dashed'}
-				size={'middle'}
-				className={'noti-btn w-1/2'}
-				htmlType={'button'}
-				onClick={!popconfirmText ? () => handleUpdateState(state) : undefined}
-			>
-				{label}
-			</Button>
-		)
-
-		return popconfirmText ? (
-			<Popconfirm
-				key={key}
-				placement={'bottom'}
-				title={popconfirmText}
-				okButtonProps={{
-					type: 'default',
-					className: 'noti-btn'
-				}}
-				cancelButtonProps={{
-					type: 'primary',
-					className: 'noti-btn'
-				}}
-				onConfirm={() => handleUpdateState(state)}
-				cancelText={t('loc:Nie')}
-				okText={t('loc:Áno')}
-			>
-				<Button type={'dashed'} size={'middle'} className={'noti-btn w-1/2'} htmlType={'button'}>
-					{label}
-				</Button>
-			</Popconfirm>
-		) : (
-			button
-		)
-	}
-
-	const [cancelPopconfirm, setCancelPopconfirm] = useState(false)
+	const getFooterCancelButton = (key: string, label: string, state: RESERVATION_STATE) => (
+		<Button key={key} type={'dashed'} size={'middle'} className={'noti-btn w-1/2'} htmlType={'button'} onClick={() => handleUpdateState(state)}>
+			{label}
+		</Button>
+	)
 
 	const headerMoreItems = {
 		cancel_by_salon: {
 			key: 'cancel-by-salon',
-			label: (
-				<Popconfirm
-					visible={cancelPopconfirm}
-					placement={'bottom'}
-					title={t('loc:Naozaj chcete zrušiť rezerváciu?')}
-					okButtonProps={{
-						type: 'default',
-						className: 'noti-btn'
-					}}
-					cancelButtonProps={{
-						type: 'primary',
-						className: 'noti-btn'
-					}}
-					cancelText={t('loc:Nie')}
-					okText={t('loc:Áno')}
-					onCancel={() => {
-						setCancelPopconfirm(false)
-					}}
-					onConfirm={() => {
-						handleUpdateState(RESERVATION_STATE.CANCEL_BY_SALON)
-						setIsOpen(false)
-						setCancelPopconfirm(false)
-					}}
-				>
-					<button
-						type={'button'}
-						className={'bg-transparent p-0 pl-8 m-0 outline-none cursor-pointer border-none inset-0 flex absolute items-center text-notino-red'}
-						onClick={() => setCancelPopconfirm(true)}
-					>
-						{t('loc:Zrušiť rezerváciu')}
-					</button>
-				</Popconfirm>
-			),
+			label: <span className={'text-notino-red'}>{STRINGS(t).cancel(t('loc:rezerváciu'))}</span>,
 			icon: <CrossedIcon />,
-			className: itemClassName
+			className: itemClassName,
+			onClick: () => handleUpdateState(RESERVATION_STATE.CANCEL_BY_SALON)
 		}
 	}
 
@@ -436,15 +367,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 					headerIcon: <CheckSuccessIcon />,
 					headerState: t('loc:Potvrdená'),
 					moreMenuItems: [headerMoreItems.cancel_by_salon],
-					footerButtons: [
-						getFooterCancelButton(
-							'cancel-button-not-realized',
-							t('loc:Nezrealizovaná'),
-							RESERVATION_STATE.NOT_REALIZED,
-							t('loc:Naozaj chcete označiť rezerváciu za nezrealizovanú?')
-						),
-						getFooterCheckoutButton()
-					]
+					footerButtons: [getFooterCancelButton('cancel-button-not-realized', t('loc:Nezrealizovaná'), RESERVATION_STATE.NOT_REALIZED), getFooterCheckoutButton()]
 				}
 			}
 			case RESERVATION_STATE.PENDING:
@@ -453,7 +376,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 					headerState: t('loc:Čakajúca'),
 					moreMenuItems: [headerMoreItems.cancel_by_salon],
 					footerButtons: [
-						getFooterCancelButton('cancel-button-declined', t('loc:Zamietnuť'), RESERVATION_STATE.DECLINED, t('loc:Naozaj chcete zamietnuť rezerváciu?')),
+						getFooterCancelButton('cancel-button-declined', t('loc:Zamietnuť'), RESERVATION_STATE.DECLINED),
 						<Button
 							key={'confirm-button'}
 							type={'dashed'}
@@ -511,7 +434,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 						if (id) {
 							onEditEvent(CALENDAR_EVENT_TYPE.RESERVATION, id)
 						}
-						setIsOpen(false)
+						handleClosePopover()
 					}}
 					onClose={handleClosePopover}
 					notes={getNotes()}
@@ -519,7 +442,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 				/>
 			}
 		>
-			<div className={''} style={{ top: position?.top, left: position?.left, width: position?.width, height: position?.height, position: 'fixed' }} />
+			<div style={{ top: position?.top, left: position?.left, width: position?.width, height: position?.height, position: 'fixed' }} />
 		</Popover>
 	)
 }

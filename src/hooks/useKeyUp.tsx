@@ -1,21 +1,19 @@
-import { useCallback, useEffect } from 'react'
+import { useEffect } from 'react'
 
-const useKeyUp = (keyName = 'Enter', onKeyUp: () => void) => {
-	const handleKeyUp = useCallback(
-		(event: KeyboardEvent) => {
-			if (event.key === keyName) {
+const useKeyUp = (keyName = 'Enter', onKeyUp?: () => void) => {
+	useEffect(() => {
+		const handleKeyUp = (event: KeyboardEvent) => {
+			if (event.key === keyName && onKeyUp) {
 				onKeyUp()
 			}
-		},
-		[onKeyUp, keyName]
-	)
-
-	useEffect(() => {
-		document.addEventListener('keyup', handleKeyUp, false)
+		}
+		if (onKeyUp) {
+			document.addEventListener('keyup', handleKeyUp, false)
+		}
 		return () => {
 			document.removeEventListener('keyup', handleKeyUp, false)
 		}
-	}, [handleKeyUp])
+	}, [onKeyUp, keyName])
 }
 
 export default useKeyUp

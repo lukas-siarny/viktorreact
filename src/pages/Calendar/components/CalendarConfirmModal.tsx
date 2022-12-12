@@ -2,17 +2,16 @@ import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize, submit } from 'redux-form'
 import { useTranslation } from 'react-i18next'
+
+// components
 import ConfirmModal, { IConfirmModal } from '../../../atoms/ConfirmModal'
-import {
-	ConfirmModalDataValues,
-	IBulkConfirmForm,
-	ICalendarEventForm,
-	ICalendarReservationForm,
-	ConfirmModalReservationData,
-	ConfirmModalDeleteEventData,
-	ConfirmModalEventnData,
-	ConfirmModalUpdateReservationData
-} from '../../../types/interfaces'
+import ConfirmBulkForm from './forms/ConfirmBulkForm'
+
+// types
+import { IBulkConfirmForm, ICalendarEventForm, ICalendarReservationForm, ConfirmModalData } from '../../../types/interfaces'
+import { RootState } from '../../../reducers'
+
+// utils
 import {
 	CALENDAR_DISABLED_NOTIFICATION_TYPE,
 	CALENDAR_EVENT_TYPE,
@@ -24,17 +23,10 @@ import {
 	RESERVATION_STATE,
 	STRINGS
 } from '../../../utils/enums'
-import ConfirmBulkForm from './forms/ConfirmBulkForm'
 import { getConfirmModalText } from '../calendarHelpers'
-import { RootState } from '../../../reducers'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-2.svg'
-
-export type ConfirmModalData = {
-	dataType: CONFIRM_MODAL_DATA_TYPE
-	dataValues: ConfirmModalDataValues
-} | null
 
 type Props = {
 	data: ConfirmModalData
@@ -44,6 +36,7 @@ type Props = {
 	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => void
 	loadingData?: boolean
 	queryEventId?: string | null
+	clearConfirmModal: () => void
 }
 
 const INIT_CONFIRM_MODAL_VALUES = {
@@ -59,15 +52,12 @@ interface IConfirmModalState extends IConfirmModal {
 }
 
 const CalendarConfirmModal: FC<Props> = (props) => {
-	const { handleSubmitReservation, handleSubmitEvent, handleDeleteEvent, handleUpdateReservationState, loadingData, queryEventId, data } = props
-	const { dataType, dataValues } = data || {}
+	const { handleSubmitReservation, handleSubmitEvent, handleDeleteEvent, handleUpdateReservationState, loadingData, queryEventId, data, clearConfirmModal } = props
 
 	const [confirmModal, setConfirmModal] = useState<IConfirmModalState>(INIT_CONFIRM_MODAL_VALUES)
 	const disabledNotifications = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.settings?.disabledNotifications)
 
 	const [t] = useTranslation()
-
-	const clearConfirmModal = () => setConfirmModal(INIT_CONFIRM_MODAL_VALUES)
 
 	const dispatch = useDispatch()
 
@@ -85,6 +75,7 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 					if (values.revertEvent) {
 						values.revertEvent()
 					}
+					clearConfirmModal()
 				},
 				content: getConfirmModalText(t('loc:Naozaj chcete upraviť rezerváciu?'), CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CHANGED, disabledNotifications)
 			})
@@ -107,7 +98,7 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 
 			setConfirmModal({
 				visible: true,
-				title: STRINGS(t).edit(t('loc:záznam')),
+				title: STRINGS(t).edit(t('loc:udalosť')),
 				onOk: () => dispatch(submit(FORM.CONFIRM_BULK_FORM)),
 				onCancel: () => {
 					if (values.revertEvent) {
@@ -140,7 +131,7 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 				onOk: () => dispatch(submit(FORM.CONFIRM_BULK_FORM))
 			}
 		} else {
-			const deleteMessage = STRINGS(t).areYouSureDelete(t('loc:záznam'))
+			const deleteMessage = STRINGS(t).areYouSureDelete(t('loc:udalosť'))
 			modalProps = {
 				...modalProps,
 				content:
@@ -153,7 +144,7 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 
 		setConfirmModal({
 			visible: true,
-			title: STRINGS(t).delete(t('loc:záznam')),
+			title: STRINGS(t).delete(t('loc:udalosť')),
 			onCancel: () => clearConfirmModal(),
 			...modalProps
 		})
@@ -204,24 +195,24 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 	}
 
 	useEffect(() => {
-		switch (dataType) {
+		switch (data?.key) {
 			case CONFIRM_MODAL_DATA_TYPE.RESERVATION:
-				handleSubmitReservationWrapper((dataValues as ConfirmModalReservationData)?.values)
+				handleSubmitReservationWrapper(data?.values)
 				break
 			case CONFIRM_MODAL_DATA_TYPE.EVENT:
-				handleSubmitEventWrapper((dataValues as ConfirmModalEventnData)?.values)
+				handleSubmitEventWrapper(data?.values)
+
 				break
 			case CONFIRM_MODAL_DATA_TYPE.DELETE_EVENT: {
-				const values = dataValues as ConfirmModalDeleteEventData
-				handleDeleteEventWrapper(values?.eventId, values?.calendarBulkEventID, values?.eventType)
+				handleDeleteEventWrapper(data?.eventId, data?.calendarBulkEventID, data?.eventType)
 				break
 			}
 			case CONFIRM_MODAL_DATA_TYPE.UPDATE_RESERVATION_STATE: {
-				const values = dataValues as ConfirmModalUpdateReservationData
-				handleUpdateReservationStateWrapper(values?.calendarEventID, values?.state, values?.reason, values?.paymentMethod)
+				handleUpdateReservationStateWrapper(data?.calendarEventID, data?.state, data?.reason, data?.paymentMethod)
 				break
 			}
 			default:
+				console.log('aaaaaa')
 				setConfirmModal(INIT_CONFIRM_MODAL_VALUES)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps

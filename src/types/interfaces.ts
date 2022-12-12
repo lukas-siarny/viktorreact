@@ -9,7 +9,8 @@ import {
 	ENDS_EVENT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, DAY,
 	SERVICE_TYPE,
 	RESERVATION_STATE,
-	RESERVATION_PAYMENT_METHOD
+	RESERVATION_PAYMENT_METHOD,
+	CONFIRM_MODAL_DATA_TYPE
 } from '../utils/enums'
 
 // types
@@ -751,16 +752,29 @@ export interface ICalendarEventCardData {
 	eventData: CalendarEvent
 }
 
-export type ConfirmModalReservationData = { values: ICalendarReservationForm }
-export type ConfirmModalEventnData = { values: ICalendarEventForm }
+export type ConfirmModalReservationData = {
+	key: CONFIRM_MODAL_DATA_TYPE.RESERVATION
+	values: ICalendarReservationForm
+}
+
+export type ConfirmModalEventnData = {
+	key: CONFIRM_MODAL_DATA_TYPE.EVENT
+	values: ICalendarEventForm
+}
+
 export type ConfirmModalDeleteEventData = {
+	key: CONFIRM_MODAL_DATA_TYPE.DELETE_EVENT
 	eventId: string
 	calendarBulkEventID?: string
-	eventType?: CALENDAR_EVENT_TYPE }
+	eventType?: CALENDAR_EVENT_TYPE
+}
+
 export type ConfirmModalUpdateReservationData = {
+	key: CONFIRM_MODAL_DATA_TYPE.UPDATE_RESERVATION_STATE
 	calendarEventID: string
 	state: RESERVATION_STATE
 	reason?: string
-	paymentMethod?: RESERVATION_PAYMENT_METHOD }
+	paymentMethod?: RESERVATION_PAYMENT_METHOD
+}
 
-export type ConfirmModalDataValues = ConfirmModalReservationData | ConfirmModalEventnData | ConfirmModalDeleteEventData | ConfirmModalUpdateReservationData
+export type ConfirmModalData = ConfirmModalReservationData | ConfirmModalEventnData | ConfirmModalDeleteEventData | ConfirmModalUpdateReservationData | null

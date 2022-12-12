@@ -56,12 +56,13 @@ import {
 	SalonSubPageProps,
 	INewCalendarEvent,
 	ReservationPopoverData,
-	ReservationPopoverPosition
+	ReservationPopoverPosition,
+	ConfirmModalData
 } from '../../types/interfaces'
 
 // atoms
 import CalendarReservationPopover from './components/CalendarReservationPopover'
-import CalendarConfirmModal, { ConfirmModalData } from './components/CalendarConfirmModal'
+import CalendarConfirmModal from './components/CalendarConfirmModal'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -122,7 +123,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	) as CALENDAR_EVENTS_VIEW_TYPE
 
 	const [currentRange, setCurrentRange] = useState(getSelectedDateRange(validCalendarView, validSelectedDate))
-	const [confirmModalData, setConfirmModalData] = useState<ConfirmModalData | null>(null)
+	const [confirmModalData, setConfirmModalData] = useState<ConfirmModalData>(null)
 
 	const clearConfirmModal = () => setConfirmModalData(null)
 
@@ -622,15 +623,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		[fetchEvents, salonID]
 	)
 
-	const handleSubmitReservationWrapper = (values: ICalendarReservationForm) => setConfirmModalData({ dataType: CONFIRM_MODAL_DATA_TYPE.RESERVATION, dataValues: { values } })
+	const initSubmitReservationData = (values: ICalendarReservationForm) => setConfirmModalData({ key: CONFIRM_MODAL_DATA_TYPE.RESERVATION, values })
 
-	const handleSubmitEventWrapper = (values: ICalendarEventForm) => setConfirmModalData({ dataType: CONFIRM_MODAL_DATA_TYPE.EVENT, dataValues: { values } })
+	const initSubmitEventData = (values: ICalendarEventForm) => setConfirmModalData({ key: CONFIRM_MODAL_DATA_TYPE.EVENT, values })
 
-	const handleDeleteEventWrapper = (eventId: string, calendarBulkEventID?: string, eventType?: CALENDAR_EVENT_TYPE) =>
-		setConfirmModalData({ dataType: CONFIRM_MODAL_DATA_TYPE.DELETE_EVENT, dataValues: { eventId, calendarBulkEventID, eventType } })
+	const initDeleteEventData = (eventId: string, calendarBulkEventID?: string, eventType?: CALENDAR_EVENT_TYPE) =>
+		setConfirmModalData({ key: CONFIRM_MODAL_DATA_TYPE.DELETE_EVENT, eventId, calendarBulkEventID, eventType })
 
-	const handleUpdateReservationStateWrapper = (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) =>
-		setConfirmModalData({ dataType: CONFIRM_MODAL_DATA_TYPE.UPDATE_RESERVATION_STATE, dataValues: { calendarEventID, state, reason, paymentMethod } })
+	const initUpdateReservationStateData = (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) =>
+		setConfirmModalData({ key: CONFIRM_MODAL_DATA_TYPE.UPDATE_RESERVATION_STATE, calendarEventID, state, reason, paymentMethod })
 
 	const modals = (
 		<CalendarConfirmModal
@@ -641,6 +642,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			handleSubmitEvent={handleSubmitEvent}
 			handleUpdateReservationState={handleUpdateReservationState}
 			handleDeleteEvent={handleDeleteEvent}
+			clearConfirmModal={clearConfirmModal}
 		/>
 	)
 
@@ -707,8 +709,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 								position: position || null
 							})
 						}}
-						handleSubmitReservation={handleSubmitReservationWrapper}
-						handleSubmitEvent={handleSubmitEventWrapper}
+						handleSubmitReservation={initSubmitReservationData}
+						handleSubmitEvent={initSubmitEventData}
 						onAddEvent={handleAddEvent}
 						clearRestartInterval={clearRestartFetchInterval}
 					/>
@@ -717,11 +719,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						selectedDate={validSelectedDate}
 						eventsViewType={validEventsViewType}
 						eventId={query.eventId}
-						handleDeleteEvent={handleDeleteEventWrapper}
+						handleDeleteEvent={initDeleteEventData}
 						sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE}
 						onCloseSider={closeSiderForm}
-						handleSubmitReservation={handleSubmitReservationWrapper}
-						handleSubmitEvent={handleSubmitEventWrapper}
+						handleSubmitReservation={initSubmitReservationData}
+						handleSubmitEvent={initSubmitEventData}
 						newEventData={newEventData}
 						calendarApi={calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()}
 						changeCalendarDate={setNewSelectedDate}
@@ -733,7 +735,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				position={reservationPopover.position}
 				isOpen={reservationPopover.isOpen}
 				setIsOpen={(isOpen: boolean) => setReservationPopover((prevState) => ({ ...prevState, isOpen, position: null }))}
-				handleUpdateReservationState={handleUpdateReservationStateWrapper}
+				handleUpdateReservationState={initUpdateReservationStateData}
 				onEditEvent={onEditEvent}
 				placement={validCalendarView === CALENDAR_VIEW.WEEK ? 'bottom' : 'left'}
 			/>

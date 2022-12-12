@@ -127,17 +127,15 @@
 					padding: 16px
 				.nc-sider-event-management-content
 					height: calc(100% - 114px) // 100% - .nc-sider-event-management-header - .nc-sider-event-management-footer
+					padding-top: 0
 			.nc-sider-event-management-tabs
-				height: calc(100% - 42px) // 100% - .nc-sider-event-management-header
+				height: 32px
 				.ant-tabs-nav
 					margin-bottom: 0
 					.ant-tabs-nav-wrap
 						padding-left: 16px
-				.ant-tabs-content
-					height: 100%
-					.nc-sider-event-management-content
-						height: calc(100% - 64px) // 100% - .nc-sider-event-management-footer
-						padding-top: 16px
+				.ant-tabs-content-holder
+					display: none
 				.ant-tabs-tab
 					font-size: 14px
 					line-height: 16px
@@ -145,9 +143,10 @@
 					& +.ant-tabs-tab
 						margin: 0 0 0 16px
 			.nc-sider-event-management-content
+				height: calc(100% - 138px) // 100% - .nc-sider-event-management-header - .nc-sider-event-management-tabs - .nc-sider-event-management-footer
 				overflow-y: auto
 				overflow-x: hidden
-				padding: 0 16px 16px 16px
+				padding: 16px
 			.nc-sider-event-management-footer
 				height: 64px
 				padding: 8px 16px 16px 16px

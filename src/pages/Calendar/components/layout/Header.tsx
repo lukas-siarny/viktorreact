@@ -196,7 +196,7 @@ const CalendarHeader: FC<Props> = (props) => {
 						isSmallerDevice={isSmallerDevice}
 					/>
 					<SwitchViewButton
-						label={t('loc:Zmeny')}
+						label={t('loc:Shifts')}
 						className={cx({ active: eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF })}
 						onClick={() => setEventsViewType(CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF)}
 						isSmallerDevice={isSmallerDevice}

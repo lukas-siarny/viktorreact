@@ -166,8 +166,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		updateCalendarSize,
 		onAddEvent,
 		virtualEvent,
-		clearRestartInterval,
-		setEventManagement
+		setEventManagement,
+		onEventChangeStart
 	} = props
 
 	const [query] = useQueryParams({
@@ -304,8 +304,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
-				eventDragStart={() => clearRestartInterval()}
-				eventResizeStart={() => clearRestartInterval()}
+				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
+				eventResizeStart={() => onEventChangeStart && onEventChangeStart()}
 				select={(selectedEvent) => handleNewEvent(selectedEvent)}
 				resourcesSet={() => setTimeout(updateCalendarSize, 0)}
 				eventsSet={() => {
@@ -319,5 +319,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 })
 
 export default React.memo(CalendarWeekView, (prevProps, nextProps) => {
+	if (nextProps.disableRender) {
+		return true
+	}
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
 })

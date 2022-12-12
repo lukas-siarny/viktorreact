@@ -458,6 +458,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} finally {
 				setIsUpdatingEvent(false)
 				clearConfirmModal()
+				if (values?.enableCalendarRender) {
+					values?.enableCalendarRender()
+				}
 			}
 		},
 		[closeSiderForm, fetchEvents, salonID]
@@ -560,6 +563,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} finally {
 				setIsUpdatingEvent(false)
 				clearConfirmModal()
+				if (values?.enableCalendarRender) {
+					values?.enableCalendarRender()
+				}
 			}
 		},
 		[dispatch, fetchEvents, closeSiderForm, query.sidebarView, salonID]

@@ -89,8 +89,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		onAddEvent,
 		virtualEvent,
 		onReservationClick,
-		clearRestartInterval,
-		setEventManagement
+		setEventManagement,
+		onEventChangeStart
 	} = props
 
 	const dispatch = useDispatch()
@@ -180,8 +180,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
-				eventDragStart={() => clearRestartInterval()}
-				eventResizeStart={() => clearRestartInterval()}
+				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
+				eventResizeStart={() => onEventChangeStart && onEventChangeStart()}
 				select={handleNewEvent}
 			/>
 		</div>
@@ -189,5 +189,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 })
 
 export default React.memo(CalendarDayView, (prevProps, nextProps) => {
+	if (nextProps.disableRender) {
+		return true
+	}
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
 })

@@ -213,7 +213,7 @@ const SalonForm: FC<Props> = (props) => {
 							signUrl={URL_UPLOAD_IMAGES}
 							multiple={false}
 							maxCount={1}
-							category={UPLOAD_IMG_CATEGORIES.SALON}
+							category={UPLOAD_IMG_CATEGORIES.SALON_ICON}
 							disabled={disabledForm}
 						/>
 						<Field
@@ -225,7 +225,7 @@ const SalonForm: FC<Props> = (props) => {
 							signUrl={URL_UPLOAD_IMAGES}
 							multiple
 							maxCount={10}
-							category={UPLOAD_IMG_CATEGORIES.SALON}
+							category={UPLOAD_IMG_CATEGORIES.SALON_IMAGE}
 							disabled={disabledForm}
 							draggable
 							selectable

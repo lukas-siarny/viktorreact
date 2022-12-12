@@ -212,7 +212,6 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 				break
 			}
 			default:
-				console.log('aaaaaa')
 				setConfirmModal(INIT_CONFIRM_MODAL_VALUES)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps

@@ -18,7 +18,6 @@ import {
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_VIEW,
 	DAY,
-	ENDS_EVENT,
 	EVERY_REPEAT,
 	FORM,
 	NOTIFICATION_TYPE,
@@ -29,7 +28,6 @@ import {
 	REFRESH_CALENDAR_INTERVAL,
 	CONFIRM_MODAL_DATA_TYPE
 } from '../../utils/enums'
-import { computeUntilDate } from '../../utils/helper'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
@@ -491,7 +489,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							// Uprava detailu cez sidebar
 							repeatEvent = values.recurring
 								? {
-										untilDate: computeUntilDate(values.end as ENDS_EVENT, values.date),
+										untilDate: values.end as string,
 										days: {
 											MONDAY: includes(values.repeatOn, DAY.MONDAY),
 											TUESDAY: includes(values.repeatOn, DAY.TUESDAY),

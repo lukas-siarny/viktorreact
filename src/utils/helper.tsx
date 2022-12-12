@@ -47,7 +47,6 @@ import {
 	DATE_TIME_PARSER_FORMAT,
 	DAY,
 	DEFAULT_DATE_FORMAT,
-	DEFAULT_DATE_INIT_FORMAT,
 	DEFAULT_DATE_TIME_OPTIONS,
 	DEFAULT_DATE_WITH_TIME_FORMAT,
 	DEFAULT_LANGUAGE,
@@ -55,7 +54,6 @@ import {
 	DEFAULT_TIME_FORMAT,
 	EN_DATE_WITH_TIME_FORMAT,
 	EN_DATE_WITHOUT_TIME_FORMAT,
-	ENDS_EVENT,
 	FORM,
 	IMAGE_UPLOADING_PROP,
 	INVALID_DATE_FORMAT,
@@ -1007,23 +1005,6 @@ export const roundMinutes = (currentMinutes: number, currentHours: number, mod =
 	return `${formattedCurrentHours}:${nearestValue}`
 }
 
-export const computeUntilDate = (endsEvent: ENDS_EVENT, actualDate: string) => {
-	switch (endsEvent) {
-		case ENDS_EVENT.WEEK:
-			return dayjs(actualDate).add(1, 'week').format(DEFAULT_DATE_INIT_FORMAT)
-		case ENDS_EVENT.MONTH:
-			return dayjs(actualDate).add(1, 'month').format(DEFAULT_DATE_INIT_FORMAT)
-		case ENDS_EVENT.THREE_MONTHS:
-			return dayjs(actualDate).add(3, 'month').format(DEFAULT_DATE_INIT_FORMAT)
-		case ENDS_EVENT.SIX_MONTHS:
-			return dayjs(actualDate).add(6, 'month').format(DEFAULT_DATE_INIT_FORMAT)
-		case ENDS_EVENT.YEAR:
-			return dayjs(actualDate).add(1, 'year').format(DEFAULT_DATE_INIT_FORMAT)
-		default:
-			return ''
-	}
-}
-
 export const getDateTime = (date: string, time: string) => {
 	return dayjs(`${dayjs(date).format(DATE_TIME_PARSER_DATE_FORMAT)}:${time}`, DATE_TIME_PARSER_FORMAT).toISOString()
 }
@@ -1042,26 +1023,4 @@ export const getAssignedUserLabel = (assignedUser?: Paths.GetApiB2BAdminSalons.R
 		default:
 			return assignedUser.id
 	}
-}
-
-export const computeEndDate = (startDate: any, endDate: any) => {
-	const weeks = dayjs(endDate).diff(dayjs(startDate), 'weeks')
-	let endsIn
-	// 1 tyzden
-	if (weeks > 25) {
-		endsIn = ENDS_EVENT.YEAR
-		// 1 mesiac - 4 tyzdne
-	} else if (weeks >= 3 && weeks <= 4) {
-		endsIn = ENDS_EVENT.MONTH
-		// 3 mesiace -> 12 tydnov
-	} else if (weeks >= 12 && weeks <= 13) {
-		endsIn = ENDS_EVENT.THREE_MONTHS
-		// 6 meiacov -> 24 tyzdnov
-	} else if (weeks >= 24 && weeks <= 25) {
-		endsIn = ENDS_EVENT.SIX_MONTHS
-		// 1 rok
-	} else {
-		endsIn = ENDS_EVENT.WEEK
-	}
-	return endsIn
 }

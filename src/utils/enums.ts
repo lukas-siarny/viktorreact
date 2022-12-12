@@ -665,14 +665,6 @@ export enum CALENDAR_SET_NEW_DATE {
 	DEFAULT = 'DEFAULT'
 }
 
-export enum ENDS_EVENT {
-	WEEK = 'WEEK',
-	MONTH = 'MONTH',
-	THREE_MONTHS = 'THREE_MONTHS',
-	SIX_MONTHS = 'SIX_MONTHS',
-	YEAR = 'YEAR'
-}
-
 export enum EVERY_REPEAT {
 	ONE_WEEK = 'ONE_WEEK',
 	TWO_WEEKS = 'TWO_WEEKS'
@@ -686,29 +678,6 @@ export const EVERY_REPEAT_OPTIONS = () => [
 	{
 		key: EVERY_REPEAT.TWO_WEEKS,
 		label: i18next.t('loc:Druhý týždeň')
-	}
-]
-
-export const ENDS_EVENT_OPTIONS = () => [
-	{
-		key: ENDS_EVENT.WEEK,
-		label: i18next.t('loc:Týždeň')
-	},
-	{
-		key: ENDS_EVENT.MONTH,
-		label: i18next.t('loc:Mesiac')
-	},
-	{
-		key: ENDS_EVENT.THREE_MONTHS,
-		label: i18next.t('loc:Tri mesiace')
-	},
-	{
-		key: ENDS_EVENT.SIX_MONTHS,
-		label: i18next.t('loc:Šesť mesiacov')
-	},
-	{
-		key: ENDS_EVENT.YEAR,
-		label: i18next.t('loc:Rok')
 	}
 ]
 

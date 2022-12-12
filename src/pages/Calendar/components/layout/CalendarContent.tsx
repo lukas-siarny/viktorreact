@@ -9,18 +9,9 @@ import { EventResizeDoneArg } from '@fullcalendar/interaction'
 import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 
 // enums
-import { change, initialize } from 'redux-form'
+import { change } from 'redux-form'
 import { startsWith } from 'lodash'
-import {
-	CALENDAR_DATE_FORMAT,
-	CALENDAR_EVENT_TYPE,
-	CALENDAR_VIEW,
-	DEFAULT_DATE_INIT_FORMAT,
-	DEFAULT_TIME_FORMAT,
-	FORM,
-	NEW_ID_PREFIX,
-	UPDATE_EVENT_PERMISSIONS
-} from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, FORM, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
@@ -101,10 +92,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
 	const calendarSelectedDate = getSelectedDateForCalendar(view, selectedDate)
-	// TODO: ak existuje virual event tak nebreaknut a updatnut data vo forme cez onAddEvent + nezavoalt handleSubmit
 
 	const onEventChange = (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
-		console.log('virtualEvent', virtualEvent)
 		const hasPermissions = permitted(authUserPermissions || [], selectedSalonuniqPermissions, UPDATE_EVENT_PERMISSIONS)
 
 		const revertEvent = () => {
@@ -123,7 +112,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		const eventExtenedProps = (event.extendedProps as IEventExtenedProps) || {}
 		const eventData = eventExtenedProps?.eventData
 		const newResourceExtendedProps = newResource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
-		console.log('event', event)
 		const eventId = eventData?.id
 		const calendarBulkEventID = eventData?.calendarBulkEvent?.id || eventData?.calendarBulkEvent
 
@@ -154,22 +142,27 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			revertEvent()
 			return
 		}
-
+		console.log('called 1')
 		// Ak existuje virualny event a isPlaceholder z eventu je true tak sa ejdna o virtualny even a bude sa rovbit change nad formularmi a nezavola sa request na BE
 		if (virtualEvent && startsWith(event.id, NEW_ID_PREFIX)) {
+			console.log('called 2')
+
 			const formName = `CALENDAR_${eventData?.eventType}_FORM` // TODO: ked sa spravi refacor bude len RESERVATION a EVENT forms
+			// TODO: ked budu dva formy tak spravit cez init s tym ze sa budu predchadzajuce data zistovat a tie sa mergnu s novymi prevetne sa voci zbytocnemu volaniu change - ked sa spravi NOT-3624
 			batch(() => {
 				dispatch(change(formName, 'date', date))
 				dispatch(change(formName, 'timeFrom', timeFrom))
 				dispatch(change(formName, 'timeTo', timeTo))
-				// Menit employee sa da len pri rezervacii
-				dispatch(
-					change(FORM.CALENDAR_RESERVATION_FORM, 'employee', {
-						value: employee?.id as string,
-						key: employee?.id as string,
-						label: 'test' // TODO:
-					})
-				)
+				// Menit virtualny event medzi employees sa da len v Rezervacii
+				if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
+					dispatch(
+						change(FORM.CALENDAR_RESERVATION_FORM, 'employee', {
+							value: employee?.id as string,
+							key: employee?.id as string,
+							label: newResource ? newResourceExtendedProps?.employee?.name : eventData?.employee.email
+						})
+					)
+				}
 			})
 
 			return

@@ -473,9 +473,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					// CREATE
 					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 					fetchEvents(true) // Po CREATe zmazat virtualny event aby neostali ten tkory sa dotiahne z BE a sucasne aj virualny
+					closeSiderForm()
 				}
 
-				// Po UPDATE rezervacie dotiahnut eventy + zatvorit drawer, pri CREATE ostane otvoreny sider pcoas updatu len
+				// Po UPDATE rezervacie dotiahnut eventy + zatvorit drawer, pri CREATE ostane otvoreny sider pocas updatu len
 				if (query.eventId) {
 					closeSiderForm()
 				}
@@ -495,10 +496,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const handleSubmitEvent = useCallback(
 		async (values: ICalendarEventForm) => {
+			console.log('called request')
 			const eventId = query.eventId || values.eventId // ak je z query ide sa detail drawer ak je values ide sa cez drag and drop alebo resize
 			const revertEvent = values?.revertEvent
 			// NOTE: ak existuje actionType tak sa kliklo v modali na moznost bulk / single a uz bol modal submitnuty
-
 			if (values.calendarBulkEventID && !formValuesBulkForm?.actionType) {
 				setTempValues(values)
 				dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
@@ -584,6 +585,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					// CREATE event shift
 					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 					fetchEvents(true) // Po CREATe zmazat virtualny event aby neostali ten tkory sa dotiahne z BE a sucasne aj virualny
+					closeSiderForm()
 				}
 				dispatch(destroy(FORM.CONFIRM_BULK_FORM))
 				// Po UPDATE eventu dotiahnut eventy + zatvorit drawer, pri CREATE ostane otvoreny sider pcoas updatu len
@@ -605,6 +607,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	)
 
 	const handleSubmitConfirmModal = async (values: IBulkConfirmForm) => {
+		console.log('visibleBulkModal', visibleBulkModal)
 		// EDIT
 		if (visibleBulkModal?.requestType === REQUEST_TYPE.PATCH) {
 			// NOTE: Uprava detailu cez form
@@ -617,6 +620,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						dispatch(submit(FORM.CALENDAR_EMPLOYEE_BREAK_FORM))
 						break
 					case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
+						console.log('CALLED')
 						dispatch(submit(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM))
 						break
 					case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:

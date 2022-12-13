@@ -745,8 +745,8 @@ export interface ICalendarEventCardData {
 	resourceId: string
 	start: string
 	end: string
-	editable: boolean
-	resourceEditable: boolean
+	editable?: boolean
+	resourceEditable?: boolean
 	allDay: boolean
 	isPlaceholder?: boolean
 	eventData: CalendarEvent

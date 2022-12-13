@@ -151,8 +151,9 @@ const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string
 		resourceId,
 		start,
 		end,
-		editable: !event.isMultiDayEvent,
-		resourceEditable: !event.isMultiDayEvent,
+		// NOTE: Ak bude undefined tak hodnotu anstavi z hora z kalendara editable
+		editable: !event.isMultiDayEvent ? false : undefined,
+		resourceEditable: !event.isMultiDayEvent ? false : undefined,
 		allDay: false,
 		eventData: {
 			...(event.originalEvent || event || {}),

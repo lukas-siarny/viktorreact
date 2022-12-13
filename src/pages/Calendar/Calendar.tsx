@@ -758,11 +758,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							selectedDate={validSelectedDate}
 							eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 							eventId={query.eventId}
-							handleDeleteEvent={handleDeleteEvent}
+							handleDeleteEvent={initDeleteEventData}
 							sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE}
 							onCloseSider={closeSiderForm}
-							handleSubmitReservation={handleSubmitReservation}
-							handleSubmitEvent={handleSubmitEvent}
+							handleSubmitReservation={initSubmitReservationData}
+							handleSubmitEvent={initSubmitEventData}
 							newEventData={newEventData}
 							calendarApi={calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()}
 							changeCalendarDate={setNewSelectedDate}

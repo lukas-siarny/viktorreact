@@ -146,14 +146,11 @@ const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeO
 }
 
 const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string, end: string): ICalendarEventCardData => {
-	return {
+	const baseEvent = {
 		id: event.id,
 		resourceId,
 		start,
 		end,
-		// NOTE: Ak bude undefined tak hodnotu anstavi z hora z kalendara editable
-		editable: event.isMultiDayEvent ? false : undefined,
-		resourceEditable: event.isMultiDayEvent ? false : undefined,
 		allDay: false,
 		eventData: {
 			...(event.originalEvent || event || {}),
@@ -162,6 +159,19 @@ const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string
 			isFirstMultiDayEventInCurrentRange: event.isFirstMultiDayEventInCurrentRange
 		}
 	}
+
+	// pri multidnovom evente zakazeme dnd a resize cez kalendar, pretoze to sposobuje viacero komplikacii
+	// editable a resourceEditable nastavene na evente prebije aj globalne nastavene editable v kalendari
+	// preto pri beznych eventoch tuto propu nenastavujeme, aby tieto evetny brali do uvahy globalne nastavenie v kalendari
+	if (event.isMultiDayEvent) {
+		return {
+			...baseEvent,
+			editable: false,
+			resourceEditable: false
+		}
+	}
+
+	return baseEvent
 }
 
 /**

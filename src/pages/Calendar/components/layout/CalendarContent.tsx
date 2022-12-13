@@ -182,6 +182,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		setDisableRender(true)
 	}
 
+	console.log({ evnets: dayView?.current?.getApi()?.getEvents() })
+
 	const getView = () => {
 		if (showEmptyState) {
 			return <CalendarEmptyState onButtonClick={onShowAllEmployees} />

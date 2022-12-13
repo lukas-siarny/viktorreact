@@ -167,7 +167,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			},
 			eventId,
 			revertEvent,
-			enableCalendarRender: () => setDisableRender(false)
+			enableCalendarRender: () => setDisableRender(false),
+			updateFromCalendar: true
 		}
 
 		if (!employee?.id) {

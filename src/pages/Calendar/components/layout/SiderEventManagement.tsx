@@ -16,7 +16,7 @@ import { RootState } from '../../../../reducers'
 
 // utils
 import { getReq } from '../../../../utils/request'
-import { computeEndDate, formatLongQueryString, getAssignedUserLabel } from '../../../../utils/helper'
+import { formatLongQueryString, getAssignedUserLabel } from '../../../../utils/helper'
 import {
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_VIEW_TYPE,
@@ -57,7 +57,7 @@ type Props = {
 	onCloseSider: () => void
 	handleSubmitReservation: (values: ICalendarReservationForm) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
-	handleDeleteEvent: () => any
+	handleDeleteEvent: (calendarEventId: string, calendarEventBulkId?: string, eventType?: CALENDAR_EVENT_TYPE) => any
 	newEventData?: INewCalendarEvent | null
 	eventId?: string | null
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
@@ -92,6 +92,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 	const timeOffFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM)(state))
 	const shiftFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM)(state))
 	const reservationFormValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
+	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 
 	useEffect(() => {
 		// nastavuje referenciu na CalendarApi, musi sa update-ovat, ked sa meni View, aby bola aktualna vo virtalEventActions
@@ -119,7 +120,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 						recurring: true,
 						repeatOn: compact(map(data.calendarBulkEvent.repeatOptions?.days as any, (item, index) => (item ? index : undefined))) as DAY[],
 						every: data.calendarBulkEvent.repeatOptions.week === 1 ? EVERY_REPEAT.ONE_WEEK : EVERY_REPEAT.TWO_WEEKS,
-						end: computeEndDate(data?.start.date, data?.calendarBulkEvent?.repeatOptions.untilDate)
+						end: data?.calendarBulkEvent?.repeatOptions.untilDate
 				  }
 				: {}
 
@@ -222,8 +223,6 @@ const SiderEventManagement: FC<Props> = (props) => {
 			...omit(prevInitData, 'eventType'),
 			eventType
 		}
-
-		dispatch(initialize(FORM.EVENT_TYPE_FILTER_FORM, { eventType }))
 		dispatch(initialize(eventForm, initData))
 	}
 
@@ -241,7 +240,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sidebarView])
 
-	useKeyUp('Escape', onCloseSider)
+	useKeyUp('Escape', query.sidebarView ? onCloseSider : undefined)
 
 	const searchEmployes = useCallback(
 		async (search: string, page: number) => {
@@ -283,22 +282,22 @@ const SiderEventManagement: FC<Props> = (props) => {
 			[CALENDAR_EVENT_TYPE.RESERVATION]: {
 				tabKey: CALENDAR_EVENT_TYPE.RESERVATION,
 				tab: <>{t('loc:Rezervácia')}</>,
-				tabPaneContent: forms[CALENDAR_EVENT_TYPE.RESERVATION]
+				tabPaneContent: null
 			},
 			[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: {
 				tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
-				tab: <>{t('loc:Zmena')}</>,
-				tabPaneContent: forms[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]
+				tab: <>{t('loc:Shift')}</>,
+				tabPaneContent: null
 			},
 			[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: {
 				tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
 				tab: <>{t('loc:Voľno')}</>,
-				tabPaneContent: forms[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]
+				tabPaneContent: null
 			},
 			[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: {
 				tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
 				tab: <>{t('loc:Prestávka')}</>,
-				tabPaneContent: forms[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]
+				tabPaneContent: null
 			}
 		}
 
@@ -322,9 +321,16 @@ const SiderEventManagement: FC<Props> = (props) => {
 									placement={'bottom'}
 									entityName={t('loc:prestávku')}
 									className={'bg-transparent mr-4'}
-									onConfirm={() => {
+									noConfirm
+									onClick={() => {
 										if (hasPermission) {
-											handleDeleteEvent()
+											if (eventDetail.data?.id) {
+												handleDeleteEvent(
+													eventDetail.data?.id,
+													eventDetail.data?.calendarBulkEvent?.id,
+													eventDetail?.data?.eventType as CALENDAR_EVENT_TYPE
+												)
+											}
 										} else {
 											openForbiddenModal()
 										}
@@ -341,9 +347,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 					</Button>
 				</div>
 			</div>
-			{eventId ? (
-				forms[sidebarView]
-			) : (
+			{!eventId && (
 				<TabsComponent
 					className={'nc-sider-event-management-tabs'}
 					activeKey={sidebarView}
@@ -352,6 +356,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 					destroyInactiveTabPane
 				/>
 			)}
+			{forms[sidebarView]}
 		</Sider>
 	)
 }

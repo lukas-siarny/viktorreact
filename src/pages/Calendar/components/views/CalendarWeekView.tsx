@@ -160,14 +160,15 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		reservations,
 		employees,
 		onEditEvent,
+		onReservationClick,
 		onEventChange,
-		refetchData,
 		weekDays,
 		updateCalendarSize,
 		onAddEvent,
 		virtualEvent,
 		setEventManagement,
-		enabledSalonReservations
+		enabledSalonReservations,
+		onEventChangeStart
 	} = props
 
 	const dispatch = useDispatch()
@@ -255,7 +256,6 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 	return (
 		<div className={'nc-calendar-wrapper'} id={'nc-calendar-week-wrapper'}>
 			<FullCalendar
-				key={'nc-calendar-week'}
 				ref={ref}
 				// plugins
 				plugins={[interactionPlugin, scrollGrid, resourceTimelinePlugin]}
@@ -277,8 +277,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				headerToolbar={false}
 				initialView='resourceTimelineDay'
 				initialDate={selectedDate}
-				weekends={true}
 				editable={enabledSalonReservations}
+				weekends
 				stickyFooterScrollbar
 				nowIndicator
 				// data sources
@@ -291,7 +291,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				resourceGroupLabelContent={resourceGroupLabelContent}
 				slotLabelContent={slotLabelContent}
 				eventContent={(data: EventContentArg) => (
-					<CalendarEventContent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} refetchData={refetchData} />
+					<CalendarEventContent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} onReservationClick={onReservationClick} />
 				)}
 				nowIndicatorContent={() => <NowIndicator />}
 				// handlers
@@ -300,14 +300,23 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				// select
 				selectable={enabledSalonReservations}
+				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
+				eventResizeStart={() => onEventChangeStart && onEventChangeStart()}
 				select={(selectedEvent) => handleNewEvent(selectedEvent)}
 				resourcesSet={() => setTimeout(updateCalendarSize, 0)}
-				eventsSet={() => setTimeout(updateCalendarSize, 0)}
+				eventsSet={() => {
+					setTimeout(() => {
+						updateCalendarSize()
+					}, 0)
+				}}
 			/>
 		</div>
 	)
 })
 
 export default React.memo(CalendarWeekView, (prevProps, nextProps) => {
+	if (nextProps.disableRender) {
+		return true
+	}
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
 })

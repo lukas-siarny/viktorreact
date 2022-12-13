@@ -13,3 +13,4 @@ export enum EVENT_DETAIL {
 }
 
 export const UPDATE_EVENT = 'UPDATE_EVENT'
+export const SET_IS_REFRESHING_EVENTS = 'SET_IS_REFRESHING_EVENTS'

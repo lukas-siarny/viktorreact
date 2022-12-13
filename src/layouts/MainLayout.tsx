@@ -55,7 +55,8 @@ const MainLayout: FC<Props> = (props) => {
 	// init selected country to header select
 	useEffect(() => {
 		dispatch(initialize(FORM.HEADER_COUNTRY_FORM, { countryCode: selectedCountry }))
-	}, [dispatch, selectedCountry])
+		// added page props to dependencies array due this bug https://goodrequest.atlassian.net/browse/NOT-3661 do not remove
+	}, [dispatch, selectedCountry, page])
 
 	const getSalonMenuItems = (): ItemType[] => {
 		const salonMenuItems: ItemType[] = salonOptions.map((item) => ({

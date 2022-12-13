@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react'
+import React, { FC, useEffect, useMemo } from 'react'
 import { Element } from 'react-scroll'
 import dayjs from 'dayjs'
 import { useDispatch } from 'react-redux'
@@ -10,7 +10,7 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
 import { composeDayViewEvents, composeDayViewResources, eventAllow, getTimeScrollId } from '../../calendarHelpers'
 
 // types
@@ -71,9 +71,7 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 	)
 }
 
-interface ICalendarDayView extends ICalendarView {
-	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
-}
+interface ICalendarDayView extends ICalendarView {}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
 	const {
@@ -85,11 +83,14 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		employees,
 		onEditEvent,
 		onEventChange,
-		refetchData,
 		onAddEvent,
 		virtualEvent,
-		setEventManagement
+		enabledSalonReservations,
+		setEventManagement,
+		onEventChangeStart,
+		onReservationClick
 	} = props
+
 	const dispatch = useDispatch()
 	const events = useMemo(() => {
 		const data = composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees)
@@ -122,6 +123,14 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		}
 	}
 
+	useEffect(() => {
+		// NOTE: ak neni je povoleny online booking tak sa nastavi disabled state nad kalendarom
+		if (!enabledSalonReservations) {
+			const body = document.getElementsByClassName('fc-timegrid-cols')[0]
+			body.classList.add('active')
+		}
+	}, [enabledSalonReservations])
+
 	return (
 		<div className={'nc-calendar-wrapper'} id={'nc-calendar-day-wrapper'}>
 			<FullCalendar
@@ -144,25 +153,28 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				// pre bezne eventy je potom nastavena min-height cez cssko .nc-day-event
 				eventMinHeight={0}
 				dayMinWidth={120}
-				editable
+				editable={enabledSalonReservations}
 				weekends
 				nowIndicator
 				allDaySlot={false}
 				stickyFooterScrollbar
 				// data sources
 				events={events}
-				// eventSources={events}
 				resources={resources}
 				// render hooks
 				resourceLabelContent={resourceLabelContent}
-				eventContent={(data) => <CalendarEventContent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} refetchData={refetchData} />}
+				eventContent={(data) => (
+					<CalendarEventContent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} onReservationClick={onReservationClick} />
+				)}
 				slotLabelContent={slotLabelContent}
 				// handlers
 				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
 				// select
-				selectable
+				selectable={enabledSalonReservations}
+				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
+				eventResizeStart={() => onEventChangeStart && onEventChangeStart()}
 				select={handleNewEvent}
 			/>
 		</div>
@@ -170,5 +182,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 })
 
 export default React.memo(CalendarDayView, (prevProps, nextProps) => {
+	if (nextProps.disableRender) {
+		return true
+	}
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
 })

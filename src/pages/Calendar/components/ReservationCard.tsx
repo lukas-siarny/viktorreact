@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useState, FC, useCallback } from 'react'
+import React, { FC, useRef } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
 
 // utils
-import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NOTIFICATION_TYPE, RESERVATION_PAYMENT_METHOD } from '../../../utils/enums'
+import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE } from '../../../utils/enums'
 import { getAssignedUserLabel } from '../../../utils/helper'
 
 // assets
@@ -14,12 +14,8 @@ import { ReactComponent as CheckIcon } from '../../../assets/icons/check-10.svg'
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/service-icon-10.svg'
 import { ReactComponent as AvatarIcon } from '../../../assets/icons/avatar-10.svg'
 
-// components
-import CalendarReservationPopover from './CalendarReservationPopover'
-
 // types
-import { CalendarEvent, IEventCardProps } from '../../../types/interfaces'
-import { patchReq } from '../../../utils/request'
+import { CalendarEvent, IEventCardProps, ReservationPopoverData, ReservationPopoverPosition } from '../../../types/interfaces'
 
 interface IReservationCardProps extends IEventCardProps {
 	salonID: string
@@ -28,7 +24,7 @@ interface IReservationCardProps extends IEventCardProps {
 	reservationData?: CalendarEvent['reservationData']
 	note?: CalendarEvent['note']
 	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
-	refetchData: () => void
+	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
 }
 
 const getIcon = ({ isPast, isRealized, isApproved, service }: { isPast?: boolean; isRealized?: boolean; isApproved?: boolean; service?: CalendarEvent['service'] }) => {
@@ -67,18 +63,14 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		isFirstMultiDayEventInCurrentRange,
 		calendarView,
 		timeText,
-		salonID,
 		diff,
-		onEditEvent,
 		originalEventData,
 		note,
 		noteFromB2CCustomer,
-		refetchData,
 		isPlaceholder,
-		isEdit
+		isEdit,
+		onReservationClick
 	} = props
-
-	const [isCardPopoverOpen, setIsCardPopoverOpen] = useState(false)
 
 	const isPast = dayjs(originalEventData?.endDateTime || end).isBefore(dayjs())
 	const isPending = reservationData?.state === RESERVATION_STATE.PENDING
@@ -100,126 +92,115 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 
 	const icon = getIcon({ isPast, isApproved, isRealized, service })
 
-	const handleUpdateReservationState = useCallback(
-		async (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
-			try {
-				await patchReq(
-					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state',
-					{ calendarEventID, salonID },
-					{ state, reason, paymentMethod },
-					undefined,
-					NOTIFICATION_TYPE.NOTIFICATION,
-					true
-				)
-				refetchData()
-			} catch (e) {
-				// eslint-disable-next-line no-console
-				console.error(e)
+	const cardRef = useRef<HTMLDivElement | null>(null)
+
+	const handleReservationClick = () => {
+		if (originalEventData.id && cardRef.current) {
+			const data: ReservationPopoverData = {
+				start,
+				end,
+				originalEventData,
+				customer,
+				employee,
+				service,
+				color: backgroundColor,
+				reservationData,
+				note,
+				noteFromB2CCustomer
 			}
-		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[salonID]
-	)
+
+			const clientRect = cardRef.current.getBoundingClientRect()
+
+			const position: ReservationPopoverPosition = {
+				top: clientRect.top,
+				left: clientRect.left,
+				width: clientRect.width,
+				height: clientRect.bottom - clientRect.top
+			}
+			onReservationClick(data, position)
+		}
+	}
 
 	return (
-		<CalendarReservationPopover
-			start={start}
-			end={end}
-			service={service}
-			employee={employee}
-			customer={customer}
-			reservationData={reservationData}
-			note={note}
-			noteFromB2CCustomer={noteFromB2CCustomer}
-			originalEventData={originalEventData}
-			isOpen={isCardPopoverOpen}
-			color={backgroundColor}
-			setIsOpen={setIsCardPopoverOpen}
-			handleUpdateReservationState={handleUpdateReservationState}
-			onEditEvent={onEditEvent}
-			salonID={salonID}
-			placement={calendarView === CALENDAR_VIEW.WEEK ? 'bottom' : 'left'}
+		<div
+			ref={cardRef}
+			className={cx('nc-event reservation', {
+				'nc-day-event': calendarView === CALENDAR_VIEW.DAY,
+				'nc-week-event': calendarView === CALENDAR_VIEW.WEEK,
+				'multiday-event': isMultiDayEvent,
+				'multiday-event-first': isFirstMultiDayEventInCurrentRange,
+				'multiday-event-last': isLastMultiDaylEventInCurrentRange,
+				'min-15': Math.abs(diff) <= 15,
+				'min-30': Math.abs(diff) <= 30 && Math.abs(diff) > 15,
+				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
+				'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
+				'is-past': isPast,
+				'is-online': isOnline,
+				'state-pending': isPending,
+				'state-approved': isApproved,
+				'state-realized': isRealized,
+				'is-autoassigned': isEmployeeAutoassigned,
+				placeholder: isPlaceholder,
+				edit: isEdit || isPlaceholder
+			})}
+			onClick={handleReservationClick}
+			style={{
+				outlineColor: (isPending || isEdit) && !isPast ? backgroundColor : undefined
+			}}
 		>
 			<div
-				className={cx('nc-event reservation', {
-					'nc-day-event': calendarView === CALENDAR_VIEW.DAY,
-					'nc-week-event': calendarView === CALENDAR_VIEW.WEEK,
-					'multiday-event': isMultiDayEvent,
-					'multiday-event-first': isFirstMultiDayEventInCurrentRange,
-					'multiday-event-last': isLastMultiDaylEventInCurrentRange,
-					'min-15': Math.abs(diff) <= 15,
-					'min-30': Math.abs(diff) <= 30 && Math.abs(diff) > 15,
-					'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
-					'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
-					focused: isCardPopoverOpen,
-					'is-past': isPast,
-					'is-online': isOnline,
-					'state-pending': isPending,
-					'state-approved': isApproved,
-					'state-realized': isRealized,
-					'is-autoassigned': isEmployeeAutoassigned,
-					placeholder: isPlaceholder,
-					edit: isEdit || isPlaceholder
-				})}
-				onClick={() => setIsCardPopoverOpen(true)}
+				className={'event-accent'}
 				style={{
-					outlineColor: (isPending || isEdit) && !isPast ? backgroundColor : undefined
+					backgroundColor: !isPending ? bgColor : undefined,
+					backgroundImage:
+						isPending && !isPast
+							? `linear-gradient(135deg, ${backgroundColor} 12.50%, transparent 12.50%, transparent 50%, ${backgroundColor} 62.50%, ${backgroundColor} 62.50%, transparent 60%, transparent 100%)`
+							: undefined
 				}}
-			>
-				<div
-					className={'event-accent'}
-					style={{
-						backgroundColor: !isPending ? bgColor : undefined,
-						backgroundImage:
-							isPending && !isPast
-								? `linear-gradient(135deg, ${backgroundColor} 12.50%, transparent 12.50%, transparent 50%, ${backgroundColor} 62.50%, ${backgroundColor} 62.50%, transparent 60%, transparent 100%)`
-								: undefined
-					}}
-				/>
-				<div className={'event-background'} style={{ backgroundColor: bgColor }} />
-				<div id={originalEventData?.id} className={'event-content'}>
-					{(() => {
-						switch (calendarView) {
-							case CALENDAR_VIEW.WEEK: {
-								return (
-									<>
+			/>
+			<div className={'event-background'} style={{ backgroundColor: bgColor }} />
+			<div id={originalEventData?.id} className={'event-content'}>
+				{(() => {
+					switch (calendarView) {
+						case CALENDAR_VIEW.WEEK: {
+							return (
+								<>
+									<div className={'title-wrapper'}>
+										<span className={'title'}>{customerName}</span>
+										{onlineIndicatior}
+									</div>
+									{service?.name && <span className={'desc'}>{service.name}</span>}
+									<div className={'icons'}>
+										<AvatarIcon className={'icon employee'} />
+										{icon}
+										{onlineIndicatior}
+									</div>
+								</>
+							)
+						}
+						case CALENDAR_VIEW.DAY:
+						default: {
+							return (
+								<>
+									<div className={'event-info'}>
 										<div className={'title-wrapper'}>
 											<span className={'title'}>{customerName}</span>
 											{onlineIndicatior}
 										</div>
+										<span className={'time'}>{timeText}</span>
 										{service?.name && <span className={'desc'}>{service.name}</span>}
-										<div className={'icons'}>
-											<AvatarIcon className={'icon employee'} />
-											{icon}
-											{onlineIndicatior}
-										</div>
-									</>
-								)
-							}
-							case CALENDAR_VIEW.DAY:
-							default: {
-								return (
-									<>
-										<div className={'event-info'}>
-											<div className={'title-wrapper'}>
-												<span className={'title'}>{customerName}</span>
-												{onlineIndicatior}
-											</div>
-											<span className={'time'}>{timeText}</span>
-											{service?.name && <span className={'desc'}>{service.name}</span>}
-										</div>
-										<div className={'icons'}>
-											<AvatarIcon className={'icon employee'} />
-											{icon}
-										</div>
-									</>
-								)
-							}
+									</div>
+									<div className={'icons'}>
+										<AvatarIcon className={'icon employee'} />
+										{icon}
+									</div>
+								</>
+							)
 						}
-					})()}
-				</div>
+					}
+				})()}
 			</div>
-		</CalendarReservationPopover>
+		</div>
 	)
 }
 

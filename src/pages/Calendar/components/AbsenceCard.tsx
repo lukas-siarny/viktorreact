@@ -20,6 +20,7 @@ import { getAssignedUserLabel } from '../../../utils/helper'
 interface IAbsenceCardProps extends IEventCardProps {
 	eventType: CALENDAR_EVENT_TYPE
 	isBulkEvent?: boolean
+	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 }
 
 const AbsenceCard: FC<IAbsenceCardProps> = (props) => {

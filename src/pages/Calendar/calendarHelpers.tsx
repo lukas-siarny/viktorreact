@@ -1,9 +1,10 @@
 /* eslint-disable import/no-cycle */
 import { DateSpanApi, EventApi } from '@fullcalendar/react'
 import dayjs from 'dayjs'
-import { t } from 'i18next'
-import { startsWith, uniqueId } from 'lodash'
+import i18next, { t } from 'i18next'
+import { isEmpty, uniqueId, startsWith } from 'lodash'
 import Scroll from 'react-scroll'
+import { Paths } from '../../types/api'
 
 // types
 import {
@@ -18,7 +19,15 @@ import {
 } from '../../types/interfaces'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, NEW_ID_PREFIX } from '../../utils/enums'
+import {
+	CALENDAR_COMMON_SETTINGS,
+	CALENDAR_DATE_FORMAT,
+	CALENDAR_DISABLED_NOTIFICATION_TYPE,
+	CALENDAR_EVENTS_VIEW_TYPE,
+	CALENDAR_EVENT_TYPE,
+	CALENDAR_VIEW,
+	NEW_ID_PREFIX
+} from '../../utils/enums'
 import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
 
 /*
@@ -138,13 +147,11 @@ const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeO
 }
 
 const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string, end: string): ICalendarEventCardData => {
-	return {
+	const baseEvent = {
 		id: event.id,
 		resourceId,
 		start,
 		end,
-		editable: !event.isMultiDayEvent,
-		resourceEditable: !event.isMultiDayEvent,
 		allDay: false,
 		eventData: {
 			...(event.originalEvent || event || {}),
@@ -153,6 +160,19 @@ const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string
 			isFirstMultiDayEventInCurrentRange: event.isFirstMultiDayEventInCurrentRange
 		}
 	}
+
+	// pri multidnovom evente zakazeme dnd a resize cez kalendar, pretoze to sposobuje viacero komplikacii
+	// editable a resourceEditable nastavene na evente prebije aj globalne nastavene editable v kalendari
+	// preto pri beznych eventoch tuto propu nenastavujeme, aby tieto evetny brali do uvahy globalne nastavenie v kalendari
+	if (event.isMultiDayEvent) {
+		return {
+			...baseEvent,
+			editable: false,
+			resourceEditable: false
+		}
+	}
+
+	return baseEvent
 }
 
 /**
@@ -522,4 +542,29 @@ export const scrollToSelectedDate = (scrollId: string, options?: Object) => {
 		offset: -25, // - hlavicka
 		...(options || {})
 	})
+}
+
+export const getConfirmModalText = (
+	baseText: string,
+	disabledNotificationType: CALENDAR_DISABLED_NOTIFICATION_TYPE,
+	disabledNotifications?: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']
+) => {
+	const disabledNotification = disabledNotifications?.find((notification) => notification.eventType === disabledNotificationType)
+	const isCustomerNotified = isEmpty(disabledNotification?.b2cChannels)
+	const isEmployeeNotified = isEmpty(disabledNotification?.b2bChannels)
+	const notifiactionText = (entity: string) => i18next.t('loc:{{entity}} dostane notifikáciu.', { entity })
+
+	if (isCustomerNotified && isEmployeeNotified) {
+		return `${baseText} ${i18next.t('loc:Zamestnanec aj zákazník dostanú notifikáciu.')}`
+	}
+
+	if (isCustomerNotified) {
+		return `${baseText} ${notifiactionText(i18next.t('loc:Zákazník'))}`
+	}
+
+	if (isEmployeeNotified) {
+		return `${baseText} ${notifiactionText(i18next.t('loc:Zamestnanec'))}`
+	}
+
+	return baseText
 }

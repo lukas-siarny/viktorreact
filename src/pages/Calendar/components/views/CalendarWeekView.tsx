@@ -14,7 +14,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 import CalendarEventContent from '../CalendarEventContent'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
 import { composeWeekResources, composeWeekViewEvents, eventAllow, getWeekDayResourceID } from '../../calendarHelpers'
 import { getDateTime } from '../../../../utils/helper'
 
@@ -147,7 +147,6 @@ const createDayLabelElement = (resourceElemenet: HTMLElement, employeesLength: n
 interface ICalendarWeekView extends ICalendarView {
 	updateCalendarSize: () => void
 	weekDays: string[]
-	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
 }
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
@@ -159,13 +158,15 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		reservations,
 		employees,
 		onEditEvent,
+		onReservationClick,
 		onEventChange,
-		refetchData,
 		weekDays,
 		updateCalendarSize,
 		onAddEvent,
 		virtualEvent,
-		setEventManagement
+		setEventManagement,
+		enabledSalonReservations,
+		onEventChangeStart
 	} = props
 
 	const dispatch = useDispatch()
@@ -243,10 +244,17 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		}
 	}, [employees.length, selectedDate])
 
+	useEffect(() => {
+		// NOTE: ak neni je povoleny online booking tak sa nastavi disabled state nad kalendarom
+		if (!enabledSalonReservations) {
+			const body = document.getElementsByClassName('fc-timeline-body')[0]
+			body.classList.add('active')
+		}
+	}, [enabledSalonReservations])
+
 	return (
 		<div className={'nc-calendar-wrapper'} id={'nc-calendar-week-wrapper'}>
 			<FullCalendar
-				key={'nc-calendar-week'}
 				ref={ref}
 				// plugins
 				plugins={[interactionPlugin, scrollGrid, resourceTimelinePlugin]}
@@ -268,8 +276,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				headerToolbar={false}
 				initialView='resourceTimelineDay'
 				initialDate={selectedDate}
-				weekends={true}
-				editable
+				editable={enabledSalonReservations}
+				weekends
 				stickyFooterScrollbar
 				nowIndicator
 				// data sources
@@ -282,7 +290,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				resourceGroupLabelContent={resourceGroupLabelContent}
 				slotLabelContent={slotLabelContent}
 				eventContent={(data: EventContentArg) => (
-					<CalendarEventContent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} refetchData={refetchData} />
+					<CalendarEventContent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} onReservationClick={onReservationClick} />
 				)}
 				nowIndicatorContent={() => <NowIndicator />}
 				// handlers
@@ -290,15 +298,24 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				// select
-				selectable
+				selectable={enabledSalonReservations}
+				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
+				eventResizeStart={() => onEventChangeStart && onEventChangeStart()}
 				select={(selectedEvent) => handleNewEvent(selectedEvent)}
 				resourcesSet={() => setTimeout(updateCalendarSize, 0)}
-				eventsSet={() => setTimeout(updateCalendarSize, 0)}
+				eventsSet={() => {
+					setTimeout(() => {
+						updateCalendarSize()
+					}, 0)
+				}}
 			/>
 		</div>
 	)
 })
 
 export default React.memo(CalendarWeekView, (prevProps, nextProps) => {
+	if (nextProps.disableRender) {
+		return true
+	}
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
 })

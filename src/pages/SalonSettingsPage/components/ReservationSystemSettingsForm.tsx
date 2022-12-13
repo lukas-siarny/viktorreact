@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { change, Field, FieldArray, FormSection, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Divider, Form, Row } from 'antd'
+import { Button, Divider, Form, Row, Spin } from 'antd'
 import { forEach, includes, map } from 'lodash'
 
 // atoms
@@ -52,11 +52,11 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const { handleSubmit, pristine, submitting, excludedB2BNotifications } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const disabled = submitting
 	const groupedServicesByCategory = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 	const groupedServicesByCategoryLoading = useSelector((state: RootState) => state.service.services.isLoading)
 	const formValues: Partial<IReservationSystemSettingsForm> = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
 
+	const disabled = submitting || !formValues?.enabledReservations
 	const defaultExpandedKeys: any = []
 	forEach(groupedServicesByCategory, (level1) => forEach(level1.category?.children, (level2) => defaultExpandedKeys.push(level2?.category?.id)))
 
@@ -155,7 +155,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						return {
 							id: level3.category.id,
 							key: level3.category.id,
-							className: `noti-tree-node-2 ml-6`,
+							className: `noti-tree-node-2 ml-6 hover:cursor-default`,
 							title: (
 								<div id={`level3-${level3.category?.id}`} className={'flex justify-between'}>
 									<div>{level3.category?.name}</div>
@@ -208,6 +208,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					<Field
 						className='mb-0 pb-0 ml-2'
 						component={SwitchField}
+						disabled={submitting}
 						onClick={(checked: boolean, event: Event) => event.stopPropagation()}
 						name='enabledReservations'
 						size='middle'
@@ -236,7 +237,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							name={'maxDaysB2cCreateReservation'}
 							size={'large'}
 							disabled={disabled}
-							min={1}
+							min={0}
 							className='flex-1'
 						/>
 						<div className='s-regular ml-2 mt-1 min-w-100px'>{t('loc:Dni vopred')}</div>
@@ -253,6 +254,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							name={'maxHoursB2cCreateReservationBeforeStart'}
 							size={'large'}
 							disabled={disabled}
+							min={0}
 							className='flex-1'
 						/>
 						<div className='s-regular ml-2 mt-1 min-w-100px'>{t('loc:Hodiny vopred')}</div>
@@ -270,6 +272,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							name={'maxHoursB2cCancelReservationBeforeStart'}
 							size={'large'}
 							disabled={disabled}
+							min={0}
 							className='flex-1'
 						/>
 						<div className='s-regular ml-2 mt-1 min-w-100px'>{t('loc:Hodiny vopred')}</div>
@@ -287,6 +290,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							name={'minutesIntervalB2CReservations'}
 							size={'large'}
 							allowClear
+							disabled={disabled}
 							className='flex-1'
 						/>
 						<div className='s-regular ml-2 mt-1 min-w-100px'>{t('loc:Minúty')}</div>
@@ -319,6 +323,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							{NOTIFICATIONS.map((key, index) => (
 								<FieldArray
 									key={index}
+									disabled={disabled}
 									name={`disabledNotifications[${key}].b2cChannels` as string}
 									component={NotificationArrayFields as any}
 									notificationType={key}
@@ -340,6 +345,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 												name={`disabledNotifications[${key}].b2bChannels` as string}
 												component={NotificationArrayFields as any}
 												notificationType={key}
+												disabled={disabled}
 												channel={NOTIFICATION_CHANNEL.B2B}
 											/>
 									  ]
@@ -389,10 +395,19 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							/>
 						</div>
 					</div>
-					{!groupedServicesByCategoryLoading && (
+					{!groupedServicesByCategoryLoading ? (
 						<FormSection name={'servicesSettings'}>
-							<Field name={'services'} component={CheckboxGroupNestedField} defaultExpandedKeys={defaultExpandedKeys} dataTree={treeData} checkable={false} />
+							<Field
+								name={'services'}
+								disabled={disabled}
+								component={CheckboxGroupNestedField}
+								defaultExpandedKeys={defaultExpandedKeys}
+								dataTree={treeData}
+								checkable={false}
+							/>
 						</FormSection>
+					) : (
+						<Spin className={'w-full m-auto'} />
 					)}
 				</div>
 			</Row>

@@ -1,12 +1,14 @@
 @import "../tailwind-variables"
 @import "../variables"
 
-// TODO: ked sa bude rusit maska tak tento kod zmazat
+
 .fc-timegrid-cols, .fc-timeline-body
 	&.active::after
 		display: block
+		cursor: not-allowed
 	&::after
 		content: ''
+		font-size: 48px
 		position: absolute
 		display: none
 		width: 100%
@@ -16,9 +18,8 @@
 		right: 0
 		bottom: 0
 		background-color: $backgroundColor-notino-gray
-		opacity: .3
+		opacity: .2
 		z-index: $z-index-overlay
-
 .noti-calendar-layout
 	height: 100%
 

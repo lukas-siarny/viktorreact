@@ -184,7 +184,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 							<UserAvatar
 								size={24}
 								className={'shrink-0 mt-1'}
-								src={employee?.image.resizedImages.thumbnail}
+								src={employee?.image?.resizedImages?.thumbnail}
 								style={{ border: `2px solid ${color || colors.neutral[200]}` }}
 							/>
 						</Row>

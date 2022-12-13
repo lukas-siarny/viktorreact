@@ -656,6 +656,9 @@ export interface ICalendarView {
 	virtualEvent?: EventInput
 	clearRestartInterval: () => void
 	disableRender?: boolean
+	view?: CALENDAR_VIEW
+	enabledSalonReservations?: boolean
+	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
 }
 
 export interface IEventCardProps {
@@ -742,8 +745,8 @@ export interface ICalendarEventCardData {
 	resourceId: string
 	start: string
 	end: string
-	editable: boolean
-	resourceEditable: boolean
+	editable?: boolean
+	resourceEditable?: boolean
 	allDay: boolean
 	isPlaceholder?: boolean
 	eventData: CalendarEvent

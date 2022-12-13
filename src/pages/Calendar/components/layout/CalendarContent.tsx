@@ -40,6 +40,7 @@ type Props = {
 	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
 	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
+	enabledSalonReservations?: boolean
 } & ICalendarView
 
 export type CalendarRefs = {
@@ -60,6 +61,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		handleSubmitEvent,
 		selectedDate,
 		setEventManagement,
+		enabledSalonReservations,
 		salonID,
 		eventsViewType,
 		employees,
@@ -84,7 +86,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const selectedSalonuniqPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions)
-
 	const [visibleForbiddenModal, setVisibleForbiddenModal] = useState(false)
 
 	const sources = useMemo(() => {
@@ -205,6 +206,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			return (
 				<CalendarWeekView
 					ref={weekView}
+					enabledSalonReservations={enabledSalonReservations}
+					setEventManagement={setEventManagement}
 					disableRender={disableRender}
 					reservations={sources.reservations}
 					shiftsTimeOffs={sources.shiftsTimeOffs}
@@ -218,7 +221,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					onReservationClick={onReservationClick}
 					onAddEvent={onAddEvent}
 					clearRestartInterval={clearRestartInterval}
-					setEventManagement={setEventManagement}
 					onEventChange={onEventChange}
 					onEventChangeStart={onEventChangeStart}
 					updateCalendarSize={() => weekView?.current?.getApi().updateSize()}
@@ -228,6 +230,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 		return (
 			<CalendarDayView
+				enabledSalonReservations={enabledSalonReservations}
+				setEventManagement={setEventManagement}
 				ref={dayView}
 				disableRender={disableRender}
 				reservations={sources.reservations}
@@ -241,7 +245,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				onEditEvent={onEditEvent}
 				onReservationClick={onReservationClick}
 				clearRestartInterval={clearRestartInterval}
-				setEventManagement={setEventManagement}
 				onEventChange={onEventChange}
 				onEventChangeStart={onEventChangeStart}
 			/>

@@ -635,7 +635,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		},
 		[fetchEvents, isRemoving, query?.sidebarView, salonID, closeSiderForm]
 	)
-	
+
 	const handleUpdateReservationState = useCallback(
 		async (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
 			try {

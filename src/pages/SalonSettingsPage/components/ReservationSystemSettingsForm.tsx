@@ -237,7 +237,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							name={'maxDaysB2cCreateReservation'}
 							size={'large'}
 							disabled={disabled}
-							min={1}
+							min={0}
 							className='flex-1'
 						/>
 						<div className='s-regular ml-2 mt-1 min-w-100px'>{t('loc:Dni vopred')}</div>
@@ -254,7 +254,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							name={'maxHoursB2cCreateReservationBeforeStart'}
 							size={'large'}
 							disabled={disabled}
-							min={1}
+							min={0}
 							className='flex-1'
 						/>
 						<div className='s-regular ml-2 mt-1 min-w-100px'>{t('loc:Hodiny vopred')}</div>
@@ -272,7 +272,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							name={'maxHoursB2cCancelReservationBeforeStart'}
 							size={'large'}
 							disabled={disabled}
-							min={1}
+							min={0}
 							className='flex-1'
 						/>
 						<div className='s-regular ml-2 mt-1 min-w-100px'>{t('loc:Hodiny vopred')}</div>

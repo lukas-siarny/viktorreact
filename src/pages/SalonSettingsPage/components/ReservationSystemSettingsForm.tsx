@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { change, Field, FieldArray, FormSection, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Divider, Form, Row } from 'antd'
+import { Button, Divider, Form, Row, Spin } from 'antd'
 import { forEach, includes, map } from 'lodash'
 
 // atoms
@@ -56,7 +56,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const groupedServicesByCategoryLoading = useSelector((state: RootState) => state.service.services.isLoading)
 	const formValues: Partial<IReservationSystemSettingsForm> = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
 
-	const disabled = submitting || !formValues.enabledReservations
+	const disabled = submitting || !formValues?.enabledReservations
 	const defaultExpandedKeys: any = []
 	forEach(groupedServicesByCategory, (level1) => forEach(level1.category?.children, (level2) => defaultExpandedKeys.push(level2?.category?.id)))
 
@@ -208,7 +208,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					<Field
 						className='mb-0 pb-0 ml-2'
 						component={SwitchField}
-						disabled={disabled}
+						disabled={submitting}
 						onClick={(checked: boolean, event: Event) => event.stopPropagation()}
 						name='enabledReservations'
 						size='middle'
@@ -395,7 +395,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							/>
 						</div>
 					</div>
-					{!groupedServicesByCategoryLoading && (
+					{!groupedServicesByCategoryLoading ? (
 						<FormSection name={'servicesSettings'}>
 							<Field
 								name={'services'}
@@ -406,6 +406,8 @@ const ReservationSystemSettingsForm = (props: Props) => {
 								checkable={false}
 							/>
 						</FormSection>
+					) : (
+						<Spin className={'w-full m-auto'} />
 					)}
 				</div>
 			</Row>

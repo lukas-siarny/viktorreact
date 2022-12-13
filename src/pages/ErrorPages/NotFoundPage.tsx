@@ -11,10 +11,18 @@ const NotFoundPage: FC<Props> = () => {
 		<Result
 			status='404'
 			title='404'
-			subTitle={t(
-				'loc:Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás'
-			)}
-			extra={<Link to={`${t('paths:index')}`}>{t('loc:Hlavná stránka')}</Link>}
+			subTitle={
+				<div className='text-black'>
+					{t(
+						'loc:Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás'
+					)}
+				</div>
+			}
+			extra={
+				<Link to={`${t('paths:index')}`} className='text-notino-pink'>
+					{t('loc:Hlavná stránka')}
+				</Link>
+			}
 		/>
 	)
 }

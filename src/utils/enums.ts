@@ -26,7 +26,7 @@ export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
 
 export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hours
 
-export const REFRESH_CALENDAR_INTERVAL = 1000 * 15 // 60 * 2 // 2 minutes
+export const REFRESH_CALENDAR_INTERVAL = 1000 * 60 * 2 // 2 minutes
 
 export const DEFAULT_LANGUAGE = LANGUAGE.EN
 
@@ -432,8 +432,8 @@ export const STRINGS = (t: TFunction) => ({
 	save: (entity: string) => t('loc:Uložiť {{entity}}', { entity }),
 	edit: (entity: string) => t('loc:Upraviť {{entity}}', { entity }),
 	createRecord: (entity: string) => t('loc:Vytvoriť {{entity}}', { entity }),
-	cancel: t('loc:Zrušiť'),
-
+	cancel: (entity: string) => t('loc:Zrušiť {{entity}}', { entity }),
+	decline: (entity: string) => t('loc:Zamietnuť {{entity}}', { entity }),
 	select: (entity: string) => t('loc:Vyberte {{entity}}', { entity }), // non searchable select field
 	search: (entity: string) => t('loc:Vyhľadajte {{entity}}', { entity }), // searchable select field
 	searchBy: (entity: string) => t('loc:Vyhľadajte podľa {{entity}}', { entity }), // input field vyhladavaci
@@ -497,7 +497,8 @@ export enum BYTE_MULTIPLIER {
 export const LOCALIZATIONS = 'LOCALIZATIONS'
 
 export enum UPLOAD_IMG_CATEGORIES {
-	SALON = 'SALON_IMAGE',
+	SALON_ICON = 'SALON_ICON',
+	SALON_IMAGE = 'SALON_IMAGE',
 	SALON_PRICELIST = 'SALON_PRICELIST',
 	EMPLOYEE = 'EMPLOYEE_IMAGE',
 	USER = 'USER_IMAGE',
@@ -665,14 +666,6 @@ export enum CALENDAR_SET_NEW_DATE {
 	DEFAULT = 'DEFAULT'
 }
 
-export enum ENDS_EVENT {
-	WEEK = 'WEEK',
-	MONTH = 'MONTH',
-	THREE_MONTHS = 'THREE_MONTHS',
-	SIX_MONTHS = 'SIX_MONTHS',
-	YEAR = 'YEAR'
-}
-
 export enum EVERY_REPEAT {
 	ONE_WEEK = 'ONE_WEEK',
 	TWO_WEEKS = 'TWO_WEEKS'
@@ -689,35 +682,12 @@ export const EVERY_REPEAT_OPTIONS = () => [
 	}
 ]
 
-export const ENDS_EVENT_OPTIONS = () => [
-	{
-		key: ENDS_EVENT.WEEK,
-		label: i18next.t('loc:Týždeň')
-	},
-	{
-		key: ENDS_EVENT.MONTH,
-		label: i18next.t('loc:Mesiac')
-	},
-	{
-		key: ENDS_EVENT.THREE_MONTHS,
-		label: i18next.t('loc:Tri mesiace')
-	},
-	{
-		key: ENDS_EVENT.SIX_MONTHS,
-		label: i18next.t('loc:Šesť mesiacov')
-	},
-	{
-		key: ENDS_EVENT.YEAR,
-		label: i18next.t('loc:Rok')
-	}
-]
-
 export const EVENT_NAMES = (eventType: CALENDAR_EVENT_TYPE) => {
 	switch (eventType) {
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 			return i18next.t('loc:prestávku')
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-			return i18next.t('loc:zmenu')
+			return i18next.t('loc:shift-akuzativ')
 
 		case CALENDAR_EVENT_TYPE.RESERVATION:
 			return i18next.t('loc:rezerváciu')
@@ -909,4 +879,17 @@ export const RS_NOTIFICATION_FIELD_TEXTS = (notificationType: RS_NOTIFICATION, c
 	}
 
 	return result
+}
+
+export enum CALENDAR_DISABLED_NOTIFICATION_TYPE {
+	RESERVATION_CHANGED = 'RESERVATION_CHANGED',
+	RESERVATION_REJECTED = 'RESERVATION_REJECTED',
+	RESERVATION_CANCELLED = 'RESERVATION_CANCELLED'
+}
+
+export enum CONFIRM_MODAL_DATA_TYPE {
+	RESERVATION = 'RESERVATION',
+	EVENT = 'EVENT',
+	DELETE_EVENT = 'DELETE_EVENT',
+	UPDATE_RESERVATION_STATE = 'UPDATE_RESERVATION_STATE'
 }

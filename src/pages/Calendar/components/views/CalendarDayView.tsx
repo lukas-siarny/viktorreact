@@ -86,11 +86,13 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		employees,
 		onEditEvent,
 		onEventChange,
-		refetchData,
 		onAddEvent,
 		virtualEvent,
-		setEventManagement
+		onReservationClick,
+		setEventManagement,
+		onEventChangeStart
 	} = props
+
 	const dispatch = useDispatch()
 	const events = useMemo(() => {
 		const data = composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees)
@@ -159,6 +161,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				// pre bezne eventy je potom nastavena min-height cez cssko .nc-day-event
 				eventMinHeight={0}
 				dayMinWidth={120}
+				selectable={!query.sidebarView}
 				editable={!query.sidebarView}
 				weekends
 				nowIndicator
@@ -166,18 +169,19 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				stickyFooterScrollbar
 				// data sources
 				events={events}
-				// eventSources={events}
 				resources={resources}
 				// render hooks
 				resourceLabelContent={resourceLabelContent}
-				eventContent={(data) => <CalendarEventContent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} refetchData={refetchData} />}
+				eventContent={(data) => (
+					<CalendarEventContent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} onReservationClick={onReservationClick} />
+				)}
 				slotLabelContent={slotLabelContent}
 				// handlers
 				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
-				// select
-				selectable={!query.sidebarView}
+				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
+				eventResizeStart={() => onEventChangeStart && onEventChangeStart()}
 				select={handleNewEvent}
 			/>
 		</div>
@@ -185,5 +189,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 })
 
 export default React.memo(CalendarDayView, (prevProps, nextProps) => {
+	if (nextProps.disableRender) {
+		return true
+	}
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
 })

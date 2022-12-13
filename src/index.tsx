@@ -43,10 +43,12 @@ dayjs.extend(isToday)
 Sentry.init({
 	release: process.env.REACT_APP_VERSION,
 	enabled: process.env.NODE_ENV !== 'development',
-	dsn: 'https://43d96832642646f18b3166843778106c@sentry.goodrequest.dev/35',
 	integrations: [new TracingIntegrations.BrowserTracing()] as any,
-	tracesSampleRate: 0.05,
-	environment: process.env.REACT_APP_HOST
+	// eslint-disable-next-line no-underscore-dangle
+	environment: window?.__RUNTIME_CONFIG__?.REACT_APP_SENTRY_ENV ? window.__RUNTIME_CONFIG__.REACT_APP_SENTRY_ENV : process.env.REACT_APP_SENTRY_ENV,
+	// eslint-disable-next-line no-underscore-dangle
+	dsn: window?.__RUNTIME_CONFIG__?.REACT_APP_SENTRY_DSN ? window.__RUNTIME_CONFIG__.REACT_APP_SENTRY_DSN : process.env.REACT_APP_SENTRY_DSN,
+	tracesSampleRate: 0.05
 })
 
 const app = (

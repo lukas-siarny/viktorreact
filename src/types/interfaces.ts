@@ -163,7 +163,6 @@ export interface ICalendarReservationForm {
 	enableCalendarRender?: () => void
 	updateFromCalendar?: boolean
 }
-
 export interface ICalendarEventForm {
 	employee: ISelectOptionItem
 	date: string

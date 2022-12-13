@@ -164,7 +164,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			},
 			eventId,
 			revertEvent,
-			enableCalendarRender: () => setDisableRender(false)
+			enableCalendarRender: () => setDisableRender(false),
+			updateFromCalendar: true
 		}
 
 		if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
@@ -181,8 +182,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		clearRestartInterval()
 		setDisableRender(true)
 	}
-
-	console.log({ evnets: dayView?.current?.getApi()?.getEvents() })
 
 	const getView = () => {
 		if (showEmptyState) {

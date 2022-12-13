@@ -474,11 +474,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				}
 			}
 		},
-		[closeSiderForm, fetchEvents, salonID]
+		[closeSiderForm, fetchEvents, salonID, query.eventId]
 	)
 
 	const handleSubmitEvent = useCallback(
-		async (values: ICalendarEventForm, calendarEventID?: string, calendarBulkEventID?: string) => {
+		async (values: ICalendarEventForm, calendarEventID?: string, calendarBulkEventID?: string, updateFromCalendar = false) => {
 			const { revertEvent } = values
 
 			try {
@@ -512,7 +512,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					if (calendarBulkEventID) {
 						// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
 						let repeatEvent
-						if (!query.sidebarView) {
+						if (updateFromCalendar) {
 							// Uprava detailu cez drag and drop / resize
 							// Ak sa posielaju data do funkcie z kalendaru, tak tie neobsahuju repeatEvent objekt
 							// Je to vsak povinna hodnota a preto je potrebne ho dotiahnut

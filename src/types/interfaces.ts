@@ -161,6 +161,7 @@ export interface ICalendarReservationForm {
 	eventId?: string
 	revertEvent?: () => void
 	enableCalendarRender?: () => void
+	updateFromCalendar?: boolean
 }
 
 export interface ICalendarEventForm {
@@ -194,6 +195,7 @@ export interface ICalendarEventForm {
 	calendarBulkEventID?: string
 	revertEvent?: () => void
 	enableCalendarRender?: () => void
+	updateFromCalendar?: boolean
 }
 
 export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null

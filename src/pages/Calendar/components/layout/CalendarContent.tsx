@@ -11,7 +11,7 @@ import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 // enums
 import { change } from 'redux-form'
 import { startsWith } from 'lodash'
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, FORM, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
@@ -129,6 +129,13 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
 		}
 
+		if (calendarView === CALENDAR_VIEW.WEEK) {
+			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
+			// (to sa bude diat len pri drope)
+			const resource = event.getResources()[0]
+			date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
+		}
+
 		// ak sa zmenil resource, tak updatenut resource (to sa bude diat len pri drope)
 		const employee = newResource ? newResourceExtendedProps?.employee : eventData?.employee
 		console.log('employee', employee)
@@ -143,13 +150,13 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			eventId,
 			revertEvent
 		}
-		//
-		// if (!employee?.id || !virtualEvent) {
-		// 	// ak nahodou nemam eventID alebo employeeId tak to vrati na povodne miesto
-		// 	revertEvent()
-		// 	return
-		// }
-		// Ak existuje virualny event a isPlaceholder z eventu je true tak sa ejdna o virtualny even a bude sa rovbit change nad formularmi a nezavola sa request na BE
+
+		if (!employee?.id) {
+			// ak nahodou nemam employeeId tak to vrati na povodne miesto
+			revertEvent()
+			return
+		}
+		// Ak existuje virualny event a isPlaceholder z eventu je true tak sa jedna o virtualny even a bude sa rovbit change nad formularmi a nezavola sa request na BE
 		if (virtualEvent && startsWith(event.id, NEW_ID_PREFIX)) {
 			const formName = `CALENDAR_${eventData?.eventType}_FORM` // TODO: ked sa spravi refacor bude len RESERVATION a EVENT forms
 			// TODO: ked budu dva formy tak spravit cez init s tym ze sa budu predchadzajuce data zistovat a tie sa mergnu s novymi prevetne sa voci zbytocnemu volaniu change - ked sa spravi NOT-3624
@@ -157,7 +164,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				dispatch(change(formName, 'date', date))
 				dispatch(change(formName, 'timeFrom', timeFrom))
 				dispatch(change(formName, 'timeTo', timeTo))
-				// Menit virtualny event medzi employees sa da len v Rezervacii
 				dispatch(
 					change(formName, 'employee', {
 						value: employee?.id as string,
@@ -170,12 +176,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			return
 		}
 
-		if (calendarView === CALENDAR_VIEW.WEEK) {
-			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
-			// (to sa bude diat len pri drope)
-			const resource = event.getResources()[0]
-			date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
-		}
 		if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
 			const customerId = eventData.customer?.id
 			const serviceId = eventData.service?.id

@@ -540,7 +540,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							NOTIFICATION_TYPE.NOTIFICATION,
 							true
 						)
-						fetchEvents(false) // Po PATCHi vponechat virtualny event ak bol vytvoreny
 					} else {
 						// SINGLE RECORD UPDATE
 						// NOTE: ak existuje eventId je otvoreny detail a bude sa patchovat
@@ -552,8 +551,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							NOTIFICATION_TYPE.NOTIFICATION,
 							true
 						)
-						fetchEvents(false) // Po PATCHi vponechat virtualny event ak bol vytvoreny
 					}
+					fetchEvents(false) // Po PATCHi vponechat virtualny event ak bol vytvoreny
 				} else {
 					// CREATE event shift
 					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
@@ -580,7 +579,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				}
 			}
 		},
-		[dispatch, fetchEvents, closeSiderForm, query.sidebarView, salonID]
+		[query.eventId, dispatch, fetchEvents, salonID, closeSiderForm]
 	)
 
 	const handleDeleteEvent = useCallback(

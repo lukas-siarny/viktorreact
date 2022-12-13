@@ -7,7 +7,7 @@ import cx from 'classnames'
 import { isEmpty } from 'lodash'
 
 // utils
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { FORM, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
 
 // types
@@ -38,10 +38,7 @@ import { RootState } from '../../../reducers'
 
 const { Panel } = Collapse
 
-type ComponentProps = {
-	salonID: string
-	addService: MouseEventHandler<HTMLElement>
-}
+type ComponentProps = {}
 
 type Props = InjectedFormProps<IEmployeeServiceEditForm, ComponentProps> & ComponentProps
 
@@ -49,7 +46,7 @@ const numberMin0 = validationNumberMin(0)
 
 const EmployeeServiceEditForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, addService } = props
+	const { handleSubmit } = props
 	const formValues: Partial<IEmployeeServiceEditForm> = useSelector((state: RootState) => getFormValues(FORM.EMPLOYEE)(state))
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const services = useSelector((state: RootState) => state.service.services)
@@ -135,6 +132,9 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 					</Col>
 				)}
 			</Row>
+			<Button className='noti-btn' block size='large' type='primary' htmlType='submit'>
+				{STRINGS(t).save(t('loc:službu'))}
+			</Button>
 		</Form>
 	)
 }

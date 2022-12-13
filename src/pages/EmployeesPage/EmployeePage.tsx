@@ -29,7 +29,7 @@ import { decodePrice, encodePrice, filterSalonRolesByPermission, formFieldID, ha
 // reducers
 import { RootState } from '../../reducers'
 import { getEmployee } from '../../reducers/employees/employeesActions'
-import { IServicesPayload } from '../../reducers/services/serviceActions'
+import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
 import { getSalonRoles } from '../../reducers/roles/rolesActions'
 import { getCurrentUser } from '../../reducers/users/userActions'
 
@@ -51,8 +51,45 @@ export type ServiceData = any /* {
 	category?: string
 } */
 
+type PriceAndDurationData = {
+	durationFrom?: number
+	durationTo?: number
+	priceFrom?: number | null
+	priceTo?: number | null
+}
+
+export type ServiceData2 = {
+	id?: string
+	name?: string
+	category?: string
+	salonData?: PriceAndDurationData
+	employeeData?: PriceAndDurationData
+	variableDuration?: boolean
+	variablePrice?: boolean
+	hasCategoryParameter?: boolean
+	categoryParameter?: {
+		name?: string
+		valueType?: 'ENUM' | 'TIME'
+		unitType?: 'MINUTES'
+		values?: {
+			id: string
+			categoryParameterValueID: string
+			value?: string
+			priceAndDurationData?: PriceAndDurationData
+			variableDuration?: boolean
+			variablePrice?: boolean
+		}[]
+	}
+}
+
+type ServiceType = NonNullable<
+	NonNullable<Paths.GetApiB2BV1Services.Responses.$200['groupedServicesByCategory'][0]['category']>['children'][0]['category']
+>['children'][0]['service']
+
+export type ServicePriceAndDurationData = ServiceType['rangePriceAndDurationData']
+export type ServiceCategoryParameter = ServiceType['serviceCategoryParameter']
+
 export type EmployeePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody
-export type ServicePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -76,43 +113,74 @@ export const addService = (servaddServiceices: IServicesPayload & ILoadingAndFai
 	const updatedServices: any[] = []
 	// go through selected services
 	forEach(selectedServiceIDs, (serviceId) => {
-		const serviceData = servaddServiceices?.options?.find((option) => option.key === serviceId) as any
+		const serviceData = servaddServiceices?.options?.find((option) => option.key === serviceId)
+		const priceAndDuration = serviceData?.extra?.rangePriceAndDurationData as ServicePriceAndDurationData
+		const categoryParameter = serviceData?.extra?.serviceCategoryParameter as ServiceCategoryParameter
+
 		if (form?.values?.services?.find((service: any) => service?.id === serviceId)) {
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
 				description: i18next.t('loc:Služba {{ label }} je už priradená!', { label: serviceData?.label })
 			})
 		} else if (serviceData) {
-			let newServiceData: ServiceData = {
+			const hasCategoryParameter = !!categoryParameter?.values?.length
+			let newServiceData: ServiceData2 = {
 				id: serviceData?.key as string,
 				name: serviceData?.label,
 				category: serviceData?.extra?.firstCategory,
 				// TODO - for change duration and price in employee detail
 				salonData: {
-					durationFrom: serviceData?.durationFrom,
-					durationTo: serviceData?.durationTo,
-					priceFrom: decodePrice(serviceData?.priceFrom),
-					priceTo: serviceData?.priceTo && serviceData?.priceFrom ? decodePrice(serviceData?.priceTo) : undefined
+					durationFrom: priceAndDuration?.durationFrom,
+					durationTo: priceAndDuration?.durationTo,
+					priceFrom: decodePrice(priceAndDuration?.priceFrom),
+					priceTo: priceAndDuration?.priceTo && priceAndDuration?.priceFrom ? decodePrice(priceAndDuration?.priceTo) : undefined
 				},
 				employeeData: {
-					durationFrom: serviceData?.durationFrom,
-					durationTo: serviceData?.durationTo,
-					priceFrom: decodePrice(serviceData?.priceFrom),
-					priceTo: serviceData?.priceTo && serviceData?.priceFrom ? decodePrice(serviceData?.priceTo) : undefined
+					durationFrom: priceAndDuration?.durationFrom,
+					durationTo: priceAndDuration.durationTo,
+					priceFrom: decodePrice(priceAndDuration?.priceFrom),
+					priceTo: priceAndDuration?.priceTo && priceAndDuration.priceFrom ? decodePrice(priceAndDuration?.priceTo) : undefined
 				},
 				variableDuration: false,
-				variablePrice: false
+				variablePrice: false,
+				hasCategoryParameter
 			}
-			if (serviceData?.durationFrom && serviceData?.durationTo) {
+			if (priceAndDuration.durationFrom && priceAndDuration?.durationTo) {
 				newServiceData = {
 					...newServiceData,
 					variableDuration: true
 				}
 			}
-			if (serviceData?.priceFrom && serviceData?.priceTo) {
+			if (priceAndDuration?.priceFrom && priceAndDuration?.priceTo) {
 				newServiceData = {
 					...newServiceData,
 					variablePrice: true
+				}
+			}
+			if (hasCategoryParameter) {
+				newServiceData = {
+					...newServiceData,
+					categoryParameter: {
+						name: categoryParameter?.name,
+						valueType: categoryParameter?.valueType,
+						unitType: categoryParameter?.unitType,
+						values: categoryParameter?.values.map((value) => {
+							const paramaterPriceDuration = value?.priceAndDurationData
+							return {
+								id: value.id,
+								categoryParameterValueID: value?.categoryParameterValueID,
+								value: value.value,
+								priceAndDurationData: {
+									durationFrom: paramaterPriceDuration?.durationFrom,
+									durationTo: paramaterPriceDuration.durationTo,
+									priceFrom: decodePrice(paramaterPriceDuration?.priceFrom),
+									priceTo: paramaterPriceDuration?.priceTo && paramaterPriceDuration.priceFrom ? decodePrice(paramaterPriceDuration?.priceTo) : undefined,
+									variableDuration: paramaterPriceDuration?.durationFrom && paramaterPriceDuration?.durationTo,
+									variablePrice: paramaterPriceDuration?.priceFrom && paramaterPriceDuration?.priceTo
+								}
+							}
+						})
+					}
 				}
 			}
 			updatedServices.push(newServiceData)
@@ -136,7 +204,7 @@ const parseServices = (categories?: ServiceRootCategory): ServiceData[] => {
 		categories?.forEach((firstCategory) =>
 			firstCategory?.children.forEach((secondCategory) => {
 				secondCategory?.children.forEach((service) => {
-					console.log({ service })
+					// console.log({ service })
 					result.push({
 						id: service?.id,
 						name: service?.category?.name,
@@ -213,6 +281,7 @@ const EmployeePage = (props: Props) => {
 
 	useEffect(() => {
 		dispatch(getSalonRoles())
+		dispatch(getServices({ salonID }))
 	}, [dispatch, salonID])
 
 	useEffect(() => {

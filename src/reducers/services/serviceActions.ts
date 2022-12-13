@@ -131,7 +131,9 @@ export const getServices =
 							value: service.service.id,
 							extra: {
 								firstCategory: firstCategory?.category?.name,
-								secondCategory: secondCategory?.category?.name
+								secondCategory: secondCategory?.category?.name,
+								rangePriceAndDurationData: service.service?.rangePriceAndDurationData,
+								serviceCategoryParameter: service.service?.serviceCategoryParameter
 							}
 						})
 					})

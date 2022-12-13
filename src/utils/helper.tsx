@@ -1024,3 +1024,16 @@ export const getAssignedUserLabel = (assignedUser?: Paths.GetApiB2BAdminSalons.R
 			return assignedUser.id
 	}
 }
+
+export const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: React.ReactNode, extra?: string, className = '') => {
+	if (!isNil(from) || !isNil(to)) {
+		return (
+			<div className={cx('flex items-center gap-1', className)}>
+				{icon}
+				{from}
+				{variable && !isNil(to) && from !== to ? ` - ${to}` : undefined} {extra}
+			</div>
+		)
+	}
+	return undefined
+}

@@ -21,7 +21,7 @@ import AvatarComponents from '../../../components/AvatarComponents'
 import { RootState } from '../../../reducers'
 
 // utils
-import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { renderFromTo, showErrorNotification, validationNumberMin } from '../../../utils/helper'
 import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, SALON_PERMISSION, STRINGS } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
@@ -55,19 +55,6 @@ type ComponentProps = {
 }
 
 type Props = InjectedFormProps<IServiceForm, ComponentProps> & ComponentProps
-
-const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode, extra?: string) => {
-	if (!isNil(from) || !isNil(to)) {
-		return (
-			<div className={'flex items-center mr-3'}>
-				{icon}
-				{from}
-				{variable && !isNil(to) && from !== to ? ` - ${to}` : undefined} {extra}
-			</div>
-		)
-	}
-	return undefined
-}
 
 const validateParameterValuePriceAndDuration = (value: string, allValues: any, props: any, name: string) => {
 	const [pathToParameterValue, key] = name.split('.')
@@ -104,8 +91,15 @@ const renderParameterValues = (props: any) => {
 			<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
 				<div className={'flex'}>
 					{showDuration &&
-						renderFromTo(fieldData?.durationFrom, fieldData?.durationTo, fieldData?.variableDuration, <ClockIcon className={'mr-1 text-notino-black'} />, t('loc:min'))}
-					{renderFromTo(fieldData?.priceFrom, fieldData?.priceTo, fieldData?.variablePrice, <CouponIcon className={'mr-1'} />, salon.data?.currency.symbol)}
+						renderFromTo(
+							fieldData?.durationFrom,
+							fieldData?.durationTo,
+							fieldData?.variableDuration,
+							<ClockIcon className={'text-notino-black'} />,
+							t('loc:min'),
+							'mr-3'
+						)}
+					{renderFromTo(fieldData?.priceFrom, fieldData?.priceTo, fieldData?.variablePrice, <CouponIcon />, salon.data?.currency.symbol, 'mr-3')}
 					<Field
 						className={'mb-0 pb-0'}
 						disabled={props.disabled}
@@ -287,21 +281,24 @@ export const renderEmployees = (props: any) => {
 								field?.serviceCategoryParameter[0]?.durationFrom,
 								field?.serviceCategoryParameter[0]?.durationTo,
 								field?.serviceCategoryParameter[0]?.variableDuration,
-								<ClockIcon className={'mr-1'} />
+								<ClockIcon />,
+								t('loc:min'),
+								'mr-3'
 							)}
 						{renderFromTo(
 							field?.serviceCategoryParameter[0]?.priceFrom,
 							field?.serviceCategoryParameter[0]?.priceTo,
 							field?.serviceCategoryParameter[0]?.variablePrice,
-							<CouponIcon className={'mr-1'} />,
-							salon.data?.currency.symbol
+							<CouponIcon />,
+							salon.data?.currency.symbol,
+							'mr-3'
 						)}
 						{field?.serviceCategoryParameter?.length > 1 && '...'}
 					</div>
 				) : (
 					<>
-						{showDuration && renderFromTo(field?.durationFrom, field?.durationTo, field?.variableDuration, <ClockIcon className={'mr-1'} />, t('loc:min'))}
-						{renderFromTo(field?.priceFrom, field?.priceTo, field?.variablePrice, <CouponIcon className={'mr-1'} />, salon.data?.currency.symbol)}
+						{showDuration && renderFromTo(field?.durationFrom, field?.durationTo, field?.variableDuration, <ClockIcon />, t('loc:min'), 'mr-3')}
+						{renderFromTo(field?.priceFrom, field?.priceTo, field?.variablePrice, <CouponIcon />, salon.data?.currency.symbol, 'mr-3')}
 					</>
 				)}
 				<DeleteButton
@@ -351,14 +348,17 @@ export const renderEmployees = (props: any) => {
 												parameterValue?.durationFrom,
 												parameterValue?.durationTo,
 												parameterValue?.variableDuration,
-												<ClockIcon className={'mr-1'} />
+												<ClockIcon />,
+												t('loc:min'),
+												'mr-3'
 											)}
 										{renderFromTo(
 											parameterValue?.priceFrom,
 											parameterValue?.priceTo,
 											parameterValue?.variablePrice,
-											<CouponIcon className={'mr-1'} />,
-											salon.data?.currency.symbol
+											<CouponIcon />,
+											salon.data?.currency.symbol,
+											'mr-3'
 										)}
 									</Tag>
 								))}

@@ -1,14 +1,14 @@
-import React, { FC, MouseEventHandler } from 'react'
+import React, { FC, MouseEventHandler, ReactNode } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Divider, Form, Space, Collapse, Tag, Button } from 'antd'
+import { Divider, Form, Space, Collapse, Tag, Button, Row, Col } from 'antd'
 import cx from 'classnames'
 import { isEmpty } from 'lodash'
 
 // utils
 import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
-import { showErrorNotification /* , validationNumberMin */ } from '../../../utils/helper'
+import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
@@ -16,8 +16,8 @@ import { IEmployeeForm } from '../../../types/interfaces'
 // atoms
 import InputField from '../../../atoms/InputField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
-// import InputNumberField from '../../../atoms/InputNumberField'
-// import SwitchField from '../../../atoms/SwitchField'
+import InputNumberField from '../../../atoms/InputNumberField'
+import SwitchField from '../../../atoms/SwitchField'
 import SelectField from '../../../atoms/SelectField'
 
 // components
@@ -28,8 +28,8 @@ import DeleteButton from '../../../components/DeleteButton'
 import validateEmployeeForm from './validateEmployeeForm'
 
 // assets
-// import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
-// import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
+import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
+import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg'
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
 
@@ -45,20 +45,20 @@ type ComponentProps = {
 
 type Props = InjectedFormProps<IEmployeeForm, ComponentProps> & ComponentProps
 
-// const numberMin0 = validationNumberMin(0)
+const numberMin0 = validationNumberMin(0)
 
 const renderListFields = (props: any) => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const [t] = useTranslation()
-	const { fields /* , salon */ } = props
+	const { fields, salon } = props
 
-	/* const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode, extra?: string) => (
+	const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode, extra?: string) => (
 		<div className={'flex items-center mr-3'}>
 			{icon}
 			{from}
 			{variable && to ? ` - ${to}` : undefined} {extra}
 		</div>
-	) */
+	)
 
 	const compareSalonAndEmployeeData = (data: any): boolean => {
 		const salonData = data?.salonData
@@ -74,26 +74,35 @@ const renderListFields = (props: any) => {
 		return !(salonData?.durationFrom === employeeData?.durationFrom && salonData?.priceFrom === employeeData?.priceFrom && checkVariableDuration && checkVariablePrice)
 	}
 
-	const genExtra = (index: number /* , field: any */) => (
-		<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
-			{/* TODO - for change duration and price in employee detail */}
-			{/* <div className={'flex'}>
-				{renderFromTo(field?.employeeData?.durationFrom, field?.employeeData?.durationTo, field?.variableDuration, <ClockIcon className={'mr-1'} />, t('loc:min'))}
-				{renderFromTo(field?.employeeData?.priceFrom, field?.employeeData?.priceTo, field?.variablePrice, <CouponIcon className={'mr-1'} />, salon.data?.currency.symbol)}
-			</div> */}
-			<DeleteButton
-				onConfirm={() => {
-					fields.remove(index)
-				}}
-				smallIcon
-				size={'small'}
-				entityName={t('loc:službu')}
-				type={'default'}
-				getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-				onlyIcon
-			/>
-		</div>
-	)
+	const genExtra = (index: number, field: any) => {
+		console.log({ field })
+
+		return (
+			<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
+				<div className={'flex'}>
+					{renderFromTo(field?.employeeData?.durationFrom, field?.employeeData?.durationTo, field?.variableDuration, <ClockIcon className={'mr-1'} />, t('loc:min'))}
+					{renderFromTo(
+						field?.employeeData?.priceFrom,
+						field?.employeeData?.priceTo,
+						field?.variablePrice,
+						<CouponIcon className={'mr-1'} />,
+						salon.data?.currency.symbol
+					)}
+				</div>
+				<DeleteButton
+					onConfirm={() => {
+						fields.remove(index)
+					}}
+					smallIcon
+					size={'small'}
+					entityName={t('loc:službu')}
+					type={'default'}
+					getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+					onlyIcon
+				/>
+			</div>
+		)
+	}
 
 	return (
 		<>
@@ -101,8 +110,8 @@ const renderListFields = (props: any) => {
 				{fields.map((field: any, index: number) => {
 					const fieldData = fields.get(index)
 					// TODO - for change duration and price in employee detail
-					/* const variableDuration = fieldData?.variableDuration
-					const variablePrice = fieldData?.variablePrice */
+					const variableDuration = fieldData?.variableDuration
+					const variablePrice = fieldData?.variablePrice
 					const collapsible = (fieldData?.durationFrom && fieldData?.priceFrom) || fieldData?.serviceCategoryParameter?.length > 1 ? undefined : 'disabled'
 					return (
 						<Panel
@@ -119,12 +128,11 @@ const renderListFields = (props: any) => {
 								</div>
 							}
 							key={index}
-							extra={genExtra(index /* , fieldData */)}
+							extra={genExtra(index, fieldData)}
 							className={cx({ hideIcon: collapsible })}
-							collapsible={collapsible}
+							// collapsible={collapsible}
 						>
 							{/* TODO - for change duration and price in employee detail */}
-							{/*
 							<Row gutter={8} align='middle'>
 								<Col span={8}>
 									<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={`${field}.variableDuration`} size={'middle'} />
@@ -201,7 +209,6 @@ const renderListFields = (props: any) => {
 									</Col>
 								)}
 							</Row>
-							*/}
 						</Panel>
 					)
 				})}

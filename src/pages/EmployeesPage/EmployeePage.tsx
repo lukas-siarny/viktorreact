@@ -24,7 +24,7 @@ import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { DELETE_BUTTON_ID, FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
-import { /* decodePrice, encodePrice, */ filterSalonRolesByPermission, formFieldID, hasAuthUserPermissionToEditRole } from '../../utils/helper'
+import { decodePrice, encodePrice, filterSalonRolesByPermission, formFieldID, hasAuthUserPermissionToEditRole } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -45,16 +45,16 @@ type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: string }>
 }
 
-export type ServiceData = {
+export type ServiceData = any /* {
 	id?: string
 	name?: string
 	category?: string
-}
+} */
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 // TODO - for change duration and price in employee detail
-/* export const parseServicesForCreateAndUpdate = (oldServices: any[]) => {
+export const parseServicesForCreateAndUpdate = (oldServices: any[]) => {
 	return oldServices?.map((service: any) => {
 		return {
 			id: service?.id,
@@ -66,26 +66,26 @@ const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOT
 			}
 		}
 	})
-} */
+}
 
 export const addService = (servaddServiceices: IServicesPayload & ILoadingAndFailure, form: any, dispatch: Dispatch<Action>) => {
 	const selectedServiceIDs = form?.values?.service
 	const updatedServices: any[] = []
 	// go through selected services
 	forEach(selectedServiceIDs, (serviceId) => {
-		const serviceData = servaddServiceices?.options?.find((option) => option.key === serviceId)
+		const serviceData = servaddServiceices?.options?.find((option) => option.key === serviceId) as any
 		if (form?.values?.services?.find((service: any) => service?.id === serviceId)) {
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
 				description: i18next.t('loc:Služba {{ label }} je už priradená!', { label: serviceData?.label })
 			})
 		} else if (serviceData) {
-			const newServiceData: ServiceData = {
+			let newServiceData: ServiceData = {
 				id: serviceData?.key as string,
 				name: serviceData?.label,
-				category: serviceData?.extra?.firstCategory
+				category: serviceData?.extra?.firstCategory,
 				// TODO - for change duration and price in employee detail
-				/* salonData: {
+				salonData: {
 					durationFrom: serviceData?.durationFrom,
 					durationTo: serviceData?.durationTo,
 					priceFrom: decodePrice(serviceData?.priceFrom),
@@ -98,10 +98,9 @@ export const addService = (servaddServiceices: IServicesPayload & ILoadingAndFai
 					priceTo: serviceData?.priceTo && serviceData?.priceFrom ? decodePrice(serviceData?.priceTo) : undefined
 				},
 				variableDuration: false,
-				variablePrice: false,
-				*/
+				variablePrice: false
 			}
-			/* if (serviceData?.durationFrom && serviceData?.durationTo) {
+			if (serviceData?.durationFrom && serviceData?.durationTo) {
 				newServiceData = {
 					...newServiceData,
 					variableDuration: true
@@ -112,7 +111,7 @@ export const addService = (servaddServiceices: IServicesPayload & ILoadingAndFai
 					...newServiceData,
 					variablePrice: true
 				}
-			} */
+			}
 			updatedServices.push(newServiceData)
 		}
 	})
@@ -134,6 +133,7 @@ const parseServices = (categories?: ServiceRootCategory): ServiceData[] => {
 		categories?.forEach((firstCategory) =>
 			firstCategory?.children.forEach((secondCategory) => {
 				secondCategory?.children.forEach((service) => {
+					console.log({ service })
 					result.push({
 						id: service?.id,
 						name: service?.category?.name,
@@ -234,8 +234,8 @@ const EmployeePage = (props: Props) => {
 					phone: data?.phone
 				}
 			}
-			/* const serviceData = parseServicesForCreateAndUpdate(data?.services)
-			await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, serviceData) */
+			const serviceData = parseServicesForCreateAndUpdate(data?.services)
+			// await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, serviceData)
 			await patchReq('/api/b2b/admin/employees/{employeeID}', { employeeID }, reqBody)
 			history.push(backUrl)
 		} catch (error: any) {

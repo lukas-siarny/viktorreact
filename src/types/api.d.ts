@@ -3759,6 +3759,22 @@ declare namespace Paths {
                                 };
                             }[];
                         };
+                        rangePriceAndDurationData: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                            priceTo?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                        };
                     }[];
                     category: {
                         id: string; // uuid
@@ -6045,6 +6061,7 @@ declare namespace Paths {
                             FIVE: number;
                         };
                     };
+                    availableReservationSystem: boolean;
                 };
             }
         }
@@ -7621,6 +7638,22 @@ declare namespace Paths {
                                 };
                             }[];
                         };
+                        rangePriceAndDurationData: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                            priceTo?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                        };
                     }[];
                     category: {
                         id: string; // uuid
@@ -8632,7 +8665,7 @@ declare namespace Paths {
             export type CategoryIDs = string /* uuid */[];
             export type CosmeticIDs = string /* uuid */[];
             export type CreateType = "NON_BASIC" | "BASIC";
-            export type ExactRating = (1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5) /* float */[];
+            export type ExactRating = number /* float */[];
             export type LanguageIDs = string /* uuid */[];
             export type Lat = number; // float
             export type LatMy = number; // float
@@ -8973,7 +9006,7 @@ declare namespace Paths {
             export type CategoryIDs = string /* uuid */[];
             export type CosmeticIDs = string /* uuid */[];
             export type CreateType = "NON_BASIC" | "BASIC";
-            export type ExactRating = (1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5) /* float */[];
+            export type ExactRating = number /* float */[];
             export type LanguageIDs = string /* uuid */[];
             export type LatMy = number; // float
             export type LatNW = number; // float
@@ -9775,6 +9808,7 @@ declare namespace Paths {
                             FIVE: number;
                         };
                     };
+                    availableReservationSystem: boolean;
                 };
             }
         }
@@ -9978,6 +10012,7 @@ declare namespace Paths {
                                                 };
                                             }[];
                                         };
+                                        availableForReservation: boolean;
                                         createdAt: string; // date-time
                                         updatedAt: string; // date-time
                                         deletedAt?: string; // date-time
@@ -10218,6 +10253,22 @@ declare namespace Paths {
                                     };
                                 };
                             }[];
+                        };
+                        rangePriceAndDurationData: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                            priceTo?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -10991,7 +11042,7 @@ declare namespace Paths {
             export type CategoryIDs = string /* uuid */[];
             export type CosmeticIDs = string /* uuid */[];
             export type CreateType = "NON_BASIC" | "BASIC";
-            export type ExactRating = (1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5) /* float */[];
+            export type ExactRating = number /* float */[];
             export type LanguageIDs = string /* uuid */[];
             export type Lat = number; // float
             export type LatMy = number; // float
@@ -11332,7 +11383,7 @@ declare namespace Paths {
             export type CategoryIDs = string /* uuid */[];
             export type CosmeticIDs = string /* uuid */[];
             export type CreateType = "NON_BASIC" | "BASIC";
-            export type ExactRating = (1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5) /* float */[];
+            export type ExactRating = number /* float */[];
             export type LanguageIDs = string /* uuid */[];
             export type LatMy = number; // float
             export type LatNW = number; // float
@@ -11622,6 +11673,7 @@ declare namespace Paths {
                                                 };
                                             }[];
                                         };
+                                        availableForReservation: boolean;
                                         createdAt: string; // date-time
                                         updatedAt: string; // date-time
                                         deletedAt?: string; // date-time
@@ -12423,6 +12475,7 @@ declare namespace Paths {
                             FIVE: number;
                         };
                     };
+                    availableReservationSystem: boolean;
                 };
             }
         }
@@ -12577,6 +12630,22 @@ declare namespace Paths {
                                     };
                                 };
                             }[];
+                        };
+                        rangePriceAndDurationData: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                            priceTo?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -31239,6 +31308,22 @@ declare namespace Paths {
                                 };
                             }[];
                         };
+                        rangePriceAndDurationData: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                            priceTo?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                        };
                     }[];
                     category: {
                         id: string; // uuid
@@ -47707,6 +47792,22 @@ declare namespace Paths {
                                 };
                             }[];
                         };
+                        rangePriceAndDurationData: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                            priceTo?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                        };
                     }[];
                     category: {
                         id: string; // uuid
@@ -54150,9 +54251,9 @@ declare namespace Paths {
                 }?
             ];
             /**
-             *  <span> Category is used to validate file (allowed mimetypes, max size, ...) and to determine, where can uploaded file be used (it is validated when files are assigned to other entities). For example file with SALON_IMAGE category can be used as image of salon, logo of salon or image of service<br><br> Category-entity usage </span> <div> <table> <thead> <tr> <th>category</th> <th>entity</th> </tr> </thead> <tbody> <tr> <td>SALON_IMAGE</td> <td>salon images</td> </tr> <tr> <td></td> <td>salon logo</td> </tr> <tr> <td>SALON_PRICELIST</td> <td>salon pricelists</td> </tr> <tr> <td>EMPLOYEE_IMAGE</td> <td>employee image</td> </tr> <tr> <td>USER_IMAGE</td> <td>user image</td> </tr> <tr> <td>CATEGORY_IMAGE</td> <td>category image</td> </tr> <tr> <td>CATEGORY_ICON</td> <td>category icon</td> </tr> <tr> <td>COSMETIC_IMAGE</td> <td>cosmetics image</td> </tr> <tr> <td>CUSTOMER_IMAGE</td> <td>customer profile image</td> </tr> <tr> <td></td> <td>customer gallery images</td> </tr> <tr> <td>LANGUAGE_IMAGE</td> <td>language image</td> </tr> </tbody> </table> </div>
+             *  <span> Category is used to validate file (allowed mimetypes, max size, ...) and to determine, where can uploaded file be used (it is validated when files are assigned to other entities). For example file with SALON_IMAGE category can be used as image of salon, logo of salon or image of service<br><br> Category-entity usage </span> <div> <table> <thead> <tr> <th>category</th> <th>entity</th> </tr> </thead> <tbody> <tr> <td>SALON_IMAGE</td> <td>salon images</td> </tr> <tr> <td>SALON_LOGO</td> <td>salon logo</td> </tr> <tr> <td>SALON_PRICELIST</td> <td>salon pricelists</td> </tr> <tr> <td>EMPLOYEE_IMAGE</td> <td>employee image</td> </tr> <tr> <td>USER_IMAGE</td> <td>user image</td> </tr> <tr> <td>CATEGORY_IMAGE</td> <td>category image</td> </tr> <tr> <td>CATEGORY_ICON</td> <td>category icon</td> </tr> <tr> <td>COSMETIC_IMAGE</td> <td>cosmetics image</td> </tr> <tr> <td>CUSTOMER_IMAGE</td> <td>customer profile image</td> </tr> <tr> <td></td> <td>customer gallery images</td> </tr> <tr> <td>LANGUAGE_IMAGE</td> <td>language image</td> </tr> </tbody> </table> </div>
              */
-            category: "SALON_IMAGE" | "SALON_PRICELIST" | "EMPLOYEE_IMAGE" | "USER_IMAGE" | "CATEGORY_IMAGE" | "CATEGORY_ICON" | "COSMETIC_IMAGE" | "CUSTOMER_IMAGE" | "LANGUAGE_IMAGE";
+            category: "SALON_IMAGE" | "SALON_LOGO" | "SALON_PRICELIST" | "EMPLOYEE_IMAGE" | "USER_IMAGE" | "CATEGORY_IMAGE" | "CATEGORY_ICON" | "COSMETIC_IMAGE" | "CUSTOMER_IMAGE" | "LANGUAGE_IMAGE";
         }
         namespace Responses {
             export interface $200 {
@@ -57509,9 +57610,9 @@ declare namespace Paths {
                 }?
             ];
             /**
-             *  <span> Category is used to validate file (allowed mimetypes, max size, ...) and to determine, where can uploaded file be used (it is validated when files are assigned to other entities). For example file with SALON_IMAGE category can be used as image of salon, logo of salon or image of service<br><br> Category-entity usage </span> <div> <table> <thead> <tr> <th>category</th> <th>entity</th> </tr> </thead> <tbody> <tr> <td>SALON_IMAGE</td> <td>salon images</td> </tr> <tr> <td></td> <td>salon logo</td> </tr> <tr> <td>SALON_PRICELIST</td> <td>salon pricelists</td> </tr> <tr> <td>EMPLOYEE_IMAGE</td> <td>employee image</td> </tr> <tr> <td>USER_IMAGE</td> <td>user image</td> </tr> <tr> <td>CATEGORY_IMAGE</td> <td>category image</td> </tr> <tr> <td>CATEGORY_ICON</td> <td>category icon</td> </tr> <tr> <td>COSMETIC_IMAGE</td> <td>cosmetics image</td> </tr> <tr> <td>CUSTOMER_IMAGE</td> <td>customer profile image</td> </tr> <tr> <td></td> <td>customer gallery images</td> </tr> <tr> <td>LANGUAGE_IMAGE</td> <td>language image</td> </tr> </tbody> </table> </div>
+             *  <span> Category is used to validate file (allowed mimetypes, max size, ...) and to determine, where can uploaded file be used (it is validated when files are assigned to other entities). For example file with SALON_IMAGE category can be used as image of salon, logo of salon or image of service<br><br> Category-entity usage </span> <div> <table> <thead> <tr> <th>category</th> <th>entity</th> </tr> </thead> <tbody> <tr> <td>SALON_IMAGE</td> <td>salon images</td> </tr> <tr> <td>SALON_LOGO</td> <td>salon logo</td> </tr> <tr> <td>SALON_PRICELIST</td> <td>salon pricelists</td> </tr> <tr> <td>EMPLOYEE_IMAGE</td> <td>employee image</td> </tr> <tr> <td>USER_IMAGE</td> <td>user image</td> </tr> <tr> <td>CATEGORY_IMAGE</td> <td>category image</td> </tr> <tr> <td>CATEGORY_ICON</td> <td>category icon</td> </tr> <tr> <td>COSMETIC_IMAGE</td> <td>cosmetics image</td> </tr> <tr> <td>CUSTOMER_IMAGE</td> <td>customer profile image</td> </tr> <tr> <td></td> <td>customer gallery images</td> </tr> <tr> <td>LANGUAGE_IMAGE</td> <td>language image</td> </tr> </tbody> </table> </div>
              */
-            category: "SALON_IMAGE" | "SALON_PRICELIST" | "EMPLOYEE_IMAGE" | "USER_IMAGE" | "CATEGORY_IMAGE" | "CATEGORY_ICON" | "COSMETIC_IMAGE" | "CUSTOMER_IMAGE" | "LANGUAGE_IMAGE";
+            category: "SALON_IMAGE" | "SALON_LOGO" | "SALON_PRICELIST" | "EMPLOYEE_IMAGE" | "USER_IMAGE" | "CATEGORY_IMAGE" | "CATEGORY_ICON" | "COSMETIC_IMAGE" | "CUSTOMER_IMAGE" | "LANGUAGE_IMAGE";
         }
         namespace Responses {
             export interface $200 {

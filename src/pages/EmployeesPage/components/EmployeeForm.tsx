@@ -130,6 +130,7 @@ const renderListFields = (props: any) => {
 							key={index}
 							extra={genExtra(index, fieldData)}
 							className={cx({ hideIcon: collapsible })}
+							showArrow={false}
 							// collapsible={collapsible}
 						>
 							{/* TODO - for change duration and price in employee detail */}

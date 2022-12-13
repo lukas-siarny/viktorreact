@@ -49,6 +49,10 @@ export interface IInviteEmployeeForm {
 	roleID: string
 }
 
+export interface IEmployeeServiceEditForm {
+
+}
+
 export interface IEditEmployeeRoleForm {
 	roleID: string
 }

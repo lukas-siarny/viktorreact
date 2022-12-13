@@ -51,6 +51,9 @@ export type ServiceData = any /* {
 	category?: string
 } */
 
+export type EmployeePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody
+export type ServicePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody
+
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 // TODO - for change duration and price in employee detail
@@ -219,7 +222,7 @@ const EmployeePage = (props: Props) => {
 	const updateEmployee = async (data: IEmployeeForm) => {
 		try {
 			setSubmitting(true)
-			let reqBody: any = {
+			let reqBody: EmployeePatchBody = {
 				firstName: data?.firstName,
 				lastName: data?.lastName,
 				email: data?.email,
@@ -234,7 +237,8 @@ const EmployeePage = (props: Props) => {
 					phone: data?.phone
 				}
 			}
-			const serviceData = parseServicesForCreateAndUpdate(data?.services)
+			// const serviceData = parseServicesForCreateAndUpdate(data?.services)
+
 			// await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, serviceData)
 			await patchReq('/api/b2b/admin/employees/{employeeID}', { employeeID }, reqBody)
 			history.push(backUrl)

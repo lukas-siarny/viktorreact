@@ -28,9 +28,10 @@ import {
 	REFRESH_CALENDAR_INTERVAL,
 	CONFIRM_MODAL_DATA_TYPE
 } from '../../utils/enums'
-import { withPermissions } from '../../utils/Permissions'
+import { withPermissions, isAdmin, checkPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
+import { history } from '../../utils/history'
 
 // reducers
 import { getCalendarEventDetail, getCalendarReservations, getCalendarShiftsTimeoff, refreshEvents } from '../../reducers/calendar/calendarActions'
@@ -38,6 +39,7 @@ import { RootState } from '../../reducers'
 import { getEmployees } from '../../reducers/employees/employeesActions'
 import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
 import { clearEvent } from '../../reducers/virtualEvent/virtualEventActions'
+import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 
 // components
 import CalendarContent, { CalendarRefs } from './components/layout/CalendarContent'
@@ -133,6 +135,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
 	const enabledSalonReservations = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.settings?.enabledReservations)
+
+	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
+	const authUserPermissions = currentUser?.uniqPermissions
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState(false)
@@ -279,9 +284,20 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}, [scrollToTime])
 
 	useEffect(() => {
+		// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
+		const loadSalonDetail = async () => {
+			const salonRes = await dispatch(selectSalon(salonID))
+
+			const canVisitThisPage = isAdmin(authUserPermissions) || (checkPermissions(authUserPermissions, [PERMISSION.PARTNER]) && salonRes?.data?.settings?.enabledReservations)
+			if (!canVisitThisPage) {
+				history.push('/404')
+			}
+		}
+
+		loadSalonDetail()
 		dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
 		dispatch(getServices({ salonID }))
-	}, [dispatch, salonID])
+	}, [dispatch, salonID, authUserPermissions])
 
 	useEffect(() => {
 		;(async () => {

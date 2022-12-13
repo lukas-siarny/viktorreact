@@ -156,7 +156,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 		// ak sa zmenil resource, tak updatenut resource (to sa bude diat len pri drope)
 		const employee = newResource ? newResourceExtendedProps?.employee : eventData?.employee
-		console.log('employee', employee)
+
 		const values = {
 			date,
 			timeFrom,
@@ -192,7 +192,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					})
 				)
 			})
-
+			setDisableRender(false)
 			return
 		}
 

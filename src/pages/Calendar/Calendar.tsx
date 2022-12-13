@@ -370,12 +370,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		setEventManagement(undefined)
 	}, [dispatch, setEventManagement])
 
-	useEffect(() => {
-		// NOTE: zmaze sa ruzove pozadie pri zruseni sidebaru cez ESC
-		const highlight = document.getElementsByClassName('fc-highlight')[0]
-		if (highlight) highlight.remove()
-	}, [])
-
 	const handleSubmitFilter = (values: ICalendarFilter) => {
 		setQuery({
 			...query,

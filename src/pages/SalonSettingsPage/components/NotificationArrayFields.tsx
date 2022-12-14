@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, WrappedFieldArrayProps } from 'redux-form'
-import { Tooltip, Form } from 'antd'
+import { Tooltip, Form, SwitchProps } from 'antd'
 
 // atoms
 import SwitchField from '../../../atoms/SwitchField'
@@ -29,20 +29,20 @@ const getNotificationTitle = (notificationType: RS_NOTIFICATION, channel: NOTIFI
 
 const TYPES = Object.keys(RS_NOTIFICATION_TYPE)
 
-type Props = WrappedFieldArrayProps & {
-	notificationType: RS_NOTIFICATION
-	channel: NOTIFICATION_CHANNEL
-}
+type Props = WrappedFieldArrayProps &
+	SwitchProps & {
+		notificationType: RS_NOTIFICATION
+		channel: NOTIFICATION_CHANNEL
+	}
 
 const NotificationArrayFields = (props: Props) => {
-	const { fields, notificationType, channel } = props
-	const disabled = false
+	const { fields, notificationType, channel, disabled } = props
 
 	return (
 		<Item className='pb-0'>
 			{getNotificationTitle(notificationType, channel)}
 			{fields.map((field: string, index: number) => (
-				<Field key={index} component={SwitchField} label={TYPES[index]} name={`${field}.${TYPES[index].toUpperCase()}`} size={'middle'} disabled={disabled} />
+				<Field key={index} disabled={disabled} component={SwitchField} label={TYPES[index]} name={`${field}.${TYPES[index].toUpperCase()}`} size={'middle'} />
 			))}
 		</Item>
 	)

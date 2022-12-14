@@ -2,7 +2,7 @@
 import { DateSpanApi, EventApi } from '@fullcalendar/react'
 import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
-import { isEmpty, uniqueId } from 'lodash'
+import { isEmpty, uniqueId, startsWith } from 'lodash'
 import Scroll from 'react-scroll'
 import { Paths } from '../../types/api'
 
@@ -25,7 +25,8 @@ import {
 	CALENDAR_DISABLED_NOTIFICATION_TYPE,
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_EVENT_TYPE,
-	CALENDAR_VIEW
+	CALENDAR_VIEW,
+	NEW_ID_PREFIX
 } from '../../utils/enums'
 import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
 
@@ -146,13 +147,11 @@ const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeO
 }
 
 const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string, end: string): ICalendarEventCardData => {
-	return {
+	const baseEvent = {
 		id: event.id,
 		resourceId,
 		start,
 		end,
-		editable: !event.isMultiDayEvent,
-		resourceEditable: !event.isMultiDayEvent,
 		allDay: false,
 		eventData: {
 			...(event.originalEvent || event || {}),
@@ -161,6 +160,19 @@ const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string
 			isFirstMultiDayEventInCurrentRange: event.isFirstMultiDayEventInCurrentRange
 		}
 	}
+
+	// pri multidnovom evente zakazeme dnd a resize cez kalendar, pretoze to sposobuje viacero komplikacii
+	// editable a resourceEditable nastavene na evente prebije aj globalne nastavene editable v kalendari
+	// preto pri beznych eventoch tuto propu nenastavujeme, aby tieto evetny brali do uvahy globalne nastavenie v kalendari
+	if (event.isMultiDayEvent) {
+		return {
+			...baseEvent,
+			editable: false,
+			resourceEditable: false
+		}
+	}
+
+	return baseEvent
 }
 
 /**
@@ -496,7 +508,7 @@ export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null) 
 	const extenedProps: IEventExtenedProps | undefined = movingEvent?.extendedProps
 	const { eventData } = extenedProps || {}
 
-	if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
+	if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION || startsWith(movingEvent?.id, NEW_ID_PREFIX)) {
 		return true
 	}
 

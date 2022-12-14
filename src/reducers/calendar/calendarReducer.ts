@@ -91,6 +91,15 @@ export default (state = initState, action: ICalendarActions) => {
 					data: action.payload.data
 				}
 			}
+		// clear events
+		case EVENTS.EVENTS_CLEAR:
+			return {
+				...state,
+				[action.enumType]: {
+					...state[action.enumType],
+					data: null
+				}
+			}
 		// Refreshing events
 		case SET_IS_REFRESHING_EVENTS:
 			return {

@@ -2,7 +2,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import dayjs from 'dayjs'
 import useResizeObserver from '@react-hook/resize-observer'
-import { StringParam, useQueryParams } from 'use-query-params'
 import { useDispatch } from 'react-redux'
 
 // full calendar
@@ -15,7 +14,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 import CalendarEventContent from '../CalendarEventContent'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
 import { composeWeekResources, composeWeekViewEvents, eventAllow, getWeekDayResourceID } from '../../calendarHelpers'
 import { getDateTime } from '../../../../utils/helper'
 
@@ -148,7 +147,6 @@ const createDayLabelElement = (resourceElemenet: HTMLElement, employeesLength: n
 interface ICalendarWeekView extends ICalendarView {
 	updateCalendarSize: () => void
 	weekDays: string[]
-	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
 }
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
@@ -167,12 +165,10 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		onAddEvent,
 		virtualEvent,
 		setEventManagement,
+		enabledSalonReservations,
 		onEventChangeStart
 	} = props
 
-	const [query] = useQueryParams({
-		sidebarView: StringParam
-	})
 	const dispatch = useDispatch()
 	const events = useMemo(() => {
 		const data = composeWeekViewEvents(selectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees)
@@ -205,6 +201,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
 		dispatch(clearEvent())
 		setEventManagement(undefined)
+
 		if (event.resource) {
 			// eslint-disable-next-line no-underscore-dangle
 			const { day, employee } = event.resource._resource.extendedProps
@@ -247,16 +244,13 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		}
 	}, [employees.length, selectedDate])
 
-	// TODO: ked sa bude rusit maska tak tento kod zmazat
 	useEffect(() => {
-		if (query?.sidebarView) {
+		// NOTE: ak neni je povoleny online booking tak sa nastavi disabled state nad kalendarom
+		if (!enabledSalonReservations) {
 			const body = document.getElementsByClassName('fc-timeline-body')[0]
 			body.classList.add('active')
-		} else {
-			const body = document.getElementsByClassName('fc-timeline-body')[0]
-			body.classList.remove('active')
 		}
-	}, [query?.sidebarView])
+	}, [enabledSalonReservations])
 
 	return (
 		<div className={'nc-calendar-wrapper'} id={'nc-calendar-week-wrapper'}>
@@ -282,9 +276,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				headerToolbar={false}
 				initialView='resourceTimelineDay'
 				initialDate={selectedDate}
+				editable={enabledSalonReservations}
 				weekends
-				selectable={!query.sidebarView}
-				editable={!query.sidebarView}
 				stickyFooterScrollbar
 				nowIndicator
 				// data sources
@@ -304,6 +297,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
+				// select
+				selectable={enabledSalonReservations}
 				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
 				eventResizeStart={() => onEventChangeStart && onEventChangeStart()}
 				select={(selectedEvent) => handleNewEvent(selectedEvent)}

@@ -50,7 +50,6 @@ const checkboxOptionRender = (option: any, checked?: boolean) => {
 		</div>
 	)
 }
-
 const CalendarFilter = (props: Props) => {
 	const { handleSubmit, parentPath, eventsViewType } = props
 	const [t] = useTranslation()

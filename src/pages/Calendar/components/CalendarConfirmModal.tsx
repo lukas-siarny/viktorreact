@@ -31,7 +31,7 @@ import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-2.
 type Props = {
 	data: ConfirmModalData
 	handleSubmitReservation: (values: ICalendarReservationForm, eventId?: string) => void
-	handleSubmitEvent: (values: ICalendarEventForm, calendarEventID?: string, calendarBulkEventID?: string) => void
+	handleSubmitEvent: (values: ICalendarEventForm, calendarEventID?: string, calendarBulkEventID?: string, updateFromCalendar?: boolean) => void
 	handleDeleteEvent: (calendarEventID: string, calendarBulkEventID?: string) => void
 	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => void
 	loadingData?: boolean
@@ -64,7 +64,7 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 	const handleSubmitReservationWrapper = (values: ICalendarReservationForm) => {
 		// wrapper ktory rozhoduje, ci je potrebne potvrdit event alebo rovno submitnut
 		// NOTE: ak je eventID z values tak sa funkcia vola z drag and drop / resize ak ide z query tak je otvoreny detail cez URL / kliknutim na bunku
-		const eventId = values?.eventId || queryEventId || undefined
+		const eventId = (values?.updateFromCalendar ? values?.eventId : queryEventId) || undefined
 
 		if (eventId) {
 			setConfirmModal({
@@ -87,13 +87,13 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 	const handleSubmitEventWrapper = (values: ICalendarEventForm) => {
 		// wrapper ktory rozhoduje, ci je potrebne potvrdit event alebo rovno submitnut
 		// NOTE: ak je eventID z values tak sa funkcia vola z drag and drop / resize ak ide z query tak je otvoreny detail cez URL / kliknutim na bunku
-		const eventId = values?.eventId || queryEventId || undefined
+		const eventId = (values?.updateFromCalendar ? values?.eventId : queryEventId) || undefined
 
 		if (values.calendarBulkEventID) {
 			dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
 
 			const handleSubmitConfirmBulkForm = (bulkFormValues: IBulkConfirmForm) => {
-				handleSubmitEvent(values, eventId, bulkFormValues.actionType === CONFIRM_BULK.BULK ? values.calendarBulkEventID : undefined)
+				handleSubmitEvent(values, eventId, bulkFormValues.actionType === CONFIRM_BULK.BULK ? values.calendarBulkEventID : undefined, values?.updateFromCalendar)
 			}
 
 			setConfirmModal({
@@ -109,7 +109,7 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 				content: <ConfirmBulkForm requestType={REQUEST_TYPE.PATCH} onSubmit={handleSubmitConfirmBulkForm} />
 			})
 		} else {
-			handleSubmitEvent(values, eventId)
+			handleSubmitEvent(values, eventId, undefined, values?.updateFromCalendar)
 		}
 	}
 
@@ -201,7 +201,6 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 				break
 			case CONFIRM_MODAL_DATA_TYPE.EVENT:
 				handleSubmitEventWrapper(data?.values)
-
 				break
 			case CONFIRM_MODAL_DATA_TYPE.DELETE_EVENT: {
 				handleDeleteEventWrapper(data?.eventId, data?.calendarBulkEventID, data?.eventType)

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Action, compose, Dispatch } from 'redux'
@@ -16,7 +16,16 @@ import InviteForm from './components/InviteForm'
 import EditRoleForm from './components/EditRoleForm'
 
 // types
-import { IBreadcrumbs, IComputedMatch, IEditEmployeeRoleForm, IEmployeeForm, IInviteEmployeeForm, ILoadingAndFailure, SalonSubPageProps } from '../../types/interfaces'
+import {
+	IBreadcrumbs,
+	IComputedMatch,
+	IEditEmployeeRoleForm,
+	IEmployeeForm,
+	IInviteEmployeeForm,
+	ILoadingAndFailure,
+	ISelectOptionItem,
+	SalonSubPageProps
+} from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
@@ -45,12 +54,6 @@ type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: string }>
 }
 
-export type ServiceData = any /* {
-	id?: string
-	name?: string
-	category?: string
-} */
-
 type PriceAndDurationData = {
 	durationFrom?: number
 	durationTo?: number
@@ -58,14 +61,13 @@ type PriceAndDurationData = {
 	priceTo?: number | null
 }
 
-export type ServiceData2 = {
+export type ServiceData = {
 	id?: string
 	name?: string
 	category?: string
-	salonData?: PriceAndDurationData
-	employeeData?: PriceAndDurationData
 	variableDuration?: boolean
 	variablePrice?: boolean
+	priceAndDurationData?: PriceAndDurationData
 	hasCategoryParameter?: boolean
 	categoryParameter?: {
 		name?: string
@@ -124,18 +126,11 @@ export const addService = (servaddServiceices: IServicesPayload & ILoadingAndFai
 			})
 		} else if (serviceData) {
 			const hasCategoryParameter = !!categoryParameter?.values?.length
-			let newServiceData: ServiceData2 = {
+			let newServiceData: ServiceData = {
 				id: serviceData?.key as string,
 				name: serviceData?.label,
 				category: serviceData?.extra?.firstCategory,
-				// TODO - for change duration and price in employee detail
-				salonData: {
-					durationFrom: priceAndDuration?.durationFrom,
-					durationTo: priceAndDuration?.durationTo,
-					priceFrom: decodePrice(priceAndDuration?.priceFrom),
-					priceTo: priceAndDuration?.priceTo && priceAndDuration?.priceFrom ? decodePrice(priceAndDuration?.priceTo) : undefined
-				},
-				employeeData: {
+				priceAndDurationData: {
 					durationFrom: priceAndDuration?.durationFrom,
 					durationTo: priceAndDuration.durationTo,
 					priceFrom: decodePrice(priceAndDuration?.priceFrom),
@@ -198,18 +193,48 @@ export const addService = (servaddServiceices: IServicesPayload & ILoadingAndFai
 
 type ServiceRootCategory = Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200['employee']['categories']
 
-const parseServices = (categories?: ServiceRootCategory): ServiceData[] => {
+const parseServices = (employeeCategories?: ServiceRootCategory, salonServices?: ISelectOptionItem[]): ServiceData[] => {
 	const result: ServiceData[] = []
-	if (categories) {
-		categories?.forEach((firstCategory) =>
+	if (employeeCategories) {
+		employeeCategories?.forEach((firstCategory) =>
 			firstCategory?.children.forEach((secondCategory) => {
 				secondCategory?.children.forEach((service) => {
-					// console.log({ service })
-					result.push({
+					const salonServiceData = salonServices?.find((option) => option?.key === service.id)
+					let formServiceData: ServiceData = {
 						id: service?.id,
 						name: service?.category?.name,
 						category: firstCategory?.name
-					})
+					}
+					// const salonCategoryParameter = salonServiceData?.extra?.serviceCategoryParameter as ServiceCategoryParameter
+					// ak ma employee nieco nastavene, tak prepiseme salonove hodnoty jeho hodnotami
+					if (service?.hasOverriddenPricesAndDurationData) {
+						const employeePriceAndDuration = service?.priceAndDurationData
+						formServiceData = {
+							...formServiceData,
+							priceAndDurationData: {
+								durationFrom: employeePriceAndDuration?.durationFrom,
+								durationTo: employeePriceAndDuration?.durationTo,
+								priceFrom: decodePrice(employeePriceAndDuration?.priceFrom),
+								priceTo: employeePriceAndDuration?.priceTo && employeePriceAndDuration.priceFrom ? decodePrice(employeePriceAndDuration?.priceTo) : undefined
+							},
+							variableDuration: !!(employeePriceAndDuration.durationFrom && employeePriceAndDuration?.durationTo),
+							variablePrice: !!(employeePriceAndDuration?.priceFrom && employeePriceAndDuration?.priceTo)
+						}
+					} else {
+						const salonPriceAndDuration = salonServiceData?.extra?.rangePriceAndDurationData as ServicePriceAndDurationData
+						formServiceData = {
+							...formServiceData,
+							priceAndDurationData: {
+								durationFrom: salonPriceAndDuration?.durationFrom,
+								durationTo: salonPriceAndDuration?.durationTo,
+								priceFrom: decodePrice(salonPriceAndDuration?.priceFrom),
+								priceTo: salonPriceAndDuration?.priceTo && salonPriceAndDuration.priceFrom ? decodePrice(salonPriceAndDuration?.priceTo) : undefined
+							},
+							variableDuration: !!(salonPriceAndDuration.durationFrom && salonPriceAndDuration?.durationTo),
+							variablePrice: !!(salonPriceAndDuration?.priceFrom && salonPriceAndDuration?.priceTo)
+						}
+					}
+					result.push(formServiceData)
 				})
 			})
 		)
@@ -247,42 +272,42 @@ const EmployeePage = (props: Props) => {
 
 	const [backUrl] = useBackUrl(parentPath + t('paths:employees'))
 
-	const fetchEmployeeData = async () => {
-		const { data } = await dispatch(getEmployee(employeeID))
-		if (!data?.employee?.id) {
+	const fetchEmployeeAndServicesData = useCallback(async () => {
+		const { data: employeesData } = await dispatch(getEmployee(employeeID))
+		const { options } = await dispatch(getServices({ salonID }))
+
+		if (!employeesData?.employee?.id) {
 			history.push('/404')
 		}
 
-		if (data?.employee) {
+		if (employeesData?.employee) {
 			dispatch(
 				initialize(FORM.EMPLOYEE, {
-					...data.employee,
-					avatar: data.employee?.image
+					...employeesData.employee,
+					avatar: employeesData.employee?.image
 						? [
 								{
-									url: data.employee?.image?.original,
-									thumbUrl: data.employee?.image?.resizedImages?.thumbnail,
-									uid: data.employee?.image?.id
+									url: employeesData.employee?.image?.original,
+									thumbUrl: employeesData.employee?.image?.resizedImages?.thumbnail,
+									uid: employeesData.employee?.image?.id
 								}
 						  ]
 						: [],
-					services: parseServices(data?.employee?.categories),
-					salonID: { label: data.employee?.salon?.name, value: data.employee?.salon?.id },
-					roleID: data.employee?.role?.id
+					services: parseServices(employeesData?.employee?.categories, options),
+					salonID: { label: employeesData.employee?.salon?.name, value: employeesData.employee?.salon?.id },
+					roleID: employeesData.employee?.role?.id
 				})
 			)
 		}
-	}
+	}, [dispatch, employeeID, salonID])
 
 	useEffect(() => {
-		fetchEmployeeData()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [employeeID])
+		fetchEmployeeAndServicesData()
+	}, [fetchEmployeeAndServicesData])
 
 	useEffect(() => {
 		dispatch(getSalonRoles())
-		dispatch(getServices({ salonID }))
-	}, [dispatch, salonID])
+	}, [dispatch])
 
 	useEffect(() => {
 		dispatch(initialize(FORM.EDIT_EMPLOYEE_ROLE, { roleID: form?.values?.roleID }))

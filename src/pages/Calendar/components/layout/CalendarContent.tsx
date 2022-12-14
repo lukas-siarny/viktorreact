@@ -1,15 +1,19 @@
 import React, { useImperativeHandle, useMemo, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector, batch } from 'react-redux'
 import { Spin } from 'antd'
 import { Content } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
+import { useTranslation } from 'react-i18next'
+import { change } from 'redux-form'
+import { startsWith } from 'lodash'
+import { DelimitedArrayParam, useQueryParams } from 'use-query-params'
 
 // fullcalendar
 import { EventResizeDoneArg } from '@fullcalendar/interaction'
 import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
@@ -35,11 +39,10 @@ import { getSelectedDateForCalendar, getWeekDays } from '../../calendarHelpers'
 type Props = {
 	view: CALENDAR_VIEW
 	loading: boolean
-	onShowAllEmployees: () => void
-	showEmptyState: boolean
 	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
 	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
+	enabledSalonReservations?: boolean
 } & ICalendarView
 
 export type CalendarRefs = {
@@ -54,12 +57,11 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		loading,
 		reservations,
 		shiftsTimeOffs,
-		onShowAllEmployees,
-		showEmptyState,
 		handleSubmitReservation,
 		handleSubmitEvent,
 		selectedDate,
 		setEventManagement,
+		enabledSalonReservations,
 		salonID,
 		eventsViewType,
 		employees,
@@ -69,9 +71,17 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		clearRestartInterval
 	} = props
 
+	const dispatch = useDispatch()
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
 	// const monthView = useRef<InstanceType<typeof FullCalendar>>(null)
+	const [t] = useTranslation()
+
+	// query
+	const [query, setQuery] = useQueryParams({
+		employeeIDs: DelimitedArrayParam,
+		categoryIDs: DelimitedArrayParam
+	})
 
 	const [disableRender, setDisableRender] = useState(false)
 
@@ -84,7 +94,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const selectedSalonuniqPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions)
-
 	const [visibleForbiddenModal, setVisibleForbiddenModal] = useState(false)
 
 	const sources = useMemo(() => {
@@ -112,7 +121,10 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const onEventChange = (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
 		const hasPermissions = permitted(authUserPermissions || [], selectedSalonuniqPermissions, UPDATE_EVENT_PERMISSIONS)
 
-		const revertEvent = () => arg.revert()
+		const revertEvent = () => {
+			setDisableRender(false)
+			arg.revert()
+		}
 
 		if (!hasPermissions) {
 			setVisibleForbiddenModal(true)
@@ -126,18 +138,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		const eventExtenedProps = (event.extendedProps as IEventExtenedProps) || {}
 		const eventData = eventExtenedProps?.eventData
 		const newResourceExtendedProps = newResource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
-
 		const eventId = eventData?.id
 		const calendarBulkEventID = eventData?.calendarBulkEvent?.id || eventData?.calendarBulkEvent
-
-		// ak sa zmenil resource, tak updatenut resource (to sa bude diat len pri drope)
-		const employeeId = newResource ? newResourceExtendedProps?.employee?.id : eventData?.employee.id
-
-		if (!eventId || !employeeId) {
-			// ak nahodou nemam eventID alebo employeeId tak to vrati na povodne miesto
-			revertEvent()
-			return
-		}
 
 		// zatial predpokladame, ze nebudu viacdnove eventy - takze start a end date by mal byt rovnaky
 		const startDajys = dayjs(start)
@@ -153,17 +155,53 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
 		}
 
+		if (calendarView === CALENDAR_VIEW.WEEK) {
+			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
+			// (to sa bude diat len pri drope)
+			const resource = event.getResources()[0]
+			date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
+		}
+
+		// ak sa zmenil resource, tak updatenut resource (to sa bude diat len pri drope)
+		const employee = newResource ? newResourceExtendedProps?.employee : eventData?.employee
+
 		const values = {
 			date,
 			timeFrom,
 			timeTo,
 			eventType: eventData?.eventType,
 			employee: {
-				key: employeeId
+				key: employee?.id
 			},
 			eventId,
 			revertEvent,
-			enableCalendarRender: () => setDisableRender(false)
+			enableCalendarRender: () => setDisableRender(false),
+			updateFromCalendar: true
+		}
+
+		if (!employee?.id) {
+			// ak nahodou nemam employeeId tak to vrati na povodne miesto
+			revertEvent()
+			return
+		}
+		// Ak existuje virualny event a isPlaceholder z eventu je true tak sa jedna o virtualny even a bude sa rovbit change nad formularmi a nezavola sa request na BE
+		if (virtualEvent && startsWith(event.id, NEW_ID_PREFIX)) {
+			const formName = `CALENDAR_${eventData?.eventType}_FORM` // TODO: ked sa spravi refacor bude len RESERVATION a EVENT forms
+			// TODO: ked budu dva formy tak spravit cez init s tym ze sa budu predchadzajuce data zistovat a tie sa mergnu s novymi prevetne sa voci zbytocnemu volaniu change - ked sa spravi NOT-3624
+			batch(() => {
+				dispatch(change(formName, 'date', date))
+				dispatch(change(formName, 'timeFrom', timeFrom))
+				dispatch(change(formName, 'timeTo', timeTo))
+				dispatch(
+					change(formName, 'employee', {
+						value: employee?.id as string,
+						key: employee?.id as string,
+						label: newResource ? newResourceExtendedProps?.employee?.name : eventData?.employee.email
+					})
+				)
+			})
+			setDisableRender(false)
+			return
 		}
 
 		if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
@@ -182,8 +220,45 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	}
 
 	const getView = () => {
-		if (showEmptyState) {
-			return <CalendarEmptyState onButtonClick={onShowAllEmployees} />
+		if (query?.categoryIDs === null && query?.employeeIDs === null) {
+			return (
+				<CalendarEmptyState
+					title={t('loc:Nie je vybratý zamestnanec ani služba')}
+					onButtonClick={() =>
+						setQuery({
+							...query,
+							employeeIDs: undefined, // undefined znamena ze sa setnu vsetky hodnoty do filtra
+							categoryIDs: undefined
+						})
+					}
+				/>
+			)
+		}
+		if (query?.employeeIDs === null) {
+			return (
+				<CalendarEmptyState
+					title={t('loc:Nie je vybratý zamestnanec')}
+					onButtonClick={() =>
+						setQuery({
+							...query,
+							employeeIDs: undefined
+						})
+					}
+				/>
+			)
+		}
+		if (query.categoryIDs === null) {
+			return (
+				<CalendarEmptyState
+					title={t('loc:Nie je vybratá služba')}
+					onButtonClick={() =>
+						setQuery({
+							...query,
+							categoryIDs: undefined
+						})
+					}
+				/>
+			)
 		}
 
 		/* if (view === CALENDAR_VIEW.MONTH) {
@@ -205,6 +280,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			return (
 				<CalendarWeekView
 					ref={weekView}
+					enabledSalonReservations={enabledSalonReservations}
+					setEventManagement={setEventManagement}
 					disableRender={disableRender}
 					reservations={sources.reservations}
 					shiftsTimeOffs={sources.shiftsTimeOffs}
@@ -218,7 +295,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					onReservationClick={onReservationClick}
 					onAddEvent={onAddEvent}
 					clearRestartInterval={clearRestartInterval}
-					setEventManagement={setEventManagement}
 					onEventChange={onEventChange}
 					onEventChangeStart={onEventChangeStart}
 					updateCalendarSize={() => weekView?.current?.getApi().updateSize()}
@@ -228,6 +304,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 		return (
 			<CalendarDayView
+				enabledSalonReservations={enabledSalonReservations}
+				setEventManagement={setEventManagement}
 				ref={dayView}
 				disableRender={disableRender}
 				reservations={sources.reservations}
@@ -241,7 +319,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				onEditEvent={onEditEvent}
 				onReservationClick={onReservationClick}
 				clearRestartInterval={clearRestartInterval}
-				setEventManagement={setEventManagement}
 				onEventChange={onEventChange}
 				onEventChangeStart={onEventChangeStart}
 			/>

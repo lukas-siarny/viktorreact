@@ -39,7 +39,7 @@ import { RootState } from '../../../reducers'
 import EmployeeServiceEditForm from './EmployeeServiceEditForm'
 import { patchReq } from '../../../utils/request'
 import { Paths } from '../../../types/api'
-import { ServiceData2 } from '../EmployeePage'
+import { ServiceData } from '../EmployeePage'
 
 const { Panel } = Collapse
 
@@ -73,7 +73,7 @@ const renderListFields = (props: any) => {
 
 	const editButton = <Button htmlType={'button'} className={'ant-btn noti-btn'} size={'small'} icon={<EditIcon />} onClick={() => setVisibleServiceEditModal(true)} />
 
-	const genExtra = (index: number, field: ServiceData2) => {
+	const genExtra = (index: number, field: ServiceData) => {
 		return (
 			<div className={'flex gap-1'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
 				{field?.hasCategoryParameter ? (
@@ -81,8 +81,20 @@ const renderListFields = (props: any) => {
 				) : (
 					<>
 						<div className={'flex gap-1'}>
-							{renderFromTo(field?.employeeData?.durationFrom, field?.employeeData?.durationTo, !!field?.variableDuration, <ClockIcon />, t('loc:min'))}
-							{renderFromTo(field?.employeeData?.priceFrom, field?.employeeData?.priceTo, !!field?.variablePrice, <CouponIcon />, salon.data?.currency.symbol)}
+							{renderFromTo(
+								field?.priceAndDurationData?.durationFrom,
+								field?.priceAndDurationData?.durationTo,
+								!!field?.variableDuration,
+								<ClockIcon />,
+								t('loc:min')
+							)}
+							{renderFromTo(
+								field?.priceAndDurationData?.priceFrom,
+								field?.priceAndDurationData?.priceTo,
+								!!field?.variablePrice,
+								<CouponIcon />,
+								salon.data?.currency.symbol
+							)}
 						</div>
 						{editButton}
 					</>
@@ -108,7 +120,7 @@ const renderListFields = (props: any) => {
 		<>
 			<Collapse className={'collapse-list'} bordered={false} activeKey={activeKeys}>
 				{fields.map((field: any, index: number) => {
-					const fieldData = fields.get(index) as ServiceData2
+					const fieldData = fields.get(index) as ServiceData
 					const categoryParameter = fieldData?.categoryParameter
 
 					return (
@@ -332,6 +344,9 @@ const EmployeeForm: FC<Props> = (props) => {
 						<FieldArray component={renderListFields} name={'services'} salon={salon} setVisibleServiceEditModal={setVisibleServiceEditModal} />
 					</div>
 				</Space>
+				<Modal title={t('loc:Upraviť službu zamestnancovi')} width={500} visible={visibleServiceEditModal} onCancel={() => setVisibleServiceEditModal(false)} footer={null}>
+					<EmployeeServiceEditForm onSubmit={editEmployeeService} />
+				</Modal>
 			</Form>
 			<Modal title={t('loc:Upraviť službu zamestnancovi')} width={500} visible={visibleServiceEditModal} onCancel={() => setVisibleServiceEditModal(false)} footer={null}>
 				<EmployeeServiceEditForm onSubmit={editEmployeeService} />

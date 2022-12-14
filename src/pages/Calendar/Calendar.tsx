@@ -83,7 +83,6 @@ const getEmployeeIDs = (data: IEmployeesPayload['options']) => {
 // NOTE: v URL sa pouzivaju skratene ID kategorii, pretoze ich moze byt dost vela a original IDcka su dost dhle
 // tak aby sa nahodu nestalo ze sa tam nevojdu v niektorom z prehliadacov
 const getFullCategoryIdsFromUrl = (ids?: (string | null)[] | null) => {
-	console.log({ ids })
 	return ids?.reduce((cv, id) => (id ? [...cv, `00000000-0000-0000-0000-${id}`] : cv), [] as string[])
 }
 

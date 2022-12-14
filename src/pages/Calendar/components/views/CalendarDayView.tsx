@@ -170,7 +170,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				// handlers
 				eventAllow={eventAllow}
 				eventDrop={(arg) => {
-					console.log({ arg })
 					if (onEventChange) onEventChange(CALENDAR_VIEW.DAY, arg)
 				}}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}

@@ -300,6 +300,10 @@ export const QUERY_LIMIT = {
 	MAX_255: 255
 }
 
+export const TEXT_LIMITS = {
+	MAX_1500: 1500
+}
+
 export const UPLOAD = {
 	MAX_FILE_SIZE: 20,
 	MAX_SIZE: 100000000, // 100MB

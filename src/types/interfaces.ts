@@ -161,28 +161,14 @@ export interface ICalendarReservationForm {
 	eventId?: string
 	revertEvent?: () => void
 	enableCalendarRender?: () => void
+	updateFromCalendar?: boolean
 }
-
 export interface ICalendarEventForm {
 	employee: ISelectOptionItem
 	date: string
 	timeFrom: string
 	timeTo: string
 	eventType: CALENDAR_EVENT_TYPE
-	// pri drag and drope sa dotahuju z detailu eventu a nie z formu
-	customRepeatOptions?: {
-		untilDate: string,
-		days: {
-			[DAY.MONDAY]: boolean,
-			[DAY.TUESDAY]: boolean,
-			[DAY.WEDNESDAY]: boolean,
-			[DAY.THURSDAY]: boolean,
-			[DAY.FRIDAY]: boolean,
-			[DAY.SATURDAY]: boolean,
-			[DAY.SUNDAY]: boolean
-		},
-		week: 2 | 1
-	} | undefined
 	recurring?: boolean
 	repeatOn?: DAY[]
 	every?: EVERY_REPEAT
@@ -194,6 +180,7 @@ export interface ICalendarEventForm {
 	calendarBulkEventID?: string
 	revertEvent?: () => void
 	enableCalendarRender?: () => void
+	updateFromCalendar?: boolean
 }
 
 export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null

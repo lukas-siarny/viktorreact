@@ -249,6 +249,8 @@ export enum PARAMETER_TYPE {
 	TIME = 'TIME'
 }
 
+export const NEW_ID_PREFIX = 'NEW'
+
 export const DEFAULT_DATE_INPUT_FORMAT = 'DD.MM.YYYY'
 
 export const DEFAULT_DATE_INIT_FORMAT = 'YYYY-MM-DD'

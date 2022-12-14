@@ -34,7 +34,14 @@ import { getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDa
 import { history } from '../../utils/history'
 
 // reducers
-import { getCalendarEventDetail, getCalendarReservations, getCalendarShiftsTimeoff, refreshEvents } from '../../reducers/calendar/calendarActions'
+import {
+	clearCalendarReservations,
+	clearCalendarShiftsTimeoffs,
+	getCalendarEventDetail,
+	getCalendarReservations,
+	getCalendarShiftsTimeoff,
+	refreshEvents
+} from '../../reducers/calendar/calendarActions'
 import { RootState } from '../../reducers'
 import { getEmployees } from '../../reducers/employees/employeesActions'
 import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
@@ -79,13 +86,15 @@ const getFullCategoryIdsFromUrl = (ids?: (string | null)[] | null) => {
 }
 
 const getShortCategoryIdsForUrl = (ids?: (string | null)[] | null) => {
-	return ids?.reduce((cv, id) => {
-		if (id) {
-			const splittedId = id.split('-')
-			return [...cv, splittedId[splittedId.length - 1]]
-		}
-		return cv
-	}, [] as string[])
+	return ids?.length
+		? ids?.reduce((cv, id) => {
+				if (id) {
+					const splittedId = id.split('-')
+					return [...cv, splittedId[splittedId.length - 1]]
+				}
+				return cv
+		  }, [] as string[])
+		: null
 }
 
 const CALENDAR_VIEWS = Object.keys(CALENDAR_VIEW)
@@ -231,7 +240,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	// fetch new events
 	const fetchEvents: any = useCallback(
-		async (clearVirtualEvent?: boolean, restartInterval = true) => {
+		async (clearVirtualEvent?: boolean) => {
 			if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 				Promise.all([
 					dispatch(
@@ -253,9 +262,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				dispatch(getCalendarShiftsTimeoff({ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs }, true, clearVirtualEvent))
 			}
 
-			if (restartInterval) {
-				await restartFetchInterval()
-			}
+			await restartFetchInterval()
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validEventsViewType]
@@ -302,7 +309,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	useEffect(() => {
 		;(async () => {
 			// if user uncheck all values from one of the filters => don't fetch new events
-			if (query?.categoryIDs === null || query?.employeeIDs === null) {
+			if (query?.employeeIDs === null || query?.categoryIDs === null) {
+				clearRestartFetchInterval()
+				dispatch(clearCalendarReservations())
+				dispatch(clearCalendarShiftsTimeoffs())
 				return
 			}
 
@@ -312,6 +322,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents])
 
 	useEffect(() => {
+		dispatch(clearEvent()) // Ak je otvoreny virtualny event tak sa zmaze virtualny event
 		dispatch(
 			initialize(FORM.CALENDAR_FILTER, {
 				eventsViewType: validEventsViewType,
@@ -319,7 +330,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				employeeIDs: query?.employeeIDs === undefined ? getEmployeeIDs(employees?.options) : query?.employeeIDs
 			})
 		)
-	}, [dispatch, employees?.options, services?.categoriesOptions, query.categoryIDs, query.employeeIDs, validEventsViewType])
+	}, [dispatch, employees?.options, services?.categoriesOptions, query?.categoryIDs, query?.employeeIDs, validEventsViewType])
 
 	useEffect(() => {
 		// update calendar size when main layout sider change
@@ -369,12 +380,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		dispatch(clearEvent())
 		setEventManagement(undefined)
 	}, [dispatch, setEventManagement])
-
-	useEffect(() => {
-		// NOTE: zmaze sa ruzove pozadie pri zruseni sidebaru cez ESC
-		const highlight = document.getElementsByClassName('fc-highlight')[0]
-		if (highlight) highlight.remove()
-	}, [])
 
 	const handleSubmitFilter = (values: ICalendarFilter) => {
 		setQuery({
@@ -453,9 +458,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					// CREATE
 					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 					fetchEvents(true) // Po CREATe zmazat virtualny event aby neostali ten tkory sa dotiahne z BE a sucasne aj virualny
+					closeSiderForm()
 				}
 
-				// Po UPDATE rezervacie dotiahnut eventy + zatvorit drawer, pri CREATE ostane otvoreny sider pcoas updatu len
+				// Po UPDATE rezervacie dotiahnut eventy + zatvorit drawer, pri CREATE ostane otvoreny sider pocas updatu len
 				if (query.eventId) {
 					closeSiderForm()
 				}
@@ -474,12 +480,28 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				}
 			}
 		},
-		[closeSiderForm, fetchEvents, salonID]
+		[closeSiderForm, fetchEvents, salonID, query.eventId]
 	)
 
 	const handleSubmitEvent = useCallback(
-		async (values: ICalendarEventForm, calendarEventID?: string, calendarBulkEventID?: string) => {
+		async (values: ICalendarEventForm, calendarEventID?: string, calendarBulkEventID?: string, updateFromCalendar = false) => {
 			const { revertEvent } = values
+
+			const repeatEvent = values.recurring
+				? {
+						untilDate: values.end as string,
+						days: {
+							MONDAY: includes(values.repeatOn, DAY.MONDAY),
+							TUESDAY: includes(values.repeatOn, DAY.TUESDAY),
+							WEDNESDAY: includes(values.repeatOn, DAY.WEDNESDAY),
+							THURSDAY: includes(values.repeatOn, DAY.THURSDAY),
+							FRIDAY: includes(values.repeatOn, DAY.FRIDAY),
+							SATURDAY: includes(values.repeatOn, DAY.SATURDAY),
+							SUNDAY: includes(values.repeatOn, DAY.SUNDAY)
+						},
+						week: values.every === EVERY_REPEAT.TWO_WEEKS ? 2 : (1 as 1 | 2 | undefined)
+				  }
+				: undefined
 
 			try {
 				setIsUpdatingEvent(true)
@@ -494,11 +516,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						time: values.timeTo
 					},
 					employeeID: values.employee.key as string,
-					note: values.note
+					note: values.note,
+					repeatEvent
 				}
 				// UPDATE event
 				if (calendarEventID) {
-					const reqDataUpdate = {
+					let reqDataUpdate = {
 						start: {
 							date: values.date,
 							time: values.timeFrom
@@ -507,45 +530,30 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							date: values.date,
 							time: values.timeTo
 						},
-						note: values.note
+						note: values.note,
+						repeatEvent
 					}
 					if (calendarBulkEventID) {
 						// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
-						let repeatEvent
-						if (!query.sidebarView) {
+						if (updateFromCalendar) {
 							// Uprava detailu cez drag and drop / resize
 							// Ak sa posielaju data do funkcie z kalendaru, tak tie neobsahuju repeatEvent objekt
 							// Je to vsak povinna hodnota a preto je potrebne ho dotiahnut
 							const event = await dispatch(getCalendarEventDetail(salonID, calendarEventID))
-							repeatEvent = event.data?.calendarBulkEvent?.repeatOptions
-						} else {
-							// Uprava detailu cez sidebar
-							repeatEvent = values.recurring
-								? {
-										untilDate: values.end as string,
-										days: {
-											MONDAY: includes(values.repeatOn, DAY.MONDAY),
-											TUESDAY: includes(values.repeatOn, DAY.TUESDAY),
-											WEDNESDAY: includes(values.repeatOn, DAY.WEDNESDAY),
-											THURSDAY: includes(values.repeatOn, DAY.THURSDAY),
-											FRIDAY: includes(values.repeatOn, DAY.FRIDAY),
-											SATURDAY: includes(values.repeatOn, DAY.SATURDAY),
-											SUNDAY: includes(values.repeatOn, DAY.SUNDAY)
-										},
-										week: values.every === EVERY_REPEAT.TWO_WEEKS ? 2 : (1 as 1 | 2 | undefined)
-								  }
-								: undefined
+							reqDataUpdate = {
+								...reqDataUpdate,
+								repeatEvent: event.data?.calendarBulkEvent?.repeatOptions
+							}
 						}
 						// BULK UPDATE
 						await patchReq(
 							'/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}',
 							{ salonID, calendarBulkEventID },
-							{ ...reqDataUpdate, repeatEvent: repeatEvent as any },
+							reqDataUpdate as any,
 							undefined,
 							NOTIFICATION_TYPE.NOTIFICATION,
 							true
 						)
-						fetchEvents(false) // Po PATCHi vponechat virtualny event ak bol vytvoreny
 					} else {
 						// SINGLE RECORD UPDATE
 						// NOTE: ak existuje eventId je otvoreny detail a bude sa patchovat
@@ -557,12 +565,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							NOTIFICATION_TYPE.NOTIFICATION,
 							true
 						)
-						fetchEvents(false) // Po PATCHi vponechat virtualny event ak bol vytvoreny
 					}
+					fetchEvents(false) // Po PATCHi vponechat virtualny event ak bol vytvoreny
 				} else {
 					// CREATE event shift
 					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 					fetchEvents(true) // Po CREATe zmazat virtualny event aby neostali ten tkory sa dotiahne z BE a sucasne aj virualny
+					closeSiderForm()
 				}
 				// Po UPDATE eventu dotiahnut eventy + zatvorit drawer, pri CREATE ostane otvoreny sider pcoas updatu len
 				if (query.eventId) {
@@ -584,7 +593,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				}
 			}
 		},
-		[dispatch, fetchEvents, closeSiderForm, query.sidebarView, salonID]
+		[dispatch, fetchEvents, closeSiderForm, salonID, query.eventId]
 	)
 
 	const handleDeleteEvent = useCallback(
@@ -732,13 +741,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						loading={isRefreshingEvents ? false : loadingData}
 						eventsViewType={validEventsViewType}
 						employees={filteredEmployees() || []}
-						showEmptyState={query?.employeeIDs === null}
-						onShowAllEmployees={() => {
-							setQuery({
-								...query,
-								employeeIDs: undefined
-							})
-						}}
 						onEditEvent={onEditEvent}
 						onReservationClick={(data?: ReservationPopoverData, position?: ReservationPopoverPosition) => {
 							setReservationPopover({
@@ -758,11 +760,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							selectedDate={validSelectedDate}
 							eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 							eventId={query.eventId}
-							handleDeleteEvent={handleDeleteEvent}
+							handleDeleteEvent={initDeleteEventData}
 							sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE}
 							onCloseSider={closeSiderForm}
-							handleSubmitReservation={handleSubmitReservation}
-							handleSubmitEvent={handleSubmitEvent}
+							handleSubmitReservation={initSubmitReservationData}
+							handleSubmitEvent={initSubmitEventData}
 							newEventData={newEventData}
 							calendarApi={calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()}
 							changeCalendarDate={setNewSelectedDate}

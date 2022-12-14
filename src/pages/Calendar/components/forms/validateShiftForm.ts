@@ -26,6 +26,10 @@ const validateShiftForm = (values?: ICalendarEventForm) => {
 		errors.timeTo = i18next.t('loc:Toto pole je povinné')
 	}
 
+	if (values?.recurring && !values?.end) {
+		errors.end = i18next.t('loc:Toto pole je povinné')
+	}
+
 	return errors
 }
 

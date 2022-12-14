@@ -240,7 +240,16 @@ const SiderEventManagement: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sidebarView])
 
-	useKeyUp('Escape', query.sidebarView ? onCloseSider : undefined)
+	useKeyUp(
+		'Escape',
+		query.sidebarView
+			? () => {
+					onCloseSider()
+					const highlight = document.getElementsByClassName('fc-highlight')[0]
+					if (highlight) highlight.remove()
+			  }
+			: undefined
+	)
 
 	const searchEmployes = useCallback(
 		async (search: string, page: number) => {

@@ -169,7 +169,9 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				slotLabelContent={slotLabelContent}
 				// handlers
 				eventAllow={eventAllow}
-				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
+				eventDrop={(arg) => {
+					if (onEventChange) onEventChange(CALENDAR_VIEW.DAY, arg)
+				}}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
 				// select
 				selectable={enabledSalonReservations}

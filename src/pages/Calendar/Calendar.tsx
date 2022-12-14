@@ -481,6 +481,22 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		async (values: ICalendarEventForm, calendarEventID?: string, calendarBulkEventID?: string, updateFromCalendar = false) => {
 			const { revertEvent } = values
 
+			const repeatEvent = values.recurring
+				? {
+						untilDate: values.end as string,
+						days: {
+							MONDAY: includes(values.repeatOn, DAY.MONDAY),
+							TUESDAY: includes(values.repeatOn, DAY.TUESDAY),
+							WEDNESDAY: includes(values.repeatOn, DAY.WEDNESDAY),
+							THURSDAY: includes(values.repeatOn, DAY.THURSDAY),
+							FRIDAY: includes(values.repeatOn, DAY.FRIDAY),
+							SATURDAY: includes(values.repeatOn, DAY.SATURDAY),
+							SUNDAY: includes(values.repeatOn, DAY.SUNDAY)
+						},
+						week: values.every === EVERY_REPEAT.TWO_WEEKS ? 2 : (1 as 1 | 2 | undefined)
+				  }
+				: undefined
+
 			try {
 				setIsUpdatingEvent(true)
 				const reqData = {
@@ -494,11 +510,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						time: values.timeTo
 					},
 					employeeID: values.employee.key as string,
-					note: values.note
+					note: values.note,
+					repeatEvent
 				}
 				// UPDATE event
 				if (calendarEventID) {
-					const reqDataUpdate = {
+					let reqDataUpdate = {
 						start: {
 							date: values.date,
 							time: values.timeFrom
@@ -507,40 +524,26 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							date: values.date,
 							time: values.timeTo
 						},
-						note: values.note
+						note: values.note,
+						repeatEvent
 					}
 					if (calendarBulkEventID) {
 						// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
-						let repeatEvent
 						if (updateFromCalendar) {
 							// Uprava detailu cez drag and drop / resize
 							// Ak sa posielaju data do funkcie z kalendaru, tak tie neobsahuju repeatEvent objekt
 							// Je to vsak povinna hodnota a preto je potrebne ho dotiahnut
 							const event = await dispatch(getCalendarEventDetail(salonID, calendarEventID))
-							repeatEvent = event.data?.calendarBulkEvent?.repeatOptions
-						} else {
-							// Uprava detailu cez sidebar
-							repeatEvent = values.recurring
-								? {
-										untilDate: values.end as string,
-										days: {
-											MONDAY: includes(values.repeatOn, DAY.MONDAY),
-											TUESDAY: includes(values.repeatOn, DAY.TUESDAY),
-											WEDNESDAY: includes(values.repeatOn, DAY.WEDNESDAY),
-											THURSDAY: includes(values.repeatOn, DAY.THURSDAY),
-											FRIDAY: includes(values.repeatOn, DAY.FRIDAY),
-											SATURDAY: includes(values.repeatOn, DAY.SATURDAY),
-											SUNDAY: includes(values.repeatOn, DAY.SUNDAY)
-										},
-										week: values.every === EVERY_REPEAT.TWO_WEEKS ? 2 : (1 as 1 | 2 | undefined)
-								  }
-								: undefined
+							reqDataUpdate = {
+								...reqDataUpdate,
+								repeatEvent: event.data?.calendarBulkEvent?.repeatOptions
+							}
 						}
 						// BULK UPDATE
 						await patchReq(
 							'/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}',
 							{ salonID, calendarBulkEventID },
-							{ ...reqDataUpdate, repeatEvent: repeatEvent as any },
+							reqDataUpdate as any,
 							undefined,
 							NOTIFICATION_TYPE.NOTIFICATION,
 							true
@@ -584,7 +587,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				}
 			}
 		},
-		[dispatch, fetchEvents, closeSiderForm, query.sidebarView, salonID]
+		[dispatch, fetchEvents, closeSiderForm, salonID, query.eventId]
 	)
 
 	const handleDeleteEvent = useCallback(

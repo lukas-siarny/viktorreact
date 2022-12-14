@@ -3,9 +3,10 @@
 import React, { FC, useRef } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
+import { startsWith } from 'lodash'
 
 // utils
-import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE } from '../../../utils/enums'
+import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NEW_ID_PREFIX } from '../../../utils/enums'
 import { getAssignedUserLabel } from '../../../utils/helper'
 
 // assets
@@ -95,6 +96,10 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 	const cardRef = useRef<HTMLDivElement | null>(null)
 
 	const handleReservationClick = () => {
+		// NOTE: prevent proti kliknutiu na virutalny event rezervacie neotvori sa popover
+		if (startsWith(originalEventData.id, NEW_ID_PREFIX)) {
+			return
+		}
 		if (originalEventData.id && cardRef.current) {
 			const data: ReservationPopoverData = {
 				start,

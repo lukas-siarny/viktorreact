@@ -311,6 +311,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		;(async () => {
 			// if user uncheck all values from one of the filters => don't fetch new events
 			if (query?.employeeIDs === null || query?.categoryIDs === null) {
+				clearRestartFetchInterval()
 				dispatch(clearCalendarReservations())
 				dispatch(clearCalendarShiftsTimeoffs())
 				return

@@ -35,7 +35,6 @@ import { history } from '../../utils/history'
 
 // reducers
 import {
-	clearCalendarEvents,
 	clearCalendarReservations,
 	clearCalendarShiftsTimeoffs,
 	getCalendarEventDetail,
@@ -323,6 +322,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents])
 
 	useEffect(() => {
+		dispatch(clearEvent()) // Ak je otvoreny virtualny event tak sa zmaze virtualny event
 		dispatch(
 			initialize(FORM.CALENDAR_FILTER, {
 				eventsViewType: validEventsViewType,
@@ -330,7 +330,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				employeeIDs: query?.employeeIDs === undefined ? getEmployeeIDs(employees?.options) : query?.employeeIDs
 			})
 		)
-	}, [dispatch, employees?.options, services?.categoriesOptions, query.categoryIDs, query.employeeIDs, validEventsViewType])
+	}, [dispatch, employees?.options, services?.categoriesOptions, query?.categoryIDs, query?.employeeIDs, validEventsViewType])
 
 	useEffect(() => {
 		// update calendar size when main layout sider change
@@ -741,13 +741,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						loading={isRefreshingEvents ? false : loadingData}
 						eventsViewType={validEventsViewType}
 						employees={filteredEmployees() || []}
-						showEmptyState={query?.employeeIDs === null}
-						onShowAllEmployees={() => {
-							setQuery({
-								...query,
-								employeeIDs: undefined
-							})
-						}}
 						onEditEvent={onEditEvent}
 						onReservationClick={(data?: ReservationPopoverData, position?: ReservationPopoverPosition) => {
 							setReservationPopover({

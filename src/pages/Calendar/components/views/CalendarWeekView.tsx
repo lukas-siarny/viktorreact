@@ -232,11 +232,19 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 						if (i % (employees.length + 1) === 1) {
 							row.classList.add('is-first-row')
 							const resourceElemenet = row.querySelector('[data-resource-id]')
-							const dayLabelAleradyExsit = !!row.children[2]
+							const alreadyExistingDayLabel = row.children[2]
 
-							if (resourceElemenet && resourceElemenet instanceof HTMLElement && !dayLabelAleradyExsit) {
+							if (alreadyExistingDayLabel) {
+								alreadyExistingDayLabel.setAttribute('rowspan', employees.length.toString())
+							} else if (resourceElemenet && resourceElemenet instanceof HTMLElement) {
 								const resourceDayLabel = createDayLabelElement(resourceElemenet, employees.length)
 								row.appendChild(resourceDayLabel)
+							}
+						} else if (row.classList.contains('is-first-row')) {
+							row.classList.remove('is-first-row')
+							const alreadyExistingDayLabel = row.children[2]
+							if (alreadyExistingDayLabel) {
+								alreadyExistingDayLabel.remove()
 							}
 						}
 					})

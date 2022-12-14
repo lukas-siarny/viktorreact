@@ -1,7 +1,7 @@
 import i18next from 'i18next'
 import { FormErrors } from 'redux-form'
 import { ICalendarReservationForm } from '../../../../types/interfaces'
-import { TEXT_LIMITS } from '../../../../utils/enums'
+import { VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
 
 const validateReservationForm = (values?: ICalendarReservationForm) => {
 	const errors: FormErrors<ICalendarReservationForm> = {}
@@ -30,8 +30,8 @@ const validateReservationForm = (values?: ICalendarReservationForm) => {
 		errors.timeTo = i18next.t('loc:Toto pole je povinné')
 	}
 
-	if (values?.note && values.note.length > TEXT_LIMITS.MAX_1500) {
-		errors.note = i18next.t('loc:Max. počet znakov je {{max}}', { max: TEXT_LIMITS.MAX_1500 })
+	if (values?.note && values.note.length > VALIDATION_MAX_LENGTH.LENGTH_1500) {
+		errors.note = i18next.t('loc:Max. počet znakov je {{max}}', { max: VALIDATION_MAX_LENGTH.LENGTH_1500 })
 	}
 
 	return errors

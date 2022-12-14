@@ -6,6 +6,7 @@ import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { change } from 'redux-form'
 import { startsWith } from 'lodash'
+import { DelimitedArrayParam, useQueryParams } from 'use-query-params'
 
 // fullcalendar
 import { EventResizeDoneArg } from '@fullcalendar/interaction'
@@ -38,8 +39,6 @@ import { getSelectedDateForCalendar, getWeekDays } from '../../calendarHelpers'
 type Props = {
 	view: CALENDAR_VIEW
 	loading: boolean
-	onShowAllEmployees: () => void
-	showEmptyState: boolean
 	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
 	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
@@ -58,8 +57,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		loading,
 		reservations,
 		shiftsTimeOffs,
-		onShowAllEmployees,
-		showEmptyState,
 		handleSubmitReservation,
 		handleSubmitEvent,
 		selectedDate,
@@ -79,6 +76,12 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
 	// const monthView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const [t] = useTranslation()
+
+	// query
+	const [query, setQuery] = useQueryParams({
+		employeeIDs: DelimitedArrayParam,
+		categoryIDs: DelimitedArrayParam
+	})
 
 	const [disableRender, setDisableRender] = useState(false)
 
@@ -217,12 +220,45 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	}
 
 	const getView = () => {
-		if (showEmptyState) {
-			// TODO: dpomienky pre texty
-			const emptyEmployees = t('loc:Nie je vybratý zamestnanec')
-			const emptyServices = t('loc:Nie je vybratá služba')
-			const emptyServicesAndEmployees = t('loc:Nie je vybratý zamestnanec ani služba')
-			return <CalendarEmptyState title={emptyEmployees} onButtonClick={onShowAllEmployees} />
+		if (query?.categoryIDs === null && query?.employeeIDs === null) {
+			return (
+				<CalendarEmptyState
+					title={t('loc:Nie je vybratý zamestnanec ani služba')}
+					onButtonClick={() =>
+						setQuery({
+							...query,
+							employeeIDs: undefined, // undefined znamena ze sa setnu vsetky hodnoty do filtra
+							categoryIDs: undefined
+						})
+					}
+				/>
+			)
+		}
+		if (query?.employeeIDs === null) {
+			return (
+				<CalendarEmptyState
+					title={t('loc:Nie je vybratý zamestnanec')}
+					onButtonClick={() =>
+						setQuery({
+							...query,
+							employeeIDs: undefined
+						})
+					}
+				/>
+			)
+		}
+		if (query.categoryIDs === null) {
+			return (
+				<CalendarEmptyState
+					title={t('loc:Nie je vybratá služba')}
+					onButtonClick={() =>
+						setQuery({
+							...query,
+							categoryIDs: undefined
+						})
+					}
+				/>
+			)
 		}
 
 		/* if (view === CALENDAR_VIEW.MONTH) {

@@ -108,6 +108,7 @@ export const addOrUpdateEvent =
 				allDay: false,
 				resourceId: String(employee.key),
 				eventData: {
+					id: eventId,
 					eventType,
 					isPlaceholder: true,
 					date,

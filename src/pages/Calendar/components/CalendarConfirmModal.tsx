@@ -201,7 +201,6 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 				break
 			case CONFIRM_MODAL_DATA_TYPE.EVENT:
 				handleSubmitEventWrapper(data?.values)
-
 				break
 			case CONFIRM_MODAL_DATA_TYPE.DELETE_EVENT: {
 				handleDeleteEventWrapper(data?.eventId, data?.calendarBulkEventID, data?.eventType)

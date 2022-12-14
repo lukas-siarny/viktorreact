@@ -34,7 +34,15 @@ import { getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDa
 import { history } from '../../utils/history'
 
 // reducers
-import { getCalendarEventDetail, getCalendarReservations, getCalendarShiftsTimeoff, refreshEvents } from '../../reducers/calendar/calendarActions'
+import {
+	clearCalendarEvents,
+	clearCalendarReservations,
+	clearCalendarShiftsTimeoffs,
+	getCalendarEventDetail,
+	getCalendarReservations,
+	getCalendarShiftsTimeoff,
+	refreshEvents
+} from '../../reducers/calendar/calendarActions'
 import { RootState } from '../../reducers'
 import { getEmployees } from '../../reducers/employees/employeesActions'
 import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
@@ -75,17 +83,20 @@ const getEmployeeIDs = (data: IEmployeesPayload['options']) => {
 // NOTE: v URL sa pouzivaju skratene ID kategorii, pretoze ich moze byt dost vela a original IDcka su dost dhle
 // tak aby sa nahodu nestalo ze sa tam nevojdu v niektorom z prehliadacov
 const getFullCategoryIdsFromUrl = (ids?: (string | null)[] | null) => {
+	console.log({ ids })
 	return ids?.reduce((cv, id) => (id ? [...cv, `00000000-0000-0000-0000-${id}`] : cv), [] as string[])
 }
 
 const getShortCategoryIdsForUrl = (ids?: (string | null)[] | null) => {
-	return ids?.reduce((cv, id) => {
-		if (id) {
-			const splittedId = id.split('-')
-			return [...cv, splittedId[splittedId.length - 1]]
-		}
-		return cv
-	}, [] as string[])
+	return ids?.length
+		? ids?.reduce((cv, id) => {
+				if (id) {
+					const splittedId = id.split('-')
+					return [...cv, splittedId[splittedId.length - 1]]
+				}
+				return cv
+		  }, [] as string[])
+		: null
 }
 
 const CALENDAR_VIEWS = Object.keys(CALENDAR_VIEW)
@@ -231,7 +242,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	// fetch new events
 	const fetchEvents: any = useCallback(
-		async (clearVirtualEvent?: boolean, restartInterval = true) => {
+		async (clearVirtualEvent?: boolean) => {
 			if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 				Promise.all([
 					dispatch(
@@ -253,9 +264,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				dispatch(getCalendarShiftsTimeoff({ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs }, true, clearVirtualEvent))
 			}
 
-			if (restartInterval) {
-				await restartFetchInterval()
-			}
+			await restartFetchInterval()
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validEventsViewType]
@@ -302,7 +311,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	useEffect(() => {
 		;(async () => {
 			// if user uncheck all values from one of the filters => don't fetch new events
-			if (query?.categoryIDs === null || query?.employeeIDs === null) {
+			if (query?.employeeIDs === null || query?.categoryIDs === null) {
+				dispatch(clearCalendarReservations())
+				dispatch(clearCalendarShiftsTimeoffs())
 				return
 			}
 

@@ -116,7 +116,12 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const onEventChange = (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
 		const hasPermissions = permitted(authUserPermissions || [], selectedSalonuniqPermissions, UPDATE_EVENT_PERMISSIONS)
 
-		const revertEvent = () => arg.revert()
+		console.log({ argOnChange: arg })
+
+		const revertEvent = () => {
+			setDisableRender(false)
+			arg.revert()
+		}
 
 		if (!hasPermissions) {
 			setVisibleForbiddenModal(true)
@@ -170,6 +175,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			enableCalendarRender: () => setDisableRender(false),
 			updateFromCalendar: true
 		}
+
+		console.log({ values })
 
 		if (!employee?.id) {
 			// ak nahodou nemam employeeId tak to vrati na povodne miesto

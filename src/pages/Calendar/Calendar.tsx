@@ -35,7 +35,6 @@ import { history } from '../../utils/history'
 
 // reducers
 import {
-	clearCalendarEvents,
 	clearCalendarReservations,
 	clearCalendarShiftsTimeoffs,
 	getCalendarEventDetail,
@@ -741,13 +740,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						loading={isRefreshingEvents ? false : loadingData}
 						eventsViewType={validEventsViewType}
 						employees={filteredEmployees() || []}
-						showEmptyState={query?.employeeIDs === null}
-						onShowAllEmployees={() => {
-							setQuery({
-								...query,
-								employeeIDs: undefined
-							})
-						}}
 						onEditEvent={onEditEvent}
 						onReservationClick={(data?: ReservationPopoverData, position?: ReservationPopoverPosition) => {
 							setReservationPopover({

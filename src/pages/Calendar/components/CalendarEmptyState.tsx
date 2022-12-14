@@ -4,14 +4,14 @@ import i18next from 'i18next'
 import calendarEmpty from '../../../assets/images/calendar-empty-min.png'
 
 type Props = {
-	title?: string
+	title: string
 	image?: string
 	buttonLabel?: string
 	onButtonClick?: () => void
 }
 
 const CalendarEmptyState: FC<Props> = (props) => {
-	const { title = i18next.t('loc:Nie je vybratý žiaden zamestnanec'), image = calendarEmpty, buttonLabel = i18next.t('loc:Vybrať všetkých'), onButtonClick } = props
+	const { title, image = calendarEmpty, buttonLabel = i18next.t('loc:Vybrať všetkých'), onButtonClick } = props
 
 	return (
 		<div className={'noti-fc-empty w-full h-full flex flex-col items-center min-w-80 gap-10 p-4 pt-10 overflow-auto'}>

@@ -3,14 +3,15 @@ import { useDispatch, useSelector, batch } from 'react-redux'
 import { Spin } from 'antd'
 import { Content } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
+import { useTranslation } from 'react-i18next'
+import { change } from 'redux-form'
+import { startsWith } from 'lodash'
 
 // fullcalendar
 import { EventResizeDoneArg } from '@fullcalendar/interaction'
 import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 
 // enums
-import { change } from 'redux-form'
-import { startsWith } from 'lodash'
 import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // components
@@ -77,6 +78,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
 	// const monthView = useRef<InstanceType<typeof FullCalendar>>(null)
+	const [t] = useTranslation()
 
 	const [disableRender, setDisableRender] = useState(false)
 
@@ -216,7 +218,11 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	const getView = () => {
 		if (showEmptyState) {
-			return <CalendarEmptyState onButtonClick={onShowAllEmployees} />
+			// TODO: dpomienky pre texty
+			const emptyEmployees = t('loc:Nie je vybratý zamestnanec')
+			const emptyServices = t('loc:Nie je vybratá služba')
+			const emptyServicesAndEmployees = t('loc:Nie je vybratý zamestnanec ani služba')
+			return <CalendarEmptyState title={emptyEmployees} onButtonClick={onShowAllEmployees} />
 		}
 
 		/* if (view === CALENDAR_VIEW.MONTH) {

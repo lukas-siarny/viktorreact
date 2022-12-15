@@ -223,7 +223,6 @@ const SiderEventManagement: FC<Props> = (props) => {
 
 	// Zmena selectu event type v draweri
 	const onChangeEventType = (type: string) => {
-		console.log('called cahnge')
 		initCreateEventForm(type as CALENDAR_EVENT_TYPE)
 	}
 

@@ -277,9 +277,15 @@ const SiderEventManagement: FC<Props> = (props) => {
 	// TODO: prerobit na dva
 	const forms = {
 		[CALENDAR_EVENT_TYPE.RESERVATION]: <ReservationForm salonID={salonID} eventId={eventId} searchEmployes={searchEmployes} onSubmit={handleSubmitReservation} />,
-		[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: <EventForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />,
-		[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: <EventForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />,
-		[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: <EventForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
+		[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: (
+			<EventForm eventType={CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT} searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
+		),
+		[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: (
+			<EventForm eventType={CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF} searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
+		),
+		[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: (
+			<EventForm eventType={CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK} searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
+		)
 	}
 
 	const getTabContent = () => {

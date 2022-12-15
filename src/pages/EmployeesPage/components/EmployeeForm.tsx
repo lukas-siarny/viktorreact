@@ -1,23 +1,22 @@
-import React, { FC, MouseEventHandler, ReactNode, useState } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
-import { useSelector } from 'react-redux'
+import React, { FC, MouseEventHandler } from 'react'
+import { Field, FieldArray, InjectedFormProps, reduxForm, getFormValues, initialize } from 'redux-form'
+import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Divider, Form, Space, Collapse, Tag, Button, Row, Col, Modal } from 'antd'
+import { Divider, Form, Space, Collapse, Button } from 'antd'
 import cx from 'classnames'
 import { isEmpty } from 'lodash'
 
 // utils
+import i18next from 'i18next'
 import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
-import { renderFromTo, showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { renderFromTo, renderPriceAndDurationInfo, showErrorNotification, validationNumberMin } from '../../../utils/helper'
 
 // types
-import { IEmployeeForm, IEmployeeServiceEditForm } from '../../../types/interfaces'
+import { EmployeeServiceData, FormPriceAndDurationData, IEmployeeForm } from '../../../types/interfaces'
 
 // atoms
 import InputField from '../../../atoms/InputField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
-import InputNumberField from '../../../atoms/InputNumberField'
-import SwitchField from '../../../atoms/SwitchField'
 import SelectField from '../../../atoms/SelectField'
 
 // components
@@ -28,82 +27,62 @@ import DeleteButton from '../../../components/DeleteButton'
 import validateEmployeeForm from './validateEmployeeForm'
 
 // assets
-import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
-import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg'
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon-16.svg'
 
 // reducers
 import { RootState } from '../../../reducers'
-import EmployeeServiceEditForm from './EmployeeServiceEditForm'
-import { patchReq } from '../../../utils/request'
-import { Paths } from '../../../types/api'
-import { ServiceData } from '../EmployeePage'
 
 const { Panel } = Collapse
 
 type ComponentProps = {
 	salonID: string
 	addService: MouseEventHandler<HTMLElement>
+	setVisibleServiceEditModal?: (visible: boolean) => void
 }
 
 type Props = InjectedFormProps<IEmployeeForm, ComponentProps> & ComponentProps
 
-const numberMin0 = validationNumberMin(0)
-
-const renderListFields = (props: any) => {
+const ListFields: FC<any> = (props) => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const [t] = useTranslation()
 	const { fields, salon, setVisibleServiceEditModal } = props
+	const dispatch = useDispatch()
 
-	const compareSalonAndEmployeeData = (data: any): boolean => {
-		const salonData = data?.salonData
-		const employeeData = data?.employeeData
-		let checkVariableDuration = true
-		let checkVariablePrice = true
-		if (data?.variableDuration) {
-			checkVariableDuration = salonData?.durationTo === employeeData?.durationTo
-		}
-		if (data?.variablePrice) {
-			checkVariablePrice = salonData?.priceTo === employeeData?.priceTo
-		}
-		return !(salonData?.durationFrom === employeeData?.durationFrom && salonData?.priceFrom === employeeData?.priceFrom && checkVariableDuration && checkVariablePrice)
-	}
+	const genExtra = (index: number, field: EmployeeServiceData) => {
+		const salonPriceAndDuration = field?.salonPriceAndDurationData
+		const employeePriceAndDuration = field?.employeePriceAndDurationData
+		const hasOverridenData = field?.hasOverriddenPricesAndDurationData
 
-	const editButton = <Button htmlType={'button'} className={'ant-btn noti-btn'} size={'small'} icon={<EditIcon />} onClick={() => setVisibleServiceEditModal(true)} />
-
-	const genExtra = (index: number, field: ServiceData) => {
 		return (
-			<div className={'flex gap-1'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
-				{field?.hasCategoryParameter ? (
-					<div>{field?.categoryParameter?.name}</div>
+			<div className={'flex gap-1 items-center'}>
+				{field?.useCategoryParameter ? (
+					<div>{field?.serviceCategoryParameterName}</div>
 				) : (
-					<>
-						<div className={'flex gap-1'}>
-							{renderFromTo(
-								field?.priceAndDurationData?.durationFrom,
-								field?.priceAndDurationData?.durationTo,
-								!!field?.variableDuration,
-								<ClockIcon />,
-								t('loc:min')
-							)}
-							{renderFromTo(
-								field?.priceAndDurationData?.priceFrom,
-								field?.priceAndDurationData?.priceTo,
-								!!field?.variablePrice,
-								<CouponIcon />,
-								salon.data?.currency.symbol
-							)}
-						</div>
-						{editButton}
-					</>
+					renderPriceAndDurationInfo(salonPriceAndDuration, employeePriceAndDuration, hasOverridenData, salon.data?.currency.symbol)
 				)}
+				<Button
+					htmlType={'button'}
+					className={'ant-btn noti-btn'}
+					size={'small'}
+					icon={<EditIcon />}
+					onClick={(e) => {
+						e.stopPropagation()
+						dispatch(initialize(FORM.EMPLOYEE_SERVICE_EDIT, field))
+						setVisibleServiceEditModal(true)
+					}}
+					onKeyDown={(e) => e.stopPropagation()}
+				/>
 				<DeleteButton
-					onConfirm={() => {
+					onConfirm={(e) => {
+						e?.stopPropagation()
 						fields.remove(index)
 					}}
+					onCancel={(e) => e?.stopPropagation()}
 					smallIcon
+					onClick={(e) => e.stopPropagation()}
+					onKeyDown={(e) => e.stopPropagation()}
 					size={'small'}
 					entityName={t('loc:službu')}
 					type={'default'}
@@ -114,141 +93,58 @@ const renderListFields = (props: any) => {
 		)
 	}
 
-	const activeKeys = fields.map((_: any, i: number) => i)
+	const defaultActiveKeys = fields.reduce((acc: any, _cv: any, index: number) => {
+		const fieldData = fields.get(index) as EmployeeServiceData
+		if (fieldData?.hasOverriddenPricesAndDurationData) {
+			return acc
+		}
+		return [fieldData.id, ...acc]
+	}, [] as string[])
 
 	return (
 		<>
-			<Collapse className={'collapse-list'} bordered={false} activeKey={activeKeys}>
-				{fields.map((field: any, index: number) => {
-					const fieldData = fields.get(index) as ServiceData
-					const categoryParameter = fieldData?.categoryParameter
+			<Collapse className={'collapse-list'} bordered={false} defaultActiveKey={defaultActiveKeys}>
+				{fields.map((_field: any, index: number) => {
+					const fieldData = fields.get(index) as EmployeeServiceData
+					const categoryParameter = fieldData?.serviceCategoryParameter
 
 					return (
 						<Panel
 							header={
 								<div className={'flex items-center gap-2'}>
-									<div
-										className={cx('font-bold', {
-											'changed-service-title': compareSalonAndEmployeeData(fieldData)
-										})}
-									>
-										{fieldData?.name}
-									</div>
-									<span className={'service-badge font-normal text-xs'}>{fieldData?.category}</span>
+									<div className={'font-bold'}>{fieldData?.name}</div>
+									<span className={'service-badge font-normal text-xxs p-1 leading-3'}>{fieldData?.category}</span>
 								</div>
 							}
 							key={index}
 							extra={genExtra(index, fieldData)}
 							className={'employee-collapse-panel'}
 							showArrow={false}
-							collapsible={'disabled'}
+							collapsible={fieldData?.useCategoryParameter ? undefined : 'disabled'}
 						>
-							{fieldData?.hasCategoryParameter ? (
+							{fieldData?.useCategoryParameter ? (
 								<div className={'flex flex-col pb-4'}>
-									{categoryParameter?.values?.map((parameterValue, i) => {
-										const parameterDurationPrice = parameterValue.priceAndDurationData
+									{categoryParameter?.map((parameterValue) => {
+										const employeePriceAndDurationData = parameterValue?.employeePriceAndDurationData
+										const salonPriceAndDurationData = parameterValue?.salonPriceAndDurationData
+
 										return (
-											<div className={cx('flex items-center justify-between p-2 rounded', { 'bg-notino-white': i % 2 === 0 })}>
-												<span className={''}>{parameterValue?.value}</span>
-												<div className={'flex gap-3'}>
-													{renderFromTo(
-														parameterDurationPrice?.durationFrom,
-														parameterDurationPrice?.durationTo,
-														!!parameterValue.variableDuration,
-														<ClockIcon />,
-														t('loc:min')
-													)}
-													{renderFromTo(
-														parameterDurationPrice?.priceFrom,
-														parameterDurationPrice?.priceTo,
-														!!parameterValue?.variablePrice,
-														<CouponIcon />,
+											<>
+												<div className={'flex items-center justify-between px-2 py-1 min-h-10'} key={fieldData?.id}>
+													<span>{parameterValue?.name}</span>
+													{renderPriceAndDurationInfo(
+														salonPriceAndDurationData,
+														employeePriceAndDurationData,
+														fieldData?.hasOverriddenPricesAndDurationData,
 														salon.data?.currency.symbol
 													)}
-													{editButton}
 												</div>
-											</div>
+												<Divider className={'m-0'} />
+											</>
 										)
 									})}
 								</div>
 							) : null}
-							{/* TODO - for change duration and price in employee detail */}
-							{/* <Row gutter={8} align='middle'>
-								<Col span={8}>
-									<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={`${field}.variableDuration`} size={'middle'} />
-								</Col>
-								<Col span={variableDuration ? 8 : 16}>
-									<Field
-										component={InputNumberField}
-										label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
-										placeholder={t('loc:min')}
-										name={`${field}.employeeData.durationFrom`}
-										precision={0}
-										step={1}
-										maxChars={3}
-										size={'large'}
-										validate={[numberMin0]}
-										required
-									/>
-								</Col>
-
-								{variableDuration && (
-									<Col span={8}>
-										<Field
-											component={InputNumberField}
-											label={t('loc:Trvanie do (minúty)')}
-											placeholder={t('loc:min')}
-											name={`${field}.employeeData.durationTo`}
-											precision={0}
-											step={1}
-											maxChars={3}
-											size={'large'}
-											validate={[numberMin0]}
-											required
-										/>
-									</Col>
-								)}
-							</Row>
-							<Divider />
-							<Row gutter={8} align='middle'>
-								<Col span={8}>
-									<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={`${field}.variablePrice`} size={'middle'} />
-								</Col>
-								<Col span={variablePrice ? 8 : 16}>
-									<Field
-										component={InputNumberField}
-										label={
-											variablePrice
-												? t('loc:Cena od ({{symbol}})', { symbol: salon.data?.currency.symbol })
-												: t('loc:Cena ({{symbol}})', { symbol: salon.data?.currency.symbol })
-										}
-										placeholder={salon.data?.currency.symbol}
-										name={`${field}.employeeData.priceFrom`}
-										precision={2}
-										step={1}
-										maxChars={5}
-										size={'large'}
-										validate={[numberMin0]}
-										required
-									/>
-								</Col>
-								{variablePrice && (
-									<Col span={8}>
-										<Field
-											component={InputNumberField}
-											label={t('loc:Cena do ({{symbol}})', { symbol: salon.data?.currency.symbol })}
-											placeholder={salon.data?.currency.symbol}
-											name={`${field}.employeeData.priceTo`}
-											precision={2}
-											step={1}
-											maxChars={5}
-											size={'large'}
-											validate={[numberMin0]}
-											required
-										/>
-									</Col>
-								)}
-								</Row> */}
 						</Panel>
 					)
 				})}
@@ -257,23 +153,12 @@ const renderListFields = (props: any) => {
 	)
 }
 
-export type ServicePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody
-
 const EmployeeForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, addService } = props
+	const { handleSubmit, addService, setVisibleServiceEditModal } = props
 	const formValues: Partial<IEmployeeForm> = useSelector((state: RootState) => getFormValues(FORM.EMPLOYEE)(state))
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const services = useSelector((state: RootState) => state.service.services)
-
-	const [visibleServiceEditModal, setVisibleServiceEditModal] = useState(false)
-
-	const editEmployeeService = async (values: IEmployeeServiceEditForm) => {
-		const serviceID = ''
-		const employeeID = ''
-		const serviceData: ServicePatchBody = {}
-		await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, serviceData)
-	}
 
 	return (
 		<>
@@ -341,16 +226,10 @@ const EmployeeForm: FC<Props> = (props) => {
 								{formValues?.services && formValues?.services.length > 1 ? t('loc:Pridať služby') : t('loc:Pridať službu')}
 							</Button>
 						</div>
-						<FieldArray component={renderListFields} name={'services'} salon={salon} setVisibleServiceEditModal={setVisibleServiceEditModal} />
+						<FieldArray component={ListFields} name={'services'} salon={salon} setVisibleServiceEditModal={setVisibleServiceEditModal} />
 					</div>
 				</Space>
-				<Modal title={t('loc:Upraviť službu zamestnancovi')} width={500} visible={visibleServiceEditModal} onCancel={() => setVisibleServiceEditModal(false)} footer={null}>
-					<EmployeeServiceEditForm onSubmit={editEmployeeService} />
-				</Modal>
 			</Form>
-			<Modal title={t('loc:Upraviť službu zamestnancovi')} width={500} visible={visibleServiceEditModal} onCancel={() => setVisibleServiceEditModal(false)} footer={null}>
-				<EmployeeServiceEditForm onSubmit={editEmployeeService} />
-			</Modal>
 		</>
 	)
 }

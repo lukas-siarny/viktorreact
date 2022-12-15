@@ -7,7 +7,7 @@ import { EventDropArg, EventInput } from '@fullcalendar/react'
 import {
 	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT,
 	CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, DAY,
-	SERVICE_TYPE, RESERVATION_STATE, RESERVATION_PAYMENT_METHOD, CONFIRM_MODAL_DATA_TYPE
+	SERVICE_TYPE, RESERVATION_STATE, RESERVATION_PAYMENT_METHOD, CONFIRM_MODAL_DATA_TYPE, PARAMETER_TYPE
 } from '../utils/enums'
 
 // types
@@ -49,10 +49,46 @@ export interface IInviteEmployeeForm {
 	roleID: string
 }
 
-export interface IEmployeeServiceEditForm {
+export type ServiceRootCategory = Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200['employee']['categories']
 
+type ServiceType = NonNullable<
+	NonNullable<Paths.GetApiB2BV1Services.Responses.$200['groupedServicesByCategory'][0]['category']>['children'][0]['category']
+>['children'][0]['service']
+
+export type ServicePriceAndDurationData = ServiceType['rangePriceAndDurationData']
+export type ServiceCategoryParameter = ServiceType['serviceCategoryParameter']
+
+
+export type FormPriceAndDurationData = {
+	durationFrom?: number | null
+	durationTo?: number | null
+	priceFrom?: number | null
+	priceTo?: number | null
+	variableDuration?: boolean
+	variablePrice?: boolean
 }
 
+export type EmployeeServiceData = {
+	id?: string
+	name?: string
+	category?: string
+	useCategoryParameter: boolean
+	employeePriceAndDurationData?: FormPriceAndDurationData
+	salonPriceAndDurationData?: FormPriceAndDurationData
+	hasOverriddenPricesAndDurationData?: boolean
+	serviceCategoryParameter?: {
+		id: string
+		name?: string
+		employeePriceAndDurationData?: FormPriceAndDurationData
+		salonPriceAndDurationData: FormPriceAndDurationData
+		hasOverriddenPricesAndDurationData?: boolean
+	}[]
+	serviceCategoryParameterType?: PARAMETER_TYPE
+	serviceCategoryParameterName?: string
+	serviceCategoryParameterId?: string
+}
+
+export type IEmployeeServiceEditForm = EmployeeServiceData & {}
 export interface IEditEmployeeRoleForm {
 	roleID: string
 }
@@ -341,6 +377,7 @@ export interface IEmployeeForm {
 	service?: string[]
 	avatar?: any
 	role: number
+	hasActiveAccount?: boolean
 }
 
 export interface ICosmeticForm {

@@ -23,6 +23,10 @@
 
 .ant-collapse-item.employee-collapse-panel
 	& > .ant-collapse-header
-		cursor: unset
+		min-height: 48px
+		padding: 8px 12px
 	& > .ant-collapse-content .ant-collapse-content-box
 		padding: 0 16px
+	&.ant-collapse-item-disabled
+		& > .ant-collapse-header
+			cursor: unset

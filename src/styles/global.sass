@@ -1997,3 +1997,20 @@ th.future-divider
 		height: 140px
 		z-index: 99
 		background-color: $backgroundColor-notino-pink
+
+.service-original-data-overriden
+	font-size: 10px !important
+	position: relative
+	line-height: 12px
+	svg
+		width: 10px
+		height: 10px
+	&::before
+		content: ''
+		position: absolute
+		top: 50%
+		transform: translateY(-50%)
+		height: 1px
+		background-color: $borderColor-notino-grayDark
+		left: 0
+		right: 0

@@ -1,45 +1,44 @@
 import i18next from 'i18next'
-import { isEmail } from 'lodash-checkit'
-import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { FormErrors } from 'redux-form'
+import { isNil } from 'lodash'
 
-export default (values: any) => {
-	const errors: any = {}
+// types
+import { IEmployeeServiceEditForm } from '../../../types/interfaces'
 
-	if (!values?.lastName) {
-		errors.lastName = i18next.t('loc:Toto pole je povinné')
-	}
+export default (values: IEmployeeServiceEditForm) => {
+	const errors: FormErrors<IEmployeeServiceEditForm> = {}
 
-	if (values?.lastName && values.lastName?.length > VALIDATION_MAX_LENGTH.LENGTH_50) {
-		errors.lastName = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_50
-		})
-	}
+	const priceAndDurationData = values?.employeePriceAndDurationData
+	const employeePriceAndDurationErrors: any = {}
 
-	if (!values?.firstName) {
-		errors.firstName = i18next.t('loc:Toto pole je povinné')
-	}
-
-	if (values?.firstName && values.firstName?.length > VALIDATION_MAX_LENGTH.LENGTH_50) {
-		errors.firstName = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_50
-		})
-	}
-
-	if (values?.email) {
-		if (values.email?.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
-			errors.email = i18next.t('loc:Max. počet znakov je {{max}}', {
-				max: VALIDATION_MAX_LENGTH.LENGTH_100
-			})
-		} else if (!isEmail(values?.email)) {
-			errors.email = i18next.t('loc:Email nie je platný')
+	if (!values?.useCategoryParameter) {
+		if (isNil(priceAndDurationData?.priceFrom)) {
+			employeePriceAndDurationErrors.priceFrom = i18next.t('loc:Toto pole je povinné')
+		}
+		if (priceAndDurationData?.variablePrice) {
+			if (isNil(priceAndDurationData?.priceTo)) {
+				employeePriceAndDurationErrors.priceTo = i18next.t('loc:Toto pole je povinné')
+			}
+			if (!isNil(priceAndDurationData?.priceFrom) && !isNil(priceAndDurationData?.priceTo) && priceAndDurationData?.priceFrom >= priceAndDurationData?.priceTo) {
+				employeePriceAndDurationErrors.priceFrom = i18next.t('loc:Chybný rozzsah')
+				employeePriceAndDurationErrors.priceTo = true
+			}
+		}
+		if (priceAndDurationData?.variableDuration) {
+			if (isNil(priceAndDurationData?.durationFrom)) {
+				employeePriceAndDurationErrors.durationFrom = i18next.t('loc:Toto pole je povinné')
+			}
+			if (isNil(priceAndDurationData?.durationTo)) {
+				employeePriceAndDurationErrors.durationTo = i18next.t('loc:Toto pole je povinné')
+			}
+			if (!isNil(priceAndDurationData?.durationFrom) && !isNil(priceAndDurationData?.durationTo) && priceAndDurationData?.durationFrom >= priceAndDurationData?.durationTo) {
+				employeePriceAndDurationErrors.durationFrom = i18next.t('loc:Chybný rozzsah')
+				employeePriceAndDurationErrors.durationTo = true
+			}
 		}
 	}
 
-	if (values?.phone && values.phone?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
-		errors.phone = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_20
-		})
-	}
+	errors.employeePriceAndDurationData = employeePriceAndDurationErrors
 
 	return errors
 }

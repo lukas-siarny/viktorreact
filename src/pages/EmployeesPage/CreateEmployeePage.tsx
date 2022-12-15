@@ -16,11 +16,11 @@ import { filterSalonRolesByPermission, getPrefixCountryCode } from '../../utils/
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import EmployeeForm from './components/EmployeeForm'
-import { addService, ServiceData /* , parseServicesForCreateAndUpdate */ } from './EmployeePage'
+import { addService } from './EmployeePage'
 import InviteForm from './components/InviteForm'
 
 // types
-import { IBreadcrumbs, IEmployeeForm, IInviteEmployeeForm, SalonSubPageProps } from '../../types/interfaces'
+import { EmployeeServiceData, IBreadcrumbs, IEmployeeForm, IInviteEmployeeForm, SalonSubPageProps } from '../../types/interfaces'
 
 // reducers
 import { getSalonRoles } from '../../reducers/roles/rolesActions'
@@ -88,9 +88,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				firstName: formData?.firstName,
 				lastName: formData?.lastName,
 				email: formData?.email,
-				serviceIDs: formData?.services?.map((service: ServiceData) => service.id),
-				// TODO - for change duration and price in employee detail
-				// parseServicesForCreateAndUpdate(formData?.services),
+				serviceIDs: formData?.services?.map((service: EmployeeServiceData) => service.id),
 				salonID,
 				imageID: get(formData, 'avatar[0].id') || get(formData, 'avatar[0].uid')
 			}

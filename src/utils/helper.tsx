@@ -65,12 +65,24 @@ import {
 	SALON_PERMISSION
 } from './enums'
 
-import { CountriesData, IAuthUserPayload, IDateTimeFilterOption, IEmployeePayload, IPrice, ISelectOptionItem, IStructuredAddress } from '../types/interfaces'
+import {
+	CountriesData,
+	FormPriceAndDurationData,
+	IAuthUserPayload,
+	IDateTimeFilterOption,
+	IEmployeePayload,
+	IPrice,
+	ISelectOptionItem,
+	IStructuredAddress,
+	ServicePriceAndDurationData
+} from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
 
 import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
+import { ReactComponent as ClockIcon } from '../assets/icons/clock-icon.svg'
+import { ReactComponent as CouponIcon } from '../assets/icons/coupon.svg'
 // eslint-disable-next-line import/no-cycle
 import { LOCALES } from '../components/LanguagePicker'
 
@@ -1036,4 +1048,98 @@ export const renderFromTo = (from: number | undefined | null, to: number | undef
 		)
 	}
 	return undefined
+}
+
+export const renderPriceAndDurationInfo = (
+	salonPriceAndDuration?: FormPriceAndDurationData,
+	employeePriceAndDuration?: FormPriceAndDurationData,
+	hasOverridenData?: boolean,
+	currencySymbol?: string
+) => {
+	return (
+		<div className='flex flex-col items-end'>
+			<div className={cx('flex gap-1 whitespace-nowrap text-xs font-normal text-notino-grayDark', { 'service-original-data-overriden': hasOverridenData })}>
+				{renderFromTo(
+					salonPriceAndDuration?.durationFrom,
+					salonPriceAndDuration?.durationTo,
+					!!salonPriceAndDuration?.variableDuration,
+					<ClockIcon className='w-3 h-3' />,
+					i18next.t('loc:min')
+				)}
+				{renderFromTo(
+					salonPriceAndDuration?.priceFrom,
+					salonPriceAndDuration?.priceTo,
+					!!salonPriceAndDuration?.variablePrice,
+					<CouponIcon className='w-3 h-3' />,
+					currencySymbol
+				)}
+			</div>
+
+			{hasOverridenData && (
+				<div className={'flex gap-1 whitespace-nowrap font-bold text-xs text-notino-pink'}>
+					{renderFromTo(
+						employeePriceAndDuration?.durationFrom,
+						employeePriceAndDuration?.durationTo,
+						!!employeePriceAndDuration?.variableDuration,
+						<ClockIcon className='w-3 h-3' />,
+						i18next.t('loc:min')
+					)}
+					{renderFromTo(
+						employeePriceAndDuration?.priceFrom,
+						employeePriceAndDuration?.priceTo,
+						!!employeePriceAndDuration?.variablePrice,
+						<CouponIcon className='w-3 h-3' />,
+						currencySymbol
+					)}
+				</div>
+			)}
+		</div>
+	)
+}
+
+export const getServicePriceAndDurationData = (
+	durationFrom?: number,
+	durationTo?: number,
+	priceFrom?: ServicePriceAndDurationData['priceFrom'],
+	priceTo?: ServicePriceAndDurationData['priceTo']
+): FormPriceAndDurationData => {
+	const decodedPriceFrom = decodePrice(priceFrom)
+	let decodedPriceTo
+	let variablePrice = false
+
+	if (!isNil(decodedPriceFrom)) {
+		decodedPriceTo = decodePrice(priceTo)
+		if (decodedPriceTo !== decodedPriceFrom) {
+			variablePrice = true
+		}
+	}
+
+	const variableDuration = !!(!isNil(durationFrom) && durationFrom !== durationTo)
+
+	return {
+		durationFrom: durationFrom || null,
+		durationTo: durationTo || null,
+		priceFrom: decodedPriceFrom || null,
+		priceTo: decodedPriceTo || null,
+		variableDuration,
+		variablePrice
+	}
+}
+
+export const arePriceAndDurationDataEmpty = (data?: FormPriceAndDurationData) => {
+	let emptyPrice = true
+	let emptyDuration = true
+
+	if (data?.variableDuration) {
+		emptyDuration = isNil(data?.durationFrom) && isNil(data?.durationTo)
+	} else {
+		emptyDuration = isNil(data?.durationFrom)
+	}
+	if (data?.variablePrice) {
+		emptyPrice = isNil(data?.priceFrom) && isNil(data?.priceTo)
+	} else {
+		emptyPrice = isNil(data?.priceFrom)
+	}
+
+	return emptyPrice && emptyDuration
 }

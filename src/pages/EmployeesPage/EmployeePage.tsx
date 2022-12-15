@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Action, compose, Dispatch } from 'redux'
 import { Button, Modal, notification, Row, Spin } from 'antd'
-import { get, forEach } from 'lodash'
+import { get, forEach, isNil } from 'lodash'
 import { change, initialize, isPristine, isSubmitting, submit } from 'redux-form'
 import cx from 'classnames'
 import i18next from 'i18next'
@@ -17,23 +17,28 @@ import EditRoleForm from './components/EditRoleForm'
 
 // types
 import {
+	EmployeeServiceData,
 	IBreadcrumbs,
 	IComputedMatch,
 	IEditEmployeeRoleForm,
 	IEmployeeForm,
+	IEmployeeServiceEditForm,
 	IInviteEmployeeForm,
 	ILoadingAndFailure,
 	ISelectOptionItem,
-	SalonSubPageProps
+	SalonSubPageProps,
+	ServiceCategoryParameter,
+	ServicePriceAndDurationData,
+	ServiceRootCategory
 } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { DELETE_BUTTON_ID, FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, PARAMETER_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
-import { decodePrice, encodePrice, filterSalonRolesByPermission, formFieldID, hasAuthUserPermissionToEditRole } from '../../utils/helper'
+import { decodePrice, encodePrice, filterSalonRolesByPermission, formFieldID, getServicePriceAndDurationData, hasAuthUserPermissionToEditRole } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -49,66 +54,15 @@ import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.sv
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+import EmployeeServiceEditForm from './components/EmployeeServiceEditForm'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: string }>
 }
 
-type PriceAndDurationData = {
-	durationFrom?: number
-	durationTo?: number
-	priceFrom?: number | null
-	priceTo?: number | null
-}
-
-export type ServiceData = {
-	id?: string
-	name?: string
-	category?: string
-	variableDuration?: boolean
-	variablePrice?: boolean
-	priceAndDurationData?: PriceAndDurationData
-	hasCategoryParameter?: boolean
-	categoryParameter?: {
-		name?: string
-		valueType?: 'ENUM' | 'TIME'
-		unitType?: 'MINUTES'
-		values?: {
-			id: string
-			categoryParameterValueID: string
-			value?: string
-			priceAndDurationData?: PriceAndDurationData
-			variableDuration?: boolean
-			variablePrice?: boolean
-		}[]
-	}
-}
-
-type ServiceType = NonNullable<
-	NonNullable<Paths.GetApiB2BV1Services.Responses.$200['groupedServicesByCategory'][0]['category']>['children'][0]['category']
->['children'][0]['service']
-
-export type ServicePriceAndDurationData = ServiceType['rangePriceAndDurationData']
-export type ServiceCategoryParameter = ServiceType['serviceCategoryParameter']
-
 export type EmployeePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
-
-// TODO - for change duration and price in employee detail
-export const parseServicesForCreateAndUpdate = (oldServices: any[]) => {
-	return oldServices?.map((service: any) => {
-		return {
-			id: service?.id,
-			employeeData: {
-				durationFrom: service?.employeeData?.durationFrom,
-				durationTo: service?.variableDuration ? service?.employeeData?.durationTo : undefined,
-				priceFrom: encodePrice(service?.employeeData?.priceFrom),
-				priceTo: service?.variablePrice ? encodePrice(service?.employeeData?.priceTo) : undefined
-			}
-		}
-	})
-}
 
 export const addService = (servaddServiceices: IServicesPayload & ILoadingAndFailure, form: any, dispatch: Dispatch<Action>) => {
 	const selectedServiceIDs = form?.values?.service
@@ -125,57 +79,52 @@ export const addService = (servaddServiceices: IServicesPayload & ILoadingAndFai
 				description: i18next.t('loc:Služba {{ label }} je už priradená!', { label: serviceData?.label })
 			})
 		} else if (serviceData) {
-			const hasCategoryParameter = !!categoryParameter?.values?.length
-			let newServiceData: ServiceData = {
+			const useCategoryParameter = !!categoryParameter?.values?.length
+			const salonPriceAndDurationData = getServicePriceAndDurationData(
+				priceAndDuration?.durationFrom,
+				priceAndDuration.durationTo,
+				priceAndDuration?.priceFrom,
+				priceAndDuration?.priceTo
+			)
+
+			let newServiceData: EmployeeServiceData = {
 				id: serviceData?.key as string,
 				name: serviceData?.label,
 				category: serviceData?.extra?.firstCategory,
-				priceAndDurationData: {
-					durationFrom: priceAndDuration?.durationFrom,
-					durationTo: priceAndDuration.durationTo,
-					priceFrom: decodePrice(priceAndDuration?.priceFrom),
-					priceTo: priceAndDuration?.priceTo && priceAndDuration.priceFrom ? decodePrice(priceAndDuration?.priceTo) : undefined
-				},
-				variableDuration: false,
-				variablePrice: false,
-				hasCategoryParameter
+				hasOverriddenPricesAndDurationData: false,
+				useCategoryParameter,
+				// ulozime si aj original data, aby sme potom vedei porovnat, ci ich ma uzivatel pretazene alebo nie
+				salonPriceAndDurationData,
+				// vygeneruje objekt so vsetkymi potrebnymi parametrami, ktore budu mat ale hodnotu null
+				// redux-form tak potom vyhodnoti isPristine spravne
+				employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined)
 			}
-			if (priceAndDuration.durationFrom && priceAndDuration?.durationTo) {
+			if (useCategoryParameter) {
 				newServiceData = {
 					...newServiceData,
-					variableDuration: true
-				}
-			}
-			if (priceAndDuration?.priceFrom && priceAndDuration?.priceTo) {
-				newServiceData = {
-					...newServiceData,
-					variablePrice: true
-				}
-			}
-			if (hasCategoryParameter) {
-				newServiceData = {
-					...newServiceData,
-					categoryParameter: {
-						name: categoryParameter?.name,
-						valueType: categoryParameter?.valueType,
-						unitType: categoryParameter?.unitType,
-						values: categoryParameter?.values.map((value) => {
-							const paramaterPriceDuration = value?.priceAndDurationData
-							return {
-								id: value.id,
-								categoryParameterValueID: value?.categoryParameterValueID,
-								value: value.value,
-								priceAndDurationData: {
-									durationFrom: paramaterPriceDuration?.durationFrom,
-									durationTo: paramaterPriceDuration.durationTo,
-									priceFrom: decodePrice(paramaterPriceDuration?.priceFrom),
-									priceTo: paramaterPriceDuration?.priceTo && paramaterPriceDuration.priceFrom ? decodePrice(paramaterPriceDuration?.priceTo) : undefined,
-									variableDuration: paramaterPriceDuration?.durationFrom && paramaterPriceDuration?.durationTo,
-									variablePrice: paramaterPriceDuration?.priceFrom && paramaterPriceDuration?.priceTo
-								}
-							}
-						})
-					}
+					serviceCategoryParameterType: categoryParameter?.valueType as PARAMETER_TYPE,
+					serviceCategoryParameterName: categoryParameter?.name,
+					serviceCategoryParameterId: categoryParameter.id,
+					serviceCategoryParameter: categoryParameter?.values?.map((value) => {
+						const paramaterPriceDuration = value?.priceAndDurationData
+						const parameterSalonPriceAndDurationData = getServicePriceAndDurationData(
+							paramaterPriceDuration?.durationFrom,
+							paramaterPriceDuration.durationTo,
+							paramaterPriceDuration?.priceFrom,
+							paramaterPriceDuration?.priceTo
+						)
+
+						return {
+							id: value?.id,
+							name: value?.value,
+							hasOverriddenPricesAndDurationData: false,
+							// vygeneruje objekt so vsetkymi potrebnymi parametrami, ktore budu mat ale hodnotu null
+							// redux-form tak potom vyhodnoti isPristine spravne
+							employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined),
+							// ulozime si aj original data, aby sme potom vedei porovnat, ci ich ma uzivatel pretazene alebo nie
+							salonPriceAndDurationData: parameterSalonPriceAndDurationData
+						}
+					})
 				}
 			}
 			updatedServices.push(newServiceData)
@@ -191,50 +140,99 @@ export const addService = (servaddServiceices: IServicesPayload & ILoadingAndFai
 	dispatch(change(FORM.EMPLOYEE, 'service', null))
 }
 
-type ServiceRootCategory = Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200['employee']['categories']
-
-const parseServices = (employeeCategories?: ServiceRootCategory, salonServices?: ISelectOptionItem[]): ServiceData[] => {
-	const result: ServiceData[] = []
+const parseServices = (employeeCategories?: ServiceRootCategory, salonServices?: ISelectOptionItem[]): EmployeeServiceData[] => {
+	const result: EmployeeServiceData[] = []
 	if (employeeCategories) {
 		employeeCategories?.forEach((firstCategory) =>
 			firstCategory?.children.forEach((secondCategory) => {
-				secondCategory?.children.forEach((service) => {
-					const salonServiceData = salonServices?.find((option) => option?.key === service.id)
-					let formServiceData: ServiceData = {
-						id: service?.id,
-						name: service?.category?.name,
-						category: firstCategory?.name
+				secondCategory?.children.forEach((employeeService) => {
+					const salonServiceData = salonServices?.find((option) => option?.key === employeeService.id)
+					const salonPriceAndDuration = salonServiceData?.extra?.rangePriceAndDurationData as ServicePriceAndDurationData
+					const categoryParameter = salonServiceData?.extra?.serviceCategoryParameter as ServiceCategoryParameter
+					const useCategoryParameter = !!categoryParameter?.values?.length
+
+					const salonPriceAndDurationData = getServicePriceAndDurationData(
+						salonPriceAndDuration?.durationFrom,
+						salonPriceAndDuration?.durationTo,
+						salonPriceAndDuration?.priceFrom,
+						salonPriceAndDuration?.priceTo
+					)
+
+					let formServiceData: EmployeeServiceData = {
+						id: employeeService?.id,
+						name: employeeService?.category?.name,
+						category: firstCategory?.name,
+						salonPriceAndDurationData,
+						// vygeneruje objekt so vsetkymi potrebnymi parametrami, ktore budu mat ale hodnotu null
+						// redux-form tak potom vyhodnoti isPristine spravne
+						employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined),
+						useCategoryParameter,
+						hasOverriddenPricesAndDurationData: false
 					}
-					// const salonCategoryParameter = salonServiceData?.extra?.serviceCategoryParameter as ServiceCategoryParameter
-					// ak ma employee nieco nastavene, tak prepiseme salonove hodnoty jeho hodnotami
-					if (service?.hasOverriddenPricesAndDurationData) {
-						const employeePriceAndDuration = service?.priceAndDurationData
+					// ak ma employee nieco nastavene, tak vyinicialuzujeme jeho hodnoty
+					if (employeeService?.hasOverriddenPricesAndDurationData) {
+						const employeePriceAndDuration = employeeService?.priceAndDurationData
+						const employeeFormPriceAndDurationData = getServicePriceAndDurationData(
+							employeePriceAndDuration?.durationFrom,
+							employeePriceAndDuration?.durationTo,
+							employeePriceAndDuration?.priceFrom,
+							employeePriceAndDuration?.priceTo
+						)
 						formServiceData = {
 							...formServiceData,
-							priceAndDurationData: {
-								durationFrom: employeePriceAndDuration?.durationFrom,
-								durationTo: employeePriceAndDuration?.durationTo,
-								priceFrom: decodePrice(employeePriceAndDuration?.priceFrom),
-								priceTo: employeePriceAndDuration?.priceTo && employeePriceAndDuration.priceFrom ? decodePrice(employeePriceAndDuration?.priceTo) : undefined
-							},
-							variableDuration: !!(employeePriceAndDuration.durationFrom && employeePriceAndDuration?.durationTo),
-							variablePrice: !!(employeePriceAndDuration?.priceFrom && employeePriceAndDuration?.priceTo)
+							hasOverriddenPricesAndDurationData: true,
+							employeePriceAndDurationData: employeeFormPriceAndDurationData
 						}
-					} else {
-						const salonPriceAndDuration = salonServiceData?.extra?.rangePriceAndDurationData as ServicePriceAndDurationData
+					}
+
+					if (useCategoryParameter) {
 						formServiceData = {
 							...formServiceData,
-							priceAndDurationData: {
-								durationFrom: salonPriceAndDuration?.durationFrom,
-								durationTo: salonPriceAndDuration?.durationTo,
-								priceFrom: decodePrice(salonPriceAndDuration?.priceFrom),
-								priceTo: salonPriceAndDuration?.priceTo && salonPriceAndDuration.priceFrom ? decodePrice(salonPriceAndDuration?.priceTo) : undefined
-							},
-							variableDuration: !!(salonPriceAndDuration.durationFrom && salonPriceAndDuration?.durationTo),
-							variablePrice: !!(salonPriceAndDuration?.priceFrom && salonPriceAndDuration?.priceTo)
+							serviceCategoryParameterType: categoryParameter?.valueType as PARAMETER_TYPE,
+							serviceCategoryParameterName: categoryParameter?.name,
+							serviceCategoryParameterId: categoryParameter.id,
+							hasOverriddenPricesAndDurationData: false,
+							// todo: treba dorobit, ak ma zamestnanec prepisany parameter, tak vyinicalizovat jeho hodnoty miesto sluzby
+							serviceCategoryParameter: categoryParameter?.values?.map((value) => {
+								const paramaterPriceDuration = value?.priceAndDurationData
+								const parameterSalonPriceAndDurationData = getServicePriceAndDurationData(
+									paramaterPriceDuration?.durationFrom,
+									paramaterPriceDuration.durationTo,
+									paramaterPriceDuration?.priceFrom,
+									paramaterPriceDuration?.priceTo
+								)
+
+								return {
+									id: value?.id,
+									name: value?.value,
+									variableDuration: false,
+									variablePrice: false,
+									// ulozime si aj original data pre zobrazovanie povodnych dat a porovnavanie s pretazenymi datami
+									salonPriceAndDurationData: parameterSalonPriceAndDurationData,
+									// vygeneruje objekt so vsetkymi potrebnymi parametrami, ktore budu mat ale hodnotu null
+									// redux-form tak potom vyhodnoti isPristine spravne
+									employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined)
+								}
+							})
 						}
 					}
 					result.push(formServiceData)
+				})
+			})
+		)
+	}
+	return result
+}
+
+type ServicePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody
+
+const getEmployeeServiceIds = (employeeCategories?: ServiceRootCategory) => {
+	const result: string[] = []
+	if (employeeCategories) {
+		employeeCategories?.forEach((firstCategory) =>
+			firstCategory?.children.forEach((secondCategory) => {
+				secondCategory?.children.forEach((employeeService) => {
+					result.push(employeeService.id)
 				})
 			})
 		)
@@ -250,6 +248,8 @@ const EmployeePage = (props: Props) => {
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const [visible, setVisible] = useState<boolean>(false)
+	const [visibleServiceEditModal, setVisibleServiceEditModal] = useState(false)
+	const [updatingService, setUpdatingSerivce] = useState(false)
 
 	const employee = useSelector((state: RootState) => state.employees.employee)
 	const services = useSelector((state: RootState) => state.service.services)
@@ -264,7 +264,7 @@ const EmployeePage = (props: Props) => {
 		[salonID, currentAuthUser?.data, salonRoles?.data]
 	)
 
-	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values)
+	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values) as IEmployeeForm
 
 	const isEmployeeExists = !!employee?.data?.employee?.id
 
@@ -321,7 +321,7 @@ const EmployeePage = (props: Props) => {
 				lastName: data?.lastName,
 				email: data?.email,
 				imageID: get(data, 'avatar[0].id') || get(data, 'avatar[0].uid'),
-				serviceIDs: data?.services?.map((service: ServiceData) => service.id)
+				serviceIDs: data?.services?.map((service: EmployeeServiceData) => service.id)
 			}
 
 			if (data?.phonePrefixCountryCode && data?.phone) {
@@ -331,11 +331,10 @@ const EmployeePage = (props: Props) => {
 					phone: data?.phone
 				}
 			}
-			// const serviceData = parseServicesForCreateAndUpdate(data?.services)
 
-			// await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, serviceData)
 			await patchReq('/api/b2b/admin/employees/{employeeID}', { employeeID }, reqBody)
-			history.push(backUrl)
+			fetchEmployeeAndServicesData()
+			// history.push(backUrl)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -418,6 +417,41 @@ const EmployeePage = (props: Props) => {
 		}
 	}
 
+	const employeeServiceIds = getEmployeeServiceIds(employee?.data?.employee?.categories)
+
+	const editEmployeeService = async (values: IEmployeeServiceEditForm) => {
+		const serviceID = values.id
+		const priceAndDurationData = values?.employeePriceAndDurationData
+
+		if (serviceID && employeeID && !isNil(priceAndDurationData?.priceFrom)) {
+			try {
+				setUpdatingSerivce(true)
+				const employeePatchServiceData: ServicePatchBody = {
+					priceAndDurationData: {
+						durationFrom: priceAndDurationData?.durationFrom,
+						durationTo: priceAndDurationData?.variableDuration ? priceAndDurationData?.durationTo : undefined,
+						priceFrom: encodePrice(priceAndDurationData?.priceFrom as number),
+						priceTo: priceAndDurationData?.variablePrice && !isNil(priceAndDurationData?.priceTo) ? encodePrice(priceAndDurationData?.priceTo) : undefined
+					}
+				}
+				if (!employeeServiceIds?.includes(serviceID)) {
+					await updateEmployee(formValues)
+					await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, employeePatchServiceData)
+					fetchEmployeeAndServicesData()
+				} else {
+					await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, employeePatchServiceData)
+					fetchEmployeeAndServicesData()
+				}
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.error(e)
+			} finally {
+				setUpdatingSerivce(false)
+				setVisibleServiceEditModal(false)
+			}
+		}
+	}
+
 	const isProfileInActive: boolean = form?.values?.hasActiveAccount === false
 	const { hasPermission: hasPermissionToEdit, tooltip } = hasAuthUserPermissionToEditRole(salonID, currentAuthUser?.data, employee?.data, salonRoles?.data || undefined)
 
@@ -441,7 +475,12 @@ const EmployeePage = (props: Props) => {
 			)}
 			<div className='content-body small'>
 				<Spin spinning={isLoading}>
-					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={updateEmployee} />
+					<EmployeeForm
+						addService={() => addService(services, form, dispatch)}
+						salonID={salonID}
+						onSubmit={updateEmployee}
+						setVisibleServiceEditModal={setVisibleServiceEditModal}
+					/>
 					<div className={'content-footer'}>
 						<div
 							className={cx('flex flex-col gap-2 lg:flex-row flex-wrap', {
@@ -542,6 +581,9 @@ const EmployeePage = (props: Props) => {
 				>
 					{t('loc:Odoslať email')}
 				</Button>
+			</Modal>
+			<Modal title={t('loc:Upraviť službu zamestnancovi')} width={600} visible={visibleServiceEditModal} onCancel={() => setVisibleServiceEditModal(false)} footer={null}>
+				<EmployeeServiceEditForm onSubmit={editEmployeeService} loading={updatingService} />
 			</Modal>
 		</>
 	)

@@ -2,10 +2,10 @@ import React, { FC, useCallback, useEffect, useRef, useState, useMemo } from 're
 import Layout from 'antd/lib/layout/layout'
 import { message } from 'antd'
 import dayjs from 'dayjs'
-import { includes, isEmpty } from 'lodash'
+import { includes, isEmpty, omit } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { initialize, destroy } from 'redux-form'
+import { initialize, destroy, getFormValues } from 'redux-form'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { useTranslation } from 'react-i18next'
 import Scroll from 'react-scroll'
@@ -26,7 +26,9 @@ import {
 	RESERVATION_STATE,
 	RESERVATION_PAYMENT_METHOD,
 	REFRESH_CALENDAR_INTERVAL,
-	CONFIRM_MODAL_DATA_TYPE
+	CONFIRM_MODAL_DATA_TYPE,
+	DEFAULT_DATE_INIT_FORMAT,
+	DEFAULT_TIME_FORMAT
 } from '../../utils/enums'
 import { withPermissions, isAdmin, checkPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
@@ -184,6 +186,43 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const initialScroll = useRef(false)
 	const scrollToDateTimeout = useRef<any>(null)
+
+	const eventFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EVENT_FORM)(state))
+	const reservationFormValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
+
+	const initCreateEventForm = (eventType?: CALENDAR_EVENT_TYPE, updateInitData?: any) => {
+		const prevEventType = query.sidebarView as CALENDAR_EVENT_TYPE
+		// Mergnut predchadzajuce data ktore boli vybrane pred zmenou eventTypu
+		let prevInitData: Partial<ICalendarEventForm | ICalendarReservationForm> = {}
+		if (prevEventType === CALENDAR_EVENT_TYPE.RESERVATION) {
+			prevInitData = reservationFormValues
+			// CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT || CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK || CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
+		} else {
+			prevInitData = eventFormValues
+		}
+		// Nastavi sa aktualny event Type zo selectu
+		setQuery({
+			...query,
+			sidebarView: eventType
+		})
+		// Initne sa event / reservation formular
+		const initData: Partial<ICalendarEventForm | ICalendarReservationForm> = {
+			date: newEventData?.date || query.date || dayjs().format(DEFAULT_DATE_INIT_FORMAT),
+			timeFrom: newEventData?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT),
+			timeTo: newEventData?.timeTo,
+			employee: newEventData?.employee,
+			eventId: query.eventId,
+			...omit(prevInitData, 'eventType'),
+			eventType
+		}
+
+		if (eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
+			dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
+		} else {
+			// CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT || CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK || CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
+			dispatch(initialize(FORM.CALENDAR_EVENT_FORM, initData))
+		}
+	}
 
 	const setNewSelectedDate = (newDate: string) => {
 		// query sa nastavi vzdy ked sa zmeni datum
@@ -403,6 +442,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 		// Event data ziskane z kalendara, sluzia pre init formularu v SiderEventManagement
 		setNewEventData(initialData)
+		// TODO: volat init create
+		// initCreateEventForm(query.sidebarView as any, initialData)
 
 		if (query.eventId) {
 			closeSiderForm()
@@ -412,9 +453,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			dispatch(destroy(FORM.CALENDAR_RESERVATION_FORM))
 			setEventManagement(CALENDAR_EVENT_TYPE.RESERVATION)
 		} else {
-			dispatch(destroy(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM))
-			dispatch(destroy(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM))
-			dispatch(destroy(FORM.CALENDAR_EMPLOYEE_BREAK_FORM))
+			dispatch(destroy(FORM.CALENDAR_EVENT_FORM))
 			setEventManagement(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
 		}
 	}
@@ -731,6 +770,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} parentPath={parentPath} eventsViewType={validEventsViewType} />
 					<CalendarContent
 						salonID={salonID}
+						initCreateEventForm={initCreateEventForm}
 						enabledSalonReservations={enabledSalonReservations}
 						setEventManagement={setEventManagement}
 						ref={calendarRefs}
@@ -756,6 +796,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					/>
 					{enabledSalonReservations && (
 						<SiderEventManagement
+							initCreateEventForm={initCreateEventForm}
 							salonID={salonID}
 							selectedDate={validSelectedDate}
 							eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
@@ -766,6 +807,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							handleSubmitReservation={initSubmitReservationData}
 							handleSubmitEvent={initSubmitEventData}
 							newEventData={newEventData}
+							// onAddEvent={handleAddEvent}
 							calendarApi={calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()}
 							changeCalendarDate={setNewSelectedDate}
 						/>

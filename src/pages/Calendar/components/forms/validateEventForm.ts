@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash'
 import { ICalendarEventForm } from '../../../../types/interfaces'
 import { VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
 
-const validateTimeOffForm = (values?: ICalendarEventForm) => {
+const validateEventForm = (values?: ICalendarEventForm) => {
 	const errors: FormErrors<ICalendarEventForm> = {}
 
 	if (isEmpty(values?.repeatOn)) {
@@ -39,4 +39,4 @@ const validateTimeOffForm = (values?: ICalendarEventForm) => {
 	return errors
 }
 
-export default validateTimeOffForm
+export default validateEventForm

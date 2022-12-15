@@ -45,7 +45,7 @@ type ComponentProps = {
 	eventId?: string | null
 	searchEmployes: (search: string, page: number) => Promise<any>
 }
-const formName = FORM.CALENDAR_EMPLOYEE_SHIFT_FORM
+const formName = FORM.CALENDAR_EVENT_FORM
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
 
 const CalendarShiftForm: FC<Props> = (props) => {

@@ -7,11 +7,12 @@ import cx from 'classnames'
 import dayjs from 'dayjs'
 
 // validate
-import validateBreakForm from './validateBreakForm'
+import validateEventForm from './validateEventForm'
 
 // utils
 import { optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import {
+	CALENDAR_COMMON_SETTINGS,
 	CREATE_EVENT_PERMISSIONS,
 	EVERY_REPEAT,
 	EVERY_REPEAT_OPTIONS,
@@ -31,11 +32,11 @@ import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employ
 import { ReactComponent as TimerIcon } from '../../../../assets/icons/clock-icon.svg'
 import { ReactComponent as DateSuffixIcon } from '../../../../assets/icons/date-suffix-icon.svg'
 
-// components / atoms
-import SelectField from '../../../../atoms/SelectField'
-import DateField from '../../../../atoms/DateField'
+// atoms / components
 import TimeRangeField from '../../../../atoms/TimeRangeField'
 import SwitchField from '../../../../atoms/SwitchField'
+import DateField from '../../../../atoms/DateField'
+import SelectField from '../../../../atoms/SelectField'
 import TextareaField from '../../../../atoms/TextareaField'
 import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
@@ -50,7 +51,7 @@ type ComponentProps = {
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
 const formName = FORM.CALENDAR_EVENT_FORM
 
-const CalendarBreakForm: FC<Props> = (props) => {
+const EventForm: FC<Props> = (props) => {
 	const { handleSubmit, eventId, searchEmployes } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -101,6 +102,18 @@ const CalendarBreakForm: FC<Props> = (props) => {
 		</>
 	)
 
+	const onChangeAllDay = (checked: any) => {
+		if (checked) {
+			// NOTE: cely den
+			dispatch(change(formName, 'timeFrom', CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT.startTime))
+			dispatch(change(formName, 'timeTo', CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT.endTime))
+		} else {
+			// Ak nie je cely den tak vynulovat
+			dispatch(change(formName, 'timeFrom', null))
+			dispatch(change(formName, 'timeTo', null))
+		}
+	}
+
 	const onChangeRecurring = (checked: any) => {
 		if (checked) {
 			const repeatDay = getDayNameFromNumber(dayjs(formValues?.date).day()) // NOTE: .day() vrati cislo od 0 do 6 co predstavuje nedela az sobota
@@ -122,12 +135,12 @@ const CalendarBreakForm: FC<Props> = (props) => {
 							placeholder={t('loc:Vyberte zamestnanca')}
 							name={'employee'}
 							size={'large'}
+							optionLabelProp={'label'}
 							update={(itemKey: number, ref: any) => ref.blur()}
 							filterOption={false}
 							allowInfinityScroll
 							showSearch
 							required
-							optionLabelProp={'label'}
 							disabled={eventId} // NOTE: ak je detail tak sa neda menit zamestnanec
 							className={'pb-0'}
 							labelInValue
@@ -153,12 +166,15 @@ const CalendarBreakForm: FC<Props> = (props) => {
 							placeholders={[t('loc:čas od'), t('loc:čas do')]}
 							component={TimeRangeField}
 							required
+							disabled={!!formValues?.allDay} // NOTE: ak je cely den tak sa disable stav pre pre nastavenie casu
 							allowClear
 							itemClassName={'m-0 pb-0'}
 							minuteStep={15}
 							size={'large'}
 							suffixIcon={<TimerIcon className={'text-notino-grayDark'} />}
 						/>
+						<Field name={'allDay'} onChange={onChangeAllDay} className={'pb-0'} label={t('loc:Celý deň')} component={SwitchField} />
+						<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 						<Field
 							name={'recurring'}
 							disabled={!formValues?.calendarBulkEventID && eventId}
@@ -168,7 +184,6 @@ const CalendarBreakForm: FC<Props> = (props) => {
 							label={t('loc:Opakovať')}
 						/>
 						{recurringFields}
-						<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 					</Form>
 				</Spin>
 			</div>
@@ -190,7 +205,7 @@ const CalendarBreakForm: FC<Props> = (props) => {
 							block
 							className={'noti-btn self-end'}
 						>
-							{eventId ? STRINGS(t).edit(t('loc:prestávku')) : STRINGS(t).createRecord(t('loc:prestávku'))}
+							{eventId ? STRINGS(t).edit(t('loc:voľno')) : STRINGS(t).createRecord(t('loc:voľno'))}
 						</Button>
 					)}
 				/>
@@ -205,7 +220,7 @@ const form = reduxForm<ICalendarEventForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateBreakForm
-})(CalendarBreakForm)
+	validate: validateEventForm
+})(EventForm)
 
 export default form

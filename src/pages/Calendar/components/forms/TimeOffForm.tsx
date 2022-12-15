@@ -7,7 +7,7 @@ import cx from 'classnames'
 import dayjs from 'dayjs'
 
 // validate
-import validateTimeOffForm from './validateTimeOffForm'
+import validateEventForm from './validateEventForm'
 
 // utils
 import { optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
@@ -49,7 +49,7 @@ type ComponentProps = {
 }
 
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
-const formName = FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM
+const formName = FORM.CALENDAR_EVENT_FORM
 
 const CalendarTimeOffForm: FC<Props> = (props) => {
 	const { handleSubmit, eventId, searchEmployes } = props
@@ -220,7 +220,7 @@ const form = reduxForm<ICalendarEventForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateTimeOffForm
+	validate: validateEventForm
 })(CalendarTimeOffForm)
 
 export default form

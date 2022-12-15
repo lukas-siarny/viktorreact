@@ -1,5 +1,5 @@
 import React, { useImperativeHandle, useMemo, useRef, useState } from 'react'
-import { useDispatch, useSelector, batch } from 'react-redux'
+import { batch, useDispatch, useSelector } from 'react-redux'
 import { Spin } from 'antd'
 import { Content } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
@@ -43,6 +43,8 @@ type Props = {
 	handleSubmitEvent: (values: ICalendarEventForm) => void
 	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
 	enabledSalonReservations?: boolean
+
+	initCreateEventForm: any
 } & ICalendarView
 
 export type CalendarRefs = {
@@ -68,10 +70,10 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		onAddEvent,
 		onEditEvent,
 		onReservationClick,
-		clearRestartInterval
+		clearRestartInterval,
+		initCreateEventForm
 	} = props
 
-	const dispatch = useDispatch()
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
 	// const monthView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -117,6 +119,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
 	const calendarSelectedDate = getSelectedDateForCalendar(view, selectedDate)
+	const dispatch = useDispatch()
 
 	const onEventChange = (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
 		const hasPermissions = permitted(authUserPermissions || [], selectedSalonuniqPermissions, UPDATE_EVENT_PERMISSIONS)
@@ -200,6 +203,21 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					})
 				)
 			})
+
+			// TODO: volat initCreate funkcu
+			// const initData = {
+			// 	date,
+			// 	timeFrom,
+			// 	timeTo,
+			// 	employee: {
+			// 		value: employee?.id as string,
+			// 		key: employee?.id as string,
+			// 		label: newResource ? newResourceExtendedProps?.employee?.name : eventData?.employee.email
+			// 	}
+			// }
+			// setNewEventData(initData)
+			// onAddEvent(initData as any)
+			// initCreateEventForm(eventData?.eventType, initData)
 			setDisableRender(false)
 			return
 		}

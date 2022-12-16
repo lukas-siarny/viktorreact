@@ -13,7 +13,7 @@ import { EventResizeDoneArg } from '@fullcalendar/interaction'
 import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, FORM, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
@@ -43,8 +43,6 @@ type Props = {
 	handleSubmitEvent: (values: ICalendarEventForm) => void
 	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
 	enabledSalonReservations?: boolean
-
-	initCreateEventForm: any
 } & ICalendarView
 
 export type CalendarRefs = {
@@ -70,8 +68,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		onAddEvent,
 		onEditEvent,
 		onReservationClick,
-		clearRestartInterval,
-		initCreateEventForm
+		clearRestartInterval
 	} = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -142,7 +139,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		const eventData = eventExtenedProps?.eventData
 		const newResourceExtendedProps = newResource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
 		const eventId = eventData?.id
-		const calendarBulkEventID = eventData?.calendarBulkEvent?.id || eventData?.calendarBulkEvent
+
+		const calendarBulkEventID = eventData?.calendarBulkEvent?.id
 
 		// zatial predpokladame, ze nebudu viacdnove eventy - takze start a end date by mal byt rovnaky
 		const startDajys = dayjs(start)
@@ -189,8 +187,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		}
 		// Ak existuje virualny event a isPlaceholder z eventu je true tak sa jedna o virtualny even a bude sa rovbit change nad formularmi a nezavola sa request na BE
 		if (virtualEvent && startsWith(event.id, NEW_ID_PREFIX)) {
-			const formName = `CALENDAR_${eventData?.eventType}_FORM` // TODO: ked sa spravi refacor bude len RESERVATION a EVENT forms
-			// TODO: ked budu dva formy tak spravit cez init s tym ze sa budu predchadzajuce data zistovat a tie sa mergnu s novymi prevetne sa voci zbytocnemu volaniu change - ked sa spravi NOT-3624
+			const formName = eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION ? FORM.CALENDAR_RESERVATION_FORM : FORM.CALENDAR_EVENT_FORM
 			batch(() => {
 				dispatch(change(formName, 'date', date))
 				dispatch(change(formName, 'timeFrom', timeFrom))
@@ -203,21 +200,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					})
 				)
 			})
-
-			// TODO: volat initCreate funkcu
-			// const initData = {
-			// 	date,
-			// 	timeFrom,
-			// 	timeTo,
-			// 	employee: {
-			// 		value: employee?.id as string,
-			// 		key: employee?.id as string,
-			// 		label: newResource ? newResourceExtendedProps?.employee?.name : eventData?.employee.email
-			// 	}
-			// }
-			// setNewEventData(initData)
-			// onAddEvent(initData as any)
-			// initCreateEventForm(eventData?.eventType, initData)
 			setDisableRender(false)
 			return
 		}

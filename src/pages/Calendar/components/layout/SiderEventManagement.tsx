@@ -62,8 +62,6 @@ type Props = {
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	calendarApi?: CalendarApi
 	changeCalendarDate: (newDate: string) => void
-
-	initCreateEventForm: any
 }
 
 const SiderEventManagement: FC<Props> = (props) => {
@@ -77,8 +75,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 		eventId,
 		eventsViewType,
 		calendarApi,
-		changeCalendarDate,
-		initCreateEventForm
+		newEventData,
+		changeCalendarDate
 	} = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -88,6 +86,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 		eventId: StringParam,
 		date: StringParam
 	})
+	const eventFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EVENT_FORM)(state))
+	const reservationFormValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
 
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 
@@ -188,38 +188,38 @@ const SiderEventManagement: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query.eventId, query.sidebarView])
 
-	// const initCreateEventForm = (eventType: CALENDAR_EVENT_TYPE) => {
-	// 	const prevEventType = sidebarView
-	// 	// Mergnut predchadzajuce data ktore boli vybrane pred zmenou eventTypu
-	// 	let prevInitData: Partial<ICalendarEventForm | ICalendarReservationForm> = {}
-	// 	if (prevEventType === CALENDAR_EVENT_TYPE.RESERVATION) {
-	// 		prevInitData = reservationFormValues
-	// 		// CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT || CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK || CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
-	// 	} else {
-	// 		prevInitData = eventFormValues
-	// 	}
-	// 	// Nastavi sa aktualny event Type zo selectu
-	// 	setQuery({
-	// 		...query,
-	// 		sidebarView: eventType
-	// 	})
-	// 	// Initne sa event / reservation formular
-	// 	const initData: Partial<ICalendarEventForm | ICalendarReservationForm> = {
-	// 		date: newEventData?.date || query.date || dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-	// 		timeFrom: newEventData?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT),
-	// 		timeTo: newEventData?.timeTo,
-	// 		employee: newEventData?.employee,
-	// 		eventId: query.eventId,
-	// 		...omit(prevInitData, 'eventType'),
-	// 		eventType
-	// 	}
-	// 	if (eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
-	// 		dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
-	// 	} else {
-	// 		// CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT || CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK || CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
-	// 		dispatch(initialize(FORM.CALENDAR_EVENT_FORM, initData))
-	// 	}
-	// }
+	const initCreateEventForm = (eventType: CALENDAR_EVENT_TYPE) => {
+		const prevEventType = sidebarView
+		// Mergnut predchadzajuce data ktore boli vybrane pred zmenou eventTypu
+		let prevInitData: Partial<ICalendarEventForm | ICalendarReservationForm> = {}
+		if (prevEventType === CALENDAR_EVENT_TYPE.RESERVATION) {
+			prevInitData = reservationFormValues
+			// CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT || CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK || CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
+		} else {
+			prevInitData = eventFormValues
+		}
+		// Nastavi sa aktualny event Type zo selectu
+		setQuery({
+			...query,
+			sidebarView: eventType
+		})
+		// Initne sa event / reservation formular
+		const initData: Partial<ICalendarEventForm | ICalendarReservationForm> = {
+			date: newEventData?.date || query.date || dayjs().format(DEFAULT_DATE_INIT_FORMAT),
+			timeFrom: newEventData?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT),
+			timeTo: newEventData?.timeTo,
+			employee: newEventData?.employee,
+			eventId: query.eventId,
+			...omit(prevInitData, 'eventType'),
+			eventType
+		}
+		if (eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
+			dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
+		} else {
+			// CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT || CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK || CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
+			dispatch(initialize(FORM.CALENDAR_EVENT_FORM, initData))
+		}
+	}
 
 	// Zmena selectu event type v draweri
 	const onChangeEventType = (type: string) => {
@@ -273,7 +273,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 		},
 		[salonID]
 	)
-	// TODO: prerobit na dva
+
 	const forms = {
 		[CALENDAR_EVENT_TYPE.RESERVATION]: <ReservationForm salonID={salonID} eventId={eventId} searchEmployes={searchEmployes} onSubmit={handleSubmitReservation} />,
 		[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: (

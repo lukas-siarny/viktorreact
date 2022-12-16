@@ -213,7 +213,7 @@ const SalonForm: FC<Props> = (props) => {
 							signUrl={URL_UPLOAD_IMAGES}
 							multiple={false}
 							maxCount={1}
-							category={UPLOAD_IMG_CATEGORIES.SALON_ICON}
+							category={UPLOAD_IMG_CATEGORIES.SALON_LOGO}
 							disabled={disabledForm}
 						/>
 						<Field

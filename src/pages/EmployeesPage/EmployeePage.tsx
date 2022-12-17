@@ -38,7 +38,15 @@ import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { DELETE_BUTTON_ID, FORM, PARAMETER_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
-import { decodePrice, encodePrice, filterSalonRolesByPermission, formFieldID, getServicePriceAndDurationData, hasAuthUserPermissionToEditRole } from '../../utils/helper'
+import {
+	arePriceAndDurationDataEmpty,
+	decodePrice,
+	encodePrice,
+	filterSalonRolesByPermission,
+	formFieldID,
+	getServicePriceAndDurationData,
+	hasAuthUserPermissionToEditRole
+} from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -205,8 +213,6 @@ const parseServices = (employeeCategories?: ServiceRootCategory, salonServices?:
 								return {
 									id: value?.id,
 									name: value?.value,
-									variableDuration: false,
-									variablePrice: false,
 									// ulozime si aj original data pre zobrazovanie povodnych dat a porovnavanie s pretazenymi datami
 									salonPriceAndDurationData: parameterSalonPriceAndDurationData,
 									// vygeneruje objekt so vsetkymi potrebnymi parametrami, ktore budu mat ale hodnotu null
@@ -421,17 +427,45 @@ const EmployeePage = (props: Props) => {
 
 	const editEmployeeService = async (values: IEmployeeServiceEditForm) => {
 		const serviceID = values.id
-		const priceAndDurationData = values?.employeePriceAndDurationData
 
-		if (serviceID && employeeID && !isNil(priceAndDurationData?.priceFrom)) {
+		if (serviceID && employeeID) {
 			try {
 				setUpdatingSerivce(true)
-				const employeePatchServiceData: ServicePatchBody = {
-					priceAndDurationData: {
-						durationFrom: priceAndDurationData?.durationFrom,
-						durationTo: priceAndDurationData?.variableDuration ? priceAndDurationData?.durationTo : undefined,
-						priceFrom: encodePrice(priceAndDurationData?.priceFrom as number),
-						priceTo: priceAndDurationData?.variablePrice && !isNil(priceAndDurationData?.priceTo) ? encodePrice(priceAndDurationData?.priceTo) : undefined
+				let employeePatchServiceData: ServicePatchBody = {}
+
+				if (values?.useCategoryParameter) {
+					employeePatchServiceData = {
+						...employeePatchServiceData,
+						serviceCategoryParameterValues: values?.serviceCategoryParameter?.reduce((acc: any, cv) => {
+							return [
+								{
+									id: cv.id,
+									priceAndDurationData: {
+										durationFrom: cv.employeePriceAndDurationData?.durationFrom,
+										durationTo: cv.employeePriceAndDurationData?.variableDuration ? cv.employeePriceAndDurationData?.durationTo : undefined,
+										priceFrom: encodePrice(cv.employeePriceAndDurationData?.priceFrom as number),
+										priceTo:
+											cv.employeePriceAndDurationData?.variablePrice && !isNil(cv.employeePriceAndDurationData?.priceTo)
+												? encodePrice(cv.employeePriceAndDurationData?.priceTo)
+												: undefined
+									}
+								},
+								...acc
+							]
+						}, [] as NonNullable<ServicePatchBody['serviceCategoryParameterValues']>)
+					}
+				} else {
+					const priceAndDurationData = values?.employeePriceAndDurationData
+					if (!isNil(priceAndDurationData?.priceFrom)) {
+						employeePatchServiceData = {
+							...employeePatchServiceData,
+							priceAndDurationData: {
+								durationFrom: priceAndDurationData?.durationFrom,
+								durationTo: priceAndDurationData?.variableDuration ? priceAndDurationData?.durationTo : undefined,
+								priceFrom: encodePrice(priceAndDurationData?.priceFrom as number),
+								priceTo: priceAndDurationData?.variablePrice && !isNil(priceAndDurationData?.priceTo) ? encodePrice(priceAndDurationData?.priceTo) : undefined
+							}
+						}
 					}
 				}
 				if (!employeeServiceIds?.includes(serviceID)) {
@@ -582,7 +616,14 @@ const EmployeePage = (props: Props) => {
 					{t('loc:Odoslať email')}
 				</Button>
 			</Modal>
-			<Modal title={t('loc:Upraviť službu zamestnancovi')} width={600} visible={visibleServiceEditModal} onCancel={() => setVisibleServiceEditModal(false)} footer={null}>
+			<Modal
+				title={t('loc:Upraviť službu zamestnancovi')}
+				className={'edit-employee-service-modal'}
+				width={600}
+				visible={visibleServiceEditModal}
+				onCancel={() => setVisibleServiceEditModal(false)}
+				footer={null}
+			>
 				<EmployeeServiceEditForm onSubmit={editEmployeeService} loading={updatingService} />
 			</Modal>
 		</>

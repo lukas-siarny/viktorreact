@@ -1143,3 +1143,37 @@ export const arePriceAndDurationDataEmpty = (data?: FormPriceAndDurationData) =>
 
 	return emptyPrice && emptyDuration
 }
+
+export const validatePriceAndDurationData = (priceAndDurationData?: FormPriceAndDurationData) => {
+	const employeePriceAndDurationErrors: any = {}
+
+	if (arePriceAndDurationDataEmpty(priceAndDurationData) && !priceAndDurationData?.variableDuration && !priceAndDurationData?.variablePrice) {
+		return employeePriceAndDurationErrors
+	}
+
+	if (isNil(priceAndDurationData?.priceFrom)) {
+		employeePriceAndDurationErrors.priceFrom = i18next.t('loc:Toto pole je povinné')
+	}
+	if (priceAndDurationData?.variablePrice) {
+		if (isNil(priceAndDurationData?.priceTo)) {
+			employeePriceAndDurationErrors.priceTo = i18next.t('loc:Toto pole je povinné')
+		}
+		if (!isNil(priceAndDurationData?.priceFrom) && !isNil(priceAndDurationData?.priceTo) && priceAndDurationData?.priceFrom >= priceAndDurationData?.priceTo) {
+			employeePriceAndDurationErrors.priceFrom = i18next.t('loc:Chybný rozzsah')
+			employeePriceAndDurationErrors.priceTo = true
+		}
+	}
+	if (priceAndDurationData?.variableDuration) {
+		if (isNil(priceAndDurationData?.durationFrom)) {
+			employeePriceAndDurationErrors.durationFrom = i18next.t('loc:Toto pole je povinné')
+		}
+		if (isNil(priceAndDurationData?.durationTo)) {
+			employeePriceAndDurationErrors.durationTo = i18next.t('loc:Toto pole je povinné')
+		}
+		if (!isNil(priceAndDurationData?.durationFrom) && !isNil(priceAndDurationData?.durationTo) && priceAndDurationData?.durationFrom >= priceAndDurationData?.durationTo) {
+			employeePriceAndDurationErrors.durationFrom = i18next.t('loc:Chybný rozzsah')
+			employeePriceAndDurationErrors.durationTo = true
+		}
+	}
+	return employeePriceAndDurationErrors
+}

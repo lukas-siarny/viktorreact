@@ -1,29 +1,22 @@
-import React, { FC, MouseEventHandler, ReactNode } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm, getFormValues, change, touch, isPristine } from 'redux-form'
+import React, { FC } from 'react'
+import { Field, FieldArray, InjectedFormProps, reduxForm, getFormValues, change, touch } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Divider, Form, Space, Collapse, Tag, Button, Row, Col, Spin } from 'antd'
+import { Form, Collapse, Button, Spin, Alert } from 'antd'
 import cx from 'classnames'
-import { get, isEmpty, isEqual, isNil } from 'lodash'
+import { isEmpty } from 'lodash'
 
 // utils
-import i18next from 'i18next'
-import { FORM, PARAMETER_TYPE, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
-import { arePriceAndDurationDataEmpty, renderFromTo, renderPriceAndDurationInfo, showErrorNotification, validationNumberMax, validationNumberMin } from '../../../utils/helper'
+import { FORM, PARAMETER_TYPE, STRINGS } from '../../../utils/enums'
+import { arePriceAndDurationDataEmpty, renderPriceAndDurationInfo, showErrorNotification, validationNumberMin } from '../../../utils/helper'
 
 // types
 import { IEmployeeServiceEditForm } from '../../../types/interfaces'
 
-// atoms
-import InputField from '../../../atoms/InputField'
-import ImgUploadField from '../../../atoms/ImgUploadField'
+// components
 import InputNumberField from '../../../atoms/InputNumberField'
 import SwitchField from '../../../atoms/SwitchField'
-import SelectField from '../../../atoms/SelectField'
-
-// components
-import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
-import DeleteButton from '../../../components/DeleteButton'
+import PopConfirmComponent from '../../../components/PopConfirmComponent'
 
 // validations
 import validateEmployeeServiceEditForm from './validateEmployeeServiceEditForm'
@@ -50,18 +43,12 @@ const numberMin0 = validationNumberMin(0)
 type FieldData = NonNullable<IEmployeeServiceEditForm['serviceCategoryParameter']>[0]
 
 const ParameterValues: FC<any> = (props) => {
-	const {
-		fields,
-		meta: { error, invalid },
-		salon,
-		showDuration,
-		form
-	} = props
+	const { fields, salon, showDuration, form } = props
 
 	const [t] = useTranslation()
 
-	const formErrors = form?.syncErrors?.serviceCategoryParameter || []
-	const formFields = form?.fields?.serviceCategoryParameter || []
+	const categoryParameterErrors = form?.syncErrors?.serviceCategoryParameter || []
+	const areAllParametersEmpty = !form?.values?.serviceCategoryParameter?.some((parameterValue: any) => !arePriceAndDurationDataEmpty(parameterValue.employeePriceAndDurationData))
 
 	const genExtra = (fieldData: FieldData) => {
 		const salonPriceAndDuration = fieldData?.salonPriceAndDurationData
@@ -74,21 +61,21 @@ const ParameterValues: FC<any> = (props) => {
 	}
 
 	const defaultActiveKeys = fields.map((_: any, i: number) => i)
+	let parameterError = ''
+
+	if (!isEmpty(categoryParameterErrors)) {
+		parameterError = t('loc:Je potrebné vyplniť povinné údaje pre všetky hodnoty parametra')
+	}
 
 	return (
 		<>
-			{invalid && error && (
-				<div role='alert' className='ant-form-item-explain-error'>
-					{error}
-				</div>
-			)}
-			<Collapse className={cx('collapse-list', { 'error-border': invalid && error })} bordered={false} defaultActiveKey={defaultActiveKeys}>
+			{parameterError && <Alert message={parameterError} showIcon type={'error'} className={'noti-alert w-full mb-4'} />}
+			<Collapse className={'collapse-list'} bordered={false} defaultActiveKey={defaultActiveKeys}>
 				{fields.map((field: any, index: number) => {
 					const fieldData = fields.get(index) as FieldData
 					const variableDuration = fieldData?.employeePriceAndDurationData?.variableDuration
 					const variablePrice = fieldData?.employeePriceAndDurationData?.variablePrice
-					const hasError = !isEmpty(formErrors[index])
-					const isTouched = !isEmpty(formFields[index])
+					const hasError = categoryParameterErrors[index]?.error
 
 					return (
 						<Panel
@@ -100,7 +87,7 @@ const ParameterValues: FC<any> = (props) => {
 							key={index}
 							forceRender
 							extra={genExtra(fieldData)}
-							className={cx({ 'collapse-header-has-error': hasError && isTouched })}
+							className={cx({ 'collapse-header-has-error': hasError })}
 							showArrow={false}
 						>
 							{showDuration && (
@@ -128,7 +115,7 @@ const ParameterValues: FC<any> = (props) => {
 											size={'large'}
 											validate={[numberMin0]}
 											disabled={props.disabled}
-											required
+											required={variableDuration}
 										/>
 									</div>
 									{variableDuration && (
@@ -145,7 +132,7 @@ const ParameterValues: FC<any> = (props) => {
 												size={'large'}
 												validate={[numberMin0]}
 												disabled={props.disabled}
-												required
+												required={!areAllParametersEmpty}
 											/>
 										</div>
 									)}
@@ -178,7 +165,7 @@ const ParameterValues: FC<any> = (props) => {
 										size={'large'}
 										validate={[numberMin0]}
 										disabled={props.disabled}
-										required
+										required={!areAllParametersEmpty}
 									/>
 								</div>
 								{variablePrice && (
@@ -194,7 +181,7 @@ const ParameterValues: FC<any> = (props) => {
 											size={'large'}
 											validate={[numberMin0]}
 											disabled={props.disabled}
-											required
+											required={!areAllParametersEmpty}
 										/>
 									</div>
 								)}
@@ -213,7 +200,6 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 	const form = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE_SERVICE_EDIT])
 	const formValues: Partial<IEmployeeServiceEditForm> = useSelector((state: RootState) => getFormValues(FORM.EMPLOYEE_SERVICE_EDIT)(state))
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-	const services = useSelector((state: RootState) => state.service.services)
 
 	const dispatch = useDispatch()
 
@@ -222,12 +208,14 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 	const useCategoryParameter = formValues?.useCategoryParameter
 
 	const hasPermission = true
+	const showResetButton = (!useCategoryParameter && formValues?.hasOverriddenPricesAndDurationData) || (useCategoryParameter && false)
+	const isRequired = !(arePriceAndDurationDataEmpty(formValues?.employeePriceAndDurationData) && !variableDuration && !variablePrice)
 
 	return (
 		<Spin spinning={loading}>
 			<Form id={`${FORM.EMPLOYEE}-form`} layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
-				{useCategoryParameter ? (
-					<div className={'my-2'}>
+				<div className={'mt-2 mb-4'}>
+					{useCategoryParameter ? (
 						<FieldArray
 							component={ParameterValues}
 							name={'serviceCategoryParameter'}
@@ -236,116 +224,139 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 							showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
 							form={form}
 						/>
-					</div>
-				) : (
-					<div className={'mt-2'}>
-						<div className={'flex w-full gap-2'}>
-							<div className={'mt-5 w-50 shrink-0'}>
-								<Field
-									disabled={!hasPermission}
-									className={'mb-0'}
-									component={SwitchField}
-									customOnChange={(checked: boolean) => {
-										dispatch(change(FORM.EMPLOYEE_SERVICE_EDIT, 'employeePriceAndDurationData.variableDuration', checked))
-										dispatch(touch(FORM.EMPLOYEE_SERVICE_EDIT, 'employeePriceAndDurationData.durationFrom', 'employeePriceAndDurationData.durationTo'))
-									}}
-									label={t('loc:Variabilné trvanie')}
-									name={'employeePriceAndDurationData.variableDuration'}
-									size={'large'}
-								/>
-							</div>
-							<div style={{ flex: variableDuration ? '1 1 50%' : '1 1 auto' }}>
-								<Field
-									disabled={!hasPermission}
-									component={InputNumberField}
-									label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
-									placeholder={t('loc:min')}
-									name='employeePriceAndDurationData.durationFrom'
-									precision={0}
-									step={1}
-									min={0}
-									max={999}
-									size={'large'}
-									validate={[numberMin0]}
-									required={variableDuration}
-								/>
-							</div>
-
-							{variableDuration && (
-								<div style={{ flex: '1 1 50%' }}>
+					) : (
+						<>
+							<div className={'flex w-full gap-2'}>
+								<div className={'mt-5 w-50 shrink-0'}>
+									<Field
+										disabled={!hasPermission}
+										className={'mb-0'}
+										component={SwitchField}
+										customOnChange={(checked: boolean) => {
+											dispatch(change(FORM.EMPLOYEE_SERVICE_EDIT, 'employeePriceAndDurationData.variableDuration', checked))
+											dispatch(touch(FORM.EMPLOYEE_SERVICE_EDIT, 'employeePriceAndDurationData.durationFrom', 'employeePriceAndDurationData.durationTo'))
+										}}
+										label={t('loc:Variabilné trvanie')}
+										name={'employeePriceAndDurationData.variableDuration'}
+										size={'large'}
+									/>
+								</div>
+								<div style={{ flex: variableDuration ? '1 1 50%' : '1 1 auto' }}>
 									<Field
 										disabled={!hasPermission}
 										component={InputNumberField}
-										label={t('loc:Trvanie do (minúty)')}
+										label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
 										placeholder={t('loc:min')}
-										name='employeePriceAndDurationData.durationTo'
+										name='employeePriceAndDurationData.durationFrom'
 										precision={0}
 										step={1}
 										min={0}
 										max={999}
 										size={'large'}
 										validate={[numberMin0]}
-										required
+										required={variableDuration}
 									/>
 								</div>
-							)}
-						</div>
-						<div className={'flex w-full gap-2'}>
-							<div className={'mt-5 w-50 shrink-0'}>
-								<Field
-									className={'mb-0'}
-									component={SwitchField}
-									customOnChange={(checked: boolean) => {
-										dispatch(change(FORM.EMPLOYEE_SERVICE_EDIT, 'employeePriceAndDurationData.variablePrice', checked))
-										dispatch(touch(FORM.EMPLOYEE_SERVICE_EDIT, 'employeePriceAndDurationData.priceFrom', 'employeePriceAndDurationData.priceTo'))
-									}}
-									label={t('loc:Variabilná cena')}
-									name={'employeePriceAndDurationData.variablePrice'}
-									size={'large'}
-								/>
+
+								{variableDuration && (
+									<div style={{ flex: '1 1 50%' }}>
+										<Field
+											disabled={!hasPermission}
+											component={InputNumberField}
+											label={t('loc:Trvanie do (minúty)')}
+											placeholder={t('loc:min')}
+											name='employeePriceAndDurationData.durationTo'
+											precision={0}
+											step={1}
+											min={0}
+											max={999}
+											size={'large'}
+											validate={[numberMin0]}
+											required={isRequired}
+										/>
+									</div>
+								)}
 							</div>
-							<div style={{ flex: variablePrice ? '1 1 50%' : '1 1 auto' }}>
-								<Field
-									disabled={!hasPermission}
-									component={InputNumberField}
-									label={
-										variablePrice
-											? t('loc:Cena od ({{symbol}})', { symbol: salon.data?.currency.symbol })
-											: t('loc:Cena ({{symbol}})', { symbol: salon.data?.currency.symbol })
-									}
-									placeholder={salon.data?.currency.symbol}
-									name='employeePriceAndDurationData.priceFrom'
-									precision={2}
-									step={1}
-									min={0}
-									size={'large'}
-									validate={[numberMin0]}
-									required
-								/>
-							</div>
-							{variablePrice && (
-								<div style={{ flex: '1 1 50%' }}>
+							<div className={'flex w-full gap-2'}>
+								<div className={'mt-5 w-50 shrink-0'}>
+									<Field
+										className={'mb-0'}
+										component={SwitchField}
+										customOnChange={(checked: boolean) => {
+											dispatch(change(FORM.EMPLOYEE_SERVICE_EDIT, 'employeePriceAndDurationData.variablePrice', checked))
+											dispatch(touch(FORM.EMPLOYEE_SERVICE_EDIT, 'employeePriceAndDurationData.priceFrom', 'employeePriceAndDurationData.priceTo'))
+										}}
+										label={t('loc:Variabilná cena')}
+										name={'employeePriceAndDurationData.variablePrice'}
+										size={'large'}
+									/>
+								</div>
+								<div style={{ flex: variablePrice ? '1 1 50%' : '1 1 auto' }}>
 									<Field
 										disabled={!hasPermission}
 										component={InputNumberField}
-										label={t('loc:Cena do ({{symbol}})', { symbol: salon.data?.currency.symbol })}
+										label={
+											variablePrice
+												? t('loc:Cena od ({{symbol}})', { symbol: salon.data?.currency.symbol })
+												: t('loc:Cena ({{symbol}})', { symbol: salon.data?.currency.symbol })
+										}
 										placeholder={salon.data?.currency.symbol}
-										name='employeePriceAndDurationData.priceTo'
+										name='employeePriceAndDurationData.priceFrom'
 										precision={2}
 										step={1}
 										min={0}
 										size={'large'}
 										validate={[numberMin0]}
-										required
+										required={isRequired}
 									/>
 								</div>
-							)}
-						</div>
-					</div>
-				)}
-				<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={pristine || loading} loading={loading}>
-					{STRINGS(t).save(t('loc:službu'))}
-				</Button>
+								{variablePrice && (
+									<div style={{ flex: '1 1 50%' }}>
+										<Field
+											disabled={!hasPermission}
+											component={InputNumberField}
+											label={t('loc:Cena do ({{symbol}})', { symbol: salon.data?.currency.symbol })}
+											placeholder={salon.data?.currency.symbol}
+											name='employeePriceAndDurationData.priceTo'
+											precision={2}
+											step={1}
+											min={0}
+											size={'large'}
+											validate={[numberMin0]}
+											required={isRequired}
+										/>
+									</div>
+								)}
+							</div>
+						</>
+					)}
+				</div>
+				<div className={'flex gap-4'}>
+					{/* TODO: dorobit logiku potom ked budu z BE chodit data aj pre paramater + ikonky */}
+					{showResetButton && (
+						<PopConfirmComponent
+							title={t('loc:Naozaj chcete vymazať nastavenia služby pre zamestnanca? Zamestnanocvi sa nastavia hodnoty podľa nastavania služby salónu.')}
+							onConfirm={() => console.log('resetovat')}
+							okText={t('loc:Pokračovať')}
+							style={{ maxWidth: 500 }}
+							allowedButton={
+								<Button className='noti-btn w-1/2' size='large' type='dashed' htmlType='button' disabled={loading} loading={loading}>
+									{t('loc:Vymazať nastavenia')}
+								</Button>
+							}
+						/>
+					)}
+					<Button
+						className={cx('noti-btn', { 'w-1/2': showResetButton, 'w-full': !showResetButton })}
+						size='large'
+						type='primary'
+						htmlType='submit'
+						disabled={pristine || loading}
+						loading={loading}
+					>
+						{STRINGS(t).save(t('nastavenia'))}
+					</Button>
+				</div>
 			</Form>
 		</Spin>
 	)

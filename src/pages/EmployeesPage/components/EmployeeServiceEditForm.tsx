@@ -48,7 +48,14 @@ const ParameterValues: FC<any> = (props) => {
 	const [t] = useTranslation()
 
 	const categoryParameterErrors = form?.syncErrors?.serviceCategoryParameter || []
-	const areAllParametersEmpty = !form?.values?.serviceCategoryParameter?.some((parameterValue: any) => !arePriceAndDurationDataEmpty(parameterValue.employeePriceAndDurationData))
+	const areAllParametersEmpty = !form?.values?.serviceCategoryParameter?.some(
+		(parameterValue: any) =>
+			!(
+				arePriceAndDurationDataEmpty(parameterValue.employeePriceAndDurationData) &&
+				!parameterValue.employeePriceAndDurationData?.variableDuration &&
+				!parameterValue.employeePriceAndDurationData?.variablePrice
+			)
+	)
 
 	const genExtra = (fieldData: FieldData) => {
 		const salonPriceAndDuration = fieldData?.salonPriceAndDurationData

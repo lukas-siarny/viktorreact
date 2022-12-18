@@ -11,14 +11,24 @@ export default (values: IEmployeeServiceEditForm) => {
 	const priceAndDurationData = values?.employeePriceAndDurationData
 
 	if (!values?.useCategoryParameter) {
-		errors.employeePriceAndDurationData = validatePriceAndDurationData(priceAndDurationData)
+		if (!(arePriceAndDurationDataEmpty(priceAndDurationData) && !priceAndDurationData?.variableDuration && !priceAndDurationData?.variablePrice)) {
+			errors.employeePriceAndDurationData = validatePriceAndDurationData(priceAndDurationData)
+		}
 	} else {
 		const serviceCategoryParameterErrors: any = []
-		const areAllEmpty = !values.serviceCategoryParameter?.some((parameterValue) => !arePriceAndDurationDataEmpty(parameterValue.employeePriceAndDurationData))
+		const areAllEmpty = !values.serviceCategoryParameter?.some(
+			(parameterValue) =>
+				!(
+					arePriceAndDurationDataEmpty(parameterValue.employeePriceAndDurationData) &&
+					!parameterValue.employeePriceAndDurationData?.variableDuration &&
+					!parameterValue.employeePriceAndDurationData?.variablePrice
+				)
+		)
 
 		if (!areAllEmpty) {
 			values.serviceCategoryParameter?.forEach((parameterValue, parameterValueIndex) => {
 				const employeePriceAndDurationErros = validatePriceAndDurationData(parameterValue?.employeePriceAndDurationData)
+
 				if (!isEmpty(employeePriceAndDurationErros)) {
 					const parameterValueErrors = {
 						employeePriceAndDurationData: employeePriceAndDurationErros,

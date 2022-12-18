@@ -1147,10 +1147,6 @@ export const arePriceAndDurationDataEmpty = (data?: FormPriceAndDurationData) =>
 export const validatePriceAndDurationData = (priceAndDurationData?: FormPriceAndDurationData) => {
 	const employeePriceAndDurationErrors: any = {}
 
-	if (arePriceAndDurationDataEmpty(priceAndDurationData) && !priceAndDurationData?.variableDuration && !priceAndDurationData?.variablePrice) {
-		return employeePriceAndDurationErrors
-	}
-
 	if (isNil(priceAndDurationData?.priceFrom)) {
 		employeePriceAndDurationErrors.priceFrom = i18next.t('loc:Toto pole je povinné')
 	}

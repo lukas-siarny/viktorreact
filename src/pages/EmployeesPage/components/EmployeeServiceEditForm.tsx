@@ -34,6 +34,7 @@ const { Panel } = Collapse
 
 type ComponentProps = {
 	loading?: boolean
+	onResetData?: () => void
 }
 
 type Props = InjectedFormProps<IEmployeeServiceEditForm, ComponentProps> & ComponentProps
@@ -48,14 +49,7 @@ const ParameterValues: FC<any> = (props) => {
 	const [t] = useTranslation()
 
 	const categoryParameterErrors = form?.syncErrors?.serviceCategoryParameter || []
-	const areAllParametersEmpty = !form?.values?.serviceCategoryParameter?.some(
-		(parameterValue: any) =>
-			!(
-				arePriceAndDurationDataEmpty(parameterValue.employeePriceAndDurationData) &&
-				!parameterValue.employeePriceAndDurationData?.variableDuration &&
-				!parameterValue.employeePriceAndDurationData?.variablePrice
-			)
-	)
+	const areAllParametersEmpty = !form?.values?.serviceCategoryParameter?.some((parameterValue: any) => !arePriceAndDurationDataEmpty(parameterValue.employeePriceAndDurationData))
 
 	const genExtra = (fieldData: FieldData) => {
 		const salonPriceAndDuration = fieldData?.salonPriceAndDurationData
@@ -203,7 +197,7 @@ const ParameterValues: FC<any> = (props) => {
 
 const EmployeeServiceEditForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, loading, pristine } = props
+	const { handleSubmit, loading, pristine, onResetData } = props
 	const form = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE_SERVICE_EDIT])
 	const formValues: Partial<IEmployeeServiceEditForm> = useSelector((state: RootState) => getFormValues(FORM.EMPLOYEE_SERVICE_EDIT)(state))
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
@@ -216,7 +210,7 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 
 	const hasPermission = true
 	const showResetButton = (!useCategoryParameter && formValues?.hasOverriddenPricesAndDurationData) || (useCategoryParameter && false)
-	const isRequired = !(arePriceAndDurationDataEmpty(formValues?.employeePriceAndDurationData) && !variableDuration && !variablePrice)
+	const isRequired = !arePriceAndDurationDataEmpty(formValues?.employeePriceAndDurationData)
 
 	return (
 		<Spin spinning={loading}>
@@ -343,7 +337,7 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 					{showResetButton && (
 						<PopConfirmComponent
 							title={t('loc:Naozaj chcete vymazať nastavenia služby pre zamestnanca? Zamestnanocvi sa nastavia hodnoty podľa nastavania služby salónu.')}
-							onConfirm={() => console.log('resetovat')}
+							onConfirm={onResetData}
 							okText={t('loc:Pokračovať')}
 							style={{ maxWidth: 500 }}
 							allowedButton={

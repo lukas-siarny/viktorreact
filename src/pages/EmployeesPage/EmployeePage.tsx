@@ -271,6 +271,7 @@ const EmployeePage = (props: Props) => {
 	)
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values) as IEmployeeForm
+	const editServiceformValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE_SERVICE_EDIT]?.values) as IEmployeeServiceEditForm
 
 	const isEmployeeExists = !!employee?.data?.employee?.id
 
@@ -425,38 +426,59 @@ const EmployeePage = (props: Props) => {
 
 	const employeeServiceIds = getEmployeeServiceIds(employee?.data?.employee?.categories)
 
-	const editEmployeeService = async (values: IEmployeeServiceEditForm) => {
+	const editEmployeeService = async (values: IEmployeeServiceEditForm, _dispatch?: Dispatch<any>, customProps?: any) => {
 		const serviceID = values.id
+		const { resetUserServiceData = false } = customProps || {}
 
-		if (serviceID && employeeID) {
+		if (serviceID) {
 			try {
 				setUpdatingSerivce(true)
 				let employeePatchServiceData: ServicePatchBody = {}
 
-				if (values?.useCategoryParameter) {
+				if (resetUserServiceData) {
 					employeePatchServiceData = {
-						...employeePatchServiceData,
-						serviceCategoryParameterValues: values?.serviceCategoryParameter?.reduce((acc: any, cv) => {
-							return [
-								{
-									id: cv.id,
-									priceAndDurationData: {
-										durationFrom: cv.employeePriceAndDurationData?.durationFrom,
-										durationTo: cv.employeePriceAndDurationData?.variableDuration ? cv.employeePriceAndDurationData?.durationTo : undefined,
-										priceFrom: encodePrice(cv.employeePriceAndDurationData?.priceFrom as number),
-										priceTo:
-											cv.employeePriceAndDurationData?.variablePrice && !isNil(cv.employeePriceAndDurationData?.priceTo)
-												? encodePrice(cv.employeePriceAndDurationData?.priceTo)
-												: undefined
-									}
-								},
-								...acc
-							]
-						}, [] as NonNullable<ServicePatchBody['serviceCategoryParameterValues']>)
+						priceAndDurationData: null,
+						serviceCategoryParameterValues: null
+					}
+				} else if (values?.useCategoryParameter) {
+					const areAllParameterValuesEmpty = !values?.serviceCategoryParameter?.some(
+						(parameterValue) => !arePriceAndDurationDataEmpty(parameterValue.employeePriceAndDurationData)
+					)
+
+					if (areAllParameterValuesEmpty) {
+						employeePatchServiceData = {
+							...employeePatchServiceData,
+							serviceCategoryParameterValues: null
+						}
+					} else if ((values?.serviceCategoryParameter?.length || 0) <= 100) {
+						const serviceCategoryParameterValues: ServicePatchBody['serviceCategoryParameterValues'] = []
+						values?.serviceCategoryParameter?.forEach((parameterValue) => {
+							serviceCategoryParameterValues.push({
+								id: parameterValue.id,
+								priceAndDurationData: {
+									durationFrom: parameterValue.employeePriceAndDurationData?.durationFrom,
+									durationTo: parameterValue.employeePriceAndDurationData?.variableDuration ? parameterValue.employeePriceAndDurationData?.durationTo : undefined,
+									priceFrom: encodePrice(parameterValue.employeePriceAndDurationData?.priceFrom as number),
+									priceTo:
+										parameterValue.employeePriceAndDurationData?.variablePrice && !isNil(parameterValue.employeePriceAndDurationData?.priceTo)
+											? encodePrice(parameterValue.employeePriceAndDurationData?.priceTo)
+											: undefined
+								}
+							})
+						})
+						employeePatchServiceData = {
+							...employeePatchServiceData,
+							serviceCategoryParameterValues
+						}
 					}
 				} else {
 					const priceAndDurationData = values?.employeePriceAndDurationData
-					if (!isNil(priceAndDurationData?.priceFrom)) {
+					if (arePriceAndDurationDataEmpty(priceAndDurationData)) {
+						employeePatchServiceData = {
+							...employeePatchServiceData,
+							priceAndDurationData: null
+						}
+					} else if (!isNil(priceAndDurationData?.priceFrom)) {
 						employeePatchServiceData = {
 							...employeePatchServiceData,
 							priceAndDurationData: {
@@ -468,14 +490,13 @@ const EmployeePage = (props: Props) => {
 						}
 					}
 				}
+
 				if (!employeeServiceIds?.includes(serviceID)) {
 					await updateEmployee(formValues)
-					await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, employeePatchServiceData)
-					fetchEmployeeAndServicesData()
-				} else {
-					await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, employeePatchServiceData)
-					fetchEmployeeAndServicesData()
 				}
+
+				await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, employeePatchServiceData)
+				fetchEmployeeAndServicesData()
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
@@ -512,6 +533,7 @@ const EmployeePage = (props: Props) => {
 					<EmployeeForm
 						addService={() => addService(services, form, dispatch)}
 						salonID={salonID}
+						isEdit
 						onSubmit={updateEmployee}
 						setVisibleServiceEditModal={setVisibleServiceEditModal}
 					/>
@@ -624,7 +646,11 @@ const EmployeePage = (props: Props) => {
 				onCancel={() => setVisibleServiceEditModal(false)}
 				footer={null}
 			>
-				<EmployeeServiceEditForm onSubmit={editEmployeeService} loading={updatingService} />
+				<EmployeeServiceEditForm
+					onSubmit={editEmployeeService}
+					loading={updatingService}
+					onResetData={() => editEmployeeService(editServiceformValues, undefined, { resetUserServiceData: true })}
+				/>
 			</Modal>
 		</>
 	)

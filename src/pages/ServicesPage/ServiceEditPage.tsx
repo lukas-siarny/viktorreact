@@ -15,13 +15,13 @@ import { getService } from '../../reducers/services/serviceActions'
 import { getCategory, ICategoryParameterValue } from '../../reducers/categories/categoriesActions'
 
 // types
-import { IServiceForm, SalonSubPageProps, ILoadingAndFailure, IEmployeesPayload } from '../../types/interfaces'
+import { IServiceForm, SalonSubPageProps, ILoadingAndFailure, IEmployeesPayload, EmployeeServiceData } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
 import { patchReq } from '../../utils/request'
 import { FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
-import { decodePrice, encodePrice } from '../../utils/helper'
+import { decodePrice, encodePrice, getServicePriceAndDurationData } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { history } from '../../utils/history'
 
@@ -148,8 +148,151 @@ const parseParameterValuesInit = (values: (ServiceParameterValues | ICategoryPar
 	return result
 }
 
-const parseEmployeesInit = (employees: ServiceEmployees) => {
+/* const parseServices = (employeeCategories?: ServiceRootCategory, salonServices?: ISelectOptionItem[]): EmployeeServiceData[] => {
+	const result: EmployeeServiceData[] = []
+	if (employeeCategories) {
+		employeeCategories?.forEach((firstCategory) =>
+			firstCategory?.children.forEach((secondCategory) => {
+				secondCategory?.children.forEach((employeeService) => {
+					const salonServiceData = salonServices?.find((option) => option?.key === employeeService.id)
+					const salonPriceAndDuration = salonServiceData?.extra?.rangePriceAndDurationData as ServicePriceAndDurationData
+					const categoryParameter = salonServiceData?.extra?.serviceCategoryParameter as ServiceCategoryParameter
+					const useCategoryParameter = !!categoryParameter?.values?.length
+
+					const salonPriceAndDurationData = getServicePriceAndDurationData(
+						salonPriceAndDuration?.durationFrom,
+						salonPriceAndDuration?.durationTo,
+						salonPriceAndDuration?.priceFrom,
+						salonPriceAndDuration?.priceTo
+					)
+
+					let formServiceData: EmployeeServiceData = {
+						id: employeeService?.id,
+						name: employeeService?.category?.name,
+						category: firstCategory?.name,
+						salonPriceAndDurationData,
+						// vygeneruje objekt so vsetkymi potrebnymi parametrami, ktore budu mat ale hodnotu null
+						// redux-form tak potom vyhodnoti isPristine spravne
+						employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined),
+						useCategoryParameter,
+						hasOverriddenPricesAndDurationData: false
+					}
+					// ak ma employee nieco nastavene, tak vyinicialuzujeme jeho hodnoty
+					if (employeeService?.hasOverriddenPricesAndDurationData) {
+						const employeePriceAndDuration = employeeService?.priceAndDurationData
+						const employeeFormPriceAndDurationData = getServicePriceAndDurationData(
+							employeePriceAndDuration?.durationFrom,
+							employeePriceAndDuration?.durationTo,
+							employeePriceAndDuration?.priceFrom,
+							employeePriceAndDuration?.priceTo
+						)
+						formServiceData = {
+							...formServiceData,
+							hasOverriddenPricesAndDurationData: true,
+							employeePriceAndDurationData: employeeFormPriceAndDurationData
+						}
+					}
+
+					if (useCategoryParameter) {
+						formServiceData = {
+							...formServiceData,
+							serviceCategoryParameterType: categoryParameter?.valueType as PARAMETER_TYPE,
+							serviceCategoryParameterName: categoryParameter?.name,
+							serviceCategoryParameterId: categoryParameter.id,
+							hasOverriddenPricesAndDurationData: false,
+							// todo: treba dorobit, ak ma zamestnanec prepisany parameter, tak vyinicalizovat jeho hodnoty miesto sluzby
+							serviceCategoryParameter: categoryParameter?.values?.map((value) => {
+								const paramaterPriceDuration = value?.priceAndDurationData
+								const parameterSalonPriceAndDurationData = getServicePriceAndDurationData(
+									paramaterPriceDuration?.durationFrom,
+									paramaterPriceDuration.durationTo,
+									paramaterPriceDuration?.priceFrom,
+									paramaterPriceDuration?.priceTo
+								)
+
+								return {
+									id: value?.id,
+									name: value?.value,
+									// ulozime si aj original data pre zobrazovanie povodnych dat a porovnavanie s pretazenymi datami
+									salonPriceAndDurationData: parameterSalonPriceAndDurationData,
+									// vygeneruje objekt so vsetkymi potrebnymi parametrami, ktore budu mat ale hodnotu null
+									// redux-form tak potom vyhodnoti isPristine spravne
+									employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined)
+								}
+							})
+						}
+					}
+					result.push(formServiceData)
+				})
+			})
+		)
+	}
+	return result
+} */
+
+const parseEmployeesInit = (employees: ServiceEmployees, service: Paths.GetApiB2BAdminServicesServiceId.Responses.$200['service']) => {
 	return employees?.map((employee) => {
+		const useCategoryParameter = service?.useCategoryParameter
+
+		let formEmployeeServiceData: EmployeeServiceData = {
+			id: service?.id,
+			hasOverriddenPricesAndDurationData: false,
+			useCategoryParameter,
+			employee: {
+				id: employee.id,
+				image: employee.image.resizedImages.thumbnail,
+				name: employee.fullName,
+				email: employee.email,
+				inviteEmail: employee.inviteEmail,
+				hasActiveAccount: employee.hasActiveAccount
+			}
+		}
+
+		if (useCategoryParameter) {
+			formEmployeeServiceData = {
+				...formEmployeeServiceData,
+				hasOverriddenPricesAndDurationData: !!employee?.serviceCategoryParameter?.values.length,
+				serviceCategoryParameterName: employee?.serviceCategoryParameter?.name,
+				serviceCategoryParameter: service?.serviceCategoryParameter?.values?.map((value) => {
+					const employeeData = employee?.serviceCategoryParameter?.values.find((employeeValue) => employeeValue?.id === value.id)
+					const employeePriceAndDuration = employeeData?.priceAndDurationData
+					const salonPriceAndDuration = value?.priceAndDurationData
+
+					return {
+						id: value.id,
+						name: value.value,
+						salonPriceAndDurationData: getServicePriceAndDurationData(
+							salonPriceAndDuration?.durationFrom,
+							salonPriceAndDuration?.durationTo,
+							salonPriceAndDuration?.priceFrom,
+							salonPriceAndDuration?.priceTo
+						),
+						employeePriceAndDurationData: getServicePriceAndDurationData(
+							employeePriceAndDuration?.durationFrom,
+							employeePriceAndDuration?.durationTo,
+							employeePriceAndDuration?.priceFrom,
+							employeePriceAndDuration?.priceTo
+						)
+					}
+				})
+			}
+		} else if (employee?.hasOverriddenPricesAndDurationData) {
+			const employeePriceAndDuration = employee?.priceAndDurationData
+			const employeeFormPriceAndDurationData = getServicePriceAndDurationData(
+				employeePriceAndDuration?.durationFrom,
+				employeePriceAndDuration?.durationTo,
+				employeePriceAndDuration?.priceFrom,
+				employeePriceAndDuration?.priceTo
+			)
+			formEmployeeServiceData = {
+				...formEmployeeServiceData,
+				hasOverriddenPricesAndDurationData: true,
+				employeePriceAndDurationData: employeeFormPriceAndDurationData
+			}
+		}
+
+		return formEmployeeServiceData
+
 		return {
 			id: employee?.id,
 			name: employee?.fullName,
@@ -184,8 +327,7 @@ const ServiceEditPage = (props: Props) => {
 		if (data) {
 			// union parameter values form service and category detail based on categoryParameterValueID
 			const parameterValues = unionBy(data.service?.serviceCategoryParameter?.values, categoryParameterValues as any, 'categoryParameterValueID')
-			// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
-			const { /* activeKeys, */ serviceCategoryParameter } = parseParameterValuesInit(parameterValues)
+			const { serviceCategoryParameter } = parseParameterValuesInit(parameterValues)
 			initData = {
 				id: data.service.id,
 				serviceCategoryParameterType: data.service.serviceCategoryParameter?.valueType,
@@ -196,11 +338,9 @@ const ServiceEditPage = (props: Props) => {
 				priceFrom: decodePrice(data.service.priceAndDurationData.priceFrom),
 				priceTo: decodePrice(data.service.priceAndDurationData.priceTo),
 				variablePrice: !!data.service.priceAndDurationData.priceTo,
-				employees: parseEmployeesInit(data?.service?.employees),
+				employees: parseEmployeesInit(data?.service?.employees, data.service),
 				useCategoryParameter: data.service.useCategoryParameter,
 				settings: data.service.settings
-				// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
-				/* activeKeys */
 			}
 		}
 		dispatch(initialize(FORM.SERVICE_FORM, initData || {}))
@@ -239,23 +379,26 @@ const ServiceEditPage = (props: Props) => {
 			dispatch(stopSubmit(FORM.SERVICE_FORM))
 		}
 	}
+
 	return (
 		<Permissions
 			allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_UPDATE]}
 			render={(hasPermission, { openForbiddenModal }) => (
-				<ServiceForm
-					backUrl={parentPath}
-					addEmployee={() => addEmployee(employees, form, dispatch)}
-					onSubmit={(formData: IServiceForm) => {
-						if (hasPermission) {
-							handleSubmit(formData)
-						} else {
-							openForbiddenModal()
-						}
-					}}
-					salonID={salonID}
-					serviceID={serviceID}
-				/>
+				<>
+					<ServiceForm
+						backUrl={parentPath}
+						addEmployee={() => addEmployee(employees, form, dispatch)}
+						onSubmit={(formData: IServiceForm) => {
+							if (hasPermission) {
+								handleSubmit(formData)
+							} else {
+								openForbiddenModal()
+							}
+						}}
+						salonID={salonID}
+						serviceID={serviceID}
+					/>
+				</>
 			)}
 		/>
 	)

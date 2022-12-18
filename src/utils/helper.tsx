@@ -71,9 +71,11 @@ import {
 	IAuthUserPayload,
 	IDateTimeFilterOption,
 	IEmployeePayload,
+	IEmployeeServiceEditForm,
 	IPrice,
 	ISelectOptionItem,
 	IStructuredAddress,
+	ServicePatchBody,
 	ServicePriceAndDurationData
 } from '../types/interfaces'
 import { phoneRegEx } from './regex'
@@ -1141,7 +1143,7 @@ export const arePriceAndDurationDataEmpty = (data?: FormPriceAndDurationData) =>
 		emptyPrice = isNil(data?.priceFrom)
 	}
 
-	return emptyPrice && emptyDuration
+	return emptyPrice && emptyDuration && !data?.variableDuration && !data?.variablePrice
 }
 
 export const validatePriceAndDurationData = (priceAndDurationData?: FormPriceAndDurationData) => {
@@ -1172,4 +1174,63 @@ export const validatePriceAndDurationData = (priceAndDurationData?: FormPriceAnd
 		}
 	}
 	return employeePriceAndDurationErrors
+}
+
+export const getEmployeeServiceDataForPatch = (values: IEmployeeServiceEditForm, resetUserServiceData?: boolean) => {
+	let employeePatchServiceData: ServicePatchBody = {}
+
+	if (resetUserServiceData) {
+		employeePatchServiceData = {
+			priceAndDurationData: null,
+			serviceCategoryParameterValues: null
+		}
+	} else if (values?.useCategoryParameter) {
+		const areAllParameterValuesEmpty = !values?.serviceCategoryParameter?.some((parameterValue) => !arePriceAndDurationDataEmpty(parameterValue.employeePriceAndDurationData))
+
+		if (areAllParameterValuesEmpty) {
+			employeePatchServiceData = {
+				...employeePatchServiceData,
+				serviceCategoryParameterValues: null
+			}
+		} else if ((values?.serviceCategoryParameter?.length || 0) <= 100) {
+			const serviceCategoryParameterValues: ServicePatchBody['serviceCategoryParameterValues'] = []
+			values?.serviceCategoryParameter?.forEach((parameterValue) => {
+				serviceCategoryParameterValues.push({
+					id: parameterValue.id,
+					priceAndDurationData: {
+						durationFrom: parameterValue.employeePriceAndDurationData?.durationFrom,
+						durationTo: parameterValue.employeePriceAndDurationData?.variableDuration ? parameterValue.employeePriceAndDurationData?.durationTo : undefined,
+						priceFrom: encodePrice(parameterValue.employeePriceAndDurationData?.priceFrom as number),
+						priceTo:
+							parameterValue.employeePriceAndDurationData?.variablePrice && !isNil(parameterValue.employeePriceAndDurationData?.priceTo)
+								? encodePrice(parameterValue.employeePriceAndDurationData?.priceTo)
+								: undefined
+					}
+				})
+			})
+			employeePatchServiceData = {
+				...employeePatchServiceData,
+				serviceCategoryParameterValues
+			}
+		}
+	} else {
+		const priceAndDurationData = values?.employeePriceAndDurationData
+		if (arePriceAndDurationDataEmpty(priceAndDurationData)) {
+			employeePatchServiceData = {
+				...employeePatchServiceData,
+				priceAndDurationData: null
+			}
+		} else if (!isNil(priceAndDurationData?.priceFrom)) {
+			employeePatchServiceData = {
+				...employeePatchServiceData,
+				priceAndDurationData: {
+					durationFrom: priceAndDurationData?.durationFrom,
+					durationTo: priceAndDurationData?.variableDuration ? priceAndDurationData?.durationTo : undefined,
+					priceFrom: encodePrice(priceAndDurationData?.priceFrom as number),
+					priceTo: priceAndDurationData?.variablePrice && !isNil(priceAndDurationData?.priceTo) ? encodePrice(priceAndDurationData?.priceTo) : undefined
+				}
+			}
+		}
+	}
+	return employeePatchServiceData
 }

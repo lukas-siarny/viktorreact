@@ -70,8 +70,18 @@ export type FormPriceAndDurationData = {
 
 export type EmployeeServiceData = {
 	id?: string
+	employee?: {
+		id: string
+		name?: string
+		image?: string
+		fallbackImage?: string
+		email?: string
+		inviteEmail?: string
+		hasActiveAccount?: boolean
+	}
 	name?: string
 	category?: string
+	image?: string
 	useCategoryParameter: boolean
 	employeePriceAndDurationData?: FormPriceAndDurationData
 	salonPriceAndDurationData?: FormPriceAndDurationData
@@ -806,3 +816,5 @@ export type ConfirmModalUpdateReservationData = {
 }
 
 export type ConfirmModalData = ConfirmModalReservationData | ConfirmModalEventnData | ConfirmModalDeleteEventData | ConfirmModalUpdateReservationData | null
+
+export type ServicePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody

@@ -88,7 +88,6 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				firstName: formData?.firstName,
 				lastName: formData?.lastName,
 				email: formData?.email,
-				serviceIDs: formData?.services?.map((service: EmployeeServiceData) => service.id),
 				salonID,
 				imageID: get(formData, 'avatar[0].id') || get(formData, 'avatar[0].uid')
 			}
@@ -160,7 +159,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				</div>
 				<h2 className={'content-body-width-small'}>{t('loc:Vytvoriť profil kolegu')}</h2>
 				<div className='content-body small without-content-footer'>
-					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={createEmployee} />
+					<EmployeeForm salonID={salonID} onSubmit={createEmployee} />
 					<Row justify={'center'}>
 						<Button
 							type={'primary'}

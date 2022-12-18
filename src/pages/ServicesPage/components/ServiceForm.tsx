@@ -36,12 +36,11 @@ import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.sv
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
 import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
-import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.svg'
-import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline.svg'
 import { ReactComponent as EmployeesIcon } from '../../../assets/icons/employees.svg'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
 import Permissions from '../../../utils/Permissions'
+import ServicesListField, { panelHeaderRenderEmployee } from '../../EmployeesPage/components/ServicesListField'
 
 const { Panel } = Collapse
 
@@ -77,12 +76,8 @@ const renderParameterValues = (props: any) => {
 		salon,
 		showDuration,
 		form
-		// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
-		// dispatch
 	} = props
 
-	// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
-	// const formValues = form?.values
 	const formErrors = form?.syncErrors?.serviceCategoryParameter || []
 	const formFields = form?.fields?.serviceCategoryParameter || []
 
@@ -107,13 +102,6 @@ const renderParameterValues = (props: any) => {
 						onClick={(checked: boolean, event: Event) => event.stopPropagation()}
 						name={`${field}.useParameter`}
 						size={'middle'}
-						// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
-						/* customOnChange={(checked: boolean) => {
-							const keys = formValues?.activeKeys || []
-							const newActiveKeys = checked ? [...keys, fieldData.id] : keys.filter((key: string) => key !== fieldData.id)
-							dispatch(change(FORM.SERVICE_FORM, `serviceCategoryParameter[${index}]useParameter`, checked))
-							dispatch(change(FORM.SERVICE_FORM, 'activeKeys', newActiveKeys))
-						}} */
 					/>
 				</div>
 			</div>
@@ -127,15 +115,7 @@ const renderParameterValues = (props: any) => {
 					{error}
 				</div>
 			)}
-			<Collapse
-				className={cx('collapse-list', { 'error-border': invalid && error })}
-				bordered={false}
-				// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
-				/* activeKey={formValues?.activeKeys}
-				onChange={(keys) => {
-					dispatch(change(FORM.SERVICE_FORM, 'activeKeys', keys))
-				}} */
-			>
+			<Collapse className={cx('collapse-list', { 'error-border': invalid && error })} bordered={false}>
 				{fields.map((field: any, index: number) => {
 					const fieldData = fields.get(index)
 					const variableDuration = fieldData?.variableDuration
@@ -151,8 +131,6 @@ const renderParameterValues = (props: any) => {
 									<div className={'list-title leading-7'}>{fieldData?.name}</div>
 								</div>
 							}
-							// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
-							// key={fieldData.id}
 							key={index}
 							forceRender
 							extra={genExtra(index, fieldData, field)}
@@ -265,8 +243,7 @@ const renderParameterValues = (props: any) => {
 	)
 }
 
-export const renderEmployees = (props: any) => {
-	// eslint-disable-next-line react-hooks/rules-of-hooks
+/* export const renderEmployees = (props: any) => {
 	const [t] = useTranslation()
 	const { fields, salon, showDuration } = props
 
@@ -368,7 +345,7 @@ export const renderEmployees = (props: any) => {
 			</Collapse>
 		</>
 	)
-}
+} */
 
 const ServiceForm: FC<Props> = (props) => {
 	const { salonID, serviceID, handleSubmit, pristine, addEmployee, backUrl } = props
@@ -450,8 +427,6 @@ const ServiceForm: FC<Props> = (props) => {
 													disabled={!hasPermission}
 													showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
 													form={form}
-													// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
-													// dispatch={dispatch}
 												/>
 											</div>
 										) : (
@@ -627,11 +602,18 @@ const ServiceForm: FC<Props> = (props) => {
 											{formValues?.employees && formValues?.employees.length > 1 ? t('loc:Pridať zamestnancov') : t('loc:Pridať zamestnanca')}
 										</Button>
 									</div>
-									<FieldArray
+									{/* <FieldArray
 										component={renderEmployees}
 										name={'employees'}
 										salon={salon}
 										showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
+																/> */}
+									<FieldArray
+										component={ServicesListField as any}
+										name={'employees'}
+										currencySymbol={salon.data?.currency.symbol}
+										panelHeaderRender={panelHeaderRenderEmployee}
+										setVisibleServiceEditModal={() => console.log('on edit')}
 									/>
 									{hasPermission && (
 										<div className={'content-footer pt-0'} id={'content-footer-container'}>

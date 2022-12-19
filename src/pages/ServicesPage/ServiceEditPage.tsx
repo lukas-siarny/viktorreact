@@ -15,13 +15,13 @@ import { getService } from '../../reducers/services/serviceActions'
 import { getCategory, ICategoryParameterValue } from '../../reducers/categories/categoriesActions'
 
 // types
-import { IServiceForm, SalonSubPageProps, ILoadingAndFailure, IEmployeesPayload, EmployeeServiceData } from '../../types/interfaces'
+import { IServiceForm, SalonSubPageProps, ILoadingAndFailure, IEmployeesPayload, EmployeeServiceData, Employees, ServiceDetail } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
 import { patchReq } from '../../utils/request'
-import { FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
-import { decodePrice, encodePrice, getServicePriceAndDurationData } from '../../utils/helper'
+import { FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { decodePrice, encodePrice, getAssignedUserLabel, getServicePriceAndDurationData } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { history } from '../../utils/history'
 
@@ -70,43 +70,79 @@ export const parseParameterValuesCreateAndUpdate = (values: IParameterValue[]): 
 	return result
 }
 
-export const addEmployee = (employees: IEmployeesPayload & ILoadingAndFailure, form: any, dispatch: Dispatch<Action>) => {
-	const selectedEmployeeIDs = form?.values?.employee
-	const updatedEmployees: any[] = []
+export const addEmployee = (dispatch: Dispatch<Action>, employees: Employees, service?: ServiceDetail | null, formValues?: IServiceForm) => {
+	const selectedEmployeeIDs = formValues?.employee
+	const updatedEmployees: EmployeeServiceData[] = []
 	// go through selected employees
 	forEach(selectedEmployeeIDs, (employeeId) => {
-		const employeeData = employees?.data?.employees?.find((employee: any) => employee?.id === employeeId)
+		const employeeData = employees?.find((employee) => employee?.id === employeeId)
+		const employeeName = getAssignedUserLabel({
+			firstName: employeeData?.firstName,
+			lastName: employeeData?.lastName,
+			email: employeeData?.email,
+			id: employeeData?.id || '-'
+		})
 
-		if (form?.values?.employees?.find((employee: any) => employee?.id === employeeId)) {
-			const employeeName =
-				`${employeeData?.lastName ? employeeData.firstName || '' : ''} ${employeeData?.lastName || ''}`.trim() ||
-				employeeData?.email ||
-				employeeData?.inviteEmail ||
-				employeeData?.id
-
+		if (formValues?.employees?.find((employee: any) => employee?.id === employeeId)) {
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
 				description: i18next.t('loc:Zamestnanec {{ name }} je už priradený!', { name: employeeName })
 			})
 		} else if (employeeData) {
-			updatedEmployees.push({
-				id: employeeData?.id,
-				name:
-					// show name if exist at least last name otherwise show fallback values
-					`${employeeData.lastName ? employeeData.firstName || '' : ''} ${employeeData.lastName || ''}`.trim() ||
-					employeeData.email ||
-					employeeData.inviteEmail ||
-					employeeData.id,
-				hasActiveAccount: employeeData?.hasActiveAccount,
-				inviteEmail: employeeData?.inviteEmail,
-				image: employeeData?.image
-			})
+			const useCategoryParameter = !!service?.useCategoryParameter
+
+			let newServiceData: EmployeeServiceData = {
+				id: service?.id,
+				hasOverriddenPricesAndDurationData: false,
+				employee: {
+					id: employeeData.id,
+					name: employeeName,
+					image: employeeData?.image?.resizedImages?.thumbnail,
+					hasActiveAccount: employeeData.hasActiveAccount
+				},
+				salonPriceAndDurationData: getServicePriceAndDurationData(
+					service?.priceAndDurationData?.durationFrom,
+					service?.priceAndDurationData?.durationTo,
+					service?.priceAndDurationData?.priceFrom,
+					service?.priceAndDurationData?.priceTo
+				),
+				employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined),
+				useCategoryParameter
+			}
+
+			if (useCategoryParameter) {
+				newServiceData = {
+					...newServiceData,
+					serviceCategoryParameterType: service?.serviceCategoryParameter?.valueType as PARAMETER_TYPE,
+					serviceCategoryParameterName: service?.serviceCategoryParameter?.name,
+					serviceCategoryParameterId: service?.serviceCategoryParameter?.id,
+					serviceCategoryParameter: service?.serviceCategoryParameter?.values?.map((value) => {
+						return {
+							id: value?.id,
+							name: value?.value,
+							hasOverriddenPricesAndDurationData: false,
+							// vygeneruje objekt so vsetkymi potrebnymi parametrami, ktore budu mat ale hodnotu null
+							// redux-form tak potom vyhodnoti isPristine spravne
+							employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined),
+							// ulozime si aj original data, aby sme potom vedei porovnat, ci ich ma uzivatel pretazene alebo nie
+							salonPriceAndDurationData: getServicePriceAndDurationData(
+								value?.priceAndDurationData?.durationFrom,
+								value?.priceAndDurationData?.durationTo,
+								value?.priceAndDurationData?.priceFrom,
+								value?.priceAndDurationData?.priceTo
+							)
+						}
+					})
+				}
+			}
+
+			updatedEmployees.push(newServiceData)
 		}
 	})
 	// update filed array services with new added service
 	if (updatedEmployees.length > 0) {
-		if (form?.values?.employees) {
-			dispatch(change(FORM.SERVICE_FORM, 'employees', [...form.values.employees, ...updatedEmployees]))
+		if (formValues?.employees) {
+			dispatch(change(FORM.SERVICE_FORM, 'employees', [...formValues.employees, ...updatedEmployees]))
 		} else {
 			dispatch(change(FORM.SERVICE_FORM, 'employees', [...updatedEmployees]))
 		}
@@ -148,89 +184,7 @@ const parseParameterValuesInit = (values: (ServiceParameterValues | ICategoryPar
 	return result
 }
 
-/* const parseServices = (employeeCategories?: ServiceRootCategory, salonServices?: ISelectOptionItem[]): EmployeeServiceData[] => {
-	const result: EmployeeServiceData[] = []
-	if (employeeCategories) {
-		employeeCategories?.forEach((firstCategory) =>
-			firstCategory?.children.forEach((secondCategory) => {
-				secondCategory?.children.forEach((employeeService) => {
-					const salonServiceData = salonServices?.find((option) => option?.key === employeeService.id)
-					const salonPriceAndDuration = salonServiceData?.extra?.rangePriceAndDurationData as ServicePriceAndDurationData
-					const categoryParameter = salonServiceData?.extra?.serviceCategoryParameter as ServiceCategoryParameter
-					const useCategoryParameter = !!categoryParameter?.values?.length
-
-					const salonPriceAndDurationData = getServicePriceAndDurationData(
-						salonPriceAndDuration?.durationFrom,
-						salonPriceAndDuration?.durationTo,
-						salonPriceAndDuration?.priceFrom,
-						salonPriceAndDuration?.priceTo
-					)
-
-					let formServiceData: EmployeeServiceData = {
-						id: employeeService?.id,
-						name: employeeService?.category?.name,
-						category: firstCategory?.name,
-						salonPriceAndDurationData,
-						// vygeneruje objekt so vsetkymi potrebnymi parametrami, ktore budu mat ale hodnotu null
-						// redux-form tak potom vyhodnoti isPristine spravne
-						employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined),
-						useCategoryParameter,
-						hasOverriddenPricesAndDurationData: false
-					}
-					// ak ma employee nieco nastavene, tak vyinicialuzujeme jeho hodnoty
-					if (employeeService?.hasOverriddenPricesAndDurationData) {
-						const employeePriceAndDuration = employeeService?.priceAndDurationData
-						const employeeFormPriceAndDurationData = getServicePriceAndDurationData(
-							employeePriceAndDuration?.durationFrom,
-							employeePriceAndDuration?.durationTo,
-							employeePriceAndDuration?.priceFrom,
-							employeePriceAndDuration?.priceTo
-						)
-						formServiceData = {
-							...formServiceData,
-							hasOverriddenPricesAndDurationData: true,
-							employeePriceAndDurationData: employeeFormPriceAndDurationData
-						}
-					}
-
-					if (useCategoryParameter) {
-						formServiceData = {
-							...formServiceData,
-							serviceCategoryParameterType: categoryParameter?.valueType as PARAMETER_TYPE,
-							serviceCategoryParameterName: categoryParameter?.name,
-							serviceCategoryParameterId: categoryParameter.id,
-							hasOverriddenPricesAndDurationData: false,
-							// todo: treba dorobit, ak ma zamestnanec prepisany parameter, tak vyinicalizovat jeho hodnoty miesto sluzby
-							serviceCategoryParameter: categoryParameter?.values?.map((value) => {
-								const paramaterPriceDuration = value?.priceAndDurationData
-								const parameterSalonPriceAndDurationData = getServicePriceAndDurationData(
-									paramaterPriceDuration?.durationFrom,
-									paramaterPriceDuration.durationTo,
-									paramaterPriceDuration?.priceFrom,
-									paramaterPriceDuration?.priceTo
-								)
-
-								return {
-									id: value?.id,
-									name: value?.value,
-									// ulozime si aj original data pre zobrazovanie povodnych dat a porovnavanie s pretazenymi datami
-									salonPriceAndDurationData: parameterSalonPriceAndDurationData,
-									// vygeneruje objekt so vsetkymi potrebnymi parametrami, ktore budu mat ale hodnotu null
-									// redux-form tak potom vyhodnoti isPristine spravne
-									employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined)
-								}
-							})
-						}
-					}
-					result.push(formServiceData)
-				})
-			})
-		)
-	}
-	return result
-} */
-
-const parseEmployeesInit = (employees: ServiceEmployees, service: Paths.GetApiB2BAdminServicesServiceId.Responses.$200['service']) => {
+const parseEmployeesInit = (employees: ServiceEmployees, service: ServiceDetail) => {
 	return employees?.map((employee) => {
 		const useCategoryParameter = service?.useCategoryParameter
 
@@ -252,7 +206,8 @@ const parseEmployeesInit = (employees: ServiceEmployees, service: Paths.GetApiB2
 			formEmployeeServiceData = {
 				...formEmployeeServiceData,
 				hasOverriddenPricesAndDurationData: !!employee?.serviceCategoryParameter?.values.length,
-				serviceCategoryParameterName: employee?.serviceCategoryParameter?.name,
+				serviceCategoryParameterName: service?.serviceCategoryParameter?.name,
+				serviceCategoryParameterType: service?.serviceCategoryParameter?.valueType as PARAMETER_TYPE,
 				serviceCategoryParameter: service?.serviceCategoryParameter?.values?.map((value) => {
 					const employeeData = employee?.serviceCategoryParameter?.values.find((employeeValue) => employeeValue?.id === value.id)
 					const employeePriceAndDuration = employeeData?.priceAndDurationData
@@ -277,36 +232,25 @@ const parseEmployeesInit = (employees: ServiceEmployees, service: Paths.GetApiB2
 				})
 			}
 		} else if (employee?.hasOverriddenPricesAndDurationData) {
-			const employeePriceAndDuration = employee?.priceAndDurationData
-			const employeeFormPriceAndDurationData = getServicePriceAndDurationData(
-				employeePriceAndDuration?.durationFrom,
-				employeePriceAndDuration?.durationTo,
-				employeePriceAndDuration?.priceFrom,
-				employeePriceAndDuration?.priceTo
-			)
 			formEmployeeServiceData = {
 				...formEmployeeServiceData,
 				hasOverriddenPricesAndDurationData: true,
-				employeePriceAndDurationData: employeeFormPriceAndDurationData
+				salonPriceAndDurationData: getServicePriceAndDurationData(
+					service?.priceAndDurationData?.durationFrom,
+					service?.priceAndDurationData?.durationTo,
+					service?.priceAndDurationData?.priceFrom,
+					service?.priceAndDurationData?.priceTo
+				),
+				employeePriceAndDurationData: getServicePriceAndDurationData(
+					employee?.priceAndDurationData.durationFrom,
+					employee?.priceAndDurationData.durationTo,
+					employee?.priceAndDurationData.priceFrom,
+					employee?.priceAndDurationData.priceTo
+				)
 			}
 		}
 
 		return formEmployeeServiceData
-
-		return {
-			id: employee?.id,
-			name: employee?.fullName,
-			email: employee?.email,
-			inviteEmail: employee?.inviteEmail,
-			image: employee?.image,
-			durationFrom: employee.priceAndDurationData?.durationFrom,
-			durationTo: employee.priceAndDurationData?.durationFrom,
-			priceFrom: decodePrice(employee.priceAndDurationData?.priceFrom),
-			priceTo: decodePrice(employee.priceAndDurationData?.priceTo),
-			variableDuration: !!employee?.priceAndDurationData?.durationTo,
-			variablePrice: !!employee?.priceAndDurationData?.priceTo,
-			serviceCategoryParameter: parseParameterValuesInit(employee?.serviceCategoryParameter?.values)?.serviceCategoryParameter
-		}
 	})
 }
 
@@ -315,6 +259,7 @@ const ServiceEditPage = (props: Props) => {
 	const dispatch = useDispatch()
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
+	const service = useSelector((state: RootState) => state.service.service.data?.service)
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
 
 	const fetchData = async () => {
@@ -387,7 +332,7 @@ const ServiceEditPage = (props: Props) => {
 				<>
 					<ServiceForm
 						backUrl={parentPath}
-						addEmployee={() => addEmployee(employees, form, dispatch)}
+						addEmployee={() => addEmployee(dispatch, employees?.data?.employees || [], service || null, form?.values as IServiceForm)}
 						onSubmit={(formData: IServiceForm) => {
 							if (hasPermission) {
 								handleSubmit(formData)

@@ -58,6 +58,7 @@ type ServiceType = NonNullable<
 export type ServicePriceAndDurationData = ServiceType['rangePriceAndDurationData']
 export type ServiceCategoryParameter = ServiceType['serviceCategoryParameter']
 
+export type ServiceDetail = Paths.GetApiB2BAdminServicesServiceId.Responses.$200['service']
 
 export type FormPriceAndDurationData = {
 	durationFrom?: number | null
@@ -193,7 +194,8 @@ export interface IServiceForm {
 	variablePrice: boolean
 	useCategoryParameter: boolean
 	serviceCategoryParameter: any
-	employees: any
+	employee: string[]
+	employees: EmployeeServiceData[]
 	settings: {
 		enabledB2cReservations: boolean
 		autoApproveReservatons: boolean

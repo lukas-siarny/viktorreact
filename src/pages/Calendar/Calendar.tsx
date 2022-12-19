@@ -1,11 +1,11 @@
-import React, { FC, useCallback, useEffect, useRef, useState, useMemo } from 'react'
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Layout from 'antd/lib/layout/layout'
 import { message } from 'antd'
 import dayjs from 'dayjs'
 import { includes, isEmpty } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { initialize, destroy } from 'redux-form'
+import { destroy, initialize } from 'redux-form'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { useTranslation } from 'react-i18next'
 import Scroll from 'react-scroll'
@@ -13,22 +13,22 @@ import Scroll from 'react-scroll'
 // utils
 import {
 	CALENDAR_DATE_FORMAT,
+	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_KEYS,
 	CALENDAR_EVENTS_VIEW_TYPE,
-	CALENDAR_EVENT_TYPE,
+	CALENDAR_INIT_TIME,
 	CALENDAR_VIEW,
+	CONFIRM_MODAL_DATA_TYPE,
 	DAY,
 	EVERY_REPEAT,
 	FORM,
 	NOTIFICATION_TYPE,
 	PERMISSION,
-	CALENDAR_INIT_TIME,
-	RESERVATION_STATE,
-	RESERVATION_PAYMENT_METHOD,
 	REFRESH_CALENDAR_INTERVAL,
-	CONFIRM_MODAL_DATA_TYPE
+	RESERVATION_PAYMENT_METHOD,
+	RESERVATION_STATE
 } from '../../utils/enums'
-import { withPermissions, isAdmin, checkPermissions } from '../../utils/Permissions'
+import { checkPermissions, isAdmin, withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
 import { history } from '../../utils/history'
@@ -56,15 +56,15 @@ import SiderFilter from './components/layout/SiderFilter'
 
 // types
 import {
+	ConfirmModalData,
 	ICalendarEventForm,
 	ICalendarFilter,
 	ICalendarReservationForm,
 	IEmployeesPayload,
-	SalonSubPageProps,
 	INewCalendarEvent,
 	ReservationPopoverData,
 	ReservationPopoverPosition,
-	ConfirmModalData
+	SalonSubPageProps
 } from '../../types/interfaces'
 
 // atoms
@@ -397,8 +397,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const handleAddEvent = (initialData?: INewCalendarEvent) => {
 		// NOTE: ak existuje vytvoreny virualny event a pouzivatel vytvori dalsi klikom na tlacidlo Pridat tak ho zmaze a otvori init create form eventu
 		if (virtualEvent) {
-			dispatch(clearEvent())
-			setEventManagement(undefined)
+			closeSiderForm()
 		}
 
 		// Event data ziskane z kalendara, sluzia pre init formularu v SiderEventManagement
@@ -412,9 +411,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			dispatch(destroy(FORM.CALENDAR_RESERVATION_FORM))
 			setEventManagement(CALENDAR_EVENT_TYPE.RESERVATION)
 		} else {
-			dispatch(destroy(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM))
-			dispatch(destroy(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM))
-			dispatch(destroy(FORM.CALENDAR_EMPLOYEE_BREAK_FORM))
+			dispatch(destroy(FORM.CALENDAR_EVENT_FORM))
 			setEventManagement(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
 		}
 	}
@@ -545,6 +542,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 								repeatEvent: event.data?.calendarBulkEvent?.repeatOptions
 							}
 						}
+
 						// BULK UPDATE
 						await patchReq(
 							'/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}',

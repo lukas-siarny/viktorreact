@@ -1157,7 +1157,7 @@ export const validatePriceAndDurationData = (priceAndDurationData?: FormPriceAnd
 			employeePriceAndDurationErrors.priceTo = i18next.t('loc:Toto pole je povinné')
 		}
 		if (!isNil(priceAndDurationData?.priceFrom) && !isNil(priceAndDurationData?.priceTo) && priceAndDurationData?.priceFrom >= priceAndDurationData?.priceTo) {
-			employeePriceAndDurationErrors.priceFrom = i18next.t('loc:Chybný rozzsah')
+			employeePriceAndDurationErrors.priceFrom = i18next.t('loc:Chybný rozsah')
 			employeePriceAndDurationErrors.priceTo = true
 		}
 	}
@@ -1169,7 +1169,7 @@ export const validatePriceAndDurationData = (priceAndDurationData?: FormPriceAnd
 			employeePriceAndDurationErrors.durationTo = i18next.t('loc:Toto pole je povinné')
 		}
 		if (!isNil(priceAndDurationData?.durationFrom) && !isNil(priceAndDurationData?.durationTo) && priceAndDurationData?.durationFrom >= priceAndDurationData?.durationTo) {
-			employeePriceAndDurationErrors.durationFrom = i18next.t('loc:Chybný rozzsah')
+			employeePriceAndDurationErrors.durationFrom = i18next.t('loc:Chybný rozsah')
 			employeePriceAndDurationErrors.durationTo = true
 		}
 	}

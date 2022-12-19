@@ -76,7 +76,14 @@ export const addOrUpdateEvent =
 			return
 		}
 
-		const formData: Partial<ICalendarEventForm & ICalendarReservationForm> | undefined = getState().form[formName].values
+		let formData: Partial<ICalendarEventForm & ICalendarReservationForm> | undefined
+
+		try {
+			formData = getState().form[formName].values
+		} catch (error: any) {
+			// eslint-disable-next-line no-console
+			console.error(`Missing formData, virtual event can't be displayed`, error)
+		}
 
 		if (!formData) {
 			return

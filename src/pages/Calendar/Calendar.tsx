@@ -397,8 +397,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const handleAddEvent = (initialData?: INewCalendarEvent) => {
 		// NOTE: ak existuje vytvoreny virualny event a pouzivatel vytvori dalsi klikom na tlacidlo Pridat tak ho zmaze a otvori init create form eventu
 		if (virtualEvent) {
-			dispatch(clearEvent())
-			setEventManagement(undefined)
+			closeSiderForm()
 		}
 
 		// Event data ziskane z kalendara, sluzia pre init formularu v SiderEventManagement

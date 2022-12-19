@@ -205,11 +205,18 @@ const SiderEventManagement: FC<Props> = (props) => {
 			...query,
 			sidebarView: eventType
 		})
+
+		let timeTo: string | undefined
+		if (newEventData?.timeTo) {
+			// use 23:59 instead of 00:00 as end of day
+			timeTo = newEventData.timeTo === '00:00' ? '23:59' : newEventData.timeTo
+		}
+
 		// Initne sa event / reservation formular
 		const initData: Partial<ICalendarEventForm | ICalendarReservationForm> = {
 			date: newEventData?.date || query.date || dayjs().format(DEFAULT_DATE_INIT_FORMAT),
 			timeFrom: newEventData?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT),
-			timeTo: newEventData?.timeTo,
+			timeTo,
 			employee: newEventData?.employee,
 			eventId: query.eventId,
 			...omit(prevInitData, 'eventType'),

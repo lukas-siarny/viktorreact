@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Collapse, Form, Spin } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -12,6 +12,7 @@ import { RootState } from '../../../../reducers'
 // assets
 import { ReactComponent as ChevronDownIcon } from '../../../../assets/icons/chevron-down.svg'
 import { ReactComponent as ServicesIcon } from '../../../../assets/icons/services-24-icon.svg'
+import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees.svg'
 
 // utils
 import { CALENDAR_DEBOUNCE_DELAY, CALENDAR_EVENTS_VIEW_TYPE, FORM } from '../../../../utils/enums'
@@ -35,6 +36,27 @@ const { Panel } = Collapse
 enum PANEL_KEY {
 	EMPLOYEES = 'EMPLOYEES',
 	CATEGORIES = 'CATEGORIES'
+}
+
+interface IFilterEmptyState {
+	buttonLabel: string
+	buttonOnClick: () => void
+	icon: React.ReactNode
+	infoMessage: string
+}
+
+const FilterEmptyState: FC<IFilterEmptyState> = (props) => {
+	const { buttonLabel, buttonOnClick, icon, infoMessage } = props
+
+	return (
+		<div className={'w-full flex flex-col justify-center items-center gap-2 text-center mt-4'}>
+			{icon}
+			{infoMessage}
+			<Button type={'primary'} htmlType={'button'} className={'noti-btn'} onClick={buttonOnClick}>
+				{buttonLabel}
+			</Button>
+		</div>
+	)
 }
 
 const checkboxOptionRender = (option: any, checked?: boolean) => {
@@ -68,16 +90,25 @@ const CalendarFilter = (props: Props) => {
 			>
 				<Panel key={PANEL_KEY.EMPLOYEES} header={t('loc:Zamestnanci')} className={'nc-collapse-panel'}>
 					<Spin spinning={employees?.isLoading}>
-						<Field
-							className={'p-0 m-0'}
-							component={CheckboxGroupField}
-							name={'employeeIDs'}
-							options={employees?.options}
-							size={'small'}
-							hideChecker
-							optionRender={checkboxOptionRender}
-							nullAsEmptyValue
-						/>
+						{employees?.options?.length ? (
+							<Field
+								className={'p-0 m-0'}
+								component={CheckboxGroupField}
+								name={'employeeIDs'}
+								options={employees?.options}
+								size={'small'}
+								hideChecker
+								optionRender={checkboxOptionRender}
+								nullAsEmptyValue
+							/>
+						) : (
+							<FilterEmptyState
+								icon={<EmployeesIcon />}
+								infoMessage={t('loc:V salóne zatiaľ nemáte pridaných žiadnych zamestnancov')}
+								buttonLabel={t('loc:Pridať zamestnancov')}
+								buttonOnClick={() => history.push(`${parentPath}${t('paths:employees')}`)}
+							/>
+						)}
 					</Spin>
 				</Panel>
 				<Panel key={PANEL_KEY.CATEGORIES} header={t('loc:Služby')} className={'nc-collapse-panel'}>
@@ -94,18 +125,12 @@ const CalendarFilter = (props: Props) => {
 								nullAsEmptyValue
 							/>
 						) : (
-							<div className={'w-full flex flex-col justify-center items-center gap-2 text-center mt-4'}>
-								<ServicesIcon />
-								{t('loc:V salóne zatiaľ nemáte priradené žiadne služby')}
-								<Button
-									type={'primary'}
-									htmlType={'button'}
-									className={'noti-btn'}
-									onClick={() => history.push(`${parentPath}${t('paths:industries-and-services')}`)}
-								>
-									{t('loc:Priradiť služby')}
-								</Button>
-							</div>
+							<FilterEmptyState
+								icon={<ServicesIcon />}
+								infoMessage={t('loc:V salóne zatiaľ nemáte priradené žiadne služby')}
+								buttonLabel={t('loc:Priradiť služby')}
+								buttonOnClick={() => history.push(`${parentPath}${t('paths:industries-and-services')}`)}
+							/>
 						)}
 					</Spin>
 				</Panel>

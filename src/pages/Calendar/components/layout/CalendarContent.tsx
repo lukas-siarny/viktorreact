@@ -35,6 +35,7 @@ import { RootState } from '../../../../reducers'
 // utils
 import { ForbiddenModal, permitted } from '../../../../utils/Permissions'
 import { getSelectedDateForCalendar, getWeekDays } from '../../calendarHelpers'
+import { history } from '../../../../utils/history'
 
 type Props = {
 	view: CALENDAR_VIEW
@@ -43,6 +44,7 @@ type Props = {
 	handleSubmitEvent: (values: ICalendarEventForm) => void
 	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
 	enabledSalonReservations?: boolean
+	parentPath: string
 } & ICalendarView
 
 export type CalendarRefs = {
@@ -68,7 +70,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		onAddEvent,
 		onEditEvent,
 		onReservationClick,
-		clearRestartInterval
+		clearRestartInterval,
+		parentPath
 	} = props
 
 	const dispatch = useDispatch()
@@ -76,6 +79,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
 	// const monthView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const [t] = useTranslation()
+
+	const employeesOptions = useSelector((state: RootState) => state.employees.employees?.options)
 
 	// query
 	const [query, setQuery] = useQueryParams({
@@ -220,6 +225,16 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	}
 
 	const getView = () => {
+		if (!employeesOptions?.length) {
+			return (
+				<CalendarEmptyState
+					title={t('loc:Pre prácu s kalendárom je potrebné pridať do salónu aspoň jedného zamestnanca')}
+					onButtonClick={() => history.push(`${parentPath}${t('paths:employees')}`)}
+					buttonLabel={t('loc:Pridať zamestnancov')}
+				/>
+			)
+		}
+
 		if (query?.categoryIDs === null && query?.employeeIDs === null) {
 			return (
 				<CalendarEmptyState
@@ -231,6 +246,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 							categoryIDs: undefined
 						})
 					}
+					buttonLabel={t('loc:Vybrať všetko')}
 				/>
 			)
 		}
@@ -257,6 +273,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 							categoryIDs: undefined
 						})
 					}
+					buttonLabel={t('loc:Vybrať všetky')}
 				/>
 			)
 		}

@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm, getFormValues, change, touch } from 'redux-form'
+import { Field, FieldArray, InjectedFormProps, reduxForm, getFormValues, change, touch, WrappedFieldArrayProps } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Form, Collapse, Button, Spin, Alert } from 'antd'
@@ -12,23 +12,23 @@ import { arePriceAndDurationDataEmpty, renderPriceAndDurationInfo, showErrorNoti
 
 // types
 import { IEmployeeServiceEditForm } from '../../../types/interfaces'
+import { RootState } from '../../../reducers'
 
 // components
 import InputNumberField from '../../../atoms/InputNumberField'
 import SwitchField from '../../../atoms/SwitchField'
 import PopConfirmComponent from '../../../components/PopConfirmComponent'
+import ServiceBreadcrumbs from '../../ServicesPage/components/ServiceBreadcrumbs'
+import AvatarComponents from '../../../components/AvatarComponents'
 
 // validations
 import validateEmployeeServiceEditForm from './validateEmployeeServiceEditForm'
 
 // assets
-import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
-import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
-import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg'
-import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
-
-// reducers
-import { RootState } from '../../../reducers'
+import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
+import { ReactComponent as BinIcon } from '../../../assets/icons/bin-icon.svg'
+import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.svg'
+import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline.svg'
 
 const { Panel } = Collapse
 
@@ -43,13 +43,22 @@ const numberMin0 = validationNumberMin(0)
 
 type FieldData = NonNullable<IEmployeeServiceEditForm['serviceCategoryParameter']>[0]
 
-const ParameterValues: FC<any> = (props) => {
-	const { fields, salon, showDuration, form } = props
+type ParameterValuesFieldType = WrappedFieldArrayProps<FieldData> & {
+	currencySymbol?: string
+	form: any
+}
+
+const ParameterValuesField: FC<ParameterValuesFieldType> = (props) => {
+	const { fields, currencySymbol, form } = props
+
+	const formValues = form?.values as IEmployeeServiceEditForm
+
+	const showDuration = formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME
 
 	const [t] = useTranslation()
 
 	const categoryParameterErrors = form?.syncErrors?.serviceCategoryParameter || []
-	const areAllParametersEmpty = !form?.values?.serviceCategoryParameter?.some((parameterValue: any) => !arePriceAndDurationDataEmpty(parameterValue.employeePriceAndDurationData))
+	const areAllParametersEmpty = !formValues?.serviceCategoryParameter?.some((parameterValue) => !arePriceAndDurationDataEmpty(parameterValue.employeePriceAndDurationData))
 
 	const genExtra = (fieldData: FieldData) => {
 		const salonPriceAndDuration = fieldData?.salonPriceAndDurationData
@@ -58,10 +67,10 @@ const ParameterValues: FC<any> = (props) => {
 		// ked je to empty, tak znamena ze to neni pretazene
 		const priceAndDurationDataEmpty = arePriceAndDurationDataEmpty(employeePriceAndDuration)
 
-		return renderPriceAndDurationInfo(salonPriceAndDuration, employeePriceAndDuration, !priceAndDurationDataEmpty, salon.data?.currency.symbol)
+		return renderPriceAndDurationInfo(salonPriceAndDuration, employeePriceAndDuration, !priceAndDurationDataEmpty, currencySymbol)
 	}
 
-	const defaultActiveKeys = fields.map((_: any, i: number) => i)
+	const defaultActiveKeys = fields.map((_, i: number) => i)
 	let parameterError = ''
 
 	if (!isEmpty(categoryParameterErrors)) {
@@ -72,8 +81,8 @@ const ParameterValues: FC<any> = (props) => {
 		<>
 			{parameterError && <Alert message={parameterError} showIcon type={'error'} className={'noti-alert w-full mb-4'} />}
 			<Collapse className={'collapse-list'} bordered={false} defaultActiveKey={defaultActiveKeys}>
-				{fields.map((field: any, index: number) => {
-					const fieldData = fields.get(index) as FieldData
+				{fields.map((field, index: number) => {
+					const fieldData = fields.get(index)
 					const variableDuration = fieldData?.employeePriceAndDurationData?.variableDuration
 					const variablePrice = fieldData?.employeePriceAndDurationData?.variablePrice
 					const hasError = categoryParameterErrors[index]?.error
@@ -100,7 +109,6 @@ const ParameterValues: FC<any> = (props) => {
 											label={t('loc:Variabilné trvanie')}
 											name={`${field}.employeePriceAndDurationData.variableDuration`}
 											size={'middle'}
-											disabled={props.disabled}
 										/>
 									</div>
 									<div style={{ flex: variableDuration ? '1 1 50%' : '1 1 auto' }}>
@@ -115,7 +123,6 @@ const ParameterValues: FC<any> = (props) => {
 											max={999}
 											size={'large'}
 											validate={[numberMin0]}
-											disabled={props.disabled}
 											required={variableDuration}
 										/>
 									</div>
@@ -132,7 +139,6 @@ const ParameterValues: FC<any> = (props) => {
 												max={999}
 												size={'large'}
 												validate={[numberMin0]}
-												disabled={props.disabled}
 												required={!areAllParametersEmpty}
 											/>
 										</div>
@@ -147,25 +153,19 @@ const ParameterValues: FC<any> = (props) => {
 										label={t('loc:Variabilná cena')}
 										name={`${field}.employeePriceAndDurationData.variablePrice`}
 										size={'middle'}
-										disabled={props.disabled}
 									/>
 								</div>
 								<div style={{ flex: variablePrice ? '1 1 50%' : '1 1 auto' }}>
 									<Field
 										component={InputNumberField}
-										label={
-											variablePrice
-												? t('loc:Cena od ({{symbol}})', { symbol: salon.data?.currency.symbol })
-												: t('loc:Cena ({{symbol}})', { symbol: salon.data?.currency.symbol })
-										}
-										placeholder={salon.data?.currency.symbol}
+										label={variablePrice ? t('loc:Cena od ({{symbol}})', { symbol: currencySymbol }) : t('loc:Cena ({{symbol}})', { symbol: currencySymbol })}
+										placeholder={currencySymbol}
 										name={`${field}.employeePriceAndDurationData.priceFrom`}
 										precision={2}
 										step={1}
 										min={0}
 										size={'large'}
 										validate={[numberMin0]}
-										disabled={props.disabled}
 										required={!areAllParametersEmpty}
 									/>
 								</div>
@@ -173,15 +173,14 @@ const ParameterValues: FC<any> = (props) => {
 									<div style={{ flex: '1 1 50%' }}>
 										<Field
 											component={InputNumberField}
-											label={t('loc:Cena do ({{symbol}})', { symbol: salon.data?.currency.symbol })}
-											placeholder={salon.data?.currency.symbol}
+											label={t('loc:Cena do ({{symbol}})', { symbol: currencySymbol })}
+											placeholder={currencySymbol}
 											name={`${field}.employeePriceAndDurationData.priceTo`}
 											precision={2}
 											step={1}
 											min={0}
 											size={'large'}
 											validate={[numberMin0]}
-											disabled={props.disabled}
 											required={!areAllParametersEmpty}
 										/>
 									</div>
@@ -208,29 +207,40 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 	const variablePrice = formValues?.employeePriceAndDurationData?.variablePrice
 	const useCategoryParameter = formValues?.useCategoryParameter
 
-	const hasPermission = true
-	const showResetButton = (!useCategoryParameter && formValues?.hasOverriddenPricesAndDurationData) || (useCategoryParameter && false)
+	const showResetButton = formValues?.hasOverriddenPricesAndDurationData
 	const isRequired = !arePriceAndDurationDataEmpty(formValues?.employeePriceAndDurationData)
+	const employee = formValues?.employee
 
 	return (
 		<Spin spinning={loading}>
 			<Form id={`${FORM.EMPLOYEE}-form`} layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
-				<div className={'mt-2 mb-4'}>
+				<div className={'flex justify-between gap-1 flex-wrap'}>
+					<div className={'flex items-center gap-2'}>
+						{employee?.image ? (
+							<AvatarComponents className='w-5 h-5' src={employee?.image} />
+						) : (
+							<div className={'w-5 h-5 shrink-0 bg-notino-gray'} style={{ borderRadius: '50%' }} />
+						)}
+						<span className={'font-bold'}>{employee?.name || employee?.email || employee?.inviteEmail || employee?.id}</span>
+						{employee?.hasActiveAccount === false && !employee?.inviteEmail ? <QuestionIcon width={16} height={16} /> : undefined}
+						{employee?.hasActiveAccount === false && employee.inviteEmail ? <CloudOfflineIcon width={16} height={16} /> : undefined}
+					</div>
+					<ServiceBreadcrumbs wrapperClassname={'text-xs'} breadcrumbs={[formValues?.industry, formValues?.name]} />
+				</div>
+				<div className={'mt-6 mb-6'}>
 					{useCategoryParameter ? (
 						<FieldArray
-							component={ParameterValues}
+							component={ParameterValuesField}
 							name={'serviceCategoryParameter'}
-							salon={salon}
-							disabled={!hasPermission}
 							showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
 							form={form}
+							currencySymbol={salon.data?.currency.symbol}
 						/>
 					) : (
 						<>
 							<div className={'flex w-full gap-2'}>
 								<div className={'mt-5 w-50 shrink-0'}>
 									<Field
-										disabled={!hasPermission}
 										className={'mb-0'}
 										component={SwitchField}
 										customOnChange={(checked: boolean) => {
@@ -244,7 +254,6 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 								</div>
 								<div style={{ flex: variableDuration ? '1 1 50%' : '1 1 auto' }}>
 									<Field
-										disabled={!hasPermission}
 										component={InputNumberField}
 										label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
 										placeholder={t('loc:min')}
@@ -262,7 +271,6 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 								{variableDuration && (
 									<div style={{ flex: '1 1 50%' }}>
 										<Field
-											disabled={!hasPermission}
 											component={InputNumberField}
 											label={t('loc:Trvanie do (minúty)')}
 											placeholder={t('loc:min')}
@@ -294,7 +302,6 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 								</div>
 								<div style={{ flex: variablePrice ? '1 1 50%' : '1 1 auto' }}>
 									<Field
-										disabled={!hasPermission}
 										component={InputNumberField}
 										label={
 											variablePrice
@@ -314,7 +321,6 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 								{variablePrice && (
 									<div style={{ flex: '1 1 50%' }}>
 										<Field
-											disabled={!hasPermission}
 											component={InputNumberField}
 											label={t('loc:Cena do ({{symbol}})', { symbol: salon.data?.currency.symbol })}
 											placeholder={salon.data?.currency.symbol}
@@ -341,7 +347,7 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 							okText={t('loc:Pokračovať')}
 							style={{ maxWidth: 500 }}
 							allowedButton={
-								<Button className='noti-btn w-1/2' size='large' type='dashed' htmlType='button' disabled={loading} loading={loading}>
+								<Button className='noti-btn w-1/2' size='large' type='dashed' htmlType='button' icon={<BinIcon />} disabled={loading} loading={loading}>
 									{t('loc:Vymazať nastavenia')}
 								</Button>
 							}
@@ -354,6 +360,7 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 						htmlType='submit'
 						disabled={pristine || loading}
 						loading={loading}
+						icon={<EditIcon />}
 					>
 						{STRINGS(t).save(t('nastavenia'))}
 					</Button>

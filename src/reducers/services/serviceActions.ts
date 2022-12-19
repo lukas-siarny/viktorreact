@@ -134,6 +134,8 @@ export const getServices =
 								secondCategory: secondCategory?.category?.name,
 								rangePriceAndDurationData: service.service?.rangePriceAndDurationData,
 								serviceCategoryParameter: service.service?.serviceCategoryParameter
+								// TODO: ked to bude BE posielat
+								// useCategoryParameter: service.service.useCateogryParameter
 							}
 						})
 					})

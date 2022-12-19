@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { change, initialize, startSubmit, stopSubmit } from 'redux-form'
 import { Action, compose, Dispatch } from 'redux'
@@ -15,7 +15,7 @@ import { getService } from '../../reducers/services/serviceActions'
 import { getCategory, ICategoryParameterValue } from '../../reducers/categories/categoriesActions'
 
 // types
-import { IServiceForm, SalonSubPageProps, EmployeeServiceData, Employees, ServiceDetail, IEmployeeServiceEditForm } from '../../types/interfaces'
+import { IServiceForm, SalonSubPageProps, EmployeeServiceData, Employees, ServiceDetail, IEmployeeServiceEditForm, IParameterValue } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
@@ -26,23 +26,10 @@ import Permissions, { withPermissions } from '../../utils/Permissions'
 import { history } from '../../utils/history'
 import ServiceEditModal from '../EmployeesPage/components/ServiceEditModal'
 
-interface IParameterValue {
-	id: string | undefined
-	name: string | undefined
-	durationFrom: number | null | undefined
-	durationTo: number | null | undefined
-	variableDuration: boolean
-	priceFrom: number | null | undefined
-	priceTo: number | null | undefined
-	variablePrice: boolean
-	useParameter: boolean
-}
-
 type Props = SalonSubPageProps & {
 	serviceID: string
 }
 
-type ServiceEmployees = Paths.GetApiB2BAdminServicesServiceId.Responses.$200['service']['employees']
 type ServiceParameterValues = NonNullable<Paths.GetApiB2BAdminServicesServiceId.Responses.$200['service']['serviceCategoryParameter']>['values']
 type ServicePatch = Paths.PatchApiB2BAdminServicesServiceId.RequestBody
 type ServiceParameterValuesPatch = ServicePatch['categoryParameterValues']
@@ -173,13 +160,16 @@ const parseParameterValuesInit = (values: (ServiceParameterValues | ICategoryPar
 	return result
 }
 
-const parseEmployeesInit = (employees: ServiceEmployees, service: ServiceDetail) => {
-	return employees?.map((employee) => {
+const parseEmployeesInit = (service: ServiceDetail) => {
+	return service?.employees?.map((employee) => {
 		const useCategoryParameter = service?.useCategoryParameter
 
 		let formEmployeeServiceData: EmployeeServiceData = {
 			id: service?.id,
-			hasOverriddenPricesAndDurationData: false,
+			industry: service?.category.name,
+			category: service?.category?.child?.name,
+			name: service?.category?.child?.child?.name,
+			hasOverriddenPricesAndDurationData: employee?.hasOverriddenPricesAndDurationData,
 			useCategoryParameter,
 			employee: {
 				id: employee.id,
@@ -195,7 +185,14 @@ const parseEmployeesInit = (employees: ServiceEmployees, service: ServiceDetail)
 				service?.priceAndDurationData?.priceFrom,
 				service?.priceAndDurationData?.priceTo
 			),
-			employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined)
+			employeePriceAndDurationData: employee?.hasOverriddenPricesAndDurationData
+				? getServicePriceAndDurationData(
+						employee?.priceAndDurationData.durationFrom,
+						employee?.priceAndDurationData.durationTo,
+						employee?.priceAndDurationData.priceFrom,
+						employee?.priceAndDurationData.priceTo
+				  )
+				: getServicePriceAndDurationData(undefined, undefined, undefined, undefined)
 		}
 
 		if (useCategoryParameter) {
@@ -206,37 +203,23 @@ const parseEmployeesInit = (employees: ServiceEmployees, service: ServiceDetail)
 				serviceCategoryParameterType: service?.serviceCategoryParameter?.valueType as PARAMETER_TYPE,
 				serviceCategoryParameter: service?.serviceCategoryParameter?.values?.map((value) => {
 					const employeeData = employee?.serviceCategoryParameter?.values.find((employeeValue) => employeeValue?.id === value.id)
-					const employeePriceAndDuration = employeeData?.priceAndDurationData
-					const salonPriceAndDuration = value?.priceAndDurationData
-
 					return {
 						id: value.id,
 						name: value.value,
 						salonPriceAndDurationData: getServicePriceAndDurationData(
-							salonPriceAndDuration?.durationFrom,
-							salonPriceAndDuration?.durationTo,
-							salonPriceAndDuration?.priceFrom,
-							salonPriceAndDuration?.priceTo
+							value?.priceAndDurationData?.durationFrom,
+							value?.priceAndDurationData?.durationTo,
+							value?.priceAndDurationData?.priceFrom,
+							value?.priceAndDurationData?.priceTo
 						),
 						employeePriceAndDurationData: getServicePriceAndDurationData(
-							employeePriceAndDuration?.durationFrom,
-							employeePriceAndDuration?.durationTo,
-							employeePriceAndDuration?.priceFrom,
-							employeePriceAndDuration?.priceTo
+							employeeData?.priceAndDurationData?.durationFrom,
+							employeeData?.priceAndDurationData?.durationTo,
+							employeeData?.priceAndDurationData?.priceFrom,
+							employeeData?.priceAndDurationData?.priceTo
 						)
 					}
 				})
-			}
-		} else if (employee?.hasOverriddenPricesAndDurationData) {
-			formEmployeeServiceData = {
-				...formEmployeeServiceData,
-				hasOverriddenPricesAndDurationData: true,
-				employeePriceAndDurationData: getServicePriceAndDurationData(
-					employee?.priceAndDurationData.durationFrom,
-					employee?.priceAndDurationData.durationTo,
-					employee?.priceAndDurationData.priceFrom,
-					employee?.priceAndDurationData.priceTo
-				)
 			}
 		}
 
@@ -255,33 +238,33 @@ const ServiceEditPage = (props: Props) => {
 	const [visibleServiceEditModal, setVisibleServiceEditModal] = useState(false)
 	const [updatingService, setUpdatingSerivce] = useState(false)
 
-	const fetchData = async () => {
+	const fetchData = useCallback(async () => {
 		const { data } = await dispatch(getService(serviceID))
 		const { categoryParameterValues } = await dispatch(getCategory(data?.service?.category?.child?.child?.id))
 		if (!data?.service?.id) {
 			history.push('/404')
 		}
-		let initData: any
 		if (data) {
 			// union parameter values form service and category detail based on categoryParameterValueID
 			const parameterValues = unionBy(data.service?.serviceCategoryParameter?.values, categoryParameterValues as any, 'categoryParameterValueID')
-			initData = {
+			const initData: IServiceForm = {
 				id: data.service.id,
-				serviceCategoryParameterType: data.service.serviceCategoryParameter?.valueType,
+				serviceCategoryParameterType: data.service.serviceCategoryParameter?.valueType as PARAMETER_TYPE,
 				serviceCategoryParameter: parseParameterValuesInit(parameterValues),
+				serviceCategoryParameterName: data.service.serviceCategoryParameter?.name,
 				durationFrom: data.service.priceAndDurationData.durationFrom,
 				durationTo: data.service.priceAndDurationData.durationTo,
 				variableDuration: !!data.service.priceAndDurationData.durationTo,
 				priceFrom: decodePrice(data.service.priceAndDurationData.priceFrom),
 				priceTo: decodePrice(data.service.priceAndDurationData.priceTo),
 				variablePrice: !!data.service.priceAndDurationData.priceTo,
-				employees: parseEmployeesInit(data?.service?.employees, data.service),
+				employees: parseEmployeesInit(data?.service),
 				useCategoryParameter: data.service.useCategoryParameter,
 				settings: data.service.settings
 			}
+			dispatch(initialize(FORM.SERVICE_FORM, initData || {}))
 		}
-		dispatch(initialize(FORM.SERVICE_FORM, initData || {}))
-	}
+	}, [dispatch, serviceID])
 
 	// const employeeServiceIds = getEmployeeServiceIds(employee?.data?.employee?.categories)
 
@@ -312,8 +295,7 @@ const ServiceEditPage = (props: Props) => {
 
 	useEffect(() => {
 		fetchData()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+	}, [fetchData])
 
 	const handleSubmit = async (values: IServiceForm) => {
 		dispatch(startSubmit(FORM.SERVICE_FORM))
@@ -327,15 +309,15 @@ const ServiceEditPage = (props: Props) => {
 					: {
 							durationFrom: values.durationFrom ?? null,
 							durationTo: values.variableDuration ? values.durationTo : null,
-							priceFrom: encodePrice(values.priceFrom),
-							priceTo: values.variablePrice ? encodePrice(values.priceTo) : null
+							priceFrom: encodePrice(values.priceFrom as number),
+							priceTo: values.variablePrice && !isNil(values.priceTo) ? encodePrice(values.priceTo) : null
 					  }) as any,
 				categoryParameterValues: parseParameterValuesCreateAndUpdate(values.serviceCategoryParameter),
 				employeeIDs: parseEmployeeCreateAndUpdate(values.employees),
 				settings: values.settings
 			}
 			await patchReq('/api/b2b/admin/services/{serviceID}', { serviceID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			history.push(parentPath)
+			fetchData()
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)

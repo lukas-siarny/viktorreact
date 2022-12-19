@@ -1940,12 +1940,21 @@ li.ant-list-item:hover
 	border-radius: 4px
 	color: $textColor-notino-grayDark
 	position: relative
-	&:not(:last-of-type)
-		margin-right: 8px
-		&::after
+	max-width: 100%
+	width: fit-content
+	span
+		display: block
+		width: 100%
+		max-width: 300px
+		white-space: nowrap
+		overflow: hidden
+		text-overflow: ellipsis
+	&:not(:first-of-type):not(.without-separator)
+		margin-left: 8px
+		&::before
 			content: ''
 			position: absolute
-			left: calc(100% + 5px)
+			right: calc(100% + 5px)
 			width: 3px
 			height: 3px
 			top: 50%

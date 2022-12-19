@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Action, compose, Dispatch } from 'redux'
 import { Button, Modal, notification, Row, Spin } from 'antd'
-import { get, forEach, isNil } from 'lodash'
+import { get, forEach } from 'lodash'
 import { change, initialize, isPristine, isSubmitting, submit } from 'redux-form'
 import cx from 'classnames'
 import i18next from 'i18next'
@@ -14,6 +14,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import DeleteButton from '../../components/DeleteButton'
 import InviteForm from './components/InviteForm'
 import EditRoleForm from './components/EditRoleForm'
+import ServiceEditModal from './components/ServiceEditModal'
 
 // types
 import {
@@ -22,9 +23,9 @@ import {
 	IComputedMatch,
 	IEditEmployeeRoleForm,
 	IEmployeeForm,
+	IEmployeePayload,
 	IEmployeeServiceEditForm,
 	IInviteEmployeeForm,
-	ILoadingAndFailure,
 	ISelectOptionItem,
 	SalonSubPageProps,
 	ServiceCategoryParameter,
@@ -39,11 +40,9 @@ import Permissions, { withPermissions } from '../../utils/Permissions'
 import { DELETE_BUTTON_ID, FORM, PARAMETER_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
 import {
-	arePriceAndDurationDataEmpty,
-	decodePrice,
-	encodePrice,
 	filterSalonRolesByPermission,
 	formFieldID,
+	getAssignedUserLabel,
 	getEmployeeServiceDataForPatch,
 	getServicePriceAndDurationData,
 	hasAuthUserPermissionToEditRole
@@ -63,8 +62,6 @@ import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.sv
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
-import EmployeeServiceEditForm from './components/EmployeeServiceEditForm'
-import ServiceEditModal from './components/ServiceEditModal'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: string }>
@@ -74,12 +71,13 @@ export type EmployeePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeId.Reques
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
-export const addService = (servaddServiceices: IServicesPayload & ILoadingAndFailure, form: any, dispatch: Dispatch<Action>) => {
+export const addService = (servicesOptions: IServicesPayload['options'], employee: IEmployeePayload['data'], form: any, dispatch: Dispatch<Action>) => {
 	const selectedServiceIDs = form?.values?.service
 	const updatedServices: any[] = []
+	const employeeData = employee?.employee
 	// go through selected services
 	forEach(selectedServiceIDs, (serviceId) => {
-		const serviceData = servaddServiceices?.options?.find((option) => option.key === serviceId)
+		const serviceData = servicesOptions?.find((option) => option.key === serviceId)
 		const priceAndDuration = serviceData?.extra?.rangePriceAndDurationData as ServicePriceAndDurationData
 		const categoryParameter = serviceData?.extra?.serviceCategoryParameter as ServiceCategoryParameter
 
@@ -88,25 +86,30 @@ export const addService = (servaddServiceices: IServicesPayload & ILoadingAndFai
 				message: i18next.t('loc:Upozornenie'),
 				description: i18next.t('loc:Služba {{ label }} je už priradená!', { label: serviceData?.label })
 			})
-		} else if (serviceData) {
+		} else if (serviceData && employeeData) {
 			const useCategoryParameter = !!categoryParameter?.values?.length
-			const salonPriceAndDurationData = getServicePriceAndDurationData(
-				priceAndDuration?.durationFrom,
-				priceAndDuration.durationTo,
-				priceAndDuration?.priceFrom,
-				priceAndDuration?.priceTo
-			)
 
 			let newServiceData: EmployeeServiceData = {
 				id: serviceData?.key as string,
 				name: serviceData?.label,
-				category: serviceData?.extra?.firstCategory,
+				industry: serviceData?.extra?.firstCategory,
+				category: serviceData?.extra?.secondCategory,
 				hasOverriddenPricesAndDurationData: false,
 				useCategoryParameter,
-				// ulozime si aj original data, aby sme potom vedei porovnat, ci ich ma uzivatel pretazene alebo nie
-				salonPriceAndDurationData,
-				// vygeneruje objekt so vsetkymi potrebnymi parametrami, ktore budu mat ale hodnotu null
-				// redux-form tak potom vyhodnoti isPristine spravne
+				employee: {
+					id: employeeData.id,
+					image: employeeData?.image.resizedImages.thumbnail,
+					name: getAssignedUserLabel({ firstName: employeeData?.firstName, lastName: employeeData?.lastName, email: employeeData?.email, id: employeeData?.id }),
+					email: employeeData?.email,
+					inviteEmail: employeeData?.inviteEmail,
+					hasActiveAccount: employeeData?.hasActiveAccount
+				},
+				salonPriceAndDurationData: getServicePriceAndDurationData(
+					priceAndDuration?.durationFrom,
+					priceAndDuration.durationTo,
+					priceAndDuration?.priceFrom,
+					priceAndDuration?.priceTo
+				),
 				employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined)
 			}
 			if (useCategoryParameter) {
@@ -128,10 +131,7 @@ export const addService = (servaddServiceices: IServicesPayload & ILoadingAndFai
 							id: value?.id,
 							name: value?.value,
 							hasOverriddenPricesAndDurationData: false,
-							// vygeneruje objekt so vsetkymi potrebnymi parametrami, ktore budu mat ale hodnotu null
-							// redux-form tak potom vyhodnoti isPristine spravne
 							employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined),
-							// ulozime si aj original data, aby sme potom vedei porovnat, ci ich ma uzivatel pretazene alebo nie
 							salonPriceAndDurationData: parameterSalonPriceAndDurationData
 						}
 					})
@@ -150,8 +150,10 @@ export const addService = (servaddServiceices: IServicesPayload & ILoadingAndFai
 	dispatch(change(FORM.EMPLOYEE, 'service', null))
 }
 
-const parseServices = (employeeCategories?: ServiceRootCategory, salonServices?: ISelectOptionItem[]): EmployeeServiceData[] => {
+const parseServices = (employee?: IEmployeePayload['data'], salonServices?: ISelectOptionItem[]): EmployeeServiceData[] => {
 	const result: EmployeeServiceData[] = []
+	const employeeData = employee?.employee
+	const employeeCategories = employeeData?.categories
 	if (employeeCategories) {
 		employeeCategories?.forEach((firstCategory) =>
 			firstCategory?.children.forEach((secondCategory) => {
@@ -159,40 +161,37 @@ const parseServices = (employeeCategories?: ServiceRootCategory, salonServices?:
 					const salonServiceData = salonServices?.find((option) => option?.key === employeeService.id)
 					const salonPriceAndDuration = salonServiceData?.extra?.rangePriceAndDurationData as ServicePriceAndDurationData
 					const categoryParameter = salonServiceData?.extra?.serviceCategoryParameter as ServiceCategoryParameter
-					const useCategoryParameter = !!categoryParameter?.values?.length
-
-					const salonPriceAndDurationData = getServicePriceAndDurationData(
-						salonPriceAndDuration?.durationFrom,
-						salonPriceAndDuration?.durationTo,
-						salonPriceAndDuration?.priceFrom,
-						salonPriceAndDuration?.priceTo
-					)
+					const useCategoryParameter = !!categoryParameter?.values?.length // salonServiceData?.extra?.useCategoryParameter TODO: ked BE bude posielat
 
 					let formServiceData: EmployeeServiceData = {
 						id: employeeService?.id,
 						name: employeeService?.category?.name,
-						category: firstCategory?.name,
-						salonPriceAndDurationData,
-						// vygeneruje objekt so vsetkymi potrebnymi parametrami, ktore budu mat ale hodnotu null
-						// redux-form tak potom vyhodnoti isPristine spravne
-						employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined),
+						industry: firstCategory?.name,
+						category: secondCategory?.name,
+						employee: {
+							id: employeeData.id,
+							image: employeeData?.image.resizedImages.thumbnail,
+							name: getAssignedUserLabel({ firstName: employeeData?.firstName, lastName: employeeData?.lastName, email: employeeData?.email, id: employeeData?.id }),
+							email: employeeData?.email,
+							inviteEmail: employeeData?.inviteEmail,
+							hasActiveAccount: employeeData?.hasActiveAccount
+						},
+						salonPriceAndDurationData: getServicePriceAndDurationData(
+							salonPriceAndDuration?.durationFrom,
+							salonPriceAndDuration?.durationTo,
+							salonPriceAndDuration?.priceFrom,
+							salonPriceAndDuration?.priceTo
+						),
+						employeePriceAndDurationData: employeeService?.hasOverriddenPricesAndDurationData
+							? getServicePriceAndDurationData(
+									employeeService?.priceAndDurationData?.durationFrom,
+									employeeService?.priceAndDurationData?.durationTo,
+									employeeService?.priceAndDurationData?.priceFrom,
+									employeeService?.priceAndDurationData?.priceTo
+							  )
+							: getServicePriceAndDurationData(undefined, undefined, undefined, undefined),
 						useCategoryParameter,
-						hasOverriddenPricesAndDurationData: false
-					}
-					// ak ma employee nieco nastavene, tak vyinicialuzujeme jeho hodnoty
-					if (employeeService?.hasOverriddenPricesAndDurationData) {
-						const employeePriceAndDuration = employeeService?.priceAndDurationData
-						const employeeFormPriceAndDurationData = getServicePriceAndDurationData(
-							employeePriceAndDuration?.durationFrom,
-							employeePriceAndDuration?.durationTo,
-							employeePriceAndDuration?.priceFrom,
-							employeePriceAndDuration?.priceTo
-						)
-						formServiceData = {
-							...formServiceData,
-							hasOverriddenPricesAndDurationData: true,
-							employeePriceAndDurationData: employeeFormPriceAndDurationData
-						}
+						hasOverriddenPricesAndDurationData: employeeService?.hasOverriddenPricesAndDurationData
 					}
 
 					if (useCategoryParameter) {
@@ -215,10 +214,7 @@ const parseServices = (employeeCategories?: ServiceRootCategory, salonServices?:
 								return {
 									id: value?.id,
 									name: value?.value,
-									// ulozime si aj original data pre zobrazovanie povodnych dat a porovnavanie s pretazenymi datami
 									salonPriceAndDurationData: parameterSalonPriceAndDurationData,
-									// vygeneruje objekt so vsetkymi potrebnymi parametrami, ktore budu mat ale hodnotu null
-									// redux-form tak potom vyhodnoti isPristine spravne
 									employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined)
 								}
 							})
@@ -271,7 +267,6 @@ const EmployeePage = (props: Props) => {
 	)
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values) as IEmployeeForm
-	const editServiceformValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE_SERVICE_EDIT]?.values) as IEmployeeServiceEditForm
 
 	const isEmployeeExists = !!employee?.data?.employee?.id
 
@@ -300,7 +295,7 @@ const EmployeePage = (props: Props) => {
 								}
 						  ]
 						: [],
-					services: parseServices(employeesData?.employee?.categories, options),
+					services: parseServices(employeesData, options),
 					salonID: { label: employeesData.employee?.salon?.name, value: employeesData.employee?.salon?.id },
 					roleID: employeesData.employee?.role?.id
 				})
@@ -341,7 +336,6 @@ const EmployeePage = (props: Props) => {
 
 			await patchReq('/api/b2b/admin/employees/{employeeID}', { employeeID }, reqBody)
 			fetchEmployeeAndServicesData()
-			// history.push(backUrl)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -424,8 +418,6 @@ const EmployeePage = (props: Props) => {
 		}
 	}
 
-	const employeeServiceIds = getEmployeeServiceIds(employee?.data?.employee?.categories)
-
 	const editEmployeeService = async (values: IEmployeeServiceEditForm, _dispatch?: Dispatch<any>, customProps?: any) => {
 		const serviceID = values.id
 		const { resetUserServiceData = false } = customProps || {}
@@ -435,7 +427,7 @@ const EmployeePage = (props: Props) => {
 				setUpdatingSerivce(true)
 				const employeePatchServiceData = getEmployeeServiceDataForPatch(values, resetUserServiceData)
 
-				if (!employeeServiceIds?.includes(serviceID)) {
+				if (!getEmployeeServiceIds(employee?.data?.employee?.categories)?.includes(serviceID)) {
 					await updateEmployee(formValues)
 				}
 
@@ -475,7 +467,7 @@ const EmployeePage = (props: Props) => {
 			<div className='content-body small'>
 				<Spin spinning={isLoading}>
 					<EmployeeForm
-						addService={() => addService(services, form, dispatch)}
+						addService={() => addService(services?.options, employee?.data, form, dispatch)}
 						salonID={salonID}
 						isEdit
 						onSubmit={updateEmployee}

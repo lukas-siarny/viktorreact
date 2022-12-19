@@ -81,6 +81,7 @@ export type EmployeeServiceData = {
 		hasActiveAccount?: boolean
 	}
 	name?: string
+	industry?: string
 	category?: string
 	image?: string
 	useCategoryParameter: boolean
@@ -184,17 +185,30 @@ export interface ISalonForm {
 	deletedAt?: boolean
 }
 
-export interface IServiceForm {
-	id: number
-	durationFrom: number
-	durationTo: number
+export interface IParameterValue {
+	id: string | undefined
+	name: string | undefined
+	durationFrom: number | null | undefined
+	durationTo: number | null | undefined
 	variableDuration: boolean
-	priceFrom: number
-	priceTo: number
+	priceFrom: number | null | undefined
+	priceTo: number | null | undefined
+	variablePrice: boolean
+	useParameter: boolean
+}
+export interface IServiceForm {
+	id: string
+	durationFrom?: number
+	durationTo?: number
+	variableDuration: boolean
+	priceFrom?: number | null
+	priceTo?: number | null
 	variablePrice: boolean
 	useCategoryParameter: boolean
-	serviceCategoryParameter: any
-	employee: string[]
+	serviceCategoryParameterType?: PARAMETER_TYPE
+	serviceCategoryParameterName?: string
+	serviceCategoryParameter: IParameterValue[]
+	employee?: string[]
 	employees: EmployeeServiceData[]
 	settings: {
 		enabledB2cReservations: boolean

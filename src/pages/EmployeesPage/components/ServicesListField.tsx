@@ -1,8 +1,12 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { FC } from 'react'
 import { initialize, WrappedFieldArrayProps } from 'redux-form'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Divider, Collapse, Button } from 'antd'
+import { Divider, Collapse, Button, Tooltip } from 'antd'
+import cx from 'classnames'
+import i18next from 'i18next'
 
 // utils
 import { FORM } from '../../../utils/enums'
@@ -26,13 +30,24 @@ type ComponentProps = {
 	currencySymbol?: string
 	setVisibleServiceEditModal: (visible: boolean) => void
 	panelHeaderRender: (fieldData: EmployeeServiceData) => React.ReactChild
+	disabledEditButton?: boolean
+	disabledEditButtonTooltip?: string
 }
+
+type Props = WrappedFieldArrayProps<EmployeeServiceData> & ComponentProps
 
 export const panelHeaderRenderCategoryName = (fieldData: EmployeeServiceData) => {
 	return (
-		<div className={'flex items-center gap-2'}>
-			<div className={'font-bold'}>{fieldData?.name}</div>
-			<span className={'service-badge font-normal text-xxs p-1 leading-3'}>{fieldData?.category}</span>
+		<div className='flex flex-col' style={{ gap: 2 }}>
+			<div className={'inline items-center flex-wrap'}>
+				<span className={'font-bold inline leading-4'}>{fieldData?.name}</span>
+				<span className={'service-badge without-separator font-normal text-xxs p-1 leading-3 inline ml-2 whitespace-nowrap'}>{fieldData?.industry}</span>
+			</div>
+			{fieldData.useCategoryParameter && (
+				<span className='leading-4 font-normal text-xs text-notino-grayDark'>
+					{i18next.t('loc:Parameter')}: <strong>{fieldData?.serviceCategoryParameterName}</strong>
+				</span>
+			)}
 		</div>
 	)
 }
@@ -53,11 +68,16 @@ export const panelHeaderRenderEmployee = (fieldData: EmployeeServiceData) => {
 	)
 }
 
-type Props = WrappedFieldArrayProps<EmployeeServiceData> & ComponentProps
-
 const ServicesListField: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { fields, currencySymbol, setVisibleServiceEditModal, panelHeaderRender } = props
+	const {
+		fields,
+		currencySymbol,
+		setVisibleServiceEditModal,
+		panelHeaderRender,
+		disabledEditButton = false,
+		disabledEditButtonTooltip = t('loc:Pred editáciou služby zamestnanca je najprv potrebné uložiť rozpracované zmeny vo formulári.')
+	} = props
 	const dispatch = useDispatch()
 
 	const genExtra = (index: number, field: EmployeeServiceData) => {
@@ -66,24 +86,28 @@ const ServicesListField: FC<Props> = (props) => {
 		const hasOverridenData = field?.hasOverriddenPricesAndDurationData
 
 		return (
-			<div className={'flex gap-1 items-center'}>
-				{field?.useCategoryParameter ? (
-					<div>{field?.serviceCategoryParameterName}</div>
-				) : (
-					renderPriceAndDurationInfo(salonPriceAndDuration, employeePriceAndDuration, hasOverridenData, currencySymbol)
-				)}
-				<Button
-					htmlType={'button'}
-					className={'ant-btn noti-btn'}
-					size={'small'}
-					icon={<EditIcon />}
-					onClick={(e) => {
-						e.stopPropagation()
-						dispatch(initialize(FORM.EMPLOYEE_SERVICE_EDIT, field))
-						setVisibleServiceEditModal(true)
-					}}
-					onKeyDown={(e) => e.stopPropagation()}
-				/>
+			<div className={'flex gap-1 items-center ml-2'}>
+				{!field?.useCategoryParameter && renderPriceAndDurationInfo(salonPriceAndDuration, employeePriceAndDuration, hasOverridenData, currencySymbol)}
+				<div onClick={(e) => e.stopPropagation()}>
+					<Tooltip title={disabledEditButton ? disabledEditButtonTooltip : null}>
+						<span className={cx('w-full md:w-auto', { 'cursor-not-allowed': disabledEditButton })}>
+							<Button
+								htmlType={'button'}
+								size={'small'}
+								icon={<EditIcon />}
+								className={cx('ant-btn noti-btn', {
+									'pointer-events-none': disabledEditButton
+								})}
+								disabled={disabledEditButton}
+								onClick={(e) => {
+									e.stopPropagation()
+									dispatch(initialize(FORM.EMPLOYEE_SERVICE_EDIT, field))
+									setVisibleServiceEditModal(true)
+								}}
+							/>
+						</span>
+					</Tooltip>
+				</div>
 				<DeleteButton
 					onConfirm={(e) => {
 						e?.stopPropagation()
@@ -113,7 +137,7 @@ const ServicesListField: FC<Props> = (props) => {
 
 	return (
 		<>
-			<Collapse className={'collapse-list'} bordered={false} defaultActiveKey={defaultActiveKeys}>
+			<Collapse className={'collapse-list'} bordered={false} defaultActiveKey={defaultActiveKeys} accordion>
 				{fields.map((_field: any, index: number) => {
 					const fieldData = fields.get(index)
 					const categoryParameter = fieldData?.serviceCategoryParameter

@@ -1,48 +1,44 @@
-import React, { FC, MouseEventHandler, ReactNode, useCallback, useState } from 'react'
+import React, { FC, MouseEventHandler, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import i18next from 'i18next'
 import { Field, FieldArray, FormSection, InjectedFormProps, reduxForm } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Col, Collapse, Divider, Form, Row, Space, Spin, Tag } from 'antd'
-import { get, isEmpty, isNil } from 'lodash'
+import { Button, Col, Divider, Form, Row, Space, Spin } from 'antd'
+import { isEmpty } from 'lodash'
 import cx from 'classnames'
 
 // atoms
 import SelectField from '../../../atoms/SelectField'
-import validateServiceForm from './validateServiceForm'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SwitchField from '../../../atoms/SwitchField'
 
 // components
 import DeleteButton from '../../../components/DeleteButton'
-import AvatarComponents from '../../../components/AvatarComponents'
+import ServicesListField, { panelHeaderRenderEmployee } from '../../EmployeesPage/components/ServicesListField'
 
-// reducers
-import { RootState } from '../../../reducers'
+// validate
+import validateServiceForm from './validateServiceForm'
 
 // utils
-import { renderFromTo, showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
 import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, SALON_PERMISSION, STRINGS } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
 import searchWrapper from '../../../utils/filters'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
+import Permissions from '../../../utils/Permissions'
 
 // types
 import { IServiceForm } from '../../../types/interfaces'
+import { RootState } from '../../../reducers'
 
 // assets
 import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
-import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
-import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
 import { ReactComponent as EmployeesIcon } from '../../../assets/icons/employees.svg'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
-import Permissions from '../../../utils/Permissions'
-import ServicesListField, { panelHeaderRenderEmployee } from '../../EmployeesPage/components/ServicesListField'
-
-const { Panel } = Collapse
+import ParameterValuesList from './ParameterValuesList'
+import ServiceBreadcrumbs from './ServiceBreadcrumbs'
 
 const numberMin0 = validationNumberMin(0)
 
@@ -56,201 +52,13 @@ type ComponentProps = {
 
 type Props = InjectedFormProps<IServiceForm, ComponentProps> & ComponentProps
 
-const validateParameterValuePriceAndDuration = (value: string, allValues: any, props: any, name: string) => {
-	const [pathToParameterValue, key] = name.split('.')
-	const parameterValueFormValues = get(allValues, pathToParameterValue)
-	if ((!parameterValueFormValues?.variablePrice && key === 'priceTo') || (!parameterValueFormValues?.variableDuration && key === 'durationTo')) {
-		return undefined
-	}
-	if (parameterValueFormValues?.useParameter && isNil(value)) {
-		return i18next.t('loc:Toto pole je povinné')
-	}
-	return undefined
-}
-
-const renderParameterValues = (props: any) => {
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [t] = useTranslation()
-	const {
-		fields,
-		meta: { error, invalid },
-		salon,
-		showDuration,
-		form
-	} = props
-
-	const formErrors = form?.syncErrors?.serviceCategoryParameter || []
-	const formFields = form?.fields?.serviceCategoryParameter || []
-
-	const genExtra = (index: number, fieldData: any, field: any) => {
-		return (
-			<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
-				<div className={'flex'}>
-					{showDuration &&
-						renderFromTo(
-							fieldData?.durationFrom,
-							fieldData?.durationTo,
-							fieldData?.variableDuration,
-							<ClockIcon className={'text-notino-black'} />,
-							t('loc:min'),
-							'mr-3'
-						)}
-					{renderFromTo(fieldData?.priceFrom, fieldData?.priceTo, fieldData?.variablePrice, <CouponIcon />, salon.data?.currency.symbol, 'mr-3')}
-					<Field
-						className={'mb-0 pb-0'}
-						disabled={props.disabled}
-						component={SwitchField}
-						onClick={(checked: boolean, event: Event) => event.stopPropagation()}
-						name={`${field}.useParameter`}
-						size={'middle'}
-					/>
-				</div>
-			</div>
-		)
-	}
-
-	return (
-		<>
-			{invalid && error && (
-				<div role='alert' className='ant-form-item-explain-error'>
-					{error}
-				</div>
-			)}
-			<Collapse className={cx('collapse-list', { 'error-border': invalid && error })} bordered={false}>
-				{fields.map((field: any, index: number) => {
-					const fieldData = fields.get(index)
-					const variableDuration = fieldData?.variableDuration
-					const variablePrice = fieldData?.variablePrice
-					const useParameter = fieldData?.useParameter
-					const hasError = !isEmpty(formErrors[index])
-					const isTouched = !isEmpty(formFields[index])
-
-					return (
-						<Panel
-							header={
-								<div className={'flex align-center'}>
-									<div className={'list-title leading-7'}>{fieldData?.name}</div>
-								</div>
-							}
-							key={index}
-							forceRender
-							extra={genExtra(index, fieldData, field)}
-							collapsible={useParameter ? undefined : 'disabled'}
-							className={cx({ 'collapse-header-has-error': hasError && isTouched })}
-						>
-							{showDuration && (
-								<Row gutter={8} align='top' justify='center'>
-									<Col className={'mt-5'} span={8}>
-										<Field
-											className={'mb-0'}
-											component={SwitchField}
-											label={t('loc:Variabilné trvanie')}
-											name={`${field}.variableDuration`}
-											size={'middle'}
-											disabled={!useParameter || props.disabled}
-										/>
-									</Col>
-									<Col span={variableDuration ? 8 : 16}>
-										<Field
-											component={InputNumberField}
-											label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
-											placeholder={t('loc:min')}
-											name={`${field}.durationFrom`}
-											precision={0}
-											step={1}
-											min={0}
-											max={999}
-											size={'large'}
-											validate={[numberMin0, validateParameterValuePriceAndDuration]}
-											disabled={!useParameter || props.disabled}
-											required
-										/>
-									</Col>
-									{variableDuration && (
-										<Col span={8}>
-											<Field
-												component={InputNumberField}
-												label={t('loc:Trvanie do (minúty)')}
-												placeholder={t('loc:min')}
-												name={`${field}.durationTo`}
-												precision={0}
-												step={1}
-												min={0}
-												max={999}
-												size={'large'}
-												validate={[numberMin0, validateParameterValuePriceAndDuration]}
-												disabled={!useParameter || props.disabled}
-												required
-											/>
-										</Col>
-									)}
-								</Row>
-							)}
-							<Row gutter={8} align='top' justify='center'>
-								<Col className={'mt-5'} span={8}>
-									<Field
-										className={'mb-0'}
-										component={SwitchField}
-										label={t('loc:Variabilná cena')}
-										name={`${field}.variablePrice`}
-										size={'middle'}
-										disabled={!useParameter || props.disabled}
-									/>
-								</Col>
-								<Col span={variablePrice ? 8 : 16}>
-									<Field
-										component={InputNumberField}
-										label={
-											variablePrice
-												? t('loc:Cena od ({{symbol}})', { symbol: salon.data?.currency.symbol })
-												: t('loc:Cena ({{symbol}})', { symbol: salon.data?.currency.symbol })
-										}
-										placeholder={salon.data?.currency.symbol}
-										name={`${field}.priceFrom`}
-										precision={2}
-										step={1}
-										min={0}
-										// max={99999}
-										size={'large'}
-										validate={[numberMin0, validateParameterValuePriceAndDuration]}
-										disabled={!useParameter || props.disabled}
-										required
-									/>
-								</Col>
-								{variablePrice && (
-									<Col span={8}>
-										<Field
-											component={InputNumberField}
-											label={t('loc:Cena do ({{symbol}})', { symbol: salon.data?.currency.symbol })}
-											placeholder={salon.data?.currency.symbol}
-											name={`${field}.priceTo`}
-											precision={2}
-											step={1}
-											min={0}
-											// max={99999}
-											size={'large'}
-											validate={[numberMin0, validateParameterValuePriceAndDuration]}
-											disabled={!useParameter || props.disabled}
-											required
-										/>
-									</Col>
-								)}
-							</Row>
-						</Panel>
-					)
-				})}
-			</Collapse>
-		</>
-	)
-}
-
 const ServiceForm: FC<Props> = (props) => {
 	const { salonID, serviceID, handleSubmit, pristine, addEmployee, backUrl, setVisibleServiceEditModal } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
-	const formValues = form?.values
+	const formValues = form?.values as IServiceForm
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const service = useSelector((state: RootState) => state.service.service)
 	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading)
@@ -265,13 +73,12 @@ const ServiceForm: FC<Props> = (props) => {
 	const variablePrice = formValues?.variablePrice
 
 	const onConfirmDelete = async () => {
-		if (isRemoving) {
+		if (isRemoving || !serviceID) {
 			return
 		}
 		try {
 			setIsRemoving(true)
-			// toto 'undefined' je divne
-			await deleteReq(`/api/b2b/admin/services/{serviceID}`, { serviceID: serviceID || 'undefined' }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			await deleteReq(`/api/b2b/admin/services/{serviceID}`, { serviceID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			setIsRemoving(false)
 			history.push(backUrl)
 		} catch (e) {
@@ -292,12 +99,15 @@ const ServiceForm: FC<Props> = (props) => {
 				<div className='content-body small'>
 					<Spin spinning={isLoading}>
 						<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
-							<div className={'flex items-center flex-wrap gap-1 mb-4'}>
-								<div className={'service-badge'}>{service.data?.service?.category?.name}</div>
-								<div className={'service-badge'}>{service.data?.service?.category?.child?.name}</div>
-								<div className={'service-badge'}>{service.data?.service?.category?.child?.child?.name}</div>
-							</div>
-							<Space className={'w-full'} direction='vertical'>
+							<ServiceBreadcrumbs
+								wrapperClassname={'mb-4'}
+								breadcrumbs={[
+									service.data?.service?.category?.name,
+									service.data?.service?.category?.child?.name,
+									service.data?.service?.category?.child?.child?.name
+								]}
+							/>
+							<Space className={'w-full'} direction={'vertical'} size={36}>
 								<div>
 									<h3 className={'mb-0 mt-0 flex items-center'}>
 										<SettingIcon className={'text-notino-black mr-2'} />
@@ -309,7 +119,11 @@ const ServiceForm: FC<Props> = (props) => {
 											className={'mb-0'}
 											disabled={!hasPermission}
 											component={SwitchField}
-											label={t('loc:Použiť parameter')}
+											customLabel={
+												<div className={'truncate min-w-0 max-w-full inline-block mr-3'} style={{ gap: 2 }}>
+													{t('loc:Použiť parameter')}: <strong>{formValues?.serviceCategoryParameterName}</strong>
+												</div>
+											}
 											name={'useCategoryParameter'}
 											size={'middle'}
 										/>
@@ -318,9 +132,9 @@ const ServiceForm: FC<Props> = (props) => {
 										{formValues?.useCategoryParameter ? (
 											<div className={'my-2'}>
 												<FieldArray
-													component={renderParameterValues}
+													component={ParameterValuesList as any}
 													name={'serviceCategoryParameter'}
-													salon={salon}
+													currencySymbol={salon.data?.currency.symbol}
 													disabled={!hasPermission}
 													showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
 													form={form}
@@ -418,6 +232,10 @@ const ServiceForm: FC<Props> = (props) => {
 												</Row>
 											</div>
 										)}
+									</>
+								</div>
+								<div>
+									<>
 										{/* NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut */}
 										{salon.data?.settings.enabledReservations && (
 											<div>
@@ -499,18 +317,13 @@ const ServiceForm: FC<Props> = (props) => {
 											{formValues?.employees && formValues?.employees.length > 1 ? t('loc:Pridať zamestnancov') : t('loc:Pridať zamestnanca')}
 										</Button>
 									</div>
-									{/* <FieldArray
-										component={renderEmployees}
-										name={'employees'}
-										salon={salon}
-										showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
-																/> */}
 									<FieldArray
 										component={ServicesListField as any}
 										name={'employees'}
 										currencySymbol={salon.data?.currency.symbol}
 										panelHeaderRender={panelHeaderRenderEmployee}
 										setVisibleServiceEditModal={setVisibleServiceEditModal}
+										disabledEditButton={!pristine}
 									/>
 									{hasPermission && (
 										<div className={'content-footer pt-0'} id={'content-footer-container'}>

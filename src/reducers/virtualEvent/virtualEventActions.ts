@@ -81,7 +81,6 @@ export const addOrUpdateEvent =
 		if (!formData) {
 			return
 		}
-
 		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID } = formData
 
 		if (date && timeFrom && employee && eventType) {
@@ -140,9 +139,11 @@ export const addOrUpdateEvent =
 								email: employee.label || employee.value
 						  }
 						: undefined,
-					calendarBulkEvent: {
-						id: calendarBulkEventID
-					}
+					calendarBulkEvent: calendarBulkEventID
+						? {
+								id: calendarBulkEventID
+						  }
+						: undefined
 				}
 			}
 

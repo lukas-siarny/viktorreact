@@ -7,12 +7,13 @@ import cx from 'classnames'
 import dayjs from 'dayjs'
 
 // validate
-import validateTimeOffForm from './validateTimeOffForm'
+import validateEventForm from './validateEventForm'
 
 // utils
 import { optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import {
 	CALENDAR_COMMON_SETTINGS,
+	CALENDAR_EVENT_TYPE,
 	CREATE_EVENT_PERMISSIONS,
 	EVERY_REPEAT,
 	EVERY_REPEAT_OPTIONS,
@@ -49,9 +50,9 @@ type ComponentProps = {
 }
 
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
-const formName = FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM
+const formName = FORM.CALENDAR_EVENT_FORM
 
-const CalendarTimeOffForm: FC<Props> = (props) => {
+const EventForm: FC<Props> = (props) => {
 	const { handleSubmit, eventId, searchEmployes } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -173,8 +174,10 @@ const CalendarTimeOffForm: FC<Props> = (props) => {
 							size={'large'}
 							suffixIcon={<TimerIcon className={'text-notino-grayDark'} />}
 						/>
-						<Field name={'allDay'} onChange={onChangeAllDay} className={'pb-0'} label={t('loc:Celý deň')} component={SwitchField} />
-						<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
+						{formValues?.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF && (
+							<Field name={'allDay'} onChange={onChangeAllDay} className={'pb-0'} label={t('loc:Celý deň')} component={SwitchField} />
+						)}
+
 						<Field
 							name={'recurring'}
 							disabled={!formValues?.calendarBulkEventID && eventId}
@@ -184,6 +187,9 @@ const CalendarTimeOffForm: FC<Props> = (props) => {
 							label={t('loc:Opakovať')}
 						/>
 						{recurringFields}
+						{(formValues?.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK || formValues?.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF) && (
+							<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
+						)}
 					</Form>
 				</Spin>
 			</div>
@@ -220,7 +226,7 @@ const form = reduxForm<ICalendarEventForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateTimeOffForm
-})(CalendarTimeOffForm)
+	validate: validateEventForm
+})(EventForm)
 
 export default form

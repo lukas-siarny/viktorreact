@@ -143,7 +143,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const isRefreshingEvents = useSelector((state: RootState) => state.calendar.isRefreshingEvents)
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
-	const enabledSalonReservations = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.settings?.enabledReservations)
+	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 
 	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
 	const authUserPermissions = currentUser?.uniqPermissions
@@ -706,7 +706,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			{modals}
 			<Layout className='noti-calendar-layout'>
 				<CalendarHeader
-					enabledSalonReservations={enabledSalonReservations}
+					enabledSalonReservations={selectedSalon?.settings?.enabledReservations}
 					selectedDate={validSelectedDate}
 					eventsViewType={validEventsViewType}
 					calendarView={validCalendarView}
@@ -730,7 +730,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} parentPath={parentPath} eventsViewType={validEventsViewType} />
 					<CalendarContent
 						salonID={salonID}
-						enabledSalonReservations={enabledSalonReservations}
+						enabledSalonReservations={selectedSalon?.settings?.enabledReservations}
 						setEventManagement={setEventManagement}
 						ref={calendarRefs}
 						selectedDate={validSelectedDate}
@@ -753,8 +753,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						onAddEvent={handleAddEvent}
 						clearRestartInterval={clearRestartFetchInterval}
 					/>
-					{enabledSalonReservations && (
+					{selectedSalon?.settings?.enabledReservations && (
 						<SiderEventManagement
+							phonePrefix={selectedSalon.address?.countryCode || selectedSalon.companyInvoiceAddress?.countryCode}
 							salonID={salonID}
 							selectedDate={validSelectedDate}
 							eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
@@ -765,7 +766,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							handleSubmitReservation={initSubmitReservationData}
 							handleSubmitEvent={initSubmitEventData}
 							newEventData={newEventData}
-							// onAddEvent={handleAddEvent}
 							calendarApi={calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()}
 							changeCalendarDate={setNewSelectedDate}
 						/>

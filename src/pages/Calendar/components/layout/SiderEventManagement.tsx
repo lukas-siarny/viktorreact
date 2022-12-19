@@ -62,6 +62,7 @@ type Props = {
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	calendarApi?: CalendarApi
 	changeCalendarDate: (newDate: string) => void
+	phonePrefix?: string
 }
 
 const SiderEventManagement: FC<Props> = (props) => {
@@ -76,7 +77,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 		eventsViewType,
 		calendarApi,
 		newEventData,
-		changeCalendarDate
+		changeCalendarDate,
+		phonePrefix
 	} = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -274,17 +276,16 @@ const SiderEventManagement: FC<Props> = (props) => {
 		[salonID]
 	)
 
-	const forms = {
-		[CALENDAR_EVENT_TYPE.RESERVATION]: <ReservationForm salonID={salonID} eventId={eventId} searchEmployes={searchEmployes} onSubmit={handleSubmitReservation} />,
-		[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: (
-			<EventForm eventType={CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT} searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
-		),
-		[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: (
-			<EventForm eventType={CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF} searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
-		),
-		[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: (
-			<EventForm eventType={CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK} searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
-		)
+	const getCalendarForm = () => {
+		switch (sidebarView) {
+			case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
+			case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
+			case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
+				return <EventForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
+			case CALENDAR_EVENT_TYPE.RESERVATION:
+			default:
+				return <ReservationForm salonID={salonID} eventId={eventId} phonePrefix={phonePrefix} searchEmployes={searchEmployes} onSubmit={handleSubmitReservation} />
+		}
 	}
 
 	const getTabContent = () => {
@@ -366,7 +367,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 					destroyInactiveTabPane
 				/>
 			)}
-			{forms[sidebarView]}
+			{getCalendarForm()}
 		</Sider>
 	)
 }

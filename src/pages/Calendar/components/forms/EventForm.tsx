@@ -47,14 +47,13 @@ import { RootState } from '../../../../reducers'
 type ComponentProps = {
 	eventId?: string | null
 	searchEmployes: (search: string, page: number) => Promise<any>
-	eventType: CALENDAR_EVENT_TYPE
 }
 
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
 const formName = FORM.CALENDAR_EVENT_FORM
 
 const EventForm: FC<Props> = (props) => {
-	const { handleSubmit, eventId, searchEmployes, eventType } = props
+	const { handleSubmit, eventId, searchEmployes } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const formValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(formName)(state))
@@ -175,7 +174,7 @@ const EventForm: FC<Props> = (props) => {
 							size={'large'}
 							suffixIcon={<TimerIcon className={'text-notino-grayDark'} />}
 						/>
-						{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF && (
+						{formValues?.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF && (
 							<Field name={'allDay'} onChange={onChangeAllDay} className={'pb-0'} label={t('loc:Celý deň')} component={SwitchField} />
 						)}
 
@@ -188,7 +187,7 @@ const EventForm: FC<Props> = (props) => {
 							label={t('loc:Opakovať')}
 						/>
 						{recurringFields}
-						{(eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK || eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF) && (
+						{(formValues?.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK || formValues?.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF) && (
 							<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 						)}
 					</Form>

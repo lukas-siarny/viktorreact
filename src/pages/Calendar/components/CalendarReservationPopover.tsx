@@ -394,7 +394,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 			case RESERVATION_STATE.NOT_REALIZED:
 			default:
 				return {
-					headerIcon: <AlertIcon />,
+					headerIcon: <CrossedIcon />,
 					headerState: t('loc:Nezrealizovaná')
 				}
 		}

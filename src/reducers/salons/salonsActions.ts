@@ -3,7 +3,7 @@ import { map, isEmpty } from 'lodash'
 import { IResetStore } from '../generalTypes'
 
 // types
-import { SALON, SALONS, SUGGESTED_SALONS, BASIC_SALON, BASIC_SALONS, SALON_HISTORY, REJECTED_SUGGESTIONS } from './salonsTypes'
+import { SALON, SALONS, SUGGESTED_SALONS, BASIC_SALON, BASIC_SALONS, SALON_HISTORY, REJECTED_SUGGESTIONS, RESERVATIONS } from './salonsTypes'
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
 import { IQueryParams, ISearchable } from '../../types/interfaces'
@@ -13,7 +13,16 @@ import { getReq } from '../../utils/request'
 import { SALON_FILTER_STATES, SALON_FILTER_OPENING_HOURS, SALONS_TAB_KEYS } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
-export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGeBasictSalon | IGetBasicSalons | IGetSalonHistory | IGetRejectedSuggestions
+export type ISalonsActions =
+	| IResetStore
+	| IGetSalons
+	| IGetSalon
+	| IGetSuggestedSalons
+	| IGetBasictSalon
+	| IGetBasicSalons
+	| IGetSalonHistory
+	| IGetRejectedSuggestions
+	| IGetSalonReservations
 
 interface IGetSalons {
 	type: SALONS
@@ -47,14 +56,25 @@ export interface IGetSalonsHistoryQueryParams extends IQueryParams {
 	salonID: string
 }
 
+export interface IGetSalonReservationsQueryParams {
+	dateFrom: string
+	dateTo: string
+	salonID: string
+}
+
 export interface IGetSalon {
 	type: SALON
 	payload: ISalonPayload
 }
 
-export interface IGeBasictSalon {
+export interface IGetBasictSalon {
 	type: BASIC_SALON
 	payload: IBasicSalonPayload
+}
+
+export interface IGetSalonReservations {
+	type: RESERVATIONS
+	payload: ISalonReservationsPayload
 }
 
 export interface ISalonPayload {
@@ -63,6 +83,11 @@ export interface ISalonPayload {
 
 export interface ISalonHistoryPayload {
 	data: Paths.GetApiB2BAdminSalonsSalonIdHistory.Responses.$200 | null
+}
+
+export interface ISalonReservationsPayload {
+	data: any // TODO: type
+	tableData: any
 }
 
 export interface IGetSuggestedSalons {
@@ -290,6 +315,27 @@ export const getSalonHistory =
 			dispatch({ type: SALON_HISTORY.SALON_HISTORY_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: SALON_HISTORY.SALON_HISTORY_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}
+
+export const getSalonReservations =
+	(queryParams: IGetSalonReservationsQueryParams): ThunkResult<Promise<ISalonReservationsPayload>> =>
+	async (dispatch) => {
+		let payload = {} as ISalonReservationsPayload
+		try {
+			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_START })
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { ...normalizeQueryParams(queryParams) } as any)
+			payload = {
+				data,
+				tableData: [] // TODO:
+			}
+			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}

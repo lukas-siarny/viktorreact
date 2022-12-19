@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Col, Row, Spin } from 'antd'
 import { useDispatch } from 'react-redux'
@@ -14,18 +14,22 @@ import { withPermissions } from '../../utils/Permissions'
 // reducers
 
 // types
-import { IBreadcrumbs } from '../../types/interfaces'
+import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
+import { getSalonReservations } from '../../reducers/salons/salonsActions'
 
 // assets
 
-type Props = {}
+type Props = {
+	computedMatch: IComputedMatch<{ salonID: string }>
+}
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 const ReservationsPage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	// const { salonID, parentPath } = props
+	const { computedMatch } = props
+	const { salonID } = computedMatch.params
 	// TODO: query
 	// const [query, setQuery] = useQueryParams({
 	// 	search: StringParam,
@@ -65,9 +69,9 @@ const ReservationsPage = (props: Props) => {
 	// }, [phonePrefixes, dispatch])
 
 	// TODO: zoznam rezervacii
-	// useEffect(() => {
-	// 	dispatch(getServices({ salonID }))
-	// }, [salonID, dispatch])
+	useEffect(() => {
+		dispatch(getSalonReservations({ salonID, dateFrom: '2021-11-11', dateTo: '2022-11-11' }))
+	}, [salonID, dispatch])
 
 	// TODO: paginacia + sortes
 	// const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {

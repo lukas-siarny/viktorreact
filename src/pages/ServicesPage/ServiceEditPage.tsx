@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { change, initialize, startSubmit, stopSubmit } from 'redux-form'
 import { Action, compose, Dispatch } from 'redux'
@@ -15,15 +15,16 @@ import { getService } from '../../reducers/services/serviceActions'
 import { getCategory, ICategoryParameterValue } from '../../reducers/categories/categoriesActions'
 
 // types
-import { IServiceForm, SalonSubPageProps, ILoadingAndFailure, IEmployeesPayload, EmployeeServiceData, Employees, ServiceDetail } from '../../types/interfaces'
+import { IServiceForm, SalonSubPageProps, EmployeeServiceData, Employees, ServiceDetail, IEmployeeServiceEditForm } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
 import { patchReq } from '../../utils/request'
 import { FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
-import { decodePrice, encodePrice, getAssignedUserLabel, getServicePriceAndDurationData } from '../../utils/helper'
+import { decodePrice, encodePrice, getAssignedUserLabel, getEmployeeServiceDataForPatch, getServicePriceAndDurationData } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { history } from '../../utils/history'
+import ServiceEditModal from '../EmployeesPage/components/ServiceEditModal'
 
 interface IParameterValue {
 	id: string | undefined
@@ -48,8 +49,8 @@ type ServiceParameterValuesPatch = ServicePatch['categoryParameterValues']
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
-export const parseEmployeeCreateAndUpdate = (employees: any[]): any => {
-	return employees?.map((employee: any) => employee?.id)
+export const parseEmployeeCreateAndUpdate = (employees: IServiceForm['employees']): any => {
+	return employees?.map((employeeService) => employeeService?.employee?.id)
 }
 
 export const parseParameterValuesCreateAndUpdate = (values: IParameterValue[]): ServiceParameterValuesPatch => {
@@ -121,10 +122,7 @@ export const addEmployee = (dispatch: Dispatch<Action>, employees: Employees, se
 							id: value?.id,
 							name: value?.value,
 							hasOverriddenPricesAndDurationData: false,
-							// vygeneruje objekt so vsetkymi potrebnymi parametrami, ktore budu mat ale hodnotu null
-							// redux-form tak potom vyhodnoti isPristine spravne
 							employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined),
-							// ulozime si aj original data, aby sme potom vedei porovnat, ci ich ma uzivatel pretazene alebo nie
 							salonPriceAndDurationData: getServicePriceAndDurationData(
 								value?.priceAndDurationData?.durationFrom,
 								value?.priceAndDurationData?.durationTo,
@@ -151,13 +149,8 @@ export const addEmployee = (dispatch: Dispatch<Action>, employees: Employees, se
 	dispatch(change(FORM.SERVICE_FORM, 'employee', null))
 }
 
-type ParseParameterValuesInitResult = {
-	activeKeys: string[]
-	serviceCategoryParameter: IParameterValue[]
-}
-
-const parseParameterValuesInit = (values: (ServiceParameterValues | ICategoryParameterValue[]) | undefined): ParseParameterValuesInitResult => {
-	const result: ParseParameterValuesInitResult = { activeKeys: [], serviceCategoryParameter: [] }
+const parseParameterValuesInit = (values: (ServiceParameterValues | ICategoryParameterValue[]) | undefined): IParameterValue[] => {
+	const result: IParameterValue[] = []
 
 	values?.forEach((value: any) => {
 		const durationFrom = value?.priceAndDurationData?.durationFrom
@@ -165,7 +158,7 @@ const parseParameterValuesInit = (values: (ServiceParameterValues | ICategoryPar
 		const priceFrom = decodePrice(value?.priceAndDurationData?.priceFrom)
 		const priceTo = decodePrice(value?.priceAndDurationData?.priceTo)
 		const useParameter = !isNil(durationFrom) || !isNil(priceFrom)
-		result.serviceCategoryParameter.push({
+		result.push({
 			id: value?.categoryParameterValueID || value?.id,
 			name: value.value || value.name,
 			durationFrom,
@@ -176,10 +169,6 @@ const parseParameterValuesInit = (values: (ServiceParameterValues | ICategoryPar
 			variablePrice: !!value?.priceAndDurationData?.priceTo,
 			useParameter
 		})
-
-		if (useParameter) {
-			result.activeKeys.push(value?.categoryParameterValueID || value?.id)
-		}
 	})
 	return result
 }
@@ -199,7 +188,14 @@ const parseEmployeesInit = (employees: ServiceEmployees, service: ServiceDetail)
 				email: employee.email,
 				inviteEmail: employee.inviteEmail,
 				hasActiveAccount: employee.hasActiveAccount
-			}
+			},
+			salonPriceAndDurationData: getServicePriceAndDurationData(
+				service?.priceAndDurationData?.durationFrom,
+				service?.priceAndDurationData?.durationTo,
+				service?.priceAndDurationData?.priceFrom,
+				service?.priceAndDurationData?.priceTo
+			),
+			employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined)
 		}
 
 		if (useCategoryParameter) {
@@ -235,12 +231,6 @@ const parseEmployeesInit = (employees: ServiceEmployees, service: ServiceDetail)
 			formEmployeeServiceData = {
 				...formEmployeeServiceData,
 				hasOverriddenPricesAndDurationData: true,
-				salonPriceAndDurationData: getServicePriceAndDurationData(
-					service?.priceAndDurationData?.durationFrom,
-					service?.priceAndDurationData?.durationTo,
-					service?.priceAndDurationData?.priceFrom,
-					service?.priceAndDurationData?.priceTo
-				),
 				employeePriceAndDurationData: getServicePriceAndDurationData(
 					employee?.priceAndDurationData.durationFrom,
 					employee?.priceAndDurationData.durationTo,
@@ -262,6 +252,9 @@ const ServiceEditPage = (props: Props) => {
 	const service = useSelector((state: RootState) => state.service.service.data?.service)
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
 
+	const [visibleServiceEditModal, setVisibleServiceEditModal] = useState(false)
+	const [updatingService, setUpdatingSerivce] = useState(false)
+
 	const fetchData = async () => {
 		const { data } = await dispatch(getService(serviceID))
 		const { categoryParameterValues } = await dispatch(getCategory(data?.service?.category?.child?.child?.id))
@@ -272,11 +265,10 @@ const ServiceEditPage = (props: Props) => {
 		if (data) {
 			// union parameter values form service and category detail based on categoryParameterValueID
 			const parameterValues = unionBy(data.service?.serviceCategoryParameter?.values, categoryParameterValues as any, 'categoryParameterValueID')
-			const { serviceCategoryParameter } = parseParameterValuesInit(parameterValues)
 			initData = {
 				id: data.service.id,
 				serviceCategoryParameterType: data.service.serviceCategoryParameter?.valueType,
-				serviceCategoryParameter,
+				serviceCategoryParameter: parseParameterValuesInit(parameterValues),
 				durationFrom: data.service.priceAndDurationData.durationFrom,
 				durationTo: data.service.priceAndDurationData.durationTo,
 				variableDuration: !!data.service.priceAndDurationData.durationTo,
@@ -289,6 +281,33 @@ const ServiceEditPage = (props: Props) => {
 			}
 		}
 		dispatch(initialize(FORM.SERVICE_FORM, initData || {}))
+	}
+
+	// const employeeServiceIds = getEmployeeServiceIds(employee?.data?.employee?.categories)
+
+	const editEmployeeService = async (values: IEmployeeServiceEditForm, _dispatch?: Dispatch<any>, customProps?: any) => {
+		const employeeID = values.employee?.id
+		const { resetUserServiceData = false } = customProps || {}
+
+		if (employeeID) {
+			try {
+				setUpdatingSerivce(true)
+				const employeePatchServiceData = getEmployeeServiceDataForPatch(values, resetUserServiceData)
+
+				/* if (!employeeServiceIds?.includes(serviceID)) {
+					await updateEmployee(formValues)
+				} */
+
+				await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, employeePatchServiceData)
+				fetchData()
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.error(e)
+			} finally {
+				setUpdatingSerivce(false)
+				setVisibleServiceEditModal(false)
+			}
+		}
 	}
 
 	useEffect(() => {
@@ -342,6 +361,13 @@ const ServiceEditPage = (props: Props) => {
 						}}
 						salonID={salonID}
 						serviceID={serviceID}
+						setVisibleServiceEditModal={setVisibleServiceEditModal}
+					/>
+					<ServiceEditModal
+						visible={visibleServiceEditModal}
+						setVisible={setVisibleServiceEditModal}
+						loading={updatingService}
+						editEmployeeService={editEmployeeService}
 					/>
 				</>
 			)}

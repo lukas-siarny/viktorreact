@@ -44,6 +44,7 @@ import {
 	encodePrice,
 	filterSalonRolesByPermission,
 	formFieldID,
+	getEmployeeServiceDataForPatch,
 	getServicePriceAndDurationData,
 	hasAuthUserPermissionToEditRole
 } from '../../utils/helper'
@@ -63,6 +64,7 @@ import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.sv
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
 import EmployeeServiceEditForm from './components/EmployeeServiceEditForm'
+import ServiceEditModal from './components/ServiceEditModal'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: string }>
@@ -229,8 +231,6 @@ const parseServices = (employeeCategories?: ServiceRootCategory, salonServices?:
 	}
 	return result
 }
-
-type ServicePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody
 
 const getEmployeeServiceIds = (employeeCategories?: ServiceRootCategory) => {
 	const result: string[] = []
@@ -433,63 +433,7 @@ const EmployeePage = (props: Props) => {
 		if (serviceID) {
 			try {
 				setUpdatingSerivce(true)
-				let employeePatchServiceData: ServicePatchBody = {}
-
-				if (resetUserServiceData) {
-					employeePatchServiceData = {
-						priceAndDurationData: null,
-						serviceCategoryParameterValues: null
-					}
-				} else if (values?.useCategoryParameter) {
-					const areAllParameterValuesEmpty = !values?.serviceCategoryParameter?.some(
-						(parameterValue) => !arePriceAndDurationDataEmpty(parameterValue.employeePriceAndDurationData)
-					)
-
-					if (areAllParameterValuesEmpty) {
-						employeePatchServiceData = {
-							...employeePatchServiceData,
-							serviceCategoryParameterValues: null
-						}
-					} else if ((values?.serviceCategoryParameter?.length || 0) <= 100) {
-						const serviceCategoryParameterValues: ServicePatchBody['serviceCategoryParameterValues'] = []
-						values?.serviceCategoryParameter?.forEach((parameterValue) => {
-							serviceCategoryParameterValues.push({
-								id: parameterValue.id,
-								priceAndDurationData: {
-									durationFrom: parameterValue.employeePriceAndDurationData?.durationFrom,
-									durationTo: parameterValue.employeePriceAndDurationData?.variableDuration ? parameterValue.employeePriceAndDurationData?.durationTo : undefined,
-									priceFrom: encodePrice(parameterValue.employeePriceAndDurationData?.priceFrom as number),
-									priceTo:
-										parameterValue.employeePriceAndDurationData?.variablePrice && !isNil(parameterValue.employeePriceAndDurationData?.priceTo)
-											? encodePrice(parameterValue.employeePriceAndDurationData?.priceTo)
-											: undefined
-								}
-							})
-						})
-						employeePatchServiceData = {
-							...employeePatchServiceData,
-							serviceCategoryParameterValues
-						}
-					}
-				} else {
-					const priceAndDurationData = values?.employeePriceAndDurationData
-					if (arePriceAndDurationDataEmpty(priceAndDurationData)) {
-						employeePatchServiceData = {
-							...employeePatchServiceData,
-							priceAndDurationData: null
-						}
-					} else if (!isNil(priceAndDurationData?.priceFrom)) {
-						employeePatchServiceData = {
-							...employeePatchServiceData,
-							priceAndDurationData: {
-								durationFrom: priceAndDurationData?.durationFrom,
-								durationTo: priceAndDurationData?.variableDuration ? priceAndDurationData?.durationTo : undefined,
-								priceFrom: encodePrice(priceAndDurationData?.priceFrom as number),
-								priceTo: priceAndDurationData?.variablePrice && !isNil(priceAndDurationData?.priceTo) ? encodePrice(priceAndDurationData?.priceTo) : undefined
-							}
-						}
-					}
-				}
+				const employeePatchServiceData = getEmployeeServiceDataForPatch(values, resetUserServiceData)
 
 				if (!employeeServiceIds?.includes(serviceID)) {
 					await updateEmployee(formValues)
@@ -638,20 +582,7 @@ const EmployeePage = (props: Props) => {
 					{t('loc:Odoslať email')}
 				</Button>
 			</Modal>
-			<Modal
-				title={t('loc:Upraviť službu zamestnancovi')}
-				className={'edit-employee-service-modal'}
-				width={600}
-				visible={visibleServiceEditModal}
-				onCancel={() => setVisibleServiceEditModal(false)}
-				footer={null}
-			>
-				<EmployeeServiceEditForm
-					onSubmit={editEmployeeService}
-					loading={updatingService}
-					onResetData={() => editEmployeeService(editServiceformValues, undefined, { resetUserServiceData: true })}
-				/>
-			</Modal>
+			<ServiceEditModal visible={visibleServiceEditModal} setVisible={setVisibleServiceEditModal} loading={updatingService} editEmployeeService={editEmployeeService} />
 		</>
 	)
 }

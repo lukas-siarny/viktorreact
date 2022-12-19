@@ -51,6 +51,7 @@ type ComponentProps = {
 	backUrl?: string
 	salonID: string
 	addEmployee: MouseEventHandler<HTMLElement>
+	setVisibleServiceEditModal?: (visible: boolean) => void
 }
 
 type Props = InjectedFormProps<IServiceForm, ComponentProps> & ComponentProps
@@ -243,112 +244,8 @@ const renderParameterValues = (props: any) => {
 	)
 }
 
-/* export const renderEmployees = (props: any) => {
-	const [t] = useTranslation()
-	const { fields, salon, showDuration } = props
-
-	const genExtra = (index: number, field: any) => (
-		<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
-			<div className={'flex'}>
-				{field?.serviceCategoryParameter && field?.serviceCategoryParameter?.length >= 1 ? (
-					<div className={'flex items-center justify-center mr-2'}>
-						<div className={'title mr-2'}>{field?.serviceCategoryParameter[0]?.name}</div>
-						{showDuration &&
-							renderFromTo(
-								field?.serviceCategoryParameter[0]?.durationFrom,
-								field?.serviceCategoryParameter[0]?.durationTo,
-								field?.serviceCategoryParameter[0]?.variableDuration,
-								<ClockIcon />,
-								t('loc:min'),
-								'mr-3'
-							)}
-						{renderFromTo(
-							field?.serviceCategoryParameter[0]?.priceFrom,
-							field?.serviceCategoryParameter[0]?.priceTo,
-							field?.serviceCategoryParameter[0]?.variablePrice,
-							<CouponIcon />,
-							salon.data?.currency.symbol,
-							'mr-3'
-						)}
-						{field?.serviceCategoryParameter?.length > 1 && '...'}
-					</div>
-				) : (
-					<>
-						{showDuration && renderFromTo(field?.durationFrom, field?.durationTo, field?.variableDuration, <ClockIcon />, t('loc:min'), 'mr-3')}
-						{renderFromTo(field?.priceFrom, field?.priceTo, field?.variablePrice, <CouponIcon />, salon.data?.currency.symbol, 'mr-3')}
-					</>
-				)}
-				<DeleteButton
-					onConfirm={() => {
-						fields.remove(index)
-					}}
-					smallIcon
-					size={'small'}
-					entityName={t('loc:zamestnanca')}
-					type={'default'}
-					onlyIcon
-				/>
-			</div>
-		</div>
-	)
-
-	return (
-		<>
-			<Collapse className={'collapse-list'} bordered={false} accordion={true}>
-				{fields.map((field: any, index: number) => {
-					const fieldData = fields.get(index)
-					const collapsible = (fieldData?.durationFrom && fieldData?.priceFrom) || fieldData?.serviceCategoryParameter?.length > 1 ? undefined : 'disabled'
-
-					return (
-						<Panel
-							header={
-								<div className={'flex align-center'}>
-									<div className={'title flex items-center'}>
-										<AvatarComponents className='mr-2-5 w-7 h-7' src={fieldData?.image?.resizedImages?.small} fallBackSrc={fieldData?.image?.original} />
-										{fieldData?.name || fieldData?.email || fieldData?.inviteEmail || fieldData?.id}
-										{fieldData?.hasActiveAccount === false && !fieldData?.inviteEmail ? <QuestionIcon className='ml-4' width={20} height={20} /> : undefined}
-										{fieldData?.hasActiveAccount === false && fieldData?.inviteEmail ? <CloudOfflineIcon className='ml-4' width={20} height={20} /> : undefined}
-									</div>
-								</div>
-							}
-							key={index}
-							extra={genExtra(index, fieldData)}
-							className={cx({ hideIcon: collapsible })}
-							collapsible={collapsible}
-						>
-							{fieldData?.serviceCategoryParameter?.length > 1 &&
-								fieldData?.serviceCategoryParameter?.map((parameterValue: any) => (
-									<Tag className={'my-1'}>
-										<div className={'title mr-2'}>{parameterValue?.name}</div>
-										{showDuration &&
-											renderFromTo(
-												parameterValue?.durationFrom,
-												parameterValue?.durationTo,
-												parameterValue?.variableDuration,
-												<ClockIcon />,
-												t('loc:min'),
-												'mr-3'
-											)}
-										{renderFromTo(
-											parameterValue?.priceFrom,
-											parameterValue?.priceTo,
-											parameterValue?.variablePrice,
-											<CouponIcon />,
-											salon.data?.currency.symbol,
-											'mr-3'
-										)}
-									</Tag>
-								))}
-						</Panel>
-					)
-				})}
-			</Collapse>
-		</>
-	)
-} */
-
 const ServiceForm: FC<Props> = (props) => {
-	const { salonID, serviceID, handleSubmit, pristine, addEmployee, backUrl } = props
+	const { salonID, serviceID, handleSubmit, pristine, addEmployee, backUrl, setVisibleServiceEditModal } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -613,7 +510,7 @@ const ServiceForm: FC<Props> = (props) => {
 										name={'employees'}
 										currencySymbol={salon.data?.currency.symbol}
 										panelHeaderRender={panelHeaderRenderEmployee}
-										setVisibleServiceEditModal={() => console.log('on edit')}
+										setVisibleServiceEditModal={setVisibleServiceEditModal}
 									/>
 									{hasPermission && (
 										<div className={'content-footer pt-0'} id={'content-footer-container'}>

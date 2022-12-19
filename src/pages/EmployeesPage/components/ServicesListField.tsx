@@ -47,8 +47,8 @@ export const panelHeaderRenderEmployee = (fieldData: EmployeeServiceData) => {
 				<div className={'w-7 h-7 shrink-0 bg-notino-gray'} style={{ borderRadius: '50%' }} />
 			)}
 			<span className={'font-bold'}>{employee?.name || employee?.email || employee?.inviteEmail || employee?.id}</span>
-			{employee?.hasActiveAccount === false && !employee?.inviteEmail ? <QuestionIcon className='ml-4' width={20} height={20} /> : undefined}
-			{employee?.hasActiveAccount === false && employee.inviteEmail ? <CloudOfflineIcon className='ml-4' width={20} height={20} /> : undefined}
+			{employee?.hasActiveAccount === false && !employee?.inviteEmail ? <QuestionIcon width={20} height={20} /> : undefined}
+			{employee?.hasActiveAccount === false && employee.inviteEmail ? <CloudOfflineIcon width={20} height={20} /> : undefined}
 		</div>
 	)
 }

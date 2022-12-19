@@ -21,6 +21,7 @@
   "languages-in-salons": "/languages-in-salons",
   "login": "/login",
   "my-account": "/my-account",
+  "reservations": "/reservations",
   "reset-password": "/reset-password",
   "salon-settings": "/salon-settings",
   "salons": "/salons",

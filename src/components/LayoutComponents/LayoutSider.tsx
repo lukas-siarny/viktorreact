@@ -29,6 +29,7 @@ import { ReactComponent as InvoiceIcon } from '../../assets/icons/invoice-24.svg
 import { ReactComponent as ChevronRightIcon } from '../../assets/icons/chevron-right.svg'
 import { ReactComponent as CalendarIcon } from '../../assets/icons/calendar-24.svg'
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
+import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -207,6 +208,12 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							label: t('loc:Kalendár'),
 							onClick: () => history.push(getPath(t('paths:calendar'))),
 							icon: <CalendarIcon />
+						},
+						{
+							key: PAGE.RESERVATIONS,
+							label: t('loc:Rezervácie'),
+							onClick: () => history.push(getPath(t('paths:reservations'))),
+							icon: <ReservationsIcon />
 						},
 						{
 							key: PAGE.SALON_SETTINGS,

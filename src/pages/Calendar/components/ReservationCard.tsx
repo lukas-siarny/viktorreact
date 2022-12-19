@@ -3,9 +3,10 @@
 import React, { FC, useRef } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
+import { startsWith } from 'lodash'
 
 // utils
-import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE } from '../../../utils/enums'
+import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NEW_ID_PREFIX } from '../../../utils/enums'
 import { getAssignedUserLabel } from '../../../utils/helper'
 
 // assets
@@ -13,6 +14,7 @@ import { ReactComponent as QuestionMarkIcon } from '../../../assets/icons/questi
 import { ReactComponent as CheckIcon } from '../../../assets/icons/check-10.svg'
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/service-icon-10.svg'
 import { ReactComponent as AvatarIcon } from '../../../assets/icons/avatar-10.svg'
+import { ReactComponent as CloseIcon } from '../../../assets/icons/close-12.svg'
 
 // types
 import { CalendarEvent, IEventCardProps, ReservationPopoverData, ReservationPopoverPosition } from '../../../types/interfaces'
@@ -27,19 +29,29 @@ interface IReservationCardProps extends IEventCardProps {
 	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
 }
 
-const getIcon = ({ isPast, isRealized, isApproved, service }: { isPast?: boolean; isRealized?: boolean; isApproved?: boolean; service?: CalendarEvent['service'] }) => {
-	if (isPast) {
-		if (isRealized) {
-			return <CheckIcon className={'icon check'} />
-		}
-
-		if (isApproved) {
-			return <QuestionMarkIcon className={'icon question-mark'} />
-		}
+const getIcon = ({
+	isPast,
+	isRealized,
+	isApproved,
+	notRealized,
+	service
+}: {
+	isPast?: boolean
+	isRealized?: boolean
+	notRealized?: boolean
+	isApproved?: boolean
+	service?: CalendarEvent['service']
+}) => {
+	if (isPast && isApproved) {
+		return <QuestionMarkIcon className={'icon question-mark'} />
 	}
 
 	if (isRealized) {
 		return <CheckIcon className={'icon check'} />
+	}
+
+	if (notRealized) {
+		return <CloseIcon className={'icon not-realized'} />
 	}
 
 	return service?.icon?.resizedImages ? (
@@ -75,7 +87,8 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 	const isPast = dayjs(originalEventData?.endDateTime || end).isBefore(dayjs())
 	const isPending = reservationData?.state === RESERVATION_STATE.PENDING
 	const isApproved = reservationData?.state === RESERVATION_STATE.APPROVED
-	const isRealized = reservationData?.state === RESERVATION_STATE.REALIZED || reservationData?.state === RESERVATION_STATE.NOT_REALIZED
+	const isRealized = reservationData?.state === RESERVATION_STATE.REALIZED
+	const notRealized = reservationData?.state === RESERVATION_STATE.NOT_REALIZED
 	const isOnline = reservationData?.createSourceType !== RESERVATION_SOURCE_TYPE.ONLINE
 	const isEmployeeAutoassigned = reservationData?.employeeAssignmentType === RESERVATION_ASSIGNMENT_TYPE.SYSTEM
 
@@ -90,11 +103,15 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		email: customer?.email
 	})
 
-	const icon = getIcon({ isPast, isApproved, isRealized, service })
+	const icon = getIcon({ isPast, isApproved, isRealized, notRealized, service })
 
 	const cardRef = useRef<HTMLDivElement | null>(null)
 
 	const handleReservationClick = () => {
+		// NOTE: prevent proti kliknutiu na virutalny event rezervacie neotvori sa popover
+		if (startsWith(originalEventData.id, NEW_ID_PREFIX)) {
+			return
+		}
 		if (originalEventData.id && cardRef.current) {
 			const data: ReservationPopoverData = {
 				start,

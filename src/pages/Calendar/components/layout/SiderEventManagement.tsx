@@ -63,6 +63,7 @@ type Props = {
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	calendarApi?: CalendarApi
 	changeCalendarDate: (newDate: string) => void
+	phonePrefix?: string
 }
 
 const SiderEventManagement: FC<Props> = (props) => {
@@ -77,7 +78,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 		eventsViewType,
 		newEventData,
 		calendarApi,
-		changeCalendarDate
+		changeCalendarDate,
+		phonePrefix
 	} = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -280,7 +282,9 @@ const SiderEventManagement: FC<Props> = (props) => {
 	)
 
 	const forms = {
-		[CALENDAR_EVENT_TYPE.RESERVATION]: <ReservationForm salonID={salonID} eventId={eventId} searchEmployes={searchEmployes} onSubmit={handleSubmitReservation} />,
+		[CALENDAR_EVENT_TYPE.RESERVATION]: (
+			<ReservationForm salonID={salonID} eventId={eventId} phonePrefix={phonePrefix} searchEmployes={searchEmployes} onSubmit={handleSubmitReservation} />
+		),
 		[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: <ShiftForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />,
 		[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: <TimeOffForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />,
 		[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: <BreakForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />

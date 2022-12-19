@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { change, Field, Fields, InjectedFormProps, reduxForm, submit } from 'redux-form'
+import { change, Field, Fields, initialize, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Form, Modal, Spin } from 'antd'
 import { flatten, map } from 'lodash'
@@ -39,13 +39,14 @@ type ComponentProps = {
 	salonID: string
 	searchEmployes: (search: string, page: number) => Promise<any>
 	eventId?: string | null
+	phonePrefix?: string
 }
 const formName = FORM.CALENDAR_RESERVATION_FORM
 
 type Props = InjectedFormProps<ICalendarReservationForm, ComponentProps> & ComponentProps
 
 const ReservationForm: FC<Props> = (props) => {
-	const { handleSubmit, salonID, searchEmployes, eventId } = props
+	const { handleSubmit, salonID, searchEmployes, eventId, phonePrefix } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [visibleCustomerModal, setVisibleCustomerModal] = useState(false)
@@ -182,7 +183,12 @@ const ReservationForm: FC<Props> = (props) => {
 									actions={[
 										{
 											title: t('loc:Nový zákaznik'),
-											onAction: hasPermission ? () => setVisibleCustomerModal(true) : openForbiddenModal
+											onAction: hasPermission
+												? () => {
+														dispatch(initialize(FORM.CUSTOMER, { phonePrefixCountryCode: phonePrefix }))
+														setVisibleCustomerModal(true)
+												  }
+												: openForbiddenModal
 										}
 									]}
 								/>

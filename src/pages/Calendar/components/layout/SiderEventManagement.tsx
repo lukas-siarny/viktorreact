@@ -63,6 +63,7 @@ type Props = {
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	calendarApi?: CalendarApi
 	changeCalendarDate: (newDate: string) => void
+	phonePrefix?: string
 }
 
 const SiderEventManagement: FC<Props> = (props) => {
@@ -77,7 +78,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 		eventsViewType,
 		newEventData,
 		calendarApi,
-		changeCalendarDate
+		changeCalendarDate,
+		phonePrefix
 	} = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()

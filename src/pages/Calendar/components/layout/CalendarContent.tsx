@@ -1,5 +1,5 @@
 import React, { useImperativeHandle, useMemo, useRef, useState } from 'react'
-import { useDispatch, useSelector, batch } from 'react-redux'
+import { batch, useDispatch, useSelector } from 'react-redux'
 import { Spin } from 'antd'
 import { Content } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
@@ -13,7 +13,7 @@ import { EventResizeDoneArg } from '@fullcalendar/interaction'
 import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, FORM, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
@@ -74,7 +74,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		parentPath
 	} = props
 
-	const dispatch = useDispatch()
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
 	// const monthView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -122,6 +121,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
 	const calendarSelectedDate = getSelectedDateForCalendar(view, selectedDate)
+	const dispatch = useDispatch()
 
 	const onEventChange = (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
 		const hasPermissions = permitted(authUserPermissions || [], selectedSalonuniqPermissions, UPDATE_EVENT_PERMISSIONS)
@@ -144,7 +144,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		const eventData = eventExtenedProps?.eventData
 		const newResourceExtendedProps = newResource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
 		const eventId = eventData?.id
-		const calendarBulkEventID = eventData?.calendarBulkEvent?.id || eventData?.calendarBulkEvent
+
+		const calendarBulkEventID = eventData?.calendarBulkEvent?.id
 
 		// zatial predpokladame, ze nebudu viacdnove eventy - takze start a end date by mal byt rovnaky
 		const startDajys = dayjs(start)
@@ -191,8 +192,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		}
 		// Ak existuje virualny event a isPlaceholder z eventu je true tak sa jedna o virtualny even a bude sa rovbit change nad formularmi a nezavola sa request na BE
 		if (virtualEvent && startsWith(event.id, NEW_ID_PREFIX)) {
-			const formName = `CALENDAR_${eventData?.eventType}_FORM` // TODO: ked sa spravi refacor bude len RESERVATION a EVENT forms
-			// TODO: ked budu dva formy tak spravit cez init s tym ze sa budu predchadzajuce data zistovat a tie sa mergnu s novymi prevetne sa voci zbytocnemu volaniu change - ked sa spravi NOT-3624
+			const formName = eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION ? FORM.CALENDAR_RESERVATION_FORM : FORM.CALENDAR_EVENT_FORM
 			batch(() => {
 				dispatch(change(formName, 'date', date))
 				dispatch(change(formName, 'timeFrom', timeFrom))

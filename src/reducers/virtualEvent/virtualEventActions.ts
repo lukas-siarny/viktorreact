@@ -76,12 +76,18 @@ export const addOrUpdateEvent =
 			return
 		}
 
-		const formData: Partial<ICalendarEventForm & ICalendarReservationForm> | undefined = getState().form[formName].values
+		let formData: Partial<ICalendarEventForm & ICalendarReservationForm> | undefined
+
+		try {
+			formData = getState().form[formName].values
+		} catch (error: any) {
+			// eslint-disable-next-line no-console
+			console.error(`Missing formData, virtual event can't be displayed`, error)
+		}
 
 		if (!formData) {
 			return
 		}
-
 		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID } = formData
 
 		if (date && timeFrom && employee && eventType) {
@@ -140,9 +146,11 @@ export const addOrUpdateEvent =
 								email: employee.label || employee.value
 						  }
 						: undefined,
-					calendarBulkEvent: {
-						id: calendarBulkEventID
-					}
+					calendarBulkEvent: calendarBulkEventID
+						? {
+								id: calendarBulkEventID
+						  }
+						: undefined
 				}
 			}
 

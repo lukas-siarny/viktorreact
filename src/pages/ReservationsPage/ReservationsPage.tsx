@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Col, Row, Spin } from 'antd'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 
 // components
@@ -14,8 +14,12 @@ import { withPermissions } from '../../utils/Permissions'
 // reducers
 
 // types
-import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
+import { Columns, IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
 import { getSalonReservations } from '../../reducers/salons/salonsActions'
+import CustomTable from '../../components/CustomTable'
+import { RootState } from '../../reducers'
+import UserAvatar from '../../components/AvatarComponents'
+import { getAssignedUserLabel } from '../../utils/helper'
 
 // assets
 
@@ -30,6 +34,7 @@ const ReservationsPage = (props: Props) => {
 	const dispatch = useDispatch()
 	const { computedMatch } = props
 	const { salonID } = computedMatch.params
+	const reservations = useSelector((state: RootState) => state.salons.reservations)
 	// TODO: query
 	// const [query, setQuery] = useQueryParams({
 	// 	search: StringParam,
@@ -70,7 +75,8 @@ const ReservationsPage = (props: Props) => {
 
 	// TODO: zoznam rezervacii
 	useEffect(() => {
-		dispatch(getSalonReservations({ salonID, dateFrom: '2021-11-11', dateTo: '2022-11-11' }))
+		// TODO: posielat z query
+		dispatch(getSalonReservations({ salonID, dateFrom: '2021-11-11', dateTo: '2022-12-12' }))
 	}, [salonID, dispatch])
 
 	// TODO: paginacia + sortes
@@ -103,84 +109,96 @@ const ReservationsPage = (props: Props) => {
 	// 	setQuery(newQuery)
 	// }
 	// TODO: tabulka
-	// const columns: Columns = [
-	// 	{
-	// 		title: t('loc:Meno'),
-	// 		dataIndex: 'fullName',
-	// 		key: 'lastName',
-	// 		ellipsis: true,
-	// 		sorter: true,
-	// 		sortOrder: setOrder(query.order, 'lastName'),
-	// 		width: '25%',
-	// 		render: (_value, record) => {
-	// 			return (
-	// 				<>
-	// 					<UserAvatar className='mr-2-5 w-7 h-7' src={record?.image?.resizedImages?.thumbnail} fallBackSrc={record?.image?.original} />
-	// 					{record?.firstName || record.lastName ? `${record?.firstName ?? ''} ${record?.lastName ?? ''}`.trim() : '-'}
-	// 				</>
-	// 			)
-	// 		}
-	// 	},
-	// 	{
-	// 		title: t('loc:Email'),
-	// 		dataIndex: 'email',
-	// 		key: 'email',
-	// 		ellipsis: true,
-	// 		width: '20%',
-	// 		render: (value) => value || '-'
-	// 	},
-	// 	{
-	// 		title: t('loc:Pozvánkový email'),
-	// 		dataIndex: 'inviteEmail',
-	// 		key: 'inviteEmail',
-	// 		ellipsis: true,
-	// 		width: '20%',
-	// 		render: (value) => value || '-'
-	// 	},
-	// 	{
-	// 		title: t('loc:Telefón'),
-	// 		dataIndex: 'phone',
-	// 		key: 'phone',
-	// 		ellipsis: true,
-	// 		sorter: false,
-	// 		width: '15%',
-	// 		render: (_value, record) => {
-	// 			return <>{record?.phone && prefixOptions[record?.phonePrefixCountryCode] ? `${prefixOptions[record?.phonePrefixCountryCode]} ${record.phone}` : '-'}</>
-	// 		}
-	// 	},
-	// 	{
-	// 		title: t('loc:Služby'),
-	// 		dataIndex: 'services',
-	// 		key: 'services',
-	// 		ellipsis: true,
-	// 		render: (value) => {
-	// 			return value && value.length ? <PopoverList elements={value.map((service: any) => ({ name: service.category.name }))} /> : '-'
-	// 		}
-	// 	},
-	// 	{
-	// 		title: t('loc:Stav konta'),
-	// 		dataIndex: 'hasActiveAccount',
-	// 		key: 'status',
-	// 		ellipsis: true,
-	// 		sorter: true,
-	// 		width: 90,
-	// 		sortOrder: setOrder(query.order, 'status'),
-	// 		render: (value, record) => (
-	// 			<div className={'flex justify-center'}>
-	// 				{value === false && !record?.inviteEmail ? (
-	// 					<TooltipEllipsis title={t('loc:Nespárované')}>
-	// 						<QuestionIcon width={20} height={20} />
-	// 					</TooltipEllipsis>
-	// 				) : undefined}
-	// 				{value === false && record?.inviteEmail ? (
-	// 					<TooltipEllipsis title={t('loc:Čakajúce')}>
-	// 						<CloudOfflineIcon width={20} height={20} />
-	// 					</TooltipEllipsis>
-	// 				) : undefined}
-	// 			</div>
-	// 		)
-	// 	}
-	// ]
+	const columns: Columns = [
+		{
+			title: t('loc:Dátum'),
+			dataIndex: 'date',
+			key: 'date',
+			ellipsis: true,
+			width: '20%'
+		},
+		{
+			title: t('loc:Trvanie'),
+			dataIndex: 'time',
+			key: 'time',
+			ellipsis: true,
+			width: '20%'
+		},
+		{
+			title: t('loc:Vytvorená v'),
+			dataIndex: 'createSourceType',
+			key: 'createSourceType',
+			ellipsis: true,
+			width: '20%'
+		},
+		{
+			title: t('loc:Stav'),
+			dataIndex: 'state',
+			key: 'state',
+			ellipsis: true,
+			width: '20%'
+		},
+		{
+			title: t('loc:Spôsob úhrady'),
+			dataIndex: 'paymentMethod',
+			key: 'paymentMethod',
+			ellipsis: true,
+			width: '20%',
+			render: (value) => value || '-'
+		},
+		{
+			title: t('loc:Zamestnanec'),
+			dataIndex: 'employee',
+			key: 'employee',
+			ellipsis: true,
+			width: '20%',
+			render: (value) => {
+				return (
+					<>
+						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.image?.resizedImages?.thumbnail} fallBackSrc={value?.image?.original} />
+						{getAssignedUserLabel(value)}
+					</>
+				)
+			}
+		},
+		{
+			title: t('loc:Zákazník'),
+			dataIndex: 'customer',
+			key: 'customer',
+			ellipsis: true,
+			width: '20%',
+			render: (value) => {
+				return (
+					<>
+						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.profileImage?.resizedImages?.thumbnail} fallBackSrc={value?.profileImage?.original} />
+						{getAssignedUserLabel(value)}
+					</>
+				)
+			}
+		},
+		{
+			title: t('loc:Služba'),
+			dataIndex: 'service',
+			key: 'service',
+			ellipsis: true,
+			width: '20%',
+			render: (value) => {
+				return (
+					<>
+						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.icon?.resizedImages?.thumbnail} fallBackSrc={value?.icon?.original} />
+						{value?.name}
+					</>
+				)
+			}
+		},
+		{
+			title: t('loc:Dátum vytvorenia'),
+			dataIndex: 'createdAt',
+			key: 'createdAt',
+			ellipsis: true,
+			width: '20%'
+		}
+	]
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -200,7 +218,6 @@ const ReservationsPage = (props: Props) => {
 					<div className='content-body'>
 						{/* // TODO: spinning */}
 						<Spin spinning={false}>
-							TESTTTT
 							{/* // TODO: Filter */}
 							{/* <Permissions */}
 							{/*	allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]} */}
@@ -218,29 +235,19 @@ const ReservationsPage = (props: Props) => {
 							{/*	)} */}
 							{/* /> */}
 							{/* // TODO: tabulka */}
-							{/* <CustomTable */}
-							{/*	className='table-fixed' */}
-							{/*	onChange={onChangeTable} */}
-							{/*	columns={columns} */}
-							{/*	dataSource={employees?.data?.employees} */}
-							{/*	rowClassName={'clickable-row'} */}
-							{/*	rowKey='id' */}
-							{/*	twoToneRows */}
-							{/*	scroll={{ x: 800 }} */}
-							{/*	onRow={(record) => ({ */}
-							{/*		onClick: () => { */}
-							{/*			history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id }))) */}
-							{/*		} */}
-							{/*	})} */}
-							{/*	useCustomPagination */}
-							{/*	pagination={{ */}
-							{/*		pageSize: employees?.data?.pagination?.limit, */}
-							{/*		total: employees?.data?.pagination?.totalCount, */}
-							{/*		current: employees?.data?.pagination?.page, */}
-							{/*		onChange: onChangePagination, */}
-							{/*		disabled: employees?.isLoading */}
-							{/*	}} */}
-							{/* /> */}
+							<CustomTable
+								className='table-fixed'
+								// onChange={onChangeTable}
+								columns={columns}
+								loading={reservations?.isLoading}
+								dataSource={reservations?.tableData}
+								rowClassName={'clickable-row'}
+								rowKey='id'
+								twoToneRows
+								// scroll={{ x: 800 }}
+								useCustomPagination
+								pagination={undefined}
+							/>
 						</Spin>
 					</div>
 				</Col>

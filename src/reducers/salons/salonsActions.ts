@@ -1,5 +1,6 @@
 /* eslint-disable import/no-cycle */
-import { map, isEmpty } from 'lodash'
+import { map, isEmpty, find } from 'lodash'
+import i18next from 'i18next'
 import { IResetStore } from '../generalTypes'
 
 // types
@@ -10,8 +11,16 @@ import { IQueryParams, ISearchable } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { SALON_FILTER_STATES, SALON_FILTER_OPENING_HOURS, SALONS_TAB_KEYS } from '../../utils/enums'
-import { normalizeQueryParams } from '../../utils/helper'
+import {
+	SALON_FILTER_STATES,
+	SALON_FILTER_OPENING_HOURS,
+	SALONS_TAB_KEYS,
+	CALENDAR_EVENT_TYPE,
+	RESERVATION_STATE,
+	RESERVATION_PAYMENT_METHOD,
+	RESERVATION_SOURCE_TYPE
+} from '../../utils/enums'
+import { formatDate, formatTime, normalizeQueryParams, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
 
 export type ISalonsActions =
 	| IResetStore
@@ -328,10 +337,30 @@ export const getSalonReservations =
 		let payload = {} as ISalonReservationsPayload
 		try {
 			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_START })
-			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { ...normalizeQueryParams(queryParams) } as any)
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', {
+				...normalizeQueryParams(queryParams),
+				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
+				reservationStates: [RESERVATION_STATE.APPROVED, RESERVATION_STATE.CANCEL_BY_SALON, RESERVATION_STATE.PENDING, RESERVATION_STATE.NOT_REALIZED]
+			} as any)
+			console.log('data', data)
+			const tableData = map(data.calendarEvents, (event) => {
+				const employee = find(data.employees, { id: event.employee.id })
+				return {
+					key: event.id,
+					date: formatDate(event.start.date),
+					time: `${event.start.time} - ${event.end.time}`,
+					createdAt: formatDate(event.createdAt),
+					createSourceType: event.reservationData?.createSourceType === RESERVATION_SOURCE_TYPE.ONLINE ? i18next.t('loc:Online') : i18next.t('loc:Offline'),
+					state: translateReservationState(event.reservationData?.state as RESERVATION_STATE),
+					employee,
+					customer: event.customer,
+					service: event.service,
+					paymentMethod: translateReservationPaymentMethod(event.reservationData?.paymentMethod as RESERVATION_PAYMENT_METHOD)
+				}
+			})
 			payload = {
 				data,
-				tableData: [] // TODO:
+				tableData
 			}
 			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_DONE, payload })
 		} catch (err) {

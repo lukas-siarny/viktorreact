@@ -62,7 +62,9 @@ import {
 	MSG_TYPE,
 	NOTIFICATION_TYPE,
 	QUERY_LIMIT,
-	SALON_PERMISSION
+	RESERVATION_STATE,
+	SALON_PERMISSION,
+	RESERVATION_PAYMENT_METHOD
 } from './enums'
 
 import { CountriesData, IAuthUserPayload, IDateTimeFilterOption, IEmployeePayload, IPrice, ISelectOptionItem, IStructuredAddress } from '../types/interfaces'
@@ -252,6 +254,40 @@ export const translateDayName = (day: DAY | typeof MONDAY_TO_FRIDAY, shortName?:
 			return shortName ? i18next.t('loc:Ne') : i18next.t('loc:Nedeľa')
 		case MONDAY_TO_FRIDAY:
 			return shortName ? i18next.t('loc:Po - Pia') : i18next.t('loc:Pondelok - Piatok')
+		default:
+			return ''
+	}
+}
+
+export const translateReservationState = (state?: RESERVATION_STATE) => {
+	switch (state) {
+		case RESERVATION_STATE.NOT_REALIZED:
+			return i18next.t('loc:Nezrealizovaná')
+		case RESERVATION_STATE.PENDING:
+			return i18next.t('loc:Čakajúca')
+		case RESERVATION_STATE.CANCEL_BY_SALON:
+			return i18next.t('loc:Zrušená salónom')
+		case RESERVATION_STATE.APPROVED:
+			return i18next.t('loc:Potvrdená')
+		case RESERVATION_STATE.REALIZED:
+			return i18next.t('loc:Zrealizovaná')
+		case RESERVATION_STATE.CANCEL_BY_CUSTOMER:
+			return i18next.t('loc:Zrušená zákaznikom')
+		case RESERVATION_STATE.DECLINED:
+			return i18next.t('loc:Odmietnutá')
+		default:
+			return ''
+	}
+}
+
+export const translateReservationPaymentMethod = (paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
+	switch (paymentMethod) {
+		case RESERVATION_PAYMENT_METHOD.CARD:
+			return i18next.t('loc:Kartou')
+		case RESERVATION_PAYMENT_METHOD.CASH:
+			return i18next.t('loc:Hotovosť')
+		case RESERVATION_PAYMENT_METHOD.OTHER:
+			return i18next.t('loc:Iné')
 		default:
 			return ''
 	}

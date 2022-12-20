@@ -348,7 +348,7 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 							style={{ maxWidth: 500 }}
 							allowedButton={
 								<Button className='noti-btn w-1/2' size='large' type='dashed' htmlType='button' icon={<BinIcon />} disabled={loading} loading={loading}>
-									{t('loc:Vymazať nastavenia')}
+									{STRINGS(t).delete(t('loc:nastavenia'))}
 								</Button>
 							}
 						/>
@@ -362,7 +362,7 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 						loading={loading}
 						icon={<EditIcon />}
 					>
-						{STRINGS(t).save(t('nastavenia'))}
+						{STRINGS(t).save(t('loc:nastavenia'))}
 					</Button>
 				</div>
 			</Form>

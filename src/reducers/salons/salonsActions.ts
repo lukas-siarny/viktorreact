@@ -332,16 +332,15 @@ export const getSalonHistory =
 	}
 
 export const getSalonReservations =
-	(queryParams: IGetSalonReservationsQueryParams): ThunkResult<Promise<ISalonReservationsPayload>> =>
+	(queryParams: any): ThunkResult<Promise<ISalonReservationsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISalonReservationsPayload
 		try {
 			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_START })
 			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', {
 				...normalizeQueryParams(queryParams),
-				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
-				reservationStates: [RESERVATION_STATE.APPROVED, RESERVATION_STATE.CANCEL_BY_SALON, RESERVATION_STATE.PENDING, RESERVATION_STATE.NOT_REALIZED]
-			} as any)
+				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION]
+			} as any) // TODO: opravit any type
 			console.log('data', data)
 			const tableData = map(data.calendarEvents, (event) => {
 				const employee = find(data.employees, { id: event.employee.id })

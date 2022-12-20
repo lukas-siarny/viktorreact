@@ -18,11 +18,12 @@ import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, FORM, NEW_ID_
 // components
 import CalendarDayView from '../views/CalendarDayView'
 import CalendarWeekView from '../views/CalendarWeekView'
-// import CalendarMonthView from '../views/CalendarMonthView'
+import CalendarMonthView from '../views/CalendarMonthView'
 import CalendarEmptyState from '../CalendarEmptyState'
 
 // types
 import {
+	Employees,
 	ICalendarEventForm,
 	ICalendarReservationForm,
 	ICalendarView,
@@ -43,12 +44,14 @@ type Props = {
 	handleSubmitEvent: (values: ICalendarEventForm) => void
 	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
 	enabledSalonReservations?: boolean
+	clearRestartInterval: () => void
+	employees: Employees
 } & ICalendarView
 
 export type CalendarRefs = {
 	[CALENDAR_VIEW.DAY]?: InstanceType<typeof FullCalendar> | null
 	[CALENDAR_VIEW.WEEK]?: InstanceType<typeof FullCalendar> | null
-	/* [CALENDAR_VIEW.MONTH]?: InstanceType<typeof FullCalendar> | null */
+	[CALENDAR_VIEW.MONTH]?: InstanceType<typeof FullCalendar> | null
 }
 
 const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
@@ -73,7 +76,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
-	// const monthView = useRef<InstanceType<typeof FullCalendar>>(null)
+	const monthView = useRef<InstanceType<typeof FullCalendar>>(null)
+
 	const [t] = useTranslation()
 
 	// query
@@ -86,8 +90,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	useImperativeHandle(ref, () => ({
 		[CALENDAR_VIEW.DAY]: dayView?.current,
-		[CALENDAR_VIEW.WEEK]: weekView?.current
-		/* [CALENDAR_VIEW.MONTH]: monthView?.current */
+		[CALENDAR_VIEW.WEEK]: weekView?.current,
+		[CALENDAR_VIEW.MONTH]: monthView?.current
 	}))
 
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
@@ -148,13 +152,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		const timeTo = dayjs(end).format(CALENDAR_DATE_FORMAT.TIME)
 
 		let date = startDajys.format(CALENDAR_DATE_FORMAT.QUERY)
-
-		if (calendarView === CALENDAR_VIEW.WEEK) {
-			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
-			// (to sa bude diat len pri drope)
-			const resource = event.getResources()[0]
-			date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
-		}
 
 		if (calendarView === CALENDAR_VIEW.WEEK) {
 			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
@@ -261,20 +258,27 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			)
 		}
 
-		/* if (view === CALENDAR_VIEW.MONTH) {
+		if (view === CALENDAR_VIEW.MONTH) {
 			return (
 				<CalendarMonthView
 					ref={monthView}
-					selectedDate={selectedDate}
-					reservations={reservations}
-					shiftsTimeOffs={shiftsTimeOffs}
-					employees={employees}
+					enabledSalonReservations={enabledSalonReservations}
+					setEventManagement={setEventManagement}
+					disableRender={disableRender}
+					selectedDate={calendarSelectedDate}
+					reservations={sources.reservations}
+					shiftsTimeOffs={sources.shiftsTimeOffs}
+					virtualEvent={sources.virtualEvent}
 					eventsViewType={eventsViewType}
 					salonID={salonID}
 					onEditEvent={onEditEvent}
+					onReservationClick={onReservationClick}
+					onAddEvent={onAddEvent}
+					onEventChange={onEventChange}
+					onEventChangeStart={onEventChangeStart}
 				/>
 			)
-		} */
+		}
 
 		if (view === CALENDAR_VIEW.WEEK) {
 			return (
@@ -294,7 +298,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					onEditEvent={onEditEvent}
 					onReservationClick={onReservationClick}
 					onAddEvent={onAddEvent}
-					clearRestartInterval={clearRestartInterval}
 					onEventChange={onEventChange}
 					onEventChangeStart={onEventChangeStart}
 					updateCalendarSize={() => weekView?.current?.getApi().updateSize()}
@@ -318,7 +321,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				onAddEvent={onAddEvent}
 				onEditEvent={onEditEvent}
 				onReservationClick={onReservationClick}
-				clearRestartInterval={clearRestartInterval}
 				onEventChange={onEventChange}
 				onEventChangeStart={onEventChangeStart}
 			/>

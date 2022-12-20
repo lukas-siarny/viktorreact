@@ -14,7 +14,7 @@ import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_
 import { composeDayViewEvents, composeDayViewResources, eventAllow, getTimeScrollId } from '../../calendarHelpers'
 
 // types
-import { ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/interfaces'
+import { Employees, ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
@@ -71,7 +71,9 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 	)
 }
 
-interface ICalendarDayView extends ICalendarView {}
+interface ICalendarDayView extends ICalendarView {
+	employees: Employees
+}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
 	const {
@@ -173,7 +175,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 					if (onEventChange) onEventChange(CALENDAR_VIEW.DAY, arg)
 				}}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
-				// select
 				selectable={enabledSalonReservations}
 				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
 				eventResizeStart={() => onEventChangeStart && onEventChangeStart()}

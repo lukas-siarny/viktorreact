@@ -341,3 +341,36 @@
 											.fc-datagrid-cell-frame
 												&::after
 													display: none
+
+
+// monthly view
+.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events
+	min-height: 160px
+	margin: 0
+.fc-dayGridMonth-view
+	.fc-non-business
+		opacity: 0.4
+		background-color: none
+		background-size: 32px 32px
+		background-image: url("../../assets/images/gray-pattern-background.png")
+	> table.fc-scrollgrid
+		border: none
+	.fc-scrollgrid-section-header
+		.fc-col-header-cell.fc-day
+			.fc-scrollgrid-sync-inner
+				.fc-col-header-cell-cushion
+					display: block
+					width: 100%
+					height: 44px
+					pointer-events: none
+					padding: 0
+					font-weight: 400
+	.fc-scrollgrid-section-body
+		.fc-daygrid-day
+			.fc-daygrid-day-frame
+				position: relative
+				.fc-daygrid-day-top
+					background: transparent
+		.fc-daygrid-event
+			margin: 6px 8px 0 4px
+			padding: 0

@@ -189,19 +189,18 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// query sa nastavi vzdy ked sa zmeni datum
 		setQuery({ ...query, date: newDate })
 
-		// datum v kalendari a current range sa nastavi len vtedy, ked sa novy datum nenachadza v aktualnom rangi
+		const newCalendarDate = getSelectedDateForCalendar(validCalendarView, newDate)
+
+		if (!dayjs(newCalendarDate).isSame(calendarRefs?.current?.[validCalendarView]?.getApi()?.getDate())) {
+			calendarRefs?.current?.[validCalendarView]?.getApi()?.gotoDate(newCalendarDate)
+		}
+
+		// current range sa nastavi len vtedy, ked sa novy datum nenachadza v aktualnom rangi
 		if (!isDateInRange(currentRange.start, currentRange.end, newDate)) {
 			setCurrentRange(getSelectedDateRange(validCalendarView, newDate))
-			const newCalendarDate = getSelectedDateForCalendar(validCalendarView, newDate)
-
-			if (!dayjs(newCalendarDate).isSame(calendarRefs?.current?.[validCalendarView]?.getApi()?.getDate())) {
-				calendarRefs?.current?.[validCalendarView]?.getApi()?.gotoDate(newCalendarDate)
-			}
-
 			initialScroll.current = false
 			return
 		}
-
 		// ak sa novy datum nachadza v rovnakom rangi ako predtym, tak sa v tyzdenom view len zascrolluje na jeho poziciu
 		// nenacitavaju nove data a netreba cakat na opatovne vykreslenie kalenadara
 		if (validCalendarView === CALENDAR_VIEW.WEEK) {
@@ -242,22 +241,26 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const fetchEvents: any = useCallback(
 		async (clearVirtualEvent?: boolean) => {
 			if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-				Promise.all([
-					dispatch(
-						getCalendarReservations(
-							{
-								salonID,
-								start: currentRange.start,
-								end: currentRange.end,
-								employeeIDs: query.employeeIDs,
-								categoryIDs: getFullCategoryIdsFromUrl(query?.categoryIDs)
-							},
-							true,
-							clearVirtualEvent
-						)
-					),
-					dispatch(getCalendarShiftsTimeoff({ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs }, true, clearVirtualEvent))
-				])
+				const dispatchGetReservations = getCalendarReservations(
+					{
+						salonID,
+						start: currentRange.start,
+						end: currentRange.end,
+						employeeIDs: query.employeeIDs,
+						categoryIDs: getFullCategoryIdsFromUrl(query?.categoryIDs)
+					},
+					true,
+					clearVirtualEvent
+				)
+
+				if (validCalendarView === CALENDAR_VIEW.MONTH) {
+					dispatch(dispatchGetReservations)
+				} else {
+					Promise.all([
+						dispatch(dispatchGetReservations),
+						dispatch(getCalendarShiftsTimeoff({ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs }, true, clearVirtualEvent))
+					])
+				}
 			} else if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
 				dispatch(getCalendarShiftsTimeoff({ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs }, true, clearVirtualEvent))
 			}

@@ -19,7 +19,7 @@ import { composeWeekResources, composeWeekViewEvents, eventAllow, getWeekDayReso
 import { getDateTime } from '../../../../utils/helper'
 
 // types
-import { ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/interfaces'
+import { Employees, ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
@@ -147,6 +147,7 @@ const createDayLabelElement = (resourceElemenet: HTMLElement, employeesLength: n
 interface ICalendarWeekView extends ICalendarView {
 	updateCalendarSize: () => void
 	weekDays: string[]
+	employees: Employees
 }
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {

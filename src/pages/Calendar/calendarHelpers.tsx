@@ -1,8 +1,8 @@
 /* eslint-disable import/no-cycle */
-import { DateSpanApi, EventApi } from '@fullcalendar/react'
+import { BusinessHoursInput, DateSpanApi, EventApi } from '@fullcalendar/react'
 import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
-import { isEmpty, uniqueId, startsWith } from 'lodash'
+import { isEmpty, uniqueId, startsWith, isNil } from 'lodash'
 import Scroll from 'react-scroll'
 import { Paths } from '../../types/api'
 
@@ -15,7 +15,8 @@ import {
 	IEventExtenedProps,
 	IResourceEmployee,
 	IWeekViewResourceExtenedProps,
-	IDayViewResourceExtenedProps
+	IDayViewResourceExtenedProps,
+	RawOpeningHours
 } from '../../types/interfaces'
 
 // utils
@@ -26,9 +27,26 @@ import {
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_VIEW,
+	DAY,
 	NEW_ID_PREFIX
 } from '../../utils/enums'
 import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
+
+export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null) => {
+	const extenedProps: IEventExtenedProps | undefined = movingEvent?.extendedProps
+	const { eventData } = extenedProps || {}
+
+	if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION || startsWith(movingEvent?.id, NEW_ID_PREFIX)) {
+		return true
+	}
+
+	const resourceExtenedProps = dropInfo?.resource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
+
+	const resourceEmployeeId = resourceExtenedProps?.employee?.id
+	const eventEmployeeId = eventData?.employee?.id
+
+	return resourceEmployeeId === eventEmployeeId
+}
 
 /*
  * monthViewFull = true;
@@ -45,7 +63,7 @@ export const getSelectedDateRange = (view: CALENDAR_VIEW, selectedDate: string, 
 	}
 
 	switch (view) {
-		/* case CALENDAR_VIEW.MONTH: {
+		case CALENDAR_VIEW.MONTH: {
 			const start = dayjs(selectedDate).startOf('month')
 			const end = dayjs(selectedDate).endOf('month')
 			result = {
@@ -55,7 +73,7 @@ export const getSelectedDateRange = (view: CALENDAR_VIEW, selectedDate: string, 
 				end: monthViewFull ? end.endOf('week').add(1, 'week') : end
 			}
 			break
-		} */
+		}
 		case CALENDAR_VIEW.WEEK: {
 			result = {
 				...result,
@@ -92,12 +110,88 @@ export const parseTimeFromMinutes = (minutes: number) => {
 	return `${days ? `${days}${'d'} ${hours}h` : ''} ${!days && hours ? `${hours}${'h'}` : ''} ${min ? `${min}${'m'}` : ''}`.trim()
 }
 
-export const getTimeText = (start: Date | null, end: Date | null) => `${dayjs(start).format(CALENDAR_DATE_FORMAT.TIME)}-${dayjs(end).format(CALENDAR_DATE_FORMAT.TIME)}`
+export const getTimeText = (start: Date | null, end: Date | null, onlyStart = false) => {
+	const startTimeText = dayjs(start).format(CALENDAR_DATE_FORMAT.TIME)
+	if (onlyStart) {
+		return startTimeText
+	}
+
+	return `${startTimeText}-${dayjs(end).format(CALENDAR_DATE_FORMAT.TIME)}`
+}
 
 export const getTimeScrollId = (hour: number) => dayjs().startOf('day').add(Math.floor(hour), 'hour').format('HH:mm:ss')
 
 type ResourceMap = {
 	[key: string]: number
+}
+
+export const scrollToSelectedDate = (scrollId: string, options?: Object) => {
+	// scroll ID je datum v tvare YYYY-MM-DD
+	Scroll.scroller.scrollTo(scrollId, {
+		containerId: 'nc-calendar-week-wrapper',
+		offset: -25, // - hlavicka
+		...(options || {})
+	})
+}
+
+export const getConfirmModalText = (
+	baseText: string,
+	disabledNotificationType: CALENDAR_DISABLED_NOTIFICATION_TYPE,
+	disabledNotifications?: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']
+) => {
+	const disabledNotification = disabledNotifications?.find((notification) => notification.eventType === disabledNotificationType)
+	const isCustomerNotified = isEmpty(disabledNotification?.b2cChannels)
+	const isEmployeeNotified = isEmpty(disabledNotification?.b2bChannels)
+	const notifiactionText = (entity: string) => i18next.t('loc:{{entity}} dostane notifikáciu.', { entity })
+
+	if (isCustomerNotified && isEmployeeNotified) {
+		return `${baseText} ${i18next.t('loc:Zamestnanec aj zákazník dostanú notifikáciu.')}`
+	}
+
+	if (isCustomerNotified) {
+		return `${baseText} ${notifiactionText(i18next.t('loc:Zákazník'))}`
+	}
+
+	if (isEmployeeNotified) {
+		return `${baseText} ${notifiactionText(i18next.t('loc:Zamestnanec'))}`
+	}
+
+	return baseText
+}
+
+export const getWeekDays = (selectedDate: string) => {
+	const monday = dayjs(selectedDate).startOf('week')
+	const weekDays = []
+	for (let i = 0; i < 7; i += 1) {
+		weekDays.push(monday.add(i, 'days').format(CALENDAR_DATE_FORMAT.QUERY))
+	}
+	return weekDays
+}
+
+export const getWeekViewSelectedDate = (weekDays: string[]) => {
+	const today = dayjs().startOf('day')
+	return weekDays.some((day) => dayjs(day).startOf('day').isSame(today)) ? today.format(CALENDAR_DATE_FORMAT.QUERY) : weekDays[0]
+}
+
+export const getSelectedDateForCalendar = (view: CALENDAR_VIEW, selectedDate: string) => {
+	switch (view) {
+		case CALENDAR_VIEW.MONTH: {
+			// realne sice nebude sediet selectedDate v kalendari s datumom v query parameteri
+			// ale kalenadru je jedno aky ma nastaveny den v mesacnom view, podstatny je mesiac
+			// takze kvoli optimalizaciam, aby sa zbytocne neprerndrovaval kalendar vzdy ked sa zmeni datum v ramci mesiaca, tak sa vezme jeho zaciatok
+			return dayjs(selectedDate).startOf('month').format(CALENDAR_DATE_FORMAT.QUERY)
+		}
+		case CALENDAR_VIEW.WEEK: {
+			// v tyzdenom view je potrebne skontrolovat, ci sa vramci novo nastaveneho tyzdnoveho rangu nachadza dnesok
+			// ak ano, je potrebne ho nastavit ako aktualny den do kalendara, aby sa ukazal now indicator
+			// kedze realne sa na tyzdenne view pouziva denne view
+			const weekDays = getWeekDays(selectedDate)
+			return getWeekViewSelectedDate(weekDays)
+		}
+		case CALENDAR_VIEW.DAY:
+		default:
+			return selectedDate
+	}
 }
 
 const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, selectedDate: string) => {
@@ -332,15 +426,6 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 /**
  * Weekly view helpers
  */
-export const getWeekDays = (selectedDate: string) => {
-	const monday = dayjs(selectedDate).startOf('week')
-	const weekDays = []
-	for (let i = 0; i < 7; i += 1) {
-		weekDays.push(monday.add(i, 'days').format(CALENDAR_DATE_FORMAT.QUERY))
-	}
-	return weekDays
-}
-
 export const getWeekDayResourceID = (employeeID: string, weekDay: string) => `${weekDay}_${employeeID}`
 
 interface EmployeeWeekResource {
@@ -378,11 +463,6 @@ export const composeWeekResources = (weekDays: string[], shiftsTimeOffs: ICalend
 		})
 		return [...resources, ...weekDayEmployees]
 	}, [] as any[])
-}
-
-export const getWeekViewSelectedDate = (weekDays: string[]) => {
-	const today = dayjs().startOf('day')
-	return weekDays.some((day) => dayjs(day).startOf('day').isSame(today)) ? today.format(CALENDAR_DATE_FORMAT.QUERY) : weekDays[0]
 }
 
 const composeWeekViewReservations = (
@@ -504,67 +584,87 @@ export const composeWeekViewEvents = (
 	}
 }
 
-export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null) => {
-	const extenedProps: IEventExtenedProps | undefined = movingEvent?.extendedProps
-	const { eventData } = extenedProps || {}
-
-	if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION || startsWith(movingEvent?.id, NEW_ID_PREFIX)) {
-		return true
-	}
-
-	const resourceExtenedProps = dropInfo?.resource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
-
-	const resourceEmployeeId = resourceExtenedProps?.employee?.id
-	const eventEmployeeId = eventData?.employee?.id
-
-	return resourceEmployeeId === eventEmployeeId
+/**
+ * Motnhly view helpers
+ */
+type DayMap = {
+	[key in DAY]: number
 }
 
-export const getSelectedDateForCalendar = (view: CALENDAR_VIEW, selectedDate: string) => {
-	switch (view) {
-		case CALENDAR_VIEW.WEEK: {
-			// v tyzdenom view je potrebne skontrolovat, ci sa vramci novo nastaveneho tyzdnoveho rangu nachadza dnesok
-			// ak ano, je potrebne ho nastavit ako aktualny den do kalendara, aby sa ukazal now indicator
-			// kedze realne sa na tyzdenne view pouziva denne view
-			const weekDays = getWeekDays(selectedDate)
-			return getWeekViewSelectedDate(weekDays)
+export const DAY_MAP: DayMap = {
+	[DAY.SATURDAY]: 0,
+	[DAY.MONDAY]: 1,
+	[DAY.TUESDAY]: 2,
+	[DAY.WEDNESDAY]: 3,
+	[DAY.THURSDAY]: 4,
+	[DAY.FRIDAY]: 5,
+	[DAY.SUNDAY]: 6
+}
+
+export type OpeningHoursMap = {
+	[key: number]: boolean
+}
+
+export const getOpnenigHoursMap = (openingHours: RawOpeningHours) => {
+	let map: OpeningHoursMap = {
+		1: false,
+		2: false,
+		3: false,
+		4: false,
+		5: false,
+		6: false,
+		0: false
+	}
+
+	openingHours?.forEach((day) => {
+		if (day.state || !isEmpty(day.timeRanges)) {
+			map = {
+				...map,
+				[DAY_MAP[day.day as DAY]]: true
+			}
 		}
-		case CALENDAR_VIEW.DAY:
-		default:
-			return selectedDate
-	}
-}
-
-export const scrollToSelectedDate = (scrollId: string, options?: Object) => {
-	// scroll ID je datum v tvare YYYY-MM-DD
-	Scroll.scroller.scrollTo(scrollId, {
-		containerId: 'nc-calendar-week-wrapper',
-		offset: -25, // - hlavicka
-		...(options || {})
 	})
+
+	return map
 }
 
-export const getConfirmModalText = (
-	baseText: string,
-	disabledNotificationType: CALENDAR_DISABLED_NOTIFICATION_TYPE,
-	disabledNotifications?: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']
+export const getBusinessHours = (openingHoursMap: OpeningHoursMap): BusinessHoursInput => {
+	return {
+		daysOfWeek: Object.entries(openingHoursMap).reduce((acc, [key, value]) => {
+			if (value) {
+				return [Number(key), ...acc]
+			}
+			return acc
+		}, [] as number[])
+	}
+}
+
+const composeMonthViewReservations = (reservations: ICalendarEventsPayload['data']) => {
+	const composedEvents: any[] = []
+
+	reservations?.forEach((event) => {
+		const employeeID = event.employee?.id
+		const start = event.startDateTime
+		const end = event.endDateTime
+
+		if (employeeID && dayjs(start).isBefore(end)) {
+			composedEvents.push(createBaseEvent(event, employeeID, start, end))
+		}
+	})
+
+	return composedEvents
+}
+
+export const composeMonthViewEvents = (
+	eventTypeFilter: CALENDAR_EVENTS_VIEW_TYPE,
+	reservations: ICalendarEventsPayload['data'],
+	shiftsTimeOffs: ICalendarEventsPayload['data']
 ) => {
-	const disabledNotification = disabledNotifications?.find((notification) => notification.eventType === disabledNotificationType)
-	const isCustomerNotified = isEmpty(disabledNotification?.b2cChannels)
-	const isEmployeeNotified = isEmpty(disabledNotification?.b2bChannels)
-	const notifiactionText = (entity: string) => i18next.t('loc:{{entity}} dostane notifikáciu.', { entity })
-
-	if (isCustomerNotified && isEmployeeNotified) {
-		return `${baseText} ${i18next.t('loc:Zamestnanec aj zákazník dostanú notifikáciu.')}`
+	switch (eventTypeFilter) {
+		case CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF:
+			return []
+		case CALENDAR_EVENTS_VIEW_TYPE.RESERVATION:
+		default:
+			return composeMonthViewReservations(reservations)
 	}
-
-	if (isCustomerNotified) {
-		return `${baseText} ${notifiactionText(i18next.t('loc:Zákazník'))}`
-	}
-
-	if (isEmployeeNotified) {
-		return `${baseText} ${notifiactionText(i18next.t('loc:Zamestnanec'))}`
-	}
-
-	return baseText
 }

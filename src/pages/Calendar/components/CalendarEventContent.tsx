@@ -72,7 +72,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 	}
 
 	const diff = dayjs(event.end).diff(event.start, 'minutes')
-	const timeText = getTimeText(event.start, event.end)
+	const timeText = getTimeText(event.start, event.end, calendarView === CALENDAR_VIEW.MONTH)
 	const resourceId = ''
 	const originalEventData = {
 		id,
@@ -83,6 +83,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 	}
 
 	const isEdit = query?.eventId === originalEventData.id
+	const color = calendarView === CALENDAR_VIEW.MONTH ? employee?.color : backgroundColor
 
 	// normal events
 	switch (eventType) {
@@ -98,7 +99,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					start={start}
 					end={end}
 					employee={employee}
-					backgroundColor={backgroundColor}
+					backgroundColor={color}
 					isMultiDayEvent={isMultiDayEvent}
 					isFirstMultiDayEventInCurrentRange={isFirstMultiDayEventInCurrentRange}
 					isLastMultiDaylEventInCurrentRange={isLastMultiDaylEventInCurrentRange}
@@ -125,7 +126,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					customer={customer}
 					service={service}
 					employee={employee}
-					backgroundColor={backgroundColor}
+					backgroundColor={color}
 					isMultiDayEvent={isMultiDayEvent}
 					isFirstMultiDayEventInCurrentRange={isFirstMultiDayEventInCurrentRange}
 					isLastMultiDaylEventInCurrentRange={isLastMultiDaylEventInCurrentRange}

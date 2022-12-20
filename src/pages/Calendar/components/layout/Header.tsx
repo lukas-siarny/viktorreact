@@ -43,9 +43,9 @@ const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 
 			return `${firstDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_START)} - ${lastDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_END)}`
 		}
-		/* case CALENDAR_VIEW.MONTH: {
+		case CALENDAR_VIEW.MONTH: {
 			return dayjs(date).startOf('month').format(CALENDAR_DATE_FORMAT.HEADER_MONTH)
-		} */
+		}
 		case CALENDAR_VIEW.DAY:
 		default:
 			return dayjs(date).format(CALENDAR_DATE_FORMAT.HEADER_DAY)
@@ -174,6 +174,11 @@ const CalendarHeader: FC<Props> = (props) => {
 				key: CALENDAR_VIEW.WEEK,
 				label: t('loc:Týždeň'),
 				value: CALENDAR_VIEW.WEEK
+			},
+			{
+				key: CALENDAR_VIEW.MONTH,
+				label: t('loc:Mesiac'),
+				value: CALENDAR_VIEW.MONTH
 			}
 		],
 		[t]

@@ -632,7 +632,6 @@ export interface ICalendarView {
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	reservations: ICalendarEventsPayload['data']
 	shiftsTimeOffs: ICalendarEventsPayload['data']
-	employees: Employees
 	salonID: string
 	onAddEvent: (event: INewCalendarEvent) => void
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
@@ -641,7 +640,6 @@ export interface ICalendarView {
 	onEventChangeStart?: () => void
 	loading?: boolean
 	virtualEvent?: EventInput
-	clearRestartInterval: () => void
 	disableRender?: boolean
 	view?: CALENDAR_VIEW
 	enabledSalonReservations?: boolean

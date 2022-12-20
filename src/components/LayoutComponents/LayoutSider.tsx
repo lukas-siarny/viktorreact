@@ -203,16 +203,16 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				if (hasPermissions(ADMIN_PERMISSIONS) || (hasPermissions([PERMISSION.PARTNER]) && selectedSalon?.settings.enabledReservations)) {
 					mainGroupItems.push(
 						{
+							key: PAGE.SALON_SETTINGS,
+							label: t('loc:Nastavenia rezervácií'),
+							onClick: () => history.push(getPath(t('paths:salon-settings'))),
+							icon: <SettingIcon />
+						},
+						{
 							key: PAGE.CALENDAR,
 							label: t('loc:Kalendár'),
 							onClick: () => history.push(getPath(t('paths:calendar'))),
 							icon: <CalendarIcon />
-						},
-						{
-							key: PAGE.SALON_SETTINGS,
-							label: t('loc:Nastavenia salónu'),
-							onClick: () => history.push(getPath(t('paths:salon-settings'))),
-							icon: <SettingIcon />
 						}
 					)
 				}

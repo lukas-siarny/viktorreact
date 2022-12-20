@@ -241,6 +241,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	// fetch new events
 	const fetchEvents: any = useCallback(
 		async (clearVirtualEvent?: boolean) => {
+			// bez zamestanncov nefunguje nic v kalendari, takze ani nema zmysel dotahovat data
+			if (!employees.options?.length) {
+				return
+			}
+
 			if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 				Promise.all([
 					dispatch(
@@ -739,6 +744,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						loading={isRefreshingEvents ? false : loadingData}
 						eventsViewType={validEventsViewType}
 						employees={filteredEmployees() || []}
+						parentPath={parentPath}
 						onEditEvent={onEditEvent}
 						onReservationClick={(data?: ReservationPopoverData, position?: ReservationPopoverPosition) => {
 							setReservationPopover({

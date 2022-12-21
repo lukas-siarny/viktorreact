@@ -17,7 +17,7 @@ import { ReactComponent as AvatarIcon } from '../../../assets/icons/avatar-10.sv
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-12.svg'
 
 // types
-import { CalendarEvent, IEventCardProps, ReservationPopoverData, ReservationPopoverPosition } from '../../../types/interfaces'
+import { CalendarEvent, IEventCardProps, ReservationPopoverData, PopoverTriggerPosition } from '../../../types/interfaces'
 
 interface IReservationCardProps extends IEventCardProps {
 	salonID: string
@@ -26,7 +26,7 @@ interface IReservationCardProps extends IEventCardProps {
 	reservationData?: CalendarEvent['reservationData']
 	note?: CalendarEvent['note']
 	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
-	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
+	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
 }
 
 const getIcon = ({
@@ -191,7 +191,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 
 			const clientRect = cardRef.current.getBoundingClientRect()
 
-			const position: ReservationPopoverPosition = {
+			const position: PopoverTriggerPosition = {
 				top: clientRect.top,
 				left: clientRect.left,
 				width: clientRect.width,

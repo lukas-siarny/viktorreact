@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
-import React, { FC, useEffect, useCallback, useRef } from 'react'
-import { Button, Col, Divider, Dropdown, Menu, Popover, Row, Tag } from 'antd'
+import React, { FC, useEffect, useCallback, useState, useRef } from 'react'
+import { Button, Col, Divider, Dropdown, Menu, Popconfirm, Popover, Row, Tag } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { ItemType } from 'antd/lib/menu/hooks/useItems'
 import { useSelector } from 'react-redux'
@@ -20,6 +20,7 @@ import { ReactComponent as CheckSuccessIcon } from '../../../assets/icons/check-
 import { ReactComponent as CreditCardIcon } from '../../../assets/icons/credit-card.svg'
 import { ReactComponent as WalletIcon } from '../../../assets/icons/wallet.svg'
 import { ReactComponent as DollarIcon } from '../../../assets/icons/dollar.svg'
+import { ReactComponent as AlertIcon } from '../../../assets/icons/alert-circle.svg'
 import { ReactComponent as ClockIcon } from '../../../assets/icons/clock.svg'
 import { ReactComponent as CrossedIcon } from '../../../assets/icons/crossed-red-16.svg'
 
@@ -29,7 +30,7 @@ import Ellipsis from '../../../atoms/Ellipsis'
 
 // types
 import { RootState } from '../../../reducers'
-import { CalendarEvent, ICalendarReservationPopover } from '../../../types/interfaces'
+import { CalendarEvent, ICalendarEventsPopover } from '../../../types/interfaces'
 
 /// utils
 import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE, STRINGS } from '../../../utils/enums'
@@ -220,26 +221,19 @@ const PopoverContent: FC<ContentProps> = (props) => {
 	)
 }
 
-const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
-	const { data, position, setIsOpen, handleUpdateReservationState, onEditEvent, placement, isOpen } = props
-
-	const { start, end, color, reservationData, service, customer, employee, note, noteFromB2CCustomer, originalEventData } = data || {}
-
-	const { id } = originalEventData || {}
+const CalendarEventsPopover: FC<ICalendarEventsPopover> = (props) => {
+	const { date, position, setIsOpen, isOpen } = props
 
 	const [t] = useTranslation()
 
-	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-
-	const overlayClassName = `nc-event-popover-overlay_${id || ''}`
-	const itemClassName = 'p-2 font-medium min-w-0 h-9 w-full relative'
+	// const overlayClassName = `nc-event-popover-overlay_${id || ''}`
 
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS]).data
 	const prevReservations = useRef(reservations)
 
 	const handleClosePopover = useCallback(() => setIsOpen(false), [setIsOpen])
 
-	useEffect(() => {
+	/* useEffect(() => {
 		// TODO: toto by este potom chcelo trochu prerobit, teraz to je cez dva overlay spravene
 		// jeden zaistuje ze sa po kliku na neho zavrie popoover (cez &::before na popover elemente)
 		// druhy je pomocny kvoli tomu, ze kvoli uvodnej animacii chvilku trva, kym prvy overlay nabehne a vtedy sa da scrollovat, aj ked by sa nemalo
@@ -266,9 +260,9 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 			document.removeEventListener('mousedown', listener)
 			document.removeEventListener('touchstart', listener)
 		}
-	}, [isOpen, overlayClassName, handleClosePopover])
+	}, [isOpen, overlayClassName, handleClosePopover]) */
 
-	useEffect(() => {
+	/* useEffect(() => {
 		if (isOpen) {
 			const prevEventData = prevReservations?.current?.find((prevEvent) => prevEvent.originalEvent?.id || prevEvent.id === originalEventData?.id)
 			const currentEventData = reservations?.find((currentEvent) => currentEvent.originalEvent?.id || currentEvent.id === originalEventData?.id)
@@ -277,173 +271,31 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 			}
 		}
 		prevReservations.current = reservations
-	}, [reservations, isOpen, originalEventData?.id, handleClosePopover])
+	}, [reservations, isOpen, originalEventData?.id, handleClosePopover]) */
 
 	useKeyUp('Escape', isOpen ? handleClosePopover : undefined)
 
-	const handleUpdateState = useCallback(
+	/* const handleUpdateState = useCallback(
 		(state: RESERVATION_STATE, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
 			if (id && handleUpdateReservationState) {
 				handleUpdateReservationState(id, state, undefined, paymentMethod)
 			}
 		},
 		[id, handleUpdateReservationState]
-	)
-
-	const getFooterCheckoutButton = () => {
-		const items = []
-
-		if (selectedSalon?.data?.payByCard) {
-			items.push({
-				key: 'realized-card',
-				label: t('loc:Kartou'),
-				icon: <CreditCardIcon />,
-				className: itemClassName,
-				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED, RESERVATION_PAYMENT_METHOD.CARD)
-			})
-		}
-
-		if (selectedSalon?.data?.payByCash) {
-			items.push({
-				key: 'realized-cash',
-				label: t('loc:Hotovosťou'),
-				icon: <WalletIcon />,
-				className: itemClassName,
-				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED, RESERVATION_PAYMENT_METHOD.CASH)
-			})
-		}
-
-		if (selectedSalon?.data?.otherPaymentMethods) {
-			items.push({
-				key: 'realized-other',
-				label: t('loc:Iným spôsobom'),
-				icon: <DollarIcon />,
-				className: itemClassName,
-				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED, RESERVATION_PAYMENT_METHOD.OTHER)
-			})
-		}
-
-		const button = (buttonBrops?: ButtonProps & { key: string }) => (
-			<Button type={'primary'} size={'middle'} className={'noti-btn w-1/2'} htmlType={'button'} onClick={(e) => e.preventDefault()} {...buttonBrops}>
-				{t('loc:Zaplatená')}
-			</Button>
-		)
-
-		return items?.length ? (
-			<Dropdown
-				key={'footer-checkout-dropdown'}
-				overlay={<Menu className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'} items={items} />}
-				placement='bottomRight'
-				trigger={['click']}
-			>
-				{button({ key: 'checkout-button-dropdown', icon: <ChevronDown className={'filter-invert max'} /> })}
-			</Dropdown>
-		) : (
-			button({ key: 'checkout-button-realized', onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED) })
-		)
-	}
-
-	const getFooterCancelButton = (key: string, label: string, state: RESERVATION_STATE) => (
-		<Button key={key} type={'dashed'} size={'middle'} className={'noti-btn w-1/2'} htmlType={'button'} onClick={() => handleUpdateState(state)}>
-			{label}
-		</Button>
-	)
-
-	const headerMoreItems = {
-		cancel_by_salon: {
-			key: 'cancel-by-salon',
-			label: <span className={'text-notino-red'}>{STRINGS(t).cancel(t('loc:rezerváciu'))}</span>,
-			icon: <CrossedIcon />,
-			className: itemClassName,
-			onClick: () => handleUpdateState(RESERVATION_STATE.CANCEL_BY_SALON)
-		}
-	}
-
-	const getPopoverContentSpecificProps = () => {
-		switch (reservationData?.state) {
-			case RESERVATION_STATE.APPROVED: {
-				return {
-					headerIcon: <CheckSuccessIcon />,
-					headerState: t('loc:Potvrdená'),
-					moreMenuItems: [headerMoreItems.cancel_by_salon],
-					footerButtons: [getFooterCancelButton('cancel-button-not-realized', t('loc:Nezrealizovaná'), RESERVATION_STATE.NOT_REALIZED), getFooterCheckoutButton()]
-				}
-			}
-			case RESERVATION_STATE.PENDING:
-				return {
-					headerIcon: <ClockIcon color={'#FF9500'} />,
-					headerState: t('loc:Čakajúca'),
-					moreMenuItems: [headerMoreItems.cancel_by_salon],
-					footerButtons: [
-						getFooterCancelButton('cancel-button-declined', t('loc:Zamietnuť'), RESERVATION_STATE.DECLINED),
-						<Button
-							key={'confirm-button'}
-							type={'dashed'}
-							size={'middle'}
-							className={'noti-btn w-1/2'}
-							htmlType={'button'}
-							onClick={() => handleUpdateState(RESERVATION_STATE.APPROVED)}
-						>
-							{t('loc:Potvrdiť')}
-						</Button>
-					]
-				}
-			case RESERVATION_STATE.REALIZED:
-				return getPaymentMethodHeaderProps(reservationData?.paymentMethod)
-			case RESERVATION_STATE.NOT_REALIZED:
-			default:
-				return {
-					headerIcon: <CrossedIcon />,
-					headerState: t('loc:Nezrealizovaná')
-				}
-		}
-	}
-
-	const getNotes = () => {
-		const notes = []
-		if (noteFromB2CCustomer) {
-			notes.push({ key: 'customer-note', text: noteFromB2CCustomer, internal: false })
-		}
-		if (note) {
-			notes.push({
-				key: 'internal-note',
-				text: note,
-				internal: true
-			})
-		}
-		return notes
-	}
+	) */
 
 	return (
 		<Popover
 			visible={isOpen}
 			destroyTooltipOnHide={{ keepParent: true }}
 			trigger={'click'}
-			placement={placement}
-			overlayClassName={`${overlayClassName} nc-event-popover-overlay`}
-			content={
-				<PopoverContent
-					start={start || null}
-					end={end || null}
-					service={service}
-					color={color}
-					customer={customer}
-					employee={employee}
-					onEdit={() => {
-						if (id) {
-							onEditEvent(CALENDAR_EVENT_TYPE.RESERVATION, id)
-						}
-						handleClosePopover()
-					}}
-					onClose={handleClosePopover}
-					notes={getNotes()}
-					{...getPopoverContentSpecificProps()}
-				/>
-			}
+			placement={'right'}
+			// overlayClassName={`${overlayClassName} nc-event-popover-overlay`}
+			content={<div>{'content'}</div>}
 		>
 			<div style={{ top: position?.top, left: position?.left, width: position?.width, height: position?.height, position: 'fixed' }} />
 		</Popover>
 	)
 }
 
-export default CalendarReservationPopover
+export default CalendarEventsPopover

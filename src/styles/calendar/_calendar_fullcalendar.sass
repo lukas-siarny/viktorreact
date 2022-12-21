@@ -345,7 +345,7 @@
 
 // monthly view
 .fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events
-	min-height: 160px
+	min-height: 150px
 	margin: 0
 .fc-dayGridMonth-view
 	.fc-non-business
@@ -370,7 +370,44 @@
 			.fc-daygrid-day-frame
 				position: relative
 				.fc-daygrid-day-top
+					position: absolute
+					bottom: 0
+					right: 0
+					width: 20px
+					height: 20px
+					display: flex
+					align-items: center
+					justify-content: center
 					background: transparent
+					border-radius: 50%
+					.fc-daygrid-day-number
+						padding: 0
+						display: flex
+						align-items: center
+						justify-content: center
+						color: $textColor-notino-black
+						font-size: 12px
+						line-height: 14px
+						pointer-events: none
+				.fc-daygrid-day-bottom
+					padding: 0
+					padding-top: 10px
+					height: 30px
+					line-height: 14px
+					font-size: 12px
+					color: $textColor-notino-grayDark
+					padding-right: 20px
+					.fc-daygrid-more-link
+						display: block
+						width: 100%
+						height: 100%
+			&.fc-day-today
+				.fc-daygrid-day-frame
+					.fc-daygrid-day-top
+						background: $backgroundColor-notino-pink
+						.fc-daygrid-day-number
+							color: $textColor-notino-white
+
 		.fc-daygrid-event
-			margin: 6px 8px 0 4px
+			margin: 4px 10px 0 4px
 			padding: 0

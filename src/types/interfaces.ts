@@ -635,7 +635,7 @@ export interface ICalendarView {
 	salonID: string
 	onAddEvent: (event: INewCalendarEvent) => void
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
-	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
+	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
 	onEventChange?: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
 	onEventChangeStart?: () => void
 	loading?: boolean
@@ -669,9 +669,16 @@ export interface IEventCardProps {
 	}
 }
 
+export type PopoverTriggerPosition = {
+	top: number
+	left: number
+	width: number
+	height: number
+}
+
 export interface ICalendarReservationPopover {
 	data: ReservationPopoverData | null
-	position: ReservationPopoverPosition | null
+	position: PopoverTriggerPosition | null
 	isOpen: boolean
 	setIsOpen: (isOpen: boolean) => void
 	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => void
@@ -679,11 +686,11 @@ export interface ICalendarReservationPopover {
 	placement: TooltipPlacement
 }
 
-export type ReservationPopoverPosition = {
-	top: number
-	left: number
-	width: number
-	height: number
+export interface ICalendarEventsPopover {
+	date: string
+	position: PopoverTriggerPosition | null
+	isOpen: boolean
+	setIsOpen: (isOpen: boolean) => void
 }
 
 export type ReservationPopoverData = {

@@ -12,7 +12,7 @@ import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
 import { CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, STRINGS, CALENDAR_DEBOUNCE_DELAY } from '../../../../utils/enums'
 
 // assets
-import { ReactComponent as ChevronDownGrayDark } from '../../../../assets/icons/chevron-down-grayDark-12.svg'
+import { ReactComponent as ChevronDownGrayDark } from '../../../../assets/icons/chevron-down-currentColor-12.svg'
 import { ReactComponent as ChevronLeft } from '../../../../assets/icons/chevron-left-16.svg'
 import { ReactComponent as NavIcon } from '../../../../assets/icons/navicon-16.svg'
 import { ReactComponent as CreateIcon } from '../../../../assets/icons/plus-icon.svg'
@@ -237,7 +237,7 @@ const CalendarHeader: FC<Props> = (props) => {
 				>
 					<button type={'button'} className={'nc-button-date mx-1'} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>
 						{formatHeaderDate(currentDate, calendarView)}
-						<ChevronDownGrayDark />
+						<ChevronDownGrayDark color={'#808080'} />
 					</button>
 				</Dropdown>
 				<button

@@ -13,14 +13,14 @@ import { getTimeText } from '../calendarHelpers'
 // components
 import AbsenceCard from './AbsenceCard'
 import ReservationCard from './ReservationCard'
-import { IEventExtenedProps, ReservationPopoverData, ReservationPopoverPosition } from '../../../types/interfaces'
+import { IEventExtenedProps, ReservationPopoverData, PopoverTriggerPosition } from '../../../types/interfaces'
 
 interface ICalendarEventProps {
 	calendarView: CALENDAR_VIEW
 	data: EventContentArg
 	salonID: string
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
-	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
+	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
 }
 
 const InverseBackgroundEvent = React.memo(() => <div className={cx('nc-bg-event not-set-availability')} />)
@@ -51,6 +51,8 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 		service,
 		customer,
 		employee,
+		note,
+		noteFromB2CCustomer,
 		isFirstMultiDayEventInCurrentRange,
 		isLastMultiDaylEventInCurrentRange,
 		isMultiDayEvent,
@@ -83,7 +85,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 	}
 
 	const isEdit = query?.eventId === originalEventData.id
-	const color = backgroundColor
+	const color = calendarView === CALENDAR_VIEW.MONTH ? employee?.color : backgroundColor
 
 	// normal events
 	switch (eventType) {
@@ -127,6 +129,8 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					service={service}
 					employee={employee}
 					backgroundColor={color}
+					note={note}
+					noteFromB2CCustomer={noteFromB2CCustomer}
 					isMultiDayEvent={isMultiDayEvent}
 					isFirstMultiDayEventInCurrentRange={isFirstMultiDayEventInCurrentRange}
 					isLastMultiDaylEventInCurrentRange={isLastMultiDaylEventInCurrentRange}

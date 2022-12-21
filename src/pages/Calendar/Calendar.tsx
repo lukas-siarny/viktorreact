@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 're
 import Layout from 'antd/lib/layout/layout'
 import { message } from 'antd'
 import dayjs from 'dayjs'
-import { includes, isEmpty } from 'lodash'
+import { includes, isEmpty, omit } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { destroy, initialize } from 'redux-form'
@@ -63,7 +63,7 @@ import {
 	IEmployeesPayload,
 	INewCalendarEvent,
 	ReservationPopoverData,
-	ReservationPopoverPosition,
+	PopoverTriggerPosition,
 	SalonSubPageProps
 } from '../../types/interfaces'
 
@@ -152,7 +152,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const [isRemoving, setIsRemoving] = useState(false)
 	const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)
 	const [newEventData, setNewEventData] = useState<INewCalendarEvent | null | undefined>(null)
-	const [reservationPopover, setReservationPopover] = useState<{ isOpen: boolean; data: ReservationPopoverData | null; position: ReservationPopoverPosition | null }>({
+	const [reservationPopover, setReservationPopover] = useState<{ isOpen: boolean; data: ReservationPopoverData | null; position: PopoverTriggerPosition | null }>({
 		isOpen: false,
 		data: null,
 		position: null
@@ -240,6 +240,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	// fetch new events
 	const fetchEvents: any = useCallback(
 		async (clearVirtualEvent?: boolean) => {
+			// bez zamestanncov nefunguje nic v kalendari, takze ani nema zmysel dotahovat data
+			if (!employees.options?.length) {
+				return
+			}
+
 			if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 				const dispatchGetReservations = getCalendarReservations(
 					{
@@ -361,11 +366,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				})
 			}
 
-			if (query.view === CALENDAR_VIEW.DAY) {
+			if (validCalendarView === CALENDAR_VIEW.DAY || validCalendarView === CALENDAR_VIEW.MONTH) {
 				setTimeout(updateCalendarSize.current, 0)
 			}
 		},
-		[query, setQuery]
+		[query, setQuery, validCalendarView]
 	)
 
 	useEffect(() => {
@@ -561,7 +566,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						await patchReq(
 							'/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}',
 							{ salonID, calendarEventID },
-							reqDataUpdate,
+							omit(reqDataUpdate, 'repeatEvent'),
 							undefined,
 							NOTIFICATION_TYPE.NOTIFICATION,
 							true
@@ -698,7 +703,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			eventId,
 			sidebarView: eventType
 		})
-		if (validCalendarView === CALENDAR_VIEW.DAY) {
+		if (validCalendarView === CALENDAR_VIEW.DAY || validCalendarView === CALENDAR_VIEW.MONTH) {
 			setTimeout(updateCalendarSize.current, 0)
 		}
 	}
@@ -722,7 +727,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					setSelectedDate={setNewSelectedDate}
 					setSiderFilterCollapsed={() => {
 						setSiderFilterCollapsed(!siderFilterCollapsed)
-						if (validCalendarView === CALENDAR_VIEW.DAY) {
+						if (validCalendarView === CALENDAR_VIEW.DAY || validCalendarView === CALENDAR_VIEW.MONTH) {
 							setTimeout(updateCalendarSize.current, 0)
 						}
 					}}
@@ -742,8 +747,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						loading={isRefreshingEvents ? false : loadingData}
 						eventsViewType={validEventsViewType}
 						employees={filteredEmployees() || []}
+						parentPath={parentPath}
 						onEditEvent={onEditEvent}
-						onReservationClick={(data?: ReservationPopoverData, position?: ReservationPopoverPosition) => {
+						onReservationClick={(data?: ReservationPopoverData, position?: PopoverTriggerPosition) => {
 							setReservationPopover({
 								isOpen: true,
 								data: data || null,

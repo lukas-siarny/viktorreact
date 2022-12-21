@@ -214,7 +214,7 @@ const EventForm: FC<Props> = (props) => {
 							block
 							className={'noti-btn self-end'}
 						>
-							{eventId ? STRINGS(t).edit(t('loc:voľno')) : STRINGS(t).createRecord(t('loc:voľno'))}
+							{eventId ? t('loc:Upraviť') : t('loc:Vytvoriť')}
 						</Button>
 					)}
 				/>

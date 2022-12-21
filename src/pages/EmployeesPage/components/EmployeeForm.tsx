@@ -29,7 +29,7 @@ import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
 
 // reducers
 import { RootState } from '../../../reducers'
-import ServicesListField, { panelHeaderRenderCategoryName } from './ServicesListField'
+import ServicesListField from './ServicesListField'
 
 type ComponentProps = {
 	salonID: string
@@ -118,7 +118,7 @@ const EmployeeForm: FC<Props> = (props) => {
 								component={ServicesListField as any}
 								name={'services'}
 								currencySymbol={salon.data?.currency.symbol}
-								panelHeaderRender={panelHeaderRenderCategoryName}
+								isEmployeeDetail
 								setVisibleServiceEditModal={setVisibleServiceEditModal}
 							/>
 						</div>

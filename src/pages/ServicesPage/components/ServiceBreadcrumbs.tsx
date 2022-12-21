@@ -11,9 +11,9 @@ const ServiceBreadcrumbs: FC<Props> = (props) => {
 
 	return breadcrumbs.length ? (
 		<div className={cx('flex items-center flex-wrap gap-1', wrapperClassname)}>
-			{breadcrumbs?.map((breadcrumb) =>
+			{breadcrumbs?.map((breadcrumb, index) =>
 				breadcrumb ? (
-					<div className={'service-badge'}>
+					<div className={'service-badge'} key={index}>
 						<span>{breadcrumb}</span>
 					</div>
 				) : null

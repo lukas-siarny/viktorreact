@@ -13,7 +13,7 @@ import SwitchField from '../../../atoms/SwitchField'
 
 // components
 import DeleteButton from '../../../components/DeleteButton'
-import ServicesListField, { panelHeaderRenderEmployee } from '../../EmployeesPage/components/ServicesListField'
+import ServicesListField from '../../EmployeesPage/components/ServicesListField'
 
 // validate
 import validateServiceForm from './validateServiceForm'
@@ -321,7 +321,7 @@ const ServiceForm: FC<Props> = (props) => {
 										component={ServicesListField as any}
 										name={'employees'}
 										currencySymbol={salon.data?.currency.symbol}
-										panelHeaderRender={panelHeaderRenderEmployee}
+										isEmployeeDetail={false}
 										setVisibleServiceEditModal={setVisibleServiceEditModal}
 										disabledEditButton={!pristine}
 									/>

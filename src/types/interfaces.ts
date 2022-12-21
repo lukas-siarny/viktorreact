@@ -55,7 +55,7 @@ type ServiceType = NonNullable<
 	NonNullable<Paths.GetApiB2BV1Services.Responses.$200['groupedServicesByCategory'][0]['category']>['children'][0]['category']
 >['children'][0]['service']
 
-export type ServicePriceAndDurationData = ServiceType['rangePriceAndDurationData']
+export type ServicePriceAndDurationData = ServiceType['priceAndDurationData']
 export type ServiceCategoryParameter = ServiceType['serviceCategoryParameter']
 
 export type ServiceDetail = Paths.GetApiB2BAdminServicesServiceId.Responses.$200['service']
@@ -70,8 +70,8 @@ export type FormPriceAndDurationData = {
 }
 
 export type EmployeeServiceData = {
-	id?: string
-	employee?: {
+	id: string
+	employee: {
 		id: string
 		name?: string
 		image?: string

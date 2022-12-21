@@ -58,7 +58,7 @@ export const parseParameterValuesCreateAndUpdate = (values: IParameterValue[]): 
 	return result
 }
 
-export const addEmployee = (dispatch: Dispatch<Action>, employees: Employees, service?: ServiceDetail | null, formValues?: IServiceForm) => {
+export const addEmployee = (dispatch: Dispatch<Action>, employees: Employees, service: ServiceDetail, formValues?: IServiceForm) => {
 	const selectedEmployeeIDs = formValues?.employee
 	const updatedEmployees: EmployeeServiceData[] = []
 	// go through selected employees
@@ -71,7 +71,7 @@ export const addEmployee = (dispatch: Dispatch<Action>, employees: Employees, se
 			id: employeeData?.id || '-'
 		})
 
-		if (formValues?.employees?.find((employee: any) => employee?.id === employeeId)) {
+		if (formValues?.employees?.find((employee) => employee.employee.id === employeeId)) {
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
 				description: i18next.t('loc:Zamestnanec {{ name }} je už priradený!', { name: employeeName })
@@ -80,7 +80,7 @@ export const addEmployee = (dispatch: Dispatch<Action>, employees: Employees, se
 			const useCategoryParameter = !!service?.useCategoryParameter
 
 			let newServiceData: EmployeeServiceData = {
-				id: service?.id,
+				id: service.id,
 				hasOverriddenPricesAndDurationData: false,
 				employee: {
 					id: employeeData.id,
@@ -161,11 +161,11 @@ const parseParameterValuesInit = (values: (ServiceParameterValues | ICategoryPar
 }
 
 const parseEmployeesInit = (service: ServiceDetail) => {
-	return service?.employees?.map((employee) => {
+	return service.employees?.map((employee) => {
 		const useCategoryParameter = service?.useCategoryParameter
 
 		let formEmployeeServiceData: EmployeeServiceData = {
-			id: service?.id,
+			id: service.id,
 			industry: service?.category.name,
 			category: service?.category?.child?.name,
 			name: service?.category?.child?.child?.name,
@@ -266,8 +266,6 @@ const ServiceEditPage = (props: Props) => {
 		}
 	}, [dispatch, serviceID])
 
-	// const employeeServiceIds = getEmployeeServiceIds(employee?.data?.employee?.categories)
-
 	const editEmployeeService = async (values: IEmployeeServiceEditForm, _dispatch?: Dispatch<any>, customProps?: any) => {
 		const employeeID = values.employee?.id
 		const { resetUserServiceData = false } = customProps || {}
@@ -276,10 +274,6 @@ const ServiceEditPage = (props: Props) => {
 			try {
 				setUpdatingSerivce(true)
 				const employeePatchServiceData = getEmployeeServiceDataForPatch(values, resetUserServiceData)
-
-				/* if (!employeeServiceIds?.includes(serviceID)) {
-					await updateEmployee(formValues)
-				} */
 
 				await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, employeePatchServiceData)
 				fetchData()
@@ -333,7 +327,11 @@ const ServiceEditPage = (props: Props) => {
 				<>
 					<ServiceForm
 						backUrl={parentPath}
-						addEmployee={() => addEmployee(dispatch, employees?.data?.employees || [], service || null, form?.values as IServiceForm)}
+						addEmployee={() => {
+							if (service) {
+								addEmployee(dispatch, employees?.data?.employees || [], service, form?.values as IServiceForm)
+							}
+						}}
 						onSubmit={(formData: IServiceForm) => {
 							if (hasPermission) {
 								handleSubmit(formData)

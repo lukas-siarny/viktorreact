@@ -29,14 +29,15 @@ const { Panel } = Collapse
 type ComponentProps = {
 	currencySymbol?: string
 	setVisibleServiceEditModal: (visible: boolean) => void
-	panelHeaderRender: (fieldData: EmployeeServiceData) => React.ReactChild
 	disabledEditButton?: boolean
 	disabledEditButtonTooltip?: string
+	// ak sa to rendruje vramci detailu zamestnanca
+	isEmployeeDetail?: boolean
 }
 
 type Props = WrappedFieldArrayProps<EmployeeServiceData> & ComponentProps
 
-export const panelHeaderRenderCategoryName = (fieldData: EmployeeServiceData) => {
+const panelHeaderRenderCategoryName = (fieldData: EmployeeServiceData) => {
 	return (
 		<div className='flex flex-col' style={{ gap: 2 }}>
 			<div className={'inline items-center flex-wrap'}>
@@ -52,7 +53,7 @@ export const panelHeaderRenderCategoryName = (fieldData: EmployeeServiceData) =>
 	)
 }
 
-export const panelHeaderRenderEmployee = (fieldData: EmployeeServiceData) => {
+const panelHeaderRenderEmployee = (fieldData: EmployeeServiceData) => {
 	const { employee } = fieldData || {}
 	return (
 		<div className={'flex items-center gap-2'}>
@@ -74,9 +75,9 @@ const ServicesListField: FC<Props> = (props) => {
 		fields,
 		currencySymbol,
 		setVisibleServiceEditModal,
-		panelHeaderRender,
 		disabledEditButton = false,
-		disabledEditButtonTooltip = t('loc:Pred editáciou služby zamestnanca je najprv potrebné uložiť rozpracované zmeny vo formulári.')
+		disabledEditButtonTooltip = t('loc:Pred editáciou služby zamestnanca je najprv potrebné uložiť rozpracované zmeny vo formulári.'),
+		isEmployeeDetail = true
 	} = props
 	const dispatch = useDispatch()
 
@@ -89,7 +90,7 @@ const ServicesListField: FC<Props> = (props) => {
 			<div className={'flex gap-1 items-center ml-2'}>
 				{!field?.useCategoryParameter && renderPriceAndDurationInfo(salonPriceAndDuration, employeePriceAndDuration, hasOverridenData, currencySymbol)}
 				<div onClick={(e) => e.stopPropagation()}>
-					<Tooltip title={disabledEditButton ? disabledEditButtonTooltip : null}>
+					<Tooltip title={disabledEditButton ? disabledEditButtonTooltip : null} destroyTooltipOnHide>
 						<span className={cx('w-full md:w-auto', { 'cursor-not-allowed': disabledEditButton })}>
 							<Button
 								htmlType={'button'}
@@ -120,32 +121,23 @@ const ServicesListField: FC<Props> = (props) => {
 					size={'small'}
 					entityName={t('loc:službu')}
 					type={'default'}
-					getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 					onlyIcon
 				/>
 			</div>
 		)
 	}
 
-	const defaultActiveKeys = (fields as any).reduce((acc: any, _cv: any, index: number) => {
-		const fieldData = fields.get(index)
-		if (fieldData?.hasOverriddenPricesAndDurationData) {
-			return acc
-		}
-		return [fieldData.id, ...acc]
-	}, [] as string[])
-
 	return (
 		<>
-			<Collapse className={'collapse-list'} bordered={false} defaultActiveKey={defaultActiveKeys} accordion>
+			<Collapse className={'collapse-list'} bordered={false} accordion>
 				{fields.map((_field: any, index: number) => {
 					const fieldData = fields.get(index)
 					const categoryParameter = fieldData?.serviceCategoryParameter
 
 					return (
 						<Panel
-							header={panelHeaderRender(fieldData)}
-							key={index}
+							header={isEmployeeDetail ? panelHeaderRenderCategoryName(fieldData) : panelHeaderRenderEmployee(fieldData)}
+							key={isEmployeeDetail ? fieldData.id : fieldData.employee.id}
 							extra={genExtra(index, fieldData)}
 							className={'employee-collapse-panel'}
 							showArrow={false}
@@ -158,7 +150,7 @@ const ServicesListField: FC<Props> = (props) => {
 										const salonPriceAndDurationData = parameterValue?.salonPriceAndDurationData
 
 										return (
-											<>
+											<React.Fragment key={parameterValue.id}>
 												<div className={'flex items-center justify-between px-2 py-1 min-h-10'} key={fieldData?.id}>
 													<span>{parameterValue?.name}</span>
 													{renderPriceAndDurationInfo(
@@ -169,7 +161,7 @@ const ServicesListField: FC<Props> = (props) => {
 													)}
 												</div>
 												<Divider className={'m-0'} />
-											</>
+											</React.Fragment>
 										)
 									})}
 								</div>

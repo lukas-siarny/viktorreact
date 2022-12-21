@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Action, compose, Dispatch } from 'redux'
 import { Button, Modal, notification, Row, Spin } from 'antd'
-import { get, forEach } from 'lodash'
+import { get, forEach, isEmpty } from 'lodash'
 import { change, initialize, isPristine, isSubmitting, submit } from 'redux-form'
 import cx from 'classnames'
 import i18next from 'i18next'
@@ -69,6 +69,8 @@ type Props = SalonSubPageProps & {
 
 export type EmployeePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody
 
+type EmployeeService = NonNullable<IEmployeePayload['data']>['employee']['categories'][0]['children'][0]['children'][0]
+
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 export const addService = (servicesOptions: IServicesPayload['options'], employee: IEmployeePayload['data'], form: any, dispatch: Dispatch<Action>) => {
@@ -106,7 +108,7 @@ export const addService = (servicesOptions: IServicesPayload['options'], employe
 				},
 				salonPriceAndDurationData: getServicePriceAndDurationData(
 					priceAndDuration?.durationFrom,
-					priceAndDuration.durationTo,
+					priceAndDuration?.durationTo,
 					priceAndDuration?.priceFrom,
 					priceAndDuration?.priceTo
 				),
@@ -150,6 +152,18 @@ export const addService = (servicesOptions: IServicesPayload['options'], employe
 	dispatch(change(FORM.EMPLOYEE, 'service', null))
 }
 
+const getCategoryById = (category: any, serviceCategoryID: string): EmployeeService | null => {
+	let result = null
+	if (category?.category?.id === serviceCategoryID) {
+		return category
+	}
+	if (category?.children) {
+		// eslint-disable-next-line no-return-assign
+		category.children.some((node: any) => (result = getCategoryById(node, serviceCategoryID)))
+	}
+	return result
+}
+
 const parseServices = (employee?: IEmployeePayload['data'], salonServices?: ISelectOptionItem[]): EmployeeServiceData[] => {
 	const result: EmployeeServiceData[] = []
 	const employeeData = employee?.employee
@@ -159,9 +173,9 @@ const parseServices = (employee?: IEmployeePayload['data'], salonServices?: ISel
 			firstCategory?.children.forEach((secondCategory) => {
 				secondCategory?.children.forEach((employeeService) => {
 					const salonServiceData = salonServices?.find((option) => option?.key === employeeService.id)
-					const salonPriceAndDuration = salonServiceData?.extra?.rangePriceAndDurationData as ServicePriceAndDurationData
+					const salonPriceAndDuration = salonServiceData?.extra?.priceAndDurationData as ServicePriceAndDurationData
 					const categoryParameter = salonServiceData?.extra?.serviceCategoryParameter as ServiceCategoryParameter
-					const useCategoryParameter = !!categoryParameter?.values?.length // salonServiceData?.extra?.useCategoryParameter TODO: ked BE bude posielat
+					const useCategoryParameter = salonServiceData?.extra?.useCategoryParameter
 
 					let formServiceData: EmployeeServiceData = {
 						id: employeeService?.id,
@@ -195,27 +209,40 @@ const parseServices = (employee?: IEmployeePayload['data'], salonServices?: ISel
 					}
 
 					if (useCategoryParameter) {
+						const employeeCategory = getCategoryById(
+							{
+								children: employee?.employee?.categories
+							},
+							salonServiceData?.extra?.categoryId
+						)
+
 						formServiceData = {
 							...formServiceData,
 							serviceCategoryParameterType: categoryParameter?.valueType as PARAMETER_TYPE,
 							serviceCategoryParameterName: categoryParameter?.name,
-							serviceCategoryParameterId: categoryParameter.id,
-							hasOverriddenPricesAndDurationData: false,
+							serviceCategoryParameterId: categoryParameter?.id,
+							hasOverriddenPricesAndDurationData: !!employeeCategory?.serviceCategoryParameter?.values.length,
 							// todo: treba dorobit, ak ma zamestnanec prepisany parameter, tak vyinicalizovat jeho hodnoty miesto sluzby
 							serviceCategoryParameter: categoryParameter?.values?.map((value) => {
 								const paramaterPriceDuration = value?.priceAndDurationData
-								const parameterSalonPriceAndDurationData = getServicePriceAndDurationData(
-									paramaterPriceDuration?.durationFrom,
-									paramaterPriceDuration.durationTo,
-									paramaterPriceDuration?.priceFrom,
-									paramaterPriceDuration?.priceTo
-								)
+								const employeeValue = employeeCategory?.serviceCategoryParameter?.values?.find((empVal) => empVal.id === value.id)
+								const employeePriceAndDuration = employeeValue?.priceAndDurationData
 
 								return {
 									id: value?.id,
 									name: value?.value,
-									salonPriceAndDurationData: parameterSalonPriceAndDurationData,
-									employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined)
+									salonPriceAndDurationData: getServicePriceAndDurationData(
+										paramaterPriceDuration?.durationFrom,
+										paramaterPriceDuration.durationTo,
+										paramaterPriceDuration?.priceFrom,
+										paramaterPriceDuration?.priceTo
+									),
+									employeePriceAndDurationData: getServicePriceAndDurationData(
+										employeePriceAndDuration?.durationFrom,
+										employeePriceAndDuration?.durationTo,
+										employeePriceAndDuration?.priceFrom,
+										employeePriceAndDuration?.priceTo
+									)
 								}
 							})
 						}

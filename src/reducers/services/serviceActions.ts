@@ -1,5 +1,5 @@
-/* eslint-disable import/no-cycle */
 import i18next from 'i18next'
+/* eslint-disable import/no-cycle */
 
 // types
 import { ThunkResult } from '../index'
@@ -10,7 +10,7 @@ import { IUserAvatar, ISearchableWithoutPagination, ISelectOptionItem } from '..
 
 // utils
 import { getReq } from '../../utils/request'
-import { decodePrice, getServiceRange } from '../../utils/helper'
+import { getAssignedUserLabel, decodePrice, getServiceRange } from '../../utils/helper'
 
 export type IServiceActions = IResetStore | IGetServices | IGetService | IGetServiceRootCategory
 
@@ -88,12 +88,12 @@ export const getServices =
 							categoryFirst: parentCategory?.category?.name || '-',
 							categorySecond: secondCategory?.category?.name || '-',
 							employees: thirdCategory?.service?.employees?.map((employee) => {
-								// TODO: remove any when BE will be done
-								const employeeName =
-									`${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() ||
-									(employee as any).email ||
-									(employee as any).inviteEmail ||
-									'-'
+								const employeeName = getAssignedUserLabel({
+									firstName: employee?.firstName,
+									lastName: employee?.lastName,
+									email: employee?.email,
+									id: employee?.id
+								})
 
 								return {
 									src: employee.image?.resizedImages?.thumbnail,
@@ -130,12 +130,12 @@ export const getServices =
 							label: service.category.name || service.category.id,
 							value: service.service.id,
 							extra: {
+								categoryId: service.category.id,
 								firstCategory: firstCategory?.category?.name,
 								secondCategory: secondCategory?.category?.name,
-								rangePriceAndDurationData: service.service?.rangePriceAndDurationData,
-								serviceCategoryParameter: service.service?.serviceCategoryParameter
-								// TODO: ked to bude BE posielat
-								// useCategoryParameter: service.service.useCateogryParameter
+								priceAndDurationData: service.service?.priceAndDurationData,
+								serviceCategoryParameter: service.service?.serviceCategoryParameter,
+								useCategoryParameter: service.service.useCategoryParameter
 							}
 						})
 					})

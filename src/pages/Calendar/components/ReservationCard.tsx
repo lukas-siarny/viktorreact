@@ -111,6 +111,7 @@ const getWrapperClassnames = (params: {
 	}
 
 	return {
+		...commonProps,
 		'nc-day-event': calendarView === CALENDAR_VIEW.DAY,
 		'nc-week-event': calendarView === CALENDAR_VIEW.WEEK,
 		'multiday-event': isMultiDayEvent,

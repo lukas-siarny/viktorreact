@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import cx from 'classnames'
 
 // full calendar
-import FullCalendar, { DayHeaderContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { DayHeaderContentArg, MoreLinkArg, MoreLinkContentArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
@@ -18,10 +18,20 @@ import { composeMonthViewEvents, getBusinessHours, getOpnenigHoursMap, OpeningHo
 import { RootState } from '../../../../reducers'
 import CalendarEventContent from '../CalendarEventContent'
 
-const dayHeaderContent = (data: DayHeaderContentArg, openingHoursMap: OpeningHoursMap) => {
-	const { date } = data || {}
+const dayHeaderContent = (arg: DayHeaderContentArg, openingHoursMap: OpeningHoursMap) => {
+	const { date } = arg || {}
 	const dayNumber = dayjs(date).day()
 	return <div className={cx('nc-month-day-header', { shaded: !openingHoursMap[dayNumber] })}>{dayjs(date).format(CALENDAR_DATE_FORMAT.MONTH_HEADER_DAY_NAME)}</div>
+}
+
+const moreLinkContent = (arg: MoreLinkContentArg) => {
+	console.log(arg)
+	return <div>{'more link'}</div>
+}
+
+const moreLinkClick = (arg: MoreLinkArg) => {
+	console.log(arg)
+	return 'day'
 }
 
 interface ICalendarMonthView extends ICalendarView {}
@@ -75,6 +85,9 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 				eventContent={(data) => (
 					<CalendarEventContent calendarView={CALENDAR_VIEW.MONTH} data={data} salonID={salonID} onEditEvent={onEditEvent} onReservationClick={onReservationClick} />
 				)}
+				moreLinkContent={(arg) => moreLinkContent(arg)}
+				// handlers
+				moreLinkClick={moreLinkClick}
 			/>
 		</div>
 	)

@@ -83,7 +83,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 	}
 
 	const isEdit = query?.eventId === originalEventData.id
-	const color = calendarView === CALENDAR_VIEW.MONTH ? employee?.color : backgroundColor
+	const color = backgroundColor
 
 	// normal events
 	switch (eventType) {

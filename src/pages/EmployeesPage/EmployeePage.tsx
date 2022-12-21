@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Action, compose, Dispatch } from 'redux'
 import { Button, Modal, notification, Row, Spin } from 'antd'
-import { get, forEach, isEmpty } from 'lodash'
+import { get, forEach } from 'lodash'
 import { change, initialize, isPristine, isSubmitting, submit } from 'redux-form'
 import cx from 'classnames'
 import i18next from 'i18next'
@@ -67,13 +67,13 @@ type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: string }>
 }
 
-export type EmployeePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody
+type EmployeePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody
 
 type EmployeeService = NonNullable<IEmployeePayload['data']>['employee']['categories'][0]['children'][0]['children'][0]
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
-export const addService = (servicesOptions: IServicesPayload['options'], employee: IEmployeePayload['data'], form: any, dispatch: Dispatch<Action>) => {
+const addService = (servicesOptions: IServicesPayload['options'], employee: IEmployeePayload['data'], form: any, dispatch: Dispatch<Action>) => {
 	const selectedServiceIDs = form?.values?.service
 	const updatedServices: any[] = []
 	const employeeData = employee?.employee
@@ -222,7 +222,6 @@ const parseServices = (employee?: IEmployeePayload['data'], salonServices?: ISel
 							serviceCategoryParameterName: categoryParameter?.name,
 							serviceCategoryParameterId: categoryParameter?.id,
 							hasOverriddenPricesAndDurationData: !!employeeCategory?.serviceCategoryParameter?.values.length,
-							// todo: treba dorobit, ak ma zamestnanec prepisany parameter, tak vyinicalizovat jeho hodnoty miesto sluzby
 							serviceCategoryParameter: categoryParameter?.values?.map((value) => {
 								const paramaterPriceDuration = value?.priceAndDurationData
 								const employeeValue = employeeCategory?.serviceCategoryParameter?.values?.find((empVal) => empVal.id === value.id)
@@ -297,7 +296,7 @@ const EmployeePage = (props: Props) => {
 
 	const isEmployeeExists = !!employee?.data?.employee?.id
 
-	const isLoading = employee.isLoading || services.isLoading || currentAuthUser.isLoading || isRemoving
+	const isLoading = submitting || employee.isLoading || services.isLoading || currentAuthUser.isLoading || isRemoving
 
 	const [backUrl] = useBackUrl(parentPath + t('paths:employees'))
 
@@ -345,6 +344,7 @@ const EmployeePage = (props: Props) => {
 	const updateEmployee = async (data: IEmployeeForm) => {
 		try {
 			setSubmitting(true)
+
 			let reqBody: EmployeePatchBody = {
 				firstName: data?.firstName,
 				lastName: data?.lastName,

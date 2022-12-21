@@ -3,6 +3,8 @@ import { isEmpty } from 'lodash'
 
 // types
 import { IEmployeeServiceEditForm } from '../../../types/interfaces'
+
+// utils
 import { arePriceAndDurationDataEmpty, validatePriceAndDurationData } from '../../../utils/helper'
 
 export default (values: IEmployeeServiceEditForm) => {

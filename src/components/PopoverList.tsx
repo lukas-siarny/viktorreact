@@ -21,8 +21,10 @@ const PopoverList: FC<Props> = (props) => {
 					{elements.length > 1 ? (
 						<Popover
 							placement={'right'}
-							content={elements?.map((element) => (
-								<p className={'m-0'}>{element.name}</p>
+							content={elements?.map((element, index) => (
+								<p key={index} className={'m-0'}>
+									{element.name}
+								</p>
 							))}
 						>
 							<div className={'circle'}>+ {elements.length - 1}</div>{' '}

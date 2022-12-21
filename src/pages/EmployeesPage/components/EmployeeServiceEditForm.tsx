@@ -339,7 +339,6 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 					)}
 				</div>
 				<div className={'flex gap-4'}>
-					{/* TODO: dorobit logiku potom ked budu z BE chodit data aj pre paramater + ikonky */}
 					{showResetButton && (
 						<PopConfirmComponent
 							title={t('loc:Naozaj chcete vymazať nastavenia služby pre zamestnanca? Zamestnanocvi sa nastavia hodnoty podľa nastavania služby salónu.')}

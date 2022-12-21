@@ -16,11 +16,10 @@ import { filterSalonRolesByPermission, getPrefixCountryCode } from '../../utils/
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import EmployeeForm from './components/EmployeeForm'
-import { addService } from './EmployeePage'
 import InviteForm from './components/InviteForm'
 
 // types
-import { EmployeeServiceData, IBreadcrumbs, IEmployeeForm, IInviteEmployeeForm, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, IEmployeeForm, IInviteEmployeeForm, SalonSubPageProps } from '../../types/interfaces'
 
 // reducers
 import { getSalonRoles } from '../../reducers/roles/rolesActions'
@@ -45,7 +44,6 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const isFormPristine = useSelector(isPristine(FORM.EMPLOYEE))
 	const isInviteFormPristine = useSelector(isPristine(FORM.INVITE_EMPLOYEE))
-	const form = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE])
 	const services = useSelector((state: RootState) => state.service.services)
 	const currentAuthUser = useSelector((state: RootState) => state.user.authUser)
 	const salonRoles = useSelector((state: RootState) => state.roles.salonRoles)

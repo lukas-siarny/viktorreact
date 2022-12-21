@@ -11,6 +11,7 @@ import { showErrorNotification } from '../../../utils/helper'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
+import { RootState } from '../../../reducers'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -19,6 +20,7 @@ import SelectField from '../../../atoms/SelectField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
+import ServicesListField from './ServicesListField'
 
 // validations
 import validateEmployeeForm from './validateEmployeeForm'
@@ -26,10 +28,6 @@ import validateEmployeeForm from './validateEmployeeForm'
 // assets
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg'
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
-
-// reducers
-import { RootState } from '../../../reducers'
-import ServicesListField from './ServicesListField'
 
 type ComponentProps = {
 	salonID: string

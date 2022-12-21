@@ -1,5 +1,5 @@
-import i18next from 'i18next'
 /* eslint-disable import/no-cycle */
+import i18next from 'i18next'
 
 // types
 import { ThunkResult } from '../index'

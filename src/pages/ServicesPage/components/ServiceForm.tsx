@@ -14,6 +14,8 @@ import SwitchField from '../../../atoms/SwitchField'
 // components
 import DeleteButton from '../../../components/DeleteButton'
 import ServicesListField from '../../EmployeesPage/components/ServicesListField'
+import ParameterValuesList from './ParameterValuesList'
+import ServiceBreadcrumbs from './ServiceBreadcrumbs'
 
 // validate
 import validateServiceForm from './validateServiceForm'
@@ -37,8 +39,6 @@ import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as EmployeesIcon } from '../../../assets/icons/employees.svg'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
-import ParameterValuesList from './ParameterValuesList'
-import ServiceBreadcrumbs from './ServiceBreadcrumbs'
 
 const numberMin0 = validationNumberMin(0)
 

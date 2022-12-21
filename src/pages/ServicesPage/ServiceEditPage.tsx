@@ -8,6 +8,7 @@ import { forEach, isNil, unionBy } from 'lodash'
 
 // components
 import ServiceForm from './components/ServiceForm'
+import ServiceEditModal from '../EmployeesPage/components/ServiceEditModal'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -24,7 +25,6 @@ import { FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, SALON_PERMISSION }
 import { decodePrice, encodePrice, getAssignedUserLabel, getEmployeeServiceDataForPatch, getServicePriceAndDurationData } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { history } from '../../utils/history'
-import ServiceEditModal from '../EmployeesPage/components/ServiceEditModal'
 
 type Props = SalonSubPageProps & {
 	serviceID: string

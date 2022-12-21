@@ -203,9 +203,9 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				if (hasPermissions(ADMIN_PERMISSIONS) || (hasPermissions([PERMISSION.PARTNER]) && selectedSalon?.settings.enabledReservations)) {
 					mainGroupItems.push(
 						{
-							key: PAGE.SALON_SETTINGS,
+							key: PAGE.RESERVATIONS_SETTINGS,
 							label: t('loc:Nastavenia rezervácií'),
-							onClick: () => history.push(getPath(t('paths:salon-settings'))),
+							onClick: () => history.push(getPath(t('paths:reservations-settings'))),
 							icon: <SettingIcon />
 						},
 						{

@@ -119,7 +119,7 @@ const EventForm: FC<Props> = (props) => {
 		if (checked) {
 			const repeatDay = getDayNameFromNumber(dayjs(formValues?.date).day()) // NOTE: .day() vrati cislo od 0 do 6 co predstavuje nedela az sobota
 			dispatch(change(formName, 'every', EVERY_REPEAT.ONE_WEEK))
-			dispatch(change(formName, 'repeatOn', repeatDay))
+			dispatch(change(formName, 'repeatOn', [repeatDay]))
 		}
 	}
 
@@ -180,7 +180,9 @@ const EventForm: FC<Props> = (props) => {
 
 						<Field
 							name={'recurring'}
-							disabled={!formValues?.calendarBulkEventID && eventId}
+							// NOTE: ak je  otvoreny EDIT tak sa nemoze dat menit reccuring (ani single eventu ani bulk eventu) ale daju sa menit ostatne hodnoty
+							// NOTE: Tento field bude dosptupny len pri CREATE evente
+							disabled={eventId}
 							onChange={onChangeRecurring}
 							className={'pb-0'}
 							component={SwitchField}

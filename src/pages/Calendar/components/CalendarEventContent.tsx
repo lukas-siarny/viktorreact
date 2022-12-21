@@ -51,6 +51,8 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 		service,
 		customer,
 		employee,
+		note,
+		noteFromB2CCustomer,
 		isFirstMultiDayEventInCurrentRange,
 		isLastMultiDaylEventInCurrentRange,
 		isMultiDayEvent,
@@ -125,6 +127,8 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					customer={customer}
 					service={service}
 					employee={employee}
+					note={note}
+					noteFromB2CCustomer={noteFromB2CCustomer}
 					backgroundColor={backgroundColor}
 					isMultiDayEvent={isMultiDayEvent}
 					isFirstMultiDayEventInCurrentRange={isFirstMultiDayEventInCurrentRange}

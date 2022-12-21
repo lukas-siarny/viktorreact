@@ -46,7 +46,7 @@ const formName = FORM.CALENDAR_RESERVATION_FORM
 type Props = InjectedFormProps<ICalendarReservationForm, ComponentProps> & ComponentProps
 
 const ReservationForm: FC<Props> = (props) => {
-	const { handleSubmit, salonID, searchEmployes, eventId, phonePrefix } = props
+	const { handleSubmit, salonID, searchEmployes, eventId, phonePrefix, pristine, submitting } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [visibleCustomerModal, setVisibleCustomerModal] = useState(false)
@@ -270,6 +270,7 @@ const ReservationForm: FC<Props> = (props) => {
 									openForbiddenModal()
 								}
 							}}
+							disabled={submitting || pristine}
 							htmlType={'submit'}
 							type={'primary'}
 							block

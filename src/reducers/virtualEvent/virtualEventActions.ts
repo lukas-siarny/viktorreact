@@ -10,7 +10,7 @@ import { ThunkResult } from '../index'
 import { ICalendarEventForm, ICalendarReservationForm } from '../../types/interfaces'
 
 // utils
-import { CALENDAR_EVENT_TYPE, HANDLE_CALENDAR_ACTIONS, HANDLE_CALENDAR_FORMS, NEW_ID_PREFIX } from '../../utils/enums'
+import { CALENDAR_EVENT_TYPE, HANDLE_CALENDAR_ACTIONS, HANDLE_CALENDAR_FORMS, NEW_ID_PREFIX, CALENDAR_DATE_FORMAT } from '../../utils/enums'
 import { getDateTime } from '../../utils/helper'
 // import { createBaseEvent } from '../../pages/Calendar/calendarHelpers'
 
@@ -98,7 +98,9 @@ export const addOrUpdateEvent =
 			}
 
 			const start = getDateTime(date, timeFrom)
-			const end = timeTo ? getDateTime(date, timeTo) : dayjs(start).add(15, 'minutes').toISOString()
+			// NOTE: ak timeTo nie je zadany, pre vykreslenia placeholdera sa pouzije najmensi casovy slot (bunka), ktory je nastaveny na 15min
+			const endTime = timeTo || dayjs(start).add(15, 'minutes').format(CALENDAR_DATE_FORMAT.TIME)
+			const end = getDateTime(date, endTime)
 
 			const calendarViewDate = dayjs(calendarApi.getDate())
 			const newDate = dayjs(date)
@@ -126,7 +128,7 @@ export const addOrUpdateEvent =
 					},
 					end: {
 						date,
-						time: timeTo
+						time: endTime
 					},
 					customer: customer
 						? {

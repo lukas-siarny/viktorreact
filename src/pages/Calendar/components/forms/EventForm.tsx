@@ -53,7 +53,7 @@ type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentPr
 const formName = FORM.CALENDAR_EVENT_FORM
 
 const EventForm: FC<Props> = (props) => {
-	const { handleSubmit, eventId, searchEmployes } = props
+	const { handleSubmit, eventId, searchEmployes, pristine, submitting } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const formValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(formName)(state))
@@ -208,6 +208,7 @@ const EventForm: FC<Props> = (props) => {
 									openForbiddenModal()
 								}
 							}}
+							disabled={submitting || pristine}
 							htmlType={'submit'}
 							type={'primary'}
 							block

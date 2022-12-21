@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 're
 import Layout from 'antd/lib/layout/layout'
 import { message } from 'antd'
 import dayjs from 'dayjs'
-import { includes, isEmpty } from 'lodash'
+import { includes, isEmpty, omit } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { destroy, initialize } from 'redux-form'
@@ -563,7 +563,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						await patchReq(
 							'/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}',
 							{ salonID, calendarEventID },
-							reqDataUpdate,
+							omit(reqDataUpdate, 'repeatEvent'),
 							undefined,
 							NOTIFICATION_TYPE.NOTIFICATION,
 							true

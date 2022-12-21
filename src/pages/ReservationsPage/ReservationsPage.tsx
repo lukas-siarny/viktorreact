@@ -3,18 +3,19 @@ import { useTranslation } from 'react-i18next'
 import { Col, Row } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { DelimitedArrayParam, StringParam, useQueryParams, DateParam } from 'use-query-params'
+import { DelimitedArrayParam, StringParam, useQueryParams, DateParam, ArrayParam } from 'use-query-params'
 
 // components
+import { initialize } from 'redux-form'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
 // types
-import { Columns, IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
+import { Columns, IBreadcrumbs, IComputedMatch, IReservationsFilter } from '../../types/interfaces'
 import { getSalonReservations } from '../../reducers/salons/salonsActions'
 import CustomTable from '../../components/CustomTable'
 import { RootState } from '../../reducers'
@@ -40,29 +41,18 @@ const ReservationsPage = (props: Props) => {
 	const [query, setQuery] = useQueryParams({
 		dateFrom: DateParam,
 		dateTo: DateParam,
-		eventTypes: DelimitedArrayParam,
 		employeeIDs: DelimitedArrayParam,
 		categoryIDs: DelimitedArrayParam,
-		reservationStates: DelimitedArrayParam,
-		reservationCreateSourceType: StringParam,
-		reservationPaymentMethods: DelimitedArrayParam
+		reservationStates: ArrayParam,
+		reservationCreateSourceType: ArrayParam,
+		reservationPaymentMethods: ArrayParam
 	})
-
+	console.log('query', query)
 	// TODO: zoznam dotiahnut + init filter
-	// useEffect(() => {
-	// 	dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search, serviceID: query.serviceID, accountState: query.accountState }))
-	// 	dispatch(
-	// 		getEmployees({
-	// 			page: query.page,
-	// 			limit: query.limit,
-	// 			order: query.order,
-	// 			search: query.search,
-	// 			accountState: query.accountState,
-	// 			serviceID: query.serviceID,
-	// 			salonID
-	// 		})
-	// 	)
-	// }, [dispatch, query.page, query.limit, query.search, query.order, query.accountState, query.serviceID, salonID])
+	useEffect(() => {
+		dispatch(initialize(FORM.RESERVAtIONS_FILTER, { reservationStates: query.reservationStates }))
+		dispatch(getSalonReservations({ salonID, dateFrom: '2021-11-11', dateTo: '2022-12-12', reservationStates: query.reservationStates }))
+	}, [dispatch, query.reservationStates, salonID])
 
 	// TODO: zoznam rezervacii
 	useEffect(() => {
@@ -71,15 +61,15 @@ const ReservationsPage = (props: Props) => {
 	}, [salonID, dispatch])
 
 	// TODO: submit filtra
-	const handleSubmit = (values: any) => {
+	const handleSubmit = (values: IReservationsFilter) => {
 		const newQuery = {
 			...query,
-			...values,
-			page: 1
+			...values
 		}
+		console.log('newQuery', newQuery)
 		setQuery(newQuery)
 	}
-	// TODO: tabulka
+
 	const columns: Columns = [
 		{
 			title: t('loc:Dátum'),
@@ -193,8 +183,6 @@ const ReservationsPage = (props: Props) => {
 							columns={columns}
 							loading={reservations?.isLoading}
 							dataSource={reservations?.tableData}
-							rowClassName={'clickable-row'}
-							rowKey='id'
 							twoToneRows
 							// scroll={{ x: 800 }}
 							useCustomPagination

@@ -765,3 +765,10 @@ export type ConfirmModalUpdateReservationData = {
 }
 
 export type ConfirmModalData = ConfirmModalReservationData | ConfirmModalEventnData | ConfirmModalDeleteEventData | ConfirmModalUpdateReservationData | null
+
+export interface IReservationsFilter {
+	dateFrom: Date
+	dateTo: Date
+	reservationStates: RESERVATION_STATE[]
+	// TODO:
+}

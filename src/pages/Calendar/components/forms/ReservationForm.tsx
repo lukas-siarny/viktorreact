@@ -276,7 +276,7 @@ const ReservationForm: FC<Props> = (props) => {
 							block
 							className={'noti-btn self-end'}
 						>
-							{eventId ? STRINGS(t).edit(t('loc:rezerváciu')) : STRINGS(t).createRecord(t('loc:rezerváciu'))}
+							{eventId ? t('loc:Upraviť') : t('loc:Vytvoriť')}
 						</Button>
 					)}
 				/>

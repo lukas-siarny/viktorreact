@@ -629,7 +629,7 @@
   "účet": "account",
   "Čakajúca": "Pending",
   "Čakajúce": "Pending",
-  "Časové intervaly medzi rezerváciami.": "Time intervals between bookings.",
+  "Časové intervaly medzi rezerváciami.": "Online booking will be able to start in the specified interval (e.g. 20 min = start of booking at 10:20, 10:40, 11:00)",
   "Časové limity": "Time limits",
   "Čo sa bude diať ďalej?": "What will happen next?",
   "Číslo ulice": "Street number",

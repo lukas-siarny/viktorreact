@@ -6,9 +6,23 @@ import { debounce, map } from 'lodash'
 import { useSelector } from 'react-redux'
 
 // utils
-import dayjs from 'dayjs'
-import { FORM, RESERVATION_STATES, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
-import { checkFiltersSizeWithoutSearch, translateReservationState } from '../../../utils/helper'
+import {
+	FORM,
+	RESERVATION_PAYMENT_METHOD,
+	RESERVATION_PAYMENT_METHODS,
+	RESERVATION_SOURCE_TYPE,
+	RESERVATION_SOURCE_TYPES,
+	RESERVATION_STATE,
+	RESERVATION_STATES,
+	ROW_GUTTER_X_DEFAULT
+} from '../../../utils/enums'
+import {
+	checkFiltersSizeWithoutSearch,
+	getAssignedUserLabel,
+	transalteReservationSourceType,
+	translateReservationPaymentMethod,
+	translateReservationState
+} from '../../../utils/helper'
 
 // atoms
 
@@ -19,7 +33,6 @@ import SelectField from '../../../atoms/SelectField'
 // reducers
 import { RootState } from '../../../reducers'
 import DateField from '../../../atoms/DateField'
-import { ReactComponent as DateSuffixIcon } from '../../../assets/icons/date-suffix-icon.svg'
 import { IReservationsFilter } from '../../../types/interfaces'
 
 type ComponentProps = {}
@@ -29,34 +42,43 @@ type Props = InjectedFormProps<IReservationsFilter, ComponentProps> & ComponentP
 const RESERVATION_STATE_OPTIONS = () =>
 	map(RESERVATION_STATES, (item) => ({
 		key: item,
-		label: translateReservationState(item as any)
+		label: translateReservationState(item as RESERVATION_STATE)
+	}))
+
+const RESERVATION_PAYMENT_METHOD_OPTIONS = () =>
+	map(RESERVATION_PAYMENT_METHODS, (item) => ({
+		key: item,
+		label: translateReservationPaymentMethod(item as RESERVATION_PAYMENT_METHOD)
+	}))
+
+const RESERVATION_SOURCE_TYPE_OPTIONS = () =>
+	map(RESERVATION_SOURCE_TYPES, (item) => ({
+		key: item,
+		label: transalteReservationSourceType(item as RESERVATION_SOURCE_TYPE)
 	}))
 
 const ReservationsFilter = (props: Props) => {
 	const { handleSubmit } = props
 	const [t] = useTranslation()
-	const servicesOptions = useSelector((state: RootState) => state.service.services.options)
+	const reservations = useSelector((state: RootState) => state.salons.reservations)
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.RESERVAtIONS_FILTER)(state))
+
+	const employeeIDsOptions = map(reservations?.data?.employees, (employee) => {
+		return {
+			key: employee.id,
+			label: getAssignedUserLabel({
+				id: employee.id,
+				firstName: employee.firstName,
+				lastName: employee.lastName,
+				email: employee.email
+			})
+		}
+	})
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
 			<Filters activeFilters={checkFiltersSizeWithoutSearch(formValues)}>
 				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					{/* <Col span={8}> */}
-					{/*	<Field */}
-					{/*		component={SelectField} */}
-					{/*		name={'accountState'} */}
-					{/*		placeholder={t('loc:Stav konta')} */}
-					{/*		allowClear */}
-					{/*		size={'middle'} */}
-					{/*		filterOptions */}
-					{/*		onDidMountSearch */}
-					{/*		options={[]} */}
-					{/*	/> */}
-					{/* </Col> */}
-					{/* <Col span={8}> */}
-					{/*	<Field component={SelectField} name={'serviceID'} placeholder={t('loc:Služba')} allowClear size={'middle'} onDidMountSearch options={servicesOptions} /> */}
-					{/* </Col> */}
 					<Col span={8}>
 						<Field
 							component={SelectField}
@@ -64,8 +86,47 @@ const ReservationsFilter = (props: Props) => {
 							name={'reservationStates'}
 							placeholder={t('loc:Stav')}
 							allowClear
+							showSearch={false}
+							showArrow
 							size={'middle'}
 							options={RESERVATION_STATE_OPTIONS()}
+						/>
+					</Col>
+					<Col span={8}>
+						<Field
+							component={SelectField}
+							mode={'multiple'}
+							name={'reservationPaymentMethods'}
+							placeholder={t('loc:Spôsob úhrady')}
+							allowClear
+							showSearch={false}
+							showArrow
+							size={'middle'}
+							options={RESERVATION_PAYMENT_METHOD_OPTIONS()}
+						/>
+					</Col>
+					<Col span={8}>
+						<Field
+							component={SelectField}
+							mode={'multiple'}
+							showSearch={false}
+							showArrow
+							name={'employeeIDs'}
+							placeholder={t('loc:Zamestnanci')}
+							allowClear
+							size={'middle'}
+							options={employeeIDsOptions}
+						/>
+					</Col>
+					<Col span={8}>
+						<Field
+							component={SelectField}
+							showSearch={false}
+							name={'reservationCreateSourceType'}
+							placeholder={t('loc:Vytvorená v')}
+							allowClear
+							size={'middle'}
+							options={RESERVATION_SOURCE_TYPE_OPTIONS()}
 						/>
 					</Col>
 					{/* <Field */}

@@ -64,7 +64,8 @@ import {
 	QUERY_LIMIT,
 	RESERVATION_STATE,
 	SALON_PERMISSION,
-	RESERVATION_PAYMENT_METHOD
+	RESERVATION_PAYMENT_METHOD,
+	RESERVATION_SOURCE_TYPE
 } from './enums'
 
 import { CountriesData, IAuthUserPayload, IDateTimeFilterOption, IEmployeePayload, IPrice, ISelectOptionItem, IStructuredAddress } from '../types/interfaces'
@@ -256,6 +257,16 @@ export const translateDayName = (day: DAY | typeof MONDAY_TO_FRIDAY, shortName?:
 			return shortName ? i18next.t('loc:Po - Pia') : i18next.t('loc:Pondelok - Piatok')
 		default:
 			return ''
+	}
+}
+
+export const transalteReservationSourceType = (sourceType: RESERVATION_SOURCE_TYPE) => {
+	// TODO: nemaju tu byt aj hodnoty b2b a b2c?
+	if (sourceType === RESERVATION_SOURCE_TYPE.ONLINE) {
+		return i18next.t('loc:Online')
+	}
+	if (sourceType === RESERVATION_SOURCE_TYPE.OFFLINE) {
+		return i18next.t('loc:Offline')
 	}
 }
 

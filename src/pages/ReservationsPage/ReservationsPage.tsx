@@ -41,24 +41,39 @@ const ReservationsPage = (props: Props) => {
 	const [query, setQuery] = useQueryParams({
 		dateFrom: DateParam,
 		dateTo: DateParam,
-		employeeIDs: DelimitedArrayParam,
-		categoryIDs: DelimitedArrayParam,
+		employeeIDs: ArrayParam,
+		categoryIDs: ArrayParam,
 		reservationStates: ArrayParam,
-		reservationCreateSourceType: ArrayParam,
+		reservationCreateSourceType: StringParam,
 		reservationPaymentMethods: ArrayParam
 	})
 	console.log('query', query)
 	// TODO: zoznam dotiahnut + init filter
 	useEffect(() => {
-		dispatch(initialize(FORM.RESERVAtIONS_FILTER, { reservationStates: query.reservationStates }))
-		dispatch(getSalonReservations({ salonID, dateFrom: '2021-11-11', dateTo: '2022-12-12', reservationStates: query.reservationStates }))
-	}, [dispatch, query.reservationStates, salonID])
+		dispatch(
+			initialize(FORM.RESERVAtIONS_FILTER, {
+				reservationStates: query.reservationStates,
+				employeeIDs: query.employeeIDs,
+				reservationPaymentMethods: query.reservationPaymentMethods,
+				reservationCreateSourceType: query.reservationCreateSourceType
+			})
+		)
+		dispatch(
+			getSalonReservations({
+				salonID,
+				dateFrom: '2021-11-11',
+				dateTo: '2022-12-12',
+				reservationStates: query.reservationStates,
+				employeeIDs: query.employeeIDs,
+				reservationPaymentMethods: query.reservationPaymentMethods,
+				reservationCreateSourceType: query.reservationCreateSourceType
+			})
+		)
+	}, [dispatch, query.employeeIDs, query.reservationCreateSourceType, query.reservationPaymentMethods, query.reservationStates, salonID])
 
-	// TODO: zoznam rezervacii
 	useEffect(() => {
-		// TODO: posielat z query
-		dispatch(getSalonReservations({ salonID, dateFrom: '2021-11-11', dateTo: '2022-12-12' }))
-	}, [salonID, dispatch])
+		dispatch(getSalonReservations({ salonID, dateFrom: '2021-11-11', dateTo: '2022-12-12', reservationStates: query.reservationStates, employeeIDs: query.employeeIDs }))
+	}, [])
 
 	// TODO: submit filtra
 	const handleSubmit = (values: IReservationsFilter) => {
@@ -66,7 +81,6 @@ const ReservationsPage = (props: Props) => {
 			...query,
 			...values
 		}
-		console.log('newQuery', newQuery)
 		setQuery(newQuery)
 	}
 

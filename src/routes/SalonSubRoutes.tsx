@@ -45,8 +45,8 @@ import BillingInfoPage from '../pages/BillingInfoPage/BillingInfoPage'
 // calendar
 import Calendar from '../pages/Calendar/Calendar'
 
-// salon-settings
-import SalonSettingsPage from '../pages/SalonSettingsPage/SalonSettingsPage'
+// reservations-settings
+import ReservationsSettingsPage from '../pages/ReservationsSettingsPage/ReservationsSettingsPage'
 
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
@@ -251,13 +251,13 @@ const SalonSubRoutes: FC = (props) => {
 			/>
 			<AuthRoute
 				exact
-				path={getPath(t('paths:salon-settings'))}
-				component={SalonSettingsPage}
+				path={getPath(t('paths:reservations-settings'))}
+				component={ReservationsSettingsPage}
 				parentPath={url}
-				translatePathKey={getPath(t('paths:salon-settings'))}
+				translatePathKey={getPath(t('paths:reservations-settings'))}
 				salonID={salonID}
 				layout={MainLayout}
-				page={PAGE.SALON_SETTINGS}
+				page={PAGE.RESERVATIONS_SETTINGS}
 				preventShowDeletedSalon
 			/>
 			<AuthRoute

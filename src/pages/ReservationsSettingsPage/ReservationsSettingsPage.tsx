@@ -81,7 +81,7 @@ const initDisabledNotifications = (notifications: any[]): IReservationSystemSett
 	)
 }
 
-const SalonSettingsPage = (props: SalonSubPageProps) => {
+const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const { salonID } = props
@@ -242,4 +242,4 @@ const SalonSettingsPage = (props: SalonSubPageProps) => {
 	)
 }
 
-export default withPermissions(permissions)(SalonSettingsPage)
+export default withPermissions(permissions)(ReservationsSettingsPage)

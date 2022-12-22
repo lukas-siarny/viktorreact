@@ -1,6 +1,5 @@
 /* eslint-disable import/no-cycle */
 import { map, isEmpty, find } from 'lodash'
-import { Dayjs } from 'dayjs'
 import { IResetStore } from '../generalTypes'
 
 // types
@@ -20,15 +19,7 @@ import {
 	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_SOURCE_TYPE
 } from '../../utils/enums'
-import {
-	formatDate,
-	formatDateByLocale,
-	formatDateWithTime,
-	normalizeQueryParams,
-	transalteReservationSourceType,
-	translateReservationPaymentMethod,
-	translateReservationState
-} from '../../utils/helper'
+import { formatDateByLocale, normalizeQueryParams, transalteReservationSourceType, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
 
 export type ISalonsActions =
 	| IResetStore
@@ -364,9 +355,9 @@ export const getSalonReservations =
 		try {
 			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_START })
 			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', {
-				...normalizeQueryParams(queryParams),
+				...(normalizeQueryParams(queryParams) as any),
 				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION]
-			} as any) // TODO: opravit any type
+			})
 
 			const tableData: ISalonReservationsTableData[] = map(data.calendarEvents, (event) => {
 				const employee = find(data.employees, { id: event.employee.id })

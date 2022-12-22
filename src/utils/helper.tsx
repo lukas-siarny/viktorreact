@@ -138,7 +138,7 @@ export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: strin
 
 /**
  * @param date Date
- * @param locale iso country code sk,cz,en,... etc.
+ * @param skipTime
  * @return string
  *
  * Returns formatted date by location

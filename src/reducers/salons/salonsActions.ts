@@ -1,5 +1,6 @@
 /* eslint-disable import/no-cycle */
 import { map, isEmpty, find } from 'lodash'
+import { Dayjs } from 'dayjs'
 import { IResetStore } from '../generalTypes'
 
 // types
@@ -19,7 +20,15 @@ import {
 	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_SOURCE_TYPE
 } from '../../utils/enums'
-import { formatDate, normalizeQueryParams, transalteReservationSourceType, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
+import {
+	formatDate,
+	formatDateByLocale,
+	formatDateWithTime,
+	normalizeQueryParams,
+	transalteReservationSourceType,
+	translateReservationPaymentMethod,
+	translateReservationState
+} from '../../utils/helper'
 
 export type ISalonsActions =
 	| IResetStore
@@ -100,9 +109,9 @@ export interface ISalonHistoryPayload {
 
 interface ISalonReservationsTableData {
 	key: string
-	date: string
+	date: string | null
 	time: string
-	createdAt: string
+	createdAt: string | null
 	createSourceType: string
 	state: string
 	employee: any // TODO: optypovat
@@ -363,9 +372,9 @@ export const getSalonReservations =
 				const employee = find(data.employees, { id: event.employee.id })
 				return {
 					key: event.id,
-					date: formatDate(event.start.date),
+					date: formatDateByLocale(event.start.date, true) as string,
 					time: `${event.start.time} - ${event.end.time}`,
-					createdAt: formatDate(event.createdAt),
+					createdAt: formatDateByLocale(event.createdAt) as string,
 					createSourceType: transalteReservationSourceType(event.reservationData?.createSourceType as RESERVATION_SOURCE_TYPE),
 					state: translateReservationState(event.reservationData?.state as RESERVATION_STATE),
 					employee,

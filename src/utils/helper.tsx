@@ -261,13 +261,10 @@ export const translateDayName = (day: DAY | typeof MONDAY_TO_FRIDAY, shortName?:
 }
 
 export const transalteReservationSourceType = (sourceType: RESERVATION_SOURCE_TYPE) => {
-	// TODO: nemaju tu byt aj hodnoty b2b a b2c?
 	if (sourceType === RESERVATION_SOURCE_TYPE.ONLINE) {
 		return i18next.t('loc:Online')
 	}
-	if (sourceType === RESERVATION_SOURCE_TYPE.OFFLINE) {
-		return i18next.t('loc:Offline')
-	}
+	return i18next.t('loc:Offline')
 }
 
 export const translateReservationState = (state?: RESERVATION_STATE) => {

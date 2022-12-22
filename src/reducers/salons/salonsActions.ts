@@ -1,6 +1,5 @@
 /* eslint-disable import/no-cycle */
 import { map, isEmpty, find } from 'lodash'
-import i18next from 'i18next'
 import { IResetStore } from '../generalTypes'
 
 // types
@@ -20,7 +19,7 @@ import {
 	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_SOURCE_TYPE
 } from '../../utils/enums'
-import { formatDate, formatTime, normalizeQueryParams, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
+import { formatDate, normalizeQueryParams, transalteReservationSourceType, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
 
 export type ISalonsActions =
 	| IResetStore
@@ -59,13 +58,18 @@ export interface IGetSalonsQueryParams extends IQueryParams {
 	assignedUserID?: string | null
 }
 
-export interface IGetSalonsHistoryQueryParams extends IQueryParams {
+interface IGetSalonReservationsQueryParams {
 	dateFrom: string
 	dateTo: string
+	employeeIDs: string[]
+	categoryIDs: string[]
+	reservationStates: string[]
+	reservationCreateSourceType: string
+	reservationPaymentMethods: string[]
 	salonID: string
 }
 
-export interface IGetSalonReservationsQueryParams {
+export interface IGetSalonsHistoryQueryParams extends IQueryParams {
 	dateFrom: string
 	dateTo: string
 	salonID: string
@@ -94,9 +98,22 @@ export interface ISalonHistoryPayload {
 	data: Paths.GetApiB2BAdminSalonsSalonIdHistory.Responses.$200 | null
 }
 
+interface ISalonReservationsTableData {
+	key: string
+	date: string
+	time: string
+	createdAt: string
+	createSourceType: string
+	state: string
+	employee: any // TODO: optypovat
+	customer: any
+	service: any
+	paymentMethod: string
+}
+
 export interface ISalonReservationsPayload {
-	data: any // TODO: type
-	tableData: any
+	data: Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200 | null
+	tableData?: ISalonReservationsTableData[]
 }
 
 export interface IGetSuggestedSalons {
@@ -341,15 +358,15 @@ export const getSalonReservations =
 				...normalizeQueryParams(queryParams),
 				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION]
 			} as any) // TODO: opravit any type
-			console.log('data', data)
-			const tableData = map(data.calendarEvents, (event) => {
+
+			const tableData: ISalonReservationsTableData[] = map(data.calendarEvents, (event) => {
 				const employee = find(data.employees, { id: event.employee.id })
 				return {
 					key: event.id,
 					date: formatDate(event.start.date),
 					time: `${event.start.time} - ${event.end.time}`,
 					createdAt: formatDate(event.createdAt),
-					createSourceType: event.reservationData?.createSourceType === RESERVATION_SOURCE_TYPE.ONLINE ? i18next.t('loc:Online') : i18next.t('loc:Offline'),
+					createSourceType: transalteReservationSourceType(event.reservationData?.createSourceType as RESERVATION_SOURCE_TYPE),
 					state: translateReservationState(event.reservationData?.state as RESERVATION_STATE),
 					employee,
 					customer: event.customer,

@@ -25,14 +25,14 @@ import {
 } from '../../../utils/helper'
 
 // atoms
+import SelectField from '../../../atoms/SelectField'
+import DateField from '../../../atoms/DateField'
 
 // components
 import Filters from '../../../components/Filters'
-import SelectField from '../../../atoms/SelectField'
 
 // reducers
 import { RootState } from '../../../reducers'
-import DateField from '../../../atoms/DateField'
 import { IReservationsFilter } from '../../../types/interfaces'
 
 type ComponentProps = {}
@@ -62,6 +62,7 @@ const ReservationsFilter = (props: Props) => {
 	const [t] = useTranslation()
 	const reservations = useSelector((state: RootState) => state.salons.reservations)
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.RESERVAtIONS_FILTER)(state))
+	const servicesOptions = useSelector((state: RootState) => state.service.services.options)
 
 	const employeeIDsOptions = map(reservations?.data?.employees, (employee) => {
 		return {
@@ -79,7 +80,43 @@ const ReservationsFilter = (props: Props) => {
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
 			<Filters activeFilters={checkFiltersSizeWithoutSearch(formValues)}>
 				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={8}>
+					<Col span={6}>
+						<Field
+							name={'dateFrom'}
+							placeholder={t('loc:Dátum od')}
+							className={'pb-0'}
+							pickerClassName={'w-full'}
+							component={DateField}
+							dropdownAlign={{ points: ['tr', 'br'] }}
+							required
+						/>
+					</Col>
+					<Col span={6}>
+						<Field
+							name={'dateTo'}
+							placeholder={t('loc:Dátum do')}
+							className={'pb-0'}
+							pickerClassName={'w-full'}
+							component={DateField}
+							dropdownAlign={{ points: ['tr', 'br'] }}
+							required
+						/>
+					</Col>
+					<Col span={6}>
+						<Field
+							component={SelectField}
+							name={'categoryIDs'}
+							mode={'multiple'}
+							placeholder={t('loc:Služba')}
+							allowClear
+							showArrow
+							size={'middle'}
+							showSearch={false}
+							onDidMountSearch
+							options={servicesOptions}
+						/>
+					</Col>
+					<Col span={6}>
 						<Field
 							component={SelectField}
 							mode={'multiple'}
@@ -92,7 +129,7 @@ const ReservationsFilter = (props: Props) => {
 							options={RESERVATION_STATE_OPTIONS()}
 						/>
 					</Col>
-					<Col span={8}>
+					<Col span={6}>
 						<Field
 							component={SelectField}
 							mode={'multiple'}
@@ -105,7 +142,7 @@ const ReservationsFilter = (props: Props) => {
 							options={RESERVATION_PAYMENT_METHOD_OPTIONS()}
 						/>
 					</Col>
-					<Col span={8}>
+					<Col span={6}>
 						<Field
 							component={SelectField}
 							mode={'multiple'}
@@ -118,7 +155,7 @@ const ReservationsFilter = (props: Props) => {
 							options={employeeIDsOptions}
 						/>
 					</Col>
-					<Col span={8}>
+					<Col span={6}>
 						<Field
 							component={SelectField}
 							showSearch={false}
@@ -129,34 +166,6 @@ const ReservationsFilter = (props: Props) => {
 							options={RESERVATION_SOURCE_TYPE_OPTIONS()}
 						/>
 					</Col>
-					{/* <Field */}
-					{/*	name={'dateFrom'} */}
-					{/*	label={t('loc:Dátum od')} */}
-					{/*	className={'pb-0'} */}
-					{/*	// pickerClassName={'w-full'} */}
-					{/*	component={DateField} */}
-					{/*	// placement={'bottomRight'} */}
-					{/*	// dropdownAlign={{ points: ['tr', 'br'] }} */}
-					{/*	required */}
-					{/*	size={'large'} */}
-					{/*	suffixIcon={<DateSuffixIcon className={'text-notino-grayDark'} />} */}
-					{/*	// compareFrom1={dayjs()} */}
-					{/*	// compareTo1={dayjs().add(1, 'year')} */}
-					{/* /> */}
-					{/* <Field */}
-					{/*	name={'dateTo'} */}
-					{/*	label={t('loc:Dátum do')} */}
-					{/*	className={'pb-0'} */}
-					{/*	// pickerClassName={'w-full'} */}
-					{/*	component={DateField} */}
-					{/*	// placement={'bottomRight'} */}
-					{/*	// dropdownAlign={{ points: ['tr', 'br'] }} */}
-					{/*	required */}
-					{/*	size={'large'} */}
-					{/*	suffixIcon={<DateSuffixIcon className={'text-notino-grayDark'} />} */}
-					{/*	// compareFrom1={dayjs()} */}
-					{/*	// compareTo1={dayjs().add(1, 'year')} */}
-					{/* /> */}
 				</Row>
 			</Filters>
 		</Form>

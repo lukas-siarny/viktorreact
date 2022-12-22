@@ -1,29 +1,34 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Col, Row } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { DelimitedArrayParam, StringParam, useQueryParams, DateParam, ArrayParam } from 'use-query-params'
+import { initialize } from 'redux-form'
+import dayjs from 'dayjs'
+import { StringParam, useQueryParams, ArrayParam } from 'use-query-params'
 
 // components
-import { initialize } from 'redux-form'
 import Breadcrumbs from '../../components/Breadcrumbs'
+import CustomTable from '../../components/CustomTable'
+import UserAvatar from '../../components/AvatarComponents'
+import ReservationsFilter from './components/ReservationsFilter'
+import ConfirmModal from '../../atoms/ConfirmModal'
 
 // utils
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { DEFAULT_DATE_INIT_FORMAT, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
+import { getAssignedUserLabel } from '../../utils/helper'
 
 // reducers
+import { getSalonReservations } from '../../reducers/salons/salonsActions'
+import { RootState } from '../../reducers'
+import { getServices } from '../../reducers/services/serviceActions'
+
 // types
 import { Columns, IBreadcrumbs, IComputedMatch, IReservationsFilter } from '../../types/interfaces'
-import { getSalonReservations } from '../../reducers/salons/salonsActions'
-import CustomTable from '../../components/CustomTable'
-import { RootState } from '../../reducers'
-import UserAvatar from '../../components/AvatarComponents'
-import { getAssignedUserLabel } from '../../utils/helper'
-import ReservationsFilter from './components/ReservationsFilter'
 
 // assets
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
 
 type Props = {
 	computedMatch: IComputedMatch<{ salonID: string }>
@@ -37,45 +42,64 @@ const ReservationsPage = (props: Props) => {
 	const { computedMatch } = props
 	const { salonID } = computedMatch.params
 	const reservations = useSelector((state: RootState) => state.salons.reservations)
+	const [visibleModal, setVisibleModal] = useState(false)
 
 	const [query, setQuery] = useQueryParams({
-		dateFrom: DateParam,
-		dateTo: DateParam,
+		dateFrom: StringParam,
+		dateTo: StringParam,
 		employeeIDs: ArrayParam,
 		categoryIDs: ArrayParam,
 		reservationStates: ArrayParam,
 		reservationCreateSourceType: StringParam,
 		reservationPaymentMethods: ArrayParam
 	})
-	console.log('query', query)
-	// TODO: zoznam dotiahnut + init filter
+
 	useEffect(() => {
+		const range = dayjs(query.dateTo).diff(query.dateFrom, 'weeks')
+		// NOTE: viac ako 3 mesiace
+		if (range > 12) {
+			setVisibleModal(true)
+			return
+		}
 		dispatch(
 			initialize(FORM.RESERVAtIONS_FILTER, {
 				reservationStates: query.reservationStates,
 				employeeIDs: query.employeeIDs,
 				reservationPaymentMethods: query.reservationPaymentMethods,
-				reservationCreateSourceType: query.reservationCreateSourceType
+				reservationCreateSourceType: query.reservationCreateSourceType,
+				dateFrom: query.dateFrom || dayjs().subtract(2, 'weeks').format(DEFAULT_DATE_INIT_FORMAT),
+				dateTo: query.dateTo || dayjs().add(2, 'weeks').format(DEFAULT_DATE_INIT_FORMAT),
+				categoryIDs: query.categoryIDs
 			})
 		)
 		dispatch(
 			getSalonReservations({
 				salonID,
-				dateFrom: '2021-11-11',
-				dateTo: '2022-12-12',
+				dateFrom: query.dateFrom || dayjs().subtract(2, 'weeks').format(DEFAULT_DATE_INIT_FORMAT),
+				dateTo: query.dateTo || dayjs().add(2, 'weeks').format(DEFAULT_DATE_INIT_FORMAT),
 				reservationStates: query.reservationStates,
 				employeeIDs: query.employeeIDs,
 				reservationPaymentMethods: query.reservationPaymentMethods,
-				reservationCreateSourceType: query.reservationCreateSourceType
+				reservationCreateSourceType: query.reservationCreateSourceType,
+				categoryIDs: query.categoryIDs
 			})
 		)
-	}, [dispatch, query.employeeIDs, query.reservationCreateSourceType, query.reservationPaymentMethods, query.reservationStates, salonID])
+	}, [
+		dispatch,
+		query.categoryIDs,
+		query.dateFrom,
+		query.dateTo,
+		query.employeeIDs,
+		query.reservationCreateSourceType,
+		query.reservationPaymentMethods,
+		query.reservationStates,
+		salonID
+	])
 
 	useEffect(() => {
-		dispatch(getSalonReservations({ salonID, dateFrom: '2021-11-11', dateTo: '2022-12-12', reservationStates: query.reservationStates, employeeIDs: query.employeeIDs }))
+		dispatch(getServices({ salonID }))
 	}, [])
 
-	// TODO: submit filtra
 	const handleSubmit = (values: IReservationsFilter) => {
 		const newQuery = {
 			...query,
@@ -182,9 +206,37 @@ const ReservationsPage = (props: Props) => {
 			}
 		]
 	}
+	const modals = (
+		<>
+			<ConfirmModal
+				closeIcon={<CloseIcon />}
+				okButtonProps={{
+					className: 'hidden'
+				}}
+				cancelButtonProps={{
+					className: 'w-full'
+				}}
+				onCancel={() => {
+					setQuery({
+						...query,
+						dateFrom: dayjs().subtract(2, 'weeks').format(DEFAULT_DATE_INIT_FORMAT),
+						dateTo: dayjs().add(2, 'weeks').format(DEFAULT_DATE_INIT_FORMAT)
+					})
+					setVisibleModal(false)
+				}}
+				visible={visibleModal}
+				title={t('loc:Chyba rozsahu')}
+				destroyOnClose
+				zIndex={2000}
+			>
+				{t('loc:Rozsah, ktorý ste zadali je veľký. Prosím zadajte rozsah menší ako tri mesiace.')}
+			</ConfirmModal>
+		</>
+	)
 
 	return (
 		<>
+			{modals}
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>

@@ -9,7 +9,7 @@ import { Paths } from '../../types/api'
 import { CalendarEvent, ICalendarEventsPayload } from '../../types/interfaces'
 
 // enums
-import { EVENTS, EVENT_DETAIL, SET_IS_REFRESHING_EVENTS, UPDATE_EVENT } from './calendarTypes'
+import { EVENTS, EVENT_DETAIL, SET_DAY_DETAIL_DATE, SET_IS_REFRESHING_EVENTS, UPDATE_EVENT } from './calendarTypes'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -47,7 +47,11 @@ interface ICalendarShiftsTimeOffQueryParams {
 	employeeIDs?: (string | null)[] | null
 }
 
-export type ICalendarActions = IResetStore | IGetCalendarEvents | IGetCalendarEventDetail | ISetIsRefreshingEvents
+export interface ISetDayDetailPayload {
+	date: string | null
+}
+
+export type ICalendarActions = IResetStore | IGetCalendarEvents | IGetCalendarEventDetail | ISetIsRefreshingEvents | ISetDayDetailDay
 
 interface IGetCalendarEvents {
 	type: EVENTS
@@ -67,6 +71,11 @@ export interface ICalendarEventDetailPayload {
 interface ISetIsRefreshingEvents {
 	type: typeof SET_IS_REFRESHING_EVENTS
 	payload: boolean
+}
+
+interface ISetDayDetailDay {
+	type: typeof SET_DAY_DETAIL_DATE
+	payload: ISetDayDetailPayload
 }
 
 const storedPreviousParams: any = {
@@ -285,3 +294,19 @@ export const refreshEvents =
 		}
 		dispatch({ type: SET_IS_REFRESHING_EVENTS, payload: false })
 	}
+
+export const setDayDetailDate =
+	(date: string | null): ThunkResult<Promise<void>> =>
+	async (dispatch) => {
+		dispatch({ type: SET_DAY_DETAIL_DATE, payload: { date } })
+	}
+
+export const getDayDetialEvents = (
+	date: string,
+	queryParams: Omit<ICalendarEventsQueryParams, 'reservationStates' | 'start' | 'end'>,
+	splitMultidayEventsIntoOneDayEvents = false,
+	clearVirtualEvent?: boolean
+): ThunkResult<Promise<ICalendarEventsPayload>> => {
+	setDayDetailDate(date)
+	return getCalendarEvents(CALENDAR_EVENTS_KEYS.DAY_DETAIL, { ...queryParams, start: date, end: date }, splitMultidayEventsIntoOneDayEvents, clearVirtualEvent, false)
+}

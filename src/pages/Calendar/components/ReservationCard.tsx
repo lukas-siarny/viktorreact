@@ -20,7 +20,6 @@ import { ReactComponent as CloseIcon } from '../../../assets/icons/close-12.svg'
 import { CalendarEvent, IEventCardProps, ReservationPopoverData, PopoverTriggerPosition } from '../../../types/interfaces'
 
 interface IReservationCardProps extends IEventCardProps {
-	salonID: string
 	customer?: CalendarEvent['customer']
 	service?: CalendarEvent['service']
 	reservationData?: CalendarEvent['reservationData']

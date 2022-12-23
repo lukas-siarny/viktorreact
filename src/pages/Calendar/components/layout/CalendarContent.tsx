@@ -48,6 +48,7 @@ type Props = {
 	clearRestartInterval: () => void
 	employees: Employees
 	parentPath: string
+	salonID: string
 } & ICalendarView
 
 export type CalendarRefs = {
@@ -310,7 +311,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					employees={employees}
 					weekDays={weekDays}
 					selectedDate={calendarSelectedDate}
-					salonID={salonID}
 					eventsViewType={eventsViewType}
 					onEditEvent={onEditEvent}
 					onReservationClick={onReservationClick}
@@ -333,7 +333,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				virtualEvent={sources.virtualEvent}
 				selectedDate={calendarSelectedDate}
 				employees={employees}
-				salonID={salonID}
 				eventsViewType={eventsViewType}
 				onAddEvent={onAddEvent}
 				onEditEvent={onEditEvent}

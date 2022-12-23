@@ -3,25 +3,14 @@ import cx from 'classnames'
 import dayjs from 'dayjs'
 import { StringParam, useQueryParams } from 'use-query-params'
 
-// full calendar
-import { EventContentArg } from '@fullcalendar/react' // must go before plugins
-
 // utils
-import { CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../utils/enums'
+import { CALENDAR_EVENT_DISPLAY_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../utils/enums'
 import { getTimeText } from '../calendarHelpers'
 
 // components
 import AbsenceCard from './AbsenceCard'
 import ReservationCard from './ReservationCard'
-import { IEventExtenedProps, ReservationPopoverData, PopoverTriggerPosition } from '../../../types/interfaces'
-
-interface ICalendarEventProps {
-	calendarView: CALENDAR_VIEW
-	data: EventContentArg
-	salonID: string
-	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
-	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
-}
+import { ICalendarEventContent } from '../../../types/interfaces'
 
 const InverseBackgroundEvent = React.memo(() => <div className={cx('nc-bg-event not-set-availability')} />)
 
@@ -34,11 +23,8 @@ const BackgroundEvent: FC<{ eventType?: CALENDAR_EVENT_TYPE }> = React.memo(({ e
 	/>
 ))
 
-const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, onEditEvent, onReservationClick }) => {
-	const { event, backgroundColor } = data || {}
-	const { start, end } = event || {}
-
-	const { eventData } = (event.extendedProps as IEventExtenedProps) || {}
+const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
+	const { start, end, eventData, eventDisplayType, calendarView, onEditEvent, onReservationClick, backgroundColor } = props
 
 	const {
 		id,
@@ -65,16 +51,16 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 	})
 
 	// background events
-	if (event.display === 'inverse-background') {
+	if (eventDisplayType === CALENDAR_EVENT_DISPLAY_TYPE.INVERSE_BACKGROUND) {
 		return <InverseBackgroundEvent />
 	}
 
-	if (event.display === 'background') {
+	if (eventDisplayType === CALENDAR_EVENT_DISPLAY_TYPE.BACKGROUND) {
 		return <BackgroundEvent eventType={eventType as CALENDAR_EVENT_TYPE} />
 	}
 
-	const diff = dayjs(event.end).diff(event.start, 'minutes')
-	const timeText = getTimeText(event.start, event.end, calendarView === CALENDAR_VIEW.MONTH)
+	const diff = dayjs(start).diff(end, 'minutes')
+	const timeText = getTimeText(start, end, calendarView === CALENDAR_VIEW.MONTH)
 	const resourceId = ''
 	const originalEventData = {
 		id,
@@ -123,7 +109,6 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					end={end}
 					diff={diff}
 					timeText={timeText}
-					salonID={salonID}
 					reservationData={reservationData}
 					customer={customer}
 					service={service}
@@ -144,8 +129,6 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 			return null
 	}
 }
-
-// export default CalendarEvent
 
 export default React.memo(CalendarEventContent, (prevProps, nextProps) => {
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps)

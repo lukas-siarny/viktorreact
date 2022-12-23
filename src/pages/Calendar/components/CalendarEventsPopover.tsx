@@ -222,7 +222,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 }
 
 const CalendarEventsPopover: FC<ICalendarEventsPopover> = (props) => {
-	const { date, position, setIsOpen, isOpen } = props
+	const { data, position, setIsOpen, isOpen } = props
 
 	const [t] = useTranslation()
 

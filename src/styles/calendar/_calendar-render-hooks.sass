@@ -701,8 +701,11 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 	margin: 0 4px
 	border-radius: 4px
 	cursor: pointer
-	transition: background 0.1s ease-in-out
+	transition: all 0.1s ease-in-out
 	&:hover,
 	&:focus-visible
 		background: $backgroundColor-notino-grayLighter
+	&:disabled
+		cursor: default
+
 

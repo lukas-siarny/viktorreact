@@ -713,7 +713,8 @@ export const SHORTCUT_DAYS_OPTIONS = (length = 2) => [
 export enum CALENDAR_EVENTS_KEYS {
 	EVENTS = 'events',
 	RESERVATIONS = 'reservations',
-	SHIFTS_TIME_OFFS = 'shiftsTimeOffs'
+	SHIFTS_TIME_OFFS = 'shiftsTimeOffs',
+	DAY_DETAIL = 'dayDetail'
 }
 
 export enum CONFIRM_BULK {
@@ -893,4 +894,10 @@ export enum CONFIRM_MODAL_DATA_TYPE {
 	EVENT = 'EVENT',
 	DELETE_EVENT = 'DELETE_EVENT',
 	UPDATE_RESERVATION_STATE = 'UPDATE_RESERVATION_STATE'
+}
+
+export enum CALENDAR_EVENT_DISPLAY_TYPE {
+	REGULAR = 'regular',
+	BACKGROUND = 'background',
+	INVERSE_BACKGROUND = 'inverse-background'
 }

@@ -7,7 +7,7 @@ import { EventDropArg, EventInput } from '@fullcalendar/react'
 import {
 	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT,
 	CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, DAY,
-	SERVICE_TYPE, RESERVATION_STATE, RESERVATION_PAYMENT_METHOD, CONFIRM_MODAL_DATA_TYPE
+	SERVICE_TYPE, RESERVATION_STATE, RESERVATION_PAYMENT_METHOD, CONFIRM_MODAL_DATA_TYPE, CALENDAR_EVENT_DISPLAY_TYPE
 } from '../utils/enums'
 
 // types
@@ -632,7 +632,6 @@ export interface ICalendarView {
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	reservations: ICalendarEventsPayload['data']
 	shiftsTimeOffs: ICalendarEventsPayload['data']
-	salonID: string
 	onAddEvent: (event: INewCalendarEvent) => void
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
@@ -687,7 +686,7 @@ export interface ICalendarReservationPopover {
 }
 
 export interface ICalendarEventsPopover {
-	date: string
+	data: null
 	position: PopoverTriggerPosition | null
 	isOpen: boolean
 	setIsOpen: (isOpen: boolean) => void
@@ -770,3 +769,16 @@ export type ConfirmModalUpdateReservationData = {
 }
 
 export type ConfirmModalData = ConfirmModalReservationData | ConfirmModalEventnData | ConfirmModalDeleteEventData | ConfirmModalUpdateReservationData | null
+
+export interface ICalendarEventContent {
+	// start - pre fullcalendar (moze sa lisit od realneho zaciatku eventu, napr. v tyzdennom view, pri multidnovych eventoch)
+	start: Date | null
+	// end - pre fullcalendar (moze sa lisit od realneho konca eventu, napr. v tyzdennom view, pri multidnovych eventoch)
+	end: Date | null
+	eventDisplayType: CALENDAR_EVENT_DISPLAY_TYPE
+	backgroundColor?: string
+	eventData?: CalendarEvent
+	calendarView: CALENDAR_VIEW
+	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
+	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
+}

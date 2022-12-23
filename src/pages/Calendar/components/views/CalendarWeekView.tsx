@@ -10,13 +10,11 @@ import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
-// components
-import CalendarEventContent from '../CalendarEventContent'
-
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
 import { composeWeekResources, composeWeekViewEvents, eventAllow, getWeekDayResourceID } from '../../calendarHelpers'
 import { getDateTime } from '../../../../utils/helper'
+import eventContent from '../../eventContent'
 
 // types
 import { Employees, ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -152,7 +150,6 @@ interface ICalendarWeekView extends ICalendarView {
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
 	const {
-		salonID,
 		selectedDate,
 		eventsViewType,
 		shiftsTimeOffs,
@@ -298,9 +295,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				resourceGroupLaneContent={resourceGroupLaneContent}
 				resourceGroupLabelContent={resourceGroupLabelContent}
 				slotLabelContent={slotLabelContent}
-				eventContent={(data: EventContentArg) => (
-					<CalendarEventContent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} onReservationClick={onReservationClick} />
-				)}
+				eventContent={(data: EventContentArg) => eventContent(data, CALENDAR_VIEW.WEEK, onEditEvent, onReservationClick)}
 				nowIndicatorContent={() => <NowIndicator />}
 				// handlers
 				eventAllow={eventAllow}

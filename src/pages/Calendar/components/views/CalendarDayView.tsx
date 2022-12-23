@@ -12,6 +12,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
 import { composeDayViewEvents, composeDayViewResources, eventAllow, getTimeScrollId } from '../../calendarHelpers'
+import eventContent from '../../eventContent'
 
 // types
 import { Employees, ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -20,7 +21,6 @@ import { Employees, ICalendarView, IDayViewResourceExtenedProps } from '../../..
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
 
 // components
-import CalendarEventContent from '../CalendarEventContent'
 import { clearEvent } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 interface IResourceLabel {
@@ -77,7 +77,6 @@ interface ICalendarDayView extends ICalendarView {
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
 	const {
-		salonID,
 		selectedDate,
 		eventsViewType,
 		reservations,
@@ -165,9 +164,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				resources={resources}
 				// render hooks
 				resourceLabelContent={resourceLabelContent}
-				eventContent={(data) => (
-					<CalendarEventContent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} onReservationClick={onReservationClick} />
-				)}
+				eventContent={(data) => eventContent(data, CALENDAR_VIEW.DAY, onEditEvent, onReservationClick)}
 				slotLabelContent={slotLabelContent}
 				// handlers
 				eventAllow={eventAllow}

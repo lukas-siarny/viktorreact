@@ -42,6 +42,12 @@ import IndustryPage from '../pages/IndustriesPage/IndustryPage'
 // Billing info
 import BillingInfoPage from '../pages/BillingInfoPage/BillingInfoPage'
 
+// calendar
+import Calendar from '../pages/Calendar/Calendar'
+
+// reservations-settings
+import ReservationsSettingsPage from '../pages/ReservationsSettingsPage/ReservationsSettingsPage'
+
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 
@@ -215,6 +221,31 @@ const SalonSubRoutes: FC = (props) => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.BILLING_INFO}
+				preventShowDeletedSalon
+			/>
+			<AuthRoute
+				exact
+				path={getPath(t('paths:calendar'))}
+				component={Calendar}
+				parentPath={url}
+				translatePathKey={getPath(t('paths:calendar'))}
+				salonID={salonID}
+				layout={MainLayout}
+				page={PAGE.CALENDAR}
+				extra={{
+					contentClassName: 'z-30'
+				}}
+				preventShowDeletedSalon
+			/>
+			<AuthRoute
+				exact
+				path={getPath(t('paths:reservations-settings'))}
+				component={ReservationsSettingsPage}
+				parentPath={url}
+				translatePathKey={getPath(t('paths:reservations-settings'))}
+				salonID={salonID}
+				layout={MainLayout}
+				page={PAGE.RESERVATIONS_SETTINGS}
 				preventShowDeletedSalon
 			/>
 			<AuthRoute

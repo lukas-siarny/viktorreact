@@ -100,7 +100,7 @@ type Props = {
 
 export const isAdmin = (authUserPermissions: _Permissions = []): boolean => checkPermissions(authUserPermissions, ADMIN_PERMISSIONS)
 
-const permitted = (userPermissions: _Permissions = [], salonsPermissions: _Permissions = [], allowed: _Permissions = [], except: _Permissions = []): boolean => {
+export const permitted = (userPermissions: _Permissions = [], salonsPermissions: _Permissions = [], allowed: _Permissions = [], except: _Permissions = []): boolean => {
 	// split into SYSTEM (index 0) and SALON (index 1) permissions
 	const allowedPermissions = partition(allowed, (permission) => isEnumValue(permission, PERMISSION)) as _Permissions[]
 	const exceptedPermissions = partition(except, (permission) => isEnumValue(permission, PERMISSION)) as _Permissions[]
@@ -115,6 +115,29 @@ const permitted = (userPermissions: _Permissions = [], salonsPermissions: _Permi
 
 	// For system permissions SUPER_ADMIN and ADMIN are salons permissions ignored
 	return (hasSalonPermissions || isAdmin(userPermissions)) && hasSystemPermissions
+}
+
+export const ForbiddenModal: FC<{ visible: boolean; onCancel: () => void; item?: any }> = (props) => {
+	const [t] = useTranslation()
+
+	const { visible, onCancel, item } = props
+
+	return (
+		<>
+			<Modal title={t('loc:Upozornenie')} visible={visible} getContainer={() => document.body} onCancel={onCancel} footer={null}>
+				<Result
+					status='warning'
+					title={t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')}
+					extra={
+						<Button className={'noti-btn'} onClick={onCancel} type='primary'>
+							{t('loc:Zatvoriť')}
+						</Button>
+					}
+				/>
+			</Modal>
+			{item}
+		</>
+	)
 }
 
 const Permissions: FC<Props> = (props) => {
@@ -140,22 +163,7 @@ const Permissions: FC<Props> = (props) => {
 			},
 			checkPermissions: (allowedPermissions: _Permissions) => checkPermissions(authUserPermissions, allowedPermissions)
 		})
-		const modal: any = (
-			<>
-				<Modal title={t('loc:Upozornenie')} visible={visibleModal} getContainer={() => document.body} onCancel={() => setVisibleModal(false)} footer={null}>
-					<Result
-						status='warning'
-						title={t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')}
-						extra={
-							<Button className={'noti-btn'} onClick={() => setVisibleModal(false)} type='primary'>
-								{t('loc:Zatvoriť')}
-							</Button>
-						}
-					/>
-				</Modal>
-				{item}
-			</>
-		)
+		const modal: any = <ForbiddenModal visible={visibleModal} onCancel={() => setVisibleModal(false)} item={item} />
 		return modal
 	}
 

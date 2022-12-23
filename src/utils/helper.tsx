@@ -1,5 +1,8 @@
+/* eslint-disable import/no-cycle */
 import React from 'react'
 import {
+	chain,
+	filter,
 	first,
 	floor,
 	forEach,
@@ -13,55 +16,56 @@ import {
 	isNaN,
 	isNil,
 	isNumber,
+	isString,
+	lowerCase,
+	map,
 	mapValues,
 	orderBy,
 	pick,
+	repeat,
+	replace,
 	round,
+	size,
 	some,
 	split,
 	toNumber,
-	chain,
-	lowerCase,
-	isString,
-	replace,
-	map,
-	size,
-	filter,
-	trimEnd,
-	repeat
+	trimEnd
 } from 'lodash'
 import { notification } from 'antd'
 import slugify from 'slugify'
-import { submit, SubmissionError } from 'redux-form'
+import { SubmissionError, submit } from 'redux-form'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
 import { ArgsProps } from 'antd/lib/notification'
-// eslint-disable-next-line import/no-cycle
+import cx from 'classnames'
 import showNotifications from './tsxHelpers'
 import {
-	DEFAULT_DATE_FORMAT,
-	DEFAULT_DATE_WITH_TIME_FORMAT,
-	DEFAULT_TIME_FORMAT,
-	FORM,
-	INVALID_DATE_FORMAT,
-	MSG_TYPE,
-	DEFAULT_LANGUAGE,
+	ADMIN_PERMISSIONS,
 	BYTE_MULTIPLIER,
-	MONDAY_TO_FRIDAY,
+	DATE_TIME_PARSER_DATE_FORMAT,
+	DATE_TIME_PARSER_FORMAT,
 	DAY,
-	LANGUAGE,
+	DEFAULT_DATE_FORMAT,
+	DEFAULT_DATE_TIME_OPTIONS,
+	DEFAULT_DATE_WITH_TIME_FORMAT,
+	DEFAULT_LANGUAGE,
+	DEFAULT_PHONE_PREFIX,
+	DEFAULT_TIME_FORMAT,
 	EN_DATE_WITH_TIME_FORMAT,
 	EN_DATE_WITHOUT_TIME_FORMAT,
+	FORM,
 	IMAGE_UPLOADING_PROP,
-	DEFAULT_PHONE_PREFIX,
-	QUERY_LIMIT,
+	INVALID_DATE_FORMAT,
+	LANGUAGE,
+	MONDAY_TO_FRIDAY,
+	MSG_TYPE,
 	NOTIFICATION_TYPE,
-	ADMIN_PERMISSIONS,
-	SALON_PERMISSION,
-	DEFAULT_DATE_TIME_OPTIONS
+	QUERY_LIMIT,
+	SALON_PERMISSION
 } from './enums'
-import { IPrice, ISelectOptionItem, IStructuredAddress, IDateTimeFilterOption, CountriesData, IAuthUserPayload, IEmployeePayload } from '../types/interfaces'
+
+import { CountriesData, IAuthUserPayload, IDateTimeFilterOption, IEmployeePayload, IPrice, ISelectOptionItem, IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
@@ -744,7 +748,7 @@ export const isEnumValue = <T extends { [k: string]: string }>(checkValue: any, 
 	typeof checkValue === 'string' && Object.values(enumObject).includes(checkValue)
 
 export const getCountryPrefix = (countriesData: CountriesData | null, countryCode?: string) => {
-	const country = countriesData?.find((c) => c.code.toLocaleLowerCase() === countryCode?.toLocaleLowerCase())
+	const country = countriesData?.find((c) => c.code.toLowerCase() === countryCode?.toLowerCase())
 	return country?.phonePrefix
 }
 
@@ -782,9 +786,22 @@ export const sortData = (a?: any, b?: any) => {
 	return 0
 }
 
+export const optionRenderNotiPinkCheckbox = (text: any, checked: any) => {
+	return (
+		<div
+			className={cx('custom-rounded-checkbox', {
+				checked
+			})}
+		>
+			{text}
+		</div>
+	)
+}
+
 export const optionRenderWithImage = (itemData: any, fallbackIcon?: React.ReactNode, imageWidth = 24, imageHeight = 24) => {
 	const { label, extra } = itemData
 	const style = { width: imageWidth, height: imageHeight }
+
 	return (
 		<div className='flex items-center'>
 			{extra?.image ? (
@@ -795,6 +812,21 @@ export const optionRenderWithImage = (itemData: any, fallbackIcon?: React.ReactN
 				</div>
 			)}
 			{label}
+		</div>
+	)
+}
+
+export const optionRenderWithAvatar = (itemData: any, imageWidth = 24, imageHeight = 24) => {
+	// Thumbnail, label, extraContent (pod labelom)
+	const { label, thumbNail, extraContent, borderColor } = itemData
+	const style = { width: imageWidth, height: imageHeight, border: `2px solid ${borderColor}` }
+	return (
+		<div className='flex items-center divide-y'>
+			<img className={'rounded-full mr-2'} width={imageWidth} height={imageHeight} style={style} src={thumbNail} alt={label} />
+			<div className={'flex flex-col leading-none'}>
+				<div>{label}</div>
+				<div>{extraContent}</div>
+			</div>
 		</div>
 	)
 }
@@ -947,4 +979,48 @@ export const getSalonFilterRanges = (values?: IDateTimeFilterOption[]): { [key: 
 			[value.name]: [now.subtract(value.value, value.unit), now]
 		}
 	}, {})
+}
+
+export const getFirstDayOfWeek = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).startOf('week')
+
+export const getFirstDayOfMonth = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).startOf('month')
+
+export const getLastDayOfWeek = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).endOf('week')
+
+export const getLasttDayOfMonth = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).endOf('month')
+
+export const roundMinutes = (currentMinutes: number, currentHours: number, mod = 15): string => {
+	const formattedCurrentHours = currentHours < 10 ? `0${currentHours}` : currentHours
+	const diff = currentMinutes % mod
+	if (diff === 0) {
+		return `${formattedCurrentHours}:${currentMinutes}`
+	}
+
+	const nearestValue = currentMinutes + mod - diff
+	// TODO: prechod z 23:46 na 00:00 nie na 24
+	if (nearestValue % 60 < 15) {
+		return `${currentHours + 1 < 10 ? `0${currentHours + 1}` : currentHours + 1}:00`
+	}
+
+	return `${formattedCurrentHours}:${nearestValue}`
+}
+
+export const getDateTime = (date: string, time: string) => {
+	return dayjs(`${dayjs(date).format(DATE_TIME_PARSER_DATE_FORMAT)}:${time}`, DATE_TIME_PARSER_FORMAT).toISOString()
+}
+
+export const getAssignedUserLabel = (assignedUser?: Paths.GetApiB2BAdminSalons.Responses.$200['salons'][0]['assignedUser']): string => {
+	if (!assignedUser) {
+		return '-'
+	}
+
+	switch (true) {
+		case !!assignedUser.firstName && !!assignedUser.lastName:
+			return `${assignedUser.firstName} ${assignedUser.lastName}`
+
+		case !!assignedUser.email:
+			return `${assignedUser.email}`
+		default:
+			return assignedUser.id
+	}
 }

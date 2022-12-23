@@ -43,8 +43,9 @@ export interface ISalonSelectionOptionsPayload {
 }
 
 export const selectSalon =
-	(salonID?: string): ThunkResult<void> =>
+	(salonID?: string): ThunkResult<Promise<any>> =>
 	async (dispatch, getState) => {
+		let payload = {} as ISelectedSalonPayload
 		if (!salonID) {
 			dispatch({ type: SELECTED_SALON.SELECTED_SALON_CLEAR })
 			return
@@ -96,7 +97,7 @@ export const selectSalon =
 				}
 			}
 
-			const payload: ISelectedSalonPayload = {
+			payload = {
 				data: {
 					...data.salon,
 					currency: salonCurrency,
@@ -104,6 +105,8 @@ export const selectSalon =
 				}
 			}
 			dispatch({ type: SELECTED_SALON.SELECTED_SALON_LOAD_DONE, payload })
+			// eslint-disable-next-line consistent-return
+			return payload
 		} catch (error) {
 			// eslint-disable-next-line no-console
 			console.error(error)

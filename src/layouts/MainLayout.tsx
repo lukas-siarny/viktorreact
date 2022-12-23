@@ -1,19 +1,23 @@
-import React, { ReactNode, FC } from 'react'
+import React, { ReactNode, FC, useEffect } from 'react'
 import { Layout, Row, Button, Dropdown, Menu } from 'antd'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
+import { ItemType } from 'antd/lib/menu/hooks/useItems'
+import { initialize } from 'redux-form'
+import { Header } from 'antd/lib/layout/layout'
 
 // components
-import { Header } from 'antd/lib/layout/layout'
 import LayoutSider, { LayoutSiderProps } from '../components/LayoutComponents/LayoutSider'
+import HeaderSelectCountryForm, { IHeaderCountryForm } from '../components/HeaderSelectCountryForm'
 
 // redux
 import { RootState } from '../reducers'
+import { setSelectedCountry } from '../reducers/selectedCountry/selectedCountryActions'
 
 // utils
 import Permissions from '../utils/Permissions'
-import { PERMISSION } from '../utils/enums'
+import { FORM, PAGE, PERMISSION } from '../utils/enums'
 import { history } from '../utils/history'
 
 // assets
@@ -31,40 +35,73 @@ const { Content } = Layout
 
 type Props = LayoutSiderProps & {
 	children: ReactNode
+	extra?: {
+		contentClassName?: string | null
+	}
 }
 
 const MainLayout: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { children } = props
+	const { children, extra, page } = props
+	const dispatch = useDispatch()
+	const { contentClassName = 'p-4 px-10 main-background' } = extra || {}
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 	const salonID = selectedSalon?.id
 	const salonOptions = useSelector((state: RootState) => state.selectedSalon.selectionOptions.data) || []
+	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
+
 	const [backUrl] = useBackUrl(t('paths:salons'))
 
-	const SALONS_MENU = (
-		<Menu className='shadow-md max-w-xs min-w-0 mt-5 noti-dropdown-header'>
-			<div className={'px-2 pt-2 pb-0'} style={{ height: salonOptions?.length > 8 ? 400 : 'auto', maxHeight: 'calc(100vh - 170px)', overflowY: 'auto' }}>
-				{salonOptions.map((item) => (
-					<Menu.Item
-						key={item.key}
-						className={cx({ 'ant-menu-item-selected': selectedSalon?.id === item.value }, 'py-2-5 px-2 mb-2 font-medium min-w-0')}
-						onClick={() => {
-							history.push(t('paths:salons/{{salonID}}', { salonID: item.value }))
-						}}
-					>
-						<AvatarComponents src={item.logo || SalonDefaultAvatar} fallBackSrc={SalonDefaultAvatar} size={24} className={'mr-2-5 header-avatar'} />
-						{item.label}
-					</Menu.Item>
-				))}
-			</div>
-			<div className={'px-2 pb-2'}>
-				<Menu.Divider className={'m-0'} />
-				<Menu.Item key='add-salon' className={'mt-2 p-2 font-medium button-add'} icon={<AddPurple />} onClick={() => history.push(t('paths:salons/create'))}>
-					{t('loc:Pridať salón')}
-				</Menu.Item>
-			</div>
-		</Menu>
-	)
+	// init selected country to header select
+	useEffect(() => {
+		dispatch(initialize(FORM.HEADER_COUNTRY_FORM, { countryCode: selectedCountry }))
+		// added page props to dependencies array due this bug https://goodrequest.atlassian.net/browse/NOT-3661 do not remove
+	}, [dispatch, selectedCountry, page])
+
+	const getSalonMenuItems = (): ItemType[] => {
+		const salonMenuItems: ItemType[] = salonOptions.map((item) => ({
+			key: item.key,
+			label: (
+				<>
+					<AvatarComponents src={item.logo || SalonDefaultAvatar} fallBackSrc={SalonDefaultAvatar} size={24} className={'mr-2-5 header-avatar'} /> {item.label}
+				</>
+			),
+			onClick: () => history.push(t('paths:salons/{{salonID}}', { salonID: item.value })),
+			className: cx({ 'ant-menu-item-selected': selectedSalon?.id === item.value }, 'py-2-5 px-2 mb-2 font-medium min-w-0')
+		}))
+
+		return [
+			{
+				type: 'group',
+				key: 'group-salons',
+				children: salonMenuItems,
+				// maxHeight - 100vh - 170px - je potrebné zaistiť aby na nejakom menšom responzívnom zobrazení nešlo menu mimo obrazovku
+				// čiže odratá sa vyška headera, výška buttonu "Pridať salón" + nejake marginy, paddingy
+				style: { height: salonOptions?.length > 8 ? 400 : 'auto', maxHeight: 'calc(100vh - 170px)', overflowY: 'auto' }
+			},
+			{
+				type: 'group',
+				key: 'group-add-salon',
+				className: '',
+				children: [
+					{
+						type: 'divider',
+						key: 'divider1',
+						className: 'm-0'
+					},
+					{
+						key: 'add-salon',
+						className: 'font-medium button-add',
+						icon: <AddPurple />,
+						onClick: () => history.push(t('paths:salons/create')),
+						label: t('loc:Pridať salón')
+					}
+				]
+			}
+		]
+	}
+
+	const SALONS_MENU = <Menu className='shadow-md max-w-xs min-w-0 mt-5 noti-dropdown-header' items={getSalonMenuItems()} />
 
 	const getSelectedSalonLabel = (hasPermision: boolean) => {
 		const content = (
@@ -125,7 +162,7 @@ const MainLayout: FC<Props> = (props) => {
 					allowed={[PERMISSION.PARTNER]}
 					render={(hasPermission) =>
 						(hasPermission || !!salonID) && (
-							<Header className='shadow-md bg-notino-white sticky top-0 px-4 flex items-center w-full z-50' id={'noti-header'}>
+							<Header className='shadow-md bg-notino-white sticky top-0 px-4 flex items-center w-full z-40' id={'noti-header'}>
 								<Row className={cx({ 'justify-end': hasPermission, 'justify-between': !hasPermission }, 'min-w-0 w-full')} wrap={false}>
 									{!hasPermission && (
 										<Button
@@ -148,7 +185,23 @@ const MainLayout: FC<Props> = (props) => {
 						)
 					}
 				/>
-				<Content className='p-4 px-10 main-background'>{children}</Content>
+				<Permissions
+					allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
+					render={(hasPermission) =>
+						hasPermission &&
+						page === PAGE.HOME &&
+						!salonID && (
+							<Header className='shadow-md bg-notino-white sticky top-0 px-4 flex items-center w-full z-40' id={'noti-header'}>
+								<Row className={'justify-end min-w-0 w-full'} wrap={false}>
+									<Row className='w-1/7 items-center min-w-0' wrap={false}>
+										<HeaderSelectCountryForm onSubmit={(data: IHeaderCountryForm) => dispatch(setSelectedCountry(data.countryCode))} />
+									</Row>
+								</Row>
+							</Header>
+						)
+					}
+				/>
+				<Content className={contentClassName || undefined}>{children}</Content>
 			</Layout>
 		</Layout>
 	)

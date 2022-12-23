@@ -22,6 +22,10 @@
 @import "time-range-picker"
 @import "tabs"
 @import "image"
+@import "radio"
+@import "checkbox-group"
+@import "calendar/_calendar"
+@import "checkbox"
 
 $searchProductTop: 166px
 
@@ -922,11 +926,6 @@ a
 .ant-spin-dot-item
 	background-color: $backgroundColor-notino-black
 
-.noti-my-account
-	max-width: calc(100% - 24px)
-	.item-label
-		max-width: 77%
-
 .phone-prefix
 	width: 110px
 	margin-right: 8px
@@ -1254,7 +1253,7 @@ span.ant-tag .title
 
 @keyframes opacityAnimation
 	0%
-		opacity:0
+		opacity: 0
 	100%
 		opacity: 1
 
@@ -1302,146 +1301,6 @@ span.ant-tag .title
 	&.error
 		outline-color: $backgroundColor-notino-red
 
-.checkbox-with-image
-	border-radius: 12px
-	label
-		display: block
-		width: 100%
-		position: relative
-		padding-bottom: 100%
-		cursor: pointer
-		overflow: hidden
-		border-radius: 12px
-		transition: 300ms ease
-
-		.inner-wrapper
-			display: block
-			position: absolute
-			top: 0
-			left: 0
-			width: 100%
-			height: 100%
-			border-radius: 12px
-			overflow: hidden
-			z-index: 1
-			background: $textColor-notino-grayLighter center center no-repeat
-			background-size: cover
-
-			&::after
-				content: ''
-				position: absolute
-				top: 0
-				left: 0
-				width: 100%
-				height: 100%
-				background: linear-gradient(180deg, rgba(0, 0, 0, 0) 51.77%, rgba(0, 0, 0, 0.0526959) 64.37%, rgba(0, 0, 0, 0.524324) 82.54%, rgba(0, 0, 0, 0.76) 100%)
-				z-index: 2
-
-			&::before
-				content: ''
-				position: absolute
-				top: 0
-				left: 0
-				width: 100%
-				height: 100%
-				border: 2px solid transparent
-				z-index: 3
-				border-radius: 12px
-				transition: border-color 300ms ease
-
-			.checker
-				position: absolute
-				right: 8px
-				top: 8px
-				display: block
-				width: 24px
-				height: 24px
-				background: $backgroundColor-notino-white url('../assets/icons/checker-icon.svg') center center no-repeat
-				background-size: 12px 12px
-				background-position: contain
-				border-radius: 50%
-				border: 1px solid $borderColor-notino-gray
-				z-index: 3
-				transition: 300ms ease
-				transition-property: background border-color
-			.label
-				position: absolute
-				bottom: 8px
-				left: 8px
-				right: 8px
-				top: 8px
-				display: flex
-				flex-direction: column-reverse
-				font-size: 16px
-				line-height: 1.5
-				color: $textColor-notino-white
-				font-weight: 700
-				z-index: 3
-
-		input
-			position: absolute
-			opacity: 0
-			width: 0
-			height: 0
-
-			&:checked
-				+ .inner-wrapper
-					&::before
-						border-color: $borderColor-notino-pink
-					.checker
-						border-color: $borderColor-notino-pink
-						background-color: $backgroundColor-notino-pink
-
-			&:hover,
-			&:focus-visible
-				+ .inner-wrapper
-					&::before
-						border-color: $borderColor-notino-pink
-
-	button
-		width: 100%
-		background: transparent
-		outline: none
-		border: none
-		color: $textColor-trueGray-700
-		font-size: 14px
-		text-align: center
-		height: 40px
-		transition: 300ms ease
-		background: $backgroundColor-notino-grayLight
-		border-bottom-left-radius: 12px
-		border-bottom-right-radius: 12px
-		position: relative
-		font-weight: 500
-		display: flex
-		align-items: center
-		gap: 2px
-		justify-content: center
-
-		svg
-			transition: 300ms ease
-			filter: brightness(0) saturate(100%) invert(20%) sepia(0%) saturate(1367%) hue-rotate(228deg) brightness(105%) contrast(84%)
-
-		&::before
-			content: ''
-			position: absolute
-			bottom: 100%
-			left: 0
-			right: 0
-			height: 20px
-			background: $backgroundColor-notino-grayLight
-
-		&:not(:disabled)
-			cursor: pointer
-			&:hover, &:focus-visible
-				color: $textColor-notino-pink
-
-				svg
-					filter: brightness(0) saturate(100%) invert(12%) sepia(95%) saturate(6163%) hue-rotate(324deg) brightness(86%) contrast(102%)
-
-		&:disabled
-			cursor: not-allowed
-			color: $textColor-notino-gray
 
 .category-select-header
 	background-color: $backgroundColor-notino-black
@@ -1681,7 +1540,7 @@ span.ant-tag .title
 							background: url("../assets/icons/location-16.svg") no-repeat center center
 	@media (max-width: 850px)
 		.cards-wrapper
-			flex-direction: columns
+			flex-direction: column
 			.card
 				width: 100%
 
@@ -1752,15 +1611,13 @@ span.ant-tag .title
 		filter: invert(97%) sepia(10%) saturate(3%) hue-rotate(56deg) brightness(114%) contrast(100%)
 
 	span
-		display: inline-blcok
+		display: inline-block
 		white-space: nowrap
 		overflow: hidden
 		margin-left: 45px
 		margin-right: 45px
 		text-align: center
 		width: 100%
-		white-space: nowrap
-		overflow: hidden
 		text-overflow: ellipsis
 
 	&:hover,

@@ -7,8 +7,7 @@ import { EMPLOYEE, EMPLOYEES } from './employeesTypes'
 import { getReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
 import { IResetStore } from '../generalTypes'
-import { Paths } from '../../types/api'
-import { IQueryParams, ISearchable, IEmployeePayload } from '../../types/interfaces'
+import { IQueryParams, IEmployeePayload, IEmployeesPayload } from '../../types/interfaces'
 
 export type IEmployeesActions = IResetStore | IGetEmployees | IGetEmployee
 
@@ -28,8 +27,6 @@ export interface IGetEmployeesQueryParams extends IQueryParams {
 	accountState?: string | undefined | null
 }
 
-export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {}
-
 export const getEmployees =
 	(queryParams: IGetEmployeesQueryParams): ThunkResult<Promise<IEmployeesPayload>> =>
 	async (dispatch) => {
@@ -43,7 +40,8 @@ export const getEmployees =
 					// show name if exist at least last name otherwise show fallback values
 					label: `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.inviteEmail || employee.id,
 					value: employee.id,
-					key: `${employee.id}-key`
+					key: `${employee.id}-key`,
+					color: employee.color
 				}
 			})
 

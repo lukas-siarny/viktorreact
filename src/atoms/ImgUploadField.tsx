@@ -87,6 +87,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 	const [previewUrl, setPreviewUrl] = useState<IPreviewFile | null>(null)
 	const [images, setImages] = useState<any[]>([])
 	const [selectedValue, setSelectedValue] = useState<string>('')
+	const [previewImgIndex, setPreviewImgIndex] = useState<number>(0)
 
 	useEffect(() => {
 		if (!isEmpty(input.value)) {
@@ -346,7 +347,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 					<div className={cx('download', { hidden: !previewUrl, fixed: previewUrl })}>
 						<Button
 							className={'w-full h-full m-0 p-0'}
-							href={`${previewUrl?.url}?response-content-disposition=attachment`}
+							href={`${images[previewImgIndex]?.url}?response-content-disposition=attachment`}
 							target='_blank'
 							rel='noopener noreferrer'
 							type={'link'}
@@ -364,7 +365,12 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 							preview={{
 								visible: !!previewUrl && (previewUrl?.type !== 'application/pdf' || !isFilePDF(previewUrl?.url)),
 								onVisibleChange: () => setPreviewUrl(null),
-								current: images?.findIndex((image: any) => image?.url === previewUrl?.url)
+								current: images?.findIndex((image: any) => image?.url === previewUrl?.url),
+								countRender: (current: number, total: number) => {
+									// NOTE: Antd pre readable format indexuje current od 1 a nie 0
+									setPreviewImgIndex(current - 1)
+									return `${current}/${total}`
+								}
 							}}
 						>
 							{map(images, (image) => (

@@ -15,6 +15,7 @@ import serviceReducer from './services/serviceReducer'
 import salonsReducer from './salons/salonsReducer'
 import customerReducer from './customers/customerReducer'
 import employeesReducer from './employees/employeesReducer'
+import selectedCountryReducer from './selectedCountry/selectedCountryReducer'
 import selectedSalonReducer from './selectedSalon/selectedSalonReducer'
 import supportContactsReducer from './supportContacts/supportContactsReducer'
 import cosmeticsReducer from './cosmetics/cosmeticsReducer'
@@ -22,6 +23,9 @@ import categoryParamsReducer from './categoryParams/categoryParamsReducer'
 import languagesReducer from './languages/languagesReducer'
 import dashboardReducer from './dashboard/dashboardReducer'
 import specialistContactsReducer from './specialistContacts/specialistContactsReducer'
+import calendarReducer from './calendar/calendarReducer'
+import helperSettingsReducer from './helperSettings/helperSettingsReducer'
+import virtualEventReducer from './virtualEvent/virtualEventReducer'
 
 export const REDUCER_KEYS = {
 	FORMS: 'FORMS',
@@ -33,13 +37,17 @@ export const REDUCER_KEYS = {
 	SALONS: 'SALONS',
 	CUSTOMERS: 'CUSTOMERS',
 	EMPLOYEES: 'EMPLOYEES',
+	SELECTED_COUNTRY: 'SELECTED_COUNTRY',
 	SELECTED_SALON: 'SELECTED_SALON',
 	SUPPORT_CONTACTS: 'SUPPORT_CONTACTS',
 	SPECIALIST_CONTACTS: 'SPECIALIST_CONTACTS',
 	COSMETICS: 'COSMETICS',
 	CATEGORY_PARAMETERS: 'CATEGORY_PARAMETERS',
 	LANGUAGES: 'LANGUAGES',
-	DASHBOARD: 'DASHBOARD'
+	DASHBOARD: 'DASHBOARD',
+	CALENDAR: 'CALENDAR',
+	HELPER_SETTINGS: 'HELPER_SETTINGS',
+	VIRTUAL_EVENT: 'VIRTUAL_EVENT'
 }
 
 const rootReducer = combineReducers({
@@ -141,6 +149,13 @@ const rootReducer = combineReducers({
 		},
 		employeesReducer
 	),
+	selectedCountry: persistReducer(
+		{
+			key: REDUCER_KEYS.SELECTED_COUNTRY,
+			storage: storageLocal
+		},
+		selectedCountryReducer
+	),
 	selectedSalon: persistReducer(
 		{
 			key: REDUCER_KEYS.SELECTED_SALON,
@@ -154,6 +169,27 @@ const rootReducer = combineReducers({
 			storage: storageSession
 		},
 		dashboardReducer
+	),
+	calendar: persistReducer(
+		{
+			key: REDUCER_KEYS.CALENDAR,
+			storage: storageSession
+		},
+		calendarReducer
+	),
+	helperSettings: persistReducer(
+		{
+			key: REDUCER_KEYS.HELPER_SETTINGS,
+			storage: storageSession
+		},
+		helperSettingsReducer
+	),
+	virtualEvent: persistReducer(
+		{
+			key: REDUCER_KEYS.VIRTUAL_EVENT,
+			storage: storageSession
+		},
+		virtualEventReducer
 	)
 })
 

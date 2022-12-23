@@ -12,11 +12,10 @@ import ServiceForm from './components/ServiceForm'
 // reducers
 import { RootState } from '../../reducers'
 import { getService } from '../../reducers/services/serviceActions'
-import { IEmployeesPayload } from '../../reducers/employees/employeesActions'
 import { getCategory, ICategoryParameterValue } from '../../reducers/categories/categoriesActions'
 
 // types
-import { IServiceForm, SalonSubPageProps, ILoadingAndFailure } from '../../types/interfaces'
+import { IServiceForm, SalonSubPageProps, ILoadingAndFailure, IEmployeesPayload } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
@@ -87,7 +86,7 @@ export const addEmployee = (employees: IEmployeesPayload & ILoadingAndFailure, f
 
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
-				description: i18next.t(`Zamestnanec ${employeeName} je už priradený!`)
+				description: i18next.t('loc:Zamestnanec {{ name }} je už priradený!', { name: employeeName })
 			})
 		} else if (employeeData) {
 			updatedEmployees.push({
@@ -187,7 +186,6 @@ const ServiceEditPage = (props: Props) => {
 			const parameterValues = unionBy(data.service?.serviceCategoryParameter?.values, categoryParameterValues as any, 'categoryParameterValueID')
 			// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
 			const { /* activeKeys, */ serviceCategoryParameter } = parseParameterValuesInit(parameterValues)
-
 			initData = {
 				id: data.service.id,
 				serviceCategoryParameterType: data.service.serviceCategoryParameter?.valueType,
@@ -199,7 +197,8 @@ const ServiceEditPage = (props: Props) => {
 				priceTo: decodePrice(data.service.priceAndDurationData.priceTo),
 				variablePrice: !!data.service.priceAndDurationData.priceTo,
 				employees: parseEmployeesInit(data?.service?.employees),
-				useCategoryParameter: data.service.useCategoryParameter
+				useCategoryParameter: data.service.useCategoryParameter,
+				settings: data.service.settings
 				// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
 				/* activeKeys */
 			}
@@ -228,7 +227,8 @@ const ServiceEditPage = (props: Props) => {
 							priceTo: values.variablePrice ? encodePrice(values.priceTo) : null
 					  }) as any,
 				categoryParameterValues: parseParameterValuesCreateAndUpdate(values.serviceCategoryParameter),
-				employeeIDs: parseEmployeeCreateAndUpdate(values.employees)
+				employeeIDs: parseEmployeeCreateAndUpdate(values.employees),
+				settings: values.settings
 			}
 			await patchReq('/api/b2b/admin/services/{serviceID}', { serviceID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			history.push(parentPath)

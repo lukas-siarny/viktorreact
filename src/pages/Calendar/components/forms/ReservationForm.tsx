@@ -52,6 +52,8 @@ const ReservationForm: FC<Props> = (props) => {
 	const [visibleCustomerModal, setVisibleCustomerModal] = useState(false)
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
+	// NOTE: pristine pouzivat len pri UPDATE eventu a pri CREATE povlit akciu vzdy
+	const disabledSubmitButton = !!(eventId && pristine) || submitting
 
 	const searchServices = useCallback(async () => {
 		try {
@@ -270,7 +272,7 @@ const ReservationForm: FC<Props> = (props) => {
 									openForbiddenModal()
 								}
 							}}
-							disabled={submitting || pristine}
+							disabled={disabledSubmitButton}
 							htmlType={'submit'}
 							type={'primary'}
 							block

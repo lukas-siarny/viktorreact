@@ -112,6 +112,8 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		if (startsWith(originalEventData.id, NEW_ID_PREFIX)) {
 			return
 		}
+		// NOTE: vzdy ked sa bude pridavat nejaky novy atribut do dat pre popover, je potrebne tie data pridat aj pri inicializacii formularu v SiderEventManagement.tsx
+		// pretoze z formularovych dat sa potom vytvara virtualny event, ktory pri editacii nahradza realny event - a tento virtualny event musi do popovera posielat rovnake data ako realny
 		if (originalEventData.id && cardRef.current) {
 			const data: ReservationPopoverData = {
 				start,

@@ -11,7 +11,7 @@
     "npm": ">=8.0.0"
   },
   "scripts": {
-    "start": "cross-env PROXY=https://notino-admin.goodrequest.dev npm-run-all -p generate-runtime-env start-watch translate-watch build:tailwind",
+    "start": "cross-env PROXY=https://notino-admin.goodrequest.dev npm-run-all -p start-watch translate-watch build:tailwind",
     "start-watch": "cross-env DISABLE_ESLINT_PLUGIN=true SKIP_PREFLIGHT_CHECK=true REACT_APP_VERSION=$npm_package_version react-app-rewired start",
     "prebuild": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true npm-run-all -p build:tailwind rebuild:sass",
     "copy-modules": "node scripts/postBuild.js",
@@ -48,6 +48,7 @@
     "@fullcalendar/resource-timegrid": "5.11.3",
     "@fullcalendar/resource-timeline": "5.11.3",
     "@fullcalendar/scrollgrid": "5.11.3",
+    "@react-google-maps/api": "2.17.1",
     "@react-hook/resize-observer": "1.2.6",
     "@sentry/cli": "1.71.0",
     "@sentry/react": "6.19.6",
@@ -92,7 +93,6 @@
     "react-dnd": "16.0.1",
     "react-dnd-html5-backend": "16.0.1",
     "react-dom": "18.2.0",
-    "react-google-maps": "9.4.5",
     "react-i18next": "11.16.7",
     "react-idle-timer": "4.6.4",
     "react-input-mask": "2.0.4",

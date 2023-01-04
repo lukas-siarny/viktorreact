@@ -1,5 +1,5 @@
 import React, { useRef, memo, useState, useEffect } from 'react'
-import { withScriptjs, withGoogleMap, GoogleMap, Marker, GoogleMapProps } from 'react-google-maps'
+import { GoogleMap, Marker, GoogleMapProps } from '@react-google-maps/api'
 import { useTranslation } from 'react-i18next'
 import { MAP, LANGUAGE } from '../utils/enums'
 
@@ -62,7 +62,7 @@ const MapContainer = (props: Props) => {
 			center={position}
 			defaultZoom={MAP.defaultZoom}
 			zoom={currentZoom}
-			ref={mapRef}
+			// ref={mapRef}
 			onRightClick={onChange}
 			onZoomChanged={handleZoomChanged}
 			// OPTIONS: https://developers.google.com/maps/documentation/javascript/reference/map
@@ -76,4 +76,4 @@ const MapContainer = (props: Props) => {
 	)
 }
 
-export default withScriptjs(withGoogleMap(memo(MapContainer)))
+export default memo(MapContainer)

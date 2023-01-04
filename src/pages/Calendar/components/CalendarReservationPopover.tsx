@@ -20,7 +20,6 @@ import { ReactComponent as CheckSuccessIcon } from '../../../assets/icons/check-
 import { ReactComponent as CreditCardIcon } from '../../../assets/icons/credit-card.svg'
 import { ReactComponent as WalletIcon } from '../../../assets/icons/wallet.svg'
 import { ReactComponent as DollarIcon } from '../../../assets/icons/dollar.svg'
-import { ReactComponent as AlertIcon } from '../../../assets/icons/alert-circle.svg'
 import { ReactComponent as ClockIcon } from '../../../assets/icons/clock.svg'
 import { ReactComponent as CrossedIcon } from '../../../assets/icons/crossed-red-16.svg'
 

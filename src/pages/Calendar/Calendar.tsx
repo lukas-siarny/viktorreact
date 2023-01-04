@@ -659,6 +659,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					NOTIFICATION_TYPE.NOTIFICATION,
 					true
 				)
+
+				if (state === RESERVATION_STATE.CANCEL_BY_SALON) {
+					closeSiderForm()
+				}
 				fetchEvents()
 			} catch (e) {
 				// eslint-disable-next-line no-console
@@ -668,7 +672,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				clearConfirmModal()
 			}
 		},
-		[fetchEvents, salonID]
+		[fetchEvents, salonID, closeSiderForm]
 	)
 
 	const initSubmitReservationData = (values: ICalendarReservationForm) => setConfirmModalData({ key: CONFIRM_MODAL_DATA_TYPE.RESERVATION, values })

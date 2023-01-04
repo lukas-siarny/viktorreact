@@ -158,7 +158,10 @@ const SiderEventManagement: FC<Props> = (props) => {
 							service: {
 								id: data?.service?.id,
 								key: data?.service?.id,
-								value: data?.service?.name
+								value: data?.service?.name,
+								extra: {
+									serviceData: data?.service
+								}
 							},
 							customer: {
 								value: data?.customer?.id,
@@ -168,8 +171,20 @@ const SiderEventManagement: FC<Props> = (props) => {
 									firstName: data?.customer?.firstName,
 									lastName: data?.customer?.lastName,
 									email: data?.customer?.email
-								})
-							}
+								}),
+								extra: {
+									customerData: data?.customer
+								}
+							},
+							employee: {
+								...initData.employee,
+								extra: {
+									employeeData: data?.employee
+								}
+							},
+							note: data?.note,
+							noteFromB2CCustomer: data?.noteFromB2CCustomer,
+							reservationData: data?.reservationData
 						})
 					)
 					break

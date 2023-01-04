@@ -2,8 +2,10 @@ import { FormErrors } from 'redux-form'
 import i18next from 'i18next'
 import { isEmpty } from 'lodash'
 
+import dayjs from 'dayjs'
 import { ICalendarEventForm } from '../../../../types/interfaces'
 import { VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
+import { formatDate } from '../../../../utils/helper'
 
 const validateEventForm = (values?: ICalendarEventForm) => {
 	const errors: FormErrors<ICalendarEventForm> = {}
@@ -34,6 +36,10 @@ const validateEventForm = (values?: ICalendarEventForm) => {
 
 	if (values?.note && values.note.length > VALIDATION_MAX_LENGTH.LENGTH_1500) {
 		errors.note = i18next.t('loc:Max. počet znakov je {{max}}', { max: VALIDATION_MAX_LENGTH.LENGTH_1500 })
+	}
+
+	if (dayjs(values?.date).isAfter(dayjs(values?.end))) {
+		errors.end = i18next.t('loc:Koniec opakovania musí byť po dátume {{ date }}', { date: formatDate(values?.date) })
 	}
 
 	return errors

@@ -1040,12 +1040,12 @@ export const getAssignedUserLabel = (assignedUser?: Paths.GetApiB2BAdminSalons.R
 }
 
 export const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: React.ReactNode, extra?: string, className = '') => {
-	if (!isNil(from) || !isNil(to)) {
+	if ((!isNil(from) && !Number.isNaN(from)) || (!isNil(to) && !Number.isNaN(to))) {
 		return (
 			<div className={cx('flex items-center gap-1', className)}>
 				{icon}
 				{from}
-				{variable && !isNil(to) && from !== to ? ` - ${to}` : undefined} {extra}
+				{variable && !isNil(to) && !Number.isNaN(to) && from !== to ? ` - ${to}` : undefined} {extra}
 			</div>
 		)
 	}
@@ -1133,14 +1133,14 @@ export const arePriceAndDurationDataEmpty = (data?: FormPriceAndDurationData) =>
 	let emptyDuration = true
 
 	if (data?.variableDuration) {
-		emptyDuration = isNil(data?.durationFrom) && isNil(data?.durationTo)
+		emptyDuration = (isNil(data?.durationFrom) || Number.isNaN(data?.durationFrom)) && (isNil(data?.durationTo) || Number.isNaN(data?.durationTo))
 	} else {
-		emptyDuration = isNil(data?.durationFrom)
+		emptyDuration = isNil(data?.durationFrom) || Number.isNaN(data?.durationFrom)
 	}
 	if (data?.variablePrice) {
-		emptyPrice = isNil(data?.priceFrom) && isNil(data?.priceTo)
+		emptyPrice = (isNil(data?.priceFrom) || Number.isNaN(data?.priceFrom)) && (isNil(data?.priceTo) || Number.isNaN(data?.priceTo))
 	} else {
-		emptyPrice = isNil(data?.priceFrom)
+		emptyPrice = isNil(data?.priceFrom) || Number.isNaN(data?.priceFrom)
 	}
 
 	return emptyPrice && emptyDuration && !data?.variableDuration && !data?.variablePrice

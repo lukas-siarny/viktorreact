@@ -105,6 +105,7 @@
   "Klienti budú mať možnosť rezervovať si vybranú službu v aplikácii.": "The clients will have the option to book the selected service in the app.",
   "Koniec": "End",
   "Koniec opakovania": "End of the recurring",
+  "Koniec opakovania musí byť po dátume {{ date }}": "The end of the recurring must be after {{ date }}",
   "Kontaktná osoba": "Contact person",
   "Kontaktné údaje": "Contact details",
   "Kontaktovať Špecialistu": "Contact Specialist",

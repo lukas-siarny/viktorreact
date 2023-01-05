@@ -782,3 +782,11 @@ export interface ICalendarEventContent {
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
 }
+
+export interface ICalendarDayEvents {
+	[key: string]: CalendarEvent[]
+}
+
+export interface ICalendarDayEventsMap {
+	[key: string]: number
+}

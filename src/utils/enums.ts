@@ -901,3 +901,5 @@ export enum CALENDAR_EVENT_DISPLAY_TYPE {
 	BACKGROUND = 'background',
 	INVERSE_BACKGROUND = 'inverse-background'
 }
+
+export const CALENDAR_DAY_EVENTS_LIMIT = 6

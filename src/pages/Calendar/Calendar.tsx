@@ -26,7 +26,8 @@ import {
 	PERMISSION,
 	REFRESH_CALENDAR_INTERVAL,
 	RESERVATION_PAYMENT_METHOD,
-	RESERVATION_STATE
+	RESERVATION_STATE,
+	CALENDAR_DAY_EVENTS_LIMIT
 } from '../../utils/enums'
 import { checkPermissions, isAdmin, withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
@@ -173,7 +174,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				content: t('loc:Kalendár sa aktualizuje'),
 				duration: 0
 			})
-			await dispatch(refreshEvents(validEventsViewType))
+			await dispatch(refreshEvents(validEventsViewType, validCalendarView === CALENDAR_VIEW.MONTH))
 			message.destroy()
 		}, REFRESH_CALENDAR_INTERVAL)
 
@@ -245,6 +246,16 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				return
 			}
 
+			const eventdsDayLimit = validCalendarView === CALENDAR_VIEW.MONTH ? CALENDAR_DAY_EVENTS_LIMIT : 0
+
+			const dispatchGetShiftsTimeOff = getCalendarShiftsTimeoff(
+				{ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs },
+				true,
+				clearVirtualEvent,
+				true,
+				eventdsDayLimit
+			)
+
 			if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 				const dispatchGetReservations = getCalendarReservations(
 					{
@@ -255,19 +266,18 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						categoryIDs: getFullCategoryIdsFromUrl(query?.categoryIDs)
 					},
 					true,
-					clearVirtualEvent
+					clearVirtualEvent,
+					true,
+					eventdsDayLimit
 				)
 
 				if (validCalendarView === CALENDAR_VIEW.MONTH) {
 					dispatch(dispatchGetReservations)
 				} else {
-					Promise.all([
-						dispatch(dispatchGetReservations),
-						dispatch(getCalendarShiftsTimeoff({ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs }, true, clearVirtualEvent))
-					])
+					Promise.all([dispatch(dispatchGetReservations), dispatch(dispatchGetShiftsTimeOff)])
 				}
 			} else if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
-				dispatch(getCalendarShiftsTimeoff({ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs }, true, clearVirtualEvent))
+				dispatch(dispatchGetShiftsTimeOff)
 			}
 
 			await restartFetchInterval()

@@ -173,7 +173,8 @@ const rootReducer = combineReducers({
 	calendar: persistReducer(
 		{
 			key: REDUCER_KEYS.CALENDAR,
-			storage: storageSession
+			storage: storageSession,
+			blacklist: ['isRefreshingEvents', 'dayEvents']
 		},
 		calendarReducer
 	),

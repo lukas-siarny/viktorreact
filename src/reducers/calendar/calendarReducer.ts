@@ -1,8 +1,8 @@
+import { SET_DAY_EVENTS, EVENTS, EVENT_DETAIL, SET_IS_REFRESHING_EVENTS, SET_DAY_DETAIL_DATE } from './calendarTypes'
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
 import { ICalendarActions, ICalendarEventDetailPayload, ISetDayDetailPayload } from './calendarActions'
-import { ICalendarEventsPayload, ILoadingAndFailure } from '../../types/interfaces'
-import { EVENTS, EVENT_DETAIL, SET_IS_REFRESHING_EVENTS, SET_DAY_DETAIL_DATE } from './calendarTypes'
+import { ICalendarDayEvents, ICalendarEventsPayload, ILoadingAndFailure } from '../../types/interfaces'
 import { CALENDAR_EVENTS_KEYS } from '../../utils/enums'
 
 export const initState = {
@@ -32,6 +32,7 @@ export const initState = {
 		isLoading: false,
 		isFailure: false
 	} as ICalendarEventsPayload & ISetDayDetailPayload & ILoadingAndFailure,
+	dayEvents: {} as ICalendarDayEvents,
 	isRefreshingEvents: false
 }
 
@@ -105,6 +106,12 @@ export default (state = initState, action: ICalendarActions) => {
 					...state[CALENDAR_EVENTS_KEYS.DAY_DETAIL],
 					date: action.payload.date
 				}
+			}
+		// set day events
+		case SET_DAY_EVENTS:
+			return {
+				...state,
+				dayEvents: action.payload
 			}
 		// clear events
 		case EVENTS.EVENTS_CLEAR:

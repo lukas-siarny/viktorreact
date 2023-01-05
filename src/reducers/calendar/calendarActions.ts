@@ -6,10 +6,10 @@ import { CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, D
 import { ThunkResult } from '../index'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { CalendarEvent, ICalendarEventsPayload } from '../../types/interfaces'
+import { CalendarEvent, ICalendarDayEvents, ICalendarEventsPayload } from '../../types/interfaces'
 
 // enums
-import { EVENTS, EVENT_DETAIL, SET_DAY_DETAIL_DATE, SET_IS_REFRESHING_EVENTS, UPDATE_EVENT } from './calendarTypes'
+import { EVENTS, EVENT_DETAIL, SET_DAY_DETAIL_DATE, SET_IS_REFRESHING_EVENTS, UPDATE_EVENT, SET_DAY_EVENTS } from './calendarTypes'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -51,7 +51,7 @@ export interface ISetDayDetailPayload {
 	date: string | null
 }
 
-export type ICalendarActions = IResetStore | IGetCalendarEvents | IGetCalendarEventDetail | ISetIsRefreshingEvents | ISetDayDetailDay
+export type ICalendarActions = IResetStore | IGetCalendarEvents | IGetCalendarEventDetail | ISetIsRefreshingEvents | ISetDayDetailDay | ISetDayEvents
 
 interface IGetCalendarEvents {
 	type: EVENTS
@@ -78,10 +78,22 @@ interface ISetDayDetailDay {
 	payload: ISetDayDetailPayload
 }
 
+interface ISetDayEvents {
+	type: typeof SET_DAY_EVENTS
+	payload: ICalendarDayEvents
+}
+
 const storedPreviousParams: any = {
 	[CALENDAR_EVENTS_KEYS.RESERVATIONS]: {},
 	[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS]: {}
 }
+
+export const setDayEvents =
+	(dayEvents: ICalendarDayEvents): ThunkResult<Promise<ICalendarDayEvents>> =>
+	async (dispatch) => {
+		dispatch({ type: SET_DAY_EVENTS, payload: dayEvents })
+		return dayEvents
+	}
 
 export const getCalendarEvents =
 	(
@@ -89,7 +101,8 @@ export const getCalendarEvents =
 		queryParams: ICalendarEventsQueryParams,
 		splitMultidayEventsIntoOneDayEvents = false,
 		clearVirtualEvent = true,
-		storePreviousParams = true
+		storePreviousParams = true,
+		eventsDayLimit = 0
 	): ThunkResult<Promise<ICalendarEventsPayload>> =>
 	async (dispatch) => {
 		dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
@@ -175,8 +188,41 @@ export const getCalendarEvents =
 				return [...newEventsArray, editedEvent]
 			}, [] as CalendarEvent[])
 
+			let eventsWithDayLimit: CalendarEvent[] = []
+
+			if (eventsDayLimit) {
+				const sortedEvents = editedEvents.sort((a, b) => {
+					if (dayjs(a.startDateTime).isBefore(b.startDateTime)) {
+						return -1
+					}
+					if (dayjs(a.startDateTime).isSame(b.startDateTime)) {
+						if (dayjs(a.endDateTime).isAfter(dayjs(b.endDateTime))) {
+							return -1
+						}
+						return 1
+					}
+					return 0
+				})
+
+				const dividedEventsIntoDays = sortedEvents.reduce((newEventsObject, event) => {
+					if (newEventsObject[event.start.date]) {
+						newEventsObject[event.start.date].push(event)
+					} else {
+						// eslint-disable-next-line no-param-reassign
+						newEventsObject[event.start.date] = [event]
+					}
+					return newEventsObject
+				}, {} as ICalendarDayEvents)
+
+				dispatch(setDayEvents(dividedEventsIntoDays))
+
+				Object.values(dividedEventsIntoDays).forEach((day) => {
+					eventsWithDayLimit = [...eventsWithDayLimit, ...day.slice(0, eventsDayLimit)]
+				})
+			}
+
 			payload = {
-				data: editedEvents
+				data: eventsDayLimit ? eventsWithDayLimit : editedEvents
 			}
 
 			if (storePreviousParams) {
@@ -204,7 +250,9 @@ export const getCalendarEvents =
 export const getCalendarReservations = (
 	queryParams: ICalendarReservationsQueryParams,
 	splitMultidayEventsIntoOneDayEvents = false,
-	clearVirtualEvent?: boolean
+	clearVirtualEvent?: boolean,
+	storePreviousParams = true,
+	eventsDayLimit = 0
 ): ThunkResult<Promise<ICalendarEventsPayload>> =>
 	getCalendarEvents(
 		CALENDAR_EVENTS_KEYS.RESERVATIONS,
@@ -214,19 +262,25 @@ export const getCalendarReservations = (
 			reservationStates: [RESERVATION_STATE.APPROVED, RESERVATION_STATE.PENDING, RESERVATION_STATE.REALIZED, RESERVATION_STATE.NOT_REALIZED]
 		},
 		splitMultidayEventsIntoOneDayEvents,
-		clearVirtualEvent
+		clearVirtualEvent,
+		storePreviousParams,
+		eventsDayLimit
 	)
 
 export const getCalendarShiftsTimeoff = (
 	queryParams: ICalendarShiftsTimeOffQueryParams,
 	splitMultidayEventsIntoOneDayEvents = false,
-	clearVirtualEvent?: boolean
+	clearVirtualEvent?: boolean,
+	storePreviousParams = true,
+	eventsDayLimit = 0
 ): ThunkResult<Promise<ICalendarEventsPayload>> =>
 	getCalendarEvents(
 		CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS,
 		{ ...queryParams, eventTypes: [CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF, CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK] },
 		splitMultidayEventsIntoOneDayEvents,
-		clearVirtualEvent
+		clearVirtualEvent,
+		storePreviousParams,
+		eventsDayLimit
 	)
 
 export const clearCalendarEvents =
@@ -278,21 +332,34 @@ export const updateCalendarEvent =
 	}
 
 export const refreshEvents =
-	(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE): ThunkResult<Promise<void>> =>
+	(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE, isMonthlyView = false): ThunkResult<Promise<void>> =>
 	async (dispatch) => {
 		const reservation = storedPreviousParams[CALENDAR_EVENTS_KEYS.RESERVATIONS]
 		const shiftsTimeOff = storedPreviousParams[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS]
 
-		dispatch({ type: SET_IS_REFRESHING_EVENTS, payload: true })
-		if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-			await Promise.all([
-				dispatch(getCalendarReservations(reservation.queryParams, reservation.splitMultidayEventsIntoOneDayEvents, reservation.clearVirtualEvent)),
-				dispatch(getCalendarShiftsTimeoff(shiftsTimeOff.queryParams, shiftsTimeOff.splitMultidayEventsIntoOneDayEvents, shiftsTimeOff.clearVirtualEvent))
-			])
-		} else if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
-			await dispatch(getCalendarShiftsTimeoff(shiftsTimeOff.queryParams, shiftsTimeOff.splitMultidayEventsIntoOneDayEvents, shiftsTimeOff.clearVirtualEvent))
+		try {
+			dispatch({ type: SET_IS_REFRESHING_EVENTS, payload: true })
+			const dispatchShiftsTimeOff = dispatch(
+				getCalendarShiftsTimeoff(shiftsTimeOff.queryParams, shiftsTimeOff.splitMultidayEventsIntoOneDayEvents, shiftsTimeOff.clearVirtualEvent)
+			)
+			if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
+				const dispatchReservations = dispatch(
+					getCalendarReservations(reservation.queryParams, reservation.splitMultidayEventsIntoOneDayEvents, reservation.clearVirtualEvent)
+				)
+				if (isMonthlyView) {
+					await dispatchReservations
+				} else {
+					await Promise.all([dispatchReservations, dispatchShiftsTimeOff])
+				}
+			} else if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
+				await dispatchShiftsTimeOff
+			}
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		} finally {
+			dispatch({ type: SET_IS_REFRESHING_EVENTS, payload: false })
 		}
-		dispatch({ type: SET_IS_REFRESHING_EVENTS, payload: false })
 	}
 
 export const setDayDetailDate =

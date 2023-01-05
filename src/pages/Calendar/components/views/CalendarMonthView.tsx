@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, FC, useRef, useEffect, useState } from 'react'
+import React, { useMemo, useCallback, FC, useRef, useEffect, useState, memo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import cx from 'classnames'
 import { DelimitedArrayParam, useQueryParams } from 'use-query-params'
@@ -13,10 +13,10 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 import dayjs from 'dayjs'
 import { t } from 'i18next'
 import { Spin } from 'antd'
-import { ICalendarEventContent, ICalendarView } from '../../../../types/interfaces'
+import { CalendarEvent, ICalendarDayEvents, ICalendarDayEventsMap, ICalendarEventContent, ICalendarView } from '../../../../types/interfaces'
 
 // enums
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_DISPLAY_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
 import { composeMonthViewEvents, getBusinessHours, getOpnenigHoursMap, OpeningHoursMap } from '../../calendarHelpers'
 import { RootState } from '../../../../reducers'
 import eventContent from '../../eventContent'
@@ -26,9 +26,9 @@ import { ReactComponent as ChevronDownIcon } from '../../../../assets/icons/chev
 import { getDayDetialEvents } from '../../../../reducers/calendar/calendarActions'
 import { ReactComponent as LoadingIcon } from '../../../../assets/icons/loading-icon.svg'
 
-type DayEventsMap = {
-	[key: string]: number
-}
+/* const getDayEventsMap = (dayEvents: ICalendarDayEvents): ICalendarDayEventsMap => {
+
+} */
 
 /* const dayEventsMapMockup = {
 	'2022-12-01': 2,
@@ -70,13 +70,16 @@ const dayHeaderContent = (arg: DayHeaderContentArg, openingHoursMap: OpeningHour
 	return <div className={cx('nc-month-day-header', { shaded: !openingHoursMap[dayNumber] })}>{dayjs(date).format(CALENDAR_DATE_FORMAT.MONTH_HEADER_DAY_NAME)}</div>
 }
 
-const MoreLinkContent: FC<{
+interface IMoreLinkContent {
 	salonID: string
-	onShowMore: (data: ICalendarEventContent[], date: string) => void
+	onShowMore: (data: CalendarEvent[], date: string) => void
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
-}> = React.memo((props) => {
+}
+
+const MoreLinkContent: FC<IMoreLinkContent> = memo((props) => {
 	const { salonID, onShowMore, eventsViewType } = props
 	const dispatch = useDispatch()
+	const dayEvents = useSelector((state: RootState) => state.calendar.dayEvents)
 
 	const [query] = useQueryParams({
 		employeeIDs: DelimitedArrayParam,
@@ -90,7 +93,7 @@ const MoreLinkContent: FC<{
 
 	const dayDetilEvents = useSelector((state: RootState) => state.calendar.dayDetail)
 
-	const handleShowMore = useCallback(async () => {
+	/* const handleShowMore = useCallback(async () => {
 		if (cellDate) {
 			try {
 				setIsFetching(true)
@@ -114,7 +117,14 @@ const MoreLinkContent: FC<{
 				setIsFetching(false)
 			}
 		}
-	}, [cellDate, dispatch, query.categoryIDs, query.employeeIDs, eventsViewType, salonID])
+	}, [cellDate, dispatch, query.categoryIDs, query.employeeIDs, eventsViewType, salonID]) */
+
+	const handleShowMore = useCallback(async () => {
+		if (cellDate) {
+			const currentDateEvents = dayEvents[cellDate]
+			onShowMore(currentDateEvents, cellDate)
+		}
+	}, [cellDate, dayEvents, onShowMore])
 
 	useEffect(() => {
 		if (moreLinkRef.current) {

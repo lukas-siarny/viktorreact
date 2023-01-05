@@ -272,8 +272,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 			await restartFetchInterval()
 		},
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validEventsViewType]
+		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validEventsViewType, validCalendarView, employees.options?.length]
 	)
 
 	const scrollToTime = useCallback(

@@ -24,7 +24,7 @@ const BackgroundEvent: FC<{ eventType?: CALENDAR_EVENT_TYPE }> = React.memo(({ e
 ))
 
 const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
-	const { start, end, eventData, eventDisplayType, calendarView, onEditEvent, onReservationClick, backgroundColor } = props
+	const { start, end, eventData, eventDisplayType, calendarView, onEditEvent, onReservationClick, backgroundColor, isDayEventsPopover } = props
 
 	const {
 		id,
@@ -97,6 +97,7 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 					isBulkEvent={!!calendarBulkEvent?.id}
 					isPlaceholder={isPlaceholder}
 					isEdit={isEdit}
+					isDayEventsPopover={isDayEventsPopover}
 				/>
 			)
 		case CALENDAR_EVENT_TYPE.RESERVATION: {
@@ -122,6 +123,7 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 					originalEventData={originalEventData}
 					isEdit={isEdit}
 					isPlaceholder={isPlaceholder}
+					isDayEventsPopover={isDayEventsPopover}
 				/>
 			)
 		}

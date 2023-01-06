@@ -107,7 +107,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 					<span className={'text-sm leading-4'}>{headerState}</span>
 				</Row>
 				<Row className={'buttons gap-4'}>
-					<button className={'nc-event-popover-header-button'} type={'button'} onClick={onEdit}>
+					<button className={'nc-popover-header-button'} type={'button'} onClick={onEdit}>
 						<EditIcon />
 					</button>
 					{(moreMenuItems || []).length > 0 && (
@@ -116,12 +116,12 @@ const PopoverContent: FC<ContentProps> = (props) => {
 							placement='bottomRight'
 							trigger={['click']}
 						>
-							<button className={'nc-event-popover-header-button'} type={'button'} onClick={(e) => e.preventDefault()}>
+							<button className={'nc-popover-header-button'} type={'button'} onClick={(e) => e.preventDefault()}>
 								<DotsIcon style={{ transform: 'rotate(90deg)' }} />
 							</button>
 						</Dropdown>
 					)}
-					<button className={'nc-event-popover-header-button'} type={'button'} onClick={onClose}>
+					<button className={'nc-popover-header-button'} type={'button'} onClick={onClose}>
 						<CloseIcon />
 					</button>
 				</Row>

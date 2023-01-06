@@ -65,12 +65,14 @@ import {
 	INewCalendarEvent,
 	ReservationPopoverData,
 	PopoverTriggerPosition,
-	SalonSubPageProps
+	SalonSubPageProps,
+	CalendarEvent
 } from '../../types/interfaces'
 
 // atoms
 import CalendarReservationPopover from './components/CalendarReservationPopover'
 import CalendarConfirmModal from './components/CalendarConfirmModal'
+import CalendarDayEventsPopover from './components/CalendarDayEventsPopover'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -155,6 +157,22 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const [newEventData, setNewEventData] = useState<INewCalendarEvent | null | undefined>(null)
 	const [reservationPopover, setReservationPopover] = useState<{ isOpen: boolean; data: ReservationPopoverData | null; position: PopoverTriggerPosition | null }>({
 		isOpen: false,
+		data: null,
+		position: null
+	})
+	// dayEventsPopover by mal byt vzdy nizzsie ako reservationPopover
+	// je potrebne ho preto predrendrovat (cez z-indexy to v tomto pripade nejde, pretoze antd ich cez portaly dynamicky injectuje do DOMka, navyse bez classnamu)
+	// ak je isHidden = true, znamena, ze existuje v DOMku ale ma nulovu velkost
+	const [dayEventsPopover, setDayEventsPopover] = useState<{
+		isOpen: boolean
+		isHidden: boolean
+		date: string | null
+		data: CalendarEvent[] | null
+		position: PopoverTriggerPosition | null
+	}>({
+		isOpen: true,
+		isHidden: true,
+		date: null,
 		data: null,
 		position: null
 	})
@@ -246,10 +264,19 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				return
 			}
 
-			const eventdsDayLimit = validCalendarView === CALENDAR_VIEW.MONTH ? CALENDAR_DAY_EVENTS_LIMIT : 0
+			let eventdsDayLimit = 0
+			let startQueryParam = currentRange.start
+			let endQueryParam = currentRange.end
+
+			if (validCalendarView === CALENDAR_VIEW.MONTH) {
+				// v mesacnom view je potrebne vyplnit cely kalendar - 7 x 6 buniek (od PO - NE) = 42
+				eventdsDayLimit = CALENDAR_DAY_EVENTS_LIMIT
+				startQueryParam = dayjs(startQueryParam).startOf('week').format(CALENDAR_DATE_FORMAT.QUERY)
+				endQueryParam = dayjs(startQueryParam).add(41, 'days').format(CALENDAR_DATE_FORMAT.QUERY)
+			}
 
 			const dispatchGetShiftsTimeOff = getCalendarShiftsTimeoff(
-				{ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs },
+				{ salonID, start: startQueryParam, end: endQueryParam, employeeIDs: query.employeeIDs },
 				true,
 				clearVirtualEvent,
 				true,
@@ -260,8 +287,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				const dispatchGetReservations = getCalendarReservations(
 					{
 						salonID,
-						start: currentRange.start,
-						end: currentRange.end,
+						start: startQueryParam,
+						end: endQueryParam,
 						employeeIDs: query.employeeIDs,
 						categoryIDs: getFullCategoryIdsFromUrl(query?.categoryIDs)
 					},
@@ -719,6 +746,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
+	const onReservationClick = (data?: ReservationPopoverData, position?: PopoverTriggerPosition) => {
+		setReservationPopover({
+			isOpen: true,
+			data: data || null,
+			position: position || null
+		})
+	}
+
 	return (
 		<>
 			{modals}
@@ -760,8 +795,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						employees={filteredEmployees() || []}
 						parentPath={parentPath}
 						onEditEvent={onEditEvent}
-						onReservationClick={(data?: ReservationPopoverData, position?: PopoverTriggerPosition) => {
-							setReservationPopover({
+						onReservationClick={onReservationClick}
+						onShowMore={(date: string, data: CalendarEvent[], position?: PopoverTriggerPosition) => {
+							setDayEventsPopover({
+								date,
+								isHidden: false,
 								isOpen: true,
 								data: data || null,
 								position: position || null
@@ -791,11 +829,21 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					)}
 				</Layout>
 			</Layout>
+			<CalendarDayEventsPopover
+				date={dayEventsPopover.date}
+				data={dayEventsPopover.data}
+				position={dayEventsPopover.position}
+				isOpen={dayEventsPopover.isOpen}
+				setIsOpen={(isOpen: boolean) => setDayEventsPopover((prevState) => ({ ...prevState, isOpen }))}
+				onEditEvent={onEditEvent}
+				onReservationClick={onReservationClick}
+				isHidden={dayEventsPopover.isHidden}
+			/>
 			<CalendarReservationPopover
 				data={reservationPopover.data}
 				position={reservationPopover.position}
 				isOpen={reservationPopover.isOpen}
-				setIsOpen={(isOpen: boolean) => setReservationPopover((prevState) => ({ ...prevState, isOpen, position: null }))}
+				setIsOpen={(isOpen: boolean) => setReservationPopover((prevState) => ({ ...prevState, isOpen }))}
 				handleUpdateReservationState={initUpdateReservationStateData}
 				onEditEvent={onEditEvent}
 				placement={validCalendarView === CALENDAR_VIEW.WEEK ? 'bottom' : 'left'}

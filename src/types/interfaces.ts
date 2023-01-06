@@ -658,6 +658,7 @@ export interface IEventCardProps {
 	employee?: CalendarEvent['employee']
 	backgroundColor?: string
 	isPlaceholder?: boolean
+	isDayEventsPopover?: boolean
 	isEdit?: boolean
 	originalEventData: {
 		id?: CalendarEvent['id']
@@ -685,11 +686,15 @@ export interface ICalendarReservationPopover {
 	placement: TooltipPlacement
 }
 
-export interface ICalendarEventsPopover {
-	data: null
+export interface ICalendarDayEventsPopover {
+	date: string | null
+	data: CalendarEvent[] | null
 	position: PopoverTriggerPosition | null
 	isOpen: boolean
 	setIsOpen: (isOpen: boolean) => void
+	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
+	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
+	isHidden: boolean
 }
 
 export type ReservationPopoverData = {
@@ -715,7 +720,7 @@ export interface IEventExtenedProps {
 
 export interface IResourceEmployee {
 	id: string
-	image: string,
+	image: string
 	name: string
 	isTimeOff: boolean
 	color?: string
@@ -781,6 +786,7 @@ export interface ICalendarEventContent {
 	calendarView: CALENDAR_VIEW
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
+	isDayEventsPopover?: boolean
 }
 
 export interface ICalendarDayEvents {

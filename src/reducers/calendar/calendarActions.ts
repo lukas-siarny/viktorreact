@@ -229,7 +229,8 @@ export const getCalendarEvents =
 				storedPreviousParams[enumType] = {
 					queryParams,
 					splitMultidayEventsIntoOneDayEvents,
-					clearVirtualEvent
+					clearVirtualEvent,
+					eventsDayLimit
 				}
 			}
 
@@ -339,20 +340,30 @@ export const refreshEvents =
 
 		try {
 			dispatch({ type: SET_IS_REFRESHING_EVENTS, payload: true })
-			const dispatchShiftsTimeOff = dispatch(
-				getCalendarShiftsTimeoff(shiftsTimeOff.queryParams, shiftsTimeOff.splitMultidayEventsIntoOneDayEvents, shiftsTimeOff.clearVirtualEvent)
+			const dispatchShiftsTimeOff = getCalendarShiftsTimeoff(
+				shiftsTimeOff.queryParams,
+				shiftsTimeOff.splitMultidayEventsIntoOneDayEvents,
+				shiftsTimeOff.clearVirtualEvent,
+				true,
+				shiftsTimeOff.eventsDayLimit
 			)
+
 			if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-				const dispatchReservations = dispatch(
-					getCalendarReservations(reservation.queryParams, reservation.splitMultidayEventsIntoOneDayEvents, reservation.clearVirtualEvent)
+				const dispatchReservations = getCalendarReservations(
+					reservation.queryParams,
+					reservation.splitMultidayEventsIntoOneDayEvents,
+					reservation.clearVirtualEvent,
+					true,
+					reservation.eventsDayLimit
 				)
+
 				if (isMonthlyView) {
-					await dispatchReservations
+					await dispatch(dispatchReservations)
 				} else {
-					await Promise.all([dispatchReservations, dispatchShiftsTimeOff])
+					await Promise.all([dispatch(dispatchReservations), dispatch(dispatchShiftsTimeOff)])
 				}
 			} else if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
-				await dispatchShiftsTimeOff
+				await dispatch(dispatchShiftsTimeOff)
 			}
 		} catch (e) {
 			// eslint-disable-next-line no-console

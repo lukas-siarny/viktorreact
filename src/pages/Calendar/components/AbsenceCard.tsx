@@ -38,7 +38,8 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 		backgroundColor,
 		isBulkEvent,
 		isPlaceholder,
-		isEdit
+		isEdit,
+		isDayEventsPopover
 	} = props
 
 	const duration = parseTimeFromMinutes(diff)
@@ -62,7 +63,8 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
 				'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
 				placeholder: isPlaceholder,
-				edit: isEdit || isPlaceholder
+				edit: isEdit || isPlaceholder,
+				'is-day-events-popover': isDayEventsPopover
 			})}
 			onClick={() => {
 				if (originalEventData?.id) {

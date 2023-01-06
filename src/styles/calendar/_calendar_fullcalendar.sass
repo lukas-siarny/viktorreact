@@ -349,10 +349,27 @@
 	margin: 0
 .fc-dayGridMonth-view
 	.fc-non-business
-		opacity: 0.4
-		background-color: none
-		background-size: 32px 32px
-		background-image: url("../../assets/images/gray-pattern-background.png")
+		opacity: 1
+		background: none
+		&::before
+			position: absolute
+			opacity: 0.4
+			content: ''
+			left: 0
+			right: 0
+			top: 0
+			bottom: 0
+			background-color: none
+			background-size: 32px 32px
+			background-image: url("../../assets/images/gray-pattern-background.png")
+		&::after
+			position: absolute
+			content: ''
+			left: 0
+			right: 0
+			bottom: -1px
+			height: 1px
+			background: $backgroundColor-notino-grayLight
 	> table.fc-scrollgrid
 		border: none
 	.fc-scrollgrid-section-header
@@ -367,6 +384,16 @@
 					font-weight: 400
 	.fc-scrollgrid-section-body
 		.fc-daygrid-day
+			border-bottom-color: transparent !important
+			position: relative
+			&::after
+				position: absolute
+				content: ''
+				left: 0
+				right: 0
+				bottom: -1px
+				height: 1px
+				background-color: $backgroundColor-notino-grayLighter
 			.fc-daygrid-day-frame
 				position: relative
 				.fc-daygrid-day-top
@@ -407,7 +434,10 @@
 						background: $backgroundColor-notino-pink
 						.fc-daygrid-day-number
 							color: $textColor-notino-white
-
+			&.fc-day-other
+				.fc-daygrid-day-frame
+					.fc-daygrid-day-top
+						opacity: 1
 		.fc-daygrid-event
 			margin: 4px 10px 0 4px
 			padding: 0

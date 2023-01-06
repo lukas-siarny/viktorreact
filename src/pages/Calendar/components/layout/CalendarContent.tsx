@@ -23,13 +23,15 @@ import CalendarEmptyState from '../CalendarEmptyState'
 
 // types
 import {
+	CalendarEvent,
 	Employees,
 	ICalendarEventForm,
 	ICalendarReservationForm,
 	ICalendarView,
 	IDayViewResourceExtenedProps,
 	IEventExtenedProps,
-	IWeekViewResourceExtenedProps
+	IWeekViewResourceExtenedProps,
+	PopoverTriggerPosition
 } from '../../../../types/interfaces'
 import { RootState } from '../../../../reducers'
 
@@ -49,6 +51,7 @@ type Props = {
 	employees: Employees
 	parentPath: string
 	salonID: string
+	onShowMore: (date: string, data: CalendarEvent[], position?: PopoverTriggerPosition) => void
 } & ICalendarView
 
 export type CalendarRefs = {
@@ -75,7 +78,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		onEditEvent,
 		onReservationClick,
 		clearRestartInterval,
-		parentPath
+		parentPath,
+		onShowMore
 	} = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -294,6 +298,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					onAddEvent={onAddEvent}
 					onEventChange={onEventChange}
 					onEventChangeStart={onEventChangeStart}
+					onShowMore={onShowMore}
 				/>
 			)
 		}

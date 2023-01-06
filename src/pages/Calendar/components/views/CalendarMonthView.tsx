@@ -13,7 +13,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 import dayjs from 'dayjs'
 import { t } from 'i18next'
 import { Spin } from 'antd'
-import { CalendarEvent, ICalendarDayEvents, ICalendarDayEventsMap, ICalendarEventContent, ICalendarView } from '../../../../types/interfaces'
+import { CalendarEvent, ICalendarDayEvents, ICalendarDayEventsMap, ICalendarEventContent, ICalendarView, PopoverTriggerPosition } from '../../../../types/interfaces'
 
 // enums
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_DISPLAY_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
@@ -26,43 +26,14 @@ import { ReactComponent as ChevronDownIcon } from '../../../../assets/icons/chev
 import { getDayDetialEvents } from '../../../../reducers/calendar/calendarActions'
 import { ReactComponent as LoadingIcon } from '../../../../assets/icons/loading-icon.svg'
 
-/* const getDayEventsMap = (dayEvents: ICalendarDayEvents): ICalendarDayEventsMap => {
-
-} */
-
-/* const dayEventsMapMockup = {
-	'2022-12-01': 2,
-	'2022-12-02': 2,
-	'2022-12-03': 1,
-	'2022-12-04': 2,
-	'2022-12-05': 4,
-	'2022-12-06': 0,
-	'2022-12-07': 0,
-	'2022-12-08': 3,
-	'2022-12-09': 0,
-	'2022-12-10': 3,
-	'2022-12-11': 3,
-	'2022-12-12': 0,
-	'2022-12-13': 1,
-	'2022-12-14': 2,
-	'2022-12-15': 2,
-	'2022-12-16': 0,
-	'2022-12-17': 1,
-	'2022-12-18': 1,
-	'2022-12-19': 10,
-	'2022-12-20': 15,
-	'2022-12-21': 25,
-	'2022-12-22': 6,
-	'2022-12-23': 5,
-	'2022-12-24': 5,
-	'2022-12-25': 5,
-	'2022-12-26': 5,
-	'2022-12-27': 5,
-	'2022-12-28': 5,
-	'2022-12-29': 5,
-	'2022-12-30': 5,
-	'2022-12-31': 5
-} */
+const getDayEventsMap = (dayEvents: ICalendarDayEvents): ICalendarDayEventsMap => {
+	return Object.entries(dayEvents).reduce((dayEventsMap, [date, events]) => {
+		return {
+			...dayEventsMap,
+			[date]: events.length
+		}
+	}, {} as ICalendarDayEventsMap)
+}
 
 const dayHeaderContent = (arg: DayHeaderContentArg, openingHoursMap: OpeningHoursMap) => {
 	const { date } = arg || {}
@@ -72,7 +43,7 @@ const dayHeaderContent = (arg: DayHeaderContentArg, openingHoursMap: OpeningHour
 
 interface IMoreLinkContent {
 	salonID: string
-	onShowMore: (data: CalendarEvent[], date: string) => void
+	onShowMore: (date: string, data: CalendarEvent[], position?: PopoverTriggerPosition) => void
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 }
 
@@ -80,6 +51,7 @@ const MoreLinkContent: FC<IMoreLinkContent> = memo((props) => {
 	const { salonID, onShowMore, eventsViewType } = props
 	const dispatch = useDispatch()
 	const dayEvents = useSelector((state: RootState) => state.calendar.dayEvents)
+	const dayEventsMap = useMemo(() => getDayEventsMap(dayEvents), [dayEvents])
 
 	const [query] = useQueryParams({
 		employeeIDs: DelimitedArrayParam,
@@ -120,9 +92,18 @@ const MoreLinkContent: FC<IMoreLinkContent> = memo((props) => {
 	}, [cellDate, dispatch, query.categoryIDs, query.employeeIDs, eventsViewType, salonID]) */
 
 	const handleShowMore = useCallback(async () => {
-		if (cellDate) {
+		if (cellDate && moreLinkRef.current) {
 			const currentDateEvents = dayEvents[cellDate]
-			onShowMore(currentDateEvents, cellDate)
+
+			const clientRect = moreLinkRef.current.getBoundingClientRect()
+
+			const position: PopoverTriggerPosition = {
+				top: clientRect.top,
+				left: clientRect.left,
+				width: clientRect.width + 10,
+				height: clientRect.bottom - clientRect.top
+			}
+			onShowMore(cellDate, currentDateEvents, position)
 		}
 	}, [cellDate, dayEvents, onShowMore])
 
@@ -137,9 +118,14 @@ const MoreLinkContent: FC<IMoreLinkContent> = memo((props) => {
 				if (moreLink) {
 					moreLink.innerHTML = `${eventsCount} ${t('loc:viac')}`
 				} */
+				const eventsCount = dayEventsMap[date]
+				const moreLink = moreLinkRef.current.querySelector('.text-more')
+				if (moreLink && eventsCount) {
+					moreLink.innerHTML = `${eventsCount} ${t('loc:viac')}`
+				}
 			}
 		}
-	}, [])
+	}, [dayEventsMap])
 
 	return (
 		<button
@@ -164,10 +150,11 @@ const moreLinkClick = () => 'day'
 
 interface ICalendarMonthView extends ICalendarView {
 	salonID: string
+	onShowMore: (date: string, data: CalendarEvent[], position?: PopoverTriggerPosition) => void
 }
 
 const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarMonthView>((props, ref) => {
-	const { selectedDate, eventsViewType, reservations, shiftsTimeOffs, onEditEvent, onReservationClick, salonID } = props
+	const { selectedDate, eventsViewType, reservations, shiftsTimeOffs, onEditEvent, onReservationClick, salonID, onShowMore } = props
 
 	const openingHours = useSelector((state: RootState) => state.selectedSalon.selectedSalon).data?.openingHours
 
@@ -211,9 +198,10 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 				events={events}
 				businessHours={businessHours}
 				// render hooks
+				dayCellContent={<div>daycell</div>}
 				dayHeaderContent={(args) => dayHeaderContent(args, openingHoursMap)}
 				eventContent={(data) => eventContent(data, CALENDAR_VIEW.MONTH, onEditEvent, onReservationClick)}
-				moreLinkContent={() => <MoreLinkContent salonID={salonID} eventsViewType={eventsViewType} onShowMore={() => {}} />}
+				moreLinkContent={() => <MoreLinkContent salonID={salonID} eventsViewType={eventsViewType} onShowMore={onShowMore} />}
 				// handlers
 				moreLinkClick={moreLinkClick}
 			/>

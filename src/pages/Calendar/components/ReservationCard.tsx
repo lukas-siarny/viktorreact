@@ -74,6 +74,7 @@ const getWrapperClassnames = (params: {
 	isMultiDayEvent?: boolean
 	isFirstMultiDayEventInCurrentRange?: boolean
 	isLastMultiDaylEventInCurrentRange?: boolean
+	isDayEventsPopover?: boolean
 }) => {
 	const {
 		calendarView,
@@ -88,7 +89,8 @@ const getWrapperClassnames = (params: {
 		isMultiDayEvent,
 		isFirstMultiDayEventInCurrentRange,
 		isLastMultiDaylEventInCurrentRange,
-		diff
+		diff,
+		isDayEventsPopover
 	} = params
 
 	const commonProps = {
@@ -98,6 +100,7 @@ const getWrapperClassnames = (params: {
 		'state-approved': isApproved,
 		'state-realized': isRealized,
 		'is-autoassigned': isEmployeeAutoassigned,
+		'is-day-events-popover': isDayEventsPopover,
 		placeholder: isPlaceholder,
 		edit: isEdit || isPlaceholder
 	}
@@ -143,7 +146,8 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		noteFromB2CCustomer,
 		isPlaceholder,
 		isEdit,
-		onReservationClick
+		onReservationClick,
+		isDayEventsPopover
 	} = props
 
 	const isPast = dayjs(originalEventData?.endDateTime || end).isBefore(dayjs())
@@ -218,7 +222,8 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 					isEdit,
 					isMultiDayEvent,
 					isFirstMultiDayEventInCurrentRange,
-					isLastMultiDaylEventInCurrentRange
+					isLastMultiDaylEventInCurrentRange,
+					isDayEventsPopover
 				})
 			)}
 			onClick={handleReservationClick}
@@ -236,7 +241,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 							: undefined
 				}}
 			/>
-			<div className={'event-background'} style={{ backgroundColor: bgColor }} />
+			{!isDayEventsPopover && <div className={'event-background'} style={{ backgroundColor: bgColor }} />}
 			<div id={originalEventData?.id} className={'event-content'}>
 				{(() => {
 					switch (calendarView) {

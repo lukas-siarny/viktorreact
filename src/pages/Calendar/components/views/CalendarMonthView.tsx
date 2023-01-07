@@ -4,7 +4,7 @@ import cx from 'classnames'
 import { DelimitedArrayParam, useQueryParams } from 'use-query-params'
 
 // full calendar
-import FullCalendar, { DayHeaderContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { DayCellContentArg, DayHeaderContentArg, MoreLinkContentArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
@@ -16,7 +16,15 @@ import { Spin } from 'antd'
 import { CalendarEvent, ICalendarDayEvents, ICalendarDayEventsMap, ICalendarEventContent, ICalendarView, PopoverTriggerPosition } from '../../../../types/interfaces'
 
 // enums
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_DISPLAY_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
+import {
+	CALENDAR_COMMON_SETTINGS,
+	CALENDAR_DATE_FORMAT,
+	CALENDAR_DAY_EVENTS_SHOWN,
+	CALENDAR_EVENTS_VIEW_TYPE,
+	CALENDAR_EVENT_DISPLAY_TYPE,
+	CALENDAR_EVENT_TYPE,
+	CALENDAR_VIEW
+} from '../../../../utils/enums'
 import { composeMonthViewEvents, getBusinessHours, getOpnenigHoursMap, OpeningHoursMap } from '../../calendarHelpers'
 import { RootState } from '../../../../reducers'
 import eventContent from '../../eventContent'
@@ -30,7 +38,7 @@ const getDayEventsMap = (dayEvents: ICalendarDayEvents): ICalendarDayEventsMap =
 	return Object.entries(dayEvents).reduce((dayEventsMap, [date, events]) => {
 		return {
 			...dayEventsMap,
-			[date]: events.length
+			[date]: Math.max(events.length - CALENDAR_DAY_EVENTS_SHOWN, 0)
 		}
 	}, {} as ICalendarDayEventsMap)
 }
@@ -42,13 +50,22 @@ const dayHeaderContent = (arg: DayHeaderContentArg, openingHoursMap: OpeningHour
 }
 
 interface IMoreLinkContent {
+	moreCount: number
+	salonID: string
+	onShowMore: (date: string, data: CalendarEvent[], position?: PopoverTriggerPosition) => void
+	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
+}
+
+interface IDayCellContent {
+	date: Date
+	dayNumberText: string
 	salonID: string
 	onShowMore: (date: string, data: CalendarEvent[], position?: PopoverTriggerPosition) => void
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 }
 
 const MoreLinkContent: FC<IMoreLinkContent> = memo((props) => {
-	const { salonID, onShowMore, eventsViewType } = props
+	const { salonID, onShowMore, eventsViewType, moreCount } = props
 	const dispatch = useDispatch()
 	const dayEvents = useSelector((state: RootState) => state.calendar.dayEvents)
 	const dayEventsMap = useMemo(() => getDayEventsMap(dayEvents), [dayEvents])
@@ -58,8 +75,12 @@ const MoreLinkContent: FC<IMoreLinkContent> = memo((props) => {
 		categoryIDs: DelimitedArrayParam
 	})
 
+	console.log(moreCount)
+
 	const [cellDate, setCellDate] = useState<string | null>(null)
 	const [isFetching, setIsFetching] = useState(false)
+
+	const eventsCount = cellDate ? dayEventsMap[cellDate] : 0
 
 	const moreLinkRef = useRef<HTMLButtonElement | null>(null)
 
@@ -118,14 +139,18 @@ const MoreLinkContent: FC<IMoreLinkContent> = memo((props) => {
 				if (moreLink) {
 					moreLink.innerHTML = `${eventsCount} ${t('loc:viac')}`
 				} */
-				const eventsCount = dayEventsMap[date]
-				const moreLink = moreLinkRef.current.querySelector('.text-more')
-				if (moreLink && eventsCount) {
-					moreLink.innerHTML = `${eventsCount} ${t('loc:viac')}`
-				}
 			}
 		}
 	}, [dayEventsMap])
+
+	useEffect(() => {
+		if (moreLinkRef.current) {
+			const moreLink = moreLinkRef.current.querySelector('.text-more')
+			if (moreLink && eventsCount) {
+				moreLink.innerHTML = `${eventsCount} ${t('loc:viac')}`
+			}
+		}
+	}, [eventsCount])
 
 	return (
 		<button
@@ -134,7 +159,7 @@ const MoreLinkContent: FC<IMoreLinkContent> = memo((props) => {
 				e.stopPropagation()
 				handleShowMore()
 			}}
-			className={'fc-month-more-button'}
+			className={'nc-month-more-button'}
 			ref={moreLinkRef}
 			disabled={dayDetilEvents?.isLoading}
 		>
@@ -147,6 +172,59 @@ const MoreLinkContent: FC<IMoreLinkContent> = memo((props) => {
 })
 
 const moreLinkClick = () => 'day'
+
+/* const DayCellContent: FC<IDayCellContent> = memo((props) => {
+	const { onShowMore, date, dayNumberText } = props
+
+	const dayEvents = useSelector((state: RootState) => state.calendar.dayEvents)
+	const dayEventsMap = useMemo(() => getDayEventsMap(dayEvents), [dayEvents])
+
+	const cellDate = dayjs(date).format(CALENDAR_DATE_FORMAT.QUERY)
+
+	const moreLinkRef = useRef<HTMLButtonElement | null>(null)
+
+	const handleShowMore = useCallback(async () => {
+		if (cellDate && moreLinkRef.current) {
+			const currentDateEvents = dayEvents[cellDate]
+
+			const clientRect = moreLinkRef.current.getBoundingClientRect()
+
+			const position: PopoverTriggerPosition = {
+				top: clientRect.top,
+				left: clientRect.left,
+				width: clientRect.width + 10,
+				height: clientRect.bottom - clientRect.top
+			}
+			onShowMore(cellDate, currentDateEvents, position)
+		}
+	}, [cellDate, dayEvents, onShowMore])
+
+	const eventsCount = dayEventsMap[cellDate]
+
+	return (
+		<div className={'nc-month-day-bottom'}>
+			{eventsCount ? (
+				<button
+					type={'button'}
+					onClick={(e) => {
+						e.stopPropagation()
+						handleShowMore()
+					}}
+					className={'nc-month-more-button'}
+					ref={moreLinkRef}
+				>
+					<Spin spinning={false} size={'small'}>
+						<span className={'text-more'}>
+							{eventsCount} {t('loc:viac')}
+						</span>
+						<ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
+					</Spin>
+				</button>
+			) : null}
+			<span className={'nc-month-day-number'}>{dayNumberText}</span>
+		</div>
+	)
+}) */
 
 interface ICalendarMonthView extends ICalendarView {
 	salonID: string
@@ -198,10 +276,12 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 				events={events}
 				businessHours={businessHours}
 				// render hooks
-				dayCellContent={<div>daycell</div>}
+				/* dayCellContent={(args: DayCellContentArg) => (
+					<DayCellContent date={args.date} dayNumberText={args.dayNumberText} salonID={salonID} eventsViewType={eventsViewType} onShowMore={onShowMore} />
+				)} */
 				dayHeaderContent={(args) => dayHeaderContent(args, openingHoursMap)}
 				eventContent={(data) => eventContent(data, CALENDAR_VIEW.MONTH, onEditEvent, onReservationClick)}
-				moreLinkContent={() => <MoreLinkContent salonID={salonID} eventsViewType={eventsViewType} onShowMore={onShowMore} />}
+				moreLinkContent={(args: MoreLinkContentArg) => <MoreLinkContent moreCount={args.num} salonID={salonID} eventsViewType={eventsViewType} onShowMore={onShowMore} />}
 				// handlers
 				moreLinkClick={moreLinkClick}
 			/>

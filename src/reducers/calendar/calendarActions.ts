@@ -16,6 +16,7 @@ import { getReq } from '../../utils/request'
 import { getDateTime, normalizeQueryParams } from '../../utils/helper'
 
 import { clearEvent } from '../virtualEvent/virtualEventActions'
+import fakeEvents from './events'
 
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
 
@@ -120,13 +121,84 @@ export const getCalendarEvents =
 				reservationStates: queryParams.reservationStates
 			}
 
-			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams)
+			// const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams)
+			const data = fakeEvents as Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200
 
 			// employees z Reduxu, budu sa mapovat do eventov
 			const employees = {} as any
 			data.employees.forEach((employee) => {
 				employees[employee.id] = employee
 			})
+
+			const createMultiDayEvents = (event: CalendarEvent, pushToArray = true, multiDayEventsObject?: ICalendarDayEvents) => {
+				const eventStartStartOfDay = dayjs(event.start.date).startOf('day')
+				const eventEndStartOfDay = dayjs(event.end.date).startOf('day')
+
+				const isMultipleDayEvent = !eventStartStartOfDay.isSame(eventEndStartOfDay)
+
+				if (isMultipleDayEvent) {
+					const multiDayEventsArray: CalendarEvent[] = []
+					// kontrola, ci je zaciatok a konec multidnoveho eventu vacsi alebo mensi ako aktualne vybraty rozsah
+					// staci nam vytvorit eventy len pre vybrany rozsah
+					const rangeStart = dayjs.max(dayjs(queryParams.start).startOf('day'), eventStartStartOfDay)
+					const rangeEnd = dayjs.min(dayjs(queryParams.end).startOf('day'), eventEndStartOfDay)
+					// rozdiel zaciatku multidnoveho eventu a zaciatku vybrateho rozsahu
+					const startDifference = rangeStart.diff(eventStartStartOfDay, 'days')
+					// rozdiel konca multidnoveho eventu a konca vybrateho rozsahu
+					const endDifference = rangeEnd.diff(eventEndStartOfDay, 'days')
+					// pocet eventov, ktore je potrebne vytvorit
+					const currentRangeDaysCount = rangeEnd.diff(rangeStart, 'days')
+
+					for (let i = 0; i <= currentRangeDaysCount; i += 1) {
+						const newStart = {
+							date: dayjs(rangeStart).add(i, 'days').format(DATE_TIME_PARSER_DATE_FORMAT),
+							time: i === 0 && !startDifference ? event.start.time : '00:00'
+						}
+
+						const newEnd = {
+							date: dayjs(rangeStart).add(i, 'days').format(DATE_TIME_PARSER_DATE_FORMAT),
+							time: i === currentRangeDaysCount && !endDifference ? event.end.time : '23:59'
+						}
+
+						const multiDayEvent = {
+							...event,
+							id: `${i}_${event.id}`,
+							start: newStart,
+							end: newEnd,
+							startDateTime: getDateTime(newStart.date, newStart.time),
+							endDateTime: getDateTime(newEnd.date, newEnd.time),
+							isMultiDayEvent: true,
+							isFirstMultiDayEventInCurrentRange: i === 0 && startDifference === 0,
+							isLastMultiDaylEventInCurrentRange: i === currentRangeDaysCount && !endDifference,
+							originalEvent: event
+						}
+
+						if (multiDayEventsObject) {
+							if (multiDayEventsObject[newStart.date]) {
+								multiDayEventsObject[newStart.date].push(multiDayEvent)
+							} else {
+								// eslint-disable-next-line no-param-reassign
+								multiDayEventsObject[newStart.date] = [multiDayEvent]
+							}
+						}
+
+						if (pushToArray) {
+							multiDayEventsArray.push(multiDayEvent)
+						}
+					}
+
+					return multiDayEventsArray
+				}
+				if (multiDayEventsObject) {
+					if (multiDayEventsObject[event.start.date]) {
+						multiDayEventsObject[event.start.date].push(event)
+					} else {
+						// eslint-disable-next-line no-param-reassign
+						multiDayEventsObject[event.start.date] = [event]
+					}
+				}
+				return [event]
+			}
 
 			const editedEvents = data.calendarEvents.reduce((newEventsArray, event) => {
 				const editedEvent: CalendarEvent = {
@@ -137,61 +209,15 @@ export const getCalendarEvents =
 				}
 
 				if (splitMultidayEventsIntoOneDayEvents) {
-					const eventStartStartOfDay = dayjs(event.start.date).startOf('day')
-					const eventEndStartOfDay = dayjs(event.end.date).startOf('day')
-
-					const isMultipleDayEvent = !eventStartStartOfDay.isSame(eventEndStartOfDay)
-					if (isMultipleDayEvent) {
-						// kontrola, ci je zaciatok a konec multidnoveho eventu vacsi alebo mensi ako aktualne vybraty rozsah
-						// staci nam vytvorit eventy len pre vybrany rozsah
-						const rangeStart = dayjs.max(dayjs(queryParams.start).startOf('day'), eventStartStartOfDay)
-						const rangeEnd = dayjs.min(dayjs(queryParams.end).startOf('day'), eventEndStartOfDay)
-						// rozdiel zaciatku multidnoveho eventu a zaciatku vybrateho rozsahu
-						const startDifference = rangeStart.diff(eventStartStartOfDay, 'days')
-						// rozdiel konca multidnoveho eventu a konca vybrateho rozsahu
-						const endDifference = rangeEnd.diff(eventEndStartOfDay, 'days')
-						// pocet eventov, ktore je potrebne vytvorit
-						const currentRangeDaysCount = rangeEnd.diff(rangeStart, 'days')
-
-						const multiDayEvents = []
-
-						for (let i = 0; i <= currentRangeDaysCount; i += 1) {
-							const newStart = {
-								date: dayjs(rangeStart).add(i, 'days').format(DATE_TIME_PARSER_DATE_FORMAT),
-								time: i === 0 && !startDifference ? event.start.time : '00:00'
-							}
-
-							const newEnd = {
-								date: dayjs(rangeStart).add(i, 'days').format(DATE_TIME_PARSER_DATE_FORMAT),
-								time: i === currentRangeDaysCount && !endDifference ? event.end.time : '23:59'
-							}
-
-							const multiDayEvent = {
-								...editedEvent,
-								id: `${i}_${event.id}`,
-								start: newStart,
-								end: newEnd,
-								startDateTime: getDateTime(newStart.date, newStart.time),
-								endDateTime: getDateTime(newEnd.date, newEnd.time),
-								isMultiDayEvent: true,
-								isFirstMultiDayEventInCurrentRange: i === 0 && startDifference === 0,
-								isLastMultiDaylEventInCurrentRange: i === currentRangeDaysCount && !endDifference,
-								originalEvent: editedEvent
-							}
-
-							multiDayEvents.push(multiDayEvent)
-						}
-						return [...newEventsArray, ...multiDayEvents]
-					}
+					return [...newEventsArray, ...createMultiDayEvents(editedEvent)]
 				}
 
 				return [...newEventsArray, editedEvent]
 			}, [] as CalendarEvent[])
 
 			let eventsWithDayLimit: CalendarEvent[] = []
-
 			if (eventsDayLimit) {
-				const sortedEvents = editedEvents.sort((a, b) => {
+				const sortedEvents = [...editedEvents].sort((a, b) => {
 					if (dayjs(a.startDateTime).isBefore(b.startDateTime)) {
 						return -1
 					}
@@ -204,21 +230,31 @@ export const getCalendarEvents =
 					return 0
 				})
 
-				const dividedEventsIntoDays = sortedEvents.reduce((newEventsObject, event) => {
-					if (newEventsObject[event.start.date]) {
-						newEventsObject[event.start.date].push(event)
+				// multidnove eventy pre popover je potrebne rozdelit na jednotlive dni
+				const dividedEventsIntoDays: ICalendarDayEvents = {}
+				// multidnove eventy do kalendara je zasa potrebne nechat v celku
+				const dividedEventsIntoDaysWithMultidayEvents: ICalendarDayEvents = {}
+
+				sortedEvents.forEach((event) => {
+					if (dividedEventsIntoDays[event.start.date]) {
+						dividedEventsIntoDays[event.start.date].push(event)
 					} else {
 						// eslint-disable-next-line no-param-reassign
-						newEventsObject[event.start.date] = [event]
+						dividedEventsIntoDays[event.start.date] = [event]
 					}
-					return newEventsObject
-				}, {} as ICalendarDayEvents)
+					// v pripade, ze este nie su rozdelene multidnove eventy na jednodnove, tak to je pre eventy pre popup potrebne spravit
+					if (!splitMultidayEventsIntoOneDayEvents) {
+						createMultiDayEvents(event, false, dividedEventsIntoDaysWithMultidayEvents)
+					}
+				})
 
-				dispatch(setDayEvents(dividedEventsIntoDays))
+				dispatch(setDayEvents(splitMultidayEventsIntoOneDayEvents ? dividedEventsIntoDays : dividedEventsIntoDaysWithMultidayEvents))
 
 				Object.values(dividedEventsIntoDays).forEach((day) => {
 					eventsWithDayLimit = [...eventsWithDayLimit, ...day.slice(0, eventsDayLimit)]
 				})
+
+				console.log(eventsWithDayLimit)
 			}
 
 			payload = {

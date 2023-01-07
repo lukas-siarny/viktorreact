@@ -277,7 +277,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 			const dispatchGetShiftsTimeOff = getCalendarShiftsTimeoff(
 				{ salonID, start: startQueryParam, end: endQueryParam, employeeIDs: query.employeeIDs },
-				true,
+				validCalendarView !== CALENDAR_VIEW.MONTH,
 				clearVirtualEvent,
 				true,
 				eventdsDayLimit
@@ -292,7 +292,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						employeeIDs: query.employeeIDs,
 						categoryIDs: getFullCategoryIdsFromUrl(query?.categoryIDs)
 					},
-					true,
+					validCalendarView !== CALENDAR_VIEW.MONTH,
 					clearVirtualEvent,
 					true,
 					eventdsDayLimit

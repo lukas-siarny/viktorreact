@@ -32,6 +32,19 @@ import {
 } from '../../utils/enums'
 import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
 
+export const compareDayEventsDates = (aStart: string, aEnd: string, bStart: string, bEnd: string) => {
+	if (dayjs(aStart).isBefore(bStart)) {
+		return -1
+	}
+	if (dayjs(aStart).isSame(bStart)) {
+		if (dayjs(aEnd).isAfter(dayjs(bEnd))) {
+			return -1
+		}
+		return 1
+	}
+	return 0
+}
+
 export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null) => {
 	const extenedProps: IEventExtenedProps | undefined = movingEvent?.extendedProps
 	const { eventData } = extenedProps || {}

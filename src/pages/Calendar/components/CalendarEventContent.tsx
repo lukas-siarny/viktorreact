@@ -73,6 +73,10 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 	const isEdit = query?.eventId === originalEventData.id
 	const color = calendarView === CALENDAR_VIEW.MONTH ? employee?.color : backgroundColor
 
+	if (isPlaceholder) {
+		console.log(color, employee)
+	}
+
 	// normal events
 	switch (eventType) {
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:

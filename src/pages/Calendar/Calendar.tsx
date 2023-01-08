@@ -167,13 +167,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		isOpen: boolean
 		isHidden: boolean
 		date: string | null
-		data: CalendarEvent[] | null
 		position: PopoverTriggerPosition | null
 	}>({
 		isOpen: true,
 		isHidden: true,
 		date: null,
-		data: null,
 		position: null
 	})
 
@@ -799,12 +797,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						parentPath={parentPath}
 						onEditEvent={onEditEvent}
 						onReservationClick={onReservationClick}
-						onShowMore={(date: string, data: CalendarEvent[], position?: PopoverTriggerPosition) => {
+						onShowMore={(date: string, position?: PopoverTriggerPosition) => {
 							setDayEventsPopover({
 								date,
 								isHidden: false,
 								isOpen: true,
-								data: data || null,
 								position: position || null
 							})
 						}}
@@ -834,13 +831,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			</Layout>
 			<CalendarDayEventsPopover
 				date={dayEventsPopover.date}
-				data={dayEventsPopover.data}
 				position={dayEventsPopover.position}
 				isOpen={dayEventsPopover.isOpen}
 				setIsOpen={(isOpen: boolean) => setDayEventsPopover((prevState) => ({ ...prevState, isOpen }))}
 				onEditEvent={onEditEvent}
 				onReservationClick={onReservationClick}
 				isHidden={dayEventsPopover.isHidden}
+				isLoading={isRefreshingEvents ? false : loadingData}
+				isUpdatingEvent={isUpdatingEvent}
 			/>
 			<CalendarReservationPopover
 				data={reservationPopover.data}

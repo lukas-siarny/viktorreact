@@ -51,7 +51,7 @@ type Props = {
 	employees: Employees
 	parentPath: string
 	salonID: string
-	onShowMore: (date: string, data: CalendarEvent[], position?: PopoverTriggerPosition) => void
+	onShowMore: (date: string, position?: PopoverTriggerPosition) => void
 } & ICalendarView
 
 export type CalendarRefs = {

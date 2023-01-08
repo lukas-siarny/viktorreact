@@ -690,13 +690,14 @@ export interface ICalendarReservationPopover {
 
 export interface ICalendarDayEventsPopover {
 	date: string | null
-	data: CalendarEvent[] | null
 	position: PopoverTriggerPosition | null
 	isOpen: boolean
 	setIsOpen: (isOpen: boolean) => void
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
 	isHidden: boolean
+	isLoading?: boolean
+	isUpdatingEvent?: boolean
 }
 
 export type ReservationPopoverData = {

@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
-import React, { FC, useEffect, useCallback, useRef } from 'react'
-import { Divider, Popover } from 'antd'
+import React, { FC, useEffect, useCallback, useRef, useMemo } from 'react'
+import { Divider, Popover, Spin } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import dayjs from 'dayjs'
@@ -62,13 +62,13 @@ type ContentProps = {
 	date: string | null
 	events: ICalendarEventContent[]
 	onClose: () => void
-	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
-	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
+	isLoading?: boolean
+	isUpdatingEvent?: boolean
 }
 
 const PopoverContent: FC<ContentProps> = (props) => {
 	const [t] = useTranslation()
-	const { date, onClose, events, onEditEvent, onReservationClick } = props
+	const { date, onClose, events, isLoading, isUpdatingEvent } = props
 
 	const isToday = dayjs(date).isToday()
 
@@ -82,36 +82,43 @@ const PopoverContent: FC<ContentProps> = (props) => {
 			</header>
 			<Divider className={'m-0'} />
 			{/* footerHeight = 72px, headerHeight = 52px. dividerHeight = 1px (header and footer dividers), padding top and bottom = 2*16px */}
-			<main className={'overflow-y-auto flex flex-col gap-1 p-6'} style={{ maxHeight: 'calc(100vh - 120px)' }}>
-				{events?.map((event, i) => {
-					return (
-						<React.Fragment key={i}>
-							<CalendarEventContent
-								id={event.id}
-								start={event.start}
-								end={event.end}
-								eventData={event.eventData}
-								onEditEvent={event.onEditEvent}
-								onReservationClick={event.onReservationClick}
-								backgroundColor={event.backgroundColor}
-								calendarView={event.calendarView}
-								eventDisplayType={event.eventDisplayType}
-								isDayEventsPopover
-							/>
-						</React.Fragment>
-					)
-				})}
+			<main className={'overflow-y-auto'} style={{ maxHeight: 'calc(100vh - 120px)' }}>
+				<Spin spinning={isUpdatingEvent || isLoading}>
+					<div className={'flex flex-col gap-1 p-6'}>
+						{events?.map((event, i) => {
+							return (
+								<React.Fragment key={i}>
+									<CalendarEventContent
+										id={event.id}
+										start={event.start}
+										end={event.end}
+										eventData={event.eventData}
+										onEditEvent={event.onEditEvent}
+										onReservationClick={event.onReservationClick}
+										backgroundColor={event.backgroundColor}
+										calendarView={event.calendarView}
+										eventDisplayType={event.eventDisplayType}
+										isDayEventsPopover
+									/>
+								</React.Fragment>
+							)
+						})}
+					</div>
+				</Spin>
 			</main>
 		</div>
 	)
 }
 
 const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
-	const { data, position, setIsOpen, isOpen, date, onEditEvent, onReservationClick, isHidden } = props
+	const { position, setIsOpen, isOpen, date, onEditEvent, onReservationClick, isHidden, isLoading, isUpdatingEvent } = props
 
 	const [t] = useTranslation()
 
 	const overlayClassName = `nc-event-popover-overlay_${date || ''}`
+
+	const dayEvents = useSelector((state: RootState) => state.calendar.dayEvents)
+	const cellDateEvents = date ? dayEvents[date] : []
 
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS]).data
 	const prevReservations = useRef(reservations)
@@ -169,7 +176,7 @@ const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
 		[id, handleUpdateReservationState]
 	) */
 
-	const eventsForPopover = getEventsForPopover(data || [], onEditEvent, onReservationClick)
+	const eventsForPopover = getEventsForPopover(cellDateEvents, onEditEvent, onReservationClick)
 
 	return (
 		<Popover
@@ -178,9 +185,7 @@ const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
 			trigger={'click'}
 			placement={'right'}
 			overlayClassName={`${overlayClassName} nc-day-events-popover-overlay ${isHidden ? 'is-hidden' : ''}`}
-			content={
-				!isHidden && <PopoverContent date={date} events={eventsForPopover} onEditEvent={onEditEvent} onReservationClick={onReservationClick} onClose={handleClosePopover} />
-			}
+			content={!isHidden && <PopoverContent date={date} events={eventsForPopover} onClose={handleClosePopover} isLoading={isLoading} isUpdatingEvent={isUpdatingEvent} />}
 		>
 			<div style={{ top: position?.top, left: position?.left, width: position?.width, height: position?.height, position: 'fixed' }} />
 		</Popover>

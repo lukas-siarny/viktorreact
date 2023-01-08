@@ -68,7 +68,7 @@ interface IDayCellContent {
 	date: Date
 	dayNumberText: string
 	salonID: string
-	onShowMore: (date: string, data: CalendarEvent[], position?: PopoverTriggerPosition) => void
+	onShowMore: (date: string, position?: PopoverTriggerPosition) => void
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 }
 
@@ -79,7 +79,6 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 	const dayEventsMap = useMemo(() => getDayEventsMap(dayEvents), [dayEvents])
 
 	const cellDate = dayjs(date).format(CALENDAR_DATE_FORMAT.QUERY)
-	const cellDateEvents = useMemo(() => dayEvents[cellDate], [dayEvents, cellDate])
 
 	const dayNumerRef = useRef<HTMLSpanElement | null>(null)
 
@@ -123,7 +122,7 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 								width: clientRect.width + 10,
 								height: clientRect.bottom - clientRect.top
 							}
-							onShowMore(cellDate, cellDateEvents, position)
+							onShowMore(cellDate, position)
 						}
 					}
 
@@ -155,14 +154,14 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [eventsCount, cellDate, cellDateEvents])
+	}, [eventsCount, cellDate])
 
 	return <span ref={dayNumerRef}>{dayNumberText}</span>
 }
 
 interface ICalendarMonthView extends ICalendarView {
 	salonID: string
-	onShowMore: (date: string, data: CalendarEvent[], position?: PopoverTriggerPosition) => void
+	onShowMore: (date: string, position?: PopoverTriggerPosition) => void
 }
 
 const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarMonthView>((props, ref) => {

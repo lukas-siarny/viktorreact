@@ -250,7 +250,10 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 						case CALENDAR_VIEW.MONTH:
 							return (
 								<>
-									<span className={'title'}>{customerName}</span>
+									<div className={'flex gap-1'}>
+										{isDayEventsPopover && <div className={'icons'}>{icon}</div>}
+										<span className={'title'}>{customerName}</span>
+									</div>
 									<span className={'time'}>{timeText}</span>
 								</>
 							)

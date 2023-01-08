@@ -25,7 +25,7 @@ import {
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_VIEW
 } from '../../../../utils/enums'
-import { composeMonthViewEvents, getBusinessHours, getOpnenigHoursMap, OpeningHoursMap } from '../../calendarHelpers'
+import { composeMonthViewEvents, eventAllow, getBusinessHours, getOpnenigHoursMap, OpeningHoursMap, sortCalendarEvents } from '../../calendarHelpers'
 import { RootState } from '../../../../reducers'
 import eventContent from '../../eventContent'
 
@@ -72,7 +72,7 @@ interface IDayCellContent {
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 }
 
-const DayCellContent: FC<IDayCellContent> = memo((props) => {
+const DayCellContent: FC<IDayCellContent> = (props) => {
 	const { onShowMore, date, dayNumberText } = props
 
 	const dayEvents = useSelector((state: RootState) => state.calendar.dayEvents)
@@ -158,7 +158,7 @@ const DayCellContent: FC<IDayCellContent> = memo((props) => {
 	}, [eventsCount, cellDate, cellDateEvents])
 
 	return <span ref={dayNumerRef}>{dayNumberText}</span>
-})
+}
 
 interface ICalendarMonthView extends ICalendarView {
 	salonID: string
@@ -166,7 +166,8 @@ interface ICalendarMonthView extends ICalendarView {
 }
 
 const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarMonthView>((props, ref) => {
-	const { selectedDate, eventsViewType, reservations, shiftsTimeOffs, onEditEvent, onReservationClick, salonID, onShowMore } = props
+	const { selectedDate, eventsViewType, reservations, shiftsTimeOffs, onEditEvent, onReservationClick, salonID, onShowMore, onEventChange, onEventChangeStart, virtualEvent } =
+		props
 
 	const openingHours = useSelector((state: RootState) => state.selectedSalon.selectedSalon).data?.openingHours
 
@@ -175,9 +176,8 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 	const events = useMemo(() => {
 		const data = composeMonthViewEvents(eventsViewType, reservations || [], shiftsTimeOffs)
 		// ak je virtualEvent definovany, zaradi sa do zdroja eventov pre Calendar
-		// return virtualEvent ? [...data, virtualEvent] : data
-		return data
-	}, [eventsViewType, reservations, shiftsTimeOffs])
+		return virtualEvent ? sortCalendarEvents([...data, virtualEvent]) : data
+	}, [eventsViewType, reservations, shiftsTimeOffs, virtualEvent])
 
 	const openingHoursMap = useMemo(() => getOpnenigHoursMap(openingHours), [openingHours])
 	const businessHours = useMemo(() => getBusinessHours(openingHoursMap), [openingHoursMap])
@@ -217,6 +217,11 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 				eventContent={(data) => eventContent(data, CALENDAR_VIEW.MONTH, onEditEvent, onReservationClick)}
 				moreLinkContent={null}
 				// handlers
+				eventAllow={eventAllow}
+				eventDrop={(arg) => {
+					if (onEventChange) onEventChange(CALENDAR_VIEW.DAY, arg)
+				}}
+				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
 			/>
 		</div>
 	)

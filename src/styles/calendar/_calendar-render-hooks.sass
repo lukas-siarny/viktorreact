@@ -613,13 +613,17 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 				color: $textColor-notino-grayDark
 	&.is-day-events-popover
 		box-shadow: none
+		border-radius: 0
 		.event-accent
 			border-radius: 0
 
 	// reservation state specific styles
 	&.reservation
 		&.is-past
+			&:not(.is-day-events-popover)
+				background-color: #eef0f1
 			.event-background
+				display: none
 				opacity: 1
 				background-color: #eef0f1
 			.event-accent

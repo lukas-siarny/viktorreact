@@ -122,8 +122,8 @@ export const getCalendarEvents =
 				reservationStates: queryParams.reservationStates
 			}
 
-			// const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams)
-			const data = fakeEvents as Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams)
+			// const data = fakeEvents as Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200
 
 			// employees z Reduxu, budu sa mapovat do eventov
 			const employees = {} as any
@@ -163,7 +163,7 @@ export const getCalendarEvents =
 
 						const multiDayEvent = {
 							...event,
-							id: `${i}_${event.id}`,
+							id: `${event.id}_${i}`,
 							start: newStart,
 							end: newEnd,
 							startDateTime: getDateTime(newStart.date, newStart.time),
@@ -218,7 +218,7 @@ export const getCalendarEvents =
 
 			let eventsWithDayLimit: CalendarEvent[] = []
 			if (eventsDayLimit) {
-				const sortedEvents = [...editedEvents].sort((a, b) => compareDayEventsDates(a.startDateTime, a.endDateTime, b.startDateTime, b.endDateTime))
+				const sortedEvents = [...editedEvents].sort((a, b) => compareDayEventsDates(a.startDateTime, a.endDateTime, b.startDateTime, b.endDateTime, a.id, b.id))
 
 				// multidnove eventy pre popover je potrebne rozdelit na jednotlive dni
 				const dividedEventsIntoDays: ICalendarDayEvents = {}
@@ -243,8 +243,6 @@ export const getCalendarEvents =
 				Object.values(dividedEventsIntoDays).forEach((day) => {
 					eventsWithDayLimit = [...eventsWithDayLimit, ...day.slice(0, eventsDayLimit)]
 				})
-
-				console.log(eventsWithDayLimit)
 			}
 
 			payload = {

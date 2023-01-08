@@ -405,7 +405,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			}
 
 			if (validCalendarView === CALENDAR_VIEW.DAY || validCalendarView === CALENDAR_VIEW.MONTH) {
-				setTimeout(updateCalendarSize.current, 0)
+				setTimeout(updateCalendarSize.current, 100)
 			}
 		},
 		[query, setQuery, validCalendarView]

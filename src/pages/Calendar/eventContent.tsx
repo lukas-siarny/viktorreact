@@ -15,6 +15,7 @@ export default (
 
 	return (
 		<CalendarEventContent
+			id={extendedProps?.eventData.id}
 			start={start}
 			end={end}
 			backgroundColor={backgroundColor}

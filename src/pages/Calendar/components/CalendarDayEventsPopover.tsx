@@ -31,7 +31,7 @@ import {
 	STRINGS
 } from '../../../utils/enums'
 import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
-import { parseTimeFromMinutes, getTimeText, compareDayEventsDates } from '../calendarHelpers'
+import { parseTimeFromMinutes, getTimeText, compareDayEventsDates, sortCalendarEvents } from '../calendarHelpers'
 
 // hooks
 import useKeyUp from '../../../hooks/useKeyUp'
@@ -41,9 +41,10 @@ const getEventsForPopover = (
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void,
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
 ): ICalendarEventContent[] => {
-	return events
-		.map((event) => {
+	return sortCalendarEvents(
+		events.map((event) => {
 			return {
+				id: event.id,
 				start: (event.originalEvent?.startDateTime || event.startDateTime) as unknown as Date,
 				end: (event.originalEvent?.endDateTime || event.endDateTime) as unknown as Date,
 				eventDisplayType: CALENDAR_EVENT_DISPLAY_TYPE.REGULAR,
@@ -54,13 +55,7 @@ const getEventsForPopover = (
 				eventData: event
 			}
 		})
-		.sort((a, b) => {
-			const aStart = a.eventData.originalEvent?.startDateTime || a.eventData.startDateTime
-			const aEnd = a.eventData.originalEvent?.endDateTime || a.eventData.endDateTime
-			const bStart = b.eventData.originalEvent?.startDateTime || b.eventData.startDateTime
-			const bEnd = b.eventData.originalEvent?.endDateTime || b.eventData.endDateTime
-			return compareDayEventsDates(aStart, aEnd, bStart, bEnd)
-		})
+	)
 }
 
 type ContentProps = {
@@ -88,19 +83,22 @@ const PopoverContent: FC<ContentProps> = (props) => {
 			<Divider className={'m-0'} />
 			{/* footerHeight = 72px, headerHeight = 52px. dividerHeight = 1px (header and footer dividers), padding top and bottom = 2*16px */}
 			<main className={'overflow-y-auto flex flex-col gap-1 p-6'} style={{ maxHeight: 'calc(100vh - 120px)' }}>
-				{events?.map((event) => {
+				{events?.map((event, i) => {
 					return (
-						<CalendarEventContent
-							start={event.start}
-							end={event.end}
-							eventData={event.eventData}
-							onEditEvent={event.onEditEvent}
-							onReservationClick={event.onReservationClick}
-							backgroundColor={event.backgroundColor}
-							calendarView={event.calendarView}
-							eventDisplayType={event.eventDisplayType}
-							isDayEventsPopover
-						/>
+						<React.Fragment key={i}>
+							<CalendarEventContent
+								id={event.id}
+								start={event.start}
+								end={event.end}
+								eventData={event.eventData}
+								onEditEvent={event.onEditEvent}
+								onReservationClick={event.onReservationClick}
+								backgroundColor={event.backgroundColor}
+								calendarView={event.calendarView}
+								eventDisplayType={event.eventDisplayType}
+								isDayEventsPopover
+							/>
+						</React.Fragment>
 					)
 				})}
 			</main>

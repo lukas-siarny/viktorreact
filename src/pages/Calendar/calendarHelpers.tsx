@@ -16,7 +16,8 @@ import {
 	IResourceEmployee,
 	IWeekViewResourceExtenedProps,
 	IDayViewResourceExtenedProps,
-	RawOpeningHours
+	RawOpeningHours,
+	ICalendarEventContent
 } from '../../types/interfaces'
 
 // utils
@@ -32,17 +33,33 @@ import {
 } from '../../utils/enums'
 import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
 
-export const compareDayEventsDates = (aStart: string, aEnd: string, bStart: string, bEnd: string) => {
+export const compareDayEventsDates = (aStart: string, aEnd: string, bStart: string, bEnd: string, aId: string, bId: string) => {
 	if (dayjs(aStart).isBefore(bStart)) {
 		return -1
 	}
 	if (dayjs(aStart).isSame(bStart)) {
+		if (dayjs(aEnd).isSame(bEnd)) {
+			return aId > bId ? -1 : 1
+		}
 		if (dayjs(aEnd).isAfter(dayjs(bEnd))) {
 			return -1
 		}
 		return 1
 	}
 	return 0
+}
+
+export const sortCalendarEvents = (events: ICalendarEventContent[]) => {
+	return [...events].sort((a, b) => {
+		if (!a.eventData || !b.eventData) {
+			return 0
+		}
+		const aStart = a.eventData.originalEvent?.startDateTime || a.eventData.startDateTime
+		const aEnd = a.eventData.originalEvent?.endDateTime || a.eventData.endDateTime
+		const bStart = b.eventData.originalEvent?.startDateTime || b.eventData.startDateTime
+		const bEnd = b.eventData.originalEvent?.endDateTime || b.eventData.endDateTime
+		return compareDayEventsDates(aStart, aEnd, bStart, bEnd, a.id, b.id)
+	})
 }
 
 export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null) => {

@@ -27,7 +27,7 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 	const { start, end, eventData, eventDisplayType, calendarView, onEditEvent, onReservationClick, backgroundColor, isDayEventsPopover } = props
 
 	const {
-		id,
+		id: originalEventId,
 		start: eventStart,
 		end: eventEnd,
 		startDateTime,
@@ -63,7 +63,7 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 	const timeText = getTimeText(start, end, calendarView === CALENDAR_VIEW.MONTH)
 	const resourceId = ''
 	const originalEventData = {
-		id,
+		id: originalEventId,
 		start: eventStart,
 		end: eventEnd,
 		startDateTime,

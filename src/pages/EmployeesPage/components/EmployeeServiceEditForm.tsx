@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Form, Collapse, Button, Spin, Alert } from 'antd'
 import cx from 'classnames'
 import { isEmpty } from 'lodash'
+import i18next from 'i18next'
 
 // utils
 import { FORM, PARAMETER_TYPE, STRINGS } from '../../../utils/enums'
@@ -40,6 +41,13 @@ type ComponentProps = {
 type Props = InjectedFormProps<IEmployeeServiceEditForm, ComponentProps> & ComponentProps
 
 const numberMin0 = validationNumberMin(0)
+
+const validateParameterValues = (_serviceCategoryParameterValues: IEmployeeServiceEditForm['serviceCategoryParameter'], allFormValues: IEmployeeServiceEditForm) => {
+	if (!isEmpty(validateEmployeeServiceEditForm(allFormValues).serviceCategoryParameter)) {
+		return i18next.t('loc:Je potrebné vyplniť povinné údaje pre všetky hodnoty parametra')
+	}
+	return undefined
+}
 
 type FieldData = NonNullable<IEmployeeServiceEditForm['serviceCategoryParameter']>[0]
 
@@ -230,14 +238,7 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 							showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
 							form={form}
 							currencySymbol={salon.data?.currency.symbol}
-							validate={[
-								(_serviceCategoryParameterValues: IEmployeeServiceEditForm['serviceCategoryParameter'], allFormValues: IEmployeeServiceEditForm) => {
-									if (!isEmpty(validateEmployeeServiceEditForm(allFormValues).serviceCategoryParameter)) {
-										return t('loc:Je potrebné vyplniť povinné údaje pre všetky hodnoty parametra')
-									}
-									return undefined
-								}
-							]}
+							validate={validateParameterValues}
 						/>
 					) : (
 						<>

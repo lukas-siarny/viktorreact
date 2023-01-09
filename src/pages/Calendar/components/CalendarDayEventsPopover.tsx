@@ -1,15 +1,11 @@
 /* eslint-disable import/no-cycle */
-import React, { FC, useEffect, useCallback, useRef, useMemo } from 'react'
+import React, { FC, useEffect, useCallback } from 'react'
 import { Divider, Popover, Spin } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import dayjs from 'dayjs'
-import colors from 'tailwindcss/colors'
-import i18next from 'i18next'
-import { ButtonProps } from 'antd/es/button'
 
 // assets
-import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon-16.svg'
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-16.svg'
 
 // components
@@ -20,18 +16,8 @@ import { RootState } from '../../../reducers'
 import { CalendarEvent, ICalendarDayEventsPopover, ICalendarEventContent, PopoverTriggerPosition, ReservationPopoverData } from '../../../types/interfaces'
 
 /// utils
-import {
-	CALENDAR_EVENTS_KEYS,
-	CALENDAR_EVENT_DISPLAY_TYPE,
-	CALENDAR_EVENT_TYPE,
-	CALENDAR_VIEW,
-	ENUMERATIONS_KEYS,
-	RESERVATION_PAYMENT_METHOD,
-	RESERVATION_STATE,
-	STRINGS
-} from '../../../utils/enums'
-import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
-import { parseTimeFromMinutes, getTimeText, compareDayEventsDates, sortCalendarEvents } from '../calendarHelpers'
+import { CALENDAR_EVENT_DISPLAY_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../utils/enums'
+import { sortCalendarEvents } from '../calendarHelpers'
 
 // hooks
 import useKeyUp from '../../../hooks/useKeyUp'
@@ -120,15 +106,9 @@ const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
 	const dayEvents = useSelector((state: RootState) => state.calendar.dayEvents)
 	const cellDateEvents = date ? dayEvents[date] : []
 
-	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS]).data
-	const prevReservations = useRef(reservations)
-
 	const handleClosePopover = useCallback(() => setIsOpen(false), [setIsOpen])
 
 	useEffect(() => {
-		// TODO: toto by este potom chcelo trochu prerobit, teraz to je cez dva overlay spravene
-		// jeden zaistuje ze sa po kliku na neho zavrie popoover (cez &::before na popover elemente)
-		// druhy je pomocny kvoli tomu, ze kvoli uvodnej animacii chvilku trva, kym prvy overlay nabehne a vtedy sa da scrollovat, aj ked by sa nemalo
 		const contentOverlay = document.querySelector('#nc-content-overlay') as HTMLElement
 
 		const listener = (e: Event) => {
@@ -154,27 +134,7 @@ const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
 		}
 	}, [isOpen, overlayClassName, handleClosePopover])
 
-	/* useEffect(() => {
-		if (isOpen) {
-			const prevEventData = prevReservations?.current?.find((prevEvent) => prevEvent.originalEvent?.id || prevEvent.id === originalEventData?.id)
-			const currentEventData = reservations?.find((currentEvent) => currentEvent.originalEvent?.id || currentEvent.id === originalEventData?.id)
-			if (JSON.stringify(prevEventData) !== JSON.stringify(currentEventData)) {
-				handleClosePopover()
-			}
-		}
-		prevReservations.current = reservations
-	}, [reservations, isOpen, originalEventData?.id, handleClosePopover]) */
-
 	useKeyUp('Escape', isOpen ? handleClosePopover : undefined)
-
-	/* const handleUpdateState = useCallback(
-		(state: RESERVATION_STATE, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
-			if (id && handleUpdateReservationState) {
-				handleUpdateReservationState(id, state, undefined, paymentMethod)
-			}
-		},
-		[id, handleUpdateReservationState]
-	) */
 
 	const eventsForPopover = getEventsForPopover(cellDateEvents, onEditEvent, onReservationClick)
 

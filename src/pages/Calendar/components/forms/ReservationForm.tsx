@@ -12,7 +12,7 @@ import validateReservationForm from './validateReservationForm'
 import { formatLongQueryString, getAssignedUserLabel, getCountryPrefix, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { getReq, postReq } from '../../../../utils/request'
-import { CREATE_EVENT_PERMISSIONS, ENUMERATIONS_KEYS, FORM, SALON_PERMISSION, STRINGS, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import { CREATE_EVENT_PERMISSIONS, ENUMERATIONS_KEYS, FORM, SALON_PERMISSION, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // types
 import { ICalendarReservationForm, ICustomerForm } from '../../../../types/interfaces'
@@ -53,6 +53,8 @@ const ReservationForm: FC<Props> = (props) => {
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 
+	// NOTE: pristine pouzivat len pri UPDATE eventu a pri CREATE povlit akciu vzdy
+	const disabledSubmitButton = !!(eventId && pristine) || submitting
 	const searchServices = useCallback(async () => {
 		try {
 			const { data } = await getReq('/api/b2b/admin/services/', {
@@ -66,8 +68,11 @@ const ReservationForm: FC<Props> = (props) => {
 							key: category?.category?.id,
 							children: map(category.category?.children, (item) => {
 								return {
+									id: item.service.id,
 									label: item.category.name,
-									key: item.service.id
+									key: item.service.id,
+									disabled: undefined,
+									title: undefined
 								}
 							})
 						}
@@ -270,7 +275,7 @@ const ReservationForm: FC<Props> = (props) => {
 									openForbiddenModal()
 								}
 							}}
-							disabled={submitting || pristine}
+							disabled={disabledSubmitButton}
 							htmlType={'submit'}
 							type={'primary'}
 							block

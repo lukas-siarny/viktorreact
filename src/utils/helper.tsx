@@ -1234,3 +1234,14 @@ export const getEmployeeServiceDataForPatch = (values: IEmployeeServiceEditForm,
 	}
 	return employeePatchServiceData
 }
+
+// NOTE: treba dodrziat tento shape aby spravne fungoval isPristine selector pre selecty typu labelInValue (maju BE vyhladavanie)
+export const initializeLabelInValueSelect = (key: string | number, label: string, disabled?: boolean, title?: boolean) => {
+	return {
+		disabled,
+		title,
+		key,
+		value: key,
+		label
+	}
+}

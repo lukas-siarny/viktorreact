@@ -49,7 +49,7 @@ type ParameterValuesFieldType = WrappedFieldArrayProps<FieldData> & {
 }
 
 const ParameterValuesField: FC<ParameterValuesFieldType> = (props) => {
-	const { fields, currencySymbol, form } = props
+	const { fields, currencySymbol, form, meta } = props
 
 	const formValues = form?.values as IEmployeeServiceEditForm
 
@@ -71,15 +71,10 @@ const ParameterValuesField: FC<ParameterValuesFieldType> = (props) => {
 	}
 
 	const defaultActiveKeys = fields.map((_, i: number) => i)
-	let parameterError = ''
-
-	if (!isEmpty(categoryParameterErrors)) {
-		parameterError = t('loc:Je potrebné vyplniť povinné údaje pre všetky hodnoty parametra')
-	}
 
 	return (
 		<>
-			{parameterError && <Alert message={parameterError} showIcon type={'error'} className={'noti-alert w-full mb-4'} />}
+			{meta.error && <Alert message={meta.error} showIcon type={'error'} className={'noti-alert w-full mb-4'} />}
 			<Collapse className={'collapse-list'} bordered={false} defaultActiveKey={defaultActiveKeys}>
 				{fields.map((field, index: number) => {
 					const fieldData = fields.get(index)
@@ -230,11 +225,19 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 				<div className={'mt-6 mb-6'}>
 					{useCategoryParameter ? (
 						<FieldArray
-							component={ParameterValuesField}
+							component={ParameterValuesField as any}
 							name={'serviceCategoryParameter'}
 							showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
 							form={form}
 							currencySymbol={salon.data?.currency.symbol}
+							validate={[
+								(_serviceCategoryParameterValues: IEmployeeServiceEditForm['serviceCategoryParameter'], allFormValues: IEmployeeServiceEditForm) => {
+									if (!isEmpty(validateEmployeeServiceEditForm(allFormValues).serviceCategoryParameter)) {
+										return t('loc:Je potrebné vyplniť povinné údaje pre všetky hodnoty parametra')
+									}
+									return undefined
+								}
+							]}
 						/>
 					) : (
 						<>

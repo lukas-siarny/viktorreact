@@ -8,9 +8,12 @@ options:
   size: 2x
 
 definitions:
-  services:
-    "custom-docker":
-      image: docker:latest
+    # Define the default Docker service with 2 GB memory limit
+  docker:
+      memory: 1024
+  docker-3g:
+      # You will have to define the service type if it is docker
+      type: docker
       memory: 3096
   caches:
     cypress: $HOME/.cache/Cypress
@@ -97,7 +100,7 @@ pipelines:
               - cypress
               - frontend
             services:
-              - "custom-docker"
+              - docker-3g
             script:
               - git clone git@bitbucket.org:GoodRequest/notino_backend.git
               - echo "127.0.0.1 s3.eu-central-1.localhost" >> /etc/hosts

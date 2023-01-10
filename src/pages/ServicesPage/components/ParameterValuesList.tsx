@@ -180,7 +180,6 @@ const ParameterValuesList: FC<Props> = (props) => {
 										precision={2}
 										step={1}
 										min={0}
-										// max={99999}
 										size={'large'}
 										validate={[numberMin0, validateParameterValuePriceAndDuration]}
 										disabled={!useParameter || props.disabled}
@@ -197,7 +196,6 @@ const ParameterValuesList: FC<Props> = (props) => {
 											precision={2}
 											step={1}
 											min={0}
-											// max={99999}
 											size={'large'}
 											validate={[numberMin0, validateParameterValuePriceAndDuration]}
 											disabled={!useParameter || props.disabled}

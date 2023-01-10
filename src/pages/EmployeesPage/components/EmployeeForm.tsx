@@ -6,7 +6,7 @@ import { Divider, Form, Space, Button } from 'antd'
 import { isEmpty } from 'lodash'
 
 // utils
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { FORM, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 import { showErrorNotification } from '../../../utils/helper'
 
 // types
@@ -109,7 +109,7 @@ const EmployeeForm: FC<Props> = (props) => {
 									onClick={addService}
 									disabled={isEmpty(formValues?.service)}
 								>
-									{formValues?.services && formValues?.services.length > 1 ? t('loc:Pridať služby') : t('loc:Pridať službu')}
+									{formValues?.services && formValues?.services.length > 1 ? STRINGS(t).addRecord(t('loc:služby')) : STRINGS(t).addRecord(t('loc:službu'))}
 								</Button>
 							</div>
 							<FieldArray

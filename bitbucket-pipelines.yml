@@ -9,8 +9,9 @@ options:
 
 definitions:
   services:
-    docker:
-      memory: 2048
+    "custom-docker":
+      image: docker:latest
+      memory: 3096
   caches:
     cypress: $HOME/.cache/Cypress
     frontend: $BITBUCKET_CLONE_DIR/node_modules
@@ -96,7 +97,7 @@ pipelines:
               - cypress
               - frontend
             services:
-              - "docker"
+              - "custom-docker"
             script:
               - git clone git@bitbucket.org:GoodRequest/notino_backend.git
               - echo "127.0.0.1 s3.eu-central-1.localhost" >> /etc/hosts

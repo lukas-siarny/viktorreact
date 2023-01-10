@@ -9,7 +9,7 @@ options:
 
 definitions:
   services:
-      # Define the default Docker service with 2 GB memory limit
+      # Define the default Docker service with 1 GB memory limit
     docker:
         memory: 1024
     docker-3g:

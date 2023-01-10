@@ -85,6 +85,7 @@ pipelines:
   custom:
     e2e:
         - step:
+            max-time: 40
             name: run Test
             image: cypress/browsers:node16.13.0-chrome95-ff94
             caches:

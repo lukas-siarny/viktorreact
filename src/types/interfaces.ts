@@ -162,6 +162,8 @@ export interface ICalendarReservationForm {
 	revertEvent?: () => void
 	enableCalendarRender?: () => void
 	updateFromCalendar?: boolean
+	noteFromB2CCustomer?: string
+	reservationData?: CalendarEvent['reservationData']
 }
 export interface ICalendarEventForm {
 	employee: ISelectOptionItem
@@ -711,7 +713,7 @@ export interface IEventExtenedProps {
 
 export interface IResourceEmployee {
 	id: string
-	image: string,
+	image: string
 	name: string
 	isTimeOff: boolean
 	color?: string

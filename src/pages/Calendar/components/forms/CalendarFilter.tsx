@@ -27,6 +27,7 @@ import { ICalendarFilter } from '../../../../types/interfaces'
 type ComponentProps = {
 	parentPath: string
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
+	loadingData?: boolean
 }
 
 type Props = InjectedFormProps<ICalendarFilter, ComponentProps> & ComponentProps
@@ -41,31 +42,33 @@ enum PANEL_KEY {
 interface IFilterEmptyState {
 	buttonLabel: string
 	buttonOnClick: () => void
+	buttonDissabled?: boolean
 	icon: React.ReactNode
 	infoMessage: string
 }
 
 const FilterEmptyState: FC<IFilterEmptyState> = (props) => {
-	const { buttonLabel, buttonOnClick, icon, infoMessage } = props
+	const { buttonLabel, buttonOnClick, icon, infoMessage, buttonDissabled } = props
 
 	return (
 		<div className={'w-full flex flex-col justify-center items-center gap-2 text-center mt-4'}>
 			{icon}
 			{infoMessage}
-			<Button type={'primary'} htmlType={'button'} className={'noti-btn'} onClick={buttonOnClick}>
+			<Button type={'primary'} htmlType={'button'} className={'noti-btn'} onClick={buttonOnClick} disabled={buttonDissabled}>
 				{buttonLabel}
 			</Button>
 		</div>
 	)
 }
 
-const checkboxOptionRender = (option: any, checked?: boolean) => {
+const checkboxOptionRender = (option: any, checked?: boolean, disabled?: boolean) => {
 	const { color, value } = option || {}
 
 	return (
-		<div className={cx('nc-checkbox-group-checkbox', { checked })}>
+		<div className={cx('nc-checkbox-group-checkbox', { checked, disabled })}>
 			<input type='checkbox' className='checkbox-input' value={value} />
-			<div className={'checker'} style={{ borderColor: color, backgroundColor: checked ? color : undefined }}>
+			<div className={'checker'}>
+				<span className={'background-color'} style={{ borderColor: color, backgroundColor: checked ? color : undefined }} />
 				<span className={'checkbox-focus'} style={{ boxShadow: `0px 0px 4px 2px ${color || '#000'}`, border: `1px solid ${color}` }} />
 			</div>
 			{option?.label}
@@ -73,7 +76,7 @@ const checkboxOptionRender = (option: any, checked?: boolean) => {
 	)
 }
 const CalendarFilter = (props: Props) => {
-	const { handleSubmit, parentPath, eventsViewType } = props
+	const { handleSubmit, parentPath, eventsViewType, loadingData } = props
 	const [t] = useTranslation()
 
 	const services = useSelector((state: RootState) => state.service.services)
@@ -100,6 +103,7 @@ const CalendarFilter = (props: Props) => {
 								hideChecker
 								optionRender={checkboxOptionRender}
 								nullAsEmptyValue
+								disabled={loadingData}
 							/>
 						) : (
 							<FilterEmptyState
@@ -107,6 +111,7 @@ const CalendarFilter = (props: Props) => {
 								infoMessage={t('loc:V salóne zatiaľ nemáte pridaných žiadnych zamestnancov')}
 								buttonLabel={t('loc:Pridať zamestnancov')}
 								buttonOnClick={() => history.push(`${parentPath}${t('paths:employees')}`)}
+								buttonDissabled={loadingData}
 							/>
 						)}
 					</Spin>
@@ -121,7 +126,7 @@ const CalendarFilter = (props: Props) => {
 								options={services?.categoriesOptions}
 								size={'small'}
 								rounded
-								disabled={eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF}
+								disabled={eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF || loadingData}
 								nullAsEmptyValue
 							/>
 						) : (
@@ -130,6 +135,7 @@ const CalendarFilter = (props: Props) => {
 								infoMessage={t('loc:V salóne zatiaľ nemáte priradené žiadne služby')}
 								buttonLabel={t('loc:Priradiť služby')}
 								buttonOnClick={() => history.push(`${parentPath}${t('paths:industries-and-services')}`)}
+								buttonDissabled={loadingData}
 							/>
 						)}
 					</Spin>

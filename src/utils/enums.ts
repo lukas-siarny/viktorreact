@@ -626,6 +626,10 @@ export const CALENDAR_COMMON_SETTINGS = {
 	EVENT_CONSTRAINT: {
 		startTime: '00:00',
 		endTime: '23:59'
+	},
+	SELECT_CONSTRAINT: {
+		startTime: '00:00',
+		endTime: '24:00'
 	}
 }
 

@@ -16,7 +16,7 @@ type ComponentProps = {
 	size: 'small' | 'medium' | 'large'
 	rounded?: boolean
 	hideChecker?: boolean
-	optionRender?: (option: any, isChecked: boolean) => React.ReactNode
+	optionRender?: (option: any, isChecked: boolean, disabled?: boolean) => React.ReactNode
 	nullAsEmptyValue?: boolean
 }
 
@@ -48,13 +48,13 @@ const CheckboxGroupField = (props: Props) => {
 		if (typeof option === 'string') {
 			return (
 				<Checkbox key={option} value={option} disabled={disabled} className={cx({ horizontal })}>
-					{optionRender ? optionRender(option, isChecked) : option}
+					{optionRender ? optionRender(option, isChecked, disabled) : option}
 				</Checkbox>
 			)
 		}
 		return (
 			<Checkbox disabled={option.disabled || disabled} key={`${option.value}`} value={option.value} className={cx({ horizontal })}>
-				{optionRender ? optionRender(option, isChecked) : option.label}
+				{optionRender ? optionRender(option, isChecked, disabled) : option.label}
 			</Checkbox>
 		)
 	})

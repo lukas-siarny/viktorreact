@@ -52,14 +52,16 @@ const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 	}
 }
 
-const SwitchViewButton: FC<{ label: string; isSmallerDevice: boolean; className: string; onClick: () => void }> = (props) => {
-	const { label, isSmallerDevice, className, onClick } = props
+const disabledDatePickerFnc = () => true
 
-	const timmedLabel = isSmallerDevice ? label.slice(0, 1) : label
+const SwitchViewButton: FC<{ label: string; isSmallerDevice: boolean; className: string; onClick: () => void; disabled?: boolean }> = (props) => {
+	const { label, isSmallerDevice, className, onClick, disabled } = props
+
+	const trimmedLabel = isSmallerDevice ? label.slice(0, 1) : label
 
 	const button = (
-		<button type={'button'} className={className} onClick={onClick}>
-			{timmedLabel}
+		<button type={'button'} className={className} onClick={onClick} disabled={disabled}>
+			{trimmedLabel}
 		</button>
 	)
 
@@ -83,6 +85,7 @@ type Props = {
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	setEventsViewType: (newViewType: CALENDAR_EVENTS_VIEW_TYPE) => void
 	enabledSalonReservations?: boolean
+	loadingData?: boolean
 }
 
 const CalendarHeader: FC<Props> = (props) => {
@@ -98,7 +101,8 @@ const CalendarHeader: FC<Props> = (props) => {
 		eventsViewType,
 		setEventsViewType,
 		onAddEvent,
-		enabledSalonReservations
+		enabledSalonReservations,
+		loadingData
 	} = props
 
 	const [currentDate, setCurrentDate] = useState(selectedDate)
@@ -158,6 +162,8 @@ const CalendarHeader: FC<Props> = (props) => {
 					onSelect={() => setIsCalendarOpen(false)}
 					showToday={false}
 					className={'nc-header-date-picker'}
+					disabledDate={loadingData ? disabledDatePickerFnc : undefined}
+					// disabled={loadingData}
 				/>
 			</div>
 		)
@@ -203,6 +209,7 @@ const CalendarHeader: FC<Props> = (props) => {
 						className={'p-0'}
 						options={calendarViewOptions}
 						dropdownMatchSelectWidth={false}
+						disabled={loadingData}
 					/>
 				</div>
 				<div className={'nc-button-group'}>
@@ -211,20 +218,32 @@ const CalendarHeader: FC<Props> = (props) => {
 						className={cx({ active: eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION })}
 						onClick={() => setEventsViewType(CALENDAR_EVENTS_VIEW_TYPE.RESERVATION)}
 						isSmallerDevice={isSmallerDevice}
+						disabled={loadingData}
 					/>
 					<SwitchViewButton
 						label={t('loc:Shifts')}
 						className={cx({ active: eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF })}
 						onClick={() => setEventsViewType(CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF)}
 						isSmallerDevice={isSmallerDevice}
+						disabled={loadingData}
 					/>
 				</div>
 			</div>
 			<div className={'nav-middle'}>
-				<button type={'button'} className={'nc-button w-8 mr-2'} onClick={() => changeSelectedDate(currentDate, CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT, true)}>
+				<button
+					type={'button'}
+					className={'nc-button w-8 mr-2'}
+					onClick={() => changeSelectedDate(currentDate, CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT, true)}
+					disabled={loadingData}
+				>
 					<ChevronLeft />
 				</button>
-				<button type={'button'} className={'nc-button w-8'} onClick={() => changeSelectedDate(currentDate, CALENDAR_SET_NEW_DATE.FIND_START_ADD, true)}>
+				<button
+					type={'button'}
+					className={'nc-button w-8'}
+					onClick={() => changeSelectedDate(currentDate, CALENDAR_SET_NEW_DATE.FIND_START_ADD, true)}
+					disabled={loadingData}
+				>
 					<ChevronLeft style={{ transform: 'rotate(180deg)' }} />
 				</button>
 				<Dropdown
@@ -244,13 +263,14 @@ const CalendarHeader: FC<Props> = (props) => {
 					type={'button'}
 					className={cx('nc-button', { active: dayjs(getSelectedDateForCalendar(calendarView, selectedDate)).isToday() })}
 					onClick={() => changeSelectedDate(dayjs())}
+					disabled={loadingData}
 				>
 					{t('loc:Dnes')}
 				</button>
 			</div>
 			<div className={'nav-right'}>
 				<Button type={'primary'} onClick={onAddEvent} icon={<CreateIcon />} disabled={!enabledSalonReservations} htmlType={'button'} className={'noti-btn'}>
-					{STRINGS(t).addRecord('')}
+					{STRINGS(t).addRecord('').trim()}
 				</Button>
 			</div>
 		</Header>

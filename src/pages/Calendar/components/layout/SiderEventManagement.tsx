@@ -63,6 +63,7 @@ type Props = {
 	calendarApi?: CalendarApi
 	changeCalendarDate: (newDate: string) => void
 	phonePrefix?: string
+	loadingData?: boolean
 }
 
 const SiderEventManagement: FC<Props> = (props) => {
@@ -78,7 +79,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 		calendarApi,
 		newEventData,
 		changeCalendarDate,
-		phonePrefix
+		phonePrefix,
+		loadingData
 	} = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -293,10 +295,19 @@ const SiderEventManagement: FC<Props> = (props) => {
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-				return <EventForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
+				return <EventForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} loadingData={loadingData} />
 			case CALENDAR_EVENT_TYPE.RESERVATION:
 			default:
-				return <ReservationForm salonID={salonID} eventId={eventId} phonePrefix={phonePrefix} searchEmployes={searchEmployes} onSubmit={handleSubmitReservation} />
+				return (
+					<ReservationForm
+						salonID={salonID}
+						eventId={eventId}
+						phonePrefix={phonePrefix}
+						searchEmployes={searchEmployes}
+						onSubmit={handleSubmitReservation}
+						loadingData={loadingData}
+					/>
+				)
 		}
 	}
 

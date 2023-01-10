@@ -601,7 +601,6 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 			display: flex
 			justify-content: space-between
 			align-items: center
-			padding: 0 4px 0 8px
 			height: 100%
 			overflow: hidden
 			gap: 4px
@@ -609,13 +608,53 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 				text-overflow: ellipsis
 				white-space: nowrap
 				overflow: hidden
+		&.reservation
+			.event-content
+				padding: 0 4px 0 8px
 			.time
 				color: $textColor-notino-grayDark
+		&.shift,
+		&.timeoff,
+		&.break
+			box-shadow: none
+			&:not(.edit)
+				outline: none
+			.event-content
+				padding: 0 4px
+				.event-info
+					display: flex
+					align-items: center
+					min-width: 0
+					gap: 4px
+					svg
+						flex: 0 0 auto
+						width: 16px
+						height: 16px
+					.title
+						color: $textColor-notino-black
+						font-weight: 400
+					.color
+						width: 6px
+						height: 6px
+						flex: 0 0 auto
+						border-radius: 50%
+				.duration
+					white-space: nowrap
+		&.timeoff,
+		&.break
+			background: url("../../assets/images/gray-bold-background-pattern.png")
+			&:not(.edit)
+				outline: 1px solid $borderColor-notino-grayLight
 	&.is-day-events-popover
 		box-shadow: none
-		border-radius: 0
-		.event-accent
+		&.reservation
 			border-radius: 0
+			.event-accent
+				border-radius: 0
+		&.timeoff,
+		&.break
+			&:not(.edit)
+				outline: none
 
 	// reservation state specific styles
 	&.reservation
@@ -720,6 +759,7 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 	display: block
 	width: 100%
 	height: 100%
+	pointer-events: none
 .nc-month-more-button
 	pointer-events: auto
 	position: relative

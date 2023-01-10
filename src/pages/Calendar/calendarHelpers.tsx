@@ -36,12 +36,13 @@ import {
 } from '../../utils/enums'
 import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
 
-export const getCalendarMonthFullRangeDates = (selectedMonthFirstDay: string) => {
+export const getCalendarMonthFullRangeDates = (selectedMonthFirstDay: string | dayjs.Dayjs, format: string | false = CALENDAR_DATE_FORMAT.QUERY) => {
 	// v mesacnom view je potrebne vyplnit cely kalendar - 7 x 6 buniek (od PO - NE) = 42
-	const queryParamsStart = dayjs(selectedMonthFirstDay).startOf('week').format(CALENDAR_DATE_FORMAT.QUERY)
+	const queryParamsStart = dayjs(selectedMonthFirstDay).startOf('week')
+	const queryParamsEnd = dayjs(queryParamsStart).add(41, 'days')
 	return {
-		queryParamsStart,
-		queryParamsEnd: dayjs(queryParamsStart).add(41, 'days').format(CALENDAR_DATE_FORMAT.QUERY)
+		queryParamsStart: format ? queryParamsStart.format(format) : queryParamsStart,
+		queryParamsEnd: format ? queryParamsEnd.format(CALENDAR_DATE_FORMAT.QUERY) : queryParamsEnd
 	}
 }
 
@@ -81,6 +82,9 @@ export const getDayEventsSource = (dayEvents: ICalendarDayEvents, virtualEvent: 
 }
 
 export const compareDayEventsDates = (aStart: string, aEnd: string, bStart: string, bEnd: string, aId: string, bId: string) => {
+	if (aId.startsWith(NEW_ID_PREFIX) || bId.startsWith(NEW_ID_PREFIX)) {
+		return -1
+	}
 	if (dayjs(aStart).isBefore(bStart)) {
 		return -1
 	}
@@ -143,11 +147,20 @@ export const getSelectedDateRange = (view: CALENDAR_VIEW, selectedDate: string, 
 		case CALENDAR_VIEW.MONTH: {
 			const start = dayjs(selectedDate).startOf('month')
 			const end = dayjs(selectedDate).endOf('month')
-			result = {
-				...result,
-				view,
-				start: monthViewFull ? start.startOf('week') : start,
-				end: monthViewFull ? end.endOf('week').add(1, 'week') : end
+			if (monthViewFull) {
+				const { queryParamsStart, queryParamsEnd } = getCalendarMonthFullRangeDates(start, false)
+				result = {
+					...result,
+					start: queryParamsStart as dayjs.Dayjs,
+					end: queryParamsEnd as dayjs.Dayjs
+				}
+			} else {
+				result = {
+					...result,
+					view,
+					start,
+					end
+				}
 			}
 			break
 		}
@@ -669,13 +682,13 @@ type DayMap = {
 }
 
 export const DAY_MAP: DayMap = {
-	[DAY.SATURDAY]: 0,
+	[DAY.SUNDAY]: 0,
 	[DAY.MONDAY]: 1,
 	[DAY.TUESDAY]: 2,
 	[DAY.WEDNESDAY]: 3,
 	[DAY.THURSDAY]: 4,
 	[DAY.FRIDAY]: 5,
-	[DAY.SUNDAY]: 6
+	[DAY.SATURDAY]: 6
 }
 
 export type OpeningHoursMap = {
@@ -716,10 +729,10 @@ export const getBusinessHours = (openingHoursMap: OpeningHoursMap): BusinessHour
 	}
 }
 
-const composeMonthViewReservations = (reservations: ICalendarEventsPayload['data']) => {
+export const composeMonthViewEvents = (events: ICalendarEventsPayload['data']) => {
 	const composedEvents: any[] = []
 
-	reservations?.forEach((event) => {
+	events?.forEach((event) => {
 		const employeeID = event.employee?.id
 		const start = event.startDateTime
 		const end = event.endDateTime
@@ -730,18 +743,4 @@ const composeMonthViewReservations = (reservations: ICalendarEventsPayload['data
 	})
 
 	return composedEvents
-}
-
-export const composeMonthViewEvents = (
-	eventTypeFilter: CALENDAR_EVENTS_VIEW_TYPE,
-	reservations: ICalendarEventsPayload['data'],
-	shiftsTimeOffs: ICalendarEventsPayload['data']
-) => {
-	switch (eventTypeFilter) {
-		case CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF:
-			return []
-		case CALENDAR_EVENTS_VIEW_TYPE.RESERVATION:
-		default:
-			return composeMonthViewReservations(reservations)
-	}
 }

@@ -65,8 +65,7 @@ import {
 	INewCalendarEvent,
 	ReservationPopoverData,
 	PopoverTriggerPosition,
-	SalonSubPageProps,
-	CalendarEvent
+	SalonSubPageProps
 } from '../../types/interfaces'
 
 // atoms
@@ -135,6 +134,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	) as CALENDAR_EVENTS_VIEW_TYPE
 
 	const [currentRange, setCurrentRange] = useState(getSelectedDateRange(validCalendarView, validSelectedDate))
+	const [monthlyViewFullRange, setMonthlyViewFullRange] = useState(getSelectedDateRange(validCalendarView, validSelectedDate, true))
 	const [confirmModalData, setConfirmModalData] = useState<ConfirmModalData>(null)
 
 	const clearConfirmModal = () => setConfirmModalData(null)
@@ -202,7 +202,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const initialScroll = useRef(false)
 	const scrollToDateTimeout = useRef<any>(null)
 
-	const setNewSelectedDate = (newDate: string) => {
+	const setNewSelectedDate = (newDate: string, monthViewFullRange = false) => {
 		// query sa nastavi vzdy ked sa zmeni datum
 		setQuery({ ...query, date: newDate })
 
@@ -213,8 +213,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 
 		// current range sa nastavi len vtedy, ked sa novy datum nenachadza v aktualnom rangi
-		if (!isDateInRange(currentRange.start, currentRange.end, newDate)) {
+		if (!isDateInRange(monthViewFullRange ? monthlyViewFullRange.start : currentRange.start, monthViewFullRange ? monthlyViewFullRange.start : currentRange.end, newDate)) {
 			setCurrentRange(getSelectedDateRange(validCalendarView, newDate))
+			if (validCalendarView === CALENDAR_VIEW.MONTH) {
+				setMonthlyViewFullRange(getSelectedDateRange(validCalendarView, newDate))
+			}
 			initialScroll.current = false
 			return
 		}
@@ -779,9 +782,16 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						}
 					}}
 					onAddEvent={handleAddEvent}
+					loadingData={loadingData}
 				/>
 				<Layout hasSider className={'noti-calendar-main-section'}>
-					<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} parentPath={parentPath} eventsViewType={validEventsViewType} />
+					<SiderFilter
+						collapsed={siderFilterCollapsed}
+						handleSubmit={handleSubmitFilter}
+						parentPath={parentPath}
+						eventsViewType={validEventsViewType}
+						loadingData={loadingData}
+					/>
 					<CalendarContent
 						salonID={salonID}
 						enabledSalonReservations={selectedSalon?.settings?.enabledReservations}

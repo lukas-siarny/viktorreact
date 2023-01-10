@@ -40,13 +40,14 @@ type ComponentProps = {
 	searchEmployes: (search: string, page: number) => Promise<any>
 	eventId?: string | null
 	phonePrefix?: string
+	loadingData?: boolean
 }
 const formName = FORM.CALENDAR_RESERVATION_FORM
 
 type Props = InjectedFormProps<ICalendarReservationForm, ComponentProps> & ComponentProps
 
 const ReservationForm: FC<Props> = (props) => {
-	const { handleSubmit, salonID, searchEmployes, eventId, phonePrefix, pristine, submitting } = props
+	const { handleSubmit, salonID, searchEmployes, eventId, phonePrefix, pristine, submitting, loadingData } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [visibleCustomerModal, setVisibleCustomerModal] = useState(false)
@@ -54,7 +55,7 @@ const ReservationForm: FC<Props> = (props) => {
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 
 	// NOTE: pristine pouzivat len pri UPDATE eventu a pri CREATE povlit akciu vzdy
-	const disabledSubmitButton = !!(eventId && pristine) || submitting
+	const disabledSubmitButton = !!(eventId && pristine) || submitting || loadingData
 	const searchServices = useCallback(async () => {
 		try {
 			const { data } = await getReq('/api/b2b/admin/services/', {

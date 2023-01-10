@@ -59,7 +59,7 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 		return <BackgroundEvent eventType={eventType as CALENDAR_EVENT_TYPE} />
 	}
 
-	const diff = dayjs(start).diff(end, 'minutes')
+	const diff = dayjs(end).diff(start, 'minutes')
 	const timeText = getTimeText(start, end, calendarView === CALENDAR_VIEW.MONTH)
 	const resourceId = ''
 	const originalEventData = {

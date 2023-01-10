@@ -1,9 +1,9 @@
 import React, { useMemo, FC, useRef, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import cx from 'classnames'
 
 // full calendar
-import FullCalendar, { DayCellContentArg, DayHeaderContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { DateSelectArg, DayCellContentArg, DayHeaderContentArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
@@ -14,13 +14,21 @@ import { t } from 'i18next'
 import { CalendarEvent, ICalendarView, PopoverTriggerPosition } from '../../../../types/interfaces'
 
 // enums
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_DAY_EVENTS_SHOWN, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
-import { composeMonthViewEvents, eventAllow, getBusinessHours, getOpnenigHoursMap, OpeningHoursMap, sortCalendarEvents } from '../../calendarHelpers'
+import {
+	CALENDAR_COMMON_SETTINGS,
+	CALENDAR_DATE_FORMAT,
+	CALENDAR_DAY_EVENTS_SHOWN,
+	CALENDAR_EVENTS_VIEW_TYPE,
+	CALENDAR_VIEW,
+	DEFAULT_DATE_INIT_FORMAT,
+	DEFAULT_TIME_FORMAT
+} from '../../../../utils/enums'
+import { compareDayEventsDates, composeMonthViewEvents, eventAllow, getBusinessHours, getOpnenigHoursMap, OpeningHoursMap, sortCalendarEvents } from '../../calendarHelpers'
 import { RootState } from '../../../../reducers'
 import eventContent from '../../eventContent'
 
 // assets
-import { IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
+import { clearEvent, IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 const getCurrentDayEventsCount = (selectedDate: string, dayEvents: CalendarEvent[], virtualEvent: IVirtualEventPayload['data'] | null): number => {
 	let eventsCount = dayEvents.reduce((count, event) => {
@@ -80,7 +88,6 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 
 	const dayNumerRef = useRef<HTMLSpanElement | null>(null)
 
-	// const eventsCount = dayEventsMap[cellDate]
 	const eventsCount = getCurrentDayEventsCount(cellDate, currentDayEvents || [], virtualEvent)
 
 	useEffect(() => {
@@ -158,27 +165,69 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 	return <span ref={dayNumerRef}>{dayNumberText}</span>
 }
 
+const eventOrder = (a: any, b: any) => {
+	// console.log({ a, b })
+	const aStart = a.eventData?.originalEvent?.startDateTime || a.eventData?.startDateTime
+	const aEnd = a.eventData?.originalEvent?.endDateTime || a.eventData?.endDateTime
+	const bStart = b.eventData?.originalEvent?.startDateTime || b.eventData?.startDateTime
+	const bEnd = b.eventData?.originalEvent?.endDateTime || b.eventData?.endDateTime
+	return compareDayEventsDates(aStart, aEnd, bStart, bEnd, a.id, b.id)
+}
+
 interface ICalendarMonthView extends ICalendarView {
 	salonID: string
 	onShowMore: (date: string, position?: PopoverTriggerPosition) => void
 }
 
 const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarMonthView>((props, ref) => {
-	const { selectedDate, eventsViewType, reservations, shiftsTimeOffs, onEditEvent, onReservationClick, salonID, onShowMore, onEventChange, onEventChangeStart, virtualEvent } =
-		props
+	const {
+		selectedDate,
+		eventsViewType,
+		reservations,
+		shiftsTimeOffs,
+		onEditEvent,
+		onReservationClick,
+		salonID,
+		onShowMore,
+		onEventChange,
+		onEventChangeStart,
+		virtualEvent,
+		onAddEvent,
+		setEventManagement
+	} = props
 
 	const openingHours = useSelector((state: RootState) => state.selectedSalon.selectedSalon).data?.openingHours
 
-	// const dispatch = useDispatch()
+	const dispatch = useDispatch()
 
 	const events = useMemo(() => {
-		const data = composeMonthViewEvents(eventsViewType, reservations || [], shiftsTimeOffs)
+		const data = composeMonthViewEvents(eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION ? reservations : shiftsTimeOffs)
 		// ak je virtualEvent definovany, zaradi sa do zdroja eventov pre Calendar
-		return virtualEvent ? sortCalendarEvents([...data, virtualEvent]) : data
+		return virtualEvent ? [...data, virtualEvent] : data
 	}, [eventsViewType, reservations, shiftsTimeOffs, virtualEvent])
 
 	const openingHoursMap = useMemo(() => getOpnenigHoursMap(openingHours), [openingHours])
 	const businessHours = useMemo(() => getBusinessHours(openingHoursMap), [openingHoursMap])
+
+	/**
+	 * Spracuje input z calendara click/select a vytvori z neho init data, ktore vyuzije form v SiderEventManager
+	 */
+	const handleNewEvent = (event: DateSelectArg) => {
+		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
+		dispatch(clearEvent())
+		setEventManagement(undefined)
+
+		onAddEvent({
+			date: dayjs(event.startStr).format(DEFAULT_DATE_INIT_FORMAT),
+			timeFrom: dayjs(event.startStr).format(DEFAULT_TIME_FORMAT),
+			timeTo: dayjs(event.endStr).format(DEFAULT_TIME_FORMAT),
+			employee: {
+				value: '',
+				key: '',
+				label: ''
+			}
+		})
+	}
 
 	return (
 		<div className={'nc-calendar-wrapper'}>
@@ -204,6 +253,9 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 				firstDay={1}
 				dayMaxEvents={5}
 				dayMinWidth={120}
+				eventOrderStrict
+				eventOrder={eventOrder as any}
+				selectConstraint={CALENDAR_COMMON_SETTINGS.SELECT_CONSTRAINT}
 				// data sources
 				events={events}
 				businessHours={businessHours}
@@ -220,6 +272,7 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 					if (onEventChange) onEventChange(CALENDAR_VIEW.DAY, arg)
 				}}
 				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
+				select={handleNewEvent}
 			/>
 		</div>
 	)

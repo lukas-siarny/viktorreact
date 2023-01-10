@@ -4,6 +4,8 @@ import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { isEmpty, uniqueId, startsWith } from 'lodash'
 import Scroll from 'react-scroll'
+import { createMultiDayEvents } from '../../reducers/calendar/calendarActions'
+import { IVirtualEventPayload } from '../../reducers/virtualEvent/virtualEventActions'
 import { Paths } from '../../types/api'
 
 // types
@@ -17,7 +19,8 @@ import {
 	IWeekViewResourceExtenedProps,
 	IDayViewResourceExtenedProps,
 	RawOpeningHours,
-	ICalendarEventContent
+	ICalendarEventContent,
+	ICalendarDayEvents
 } from '../../types/interfaces'
 
 // utils
@@ -32,6 +35,50 @@ import {
 	NEW_ID_PREFIX
 } from '../../utils/enums'
 import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
+
+export const getCalendarMonthFullRangeDates = (selectedMonthFirstDay: string) => {
+	// v mesacnom view je potrebne vyplnit cely kalendar - 7 x 6 buniek (od PO - NE) = 42
+	const queryParamsStart = dayjs(selectedMonthFirstDay).startOf('week').format(CALENDAR_DATE_FORMAT.QUERY)
+	return {
+		queryParamsStart,
+		queryParamsEnd: dayjs(queryParamsStart).add(41, 'days').format(CALENDAR_DATE_FORMAT.QUERY)
+	}
+}
+
+export const getDayEventsSource = (dayEvents: ICalendarDayEvents, virtualEvent: IVirtualEventPayload['data'] | null, currentRangeStart: string) => {
+	if (!virtualEvent) {
+		return dayEvents
+	}
+
+	let newDayEvents: ICalendarDayEvents = {
+		...dayEvents
+	}
+	Object.entries({ ...dayEvents }).some(([date, events]) => {
+		const originalEVentsLength = events.length
+		const filteredArray = events.filter((event) => {
+			return event.id !== virtualEvent?.event?.id
+		})
+		if (originalEVentsLength !== filteredArray.length) {
+			newDayEvents = {
+				...newDayEvents,
+				[date]: filteredArray
+			}
+			return true
+		}
+
+		return false
+	})
+	const { queryParamsStart, queryParamsEnd } = getCalendarMonthFullRangeDates(currentRangeStart)
+	// createMultiDayEvents(virtualEvent?.event.eventData, queryParamsStart, queryParamsEnd, false, newDayEvents)
+	const newEventData = virtualEvent.event.eventData
+	if (newEventData.start.date) {
+		return {
+			...newDayEvents,
+			[newEventData.start.date]: [...newDayEvents[newEventData.start.date], newEventData]
+		}
+	}
+	return newDayEvents
+}
 
 export const compareDayEventsDates = (aStart: string, aEnd: string, bStart: string, bEnd: string, aId: string, bId: string) => {
 	if (dayjs(aStart).isBefore(bStart)) {

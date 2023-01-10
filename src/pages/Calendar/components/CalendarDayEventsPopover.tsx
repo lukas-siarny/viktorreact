@@ -21,15 +21,23 @@ import { sortCalendarEvents } from '../calendarHelpers'
 
 // hooks
 import useKeyUp from '../../../hooks/useKeyUp'
+import { IVirtualEventPayload } from '../../../reducers/virtualEvent/virtualEventActions'
 
 const getEventsForPopover = (
+	date: string | null,
 	events: CalendarEvent[],
+	virtualEvent: IVirtualEventPayload['data'] | null,
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void,
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
 ): ICalendarEventContent[] => {
-	return sortCalendarEvents(
-		events.map((event) => {
-			return {
+	const newEvents = (events || []).reduce((editedEvents: ICalendarEventContent[], event) => {
+		if (event.id === virtualEvent?.id) {
+			return editedEvents
+		}
+
+		return [
+			...editedEvents,
+			{
 				id: event.id,
 				start: (event.originalEvent?.startDateTime || event.startDateTime) as unknown as Date,
 				end: (event.originalEvent?.endDateTime || event.endDateTime) as unknown as Date,
@@ -40,8 +48,25 @@ const getEventsForPopover = (
 				onReservationClick,
 				eventData: event
 			}
+		]
+	}, [])
+
+	const virtualEventStartTime = virtualEvent?.event?.eventData?.start.date
+	const virtualEventEndTime = virtualEvent?.event?.eventData?.end.date
+	if (virtualEventStartTime && virtualEventEndTime && date && dayjs(date).isBetween(virtualEventStartTime, virtualEventEndTime, 'day', '[]')) {
+		newEvents.push({
+			id: virtualEvent.id,
+			start: (virtualEvent.event.start as Date) || null,
+			end: (virtualEvent.event.end as Date) || null,
+			backgroundColor: virtualEvent?.event?.eventData?.employee?.color,
+			eventDisplayType: CALENDAR_EVENT_DISPLAY_TYPE.REGULAR,
+			calendarView: CALENDAR_VIEW.MONTH,
+			onEditEvent,
+			onReservationClick,
+			eventData: virtualEvent?.event?.eventData
 		})
-	)
+	}
+	return sortCalendarEvents(newEvents)
 }
 
 type ContentProps = {
@@ -104,6 +129,9 @@ const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
 	const overlayClassName = `nc-event-popover-overlay_${date || ''}`
 
 	const dayEvents = useSelector((state: RootState) => state.calendar.dayEvents)
+
+	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
+
 	const cellDateEvents = date ? dayEvents[date] : []
 
 	const handleClosePopover = useCallback(() => setIsOpen(false), [setIsOpen])
@@ -136,7 +164,7 @@ const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
 
 	useKeyUp('Escape', isOpen ? handleClosePopover : undefined)
 
-	const eventsForPopover = getEventsForPopover(cellDateEvents, onEditEvent, onReservationClick)
+	const eventsForPopover = getEventsForPopover(date, cellDateEvents, virtualEvent, onEditEvent, onReservationClick)
 
 	return (
 		<Popover

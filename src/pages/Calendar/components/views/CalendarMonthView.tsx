@@ -1,10 +1,9 @@
-import React, { useMemo, useCallback, FC, useRef, useEffect, useState, memo } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useMemo, FC, useRef, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import cx from 'classnames'
-import { DelimitedArrayParam, useQueryParams } from 'use-query-params'
 
 // full calendar
-import FullCalendar, { DayCellContentArg, DayHeaderContentArg, MoreLinkContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { DayCellContentArg, DayHeaderContentArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
@@ -12,35 +11,32 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 // types
 import dayjs from 'dayjs'
 import { t } from 'i18next'
-import { Spin } from 'antd'
-import { CalendarEvent, ICalendarDayEvents, ICalendarDayEventsMap, ICalendarEventContent, ICalendarView, PopoverTriggerPosition } from '../../../../types/interfaces'
+import { CalendarEvent, ICalendarView, PopoverTriggerPosition } from '../../../../types/interfaces'
 
 // enums
-import {
-	CALENDAR_COMMON_SETTINGS,
-	CALENDAR_DATE_FORMAT,
-	CALENDAR_DAY_EVENTS_SHOWN,
-	CALENDAR_EVENTS_VIEW_TYPE,
-	CALENDAR_EVENT_DISPLAY_TYPE,
-	CALENDAR_EVENT_TYPE,
-	CALENDAR_VIEW
-} from '../../../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_DAY_EVENTS_SHOWN, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
 import { composeMonthViewEvents, eventAllow, getBusinessHours, getOpnenigHoursMap, OpeningHoursMap, sortCalendarEvents } from '../../calendarHelpers'
 import { RootState } from '../../../../reducers'
 import eventContent from '../../eventContent'
 
 // assets
-import { ReactComponent as ChevronDownIcon } from '../../../../assets/icons/chevron-down-currentColor-12.svg'
-import { getDayDetialEvents } from '../../../../reducers/calendar/calendarActions'
-import { ReactComponent as LoadingIcon } from '../../../../assets/icons/loading-icon.svg'
+import { IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
 
-const getDayEventsMap = (dayEvents: ICalendarDayEvents): ICalendarDayEventsMap => {
-	return Object.entries(dayEvents).reduce((dayEventsMap, [date, events]) => {
-		return {
-			...dayEventsMap,
-			[date]: Math.max(events.length - CALENDAR_DAY_EVENTS_SHOWN, 0)
+const getCurrentDayEventsCount = (selectedDate: string, dayEvents: CalendarEvent[], virtualEvent: IVirtualEventPayload['data'] | null): number => {
+	let eventsCount = dayEvents.reduce((count, event) => {
+		if (event.id === virtualEvent?.id) {
+			return count
 		}
-	}, {} as ICalendarDayEventsMap)
+
+		return count + 1
+	}, 0)
+
+	const virtualEventStartTime = virtualEvent?.event?.eventData?.start.date
+	const virtualEventEndTime = virtualEvent?.event?.eventData?.end.date
+	if (virtualEventStartTime && virtualEventEndTime && selectedDate && dayjs(selectedDate).isBetween(virtualEventStartTime, virtualEventEndTime, 'day', '[]')) {
+		eventsCount += 1
+	}
+	return Math.max(eventsCount - CALENDAR_DAY_EVENTS_SHOWN, 0)
 }
 
 const getLinkMoreText = (eventsCount?: number) => {
@@ -75,14 +71,17 @@ interface IDayCellContent {
 const DayCellContent: FC<IDayCellContent> = (props) => {
 	const { onShowMore, date, dayNumberText } = props
 
+	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
 	const dayEvents = useSelector((state: RootState) => state.calendar.dayEvents)
-	const dayEventsMap = useMemo(() => getDayEventsMap(dayEvents), [dayEvents])
 
 	const cellDate = dayjs(date).format(CALENDAR_DATE_FORMAT.QUERY)
 
+	const currentDayEvents = dayEvents[cellDate]
+
 	const dayNumerRef = useRef<HTMLSpanElement | null>(null)
 
-	const eventsCount = dayEventsMap[cellDate]
+	// const eventsCount = dayEventsMap[cellDate]
+	const eventsCount = getCurrentDayEventsCount(cellDate, currentDayEvents || [], virtualEvent)
 
 	useEffect(() => {
 		if (dayNumerRef.current) {

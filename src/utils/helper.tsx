@@ -1025,12 +1025,13 @@ export const getAssignedUserLabel = (assignedUser?: Paths.GetApiB2BAdminSalons.R
 	}
 }
 // NOTE: treba dodrziat tento shape aby spravne fungoval isPristine selector pre selecty typu labelInValue (maju BE vyhladavanie)
-export const initializeLabelInValueSelect = (key: string | number, label: string, disabled?: boolean, title?: boolean) => {
+export const initializeLabelInValueSelect = (key: string | number, label: string, extra?: any, disabled?: boolean, title?: boolean) => {
 	return {
 		disabled,
 		title,
 		key,
 		value: key,
-		label
+		label,
+		extra
 	}
 }

@@ -606,11 +606,11 @@ export enum TIME_STATS_SOURCE_TYPE {
 	MONTH = 'MONTH',
 	YEAR = 'YEAR'
 }
-
 // CALENDAR ENUMS
 export const CALENDAR_COMMON_SETTINGS = {
+	// add condition for cypress E2E errors
 	// eslint-disable-next-line no-underscore-dangle
-	LICENSE_KEY: `${window.__RUNTIME_CONFIG__.FULLCALENDAR_LICENSE_KEY}`,
+	LICENSE_KEY: window.__RUNTIME_CONFIG__ && window.__RUNTIME_CONFIG__.FULLCALENDAR_LICENSE_KEY ? `${window.__RUNTIME_CONFIG__.FULLCALENDAR_LICENSE_KEY}` : '',
 	TIME_ZONE: 'local',
 	TIME_FORMAT: {
 		hour: '2-digit',

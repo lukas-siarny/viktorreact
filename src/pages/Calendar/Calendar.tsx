@@ -134,8 +134,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	) as CALENDAR_EVENTS_VIEW_TYPE
 
 	const [currentRange, setCurrentRange] = useState(getSelectedDateRange(validCalendarView, validSelectedDate))
+	// tento state je relevantny len pre mesacne view
 	const [monthlyViewFullRange, setMonthlyViewFullRange] = useState(getSelectedDateRange(validCalendarView, validSelectedDate, true))
-	const [selectedMonth, setSelectedMonth] = useState(getSelectedDateRange(validCalendarView, validSelectedDate).selectedMonth)
+
 	const [confirmModalData, setConfirmModalData] = useState<ConfirmModalData>(null)
 
 	const clearConfirmModal = () => setConfirmModalData(null)
@@ -204,6 +205,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const initialScroll = useRef(false)
 	const scrollToDateTimeout = useRef<any>(null)
 
+	const setRangeInformationForMonthlyView = (date: string) => {
+		setMonthlyViewFullRange(getSelectedDateRange(CALENDAR_VIEW.MONTH, date, true))
+	}
+
 	const setNewSelectedDate = (newDate: string, monthViewFullRange = false) => {
 		// query sa nastavi vzdy ked sa zmeni datum
 		setQuery({ ...query, date: newDate })
@@ -214,10 +219,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		if (!isDateInRange(monthViewFullRange ? monthlyViewFullRange.start : currentRange.start, monthViewFullRange ? monthlyViewFullRange.end : currentRange.end, newDate)) {
 			setCurrentRange(getSelectedDateRange(validCalendarView, newDate))
 
-			setSelectedMonth(getSelectedDateRange(validCalendarView, newDate, monthViewFullRange).selectedMonth)
-
 			if (validCalendarView === CALENDAR_VIEW.MONTH) {
-				setMonthlyViewFullRange(getSelectedDateRange(validCalendarView, newDate, true))
+				setRangeInformationForMonthlyView(newDate)
 			}
 			initialScroll.current = false
 
@@ -248,6 +251,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const setCalendarView = (newView: CALENDAR_VIEW) => {
 		setQuery({ ...query, view: newView })
 		setCurrentRange(getSelectedDateRange(newView, query.date))
+		if (newView === CALENDAR_VIEW.MONTH) {
+			setRangeInformationForMonthlyView(query.date)
+		}
 	}
 
 	const updateCalendarSize = useRef(() => calendarRefs?.current?.[validCalendarView]?.getApi()?.updateSize())
@@ -786,7 +792,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					}}
 					onAddEvent={handleAddEvent}
 					loadingData={isLoading}
-					selectedMonth={selectedMonth}
+					selectedMonth={monthlyViewFullRange.selectedMonth}
 				/>
 				<Layout hasSider className={'noti-calendar-main-section'}>
 					<SiderFilter

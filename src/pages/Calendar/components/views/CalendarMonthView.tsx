@@ -201,12 +201,6 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 	const handleNewEvent = (event: DateSelectArg) => {
 		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
 		const eventStart = dayjs(event.startStr)
-		/* const eventStart = dayjs(event.startStr)
-		const virtualEventStart = virtualEvent?.event?.eventData?.start?.date
-		if (virtualEventStart && !dayjs(virtualEventStart).isSame(eventStart)) {
-			dispatch(clearEvent())
-			setEventManagement(undefined)
-		} */
 		dispatch(clearEvent())
 		setEventManagement(undefined)
 

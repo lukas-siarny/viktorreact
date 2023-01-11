@@ -5,7 +5,7 @@ import cx from 'classnames'
 import { useTranslation } from 'react-i18next'
 
 // utils
-import { CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../utils/enums'
+import { CALENDAR_EVENT_TYPE, CALENDAR_VIEW, NEW_ID_PREFIX } from '../../../utils/enums'
 import { parseTimeFromMinutes } from '../calendarHelpers'
 
 // assets
@@ -113,7 +113,8 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 				})
 			)}
 			onClick={() => {
-				if (originalEventData?.id) {
+				// NOTE: prevent proti kliknutiu na virutalny event rezervacie neotvori sa popover
+				if (originalEventData?.id && !originalEventData.id?.startsWith(NEW_ID_PREFIX)) {
 					onEditEvent(eventType, originalEventData.id)
 				}
 			}}

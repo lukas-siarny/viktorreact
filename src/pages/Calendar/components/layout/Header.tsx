@@ -28,6 +28,10 @@ import useMedia from '../../../../hooks/useMedia'
 // utils
 import { getSelectedDateForCalendar } from '../../calendarHelpers'
 
+const getDateFromSelectedMonth = (selectedMonth: { year: number; month: number }) => {
+	return dayjs(new Date(selectedMonth.year, selectedMonth.month, 1))
+}
+
 const formatHeaderDate = (date: string, view: CALENDAR_VIEW, selectedMonth: { year: number; month: number }) => {
 	switch (view) {
 		case CALENDAR_VIEW.WEEK: {
@@ -44,8 +48,7 @@ const formatHeaderDate = (date: string, view: CALENDAR_VIEW, selectedMonth: { ye
 			return `${firstDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_START)} - ${lastDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_END)}`
 		}
 		case CALENDAR_VIEW.MONTH: {
-			const { month, year } = selectedMonth
-			return dayjs(new Date(year, month, 1)).format(CALENDAR_DATE_FORMAT.HEADER_MONTH)
+			return getDateFromSelectedMonth(selectedMonth).format(CALENDAR_DATE_FORMAT.HEADER_MONTH)
 		}
 		case CALENDAR_VIEW.DAY:
 		default:
@@ -131,12 +134,12 @@ const CalendarHeader: FC<Props> = (props) => {
 
 		switch (type) {
 			case CALENDAR_SET_NEW_DATE.FIND_START_ADD:
-				newQueryDate = dayjs(newDate)
+				newQueryDate = dayjs(calendarView === CALENDAR_VIEW.MONTH ? getDateFromSelectedMonth(selectedMonth) : newDate)
 					.startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
 					.add(1, calendarView.toLowerCase() as dayjs.OpUnitType)
 				break
 			case CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT:
-				newQueryDate = dayjs(newDate)
+				newQueryDate = dayjs(calendarView === CALENDAR_VIEW.MONTH ? getDateFromSelectedMonth(selectedMonth) : newDate)
 					.startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
 					.subtract(1, calendarView.toLowerCase() as dayjs.OpUnitType)
 				break

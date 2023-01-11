@@ -4,7 +4,6 @@ import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { isEmpty, uniqueId, startsWith } from 'lodash'
 import Scroll from 'react-scroll'
-import { createMultiDayEvents } from '../../reducers/calendar/calendarActions'
 import { IVirtualEventPayload } from '../../reducers/virtualEvent/virtualEventActions'
 import { Paths } from '../../types/api'
 
@@ -19,7 +18,6 @@ import {
 	IWeekViewResourceExtenedProps,
 	IDayViewResourceExtenedProps,
 	RawOpeningHours,
-	ICalendarEventContent,
 	ICalendarDayEvents
 } from '../../types/interfaces'
 
@@ -130,7 +128,7 @@ export const getSelectedDateRange = (view: CALENDAR_VIEW, selectedDate: string, 
 		end: dayjs(selectedDate).endOf('day'),
 		selectedMonth: {
 			month: dayjs(selectedDate).month(),
-			year: dayjs(selectedDate).month()
+			year: dayjs(selectedDate).year()
 		}
 	}
 
@@ -737,7 +735,10 @@ export const composeMonthViewEvents = (events: ICalendarEventsPayload['data']) =
 		const end = event.endDateTime
 
 		if (employeeID && dayjs(start).isBefore(end)) {
-			composedEvents.push(createBaseEvent(event, employeeID, start, end))
+			composedEvents.push({
+				...createBaseEvent(event, employeeID, start, end),
+				groupId: event?.calendarBulkEvent?.id
+			})
 		}
 	})
 

@@ -109,7 +109,7 @@ pipelines:
               - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               - chmod +x /usr/local/bin/docker-compose
               - docker-compose up -d
-			  # run npm install for tunning tests after docker compose for saving time
+              # run npm install for tunning tests after docker compose for saving time
               - npm install --legacy-peer-deps
               # needs to check/implement -> how to hold context of wait-for-it for DB service in backend
               - sleep 10

@@ -12,7 +12,7 @@ definitions:
       # Define the default Docker service with 1 GB memory limit
     docker:
         memory: 1024
-    docker-3g:
+    docker-6g:
         # You will have to define the service type if it is docker
         type: docker
         memory: 6144

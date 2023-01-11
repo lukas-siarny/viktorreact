@@ -17,7 +17,7 @@ import { CalendarEvent, ICalendarDayEventsPopover, ICalendarEventContent, Popove
 
 /// utils
 import { CALENDAR_EVENT_DISPLAY_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../utils/enums'
-import { sortCalendarEvents } from '../calendarHelpers'
+import { compareAndSortDayEvents } from '../calendarHelpers'
 
 // hooks
 import useKeyUp from '../../../hooks/useKeyUp'
@@ -66,7 +66,16 @@ const getEventsForPopover = (
 			eventData: virtualEvent?.event?.eventData
 		})
 	}
-	return sortCalendarEvents(newEvents)
+	return newEvents.sort((a, b) => {
+		if (!a.eventData || !b.eventData) {
+			return 0
+		}
+		const aStart = a.eventData.originalEvent?.startDateTime || a.eventData.startDateTime
+		const aEnd = a.eventData.originalEvent?.endDateTime || a.eventData.endDateTime
+		const bStart = b.eventData.originalEvent?.startDateTime || b.eventData.startDateTime
+		const bEnd = b.eventData.originalEvent?.endDateTime || b.eventData.endDateTime
+		return compareAndSortDayEvents(aStart, aEnd, bStart, bEnd, a.id, b.id)
+	})
 }
 
 type ContentProps = {

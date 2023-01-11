@@ -23,7 +23,6 @@ import CalendarEmptyState from '../CalendarEmptyState'
 
 // types
 import {
-	CalendarEvent,
 	Employees,
 	ICalendarEventForm,
 	ICalendarReservationForm,
@@ -187,8 +186,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			updateFromCalendar: true
 		}
 
-		if (!employee?.id) {
+		if (!employee?.id && calendarView !== CALENDAR_VIEW.MONTH) {
 			// ak nahodou nemam employeeId tak to vrati na povodne miesto
+			// v mesacnom view sa nerzoduluju eventy podla resourcov, ale su vsetky v kopce.. cize v tomto pripade tuto podmineku treba ignorovat
 			revertEvent()
 			return
 		}
@@ -199,13 +199,15 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				dispatch(change(formName, 'date', date))
 				dispatch(change(formName, 'timeFrom', timeFrom))
 				dispatch(change(formName, 'timeTo', timeTo))
-				dispatch(
-					change(formName, 'employee', {
-						value: employee?.id as string,
-						key: employee?.id as string,
-						label: newResource ? newResourceExtendedProps?.employee?.name : eventData?.employee.email
-					})
-				)
+				if (calendarView !== CALENDAR_VIEW.MONTH) {
+					dispatch(
+						change(formName, 'employee', {
+							value: employee?.id as string,
+							key: employee?.id as string,
+							label: newResource ? newResourceExtendedProps?.employee?.name : eventData?.employee.email
+						})
+					)
+				}
 			})
 			setDisableRender(false)
 			return

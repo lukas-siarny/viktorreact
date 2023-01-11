@@ -23,7 +23,7 @@ import {
 	DEFAULT_DATE_INIT_FORMAT,
 	DEFAULT_TIME_FORMAT
 } from '../../../../utils/enums'
-import { compareDayEventsDates, composeMonthViewEvents, eventAllow, getBusinessHours, getOpnenigHoursMap, OpeningHoursMap, sortCalendarEvents } from '../../calendarHelpers'
+import { compareAndSortDayEvents, composeMonthViewEvents, eventAllow, getBusinessHours, getOpnenigHoursMap, OpeningHoursMap } from '../../calendarHelpers'
 import { RootState } from '../../../../reducers'
 import eventContent from '../../eventContent'
 
@@ -94,19 +94,6 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 		if (dayNumerRef.current) {
 			const dayGridDayBottom = dayNumerRef.current.parentNode?.parentNode?.parentNode?.querySelector('.fc-daygrid-day-events')?.querySelector('.fc-daygrid-day-bottom')
 			if (dayGridDayBottom) {
-				/*
-					const existingLink = dayGridDayBottom.querySelector('.nc-more-link')
-					if (existingLink) {
-						if (!eventsCount) {
-							existingLink.remove()
-						} else {
-							const button = existingLink.querySelector('.nc-month-more-button')
-							if (button) {
-								button.innerHTML = getLinkMoreText(eventsCount)
-							}
-					}
-				*/
-
 				const existingButton = dayGridDayBottom.querySelector('.nc-month-more-button')
 				if (existingButton) {
 					if (!eventsCount) {
@@ -166,12 +153,11 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 }
 
 const eventOrder = (a: any, b: any) => {
-	// console.log({ a, b })
 	const aStart = a.eventData?.originalEvent?.startDateTime || a.eventData?.startDateTime
 	const aEnd = a.eventData?.originalEvent?.endDateTime || a.eventData?.endDateTime
 	const bStart = b.eventData?.originalEvent?.startDateTime || b.eventData?.startDateTime
 	const bEnd = b.eventData?.originalEvent?.endDateTime || b.eventData?.endDateTime
-	return compareDayEventsDates(aStart, aEnd, bStart, bEnd, a.id, b.id)
+	return compareAndSortDayEvents(aStart, aEnd, bStart, bEnd, a.id, b.id)
 }
 
 interface ICalendarMonthView extends ICalendarView {
@@ -214,12 +200,19 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 	 */
 	const handleNewEvent = (event: DateSelectArg) => {
 		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
+		const eventStart = dayjs(event.startStr)
+		/* const eventStart = dayjs(event.startStr)
+		const virtualEventStart = virtualEvent?.event?.eventData?.start?.date
+		if (virtualEventStart && !dayjs(virtualEventStart).isSame(eventStart)) {
+			dispatch(clearEvent())
+			setEventManagement(undefined)
+		} */
 		dispatch(clearEvent())
 		setEventManagement(undefined)
 
 		onAddEvent({
-			date: dayjs(event.startStr).format(DEFAULT_DATE_INIT_FORMAT),
-			timeFrom: dayjs(event.startStr).format(DEFAULT_TIME_FORMAT),
+			date: eventStart.format(DEFAULT_DATE_INIT_FORMAT),
+			timeFrom: eventStart.format(DEFAULT_TIME_FORMAT),
 			timeTo: dayjs(event.endStr).format(DEFAULT_TIME_FORMAT),
 			employee: {
 				value: '',
@@ -269,7 +262,9 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 				// handlers
 				eventAllow={eventAllow}
 				eventDrop={(arg) => {
-					if (onEventChange) onEventChange(CALENDAR_VIEW.DAY, arg)
+					if (onEventChange) {
+						onEventChange(CALENDAR_VIEW.MONTH, arg)
+					}
 				}}
 				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
 				select={handleNewEvent}

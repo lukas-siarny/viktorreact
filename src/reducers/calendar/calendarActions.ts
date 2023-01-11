@@ -17,7 +17,7 @@ import { getDateTime, normalizeQueryParams } from '../../utils/helper'
 
 import { clearEvent } from '../virtualEvent/virtualEventActions'
 import fakeEvents from './events'
-import { compareDayEventsDates } from '../../pages/Calendar/calendarHelpers'
+import { compareAndSortDayEvents } from '../../pages/Calendar/calendarHelpers'
 
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
 
@@ -224,7 +224,7 @@ export const getCalendarEvents =
 
 			let eventsWithDayLimit: CalendarEvent[] = []
 			if (eventsDayLimit) {
-				const sortedEvents = [...editedEvents].sort((a, b) => compareDayEventsDates(a.startDateTime, a.endDateTime, b.startDateTime, b.endDateTime, a.id, b.id))
+				const sortedEvents = [...editedEvents].sort((a, b) => compareAndSortDayEvents(a.startDateTime, a.endDateTime, b.startDateTime, b.endDateTime, a.id, b.id))
 
 				// multidnove eventy pre popover je potrebne rozdelit na jednotlive dni
 				const dividedEventsIntoDays: ICalendarDayEvents = {}

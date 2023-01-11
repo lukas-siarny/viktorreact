@@ -413,10 +413,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 		// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastav pracovnu zmenu
 		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-			dispatch(destroy(FORM.CALENDAR_RESERVATION_FORM))
 			setEventManagement(CALENDAR_EVENT_TYPE.RESERVATION)
 		} else {
-			dispatch(destroy(FORM.CALENDAR_EVENT_FORM))
 			setEventManagement(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
 		}
 	}

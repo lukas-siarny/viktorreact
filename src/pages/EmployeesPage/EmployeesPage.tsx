@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row, Spin } from 'antd'
@@ -6,6 +6,7 @@ import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
+import { arrayMoveImmutable } from 'array-move'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -16,7 +17,7 @@ import TooltipEllipsis from '../../components/TooltipEllipsis'
 import UserAvatar from '../../components/AvatarComponents'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, NOTIFICATION_TYPE } from '../../utils/enums'
 import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
@@ -32,6 +33,7 @@ import { IBreadcrumbs, SalonSubPageProps, Columns } from '../../types/interfaces
 // assets
 import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-offline.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question.svg'
+import { patchReq } from '../../utils/request'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -198,6 +200,27 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		]
 	}
 
+	const handleDrop = useCallback(
+		async (oldIndex: number, newIndex: number) => {
+			console.log('called')
+			// try {
+			// 	const itemID: any = stationsTableData?.[oldIndex]?.station?.id
+			// 	if (itemID && oldIndex !== newIndex) {
+			// 		// NOTE: Prevent voci prebliku pred volanim BE
+			// 		const reorderedData = arrayMoveImmutable(stationsTableData, oldIndex, newIndex).filter((item) => !!item)
+			// 		dispatch(reorderTableAction(reorderedData))
+			// 		await patchReq(`/api/v1/lines/${lineID}/stations/${itemID}/reorder`, undefined, { order: newIndex }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			// 	}
+			// } catch (e) {
+			// 	// eslint-disable-next-line no-console
+			// 	console.error(e)
+			// }
+			// // NOTE: V pripade ak BE reorder zlyha pouzi povodne radenie
+			// fetchStations()
+		},
+		[dispatch]
+	)
+
 	return (
 		<>
 			<Row>
@@ -222,7 +245,6 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 									/>
 								)}
 							/>
-
 							<CustomTable
 								className='table-fixed'
 								onChange={onChangeTable}
@@ -230,6 +252,8 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 								dataSource={employees?.data?.employees}
 								rowClassName={'clickable-row'}
 								rowKey='id'
+								dndEnabled
+								dndDrop={handleDrop}
 								twoToneRows
 								scroll={{ x: 800 }}
 								onRow={(record) => ({

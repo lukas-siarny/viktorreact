@@ -11,7 +11,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
-import { composeDayViewEvents, composeDayViewResources, eventAllow, getTimeScrollId } from '../../calendarHelpers'
+import { composeDayViewEvents, composeDayViewResources, getTimeScrollId, eventAllow } from '../../calendarHelpers'
 import eventContent from '../../eventContent'
 
 // types

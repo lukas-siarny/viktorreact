@@ -1,13 +1,29 @@
-import { EventDragStartArg, EventResizeDoneArg, EventResizeStartArg } from '@fullcalendar/interaction'
+import { EventResizeDoneArg, EventDragStopArg, EventResizeStopArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
-import { EventDropArg, EventInput } from '@fullcalendar/react'
+import { EventDropArg, EventInput, DateSpanApi, EventApi } from '@fullcalendar/react'
 
 // utils
 import {
-	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT,
-	CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, DAY,
-	SERVICE_TYPE, RESERVATION_STATE, RESERVATION_PAYMENT_METHOD, CONFIRM_MODAL_DATA_TYPE, CALENDAR_EVENT_DISPLAY_TYPE
+	GENDER,
+	MSG_TYPE,
+	LANGUAGE,
+	PERMISSION,
+	SALON_PERMISSION,
+	CALENDAR_EVENTS_VIEW_TYPE,
+	SALON_STATES,
+	EVERY_REPEAT,
+	CALENDAR_EVENT_TYPE,
+	CALENDAR_VIEW,
+	CONFIRM_BULK,
+	RS_NOTIFICATION,
+	RS_NOTIFICATION_TYPE,
+	DAY,
+	SERVICE_TYPE,
+	RESERVATION_STATE,
+	RESERVATION_PAYMENT_METHOD,
+	CONFIRM_MODAL_DATA_TYPE,
+	CALENDAR_EVENT_DISPLAY_TYPE
 } from '../utils/enums'
 
 // types
@@ -98,7 +114,7 @@ export interface ISalonForm {
 	nameSelect: { key: string; label: string | null; value: string | null } | null
 	aboutUsFirst: string | null
 	state?: SALON_STATES
-	sourceOfPremium?: string,
+	sourceOfPremium?: string
 	openingHours: OpeningHours
 	sameOpenHoursOverWeek: boolean
 	openOverWeekend: boolean
@@ -639,6 +655,7 @@ export interface ICalendarView {
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
 	onEventChange?: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
 	onEventChangeStart?: () => void
+	onEventChangeStop: (args: EventDragStopArg | EventResizeStopArg) => void
 	loading?: boolean
 	virtualEvent?: EventInput
 	disableRender?: boolean

@@ -100,11 +100,11 @@ export const compareAndSortDayEvents = (aStart: string, aEnd: string, bStart: st
 	return 0
 }
 
-export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null) => {
+export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null, calendarView?: CALENDAR_VIEW) => {
 	const extenedProps: IEventExtenedProps | undefined = movingEvent?.extendedProps
 	const { eventData } = extenedProps || {}
 
-	if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION || startsWith(movingEvent?.id, NEW_ID_PREFIX)) {
+	if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION || startsWith(movingEvent?.id, NEW_ID_PREFIX) || calendarView === CALENDAR_VIEW.MONTH) {
 		return true
 	}
 

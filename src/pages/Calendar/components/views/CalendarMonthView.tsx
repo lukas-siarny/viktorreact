@@ -23,7 +23,7 @@ import {
 	DEFAULT_DATE_INIT_FORMAT,
 	DEFAULT_TIME_FORMAT
 } from '../../../../utils/enums'
-import { compareAndSortDayEvents, composeMonthViewEvents, eventAllow, getBusinessHours, getOpnenigHoursMap, OpeningHoursMap } from '../../calendarHelpers'
+import { compareAndSortDayEvents, composeMonthViewEvents, getBusinessHours, getOpnenigHoursMap, OpeningHoursMap, eventAllow } from '../../calendarHelpers'
 import { RootState } from '../../../../reducers'
 import eventContent from '../../eventContent'
 
@@ -93,18 +93,17 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 	useEffect(() => {
 		if (dayNumerRef.current) {
 			const dayGridDayBottom = dayNumerRef.current.parentNode?.parentNode?.parentNode?.querySelector('.fc-daygrid-day-events')?.querySelector('.fc-daygrid-day-bottom')
+
 			if (dayGridDayBottom) {
-				const existingButton = dayGridDayBottom.querySelector('.nc-month-more-button')
-				if (existingButton) {
+				const existingButton = dayGridDayBottom?.querySelector('.nc-month-more-button')
+				const textMore = existingButton?.querySelector('.text-more')
+				if (existingButton && textMore) {
 					if (!eventsCount) {
-						existingButton.innerHTML = ''
+						textMore.innerHTML = ''
 						existingButton.classList.add('nc-month-more-button-hidden')
 					} else {
-						const textMore = existingButton.querySelector('.text-more')
-						if (textMore) {
-							textMore.innerHTML = getLinkMoreText(eventsCount)
-							existingButton.classList.remove('nc-month-more-button-hidden')
-						}
+						textMore.innerHTML = getLinkMoreText(eventsCount)
+						existingButton.classList.remove('nc-month-more-button-hidden')
 					}
 				} else if (eventsCount) {
 					const handleShowMore = async (clientRect: DOMRect) => {
@@ -129,7 +128,7 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 
 					const span = document.createElement('span')
 					span.className = 'text-more'
-					span.innerHTML = getLinkMoreText(eventsCount)
+					span.innerHTML = getLinkMoreText(eventsCount || 0)
 
 					const arrow = document.createElement('span')
 					arrow.className = 'arrow'
@@ -179,7 +178,8 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 		onEventChangeStart,
 		virtualEvent,
 		onAddEvent,
-		setEventManagement
+		setEventManagement,
+		onEventChangeStop
 	} = props
 
 	const openingHours = useSelector((state: RootState) => state.selectedSalon.selectedSalon).data?.openingHours
@@ -260,13 +260,15 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 				eventContent={(data) => eventContent(data, CALENDAR_VIEW.MONTH, onEditEvent, onReservationClick)}
 				moreLinkContent={null}
 				// handlers
-				eventAllow={eventAllow}
+				eventAllow={(dropInfo, movingEvent) => eventAllow(dropInfo, movingEvent, CALENDAR_VIEW.MONTH)}
 				eventDrop={(arg) => {
 					if (onEventChange) {
 						onEventChange(CALENDAR_VIEW.MONTH, arg)
 					}
 				}}
 				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
+				eventDragStop={onEventChangeStop}
+				eventResizeStop={onEventChangeStop}
 				select={handleNewEvent}
 			/>
 		</div>

@@ -12,7 +12,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
-import { composeWeekResources, composeWeekViewEvents, eventAllow, getWeekDayResourceID } from '../../calendarHelpers'
+import { composeWeekResources, composeWeekViewEvents, getWeekDayResourceID, eventAllow } from '../../calendarHelpers'
 import { getDateTime } from '../../../../utils/helper'
 import eventContent from '../../eventContent'
 

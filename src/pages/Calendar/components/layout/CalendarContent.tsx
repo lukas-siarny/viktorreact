@@ -1,6 +1,6 @@
 import React, { useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { batch, useDispatch, useSelector } from 'react-redux'
-import { Spin } from 'antd'
+import { notification, Spin } from 'antd'
 import { Content } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
@@ -9,8 +9,8 @@ import { startsWith } from 'lodash'
 import { DelimitedArrayParam, useQueryParams } from 'use-query-params'
 
 // fullcalendar
-import { EventResizeDoneArg } from '@fullcalendar/interaction'
-import FullCalendar, { EventDropArg } from '@fullcalendar/react'
+import { EventDragStopArg, EventResizeDoneArg, EventResizeStopArg } from '@fullcalendar/interaction'
+import FullCalendar, { DateSpanApi, EventApi, EventDropArg } from '@fullcalendar/react'
 
 // enums
 import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, FORM, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
@@ -51,7 +51,7 @@ type Props = {
 	parentPath: string
 	salonID: string
 	onShowMore: (date: string, position?: PopoverTriggerPosition) => void
-} & ICalendarView
+} & Omit<ICalendarView, 'onEventChangeStop'>
 
 export type CalendarRefs = {
 	[CALENDAR_VIEW.DAY]?: InstanceType<typeof FullCalendar> | null
@@ -96,6 +96,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	})
 
 	const [disableRender, setDisableRender] = useState(false)
+	// const [dontEnableRenderImmediatelyAfterChange, setDontEnableRenderImmediatelyAfterChange] = useState(false)
 
 	useImperativeHandle(ref, () => ({
 		[CALENDAR_VIEW.DAY]: dayView?.current,
@@ -148,12 +149,26 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		const { event } = arg
 		const { start, end } = event
 		const { newResource } = arg as EventDropArg
+		const newResourceExtendedProps = newResource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
 		const eventExtenedProps = (event.extendedProps as IEventExtenedProps) || {}
 		const eventData = eventExtenedProps?.eventData
-		const newResourceExtendedProps = newResource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
 		const eventId = eventData?.id
-
 		const calendarBulkEventID = eventData?.calendarBulkEvent?.id
+
+		const newEmployeeId = newResourceExtendedProps?.employee?.id || eventExtenedProps?.eventData?.employee?.id
+		const currentEmployeeId = eventExtenedProps?.eventData?.employee?.id
+
+		// TODO: toto nebudeme potrebovat ak sa pouziva eventAllow
+		if (calendarView !== CALENDAR_VIEW.MONTH && eventData?.eventType !== CALENDAR_EVENT_TYPE.RESERVATION && !startsWith(event.id, NEW_ID_PREFIX)) {
+			if (newEmployeeId !== currentEmployeeId) {
+				notification.warning({
+					message: t('loc:Upozornenie'),
+					description: t('loc:Udalosť typu {{ eventType }} nie je možné preradiť na iného zamestnanca!', { eventType: 'Prestávka' })
+				})
+				revertEvent()
+				return
+			}
+		}
 
 		// zatial predpokladame, ze nebudu viacdnove eventy - takze start a end date by mal byt rovnaky
 		const startDajys = dayjs(start)
@@ -213,6 +228,10 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			return
 		}
 
+		// v tomto pripade sa opat povoli rendrovanie az po tom co sa spravi request
+		// a nie hned po dropStop / resizeStop
+		// setDontEnableRenderImmediatelyAfterChange(true)
+
 		if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
 			const customerId = eventData.customer?.id
 			const serviceId = eventData.service?.id
@@ -221,6 +240,18 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			return
 		}
 		handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm)
+	}
+
+	/* const enbaleRender = () => {
+		console.log('aaa', dontEnableRenderImmediatelyAfterChange)
+		if (!dontEnableRenderImmediatelyAfterChange) {
+			setDisableRender(false)
+		}
+	} */
+
+	const onEventChangeStop = () => {
+		// setTimeout(() => enbaleRender(), 1000)
+		setDisableRender(false)
 	}
 
 	const onEventChangeStart = () => {
@@ -301,6 +332,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					onEventChange={onEventChange}
 					onEventChangeStart={onEventChangeStart}
 					onShowMore={onShowMore}
+					onEventChangeStop={onEventChangeStop}
 				/>
 			)
 		}
@@ -325,6 +357,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					onEventChange={onEventChange}
 					onEventChangeStart={onEventChangeStart}
 					updateCalendarSize={() => weekView?.current?.getApi().updateSize()}
+					onEventChangeStop={onEventChangeStop}
 				/>
 			)
 		}
@@ -346,6 +379,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				onReservationClick={onReservationClick}
 				onEventChange={onEventChange}
 				onEventChangeStart={onEventChangeStart}
+				onEventChangeStop={onEventChangeStop}
 			/>
 		)
 	}

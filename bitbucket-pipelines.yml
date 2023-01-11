@@ -15,7 +15,7 @@ definitions:
     docker-3g:
         # You will have to define the service type if it is docker
         type: docker
-        memory: 3096
+        memory: 6144
   caches:
     cypress: $HOME/.cache/Cypress
     frontend: $BITBUCKET_CLONE_DIR/node_modules
@@ -93,7 +93,7 @@ pipelines:
   custom:
     e2e:
         - step:
-            max-time: 40
+            max-time: 30
             size: 2x
             name: run Test
             image: cypress/browsers:node16.13.0-chrome95-ff94
@@ -101,17 +101,18 @@ pipelines:
               - cypress
               - frontend
             services:
-              - docker-3g
+              - docker-6g
             script:
               - git clone git@bitbucket.org:GoodRequest/notino_backend.git
               - echo "127.0.0.1 s3.eu-central-1.localhost" >> /etc/hosts
               - echo "127.0.0.1 sample-bucket.s3.eu-central-1.localhost" >> /etc/hosts
               - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               - chmod +x /usr/local/bin/docker-compose
-              - npm install --legacy-peer-deps
               - docker-compose up -d
+			  # run npm install for tunning tests after docker compose for saving time
+              - npm install --legacy-peer-deps
               # needs to check/implement -> how to hold context of wait-for-it for DB service in backend
-              - sleep 105
+              - sleep 10
               - mkdir docker_logs && docker-compose logs --no-color >& docker_logs/logs.txt
               - npm run test:CI
             artifacts: # store cypress images, videos and BE logs

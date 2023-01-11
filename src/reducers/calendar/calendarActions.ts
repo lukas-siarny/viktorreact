@@ -192,7 +192,14 @@ export const getCalendarEvents =
 				reservationStates: queryParams.reservationStates
 			}
 
-			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams)
+			const { data } = await getReq(
+				'/api/b2b/admin/salons/{salonID}/calendar-events/',
+				normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams,
+				undefined,
+				undefined,
+				undefined,
+				true
+			)
 
 			// employees sa mapuju do eventov
 			const employees = {} as any

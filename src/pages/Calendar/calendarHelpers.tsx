@@ -140,13 +140,24 @@ export const getSelectedDateRange = (view: CALENDAR_VIEW, selectedDate: string, 
 	let result = {
 		view,
 		start: dayjs(selectedDate).startOf('day'),
-		end: dayjs(selectedDate).endOf('day')
+		end: dayjs(selectedDate).endOf('day'),
+		selectedMonth: {
+			month: dayjs(selectedDate).month(),
+			year: dayjs(selectedDate).month()
+		}
 	}
 
 	switch (view) {
 		case CALENDAR_VIEW.MONTH: {
 			const start = dayjs(selectedDate).startOf('month')
 			const end = dayjs(selectedDate).endOf('month')
+			result = {
+				...result,
+				selectedMonth: {
+					month: start.month(),
+					year: start.year()
+				}
+			}
 			if (monthViewFull) {
 				const { queryParamsStart, queryParamsEnd } = getCalendarMonthFullRangeDates(start, false)
 				result = {
@@ -180,7 +191,8 @@ export const getSelectedDateRange = (view: CALENDAR_VIEW, selectedDate: string, 
 	return {
 		view: result.view,
 		start: format ? result.start.format(format) : result.start.toISOString(),
-		end: format ? result.end.format(format) : result.end.toISOString()
+		end: format ? result.end.format(format) : result.end.toISOString(),
+		selectedMonth: result.selectedMonth
 	}
 }
 

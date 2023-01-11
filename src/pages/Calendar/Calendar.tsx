@@ -135,6 +135,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const [currentRange, setCurrentRange] = useState(getSelectedDateRange(validCalendarView, validSelectedDate))
 	const [monthlyViewFullRange, setMonthlyViewFullRange] = useState(getSelectedDateRange(validCalendarView, validSelectedDate, true))
+	const [selectedMonth, setSelectedMonth] = useState(getSelectedDateRange(validCalendarView, validSelectedDate).selectedMonth)
 	const [confirmModalData, setConfirmModalData] = useState<ConfirmModalData>(null)
 
 	const clearConfirmModal = () => setConfirmModalData(null)
@@ -198,6 +199,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || isUpdatingEvent
+	const isLoading = isRefreshingEvents ? false : loadingData
 
 	const initialScroll = useRef(false)
 	const scrollToDateTimeout = useRef<any>(null)
@@ -208,17 +210,20 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 		const newCalendarDate = getSelectedDateForCalendar(validCalendarView, newDate)
 
-		if (!dayjs(newCalendarDate).isSame(calendarRefs?.current?.[validCalendarView]?.getApi()?.getDate())) {
-			calendarRefs?.current?.[validCalendarView]?.getApi()?.gotoDate(newCalendarDate)
-		}
-
 		// current range sa nastavi len vtedy, ked sa novy datum nenachadza v aktualnom rangi
-		if (!isDateInRange(monthViewFullRange ? monthlyViewFullRange.start : currentRange.start, monthViewFullRange ? monthlyViewFullRange.start : currentRange.end, newDate)) {
+		if (!isDateInRange(monthViewFullRange ? monthlyViewFullRange.start : currentRange.start, monthViewFullRange ? monthlyViewFullRange.end : currentRange.end, newDate)) {
 			setCurrentRange(getSelectedDateRange(validCalendarView, newDate))
+
+			setSelectedMonth(getSelectedDateRange(validCalendarView, newDate, monthViewFullRange).selectedMonth)
+
 			if (validCalendarView === CALENDAR_VIEW.MONTH) {
-				setMonthlyViewFullRange(getSelectedDateRange(validCalendarView, newDate))
+				setMonthlyViewFullRange(getSelectedDateRange(validCalendarView, newDate, true))
 			}
 			initialScroll.current = false
+
+			if (!dayjs(newCalendarDate).isSame(calendarRefs?.current?.[validCalendarView]?.getApi()?.getDate())) {
+				calendarRefs?.current?.[validCalendarView]?.getApi()?.gotoDate(newCalendarDate)
+			}
 			return
 		}
 		// ak sa novy datum nachadza v rovnakom rangi ako predtym, tak sa v tyzdenom view len zascrolluje na jeho poziciu
@@ -782,7 +787,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						}
 					}}
 					onAddEvent={handleAddEvent}
-					loadingData={loadingData}
+					loadingData={isLoading}
+					selectedMonth={selectedMonth}
 				/>
 				<Layout hasSider className={'noti-calendar-main-section'}>
 					<SiderFilter
@@ -790,7 +796,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						handleSubmit={handleSubmitFilter}
 						parentPath={parentPath}
 						eventsViewType={validEventsViewType}
-						loadingData={loadingData}
+						loadingData={isLoading}
 					/>
 					<CalendarContent
 						salonID={salonID}
@@ -801,7 +807,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						view={validCalendarView}
 						reservations={reservations?.data || []}
 						shiftsTimeOffs={shiftsTimeOffs?.data || []}
-						loading={isRefreshingEvents ? false : loadingData}
+						loading={isLoading}
 						eventsViewType={validEventsViewType}
 						employees={filteredEmployees() || []}
 						parentPath={parentPath}
@@ -835,6 +841,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							newEventData={newEventData}
 							calendarApi={calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()}
 							changeCalendarDate={setNewSelectedDate}
+							loadingData={isLoading}
 						/>
 					)}
 				</Layout>
@@ -847,7 +854,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				onEditEvent={onEditEvent}
 				onReservationClick={onReservationClick}
 				isHidden={dayEventsPopover.isHidden}
-				isLoading={isRefreshingEvents ? false : loadingData}
+				isLoading={isLoading}
 				isUpdatingEvent={isUpdatingEvent}
 			/>
 			<CalendarReservationPopover

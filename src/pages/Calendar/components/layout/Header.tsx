@@ -28,7 +28,7 @@ import useMedia from '../../../../hooks/useMedia'
 // utils
 import { getSelectedDateForCalendar } from '../../calendarHelpers'
 
-const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
+const formatHeaderDate = (date: string, view: CALENDAR_VIEW, selectedMonth: { year: number; month: number }) => {
 	switch (view) {
 		case CALENDAR_VIEW.WEEK: {
 			const firstDayOfWeek = dayjs(date).startOf('week')
@@ -44,7 +44,8 @@ const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 			return `${firstDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_START)} - ${lastDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_END)}`
 		}
 		case CALENDAR_VIEW.MONTH: {
-			return dayjs(date).startOf('month').format(CALENDAR_DATE_FORMAT.HEADER_MONTH)
+			const { month, year } = selectedMonth
+			return dayjs(new Date(year, month, 1)).format(CALENDAR_DATE_FORMAT.HEADER_MONTH)
 		}
 		case CALENDAR_VIEW.DAY:
 		default:
@@ -86,6 +87,7 @@ type Props = {
 	setEventsViewType: (newViewType: CALENDAR_EVENTS_VIEW_TYPE) => void
 	enabledSalonReservations?: boolean
 	loadingData?: boolean
+	selectedMonth: { year: number; month: number }
 }
 
 const CalendarHeader: FC<Props> = (props) => {
@@ -102,7 +104,8 @@ const CalendarHeader: FC<Props> = (props) => {
 		setEventsViewType,
 		onAddEvent,
 		enabledSalonReservations,
-		loadingData
+		loadingData,
+		selectedMonth
 	} = props
 
 	const [currentDate, setCurrentDate] = useState(selectedDate)
@@ -163,7 +166,6 @@ const CalendarHeader: FC<Props> = (props) => {
 					showToday={false}
 					className={'nc-header-date-picker'}
 					disabledDate={loadingData ? disabledDatePickerFnc : undefined}
-					// disabled={loadingData}
 				/>
 			</div>
 		)
@@ -255,7 +257,7 @@ const CalendarHeader: FC<Props> = (props) => {
 					destroyPopupOnHide
 				>
 					<button type={'button'} className={'nc-button-date mx-1'} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>
-						{formatHeaderDate(currentDate, calendarView)}
+						{formatHeaderDate(currentDate, calendarView, selectedMonth)}
 						<ChevronDownGrayDark color={'#808080'} />
 					</button>
 				</Dropdown>

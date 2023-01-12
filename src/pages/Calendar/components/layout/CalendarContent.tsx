@@ -154,7 +154,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			if (newEmployeeId !== currentEmployeeId) {
 				notification.warning({
 					message: t('loc:Upozornenie'),
-					description: t('loc:{{ eventType }} nie je možné preradiť na iného zamestnanca!', {
+					description: t('loc:{{ eventType }} nie je možné preradiť na iného zamestnanca.', {
 						eventType: eventData?.eventType ? EVENT_NAMES(eventData?.eventType as CALENDAR_EVENT_TYPE, true) : t('loc:Udalosť')
 					})
 				})

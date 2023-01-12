@@ -129,8 +129,6 @@ export const getReq = async <T extends keyof GetUrls>(
 ): Promise<ReturnType<GetUrls[T]['get']>> => {
 	const { fullfilURL, queryParams } = fullFillURL(url, params)
 
-	console.log(cancelGetTokens)
-
 	let token = {}
 	if (allowCancelToken) {
 		const cancelTokenStorageKey = cancelTokenKey || fullfilURL

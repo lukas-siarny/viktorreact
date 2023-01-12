@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Action, compose, Dispatch } from 'redux'
@@ -14,22 +14,44 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import DeleteButton from '../../components/DeleteButton'
 import InviteForm from './components/InviteForm'
 import EditRoleForm from './components/EditRoleForm'
+import ServiceEditModal from './components/ServiceEditModal'
 
 // types
-import { IBreadcrumbs, IComputedMatch, IEditEmployeeRoleForm, IEmployeeForm, IInviteEmployeeForm, ILoadingAndFailure, SalonSubPageProps } from '../../types/interfaces'
+import {
+	EmployeeServiceData,
+	IBreadcrumbs,
+	IComputedMatch,
+	IEditEmployeeRoleForm,
+	IEmployeeForm,
+	IEmployeePayload,
+	IEmployeeServiceEditForm,
+	IInviteEmployeeForm,
+	ISelectOptionItem,
+	SalonSubPageProps,
+	ServiceCategoryParameter,
+	ServicePriceAndDurationData,
+	ServiceRootCategory
+} from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { DELETE_BUTTON_ID, FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, PARAMETER_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
-import { /* decodePrice, encodePrice, */ filterSalonRolesByPermission, formFieldID, hasAuthUserPermissionToEditRole } from '../../utils/helper'
+import {
+	filterSalonRolesByPermission,
+	formFieldID,
+	getAssignedUserLabel,
+	getEmployeeServiceDataForPatch,
+	getServicePriceAndDurationData,
+	hasAuthUserPermissionToEditRole
+} from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
 import { getEmployee } from '../../reducers/employees/employeesActions'
-import { IServicesPayload } from '../../reducers/services/serviceActions'
+import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
 import { getSalonRoles } from '../../reducers/roles/rolesActions'
 import { getCurrentUser } from '../../reducers/users/userActions'
 
@@ -45,74 +67,78 @@ type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: string }>
 }
 
-export type ServiceData = {
-	id?: string
-	name?: string
-	category?: string
-}
+type EmployeePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody
+
+type EmployeeService = NonNullable<IEmployeePayload['data']>['employee']['categories'][0]['children'][0]['children'][0]
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
-// TODO - for change duration and price in employee detail
-/* export const parseServicesForCreateAndUpdate = (oldServices: any[]) => {
-	return oldServices?.map((service: any) => {
-		return {
-			id: service?.id,
-			employeeData: {
-				durationFrom: service?.employeeData?.durationFrom,
-				durationTo: service?.variableDuration ? service?.employeeData?.durationTo : undefined,
-				priceFrom: encodePrice(service?.employeeData?.priceFrom),
-				priceTo: service?.variablePrice ? encodePrice(service?.employeeData?.priceTo) : undefined
-			}
-		}
-	})
-} */
-
-export const addService = (servaddServiceices: IServicesPayload & ILoadingAndFailure, form: any, dispatch: Dispatch<Action>) => {
+const addService = (servicesOptions: IServicesPayload['options'], employee: IEmployeePayload['data'], form: any, dispatch: Dispatch<Action>) => {
 	const selectedServiceIDs = form?.values?.service
 	const updatedServices: any[] = []
+	const employeeData = employee?.employee
 	// go through selected services
 	forEach(selectedServiceIDs, (serviceId) => {
-		const serviceData = servaddServiceices?.options?.find((option) => option.key === serviceId)
+		const serviceData = servicesOptions?.find((option) => option.key === serviceId)
+		const priceAndDuration = serviceData?.extra?.rangePriceAndDurationData as ServicePriceAndDurationData
+		const categoryParameter = serviceData?.extra?.serviceCategoryParameter as ServiceCategoryParameter
+
 		if (form?.values?.services?.find((service: any) => service?.id === serviceId)) {
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
 				description: i18next.t('loc:Služba {{ label }} je už priradená!', { label: serviceData?.label })
 			})
-		} else if (serviceData) {
-			const newServiceData: ServiceData = {
+		} else if (serviceData && employeeData) {
+			const useCategoryParameter = !!categoryParameter?.values?.length
+
+			let newServiceData: EmployeeServiceData = {
 				id: serviceData?.key as string,
 				name: serviceData?.label,
-				category: serviceData?.extra?.firstCategory
-				// TODO - for change duration and price in employee detail
-				/* salonData: {
-					durationFrom: serviceData?.durationFrom,
-					durationTo: serviceData?.durationTo,
-					priceFrom: decodePrice(serviceData?.priceFrom),
-					priceTo: serviceData?.priceTo && serviceData?.priceFrom ? decodePrice(serviceData?.priceTo) : undefined
+				industry: serviceData?.extra?.firstCategory,
+				category: serviceData?.extra?.secondCategory,
+				hasOverriddenPricesAndDurationData: false,
+				useCategoryParameter,
+				employee: {
+					id: employeeData.id,
+					image: employeeData?.image.resizedImages.thumbnail,
+					name: getAssignedUserLabel({ firstName: employeeData?.firstName, lastName: employeeData?.lastName, email: employeeData?.email, id: employeeData?.id }),
+					email: employeeData?.email,
+					inviteEmail: employeeData?.inviteEmail,
+					hasActiveAccount: employeeData?.hasActiveAccount
 				},
-				employeeData: {
-					durationFrom: serviceData?.durationFrom,
-					durationTo: serviceData?.durationTo,
-					priceFrom: decodePrice(serviceData?.priceFrom),
-					priceTo: serviceData?.priceTo && serviceData?.priceFrom ? decodePrice(serviceData?.priceTo) : undefined
-				},
-				variableDuration: false,
-				variablePrice: false,
-				*/
+				salonPriceAndDurationData: getServicePriceAndDurationData(
+					priceAndDuration?.durationFrom,
+					priceAndDuration?.durationTo,
+					priceAndDuration?.priceFrom,
+					priceAndDuration?.priceTo
+				),
+				employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined)
 			}
-			/* if (serviceData?.durationFrom && serviceData?.durationTo) {
+			if (useCategoryParameter) {
 				newServiceData = {
 					...newServiceData,
-					variableDuration: true
+					serviceCategoryParameterType: categoryParameter?.valueType as PARAMETER_TYPE,
+					serviceCategoryParameterName: categoryParameter?.name,
+					serviceCategoryParameterId: categoryParameter.id,
+					serviceCategoryParameter: categoryParameter?.values?.map((value) => {
+						const paramaterPriceDuration = value?.priceAndDurationData
+						const parameterSalonPriceAndDurationData = getServicePriceAndDurationData(
+							paramaterPriceDuration?.durationFrom,
+							paramaterPriceDuration.durationTo,
+							paramaterPriceDuration?.priceFrom,
+							paramaterPriceDuration?.priceTo
+						)
+
+						return {
+							id: value?.id,
+							name: value?.value,
+							hasOverriddenPricesAndDurationData: false,
+							employeePriceAndDurationData: getServicePriceAndDurationData(undefined, undefined, undefined, undefined),
+							salonPriceAndDurationData: parameterSalonPriceAndDurationData
+						}
+					})
 				}
 			}
-			if (serviceData?.priceFrom && serviceData?.priceTo) {
-				newServiceData = {
-					...newServiceData,
-					variablePrice: true
-				}
-			} */
 			updatedServices.push(newServiceData)
 		}
 	})
@@ -126,19 +152,115 @@ export const addService = (servaddServiceices: IServicesPayload & ILoadingAndFai
 	dispatch(change(FORM.EMPLOYEE, 'service', null))
 }
 
-type ServiceRootCategory = Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200['employee']['categories']
+const getCategoryById = (category: any, serviceCategoryID: string): EmployeeService | null => {
+	let result = null
+	if (category?.category?.id === serviceCategoryID) {
+		return category
+	}
+	if (category?.children) {
+		// eslint-disable-next-line no-return-assign
+		category.children.some((node: any) => (result = getCategoryById(node, serviceCategoryID)))
+	}
+	return result
+}
 
-const parseServices = (categories?: ServiceRootCategory): ServiceData[] => {
-	const result: ServiceData[] = []
-	if (categories) {
-		categories?.forEach((firstCategory) =>
+const parseServices = (employee?: IEmployeePayload['data'], salonServices?: ISelectOptionItem[]): EmployeeServiceData[] => {
+	const result: EmployeeServiceData[] = []
+	const employeeData = employee?.employee
+	const employeeCategories = employeeData?.categories
+	if (employeeCategories) {
+		employeeCategories?.forEach((firstCategory) =>
 			firstCategory?.children.forEach((secondCategory) => {
-				secondCategory?.children.forEach((service) => {
-					result.push({
-						id: service?.id,
-						name: service?.category?.name,
-						category: firstCategory?.name
-					})
+				secondCategory?.children.forEach((employeeService) => {
+					const salonServiceData = salonServices?.find((option) => option?.key === employeeService.id)
+					const salonPriceAndDuration = salonServiceData?.extra?.priceAndDurationData as ServicePriceAndDurationData
+					const categoryParameter = salonServiceData?.extra?.serviceCategoryParameter as ServiceCategoryParameter
+					const useCategoryParameter = salonServiceData?.extra?.useCategoryParameter
+
+					let formServiceData: EmployeeServiceData = {
+						id: employeeService?.id,
+						name: employeeService?.category?.name,
+						industry: firstCategory?.name,
+						category: secondCategory?.name,
+						employee: {
+							id: employeeData.id,
+							image: employeeData?.image.resizedImages.thumbnail,
+							name: getAssignedUserLabel({ firstName: employeeData?.firstName, lastName: employeeData?.lastName, email: employeeData?.email, id: employeeData?.id }),
+							email: employeeData?.email,
+							inviteEmail: employeeData?.inviteEmail,
+							hasActiveAccount: employeeData?.hasActiveAccount
+						},
+						salonPriceAndDurationData: getServicePriceAndDurationData(
+							salonPriceAndDuration?.durationFrom,
+							salonPriceAndDuration?.durationTo,
+							salonPriceAndDuration?.priceFrom,
+							salonPriceAndDuration?.priceTo
+						),
+						employeePriceAndDurationData: employeeService?.hasOverriddenPricesAndDurationData
+							? getServicePriceAndDurationData(
+									employeeService?.priceAndDurationData?.durationFrom,
+									employeeService?.priceAndDurationData?.durationTo,
+									employeeService?.priceAndDurationData?.priceFrom,
+									employeeService?.priceAndDurationData?.priceTo
+							  )
+							: getServicePriceAndDurationData(undefined, undefined, undefined, undefined),
+						useCategoryParameter,
+						hasOverriddenPricesAndDurationData: employeeService?.hasOverriddenPricesAndDurationData
+					}
+
+					if (useCategoryParameter) {
+						const employeeCategory = getCategoryById(
+							{
+								children: employee?.employee?.categories
+							},
+							salonServiceData?.extra?.categoryId
+						)
+
+						formServiceData = {
+							...formServiceData,
+							serviceCategoryParameterType: categoryParameter?.valueType as PARAMETER_TYPE,
+							serviceCategoryParameterName: categoryParameter?.name,
+							serviceCategoryParameterId: categoryParameter?.id,
+							hasOverriddenPricesAndDurationData: !!employeeCategory?.serviceCategoryParameter?.values.length,
+							serviceCategoryParameter: categoryParameter?.values?.map((value) => {
+								const paramaterPriceDuration = value?.priceAndDurationData
+								const employeeValue = employeeCategory?.serviceCategoryParameter?.values?.find((empVal) => empVal.id === value.id)
+								const employeePriceAndDuration = employeeValue?.priceAndDurationData
+
+								return {
+									id: value?.id,
+									name: value?.value,
+									salonPriceAndDurationData: getServicePriceAndDurationData(
+										paramaterPriceDuration?.durationFrom,
+										paramaterPriceDuration.durationTo,
+										paramaterPriceDuration?.priceFrom,
+										paramaterPriceDuration?.priceTo
+									),
+									employeePriceAndDurationData: getServicePriceAndDurationData(
+										employeePriceAndDuration?.durationFrom,
+										employeePriceAndDuration?.durationTo,
+										employeePriceAndDuration?.priceFrom,
+										employeePriceAndDuration?.priceTo
+									)
+								}
+							})
+						}
+					}
+					result.push(formServiceData)
+				})
+			})
+		)
+	}
+	return result
+}
+
+const getEmployeeServiceIds = (employeeCategories?: ServiceRootCategory) => {
+	const result: string[] = []
+	if (employeeCategories) {
+		employeeCategories?.forEach((firstCategory) =>
+			firstCategory?.children.forEach((secondCategory) => {
+				secondCategory?.children.forEach((employeeService) => {
+					result.push(employeeService.id)
 				})
 			})
 		)
@@ -154,6 +276,8 @@ const EmployeePage = (props: Props) => {
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const [visible, setVisible] = useState<boolean>(false)
+	const [visibleServiceEditModal, setVisibleServiceEditModal] = useState(false)
+	const [updatingService, setUpdatingSerivce] = useState(false)
 
 	const employee = useSelector((state: RootState) => state.employees.employee)
 	const services = useSelector((state: RootState) => state.service.services)
@@ -168,49 +292,50 @@ const EmployeePage = (props: Props) => {
 		[salonID, currentAuthUser?.data, salonRoles?.data]
 	)
 
-	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values)
+	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values) as IEmployeeForm
 
 	const isEmployeeExists = !!employee?.data?.employee?.id
 
-	const isLoading = employee.isLoading || services.isLoading || currentAuthUser.isLoading || isRemoving
+	const isLoading = submitting || employee.isLoading || services.isLoading || currentAuthUser.isLoading || isRemoving
 
 	const [backUrl] = useBackUrl(parentPath + t('paths:employees'))
 
-	const fetchEmployeeData = async () => {
-		const { data } = await dispatch(getEmployee(employeeID))
-		if (!data?.employee?.id) {
+	const fetchEmployeeAndServicesData = useCallback(async () => {
+		const { data: employeesData } = await dispatch(getEmployee(employeeID))
+		const { options } = await dispatch(getServices({ salonID }))
+
+		if (!employeesData?.employee?.id) {
 			history.push('/404')
 		}
 
-		if (data?.employee) {
+		if (employeesData?.employee) {
 			dispatch(
 				initialize(FORM.EMPLOYEE, {
-					...data.employee,
-					avatar: data.employee?.image
+					...employeesData.employee,
+					avatar: employeesData.employee?.image
 						? [
 								{
-									url: data.employee?.image?.original,
-									thumbUrl: data.employee?.image?.resizedImages?.thumbnail,
-									uid: data.employee?.image?.id
+									url: employeesData.employee?.image?.original,
+									thumbUrl: employeesData.employee?.image?.resizedImages?.thumbnail,
+									uid: employeesData.employee?.image?.id
 								}
 						  ]
 						: [],
-					services: parseServices(data?.employee?.categories),
-					salonID: { label: data.employee?.salon?.name, value: data.employee?.salon?.id },
-					roleID: data.employee?.role?.id
+					services: parseServices(employeesData, options),
+					salonID: { label: employeesData.employee?.salon?.name, value: employeesData.employee?.salon?.id },
+					roleID: employeesData.employee?.role?.id
 				})
 			)
 		}
-	}
+	}, [dispatch, employeeID, salonID])
 
 	useEffect(() => {
-		fetchEmployeeData()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [employeeID])
+		fetchEmployeeAndServicesData()
+	}, [fetchEmployeeAndServicesData])
 
 	useEffect(() => {
 		dispatch(getSalonRoles())
-	}, [dispatch, salonID])
+	}, [dispatch])
 
 	useEffect(() => {
 		dispatch(initialize(FORM.EDIT_EMPLOYEE_ROLE, { roleID: form?.values?.roleID }))
@@ -219,12 +344,13 @@ const EmployeePage = (props: Props) => {
 	const updateEmployee = async (data: IEmployeeForm) => {
 		try {
 			setSubmitting(true)
-			let reqBody: any = {
+
+			let reqBody: EmployeePatchBody = {
 				firstName: data?.firstName,
 				lastName: data?.lastName,
 				email: data?.email,
 				imageID: get(data, 'avatar[0].id') || get(data, 'avatar[0].uid'),
-				serviceIDs: data?.services?.map((service: ServiceData) => service.id)
+				serviceIDs: data?.services?.map((service: EmployeeServiceData) => service.id)
 			}
 
 			if (data?.phonePrefixCountryCode && data?.phone) {
@@ -234,10 +360,9 @@ const EmployeePage = (props: Props) => {
 					phone: data?.phone
 				}
 			}
-			/* const serviceData = parseServicesForCreateAndUpdate(data?.services)
-			await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, serviceData) */
+
 			await patchReq('/api/b2b/admin/employees/{employeeID}', { employeeID }, reqBody)
-			history.push(backUrl)
+			fetchEmployeeAndServicesData()
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -320,6 +445,31 @@ const EmployeePage = (props: Props) => {
 		}
 	}
 
+	const editEmployeeService = async (values: IEmployeeServiceEditForm, _dispatch?: Dispatch<any>, customProps?: any) => {
+		const serviceID = values.id
+		const { resetUserServiceData = false } = customProps || {}
+
+		if (serviceID) {
+			try {
+				setUpdatingSerivce(true)
+				const employeePatchServiceData = getEmployeeServiceDataForPatch(values, resetUserServiceData)
+
+				if (!getEmployeeServiceIds(employee?.data?.employee?.categories)?.includes(serviceID)) {
+					await updateEmployee(formValues)
+				}
+
+				await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, employeePatchServiceData)
+				fetchEmployeeAndServicesData()
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.error(e)
+			} finally {
+				setUpdatingSerivce(false)
+				setVisibleServiceEditModal(false)
+			}
+		}
+	}
+
 	const isProfileInActive: boolean = form?.values?.hasActiveAccount === false
 	const { hasPermission: hasPermissionToEdit, tooltip } = hasAuthUserPermissionToEditRole(salonID, currentAuthUser?.data, employee?.data, salonRoles?.data || undefined)
 
@@ -343,7 +493,13 @@ const EmployeePage = (props: Props) => {
 			)}
 			<div className='content-body small'>
 				<Spin spinning={isLoading}>
-					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={updateEmployee} />
+					<EmployeeForm
+						addService={() => addService(services?.options, employee?.data, form, dispatch)}
+						salonID={salonID}
+						isEdit
+						onSubmit={updateEmployee}
+						setVisibleServiceEditModal={setVisibleServiceEditModal}
+					/>
 					<div className={'content-footer'}>
 						<div
 							className={cx('flex flex-col gap-2 lg:flex-row flex-wrap', {
@@ -445,6 +601,7 @@ const EmployeePage = (props: Props) => {
 					{t('loc:Odoslať email')}
 				</Button>
 			</Modal>
+			<ServiceEditModal visible={visibleServiceEditModal} setVisible={setVisibleServiceEditModal} loading={updatingService} editEmployeeService={editEmployeeService} />
 		</>
 	)
 }

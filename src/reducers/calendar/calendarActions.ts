@@ -1,6 +1,6 @@
-import dayjs from 'dayjs'
-import { CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, DATE_TIME_PARSER_DATE_FORMAT, RESERVATION_STATE } from '../../utils/enums'
 /* eslint-disable import/no-cycle */
+import dayjs from 'dayjs'
+import axios from 'axios'
 
 // types
 import { ThunkResult } from '../index'
@@ -10,6 +10,7 @@ import { CalendarEvent, ICalendarDayEvents, ICalendarEventsPayload } from '../..
 
 // enums
 import { EVENTS, EVENT_DETAIL, SET_DAY_DETAIL_DATE, SET_IS_REFRESHING_EVENTS, UPDATE_EVENT, SET_DAY_EVENTS } from './calendarTypes'
+import { CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, DATE_TIME_PARSER_DATE_FORMAT, RESERVATION_STATE } from '../../utils/enums'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -267,9 +268,8 @@ export const getCalendarEvents =
 
 			dispatch({ type: EVENTS.EVENTS_LOAD_DONE, enumType, payload })
 		} catch (err) {
-			// Ak je error code 'ERR_CANCELED', znamena to, ze request bol preruseny novsim requestom na rovnaky EP
-			// tym padom chceme, aby loading state porkacoval
-			if ((err as any).code === 'ERR_CANCELED') {
+			if (axios.isCancel(err)) {
+				// Request bol preruseny novsim requestom, tym padom chceme, aby loading state porkacoval
 				dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
 			} else {
 				dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType })

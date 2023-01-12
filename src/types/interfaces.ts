@@ -23,7 +23,8 @@ import {
 	RESERVATION_STATE,
 	RESERVATION_PAYMENT_METHOD,
 	CONFIRM_MODAL_DATA_TYPE,
-	CALENDAR_EVENT_DISPLAY_TYPE
+	CALENDAR_EVENT_DISPLAY_TYPE,
+	PARAMETER_TYPE
 } from '../utils/enums'
 
 // types
@@ -65,6 +66,58 @@ export interface IInviteEmployeeForm {
 	roleID: string
 }
 
+export type ServiceRootCategory = Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200['employee']['categories']
+
+type ServiceType = NonNullable<
+	NonNullable<Paths.GetApiB2BV1Services.Responses.$200['groupedServicesByCategory'][0]['category']>['children'][0]['category']
+>['children'][0]['service']
+
+export type ServicePriceAndDurationData = ServiceType['priceAndDurationData']
+export type ServiceCategoryParameter = ServiceType['serviceCategoryParameter']
+
+export type ServiceDetail = Paths.GetApiB2BAdminServicesServiceId.Responses.$200['service']
+
+export type FormPriceAndDurationData = {
+	durationFrom?: number | null
+	durationTo?: number | null
+	priceFrom?: number | null
+	priceTo?: number | null
+	variableDuration?: boolean
+	variablePrice?: boolean
+}
+
+export type EmployeeServiceData = {
+	id: string
+	employee: {
+		id: string
+		name?: string
+		image?: string
+		fallbackImage?: string
+		email?: string
+		inviteEmail?: string
+		hasActiveAccount?: boolean
+	}
+	name?: string
+	industry?: string
+	category?: string
+	image?: string
+	useCategoryParameter: boolean
+	employeePriceAndDurationData?: FormPriceAndDurationData
+	salonPriceAndDurationData?: FormPriceAndDurationData
+	hasOverriddenPricesAndDurationData?: boolean
+	serviceCategoryParameter?: {
+		id: string
+		name?: string
+		employeePriceAndDurationData?: FormPriceAndDurationData
+		salonPriceAndDurationData: FormPriceAndDurationData
+		hasOverriddenPricesAndDurationData?: boolean
+	}[]
+	serviceCategoryParameterType?: PARAMETER_TYPE
+	serviceCategoryParameterName?: string
+	serviceCategoryParameterId?: string
+}
+
+export type IEmployeeServiceEditForm = EmployeeServiceData & {}
 export interface IEditEmployeeRoleForm {
 	roleID: string
 }
@@ -149,17 +202,31 @@ export interface ISalonForm {
 	deletedAt?: boolean
 }
 
-export interface IServiceForm {
-	id: number
-	durationFrom: number
-	durationTo: number
+export interface IParameterValue {
+	id: string | undefined
+	name: string | undefined
+	durationFrom: number | null | undefined
+	durationTo: number | null | undefined
 	variableDuration: boolean
-	priceFrom: number
-	priceTo: number
+	priceFrom: number | null | undefined
+	priceTo: number | null | undefined
+	variablePrice: boolean
+	useParameter: boolean
+}
+export interface IServiceForm {
+	id: string
+	durationFrom?: number
+	durationTo?: number
+	variableDuration: boolean
+	priceFrom?: number | null
+	priceTo?: number | null
 	variablePrice: boolean
 	useCategoryParameter: boolean
-	serviceCategoryParameter: any
-	employees: any
+	serviceCategoryParameterType?: PARAMETER_TYPE
+	serviceCategoryParameterName?: string
+	serviceCategoryParameter: IParameterValue[]
+	employee?: string[]
+	employees: EmployeeServiceData[]
 	settings: {
 		enabledB2cReservations: boolean
 		autoApproveReservatons: boolean
@@ -355,6 +422,7 @@ export interface IEmployeeForm {
 	service?: string[]
 	avatar?: any
 	role: number
+	hasActiveAccount?: boolean
 }
 
 export interface ICosmeticForm {
@@ -816,3 +884,4 @@ export interface ICalendarDayEvents {
 export interface ICalendarDayEventsMap {
 	[key: string]: number
 }
+export type ServicePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody

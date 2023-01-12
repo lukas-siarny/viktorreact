@@ -271,6 +271,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	// fetch new events
 	const fetchEvents: any = useCallback(
 		async (clearVirtualEvent?: boolean) => {
+			restartFetchInterval()
 			// bez zamestanncov nefunguje nic v kalendari, takze ani nema zmysel dotahovat data
 			if (!employees.options?.length) {
 				return
@@ -318,8 +319,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} else if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
 				await dispatch(dispatchGetShiftsTimeOff)
 			}
-
-			await restartFetchInterval()
 		},
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps

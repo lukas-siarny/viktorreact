@@ -129,6 +129,8 @@ export const getReq = async <T extends keyof GetUrls>(
 ): Promise<ReturnType<GetUrls[T]['get']>> => {
 	const { fullfilURL, queryParams } = fullFillURL(url, params)
 
+	console.log(cancelGetTokens)
+
 	let token = {}
 	if (allowCancelToken) {
 		const cancelTokenStorageKey = cancelTokenKey || fullfilURL
@@ -207,18 +209,20 @@ export const postReq = async <T extends keyof PostUrls>(
 	customConfig: ICustomConfig = {},
 	typeNotification: NOTIFICATION_TYPE | false = NOTIFICATION_TYPE.NOTIFICATION,
 	showLoading = false,
-	allowCancelToken = false
+	allowCancelToken = false,
+	cancelTokenKey = ''
 ): Promise<ReturnType<PostUrls[T]['post']>> => {
 	const { fullfilURL, queryParams } = fullFillURL(url, params)
 	let token = {}
 	if (allowCancelToken) {
-		if (typeof cancelPostTokens[fullfilURL] !== typeof undefined) {
-			cancelPostTokens[fullfilURL].cancel('Operation canceled due to new request.')
+		const cancelTokenStorageKey = cancelTokenKey || fullfilURL
+		if (typeof cancelPostTokens[cancelTokenStorageKey] !== typeof undefined) {
+			cancelPostTokens[cancelTokenStorageKey].cancel('Operation canceled due to new request.')
 		}
 		// Save the cancel token for the current request
-		cancelPostTokens[fullfilURL] = axios.CancelToken.source()
+		cancelPostTokens[cancelTokenStorageKey] = axios.CancelToken.source()
 		token = {
-			cancelToken: cancelPostTokens[fullfilURL].token
+			cancelToken: cancelPostTokens[cancelTokenStorageKey].token
 		}
 	}
 
@@ -287,18 +291,20 @@ export const patchReq = async <T extends keyof PatchUrls>(
 	customConfig: ICustomConfig = {},
 	typeNotification: NOTIFICATION_TYPE | false = NOTIFICATION_TYPE.NOTIFICATION,
 	showLoading = false,
-	allowCancelToken = false
+	allowCancelToken = false,
+	cancelTokenKey = ''
 ): Promise<ReturnType<PatchUrls[T]['patch']>> => {
 	const { fullfilURL, queryParams } = fullFillURL(url, params)
 	let token = {}
 	if (allowCancelToken) {
-		if (typeof cancelPatchTokens[fullfilURL] !== typeof undefined) {
-			cancelPatchTokens[fullfilURL].cancel('Operation canceled due to new request.')
+		const cancelTokenStorageKey = cancelTokenKey || fullfilURL
+		if (typeof cancelPatchTokens[cancelTokenStorageKey] !== typeof undefined) {
+			cancelPatchTokens[cancelTokenStorageKey].cancel('Operation canceled due to new request.')
 		}
 		// Save the cancel token for the current request
-		cancelPatchTokens[fullfilURL] = axios.CancelToken.source()
+		cancelPatchTokens[cancelTokenStorageKey] = axios.CancelToken.source()
 		token = {
-			cancelToken: cancelPatchTokens[fullfilURL].token
+			cancelToken: cancelPatchTokens[cancelTokenStorageKey].token
 		}
 	}
 

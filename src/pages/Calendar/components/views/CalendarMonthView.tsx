@@ -178,8 +178,7 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 		onEventChangeStart,
 		virtualEvent,
 		onAddEvent,
-		setEventManagement,
-		onEventChangeStop
+		setEventManagement
 	} = props
 
 	const openingHours = useSelector((state: RootState) => state.selectedSalon.selectedSalon).data?.openingHours
@@ -261,8 +260,6 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 					}
 				}}
 				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
-				eventDragStop={onEventChangeStop}
-				eventResizeStop={onEventChangeStop}
 				select={handleNewEvent}
 			/>
 		</div>

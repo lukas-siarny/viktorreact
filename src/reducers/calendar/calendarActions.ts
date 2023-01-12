@@ -192,7 +192,15 @@ export const getCalendarEvents =
 				reservationStates: queryParams.reservationStates
 			}
 
-			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams)
+			const { data } = await getReq(
+				'/api/b2b/admin/salons/{salonID}/calendar-events/',
+				normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams,
+				undefined,
+				undefined,
+				undefined,
+				true,
+				`calendar-events-${enumType}`
+			)
 
 			// employees sa mapuju do eventov
 			const employees = {} as any
@@ -259,7 +267,13 @@ export const getCalendarEvents =
 
 			dispatch({ type: EVENTS.EVENTS_LOAD_DONE, enumType, payload })
 		} catch (err) {
-			dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType })
+			// Ak je error code 'ERR_CANCELED', znamena to, ze request bol preruseny novsim requestom na rovnaky EP
+			// tym padom chceme, aby loading state porkacoval
+			if ((err as any).code === 'ERR_CANCELED') {
+				dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
+			} else {
+				dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType })
+			}
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}
@@ -324,7 +338,7 @@ export const getCalendarEventDetail =
 		try {
 			dispatch({ type: EVENT_DETAIL.EVENT_DETAIL_LOAD_START })
 
-			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}', { calendarEventID, salonID })
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}', { calendarEventID, salonID }, undefined, undefined, undefined, true)
 
 			payload = {
 				data: data.calendarEvent

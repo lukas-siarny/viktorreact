@@ -124,19 +124,21 @@ export const getReq = async <T extends keyof GetUrls>(
 	customConfig: ICustomConfig = {},
 	typeNotification: NOTIFICATION_TYPE | false = NOTIFICATION_TYPE.NOTIFICATION,
 	showLoading = false,
-	allowCancelToken = false
+	allowCancelToken = false,
+	cancelTokenKey = ''
 ): Promise<ReturnType<GetUrls[T]['get']>> => {
 	const { fullfilURL, queryParams } = fullFillURL(url, params)
 
 	let token = {}
 	if (allowCancelToken) {
-		if (typeof cancelGetTokens[fullfilURL] !== typeof undefined) {
-			cancelGetTokens[fullfilURL].cancel('Operation canceled due to new request.')
+		const cancelTokenStorageKey = cancelTokenKey || fullfilURL
+		if (typeof cancelGetTokens[cancelTokenStorageKey] !== typeof undefined) {
+			cancelGetTokens[cancelTokenStorageKey].cancel('Operation canceled due to new request.')
 		}
 		// Save the cancel token for the current request
-		cancelGetTokens[fullfilURL] = axios.CancelToken.source()
+		cancelGetTokens[cancelTokenStorageKey] = axios.CancelToken.source()
 		token = {
-			cancelToken: cancelGetTokens[fullfilURL].token
+			cancelToken: cancelGetTokens[cancelTokenStorageKey].token
 		}
 	}
 	let hide

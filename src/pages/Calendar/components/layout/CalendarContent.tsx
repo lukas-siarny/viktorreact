@@ -13,7 +13,7 @@ import { EventDragStopArg, EventResizeDoneArg, EventResizeStopArg } from '@fullc
 import FullCalendar, { DateSpanApi, EventApi, EventDropArg } from '@fullcalendar/react'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, FORM, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, EVENT_NAMES, FORM, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
@@ -51,7 +51,7 @@ type Props = {
 	parentPath: string
 	salonID: string
 	onShowMore: (date: string, position?: PopoverTriggerPosition) => void
-} & Omit<ICalendarView, 'onEventChangeStop'>
+} & ICalendarView
 
 export type CalendarRefs = {
 	[CALENDAR_VIEW.DAY]?: InstanceType<typeof FullCalendar> | null
@@ -96,7 +96,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	})
 
 	const [disableRender, setDisableRender] = useState(false)
-	// const [dontEnableRenderImmediatelyAfterChange, setDontEnableRenderImmediatelyAfterChange] = useState(false)
 
 	useImperativeHandle(ref, () => ({
 		[CALENDAR_VIEW.DAY]: dayView?.current,
@@ -158,12 +157,14 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		const newEmployeeId = newResourceExtendedProps?.employee?.id || eventExtenedProps?.eventData?.employee?.id
 		const currentEmployeeId = eventExtenedProps?.eventData?.employee?.id
 
-		// TODO: toto nebudeme potrebovat ak sa pouziva eventAllow
+		// NOTE: miesto eventAllow sa bude vyhodnocovat, ci sa dany event moze upravit tu
 		if (calendarView !== CALENDAR_VIEW.MONTH && eventData?.eventType !== CALENDAR_EVENT_TYPE.RESERVATION && !startsWith(event.id, NEW_ID_PREFIX)) {
 			if (newEmployeeId !== currentEmployeeId) {
 				notification.warning({
 					message: t('loc:Upozornenie'),
-					description: t('loc:Udalosť typu {{ eventType }} nie je možné preradiť na iného zamestnanca!', { eventType: 'Prestávka' })
+					description: t('loc:{{ eventType }} nie je možné preradiť na iného zamestnanca!', {
+						eventType: eventData?.eventType ? EVENT_NAMES(eventData?.eventType as CALENDAR_EVENT_TYPE, true) : t('loc:Udalosť')
+					})
 				})
 				revertEvent()
 				return
@@ -228,10 +229,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			return
 		}
 
-		// v tomto pripade sa opat povoli rendrovanie az po tom co sa spravi request
-		// a nie hned po dropStop / resizeStop
-		// setDontEnableRenderImmediatelyAfterChange(true)
-
 		if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
 			const customerId = eventData.customer?.id
 			const serviceId = eventData.service?.id
@@ -240,18 +237,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			return
 		}
 		handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm)
-	}
-
-	/* const enbaleRender = () => {
-		console.log('aaa', dontEnableRenderImmediatelyAfterChange)
-		if (!dontEnableRenderImmediatelyAfterChange) {
-			setDisableRender(false)
-		}
-	} */
-
-	const onEventChangeStop = () => {
-		// setTimeout(() => enbaleRender(), 1000)
-		setDisableRender(false)
 	}
 
 	const onEventChangeStart = () => {
@@ -332,7 +317,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					onEventChange={onEventChange}
 					onEventChangeStart={onEventChangeStart}
 					onShowMore={onShowMore}
-					onEventChangeStop={onEventChangeStop}
 				/>
 			)
 		}
@@ -357,7 +341,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					onEventChange={onEventChange}
 					onEventChangeStart={onEventChangeStart}
 					updateCalendarSize={() => weekView?.current?.getApi().updateSize()}
-					onEventChangeStop={onEventChangeStop}
 				/>
 			)
 		}
@@ -379,7 +362,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				onReservationClick={onReservationClick}
 				onEventChange={onEventChange}
 				onEventChangeStart={onEventChangeStart}
-				onEventChangeStop={onEventChangeStop}
 			/>
 		)
 	}

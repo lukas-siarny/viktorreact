@@ -311,12 +311,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				)
 
 				if (validCalendarView === CALENDAR_VIEW.MONTH) {
-					dispatch(dispatchGetReservations)
+					await dispatch(dispatchGetReservations)
 				} else {
-					Promise.all([dispatch(dispatchGetReservations), dispatch(dispatchGetShiftsTimeOff)])
+					await Promise.all([dispatch(dispatchGetReservations), dispatch(dispatchGetShiftsTimeOff)])
 				}
 			} else if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
-				dispatch(dispatchGetShiftsTimeOff)
+				await dispatch(dispatchGetShiftsTimeOff)
 			}
 
 			await restartFetchInterval()
@@ -791,7 +791,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						}
 					}}
 					onAddEvent={handleAddEvent}
-					loadingData={isLoading}
+					// loadingData={isLoading}
 					selectedMonth={monthlyViewFullRange.selectedMonth}
 				/>
 				<Layout hasSider className={'noti-calendar-main-section'}>

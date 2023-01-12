@@ -144,13 +144,15 @@ const CosmeticsPage = () => {
 	}
 
 	const handleDelete = async () => {
-		try {
-			await deleteReq('/api/b2b/admin/enums/cosmetics/{cosmeticID}', { cosmeticID: cosmeticID || 'undefined' })
-			dispatch(getCosmetics())
-			changeFormVisibility()
-		} catch (error: any) {
-			// eslint-disable-next-line no-console
-			console.error(error.message)
+		if (cosmeticID) {
+			try {
+				await deleteReq('/api/b2b/admin/enums/cosmetics/{cosmeticID}', { cosmeticID })
+				dispatch(getCosmetics())
+				changeFormVisibility()
+			} catch (error: any) {
+				// eslint-disable-next-line no-console
+				console.error(error.message)
+			}
 		}
 	}
 

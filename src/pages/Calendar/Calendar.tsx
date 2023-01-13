@@ -270,7 +270,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			await restartFetchInterval()
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validEventsViewType]
+		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validEventsViewType, employees.options?.length]
 	)
 
 	const scrollToTime = useCallback(
@@ -413,10 +413,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 		// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastav pracovnu zmenu
 		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-			dispatch(destroy(FORM.CALENDAR_RESERVATION_FORM))
 			setEventManagement(CALENDAR_EVENT_TYPE.RESERVATION)
 		} else {
-			dispatch(destroy(FORM.CALENDAR_EVENT_FORM))
 			setEventManagement(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
 		}
 	}
@@ -659,6 +657,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					NOTIFICATION_TYPE.NOTIFICATION,
 					true
 				)
+				if (state === RESERVATION_STATE.CANCEL_BY_SALON) {
+					closeSiderForm()
+				}
 				fetchEvents()
 			} catch (e) {
 				// eslint-disable-next-line no-console
@@ -668,7 +669,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				clearConfirmModal()
 			}
 		},
-		[fetchEvents, salonID]
+		[fetchEvents, salonID, closeSiderForm]
 	)
 
 	const initSubmitReservationData = (values: ICalendarReservationForm) => setConfirmModalData({ key: CONFIRM_MODAL_DATA_TYPE.RESERVATION, values })

@@ -546,7 +546,7 @@ export const scrollToSelectedDate = (scrollId: string, options?: Object) => {
 
 export const getConfirmModalText = (
 	baseText: string,
-	disabledNotificationType: CALENDAR_DISABLED_NOTIFICATION_TYPE,
+	disabledNotificationType: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications'][0]['eventType'],
 	disabledNotifications?: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']
 ) => {
 	const disabledNotification = disabledNotifications?.find((notification) => notification.eventType === disabledNotificationType)

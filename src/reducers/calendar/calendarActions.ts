@@ -98,6 +98,8 @@ export const setDayEvents =
 		return dayEvents
 	}
 
+export const getCalendarEventsCancelTokenKey = (enumType: CALENDAR_EVENTS_KEYS) => `calendar-events-${enumType}`
+
 export const createMultiDayEvents = (event: CalendarEvent, queryParamsStart: string, queryParamsEnd: string, pushToArray = true, multiDayEventsObject?: ICalendarDayEvents) => {
 	const eventStartStartOfDay = dayjs(event.start.date).startOf('day')
 	const eventEndStartOfDay = dayjs(event.end.date).startOf('day')
@@ -200,7 +202,7 @@ export const getCalendarEvents =
 				undefined,
 				undefined,
 				true,
-				`calendar-events-${enumType}`
+				getCalendarEventsCancelTokenKey(enumType)
 			)
 
 			// employees sa mapuju do eventov

@@ -106,7 +106,7 @@ const fullFillURL = (urlTemplate: string, params: any) => {
 	}
 }
 
-const cancelGetTokens = {} as { [key: string]: CancelTokenSource }
+export const cancelGetTokens = {} as { [key: string]: CancelTokenSource }
 
 /**
  * @param url url endpoint

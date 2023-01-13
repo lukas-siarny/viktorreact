@@ -30,7 +30,7 @@ import {
 	CALENDAR_DAY_EVENTS_LIMIT
 } from '../../utils/enums'
 import { checkPermissions, isAdmin, withPermissions } from '../../utils/Permissions'
-import { deleteReq, patchReq, postReq } from '../../utils/request'
+import { cancelGetTokens, deleteReq, patchReq, postReq } from '../../utils/request'
 import { getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
 import { history } from '../../utils/history'
 
@@ -39,6 +39,7 @@ import {
 	clearCalendarReservations,
 	clearCalendarShiftsTimeoffs,
 	getCalendarEventDetail,
+	getCalendarEventsCancelTokenKey,
 	getCalendarReservations,
 	getCalendarShiftsTimeoff,
 	refreshEvents
@@ -72,6 +73,7 @@ import {
 import CalendarReservationPopover from './components/CalendarReservationPopover'
 import CalendarConfirmModal from './components/CalendarConfirmModal'
 import CalendarDayEventsPopover from './components/CalendarDayEventsPopover'
+import { EVENTS } from '../../reducers/calendar/calendarTypes'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -101,6 +103,10 @@ const getShortCategoryIdsForUrl = (ids?: (string | null)[] | null) => {
 
 const CALENDAR_VIEWS = Object.keys(CALENDAR_VIEW)
 const CALENDAR_EVENTS_VIEW_TYPES = Object.keys(CALENDAR_EVENTS_VIEW_TYPE)
+const GET_RESERVATIONS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.RESERVATIONS)
+const GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS)
+
+// const cancelGetTokens = {} as { [key: string]: CancelTokenSource }
 
 const Calendar: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath = '' } = props
@@ -205,6 +211,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const initialScroll = useRef(false)
 	const scrollToDateTimeout = useRef<any>(null)
 
+	const canceledReservationRequest = useRef(false)
+	const canceledShiftTimeOffRequest = useRef(false)
+
 	const setRangeInformationForMonthlyView = (date: string) => {
 		setMonthlyViewFullRange(getSelectedDateRange(CALENDAR_VIEW.MONTH, date, true))
 	}
@@ -248,11 +257,28 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		return () => clearTimeout(scrollToDateTimeout.current)
 	}, [loadingData, validSelectedDate, query.view, currentRange.start, currentRange.end, validCalendarView])
 
-	const setCalendarView = (newView: CALENDAR_VIEW) => {
+	const setNewCalendarView = (newView: CALENDAR_VIEW) => {
 		setQuery({ ...query, view: newView })
 		setCurrentRange(getSelectedDateRange(newView, query.date))
 		if (newView === CALENDAR_VIEW.MONTH) {
 			setRangeInformationForMonthlyView(query.date)
+		}
+	}
+
+	const setNewEventsViewType = (newEventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => {
+		// NOTE: Ak je otvoreny CREATE / EDIT sidebar tak pri prepnuti filtra ho zrusit + zmaze virtual event
+		dispatch(clearEvent())
+		setQuery({ ...query, eventsViewType: newEventsViewType, sidebarView: undefined })
+		if (newEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF && typeof cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY] !== typeof undefined) {
+			cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY].cancel('Operation canceled due to new request.')
+			canceledReservationRequest.current = true
+		} else if (
+			validCalendarView === CALENDAR_VIEW.MONTH &&
+			newEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION &&
+			typeof cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY] !== typeof undefined
+		) {
+			cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY].cancel('Operation canceled due to new request.')
+			canceledShiftTimeOffRequest.current = true
 		}
 	}
 
@@ -318,6 +344,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				}
 			} else if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
 				await dispatch(dispatchGetShiftsTimeOff)
+			}
+			// v tomto pripade bol request zruseny bez toho, aby pokracoval dalsi request, tym padom je potrebne zrusit loading state
+			if (canceledReservationRequest.current) {
+				dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType: CALENDAR_EVENTS_KEYS.RESERVATIONS })
+				canceledReservationRequest.current = false
+			}
+			if (canceledShiftTimeOffRequest.current) {
+				dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType: CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS })
+				canceledShiftTimeOffRequest.current = false
 			}
 		},
 
@@ -776,12 +811,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					eventsViewType={validEventsViewType}
 					calendarView={validCalendarView}
 					siderFilterCollapsed={siderFilterCollapsed}
-					setCalendarView={setCalendarView}
-					setEventsViewType={(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => {
-						// NOTE: Ak je otvoreny CREATE / EDIT sidebar tak pri prepnuti filtra ho zrusit + zmaze virtual event
-						dispatch(clearEvent())
-						setQuery({ ...query, eventsViewType, sidebarView: undefined })
-					}}
+					setCalendarView={setNewCalendarView}
+					setEventsViewType={setNewEventsViewType}
 					setSelectedDate={setNewSelectedDate}
 					setSiderFilterCollapsed={() => {
 						setSiderFilterCollapsed(!siderFilterCollapsed)
@@ -790,7 +821,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						}
 					}}
 					onAddEvent={handleAddEvent}
-					// loadingData={isLoading}
 					selectedMonth={monthlyViewFullRange.selectedMonth}
 				/>
 				<Layout hasSider className={'noti-calendar-main-section'}>

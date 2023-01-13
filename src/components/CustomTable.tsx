@@ -77,6 +77,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 
 	const dndDropWrap = useCallback(
 		async (oldIndex: number, newIndex: number) => {
+			console.log('table', oldIndex, newIndex)
 			if (isProcessingDrop) {
 				return
 			}
@@ -144,17 +145,46 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 		}
 		columns = [DND_COL, ...columns]
 	}
+
 	const onRow = (record: any, index?: number) => {
-		// const onRowProp = props?.onRow?.(record, index)
-		let rowProps: any
+		const onRowProp = props?.onRow?.(record, index)
+		let rowProps: any = {
+			...onRowProp,
+			onClick: onRowProp?.onClick
+				? (e: React.MouseEvent<HTMLElement>) => {
+						const { target } = e as any
+						const ignoreCellClick = target ? !!target.closest('.ignore-cell-click') : false
+
+						// NOTE: Kliknutie vo vnútri delete popconfirmu sposobovalo otvorenie detailu (kliknutie mimo riadok)
+						let clickInsideRow
+						if (target.closest('.ant-table-row')) {
+							clickInsideRow = true
+						}
+						// TODO: ceckovat permissiony na pracu cez drag and dro v tabulke?
+						const hasPerm = true
+						// if (props.onRowOnClickPermissions && onRowProp?.onClick) {
+						// 	hasPerm = checkPermissions(props.onRowOnClickPermissions)
+						// }
+
+						if (!hasPerm) {
+							// showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia.') }], NOTIFICATION_TYPE.NOTIFICATION)
+						} else if (clickInsideRow && onRowProp?.onClick) {
+							;(onRowProp.onClick as any)(e, ignoreCellClick)
+						}
+				  }
+				: undefined,
+			index
+		}
+
+		// NOTE:    Pre tabuľku bez dnd neposielame propu moveRow vôbec (ani ako undefined),
+		//          inak vznikne chyba, lebo sa snaží nastaviť moveRow ako html atribút <td> elementu ale moveRow nie je html atribút
 		if (dndEnabled) {
 			rowProps = { ...rowProps, dndDrop: dndDropWrap, dndCanDrag }
-		} else {
-			rowProps = { ...rowProps }
 		}
 
 		return rowProps
 	}
+
 	const table = (
 		<div className={cx({ 'disabled-state': disabled })}>
 			<Table

@@ -268,7 +268,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const setNewEventsViewType = (newEventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => {
 		// NOTE: Ak je otvoreny CREATE / EDIT sidebar tak pri prepnuti filtra ho zrusit + zmaze virtual event
 		dispatch(clearEvent())
-		setQuery({ ...query, eventsViewType: newEventsViewType, sidebarView: undefined })
+		setQuery({ ...query, eventsViewType: newEventsViewType, sidebarView: undefined, eventId: undefined })
 		if (newEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF && typeof cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY] !== typeof undefined) {
 			cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY].cancel('Operation canceled due to new request.')
 			canceledReservationRequest.current = true

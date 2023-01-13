@@ -1,6 +1,6 @@
 import React, { useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { batch, useDispatch, useSelector } from 'react-redux'
-import { Spin } from 'antd'
+import { notification, Spin } from 'antd'
 import { Content } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
@@ -13,7 +13,7 @@ import { EventResizeDoneArg } from '@fullcalendar/interaction'
 import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, FORM, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, EVENT_NAMES, FORM, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
@@ -140,12 +140,28 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		const { event } = arg
 		const { start, end } = event
 		const { newResource } = arg as EventDropArg
+		const newResourceExtendedProps = newResource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
 		const eventExtenedProps = (event.extendedProps as IEventExtenedProps) || {}
 		const eventData = eventExtenedProps?.eventData
-		const newResourceExtendedProps = newResource?.extendedProps as IWeekViewResourceExtenedProps | IDayViewResourceExtenedProps
 		const eventId = eventData?.id
-
 		const calendarBulkEventID = eventData?.calendarBulkEvent?.id
+
+		const newEmployeeId = newResourceExtendedProps?.employee?.id || eventExtenedProps?.eventData?.employee?.id
+		const currentEmployeeId = eventExtenedProps?.eventData?.employee?.id
+
+		// NOTE: miesto eventAllow sa bude vyhodnocovat, ci sa dany event moze upravit tu
+		if (/* calendarView !== CALENDAR_VIEW.MONTH && */ eventData?.eventType !== CALENDAR_EVENT_TYPE.RESERVATION && !startsWith(event.id, NEW_ID_PREFIX)) {
+			if (newEmployeeId !== currentEmployeeId) {
+				notification.warning({
+					message: t('loc:Upozornenie'),
+					description: t('loc:{{ eventType }} nie je možné preradiť na iného zamestnanca.', {
+						eventType: eventData?.eventType ? EVENT_NAMES(eventData?.eventType as CALENDAR_EVENT_TYPE, true) : t('loc:Udalosť')
+					})
+				})
+				revertEvent()
+				return
+			}
+		}
 
 		// zatial predpokladame, ze nebudu viacdnove eventy - takze start a end date by mal byt rovnaky
 		const startDajys = dayjs(start)

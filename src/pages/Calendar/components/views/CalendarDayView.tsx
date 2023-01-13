@@ -11,7 +11,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
-import { composeDayViewEvents, composeDayViewResources, eventAllow, getTimeScrollId } from '../../calendarHelpers'
+import { composeDayViewEvents, composeDayViewResources, getTimeScrollId } from '../../calendarHelpers'
 
 // types
 import { ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -168,7 +168,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				)}
 				slotLabelContent={slotLabelContent}
 				// handlers
-				eventAllow={eventAllow}
 				eventDrop={(arg) => {
 					if (onEventChange) onEventChange(CALENDAR_VIEW.DAY, arg)
 				}}

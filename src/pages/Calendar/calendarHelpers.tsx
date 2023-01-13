@@ -544,27 +544,50 @@ export const scrollToSelectedDate = (scrollId: string, options?: Object) => {
 	})
 }
 
+/**
+ * @param baseNotificationText base notification text
+ * @param disabledNotificationTypes array of disabled notification types to check if they are included in disabled notications types source
+ * @param disabledNotificationsSource source of disabled notifications types
+ * @return string
+ *
+ *  Return base notification text including information whether employee, customer, both or none of them will be notified
+ *
+ */
 export const getConfirmModalText = (
-	baseText: string,
-	disabledNotificationType: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications'][0]['eventType'],
-	disabledNotifications?: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']
+	baseNotificationText: string,
+	disabledNotificationTypesToCheck: CALENDAR_DISABLED_NOTIFICATION_TYPE[],
+	disabledNotificationsSource?: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']
 ) => {
-	const disabledNotification = disabledNotifications?.find((notification) => notification.eventType === disabledNotificationType)
-	const isCustomerNotified = isEmpty(disabledNotification?.b2cChannels)
-	const isEmployeeNotified = isEmpty(disabledNotification?.b2bChannels)
+	let isCustomerNotified = true
+	let isEmployeeNotified = true
+
+	disabledNotificationTypesToCheck.forEach((notificationToCheck) => {
+		const disabledNotificationSource = disabledNotificationsSource?.find((notificationSource) => notificationSource.eventType === notificationToCheck)
+		// entity has disabled notification if channels array is not empty
+		if (!isEmpty(disabledNotificationSource?.channels)) {
+			// get the entity type (customer or employee)
+			if (disabledNotificationSource?.eventType?.endsWith('CUSTOMER')) {
+				isCustomerNotified = false
+			}
+			if (disabledNotificationSource?.eventType?.endsWith('EMPLOYEE')) {
+				isEmployeeNotified = false
+			}
+		}
+	})
+
 	const notifiactionText = (entity: string) => i18next.t('loc:{{entity}} dostane notifikáciu.', { entity })
 
 	if (isCustomerNotified && isEmployeeNotified) {
-		return `${baseText} ${i18next.t('loc:Zamestnanec aj zákazník dostanú notifikáciu.')}`
+		return `${baseNotificationText} ${i18next.t('loc:Zamestnanec aj zákazník dostanú notifikáciu.')}`
 	}
 
 	if (isCustomerNotified) {
-		return `${baseText} ${notifiactionText(i18next.t('loc:Zákazník'))}`
+		return `${baseNotificationText} ${notifiactionText(i18next.t('loc:Zákazník'))}`
 	}
 
 	if (isEmployeeNotified) {
-		return `${baseText} ${notifiactionText(i18next.t('loc:Zamestnanec'))}`
+		return `${baseNotificationText} ${notifiactionText(i18next.t('loc:Zamestnanec'))}`
 	}
 
-	return baseText
+	return baseNotificationText
 }

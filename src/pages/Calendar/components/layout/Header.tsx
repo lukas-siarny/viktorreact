@@ -142,7 +142,7 @@ const CalendarHeader: FC<Props> = (props) => {
 	}, [currentDate, calendarView, currentSelectedMonth])
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	const setSelectedDateDebounced = useCallback(debounce(setSelectedDate, /* CALENDAR_DEBOUNCE_DELAY */ 1000), [setSelectedDate])
+	const setSelectedDateDebounced = useCallback(debounce(setSelectedDate, CALENDAR_DEBOUNCE_DELAY), [setSelectedDate])
 
 	const changeSelectedDate = useCallback(
 		(newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT, debounced = false) => {

@@ -12,7 +12,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
-import { composeWeekResources, composeWeekViewEvents, getWeekDayResourceID, eventAllow } from '../../calendarHelpers'
+import { composeWeekResources, composeWeekViewEvents, getWeekDayResourceID } from '../../calendarHelpers'
 import { getDateTime } from '../../../../utils/helper'
 import eventContent from '../../eventContent'
 
@@ -298,7 +298,6 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				eventContent={(data: EventContentArg) => eventContent(data, CALENDAR_VIEW.WEEK, onEditEvent, onReservationClick)}
 				nowIndicatorContent={() => <NowIndicator />}
 				// handlers
-				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				// select

@@ -688,26 +688,26 @@ export const EVERY_REPEAT_OPTIONS = () => [
 	}
 ]
 
-export const EVENT_NAMES = (eventType?: CALENDAR_EVENT_TYPE, capitalizeFirstLetter = false) => {
+export const EVENT_NAMES = (t: TFunction, eventType?: CALENDAR_EVENT_TYPE, capitalizeFirstLetter = false) => {
 	let string = ''
 	switch (eventType) {
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-			string = i18next.t('loc:prestávku')
+			string = t('loc:prestávku')
 			break
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-			string = i18next.t('loc:shift-akuzativ')
+			string = t('loc:shift-akuzativ')
 			break
 		case CALENDAR_EVENT_TYPE.RESERVATION:
-			string = i18next.t('loc:rezerváciu')
+			string = t('loc:rezerváciu')
 			break
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-			string = i18next.t('loc:voľno')
+			string = t('loc:voľno')
 			break
 		default:
 			break
 	}
-	if (capitalizeFirstLetter) {
-		const firstLetterCapitalized = string.charAt(0).toUpperCase
+	if (capitalizeFirstLetter && string) {
+		const firstLetterCapitalized = string.charAt(0).toUpperCase()
 		return firstLetterCapitalized + string.slice(1)
 	}
 	return string

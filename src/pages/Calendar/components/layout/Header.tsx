@@ -29,10 +29,10 @@ import useMedia from '../../../../hooks/useMedia'
 import { getSelectedDateForCalendar } from '../../calendarHelpers'
 
 const getDateFromSelectedMonth = (selectedMonth: { year: number; month: number }) => {
-	return dayjs(new Date(selectedMonth.year, selectedMonth.month, 1))
+	return dayjs(new Date(selectedMonth?.year, selectedMonth.month, 1))
 }
 
-const formatHeaderDate = (date: string, view: CALENDAR_VIEW, selectedMonth: { year: number; month: number }) => {
+const formatHeaderDate = (date: string, view: CALENDAR_VIEW, selectedMonth?: { year: number; month: number }) => {
 	switch (view) {
 		case CALENDAR_VIEW.WEEK: {
 			const firstDayOfWeek = dayjs(date).startOf('week')
@@ -48,7 +48,10 @@ const formatHeaderDate = (date: string, view: CALENDAR_VIEW, selectedMonth: { ye
 			return `${firstDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_START)} - ${lastDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_END)}`
 		}
 		case CALENDAR_VIEW.MONTH: {
-			return getDateFromSelectedMonth(selectedMonth).format(CALENDAR_DATE_FORMAT.HEADER_MONTH)
+			if (selectedMonth) {
+				return getDateFromSelectedMonth(selectedMonth).format(CALENDAR_DATE_FORMAT.HEADER_MONTH)
+			}
+			return dayjs(date).startOf('month').format(CALENDAR_DATE_FORMAT.HEADER_MONTH)
 		}
 		case CALENDAR_VIEW.DAY:
 		default:
@@ -112,6 +115,8 @@ const CalendarHeader: FC<Props> = (props) => {
 	} = props
 
 	const [currentDate, setCurrentDate] = useState(selectedDate)
+	const [formattedDate, setFormattedDate] = useState(formatHeaderDate(currentDate, calendarView, selectedMonth))
+	const [currentSelectedMonth, setCurrentSelectedMonth] = useState(selectedMonth)
 
 	const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
@@ -124,41 +129,63 @@ const CalendarHeader: FC<Props> = (props) => {
 
 	const isSmallerDevice = useMedia(['(max-width: 1200px)'], [true], false)
 
-	useEffect(() => setCurrentDate(selectedDate), [selectedDate])
+	useEffect(() => {
+		setCurrentDate(selectedDate)
+	}, [selectedDate])
+
+	useEffect(() => {
+		setCurrentSelectedMonth(selectedMonth)
+	}, [selectedMonth])
+
+	useEffect(() => {
+		setFormattedDate(formatHeaderDate(currentDate, calendarView, currentSelectedMonth))
+	}, [currentDate, calendarView, currentSelectedMonth])
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	const setSelectedDateDebounced = useCallback(debounce(setSelectedDate, CALENDAR_DEBOUNCE_DELAY), [setSelectedDate])
+	const setSelectedDateDebounced = useCallback(debounce(setSelectedDate, /* CALENDAR_DEBOUNCE_DELAY */ 1000), [setSelectedDate])
 
-	const changeSelectedDate = (newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT, debounced = false) => {
-		let newQueryDate: string | dayjs.Dayjs = newDate
+	const changeSelectedDate = useCallback(
+		(newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT, debounced = false) => {
+			let newQueryDate: string | dayjs.Dayjs = newDate
+			let newSelectedMonth = { year: currentSelectedMonth.year, month: currentSelectedMonth.month }
 
-		switch (type) {
-			case CALENDAR_SET_NEW_DATE.FIND_START_ADD:
-				newQueryDate = dayjs(calendarView === CALENDAR_VIEW.MONTH ? getDateFromSelectedMonth(selectedMonth) : newDate)
-					.startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
-					.add(1, calendarView.toLowerCase() as dayjs.OpUnitType)
-				break
-			case CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT:
-				newQueryDate = dayjs(calendarView === CALENDAR_VIEW.MONTH ? getDateFromSelectedMonth(selectedMonth) : newDate)
-					.startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
-					.subtract(1, calendarView.toLowerCase() as dayjs.OpUnitType)
-				break
-			default:
-				break
-		}
+			switch (type) {
+				case CALENDAR_SET_NEW_DATE.FIND_START_ADD:
+				case CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT: {
+					const newSelectedMonthDate = getDateFromSelectedMonth(newSelectedMonth)
+					newQueryDate = dayjs(newDate).startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
 
-		const newQueryDateFormatted = dayjs(newQueryDate).format(CALENDAR_DATE_FORMAT.QUERY)
-		setCurrentDate(newQueryDateFormatted)
+					if (type === CALENDAR_SET_NEW_DATE.FIND_START_ADD) {
+						newQueryDate = (calendarView === CALENDAR_VIEW?.MONTH ? newSelectedMonthDate : newQueryDate).add(1, calendarView.toLowerCase() as dayjs.OpUnitType)
+					} else {
+						newQueryDate = (calendarView === CALENDAR_VIEW?.MONTH ? newSelectedMonthDate : newQueryDate).subtract(1, calendarView.toLowerCase() as dayjs.OpUnitType)
+					}
+					newSelectedMonth = {
+						year: dayjs(newQueryDate).year(),
+						month: dayjs(newQueryDate).month()
+					}
+					break
+				}
+				default:
+					break
+			}
 
-		if (debounced) {
-			setSelectedDateDebounced(newQueryDateFormatted)
-		} else {
-			setSelectedDate(newQueryDateFormatted)
-			setSelectedDateDebounced.cancel()
-		}
-	}
+			const newQueryDateFormatted = dayjs(newQueryDate).format(CALENDAR_DATE_FORMAT.QUERY)
 
-	const datePicker = () => {
+			setCurrentDate(newQueryDateFormatted)
+			setCurrentSelectedMonth(newSelectedMonth)
+
+			if (debounced) {
+				setSelectedDateDebounced(newQueryDateFormatted)
+			} else {
+				setSelectedDate(newQueryDateFormatted)
+				setSelectedDateDebounced.cancel()
+			}
+		},
+		[calendarView, setSelectedDate, setSelectedDateDebounced, currentSelectedMonth]
+	)
+
+	const datePicker = useMemo(() => {
 		return (
 			<div ref={calendarDropdownRef}>
 				<DateField
@@ -172,7 +199,7 @@ const CalendarHeader: FC<Props> = (props) => {
 				/>
 			</div>
 		)
-	}
+	}, [currentDate, loadingData, changeSelectedDate])
 
 	const calendarViewOptions = useMemo(
 		() => [
@@ -259,8 +286,8 @@ const CalendarHeader: FC<Props> = (props) => {
 					visible={isCalendarOpen}
 					destroyPopupOnHide
 				>
-					<button type={'button'} className={'nc-button-date mx-1'} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>
-						{formatHeaderDate(currentDate, calendarView, selectedMonth)}
+					<button type={'button'} className={'nc-button-date mx-1'} style={{ width: 200 }} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>
+						{formattedDate}
 						<ChevronDownGrayDark color={'#808080'} />
 					</button>
 				</Dropdown>

@@ -9,8 +9,8 @@ import { startsWith } from 'lodash'
 import { DelimitedArrayParam, useQueryParams } from 'use-query-params'
 
 // fullcalendar
-import { EventDragStopArg, EventResizeDoneArg, EventResizeStopArg } from '@fullcalendar/interaction'
-import FullCalendar, { DateSpanApi, EventApi, EventDropArg } from '@fullcalendar/react'
+import { EventResizeDoneArg } from '@fullcalendar/interaction'
+import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 
 // enums
 import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, EVENT_NAMES, FORM, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
@@ -162,8 +162,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			if (newEmployeeId !== currentEmployeeId) {
 				notification.warning({
 					message: t('loc:Upozornenie'),
-					description: t('loc:{{ eventType }} nie je možné preradiť na iného zamestnanca!', {
-						eventType: eventData?.eventType ? EVENT_NAMES(eventData?.eventType as CALENDAR_EVENT_TYPE, true) : t('loc:Udalosť')
+					description: t('loc:{{ eventType }} nie je možné preradiť na iného zamestnanca.', {
+						eventType: eventData?.eventType ? EVENT_NAMES(t, eventData?.eventType as CALENDAR_EVENT_TYPE, true) : t('loc:Udalosť')
 					})
 				})
 				revertEvent()

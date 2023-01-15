@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 // components
 import i18next from 'i18next'
 import { useSelector } from 'react-redux'
-import MapContainer from './MapContainer'
+import MapContainer from './MapContainerNew'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, MAP } from '../utils/enums'
@@ -303,21 +303,22 @@ const AddressFields = (props: Props) => {
 								<div className={'mb-7 flex-1 w-1/2 xl:w-full'}>
 									<Row>
 										<Col span={24} className={'mb-7'}>
-											<LocationSearchInputField
-												googleMapURL={googleMapUrl}
-												loadingElement={locationSearchElements.loadingElement}
-												containerElement={locationSearchElements.containerElement}
-												label={t('loc:Vyhľadať')}
-												required
-												onPlaceSelected={selectLocation}
-												type='search'
-												placeholder={t('loc:Vyhľadajte miesto na mape')}
-												className={'mb-0'}
-												error={error && touched}
-												disabled={disabled}
-												form={form}
-												name={input.name}
-											/>
+											SEARCH INPUT
+											{/* <LocationSearchInputField */}
+											{/*	googleMapURL={googleMapUrl} */}
+											{/*	loadingElement={locationSearchElements.loadingElement} */}
+											{/*	containerElement={locationSearchElements.containerElement} */}
+											{/*	label={t('loc:Vyhľadať')} */}
+											{/*	required */}
+											{/*	onPlaceSelected={selectLocation} */}
+											{/*	type='search' */}
+											{/*	placeholder={t('loc:Vyhľadajte miesto na mape')} */}
+											{/*	className={'mb-0'} */}
+											{/*	error={error && touched} */}
+											{/*	disabled={disabled} */}
+											{/*	form={form} */}
+											{/*	name={input.name} */}
+											{/* /> */}
 											<div className={cx('text-danger', { hidden: !(error && touched) })}>{error}</div>
 										</Col>
 									</Row>
@@ -330,17 +331,19 @@ const AddressFields = (props: Props) => {
 									})}
 								</div>
 								<div className={'mt-6 w-1/2 xl:w-2/3 max-w-3xl'}>
-									<MapContainer
-										onError={() => setMapError(true)}
-										googleMapURL={googleMapUrl}
-										containerElement={mapContainerElements.containerElement}
-										mapElement={mapContainerElements.mapElement}
-										loadingElement={mapContainerElements.loadingElement}
-										onLocationChange={changeLocation}
-										lat={get(inputValues, 'latitude')}
-										long={get(inputValues, 'longitude')}
-										disabled={disabled}
-									/>
+									miso
+									<MapContainer />
+									{/* <MapContainer */}
+									{/*	onError={() => setMapError(true)} */}
+									{/*	googleMapURL={googleMapUrl} */}
+									{/*	containerElement={mapContainerElements.containerElement} */}
+									{/*	mapElement={mapContainerElements.mapElement} */}
+									{/*	loadingElement={mapContainerElements.loadingElement} */}
+									{/*	onLocationChange={changeLocation} */}
+									{/*	lat={get(inputValues, 'latitude')} */}
+									{/*	long={get(inputValues, 'longitude')} */}
+									{/*	disabled={disabled} */}
+									{/* /> */}
 								</div>
 							</>
 						)}

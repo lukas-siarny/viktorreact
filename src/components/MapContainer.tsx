@@ -57,22 +57,23 @@ const MapContainer = (props: Props) => {
 	}
 
 	return (
-		<GoogleMap
-			defaultCenter={position}
-			center={position}
-			defaultZoom={MAP.defaultZoom}
-			zoom={currentZoom}
-			// ref={mapRef}
-			onRightClick={onChange}
-			onZoomChanged={handleZoomChanged}
-			// OPTIONS: https://developers.google.com/maps/documentation/javascript/reference/map
-			options={{
-				maxZoom: MAP.maxZoom,
-				minZoom: MAP.minZoom
-			}}
-		>
-			<Marker position={position} draggable={!disabled} onDragEnd={onChange} onRightClick={onChange} />
-		</GoogleMap>
+		<div>test</div>
+		// <GoogleMap
+		// 	defaultCenter={position}
+		// 	center={position}
+		// 	defaultZoom={MAP.defaultZoom}
+		// 	zoom={currentZoom}
+		// 	// ref={mapRef}
+		// 	onRightClick={onChange}
+		// 	onZoomChanged={handleZoomChanged}
+		// 	// OPTIONS: https://developers.google.com/maps/documentation/javascript/reference/map
+		// 	options={{
+		// 		maxZoom: MAP.maxZoom,
+		// 		minZoom: MAP.minZoom
+		// 	}}
+		// >
+		// 	<Marker position={position} draggable={!disabled} onDragEnd={onChange} onRightClick={onChange} />
+		// </GoogleMap>
 	)
 }
 

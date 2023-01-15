@@ -683,21 +683,29 @@ export const EVERY_REPEAT_OPTIONS = () => [
 	}
 ]
 
-export const EVENT_NAMES = (eventType: CALENDAR_EVENT_TYPE) => {
+export const EVENT_NAMES = (eventType?: CALENDAR_EVENT_TYPE, capitalizeFirstLetter = false) => {
+	let string = ''
 	switch (eventType) {
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-			return i18next.t('loc:prestávku')
+			string = i18next.t('loc:prestávku')
+			break
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-			return i18next.t('loc:shift-akuzativ')
-
+			string = i18next.t('loc:shift-akuzativ')
+			break
 		case CALENDAR_EVENT_TYPE.RESERVATION:
-			return i18next.t('loc:rezerváciu')
-
+			string = i18next.t('loc:rezerváciu')
+			break
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-			return i18next.t('loc:voľno')
+			string = i18next.t('loc:voľno')
+			break
 		default:
-			return ''
+			break
 	}
+	if (capitalizeFirstLetter) {
+		const firstLetterCapitalized = string.charAt(0).toUpperCase()
+		return firstLetterCapitalized + string.slice(1)
+	}
+	return string
 }
 
 export const SHORTCUT_DAYS_OPTIONS = (length = 2) => [

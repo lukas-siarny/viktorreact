@@ -15,7 +15,7 @@ import CalendarEventContent from '../CalendarEventContent'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
-import { composeWeekResources, composeWeekViewEvents, eventAllow, getWeekDayResourceID } from '../../calendarHelpers'
+import { composeWeekResources, composeWeekViewEvents, getWeekDayResourceID } from '../../calendarHelpers'
 import { getDateTime } from '../../../../utils/helper'
 
 // types
@@ -302,7 +302,6 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				)}
 				nowIndicatorContent={() => <NowIndicator />}
 				// handlers
-				eventAllow={eventAllow}
 				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				// select

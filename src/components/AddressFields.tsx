@@ -331,18 +331,27 @@ const AddressFields = (props: Props) => {
 									})}
 								</div>
 								<div className={'mt-6 w-1/2 xl:w-2/3 max-w-3xl'}>
-									miso
-									<MapContainer />
+									<MapContainer
+										onError={() => setMapError(true)}
+										googleMapURL={googleMapUrl}
+										// containerElement={mapContainerElements.containerElement}
+										// mapElement={mapContainerElements.mapElement}
+										// loadingElement={mapContainerElements.loadingElement}
+										onLocationChange={changeLocation}
+										lat={get(inputValues, 'latitude')}
+										lng={get(inputValues, 'longitude')}
+										disabled={disabled}
+									/>
 									{/* <MapContainer */}
-									{/*	onError={() => setMapError(true)} */}
-									{/*	googleMapURL={googleMapUrl} */}
-									{/*	containerElement={mapContainerElements.containerElement} */}
-									{/*	mapElement={mapContainerElements.mapElement} */}
-									{/*	loadingElement={mapContainerElements.loadingElement} */}
-									{/*	onLocationChange={changeLocation} */}
-									{/*	lat={get(inputValues, 'latitude')} */}
-									{/*	long={get(inputValues, 'longitude')} */}
-									{/*	disabled={disabled} */}
+									{/* onError={() => setMapError(true)} */}
+									{/* googleMapURL={googleMapUrl} */}
+									{/* containerElement={mapContainerElements.containerElement} */}
+									{/* mapElement={mapContainerElements.mapElement} */}
+									{/* loadingElement={mapContainerElements.loadingElement} */}
+									{/* onLocationChange={changeLocation} */}
+									{/* lat={get(inputValues, 'latitude')} */}
+									{/* long={get(inputValues, 'longitude')} */}
+									{/* disabled={disabled} */}
 									{/* /> */}
 								</div>
 							</>

@@ -286,7 +286,7 @@ const CalendarHeader: FC<Props> = (props) => {
 					visible={isCalendarOpen}
 					destroyPopupOnHide
 				>
-					<button type={'button'} className={'nc-button-date mx-1'} style={{ width: 200 }} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>
+					<button type={'button'} className={'nc-button-date mx-1'} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>
 						{formattedDate}
 						<ChevronDownGrayDark color={'#808080'} />
 					</button>

@@ -77,7 +77,11 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 					}
 					clearConfirmModal()
 				},
-				content: getConfirmModalText(t('loc:Naozaj chcete upraviť rezerváciu?'), CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CHANGED, disabledNotifications)
+				content: getConfirmModalText(
+					t('loc:Naozaj chcete upraviť rezerváciu?'),
+					[CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CHANGED_CUSTOMER, CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CHANGED_EMPLOYEE],
+					disabledNotifications
+				)
 			})
 		} else {
 			handleSubmitReservation(values, eventId)
@@ -136,7 +140,11 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 				...modalProps,
 				content:
 					eventType === CALENDAR_EVENT_TYPE.RESERVATION
-						? getConfirmModalText(deleteMessage, CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CANCELLED, disabledNotifications)
+						? getConfirmModalText(
+								deleteMessage,
+								[CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CANCELLED_CUSTOMER, CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CANCELLED_EMPLOYEE],
+								disabledNotifications
+						  )
 						: deleteMessage,
 				onOk: () => handleDeleteEvent(eventId, calendarBulkEventID)
 			}
@@ -160,14 +168,22 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 					modalProps = {
 						...modalProps,
 						title: STRINGS(t).decline(t('loc:rezerváciu')),
-						content: getConfirmModalText(t('loc:Naozaj chcete zamietnuť rezerváciu?'), CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_REJECTED, disabledNotifications)
+						content: getConfirmModalText(
+							t('loc:Naozaj chcete zamietnuť rezerváciu?'),
+							[CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_REJECTED_CUSTOMER, CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_REJECTED_EMPLOYEE],
+							disabledNotifications
+						)
 					}
 					break
 				case RESERVATION_STATE.CANCEL_BY_SALON:
 					modalProps = {
 						...modalProps,
 						title: STRINGS(t).cancel(t('loc:rezerváciu')),
-						content: getConfirmModalText(t('loc:Naozaj chcete zrušiť rezerváciu?'), CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CANCELLED, disabledNotifications)
+						content: getConfirmModalText(
+							t('loc:Naozaj chcete zrušiť rezerváciu?'),
+							[CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CANCELLED_CUSTOMER, CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CANCELLED_EMPLOYEE],
+							disabledNotifications
+						)
 					}
 					break
 				case RESERVATION_STATE.NOT_REALIZED:

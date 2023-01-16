@@ -85,8 +85,6 @@ const SiderEventManagement: FC<Props> = (props) => {
 		eventId: StringParam,
 		date: StringParam
 	})
-	// const eventFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EVENT_FORM)(state))
-	// const reservationFormValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
 
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 

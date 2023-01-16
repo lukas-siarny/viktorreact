@@ -15,7 +15,8 @@ import {
 	IEventExtenedProps,
 	IResourceEmployee,
 	IWeekViewResourceExtenedProps,
-	IDayViewResourceExtenedProps
+	IDayViewResourceExtenedProps,
+	DisabledNotificationsArray
 } from '../../types/interfaces'
 
 // utils
@@ -26,7 +27,8 @@ import {
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_VIEW,
-	NEW_ID_PREFIX
+	NEW_ID_PREFIX,
+	NOTIFICATION_TYPES
 } from '../../utils/enums'
 import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
 
@@ -556,16 +558,15 @@ export const scrollToSelectedDate = (scrollId: string, options?: Object) => {
 export const getConfirmModalText = (
 	baseNotificationText: string,
 	disabledNotificationTypesToCheck: CALENDAR_DISABLED_NOTIFICATION_TYPE[],
-	disabledNotificationsSource?: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']
+	disabledNotificationsSource?: DisabledNotificationsArray
 ) => {
 	let isCustomerNotified = true
 	let isEmployeeNotified = true
 
 	disabledNotificationTypesToCheck.forEach((notificationToCheck) => {
 		const disabledNotificationSource = disabledNotificationsSource?.find((notificationSource) => notificationSource.eventType === notificationToCheck)
-		// entity has disabled notification if channels array is not empty
-		if (!isEmpty(disabledNotificationSource?.channels)) {
-			// get the entity type (customer or employee)
+		// when array length is equal to NOTIFICATION_TYPES length it means all notifications are disabled for entity
+		if (disabledNotificationSource && disabledNotificationSource?.channels?.length === NOTIFICATION_TYPES.length) {
 			if (disabledNotificationSource?.eventType?.endsWith('CUSTOMER')) {
 				isCustomerNotified = false
 			}

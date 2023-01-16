@@ -222,6 +222,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 			...omit(prevInitData, 'eventType'),
 			eventType
 		}
+
+		console.log({ initData, prevInitData, newEventData })
 		if (eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
 			dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
 		} else {

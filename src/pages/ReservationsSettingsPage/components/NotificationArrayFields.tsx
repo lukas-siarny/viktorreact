@@ -14,7 +14,7 @@ import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon-32.s
 const { Item } = Form
 
 const getNotificationTitle = (notificationType: RS_NOTIFICATION, channel: NOTIFICATION_CHANNEL) => {
-	const { title, tooltip } = RS_NOTIFICATION_FIELD_TEXTS(notificationType, channel)
+	const { title, tooltip } = RS_NOTIFICATION_FIELD_TEXTS(notificationType)
 	return (
 		<div className={'mt-5 mb-4 w-full'}>
 			<div className={'mb-0 mt-0 flex items-center justify-between'}>

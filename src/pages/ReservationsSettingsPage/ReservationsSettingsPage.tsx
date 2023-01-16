@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { Col, Row, Spin } from 'antd'
-import { forEach, includes, reduce } from 'lodash'
+import { filter, forEach, includes, reduce } from 'lodash'
 
 // components
+import { channel } from 'diagnostics_channel'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ReservationSystemSettingsForm from './components/ReservationSystemSettingsForm'
 
@@ -21,11 +22,11 @@ import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getServices } from '../../reducers/services/serviceActions'
 
 // types
-import { IBreadcrumbs, IReservationSystemSettingsForm, SalonSubPageProps } from '../../types/interfaces'
+import { DisabledNotifications, IBreadcrumbs, IReservationSystemSettingsForm, SalonSubPageProps } from '../../types/interfaces'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
-const EXCLUDED_NOTIFICATIONS_B2B: string[] = [RS_NOTIFICATION.RESERVATION_REJECTED, RS_NOTIFICATION.RESERVATION_REMINDER]
+const EXCLUDED_NOTIFICATIONS_B2B: string[] = [RS_NOTIFICATION.RESERVATION_REJECTED_CUSTOMER, RS_NOTIFICATION.RESERVATION_REMINDER_CUSTOMER]
 
 const NOTIFICATIONS = Object.keys(RS_NOTIFICATION)
 const NOTIFICATION_TYPES = Object.keys(RS_NOTIFICATION_TYPE)
@@ -47,7 +48,8 @@ const transformNotificationsChannelForRequest = (
 	})
 }
 
-const initDisabledNotifications = (notifications: any[]): IReservationSystemSettingsForm['disabledNotifications'] => {
+const initDisabledNotifications = (notifications: DisabledNotifications): IReservationSystemSettingsForm['disabledNotifications'] => {
+	console.log('notifications', notifications)
 	// find all relevant notifications
 	const relevantNotifications = notifications.filter((notification) => NOTIFICATIONS.includes(notification.eventType as string))
 	// transform into object of type IReservationSystemSettingsForm.disabledNotifications
@@ -57,8 +59,8 @@ const initDisabledNotifications = (notifications: any[]): IReservationSystemSett
 			// eslint-disable-next-line no-param-reassign
 			data[item.eventType as string] = {
 				// included notification types of RS_NOTIFICATION_TYPE(EMAIL, PUSH) means switch is OFF (false value)
-				b2cChannels: NOTIFICATION_TYPES.map((type) => ({ [type]: !item.b2cChannels.includes(type as RS_NOTIFICATION_TYPE) })),
-				b2bChannels: NOTIFICATION_TYPES.map((type) => ({ [type]: !item.b2bChannels.includes(type as RS_NOTIFICATION_TYPE) }))
+				b2cChannels: NOTIFICATION_TYPES.map((type) => ({ [type]: !item.channels.includes(type as RS_NOTIFICATION_TYPE) })),
+				b2bChannels: NOTIFICATION_TYPES.map((type) => ({ [type]: !item.channels.includes(type as RS_NOTIFICATION_TYPE) }))
 			}
 
 			return data
@@ -101,7 +103,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 
 	const fetchData = async () => {
 		const salonRes = await dispatch(selectSalon(salonID))
-
+		console.log('salonRes', salonRes)
 		// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
 		const canVisitThisPage = isAdmin(authUserPermissions) || (checkPermissions(authUserPermissions, [PERMISSION.PARTNER]) && salonRes?.data?.settings?.enabledReservations)
 		if (!canVisitThisPage) {

@@ -15,7 +15,8 @@ import {
 	IEventExtenedProps,
 	IResourceEmployee,
 	IWeekViewResourceExtenedProps,
-	IDayViewResourceExtenedProps
+	IDayViewResourceExtenedProps,
+	DisabledNotifications
 } from '../../types/interfaces'
 
 // utils
@@ -556,7 +557,7 @@ export const scrollToSelectedDate = (scrollId: string, options?: Object) => {
 export const getConfirmModalText = (
 	baseNotificationText: string,
 	disabledNotificationTypesToCheck: CALENDAR_DISABLED_NOTIFICATION_TYPE[],
-	disabledNotificationsSource?: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']
+	disabledNotificationsSource?: DisabledNotifications
 ) => {
 	let isCustomerNotified = true
 	let isEmployeeNotified = true

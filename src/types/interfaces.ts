@@ -765,3 +765,5 @@ export type ConfirmModalUpdateReservationData = {
 }
 
 export type ConfirmModalData = ConfirmModalReservationData | ConfirmModalEventnData | ConfirmModalDeleteEventData | ConfirmModalUpdateReservationData | null
+
+export type DisabledNotifications = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']

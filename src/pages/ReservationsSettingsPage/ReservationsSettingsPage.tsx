@@ -236,14 +236,6 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 		})
 		// Notifications
 		// find notification which are OFF - relevant for API
-		/* const disabledNotifications = NOTIFICATIONS.map((type: string) => {
-			return {
-				eventType: type,
-				b2bChannels: transformNotificationsChannelForRequest(values.disabledNotifications[type as RS_NOTIFICATION].b2bChannels),
-				b2cChannels: transformNotificationsChannelForRequest(values.disabledNotifications[type as RS_NOTIFICATION].b2cChannels)
-			}
-		}) */
-
 		const disabledNotifications = NOTIFICATIONS.reduce((result: any, item) => {
 			const notificationValues = values.disabledNotifications[item]
 			const b2cChannel = transformNotificationsChannelForRequest(notificationValues.b2cChannels) as NonNullable<PatchDisabledNotifications[0]>['channels']
@@ -271,8 +263,6 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 
 			return [...result, ...items]
 		}, [] as PatchDisabledNotifications)
-
-		console.log({ disabledNotifications })
 
 		const reqData: PathSettingsBody = {
 			settings: {

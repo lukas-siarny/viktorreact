@@ -2,9 +2,8 @@
 import { DateSpanApi, EventApi } from '@fullcalendar/react'
 import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
-import { isEmpty, uniqueId, startsWith } from 'lodash'
+import { uniqueId, startsWith } from 'lodash'
 import Scroll from 'react-scroll'
-import { Paths } from '../../types/api'
 
 // types
 import {

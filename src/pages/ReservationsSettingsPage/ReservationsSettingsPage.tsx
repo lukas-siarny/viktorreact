@@ -119,8 +119,6 @@ const initDisabledNotifications = (notifications: DisabledNotificationsArray): I
 		}
 	}, {} as InitDisabledNotifications)
 
-	console.log({ notifications, result })
-
 	return result
 }
 
@@ -144,7 +142,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 
 	const fetchData = async () => {
 		const salonRes = await dispatch(selectSalon(salonID))
-
+		console.log('salonRes', salonRes)
 		// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
 		const canVisitThisPage = isAdmin(authUserPermissions) || (checkPermissions(authUserPermissions, [PERMISSION.PARTNER]) && salonRes?.data?.settings?.enabledReservations)
 		if (!canVisitThisPage) {

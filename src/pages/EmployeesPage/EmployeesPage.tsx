@@ -199,24 +199,41 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			}
 		]
 	}
-
+	console.log('table data', employees?.data?.employees)
 	const handleDrop = useCallback(
 		async (oldIndex: number, newIndex: number) => {
-			console.log('called')
-			// try {
-			// 	const itemID: any = stationsTableData?.[oldIndex]?.station?.id
-			// 	if (itemID && oldIndex !== newIndex) {
-			// 		// NOTE: Prevent voci prebliku pred volanim BE
-			// 		const reorderedData = arrayMoveImmutable(stationsTableData, oldIndex, newIndex).filter((item) => !!item)
-			// 		dispatch(reorderTableAction(reorderedData))
-			// 		await patchReq(`/api/v1/lines/${lineID}/stations/${itemID}/reorder`, undefined, { order: newIndex }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			// 	}
-			// } catch (e) {
-			// 	// eslint-disable-next-line no-console
-			// 	console.error(e)
-			// }
-			// // NOTE: V pripade ak BE reorder zlyha pouzi povodne radenie
-			// fetchStations()
+			console.log('called', oldIndex, newIndex)
+			try {
+				const itemID: any = employees?.data?.employees?.[oldIndex]?.id
+				if (itemID && oldIndex !== newIndex) {
+					// NOTE: Prevent voci prebliku pred volanim BE
+					const reorderedData = arrayMoveImmutable(employees?.data?.employees as any, oldIndex, newIndex).filter((item) => !!item)
+					// dispatch(reorderTableAction(reorderedData))
+					await patchReq(
+						`/api/b2b/admin/employees/{employeeID}/reorder`,
+						{ employeeID: itemID },
+						{ orderIndex: newIndex },
+						undefined,
+						NOTIFICATION_TYPE.NOTIFICATION,
+						true
+					)
+				}
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.error(e)
+			}
+			// NOTE: V pripade ak BE reorder zlyha pouzi povodne radenie
+			dispatch(
+				getEmployees({
+					page: query.page,
+					limit: query.limit,
+					order: query.order,
+					search: query.search,
+					accountState: query.accountState,
+					serviceID: query.serviceID,
+					salonID
+				})
+			)
 		},
 		[dispatch]
 	)

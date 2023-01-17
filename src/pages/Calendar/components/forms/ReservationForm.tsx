@@ -220,7 +220,6 @@ const ReservationForm: FC<Props> = (props) => {
 							className={'pb-0'}
 							pickerClassName={'w-full'}
 							component={DateField}
-							disablePast
 							showInReservationDrawer
 							placement={'bottomRight'}
 							dropdownAlign={{ points: ['tr', 'br'] }}

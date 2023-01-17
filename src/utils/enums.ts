@@ -145,6 +145,7 @@ export enum FORM {
 	CONFIRM_BULK_FORM = 'CONFIRM_BULK_FORM',
 	RESEVATION_SYSTEM_SETTINGS = 'RESEVATION_SYSTEM_SETTINGS',
 	HEADER_COUNTRY_FORM = 'HEADER_COUNTRY_FORM',
+	EMPLOYEE_SERVICE_EDIT = 'EMPLOYEE_SERVICE_EDIT',
 	CALENDAR_EVENT_FORM = 'CALENDAR_EVENT_FORM'
 }
 
@@ -606,11 +607,11 @@ export enum TIME_STATS_SOURCE_TYPE {
 	MONTH = 'MONTH',
 	YEAR = 'YEAR'
 }
-
 // CALENDAR ENUMS
 export const CALENDAR_COMMON_SETTINGS = {
+	// add condition for cypress E2E errors
 	// eslint-disable-next-line no-underscore-dangle
-	LICENSE_KEY: `${window.__RUNTIME_CONFIG__.FULLCALENDAR_LICENSE_KEY}`,
+	LICENSE_KEY: window.__RUNTIME_CONFIG__ && window.__RUNTIME_CONFIG__.FULLCALENDAR_LICENSE_KEY ? `${window.__RUNTIME_CONFIG__.FULLCALENDAR_LICENSE_KEY}` : '',
 	TIME_ZONE: 'local',
 	TIME_FORMAT: {
 		hour: '2-digit',
@@ -682,21 +683,29 @@ export const EVERY_REPEAT_OPTIONS = () => [
 	}
 ]
 
-export const EVENT_NAMES = (eventType: CALENDAR_EVENT_TYPE) => {
+export const EVENT_NAMES = (eventType?: CALENDAR_EVENT_TYPE, capitalizeFirstLetter = false) => {
+	let string = ''
 	switch (eventType) {
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-			return i18next.t('loc:prestávku')
+			string = i18next.t('loc:prestávku')
+			break
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-			return i18next.t('loc:shift-akuzativ')
-
+			string = i18next.t('loc:shift-akuzativ')
+			break
 		case CALENDAR_EVENT_TYPE.RESERVATION:
-			return i18next.t('loc:rezerváciu')
-
+			string = i18next.t('loc:rezerváciu')
+			break
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-			return i18next.t('loc:voľno')
+			string = i18next.t('loc:voľno')
+			break
 		default:
-			return ''
+			break
 	}
+	if (capitalizeFirstLetter) {
+		const firstLetterCapitalized = string.charAt(0).toUpperCase()
+		return firstLetterCapitalized + string.slice(1)
+	}
+	return string
 }
 
 export const SHORTCUT_DAYS_OPTIONS = (length = 2) => [
@@ -812,8 +821,8 @@ export enum RS_NOTIFICATION {
 	RESERVATION_AWAITING_APPROVAL = 'RESERVATION_AWAITING_APPROVAL',
 	RESERVATION_CONFIRMED = 'RESERVATION_CONFIRMED',
 	RESERVATION_CHANGED = 'RESERVATION_CHANGED',
-	RESERVATION_REJECTED = 'RESERVATION_REJECTED',
 	RESERVATION_CANCELLED = 'RESERVATION_CANCELLED',
+	RESERVATION_REJECTED = 'RESERVATION_REJECTED',
 	RESERVATION_REMINDER = 'RESERVATION_REMINDER'
 }
 
@@ -822,6 +831,8 @@ export enum RS_NOTIFICATION_TYPE {
 	EMAIL = 'EMAIL',
 	PUSH = 'PUSH'
 }
+
+export const NOTIFICATION_TYPES = Object.keys(RS_NOTIFICATION_TYPE)
 
 export enum NOTIFICATION_CHANNEL {
 	B2B = 'B2B',
@@ -882,9 +893,12 @@ export const RS_NOTIFICATION_FIELD_TEXTS = (notificationType: RS_NOTIFICATION, c
 }
 
 export enum CALENDAR_DISABLED_NOTIFICATION_TYPE {
-	RESERVATION_CHANGED = 'RESERVATION_CHANGED',
-	RESERVATION_REJECTED = 'RESERVATION_REJECTED',
-	RESERVATION_CANCELLED = 'RESERVATION_CANCELLED'
+	RESERVATION_CHANGED_CUSTOMER = 'RESERVATION_CHANGED_CUSTOMER',
+	RESERVATION_REJECTED_CUSTOMER = 'RESERVATION_REJECTED_CUSTOMER',
+	RESERVATION_CANCELLED_CUSTOMER = 'RESERVATION_CANCELLED_CUSTOMER',
+	RESERVATION_CHANGED_EMPLOYEE = 'RESERVATION_CHANGED_EMPLOYEE',
+	RESERVATION_CANCELLED_EMPLOYEE = 'RESERVATION_CANCELLED_EMPLOYEE',
+	RESERVATION_REJECTED_EMPLOYEE = 'RESERVATION_REJECTED_EMPLOYEE'
 }
 
 export enum CONFIRM_MODAL_DATA_TYPE {

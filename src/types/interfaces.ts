@@ -7,7 +7,7 @@ import { EventDropArg, EventInput } from '@fullcalendar/react'
 import {
 	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT,
 	CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, DAY,
-	SERVICE_TYPE, RESERVATION_STATE, RESERVATION_PAYMENT_METHOD, CONFIRM_MODAL_DATA_TYPE
+	SERVICE_TYPE, RESERVATION_STATE, RESERVATION_PAYMENT_METHOD, CONFIRM_MODAL_DATA_TYPE, PARAMETER_TYPE
 } from '../utils/enums'
 
 // types
@@ -49,6 +49,58 @@ export interface IInviteEmployeeForm {
 	roleID: string
 }
 
+export type ServiceRootCategory = Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200['employee']['categories']
+
+type ServiceType = NonNullable<
+	NonNullable<Paths.GetApiB2BV1Services.Responses.$200['groupedServicesByCategory'][0]['category']>['children'][0]['category']
+>['children'][0]['service']
+
+export type ServicePriceAndDurationData = ServiceType['priceAndDurationData']
+export type ServiceCategoryParameter = ServiceType['serviceCategoryParameter']
+
+export type ServiceDetail = Paths.GetApiB2BAdminServicesServiceId.Responses.$200['service']
+
+export type FormPriceAndDurationData = {
+	durationFrom?: number | null
+	durationTo?: number | null
+	priceFrom?: number | null
+	priceTo?: number | null
+	variableDuration?: boolean
+	variablePrice?: boolean
+}
+
+export type EmployeeServiceData = {
+	id: string
+	employee: {
+		id: string
+		name?: string
+		image?: string
+		fallbackImage?: string
+		email?: string
+		inviteEmail?: string
+		hasActiveAccount?: boolean
+	}
+	name?: string
+	industry?: string
+	category?: string
+	image?: string
+	useCategoryParameter: boolean
+	employeePriceAndDurationData?: FormPriceAndDurationData
+	salonPriceAndDurationData?: FormPriceAndDurationData
+	hasOverriddenPricesAndDurationData?: boolean
+	serviceCategoryParameter?: {
+		id: string
+		name?: string
+		employeePriceAndDurationData?: FormPriceAndDurationData
+		salonPriceAndDurationData: FormPriceAndDurationData
+		hasOverriddenPricesAndDurationData?: boolean
+	}[]
+	serviceCategoryParameterType?: PARAMETER_TYPE
+	serviceCategoryParameterName?: string
+	serviceCategoryParameterId?: string
+}
+
+export type IEmployeeServiceEditForm = EmployeeServiceData & {}
 export interface IEditEmployeeRoleForm {
 	roleID: string
 }
@@ -133,17 +185,31 @@ export interface ISalonForm {
 	deletedAt?: boolean
 }
 
-export interface IServiceForm {
-	id: number
-	durationFrom: number
-	durationTo: number
+export interface IParameterValue {
+	id: string | undefined
+	name: string | undefined
+	durationFrom: number | null | undefined
+	durationTo: number | null | undefined
 	variableDuration: boolean
-	priceFrom: number
-	priceTo: number
+	priceFrom: number | null | undefined
+	priceTo: number | null | undefined
+	variablePrice: boolean
+	useParameter: boolean
+}
+export interface IServiceForm {
+	id: string
+	durationFrom?: number
+	durationTo?: number
+	variableDuration: boolean
+	priceFrom?: number | null
+	priceTo?: number | null
 	variablePrice: boolean
 	useCategoryParameter: boolean
-	serviceCategoryParameter: any
-	employees: any
+	serviceCategoryParameterType?: PARAMETER_TYPE
+	serviceCategoryParameterName?: string
+	serviceCategoryParameter: IParameterValue[]
+	employee?: string[]
+	employees: EmployeeServiceData[]
 	settings: {
 		enabledB2cReservations: boolean
 		autoApproveReservatons: boolean
@@ -339,6 +405,7 @@ export interface IEmployeeForm {
 	service?: string[]
 	avatar?: any
 	role: number
+	hasActiveAccount?: boolean
 }
 
 export interface ICosmeticForm {
@@ -767,3 +834,9 @@ export type ConfirmModalUpdateReservationData = {
 }
 
 export type ConfirmModalData = ConfirmModalReservationData | ConfirmModalEventnData | ConfirmModalDeleteEventData | ConfirmModalUpdateReservationData | null
+
+export type ServicePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody
+
+export type DisabledNotificationsArray = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']
+
+export type PathSettingsBody = Paths.PatchApiB2BAdminSalonsSalonIdSettings.RequestBody

@@ -4,6 +4,7 @@ import React, { FC, useRef } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
 import { startsWith } from 'lodash'
+import { useTranslation } from 'react-i18next'
 
 // utils
 import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NEW_ID_PREFIX } from '../../../utils/enums'
@@ -15,6 +16,7 @@ import { ReactComponent as CheckIcon } from '../../../assets/icons/check-10.svg'
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/service-icon-10.svg'
 import { ReactComponent as AvatarIcon } from '../../../assets/icons/avatar-10.svg'
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-12.svg'
+import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-12.svg'
 
 // types
 import { CalendarEvent, IEventCardProps, ReservationPopoverData, ReservationPopoverPosition } from '../../../types/interfaces'
@@ -29,7 +31,7 @@ interface IReservationCardProps extends IEventCardProps {
 	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
 }
 
-const getIcon = ({
+const getIconState = ({
 	isPast,
 	isRealized,
 	isApproved,
@@ -55,9 +57,9 @@ const getIcon = ({
 	}
 
 	return service?.icon?.resizedImages ? (
-		<img src={service.icon.resizedImages.thumbnail} alt={service?.name} width={10} height={10} className={'object-contain'} />
+		<img src={service.icon.resizedImages.thumbnail} alt={service?.name} width={10} height={10} className={'object-contain shrink-0'} />
 	) : (
-		<ServiceIcon />
+		<ServiceIcon className={'icon service'} />
 	)
 }
 
@@ -84,17 +86,23 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		onReservationClick
 	} = props
 
+	const [t] = useTranslation()
+
 	const isPast = dayjs(originalEventData?.endDateTime || end).isBefore(dayjs())
 	const isPending = reservationData?.state === RESERVATION_STATE.PENDING
 	const isApproved = reservationData?.state === RESERVATION_STATE.APPROVED
 	const isRealized = reservationData?.state === RESERVATION_STATE.REALIZED
 	const notRealized = reservationData?.state === RESERVATION_STATE.NOT_REALIZED
-	const isOnline = reservationData?.createSourceType !== RESERVATION_SOURCE_TYPE.ONLINE
+	const isOnline = reservationData?.createSourceType === RESERVATION_SOURCE_TYPE.ONLINE
 	const isEmployeeAutoassigned = reservationData?.employeeAssignmentType === RESERVATION_ASSIGNMENT_TYPE.SYSTEM
 
 	const bgColor = !isPast ? backgroundColor : undefined
 
-	const onlineIndicatior = reservationData?.createSourceType === RESERVATION_SOURCE_TYPE.ONLINE ? <div className={'state'} style={{ backgroundColor: bgColor }} /> : null
+	const onlineIndicatior = isOnline ? (
+		<div className={'state'} style={{ color: bgColor }}>
+			{t('loc:Online')}
+		</div>
+	) : null
 
 	const customerName = getAssignedUserLabel({
 		id: customer?.id || '-',
@@ -103,7 +111,9 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		email: customer?.email
 	})
 
-	const icon = getIcon({ isPast, isApproved, isRealized, notRealized, service })
+	const iconState = getIconState({ isPast, isApproved, isRealized, notRealized, service })
+	const iconPending = isPending && <ClockIcon className={'icon clock'} style={{ color: bgColor }} />
+	const iconAutoAssigned = <AvatarIcon className={'icon employee'} />
 
 	const cardRef = useRef<HTMLDivElement | null>(null)
 
@@ -190,9 +200,9 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 									</div>
 									{service?.name && <span className={'desc'}>{service.name}</span>}
 									<div className={'icons'}>
-										<AvatarIcon className={'icon employee'} />
-										{icon}
-										{onlineIndicatior}
+										{iconPending}
+										{iconAutoAssigned}
+										{iconState}
 									</div>
 								</>
 							)
@@ -210,8 +220,9 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 										{service?.name && <span className={'desc'}>{service.name}</span>}
 									</div>
 									<div className={'icons'}>
-										<AvatarIcon className={'icon employee'} />
-										{icon}
+										{iconPending}
+										{iconAutoAssigned}
+										{iconState}
 									</div>
 								</>
 							)

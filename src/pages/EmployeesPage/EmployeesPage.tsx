@@ -6,7 +6,7 @@ import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
-import { arrayMoveImmutable } from 'array-move'
+import { find } from 'lodash'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -49,7 +49,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		search: StringParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'createdAt:desc'),
+		order: withDefault(StringParam, 'orderIndex:asc'),
 		accountState: StringParam,
 		serviceID: StringParam,
 		salonID: StringParam
@@ -199,20 +199,16 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			}
 		]
 	}
-	console.log('table data', employees?.data?.employees)
+
 	const handleDrop = useCallback(
 		async (oldIndex: number, newIndex: number) => {
-			console.log('called', oldIndex, newIndex)
 			try {
-				const itemID: any = employees?.data?.employees?.[oldIndex]?.id
-				if (itemID && oldIndex !== newIndex) {
-					// NOTE: Prevent voci prebliku pred volanim BE
-					const reorderedData = arrayMoveImmutable(employees?.data?.employees as any, oldIndex, newIndex).filter((item) => !!item)
-					// dispatch(reorderTableAction(reorderedData))
+				const employee = find(employees?.data?.employees, { orderIndex: oldIndex + 1 })
+				if (employee?.id && oldIndex !== newIndex) {
 					await patchReq(
 						`/api/b2b/admin/employees/{employeeID}/reorder`,
-						{ employeeID: itemID },
-						{ orderIndex: newIndex },
+						{ employeeID: employee?.id },
+						{ orderIndex: newIndex + 1 },
 						undefined,
 						NOTIFICATION_TYPE.NOTIFICATION,
 						true
@@ -221,21 +217,22 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
+			} finally {
+				// NOTE: V pripade ak BE reorder zlyha pouzi povodne radenie
+				dispatch(
+					getEmployees({
+						page: query.page,
+						limit: query.limit,
+						order: query.order,
+						search: query.search,
+						accountState: query.accountState,
+						serviceID: query.serviceID,
+						salonID
+					})
+				)
 			}
-			// NOTE: V pripade ak BE reorder zlyha pouzi povodne radenie
-			dispatch(
-				getEmployees({
-					page: query.page,
-					limit: query.limit,
-					order: query.order,
-					search: query.search,
-					accountState: query.accountState,
-					serviceID: query.serviceID,
-					salonID
-				})
-			)
 		},
-		[dispatch]
+		[dispatch, employees?.data?.employees, query.accountState, query.limit, query.order, query.page, query.search, query.serviceID, salonID]
 	)
 
 	return (
@@ -268,7 +265,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 								columns={columns}
 								dataSource={employees?.data?.employees}
 								rowClassName={'clickable-row'}
-								rowKey='id'
+								rowKey='orderIndex'
 								dndEnabled
 								dndDrop={handleDrop}
 								twoToneRows

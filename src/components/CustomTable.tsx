@@ -77,7 +77,6 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 
 	const dndDropWrap = useCallback(
 		async (oldIndex: number, newIndex: number) => {
-			console.log('table', oldIndex, newIndex)
 			if (isProcessingDrop) {
 				return
 			}
@@ -187,6 +186,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 
 	const table = (
 		<div className={cx({ 'disabled-state': disabled })}>
+			{/* // TODO: ak by trebalo tak wrappnut tabulku kvoli dnd do permissions - moze byt pouzivatel ktory ma prava na citanie ale nie na upravu? */}
 			<Table
 				{...props}
 				columns={columns}

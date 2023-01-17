@@ -209,6 +209,7 @@ const SalonForm: FC<Props> = (props) => {
 							optionRender={(itemData: any) => optionRenderWithImage(itemData, <CosmeticIcon />, 40)}
 							showSearch
 							onSearch={searchCosmetics}
+							filterOption={false}
 							size={'large'}
 							loading={cosmetics.isLoading}
 							mode={'multiple'}

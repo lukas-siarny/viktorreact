@@ -1,14 +1,15 @@
 import { Action, Dispatch } from 'redux'
 import { ThunkResult } from '../reducers'
-import { IQueryParams, ISearchable, ISelectOptionItem } from '../types/interfaces'
+import { IQueryParams, ISearchable, ISearchableWithoutPagination, ISelectOptionItem } from '../types/interfaces'
 import { FILTER_ENTITY } from './enums'
 
 // reducers
 import { getSalons, getBasicSalons } from '../reducers/salons/salonsActions'
 import { getNotinoUsers, getUsers } from '../reducers/users/userActions'
 import { getEmployees } from '../reducers/employees/employeesActions'
+import { getCosmetics } from '../reducers/cosmetics/cosmeticsActions'
 
-const getSearchFn = (type: FILTER_ENTITY): ((params: IQueryParams) => ThunkResult<Promise<ISearchable<any>>>) => {
+const getSearchFn = (type: FILTER_ENTITY): ((params: IQueryParams) => ThunkResult<Promise<ISearchable<any> | ISearchableWithoutPagination<any>>>) => {
 	switch (type) {
 		case FILTER_ENTITY.EMPLOYEE:
 			return getEmployees
@@ -21,8 +22,12 @@ const getSearchFn = (type: FILTER_ENTITY): ((params: IQueryParams) => ThunkResul
 
 		case FILTER_ENTITY.USER:
 			return getUsers
+
 		case FILTER_ENTITY.NOTINO_USER:
 			return getNotinoUsers
+
+		case FILTER_ENTITY.COSMETICS:
+			return getCosmetics
 		default:
 			throw new Error(`Unsupported entity type for filtering:${type}`)
 	}
@@ -37,7 +42,7 @@ const searchWrapper = async (
 	try {
 		const searchFn = getSearchFn(entity)
 		const { data, options } = await dispatch(searchFn(queryParams))
-		return { pagination: data.pagination, page: data.pagination.page, data: modifyOptions ? modifyOptions(options) : options }
+		return { pagination: data?.pagination, page: data?.pagination?.page, data: modifyOptions ? modifyOptions(options) : options }
 	} catch (error) {
 		// eslint-disable-next-line no-console
 		console.error(error)

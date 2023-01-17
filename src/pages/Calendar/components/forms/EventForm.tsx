@@ -20,7 +20,6 @@ import {
 	FORM,
 	getDayNameFromNumber,
 	SHORTCUT_DAYS_OPTIONS,
-	STRINGS,
 	UPDATE_EVENT_PERMISSIONS
 } from '../../../../utils/enums'
 import Permissions from '../../../../utils/Permissions'
@@ -58,6 +57,8 @@ const EventForm: FC<Props> = (props) => {
 	const dispatch = useDispatch()
 	const formValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(formName)(state))
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
+	// NOTE: pristine pouzivat len pri UPDATE eventu a pri CREATE povlit akciu vzdy
+	const disabledSubmitButton = !!(eventId && pristine) || submitting
 
 	const checkboxOptionRender = (option: any, checked?: boolean) => {
 		return <div className={cx('w-5 h-5 flex-center bg-notino-grayLighter rounded', { 'bg-notino-pink': checked, 'text-notino-white': checked })}>{option?.label}</div>
@@ -153,7 +154,6 @@ const EventForm: FC<Props> = (props) => {
 							className={'pb-0'}
 							pickerClassName={'w-full'}
 							component={DateField}
-							disablePast
 							showInReservationDrawer
 							placement={'bottomRight'}
 							dropdownAlign={{ points: ['tr', 'br'] }}
@@ -208,7 +208,7 @@ const EventForm: FC<Props> = (props) => {
 									openForbiddenModal()
 								}
 							}}
-							disabled={submitting || pristine}
+							disabled={disabledSubmitButton}
 							htmlType={'submit'}
 							type={'primary'}
 							block

@@ -2,9 +2,8 @@
 import { DateSpanApi, EventApi } from '@fullcalendar/react'
 import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
-import { isEmpty, uniqueId, startsWith } from 'lodash'
+import { uniqueId, startsWith } from 'lodash'
 import Scroll from 'react-scroll'
-import { Paths } from '../../types/api'
 
 // types
 import {
@@ -15,7 +14,8 @@ import {
 	IEventExtenedProps,
 	IResourceEmployee,
 	IWeekViewResourceExtenedProps,
-	IDayViewResourceExtenedProps
+	IDayViewResourceExtenedProps,
+	DisabledNotificationsArray
 } from '../../types/interfaces'
 
 // utils
@@ -26,7 +26,8 @@ import {
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_VIEW,
-	NEW_ID_PREFIX
+	NEW_ID_PREFIX,
+	NOTIFICATION_TYPES
 } from '../../utils/enums'
 import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
 
@@ -544,27 +545,49 @@ export const scrollToSelectedDate = (scrollId: string, options?: Object) => {
 	})
 }
 
+/**
+ * @param baseNotificationText base notification text
+ * @param disabledNotificationTypes array of disabled notification types to check if they are included in disabled notications types source
+ * @param disabledNotificationsSource source of disabled notifications types
+ * @return string
+ *
+ *  Return base notification text including information whether employee, customer, both or none of them will be notified
+ *
+ */
 export const getConfirmModalText = (
-	baseText: string,
-	disabledNotificationType: CALENDAR_DISABLED_NOTIFICATION_TYPE,
-	disabledNotifications?: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']
+	baseNotificationText: string,
+	disabledNotificationTypesToCheck: CALENDAR_DISABLED_NOTIFICATION_TYPE[],
+	disabledNotificationsSource?: DisabledNotificationsArray
 ) => {
-	const disabledNotification = disabledNotifications?.find((notification) => notification.eventType === disabledNotificationType)
-	const isCustomerNotified = isEmpty(disabledNotification?.b2cChannels)
-	const isEmployeeNotified = isEmpty(disabledNotification?.b2bChannels)
+	let isCustomerNotified = true
+	let isEmployeeNotified = true
+
+	disabledNotificationTypesToCheck.forEach((notificationToCheck) => {
+		const disabledNotificationSource = disabledNotificationsSource?.find((notificationSource) => notificationSource.eventType === notificationToCheck)
+		// when array length is equal to NOTIFICATION_TYPES length it means all notifications are disabled for entity
+		if (disabledNotificationSource && disabledNotificationSource?.channels?.length === NOTIFICATION_TYPES.length) {
+			if (disabledNotificationSource?.eventType?.endsWith('CUSTOMER')) {
+				isCustomerNotified = false
+			}
+			if (disabledNotificationSource?.eventType?.endsWith('EMPLOYEE')) {
+				isEmployeeNotified = false
+			}
+		}
+	})
+
 	const notifiactionText = (entity: string) => i18next.t('loc:{{entity}} dostane notifikáciu.', { entity })
 
 	if (isCustomerNotified && isEmployeeNotified) {
-		return `${baseText} ${i18next.t('loc:Zamestnanec aj zákazník dostanú notifikáciu.')}`
+		return `${baseNotificationText} ${i18next.t('loc:Zamestnanec aj zákazník dostanú notifikáciu.')}`
 	}
 
 	if (isCustomerNotified) {
-		return `${baseText} ${notifiactionText(i18next.t('loc:Zákazník'))}`
+		return `${baseNotificationText} ${notifiactionText(i18next.t('loc:Zákazník'))}`
 	}
 
 	if (isEmployeeNotified) {
-		return `${baseText} ${notifiactionText(i18next.t('loc:Zamestnanec'))}`
+		return `${baseNotificationText} ${notifiactionText(i18next.t('loc:Zamestnanec'))}`
 	}
 
-	return baseText
+	return baseNotificationText
 }

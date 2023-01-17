@@ -49,7 +49,11 @@ const ConfirmBulkForm: FC<Props> = (props) => {
 		}
 		const deleteMessage = t('loc:Odstraňujete záznam, ktorý sa opakuje. Odstránenie nadchádzajúcich zmien prepíše prebiehajúce plánovanie.')
 		if (eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
-			return getConfirmModalText(deleteMessage, CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CANCELLED, disabledNotifications)
+			return getConfirmModalText(
+				deleteMessage,
+				[CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CANCELLED_CUSTOMER, CALENDAR_DISABLED_NOTIFICATION_TYPE.RESERVATION_CANCELLED_EMPLOYEE],
+				disabledNotifications
+			)
 		}
 
 		return deleteMessage

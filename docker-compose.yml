@@ -66,6 +66,9 @@ services:
   frontend:
     environment:
       - REACT_APP_GOOGLE_MAPS_API_KEY=testGoogleAPIKey
+      - FULLCALENDAR_LICENSE_KEY=testKey
+      - REACT_APP_SENTRY_ENV=e2e
+      - REACT_APP_SENTRY_DSN=https://123@sentry.dev/1
     build:
         context: .
         dockerfile: ./docker/CI/Dockerfile

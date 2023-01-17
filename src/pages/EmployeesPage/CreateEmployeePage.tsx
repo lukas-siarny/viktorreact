@@ -16,7 +16,6 @@ import { filterSalonRolesByPermission, getPrefixCountryCode } from '../../utils/
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import EmployeeForm from './components/EmployeeForm'
-import { addService, ServiceData /* , parseServicesForCreateAndUpdate */ } from './EmployeePage'
 import InviteForm from './components/InviteForm'
 
 // types
@@ -45,7 +44,6 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const isFormPristine = useSelector(isPristine(FORM.EMPLOYEE))
 	const isInviteFormPristine = useSelector(isPristine(FORM.INVITE_EMPLOYEE))
-	const form = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE])
 	const services = useSelector((state: RootState) => state.service.services)
 	const currentAuthUser = useSelector((state: RootState) => state.user.authUser)
 	const salonRoles = useSelector((state: RootState) => state.roles.salonRoles)
@@ -88,9 +86,6 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				firstName: formData?.firstName,
 				lastName: formData?.lastName,
 				email: formData?.email,
-				serviceIDs: formData?.services?.map((service: ServiceData) => service.id),
-				// TODO - for change duration and price in employee detail
-				// parseServicesForCreateAndUpdate(formData?.services),
 				salonID,
 				imageID: get(formData, 'avatar[0].id') || get(formData, 'avatar[0].uid')
 			}
@@ -162,7 +157,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				</div>
 				<h2 className={'content-body-width-small'}>{t('loc:Vytvoriť profil kolegu')}</h2>
 				<div className='content-body small without-content-footer'>
-					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={createEmployee} />
+					<EmployeeForm salonID={salonID} onSubmit={createEmployee} />
 					<Row justify={'center'}>
 						<Button
 							type={'primary'}

@@ -19,6 +19,12 @@ export interface IErrorMessage {
 	message: string
 }
 
+export interface IPaginationQuery {
+	limit?: number | null
+	page?: number | null
+	order?: string
+}
+
 export interface IResponsePagination {
 	limit: number
 	page: number
@@ -471,7 +477,7 @@ export interface ISelectable<T> {
  * support async (on BE) searching
  */
 export interface ISearchable<T extends IDataPagination> {
-	options: ISelectOptionItem[] | undefined
+	options?: ISelectOptionItem[] | undefined
 	data: T | null
 }
 
@@ -837,7 +843,6 @@ export type ConfirmModalData = ConfirmModalReservationData | ConfirmModalEventnD
 
 export interface IReservationsFilter {
 	dateFrom: string
-	dateTo: string
 	employeeIDs?: string[]
 	categoryIDs?: string[]
 	reservationStates?: RESERVATION_STATE[]

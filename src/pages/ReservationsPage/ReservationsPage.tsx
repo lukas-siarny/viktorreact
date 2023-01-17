@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Col, Row } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { initialize } from 'redux-form'
-import dayjs from 'dayjs'
-import { StringParam, useQueryParams, ArrayParam } from 'use-query-params'
+import { ArrayParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 
 // components
+import dayjs from 'dayjs'
+import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import UserAvatar from '../../components/AvatarComponents'
 import ReservationsFilter from './components/ReservationsFilter'
-import ConfirmModal from '../../atoms/ConfirmModal'
 
 // utils
 import { DEFAULT_DATE_INIT_FORMAT, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { getAssignedUserLabel } from '../../utils/helper'
+import { getAssignedUserLabel, normalizeDirectionKeys } from '../../utils/helper'
 
 // reducers
 import { getSalonReservations } from '../../reducers/salons/salonsActions'
@@ -26,9 +26,6 @@ import { getServices } from '../../reducers/services/serviceActions'
 
 // types
 import { Columns, IBreadcrumbs, IComputedMatch, IReservationsFilter } from '../../types/interfaces'
-
-// assets
-import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
 
 type Props = {
 	computedMatch: IComputedMatch<{ salonID: string }>
@@ -42,54 +39,53 @@ const ReservationsPage = (props: Props) => {
 	const { computedMatch } = props
 	const { salonID } = computedMatch.params
 	const reservations = useSelector((state: RootState) => state.salons.reservations)
-	const [visibleModal, setVisibleModal] = useState(false)
 
 	const [query, setQuery] = useQueryParams({
-		dateFrom: StringParam,
-		dateTo: StringParam,
+		dateFrom: withDefault(StringParam, dayjs().format(DEFAULT_DATE_INIT_FORMAT)),
 		employeeIDs: ArrayParam,
 		categoryIDs: ArrayParam,
 		reservationStates: ArrayParam,
 		reservationCreateSourceType: StringParam,
-		reservationPaymentMethods: ArrayParam
+		reservationPaymentMethods: ArrayParam,
+		limit: NumberParam,
+		page: withDefault(NumberParam, 1),
+		order: withDefault(StringParam, 'startDate:ASC')
 	})
 
 	useEffect(() => {
-		const range = dayjs(query.dateTo).diff(query.dateFrom, 'weeks')
 		// NOTE: viac ako 3 mesiace
-		if (range > 12) {
-			setVisibleModal(true)
-			return
-		}
 		dispatch(
-			initialize(FORM.RESERVAtIONS_FILTER, {
+			initialize(FORM.RESERVATIONS_FILTER, {
 				reservationStates: query.reservationStates,
 				employeeIDs: query.employeeIDs,
 				reservationPaymentMethods: query.reservationPaymentMethods,
 				reservationCreateSourceType: query.reservationCreateSourceType,
-				dateFrom: query.dateFrom || dayjs().subtract(2, 'weeks').format(DEFAULT_DATE_INIT_FORMAT),
-				dateTo: query.dateTo || dayjs().add(2, 'weeks').format(DEFAULT_DATE_INIT_FORMAT),
+				dateFrom: query.dateFrom,
 				categoryIDs: query.categoryIDs
 			})
 		)
 		dispatch(
 			getSalonReservations({
 				salonID,
-				dateFrom: query.dateFrom || dayjs().subtract(2, 'weeks').format(DEFAULT_DATE_INIT_FORMAT),
-				dateTo: query.dateTo || dayjs().add(2, 'weeks').format(DEFAULT_DATE_INIT_FORMAT),
+				dateFrom: query.dateFrom,
 				reservationStates: query.reservationStates,
 				employeeIDs: query.employeeIDs,
 				reservationPaymentMethods: query.reservationPaymentMethods,
 				reservationCreateSourceType: query.reservationCreateSourceType,
-				categoryIDs: query.categoryIDs
+				categoryIDs: query.categoryIDs,
+				page: query.page,
+				order: query.order,
+				limit: query.limit
 			})
 		)
 	}, [
 		dispatch,
 		query.categoryIDs,
 		query.dateFrom,
-		query.dateTo,
 		query.employeeIDs,
+		query.limit,
+		query.order,
+		query.page,
 		query.reservationCreateSourceType,
 		query.reservationPaymentMethods,
 		query.reservationStates,
@@ -104,6 +100,27 @@ const ReservationsPage = (props: Props) => {
 		const newQuery = {
 			...query,
 			...values
+		}
+		setQuery(newQuery)
+	}
+	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
+		if (!(sorter instanceof Array)) {
+			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
+			const newQuery = {
+				...query,
+				limit: pagination.pageSize,
+				page: pagination.current,
+				order
+			}
+			setQuery(newQuery)
+		}
+	}
+
+	const onChangePagination = (page: number, limit: number) => {
+		const newQuery = {
+			...query,
+			limit,
+			page
 		}
 		setQuery(newQuery)
 	}
@@ -206,37 +223,9 @@ const ReservationsPage = (props: Props) => {
 			}
 		]
 	}
-	const modals = (
-		<>
-			<ConfirmModal
-				closeIcon={<CloseIcon />}
-				okButtonProps={{
-					className: 'hidden'
-				}}
-				cancelButtonProps={{
-					className: 'w-full'
-				}}
-				onCancel={() => {
-					setQuery({
-						...query,
-						dateFrom: dayjs().subtract(2, 'weeks').format(DEFAULT_DATE_INIT_FORMAT),
-						dateTo: dayjs().add(2, 'weeks').format(DEFAULT_DATE_INIT_FORMAT)
-					})
-					setVisibleModal(false)
-				}}
-				visible={visibleModal}
-				title={t('loc:Chyba rozsahu')}
-				destroyOnClose
-				zIndex={2000}
-			>
-				{t('loc:Rozsah, ktorý ste zadali je veľký. Prosím zadajte rozsah menší ako tri mesiace.')}
-			</ConfirmModal>
-		</>
-	)
 
 	return (
 		<>
-			{modals}
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
@@ -247,12 +236,18 @@ const ReservationsPage = (props: Props) => {
 						<CustomTable
 							className='table-fixed'
 							columns={columns}
+							onChange={onChangeTable}
 							loading={reservations?.isLoading}
 							dataSource={reservations?.tableData}
 							twoToneRows
-							// scroll={{ x: 800 }}
 							useCustomPagination
-							pagination={undefined}
+							pagination={{
+								pageSize: reservations.data?.pagination.limit,
+								total: reservations.data?.pagination.totalCount,
+								current: reservations.data?.pagination.page,
+								onChange: onChangePagination,
+								disabled: reservations.isLoading
+							}}
 						/>
 					</div>
 				</Col>

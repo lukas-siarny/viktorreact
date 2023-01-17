@@ -6,7 +6,7 @@ import { IResetStore } from '../generalTypes'
 import { SALON, SALONS, SUGGESTED_SALONS, BASIC_SALON, BASIC_SALONS, SALON_HISTORY, REJECTED_SUGGESTIONS, RESERVATIONS } from './salonsTypes'
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
-import { IQueryParams, ISearchable } from '../../types/interfaces'
+import { IPaginationQuery, IQueryParams, ISearchable } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -58,14 +58,13 @@ export interface IGetSalonsQueryParams extends IQueryParams {
 	assignedUserID?: string | null
 }
 
-interface IGetSalonReservationsQueryParams {
-	dateFrom: string
-	dateTo: string
-	employeeIDs: string[]
-	categoryIDs: string[]
-	reservationStates: string[]
-	reservationCreateSourceType: string
-	reservationPaymentMethods: string[]
+interface IGetSalonReservationsQueryParams extends IPaginationQuery {
+	dateFrom?: string | null
+	employeeIDs?: (string | null)[] | null
+	categoryIDs?: (string | null)[] | null
+	reservationStates?: (string | null)[] | null
+	reservationCreateSourceType?: string | null
+	reservationPaymentMethods?: (string | null)[] | null
 	salonID: string
 }
 
@@ -111,9 +110,8 @@ interface ISalonReservationsTableData {
 	paymentMethod: string
 }
 
-export interface ISalonReservationsPayload {
-	data: Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200 | null
-	tableData?: ISalonReservationsTableData[]
+export interface ISalonReservationsPayload extends ISearchable<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200> {
+	tableData: ISalonReservationsTableData[]
 }
 
 export interface IGetSuggestedSalons {
@@ -349,13 +347,27 @@ export const getSalonHistory =
 	}
 
 export const getSalonReservations =
-	(queryParams: any): ThunkResult<Promise<ISalonReservationsPayload>> =>
+	(queryParams: IGetSalonReservationsQueryParams): ThunkResult<Promise<ISalonReservationsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISalonReservationsPayload
 		try {
+			const queryParamsEditedForRequest = {
+				salonID: queryParams.salonID,
+				dateFrom: queryParams.dateFrom,
+				reservationStates: queryParams.reservationStates,
+				employeeIDs: queryParams.employeeIDs,
+				reservationPaymentMethods: queryParams.reservationPaymentMethods,
+				reservationCreateSourceType: queryParams.reservationCreateSourceType,
+				categoryIDs: queryParams.categoryIDs,
+				limit: queryParams.limit,
+				page: queryParams.page,
+				order: queryParams.order
+			}
+
 			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_START })
-			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', {
-				...(normalizeQueryParams(queryParams) as any),
+
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/paginated', {
+				...(normalizeQueryParams(queryParamsEditedForRequest) as any),
 				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION]
 			})
 

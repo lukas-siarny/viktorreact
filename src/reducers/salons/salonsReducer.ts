@@ -53,7 +53,7 @@ export const initState = {
 	} as IRejectedSuggestionsPayload & ILoadingAndFailure,
 	reservations: {
 		data: null,
-		tableData: undefined,
+		tableData: [],
 		isLoading: false,
 		isFailure: false
 	} as ISalonReservationsPayload & ILoadingAndFailure

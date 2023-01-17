@@ -61,7 +61,7 @@ const ReservationsFilter = (props: Props) => {
 	const { handleSubmit } = props
 	const [t] = useTranslation()
 	const reservations = useSelector((state: RootState) => state.salons.reservations)
-	const formValues = useSelector((state: RootState) => getFormValues(FORM.RESERVAtIONS_FILTER)(state))
+	const formValues = useSelector((state: RootState) => getFormValues(FORM.RESERVATIONS_FILTER)(state))
 	const servicesOptions = useSelector((state: RootState) => state.service.services.options)
 
 	const employeeIDsOptions = map(reservations?.data?.employees, (employee) => {
@@ -84,17 +84,6 @@ const ReservationsFilter = (props: Props) => {
 						<Field
 							name={'dateFrom'}
 							placeholder={t('loc:Dátum od')}
-							className={'pb-0'}
-							pickerClassName={'w-full'}
-							component={DateField}
-							dropdownAlign={{ points: ['tr', 'br'] }}
-							required
-						/>
-					</Col>
-					<Col span={6}>
-						<Field
-							name={'dateTo'}
-							placeholder={t('loc:Dátum do')}
 							className={'pb-0'}
 							pickerClassName={'w-full'}
 							component={DateField}
@@ -173,7 +162,7 @@ const ReservationsFilter = (props: Props) => {
 }
 
 const form = reduxForm<IReservationsFilter, ComponentProps>({
-	form: FORM.RESERVAtIONS_FILTER,
+	form: FORM.RESERVATIONS_FILTER,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	onChange: debounce((_values, _dispatch, { submit, anyTouched }) => {

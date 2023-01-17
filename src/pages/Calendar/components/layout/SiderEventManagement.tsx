@@ -16,7 +16,7 @@ import { RootState } from '../../../../reducers'
 
 // utils
 import { getReq } from '../../../../utils/request'
-import { formatLongQueryString, getAssignedUserLabel } from '../../../../utils/helper'
+import { formatLongQueryString, getAssignedUserLabel, initializeLabelInValueSelect } from '../../../../utils/helper'
 import {
 	CALENDAR_COMMON_SETTINGS,
 	CALENDAR_EVENT_TYPE,
@@ -132,16 +132,18 @@ const SiderEventManagement: FC<Props> = (props) => {
 				eventType: data.eventType as CALENDAR_EVENT_TYPE,
 				calendarBulkEventID: data.calendarBulkEvent?.id,
 				allDay: data.start.time === CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT.startTime && data.end.time === CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT.endTime,
-				employee: {
-					value: data.employee.id,
-					key: data.employee.id,
-					label: getAssignedUserLabel({
+				employee: initializeLabelInValueSelect(
+					data.employee.id,
+					getAssignedUserLabel({
 						id: data.employee.id as string,
 						firstName: data.employee.firstName,
 						lastName: data.employee.lastName,
 						email: data.employee.email
-					})
-				},
+					}),
+					{
+						employeeData: data?.employee
+					}
+				),
 				...repeatOptions
 			}
 
@@ -155,21 +157,24 @@ const SiderEventManagement: FC<Props> = (props) => {
 					dispatch(
 						initialize(FORM.CALENDAR_RESERVATION_FORM, {
 							...initData,
-							service: {
-								id: data?.service?.id,
-								key: data?.service?.id,
-								value: data?.service?.name
-							},
-							customer: {
-								value: data?.customer?.id,
-								key: data?.customer?.id,
-								label: getAssignedUserLabel({
+							service: initializeLabelInValueSelect(data?.service?.id as string, data?.service?.name as string, {
+								serviceData: data?.service
+							}),
+							customer: initializeLabelInValueSelect(
+								data?.customer?.id as string,
+								getAssignedUserLabel({
 									id: data?.customer?.id as string,
 									firstName: data?.customer?.firstName,
 									lastName: data?.customer?.lastName,
 									email: data?.customer?.email
-								})
-							}
+								}),
+								{
+									customerData: data?.customer
+								}
+							),
+							note: data?.note,
+							noteFromB2CCustomer: data?.noteFromB2CCustomer,
+							reservationData: data?.reservationData
 						})
 					)
 					break

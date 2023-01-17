@@ -2852,9 +2852,8 @@ declare namespace Paths {
                              * example:
                              * CREATE_USER
                              */
-                            eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                            b2bChannels: ("EMAIL" | "PUSH")[];
-                            b2cChannels: ("EMAIL" | "PUSH")[];
+                            eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                            channels: ("EMAIL" | "PUSH")[];
                         }[];
                     };
                     premiumSourceUserType?: "NOTINO" | "PARTNER";
@@ -3393,6 +3392,360 @@ declare namespace Paths {
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
+                };
+            }
+        }
+    }
+    namespace GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CategoryIDs = [
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
+            ];
+            export type DateFrom = string; // date-time
+            export type EmployeeIDs = [
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
+            ];
+            export type EventTypes = ("RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF")[];
+            export type Limit = number;
+            /**
+             * Order attributes: startDate
+             */
+            export type Order = string;
+            export type Page = number;
+            export type ReservationCreateSourceType = "ONLINE" | "OFFLINE";
+            export type ReservationPaymentMethods = ("CASH" | "CARD" | "OTHER")[];
+            export type ReservationStates = ("PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED")[];
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            dateFrom: Parameters.DateFrom /* date-time */;
+            eventTypes?: Parameters.EventTypes;
+            employeeIDs?: Parameters.EmployeeIDs;
+            categoryIDs?: Parameters.CategoryIDs;
+            reservationStates?: Parameters.ReservationStates;
+            reservationCreateSourceType?: Parameters.ReservationCreateSourceType;
+            reservationPaymentMethods?: Parameters.ReservationPaymentMethods;
+            order?: /* Order attributes: startDate */ Parameters.Order;
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                employees: {
+                    id: string; // uuid
+                    firstName?: string;
+                    lastName?: string;
+                    email?: string;
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                    image: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                }[];
+                calendarEvents: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    note?: string;
+                    noteFromB2CCustomer?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                        note?: string;
+                        profileImage: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    employee: {
+                        id: string; // uuid
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
                 };
             }
         }
@@ -6824,9 +7177,8 @@ declare namespace Paths {
                                  * example:
                                  * CREATE_USER
                                  */
-                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                                b2bChannels: ("EMAIL" | "PUSH")[];
-                                b2cChannels: ("EMAIL" | "PUSH")[];
+                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                                channels: ("EMAIL" | "PUSH")[];
                             }[];
                         };
                     };
@@ -7388,6 +7740,360 @@ declare namespace Paths {
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
+                };
+            }
+        }
+    }
+    namespace GetApiB2BV1SalonsSalonIdCalendarEventsPaginated {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CategoryIDs = [
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
+            ];
+            export type DateFrom = string; // date-time
+            export type EmployeeIDs = [
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
+            ];
+            export type EventTypes = ("RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF")[];
+            export type Limit = number;
+            /**
+             * Order attributes: startDate
+             */
+            export type Order = string;
+            export type Page = number;
+            export type ReservationCreateSourceType = "ONLINE" | "OFFLINE";
+            export type ReservationPaymentMethods = ("CASH" | "CARD" | "OTHER")[];
+            export type ReservationStates = ("PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED")[];
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            dateFrom: Parameters.DateFrom /* date-time */;
+            eventTypes?: Parameters.EventTypes;
+            employeeIDs?: Parameters.EmployeeIDs;
+            categoryIDs?: Parameters.CategoryIDs;
+            reservationStates?: Parameters.ReservationStates;
+            reservationCreateSourceType?: Parameters.ReservationCreateSourceType;
+            reservationPaymentMethods?: Parameters.ReservationPaymentMethods;
+            order?: /* Order attributes: startDate */ Parameters.Order;
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                employees: {
+                    id: string; // uuid
+                    firstName?: string;
+                    lastName?: string;
+                    email?: string;
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                    image: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                }[];
+                calendarEvents: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    note?: string;
+                    noteFromB2CCustomer?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                        note?: string;
+                        profileImage: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    employee: {
+                        id: string; // uuid
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
                 };
             }
         }
@@ -8658,16 +9364,19 @@ declare namespace Paths {
                 categories: {
                     id: string; // uuid
                     name?: string;
+                    nameSlug?: string;
                     parentID?: string; // uuid
                     orderIndex: number;
                     children: {
                         id: string; // uuid
                         name?: string;
+                        nameSlug?: string;
                         parentID?: string; // uuid
                         orderIndex: number;
                         children: {
                             id: string; // uuid
                             name?: string;
+                            nameSlug?: string;
                             description?: string;
                             parentID?: string; // uuid
                             orderIndex: number;
@@ -8732,6 +9441,7 @@ declare namespace Paths {
                 category: {
                     id: string; // uuid
                     name?: string;
+                    nameSlug?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
@@ -8791,6 +9501,7 @@ declare namespace Paths {
                     children: {
                         id: string; // uuid
                         name?: string;
+                        nameSlug?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
@@ -8827,6 +9538,7 @@ declare namespace Paths {
                         children: {
                             id: string; // uuid
                             name?: string;
+                            nameSlug?: string;
                             nameLocalizations: {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                                 value: string | null;
@@ -11333,16 +12045,19 @@ declare namespace Paths {
                 categories: {
                     id: string; // uuid
                     name?: string;
+                    nameSlug?: string;
                     parentID?: string; // uuid
                     orderIndex: number;
                     children: {
                         id: string; // uuid
                         name?: string;
+                        nameSlug?: string;
                         parentID?: string; // uuid
                         orderIndex: number;
                         children: {
                             id: string; // uuid
                             name?: string;
+                            nameSlug?: string;
                             description?: string;
                             parentID?: string; // uuid
                             orderIndex: number;
@@ -11407,6 +12122,7 @@ declare namespace Paths {
                 category: {
                     id: string; // uuid
                     name?: string;
+                    nameSlug?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
@@ -11466,6 +12182,7 @@ declare namespace Paths {
                     children: {
                         id: string; // uuid
                         name?: string;
+                        nameSlug?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
@@ -11502,6 +12219,7 @@ declare namespace Paths {
                         children: {
                             id: string; // uuid
                             name?: string;
+                            nameSlug?: string;
                             nameLocalizations: {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                                 value: string | null;
@@ -14034,6 +14752,41 @@ declare namespace Paths {
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
                 };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminEmployeesEmployeeIdReorder {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type EmployeeID = string; // uuid
+        }
+        export interface PathParameters {
+            employeeID: Parameters.EmployeeID /* uuid */;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 1
+             */
+            orderIndex: number;
+        }
+        namespace Responses {
+            export interface $200 {
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
@@ -18253,139 +19006,6 @@ declare namespace Paths {
                     };
                 }?
             ] | null;
-        }
-        namespace Responses {
-            export interface $200 {
-                messages: {
-                    message: string;
-                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
-                }[];
-            }
-        }
-    }
-    namespace PatchApiB2BAdminEmployeesReorder {
-        export interface HeaderParameters {
-            "accept-language"?: /**
-             * example:
-             * sk
-             */
-            Parameters.AcceptLanguage;
-        }
-        namespace Parameters {
-            /**
-             * example:
-             * sk
-             */
-            export type AcceptLanguage = string;
-        }
-        export interface RequestBody {
-            employeeIDs: [
-                string,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?
-            ];
-            /**
-             * example:
-             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-             */
-            salonID: string; // uuid
         }
         namespace Responses {
             export interface $200 {
@@ -23140,900 +23760,800 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?
                 ] | null;
             } | null;
@@ -32960,6 +33480,41 @@ declare namespace Paths {
             }
         }
     }
+    namespace PatchApiB2BV1EmployeesEmployeeIdReorder {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type EmployeeID = string; // uuid
+        }
+        export interface PathParameters {
+            employeeID: Parameters.EmployeeID /* uuid */;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 1
+             */
+            orderIndex: number;
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PatchApiB2BV1EmployeesEmployeeIdRole {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -37319,139 +37874,6 @@ declare namespace Paths {
             }
         }
     }
-    namespace PatchApiB2BV1EmployeesReorder {
-        export interface HeaderParameters {
-            "accept-language"?: /**
-             * example:
-             * sk
-             */
-            Parameters.AcceptLanguage;
-        }
-        namespace Parameters {
-            /**
-             * example:
-             * sk
-             */
-            export type AcceptLanguage = string;
-        }
-        export interface RequestBody {
-            employeeIDs: [
-                string,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?
-            ];
-            /**
-             * example:
-             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
-             */
-            salonID: string; // uuid
-        }
-        namespace Responses {
-            export interface $200 {
-                messages: {
-                    message: string;
-                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
-                }[];
-            }
-        }
-    }
     namespace PatchApiB2BV1SalonsSalonId {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -38396,9 +38818,8 @@ declare namespace Paths {
                                  * example:
                                  * CREATE_USER
                                  */
-                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                                b2bChannels: ("EMAIL" | "PUSH")[];
-                                b2cChannels: ("EMAIL" | "PUSH")[];
+                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                                channels: ("EMAIL" | "PUSH")[];
                             }[];
                         };
                     };
@@ -39579,9 +40000,8 @@ declare namespace Paths {
                                  * example:
                                  * CREATE_USER
                                  */
-                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                                b2bChannels: ("EMAIL" | "PUSH")[];
-                                b2cChannels: ("EMAIL" | "PUSH")[];
+                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                                channels: ("EMAIL" | "PUSH")[];
                             }[];
                         };
                     };
@@ -39823,900 +40243,800 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?,
                     {
                         /**
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                        b2bChannels: ("EMAIL" | "PUSH")[];
-                        b2cChannels: ("EMAIL" | "PUSH")[];
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                        channels: ("EMAIL" | "PUSH")[];
                     }?
                 ] | null;
             } | null;
@@ -59519,9 +59839,8 @@ declare namespace Paths {
                                  * example:
                                  * CREATE_USER
                                  */
-                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER";
-                                b2bChannels: ("EMAIL" | "PUSH")[];
-                                b2cChannels: ("EMAIL" | "PUSH")[];
+                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER";
+                                channels: ("EMAIL" | "PUSH")[];
                             }[];
                         };
                     };
@@ -60171,6 +60490,87 @@ declare namespace Paths {
             }
         }
     }
+    namespace PostApiB2CWebFormsExternalSalesRepSalonRegistrationForm {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Salon xyz
+             */
+            salonName: string;
+            /**
+             * example:
+             * 123456789
+             */
+            regID?: string;
+            /**
+             * example:
+             * Janko Hraško
+             */
+            contactPerson: string;
+            /**
+             * example:
+             * test.confirmed_notinouser@goodrequest.com
+             */
+            email: string; // email
+            /**
+             * example:
+             * 0900000000
+             */
+            phone: string;
+            /**
+             * example:
+             * Framborská
+             */
+            street: string;
+            /**
+             * example:
+             * Žilina
+             */
+            city: string;
+            /**
+             * example:
+             * Slovakia
+             */
+            country: string;
+            /**
+             * example:
+             * Ecommerce
+             */
+            salesChannel: string;
+            /**
+             * example:
+             * Janko Hraško
+             */
+            salesRepresentative: string;
+            /**
+             * example:
+             * Some note
+             */
+            notes?: string;
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PostApiB2CWebSalonsSalonIdCalendarEventsReservations {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -60383,15 +60783,17 @@ declare namespace Paths {
                 recipient: {
                     email?: any;
                     token?: any;
+                    module?: any;
                     platform?: any;
                 };
             };
             notifications?: {
-                type: ("CREATE_USER" | "EMPLOYEE_INVITE" | "FORGOT_PASSWORD" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "PARTNER_CONTACT_FORM" | "RESEND_USER_ACTIVATION" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "SUGGEST_CATEGORY_SERVICE" | "UNPUBLISH_SALON" | "USER_INVITE" | "USER_REGISTRATION" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CANCELLED" | "RESERVATION_CHANGED" | "RESERVATION_CONFIRMED" | "RESERVATION_REJECTED" | "RESERVATION_REMINDER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER") | ("RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CANCELLED" | "RESERVATION_CHANGED" | "RESERVATION_CONFIRMED" | "RESERVATION_REJECTED" | "RESERVATION_REMINDER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER");
+                type: ("IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER") | ("RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER");
                 language: string;
                 recipient: {
                     email?: string;
                     token?: string;
+                    module?: string;
                     platform?: string;
                 };
                 data?: {
@@ -60448,23 +60850,153 @@ declare namespace Paths {
                         content?: any;
                     }[];
                 } | {
-                    calendarEventID: string; // uuid
-                    salonID: string; // uuid
+                    salonName: string;
+                    regID?: string;
+                    contactPerson: string;
+                    email: string; // email
+                    phone: string;
+                    street: string;
+                    city: string;
+                    country: string;
+                    salesChannel: string;
+                    salesRepresentative: string;
+                    notes?: string;
                 } | {
+                    date: string;
+                    time: string;
+                    serviceName: string;
+                    salonName: string;
+                    salonStreet: string;
+                    salonZip: string;
+                    salonCity: string;
+                    salonPhone: string;
+                    salonEmail: string; // email
                     calendarEventID: string; // uuid
                     salonID: string; // uuid
+                    customerName: string;
                 } | {
+                    date: string;
+                    time: string;
+                    serviceName: string;
+                    salonName: string;
+                    salonStreet: string;
+                    salonZip: string;
+                    salonCity: string;
+                    salonPhone: string;
+                    salonEmail: string; // email
                     calendarEventID: string; // uuid
                     salonID: string; // uuid
+                    customerName: string;
                 } | {
+                    date: string;
+                    time: string;
+                    serviceName: string;
+                    salonName: string;
+                    salonStreet: string;
+                    salonZip: string;
+                    salonCity: string;
+                    salonPhone: string;
+                    salonEmail: string; // email
                     calendarEventID: string; // uuid
                     salonID: string; // uuid
+                    customerName: string;
                 } | {
+                    date: string;
+                    time: string;
+                    serviceName: string;
+                    salonName: string;
+                    salonStreet: string;
+                    salonZip: string;
+                    salonCity: string;
+                    salonPhone: string;
+                    salonEmail: string; // email
                     calendarEventID: string; // uuid
                     salonID: string; // uuid
+                    customerName: string;
                 } | {
+                    date: string;
+                    time: string;
+                    serviceName: string;
+                    salonName: string;
+                    salonStreet: string;
+                    salonZip: string;
+                    salonCity: string;
+                    salonPhone: string;
+                    salonEmail: string; // email
                     calendarEventID: string; // uuid
                     salonID: string; // uuid
+                    customerName: string;
+                    newDate: string;
+                    newTime: string;
+                    employeeName: string;
+                } | {
+                    date: string;
+                    time: string;
+                    serviceName: string;
+                    salonName: string;
+                    salonStreet: string;
+                    salonZip: string;
+                    salonCity: string;
+                    salonPhone: string;
+                    salonEmail: string; // email
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                    customerName: string;
+                    newDate: string;
+                    newTime: string;
+                    employeeName: string;
+                } | {
+                    date: string;
+                    time: string;
+                    serviceName: string;
+                    salonName: string;
+                    salonStreet: string;
+                    salonZip: string;
+                    salonCity: string;
+                    salonPhone: string;
+                    salonEmail: string; // email
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                    customerName: string;
+                } | {
+                    date: string;
+                    time: string;
+                    serviceName: string;
+                    salonName: string;
+                    salonStreet: string;
+                    salonZip: string;
+                    salonCity: string;
+                    salonPhone: string;
+                    salonEmail: string; // email
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                    customerName: string;
+                } | {
+                    date: string;
+                    time: string;
+                    serviceName: string;
+                    salonName: string;
+                    salonStreet: string;
+                    salonZip: string;
+                    salonCity: string;
+                    salonPhone: string;
+                    salonEmail: string; // email
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                    customerName: string;
+                } | {
+                    date: string;
+                    time: string;
+                    serviceName: string;
+                    salonName: string;
+                    salonStreet: string;
+                    salonZip: string;
+                    salonCity: string;
+                    salonPhone: string;
+                    salonEmail: string; // email
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                    customerName: string;
                 };
             }[];
         }
@@ -61313,6 +61845,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.Responses.$200>
   /**
+   * postApiB2CWebFormsExternalSalesRepSalonRegistrationForm - permissions: NO
+   */
+  'postApiB2CWebFormsExternalSalesRepSalonRegistrationForm'(
+    parameters?: Parameters<Paths.PostApiB2CWebFormsExternalSalesRepSalonRegistrationForm.HeaderParameters> | null,
+    data?: Paths.PostApiB2CWebFormsExternalSalesRepSalonRegistrationForm.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2CWebFormsExternalSalesRepSalonRegistrationForm.Responses.$200>
+  /**
    * getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
    */
   'getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable'(
@@ -61698,7 +62238,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
   /**
-   * getApiB2BAdminSalonsSalonIdCalendarEvents - Endpoint is used for getting an array of calendar events. It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * getApiB2BAdminSalonsSalonIdCalendarEvents - Endpoint is used for getting an array of calendar events (from provided date range). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
    */
   'getApiB2BAdminSalonsSalonIdCalendarEvents'(
     parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
@@ -61713,6 +62253,14 @@ export interface OperationMethods {
     data?: Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonIdCalendarEventsPaginated - Endpoint is used for getting an array of calendar events (paginated list starting/ending on provided date). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonIdCalendarEventsPaginated'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200>
   /**
    * getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for getting calendar event detail., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
    */
@@ -62069,13 +62617,13 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminEmployeesInvite.Responses.$200>
   /**
-   * patchApiB2BAdminEmployeesReorder - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+   * patchApiB2BAdminEmployeesEmployeeIdReorder - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
    */
-  'patchApiB2BAdminEmployeesReorder'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesReorder.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminEmployeesReorder.RequestBody,
+  'patchApiB2BAdminEmployeesEmployeeIdReorder'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.RequestBody,
     config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminEmployeesReorder.Responses.$200>
+  ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.Responses.$200>
   /**
    * patchApiB2BAdminEmployeesEmployeeIdRole - Endpoint is used for updating employee role., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, USER_ROLE_EDIT]</li></ul>
    */
@@ -62205,7 +62753,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
   /**
-   * getApiB2BV1SalonsSalonIdCalendarEvents - Endpoint is used for getting an array of calendar events. It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+   * getApiB2BV1SalonsSalonIdCalendarEvents - Endpoint is used for getting an array of calendar events (from provided date range). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
    */
   'getApiB2BV1SalonsSalonIdCalendarEvents'(
     parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.PathParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.HeaderParameters> | null,
@@ -62220,6 +62768,14 @@ export interface OperationMethods {
     data?: Paths.PostApiB2BV1SalonsSalonIdCalendarEvents.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1SalonsSalonIdCalendarEvents.Responses.$200>
+  /**
+   * getApiB2BV1SalonsSalonIdCalendarEventsPaginated - Endpoint is used for getting an array of calendar events (paginated list starting/ending on provided date). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+   */
+  'getApiB2BV1SalonsSalonIdCalendarEventsPaginated'(
+    parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdCalendarEventsPaginated.PathParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEventsPaginated.QueryParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEventsPaginated.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdCalendarEventsPaginated.Responses.$200>
   /**
    * getApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for getting calendar event detail., permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
    */
@@ -62541,13 +63097,13 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1EmployeesInvite.Responses.$200>
   /**
-   * patchApiB2BV1EmployeesReorder - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+   * patchApiB2BV1EmployeesEmployeeIdReorder - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
    */
-  'patchApiB2BV1EmployeesReorder'(
-    parameters?: Parameters<Paths.PatchApiB2BV1EmployeesReorder.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BV1EmployeesReorder.RequestBody,
+  'patchApiB2BV1EmployeesEmployeeIdReorder'(
+    parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdReorder.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdReorder.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1EmployeesEmployeeIdReorder.RequestBody,
     config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BV1EmployeesReorder.Responses.$200>
+  ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdReorder.Responses.$200>
   /**
    * patchApiB2BV1EmployeesEmployeeIdRole - Endpoint is used for updating employee role., permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, USER_ROLE_EDIT]</li></ul>
    */
@@ -63475,6 +64031,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.Responses.$200>
   }
+  ['/api/b2c/web/forms/external-sales-rep-salon-registration-form']: {
+    /**
+     * postApiB2CWebFormsExternalSalesRepSalonRegistrationForm - permissions: NO
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2CWebFormsExternalSalesRepSalonRegistrationForm.HeaderParameters> | null,
+      data?: Paths.PostApiB2CWebFormsExternalSalesRepSalonRegistrationForm.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2CWebFormsExternalSalesRepSalonRegistrationForm.Responses.$200>
+  }
   ['/api/b2c/v1/salons/{salonID}/calendar-events/reservations/available']: {
     /**
      * getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
@@ -63948,7 +64514,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/salons/{salonID}/calendar-events/']: {
     /**
-     * getApiB2BAdminSalonsSalonIdCalendarEvents - Endpoint is used for getting an array of calendar events. It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * getApiB2BAdminSalonsSalonIdCalendarEvents - Endpoint is used for getting an array of calendar events (from provided date range). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
@@ -63963,6 +64529,16 @@ export interface PathsDictionary {
       data?: Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/paginated']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdCalendarEventsPaginated - Endpoint is used for getting an array of calendar events (paginated list starting/ending on provided date). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}']: {
     /**
@@ -64379,15 +64955,15 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminEmployeesInvite.Responses.$200>
   }
-  ['/api/b2b/admin/employees/reorder']: {
+  ['/api/b2b/admin/employees/{employeeID}/reorder']: {
     /**
-     * patchApiB2BAdminEmployeesReorder - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+     * patchApiB2BAdminEmployeesEmployeeIdReorder - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
      */
     'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesReorder.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminEmployeesReorder.RequestBody,
+      parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.RequestBody,
       config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminEmployeesReorder.Responses.$200>
+    ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.Responses.$200>
   }
   ['/api/b2b/admin/employees/{employeeID}/role']: {
     /**
@@ -64545,7 +65121,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/salons/{salonID}/calendar-events/']: {
     /**
-     * getApiB2BV1SalonsSalonIdCalendarEvents - Endpoint is used for getting an array of calendar events. It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+     * getApiB2BV1SalonsSalonIdCalendarEvents - Endpoint is used for getting an array of calendar events (from provided date range). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.PathParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.HeaderParameters> | null,
@@ -64560,6 +65136,16 @@ export interface PathsDictionary {
       data?: Paths.PostApiB2BV1SalonsSalonIdCalendarEvents.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1SalonsSalonIdCalendarEvents.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/calendar-events/paginated']: {
+    /**
+     * getApiB2BV1SalonsSalonIdCalendarEventsPaginated - Endpoint is used for getting an array of calendar events (paginated list starting/ending on provided date). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdCalendarEventsPaginated.PathParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEventsPaginated.QueryParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEventsPaginated.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdCalendarEventsPaginated.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}/calendar-events/{calendarEventID}']: {
     /**
@@ -64933,15 +65519,15 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1EmployeesInvite.Responses.$200>
   }
-  ['/api/b2b/v1/employees/reorder']: {
+  ['/api/b2b/v1/employees/{employeeID}/reorder']: {
     /**
-     * patchApiB2BV1EmployeesReorder - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+     * patchApiB2BV1EmployeesEmployeeIdReorder - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
      */
     'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BV1EmployeesReorder.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BV1EmployeesReorder.RequestBody,
+      parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdReorder.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdReorder.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1EmployeesEmployeeIdReorder.RequestBody,
       config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BV1EmployeesReorder.Responses.$200>
+    ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdReorder.Responses.$200>
   }
   ['/api/b2b/v1/employees/{employeeID}/role']: {
     /**

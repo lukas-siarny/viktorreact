@@ -216,13 +216,16 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 			font-weight: 600
 			color: $textColor-notino-black
 		.state
-			width: 4px
-			height: 4px
-			border-radius: 50%
-			background-color: $backgroundColor-notino-black
 			flex: 0 0 auto
+			font-size: 10px
+			line-height: 11px
+			white-space: nowrap
+			overflow: hidden
+			text-overflow: ellipsis
 		.icons
+			overflow: hidden
 			.icon
+				flex: 0 0 auto
 				width: 10px
 				height: 10px
 				&.employee
@@ -310,16 +313,16 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 					.title-wrapper
 						display: inline-flex
 						align-items: flex-start
-						gap: 4px
+						gap: 2px
 						min-width: 0
 						overflow: hidden
-						max-width: calc(100% - 10px)
+						max-width: calc(100% - 14px)
 						.title
 							white-space: nowrap
 							overflow: hidden
 							text-overflow: ellipsis
 							max-width: 100%
-						.state
+						/* .state
 							margin-top: 3px
 							border-radius: 50%
 					.desc
@@ -333,19 +336,21 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 				top: 2px
 				display: flex
 				gap: 2px
+				justify-content: flex-end
+				max-width: calc(100% - 8px)
 			&.min-15
 				.event-content
-					padding-top: 0
+					padding-top: 1px
 					padding-bottom: 0
 					.event-info
 						flex-direction: row
-						margin-right: 10px
+						margin-right: 12px
 						.title-wrapper
 							margin-right: 0
 						.desc
 							display: none
 				.icons
-					top: 0
+					top: 1px
 		&.shift,
 		&.timeoff,
 		&.break
@@ -442,9 +447,7 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 						min-width: 0
 						min-height: 11px
 						&:not(:empty):not(:last-child)
-							margin-right: 4px
-					.state
-						margin-top: 3px
+							margin-right: 2px
 				.desc
 					max-width: 100%
 					white-space: nowrap
@@ -461,7 +464,9 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 					top: 2px
 					display: flex
 					align-items: center
-					gap: 4px
+					gap: 2px
+					justify-content: flex-end
+					max-width: calc(100% - 8px)
 					.state
 						display: none
 			&.min-15,
@@ -475,8 +480,6 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 							min-height: 0
 							&:not(:empty)
 								margin-bottom: 4px
-						.state
-							display: none
 					.desc
 						display: none
 					.icons
@@ -485,22 +488,16 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 						position: relative
 						display: flex
 						align-items: center
-						gap: 4px
-						flex-direction: row-reverse
-						.state
-							display: block
-			&.min-15
+			&.min-15,
+			&.mint-30
 				.event-content
-					height: 100%
-					padding-bottom: 6px
-					flex-direction: row
-					.title-wrapper
+					padding-left: 4px
+				.icons
+					padding-left: 1px
+					max-width: unset
+					.clock,
+					.employee
 						display: none
-					.icons
-						height: 100%
-						flex-direction: column
-						align-items: flex-start
-						justify-content: space-between
 		&.shift,
 		&.timeoff,
 		&.break
@@ -546,7 +543,8 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 								display: none
 							.time
 								display: none
-			&.min-75
+			&.min-30,
+			&.min-15
 				.event-content
 					.sticky-container
 						.event-info
@@ -588,8 +586,6 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 				background-color: #C6CAD1
 			.time
 				color: $textColor-notino-black
-			.state
-				background-color: #8B94A1
 			&.edit
 				outline-color: $borderColor-notino-grayDark
 				.event-accent
@@ -619,6 +615,26 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 					outline-color: $borderColor-notino-grayDark
 					.event-accent
 						@include event-hatch($backgroundColor-notino-grayDark)
+			&:not(.is-autoassigned)
+				&.nc-day-event
+					.event-content
+						.event-info
+							.title-wrapper
+								max-width: calc(100% - 26px)
+					&.min-15
+						.event-content
+							.event-info
+								margin-right: 24px
+				&.nc-week-event
+					.event-content
+						.title-wrapper
+							padding-right: 26px
+					&.min-15,
+					&.min-30,
+					&.min-45
+						.event-content
+							.title-wrapper
+								padding-right: 0
 		&.is-autoassigned
 			.icons
 				.employee
@@ -632,10 +648,24 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 					.event-content
 						.event-info
 							margin-right: 24px
+				&.state-pending
+					&.nc-day-event
+						.event-content
+							.event-info
+								.title-wrapper
+									max-width: calc(100% - 36px)
+						&.min-15
+							.event-content
+								.event-info
+									margin-right: 36px
 			&.nc-week-event
 				.event-content
 					.title-wrapper
 						padding-right: 26px
+				&.state-pending
+					.event-content
+						.title-wrapper
+							padding-right: 36px
 				&.min-15,
 				&.min-30,
 				&.min-45

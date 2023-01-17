@@ -109,7 +109,6 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 		loadingWrap = false
 	}
 	// NOTE: Memo fixuje problém infinite volaní akcie UPDATE_SYNC_ERRORS pri dnd tabuľkách
-	//       výskyt: predaj -> detail obchodného prípadu -> cestujúci -> nový cestujúci
 	const componentsWrap = useMemo(() => {
 		let components = props?.components
 		if (dndEnabled) {
@@ -130,6 +129,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 	let columns = props?.columns || []
 	const isFirstColFixed = props?.columns?.[0]?.fixed ? true : undefined
 	if (dndEnabled) {
+		// Samostatny column aby sa nedrag and dropoval cely riadok ale len cast stlpa (moze sa dat kliknut na riadok na prepnutie detailu entity)
 		const DND_COL = {
 			key: 'dnd',
 			width: 25,

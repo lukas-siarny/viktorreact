@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import { StringParam, useQueryParams } from 'use-query-params'
 
 // full calendar
-import { EventContentArg } from '@fullcalendar/react' // must go before plugins
+import { EventContentArg } from '@fullcalendar/core'
 
 // utils
 import { CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../utils/enums'

@@ -8,7 +8,7 @@ import dayjs from 'dayjs'
 import { getFormValues, initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { StringParam, useQueryParams } from 'use-query-params'
-import { CalendarApi } from '@fullcalendar/react'
+import { CalendarApi } from '@fullcalendar/core'
 
 // types
 import { ICalendarEventForm, ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'

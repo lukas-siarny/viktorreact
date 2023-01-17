@@ -5,7 +5,8 @@ import useResizeObserver from '@react-hook/resize-observer'
 import { useDispatch } from 'react-redux'
 
 // full calendar
-import FullCalendar, { DateSelectArg, EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar from '@fullcalendar/react' // must go before plugins
+import { DateSelectArg, EventContentArg, SlotLabelContentArg } from '@fullcalendar/core'
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
@@ -48,13 +49,13 @@ const resourceGroupLaneContent = () => {
 const resourceAreaColumns = [
 	{
 		field: 'day',
-		headerContent: null,
+		headerContent: 'header', // NOTE: do not delete this - calendar header won't render correctly without this
 		width: 55,
-		cellContent: () => null
+		cellContent: () => <span />
 	},
 	{
 		field: 'employee',
-		headerContent: null,
+		headerContent: 'header', // NOTE: do not delete this - calendar header won't render correctly without this
 		width: 145,
 		cellContent: (args: any) => {
 			const { resource } = args || {}

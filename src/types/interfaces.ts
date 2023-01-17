@@ -1,7 +1,7 @@
 import { EventDragStartArg, EventResizeDoneArg, EventResizeStartArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
-import { EventDropArg, EventInput } from '@fullcalendar/react'
+import { EventDropArg, EventInput } from '@fullcalendar/core'
 
 // utils
 import {

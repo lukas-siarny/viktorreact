@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Col, Row, Spin, Button, Divider, Image, TablePaginationConfig } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
@@ -19,7 +19,7 @@ import CosmeticsFilter from './components/CosmeticsFilter'
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, CREATE_BUTTON_ID } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import { normalizeDirectionKeys, setOrder, sortData } from '../../utils/helper'
 
 // reducers
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
@@ -29,7 +29,7 @@ import { RootState } from '../../reducers'
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
-import { IBreadcrumbs, ICosmetic, ICosmeticForm, Columns } from '../../types/interfaces'
+import { IBreadcrumbs, ICosmetic, ICosmeticForm, Columns, ISearchFilter } from '../../types/interfaces'
 
 const CosmeticsPage = () => {
 	const [t] = useTranslation()
@@ -55,8 +55,8 @@ const CosmeticsPage = () => {
 	}
 
 	useEffect(() => {
-		dispatch(getCosmetics())
-	}, [dispatch])
+		dispatch(getCosmetics({ search: query.search as string }))
+	}, [dispatch, query.search])
 
 	useEffect(() => {
 		dispatch(
@@ -65,26 +65,6 @@ const CosmeticsPage = () => {
 			})
 		)
 	}, [dispatch, query.search])
-
-	const tableData = useMemo(() => {
-		if (!cosmetics || !cosmetics.data) {
-			return []
-		}
-
-		const source = query.search
-			? cosmetics.data.filter((cosmetic) => {
-					const name = transformToLowerCaseWithoutAccent(cosmetic.name)
-					const searchedValue = transformToLowerCaseWithoutAccent(query.search || undefined)
-					return name.includes(searchedValue)
-			  })
-			: cosmetics.data
-
-		// transform to table data
-		return source.map((cosmetic) => ({
-			...cosmetic,
-			key: cosmetic.id
-		}))
-	}, [query.search, cosmetics])
 
 	const changeFormVisibility = (show?: boolean, cosmetic?: ICosmetic) => {
 		if (!show) {
@@ -187,6 +167,16 @@ const CosmeticsPage = () => {
 				)
 		}
 	]
+	const searchSubmit = useCallback(
+		(values: ISearchFilter) => {
+			const newQuery = {
+				...query,
+				search: values.search
+			}
+			setQuery(newQuery)
+		},
+		[query, setQuery]
+	)
 
 	const formClass = cx({
 		'w-2/3 xl:w-1/2': visibleForm
@@ -203,7 +193,7 @@ const CosmeticsPage = () => {
 						<Spin spinning={cosmetics?.isLoading}>
 							<CosmeticsFilter
 								total={cosmetics?.data?.length}
-								onSubmit={(values: any) => setQuery({ ...query, search: values.search })}
+								onSubmit={searchSubmit}
 								addButton={
 									<Button
 										onClick={() => {
@@ -225,9 +215,10 @@ const CosmeticsPage = () => {
 									<CustomTable
 										className='table-fixed'
 										columns={columns}
-										dataSource={tableData}
+										dataSource={cosmetics.data}
 										rowClassName={'clickable-row'}
 										twoToneRows
+										rowKey={'id'}
 										onChange={onChangeTable}
 										pagination={false}
 										onRow={(record) => ({

@@ -324,7 +324,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 								<FieldArray
 									key={index}
 									disabled={disabled}
-									name={`disabledNotifications[${key}].b2cChannels` as string}
+									name={`disabledNotifications[${key}].b2bChannels` as string}
 									component={NotificationArrayFields as any}
 									notificationType={key}
 									channel={NOTIFICATION_CHANNEL.B2C}
@@ -342,7 +342,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 									: [
 											<FieldArray
 												key={key}
-												name={`disabledNotifications[${key}].b2bChannels` as string}
+												name={`disabledNotifications[${key}].b2cChannels` as string}
 												component={NotificationArrayFields as any}
 												notificationType={key}
 												disabled={disabled}

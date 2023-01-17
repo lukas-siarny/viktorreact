@@ -31,7 +31,7 @@ interface IReservationCardProps extends IEventCardProps {
 	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
 }
 
-const getIcon = ({
+const getIconState = ({
 	isPast,
 	isRealized,
 	isApproved,
@@ -111,7 +111,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		email: customer?.email
 	})
 
-	const iconState = getIcon({ isPast, isApproved, isRealized, notRealized, service })
+	const iconState = getIconState({ isPast, isApproved, isRealized, notRealized, service })
 	const iconPending = isPending && <ClockIcon className={'icon clock'} style={{ color: bgColor }} />
 	const iconAutoAssigned = <AvatarIcon className={'icon employee'} />
 

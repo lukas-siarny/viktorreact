@@ -10,7 +10,7 @@ import { DelimitedArrayParam, useQueryParams } from 'use-query-params'
 
 // fullcalendar
 import { EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
-import FullCalendar, { EventApi, EventDropArg } from '@fullcalendar/react'
+import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 
 // enums
 import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, EVENT_NAMES, FORM, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
@@ -299,7 +299,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		// it is therefore necessary to wait until the original DOM event is updated after the change and then find out its new coordinates
 		setTimeout(() => {
 			const dropEventInfo = getEventForComparsion(view, arg.event.extendedProps.idClassName)
-			// if the old and new coordinates are the same, then onEventChange CB is not called (which would enable render) and it is necessary to enable render here
+			// if the old and new coordinates are the same, then onEventChange CB is not called (which would enable render again) and it is necessary to enable render here
 			if (isEqual(dropEventInfo, prevEvent.current)) {
 				setDisableRender(false)
 			}

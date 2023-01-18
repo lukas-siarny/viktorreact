@@ -90,6 +90,7 @@ const CalendarSelectField: FC<Props> = (props) => {
 								// NOTE: moze sa to skusit spravit nejak inak ako cez divko
 								return (
 									<div
+										role={'button'}
 										className={cx(option.className, 'nc-select-option')}
 										onClick={() => {
 											input.onChange(option)

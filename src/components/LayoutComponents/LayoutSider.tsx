@@ -29,6 +29,7 @@ import { ReactComponent as InvoiceIcon } from '../../assets/icons/invoice-24.svg
 import { ReactComponent as ChevronRightIcon } from '../../assets/icons/chevron-right.svg'
 import { ReactComponent as CalendarIcon } from '../../assets/icons/calendar-24.svg'
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
+import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -203,16 +204,22 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				if (hasPermissions(ADMIN_PERMISSIONS) || (hasPermissions([PERMISSION.PARTNER]) && selectedSalon?.settings.enabledReservations)) {
 					mainGroupItems.push(
 						{
-							key: PAGE.RESERVATIONS_SETTINGS,
-							label: t('loc:Nastavenia rezervácií'),
-							onClick: () => history.push(getPath(t('paths:reservations-settings'))),
-							icon: <SettingIcon />
-						},
-						{
 							key: PAGE.CALENDAR,
 							label: t('loc:Kalendár'),
 							onClick: () => history.push(getPath(t('paths:calendar'))),
 							icon: <CalendarIcon />
+						},
+						{
+							key: PAGE.SALON_SETTINGS,
+							label: t('loc:Nastavenia salónu'),
+							onClick: () => history.push(getPath(t('paths:salon-settings'))),
+							icon: <SettingIcon />
+						},
+						{
+							key: PAGE.RESERVATIONS,
+							label: t('loc:Rezervácie'),
+							onClick: () => history.push(getPath(t('paths:reservations'))),
+							icon: <ReservationsIcon />
 						}
 					)
 				}

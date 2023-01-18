@@ -5,7 +5,7 @@ import { debounce } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 // utils
-import { FORM } from '../../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, FORM } from '../../../../utils/enums'
 import { getSalonFilterRanges } from '../../../../utils/helper'
 
 // atoms
@@ -56,7 +56,7 @@ const form = reduxForm({
 		if (anyTouched) {
 			submit()
 		}
-	}, 300),
+	}, CHANGE_DEBOUNCE_TIME),
 	destroyOnUnmount: true
 })(SalonHistoryFilter)
 

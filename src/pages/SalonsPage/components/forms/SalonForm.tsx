@@ -1,8 +1,8 @@
-import React, { FC } from 'react'
+import React, { FC, useCallback } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Space } from 'antd'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 // components
 import { isEmpty } from 'lodash'
@@ -21,9 +21,10 @@ import AutocompleteField from '../../../../atoms/AutocompleteField'
 
 // utils
 import { optionRenderWithImage, showErrorNotification } from '../../../../utils/helper'
-import { FORM, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
+import { FILTER_ENTITY, FORM, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
 import { withPromptUnsavedChanges } from '../../../../utils/promptUnsavedChanges'
 import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, getSalonTagSourceType } from '../salonUtils'
+import searchWrapper from '../../../../utils/filters'
 
 // types
 import { ISalonForm, ISelectOptionItem } from '../../../../types/interfaces'
@@ -104,9 +105,17 @@ const SalonForm: FC<Props> = (props) => {
 		deletedSalon,
 		notinoUserModalControlButtons
 	} = props
+	const dispatch = useDispatch()
 	const languages = useSelector((state: RootState) => state.languages.languages)
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
+
+	const searchCosmetics = useCallback(
+		async (search: string) => {
+			return searchWrapper(dispatch, { search }, FILTER_ENTITY.COSMETICS)
+		},
+		[dispatch]
+	)
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -193,13 +202,14 @@ const SalonForm: FC<Props> = (props) => {
 						/>
 						<Field
 							component={SelectField}
-							options={cosmetics.enumerationsOptions}
+							options={cosmetics.options}
 							label={t('loc:Kozmetika')}
 							placeholder={t('loc:Vyberte kozmetiku')}
 							name={'cosmeticIDs'}
 							optionRender={(itemData: any) => optionRenderWithImage(itemData, <CosmeticIcon />, 40)}
 							showSearch
-							filterOption={true}
+							onSearch={searchCosmetics}
+							filterOption={false}
 							size={'large'}
 							loading={cosmetics.isLoading}
 							mode={'multiple'}

@@ -15,7 +15,7 @@ import { RootState } from '../../../reducers'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { ENUMERATIONS_KEYS, FIELD_MODE, FORM } from '../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, ENUMERATIONS_KEYS, FIELD_MODE, FORM } from '../../../utils/enums'
 import { checkFiltersSize, checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
 
 // atoms
@@ -125,7 +125,7 @@ const form = reduxForm({
 		if (anyTouched) {
 			submit()
 		}
-	}, 300),
+	}, CHANGE_DEBOUNCE_TIME),
 	destroyOnUnmount: true
 })(SupportContactsFilter)
 

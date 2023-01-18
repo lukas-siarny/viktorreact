@@ -38,7 +38,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 	const { event, backgroundColor } = data || {}
 	const { start, end } = event || {}
 
-	const { eventData, idClassName } = (event.extendedProps as IEventExtenedProps) || {}
+	const { eventData } = (event.extendedProps as IEventExtenedProps) || {}
 
 	const {
 		id,
@@ -110,7 +110,6 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					isBulkEvent={!!calendarBulkEvent?.id}
 					isPlaceholder={isPlaceholder}
 					isEdit={isEdit}
-					idClassName={idClassName}
 				/>
 			)
 		case CALENDAR_EVENT_TYPE.RESERVATION: {
@@ -137,7 +136,6 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					originalEventData={originalEventData}
 					isEdit={isEdit}
 					isPlaceholder={isPlaceholder}
-					idClassName={idClassName}
 				/>
 			)
 		}

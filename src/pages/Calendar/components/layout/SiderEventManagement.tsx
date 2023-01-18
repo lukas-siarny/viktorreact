@@ -1,11 +1,10 @@
 import React, { FC, useCallback, useEffect } from 'react'
 import Sider from 'antd/lib/layout/Sider'
-import { compact, map, omit } from 'lodash'
+import { compact, map } from 'lodash'
 import cx from 'classnames'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
-import dayjs from 'dayjs'
-import { getFormValues, initialize } from 'redux-form'
+import { initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { StringParam, useQueryParams } from 'use-query-params'
 import { CalendarApi } from '@fullcalendar/react'
@@ -22,8 +21,6 @@ import {
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_VIEW_TYPE,
 	DAY,
-	DEFAULT_DATE_INIT_FORMAT,
-	DEFAULT_TIME_FORMAT,
 	DELETE_EVENT_PERMISSIONS,
 	EVENT_NAMES,
 	EVERY_REPEAT,
@@ -57,12 +54,12 @@ type Props = {
 	handleSubmitReservation: (values: ICalendarReservationForm) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
 	handleDeleteEvent: (calendarEventId: string, calendarEventBulkId?: string, eventType?: CALENDAR_EVENT_TYPE) => any
-	newEventData?: INewCalendarEvent | null
 	eventId?: string | null
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	calendarApi?: CalendarApi
 	changeCalendarDate: (newDate: string) => void
 	phonePrefix?: string
+	initCreateEventForm: (eventType: CALENDAR_EVENT_TYPE, newEventData?: INewCalendarEvent, forceDestroy?: boolean) => void
 }
 
 const SiderEventManagement: FC<Props> = (props) => {
@@ -76,20 +73,18 @@ const SiderEventManagement: FC<Props> = (props) => {
 		eventId,
 		eventsViewType,
 		calendarApi,
-		newEventData,
 		changeCalendarDate,
-		phonePrefix
+		phonePrefix,
+		initCreateEventForm
 	} = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const [query, setQuery] = useQueryParams({
+	const [query] = useQueryParams({
 		sidebarView: StringParam,
 		eventId: StringParam,
 		date: StringParam
 	})
-	const eventFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EVENT_FORM)(state))
-	const reservationFormValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
 
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 
@@ -195,60 +190,14 @@ const SiderEventManagement: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query.eventId, query.sidebarView])
 
-	const initCreateEventForm = (eventType: CALENDAR_EVENT_TYPE) => {
-		const prevEventType = sidebarView
-		// Mergnut predchadzajuce data ktore boli vybrane pred zmenou eventTypu
-		let prevInitData: Partial<ICalendarEventForm | ICalendarReservationForm> = {}
-		if (prevEventType === CALENDAR_EVENT_TYPE.RESERVATION) {
-			prevInitData = reservationFormValues
-			// CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT || CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK || CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
-		} else {
-			prevInitData = eventFormValues
-		}
-		// Nastavi sa aktualny event Type zo selectu
-		setQuery({
-			...query,
-			sidebarView: eventType
-		})
-
-		let timeTo: string | undefined
-		if (newEventData?.timeTo) {
-			// use 23:59 instead of 00:00 as end of day
-			timeTo = newEventData.timeTo === '00:00' ? '23:59' : newEventData.timeTo
-		}
-
-		// Initne sa event / reservation formular
-		const initData: Partial<ICalendarEventForm | ICalendarReservationForm> = {
-			date: newEventData?.date || query.date || dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-			timeFrom: newEventData?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT),
-			timeTo,
-			employee: newEventData?.employee,
-			eventId: query.eventId,
-			...omit(prevInitData, 'eventType'),
-			eventType
-		}
-
-		if (eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
-			dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
-		} else {
-			// CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT || CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK || CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
-			dispatch(initialize(FORM.CALENDAR_EVENT_FORM, initData))
-		}
-	}
-
-	// Zmena selectu event type v draweri
-	const onChangeEventType = (type: string) => {
-		initCreateEventForm(type as CALENDAR_EVENT_TYPE)
-	}
-
 	useEffect(() => {
 		// zmena sideBar view
 		if (sidebarView !== undefined) {
 			// initnutie defaultu sidebaru pri nacitani bude COLLAPSED a ak bude existovat typ formu tak sa initne dany FORM (pri skopirovani URL na druhy tab)
-			onChangeEventType(sidebarView as CALENDAR_EVENT_TYPE)
+			initCreateEventForm(sidebarView as CALENDAR_EVENT_TYPE)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [sidebarView])
+	}, [])
 
 	useKeyUp(
 		'Escape',
@@ -375,7 +324,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 				<TabsComponent
 					className={'nc-sider-event-management-tabs'}
 					activeKey={sidebarView}
-					onChange={onChangeEventType}
+					onChange={(type: string) => initCreateEventForm(type as CALENDAR_EVENT_TYPE)}
 					tabsContent={getTabContent()}
 					destroyInactiveTabPane
 				/>

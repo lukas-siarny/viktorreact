@@ -38,8 +38,7 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 		backgroundColor,
 		isBulkEvent,
 		isPlaceholder,
-		isEdit,
-		idClassName
+		isEdit
 	} = props
 
 	const duration = parseTimeFromMinutes(diff)
@@ -49,7 +48,7 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 
 	return (
 		<div
-			className={cx('nc-event', idClassName, {
+			className={cx('nc-event', {
 				'nc-day-event': calendarView === CALENDAR_VIEW.DAY,
 				'nc-week-event': calendarView === CALENDAR_VIEW.WEEK,
 				shift: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,

@@ -16,7 +16,7 @@ import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.s
 import { ReactComponent as CategoryIcon } from '../../../../assets/icons/categories-24-icon.svg'
 
 // utils
-import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, ENUMERATIONS_KEYS, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../../utils/enums'
 import { optionRenderWithImage, validationString } from '../../../../utils/helper'
 
 // atoms
@@ -124,7 +124,7 @@ const form = reduxForm({
 		if (anyTouched) {
 			submit()
 		}
-	}, 300),
+	}, CHANGE_DEBOUNCE_TIME),
 	destroyOnUnmount: true
 })(SalonsFilterDeleted)
 

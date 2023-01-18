@@ -307,8 +307,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		}, 500)
 	}
 
-	console.log({ disableRender })
-
 	const getView = () => {
 		if (!employeesOptions?.length) {
 			return (

@@ -9,7 +9,16 @@ import { debounce } from 'lodash'
 import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, STRINGS, CALENDAR_DEBOUNCE_DELAY } from '../../../../utils/enums'
+import {
+	CALENDAR_DATE_FORMAT,
+	CALENDAR_EVENTS_VIEW_TYPE,
+	CALENDAR_SET_NEW_DATE,
+	CALENDAR_VIEW,
+	STRINGS,
+	CALENDAR_DEBOUNCE_DELAY,
+	DEFAULT_DATE_INIT_FORMAT,
+	DEFAULT_TIME_FORMAT
+} from '../../../../utils/enums'
 
 // assets
 import { ReactComponent as ChevronDownGrayDark } from '../../../../assets/icons/chevron-down-grayDark-12.svg'
@@ -27,6 +36,7 @@ import useMedia from '../../../../hooks/useMedia'
 
 // utils
 import { getSelectedDateForCalendar } from '../../calendarHelpers'
+import { INewCalendarEvent } from '../../../../types/interfaces'
 
 const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 	switch (view) {
@@ -79,7 +89,7 @@ type Props = {
 	setCalendarView: (newView: CALENDAR_VIEW) => void
 	setSiderFilterCollapsed: () => void
 	setSelectedDate: (newDate: string) => void
-	onAddEvent: () => void
+	onAddEvent: (initialData?: INewCalendarEvent, fromAddButton?: boolean) => void
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	setEventsViewType: (newViewType: CALENDAR_EVENTS_VIEW_TYPE) => void
 	enabledSalonReservations?: boolean
@@ -244,7 +254,20 @@ const CalendarHeader: FC<Props> = (props) => {
 				</button>
 			</div>
 			<div className={'nav-right'}>
-				<Button type={'primary'} onClick={onAddEvent} icon={<CreateIcon />} disabled={!enabledSalonReservations} htmlType={'button'} className={'noti-btn'}>
+				<Button
+					type={'primary'}
+					onClick={() =>
+						onAddEvent({
+							// NOTE: ak klikne pouzivatel na tlacidlo pridat tak sa initnu len date a timeFrom kedze nie je vybraty kolega
+							date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
+							timeFrom: dayjs().format(DEFAULT_TIME_FORMAT)
+						} as INewCalendarEvent)
+					}
+					icon={<CreateIcon />}
+					disabled={!enabledSalonReservations}
+					htmlType={'button'}
+					className={'noti-btn'}
+				>
 					{STRINGS(t).addRecord('')}
 				</Button>
 			</div>

@@ -251,13 +251,13 @@ const SalonSubRoutes: FC = (props) => {
 			/>
 			<AuthRoute
 				exact
-				path={getPath(t('paths:reservations-settings'))}
+				path={getPath(t('paths:salon-settings'))}
 				component={ReservationsSettingsPage}
 				parentPath={url}
-				translatePathKey={getPath(t('paths:reservations-settings'))}
+				translatePathKey={getPath(t('paths:salon-settings'))}
 				salonID={salonID}
 				layout={MainLayout}
-				page={PAGE.RESERVATIONS_SETTINGS}
+				page={PAGE.SALON_SETTINGS}
 				preventShowDeletedSalon
 			/>
 			<AuthRoute

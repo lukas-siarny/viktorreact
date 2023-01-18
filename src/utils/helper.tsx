@@ -305,9 +305,9 @@ export const translateReservationState = (state?: RESERVATION_STATE) => {
 export const translateReservationPaymentMethod = (paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
 	switch (paymentMethod) {
 		case RESERVATION_PAYMENT_METHOD.CARD:
-			return i18next.t('loc:Kartou')
+			return i18next.t('loc:Platba kartou')
 		case RESERVATION_PAYMENT_METHOD.CASH:
-			return i18next.t('loc:Hotovosť')
+			return i18next.t('loc:Platba v hotovosti')
 		case RESERVATION_PAYMENT_METHOD.OTHER:
 			return i18next.t('loc:Iné')
 		default:

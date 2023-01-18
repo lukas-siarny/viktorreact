@@ -17,15 +17,15 @@ import ReservationsFilter from './components/ReservationsFilter'
 // utils
 import { DEFAULT_DATE_INIT_FORMAT, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { getAssignedUserLabel, normalizeDirectionKeys } from '../../utils/helper'
+import { getAssignedUserLabel, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 
 // reducers
-import { getSalonReservations } from '../../reducers/salons/salonsActions'
 import { RootState } from '../../reducers'
 import { getServices } from '../../reducers/services/serviceActions'
 
 // types
 import { Columns, IBreadcrumbs, IComputedMatch, IReservationsFilter } from '../../types/interfaces'
+import { getPaginatedReservations } from '../../reducers/calendar/calendarActions'
 
 type Props = {
 	computedMatch: IComputedMatch<{ salonID: string }>
@@ -38,7 +38,7 @@ const ReservationsPage = (props: Props) => {
 	const dispatch = useDispatch()
 	const { computedMatch } = props
 	const { salonID } = computedMatch.params
-	const reservations = useSelector((state: RootState) => state.salons.reservations)
+	const reservations = useSelector((state: RootState) => state.calendar.paginatedReservations)
 
 	const [query, setQuery] = useQueryParams({
 		dateFrom: withDefault(StringParam, dayjs().format(DEFAULT_DATE_INIT_FORMAT)),
@@ -65,7 +65,7 @@ const ReservationsPage = (props: Props) => {
 			})
 		)
 		dispatch(
-			getSalonReservations({
+			getPaginatedReservations({
 				salonID,
 				dateFrom: query.dateFrom,
 				reservationStates: query.reservationStates,
@@ -128,10 +128,12 @@ const ReservationsPage = (props: Props) => {
 	const columns: Columns = [
 		{
 			title: t('loc:Dátum'),
-			dataIndex: 'date',
-			key: 'date',
+			dataIndex: 'startDate',
+			key: 'startDate',
 			ellipsis: true,
-			width: '20%'
+			width: '20%',
+			sorter: true,
+			sortOrder: setOrder(query.order, 'startDate')
 		},
 		{
 			title: t('loc:Trvanie'),

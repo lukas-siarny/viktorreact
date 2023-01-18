@@ -22,6 +22,8 @@ export enum LANGUAGE {
 	IT = 'it' */
 }
 
+export const CHANGE_DEBOUNCE_TIME = 300 // 300ms change debounce time for forms that have onChange submit
+
 export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
 
 export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hours
@@ -242,8 +244,7 @@ export enum PAGE {
 	BILLING_INFO = 'BILLING_INFO',
 	CALENDAR = 'CALENDAR',
 	SALON_SETTINGS = 'SALON_SETTINGS',
-	RESERVATIONS = 'RESERVATIONS',
-	RESERVATIONS_SETTINGS = 'RESERVATIONS_SETTINGS'
+	RESERVATIONS = 'RESERVATIONS'
 }
 
 export enum PARAMETER_TYPE {

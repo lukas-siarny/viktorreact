@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 
 // utils
 import {
+	CHANGE_DEBOUNCE_TIME,
 	FORM,
 	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_PAYMENT_METHODS,
@@ -33,38 +34,29 @@ import Filters from '../../../components/Filters'
 
 // reducers
 import { RootState } from '../../../reducers'
-import { IReservationsFilter } from '../../../types/interfaces'
+import { IReservationsFilter, ReservationsEmployees } from '../../../types/interfaces'
 
 type ComponentProps = {}
 
 type Props = InjectedFormProps<IReservationsFilter, ComponentProps> & ComponentProps
 
-const RESERVATION_STATE_OPTIONS = () =>
-	map(RESERVATION_STATES, (item) => ({
-		key: item,
-		label: translateReservationState(item as RESERVATION_STATE)
-	}))
+const RESERVATION_STATE_OPTIONS = map(RESERVATION_STATES, (item) => ({
+	key: item,
+	label: translateReservationState(item as RESERVATION_STATE)
+}))
 
-const RESERVATION_PAYMENT_METHOD_OPTIONS = () =>
-	map(RESERVATION_PAYMENT_METHODS, (item) => ({
-		key: item,
-		label: translateReservationPaymentMethod(item as RESERVATION_PAYMENT_METHOD)
-	}))
+const RESERVATION_PAYMENT_METHOD_OPTIONS = map(RESERVATION_PAYMENT_METHODS, (item) => ({
+	key: item,
+	label: translateReservationPaymentMethod(item as RESERVATION_PAYMENT_METHOD)
+}))
 
-const RESERVATION_SOURCE_TYPE_OPTIONS = () =>
-	map(RESERVATION_SOURCE_TYPES, (item) => ({
-		key: item,
-		label: transalteReservationSourceType(item as RESERVATION_SOURCE_TYPE)
-	}))
+const RESERVATION_SOURCE_TYPE_OPTIONS = map(RESERVATION_SOURCE_TYPES, (item) => ({
+	key: item,
+	label: transalteReservationSourceType(item as RESERVATION_SOURCE_TYPE)
+}))
 
-const ReservationsFilter = (props: Props) => {
-	const { handleSubmit } = props
-	const [t] = useTranslation()
-	const reservations = useSelector((state: RootState) => state.salons.reservations)
-	const formValues = useSelector((state: RootState) => getFormValues(FORM.RESERVATIONS_FILTER)(state))
-	const servicesOptions = useSelector((state: RootState) => state.service.services.options)
-
-	const employeeIDsOptions = map(reservations?.data?.employees, (employee) => {
+const employeeIDsOptions = (employees: ReservationsEmployees) =>
+	map(employees, (employee) => {
 		return {
 			key: employee.id,
 			label: getAssignedUserLabel({
@@ -75,6 +67,13 @@ const ReservationsFilter = (props: Props) => {
 			})
 		}
 	})
+
+const ReservationsFilter = (props: Props) => {
+	const { handleSubmit } = props
+	const [t] = useTranslation()
+	const reservations = useSelector((state: RootState) => state.calendar.paginatedReservations)
+	const formValues = useSelector((state: RootState) => getFormValues(FORM.RESERVATIONS_FILTER)(state))
+	const servicesOptions = useSelector((state: RootState) => state.service.services.options)
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
@@ -115,7 +114,7 @@ const ReservationsFilter = (props: Props) => {
 							showSearch={false}
 							showArrow
 							size={'middle'}
-							options={RESERVATION_STATE_OPTIONS()}
+							options={RESERVATION_STATE_OPTIONS}
 						/>
 					</Col>
 					<Col span={6}>
@@ -128,7 +127,7 @@ const ReservationsFilter = (props: Props) => {
 							showSearch={false}
 							showArrow
 							size={'middle'}
-							options={RESERVATION_PAYMENT_METHOD_OPTIONS()}
+							options={RESERVATION_PAYMENT_METHOD_OPTIONS}
 						/>
 					</Col>
 					<Col span={6}>
@@ -141,7 +140,7 @@ const ReservationsFilter = (props: Props) => {
 							placeholder={t('loc:Zamestnanci')}
 							allowClear
 							size={'middle'}
-							options={employeeIDsOptions}
+							options={employeeIDsOptions(reservations.data?.employees as ReservationsEmployees)}
 						/>
 					</Col>
 					<Col span={6}>
@@ -152,7 +151,7 @@ const ReservationsFilter = (props: Props) => {
 							placeholder={t('loc:Vytvorená v')}
 							allowClear
 							size={'middle'}
-							options={RESERVATION_SOURCE_TYPE_OPTIONS()}
+							options={RESERVATION_SOURCE_TYPE_OPTIONS}
 						/>
 					</Col>
 				</Row>
@@ -169,7 +168,7 @@ const form = reduxForm<IReservationsFilter, ComponentProps>({
 		if (anyTouched) {
 			submit()
 		}
-	}, 300),
+	}, CHANGE_DEBOUNCE_TIME),
 	destroyOnUnmount: true
 })(ReservationsFilter)
 

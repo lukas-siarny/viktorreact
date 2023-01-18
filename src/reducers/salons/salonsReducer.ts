@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { BASIC_SALON, BASIC_SALONS, SALON, SALONS, SUGGESTED_SALONS, SALON_HISTORY, REJECTED_SUGGESTIONS, RESERVATIONS } from './salonsTypes'
+import { BASIC_SALON, BASIC_SALONS, SALON, SALONS, SUGGESTED_SALONS, SALON_HISTORY, REJECTED_SUGGESTIONS } from './salonsTypes'
 import {
 	IBasicSalonPayload,
 	IBasicSalonsPayload,
@@ -10,8 +10,7 @@ import {
 	ISalonsPayload,
 	ISuggestedSalonsPayload,
 	ISalonHistoryPayload,
-	IRejectedSuggestionsPayload,
-	ISalonReservationsPayload
+	IRejectedSuggestionsPayload
 } from './salonsActions'
 
 export const initState = {
@@ -50,13 +49,7 @@ export const initState = {
 		tableData: undefined,
 		isLoading: false,
 		isFailure: false
-	} as IRejectedSuggestionsPayload & ILoadingAndFailure,
-	reservations: {
-		data: null,
-		tableData: [],
-		isLoading: false,
-		isFailure: false
-	} as ISalonReservationsPayload & ILoadingAndFailure
+	} as IRejectedSuggestionsPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -234,32 +227,6 @@ export default (state = initState, action: ISalonsActions) => {
 				...state,
 				rejectedSuggestions: {
 					...initState.rejectedSuggestions,
-					data: action.payload.data,
-					tableData: action.payload.tableData
-				}
-			}
-		// Reservations
-		case RESERVATIONS.RESERVATIONS_LOAD_START:
-			return {
-				...state,
-				reservations: {
-					...state.reservations,
-					isLoading: true
-				}
-			}
-		case RESERVATIONS.RESERVATIONS_LOAD_FAIL:
-			return {
-				...state,
-				reservations: {
-					...initState.reservations,
-					isFailure: true
-				}
-			}
-		case RESERVATIONS.RESERVATIONS_LOAD_DONE:
-			return {
-				...state,
-				reservations: {
-					...initState.reservations,
 					data: action.payload.data,
 					tableData: action.payload.tableData
 				}

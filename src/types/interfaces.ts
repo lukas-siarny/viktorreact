@@ -854,3 +854,5 @@ export type ServicePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeIdServices
 export type DisabledNotificationsArray = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']
 
 export type PathSettingsBody = Paths.PatchApiB2BAdminSalonsSalonIdSettings.RequestBody
+
+export type ReservationsEmployees = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200['employees']

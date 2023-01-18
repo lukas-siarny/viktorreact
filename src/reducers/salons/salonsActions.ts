@@ -1,36 +1,19 @@
 /* eslint-disable import/no-cycle */
-import { map, isEmpty, find } from 'lodash'
+import { isEmpty, map } from 'lodash'
 import { IResetStore } from '../generalTypes'
 
 // types
-import { SALON, SALONS, SUGGESTED_SALONS, BASIC_SALON, BASIC_SALONS, SALON_HISTORY, REJECTED_SUGGESTIONS, RESERVATIONS } from './salonsTypes'
+import { BASIC_SALON, BASIC_SALONS, REJECTED_SUGGESTIONS, SALON, SALON_HISTORY, SALONS, SUGGESTED_SALONS } from './salonsTypes'
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
-import { IPaginationQuery, IQueryParams, ISearchable } from '../../types/interfaces'
+import { IQueryParams, ISearchable } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import {
-	SALON_FILTER_STATES,
-	SALON_FILTER_OPENING_HOURS,
-	SALONS_TAB_KEYS,
-	CALENDAR_EVENT_TYPE,
-	RESERVATION_STATE,
-	RESERVATION_PAYMENT_METHOD,
-	RESERVATION_SOURCE_TYPE
-} from '../../utils/enums'
-import { formatDateByLocale, normalizeQueryParams, transalteReservationSourceType, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
+import { SALON_FILTER_OPENING_HOURS, SALON_FILTER_STATES, SALONS_TAB_KEYS } from '../../utils/enums'
+import { normalizeQueryParams } from '../../utils/helper'
 
-export type ISalonsActions =
-	| IResetStore
-	| IGetSalons
-	| IGetSalon
-	| IGetSuggestedSalons
-	| IGetBasictSalon
-	| IGetBasicSalons
-	| IGetSalonHistory
-	| IGetRejectedSuggestions
-	| IGetSalonReservations
+export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGetBasictSalon | IGetBasicSalons | IGetSalonHistory | IGetRejectedSuggestions
 
 interface IGetSalons {
 	type: SALONS
@@ -58,16 +41,6 @@ export interface IGetSalonsQueryParams extends IQueryParams {
 	assignedUserID?: string | null
 }
 
-interface IGetSalonReservationsQueryParams extends IPaginationQuery {
-	dateFrom?: string | null
-	employeeIDs?: (string | null)[] | null
-	categoryIDs?: (string | null)[] | null
-	reservationStates?: (string | null)[] | null
-	reservationCreateSourceType?: string | null
-	reservationPaymentMethods?: (string | null)[] | null
-	salonID: string
-}
-
 export interface IGetSalonsHistoryQueryParams extends IQueryParams {
 	dateFrom: string
 	dateTo: string
@@ -84,34 +57,12 @@ export interface IGetBasictSalon {
 	payload: IBasicSalonPayload
 }
 
-export interface IGetSalonReservations {
-	type: RESERVATIONS
-	payload: ISalonReservationsPayload
-}
-
 export interface ISalonPayload {
 	data: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200 | null
 }
 
 export interface ISalonHistoryPayload {
 	data: Paths.GetApiB2BAdminSalonsSalonIdHistory.Responses.$200 | null
-}
-
-interface ISalonReservationsTableData {
-	key: string
-	date: string | null
-	time: string
-	createdAt: string | null
-	createSourceType: string
-	state: string
-	employee: any // TODO: optypovat
-	customer: any
-	service: any
-	paymentMethod: string
-}
-
-export interface ISalonReservationsPayload extends ISearchable<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200> {
-	tableData: ISalonReservationsTableData[]
 }
 
 export interface IGetSuggestedSalons {
@@ -339,60 +290,6 @@ export const getSalonHistory =
 			dispatch({ type: SALON_HISTORY.SALON_HISTORY_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: SALON_HISTORY.SALON_HISTORY_LOAD_FAIL })
-			// eslint-disable-next-line no-console
-			console.error(err)
-		}
-
-		return payload
-	}
-
-export const getSalonReservations =
-	(queryParams: IGetSalonReservationsQueryParams): ThunkResult<Promise<ISalonReservationsPayload>> =>
-	async (dispatch) => {
-		let payload = {} as ISalonReservationsPayload
-		try {
-			const queryParamsEditedForRequest = {
-				salonID: queryParams.salonID,
-				dateFrom: queryParams.dateFrom,
-				reservationStates: queryParams.reservationStates,
-				employeeIDs: queryParams.employeeIDs,
-				reservationPaymentMethods: queryParams.reservationPaymentMethods,
-				reservationCreateSourceType: queryParams.reservationCreateSourceType,
-				categoryIDs: queryParams.categoryIDs,
-				limit: queryParams.limit,
-				page: queryParams.page,
-				order: queryParams.order
-			}
-
-			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_START })
-
-			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/paginated', {
-				...(normalizeQueryParams(queryParamsEditedForRequest) as any),
-				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION]
-			})
-
-			const tableData: ISalonReservationsTableData[] = map(data.calendarEvents, (event) => {
-				const employee = find(data.employees, { id: event.employee.id })
-				return {
-					key: event.id,
-					date: formatDateByLocale(event.start.date, true) as string,
-					time: `${event.start.time} - ${event.end.time}`,
-					createdAt: formatDateByLocale(event.createdAt) as string,
-					createSourceType: transalteReservationSourceType(event.reservationData?.createSourceType as RESERVATION_SOURCE_TYPE),
-					state: translateReservationState(event.reservationData?.state as RESERVATION_STATE),
-					employee,
-					customer: event.customer,
-					service: event.service,
-					paymentMethod: translateReservationPaymentMethod(event.reservationData?.paymentMethod as RESERVATION_PAYMENT_METHOD)
-				}
-			})
-			payload = {
-				data,
-				tableData
-			}
-			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_DONE, payload })
-		} catch (err) {
-			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}

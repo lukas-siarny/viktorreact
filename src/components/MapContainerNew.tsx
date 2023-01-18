@@ -20,6 +20,8 @@ const MapContainer = (props: Props) => {
 
 	const { isLoaded } = useJsApiLoader({
 		// https://react-google-maps-api-docs.netlify.app/#usejsapiloader
+		id: 'google-map',
+		libraries: ['places'],
 		googleMapsApiKey: String(process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
 	})
 

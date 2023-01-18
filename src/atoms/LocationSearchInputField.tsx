@@ -7,12 +7,13 @@ import { InputProps } from 'antd/lib/input'
 import cx from 'classnames'
 
 // assets
+import { StandaloneSearchBox } from '@react-google-maps/api'
 import { ReactComponent as SearchIcon } from '../assets/icons/search-icon-16.svg'
 
 // utils
 import { formFieldID } from '../utils/helper'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { StandaloneSearchBox } = require('react-google-map/lib/components/places/StandaloneSearchBox')
+// const { StandaloneSearchBox } = require('react-google-map/lib/components/places/StandaloneSearchBox')
 
 const { Item } = Form
 

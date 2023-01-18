@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 // components
 import i18next from 'i18next'
 import { useSelector } from 'react-redux'
+import { StandaloneSearchBox } from '@react-google-maps/api'
 import MapContainer from './MapContainerNew'
 
 // utils
@@ -24,7 +25,6 @@ import {
 } from '../utils/helper'
 
 // atoms
-import LocationSearchInputField from '../atoms/LocationSearchInputField'
 import InputField from '../atoms/InputField'
 import SelectField from '../atoms/SelectField'
 import InputNumberField from '../atoms/InputNumberField'
@@ -34,6 +34,7 @@ import { RootState } from '../reducers'
 
 // assets
 import { ReactComponent as GlobeIcon } from '../assets/icons/globe-24.svg'
+import StandaloneSearchBoxField from '../atoms/StandaloneSearchBoxField'
 
 /**
  * Define in props only variables required for form
@@ -304,9 +305,10 @@ const AddressFields = (props: Props) => {
 									<Row>
 										<Col span={24} className={'mb-7'}>
 											SEARCH INPUT
+											<StandaloneSearchBoxField />
 											{/* <LocationSearchInputField */}
-											{/*	googleMapURL={googleMapUrl} */}
-											{/*	loadingElement={locationSearchElements.loadingElement} */}
+											{/*	// googleMapURL={googleMapUrl} */}
+											{/*	// loadingElement={locationSearchElements.loadingElement} */}
 											{/*	containerElement={locationSearchElements.containerElement} */}
 											{/*	label={t('loc:Vyhľadať')} */}
 											{/*	required */}
@@ -341,6 +343,7 @@ const AddressFields = (props: Props) => {
 										lng={get(inputValues, 'longitude')}
 										disabled={disabled}
 									/>
+
 									{/* <MapContainer */}
 									{/* onError={() => setMapError(true)} */}
 									{/* googleMapURL={googleMapUrl} */}

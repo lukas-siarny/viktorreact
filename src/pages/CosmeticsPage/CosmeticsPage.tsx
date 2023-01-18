@@ -215,7 +215,7 @@ const CosmeticsPage = () => {
 									<CustomTable
 										className='table-fixed'
 										columns={columns}
-										dataSource={cosmetics.data}
+										dataSource={cosmetics.data || []}
 										rowClassName={'clickable-row'}
 										twoToneRows
 										rowKey={'id'}

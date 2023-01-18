@@ -87,8 +87,15 @@ const configureStoreDev = (rootReducer: Reducer) => {
 	})
 
 	const middlewares = [thunk, logger, preventSubmitFormDuringUpload, handleCalendarFormsChanges]
-	// eslint-disable-next-line no-underscore-dangle
-	const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose // add support for Redux dev tools
+
+	const composeEnhancers =
+		typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+			? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+					trace: true,
+					traceLimit: 25
+			  })
+			: compose
+
 	const store = createStore(rootReducer, composeEnhancers(applyMiddleware(...middlewares)))
 	const persistor = persistStore(store)
 

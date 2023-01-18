@@ -333,7 +333,6 @@ const AddressFields = (props: Props) => {
 								<div className={'mt-6 w-1/2 xl:w-2/3 max-w-3xl'}>
 									<MapContainer
 										onError={() => setMapError(true)}
-										googleMapURL={googleMapUrl}
 										// containerElement={mapContainerElements.containerElement}
 										// mapElement={mapContainerElements.mapElement}
 										// loadingElement={mapContainerElements.loadingElement}

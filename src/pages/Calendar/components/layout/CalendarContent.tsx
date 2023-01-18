@@ -53,15 +53,15 @@ const COMPARSION_INFO_DEFAULT = {
 	width: null
 }
 
-const getEventForComparsion = (calendarView: CALENDAR_VIEW, eventClassName?: string) => {
-	const element = document.querySelector(`.${eventClassName}`)
+const getEventForComparsion = (calendarView: CALENDAR_VIEW, element?: HTMLElement) => {
+	// const element = document.querySelector(`.${eventClassName}`)
 	let offsetTop = null
 	let offsetLeft = null
 	let offsetTopRow = null // relevant only for the week view
 	const clientRect = element?.getBoundingClientRect()
 	const height = clientRect?.height || null
 	const width = clientRect?.width || null
-	const parentWrapper = element?.parentElement?.parentElement?.parentElement
+	const parentWrapper = element?.parentElement
 
 	switch (calendarView) {
 		case CALENDAR_VIEW.DAY:
@@ -291,14 +291,14 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		clearRestartInterval()
 		// disable render on resize or drop start
 		setDisableRender(true)
-		prevEvent.current = getEventForComparsion(view, arg.event.extendedProps.idClassName)
+		prevEvent.current = getEventForComparsion(view, arg.el)
 	}
 
 	const onEventChangeStop = (arg: EventDropArg | EventResizeStopArg) => {
 		// FC uses a "fake" element in the DOM for drag and resize
 		// it is therefore necessary to wait until the original DOM event is updated after the change and then find out its new coordinates
 		setTimeout(() => {
-			const dropEventInfo = getEventForComparsion(view, arg.event.extendedProps.idClassName)
+			const dropEventInfo = getEventForComparsion(view, arg.el)
 			// if the old and new coordinates are the same, then onEventChange CB is not called (which would enable render again) and it is necessary to enable render here
 			if (isEqual(dropEventInfo, prevEvent.current)) {
 				setDisableRender(false)
@@ -306,6 +306,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			prevEvent.current = COMPARSION_INFO_DEFAULT
 		}, 500)
 	}
+
+	console.log({ disableRender })
 
 	const getView = () => {
 		if (!employeesOptions?.length) {

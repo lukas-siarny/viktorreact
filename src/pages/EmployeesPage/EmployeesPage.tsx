@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row, Spin } from 'antd'
@@ -6,6 +6,7 @@ import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
+import { find } from 'lodash'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -16,7 +17,7 @@ import TooltipEllipsis from '../../components/TooltipEllipsis'
 import UserAvatar from '../../components/AvatarComponents'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, NOTIFICATION_TYPE } from '../../utils/enums'
 import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
@@ -32,6 +33,7 @@ import { IBreadcrumbs, SalonSubPageProps, Columns } from '../../types/interfaces
 // assets
 import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-offline.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question.svg'
+import { patchReq } from '../../utils/request'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -47,7 +49,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		search: StringParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'createdAt:desc'),
+		order: withDefault(StringParam, 'orderIndex:asc'),
 		accountState: StringParam,
 		serviceID: StringParam,
 		salonID: StringParam
@@ -198,6 +200,41 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		]
 	}
 
+	const handleDrop = useCallback(
+		async (oldIndex: number, newIndex: number) => {
+			try {
+				const employee = find(employees?.data?.employees, { orderIndex: oldIndex + 1 })
+				if (employee?.id && oldIndex !== newIndex) {
+					await patchReq(
+						`/api/b2b/admin/employees/{employeeID}/reorder`,
+						{ employeeID: employee?.id },
+						{ orderIndex: newIndex + 1 },
+						undefined,
+						NOTIFICATION_TYPE.NOTIFICATION,
+						true
+					)
+				}
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.error(e)
+			} finally {
+				// NOTE: V pripade ak BE reorder zlyha pouzi povodne radenie
+				dispatch(
+					getEmployees({
+						page: query.page,
+						limit: query.limit,
+						order: query.order,
+						search: query.search,
+						accountState: query.accountState,
+						serviceID: query.serviceID,
+						salonID
+					})
+				)
+			}
+		},
+		[dispatch, employees?.data?.employees, query.accountState, query.limit, query.order, query.page, query.search, query.serviceID, salonID]
+	)
+
 	return (
 		<>
 			<Row>
@@ -222,14 +259,15 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 									/>
 								)}
 							/>
-
 							<CustomTable
 								className='table-fixed'
 								onChange={onChangeTable}
 								columns={columns}
 								dataSource={employees?.data?.employees}
 								rowClassName={'clickable-row'}
-								rowKey='id'
+								rowKey='orderIndex'
+								dndEnabled
+								dndDrop={handleDrop}
 								twoToneRows
 								scroll={{ x: 800 }}
 								onRow={(record) => ({

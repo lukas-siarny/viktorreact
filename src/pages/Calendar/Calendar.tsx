@@ -436,6 +436,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			...(!forceDestroy && omit(prevInitData, 'eventType')), // prevData initne len pri prepinani selectu, pri znovu kliknuti na pridat sa tieto data nemerguju
 			eventType
 		}
+
 		if (eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
 			dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
 		} else {
@@ -446,13 +447,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const handleAddEvent = (initialData?: INewCalendarEvent) => {
 		// NOTE: ak existuje vytvoreny virualny event a pouzivatel vytvori dalsi klikom na tlacidlo Pridat tak ho zmaze a otvori init create form eventu
-		if (virtualEvent) {
+		if (virtualEvent || query.eventId) {
 			closeSiderForm()
 		}
 
-		if (query.eventId) {
-			closeSiderForm()
-		}
 		// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastav pracovnu zmenu
 		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 			setEventManagement(CALENDAR_EVENT_TYPE.RESERVATION)

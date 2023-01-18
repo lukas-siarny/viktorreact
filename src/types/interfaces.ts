@@ -707,7 +707,7 @@ export interface ICalendarView {
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
 	onEventChange?: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
-	onEventChangeStart?: () => void
+	onEventChangeStart?: (arg: EventDropArg | EventResizeStartArg) => void
 	loading?: boolean
 	virtualEvent?: EventInput
 	clearRestartInterval: () => void
@@ -738,6 +738,7 @@ export interface IEventCardProps {
 		startDateTime?: CalendarEvent['startDateTime']
 		endDateTime?: CalendarEvent['endDateTime']
 	}
+	timeLeftClassName?: string
 }
 
 export interface ICalendarReservationPopover {

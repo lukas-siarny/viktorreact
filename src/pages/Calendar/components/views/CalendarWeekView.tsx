@@ -307,8 +307,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
 				// select
 				selectable={enabledSalonReservations}
-				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
-				eventResizeStart={() => onEventChangeStart && onEventChangeStart()}
+				eventDragStart={(arg) => onEventChangeStart && onEventChangeStart(arg)}
+				eventResizeStart={(arg) => onEventChangeStart && onEventChangeStart(arg)}
 				select={(selectedEvent) => handleNewEvent(selectedEvent)}
 				resourcesSet={() => setTimeout(updateCalendarSize, 0)}
 				eventsSet={() => {

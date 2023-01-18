@@ -125,6 +125,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const dispatch = useDispatch()
 
 	const onEventChange = (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
+		console.log('onEventChange')
+
 		const hasPermissions = permitted(authUserPermissions || [], selectedSalonuniqPermissions, UPDATE_EVENT_PERMISSIONS)
 
 		const revertEvent = () => {
@@ -236,7 +238,12 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm)
 	}
 
+	console.log({ disableRender })
+
 	const onEventChangeStart = () => {
+		console.log('aaaaaaaaaa')
+		// este osetrit ze ked sa nezmeni dlzka eventu, tak aby sa nezapol disabled render
+		// respektive v onEventStop by sa to moholo osetrit
 		clearRestartInterval()
 		setDisableRender(true)
 	}

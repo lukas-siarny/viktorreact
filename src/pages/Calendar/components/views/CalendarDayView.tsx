@@ -175,8 +175,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
 				// select
 				selectable={enabledSalonReservations}
-				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
-				eventResizeStart={() => onEventChangeStart && onEventChangeStart()}
+				eventDragStart={(arg) => onEventChangeStart && onEventChangeStart(arg)}
+				eventResizeStart={(arg) => onEventChangeStart && onEventChangeStart(arg)}
 				select={handleNewEvent}
 			/>
 		</div>

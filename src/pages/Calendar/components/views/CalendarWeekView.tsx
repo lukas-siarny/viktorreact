@@ -289,9 +289,9 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				weekends
 				stickyFooterScrollbar
 				nowIndicator
+				selectable={enabledSalonReservations}
 				// data sources
 				events={events}
-				// eventSources={events}
 				resources={resources}
 				resourceAreaColumns={resourceAreaColumns}
 				// render hooks
@@ -303,10 +303,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				)}
 				nowIndicatorContent={() => <NowIndicator />}
 				// handlers
-				eventDrop={(arg) => onEventChange(CALENDAR_VIEW.WEEK, arg)}
-				eventResize={(arg) => onEventChange(CALENDAR_VIEW.WEEK, arg)}
-				// select
-				selectable={enabledSalonReservations}
+				eventDrop={onEventChange}
+				eventResize={onEventChange}
 				eventDragStart={onEventChangeStart}
 				eventResizeStart={onEventChangeStart}
 				eventDragStop={onEventChangeStop}

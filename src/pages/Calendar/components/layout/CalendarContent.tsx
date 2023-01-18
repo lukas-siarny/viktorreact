@@ -173,7 +173,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const calendarSelectedDate = getSelectedDateForCalendar(view, selectedDate)
 	const dispatch = useDispatch()
 
-	const onEventChange = (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
+	const onEventChange = (arg: EventDropArg | EventResizeDoneArg) => {
 		const hasPermissions = permitted(authUserPermissions || [], selectedSalonuniqPermissions, UPDATE_EVENT_PERMISSIONS)
 
 		const revertEvent = () => {
@@ -200,7 +200,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		const currentEmployeeId = eventExtenedProps?.eventData?.employee?.id
 
 		// NOTE: miesto eventAllow sa bude vyhodnocovat, ci sa dany event moze upravit tu
-		if (/* calendarView !== CALENDAR_VIEW.MONTH && */ eventData?.eventType !== CALENDAR_EVENT_TYPE.RESERVATION && !startsWith(event.id, NEW_ID_PREFIX)) {
+		if (/* view !== CALENDAR_VIEW.MONTH && */ eventData?.eventType !== CALENDAR_EVENT_TYPE.RESERVATION && !startsWith(event.id, NEW_ID_PREFIX)) {
 			if (newEmployeeId !== currentEmployeeId) {
 				notification.warning({
 					message: t('loc:Upozornenie'),
@@ -220,14 +220,14 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 		let date = startDajys.format(CALENDAR_DATE_FORMAT.QUERY)
 
-		if (calendarView === CALENDAR_VIEW.WEEK) {
+		if (view === CALENDAR_VIEW.WEEK) {
 			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
 			// (to sa bude diat len pri drope)
 			const resource = event.getResources()[0]
 			date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
 		}
 
-		if (calendarView === CALENDAR_VIEW.WEEK) {
+		if (view === CALENDAR_VIEW.WEEK) {
 			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
 			// (to sa bude diat len pri drope)
 			const resource = event.getResources()[0]

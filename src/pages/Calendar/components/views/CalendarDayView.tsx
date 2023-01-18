@@ -159,6 +159,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				nowIndicator
 				allDaySlot={false}
 				stickyFooterScrollbar
+				selectable={enabledSalonReservations}
 				// data sources
 				events={events}
 				resources={resources}
@@ -169,15 +170,12 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				)}
 				slotLabelContent={slotLabelContent}
 				// handlers
-				eventDrop={(arg) => {
-					onEventChange(CALENDAR_VIEW.DAY, arg)
-				}}
-				eventResize={(arg) => onEventChange(CALENDAR_VIEW.DAY, arg)}
+				eventDrop={onEventChange}
+				eventResize={onEventChange}
 				eventDragStart={onEventChangeStart}
 				eventResizeStart={onEventChangeStart}
 				eventDragStop={onEventChangeStop}
 				eventResizeStop={onEventChangeStop}
-				selectable={enabledSalonReservations}
 				select={handleNewEvent}
 			/>
 		</div>

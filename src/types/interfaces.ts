@@ -712,7 +712,7 @@ export interface ICalendarView {
 	onAddEvent: (event: INewCalendarEvent) => void
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
-	onEventChange: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
+	onEventChange: (arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
 	onEventChangeStart: (arg: EventDropArg | EventResizeStartArg) => void
 	onEventChangeStop: (arg: EventDropArg | EventResizeStopArg) => void
 	loading?: boolean

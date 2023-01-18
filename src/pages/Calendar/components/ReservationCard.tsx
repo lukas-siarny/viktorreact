@@ -83,7 +83,8 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		noteFromB2CCustomer,
 		isPlaceholder,
 		isEdit,
-		onReservationClick
+		onReservationClick,
+		idClassName
 	} = props
 
 	const [t] = useTranslation()
@@ -153,7 +154,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 	return (
 		<div
 			ref={cardRef}
-			className={cx('nc-event reservation', {
+			className={cx('nc-event reservation', idClassName, {
 				'nc-day-event': calendarView === CALENDAR_VIEW.DAY,
 				'nc-week-event': calendarView === CALENDAR_VIEW.WEEK,
 				'multiday-event': isMultiDayEvent,

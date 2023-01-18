@@ -154,6 +154,7 @@ const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string
 		start,
 		end,
 		allDay: false,
+		idClassName: `nc-event-${event.id}`,
 		eventData: {
 			...(event.originalEvent || event || {}),
 			isMultiDayEvent: event.isMultiDayEvent,

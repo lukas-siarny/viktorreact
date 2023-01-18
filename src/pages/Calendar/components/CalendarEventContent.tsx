@@ -38,7 +38,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 	const { event, backgroundColor } = data || {}
 	const { start, end } = event || {}
 
-	const { eventData } = (event.extendedProps as IEventExtenedProps) || {}
+	const { eventData, idClassName } = (event.extendedProps as IEventExtenedProps) || {}
 
 	const {
 		id,
@@ -110,6 +110,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					isBulkEvent={!!calendarBulkEvent?.id}
 					isPlaceholder={isPlaceholder}
 					isEdit={isEdit}
+					idClassName={idClassName}
 				/>
 			)
 		case CALENDAR_EVENT_TYPE.RESERVATION: {
@@ -136,6 +137,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					originalEventData={originalEventData}
 					isEdit={isEdit}
 					isPlaceholder={isPlaceholder}
+					idClassName={idClassName}
 				/>
 			)
 		}
@@ -143,8 +145,6 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 			return null
 	}
 }
-
-// export default CalendarEvent
 
 export default React.memo(CalendarEventContent, (prevProps, nextProps) => {
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps)

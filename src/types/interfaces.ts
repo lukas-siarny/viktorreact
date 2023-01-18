@@ -1,4 +1,4 @@
-import { EventDragStartArg, EventResizeDoneArg, EventResizeStartArg } from '@fullcalendar/interaction'
+import { EventDragStartArg, EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 import { EventDropArg, EventInput } from '@fullcalendar/react'
@@ -706,8 +706,9 @@ export interface ICalendarView {
 	onAddEvent: (event: INewCalendarEvent) => void
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
-	onEventChange?: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
-	onEventChangeStart?: () => void
+	onEventChange: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
+	onEventChangeStart: (arg: EventDropArg | EventResizeStartArg) => void
+	onEventChangeStop: (arg: EventDropArg | EventResizeStopArg) => void
 	loading?: boolean
 	virtualEvent?: EventInput
 	clearRestartInterval: () => void
@@ -738,6 +739,7 @@ export interface IEventCardProps {
 		startDateTime?: CalendarEvent['startDateTime']
 		endDateTime?: CalendarEvent['endDateTime']
 	}
+	idClassName?: string
 }
 
 export interface ICalendarReservationPopover {
@@ -776,6 +778,7 @@ export interface IBulkConfirmForm {
 
 export interface IEventExtenedProps {
 	eventData?: CalendarEvent
+	idClassName?: string
 }
 
 export interface IResourceEmployee {

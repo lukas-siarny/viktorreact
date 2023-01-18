@@ -1,19 +1,19 @@
 /* eslint-disable import/no-cycle */
-import { map, isEmpty } from 'lodash'
+import { isEmpty, map } from 'lodash'
 import { IResetStore } from '../generalTypes'
 
 // types
-import { SALON, SALONS, SUGGESTED_SALONS, BASIC_SALON, BASIC_SALONS, SALON_HISTORY, REJECTED_SUGGESTIONS } from './salonsTypes'
+import { BASIC_SALON, BASIC_SALONS, REJECTED_SUGGESTIONS, SALON, SALON_HISTORY, SALONS, SUGGESTED_SALONS } from './salonsTypes'
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
 import { IQueryParams, ISearchable } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { SALON_FILTER_STATES, SALON_FILTER_OPENING_HOURS, SALONS_TAB_KEYS } from '../../utils/enums'
+import { SALON_FILTER_OPENING_HOURS, SALON_FILTER_STATES, SALONS_TAB_KEYS } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
-export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGeBasictSalon | IGetBasicSalons | IGetSalonHistory | IGetRejectedSuggestions
+export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGetBasictSalon | IGetBasicSalons | IGetSalonHistory | IGetRejectedSuggestions
 
 interface IGetSalons {
 	type: SALONS
@@ -52,7 +52,7 @@ export interface IGetSalon {
 	payload: ISalonPayload
 }
 
-export interface IGeBasictSalon {
+export interface IGetBasictSalon {
 	type: BASIC_SALON
 	payload: IBasicSalonPayload
 }

@@ -7,7 +7,7 @@ import { EventDropArg, EventInput } from '@fullcalendar/react'
 import {
 	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT,
 	CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, DAY,
-	SERVICE_TYPE, RESERVATION_STATE, RESERVATION_PAYMENT_METHOD, CONFIRM_MODAL_DATA_TYPE, PARAMETER_TYPE
+	RESERVATION_SOURCE_TYPE, SERVICE_TYPE, RESERVATION_STATE, RESERVATION_PAYMENT_METHOD, CONFIRM_MODAL_DATA_TYPE, PARAMETER_TYPE
 } from '../utils/enums'
 
 // types
@@ -17,6 +17,12 @@ import { TooltipPlacement } from 'antd/es/tooltip'
 export interface IErrorMessage {
 	type: MSG_TYPE
 	message: string
+}
+
+export interface IPaginationQuery {
+	limit?: number | null
+	page?: number | null
+	order?: string
 }
 
 export interface IResponsePagination {
@@ -471,7 +477,7 @@ export interface ISelectable<T> {
  * support async (on BE) searching
  */
 export interface ISearchable<T extends IDataPagination> {
-	options: ISelectOptionItem[] | undefined
+	options?: ISelectOptionItem[] | undefined
 	data: T | null
 }
 
@@ -835,8 +841,18 @@ export type ConfirmModalUpdateReservationData = {
 
 export type ConfirmModalData = ConfirmModalReservationData | ConfirmModalEventnData | ConfirmModalDeleteEventData | ConfirmModalUpdateReservationData | null
 
+export interface IReservationsFilter {
+	dateFrom: string
+	employeeIDs?: string[]
+	categoryIDs?: string[]
+	reservationStates?: RESERVATION_STATE[]
+	reservationPaymentMethods?: RESERVATION_PAYMENT_METHOD[]
+	reservationCreateSourceType?: RESERVATION_SOURCE_TYPE
+}
 export type ServicePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody
 
 export type DisabledNotificationsArray = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']
 
 export type PathSettingsBody = Paths.PatchApiB2BAdminSalonsSalonIdSettings.RequestBody
+
+export type ReservationsEmployees = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200['employees']

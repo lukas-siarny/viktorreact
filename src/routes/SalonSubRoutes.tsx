@@ -50,6 +50,7 @@ import ReservationsSettingsPage from '../pages/ReservationsSettingsPage/Reservat
 
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
+import ReservationsPage from '../pages/ReservationsPage/ReservationsPage'
 
 const redirectoToForbiddenPage = () => {
 	history.push('/403')
@@ -239,13 +240,24 @@ const SalonSubRoutes: FC = (props) => {
 			/>
 			<AuthRoute
 				exact
-				path={getPath(t('paths:reservations-settings'))}
-				component={ReservationsSettingsPage}
+				path={getPath(t('paths:reservations'))}
+				component={ReservationsPage}
 				parentPath={url}
-				translatePathKey={getPath(t('paths:reservations-settings'))}
+				translatePathKey={getPath(t('paths:reservations'))}
 				salonID={salonID}
 				layout={MainLayout}
-				page={PAGE.RESERVATIONS_SETTINGS}
+				page={PAGE.RESERVATIONS}
+				preventShowDeletedSalon
+			/>
+			<AuthRoute
+				exact
+				path={getPath(t('paths:salon-settings'))}
+				component={ReservationsSettingsPage}
+				parentPath={url}
+				translatePathKey={getPath(t('paths:salon-settings'))}
+				salonID={salonID}
+				layout={MainLayout}
+				page={PAGE.SALON_SETTINGS}
 				preventShowDeletedSalon
 			/>
 			<AuthRoute

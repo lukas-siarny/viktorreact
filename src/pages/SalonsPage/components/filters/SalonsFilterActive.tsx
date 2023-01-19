@@ -29,7 +29,8 @@ import {
 	SALON_FILTER_OPENING_HOURS,
 	SALON_FILTER_STATES,
 	SALON_SOURCE_TYPE,
-	FILTER_ENTITY
+	FILTER_ENTITY,
+	CHANGE_DEBOUNCE_TIME
 } from '../../../../utils/enums'
 import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getSalonFilterRanges } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
@@ -397,7 +398,7 @@ const form = reduxForm({
 		if (anyTouched) {
 			submit()
 		}
-	}, 300),
+	}, CHANGE_DEBOUNCE_TIME),
 	destroyOnUnmount: true
 })(SalonsFilterActive)
 

@@ -1,8 +1,8 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
-import { ICalendarActions, ICalendarEventDetailPayload } from './calendarActions'
+import { ICalendarActions, ICalendarEventDetailPayload, ISalonReservationsPayload } from './calendarActions'
 import { ICalendarEventsPayload, ILoadingAndFailure } from '../../types/interfaces'
-import { EVENTS, EVENT_DETAIL, SET_IS_REFRESHING_EVENTS } from './calendarTypes'
+import { EVENTS, EVENT_DETAIL, RESERVATIONS, SET_IS_REFRESHING_EVENTS } from './calendarTypes'
 import { CALENDAR_EVENTS_KEYS } from '../../utils/enums'
 
 export const initState = {
@@ -26,7 +26,13 @@ export const initState = {
 		isLoading: false,
 		isFailure: false
 	} as ICalendarEventDetailPayload & ILoadingAndFailure,
-	isRefreshingEvents: false
+	isRefreshingEvents: false,
+	paginatedReservations: {
+		data: null,
+		tableData: [],
+		isLoading: false,
+		isFailure: false
+	} as ISalonReservationsPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -105,6 +111,32 @@ export default (state = initState, action: ICalendarActions) => {
 			return {
 				...state,
 				isRefreshingEvents: action.payload
+			}
+		// Reservations
+		case RESERVATIONS.RESERVATIONS_LOAD_START:
+			return {
+				...state,
+				paginatedReservations: {
+					...state.paginatedReservations,
+					isLoading: true
+				}
+			}
+		case RESERVATIONS.RESERVATIONS_LOAD_FAIL:
+			return {
+				...state,
+				paginatedReservations: {
+					...initState.paginatedReservations,
+					isFailure: true
+				}
+			}
+		case RESERVATIONS.RESERVATIONS_LOAD_DONE:
+			return {
+				...state,
+				paginatedReservations: {
+					...initState.paginatedReservations,
+					data: action.payload.data,
+					tableData: action.payload.tableData
+				}
 			}
 		case RESET_STORE:
 			return initState

@@ -6,8 +6,8 @@ import { ICosmeticsActions, ICosmeticsPayload } from './cosmeticsActions'
 
 export const initState = {
 	cosmetics: {
-		data: undefined,
-		enumerationsOptions: [],
+		data: null,
+		options: [],
 		isLoading: false,
 		isFailure: false
 	} as ICosmeticsPayload & ILoadingAndFailure
@@ -37,7 +37,7 @@ export default (state = initState, action: ICosmeticsActions) => {
 				...state,
 				cosmetics: {
 					...initState.cosmetics,
-					enumerationsOptions: action.payload.enumerationsOptions,
+					options: action.payload.options,
 					data: action.payload.data
 				}
 			}

@@ -689,7 +689,7 @@ export const EVERY_REPEAT_OPTIONS = () => [
 ]
 
 export const EVENT_NAMES = (eventType?: CALENDAR_EVENT_TYPE, capitalizeFirstLetter = false) => {
-	let string = ''
+	let string = i18next.t('loc:udalosť')
 	switch (eventType) {
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 			string = i18next.t('loc:prestávku')

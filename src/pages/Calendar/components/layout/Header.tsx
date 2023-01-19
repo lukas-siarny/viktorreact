@@ -237,7 +237,7 @@ const CalendarHeader: FC<Props> = (props) => {
 					placement='bottom'
 					trigger={['click']}
 					getPopupContainer={() => document.querySelector('#noti-calendar-header') as HTMLElement}
-					visible={isCalendarOpen}
+					open={isCalendarOpen}
 					destroyPopupOnHide
 				>
 					<button type={'button'} className={'nc-button-date mx-1'} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>

@@ -2,9 +2,9 @@
 
 const { override, fixBabelImports, addWebpackPlugin } = require('customize-cra')
 const addLessLoader = require('customize-cra-less-loader')
-const AntdDayjsWebpackPlugin = require('antd-dayjs-webpack-plugin')
+// const AntdDayjsWebpackPlugin = require('antd-dayjs-webpack-plugin')
 
-module.exports = override(
+/* module.exports = override(
 	// rewireReactHotLoader,
 	fixBabelImports('import', {
 		libraryName: 'antd',
@@ -32,4 +32,4 @@ module.exports = override(
 	}),
 	// antd components dayjs
 	addWebpackPlugin(new AntdDayjsWebpackPlugin())
-)
+) */

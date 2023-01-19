@@ -269,7 +269,7 @@ const IndustryPage = (props: Props) => {
 			<Modal
 				key={'requestNewServiceModal'}
 				title={t('loc:Žiadosť o novú službu')}
-				visible={isVisible}
+				open={isVisible}
 				onCancel={() => {
 					dispatch(reset(FORM.REQUEST_NEW_SERVICE_FORM))
 					setIsVisible(false)

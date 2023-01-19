@@ -67,7 +67,7 @@ const SalonSuggestionsModal = (props: Props) => {
 			className='rounded-fields'
 			title={t('loc:Navrhované salóny')}
 			centered
-			visible={visible}
+			open={visible}
 			footer={null}
 			onCancel={() => setVisible(false)}
 			closeIcon={<CloseIcon />}

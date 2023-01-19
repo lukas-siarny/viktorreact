@@ -3,6 +3,17 @@
 @import "typography"
 
 // Buttons
+.ant-btn
+	&:not(:disabled):focus-visible
+			outline: none
+			box-shadow: $btn-shadow-hover-default
+	&.noti-filter-button
+		padding-top: 0
+		padding-bottom: 0
+		border-radius: 4px
+		&:not(:disabled):focus-visible
+			outline: 1px solid $borderColor-notino-black
+			box-shadow:  none
 
 // Secondary (DEFAULT
 .ant-btn.noti-btn,

@@ -128,7 +128,7 @@ const ContactPage: FC<Props> = () => {
 						value={{ value: selectedContact?.id }}
 						className={'noti-select-input w-full'}
 						size={'large'}
-						dropdownClassName={'noti-select-dropdown dropdown-match-select-width'}
+						popupClassName={'noti-select-dropdown dropdown-match-select-width'}
 						labelInValue
 					>
 						{supportContacts?.options?.map((option) => (
@@ -214,7 +214,7 @@ const ContactPage: FC<Props> = () => {
 																	<Popover
 																		overlayClassName={'w-full sm:max-w-md p-2'}
 																		ref={notePopoverRef}
-																		visible={isNoteOpen}
+																		open={isNoteOpen}
 																		content={
 																			<>
 																				<Row align={'middle'} justify={'space-between'}>

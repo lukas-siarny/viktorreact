@@ -691,7 +691,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			<Modal
 				key={`${modalConfig.visible}`}
 				title={modalConfig.title}
-				visible={modalConfig.visible}
+				open={modalConfig.visible}
 				onCancel={() =>
 					setModalConfig({
 						title: '',
@@ -707,7 +707,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			</Modal>
 			<Modal
 				title={t('loc:Priradiť Notino používateľa')}
-				visible={visibleNotinoUserModal}
+				open={visibleNotinoUserModal}
 				onCancel={() => setVisibleNotinoUserModal(false)}
 				footer={null}
 				closeIcon={<CloseIcon />}

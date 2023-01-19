@@ -151,7 +151,7 @@ const ReservationForm: FC<Props> = (props) => {
 			centered
 			destroyOnClose
 			onOk={() => dispatch(submit(FORM.CUSTOMER))}
-			visible={visibleCustomerModal}
+			open={visibleCustomerModal}
 			onCancel={() => setVisibleCustomerModal(false)}
 			closeIcon={<CloseIcon />}
 		>

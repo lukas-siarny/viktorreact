@@ -37,7 +37,8 @@ import { SubmissionError, submit } from 'redux-form'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
-import { ArgsProps } from 'antd/lib/notification'
+import { ArgsProps } from 'antd/es/notification/interface'
+
 import cx from 'classnames'
 import showNotifications from './tsxHelpers'
 import {

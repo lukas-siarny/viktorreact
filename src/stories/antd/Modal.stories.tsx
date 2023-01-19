@@ -18,7 +18,7 @@ const Template: ComponentStory<typeof Modal> = (args) => {
 			<Button className='noti-btn m-regular' onClick={() => setShowModal(true)}>
 				Open Modal
 			</Button>
-			<Modal {...args} visible={showModal} onOk={() => setShowModal(false)} onCancel={() => setShowModal(false)}>
+			<Modal {...args} open={showModal} onOk={() => setShowModal(false)} onCancel={() => setShowModal(false)}>
 				<p>Some contents...</p>
 				<p>Some contents...</p>
 				<p>Some contents...</p>

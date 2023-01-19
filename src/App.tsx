@@ -6,9 +6,11 @@ import { PersistGate } from 'redux-persist/es/integration/react'
 import { QueryParamProvider, ExtendedStringifyOptions, transformSearchStringJsonSafe } from 'use-query-params'
 import { Spin, ConfigProvider } from 'antd'
 import { Locale } from 'antd/lib/locale-provider'
+import { AliasToken } from 'antd/es/theme/internal'
 import dayjs from 'dayjs'
 
-import 'antd/dist/antd.min.css'
+// import 'antd/dist/antd.min.css'
+import 'antd/dist/reset.css'
 
 import Routes from './routes/Routes'
 
@@ -29,6 +31,20 @@ const queryStringifyOptions: ExtendedStringifyOptions = {
 }
 
 const { store, persistor } = configureStore(rootReducer)
+
+const ANTD_THEME_VARIABLES_OVERRIDE: Partial<AliasToken> = {
+	// Override AntD colors
+	colorPrimary: '#000000', // black
+	colorLink: '#DC0069', // notino-pink
+	colorText: '#404040', // true-gray-700,
+	colorTextHeading: '#3F3F46', // cool-gray-900
+	colorTextSecondary: '#BFBFBF', // notino-gray
+	colorTextDisabled: '#9CA3AF', // cool-gray-100,
+	colorSuccess: '#008700', // notino-success
+	colorWarning: '#D97706', // amber-600
+	colorError: '#D21414', // notino-red
+	borderRadius: 2
+}
 
 const App = () => {
 	const [antdLocale, setAntdLocale] = useState<Locale | undefined>(undefined)
@@ -62,7 +78,12 @@ const App = () => {
 					}
 					persistor={persistor}
 				>
-					<ConfigProvider locale={antdLocale}>
+					<ConfigProvider
+						locale={antdLocale}
+						theme={{
+							token: ANTD_THEME_VARIABLES_OVERRIDE
+						}}
+					>
 						<Provider store={store}>
 							<Router history={history}>
 								<QueryParamProvider ReactRouterRoute={Route} stringifyOptions={queryStringifyOptions}>

@@ -68,7 +68,7 @@ const SalonRolesField: FC<Props> = (props) => {
 						{t('loc:Výber role')}
 					</Row>
 				}
-				visible={visible}
+				open={visible}
 				centered
 				footer={null}
 				onCancel={() => setVisible(false)}

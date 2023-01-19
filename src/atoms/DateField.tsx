@@ -5,9 +5,12 @@ import cx from 'classnames'
 import { FormItemProps } from 'antd/lib/form/FormItem'
 import { Form, DatePicker } from 'antd'
 import { DatePickerProps } from 'antd/lib/date-picker'
+
+// assets
 import { ReactComponent as DateSuffixIcon } from '../assets/icons/date-suffix-icon.svg'
 import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'
 
+// utils
 import { DEFAULT_DATE_INIT_FORMAT, DEFAULT_DATE_INPUT_FORMAT, DROPDOWN_POSITION } from '../utils/enums'
 import { formFieldID } from '../utils/helper'
 
@@ -143,7 +146,7 @@ const DateField = (props: Props) => {
 				suffixIcon={suffixIcon || <DateSuffixIcon className={'text-gray-600'} />}
 				placeholder={placeholder}
 				disabledDate={disabledDateWrap}
-				dropdownClassName={cx({ showInReservationDrawer })}
+				popupClassName={cx({ showInReservationDrawer })}
 				disabled={disabled}
 				allowClear={allowClear}
 				getPopupContainer={getPopupContainer || ((node) => node)}

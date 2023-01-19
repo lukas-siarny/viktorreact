@@ -544,7 +544,7 @@ const SalonsPage = () => {
 				className='rounded-fields'
 				title={t('loc:Importovať salóny')}
 				centered
-				visible={salonImportsModalVisible}
+				open={salonImportsModalVisible}
 				footer={null}
 				onCancel={() => {
 					resetUploadForm()

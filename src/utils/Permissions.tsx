@@ -124,7 +124,7 @@ export const ForbiddenModal: FC<{ visible: boolean; onCancel: () => void; item?:
 
 	return (
 		<>
-			<Modal title={t('loc:Upozornenie')} visible={visible} getContainer={() => document.body} onCancel={onCancel} footer={null}>
+			<Modal title={t('loc:Upozornenie')} open={visible} getContainer={() => document.body} onCancel={onCancel} footer={null}>
 				<Result
 					status='warning'
 					title={t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')}

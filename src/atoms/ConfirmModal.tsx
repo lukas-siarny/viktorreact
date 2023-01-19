@@ -1,11 +1,12 @@
 import React, { FC } from 'react'
-import { Button, Modal, ModalProps } from 'antd'
+import { Button, ButtonProps, Modal, ModalProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 
 // assets
 import { ReactComponent as CloseIcon } from '../assets/icons/close-icon-2.svg'
 
+type buttonType = Pick<ButtonProps, 'onClick'>
 export interface IConfirmModal extends ModalProps {
 	loading?: boolean
 	disabled?: boolean
@@ -24,7 +25,7 @@ const ConfirmModal: FC<IConfirmModal> = (props) => {
 					size={'middle'}
 					className={cx(props.cancelButtonProps?.className, 'noti-btn w-1/2')}
 					htmlType={'button'}
-					onClick={onCancel}
+					onClick={onCancel as any}
 					disabled={disabled}
 					loading={loading}
 				>
@@ -35,7 +36,7 @@ const ConfirmModal: FC<IConfirmModal> = (props) => {
 					size={'middle'}
 					className={cx(props.okButtonProps?.className, 'noti-btn w-1/2')}
 					htmlType={'button'}
-					onClick={onOk}
+					onClick={onOk as any}
 					disabled={disabled}
 					loading={loading}
 				>

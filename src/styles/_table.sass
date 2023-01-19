@@ -60,6 +60,7 @@
 			background: $textColor-gray-50
 	table
 		border-spacing: 0 4px
+		border-collapse: initial
 		// Header tabulky
 		thead
 			tr
@@ -116,6 +117,9 @@
 		// Telo tabulky
 		tbody
 			// riadok
+			> tr
+				> td
+					border-top: none !important
 			// selectnuty
 			tr.ant-table-row-selected
 				color: $textColor-gray-900
@@ -166,7 +170,7 @@
 						.noti-input-number
 							background-color: $backgroundColor-gray-200
 					td, td.ant-table-column-sort
-						background: $backgroundColor-gray-100
+						background: $backgroundColor-gray-100 !important
 						button.noti-table-btn
 							visibility: visible
 							svg

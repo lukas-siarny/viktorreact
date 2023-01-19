@@ -132,7 +132,7 @@ const DateRangePickerField = (props: Props) => {
 					separator={separator || <SeparatorIcon />}
 					open={open}
 					disabledDate={disabledDateWrap}
-					dropdownClassName={dropdownClassName}
+					popupClassName={dropdownClassName}
 					renderExtraFooter={renderExtraFooter}
 					getPopupContainer={getPopupContainer || ((node) => node)}
 					size={size}

@@ -416,7 +416,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 
 	return (
 		<Popover
-			visible={isOpen}
+			open={isOpen}
 			destroyTooltipOnHide={{ keepParent: true }}
 			trigger={'click'}
 			placement={placement}

@@ -579,7 +579,7 @@ const EmployeePage = (props: Props) => {
 				className='rounded-fields'
 				title={t('loc:Pozvať do tímu')}
 				centered
-				visible={visible}
+				open={visible}
 				footer={null}
 				onCancel={() => setVisible(false)}
 				closeIcon={<CloseIcon />}

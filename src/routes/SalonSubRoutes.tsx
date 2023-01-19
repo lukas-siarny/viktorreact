@@ -251,10 +251,10 @@ const SalonSubRoutes: FC = (props) => {
 			/>
 			<AuthRoute
 				exact
-				path={getPath(t('paths:salon-settings'))}
+				path={getPath(t('paths:reservations-settings'))}
 				component={ReservationsSettingsPage}
 				parentPath={url}
-				translatePathKey={getPath(t('paths:salon-settings'))}
+				translatePathKey={getPath(t('paths:reservations-settings'))}
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.SALON_SETTINGS}

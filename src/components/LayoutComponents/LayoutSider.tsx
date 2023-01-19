@@ -211,8 +211,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						},
 						{
 							key: PAGE.SALON_SETTINGS,
-							label: t('loc:Nastavenia salónu'),
-							onClick: () => history.push(getPath(t('paths:salon-settings'))),
+							label: t('loc:Nastavenia rezervácií'),
+							onClick: () => history.push(getPath(t('paths:reservations-settings'))),
 							icon: <SettingIcon />
 						},
 						{

@@ -417,6 +417,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// Nastavi sa aktualny event Type zo selectu
 		setQuery({
 			...query,
+			eventId: undefined, // Pri create vynulovat eventID ak bol pred creatom otvoreny nejaky detail
 			sidebarView: eventType
 		})
 
@@ -432,7 +433,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			timeFrom: newEventData?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT),
 			timeTo,
 			employee: newEventData?.employee,
-			eventId: query.eventId,
 			...(!forceDestroy && omit(prevInitData, 'eventType')), // prevData initne len pri prepinani selectu, pri znovu kliknuti na pridat sa tieto data nemerguju
 			eventType
 		}

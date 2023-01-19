@@ -27,13 +27,13 @@ import {
 import InputField from '../atoms/InputField'
 import SelectField from '../atoms/SelectField'
 import InputNumberField from '../atoms/InputNumberField'
+import StandaloneSearchBoxField from '../atoms/StandaloneSearchBoxField'
 
 // redux
 import { RootState } from '../reducers'
 
 // assets
 import { ReactComponent as GlobeIcon } from '../assets/icons/globe-24.svg'
-import StandaloneSearchBoxField from '../atoms/StandaloneSearchBoxField'
 
 /**
  * Define in props only variables required for form

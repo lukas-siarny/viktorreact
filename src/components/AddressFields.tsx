@@ -4,13 +4,12 @@ import { Field, InjectedFormProps, WrappedFieldProps } from 'redux-form'
 import { Alert, Col, Row } from 'antd'
 import cx from 'classnames'
 import { get } from 'lodash'
+import i18next from 'i18next'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
 // components
-import i18next from 'i18next'
-import { useSelector } from 'react-redux'
-import { StandaloneSearchBox } from '@react-google-maps/api'
-import MapContainer from './MapContainerNew'
+import MapContainer from './MapContainer'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, MAP } from '../utils/enums'
@@ -69,8 +68,6 @@ type Props = WrappedFieldProps & {
 	form?: FORM
 }
 
-const FULL_H_ELEMENT = <div className='h-full' />
-
 const numberMinLongitude = validationNumberMin(MAP.minLongitude)
 const numberMaxLongitude = validationNumberMax(MAP.maxLongitude)
 const numberMinLatitude = validationNumberMin(MAP.minLatitude)
@@ -124,15 +121,6 @@ const AddressFields = (props: Props) => {
 		inputValues,
 		input,
 		meta: { form, error, touched },
-		locationSearchElements = {
-			loadingElement: FULL_H_ELEMENT,
-			containerElement: <div />
-		},
-		mapContainerElements = {
-			loadingElement: FULL_H_ELEMENT,
-			mapElement: FULL_H_ELEMENT,
-			containerElement: <div className='h-56 lg:h-72' />
-		},
 		disabled
 	} = props
 	const { t } = useTranslation()
@@ -306,13 +294,12 @@ const AddressFields = (props: Props) => {
 									<Row>
 										<Col span={24} className={'mb-7'}>
 											<StandaloneSearchBoxField
-												containerElement={locationSearchElements.containerElement}
 												label={t('loc:Vyhľadať')}
 												required
 												onPlaceSelected={selectLocation}
 												type='search'
 												placeholder={t('loc:Vyhľadajte miesto na mape')}
-												className={'mb-0'}
+												className={'mb-0 pb-0'}
 												error={error && touched}
 												disabled={disabled}
 												form={form}
@@ -320,39 +307,29 @@ const AddressFields = (props: Props) => {
 											/>
 											<div className={cx('text-danger', { hidden: !(error && touched) })}>{error}</div>
 										</Col>
+										<Col span={24}>
+											<Row>
+												<Col span={6}>
+													{AddressLayout({
+														street: get(inputValues, 'street'),
+														streetNumber: get(inputValues, 'streetNumber'),
+														city: get(inputValues, 'city'),
+														zipCode: get(inputValues, 'zipCode'),
+														country: get(inputValues, 'country')
+													})}
+												</Col>
+												<Col span={18}>
+													<MapContainer
+														onLocationChange={changeLocation}
+														lat={get(inputValues, 'latitude')}
+														lng={get(inputValues, 'longitude')}
+														zoom={get(inputValues, 'zoom')}
+														disabled={disabled}
+													/>
+												</Col>
+											</Row>
+										</Col>
 									</Row>
-									{AddressLayout({
-										street: get(inputValues, 'street'),
-										streetNumber: get(inputValues, 'streetNumber'),
-										city: get(inputValues, 'city'),
-										zipCode: get(inputValues, 'zipCode'),
-										country: get(inputValues, 'country')
-									})}
-								</div>
-								<div className={'mt-6 w-1/2 xl:w-2/3 max-w-3xl'}>
-									<MapContainer
-										onError={() => setMapError(true)}
-										// containerElement={mapContainerElements.containerElement}
-										// mapElement={mapContainerElements.mapElement}
-										// loadingElement={mapContainerElements.loadingElementoadingElement}
-										onLocationChange={changeLocation}
-										lat={get(inputValues, 'latitude')}
-										lng={get(inputValues, 'longitude')}
-										zoom={get(inputValues, 'zoom')}
-										disabled={disabled}
-									/>
-
-									{/* <MapContainer */}
-									{/* onError={() => setMapError(true)} */}
-									{/* googleMapURL={googleMapUrl} */}
-									{/* containerElement={mapContainerElements.containerElement} */}
-									{/* mapElement={mapContainerElements.mapElement} */}
-									{/* loadingElement={mapContainerElements.loadingElement} */}
-									{/* onLocationChange={changeLocation} */}
-									{/* lat={get(inputValues, 'latitude')} */}
-									{/* long={get(inputValues, 'longitude')} */}
-									{/* disabled={disabled} */}
-									{/* /> */}
 								</div>
 							</>
 						)}

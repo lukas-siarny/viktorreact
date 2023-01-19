@@ -4,13 +4,13 @@ import cx from 'classnames'
 import { Input, Form, Spin } from 'antd'
 import { FormItemLabelProps } from 'antd/lib/form/FormItemLabel'
 import { InputProps } from 'antd/lib/input'
+
 import { formFieldID } from '../utils/helper'
 import { ReactComponent as SearchIcon } from '../assets/icons/search-icon-16.svg'
 
 type Props = FormItemLabelProps &
 	InputProps & {
 		onPlaceSelected: (place: google.maps.places.PlaceResult) => void
-		containerElement: React.ReactNode
 		error?: boolean
 	}
 
@@ -40,7 +40,7 @@ const StandaloneSearchBoxField = (props: Props) => {
 		})
 		// eslint-disable-next-line consistent-return
 		return () => {
-			google.maps.event.removeListener(listener!)
+			google.maps.event.removeListener(listener)
 		}
 	}, [isLoaded, loaded, onPlaceSelected])
 

@@ -47,7 +47,7 @@ export const clearEvent = (): ThunkResult<void> => (dispatch, getState) => {
 	// clear store
 	dispatch({ type: VIRTUAL_EVENT.VIRTUAL_EVENT_CLEAR, payload: { data: null } })
 	// destroy calendar forms
-	Object.keys(HANDLE_CALENDAR_FORMS).forEach((key) => dispatch(destroy(key)))
+	HANDLE_CALENDAR_FORMS.forEach((form) => dispatch(destroy(form)))
 	// remove event from Calendar API
 	if (calendarApi) {
 		const eventId = getState().virtualEvent.virtualEvent.data?.id
@@ -161,7 +161,6 @@ export const addOrUpdateEvent =
 					reservationData
 				}
 			}
-
 			const payload: IVirtualEventPayload = {
 				data: {
 					id: eventId,

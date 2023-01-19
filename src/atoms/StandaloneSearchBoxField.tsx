@@ -23,7 +23,8 @@ const StandaloneSearchBoxField = (props: Props) => {
 	const { isLoaded, loadError } = useJsApiLoader({
 		// https://react-google-maps-api-docs.netlify.app/#usejsapiloader
 		id: 'google-map',
-		googleMapsApiKey: String(process.env.REACT_APP_GOOGLE_MAPS_API_KEY),
+		// eslint-disable-next-line no-underscore-dangle
+		googleMapsApiKey: window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_MAPS_API_KEY,
 		libraries: ['places']
 	})
 	const autocompleteRef = useRef<any>(null)

@@ -22,7 +22,8 @@ const MapContainer = (props: Props) => {
 		// https://react-google-maps-api-docs.netlify.app/#usejsapiloader
 		id: 'google-map',
 		libraries: ['places'],
-		googleMapsApiKey: String(process.env.REACT_APP_GOOGLE_MAPS_API_KEY)
+		// eslint-disable-next-line no-underscore-dangle
+		googleMapsApiKey: window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_MAPS_API_KEY
 	})
 
 	const updatePosition = (newPosition: google.maps.LatLng | google.maps.LatLngLiteral) => {

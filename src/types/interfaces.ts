@@ -26,8 +26,10 @@ export interface IPaginationQuery {
 }
 
 export interface ILabelInValue<T = any> {
-	label: string
+	label?: string
 	value: T
+	key: string
+	extra?: any
 }
 export interface IResponsePagination {
 	limit: number

@@ -95,8 +95,17 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 					}
 			  ]
 			: null,
-		languageIDs: map(salonData.languages, (lng) => lng?.id).filter((lng) => lng !== undefined) as string[],
-		cosmeticIDs: map(salonData.cosmetics, (cosmetic) => cosmetic?.id).filter((cosmetic) => cosmetic !== undefined) as string[],
+		/* languageIDs: map(
+			filter(salonData.languages, (lng) => lng !== undefined),
+			(lng) => ({ label: lng.name, value: lng.id })
+		),
+		cosmeticIDs: map(salonData.cosmetics, (cosmetic) => cosmetic?.id).filter((cosmetic) => cosmetic !== undefined), */
+		cosmeticIDs: salonData.cosmetics
+			?.filter((lng) => lng !== undefined)
+			.map((cosmetic) => ({ label: cosmetic?.name, value: (cosmetic as any).id, extra: { image: 'ss' }, key: `Cosmetic_${(cosmetic as any).id}` })),
+		languageIDs: salonData.languages
+			?.filter((lng) => lng !== undefined)
+			.map((lng) => ({ label: lng?.name, value: (lng as any).id, extra: { image: 'ss' }, key: `language_${(lng as any).id}` })),
 		address: !!salonData.address || null,
 		socialLinkWebPage: salonData.socialLinkWebPage || null,
 		socialLinkFB: salonData.socialLinkFB || null,

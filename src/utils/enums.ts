@@ -354,7 +354,7 @@ export const MAP = {
 	maxLatitude: 90,
 	minLongitude: -180,
 	maxLongitude: 180,
-	minZoom: 1,
+	minZoom: 8,
 	maxZoom: 20,
 	placeZoom: 16,
 	defaultLocation: PRAGUE_LOCATION,

@@ -147,7 +147,7 @@ const AddressFields = (props: Props) => {
 		setGoogleMapUrl(getGoogleMapUrl())
 	}, [])
 
-	const parseAddressObject = (addressComponents: any[]) => {
+	const parseAddressObject = (addressComponents: google.maps.places.PlaceResult['address_components']) => {
 		const address = parseAddressComponents(addressComponents)
 
 		const { streetNumber, houseNumber } = address
@@ -170,11 +170,12 @@ const AddressFields = (props: Props) => {
 		input.onChange(true)
 	}
 
-	const selectLocation = (place: any) => {
+	const selectLocation = (place: google.maps.places.PlaceResult) => {
 		parseAddressObject(place.address_components)
-		if (place.location) {
-			changeFormFieldValue('latitude', parseFloat(place.location.lat().toFixed(8)))
-			changeFormFieldValue('longitude', parseFloat(place.location.lng().toFixed(8)))
+		if (place.geometry?.location) {
+			changeFormFieldValue('latitude', parseFloat(place.geometry.location.lat().toFixed(8)))
+			changeFormFieldValue('longitude', parseFloat(place.geometry.location.lng().toFixed(8)))
+			changeFormFieldValue('zoom', MAP.placeZoom)
 		}
 	}
 
@@ -304,23 +305,19 @@ const AddressFields = (props: Props) => {
 								<div className={'mb-7 flex-1 w-1/2 xl:w-full'}>
 									<Row>
 										<Col span={24} className={'mb-7'}>
-											SEARCH INPUT
-											<StandaloneSearchBoxField />
-											{/* <LocationSearchInputField */}
-											{/*	// googleMapURL={googleMapUrl} */}
-											{/*	// loadingElement={locationSearchElements.loadingElement} */}
-											{/*	containerElement={locationSearchElements.containerElement} */}
-											{/*	label={t('loc:Vyhľadať')} */}
-											{/*	required */}
-											{/*	onPlaceSelected={selectLocation} */}
-											{/*	type='search' */}
-											{/*	placeholder={t('loc:Vyhľadajte miesto na mape')} */}
-											{/*	className={'mb-0'} */}
-											{/*	error={error && touched} */}
-											{/*	disabled={disabled} */}
-											{/*	form={form} */}
-											{/*	name={input.name} */}
-											{/* /> */}
+											<StandaloneSearchBoxField
+												containerElement={locationSearchElements.containerElement}
+												label={t('loc:Vyhľadať')}
+												required
+												onPlaceSelected={selectLocation}
+												type='search'
+												placeholder={t('loc:Vyhľadajte miesto na mape')}
+												className={'mb-0'}
+												error={error && touched}
+												disabled={disabled}
+												form={form}
+												name={input.name}
+											/>
 											<div className={cx('text-danger', { hidden: !(error && touched) })}>{error}</div>
 										</Col>
 									</Row>
@@ -337,10 +334,11 @@ const AddressFields = (props: Props) => {
 										onError={() => setMapError(true)}
 										// containerElement={mapContainerElements.containerElement}
 										// mapElement={mapContainerElements.mapElement}
-										// loadingElement={mapContainerElements.loadingElement}
+										// loadingElement={mapContainerElements.loadingElementoadingElement}
 										onLocationChange={changeLocation}
 										lat={get(inputValues, 'latitude')}
 										lng={get(inputValues, 'longitude')}
+										zoom={get(inputValues, 'zoom')}
 										disabled={disabled}
 									/>
 

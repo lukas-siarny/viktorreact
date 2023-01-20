@@ -4,18 +4,38 @@
 
 // Buttons
 .ant-btn
+	@include baseOutlineStyle()
 	&:not(:disabled):focus-visible
-			outline: none
-			box-shadow: $btn-shadow-hover-default
+		@include focusOutlineStyle()
+	&.ant-btn-dangerous
+		&:not(:disabled):focus-visible
+			@include focusOutlineStyle($focus-outline-danger)
+	&.ant-btn-link
+		&:not(:disabled):focus-visible
+			@include focusOutlineStyle($focus-outline-link)
 	&.noti-filter-button
 		padding-top: 0
 		padding-bottom: 0
 		border-radius: 4px
+		@include baseOutlineStyle()
 		&:not(:disabled):focus-visible
-			outline: 1px solid $borderColor-notino-black
+			@include focusOutlineStyle()
 			box-shadow:  none
-
-// Secondary (DEFAULT
+	&.noti-admin-back-button
+		&:not(:disabled):focus-visible
+			@include focusOutlineStyle($textColor-notino-pink)
+	&.noti-close-form-btn
+		width: 32px
+		height: 32px
+		display: flex
+		align-items: center
+		justify-content: center
+		border: none
+		box-shadow: none
+		padding: 0
+	.ant-wave
+		display: none
+// Secondary (DEFAULT)
 .ant-btn.noti-btn,
 .ant-btn.ant-popover-disabled-compatible-wrapper > button // kvoli delete buttonu ktory je v pop confirme disablnuty
 	// Medium (DEFAULT)
@@ -95,8 +115,7 @@
 		background-color: $backgroundColor-notino-black
 		&:disabled
 			opacity: .4
-		&:not(:disabled):hover,
-		&:not(:disabled):focus-visible
+		&:not(:disabled):hover
 			background-color: $backgroundColor-notino-black
 			color: $textColor-notino-white
 			z-index: $z-index-box-shadow
@@ -253,6 +272,7 @@ a.ant-btn.noti-btn // ak ma btn href atributu tak ho zmeni na anchor -> treba vy
 			border-radius: 4px
 			background: $backgroundColor-notino-black
 
+// public back button
 .noti-public-back-btn
 	@media (max-width: 744px)
 		svg
@@ -260,3 +280,68 @@ a.ant-btn.noti-btn // ak ma btn href atributu tak ho zmeni na anchor -> treba vy
 			height: 20px
 		span
 			padding-left: 28px !important
+
+// show more button
+.noti-show-more-button
+	&:hover,
+	&:focus-visible
+		color: $textColor-notino-pink
+		transition: 300ms ease
+
+// languages button
+.noti-language-button
+	z-index: 2
+	@include baseOutlineStyle()
+	&:focus-visible
+		@include focusOutlineStyle()
+	&.noti-absolute
+		@media (min-width: 1195px)
+			top: -0.25rem
+			right: 0px
+			position: absolute
+
+// specialist button
+.noti-specialist-button
+	position: fixed
+	bottom: 70px
+	right: 16px
+	background: $backgroundColor-notino-pink
+	border-radius: 999px
+	border: none
+	outline: none
+	height: 60px
+	color: $textColor-notino-white
+	cursor: pointer
+	z-index: 888
+	display: flex
+	align-items: center
+	justify-content: center
+	width: 60px
+	overflow: hidden
+	transition: width 50ms ease-in-out, box-shadow 50ms ease-in-out
+	padding: 0
+	box-shadow: $btn-shadow-hover-default
+
+	svg
+		width: 24px
+		height: 24px
+		flex: 0 0 auto
+		position: absolute
+		left: 16px
+		top: 18px
+		filter: invert(97%) sepia(10%) saturate(3%) hue-rotate(56deg) brightness(114%) contrast(100%)
+
+	span
+		display: inline-block
+		white-space: nowrap
+		overflow: hidden
+		margin-left: 45px
+		margin-right: 45px
+		text-align: center
+		width: 100%
+		text-overflow: ellipsis
+
+	&:hover,
+	&:focus-visible,
+	&.is-active
+		width: 350px

@@ -59,11 +59,11 @@ const CosmeticForm: FC<Props> = (props) => {
 	)
 
 	return (
-		<Form id={`${FORM.COSMETIC}-form`} layout={'vertical'} className={'w-full top-0 sticky overflow-hidden'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
+		<Form id={`${FORM.COSMETIC}-form`} layout={'vertical'} className={'w-full top-0 sticky overflow-hidden p-1'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<div className={'h-full'}>
 				<h3 className={'mb-0 mt-3 relative pr-7'}>
 					{cosmeticID ? t('loc:Upraviť kozmetiku') : t('loc:Vytvoriť kozmetiku')}
-					<Button className='absolute top-1 right-0 p-0 border-none shadow-none' onClick={() => closeForm()}>
+					<Button className='noti-close-form-btn absolute top-1 right-0' onClick={() => closeForm()}>
 						<CloseIcon />
 					</Button>
 				</h3>

@@ -303,7 +303,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 										: undefined
 								}
 								getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}
-								onVisibleChange={setIsDropdownOpen}
+								onOpenChange={setIsDropdownOpen}
 							>
 								<div role='button' className='cursor-pointer' tabIndex={-1} onClick={(e) => e.preventDefault()} onKeyPress={(e) => e.preventDefault()}>
 									<Row className='flex items-center' justify='space-between'>

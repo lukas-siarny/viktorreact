@@ -170,7 +170,7 @@ const MainLayout: FC<Props> = (props) => {
 												history.push(backUrl)
 											}}
 											icon={<BackIcon className={'filter-invert max'} />}
-											className={'noti-btn h-8 text-notino-white self-center bg-notino-pink mr-2'}
+											className={'noti-btn noti-admin-back-button h-8 text-notino-white self-center bg-notino-pink mr-2'}
 											type={'default'}
 											size={'small'}
 										>

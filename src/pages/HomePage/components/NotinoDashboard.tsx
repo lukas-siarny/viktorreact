@@ -323,6 +323,7 @@ const NotinoDashboard: FC = () => {
 			allowClear={false}
 			format={dateFormat}
 			disabledDate={(date) => dayjs(date).year() < 2022}
+			getPopupContainer={(node) => node.parentElement || document.body}
 		/>
 	)
 

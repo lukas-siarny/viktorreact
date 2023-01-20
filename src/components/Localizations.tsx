@@ -85,8 +85,8 @@ const Localizations = (param: any) => {
 		<div className={cx(param.className, 'relative noti-localizations-collapse-wrapper')}>
 			<button
 				type='button'
-				className={cx('flex items-center justify-end cursor-pointer border-none bg-none p-0 bg-transparent', {
-					'language-btn': param.noSpace,
+				className={cx('noti-language-button flex items-center justify-end cursor-pointer border-none bg-none p-0 bg-transparent', {
+					'noti-absolute': param.noSpace,
 					'absolute -top-1 right-0': !param.noSpace
 				})}
 				style={{ zIndex: 1 }}

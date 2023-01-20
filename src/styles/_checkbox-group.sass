@@ -142,3 +142,55 @@
 			border-color: $backgroundColor-notino-black
 			&::after
 				transform: rotate(45deg) scale(1) translate(-50%, -50%)
+
+
+// checkboxgroup with image
+@keyframes opacityAnimation
+	0%
+		opacity: 0
+	100%
+		opacity: 1
+
+.checkbox-group-image-fieldset
+	.label-error-wrapper
+		position: relative
+		padding-bottom: 24px
+		legend
+			border-bottom: none
+			color: $textColor-trueGray-700
+			margin-bottom: 0
+			&.required
+				&::before
+					display: inline-block
+					margin-right: 4px
+					color: #ff4d4f // interna antd farba ktora sa nenachadza v nasej palete
+					font-size: 14px
+					font-family: SimSun,sans-serif
+					line-height: 1
+					content: "*"
+
+		.error-msg
+			animation: opacityAnimation 200ms ease-in-out
+			bottom: 6px
+			position: absolute
+			font-size: 14px
+			font-size: 12px
+	&.required
+		.label-error-wrapper
+			.error-msg
+				margin-left: 12px
+
+
+.checkbox-group-image-wrapper
+	width: 100%
+	margin: 0 auto
+	display: grid
+	grid-template-columns: repeat(auto-fill, minmax(160px, 1fr))
+	grid-gap: 16px
+	border-radius: 12px
+	outline: 1px solid transparent
+	outline-offset: 4px
+	transition: outline-color 300ms ease-in-out
+
+	&.error
+		outline-color: $backgroundColor-notino-red

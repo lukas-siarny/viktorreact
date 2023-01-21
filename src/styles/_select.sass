@@ -55,7 +55,12 @@
 	color: $textColor-notino-grayLight
 	background-color: $textColor-notino-grayDark
 
-.ant-select-multiple
+.ant-select-multiple,
+.ant-select-multiple.ant-select-lg,
+.ant-select-multiple.ant-select-sm
+	.ant-select-selection-item
+		background-color: $backgroundColor-notino-grayLighter
+		border-color: #f0f0f0
 	span.ant-select-selection-item-remove svg path
 		stroke: $backgroundColor-notino-black
 	& .ant-select-selection-item-remove

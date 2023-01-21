@@ -21,8 +21,8 @@ const BackButton = ({ path, defaultBackButtonAction, showSeparator = true, class
 	return backUrlLink ? (
 		<div className={cx('flex items-center', className)}>
 			<Link className={'flex items-center group'} onClick={defaultBackButtonAction} to={backUrlLink}>
-				<BackButtonIcon className={'small-icon text-gray-600 group-hover:textColor-notino-black mr-1'} />
-				<span className='text-gray-600 align-text-bottom text-base font-normal group-hover:textColor-notino-black'>{t('loc:Späť')}</span>
+				<BackButtonIcon className={'small-icon text-gray-600 group-hover:text-notino-black mr-1'} />
+				<span className='text-gray-600 align-text-bottom text-base font-normal group-hover:text-notino-black'>{t('loc:Späť')}</span>
 			</Link>
 			{showSeparator && <BreadcrumbSeparator className={'text-gray-600'} />}
 		</div>

@@ -17,6 +17,14 @@
 			@include baseOutlineStyle()
 			span
 				display: none
+	.ant-pagination-jump-next,
+	.ant-pagination-jump-prev
+		&:hover
+			.ant-pagination-item-container
+				.ant-pagination-item-link-icon
+					opacity: 0
+				.ant-pagination-item-ellipsis
+					opacity: 1
 	&:not(.ant-pagination-disabled)
 		li:not(.ant-pagination-item-active)
 			&:hover
@@ -32,7 +40,18 @@
 				background-color: $backgroundColor-gray-200
 			&:focus-visible
 				@include focusOutlineStyle()
-		.ant-pagination-prev, .ant-pagination-next,
+		.ant-pagination-jump-next,
+		.ant-pagination-jump-prev
+			&:hover
+				.ant-pagination-item-container
+					.ant-pagination-item-link-icon
+						opacity: 1
+					.ant-pagination-item-ellipsis
+						opacity: 0
+			&:focus-visible
+				@include focusOutlineStyle()
+		.ant-pagination-prev,
+		.ant-pagination-next
 			&:focus-visible
 				.ant-pagination-item-link
 					@include focusOutlineStyle()

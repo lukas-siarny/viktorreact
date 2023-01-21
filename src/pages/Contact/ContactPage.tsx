@@ -222,7 +222,10 @@ const ContactPage: FC<Props> = () => {
 																						<PencilIcon />
 																						<h4 className={'m-0'}>{t('loc:Poznámka')}</h4>
 																					</Row>
-																					<Button className={'p-0 border-none shadow-none'} onClick={() => setIsNoteOpen(false)}>
+																					<Button
+																						className={'p-0 border-none shadow-none w-6 h-6 flex items-center justify-center'}
+																						onClick={() => setIsNoteOpen(false)}
+																					>
 																						<CloseIcon style={{ width: 16, height: 16 }} />
 																					</Button>
 																				</Row>

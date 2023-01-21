@@ -11,8 +11,11 @@
 		&:not(:disabled):focus-visible
 			@include focusOutlineStyle($focus-outline-danger)
 	&.ant-btn-link
-		&:not(:disabled):focus-visible
-			@include focusOutlineStyle($focus-outline-link)
+		&:not(:disabled)
+			&:hover
+				color: $textColor-notino-black
+			&:focus-visible
+				@include focusOutlineStyle($focus-outline-link)
 	&.noti-filter-button
 		padding-top: 0
 		padding-bottom: 0
@@ -34,7 +37,7 @@
 		box-shadow: none
 		padding: 0
 	.ant-wave
-		display: none
+		opacity: 0
 // Secondary (DEFAULT)
 .ant-btn.noti-btn,
 .ant-btn.ant-popover-disabled-compatible-wrapper > button // kvoli delete buttonu ktory je v pop confirme disablnuty

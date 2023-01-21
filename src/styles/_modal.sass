@@ -4,29 +4,40 @@
 .ant-modal
 	.ant-modal-content
 		border-radius: 20px
+		padding: 0
 		.ant-modal-close
 			right: 19px
 			top: 19px
-			padding: 5px
 			background-color: $backgroundColor-notino-white
 			border-radius: 50%
+			width: 32px
+			height: 32px
+			display: flex
+			align-items: center
+			justify-content: center
+			border-radius: 2px
+			@include baseOutlineStyle()
 			.ant-modal-close-x
 				width: 24px
 				height: 24px
 				line-height: 24px
 				color: $textColor-notino-black
+			&:focus-visible
+				@include focusOutlineStyle()
 		.ant-modal-header
 			padding: 24px 24px 16px 24px
 			background-color: transparent
 			border: none
+			margin-bottom: 0
 			.ant-modal-title
 				color: $textColor-notino-black
 
 			.ant-modal-title
 				font-size: 24px
 				font-weight: $fontWeight-bold
+				line-height: 1.1
 		.ant-modal-header~.ant-modal-body
-			padding-top: 0
+			padding: 0 24px 24px 24px
 
 // suggested salon modal
 .suggested-salons-modal

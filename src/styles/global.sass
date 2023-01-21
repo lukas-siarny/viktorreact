@@ -26,6 +26,7 @@
 @import "checkbox-group"
 @import "calendar/_calendar"
 @import "checkbox"
+@import "dropdown"
 
 $searchProductTop: 166px
 
@@ -144,9 +145,6 @@ body, .ant-layout
 	cursor: move
 	cursor: -webkit-grabbing
 
-.ant-tabs-nav-add
-	position: relative
-
 .ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left
 	border-right: 0
 
@@ -258,10 +256,6 @@ body, .ant-layout
 	img
 		filter: initial
 		opacity: 1
-
-.ant-tabs-nav-add
-	width: 40px
-	height: 50px
 
 .icon-size-20
 	font-size: 20px
@@ -436,9 +430,6 @@ h4.ant-typography
 		display: block
 		> .ant-form-item-control
 			left: -6px
-
-.ant-tabs-nav
-	margin: 0
 
 .col-container
 	.ant-spin-nested-loading
@@ -1068,26 +1059,6 @@ span.ant-tag
 				font-weight: bold
 			.day-intervals
 				gap: 8px
-
-
-.noti-collapse
-	background: transparent
-	.ant-collapse-item
-		border-bottom: 1px solid $borderColor-notino-grayLight
-		.ant-collapse-header
-			padding: 0
-			position: relative
-		.ant-collapse-content
-			.ant-collapse-content-box
-				padding: 0
-
-	&.noti-support-collapse
-		max-width: 528px
-		@media (max-width: 1280px)
-			max-width: 416px
-			width: 100%
-		@media (max-width: 744px)
-			max-width: 100%
 
 .noti-alert.ant-alert
 	align-items: flex-start

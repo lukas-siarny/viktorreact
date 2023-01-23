@@ -380,8 +380,7 @@ const SalonForm: FC<Props> = (props) => {
 							name={'socialLinkWebPage'}
 							size={'large'}
 							prefix={(<GlobeIcon />) as any}
-							// placeholder={t('loc:Odkaz na webovú stránku salóna')}
-							placeholder={t('loc:Aké spôsoby platby akceptujete, napr. hotovosť, poukazy, kryptomeny,...')}
+							placeholder={t('loc:Odkaz na webovú stránku salóna')}
 							disabled={disabledForm}
 						/>
 						<Field

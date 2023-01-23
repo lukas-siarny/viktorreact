@@ -199,7 +199,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	useKeyUp(
+	// NOTE: treba to doriesit zeby sa na Escape nezatvarlo aj to co nema (napr. ak je otovreny modal an detial / zalozenie klienta, tak sa po stlaceni ESC okrem modalu zavrie aj sider, co by sa nemal)
+	/* useKeyUp(
 		'Escape',
 		query.sidebarView
 			? () => {
@@ -208,7 +209,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 					if (highlight) highlight.remove()
 			  }
 			: undefined
-	)
+	) */
 
 	const searchEmployes = useCallback(
 		async (search: string, page: number) => {

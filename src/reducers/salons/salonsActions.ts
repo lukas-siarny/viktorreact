@@ -309,6 +309,7 @@ export const getRejectedSuggestions =
 				const { address } = suggestion.salon
 				const formattedAddress = `${address?.city}${address?.street ? `, ${address.street}` : ''}`
 				return {
+					id: suggestion.salon.id,
 					key: suggestion.salon.id,
 					salonID: suggestion.salon.id,
 					salonName: suggestion.salon.name ?? '-',

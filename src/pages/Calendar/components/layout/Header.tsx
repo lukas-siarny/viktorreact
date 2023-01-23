@@ -227,7 +227,6 @@ const CalendarHeader: FC<Props> = (props) => {
 						className={'nc-header-date-picker'}
 						inputReadOnly
 						suffixIcon={null}
-						ref={headerDatePickerRef}
 						inputRender={() => {
 							return (
 								<button type={'button'} className={'nc-button-date mx-1'} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>

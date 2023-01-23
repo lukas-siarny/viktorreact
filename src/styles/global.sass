@@ -27,6 +27,7 @@
 @import "calendar/_calendar"
 @import "checkbox"
 @import "dropdown"
+@import "upload"
 
 $searchProductTop: 166px
 
@@ -53,10 +54,28 @@ body, .ant-layout
 	background: $backgroundColor-notino-grayLighter
 	font-size: initial
 
-/**:focus-visible
-	outline-color: $borderColor-blue-600
-	transition-property: outline-color
-	transition-duration: 0s
+.ant-message-notice .ant-message-info .anticon,
+.ant-message-notice .ant-message-loading .anticon
+	color: $textColor-notino-black
+
+.ant-notification-notice
+	border-radius: 0
+	.ant-notification-notice-close
+		background-color: unset
+		&:hover
+			background-color: unset
+	&.ant-notification-notice-info
+		.ant-notification-notice-icon
+			color: $textColor-notino-black
+	&.ant-notification-notice-success
+		.ant-notification-notice-icon
+			color: $textColor-notino-success
+	&.ant-notification-notice-error
+		.ant-notification-notice-icon
+			color: $textColor-danger
+	&.ant-notification-notice-warning
+		.ant-notification-notice-icon
+			color: #d97706
 
 .ant-menu-item:hover, .ant-menu-item-active, .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open, .ant-menu-submenu-active, .ant-menu-submenu-title:hover
 	color: $textColor-gray-600
@@ -113,31 +132,13 @@ body, .ant-layout
 	to
 		transform: rotate(360deg)
 
-.ant-notification-notice
-	border-radius: 0
-	.ant-notification-notice-close
-		background-color: unset
-		&:hover
-			background-color: unset
-	&.ant-notification-notice-info
-		.ant-notification-notice-icon
-			color: $textColor-notino-black
-	&.ant-notification-notice-success
-		.ant-notification-notice-icon
-			color: $textColor-notino-success
-	&.ant-notification-notice-error
-		.ant-notification-notice-icon
-			color: $textColor-danger
-	&.ant-notification-notice-warning
-		.ant-notification-notice-icon
-			color: #d97706
 .ant-picker
 	border-radius: 8px
 
 .ant-picker-dropdown
 	.ant-picker-cell-inner
 		text-align: center
-.ant-select-dropdown, .ant-picker-dropdown
+.ant-select-dropdown
 	z-index: $z-index-field-dropdown
 .horizontal-top-divider
 	border-top: 1px solid $borderColor-gray-200
@@ -434,7 +435,7 @@ h4.ant-typography
 		vertical-align: top
 	.ant-upload-select-picture-card
 		margin: 0
-		.ant-upload-list-picture-card-container
+		.ant-upload-list-item-container
 			order: 2
 		.ant-upload-select
 			order: 1 // Uploader item na prvom mieste
@@ -1412,37 +1413,6 @@ li.ant-list-item:hover
 			background-color: $textColor-notino-gray
 	&:last-of-type
 		font-weight: 700
-
-.ant-upload-list-picture-card .ant-upload-list-item-actions
-	z-index: 1
-
-.upload-draggable-list-item
-	border-left: 1px dashed transparent
-	border-right: 1px dashed transparent
-	padding-left: 5px
-	padding-right: 5px
-
-.upload-draggable-list-item.drop-over-downward
-	border-right-color: $backgroundColor-notino-pink
-
-.upload-draggable-list-item.drop-over-upward
-	border-left-color: $backgroundColor-notino-pink
-
-.ant-upload-list-picture-card-container
-	margin: 0 0 6px 6px
-
-.draggable-upload
-	& .ant-upload-list-picture-card-container
-		margin: 0
-		width: 116px
-		height: 158px
-
-.selectable-upload
-	& .ant-upload-list-picture-card .ant-upload-list-item
-		height: 104px
-
-.ant-upload.ant-upload-select-picture-card
-	margin-left: 6px
 
 span.anticon.anticon-delete.w-full svg circle
 	stroke: $backgroundColor-notino-red

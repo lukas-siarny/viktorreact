@@ -35,6 +35,7 @@ import CustomerForm from '../../../CustomersPage/components/CustomerForm'
 // redux
 import { RootState } from '../../../../reducers'
 import { getCustomer } from '../../../../reducers/customers/customerActions'
+import ConfirmModal from '../../../../atoms/ConfirmModal'
 
 type ComponentProps = {
 	salonID: string
@@ -160,7 +161,7 @@ const ReservationForm: FC<Props> = (props) => {
 
 	const modals = (
 		<>
-			<Modal
+			<ConfirmModal
 				className='rounded-fields'
 				title={t('loc:Pridať nového zákaznika')}
 				centered
@@ -171,7 +172,7 @@ const ReservationForm: FC<Props> = (props) => {
 				closeIcon={<CloseIcon />}
 			>
 				<CustomerForm onSubmit={handleSubmitCustomer} inModal />
-			</Modal>
+			</ConfirmModal>
 			<Modal
 				className='rounded-fields'
 				title={t('loc:Detail klienta')}
@@ -180,11 +181,7 @@ const ReservationForm: FC<Props> = (props) => {
 				open={visibleCustomerDetailModal}
 				onCancel={() => setVisibleCustomerDetailModal(false)}
 				closeIcon={<CloseIcon />}
-				footer={[
-					<Button type={'dashed'} className={'noti-btn'} size={'middle'} onClick={() => setVisibleCustomerDetailModal(false)}>
-						{t('loc:Zatvoriť')}
-					</Button>
-				]}
+				footer={null}
 			>
 				<CustomerForm inModal disabled />
 			</Modal>

@@ -34,7 +34,7 @@ type Props = WrappedFieldProps &
 		showInReservationDrawer?: boolean
 	}
 
-const DateField = React.forwardRef<any, Props>((props, ref) => {
+const DateField = (props: Props) => {
 	const {
 		input,
 		label,
@@ -161,5 +161,6 @@ const DateField = React.forwardRef<any, Props>((props, ref) => {
 			/>
 		</Form.Item>
 	)
-})
+}
+
 export default DateField

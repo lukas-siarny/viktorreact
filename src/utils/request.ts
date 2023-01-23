@@ -121,8 +121,6 @@ const cancelGetTokens = {} as { [key: string]: CancelTokenSource }
  */
 export const getReq = async <T extends keyof GetUrls>(
 	url: T,
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
 	params: Parameters<GetUrls[T]['get']>[0],
 	customConfig?: ICustomConfig,
 	typeNotification: NOTIFICATION_TYPE | false = NOTIFICATION_TYPE.NOTIFICATION,
@@ -203,11 +201,7 @@ const cancelPostTokens = {} as { [key: string]: CancelTokenSource }
  */
 export const postReq = async <T extends keyof PostUrls>(
 	url: T,
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
 	params: Parameters<PostUrls[T]['post']>[0],
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
 	reqBody: Parameters<PostUrls[T]['post']>[1],
 	customConfig?: ICustomConfig,
 	typeNotification: NOTIFICATION_TYPE | false = NOTIFICATION_TYPE.NOTIFICATION,
@@ -288,11 +282,7 @@ const cancelPatchTokens = {} as { [key: string]: CancelTokenSource }
 
 export const patchReq = async <T extends keyof PatchUrls>(
 	url: T,
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
 	params: Parameters<PatchUrls[T]['patch']>[0],
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
 	reqBody: Parameters<PatchUrls[T]['patch']>[1],
 	customConfig?: ICustomConfig,
 	typeNotification: NOTIFICATION_TYPE | false = NOTIFICATION_TYPE.NOTIFICATION,
@@ -363,8 +353,6 @@ export const patchReq = async <T extends keyof PatchUrls>(
  */
 export const deleteReq = async <T extends keyof DeleteUrls>(
 	_url: T,
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
 	_params: Parameters<DeleteUrls[T]['delete']>[0],
 	customConfig?: ICustomConfig,
 	typeNotification: NOTIFICATION_TYPE | false = NOTIFICATION_TYPE.NOTIFICATION,

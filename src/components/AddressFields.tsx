@@ -4,11 +4,11 @@ import { Field, InjectedFormProps, WrappedFieldProps } from 'redux-form'
 import { Alert, Col, Row } from 'antd'
 import cx from 'classnames'
 import { get } from 'lodash'
+import i18next from 'i18next'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
 // components
-import i18next from 'i18next'
-import { useSelector } from 'react-redux'
 import MapContainer from './MapContainer'
 
 // utils
@@ -24,10 +24,10 @@ import {
 } from '../utils/helper'
 
 // atoms
-import LocationSearchInputField from '../atoms/LocationSearchInputField'
 import InputField from '../atoms/InputField'
 import SelectField from '../atoms/SelectField'
 import InputNumberField from '../atoms/InputNumberField'
+import StandaloneSearchBoxField from '../atoms/StandaloneSearchBoxField'
 
 // redux
 import { RootState } from '../reducers'
@@ -67,8 +67,6 @@ type Props = WrappedFieldProps & {
 	disabled?: boolean
 	form?: FORM
 }
-
-const FULL_H_ELEMENT = <div className='h-full' />
 
 const numberMinLongitude = validationNumberMin(MAP.minLongitude)
 const numberMaxLongitude = validationNumberMax(MAP.maxLongitude)
@@ -123,15 +121,6 @@ const AddressFields = (props: Props) => {
 		inputValues,
 		input,
 		meta: { form, error, touched },
-		locationSearchElements = {
-			loadingElement: FULL_H_ELEMENT,
-			containerElement: <div />
-		},
-		mapContainerElements = {
-			loadingElement: FULL_H_ELEMENT,
-			mapElement: FULL_H_ELEMENT,
-			containerElement: <div className='h-56 lg:h-72' />
-		},
 		disabled
 	} = props
 	const { t } = useTranslation()
@@ -146,7 +135,7 @@ const AddressFields = (props: Props) => {
 		setGoogleMapUrl(getGoogleMapUrl())
 	}, [])
 
-	const parseAddressObject = (addressComponents: any[]) => {
+	const parseAddressObject = (addressComponents: google.maps.places.PlaceResult['address_components']) => {
 		const address = parseAddressComponents(addressComponents)
 
 		const { streetNumber, houseNumber } = address
@@ -169,11 +158,12 @@ const AddressFields = (props: Props) => {
 		input.onChange(true)
 	}
 
-	const selectLocation = (place: any) => {
+	const selectLocation = (place: google.maps.places.PlaceResult) => {
 		parseAddressObject(place.address_components)
-		if (place.location) {
-			changeFormFieldValue('latitude', parseFloat(place.location.lat().toFixed(8)))
-			changeFormFieldValue('longitude', parseFloat(place.location.lng().toFixed(8)))
+		if (place.geometry?.location) {
+			changeFormFieldValue('latitude', parseFloat(place.geometry.location.lat().toFixed(8)))
+			changeFormFieldValue('longitude', parseFloat(place.geometry.location.lng().toFixed(8)))
+			changeFormFieldValue('zoom', MAP.placeZoom)
 		}
 	}
 
@@ -303,16 +293,13 @@ const AddressFields = (props: Props) => {
 								<div className={'mb-7 flex-1 w-1/2 xl:w-full'}>
 									<Row>
 										<Col span={24} className={'mb-7'}>
-											<LocationSearchInputField
-												googleMapURL={googleMapUrl}
-												loadingElement={locationSearchElements.loadingElement}
-												containerElement={locationSearchElements.containerElement}
+											<StandaloneSearchBoxField
 												label={t('loc:Vyhľadať')}
 												required
 												onPlaceSelected={selectLocation}
 												type='search'
 												placeholder={t('loc:Vyhľadajte miesto na mape')}
-												className={'mb-0'}
+												className={'mb-0 pb-0'}
 												error={error && touched}
 												disabled={disabled}
 												form={form}
@@ -320,27 +307,29 @@ const AddressFields = (props: Props) => {
 											/>
 											<div className={cx('text-danger', { hidden: !(error && touched) })}>{error}</div>
 										</Col>
+										<Col span={24}>
+											<Row>
+												<Col span={6}>
+													{AddressLayout({
+														street: get(inputValues, 'street'),
+														streetNumber: get(inputValues, 'streetNumber'),
+														city: get(inputValues, 'city'),
+														zipCode: get(inputValues, 'zipCode'),
+														country: get(inputValues, 'country')
+													})}
+												</Col>
+												<Col span={18}>
+													<MapContainer
+														onLocationChange={changeLocation}
+														lat={get(inputValues, 'latitude')}
+														lng={get(inputValues, 'longitude')}
+														zoom={get(inputValues, 'zoom')}
+														disabled={disabled}
+													/>
+												</Col>
+											</Row>
+										</Col>
 									</Row>
-									{AddressLayout({
-										street: get(inputValues, 'street'),
-										streetNumber: get(inputValues, 'streetNumber'),
-										city: get(inputValues, 'city'),
-										zipCode: get(inputValues, 'zipCode'),
-										country: get(inputValues, 'country')
-									})}
-								</div>
-								<div className={'mt-6 w-1/2 xl:w-2/3 max-w-3xl'}>
-									<MapContainer
-										onError={() => setMapError(true)}
-										googleMapURL={googleMapUrl}
-										containerElement={mapContainerElements.containerElement}
-										mapElement={mapContainerElements.mapElement}
-										loadingElement={mapContainerElements.loadingElement}
-										onLocationChange={changeLocation}
-										lat={get(inputValues, 'latitude')}
-										long={get(inputValues, 'longitude')}
-										disabled={disabled}
-									/>
 								</div>
 							</>
 						)}

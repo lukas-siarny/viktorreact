@@ -1,12 +1,11 @@
 import React, { FC } from 'react'
-import { Button, ButtonProps, Modal, ModalProps } from 'antd'
+import { Button, Modal, ModalProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 
 // assets
 import { ReactComponent as CloseIcon } from '../assets/icons/close-icon-2.svg'
 
-type buttonType = Pick<ButtonProps, 'onClick'>
 export interface IConfirmModal extends ModalProps {
 	loading?: boolean
 	disabled?: boolean

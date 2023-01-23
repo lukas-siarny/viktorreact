@@ -1,7 +1,7 @@
 /*eslint-disable*/
 
-const { override, fixBabelImports, addWebpackPlugin } = require('customize-cra')
-const addLessLoader = require('customize-cra-less-loader')
+// const { override, fixBabelImports, addWebpackPlugin } = require('customize-cra')
+// const addLessLoader = require('customize-cra-less-loader')
 // const AntdDayjsWebpackPlugin = require('antd-dayjs-webpack-plugin')
 
 /* module.exports = override(

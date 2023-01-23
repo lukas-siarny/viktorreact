@@ -564,11 +564,9 @@ export const transformNumberFieldValue = (rawValue: number | string | undefined 
 		} else if (isNumber(min) && isNumber(max) && value >= min && value <= max) {
 			result = value
 		}
-	} else if (Number.isNaN(value)) {
-		result = NaN
 	}
 
-	if (isFinite(result) && isNumber(precision)) {
+	if (!Number.isNaN(value) && isFinite(result) && isNumber(precision)) {
 		result = round(result as number, precision)
 	}
 

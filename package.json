@@ -60,8 +60,6 @@
     "chartjs-plugin-annotation": "2.0.1",
     "classnames": "2.3.1",
     "core-js": "3.22.0",
-    "customize-cra": "1.0.0",
-    "customize-cra-less-loader": "2.0.0",
     "dayjs": "1.11.1",
     "env-cmd": "10.1.0",
     "gulp": "4.0.2",

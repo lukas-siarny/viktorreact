@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { ArrayParam, BooleanParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Modal, Progress, Row, Spin, Image, Tooltip } from 'antd'
+import { Col, Modal, Progress, Row, Spin, Image, Tooltip, TabsProps } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize, isPristine, reset } from 'redux-form'
 
@@ -517,21 +517,21 @@ const SalonsPage = () => {
 		)
 	}
 
-	const tabContent = [
+	const tabContent: TabsProps['items'] = [
 		{
-			tabKey: TAB_KEYS.ACTIVE,
-			tab: <>{t('loc:Aktívne')}</>,
-			tabPaneContent: getTabContent(TAB_KEYS.ACTIVE)
+			key: TAB_KEYS.ACTIVE,
+			label: <>{t('loc:Aktívne')}</>,
+			children: getTabContent(TAB_KEYS.ACTIVE)
 		},
 		{
-			tabKey: TAB_KEYS.DELETED,
-			tab: <>{t('loc:Vymazané')}</>,
-			tabPaneContent: getTabContent(TAB_KEYS.DELETED)
+			key: TAB_KEYS.DELETED,
+			label: <>{t('loc:Vymazané')}</>,
+			children: getTabContent(TAB_KEYS.DELETED)
 		},
 		{
-			tabKey: TAB_KEYS.MISTAKES,
-			tab: <>{t('loc:Omylom navrhnuté na spárovanie')}</>,
-			tabPaneContent: getTabContent(TAB_KEYS.MISTAKES)
+			key: TAB_KEYS.MISTAKES,
+			label: <>{t('loc:Omylom navrhnuté na spárovanie')}</>,
+			children: getTabContent(TAB_KEYS.MISTAKES)
 		}
 	]
 	return (
@@ -539,7 +539,7 @@ const SalonsPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<TabsComponent className={'box-tab'} activeKey={tabKey} onChange={onTabChange} tabsContent={tabContent} destroyInactiveTabPane />
+			<TabsComponent className={'box-tab'} activeKey={tabKey} onChange={onTabChange} items={tabContent} destroyInactiveTabPane />
 			<Modal
 				className='rounded-fields'
 				title={t('loc:Importovať salóny')}

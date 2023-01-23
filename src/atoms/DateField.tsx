@@ -34,7 +34,7 @@ type Props = WrappedFieldProps &
 		showInReservationDrawer?: boolean
 	}
 
-const DateField = (props: Props) => {
+const DateField = React.forwardRef<any, Props>((props, ref) => {
 	const {
 		input,
 		label,
@@ -56,7 +56,7 @@ const DateField = (props: Props) => {
 		size,
 		rounded,
 		readOnly,
-		suffixIcon,
+		suffixIcon = <DateSuffixIcon className={'text-gray-600'} />,
 		clearIcon,
 		showToday = true,
 		defaultPickerValue,
@@ -67,7 +67,9 @@ const DateField = (props: Props) => {
 		className,
 		pickerClassName,
 		dropdownAlign,
-		showInReservationDrawer
+		showInReservationDrawer,
+		inputReadOnly,
+		inputRender
 	} = props
 
 	let value
@@ -143,7 +145,7 @@ const DateField = (props: Props) => {
 				defaultPickerValue={defaultPickerValue}
 				size={size}
 				clearIcon={clearIcon || <RemoveIcon className={'text-gray-600'} />}
-				suffixIcon={suffixIcon || <DateSuffixIcon className={'text-gray-600'} />}
+				suffixIcon={suffixIcon}
 				placeholder={placeholder}
 				disabledDate={disabledDateWrap}
 				popupClassName={cx({ showInReservationDrawer })}
@@ -151,12 +153,13 @@ const DateField = (props: Props) => {
 				allowClear={allowClear}
 				getPopupContainer={getPopupContainer || ((node) => node)}
 				showToday={showToday}
-				inputReadOnly={true}
+				inputReadOnly={inputReadOnly}
 				mode={mode}
 				open={open}
 				onSelect={onSelect}
+				inputRender={inputRender}
 			/>
 		</Form.Item>
 	)
-}
+})
 export default DateField

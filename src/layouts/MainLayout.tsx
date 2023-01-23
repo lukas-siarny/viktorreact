@@ -1,5 +1,5 @@
 import React, { ReactNode, FC, useEffect } from 'react'
-import { Layout, Row, Button, Dropdown, Menu } from 'antd'
+import { Layout, Row, Button, Dropdown } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
@@ -101,8 +101,6 @@ const MainLayout: FC<Props> = (props) => {
 		]
 	}
 
-	const SALONS_MENU = <Menu className='shadow-md max-w-xs min-w-0 mt-5 noti-dropdown-header' items={getSalonMenuItems()} />
-
 	const getSelectedSalonLabel = (hasPermision: boolean) => {
 		const content = (
 			<Row className={cx('m-2 flex items-center gap-2 min-w-0')} justify='space-between' wrap={false}>
@@ -133,7 +131,10 @@ const MainLayout: FC<Props> = (props) => {
 
 			return (
 				<Dropdown
-					overlay={SALONS_MENU}
+					menu={{
+						className: 'shadow-md max-w-xs min-w-0 mt-5 noti-dropdown-header',
+						items: getSalonMenuItems()
+					}}
 					placement='bottomRight'
 					trigger={['click']}
 					overlayStyle={{ minWidth: 226 }}

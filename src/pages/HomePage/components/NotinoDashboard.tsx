@@ -203,12 +203,12 @@ const NotinoDashboard: FC = () => {
 
 			const alertData: AlertData[] = [
 				{
-					label: t('loc:Salóny čakajúce na schválenie'),
+					label: <>{t('loc:Salóny čakajúce na schválenie')}</>,
 					count: notino.data.pendingSalons,
 					onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PENDING_PUBLICATION])
 				},
 				{
-					label: t('loc:BASIC salóny, systémom omylom navrhnuté na spárovanie'),
+					label: <>{t('loc:BASIC salóny, systémom omylom navrhnuté na spárovanie')}</>,
 					count: notino.data.suggestionIncidents,
 					onClick: () => history.push(FILTER_PATHS().SALONS.rejectedSuggestions)
 				},

@@ -848,8 +848,8 @@ export const RS_NOTIFICATION_FIELD_TEXTS = (notificationType: RS_NOTIFICATION, c
 	const entity = i18next.t(channel === NOTIFICATION_CHANNEL.B2B ? 'loc:Zamestnanec' : 'loc:Zákazník')
 
 	const result = {
-		title: undefined,
-		tooltip: undefined
+		title: '',
+		tooltip: ''
 	}
 
 	switch (notificationType) {

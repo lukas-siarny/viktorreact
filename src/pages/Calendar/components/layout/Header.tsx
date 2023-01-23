@@ -136,12 +136,12 @@ const CalendarHeader: FC<Props> = (props) => {
 			case CALENDAR_SET_NEW_DATE.FIND_START_ADD:
 				newQueryDate = dayjs(newDate)
 					.startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
-					.add(1, calendarView.toLowerCase() as dayjs.OpUnitType)
+					.add(1, calendarView.toLowerCase() as dayjs.ManipulateType)
 				break
 			case CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT:
 				newQueryDate = dayjs(newDate)
 					.startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
-					.subtract(1, calendarView.toLowerCase() as dayjs.OpUnitType)
+					.subtract(1, calendarView.toLowerCase() as dayjs.ManipulateType)
 				break
 			default:
 				break

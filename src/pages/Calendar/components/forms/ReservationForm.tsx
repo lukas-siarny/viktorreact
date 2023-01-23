@@ -34,6 +34,7 @@ import CustomerForm from '../../../CustomersPage/components/CustomerForm'
 
 // redux
 import { RootState } from '../../../../reducers'
+import { getCustomer } from '../../../../reducers/customers/customerActions'
 
 type ComponentProps = {
 	salonID: string
@@ -49,7 +50,8 @@ const ReservationForm: FC<Props> = (props) => {
 	const { handleSubmit, salonID, searchEmployes, eventId, phonePrefix, pristine, submitting } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const [visibleCustomerModal, setVisibleCustomerModal] = useState(false)
+	const [visibleCustomerCreateModal, setVisibleCustomerCreateModal] = useState(false)
+	const [visibleCustomerDetailModal, setVisibleCustomerDetailModal] = useState(false)
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 
@@ -137,26 +139,56 @@ const ReservationForm: FC<Props> = (props) => {
 					})
 				})
 			)
-			setVisibleCustomerModal(false)
+			setVisibleCustomerCreateModal(false)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
 		}
 	}
+	const onChangeCustomer = async (customer: any) => {
+		const { data } = await dispatch(getCustomer(customer.key))
+		dispatch(
+			initialize(FORM.CUSTOMER, {
+				...data?.customer,
+				avatar: data?.customer?.profileImage
+					? [{ url: data?.customer?.profileImage?.original, thumbnail: data?.customer?.profileImage?.resizedImages?.thumbnail, uid: data?.customer?.profileImage?.id }]
+					: null
+			})
+		)
+		setVisibleCustomerDetailModal(true)
+	}
 
 	const modals = (
-		<Modal
-			className='rounded-fields'
-			title={t('loc:Pridať nového zákaznika')}
-			centered
-			destroyOnClose
-			onOk={() => dispatch(submit(FORM.CUSTOMER))}
-			open={visibleCustomerModal}
-			onCancel={() => setVisibleCustomerModal(false)}
-			closeIcon={<CloseIcon />}
-		>
-			<CustomerForm onSubmit={handleSubmitCustomer} inModal />
-		</Modal>
+		<>
+			<Modal
+				className='rounded-fields'
+				title={t('loc:Pridať nového zákaznika')}
+				centered
+				destroyOnClose
+				onOk={() => dispatch(submit(FORM.CUSTOMER))}
+				open={visibleCustomerCreateModal}
+				onCancel={() => setVisibleCustomerCreateModal(false)}
+				closeIcon={<CloseIcon />}
+			>
+				<CustomerForm onSubmit={handleSubmitCustomer} inModal />
+			</Modal>
+			<Modal
+				className='rounded-fields'
+				title={t('loc:Detail klienta')}
+				centered
+				destroyOnClose
+				open={visibleCustomerDetailModal}
+				onCancel={() => setVisibleCustomerDetailModal(false)}
+				closeIcon={<CloseIcon />}
+				footer={[
+					<Button type={'dashed'} className={'noti-btn'} size={'middle'} onClick={() => setVisibleCustomerDetailModal(false)}>
+						{t('loc:Zatvoriť')}
+					</Button>
+				]}
+			>
+				<CustomerForm inModal disabled />
+			</Modal>
+		</>
 	)
 
 	return (
@@ -176,6 +208,7 @@ const ReservationForm: FC<Props> = (props) => {
 									name={'customer'}
 									className={'pb-0'}
 									size={'large'}
+									onChange={onChangeCustomer}
 									optionLabelProp={'label'}
 									suffixIcon={<CustomerIcon className={'text-notino-grayDark'} width={16} height={16} />}
 									update={(itemKey: number, ref: any) => ref.blur()}
@@ -191,7 +224,7 @@ const ReservationForm: FC<Props> = (props) => {
 											onAction: hasPermission
 												? () => {
 														dispatch(initialize(FORM.CUSTOMER, { phonePrefixCountryCode: phonePrefix }))
-														setVisibleCustomerModal(true)
+														setVisibleCustomerCreateModal(true)
 												  }
 												: openForbiddenModal
 										}

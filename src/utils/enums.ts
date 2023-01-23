@@ -354,7 +354,7 @@ export const MAP = {
 	maxLatitude: 90,
 	minLongitude: -180,
 	maxLongitude: 180,
-	minZoom: 1,
+	minZoom: 8,
 	maxZoom: 20,
 	placeZoom: 16,
 	defaultLocation: PRAGUE_LOCATION,
@@ -689,7 +689,7 @@ export const EVERY_REPEAT_OPTIONS = () => [
 ]
 
 export const EVENT_NAMES = (eventType?: CALENDAR_EVENT_TYPE, capitalizeFirstLetter = false) => {
-	let string = ''
+	let string = i18next.t('loc:udalosť')
 	switch (eventType) {
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 			string = i18next.t('loc:prestávku')

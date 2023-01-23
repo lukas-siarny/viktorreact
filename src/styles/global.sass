@@ -35,6 +35,11 @@ $searchProductTop: 166px
 	font-feature-settings: normal!important
 	font-variant: normal!important
 
+input::placeholder,
+textarea::placeholder,
+.ant-input:placeholder-shown
+	color: $borderColor-notino-gray !important
+
 html
 	scroll-behavior: smooth
 
@@ -108,6 +113,24 @@ body, .ant-layout
 	to
 		transform: rotate(360deg)
 
+.ant-notification-notice
+	border-radius: 0
+	.ant-notification-notice-close
+		background-color: unset
+		&:hover
+			background-color: unset
+	&.ant-notification-notice-info
+		.ant-notification-notice-icon
+			color: $textColor-notino-black
+	&.ant-notification-notice-success
+		.ant-notification-notice-icon
+			color: $textColor-notino-success
+	&.ant-notification-notice-error
+		.ant-notification-notice-icon
+			color: $textColor-danger
+	&.ant-notification-notice-warning
+		.ant-notification-notice-icon
+			color: #d97706
 .ant-picker
 	border-radius: 8px
 
@@ -631,6 +654,10 @@ h4.ant-typography
 	color: $textColor-gray-900
 	font-weight: 500
 
+.map
+	width: 100%
+	height: 300px
+
 // NOTE: Ak v hlavičke jedna bunka pod seba groupuje jednu bunku odstráň border, ant s týmto prípadom nepočíta
 .ant-table-thead > tr:not(:last-child) > th:not([colspan])
 	border-bottom: 0
@@ -770,9 +797,6 @@ td.ant-table-cell.track
 
 .rc-virtual-list
 	overflow-y: auto
-
-.ant-collapse > .ant-collapse-item
-	border-bottom: none
 
 .room-index
 	display: flex

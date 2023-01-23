@@ -417,6 +417,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// Nastavi sa aktualny event Type zo selectu
 		setQuery({
 			...query,
+			eventId: undefined, // Pri create vynulovat eventID ak bol pred creatom otvoreny nejaky detail
 			sidebarView: eventType
 		})
 
@@ -432,10 +433,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			timeFrom: newEventData?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT),
 			timeTo,
 			employee: newEventData?.employee,
-			eventId: query.eventId,
 			...(!forceDestroy && omit(prevInitData, 'eventType')), // prevData initne len pri prepinani selectu, pri znovu kliknuti na pridat sa tieto data nemerguju
 			eventType
 		}
+
 		if (eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
 			dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
 		} else {
@@ -446,13 +447,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const handleAddEvent = (initialData?: INewCalendarEvent) => {
 		// NOTE: ak existuje vytvoreny virualny event a pouzivatel vytvori dalsi klikom na tlacidlo Pridat tak ho zmaze a otvori init create form eventu
-		if (virtualEvent) {
+		if (virtualEvent || query.eventId) {
 			closeSiderForm()
 		}
 
-		if (query.eventId) {
-			closeSiderForm()
-		}
 		// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastav pracovnu zmenu
 		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 			setEventManagement(CALENDAR_EVENT_TYPE.RESERVATION)

@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useEffect, useState } from 'react'
-import { Layout, Menu, Dropdown, Row } from 'antd'
+import { Layout, Menu, Dropdown, Row, MenuProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
@@ -211,8 +211,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						},
 						{
 							key: PAGE.SALON_SETTINGS,
-							label: t('loc:Nastavenia salónu'),
-							onClick: () => history.push(getPath(t('paths:salon-settings'))),
+							label: t('loc:Nastavenia rezervácií'),
+							onClick: () => history.push(getPath(t('paths:reservations-settings'))),
 							icon: <SettingIcon />
 						},
 						{
@@ -227,7 +227,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 		}
 
 		// account menu items
-		const myAccontMenuItems = [
+		const myAccontMenuItems: MenuProps['items'] = [
 			{
 				key: 'myProfile',
 				label: t('loc:Môj profil'),
@@ -248,7 +248,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			getLanguagePickerAsSubmenuItem(dispatch),
 			{
 				key: 'logOut',
-				id: 'logOut',
+				className: 'noti-logout-button',
 				label: t('loc:Odhlásiť'),
 				onClick: () => dispatch(logOutUser()),
 				icon: <LogOutIcon />
@@ -285,13 +285,11 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						className: 'noti-account-menu-item',
 						label: (
 							<Dropdown
-								overlay={
-									<Menu
-										className='noti-sider-menu'
-										getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}
-										items={myAccontMenuItems}
-									/>
-								}
+								menu={{
+									className: 'noti-sider-menu',
+									getPopupContainer: () => document.querySelector('#noti-sider-wrapper') as HTMLElement,
+									items: myAccontMenuItems
+								}}
 								placement='topLeft'
 								trigger={['click']}
 								overlayStyle={{ minWidth: 214 }}

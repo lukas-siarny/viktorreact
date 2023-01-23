@@ -17,9 +17,6 @@ const showNotifications = (messages: IErrorMessage[], typeNotification: NOTIFICA
 			forEach(messages, (message) => {
 				let notif
 				switch (lowerCase(message.type)) {
-					case 'info':
-						notif = notification.info
-						break
 					case 'warning':
 						notif = notification.warning
 						break
@@ -29,6 +26,7 @@ const showNotifications = (messages: IErrorMessage[], typeNotification: NOTIFICA
 					case 'error':
 						notif = notification.error
 						break
+					case 'info':
 					default:
 						notif = notification.info
 						break

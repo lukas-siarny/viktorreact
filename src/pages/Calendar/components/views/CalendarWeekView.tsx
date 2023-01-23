@@ -166,7 +166,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		virtualEvent,
 		setEventManagement,
 		enabledSalonReservations,
-		onEventChangeStart
+		onEventChangeStart,
+		onEventChangeStop
 	} = props
 
 	const dispatch = useDispatch()
@@ -288,9 +289,9 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				weekends
 				stickyFooterScrollbar
 				nowIndicator
+				selectable={enabledSalonReservations}
 				// data sources
 				events={events}
-				// eventSources={events}
 				resources={resources}
 				resourceAreaColumns={resourceAreaColumns}
 				// render hooks
@@ -302,12 +303,12 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				)}
 				nowIndicatorContent={() => <NowIndicator />}
 				// handlers
-				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
-				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
-				// select
-				selectable={enabledSalonReservations}
-				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
-				eventResizeStart={() => onEventChangeStart && onEventChangeStart()}
+				eventDrop={onEventChange}
+				eventResize={onEventChange}
+				eventDragStart={onEventChangeStart}
+				eventResizeStart={onEventChangeStart}
+				eventDragStop={onEventChangeStop}
+				eventResizeStop={onEventChangeStop}
 				select={(selectedEvent) => handleNewEvent(selectedEvent)}
 				resourcesSet={() => setTimeout(updateCalendarSize, 0)}
 				eventsSet={() => {

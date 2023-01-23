@@ -165,7 +165,7 @@ const SpecialistModal = (props: Props) => {
 							{t('loc:Cena')}: {t('loc:zdarma')}
 						</p>
 						<div>
-							<h2>{t('loc:Kontaktovať Špecialistu')}</h2>
+							<h2 className={'text-notino-black'}>{t('loc:Kontaktovať Špecialistu')}</h2>
 							<div className={'ant-form-item mb-0 pb-0'}>{specialistContent()}</div>
 						</div>
 					</main>

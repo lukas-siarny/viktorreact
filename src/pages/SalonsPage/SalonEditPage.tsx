@@ -762,16 +762,16 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 					className={'box-tab'}
 					activeKey={tabKey}
 					onChange={onTabChange}
-					tabsContent={[
+					items={[
 						{
-							tabKey: TAB_KEYS.SALON_DETAIL,
-							tab: <>{t('loc:Detail salónu')}</>,
-							tabPaneContent: salonForm
+							key: TAB_KEYS.SALON_DETAIL,
+							label: <>{t('loc:Detail salónu')}</>,
+							children: salonForm
 						},
 						{
-							tabKey: TAB_KEYS.SALON_HISTORY,
-							tab: <>{t('loc:História salónu')}</>,
-							tabPaneContent: (
+							key: TAB_KEYS.SALON_HISTORY,
+							label: <>{t('loc:História salónu')}</>,
+							children: (
 								<div className='content-body'>
 									<SalonHistory salonID={salonID} tabKey={tabKey} />
 								</div>

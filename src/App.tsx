@@ -43,6 +43,7 @@ const ANTD_THEME_VARIABLES_OVERRIDE: Partial<AliasToken> = {
 	colorSuccess: '#008700', // notino-success
 	colorWarning: '#D97706', // amber-600
 	colorError: '#D21414', // notino-red
+	colorTextPlaceholder: '#BFBFBF', // notino-gray
 	borderRadius: 2
 }
 

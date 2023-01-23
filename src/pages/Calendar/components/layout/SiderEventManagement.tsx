@@ -253,29 +253,29 @@ const SiderEventManagement: FC<Props> = (props) => {
 	const getTabContent = () => {
 		const tabs = {
 			[CALENDAR_EVENT_TYPE.RESERVATION]: {
-				tabKey: CALENDAR_EVENT_TYPE.RESERVATION,
-				tab: <>{t('loc:Rezervácia')}</>,
-				tabPaneContent: null
+				key: CALENDAR_EVENT_TYPE.RESERVATION,
+				label: <>{t('loc:Rezervácia')}</>,
+				children: null
 			},
 			[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: {
-				tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
-				tab: <>{t('loc:Shift')}</>,
-				tabPaneContent: null
+				key: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
+				label: <>{t('loc:Shift')}</>,
+				children: null
 			},
 			[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: {
-				tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
-				tab: <>{t('loc:Voľno')}</>,
-				tabPaneContent: null
+				key: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
+				label: <>{t('loc:Voľno')}</>,
+				children: null
 			},
 			[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: {
-				tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
-				tab: <>{t('loc:Prestávka')}</>,
-				tabPaneContent: null
+				key: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
+				label: <>{t('loc:Prestávka')}</>,
+				children: null
 			}
 		}
 
 		if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-			return [tabs[CALENDAR_EVENT_TYPE.RESERVATION], tabs[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]]
+			return [tabs[CALENDAR_EVENT_TYPE.RESERVATION]]
 		}
 
 		return [tabs[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT], tabs[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF], tabs[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]]
@@ -320,12 +320,12 @@ const SiderEventManagement: FC<Props> = (props) => {
 					</Button>
 				</div>
 			</div>
-			{!eventId && (
+			{!eventId && sidebarView !== undefined && (
 				<TabsComponent
 					className={'nc-sider-event-management-tabs'}
 					activeKey={sidebarView}
 					onChange={(type: string) => initCreateEventForm(type as CALENDAR_EVENT_TYPE)}
-					tabsContent={getTabContent()}
+					items={getTabContent()}
 					destroyInactiveTabPane
 				/>
 			)}

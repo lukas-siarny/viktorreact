@@ -24,9 +24,22 @@
 			svg
 				color: $textColor-notino-red !important
 .ant-picker-dropdown
+	.ant-picker-cell-inner
+		text-align: center
+	.ant-picker-today-btn:hover
+		color: $textColor-notino-black
 	&.showInReservationDrawer
-		.ant-picker-date-panel
+		.ant-picker-date-panel,
+		.ant-picker-decade-panel,
+		.ant-picker-year-panel,
+		.ant-picker-month-panel,
+		.ant-picker-quarter-panel,
+		.ant-picker-time-panel
 			width: 210px
+		.ant-picker-decade-panel
+			.ant-picker-cell .ant-picker-cell-inner
+				height: auto
+				min-height: 24px
 		.ant-picker-header
 			padding: 0
 		.ant-picker-body

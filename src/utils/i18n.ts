@@ -16,6 +16,7 @@ i18n.use(Backend)
 	.use(initReactI18next)
 	.use(LanguageDetector)
 	.init({
+		returnNull: false,
 		backend: {
 			backendOptions: [
 				{

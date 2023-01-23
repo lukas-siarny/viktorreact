@@ -113,6 +113,9 @@ const cancelGetTokens = {} as { [key: string]: CancelTokenSource }
  * @param params Object object
  * @param customConfig overwrite defaultConfig with custom one
  * @param typeNotification Enum notification type
+ * @param showLoading
+ * @param allowCancelToken
+ * @param cancelTokenKey
  * @return Promise response
  *
  */
@@ -121,7 +124,7 @@ export const getReq = async <T extends keyof GetUrls>(
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	params: Parameters<GetUrls[T]['get']>[0],
-	customConfig: ICustomConfig = {},
+	customConfig?: ICustomConfig,
 	typeNotification: NOTIFICATION_TYPE | false = NOTIFICATION_TYPE.NOTIFICATION,
 	showLoading = false,
 	allowCancelToken = false,
@@ -146,13 +149,13 @@ export const getReq = async <T extends keyof GetUrls>(
 		hide = antMessage.loading('Načitavajú sa dáta...', 0)
 	}
 	const config: AxiosRequestConfig = {
-		paramsSerializer: qs.stringify,
+		paramsSerializer: qs.stringify as any,
 		...customConfig,
 		...token,
 		headers: {
 			...buildHeaders(),
 			...get(customConfig, 'headers', {})
-		}
+		} as any
 	}
 
 	if (queryParams) {
@@ -189,10 +192,12 @@ const cancelPostTokens = {} as { [key: string]: CancelTokenSource }
 /**
  * @param url url endpoint
  * @param params Object params object
- * @param data Object data object
+ * @param reqBody
  * @param customConfig overwrite defaultConfig with custom one
  * @param typeNotification Enum notification type
  * @param showLoading Boolean show loading
+ * @param allowCancelToken
+ * @param cancelTokenKey
  * @return Promise response
  * Performs post request to url and returns callback with result
  */
@@ -204,7 +209,7 @@ export const postReq = async <T extends keyof PostUrls>(
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	reqBody: Parameters<PostUrls[T]['post']>[1],
-	customConfig: ICustomConfig = {},
+	customConfig?: ICustomConfig,
 	typeNotification: NOTIFICATION_TYPE | false = NOTIFICATION_TYPE.NOTIFICATION,
 	showLoading = false,
 	allowCancelToken = false,
@@ -271,11 +276,14 @@ const cancelPatchTokens = {} as { [key: string]: CancelTokenSource }
 /**
  * @param url url endpoint
  * @param params Object params object
- * @param data Object data object
+ * @param reqBody
  * @param customConfig overwrite defaultConfig with custom one
  * @param typeNotification Enum notification type
  *
  * Performs put request to url and returns callback with result
+ * @param showLoading
+ * @param allowCancelToken
+ * @param cancelTokenKey
  */
 
 export const patchReq = async <T extends keyof PatchUrls>(
@@ -286,7 +294,7 @@ export const patchReq = async <T extends keyof PatchUrls>(
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	reqBody: Parameters<PatchUrls[T]['patch']>[1],
-	customConfig: ICustomConfig = {},
+	customConfig?: ICustomConfig,
 	typeNotification: NOTIFICATION_TYPE | false = NOTIFICATION_TYPE.NOTIFICATION,
 	showLoading = false,
 	allowCancelToken = false,
@@ -345,8 +353,8 @@ export const patchReq = async <T extends keyof PatchUrls>(
 }
 
 /**
- * @param url url endpoint
- * @param params Object params object
+ * @param _url
+ * @param _params
  * @param customConfig overwrite defaultConfig with custom one
  * @param typeNotification Enum notification type
  * @param showLoading Boolean show loading
@@ -358,7 +366,7 @@ export const deleteReq = async <T extends keyof DeleteUrls>(
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	_params: Parameters<DeleteUrls[T]['delete']>[0],
-	customConfig: ICustomConfig = {},
+	customConfig?: ICustomConfig,
 	typeNotification: NOTIFICATION_TYPE | false = NOTIFICATION_TYPE.NOTIFICATION,
 	showLoading = false
 ): Promise<ReturnType<DeleteUrls[T]['delete']>> => {

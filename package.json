@@ -111,8 +111,8 @@
   },
   "devDependencies": {
     "@goodrequest/antd-form-fields": "0.0.3",
-    "@goodrequest/convert-translations-i18next": "1.0.7",
-    "@goodrequest/eslint-config-typescript-react": "1.1.1",
+    "@goodrequest/convert-translations-i18next": "1.0.7-beta",
+    "@goodrequest/eslint-config-typescript-react": "1.2.0",
     "@types/classnames": "2.3.1",
     "@types/history": "5.0.0",
     "@types/jwt-decode": "3.1.0",

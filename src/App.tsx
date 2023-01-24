@@ -1,13 +1,15 @@
 import React, { Suspense, useEffect, useState } from 'react'
 import { Provider } from 'react-redux'
-import { Router, Route } from 'react-router'
+import { Router } from 'react-router'
 import { I18nextProvider } from 'react-i18next'
 import { PersistGate } from 'redux-persist/es/integration/react'
-import { QueryParamProvider, ExtendedStringifyOptions, transformSearchStringJsonSafe } from 'use-query-params'
 import { Spin, ConfigProvider } from 'antd'
 import { Locale } from 'antd/lib/locale-provider'
 import { AliasToken } from 'antd/es/theme/internal'
 import dayjs from 'dayjs'
+import { QueryParamProvider } from 'use-query-params'
+import { ReactRouter5Adapter } from 'use-query-params/adapters/react-router-5'
+import { parse, stringify } from 'query-string'
 
 // import 'antd/dist/antd.min.css'
 import 'antd/dist/reset.css'
@@ -25,10 +27,6 @@ import { LANGUAGE, DEFAULT_LANGUAGE } from './utils/enums'
 // components
 import ScrollToTop from './components/ScrollToTop'
 import { LOCALES } from './components/LanguagePicker'
-
-const queryStringifyOptions: ExtendedStringifyOptions = {
-	transformSearchString: transformSearchStringJsonSafe
-}
 
 const { store, persistor } = configureStore(rootReducer)
 
@@ -87,7 +85,14 @@ const App = () => {
 					>
 						<Provider store={store}>
 							<Router history={history}>
-								<QueryParamProvider ReactRouterRoute={Route} stringifyOptions={queryStringifyOptions}>
+								<QueryParamProvider
+									// changelog v2: https://github.com/pbeshai/use-query-params/releases
+									adapter={ReactRouter5Adapter}
+									options={{
+										searchStringToObject: parse,
+										objectToSearchString: stringify
+									}}
+								>
 									<ScrollToTop>
 										<Routes />
 									</ScrollToTop>

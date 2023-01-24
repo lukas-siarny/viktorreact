@@ -246,7 +246,7 @@ const ReservationForm: FC<Props> = (props) => {
 					const prefix = getCountryPrefix(countriesData.data, customer?.phonePrefixCountryCode)
 					return {
 						value: customer.id,
-						kaey: customer.id,
+						key: customer.id,
 						label: customer.firstName && customer.lastName ? `${customer.firstName} ${customer.lastName}` : customer.email,
 						thumbNail: customer?.profileImage?.resizedImages?.thumbnail,
 						extraContent: (

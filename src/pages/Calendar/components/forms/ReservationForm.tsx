@@ -1,21 +1,23 @@
 import React, { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { change, Field, Fields, initialize, InjectedFormProps, reduxForm, submit } from 'redux-form'
+import { change, Field, Fields, getFormValues, initialize, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Form, Modal, Spin } from 'antd'
-import { flatten, map } from 'lodash'
+import { flatten, isEmpty, isNil, map } from 'lodash'
+import dayjs from 'dayjs'
 
 // validate
+import { Action, Dispatch } from 'redux'
 import validateReservationForm from './validateReservationForm'
 
 // utils
 import { formatLongQueryString, getAssignedUserLabel, getCountryPrefix, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { getReq, postReq } from '../../../../utils/request'
-import { CREATE_EVENT_PERMISSIONS, ENUMERATIONS_KEYS, FORM, SALON_PERMISSION, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import { CREATE_EVENT_PERMISSIONS, DEFAULT_TIME_FORMAT, ENUMERATIONS_KEYS, FORM, SALON_PERMISSION, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // types
-import { ICalendarReservationForm, ICustomerForm } from '../../../../types/interfaces'
+import { EmployeeService, ICalendarReservationForm, ICustomerForm, IEmployeePayload, ServiceDetail, ServiceType } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
@@ -35,6 +37,8 @@ import CustomerForm from '../../../CustomersPage/components/CustomerForm'
 // redux
 import { RootState } from '../../../../reducers'
 import { getCustomer } from '../../../../reducers/customers/customerActions'
+import { getEmployee } from '../../../../reducers/employees/employeesActions'
+import { getService } from '../../../../reducers/services/serviceActions'
 
 type ComponentProps = {
 	salonID: string
@@ -46,14 +50,151 @@ const formName = FORM.CALENDAR_RESERVATION_FORM
 
 type Props = InjectedFormProps<ICalendarReservationForm, ComponentProps> & ComponentProps
 
+type DurationData = Omit<ServiceType['rangePriceAndDurationData'], 'priceFrom' | 'priceTo'>
+
+const getDurationData = (
+	priceAndDurationData?: ServiceType['priceAndDurationData'],
+	useCategoryParameter?: boolean,
+	serviceCategoryParameter?: ServiceType['serviceCategoryParameter']
+) => {
+	let durationData = {} as DurationData
+
+	const durationDataToCheck = {} as DurationData
+	if (!isNil(priceAndDurationData?.durationFrom)) {
+		durationDataToCheck.durationFrom = priceAndDurationData?.durationFrom
+	}
+	if (!isNil(priceAndDurationData?.durationTo)) {
+		durationDataToCheck.durationTo = priceAndDurationData?.durationTo
+	}
+
+	if (useCategoryParameter && !isEmpty(serviceCategoryParameter?.values)) {
+		const employeeDurationData = serviceCategoryParameter?.values.reduce((duration, cv) => {
+			let newDurationData = { ...duration }
+			const durationFrom = cv.priceAndDurationData.durationFrom || 0
+			const durationTo = cv.priceAndDurationData.durationTo || durationFrom
+
+			if (durationFrom && durationFrom < (duration.durationTo || 0)) {
+				newDurationData = {
+					...newDurationData,
+					durationFrom
+				}
+			}
+
+			if (durationTo && durationTo > (duration.durationTo || 0)) {
+				newDurationData = {
+					...newDurationData,
+					durationTo
+				}
+			}
+			return newDurationData
+		}, {} as DurationData)
+		if (!isEmpty(employeeDurationData)) {
+			durationData = {
+				durationFrom: employeeDurationData?.durationFrom,
+				durationTo: employeeDurationData?.durationTo
+			}
+		}
+	} else if (!isEmpty(durationDataToCheck)) {
+		const durationFrom = durationDataToCheck?.durationFrom || 0
+		const durationTo = durationDataToCheck?.durationTo || durationFrom
+		durationData = {
+			durationFrom,
+			durationTo
+		}
+	}
+	return durationData
+}
+
+const getCategoryById = (category: any, serviceCategoryID?: string): EmployeeService | null => {
+	let result = null
+	if (category?.category?.id === serviceCategoryID) {
+		return category
+	}
+	if (category?.children) {
+		// eslint-disable-next-line no-return-assign
+		category.children.some((node: any) => (result = getCategoryById(node, serviceCategoryID)))
+	}
+	return result
+}
+
+interface EmployeeOnChangeData {
+	id?: string
+	categories?: NonNullable<IEmployeePayload['data']>['employee']['categories']
+}
+
+interface ServiceOnChangeData {
+	serviceCategoryId?: string
+	priceAndDurationData?: ServiceDetail['priceAndDurationData']
+	useCategoryParameter?: boolean
+	serviceCategoryParameter?: ServiceType['serviceCategoryParameter']
+}
+
+const getAndChangeReservationTime = (
+	dispatch: Dispatch<Action>,
+	employee?: EmployeeOnChangeData,
+	service?: ServiceOnChangeData,
+	formValues?: Partial<ICalendarReservationForm>
+) => {
+	let durationData: DurationData = {}
+	const employeeId = employee?.id
+	const serviceCategoryId = service?.serviceCategoryId
+	if (employeeId) {
+		const employeeCategory = getCategoryById(
+			{
+				children: employee.categories
+			},
+			serviceCategoryId
+		)
+
+		// check if employee has overriden duration data of selected service
+		if (employeeCategory) {
+			const employeeDurationData = getDurationData(employeeCategory.priceAndDurationData, employeeCategory.useCategoryParameter, employeeCategory.serviceCategoryParameter)
+			if (!isEmpty(employeeDurationData)) {
+				durationData = {
+					durationFrom: employeeDurationData?.durationFrom,
+					durationTo: employeeDurationData?.durationTo
+				}
+			}
+		}
+	}
+
+	// if employee doesn't have overriden duration data, check duration data of selected service
+	if (isEmpty(durationData)) {
+		const serviceDurationData = getDurationData(service?.priceAndDurationData, service?.useCategoryParameter, service?.serviceCategoryParameter)
+		if (!isEmpty(serviceDurationData)) {
+			durationData = {
+				durationFrom: serviceDurationData?.durationFrom,
+				durationTo: serviceDurationData?.durationTo
+			}
+		}
+	}
+
+	// set event time based on service duration data
+	if (!isEmpty(durationData) && !isNil(durationData.durationTo)) {
+		const timeFrom = formValues?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT)
+		const [hoursFrom, minutesFrom] = timeFrom.split(':')
+		let timeTo = dayjs().startOf('day').add(Number(hoursFrom), 'hours').add(Number(minutesFrom), 'minutes').add(durationData.durationTo, 'minutes')
+		const endOfADay = dayjs().startOf('day').add(23, 'hours').add(59, 'minutes')
+		if (!dayjs(timeTo).isSameOrBefore(endOfADay)) {
+			timeTo = endOfADay
+		}
+		if (!formValues?.timeFrom) {
+			dispatch(change(formName, 'timeFrom', timeFrom))
+		}
+		dispatch(change(formName, 'timeTo', timeTo.format(DEFAULT_TIME_FORMAT)))
+	}
+}
+
 const ReservationForm: FC<Props> = (props) => {
 	const { handleSubmit, salonID, searchEmployes, eventId, phonePrefix, pristine, submitting } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [visibleCustomerCreateModal, setVisibleCustomerCreateModal] = useState(false)
 	const [visibleCustomerDetailModal, setVisibleCustomerDetailModal] = useState(false)
+	const [isSettingTime, setIsSettingTime] = useState(false)
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
+	const formValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(formName)(state))
 
 	// NOTE: pristine pouzivat len pri UPDATE eventu a pri CREATE povlit akciu vzdy
 	const disabledSubmitButton = !!(eventId && pristine) || submitting
@@ -74,7 +215,13 @@ const ReservationForm: FC<Props> = (props) => {
 									label: item.category.name,
 									key: item.service.id,
 									disabled: undefined,
-									title: undefined
+									title: undefined,
+									extra: {
+										priceAndDurationData: item.service.priceAndDurationData,
+										useCategoryParameter: item.service.useCategoryParameter,
+										serviceCategoryParameter: item.service.serviceCategoryParameter,
+										categoryId: item.category.id
+									}
 								}
 							})
 						}
@@ -99,7 +246,7 @@ const ReservationForm: FC<Props> = (props) => {
 					const prefix = getCountryPrefix(countriesData.data, customer?.phonePrefixCountryCode)
 					return {
 						value: customer.id,
-						key: customer.id,
+						kaey: customer.id,
 						label: customer.firstName && customer.lastName ? `${customer.firstName} ${customer.lastName}` : customer.email,
 						thumbNail: customer?.profileImage?.resizedImages?.thumbnail,
 						extraContent: (
@@ -151,7 +298,13 @@ const ReservationForm: FC<Props> = (props) => {
 			initialize(FORM.CUSTOMER, {
 				...data?.customer,
 				avatar: data?.customer?.profileImage
-					? [{ url: data?.customer?.profileImage?.original, thumbnail: data?.customer?.profileImage?.resizedImages?.thumbnail, uid: data?.customer?.profileImage?.id }]
+					? [
+							{
+								url: data?.customer?.profileImage?.original,
+								thumbnail: data?.customer?.profileImage?.resizedImages?.thumbnail,
+								uid: data?.customer?.profileImage?.id
+							}
+					  ]
 					: null
 			})
 		)
@@ -190,6 +343,62 @@ const ReservationForm: FC<Props> = (props) => {
 			</Modal>
 		</>
 	)
+
+	const onChangeService = async (item?: any) => {
+		const service = item as ICalendarReservationForm['service'] | undefined
+		const selectedEmployeeId = formValues?.employee?.value as string | undefined
+		const serviceExtra = service?.extra
+		let employeeData: EmployeeOnChangeData = {}
+
+		if (selectedEmployeeId) {
+			setIsSettingTime(true)
+			try {
+				const { data } = await dispatch(getEmployee(selectedEmployeeId))
+				employeeData = { id: selectedEmployeeId, categories: data?.employee?.categories }
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.error(e)
+			}
+		}
+
+		getAndChangeReservationTime(
+			dispatch,
+			employeeData,
+			{
+				serviceCategoryId: serviceExtra?.categoryId,
+				priceAndDurationData: serviceExtra?.priceAndDurationData,
+				useCategoryParameter: serviceExtra?.useCategoryParameter,
+				serviceCategoryParameter: serviceExtra?.serviceCategoryParameter
+			},
+			formValues
+		)
+		setIsSettingTime(false)
+	}
+
+	const onChangeEmployee = async (item?: any) => {
+		const employeeId = item?.value
+		const selectedServiceId = formValues?.service?.value
+
+		// check service / employee duration data and change event time only when there is alerady a service selected
+		if (employeeId && selectedServiceId) {
+			setIsSettingTime(true)
+			const [{ data: employeeDetail }, { data: serviceDetail }] = await Promise.all([dispatch(getEmployee(employeeId)), dispatch(getService(selectedServiceId as string))])
+			const serviceCategoryId = serviceDetail?.service.category.child.child?.id
+
+			getAndChangeReservationTime(
+				dispatch,
+				{ id: employeeId, categories: employeeDetail?.employee?.categories },
+				{
+					serviceCategoryId,
+					priceAndDurationData: serviceDetail?.service?.priceAndDurationData,
+					useCategoryParameter: serviceDetail?.service?.useCategoryParameter,
+					serviceCategoryParameter: serviceDetail?.service?.serviceCategoryParameter
+				},
+				formValues
+			)
+			setIsSettingTime(false)
+		}
+	}
 
 	return (
 		<>
@@ -246,6 +455,8 @@ const ReservationForm: FC<Props> = (props) => {
 							required
 							labelInValue
 							onSearch={searchServices}
+							onChange={onChangeService}
+							hasExtra
 						/>
 						<Field
 							name={'date'}
@@ -271,6 +482,7 @@ const ReservationForm: FC<Props> = (props) => {
 							minuteStep={15}
 							suffixIcon={<TimerIcon className={'text-notino-grayDark'} />}
 							size={'large'}
+							disabled={isSettingTime}
 						/>
 						<Field
 							component={SelectField}
@@ -289,6 +501,7 @@ const ReservationForm: FC<Props> = (props) => {
 							className={'pb-0'}
 							labelInValue
 							onSearch={searchEmployes}
+							onChange={onChangeEmployee}
 						/>
 						<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 					</Form>

@@ -186,8 +186,20 @@ const customDropdown = (actions: Action[] | null | undefined, menu: React.ReactE
 	)
 }
 
+const findNodeInTree = (node: any, value: any) => {
+	let result = null
+	if (node?.id === value) {
+		return node
+	}
+	if (node?.children) {
+		// eslint-disable-next-line no-return-assign
+		node.children.some((childrenNode: any) => (result = findNodeInTree(childrenNode, value)))
+	}
+	return result
+}
+
 const handleChange = async (data: any) => {
-	const { value, options, autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update } = data
+	const { value, options, autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update, selectState, onSearch, filterOption } = data
 	let val = value
 	// NOTE condition for checking if select field has 'tags' mode with maxTagLength prop for checking length string of added tag
 	// if input value's length is larger than maxTagLength, filter this value from tags
@@ -204,6 +216,14 @@ const handleChange = async (data: any) => {
 		val = {
 			...value,
 			extra: options?.extra
+		}
+	} else if (hasExtra && filterOption === false && onSearch) {
+		// NOTE: vrati extra object pre async search (Antd extra propu z options prefiltruje)
+		const valueToCompare = typeof value === 'object' ? value?.value : value
+		const nodeFromAsyncOptions = findNodeInTree({ children: selectState.data }, valueToCompare)
+		val = {
+			...val,
+			extra: nodeFromAsyncOptions?.extra
 		}
 	}
 	if (maxTagsLimit && val?.length > maxTagsLimit) {
@@ -387,9 +407,23 @@ const SelectField = (props: Props) => {
 				setConfVisibility(true)
 				return
 			}
-			handleChange({ value, options: antdOptions, autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update })
+			handleChange({
+				value,
+				options: antdOptions,
+				autoBlur,
+				hasExtra,
+				input,
+				itemRef,
+				maxTagLength,
+				maxTagsLimit,
+				mode,
+				update,
+				selectState,
+				onSearch: props.onSearch,
+				filterOption
+			})
 		},
-		[autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update, confirmSelection]
+		[autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update, confirmSelection, props.onSearch, filterOption, selectState]
 	)
 
 	const onSelectWrap = async (value: any, option: any) => {

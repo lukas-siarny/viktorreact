@@ -320,6 +320,7 @@ const AddressFields = (props: Props) => {
 												</Col>
 												<Col span={18}>
 													<MapContainer
+														onError={() => setMapError(true)}
 														onLocationChange={changeLocation}
 														lat={get(inputValues, 'latitude')}
 														lng={get(inputValues, 'longitude')}

@@ -9,7 +9,6 @@ import { AliasToken } from 'antd/es/theme/internal'
 import dayjs from 'dayjs'
 import { QueryParamProvider } from 'use-query-params'
 import { ReactRouter5Adapter } from 'use-query-params/adapters/react-router-5'
-import { parse, stringify } from 'query-string'
 
 // import 'antd/dist/antd.min.css'
 import 'antd/dist/reset.css'
@@ -88,10 +87,6 @@ const App = () => {
 								<QueryParamProvider
 									// changelog v2: https://github.com/pbeshai/use-query-params/releases
 									adapter={ReactRouter5Adapter}
-									options={{
-										searchStringToObject: parse,
-										objectToSearchString: stringify
-									}}
 								>
 									<ScrollToTop>
 										<Routes />

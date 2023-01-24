@@ -77,7 +77,7 @@
     "openapi-client-axios": "6.1.4",
     "openapi-client-axios-typegen": "6.1.4",
     "qs": "6.11.0",
-    "query-string": "7.1.1",
+    "query-string": "8.1.0",
     "react": "18.2.0",
     "react-app-rewired": "2.2.1",
     "react-chartjs-2": "5.2.0",

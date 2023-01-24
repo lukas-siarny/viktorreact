@@ -32,7 +32,7 @@ import {
 	FILTER_ENTITY,
 	CHANGE_DEBOUNCE_TIME
 } from '../../../../utils/enums'
-import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getSalonFilterRanges } from '../../../../utils/helper'
+import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getRangesForDatePicker } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { history } from '../../../../utils/history'
 import searchWrapper from '../../../../utils/filters'
@@ -350,8 +350,8 @@ const SalonsFilterActive = (props: Props) => {
 									placeholder={[t('loc:Úpravy od'), t('loc:Úpravy do')]}
 									allowClear
 									name={'dateFromTo'}
-									ranges={getSalonFilterRanges()}
-									dropdownAlign={{ points: ['tr', 'br'] }}
+									presets={getRangesForDatePicker()}
+									dropdownAlign={{ points: ['tl', 'bl'] }}
 									allowEmpty={[false, false]}
 								/>
 							</Col>

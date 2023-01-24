@@ -1038,6 +1038,20 @@ export const getSalonFilterRanges = (values?: IDateTimeFilterOption[]): { [key: 
 	}, {})
 }
 
+export const getRangesForDatePicker = (values?: IDateTimeFilterOption[]): { [key: string]: Dayjs[] } => {
+	const options = values ?? Object.values(DEFAULT_DATE_TIME_OPTIONS())
+	const now = dayjs()
+	return options.reduce((ranges, value) => {
+		return [
+			...ranges,
+			{
+				label: value.name,
+				value: [now.subtract(value.value, value.unit), now]
+			}
+		]
+	}, [])
+}
+
 export const getFirstDayOfWeek = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).startOf('week')
 
 export const getFirstDayOfMonth = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).startOf('month')

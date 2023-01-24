@@ -173,11 +173,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 
 		const interval = window.setInterval(async () => {
-			message.open({
-				type: 'loading',
-				content: t('loc:Kalendár sa aktualizuje'),
-				duration: 0
-			})
+			const messageExists = document.querySelector('.nc-calendar-msg-refresh')
+			if (!messageExists) {
+				message.open({
+					type: 'loading',
+					className: 'nc-calendar-msg-refresh',
+					content: t('loc:Kalendár sa aktualizuje'),
+					duration: 0
+				})
+			}
 			await dispatch(refreshEvents(validEventsViewType))
 			message.destroy()
 		}, REFRESH_CALENDAR_INTERVAL)

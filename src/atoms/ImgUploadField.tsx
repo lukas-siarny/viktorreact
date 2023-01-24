@@ -188,7 +188,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 							<button
 								title='Remove file'
 								type='button'
-								className='ant-btn ant-btn-text ant-btn-sm ant-btn-icon-only ant-upload-list-item-card-actions-btn flex items-center justify-center fixed top-1 right-1 z-50'
+								className='ant-btn ant-btn-text ant-btn-sm ant-btn-icon-only ant-upload-list-item-card-actions-btn flex items-center justify-center fixed top-1 right-1 z-50 p-0 border-none bg-transparent'
 							>
 								<span role='img' aria-label='delete' tabIndex={-1} className='anticon anticon-delete w-full h-full'>
 									<RemoveIcon className='remove-icon-image' width={18} />

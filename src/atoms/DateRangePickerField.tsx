@@ -46,7 +46,7 @@ const DateRangePickerField = (props: Props) => {
 		size,
 		disabled,
 		className,
-		ranges,
+		presets,
 		rangePickerClassName,
 		showTime,
 		dropdownAlign,
@@ -137,7 +137,7 @@ const DateRangePickerField = (props: Props) => {
 					getPopupContainer={getPopupContainer || ((node) => node)}
 					size={size}
 					disabled={disabled}
-					ranges={ranges}
+					presets={presets}
 					locale={locale}
 				/>
 			</div>

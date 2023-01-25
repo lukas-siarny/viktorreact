@@ -207,8 +207,8 @@ const handleChange = async (data: any) => {
 		val = filter(value, (v, i: number) => i !== value.length - 1)
 	}
 	// NOTE: extra data k value, key, label ak potrebujeme poslat ine data -> eg. pri reservacii sa neposiela ID travelera ale cely objekt
-	if (mode === 'tags' || mode === 'multiple') {
-		if (hasExtra) {
+	if (hasExtra) {
+		if (mode === 'tags' || mode === 'multiple') {
 			val = map(value, (valInput) =>
 				typeof valInput === 'object'
 					? {
@@ -217,18 +217,18 @@ const handleChange = async (data: any) => {
 					  }
 					: valInput
 			)
-		}
-	} else if (antdOptions?.extra && typeof value === 'object') {
-		val = {
-			...value,
-			extra: antdOptions.extra
-		}
-	} else if (typeof value === 'object') {
-		// NOTE: v niektorych pripadoch Antd odfiltruje extra objekt z antdOptions
-		const nodeFromOptions = findNodeInOptionsTree({ children: options }, value?.value)
-		val = {
-			...val,
-			extra: nodeFromOptions?.extra
+		} else if (antdOptions?.extra && typeof value === 'object') {
+			val = {
+				...value,
+				extra: antdOptions.extra
+			}
+		} else if (typeof value === 'object') {
+			// NOTE: v niektorych pripadoch Antd odfiltruje extra objekt z antdOptions
+			const nodeFromOptions = findNodeInOptionsTree({ children: options }, value?.value)
+			val = {
+				...val,
+				extra: nodeFromOptions?.extra
+			}
 		}
 	}
 	if (maxTagsLimit && val?.length > maxTagsLimit) {

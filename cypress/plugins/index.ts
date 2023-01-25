@@ -12,6 +12,7 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const ms = require('smtp-tester')
 
 /**
@@ -24,22 +25,11 @@ export default (on: any, config: any) => {
 	console.log('mail server at port %d', port)
 
 	// process all emails
-	mailServer.bind((addr, id, email) => {
+	mailServer.bind((addr: string, id: string, email: string) => {
 		console.log('--- email ---')
 		// TODO: figure out how it would be possible use received emails
 		// console.log(addr, id, email)
 	})
-
-	// eslint-disable-next-line no-param-reassign
-	config = {
-		...config,
-		env: {
-			...config.env,
-			auth_email: process.env.AUTH_EMAIL,
-			auth_password: process.env.AUTH_PASSWORD,
-			sign_in_url: process.env.SIGN_IN_URL
-		}
-	}
 
 	return config
 }

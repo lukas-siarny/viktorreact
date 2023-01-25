@@ -53,6 +53,9 @@ import ContactPage from '../pages/Contact/ContactPage'
 // Specialist contacts
 import SpecialistContactsPage from '../pages/SpecialistContactsPage/SpecialistContactsPage'
 
+// Reviews
+import ReviewsPage from '../pages/ReviewsPage/ReviewsPage'
+
 import AppInit from '../components/AppInit'
 
 // 404, 403
@@ -220,6 +223,7 @@ const Routes: FC = (props) => {
 					layout={MainLayout}
 					page={PAGE.SPECIALIST_CONTACTS}
 				/>
+				<AuthRoute {...props} exact path={t('paths:reviews')} component={ReviewsPage} translatePathKey={t('paths:reviews')} layout={MainLayout} page={PAGE.REVIEWS} />
 				{/* NOTE: add all private routes before this declaration */}
 				<AuthRoute {...props} path={'/403'} component={ForbiddenPage} layout={MainLayout} />
 				<AuthRoute

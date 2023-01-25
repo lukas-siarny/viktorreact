@@ -144,6 +144,12 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							label: t('loc:Špecialisti'),
 							onClick: () => history.push(t('paths:specialist-contacts')),
 							icon: <SpecialistIcon />
+						},
+						{
+							key: PAGE.REVIEWS,
+							label: t('loc:Recenzie'),
+							onClick: () => history.push(t('paths:reviews')),
+							icon: <SpecialistIcon />
 						}
 					)
 				}

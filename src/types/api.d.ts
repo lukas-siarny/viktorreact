@@ -255,6 +255,37 @@ declare namespace Paths {
             }
         }
     }
+    namespace DeleteApiB2BAdminReviewsReviewId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ReviewID = string; // uuid
+        }
+        export interface PathParameters {
+            reviewID: Parameters.ReviewID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                review?: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace DeleteApiB2BAdminSalonsSalonId {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -854,7 +885,7 @@ declare namespace Paths {
         }
         namespace Responses {
             /**
-             * Endpoint is used for getting an customer detail informations.
+             * Endpoint is used for getting customer detail information.
              */
             export interface $200 {
                 customer: {
@@ -2171,6 +2202,133 @@ declare namespace Paths {
                         newBasicSalons: number;
                         nonBasicPendingPublicationSalons: number;
                         nonBasicApprovedSalons: number;
+                    };
+                };
+            }
+        }
+    }
+    namespace GetApiB2BAdminReviews {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type Deleted = boolean;
+            export type Limit = number;
+            /**
+             * Order attributes: toxicityScore
+             */
+            export type Order = string;
+            export type Page = number;
+            export type SalonCountryCode = string;
+            export type Search = string | null;
+            export type ToxicityScoreFrom = number; // float
+            export type ToxicityScoreTo = number; // float
+            export type VerificationStatus = "NOT_VERIFIED" | "VISIBLE_IN_B2C" | "HIDDEN_IN_B2C";
+        }
+        export interface QueryParameters {
+            search?: Parameters.Search;
+            verificationStatus?: Parameters.VerificationStatus;
+            deleted?: Parameters.Deleted;
+            salonCountryCode?: Parameters.SalonCountryCode;
+            toxicityScoreFrom?: Parameters.ToxicityScoreFrom /* float */;
+            toxicityScoreTo?: Parameters.ToxicityScoreTo /* float */;
+            order?: /* Order attributes: toxicityScore */ Parameters.Order;
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                reviews: {
+                    id: string; // uuid
+                    rating: number;
+                    partialRatings?: {
+                        [name: string]: number;
+                    };
+                    userName: string;
+                    deviceID?: string;
+                    reviewMessage?: string;
+                    toxicityScore?: number; // float
+                    verificationStatus: "NOT_VERIFIED" | "VISIBLE_IN_B2C" | "HIDDEN_IN_B2C";
+                    b2cUser: {
+                        id: string; // uuid
+                    };
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                    };
+                    calendarEvent?: {
+                        id: string; // uuid
+                        employee: {
+                            id: string; // uuid
+                            fullName?: string;
+                        };
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
+                };
+            }
+        }
+    }
+    namespace GetApiB2BAdminReviewsReviewId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ReviewID = string; // uuid
+        }
+        export interface PathParameters {
+            reviewID: Parameters.ReviewID /* uuid */;
+        }
+        namespace Responses {
+            /**
+             * Endpoint is used for getting review detail information.
+             */
+            export interface $200 {
+                review: {
+                    id: string; // uuid
+                    rating: number;
+                    partialRatings?: {
+                        [name: string]: number;
+                    };
+                    userName: string;
+                    deviceID?: string;
+                    reviewMessage?: string;
+                    toxicityScore?: number; // float
+                    verificationStatus: "NOT_VERIFIED" | "VISIBLE_IN_B2C" | "HIDDEN_IN_B2C";
+                    b2cUser: {
+                        id: string; // uuid
+                    };
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                    };
+                    calendarEvent?: {
+                        id: string; // uuid
                     };
                 };
             }
@@ -4620,7 +4778,7 @@ declare namespace Paths {
         }
         namespace Responses {
             /**
-             * Endpoint is used for getting an customer detail informations.
+             * Endpoint is used for getting customer detail information.
              */
             export interface $200 {
                 customer: {
@@ -6533,7 +6691,10 @@ declare namespace Paths {
                             FIVE: number;
                         };
                         partialRatings?: {
-                            [name: string]: number;
+                            SERVICE: number;
+                            PLACE: number;
+                            COMMUNICATION: number;
+                            GENERAL_IMPRESSION: number;
                         };
                     };
                     availableReservationSystem: boolean;
@@ -8942,6 +9103,7 @@ declare namespace Paths {
                             isOwned: boolean;
                             b2cUserID: string; // uuid
                             calendarEventID?: string; // uuid
+                            createdAt: string; // date-time
                         };
                     };
                     customer?: {
@@ -10986,7 +11148,10 @@ declare namespace Paths {
                             FIVE: number;
                         };
                         partialRatings?: {
-                            [name: string]: number;
+                            SERVICE: number;
+                            PLACE: number;
+                            COMMUNICATION: number;
+                            GENERAL_IMPRESSION: number;
                         };
                     };
                     availableReservationSystem: boolean;
@@ -11190,6 +11355,7 @@ declare namespace Paths {
                     reviewMessage?: string;
                     b2cUserID: string; // uuid
                     calendarEventID?: string; // uuid
+                    createdAt: string; // date-time
                 };
             }
         }
@@ -11766,6 +11932,7 @@ declare namespace Paths {
                             isOwned: boolean;
                             b2cUserID: string; // uuid
                             calendarEventID?: string; // uuid
+                            createdAt: string; // date-time
                         };
                     };
                     customer?: {
@@ -13261,6 +13428,7 @@ declare namespace Paths {
                     reviewMessage?: string;
                     b2cUserID: string; // uuid
                     calendarEventID?: string; // uuid
+                    createdAt: string; // date-time
                 };
             }
         }
@@ -14147,7 +14315,10 @@ declare namespace Paths {
                             FIVE: number;
                         };
                         partialRatings?: {
-                            [name: string]: number;
+                            SERVICE: number;
+                            PLACE: number;
+                            COMMUNICATION: number;
+                            GENERAL_IMPRESSION: number;
                         };
                     };
                     availableReservationSystem: boolean;
@@ -22781,6 +22952,44 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 supportContact: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminReviewsReviewIdVerification {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ReviewID = string; // uuid
+        }
+        export interface PathParameters {
+            reviewID: Parameters.ReviewID /* uuid */;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * VISIBLE_IN_B2C
+             */
+            verificationStatus: "NOT_VERIFIED" | "VISIBLE_IN_B2C" | "HIDDEN_IN_B2C";
+        }
+        namespace Responses {
+            export interface $200 {
+                review?: {
                     id: string; // uuid
                 };
                 messages: {
@@ -60634,6 +60843,7 @@ declare namespace Paths {
                             isOwned: boolean;
                             b2cUserID: string; // uuid
                             calendarEventID?: string; // uuid
+                            createdAt: string; // date-time
                         };
                     };
                     customer?: {
@@ -60961,6 +61171,7 @@ declare namespace Paths {
                             isOwned: boolean;
                             b2cUserID: string; // uuid
                             calendarEventID?: string; // uuid
+                            createdAt: string; // date-time
                         };
                     };
                     customer?: {
@@ -62512,7 +62723,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiMaintenanceHealth.Responses.$200>
   /**
-   * getApiB2BAdminUsers - Endpoint is used for getting an array of users. 
+   * getApiB2BAdminUsers - Endpoint is used for getting an array of users.
    * 	It is possible to search by (firstName, lastName, email, phone), order (firstName, lastName, activatedAt, roleName, email), filter (roleID) and to use pagination., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_BROWSING]</li></ul>
    */
   'getApiB2BAdminUsers'(
@@ -62705,9 +62916,9 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
   /**
-   * getApiB2BAdminSalons - Endpoint is used for getting an array of salons. 
-   * 	It possible to use search (name, zipCode, city, street, streetNumber, businessID), 
-   * 	filter (categoryFirstLevelIDs, statuses, countryCode, pendingPublication, createType, sourceTypes, lastUpdatedAtFrom, lastUpdatedAtTo, hasSetOpeningHours, assignedUserID, premiumSourceUserType), 
+   * getApiB2BAdminSalons - Endpoint is used for getting an array of salons.
+   * 	It possible to use search (name, zipCode, city, street, streetNumber, businessID),
+   * 	filter (categoryFirstLevelIDs, statuses, countryCode, pendingPublication, createType, sourceTypes, lastUpdatedAtFrom, lastUpdatedAtTo, hasSetOpeningHours, assignedUserID, premiumSourceUserType),
    * 	order (name, fillingProgress, createdAt) and pagination., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
    */
   'getApiB2BAdminSalons'(
@@ -62940,7 +63151,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminCustomers.Responses.$200>
   /**
-   * postApiB2BAdminCustomers - Endpoint is used for creating an customer., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, CUSTOMER_CREATE]</li></ul>
+   * postApiB2BAdminCustomers - Endpoint is used for creating customer., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, CUSTOMER_CREATE]</li></ul>
    */
   'postApiB2BAdminCustomers'(
     parameters?: Parameters<Paths.PostApiB2BAdminCustomers.HeaderParameters> | null,
@@ -62956,7 +63167,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminCustomersCustomerId.Responses.$200>
   /**
-   * patchApiB2BAdminCustomersCustomerId - Endpoint is used for updating customer informations., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, CUSTOMER_UPDATE]</li></ul>
+   * patchApiB2BAdminCustomersCustomerId - Endpoint is used for updating customer information., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, CUSTOMER_UPDATE]</li></ul>
    */
   'patchApiB2BAdminCustomersCustomerId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminCustomersCustomerId.PathParameters & Paths.PatchApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
@@ -63075,6 +63286,38 @@ export interface OperationMethods {
     data?: Paths.PostApiB2BAdminCalendarSyncSyncToken.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminCalendarSyncSyncToken.Responses.$200>
+  /**
+   * getApiB2BAdminReviews - Endpoint is used for getting an array of reviews. It is possible to use search (salonName, review.reviewMessage), filter (verificationStatus, deleted, salonCountryCode, toxicityScoreFrom, toxicityScoreTo), order (toxicityScore) and pagination., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+   */
+  'getApiB2BAdminReviews'(
+    parameters?: Parameters<Paths.GetApiB2BAdminReviews.QueryParameters & Paths.GetApiB2BAdminReviews.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminReviews.Responses.$200>
+  /**
+   * getApiB2BAdminReviewsReviewId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+   */
+  'getApiB2BAdminReviewsReviewId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminReviewsReviewId.PathParameters & Paths.GetApiB2BAdminReviewsReviewId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminReviewsReviewId.Responses.$200>
+  /**
+   * deleteApiB2BAdminReviewsReviewId - Endpoint is used for removing specific salon review., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+   */
+  'deleteApiB2BAdminReviewsReviewId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminReviewsReviewId.PathParameters & Paths.DeleteApiB2BAdminReviewsReviewId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminReviewsReviewId.Responses.$200>
+  /**
+   * patchApiB2BAdminReviewsReviewIdVerification - Endpoint is used for verifying salon review., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+   */
+  'patchApiB2BAdminReviewsReviewIdVerification'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminReviewsReviewIdVerification.PathParameters & Paths.PatchApiB2BAdminReviewsReviewIdVerification.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminReviewsReviewIdVerification.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminReviewsReviewIdVerification.Responses.$200>
   /**
    * getApiB2BV1UsersPartners - permissions:<ul><li>user: [NOTINO_ADMIN, LOGIN_AS_PARTNER]</li></ul>
    */
@@ -63420,7 +63663,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1Customers.Responses.$200>
   /**
-   * postApiB2BV1Customers - Endpoint is used for creating an customer., permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, CUSTOMER_CREATE]</li></ul>
+   * postApiB2BV1Customers - Endpoint is used for creating customer., permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, CUSTOMER_CREATE]</li></ul>
    */
   'postApiB2BV1Customers'(
     parameters?: Parameters<Paths.PostApiB2BV1Customers.HeaderParameters> | null,
@@ -63436,7 +63679,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1CustomersCustomerId.Responses.$200>
   /**
-   * patchApiB2BV1CustomersCustomerId - Endpoint is used for updating customer informations., permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, CUSTOMER_UPDATE]</li></ul>
+   * patchApiB2BV1CustomersCustomerId - Endpoint is used for updating customer information., permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, CUSTOMER_UPDATE]</li></ul>
    */
   'patchApiB2BV1CustomersCustomerId'(
     parameters?: Parameters<Paths.PatchApiB2BV1CustomersCustomerId.PathParameters & Paths.PatchApiB2BV1CustomersCustomerId.HeaderParameters> | null,
@@ -64820,7 +65063,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/users/']: {
     /**
-     * getApiB2BAdminUsers - Endpoint is used for getting an array of users. 
+     * getApiB2BAdminUsers - Endpoint is used for getting an array of users.
      * 	It is possible to search by (firstName, lastName, email, phone), order (firstName, lastName, activatedAt, roleName, email), filter (roleID) and to use pagination., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_BROWSING]</li></ul>
      */
     'get'(
@@ -65045,9 +65288,9 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/salons/']: {
     /**
-     * getApiB2BAdminSalons - Endpoint is used for getting an array of salons. 
-     * 	It possible to use search (name, zipCode, city, street, streetNumber, businessID), 
-     * 	filter (categoryFirstLevelIDs, statuses, countryCode, pendingPublication, createType, sourceTypes, lastUpdatedAtFrom, lastUpdatedAtTo, hasSetOpeningHours, assignedUserID, premiumSourceUserType), 
+     * getApiB2BAdminSalons - Endpoint is used for getting an array of salons.
+     * 	It possible to use search (name, zipCode, city, street, streetNumber, businessID),
+     * 	filter (categoryFirstLevelIDs, statuses, countryCode, pendingPublication, createType, sourceTypes, lastUpdatedAtFrom, lastUpdatedAtTo, hasSetOpeningHours, assignedUserID, premiumSourceUserType),
      * 	order (name, fillingProgress, createdAt) and pagination., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
      */
     'get'(
@@ -65326,7 +65569,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminCustomers.Responses.$200>
     /**
-     * postApiB2BAdminCustomers - Endpoint is used for creating an customer., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, CUSTOMER_CREATE]</li></ul>
+     * postApiB2BAdminCustomers - Endpoint is used for creating customer., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, CUSTOMER_CREATE]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminCustomers.HeaderParameters> | null,
@@ -65344,7 +65587,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminCustomersCustomerId.Responses.$200>
     /**
-     * patchApiB2BAdminCustomersCustomerId - Endpoint is used for updating customer informations., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, CUSTOMER_UPDATE]</li></ul>
+     * patchApiB2BAdminCustomersCustomerId - Endpoint is used for updating customer information., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, CUSTOMER_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminCustomersCustomerId.PathParameters & Paths.PatchApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
@@ -65483,6 +65726,44 @@ export interface PathsDictionary {
       data?: Paths.PostApiB2BAdminCalendarSyncSyncToken.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminCalendarSyncSyncToken.Responses.$200>
+  }
+  ['/api/b2b/admin/reviews/']: {
+    /**
+     * getApiB2BAdminReviews - Endpoint is used for getting an array of reviews. It is possible to use search (salonName, review.reviewMessage), filter (verificationStatus, deleted, salonCountryCode, toxicityScoreFrom, toxicityScoreTo), order (toxicityScore) and pagination., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminReviews.QueryParameters & Paths.GetApiB2BAdminReviews.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminReviews.Responses.$200>
+  }
+  ['/api/b2b/admin/reviews/{reviewID}']: {
+    /**
+     * getApiB2BAdminReviewsReviewId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminReviewsReviewId.PathParameters & Paths.GetApiB2BAdminReviewsReviewId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminReviewsReviewId.Responses.$200>
+    /**
+     * deleteApiB2BAdminReviewsReviewId - Endpoint is used for removing specific salon review., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminReviewsReviewId.PathParameters & Paths.DeleteApiB2BAdminReviewsReviewId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminReviewsReviewId.Responses.$200>
+  }
+  ['/api/b2b/admin/reviews/{reviewID}/verification']: {
+    /**
+     * patchApiB2BAdminReviewsReviewIdVerification - Endpoint is used for verifying salon review., permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminReviewsReviewIdVerification.PathParameters & Paths.PatchApiB2BAdminReviewsReviewIdVerification.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminReviewsReviewIdVerification.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminReviewsReviewIdVerification.Responses.$200>
   }
   ['/api/b2b/v1/users/partners']: {
     /**
@@ -65890,7 +66171,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Customers.Responses.$200>
     /**
-     * postApiB2BV1Customers - Endpoint is used for creating an customer., permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, CUSTOMER_CREATE]</li></ul>
+     * postApiB2BV1Customers - Endpoint is used for creating customer., permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, CUSTOMER_CREATE]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1Customers.HeaderParameters> | null,
@@ -65908,7 +66189,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1CustomersCustomerId.Responses.$200>
     /**
-     * patchApiB2BV1CustomersCustomerId - Endpoint is used for updating customer informations., permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, CUSTOMER_UPDATE]</li></ul>
+     * patchApiB2BV1CustomersCustomerId - Endpoint is used for updating customer information., permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, CUSTOMER_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1CustomersCustomerId.PathParameters & Paths.PatchApiB2BV1CustomersCustomerId.HeaderParameters> | null,

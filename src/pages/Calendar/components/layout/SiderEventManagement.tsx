@@ -158,10 +158,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 									lastName: data?.customer?.lastName,
 									email: data?.customer?.email
 								})
-							),
-							note: data?.note,
-							noteFromB2CCustomer: data?.noteFromB2CCustomer,
-							reservationData: data?.reservationData
+							)
 						})
 					)
 					break

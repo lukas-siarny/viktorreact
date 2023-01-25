@@ -32,14 +32,13 @@ import { ReactComponent as LoadingIcon } from '../../../../assets/icons/loading-
 import DateField from '../../../../atoms/DateField'
 import TextareaField from '../../../../atoms/TextareaField'
 import TimeRangeField from '../../../../atoms/TimeRangeField'
-import SelectField from '../../../../atoms/SelectField'
+import SelectField, { findNodeInOptionsTree } from '../../../../atoms/SelectField'
 import CustomerForm from '../../../CustomersPage/components/CustomerForm'
 
 // redux
 import { RootState } from '../../../../reducers'
 import { getCustomer } from '../../../../reducers/customers/customerActions'
 import { getEmployee } from '../../../../reducers/employees/employeesActions'
-import { getService } from '../../../../reducers/services/serviceActions'
 
 type ComponentProps = {
 	salonID: string
@@ -71,15 +70,7 @@ const getDurationData = (
 	if (useCategoryParameter && !isEmpty(serviceCategoryParameter?.values)) {
 		const employeeDurationData = serviceCategoryParameter?.values.reduce((duration, cv) => {
 			let newDurationData = { ...duration }
-			const durationFrom = cv.priceAndDurationData.durationFrom || 0
-			const durationTo = cv.priceAndDurationData.durationTo || durationFrom
-
-			if (durationFrom && durationFrom < (duration.durationTo || 0)) {
-				newDurationData = {
-					...newDurationData,
-					durationFrom
-				}
-			}
+			const durationTo = cv.priceAndDurationData.durationTo || cv.priceAndDurationData.durationFrom || 0
 
 			if (durationTo && durationTo > (duration.durationTo || 0)) {
 				newDurationData = {
@@ -91,15 +82,12 @@ const getDurationData = (
 		}, {} as DurationData)
 		if (!isEmpty(employeeDurationData)) {
 			durationData = {
-				durationFrom: employeeDurationData?.durationFrom,
 				durationTo: employeeDurationData?.durationTo
 			}
 		}
 	} else if (!isEmpty(durationDataToCheck)) {
-		const durationFrom = durationDataToCheck?.durationFrom || 0
-		const durationTo = durationDataToCheck?.durationTo || durationFrom
+		const durationTo = durationDataToCheck?.durationTo || durationDataToCheck?.durationFrom || 0
 		durationData = {
-			durationFrom,
 			durationTo
 		}
 	}
@@ -118,73 +106,295 @@ const getCategoryById = (category: any, serviceCategoryID?: string): EmployeeSer
 	return result
 }
 
-interface EmployeeOnChangeData {
-	id?: string
-	categories?: NonNullable<IEmployeePayload['data']>['employee']['categories']
-}
-
-interface ServiceOnChangeData {
-	serviceCategoryId?: string
-	priceAndDurationData?: ServiceDetail['priceAndDurationData']
-	useCategoryParameter?: boolean
-	serviceCategoryParameter?: ServiceType['serviceCategoryParameter']
-}
-
-const getAndChangeReservationTime = (
-	dispatch: Dispatch<Action>,
-	employee?: EmployeeOnChangeData,
-	service?: ServiceOnChangeData,
-	formValues?: Partial<ICalendarReservationForm>
-) => {
-	let durationData: DurationData = {}
-	const employeeId = employee?.id
-	const serviceCategoryId = service?.serviceCategoryId
-	if (employeeId) {
-		const employeeCategory = getCategoryById(
-			{
-				children: employee.categories
-			},
-			serviceCategoryId
-		)
-
-		// check if employee has overriden duration data of selected service
-		if (employeeCategory) {
-			const employeeDurationData = getDurationData(employeeCategory.priceAndDurationData, employeeCategory.useCategoryParameter, employeeCategory.serviceCategoryParameter)
-			if (!isEmpty(employeeDurationData)) {
-				durationData = {
-					durationFrom: employeeDurationData?.durationFrom,
-					durationTo: employeeDurationData?.durationTo
+const opt = [
+	{
+		id: 'f23fecd9-fdbb-4f94-ad8e-c95dea3fab67',
+		label: 'Balayage with blow-dry',
+		key: 'f23fecd9-fdbb-4f94-ad8e-c95dea3fab67',
+		extra: {
+			priceAndDurationData: {
+				durationFrom: 40,
+				priceFrom: {
+					currency: 'EUR',
+					currencySymbol: '€',
+					exponent: 2,
+					significand: 5
 				}
-			}
+			},
+			useCategoryParameter: false,
+			serviceCategoryParameter: {
+				id: '00000000-0000-0000-0000-000000000001',
+				valueType: 'ENUM',
+				name: 'Hair length',
+				values: []
+			},
+			categoryId: '00000000-0000-0000-0000-000000000079'
 		}
-	}
+	},
+	{
+		id: '63768b18-e021-4193-a6d3-d97a7cebb4f2',
+		label: 'Balayage with cut',
+		key: '63768b18-e021-4193-a6d3-d97a7cebb4f2',
+		extra: {
+			priceAndDurationData: {
+				durationFrom: 40,
+				priceFrom: {
+					currency: 'EUR',
+					currencySymbol: '€',
+					exponent: 2,
+					significand: 4
+				}
+			},
+			useCategoryParameter: true,
+			serviceCategoryParameter: {
+				id: '00000000-0000-0000-0000-000000000001',
+				valueType: 'ENUM',
+				name: 'Hair length',
+				values: [
+					{
+						id: '8fa3922e-7c79-4917-9199-8ebe1992390c',
+						categoryParameterValueID: 'bc478e67-7f05-4c4c-9b91-b79ae5655fc8',
+						value: 'Long',
+						priceAndDurationData: {
+							durationFrom: 50,
+							priceFrom: {
+								currency: 'EUR',
+								currencySymbol: '€',
+								exponent: 1,
+								significand: 15
+							}
+						}
+					},
+					{
+						id: '5153e613-38ab-4a95-acd8-6c6c8f6987cb',
+						categoryParameterValueID: '91441584-8ce6-458b-a56e-3bd68d9ac2ad',
+						value: 'Medium',
+						priceAndDurationData: {
+							durationFrom: 10,
+							durationTo: 250,
+							priceFrom: {
+								currency: 'EUR',
+								currencySymbol: '€',
+								exponent: 1,
+								significand: 0
+							},
+							priceTo: {
+								currency: 'EUR',
+								currencySymbol: '€',
+								exponent: 2,
+								significand: 5
+							}
+						}
+					}
+				]
+			},
+			categoryId: '00000000-0000-0000-0000-000000000080'
+		}
+	},
+	{
+		id: '0489b10a-ad70-4cf8-aa36-c79135767b15',
+		label: 'Blow-dry',
+		key: '0489b10a-ad70-4cf8-aa36-c79135767b15',
+		extra: {
+			priceAndDurationData: {
+				durationFrom: 20,
+				priceFrom: {
+					currency: 'EUR',
+					currencySymbol: '€',
+					exponent: 2,
+					significand: 4
+				}
+			},
+			useCategoryParameter: false,
+			serviceCategoryParameter: {
+				id: '00000000-0000-0000-0000-000000000001',
+				valueType: 'ENUM',
+				name: 'Hair length',
+				values: []
+			},
+			categoryId: '00000000-0000-0000-0000-000000000068'
+		}
+	},
+	{
+		id: '801cbefa-e763-4323-a7cf-73aa6d11a3a9',
+		label: 'Blow-dry with waves',
+		key: '801cbefa-e763-4323-a7cf-73aa6d11a3a9',
+		extra: {
+			priceAndDurationData: {
+				durationFrom: 20,
+				priceFrom: {
+					currency: 'EUR',
+					currencySymbol: '€',
+					exponent: 3,
+					significand: 2
+				}
+			},
+			useCategoryParameter: false,
+			serviceCategoryParameter: {
+				id: '00000000-0000-0000-0000-000000000001',
+				valueType: 'ENUM',
+				name: 'Hair length',
+				values: []
+			},
+			categoryId: '00000000-0000-0000-0000-000000000069'
+		}
+	},
+	{
+		id: 'a91fff8e-291e-40a0-ab56-fc1757203fed',
+		label: 'Colouring roots and lengths with cut and blow-dry',
+		key: 'a91fff8e-291e-40a0-ab56-fc1757203fed',
+		extra: {
+			priceAndDurationData: {
+				durationFrom: 30,
+				priceFrom: {
+					currency: 'EUR',
+					currencySymbol: '€',
+					exponent: 3,
+					significand: 1
+				}
+			},
+			useCategoryParameter: false,
+			serviceCategoryParameter: {
+				id: '00000000-0000-0000-0000-000000000001',
+				valueType: 'ENUM',
+				name: 'Hair length',
+				values: []
+			},
+			categoryId: '00000000-0000-0000-0000-000000000075'
+		}
+	},
+	{
+		id: 'ac210d0f-1bc8-44b3-9ee6-14ad55452e53',
+		label: 'Colouring roots with cut and blow-dry',
+		key: 'ac210d0f-1bc8-44b3-9ee6-14ad55452e53',
+		extra: {
+			priceAndDurationData: {
+				durationFrom: 30,
+				priceFrom: {
+					currency: 'EUR',
+					currencySymbol: '€',
+					exponent: 2,
+					significand: 15
+				}
+			},
+			useCategoryParameter: false,
+			serviceCategoryParameter: {
+				id: '00000000-0000-0000-0000-000000000001',
+				valueType: 'ENUM',
+				name: 'Hair length',
+				values: []
+			},
+			categoryId: '00000000-0000-0000-0000-000000000074'
+		}
+	},
+	{
+		id: '4d227bb8-ebe5-4b62-962f-7f22b2abab0c',
+		label: 'Hair colour rinse with cut and blow-dry',
+		key: '4d227bb8-ebe5-4b62-962f-7f22b2abab0c',
+		extra: {
+			priceAndDurationData: {
+				durationFrom: 40,
+				durationTo: 150,
+				priceFrom: {
+					currency: 'EUR',
+					currencySymbol: '€',
+					exponent: 2,
+					significand: 4
+				}
+			},
+			useCategoryParameter: false,
+			serviceCategoryParameter: {
+				id: '00000000-0000-0000-0000-000000000001',
+				valueType: 'ENUM',
+				name: 'Hair length',
+				values: [
+					{
+						id: '9e52bfd6-af59-40d2-8ef7-102a2efd4419',
+						categoryParameterValueID: 'bc478e67-7f05-4c4c-9b91-b79ae5655fc8',
+						value: 'Long',
+						priceAndDurationData: {
+							durationFrom: 100,
+							priceFrom: {
+								currency: 'EUR',
+								currencySymbol: '€',
+								exponent: 2,
+								significand: 2
+							}
+						}
+					}
+				]
+			},
+			categoryId: '00000000-0000-0000-0000-000000000076'
+		}
+	},
 
-	// if employee doesn't have overriden duration data, check duration data of selected service
-	if (isEmpty(durationData)) {
-		const serviceDurationData = getDurationData(service?.priceAndDurationData, service?.useCategoryParameter, service?.serviceCategoryParameter)
-		if (!isEmpty(serviceDurationData)) {
-			durationData = {
-				durationFrom: serviceDurationData?.durationFrom,
-				durationTo: serviceDurationData?.durationTo
-			}
+	{
+		id: '6963ff9f-6887-4e32-94e6-a5f525de04c6',
+		label: "Men's cut",
+		key: '6963ff9f-6887-4e32-94e6-a5f525de04c6',
+		extra: {
+			priceAndDurationData: {
+				durationFrom: 11,
+				priceFrom: {
+					currency: 'EUR',
+					currencySymbol: '€',
+					exponent: 0,
+					significand: 13
+				}
+			},
+			useCategoryParameter: false,
+			serviceCategoryParameter: {
+				id: '00000000-0000-0000-0000-000000000001',
+				valueType: 'ENUM',
+				name: 'Hair length',
+				values: []
+			},
+			categoryId: '00000000-0000-0000-0000-000000000095'
 		}
-	}
+	},
 
-	// set event time based on service duration data
-	if (!isEmpty(durationData) && !isNil(durationData.durationTo)) {
-		const timeFrom = formValues?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT)
-		const [hoursFrom, minutesFrom] = timeFrom.split(':')
-		let timeTo = dayjs().startOf('day').add(Number(hoursFrom), 'hours').add(Number(minutesFrom), 'minutes').add(durationData.durationTo, 'minutes')
-		const endOfADay = dayjs().startOf('day').add(23, 'hours').add(59, 'minutes')
-		if (!dayjs(timeTo).isSameOrBefore(endOfADay)) {
-			timeTo = endOfADay
+	{
+		id: '6a637a8c-0e09-4f43-b575-7f1651cfd40d',
+		label: 'Boys’ cut (up to the age of 12)',
+		key: '6a637a8c-0e09-4f43-b575-7f1651cfd40d',
+		extra: {
+			priceAndDurationData: {
+				durationFrom: 20,
+				durationTo: 25,
+				priceFrom: {
+					currency: 'EUR',
+					currencySymbol: '€',
+					exponent: 0,
+					significand: 15
+				}
+			},
+			useCategoryParameter: false,
+			serviceCategoryParameter: {
+				id: '00000000-0000-0000-0000-000000000001',
+				valueType: 'ENUM',
+				name: 'Hair length',
+				values: []
+			},
+			categoryId: '00000000-0000-0000-0000-000000000113'
 		}
-		if (!formValues?.timeFrom) {
-			dispatch(change(formName, 'timeFrom', timeFrom))
+	},
+	{
+		id: 'bcff2453-ce12-4151-801e-00d718592ed3',
+		label: 'Basic treatment',
+		key: 'bcff2453-ce12-4151-801e-00d718592ed3',
+		extra: {
+			priceAndDurationData: {},
+			useCategoryParameter: false,
+			serviceCategoryParameter: {
+				id: '00000000-0000-0000-0000-000000000003',
+				valueType: 'ENUM',
+				name: 'Skin type',
+				values: []
+			},
+			categoryId: '00000000-0000-0000-0000-000000000136'
 		}
-		dispatch(change(formName, 'timeTo', timeTo.format(DEFAULT_TIME_FORMAT)))
 	}
-}
+]
 
 const ReservationForm: FC<Props> = (props) => {
 	const { handleSubmit, salonID, searchEmployes, eventId, phonePrefix, pristine, submitting } = props
@@ -196,44 +406,36 @@ const ReservationForm: FC<Props> = (props) => {
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 	const formValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(formName)(state))
+	const services = useSelector((state: RootState) => state.service.services)
+
+	const servicesOptions = flatten(
+		map(services?.data?.groupedServicesByCategory, (industry) =>
+			map(industry.category?.children, (category) => {
+				return {
+					label: category?.category?.name,
+					key: category?.category?.id,
+					children: map(category.category?.children, (item) => {
+						return {
+							id: item.service.id,
+							label: item.category.name,
+							key: item.service.id,
+							disabled: undefined,
+							title: undefined,
+							extra: {
+								priceAndDurationData: item.service.priceAndDurationData,
+								useCategoryParameter: item.service.useCategoryParameter,
+								serviceCategoryParameter: item.service.serviceCategoryParameter,
+								categoryId: item.category.id
+							}
+						}
+					})
+				}
+			})
+		)
+	)
 
 	// NOTE: pristine pouzivat len pri UPDATE eventu a pri CREATE povlit akciu vzdy
 	const disabledSubmitButton = !!(eventId && pristine) || submitting
-	const searchServices = useCallback(async () => {
-		try {
-			const { data } = await getReq('/api/b2b/admin/services/', {
-				salonID
-			})
-			const optData = flatten(
-				map(data.groupedServicesByCategory, (industry) =>
-					map(industry.category?.children, (category) => {
-						return {
-							label: category?.category?.name,
-							key: category?.category?.id,
-							children: map(category.category?.children, (item) => {
-								return {
-									id: item.service.id,
-									label: item.category.name,
-									key: item.service.id,
-									disabled: undefined,
-									title: undefined,
-									extra: {
-										priceAndDurationData: item.service.priceAndDurationData,
-										useCategoryParameter: item.service.useCategoryParameter,
-										serviceCategoryParameter: item.service.serviceCategoryParameter,
-										categoryId: item.category.id
-									}
-								}
-							})
-						}
-					})
-				)
-			)
-			return { pagination: null, data: optData }
-		} catch (e) {
-			return { pagination: null, data: [] }
-		}
-	}, [salonID])
 
 	const searchCustomers = useCallback(
 		async (search: string, page: number) => {
@@ -345,59 +547,85 @@ const ReservationForm: FC<Props> = (props) => {
 		</>
 	)
 
-	const onChangeService = async (item?: any) => {
-		const service = item as ICalendarReservationForm['service'] | undefined
-		const selectedEmployeeId = formValues?.employee?.value as string | undefined
-		const serviceExtra = service?.extra
-		let employeeData: EmployeeOnChangeData = {}
+	const getAndChangeReservationTime = async (serviceId?: string, employeeId?: string) => {
+		let durationData: DurationData = {}
 
-		if (selectedEmployeeId) {
+		const service = findNodeInOptionsTree({ children: servicesOptions }, serviceId) as ICalendarReservationForm['service'] | undefined
+
+		if (employeeId) {
 			setIsSettingTime(true)
 			try {
-				const { data } = await dispatch(getEmployee(selectedEmployeeId))
-				employeeData = { id: selectedEmployeeId, categories: data?.employee?.categories }
+				const { data: employeeData } = await dispatch(getEmployee(employeeId))
+				const employeeCategory = getCategoryById(
+					{
+						children: employeeData?.employee?.categories
+					},
+					service?.extra?.categoryId
+				)
+
+				// check if employee has overriden duration data of selected service
+				if (employeeCategory) {
+					const employeeDurationData = getDurationData(
+						employeeCategory.priceAndDurationData,
+						employeeCategory.useCategoryParameter,
+						employeeCategory.serviceCategoryParameter
+					)
+					if (!isEmpty(employeeDurationData)) {
+						durationData = {
+							durationTo: employeeDurationData?.durationTo
+						}
+					}
+				}
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
 			}
 		}
 
-		getAndChangeReservationTime(
-			dispatch,
-			employeeData,
-			{
-				serviceCategoryId: serviceExtra?.categoryId,
-				priceAndDurationData: serviceExtra?.priceAndDurationData,
-				useCategoryParameter: serviceExtra?.useCategoryParameter,
-				serviceCategoryParameter: serviceExtra?.serviceCategoryParameter
-			},
-			formValues
-		)
+		// if employee doesn't have overriden duration data, check duration data of selected service
+		if (isEmpty(durationData)) {
+			const serviceDurationData = getDurationData(service?.extra?.priceAndDurationData, service?.extra?.useCategoryParameter, service?.extra?.serviceCategoryParameter)
+			if (!isEmpty(serviceDurationData)) {
+				durationData = {
+					durationTo: serviceDurationData?.durationTo
+				}
+			}
+		}
+
+		// set event time based on service duration data
+		if (!isEmpty(durationData) && !isNil(durationData.durationTo)) {
+			const timeFrom = formValues?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT)
+			const [hoursFrom, minutesFrom] = timeFrom.split(':')
+			let timeTo = dayjs().startOf('day').add(Number(hoursFrom), 'hours').add(Number(minutesFrom), 'minutes').add(durationData.durationTo, 'minutes')
+			const endOfADay = dayjs().startOf('day').add(23, 'hours').add(59, 'minutes')
+			if (!dayjs(timeTo).isSameOrBefore(endOfADay)) {
+				timeTo = endOfADay
+			}
+			if (!formValues?.timeFrom) {
+				dispatch(change(formName, 'timeFrom', timeFrom))
+			}
+			dispatch(change(formName, 'timeTo', timeTo.format(DEFAULT_TIME_FORMAT)))
+		}
 		setIsSettingTime(false)
 	}
 
-	const onChangeEmployee = async (item?: any) => {
-		const employeeId = item?.value
+	const onChangeService = async (service?: any) => {
+		console.log({ service })
+		const selectedEmployeeId = formValues?.employee?.value as string | undefined
+		const selectedServiceId = service?.value
+
+		if (selectedServiceId) {
+			getAndChangeReservationTime(selectedServiceId, selectedEmployeeId)
+		}
+	}
+
+	const onChangeEmployee = async (emp?: any) => {
+		const selectedEmployeeId = emp?.value
 		const selectedServiceId = formValues?.service?.value
 
 		// check service / employee duration data and change event time only when there is alerady a service selected
-		if (employeeId && selectedServiceId) {
-			setIsSettingTime(true)
-			const [{ data: employeeDetail }, { data: serviceDetail }] = await Promise.all([dispatch(getEmployee(employeeId)), dispatch(getService(selectedServiceId as string))])
-			const serviceCategoryId = serviceDetail?.service.category.child.child?.id
-
-			getAndChangeReservationTime(
-				dispatch,
-				{ id: employeeId, categories: employeeDetail?.employee?.categories },
-				{
-					serviceCategoryId,
-					priceAndDurationData: serviceDetail?.service?.priceAndDurationData,
-					useCategoryParameter: serviceDetail?.service?.useCategoryParameter,
-					serviceCategoryParameter: serviceDetail?.service?.serviceCategoryParameter
-				},
-				formValues
-			)
-			setIsSettingTime(false)
+		if (selectedEmployeeId && selectedServiceId) {
+			getAndChangeReservationTime(selectedServiceId as string, selectedEmployeeId)
 		}
 	}
 
@@ -450,12 +678,11 @@ const ReservationForm: FC<Props> = (props) => {
 							name={'service'}
 							size={'large'}
 							update={(_itemKey: number, ref: any) => ref.blur()}
-							filterOption={false}
+							options={servicesOptions}
 							allowInfinityScroll
 							className={'pb-0'}
 							required
 							labelInValue
-							onSearch={searchServices}
 							onChange={onChangeService}
 							hasExtra
 						/>

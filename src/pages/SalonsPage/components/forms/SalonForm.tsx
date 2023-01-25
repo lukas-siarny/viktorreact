@@ -199,6 +199,7 @@ const SalonForm: FC<Props> = (props) => {
 							mode={'multiple'}
 							disabled={disabledForm}
 							allowClear
+							onChange={(item: any) => console.log({ item })}
 						/>
 						<Field
 							component={SelectField}

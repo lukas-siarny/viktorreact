@@ -186,20 +186,20 @@ const customDropdown = (actions: Action[] | null | undefined, menu: React.ReactE
 	)
 }
 
-const findNodeInTree = (node: any, value: any) => {
+export const findNodeInOptionsTree = (node: any, value: any) => {
 	let result = null
 	if (node?.id === value) {
 		return node
 	}
 	if (node?.children) {
 		// eslint-disable-next-line no-return-assign
-		node.children.some((childrenNode: any) => (result = findNodeInTree(childrenNode, value)))
+		node.children.some((childrenNode: any) => (result = findNodeInOptionsTree(childrenNode, value)))
 	}
 	return result
 }
 
 const handleChange = async (data: any) => {
-	const { value, options, autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update, selectState, onSearch, filterOption } = data
+	const { value, options, antdOptions, autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update } = data
 	let val = value
 	// NOTE condition for checking if select field has 'tags' mode with maxTagLength prop for checking length string of added tag
 	// if input value's length is larger than maxTagLength, filter this value from tags
@@ -207,23 +207,28 @@ const handleChange = async (data: any) => {
 		val = filter(value, (v, i: number) => i !== value.length - 1)
 	}
 	// NOTE: extra data k value, key, label ak potrebujeme poslat ine data -> eg. pri reservacii sa neposiela ID travelera ale cely objekt
-	if ((mode === 'tags' || mode === 'multiple') && hasExtra) {
-		val = map(value, (valInput) => ({
-			...valInput,
-			extra: find(options, (item) => item.value === valInput.value)?.extra
-		}))
-	} else if (hasExtra && options?.extra) {
+	if (mode === 'tags' || mode === 'multiple') {
+		if (hasExtra) {
+			val = map(value, (valInput) =>
+				typeof valInput === 'object'
+					? {
+							...valInput,
+							extra: find(antdOptions, (item) => item.value === valInput.value)?.extra
+					  }
+					: valInput
+			)
+		}
+	} else if (antdOptions?.extra && typeof value === 'object') {
 		val = {
 			...value,
-			extra: options?.extra
+			extra: antdOptions.extra
 		}
-	} else if (hasExtra && filterOption === false && onSearch) {
-		// NOTE: vrati extra object pre async search (Antd extra propu z options prefiltruje)
-		const valueToCompare = typeof value === 'object' ? value?.value : value
-		const nodeFromAsyncOptions = findNodeInTree({ children: selectState.data }, valueToCompare)
+	} else if (typeof value === 'object') {
+		// NOTE: v niektorych pripadoch Antd odfiltruje extra objekt z antdOptions
+		const nodeFromOptions = findNodeInOptionsTree({ children: options }, value?.value)
 		val = {
 			...val,
-			extra: nodeFromAsyncOptions?.extra
+			extra: nodeFromOptions?.extra
 		}
 	}
 	if (maxTagsLimit && val?.length > maxTagsLimit) {
@@ -409,7 +414,7 @@ const SelectField = (props: Props) => {
 			}
 			handleChange({
 				value,
-				options: antdOptions,
+				antdOptions,
 				autoBlur,
 				hasExtra,
 				input,
@@ -418,12 +423,10 @@ const SelectField = (props: Props) => {
 				maxTagsLimit,
 				mode,
 				update,
-				selectState,
-				onSearch: props.onSearch,
-				filterOption
+				options: props.onSearch && filterOption === false ? selectState.data : options
 			})
 		},
-		[autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update, confirmSelection, props.onSearch, filterOption, selectState]
+		[autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update, confirmSelection, props.onSearch, filterOption, selectState, options]
 	)
 
 	const onSelectWrap = async (value: any, option: any) => {

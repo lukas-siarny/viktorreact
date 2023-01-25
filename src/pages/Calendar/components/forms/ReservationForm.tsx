@@ -26,6 +26,7 @@ import { ReactComponent as CustomerIcon } from '../../../../assets/icons/custome
 import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-16-current-color.svg'
 import { ReactComponent as TimerIcon } from '../../../../assets/icons/clock-icon.svg'
 import { ReactComponent as DateSuffixIcon } from '../../../../assets/icons/date-suffix-icon.svg'
+import { ReactComponent as LoadingIcon } from '../../../../assets/icons/loading-icon.svg'
 
 // components
 import DateField from '../../../../atoms/DateField'
@@ -480,7 +481,7 @@ const ReservationForm: FC<Props> = (props) => {
 							allowClear
 							itemClassName={'m-0 pb-0'}
 							minuteStep={15}
-							suffixIcon={<TimerIcon className={'text-notino-grayDark'} />}
+							suffixIcon={isSettingTime ? <LoadingIcon className={'loading-animation'} /> : <TimerIcon className={'text-notino-grayDark'} />}
 							size={'large'}
 							disabled={isSettingTime}
 						/>

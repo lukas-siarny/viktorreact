@@ -79,8 +79,8 @@ const initDisabledNotifications = (notifications: DisabledNotificationsArray): I
 
 	// transform into object of type IReservationSystemSettingsForm.disabledNotifications
 	const current = relevantNotifications?.reduce((data, item) => {
-		const isB2CChannel = item.eventType?.endsWith('EMPLOYEE') // B2C interne
-		const isB2BChannel = item.eventType?.endsWith('CUSTOMER') // B2C klientse
+		const isB2BChannel = item.eventType?.endsWith('EMPLOYEE') // B2B internal (employee)
+		const isB2CChannel = item.eventType?.endsWith('CUSTOMER') // B2C customer
 		const notificationFormName = getNotificationFormName(item.eventType)
 
 		if (notificationFormName) {
@@ -248,14 +248,14 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 
 			if (!isEmpty(b2cChannel)) {
 				items.push({
-					eventType: `${item}_EMPLOYEE` as any,
+					eventType: `${item}_CUSTOMER`,
 					channels: b2cChannel
 				})
 			}
 
 			if (!isEmpty(b2bChannel)) {
 				items.push({
-					eventType: `${item}_CUSTOMER`,
+					eventType: `${item}_EMPLOYEE` as any,
 					channels: b2bChannel
 				})
 			}

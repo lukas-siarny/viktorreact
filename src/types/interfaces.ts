@@ -222,17 +222,23 @@ export interface IServiceForm {
 	}
 }
 
+export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
+export interface ICalendarEventDetailPayload {
+	data: CalendarEventDetail | null
+}
 export interface ICalendarReservationForm {
-	customer: ISelectOptionItem
+	customer: ISelectOptionItem<{
+		customerData?: NonNullable<ICalendarEventDetailPayload['data']>['customer']
+	}>
 	service: ISelectOptionItem<{
 		priceAndDurationData?: ServiceType['priceAndDurationData'],
 		useCategoryParameter?: ServiceType['useCategoryParameter'],
 		serviceCategoryParameter?: ServiceType['serviceCategoryParameter'],
-		serviceData?: any
+		serviceData?: NonNullable<ICalendarEventDetailPayload['data']>['service']
 		categoryId?: string
 	}>
 	employee: ISelectOptionItem<{
-		employeeData?: any
+		employeeData?: NonNullable<ICalendarEventDetailPayload['data']>['employee']
 	}>
 	date: string
 	timeFrom: string

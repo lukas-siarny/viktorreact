@@ -7,7 +7,7 @@ import { find, map } from 'lodash'
 import { ThunkResult } from '../index'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { CalendarEvent, ICalendarEventsPayload, IPaginationQuery, ISearchable } from '../../types/interfaces'
+import { CalendarEvent, ICalendarEventsPayload, IPaginationQuery, ISearchable, ICalendarEventDetailPayload } from '../../types/interfaces'
 
 // enums
 import { EVENTS, EVENT_DETAIL, RESERVATIONS, SET_IS_REFRESHING_EVENTS, UPDATE_EVENT } from './calendarTypes'
@@ -35,8 +35,6 @@ import {
 import { clearEvent } from '../virtualEvent/virtualEventActions'
 
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
-
-export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
 
 interface IGetSalonReservationsQueryParams extends IPaginationQuery {
 	dateFrom?: string | null
@@ -89,10 +87,6 @@ interface IGetCalendarEvents {
 interface IGetCalendarEventDetail {
 	type: EVENT_DETAIL
 	payload: ICalendarEventDetailPayload
-}
-
-export interface ICalendarEventDetailPayload {
-	data: CalendarEventDetail | null
 }
 
 interface ISetIsRefreshingEvents {

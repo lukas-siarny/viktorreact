@@ -129,7 +129,6 @@ export const getReq = async <T extends keyof GetUrls>(
 	cancelTokenKey = ''
 ): Promise<ReturnType<GetUrls[T]['get']>> => {
 	const { fullfilURL, queryParams } = fullFillURL(url, params)
-
 	let token = {}
 	if (allowCancelToken) {
 		const cancelTokenStorageKey = cancelTokenKey || fullfilURL
@@ -146,8 +145,12 @@ export const getReq = async <T extends keyof GetUrls>(
 	if (showLoading) {
 		hide = antMessage.loading('Načitavajú sa dáta...', 0)
 	}
+
 	const config: AxiosRequestConfig = {
-		paramsSerializer: qs.stringify as any,
+		paramsSerializer: {
+			serialize: (serializeParams: Record<string, any>) => qs.stringify(serializeParams), // mimic pre 1.x behavior and send entire params object to a custom serializer func. Allows consumer to control how params are serialized.
+			indexes: false // array indexes format (null - no brackets, false (default) - empty brackets, true - brackets with indexes)
+		},
 		...customConfig,
 		...token,
 		headers: {

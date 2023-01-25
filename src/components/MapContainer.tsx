@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { GoogleMap, useJsApiLoader, Marker, GoogleMapProps } from '@react-google-maps/api'
+import { GoogleMap, Marker, GoogleMapProps, useJsApiLoader } from '@react-google-maps/api'
 import { Spin } from 'antd'
 
 import { LANGUAGE, MAP } from '../utils/enums'
@@ -9,13 +9,13 @@ type Props = GoogleMapProps & {
 	lat: number
 	lng: number
 	onLocationChange: (e: any) => void
-	onError?: (message: string) => void
+	onError: (message: string) => void
 	disabled?: boolean
 }
 // https://react-google-maps-api-docs.netlify.app/
 const MapContainer = (props: Props) => {
 	const { i18n } = useTranslation()
-	const { lng, lat, onLocationChange, disabled, zoom, options } = props
+	const { lng, lat, onLocationChange, disabled, zoom, onError, options } = props
 	const [position, setPosition] = useState<google.maps.LatLng | google.maps.LatLngLiteral>(MAP.defaultLocation)
 
 	const { isLoaded, loadError } = useJsApiLoader({
@@ -25,6 +25,14 @@ const MapContainer = (props: Props) => {
 		// eslint-disable-next-line no-underscore-dangle
 		googleMapsApiKey: window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_MAPS_API_KEY
 	})
+
+	window.gm_authFailure = () => {
+		onError('Goggle Map auth error')
+	}
+
+	if (loadError) {
+		onError('Goggle Map unexpected error')
+	}
 
 	const updatePosition = (newPosition: google.maps.LatLng | google.maps.LatLngLiteral) => {
 		setPosition(newPosition)
@@ -46,10 +54,6 @@ const MapContainer = (props: Props) => {
 		if (onLocationChange) {
 			onLocationChange(e)
 		}
-	}
-
-	if (loadError) {
-		return <div>Goggle Map auth error.</div>
 	}
 
 	return isLoaded ? (

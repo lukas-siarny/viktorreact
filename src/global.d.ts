@@ -57,5 +57,6 @@ declare module 'tailwindcss/colors' {
 }
 
 interface Window {
+	gm_authFailure: any
 	__REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: any
 }

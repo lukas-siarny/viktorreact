@@ -149,7 +149,9 @@ const SiderEventManagement: FC<Props> = (props) => {
 					dispatch(
 						initialize(FORM.CALENDAR_RESERVATION_FORM, {
 							...initData,
-							service: initializeLabelInValueSelect(data?.service?.id as string, data?.service?.name as string),
+							service: initializeLabelInValueSelect(data?.service?.id as string, data?.service?.name as string, {
+								icon: data?.service?.icon
+							}),
 							customer: initializeLabelInValueSelect(
 								data?.customer?.id as string,
 								getAssignedUserLabel({
@@ -158,7 +160,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 									lastName: data?.customer?.lastName,
 									email: data?.customer?.email
 								})
-							)
+							),
+							reservationData: data?.reservationData
 						})
 					)
 					break

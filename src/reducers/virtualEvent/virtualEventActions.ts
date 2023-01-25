@@ -88,7 +88,7 @@ export const addOrUpdateEvent =
 		if (!formData) {
 			return
 		}
-		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID } = formData
+		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID, reservationData } = formData
 
 		if (date && timeFrom && employee && eventType) {
 			let { eventId } = formData
@@ -138,6 +138,7 @@ export const addOrUpdateEvent =
 						: undefined,
 					service: service
 						? {
+								icon: service?.extra?.icon,
 								id: service.key,
 								name: service.label || service.value
 						  }
@@ -152,7 +153,8 @@ export const addOrUpdateEvent =
 						? {
 								id: calendarBulkEventID
 						  }
-						: undefined
+						: undefined,
+					reservationData
 				}
 			}
 			const payload: IVirtualEventPayload = {

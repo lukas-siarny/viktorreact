@@ -1,5 +1,5 @@
 import React, { useEffect, ComponentType } from 'react'
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+// import { withRouter } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
@@ -7,8 +7,9 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../reducers'
 
 // eslint-disable-next-line import/prefer-default-export
-export function withPromptUnsavedChanges(WrappedComponent: ComponentType<RouteComponentProps<any>> | ComponentType<any>): any {
-	return withRouter((props: any) => {
+export function withPromptUnsavedChanges(WrappedComponent: ComponentType<any>): any {
+	// TODO: withrouter doriesit!
+	return (props: any) => {
 		const { history, submitting, form } = props
 		const [t] = useTranslation()
 		const message = t('loc:Chcete zahodiť vykonané zmeny?')
@@ -57,5 +58,5 @@ export function withPromptUnsavedChanges(WrappedComponent: ComponentType<RouteCo
 		}, [dirty, submitting])
 
 		return <WrappedComponent {...props} />
-	})
+	}
 }

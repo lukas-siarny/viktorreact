@@ -33,7 +33,7 @@ const PublicLayout = (props: Props) => {
 	const { className, showBackButton = false } = props
 
 	const [t] = useTranslation()
-	const location = useLocation() as any
+	const location = useLocation()
 
 	const content = useMemo(() => {
 		switch (size) {

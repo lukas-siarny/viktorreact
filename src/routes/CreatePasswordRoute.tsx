@@ -4,7 +4,8 @@ import { compose } from 'redux'
 import qs from 'qs'
 import decode from 'jwt-decode'
 import { get } from 'lodash'
-import { Redirect, RouteProps, Route } from 'react-router-dom'
+import { Navigate, RouteProps } from 'react-router-dom'
+import i18next from 'i18next'
 
 // routes
 import BaseRoute from './BaseRoute'
@@ -20,26 +21,23 @@ type Props = WithTranslation &
 		className?: string
 	}
 
-class CreatePasswordRoute extends Route<Props> {
-	render = () => {
-		// t je query param pre token (nie preklad)
-		const { t } = qs.parse(document.location.search, { ignoreQueryPrefix: true })
-
-		// if user is already logged In or token does not exist redirect to index route
-		if (isLoggedIn() || !t) {
-			return <Redirect to={this.props.t('paths:index')} />
-		}
-
-		const payload = decode(t as string)
-		const aud = get(payload, 'aud')
-
-		if (aud === TOKEN_AUDIENCE.FORGOTTEN_PASSWORD || aud === TOKEN_AUDIENCE.INVITATION) {
-			// dokoncenie registracie , zabudnute heslo
-			return <BaseRoute {...(this.props as any)} token={t} />
-		}
-
-		return <Redirect to={this.props.t('paths:index')} />
+const CreatePasswordRoute = (props: Props) => {
+	// t je query param pre token (nie preklad)
+	const { t } = qs.parse(document.location.search, { ignoreQueryPrefix: true })
+	// if user is already logged In or token does not exist redirect to index route
+	if (isLoggedIn() || !t) {
+		return <Navigate to={i18next.t('paths:index')} />
 	}
+
+	const payload = decode(t as string)
+	const aud = get(payload, 'aud')
+
+	if (aud === TOKEN_AUDIENCE.FORGOTTEN_PASSWORD || aud === TOKEN_AUDIENCE.INVITATION) {
+		// dokoncenie registracie , zabudnute heslo
+		return <BaseRoute {...(props as any)} token={t} />
+	}
+
+	return <Navigate to={i18next.t('paths:index')} />
 }
 
 export default compose(withTranslation())(CreatePasswordRoute)

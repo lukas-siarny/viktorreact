@@ -239,11 +239,6 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 			const notificationValues = values.disabledNotifications[item]
 			const b2cChannel = transformNotificationsChannelForRequest(notificationValues.b2cChannels) as NonNullable<PatchDisabledNotifications[0]>['channels']
 			const b2bChannel = transformNotificationsChannelForRequest(notificationValues.b2bChannels) as NonNullable<PatchDisabledNotifications[0]>['channels']
-
-			if (result.length > 100) {
-				return result
-			}
-
 			const items = [] as PatchDisabledNotifications
 
 			if (!isEmpty(b2cChannel)) {

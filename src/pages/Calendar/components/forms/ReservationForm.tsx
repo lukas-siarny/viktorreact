@@ -223,39 +223,6 @@ const ReservationForm: FC<Props> = (props) => {
 		setVisibleCustomerDetailModal(true)
 	}
 
-	const modals = (
-		<>
-			<Modal
-				className='rounded-fields'
-				title={t('loc:Pridať nového zákaznika')}
-				centered
-				destroyOnClose
-				onOk={() => dispatch(submit(FORM.CUSTOMER))}
-				visible={visibleCustomerCreateModal}
-				onCancel={() => setVisibleCustomerCreateModal(false)}
-				closeIcon={<CloseIcon />}
-			>
-				<CustomerForm onSubmit={handleSubmitCustomer} inModal />
-			</Modal>
-			<Modal
-				className='rounded-fields'
-				title={t('loc:Detail klienta')}
-				centered
-				destroyOnClose
-				visible={visibleCustomerDetailModal}
-				onCancel={() => setVisibleCustomerDetailModal(false)}
-				closeIcon={<CloseIcon />}
-				footer={[
-					<Button type={'dashed'} className={'noti-btn'} size={'middle'} onClick={() => setVisibleCustomerDetailModal(false)}>
-						{t('loc:Zatvoriť')}
-					</Button>
-				]}
-			>
-				<CustomerForm inModal disabled />
-			</Modal>
-		</>
-	)
-
 	const getAndChangeReservationTime = async (serviceId?: string, employeeId?: string) => {
 		let durationData: DurationData = {}
 
@@ -319,7 +286,6 @@ const ReservationForm: FC<Props> = (props) => {
 	}
 
 	const onChangeService = async (service?: any) => {
-		console.log({ service })
 		const selectedEmployeeId = formValues?.employee?.value as string | undefined
 		const selectedServiceId = service?.value
 
@@ -337,6 +303,39 @@ const ReservationForm: FC<Props> = (props) => {
 			getAndChangeReservationTime(selectedServiceId as string, selectedEmployeeId)
 		}
 	}
+
+	const modals = (
+		<>
+			<Modal
+				className='rounded-fields'
+				title={t('loc:Pridať nového zákaznika')}
+				centered
+				destroyOnClose
+				onOk={() => dispatch(submit(FORM.CUSTOMER))}
+				visible={visibleCustomerCreateModal}
+				onCancel={() => setVisibleCustomerCreateModal(false)}
+				closeIcon={<CloseIcon />}
+			>
+				<CustomerForm onSubmit={handleSubmitCustomer} inModal />
+			</Modal>
+			<Modal
+				className='rounded-fields'
+				title={t('loc:Detail klienta')}
+				centered
+				destroyOnClose
+				visible={visibleCustomerDetailModal}
+				onCancel={() => setVisibleCustomerDetailModal(false)}
+				closeIcon={<CloseIcon />}
+				footer={[
+					<Button type={'dashed'} className={'noti-btn'} size={'middle'} onClick={() => setVisibleCustomerDetailModal(false)}>
+						{t('loc:Zatvoriť')}
+					</Button>
+				]}
+			>
+				<CustomerForm inModal disabled />
+			</Modal>
+		</>
+	)
 
 	return (
 		<>
@@ -358,7 +357,7 @@ const ReservationForm: FC<Props> = (props) => {
 									onChange={onChangeCustomer}
 									optionLabelProp={'label'}
 									suffixIcon={<CustomerIcon className={'text-notino-grayDark'} width={16} height={16} />}
-									update={(itemKey: number, ref: any) => ref.blur()}
+									update={(_itemKey: number, ref: any) => ref.blur()}
 									filterOption={false}
 									allowInfinityScroll
 									showSearch

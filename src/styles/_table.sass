@@ -181,12 +181,39 @@
 					background: none
 				td
 					border: none
-				// zmazany zaznam
-				&.deleted-table-item
+				// danger
+				&.noti-table-row-danger
 					background: $backgroundColor-red-50 !important
-					color: $textColor-red-700 !important
+					color: $textColor-yellow-700 !important
 					&:hover
 						color: $textColor-gray-900 !important
+				&.noti-table-row-warning
+					background: $backgroundColor-yellow-50 !important
+					color: $textColor-yellow-700 !important
+					&:hover
+						color: $textColor-gray-900 !important
+			.ant-table-expanded-row
+				border: none
+				> td
+					background-color: transparent
+					border: none
+
+	&.table-no-hover-style
+		table
+			tbody
+				tr
+					&.ant-table-row
+						&:hover
+							color: inherit !important
+							td
+								background: inherit !important
+								color: inherit !important
+					&.noti-table-row-danger
+						&:hover
+							color: $textColor-red-700 !important
+					&.noti-table-row-warning
+						&:hover
+							color: $textColor-yellow-700 !important
 	.ant-table-footer
 		background: $backgroundColor-white
 		margin-top: 16px

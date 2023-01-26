@@ -31,7 +31,7 @@ import {
 	toNumber,
 	trimEnd
 } from 'lodash'
-import { notification } from 'antd'
+import { notification, Tag } from 'antd'
 import slugify from 'slugify'
 import { SubmissionError, submit } from 'redux-form'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
@@ -902,6 +902,15 @@ export const langaugesOptionRender = (itemData: any) => {
 			)}
 			{label}
 		</div>
+	)
+}
+
+export const optionRenderWithTag = (itemData: any) => {
+	const { value, label, tagClassName } = itemData
+	return (
+		<Tag key={value} className={cx('noti-tag', tagClassName)}>
+			<span>{label}</span>
+		</Tag>
 	)
 }
 

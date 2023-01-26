@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -7,8 +7,8 @@ import { useSelector } from 'react-redux'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { CHANGE_DEBOUNCE_TIME, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
-import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
+import { CHANGE_DEBOUNCE_TIME, ENUMERATIONS_KEYS, FIELD_MODE, FORM, REVIEW_VERIFICATION_STATUS, ROW_GUTTER_X_DEFAULT, STRINGS } from '../../../utils/enums'
+import { checkFiltersSizeWithoutSearch, optionRenderWithImage, optionRenderWithTag, validationString } from '../../../utils/helper'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -20,13 +20,21 @@ import Filters from '../../../components/Filters'
 // reducers
 import { RootState } from '../../../reducers'
 
+// assets
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import InputNumberField from '../../../atoms/InputNumberField'
+
 type ComponentProps = {}
 
-export interface IUsersFilter {
-	search: string
+export interface IReviewsFilter {
+	search?: string
+	verificationStatus?: REVIEW_VERIFICATION_STATUS
+	salonCountryCode?: string
+	toxicityScoreFrom?: number
+	toxicityScoreTo?: number
 }
 
-type Props = InjectedFormProps<IUsersFilter, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<IReviewsFilter, ComponentProps> & ComponentProps
 
 const fixLength100 = validationString(100)
 
@@ -35,19 +43,43 @@ const ReviewsFilter = (props: Props) => {
 	const [t] = useTranslation()
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.ADMIN_USERS_FILTER])
-	const roles = useSelector((state: RootState) => state.roles.systemRoles)
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const searchInput = (
 		<Field
 			className={'h-10 p-0 m-0'}
 			component={InputField}
 			size={'large'}
-			placeholder={t('loc:Hľadať podľa meno, e-mail, tel. číslo')}
+			placeholder={t('loc:Hľadať podľa názvu salónu, správy')}
 			name='search'
 			fieldMode={FIELD_MODE.FILTER}
 			search
 			validate={fixLength100}
 		/>
+	)
+
+	const verificationStatusOptions = useMemo(
+		() => [
+			{
+				label: t('loc:Zverejnená'),
+				value: REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C,
+				key: REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C,
+				tagClassName: 'bg-status-published'
+			},
+			{
+				label: t('loc:Skrytá'),
+				value: REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C,
+				key: REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C,
+				tagClassName: 'bg-status-notPublished'
+			},
+			{
+				label: t('loc:Na kontrolu'),
+				value: REVIEW_VERIFICATION_STATUS.NOT_VERIFIED,
+				key: REVIEW_VERIFICATION_STATUS.NOT_VERIFIED,
+				tagClassName: 'bg-status-pending'
+			}
+		],
+		[t]
 	)
 
 	return (
@@ -57,15 +89,41 @@ const ReviewsFilter = (props: Props) => {
 					<Col span={8}>
 						<Field
 							component={SelectField}
-							name={'roleID'}
-							placeholder={t('loc:Rola')}
+							name={'verificationStatus'}
+							placeholder={t('loc:Stav recenzie')}
+							className={'select-with-tag-options'}
 							allowClear
-							size={'middle'}
+							size={'large'}
 							filterOptions
 							onDidMountSearch
-							options={roles?.data}
-							loadinf={roles?.isLoading}
+							options={verificationStatusOptions}
+							optionRender={optionRenderWithTag}
 						/>
+					</Col>
+					<Col span={8}>
+						<Field
+							component={SelectField}
+							optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
+							name={'salonCountryCode'}
+							placeholder={t('loc:Krajina')}
+							allowClear
+							size={'large'}
+							filterOptions
+							onDidMountSearch
+							options={countries?.enumerationsOptions}
+							loading={countries?.isLoading}
+							disabled={countries?.isLoading}
+						/>
+					</Col>
+					<Col span={8}>
+						<Row gutter={ROW_GUTTER_X_DEFAULT}>
+							<Col span={12}>
+								<Field component={InputNumberField} name={'toxicityScoreFrom'} placeholder={t('loc:Toxicita od')} size={'large'} min={0} max={100} />
+							</Col>
+							<Col span={12}>
+								<Field component={InputNumberField} name={'toxicityScoreTo'} placeholder={t('loc:Toxicita do')} size={'large'} min={0} max={100} />
+							</Col>
+						</Row>
 					</Col>
 				</Row>
 			</Filters>

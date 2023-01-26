@@ -32,7 +32,7 @@ import {
 	FILTER_ENTITY,
 	CHANGE_DEBOUNCE_TIME
 } from '../../../../utils/enums'
-import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getSalonFilterRanges } from '../../../../utils/helper'
+import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getSalonFilterRanges, optionRenderWithTag } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { history } from '../../../../utils/history'
 import searchWrapper from '../../../../utils/filters'
@@ -65,15 +65,6 @@ export interface ISalonsFilterActive {
 type Props = InjectedFormProps<ISalonsFilterActive, ComponentProps> & ComponentProps
 
 const fixLength100 = validationString(100)
-
-const statusOptionRender = (itemData: any) => {
-	const { value, label, tagClassName } = itemData
-	return (
-		<Tag key={value} className={cx('noti-tag', tagClassName)}>
-			<span>{label}</span>
-		</Tag>
-	)
-}
 
 export const checkSalonFiltersSize = (formValues: any) =>
 	size(
@@ -239,13 +230,13 @@ const SalonsFilterActive = (props: Props) => {
 									component={SelectField}
 									name={'statuses_published'}
 									placeholder={t('loc:Publikovaný')}
-									className={'statuses-filter-select'}
+									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
 									filterOptions
 									onDidMountSearch
 									options={publishedOptions}
-									optionRender={statusOptionRender}
+									optionRender={optionRenderWithTag}
 								/>
 							</Col>
 							<Col span={5}>
@@ -253,13 +244,13 @@ const SalonsFilterActive = (props: Props) => {
 									component={SelectField}
 									name={'statuses_changes'}
 									placeholder={t('loc:Zmeny')}
-									className={'statuses-filter-select'}
+									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
 									filterOptions
 									onDidMountSearch
 									options={changesOptions}
-									optionRender={statusOptionRender}
+									optionRender={optionRenderWithTag}
 								/>
 							</Col>
 							<Col span={4}>
@@ -267,13 +258,13 @@ const SalonsFilterActive = (props: Props) => {
 									component={SelectField}
 									name={'createType'}
 									placeholder={t('loc:Typ salónu')}
-									className={'statuses-filter-select'}
+									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
 									filterOptions
 									onDidMountSearch
 									options={createTypesOptions}
-									optionRender={statusOptionRender}
+									optionRender={optionRenderWithTag}
 								/>
 							</Col>
 							<Col span={5}>
@@ -281,13 +272,13 @@ const SalonsFilterActive = (props: Props) => {
 									component={SelectField}
 									name={'sourceType'}
 									placeholder={t('loc:Zdroj vytvorenia')}
-									className={'statuses-filter-select'}
+									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
 									filterOptions
 									onDidMountSearch
 									options={sourceOptions}
-									optionRender={statusOptionRender}
+									optionRender={optionRenderWithTag}
 								/>
 							</Col>
 							<Col span={5}>
@@ -295,13 +286,13 @@ const SalonsFilterActive = (props: Props) => {
 									component={SelectField}
 									name={'premiumSourceUserType'}
 									placeholder={t('loc:Zdroj PREMIUM')}
-									className={'statuses-filter-select'}
+									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
 									filterOptions
 									onDidMountSearch
 									options={premiumSourceOptions}
-									optionRender={statusOptionRender}
+									optionRender={optionRenderWithTag}
 								/>
 							</Col>
 						</Row>

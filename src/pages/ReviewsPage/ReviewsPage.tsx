@@ -98,7 +98,6 @@ const ReviewsPage = () => {
 			dataIndex: 'rating',
 			key: 'rating',
 			ellipsis: true,
-			sorter: true,
 			width: '25%'
 		},
 		{

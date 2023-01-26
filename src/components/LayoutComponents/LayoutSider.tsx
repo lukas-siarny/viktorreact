@@ -30,6 +30,7 @@ import { ReactComponent as ChevronRightIcon } from '../../assets/icons/chevron-r
 import { ReactComponent as CalendarIcon } from '../../assets/icons/calendar-24.svg'
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
 import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations.svg'
+import { ReactComponent as ReviewsIcon } from '../../assets/icons/reviews-icon.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -149,7 +150,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.REVIEWS,
 							label: t('loc:Recenzie'),
 							onClick: () => history.push(t('paths:reviews')),
-							icon: <SpecialistIcon />
+							icon: <ReviewsIcon />
 						}
 					)
 				}

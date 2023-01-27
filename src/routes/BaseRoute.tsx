@@ -22,6 +22,7 @@ const BaseRoute: FC<Props> = (props) => {
 			<Layout {...props}>
 				{preventShowDeletedSalon ? (
 					<PreventShowDeletedSalon>
+						{/* // Outlet je Route component to iste ako <Route {...props} /> */}
 						<Outlet />
 					</PreventShowDeletedSalon>
 				) : (

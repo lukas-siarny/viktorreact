@@ -17,7 +17,7 @@ import { PAGE, SUBMENU_PARENT, REFRESH_PAGE_INTERVAL } from '../utils/enums'
 
 type Props = RouteProps & {
 	layout?: React.ReactNode
-	component?: React.ReactNode
+	element?: React.ReactNode
 	translatePathKey?: string
 	page?: PAGE
 	submenuParent?: {

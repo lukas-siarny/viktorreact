@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useLayoutEffect, useState } from 'react'
 import { Provider } from 'react-redux'
 import { I18nextProvider } from 'react-i18next'
 import { PersistGate } from 'redux-persist/es/integration/react'
@@ -8,7 +8,8 @@ import { AliasToken } from 'antd/es/theme/internal'
 import dayjs from 'dayjs'
 import { QueryParamProvider } from 'use-query-params'
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Router } from 'react-router-dom'
+
 // import 'antd/dist/antd.min.css'
 import 'antd/dist/reset.css'
 
@@ -17,6 +18,7 @@ import rootReducer from './reducers'
 // utils
 import configureStore from './utils/configureStore'
 import i18n from './utils/i18n'
+import { history } from './utils/history'
 import { LANGUAGE, DEFAULT_LANGUAGE } from './utils/enums'
 
 // components
@@ -43,6 +45,13 @@ const ANTD_THEME_VARIABLES_OVERRIDE: Partial<AliasToken> = {
 
 const App = () => {
 	const [antdLocale, setAntdLocale] = useState<Locale | undefined>(undefined)
+	const [state, setState] = useState({
+		action: history.action,
+		location: history.location
+	})
+	console.log('state', state)
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	useLayoutEffect(() => history.listen(setState), [history])
 
 	useEffect(() => {
 		i18n.on('languageChanged', (language) => {

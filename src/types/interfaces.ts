@@ -234,8 +234,8 @@ export interface ICalendarReservationForm {
 		priceAndDurationData?: ServiceType['priceAndDurationData'],
 		useCategoryParameter?: ServiceType['useCategoryParameter'],
 		serviceCategoryParameter?: ServiceType['serviceCategoryParameter'],
-		serviceData?: NonNullable<ICalendarEventDetailPayload['data']>['service']
 		categoryId?: string
+		icon?: NonNullable<NonNullable<ICalendarEventDetailPayload['data']>['service']>['icon']
 	}>
 	employee: ISelectOptionItem<{
 		employeeData?: NonNullable<ICalendarEventDetailPayload['data']>['employee']

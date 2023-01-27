@@ -94,14 +94,14 @@ const AppRoutes: FC = () => {
 				<Route path={t('paths:activation')} element={<AuthRoute layout={MainLayout} page={PAGE.ACTIVATION} />}>
 					<Route index element={<ActivationPage />} />
 				</Route>
-				<Route path={t('paths:salons')} element={<AuthRoute salonID={'test'} layout={MainLayout} page={PAGE.SALONS} />}>
+				<Route path={t('paths:salons')} element={<AuthRoute layout={MainLayout} page={PAGE.SALONS} />}>
 					<Route index element={<SalonsPage />} />
 					<Route path={t('loc:createEntity')} element={<SalonPage salonID={NEW_SALON_ID} />} />
-					<Route path={':salonID'} element={<SalonPage salonID={salonID as string} />} />
 				</Route>
-				{/* // TODO: subruting */}
-				{/* <Route {...props} path={t('paths:salons/{{salonID}}', { salonID: ':salonID' })} element={<SalonSubRoutes />} /> */}
-
+				{/* // Salon view */}
+				<Route path={t('paths:salons/{{salonID}}', { salonID: ':salonID' })}>
+					<Route index element={<SalonSubRoutes />} />
+				</Route>
 				<Route path={t('paths:categories')} element={<AuthRoute layout={MainLayout} page={PAGE.CATEGORIES} />}>
 					<Route index element={<CategoriesPage />} />
 				</Route>

@@ -7,6 +7,7 @@ import { isEmpty } from 'lodash'
 import cx from 'classnames'
 
 // atoms
+import { useNavigate } from 'react-router-dom'
 import SelectField from '../../../atoms/SelectField'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SwitchField from '../../../atoms/SwitchField'
@@ -24,7 +25,6 @@ import validateServiceForm from './validateServiceForm'
 import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
 import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, SALON_PERMISSION, STRINGS } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
-import { history } from '../../../utils/history'
 import searchWrapper from '../../../utils/filters'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
@@ -56,6 +56,7 @@ const ServiceForm: FC<Props> = (props) => {
 	const { salonID, serviceID, handleSubmit, pristine, addEmployee, backUrl, setVisibleServiceEditModal } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
 	const formValues = form?.values as IServiceForm
@@ -80,7 +81,7 @@ const ServiceForm: FC<Props> = (props) => {
 			setIsRemoving(true)
 			await deleteReq(`/api/b2b/admin/services/{serviceID}`, { serviceID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			setIsRemoving(false)
-			history.push(backUrl)
+			navigate(backUrl as string)
 		} catch (e) {
 			setIsRemoving(false)
 		}

@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import cx from 'classnames'
 
 // reducers
+import { useNavigate } from 'react-router-dom'
 import { RootState } from '../../../../reducers'
 
 // assets
@@ -16,7 +17,6 @@ import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employ
 
 // utils
 import { CALENDAR_DEBOUNCE_DELAY, CALENDAR_EVENTS_VIEW_TYPE, FORM } from '../../../../utils/enums'
-import { history } from '../../../../utils/history'
 
 // atoms
 import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
@@ -75,6 +75,7 @@ const checkboxOptionRender = (option: any, checked?: boolean) => {
 const CalendarFilter = (props: Props) => {
 	const { handleSubmit, parentPath, eventsViewType } = props
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 
 	const services = useSelector((state: RootState) => state.service.services)
 	const employees = useSelector((state: RootState) => state.employees.employees)
@@ -106,7 +107,7 @@ const CalendarFilter = (props: Props) => {
 								icon={<EmployeesIcon />}
 								infoMessage={t('loc:V salóne zatiaľ nemáte pridaných žiadnych zamestnancov')}
 								buttonLabel={t('loc:Pridať zamestnancov')}
-								buttonOnClick={() => history.push(`${parentPath}${t('paths:employees')}`)}
+								buttonOnClick={() => navigate(`${parentPath}${t('paths:employees')}`)}
 							/>
 						)}
 					</Spin>
@@ -129,7 +130,7 @@ const CalendarFilter = (props: Props) => {
 								icon={<ServicesIcon />}
 								infoMessage={t('loc:V salóne zatiaľ nemáte priradené žiadne služby')}
 								buttonLabel={t('loc:Priradiť služby')}
-								buttonOnClick={() => history.push(`${parentPath}${t('paths:industries-and-services')}`)}
+								buttonOnClick={() => navigate(`${parentPath}${t('paths:industries-and-services')}`)}
 							/>
 						)}
 					</Spin>

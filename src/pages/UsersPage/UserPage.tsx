@@ -5,9 +5,9 @@ import { Button, Row, Spin } from 'antd'
 import { initialize, isPristine, isSubmitting, submit } from 'redux-form'
 import { get } from 'lodash'
 import cx from 'classnames'
+import { useLocation, useNavigate, useParams, useRouteError } from 'react-router-dom'
 
 // components
-import { useLocation, useParams, useRouteError } from 'react-router-dom'
 import UserAccountForm from './components/UserAccountForm'
 import DeleteButton from '../../components/DeleteButton'
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -26,7 +26,6 @@ import { IBreadcrumbs, IEditUserRoleForm, IUserAccountForm } from '../../types/i
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
-import { history } from '../../utils/history'
 import Permissions from '../../utils/Permissions'
 import { formFieldID } from '../../utils/helper'
 
@@ -43,6 +42,7 @@ const UserPage: FC<Props> = () => {
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const { userID } = useParams<{ userID?: string }>()
 	const location = useLocation()
+	const navigate = useNavigate()
 	const userIDWrap = userID || get(authUser, 'data.id')
 	const dispatch = useDispatch()
 	const submittingAccountForm = useSelector(isSubmitting(FORM.USER_ACCOUNT))
@@ -72,7 +72,7 @@ const UserPage: FC<Props> = () => {
 		const fetchUserData = async () => {
 			const { data } = await dispatch(getUserAccountDetails(userIDWrap))
 			if (!data?.user?.id) {
-				history.push('/404')
+				navigate('/404')
 			}
 
 			dispatch(
@@ -141,9 +141,9 @@ const UserPage: FC<Props> = () => {
 			await deleteReq('/api/b2b/admin/users/{userID}', { userID: id }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			if (isMyAccountPage) {
 				dispatch(logOutUser())
-				history.push(t('paths:login'))
+				navigate(t('paths:login'))
 			} else {
-				history.push(t('paths:users'))
+				navigate(t('paths:users'))
 			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console

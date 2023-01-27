@@ -7,6 +7,7 @@ import { get } from 'lodash'
 import { compose } from 'redux'
 import { BooleanParam, useQueryParams } from 'use-query-params'
 import cx from 'classnames'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import DeleteButton from '../../components/DeleteButton'
@@ -32,7 +33,6 @@ import { IBreadcrumbs, INoteForm, INoteModal, INotinoUserForm, ISalonForm, Salon
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
-import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { formFieldID, getAssignedUserLabel } from '../../utils/helper'
 import { getSalonDataForSubmission, initSalonFormData } from './components/salonUtils'
@@ -56,7 +56,7 @@ interface SalonEditPageProps extends SalonPageProps {
 const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-
+	const navigate = useNavigate()
 	const { salonID, isAdmin, backUrl, phonePrefixes, authUser, phonePrefixCountryCode } = props
 
 	const [submitting, setSubmitting] = useState<boolean>(false)
@@ -154,17 +154,17 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/salons/{salonID}', { salonID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			if (isAdmin) {
-				history.push(backUrl)
+				navigate(backUrl as string)
 			} else {
 				// check if there are any other salons assigned to user and redircet user to first of them
 				const { data } = await dispatch(getCurrentUser())
 				const salonToRedirect = (data?.salons || [])[0]
 				if (salonToRedirect) {
-					history.push(`${t('paths:salons')}/${salonToRedirect.id}`)
+					navigate(`${t('paths:salons')}/${salonToRedirect.id}`)
 				} else {
 					// otherwise redirect user to dashboard
 					await dispatch(selectSalon())
-					history.push(t('paths:index'))
+					navigate(t('paths:index'))
 				}
 			}
 		} catch (error: any) {

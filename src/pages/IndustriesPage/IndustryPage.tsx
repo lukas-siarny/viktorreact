@@ -7,6 +7,7 @@ import { getFormValues, initialize, isSubmitting, reset } from 'redux-form'
 import { DataNode } from 'antd/lib/tree'
 import { isEmpty, map } from 'lodash'
 import i18next from 'i18next'
+import { useNavigate } from 'react-router-dom'
 
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
@@ -24,7 +25,6 @@ import { ROW_GUTTER_X_DEFAULT, PERMISSION, FORM, SALON_PERMISSION, NOTIFICATION_
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { patchReq, postReq } from '../../utils/request'
 import { flattenTree } from '../../utils/helper'
-import { history } from '../../utils/history'
 
 // types
 import { IBreadcrumbs, IIndustryForm, SalonSubPageProps, IComputedMatch } from '../../types/interfaces'
@@ -108,6 +108,7 @@ const mapCategoriesForDataTree = (parentId: string | null, children: any[] | und
 
 const IndustryPage = (props: Props) => {
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const { salonID, parentPath } = props
 	const { industryID } = props.computedMatch.params
@@ -197,7 +198,7 @@ const IndustryPage = (props: Props) => {
 				const serviceID = getCategoryById(updatedUserRootCategory, categoryIDs[0])?.service?.id
 				// redirect
 				if (serviceID) {
-					history.push(parentPath + t('paths:services-settings/{{serviceID}}', { serviceID }))
+					navigate(parentPath + t('paths:services-settings/{{serviceID}}', { serviceID }))
 				}
 			}
 		} catch (e) {

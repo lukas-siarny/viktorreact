@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
 import { find } from 'lodash'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -19,7 +20,6 @@ import UserAvatar from '../../components/AvatarComponents'
 // utils
 import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, NOTIFICATION_TYPE } from '../../utils/enums'
 import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
-import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -40,6 +40,7 @@ const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOT
 const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 	const { salonID, parentPath } = props
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
@@ -250,7 +251,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 									<EmployeesFilter
 										createEmployee={() => {
 											if (hasPermission) {
-												history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/create')))
+												navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/create')))
 											} else {
 												openForbiddenModal()
 											}
@@ -272,7 +273,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 								scroll={{ x: 800 }}
 								onRow={(record) => ({
 									onClick: () => {
-										history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id })))
+										navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id })))
 									}
 								})}
 								useCustomPagination

@@ -5,6 +5,7 @@ import { Button, Row, Spin } from 'antd'
 import { get, map } from 'lodash'
 import { compose } from 'redux'
 import { initialize, submit, isPristine } from 'redux-form'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -22,7 +23,6 @@ import { RootState } from '../../reducers'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { deleteReq, patchReq } from '../../utils/request'
-import { history } from '../../utils/history'
 import { Paths } from '../../types/api'
 
 // hooks
@@ -49,6 +49,7 @@ const CustomerPage = (props: Props) => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const isFormPristine = useSelector(isPristine(FORM.CUSTOMER))
 	const customer = useSelector((state: RootState) => state.customers.customer)
+	const navigate = useNavigate()
 
 	const isLoading = customer?.isLoading || isRemoving
 
@@ -57,7 +58,7 @@ const CustomerPage = (props: Props) => {
 	const fetchCustomerData = async () => {
 		const { data } = await dispatch(getCustomer(customerID))
 		if (!data?.customer?.id) {
-			history.push('/404')
+			navigate('/404')
 		}
 		dispatch(
 			initialize(FORM.CUSTOMER, {
@@ -123,7 +124,7 @@ const CustomerPage = (props: Props) => {
 				}
 			)
 
-			history.push(backUrl)
+			navigate(backUrl as string)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -139,7 +140,7 @@ const CustomerPage = (props: Props) => {
 		try {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/customers/{customerID}', { customerID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			history.push(parentPath + t('paths:customers'))
+			navigate(parentPath + t('paths:customers'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

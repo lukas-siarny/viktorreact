@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useEffect, useState } from 'react'
 import { Layout, Menu, Dropdown, Row, MenuProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import cx from 'classnames'
 
 // assets
@@ -62,7 +62,9 @@ const LOGO_HEIGHT = 72
 
 const LayoutSider = (props: LayoutSiderProps) => {
 	const { page, showNavigation = true, salonID, parentPath } = props
-
+	console.log('salonID', salonID)
+	const params = useParams()
+	console.log('params', params)
 	const collapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 

@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 // authorized pages
+import { useParams } from 'react-router'
 import HomePage from '../pages/HomePage/HomePage'
 
 // routes middlewares
@@ -61,7 +62,7 @@ import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 
 const AppRoutes: FC = () => {
 	const [t] = useTranslation()
-
+	const { salonID } = useParams()
 	return (
 		<AppInit>
 			<Routes>
@@ -85,7 +86,7 @@ const AppRoutes: FC = () => {
 				<Route path={t('paths:users')} element={<AuthRoute layout={MainLayout} page={PAGE.USERS} />}>
 					<Route index element={<UsersPage />} />
 					<Route path={':userID'} element={<UserPage />} />
-					<Route path={t('loc:createEntityPathName')} element={<CreateUserPage />} />
+					<Route path={t('loc:createEntity')} element={<CreateUserPage />} />
 				</Route>
 				<Route path={t('paths:my-account')} element={<AuthRoute layout={MainLayout} page={PAGE.MY_ACCOUNT} />}>
 					<Route index element={<UserPage />} />
@@ -93,9 +94,10 @@ const AppRoutes: FC = () => {
 				<Route path={t('paths:activation')} element={<AuthRoute layout={MainLayout} page={PAGE.ACTIVATION} />}>
 					<Route index element={<ActivationPage />} />
 				</Route>
-				<Route path={t('paths:salons')} element={<AuthRoute layout={MainLayout} page={PAGE.SALONS} />}>
+				<Route path={t('paths:salons')} element={<AuthRoute salonID={'test'} layout={MainLayout} page={PAGE.SALONS} />}>
 					<Route index element={<SalonsPage />} />
-					<Route path={t('loc:createEntityPathName')} element={<SalonPage salonID={NEW_SALON_ID} />} />
+					<Route path={t('loc:createEntity')} element={<SalonPage salonID={NEW_SALON_ID} />} />
+					<Route path={':salonID'} element={<SalonPage salonID={salonID as string} />} />
 				</Route>
 				{/* // TODO: subruting */}
 				{/* <Route {...props} path={t('paths:salons/{{salonID}}', { salonID: ':salonID' })} element={<SalonSubRoutes />} /> */}
@@ -106,7 +108,7 @@ const AppRoutes: FC = () => {
 				<Route path={t('paths:category-parameters')} element={<AuthRoute layout={MainLayout} page={PAGE.CATEGORY_PARAMETERS} />}>
 					<Route index element={<CategoryParamsPage />} />
 					<Route path={':parameterID'} element={<EditCategoryParamsPage />} />
-					<Route path={t('loc:createEntityPathName')} element={<CreateCategoryParamsPage />} />
+					<Route path={t('loc:createEntity')} element={<CreateCategoryParamsPage />} />
 				</Route>
 				<Route path={t('paths:cosmetics')} element={<AuthRoute layout={MainLayout} page={PAGE.COSMETICS} />}>
 					<Route index element={<CosmeticsPage />} />
@@ -117,7 +119,7 @@ const AppRoutes: FC = () => {
 				<Route path={t('paths:support-contacts')} element={<AuthRoute layout={MainLayout} page={PAGE.SUPPORT_CONTACTS} />}>
 					<Route index element={<SupportContactsPage />} />
 					<Route path={':supportContactID'} element={<SupportContactPage />} />
-					<Route path={t('loc:createEntityPathName')} element={<SupportContactPage />} />
+					<Route path={t('loc:createEntity')} element={<SupportContactPage />} />
 				</Route>
 				<Route path={t('paths:specialist-contacts')} element={<AuthRoute layout={MainLayout} page={PAGE.SPECIALIST_CONTACTS} />}>
 					<Route index element={<SpecialistContactsPage />} />

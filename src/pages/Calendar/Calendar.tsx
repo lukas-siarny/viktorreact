@@ -9,6 +9,7 @@ import { destroy, getFormValues, initialize } from 'redux-form'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { useTranslation } from 'react-i18next'
 import Scroll from 'react-scroll'
+import { useNavigate } from 'react-router-dom'
 
 // utils
 import {
@@ -33,7 +34,6 @@ import {
 import { checkPermissions, isAdmin, withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
-import { history } from '../../utils/history'
 
 // reducers
 import {
@@ -104,6 +104,7 @@ const CALENDAR_EVENTS_VIEW_TYPES = Object.keys(CALENDAR_EVENTS_VIEW_TYPE)
 
 const Calendar: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath = '' } = props
+	const navigate = useNavigate()
 	const calendarRefs = useRef<CalendarRefs>(null)
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -311,7 +312,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 			const canVisitThisPage = isAdmin(authUserPermissions) || (checkPermissions(authUserPermissions, [PERMISSION.PARTNER]) && salonRes?.data?.settings?.enabledReservations)
 			if (!canVisitThisPage) {
-				history.push('/404')
+				navigate('/404')
 			}
 		}
 

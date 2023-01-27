@@ -6,6 +6,7 @@ import cx from 'classnames'
 import { ItemType } from 'antd/lib/menu/hooks/useItems'
 import { initialize } from 'redux-form'
 import { Header } from 'antd/lib/layout/layout'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import LayoutSider, { LayoutSiderProps } from '../components/LayoutComponents/LayoutSider'
@@ -18,7 +19,6 @@ import { setSelectedCountry } from '../reducers/selectedCountry/selectedCountryA
 // utils
 import Permissions from '../utils/Permissions'
 import { FORM, PAGE, PERMISSION } from '../utils/enums'
-import { history } from '../utils/history'
 
 // assets
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon.svg'
@@ -44,8 +44,10 @@ const MainLayout: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { children, extra, page } = props
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 	const { contentClassName = 'p-4 px-10 main-background' } = extra || {}
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
+	console.log('selectedSalon', selectedSalon)
 	const salonID = selectedSalon?.id
 	const salonOptions = useSelector((state: RootState) => state.selectedSalon.selectionOptions.data) || []
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
@@ -66,7 +68,7 @@ const MainLayout: FC<Props> = (props) => {
 					<AvatarComponents src={item.logo || SalonDefaultAvatar} fallBackSrc={SalonDefaultAvatar} size={24} className={'mr-2-5 header-avatar'} /> {item.label}
 				</>
 			),
-			onClick: () => history.push(t('paths:salons/{{salonID}}', { salonID: item.value })),
+			onClick: () => navigate(t('paths:salons/{{salonID}}', { salonID: item.value })),
 			className: cx({ 'ant-menu-item-selected': selectedSalon?.id === item.value }, 'py-2-5 px-2 mb-2 font-medium min-w-0')
 		}))
 
@@ -93,7 +95,7 @@ const MainLayout: FC<Props> = (props) => {
 						key: 'add-salon',
 						className: 'font-medium button-add',
 						icon: <AddPurple />,
-						onClick: () => history.push(t('paths:salons/create')),
+						onClick: () => navigate(t('paths:salons/create')),
 						label: t('loc:Pridať salón')
 					}
 				]
@@ -123,7 +125,7 @@ const MainLayout: FC<Props> = (props) => {
 		if (hasPermision) {
 			if (salonOptions.length === 0) {
 				return (
-					<Button onClick={() => history.push(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'} icon={<PlusIcon />}>
+					<Button onClick={() => navigate(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'} icon={<PlusIcon />}>
 						{t('loc:Pridať salón')}
 					</Button>
 				)
@@ -168,7 +170,7 @@ const MainLayout: FC<Props> = (props) => {
 									{!hasPermission && (
 										<Button
 											onClick={() => {
-												history.push(backUrl)
+												navigate(backUrl as string)
 											}}
 											icon={<BackIcon className={'filter-invert max'} />}
 											className={'noti-btn noti-admin-back-button h-8 text-notino-white self-center bg-notino-pink mr-2'}

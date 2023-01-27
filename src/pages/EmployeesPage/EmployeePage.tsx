@@ -7,6 +7,7 @@ import { get, forEach } from 'lodash'
 import { change, initialize, isPristine, isSubmitting, submit } from 'redux-form'
 import cx from 'classnames'
 import i18next from 'i18next'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import EmployeeForm from './components/EmployeeForm'
@@ -38,7 +39,6 @@ import { Paths } from '../../types/api'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { DELETE_BUTTON_ID, FORM, PARAMETER_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
-import { history } from '../../utils/history'
 import {
 	filterSalonRolesByPermission,
 	formFieldID,
@@ -271,6 +271,8 @@ const getEmployeeServiceIds = (employeeCategories?: ServiceRootCategory) => {
 const EmployeePage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
+
 	const { salonID, parentPath } = props
 	const { employeeID } = props.computedMatch.params
 	const [submitting, setSubmitting] = useState<boolean>(false)
@@ -305,7 +307,7 @@ const EmployeePage = (props: Props) => {
 		const { options } = await dispatch(getServices({ salonID }))
 
 		if (!employeesData?.employee?.id) {
-			history.push('/404')
+			navigate('/404')
 		}
 
 		if (employeesData?.employee) {
@@ -378,7 +380,7 @@ const EmployeePage = (props: Props) => {
 		try {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/employees/{employeeID}', { employeeID })
-			history.push(backUrl)
+			navigate(backUrl as string)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -414,7 +416,7 @@ const EmployeePage = (props: Props) => {
 					roleID: formData?.roleID
 				}
 			)
-			history.push(backUrl)
+			navigate(backUrl as string)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

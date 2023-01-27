@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect } from 'react'
-import { Routes, useMatch } from 'react-router-dom'
+import { Route, Routes, useMatch, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { includes } from 'lodash'
@@ -10,7 +10,6 @@ import AuthRoute from './AuthRoute'
 // utils
 import { PAGE } from '../utils/enums'
 import { isAdmin } from '../utils/Permissions'
-import { history } from '../utils/history'
 
 // redux
 import { RootState } from '../reducers'
@@ -52,19 +51,21 @@ import ReservationsSettingsPage from '../pages/ReservationsSettingsPage/Reservat
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 import ReservationsPage from '../pages/ReservationsPage/ReservationsPage'
+import HomePage from '../pages/HomePage/HomePage'
 
-const redirectoToForbiddenPage = () => {
-	history.push('/403')
-}
+// const redirectoToForbiddenPage = () => {
+// 	history.push('/403')
+// }
 
 const SalonSubRoutes: FC = (props) => {
 	// TODO: useMatch nevracia tieto hodnoty z hooku
 	// const { path, url, params } = useMatch()
 	// TODO: odkial params brat?
 	// const { salonID } = (params as any) || {}
+	const navigate = useNavigate()
 	const { salonID } = useParams()
 	if (!salonID) {
-		redirectoToForbiddenPage()
+		navigate('/403')
 	}
 
 	const [t] = useTranslation()
@@ -92,7 +93,7 @@ const SalonSubRoutes: FC = (props) => {
 					dispatch(selectSalon(salonID))
 				}
 			} else {
-				redirectoToForbiddenPage()
+				navigate('/403')
 			}
 		}
 	}, [salonID, dispatch, currentUser, selectedSalon?.id])
@@ -100,8 +101,17 @@ const SalonSubRoutes: FC = (props) => {
 	return (
 		<Routes>
 			{/* SALON DETAIL */}
-			<AuthRoute path={path} element={SalonPage} translatePathKey={path} salonID={salonID} layout={MainLayout} page={PAGE.SALONS} />
+			<Route element={<AuthRoute layout={MainLayout} page={PAGE.SALONS} />}>
+				<Route index element={<SalonPage salonID={salonID as string} />} />
+			</Route>
 			{/* CUSTOMERS */}
+			{/* SERVICES */}
+			{/* EMPLOYEES */}
+			{/* Industries */}
+			{/* Billing info */}
+
+			{/*
+			<AuthRoute path={path} element={SalonPage} translatePathKey={path} salonID={salonID} layout={MainLayout} page={PAGE.SALONS} />
 			<AuthRoute
 				path={getPath(t('paths:customers/create'))}
 				element={CreateCustomerPage}
@@ -132,7 +142,6 @@ const SalonSubRoutes: FC = (props) => {
 				page={PAGE.CUSTOMERS}
 				preventShowDeletedSalon
 			/>
-			{/* SERVICES */}
 			<AuthRoute
 				path={getPath(t('paths:services-settings'))}
 				element={ServicesPage}
@@ -153,7 +162,6 @@ const SalonSubRoutes: FC = (props) => {
 				page={PAGE.SERVICES_SETTINGS}
 				preventShowDeletedSalon
 			/>
-			{/* EMPLOYEES */}
 			<AuthRoute
 				path={getPath(t('paths:employees'))}
 				element={EmployeesPage}
@@ -184,7 +192,6 @@ const SalonSubRoutes: FC = (props) => {
 				page={PAGE.EMPLOYEES}
 				preventShowDeletedSalon
 			/>
-			{/* Industries */}
 			<AuthRoute
 				path={getPath(t('paths:industries-and-services'))}
 				element={IndustriesPage}
@@ -205,7 +212,6 @@ const SalonSubRoutes: FC = (props) => {
 				page={PAGE.INDUSTRIES_AND_SERVICES}
 				preventShowDeletedSalon
 			/>
-			{/* Billing info */}
 			<AuthRoute
 				path={getPath(t('paths:billing-info'))}
 				element={BillingInfoPage}
@@ -254,6 +260,7 @@ const SalonSubRoutes: FC = (props) => {
 				element={NotFoundPage} // NOTE: for non auth route just let the user redirect on login page
 				layout={MainLayout}
 			/>
+			*/}
 		</Routes>
 	)
 }

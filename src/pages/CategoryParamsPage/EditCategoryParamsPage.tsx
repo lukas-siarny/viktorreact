@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Spin } from 'antd'
 import { initialize } from 'redux-form'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -19,7 +19,6 @@ import { withPermissions } from '../../utils/Permissions'
 import { PERMISSION, FORM, PARAMETERS_VALUE_TYPES, PARAMETERS_UNIT_TYPES } from '../../utils/enums'
 import { normalizeNameLocalizations } from '../../utils/helper'
 import { patchReq, deleteReq } from '../../utils/request'
-import { history } from '../../utils/history'
 
 // types
 import { IBreadcrumbs, ICategoryParamForm } from '../../types/interfaces'
@@ -31,7 +30,7 @@ import useBackUrl from '../../hooks/useBackUrl'
 const EditCategoryParamsPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-
+	const navigate = useNavigate()
 	const { parameterID } = useParams<Required<{ parameterID: string }>>()
 
 	const parameter = useSelector((state: RootState) => state.categoryParams.parameter)
@@ -43,7 +42,7 @@ const EditCategoryParamsPage = () => {
 			const { data } = await dispatch(getCategoryParameter(parameterID as string))
 
 			if (!data?.id) {
-				history.push('/404')
+				navigate('/404')
 			}
 
 			if (data) {
@@ -100,7 +99,7 @@ const EditCategoryParamsPage = () => {
 	const handleDelete = async () => {
 		try {
 			await deleteReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}', { categoryParameterID: parameterID as string })
-			history.push(t('paths:category-parameters'))
+			navigate(t('paths:category-parameters'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

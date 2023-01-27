@@ -6,6 +6,7 @@ import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -16,7 +17,6 @@ import UserAvatar from '../../components/AvatarComponents'
 // utils
 import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, normalizeQueryParams, formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
-import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -30,6 +30,7 @@ const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOT
 
 const CustomersPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const { salonID, parentPath } = props
 	const customers = useSelector((state: RootState) => state.customers.customers)
@@ -161,7 +162,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 											if (!hasPermission) {
 												openForbiddenModal()
 											} else {
-												history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:customers/create')))
+												navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:customers/create')))
 											}
 										}}
 									/>
@@ -178,7 +179,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 								scroll={{ x: 800 }}
 								onRow={(record) => ({
 									onClick: () => {
-										history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:customers/{{customerID}}', { customerID: record.id })))
+										navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:customers/{{customerID}}', { customerID: record.id })))
 									}
 								})}
 								useCustomPagination

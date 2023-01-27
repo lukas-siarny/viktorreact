@@ -3,12 +3,10 @@ import { useSelector } from 'react-redux'
 import { Button, Result } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { isEmpty, isNil } from 'lodash'
+import { useNavigate } from 'react-router-dom'
 
 // types
 import { RootState } from '../reducers'
-
-// utils
-import { history } from './history'
 
 // assets
 import { ReactComponent as TrashIcon } from '../assets/icons/deleted.svg'
@@ -17,6 +15,7 @@ type Props = {}
 
 const PreventShowDeletedSalon: FC<Props> = (props) => {
 	const { children } = props
+	const navigate = useNavigate()
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const [t] = useTranslation()
 
@@ -34,7 +33,12 @@ const PreventShowDeletedSalon: FC<Props> = (props) => {
 			title={t('loc:Salón bol vymazaný')}
 			icon={<TrashIcon style={{ width: 56, height: 56 }} />}
 			extra={
-				<Button type={'primary'} size={'middle'} className={'noti-btn m-regular'} onClick={() => history.push(`${t('paths:salons')}/${selectedSalon.data?.id}`)}>
+				<Button
+					type={'primary'}
+					size={'middle'}
+					className={'noti-btn m-regular'}
+					onClick={() => navigate(t('paths:salons/{{salonID}}', { salonID: selectedSalon?.data?.id }))}
+				>
 					{t('loc:Detail salónu')}
 				</Button>
 			}

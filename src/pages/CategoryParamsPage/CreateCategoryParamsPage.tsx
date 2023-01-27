@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { Row } from 'antd'
 import { initialize } from 'redux-form'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -14,7 +15,6 @@ import { EMPTY_NAME_LOCALIZATIONS } from '../../components/LanguagePicker'
 import { withPermissions } from '../../utils/Permissions'
 import { PERMISSION, FORM, PARAMETERS_VALUE_TYPES, PARAMETERS_UNIT_TYPES } from '../../utils/enums'
 import { postReq } from '../../utils/request'
-import { history } from '../../utils/history'
 
 // types
 import { IBreadcrumbs, ICategoryParamForm } from '../../types/interfaces'
@@ -24,6 +24,7 @@ import useBackUrl from '../../hooks/useBackUrl'
 
 const CreateCategoryParamsPage = () => {
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
 	const [backUrl] = useBackUrl(t('paths:category-parameters'))
@@ -59,7 +60,7 @@ const CreateCategoryParamsPage = () => {
 				unitType
 			}
 			await postReq('/api/b2b/admin/enums/category-parameters/', {}, reqBody)
-			history.push(t('paths:category-parameters'))
+			navigate(t('paths:category-parameters'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

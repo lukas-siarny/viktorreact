@@ -227,9 +227,7 @@ export interface ICalendarEventDetailPayload {
 	data: CalendarEventDetail | null
 }
 export interface ICalendarReservationForm {
-	customer: ISelectOptionItem<{
-		customerData?: NonNullable<ICalendarEventDetailPayload['data']>['customer']
-	}>
+	customer: ISelectOptionItem
 	service: ISelectOptionItem<{
 		priceAndDurationData?: ServiceType['priceAndDurationData'],
 		useCategoryParameter?: ServiceType['useCategoryParameter'],
@@ -237,9 +235,7 @@ export interface ICalendarReservationForm {
 		categoryId?: string
 		icon?: NonNullable<NonNullable<ICalendarEventDetailPayload['data']>['service']>['icon']
 	}>
-	employee: ISelectOptionItem<{
-		employeeData?: NonNullable<ICalendarEventDetailPayload['data']>['employee']
-	}>
+	employee: ISelectOptionItem
 	date: string
 	timeFrom: string
 	timeTo: string

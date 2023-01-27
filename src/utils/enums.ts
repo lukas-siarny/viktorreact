@@ -432,7 +432,7 @@ export const ENUMERATIONS_OPTIONS = () =>
 
 export const STRINGS = (t: TFunction) => ({
 	accessEditTab: t('loc:Pre prístup potvrďte základné údaje'),
-	areYouSureDelete: (entity: string) => t('loc:Naozaj chcete odstrániť {{entity}}?', { entity }),
+	areYouSureDelete: (entity: string) => t('loc:Naozaj chcete odstrániť {{entity}} ?', { entity }),
 	addRecord: (entity: string) => t('loc:Pridať {{entity}}', { entity }),
 	assign: (entity: string) => t('loc:Priradiť {{entity}}', { entity }),
 	loading: t('loc:Načítavam...'),

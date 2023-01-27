@@ -6,7 +6,7 @@ import { debounce } from 'lodash'
 import { useSelector } from 'react-redux'
 
 // utils
-import { CHANGE_DEBOUNCE_TIME, ENUMERATIONS_KEYS, FIELD_MODE, FORM, REVIEW_VERIFICATION_STATUS, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, ENUMERATIONS_KEYS, FIELD_MODE, FORM, REVIEW_VERIFICATION_STATUS, ROW_GUTTER_X_DEFAULT, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, optionRenderWithImage, optionRenderWithTag, validationString } from '../../../utils/helper'
 
 // atoms
@@ -35,7 +35,7 @@ export interface IReviewsFilter {
 
 type Props = InjectedFormProps<IReviewsFilter, ComponentProps> & ComponentProps
 
-const fixLength500 = validationString(500)
+const fixLength255 = validationString(255)
 
 const ReviewsFilter = (props: Props) => {
 	const { handleSubmit } = props
@@ -53,7 +53,8 @@ const ReviewsFilter = (props: Props) => {
 			name='search'
 			fieldMode={FIELD_MODE.FILTER}
 			search
-			validate={fixLength500}
+			validate={fixLength255}
+			maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
 		/>
 	)
 

@@ -92,9 +92,9 @@ const DeleteButton = (props: Props) => {
 					type: 'primary',
 					className: 'noti-btn'
 				}}
-				okText={t('loc:Zmazať')}
+				okText={t('loc:Áno')}
 				onConfirm={onConfirm}
-				cancelText={t('loc:Zrušiť')}
+				cancelText={t('loc:Nie')}
 				onCancel={onCancel}
 				disabled={disabled}
 				getPopupContainer={getPopupContainer}

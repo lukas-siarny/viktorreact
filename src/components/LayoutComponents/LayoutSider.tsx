@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useEffect, useState } from 'react'
 import { Layout, Menu, Dropdown, Row, MenuProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import cx from 'classnames'
 
 // assets
@@ -32,7 +32,6 @@ import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
 import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations.svg'
 
 // utils
-import { history } from '../../utils/history'
 import { PAGE, PERMISSION, ADMIN_PERMISSIONS } from '../../utils/enums'
 import { permitted } from '../../utils/Permissions'
 
@@ -74,7 +73,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
 	const location = useLocation()
-
+	const navigate = useNavigate()
 	const hasPermissions = useCallback(
 		(allowed: _Permissions = [], except: _Permissions = []) => {
 			return permitted(authUserPermissions || [], selectedSalon?.uniqPermissions, allowed, except)
@@ -93,7 +92,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			mainGroupItems.push({
 				key: PAGE.HOME,
 				label: t('loc:Prehľad'),
-				onClick: () => history.push(t('paths:index')),
+				onClick: () => navigate(t('paths:index')),
 				icon: <HomeIcon />
 			})
 
@@ -103,7 +102,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 					mainGroupItems.push({
 						key: PAGE.USERS,
 						label: t('loc:Používatelia'),
-						onClick: () => history.push(t('paths:users')),
+						onClick: () => navigate(t('paths:users')),
 						icon: <UsersIcon />
 					})
 				}
@@ -112,37 +111,37 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						{
 							key: PAGE.CATEGORIES,
 							label: t('loc:Kategórie'),
-							onClick: () => history.push(t('paths:categories')),
+							onClick: () => navigate(t('paths:categories')),
 							icon: <CategoryIcon />
 						},
 						{
 							key: PAGE.CATEGORY_PARAMETERS,
 							label: t('loc:Parametre'),
-							onClick: () => history.push(t('paths:category-parameters')),
+							onClick: () => navigate(t('paths:category-parameters')),
 							icon: <ParametersIcon />
 						},
 						{
 							key: PAGE.COSMETICS,
 							label: t('loc:Kozmetika'),
-							onClick: () => history.push(t('paths:cosmetics')),
+							onClick: () => navigate(t('paths:cosmetics')),
 							icon: <CosmeticIcon />
 						},
 						{
 							key: PAGE.LANGUAGES,
 							label: t('loc:Jazyky'),
-							onClick: () => history.push(t('paths:languages-in-salons')),
+							onClick: () => navigate(t('paths:languages-in-salons')),
 							icon: <LanguagesIcon />
 						},
 						{
 							key: PAGE.SUPPORT_CONTACTS,
 							label: t('loc:Podpora'),
-							onClick: () => history.push(t('paths:support-contacts')),
+							onClick: () => navigate(t('paths:support-contacts')),
 							icon: <HelpIcon />
 						},
 						{
 							key: PAGE.SPECIALIST_CONTACTS,
 							label: t('loc:Špecialisti'),
-							onClick: () => history.push(t('paths:specialist-contacts')),
+							onClick: () => navigate(t('paths:specialist-contacts')),
 							icon: <SpecialistIcon />
 						}
 					)
@@ -151,7 +150,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 					mainGroupItems.push({
 						key: PAGE.SALONS,
 						label: t('loc:Salóny'),
-						onClick: () => history.push(t('paths:salons')),
+						onClick: () => navigate(t('paths:salons')),
 						icon: <SalonIcon />
 					})
 				}
@@ -164,37 +163,37 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						{
 							key: PAGE.SALONS,
 							label: t('loc:Detail salónu'),
-							onClick: () => history.push(parentPath),
+							onClick: () => navigate(parentPath as string),
 							icon: <SalonIcon />
 						},
 						{
 							key: PAGE.BILLING_INFO,
 							label: t('loc:Fakturačné údaje'),
-							onClick: () => history.push(getPath(t('paths:billing-info'))),
+							onClick: () => navigate(getPath(t('paths:billing-info'))),
 							icon: <InvoiceIcon />
 						},
 						{
 							key: PAGE.INDUSTRIES_AND_SERVICES,
 							label: t('loc:Odvetvia a služby'),
-							onClick: () => history.push(getPath(t('paths:industries-and-services'))),
+							onClick: () => navigate(getPath(t('paths:industries-and-services'))),
 							icon: <IndustiresIcon />
 						},
 						{
 							key: PAGE.SERVICES_SETTINGS,
 							label: t('loc:Nastavenie služieb'),
-							onClick: () => history.push(getPath(t('paths:services-settings'))),
+							onClick: () => navigate(getPath(t('paths:services-settings'))),
 							icon: <ServiceIcon className={'text-black'} />
 						},
 						{
 							key: PAGE.CUSTOMERS,
 							label: t('loc:Zákazníci'),
-							onClick: () => history.push(getPath(t('paths:customers'))),
+							onClick: () => navigate(getPath(t('paths:customers'))),
 							icon: <CustomerIcon className={'text-black'} />
 						},
 						{
 							key: PAGE.EMPLOYEES,
 							label: t('loc:Zamestnanci'),
-							onClick: () => history.push(getPath(t('paths:employees'))),
+							onClick: () => navigate(getPath(t('paths:employees'))),
 							icon: <EmployeesIcon />
 						}
 					)
@@ -206,19 +205,19 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						{
 							key: PAGE.CALENDAR,
 							label: t('loc:Kalendár'),
-							onClick: () => history.push(getPath(t('paths:calendar'))),
+							onClick: () => navigate(getPath(t('paths:calendar'))),
 							icon: <CalendarIcon />
 						},
 						{
 							key: PAGE.SALON_SETTINGS,
 							label: t('loc:Nastavenia rezervácií'),
-							onClick: () => history.push(getPath(t('paths:reservations-settings'))),
+							onClick: () => navigate(getPath(t('paths:reservations-settings'))),
 							icon: <SettingIcon />
 						},
 						{
 							key: PAGE.RESERVATIONS,
 							label: t('loc:Rezervácie'),
-							onClick: () => history.push(getPath(t('paths:reservations'))),
+							onClick: () => navigate(getPath(t('paths:reservations'))),
 							icon: <ReservationsIcon />
 						}
 					)
@@ -231,7 +230,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			{
 				key: 'myProfile',
 				label: t('loc:Môj profil'),
-				onClick: () => history.push(t('paths:my-account')),
+				onClick: () => navigate(t('paths:my-account')),
 				icon: <ProfileIcon />
 			},
 			{
@@ -241,7 +240,9 @@ const LayoutSider = (props: LayoutSiderProps) => {
 					// reset support contact data to empty in case there are some stored in redux
 					// otherwise language detection would not work correctly in t('paths:contact') page
 					dispatch(getSupportContact())
-					history.push({ pathname: t('paths:contact'), state: { from: location.pathname } })
+					// TODO: ako toto funguje?
+					// navigate({ pathname: t('paths:contact'), state: { from: location.pathname } })
+					navigate(t('paths:contact'))
 				},
 				icon: <HelpIcon />
 			},

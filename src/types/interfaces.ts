@@ -337,7 +337,7 @@ export interface IConfirmUserForm extends ICreatePasswordForm {
 	name: string
 	surname: string
 }
-
+// TODO: zmazat
 export interface IComputedMatch<Params> {
 	isExact: boolean
 	params: Params

@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Row, Spin } from 'antd'
 import { initialize, isPristine, submit } from 'redux-form'
@@ -36,7 +36,6 @@ import { getSupportContact, getSupportContacts } from '../../reducers/supportCon
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode } from '../../utils/helper'
 
@@ -51,17 +50,14 @@ type SupportContactPatch = Paths.PatchApiB2BAdminEnumsSupportContactsSupportCont
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
 
-type Props = {
-	computedMatch: IComputedMatch<{
-		supportContactID: string
-	}>
-}
+type Props = {}
 
 const SupportContactPage: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
-	const { supportContactID } = props.computedMatch.params
+	const { supportContactID } = useParams<{ supportContactID: string }>()
 
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
@@ -91,7 +87,7 @@ const SupportContactPage: FC<Props> = (props) => {
 			const { data } = await dispatch(getSupportContact(supportContactID))
 
 			if (!data?.supportContact?.id) {
-				history.push('/404')
+				navigate('/404')
 			}
 
 			if (data) {
@@ -177,7 +173,7 @@ const SupportContactPage: FC<Props> = (props) => {
 				const result = await postReq('/api/b2b/admin/enums/support-contacts/', undefined, supportContactData as SupportContactPatch)
 				if (result?.data?.supportContact?.id) {
 					// select new supportContact
-					history.push(t('paths:support-contacts/{{supportContactID}}', { supportContactID: result.data.supportContact.id }))
+					navigate(t('paths:support-contacts/{{supportContactID}}', { supportContactID: result.data.supportContact.id }))
 				}
 			}
 			dispatch(initialize(FORM.SUPPORT_CONTACT, data))
@@ -216,10 +212,16 @@ const SupportContactPage: FC<Props> = (props) => {
 		}
 		try {
 			setIsRemoving(true)
-			await deleteReq('/api/b2b/admin/enums/support-contacts/{supportContactID}', { supportContactID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			await deleteReq(
+				'/api/b2b/admin/enums/support-contacts/{supportContactID}',
+				{ supportContactID: supportContactID as string },
+				undefined,
+				NOTIFICATION_TYPE.NOTIFICATION,
+				true
+			)
 			// clear redux
 			dispatch(getSupportContact())
-			history.push(t('paths:support-contacts'))
+			navigate(t('paths:support-contacts'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

@@ -15,13 +15,13 @@ import { processAuthorizationResult } from '../../reducers/users/userActions'
 import { postReq } from '../../utils/request'
 
 type Props = {
-	token: string
+	token?: string
 }
 
 const CreatePasswordPage: FC<Props> = (props) => {
 	const [modalVisible, setModalVisible] = useState(false)
 	const dispatch = useDispatch()
-
+	console.log('props create page', props)
 	const handleSubmit = async (values: ICreatePasswordForm) => {
 		try {
 			const input = {

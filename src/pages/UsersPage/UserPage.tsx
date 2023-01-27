@@ -7,6 +7,7 @@ import { get } from 'lodash'
 import cx from 'classnames'
 
 // components
+import { useLocation, useParams, useRouteError } from 'react-router-dom'
 import UserAccountForm from './components/UserAccountForm'
 import DeleteButton from '../../components/DeleteButton'
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -21,7 +22,7 @@ import { getSystemRoles } from '../../reducers/roles/rolesActions'
 import EditUserRoleForm from './components/EditUserRoleForm'
 
 // types
-import { IBreadcrumbs, IComputedMatch, IEditUserRoleForm, IUserAccountForm } from '../../types/interfaces'
+import { IBreadcrumbs, IEditUserRoleForm, IUserAccountForm } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
@@ -35,21 +36,24 @@ import useBackUrl from '../../hooks/useBackUrl'
 // assets
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
 
-type Props = {
-	computedMatch: IComputedMatch<{ userID: string }>
-}
+type Props = {}
 
-const UserPage: FC<Props> = (props) => {
+const UserPage: FC<Props> = () => {
 	const [t] = useTranslation()
 	const authUser = useSelector((state: RootState) => state.user.authUser)
-	const { computedMatch } = props
-	const userID = computedMatch.params.userID || get(authUser, 'data.id')
+	const { userID } = useParams<{ userID?: string }>()
+	const location = useLocation()
+	const userIDWrap = userID || get(authUser, 'data.id')
 	const dispatch = useDispatch()
 	const submittingAccountForm = useSelector(isSubmitting(FORM.USER_ACCOUNT))
 	const submittingEditRoleForm = useSelector(isSubmitting(FORM.EDIT_USER_ROLE))
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser)) as any
-	const isMyAccountPath = computedMatch.path === t('paths:my-account')
+	// TODO: treba cez createRouter instanciu
+	// const error = useRouteError()
+	// TODO: vytiahnut pathname z location
+	const isMyAccountPath = false
+	// const isMyAccountPath = computedMatch.path === t('paths:my-account')
 	let submitPermissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_EDIT]
 
 	const [backUrl] = useBackUrl(t('paths:users'))
@@ -66,7 +70,7 @@ const UserPage: FC<Props> = (props) => {
 
 	useEffect(() => {
 		const fetchUserData = async () => {
-			const { data } = await dispatch(getUserAccountDetails(userID))
+			const { data } = await dispatch(getUserAccountDetails(userIDWrap))
 			if (!data?.user?.id) {
 				history.push('/404')
 			}
@@ -98,7 +102,7 @@ const UserPage: FC<Props> = (props) => {
 				assignedCountryCode: data?.assignedCountryCode
 			}
 
-			await patchReq('/api/b2b/admin/users/{userID}', { userID }, userData)
+			await patchReq('/api/b2b/admin/users/{userID}', { userID: userIDWrap }, userData)
 			if (!userID || authUser.data?.id === userID) dispatch(getCurrentUser())
 			dispatch(initialize(FORM.USER_ACCOUNT, data))
 		} catch (error: any) {
@@ -129,7 +133,7 @@ const UserPage: FC<Props> = (props) => {
 			return
 		}
 		try {
-			let id = userID
+			let id = userIDWrap
 			if (isMyAccountPage && authUser.data) {
 				id = authUser.data.id
 			}
@@ -156,12 +160,12 @@ const UserPage: FC<Props> = (props) => {
 		try {
 			await patchReq(
 				'/api/b2b/admin/users/{userID}/role',
-				{ userID },
+				{ userID: userIDWrap },
 				{
 					roleID: data?.roleID
 				}
 			)
-			await dispatch(getUserAccountDetails(userID))
+			await dispatch(getUserAccountDetails(userIDWrap))
 			dispatch(initialize(FORM.EDIT_USER_ROLE, data))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console

@@ -18,7 +18,6 @@ type Props = RouteProps & {
 const PublicRoute: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { redirectLoggedInUser = true } = props
-	console.log('called', props)
 	if (isLoggedIn() && redirectLoggedInUser) {
 		return <Navigate to={t('paths:index')} />
 	}

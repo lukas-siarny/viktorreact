@@ -6,6 +6,7 @@ import { ArrayParam, BooleanParam, NumberParam, StringParam, useQueryParams, wit
 import { Col, Modal, Progress, Row, Spin, Image, Tooltip, TabsProps } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize, isPristine, reset } from 'redux-form'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import { isEmpty } from 'lodash'
@@ -22,7 +23,6 @@ import RejectedSalonSuggestions from './components/RejectedSalonSuggestions'
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, getAssignedUserLabel, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
-import { history } from '../../utils/history'
 import { postReq } from '../../utils/request'
 import { getSalonTagChanges, getSalonTagCreateType, getSalonTagPublished, getSalonTagSourceType } from './components/salonUtils'
 
@@ -50,7 +50,7 @@ enum TAB_KEYS {
 const SalonsPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-
+	const navigate = useNavigate()
 	const salons = useSelector((state: RootState) => state.salons.salons)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 
@@ -506,7 +506,7 @@ const SalonsPage = () => {
 								}}
 								onRow={(record) => ({
 									onClick: () => {
-										history.push(getLinkWithEncodedBackUrl(t('paths:salons/{{salonID}}', { salonID: record.id })))
+										navigate(getLinkWithEncodedBackUrl(t('paths:salons/{{salonID}}', { salonID: record.id })))
 									}
 								})}
 							/>

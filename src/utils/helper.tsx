@@ -802,6 +802,20 @@ export const flattenTree = (array: any[], callback?: (item: any, level: number) 
 	return output
 }
 
+export const findNodeInTree = (node: any, value: any, valueKey = 'id', nestingKey = 'children') => {
+	let result = null
+	if (node) {
+		if (node[valueKey] === value) {
+			return node
+		}
+		if (node[nestingKey]) {
+			// eslint-disable-next-line no-return-assign
+			node[nestingKey].some((childrenNode: any) => (result = findNodeInTree(childrenNode, value)))
+		}
+	}
+	return result
+}
+
 export const isEnumValue = <T extends { [k: string]: string }>(checkValue: any, enumObject: T): checkValue is T[keyof T] =>
 	typeof checkValue === 'string' && Object.values(enumObject).includes(checkValue)
 

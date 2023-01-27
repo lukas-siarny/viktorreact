@@ -20,7 +20,7 @@ import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon.svg'
 
 // utils
 import { FIELD_MODE, FORM } from '../utils/enums'
-import { createSlug, formFieldID } from '../utils/helper'
+import { createSlug, findNodeInTree, formFieldID } from '../utils/helper'
 
 // assets
 import { ReactComponent as LoadingIcon } from '../assets/icons/loading-icon.svg'
@@ -186,18 +186,6 @@ const customDropdown = (actions: Action[] | null | undefined, menu: React.ReactE
 	)
 }
 
-export const findNodeInOptionsTree = (node: any, value: any) => {
-	let result = null
-	if (node?.id === value) {
-		return node
-	}
-	if (node?.children) {
-		// eslint-disable-next-line no-return-assign
-		node.children.some((childrenNode: any) => (result = findNodeInOptionsTree(childrenNode, value)))
-	}
-	return result
-}
-
 const handleChange = async (data: any) => {
 	const { value, options, antdOptions, autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update } = data
 	let val = value
@@ -224,7 +212,7 @@ const handleChange = async (data: any) => {
 			}
 		} else if (typeof value === 'object') {
 			// NOTE: v niektorych pripadoch Antd odfiltruje extra objekt z antdOptions
-			const nodeFromOptions = findNodeInOptionsTree({ children: options }, value?.value)
+			const nodeFromOptions = findNodeInTree({ children: options }, value?.value)
 			val = {
 				...val,
 				extra: nodeFromOptions?.extra

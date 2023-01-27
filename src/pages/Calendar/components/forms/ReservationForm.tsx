@@ -10,7 +10,7 @@ import dayjs from 'dayjs'
 import validateReservationForm from './validateReservationForm'
 
 // utils
-import { formatLongQueryString, getAssignedUserLabel, getCountryPrefix, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
+import { formatLongQueryString, getAssignedUserLabel, getCountryPrefix, optionRenderWithAvatar, showErrorNotification, findNodeInTree } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { getReq, postReq } from '../../../../utils/request'
 import { CREATE_EVENT_PERMISSIONS, DEFAULT_TIME_FORMAT, ENUMERATIONS_KEYS, FORM, SALON_PERMISSION, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
@@ -31,7 +31,7 @@ import { ReactComponent as LoadingIcon } from '../../../../assets/icons/loading-
 import DateField from '../../../../atoms/DateField'
 import TextareaField from '../../../../atoms/TextareaField'
 import TimeRangeField from '../../../../atoms/TimeRangeField'
-import SelectField, { findNodeInOptionsTree } from '../../../../atoms/SelectField'
+import SelectField from '../../../../atoms/SelectField'
 import CustomerForm from '../../../CustomersPage/components/CustomerForm'
 
 // redux
@@ -226,7 +226,7 @@ const ReservationForm: FC<Props> = (props) => {
 	const getAndChangeReservationTime = async (serviceId?: string, employeeId?: string) => {
 		let durationData: DurationData = {}
 
-		const service = findNodeInOptionsTree({ children: servicesOptions }, serviceId) as ICalendarReservationForm['service'] | undefined
+		const service = findNodeInTree({ children: servicesOptions }, serviceId) as ICalendarReservationForm['service'] | undefined
 
 		if (employeeId) {
 			setIsSettingTime(true)
@@ -416,7 +416,7 @@ const ReservationForm: FC<Props> = (props) => {
 							allowClear
 							itemClassName={'m-0 pb-0'}
 							minuteStep={15}
-							suffixIcon={isSettingTime ? <LoadingIcon className={'loading-animation'} /> : <TimerIcon className={'text-notino-grayDark'} />}
+							suffixIcon={isSettingTime ? <LoadingIcon className={'animate-spin-2s'} /> : <TimerIcon className={'text-notino-grayDark'} />}
 							size={'large'}
 							disabled={isSettingTime}
 						/>

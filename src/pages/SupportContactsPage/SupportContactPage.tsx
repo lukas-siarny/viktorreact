@@ -28,7 +28,7 @@ import { ENUMERATIONS_KEYS, FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS } from 
 
 // types
 import { Paths } from '../../types/api'
-import { IBreadcrumbs, OpeningHours, ISupportContactForm, IComputedMatch } from '../../types/interfaces'
+import { IBreadcrumbs, OpeningHours, ISupportContactForm } from '../../types/interfaces'
 
 // reducers
 import { RootState } from '../../reducers'

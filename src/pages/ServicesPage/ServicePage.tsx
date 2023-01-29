@@ -9,7 +9,7 @@ import ServiceEditPage from './ServiceEditPage'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // types
-import { IBreadcrumbs, IComputedMatch, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
 // reducers

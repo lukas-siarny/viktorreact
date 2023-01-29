@@ -21,7 +21,6 @@ import ServiceEditModal from './components/ServiceEditModal'
 import {
 	EmployeeServiceData,
 	IBreadcrumbs,
-	IComputedMatch,
 	IEditEmployeeRoleForm,
 	IEmployeeForm,
 	IEmployeePayload,

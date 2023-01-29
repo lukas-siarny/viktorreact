@@ -123,6 +123,8 @@ const storedPreviousParams: any = {
 	[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS]: {}
 }
 
+export const getCalendarEventsCancelTokenKey = (enumType: CALENDAR_EVENTS_KEYS) => `calendar-events-${enumType}`
+
 export const getCalendarEvents =
 	(
 		enumType: CALENDAR_EVENTS_KEYS = CALENDAR_EVENTS_KEYS.EVENTS,
@@ -154,7 +156,7 @@ export const getCalendarEvents =
 				undefined,
 				undefined,
 				true,
-				`calendar-events-${enumType}`
+				getCalendarEventsCancelTokenKey(enumType)
 			)
 
 			// employees z Reduxu, budu sa mapovat do eventov
@@ -239,9 +241,9 @@ export const getCalendarEvents =
 		} catch (err) {
 			if (axios.isCancel(err)) {
 				// Request bol preruseny novsim requestom, tym padom chceme, aby loading state pokracoval
-				dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
+				// dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
 			} else {
-				dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType })
+				// dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType })
 			}
 		}
 

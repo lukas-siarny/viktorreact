@@ -524,9 +524,12 @@ export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null) 
 export const getSelectedDateForCalendar = (view: CALENDAR_VIEW, selectedDate: string) => {
 	switch (view) {
 		case CALENDAR_VIEW.WEEK: {
-			// v tyzdenom view je potrebne skontrolovat, ci sa vramci novo nastaveneho tyzdnoveho rangu nachadza dnesok
-			// ak ano, je potrebne ho nastavit ako aktualny den do kalendara, aby sa ukazal now indicator
-			// kedze realne sa na tyzdenne view pouziva denne view
+			/**
+			 * aj ked sa jedna o tyzdenne view, realne sa pouziva denne view, ktore je pozgrupovane tak, ze posobi ako tyzdenne
+			 * je potrebne skontrolovat, ci sa vramci novo nastaveneho tyzdnoveho rangu nachadza dnesok
+			 * ak ano, je potrebne ho nastavit ako aktualny den do Fullcalendara, aby sa ukazal now indicator, ak nie, tak sa nastavy ako aktualny datum prvy den zo zvoleneho tyzdna
+			 * tym, ze sa nastavi bud dnesok alebo prvy den z tyzdna, sa zamedzi zbytocnym prerendrovaniam Fullcalendara, ktore su hlavne v tyzdennom view, kde moze byt dost vela eventov, narocne
+			 */
 			const weekDays = getWeekDays(selectedDate)
 			return getWeekViewSelectedDate(weekDays)
 		}

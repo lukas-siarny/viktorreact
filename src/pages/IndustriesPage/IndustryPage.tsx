@@ -7,7 +7,7 @@ import { getFormValues, initialize, isSubmitting, reset } from 'redux-form'
 import { DataNode } from 'antd/lib/tree'
 import { isEmpty, map } from 'lodash'
 import i18next from 'i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
@@ -27,7 +27,7 @@ import { patchReq, postReq } from '../../utils/request'
 import { flattenTree } from '../../utils/helper'
 
 // types
-import { IBreadcrumbs, IIndustryForm, SalonSubPageProps, IComputedMatch } from '../../types/interfaces'
+import { IBreadcrumbs, IIndustryForm, SalonSubPageProps } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // assets
@@ -36,9 +36,7 @@ import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.s
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
-type Props = SalonSubPageProps & {
-	computedMatch: IComputedMatch<{ industryID: string }>
-}
+type Props = SalonSubPageProps
 type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody
 
 type ServiceCategorySuggestPost = Paths.PostApiB2BAdminServicesCategoryServiceSuggest.RequestBody
@@ -111,7 +109,7 @@ const IndustryPage = (props: Props) => {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const { salonID, parentPath } = props
-	const { industryID } = props.computedMatch.params
+	const { industryID } = useParams<{ industryID?: string }>()
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const services = useSelector((state: RootState) => state.service.services)

@@ -65,6 +65,8 @@ const AppRoutes: FC = () => {
 	const { salonID } = useParams()
 	return (
 		<AppInit>
+			{/* <SalonSubRoutes /> */}
+
 			<Routes>
 				{/* // CreatePassword route */}
 				<Route element={<CreatePasswordRoute layout={PublicLayout} className={'noti-login-page'} />}>
@@ -100,7 +102,7 @@ const AppRoutes: FC = () => {
 				</Route>
 				{/* // Salon view */}
 				<Route path={t('paths:salons/{{salonID}}', { salonID: ':salonID' })}>
-					<Route index element={<SalonSubRoutes />} />
+					<Route path={'*'} element={<SalonSubRoutes />} />
 				</Route>
 				<Route path={t('paths:categories')} element={<AuthRoute layout={MainLayout} page={PAGE.CATEGORIES} />}>
 					<Route index element={<CategoriesPage />} />

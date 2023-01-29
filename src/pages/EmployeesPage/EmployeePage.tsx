@@ -7,7 +7,7 @@ import { get, forEach } from 'lodash'
 import { change, initialize, isPristine, isSubmitting, submit } from 'redux-form'
 import cx from 'classnames'
 import i18next from 'i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 // components
 import EmployeeForm from './components/EmployeeForm'
@@ -63,9 +63,7 @@ import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.sv
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
 
-type Props = SalonSubPageProps & {
-	computedMatch: IComputedMatch<{ employeeID: string }>
-}
+type Props = SalonSubPageProps
 
 type EmployeePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody
 
@@ -274,7 +272,7 @@ const EmployeePage = (props: Props) => {
 	const navigate = useNavigate()
 
 	const { salonID, parentPath } = props
-	const { employeeID } = props.computedMatch.params
+	const { employeeID } = useParams<{ employeeID?: string }>()
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const [visible, setVisible] = useState<boolean>(false)
@@ -303,7 +301,7 @@ const EmployeePage = (props: Props) => {
 	const [backUrl] = useBackUrl(parentPath + t('paths:employees'))
 
 	const fetchEmployeeAndServicesData = useCallback(async () => {
-		const { data: employeesData } = await dispatch(getEmployee(employeeID))
+		const { data: employeesData } = await dispatch(getEmployee(employeeID as string))
 		const { options } = await dispatch(getServices({ salonID }))
 
 		if (!employeesData?.employee?.id) {
@@ -363,7 +361,7 @@ const EmployeePage = (props: Props) => {
 				}
 			}
 
-			await patchReq('/api/b2b/admin/employees/{employeeID}', { employeeID }, reqBody)
+			await patchReq('/api/b2b/admin/employees/{employeeID}', { employeeID: employeeID as string }, reqBody)
 			fetchEmployeeAndServicesData()
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -379,7 +377,7 @@ const EmployeePage = (props: Props) => {
 		}
 		try {
 			setIsRemoving(true)
-			await deleteReq('/api/b2b/admin/employees/{employeeID}', { employeeID })
+			await deleteReq('/api/b2b/admin/employees/{employeeID}', { employeeID: employeeID as string })
 			navigate(backUrl as string)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -430,12 +428,12 @@ const EmployeePage = (props: Props) => {
 			setSubmitting(true)
 			await patchReq(
 				'/api/b2b/admin/employees/{employeeID}/role',
-				{ employeeID },
+				{ employeeID: employeeID as string },
 				{
 					roleID: data?.roleID
 				}
 			)
-			dispatch(getEmployee(employeeID))
+			dispatch(getEmployee(employeeID as string))
 			dispatch(getCurrentUser())
 			dispatch(initialize(FORM.EDIT_EMPLOYEE_ROLE, data))
 		} catch (error: any) {
@@ -460,7 +458,7 @@ const EmployeePage = (props: Props) => {
 					await updateEmployee(formValues)
 				}
 
-				await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, employeePatchServiceData)
+				await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID: employeeID as string, serviceID }, employeePatchServiceData)
 				fetchEmployeeAndServicesData()
 			} catch (e) {
 				// eslint-disable-next-line no-console

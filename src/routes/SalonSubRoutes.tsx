@@ -60,8 +60,6 @@ import HomePage from '../pages/HomePage/HomePage'
 const SalonSubRoutes: FC = (props) => {
 	// TODO: useMatch nevracia tieto hodnoty z hooku
 	// const { path, url, params } = useMatch()
-	// TODO: odkial params brat?
-	// const { salonID } = (params as any) || {}
 	const navigate = useNavigate()
 	const { salonID } = useParams()
 	if (!salonID) {
@@ -100,167 +98,66 @@ const SalonSubRoutes: FC = (props) => {
 
 	return (
 		<Routes>
+			{/* // TODO: doriesit parentPath */}
 			{/* SALON DETAIL */}
+			{/* // TODO: nefunguje detail? */}
+			{/* <AuthRoute path={path} element={SalonPage} translatePathKey={path} salonID={salonID} layout={MainLayout} page={PAGE.SALONS} /> */}
 			<Route element={<AuthRoute layout={MainLayout} page={PAGE.SALONS} />}>
 				<Route index element={<SalonPage salonID={salonID as string} />} />
 			</Route>
 			{/* CUSTOMERS */}
+			<Route path={t('paths:customers')} element={<AuthRoute layout={MainLayout} page={PAGE.CUSTOMERS} />}>
+				<Route index element={<CustomersPage salonID={salonID} />} />
+				<Route path={t('loc:createEntity')} element={<CreateCustomerPage salonID={salonID} />} />
+				<Route path={':customerID'} element={<CustomerPage />} />
+			</Route>
 			{/* SERVICES */}
+			<Route path={t('paths:services-settings')} element={<AuthRoute layout={MainLayout} page={PAGE.SERVICES_SETTINGS} />}>
+				<Route index element={<ServicesPage salonID={salonID} />} />
+				<Route path={':serviceID'} element={<ServicePage salonID={salonID as string} />} />
+			</Route>
 			{/* EMPLOYEES */}
-			{/* Industries */}
-			{/* Billing info */}
-
-			{/*
-			<AuthRoute path={path} element={SalonPage} translatePathKey={path} salonID={salonID} layout={MainLayout} page={PAGE.SALONS} />
-			<AuthRoute
-				path={getPath(t('paths:customers/create'))}
-				element={CreateCustomerPage}
-				// TODO: parent path by nemalo byt uz potrebne
-				// parentPath={url}
-				translatePathKey={getPath(t('paths:customers/create'))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.CUSTOMERS}
-			/>
-			<AuthRoute
-				path={getPath(t('paths:customers/{{customerID}}', { customerID: ':customerID' }))}
-				element={CustomerPage}
-				// parentPath={url}
-				translatePathKey={getPath(t('paths:customers/{{customerID}}', { customerID: ':customerID' }))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.CUSTOMERS}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				path={getPath(t('paths:customers'))}
-				element={CustomersPage}
-				// parentPath={url}
-				translatePathKey={getPath(t('paths:customers'))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.CUSTOMERS}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				path={getPath(t('paths:services-settings'))}
-				element={ServicesPage}
-				// parentPath={url}
-				translatePathKey={getPath(t('paths:services-settings'))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.SERVICES_SETTINGS}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				path={getPath(t('paths:services-settings/{{serviceID}}', { serviceID: ':serviceID' }))}
-				element={ServicePage}
-				// parentPath={url}
-				translatePathKey={getPath(t('paths:services-settings/{{serviceID}}', { serviceID: ':serviceID' }))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.SERVICES_SETTINGS}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				path={getPath(t('paths:employees'))}
-				element={EmployeesPage}
-				// parentPath={url}
-				translatePathKey={getPath(t('paths:employees'))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.EMPLOYEES}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				path={getPath(t('paths:employees/create'))}
-				element={CreateEmployeePage}
-				// parentPath={url}
-				translatePathKey={getPath(t('paths:employees/create'))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.EMPLOYEES}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				path={getPath(t('paths:employees/{{employeeID}}', { employeeID: ':employeeID' }))}
-				element={EmployeePage}
-				// parentPath={url}
-				translatePathKey={getPath(t('paths:employees/{{employeeID}}', { employeeID: ':employeeID' }))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.EMPLOYEES}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				path={getPath(t('paths:industries-and-services'))}
-				element={IndustriesPage}
-				// parentPath={url}
-				translatePathKey={getPath(t('paths:industries-and-services'))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.INDUSTRIES_AND_SERVICES}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				path={getPath(t('paths:industries-and-services/{{industryID}}', { industryID: ':industryID' }))}
-				element={IndustryPage}
-				// parentPath={url}
-				translatePathKey={getPath(t('paths:industries-and-services/{{industryID}}', { industryID: ':industryID' }))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.INDUSTRIES_AND_SERVICES}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				path={getPath(t('paths:billing-info'))}
-				element={BillingInfoPage}
-				// parentPath={url}
-				translatePathKey={getPath(t('paths:billing-info'))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.BILLING_INFO}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				path={getPath(t('paths:calendar'))}
-				element={Calendar}
-				// parentPath={url}
-				translatePathKey={getPath(t('paths:calendar'))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.CALENDAR}
-				extra={{
-					contentClassName: 'z-30'
-				}}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				path={getPath(t('paths:reservations'))}
-				element={ReservationsPage}
-				// parentPath={url}
-				translatePathKey={getPath(t('paths:reservations'))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.RESERVATIONS}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				path={getPath(t('paths:reservations-settings'))}
-				element={ReservationsSettingsPage}
-				// parentPath={url}
-				translatePathKey={getPath(t('paths:reservations-settings'))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.SALON_SETTINGS}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				{...props}
-				element={NotFoundPage} // NOTE: for non auth route just let the user redirect on login page
-				layout={MainLayout}
-			/>
-			*/}
+			<Route path={t('paths:employees')} element={<AuthRoute layout={MainLayout} page={PAGE.EMPLOYEES} />}>
+				<Route index element={<EmployeesPage salonID={salonID} />} />
+				<Route path={t('loc:createEntity')} element={<CreateEmployeePage salonID={salonID} />} />
+				<Route path={':employeeID'} element={<EmployeePage salonID={salonID as string} />} />
+			</Route>
+			{/* INDUSTRIES */}
+			<Route path={t('paths:industries-and-services')} element={<AuthRoute layout={MainLayout} page={PAGE.INDUSTRIES_AND_SERVICES} />}>
+				<Route index element={<IndustriesPage salonID={salonID} />} />
+				<Route path={':industryID'} element={<IndustryPage salonID={salonID as string} />} />
+			</Route>
+			{/* BILLING INFO */}
+			<Route path={t('paths:billing-info')} element={<AuthRoute layout={MainLayout} page={PAGE.BILLING_INFO} />}>
+				<Route index element={<BillingInfoPage salonID={salonID} />} />
+			</Route>
+			{/* CALENDAR */}
+			<Route
+				path={t('paths:calendar')}
+				element={
+					<AuthRoute
+						extra={{
+							contentClassName: 'z-30'
+						}}
+						layout={MainLayout}
+						page={PAGE.CALENDAR}
+					/>
+				}
+			>
+				<Route index element={<Calendar salonID={salonID} />} />
+			</Route>
+			{/* RESERVATIONS */}
+			<Route path={t('paths:reservations')} element={<AuthRoute layout={MainLayout} page={PAGE.RESERVATIONS} />}>
+				<Route index element={<ReservationsPage salonID={salonID} />} />
+			</Route>
+			{/* RESERVATIONS SETTINGS */}
+			<Route path={t('paths:reservations-settings')} element={<AuthRoute layout={MainLayout} page={PAGE.SALON_SETTINGS} />}>
+				<Route index element={<ReservationsSettingsPage salonID={salonID} />} />
+			</Route>
+			{/* 404 */}
+			<Route element={<AuthRoute layout={MainLayout} />}>
+				<Route path={'*'} element={<NotFoundPage />} />
+			</Route>
 		</Routes>
 	)
 }

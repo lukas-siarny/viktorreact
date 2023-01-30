@@ -1,11 +1,6 @@
-// use Nodemailer to get an Ethereal email inbox
-// https://nodemailer.com/about/
 // eslint-disable-next-line import/no-extraneous-dependencies,import/no-import-module-exports
 import nodemailer from 'nodemailer'
-// used to fetch emails from the inbox via imap protocol
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 
-// used to parse emails from the inbox
 // eslint-disable-next-line import/no-extraneous-dependencies,import/no-import-module-exports
 import { simpleParser } from 'mailparser'
 

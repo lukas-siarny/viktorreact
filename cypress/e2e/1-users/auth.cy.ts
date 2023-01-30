@@ -6,8 +6,6 @@ import { FORM } from '../../../src/utils/enums'
 
 import user from '../../fixtures/user.json'
 
-const nthInput = (n: number) => `#ACTIVATION-code > :nth-child(${n})`
-
 context('Auth', () => {
 	let userEmail: string
 
@@ -17,12 +15,10 @@ context('Auth', () => {
 			cy.log('Email address:', emailUser.email)
 			expect(emailUser.email).to.be.a('string')
 			userEmail = emailUser.email
-			userName = emailUser.email.replace('@ethereal.email', '')
 		})
 	})
 
-	it('Sign up', async () => {
-		cy.clearLocalStorage()
+	it('Sign up', () => {
 		cy.intercept({
 			method: 'POST',
 			url: '/api/b2b/admin/users/registration'
@@ -58,19 +54,13 @@ context('Auth', () => {
 				cy.get('strong')
 					.invoke('text')
 					.then((txt) => {
-						cy.log('Activation code is: ', txt.toString())
-						const activationCode: string = txt.toString()
+						cy.log('Activation code: ', txt.toString())
 						cy.visit('/activation')
 						cy.intercept({
 							method: 'POST',
 							url: '/api/b2b/admin/users/activation'
 						}).as('activation')
-						cy.get(nthInput(1)).type(activationCode[0]).should('have.value', activationCode[0])
-						cy.get(nthInput(2)).type(activationCode[1]).should('have.value', activationCode[1])
-						cy.get(nthInput(3)).type(activationCode[2]).should('have.value', activationCode[2])
-						cy.get(nthInput(4)).type(activationCode[3]).should('have.value', activationCode[3])
-						cy.get(nthInput(5)).type(activationCode[4]).should('have.value', activationCode[4])
-						cy.get(nthInput(6)).type(activationCode[5]).should('have.value', activationCode[5])
+						cy.setValuesForPinField(FORM.ACTIVATION, 'code', txt.toString())
 						cy.get('form').submit()
 						cy.wait('@activation').then((interception: any) => {
 							// check status code of registration request

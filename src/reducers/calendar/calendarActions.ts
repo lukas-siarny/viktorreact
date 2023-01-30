@@ -239,12 +239,14 @@ export const getCalendarEvents =
 
 			dispatch({ type: EVENTS.EVENTS_LOAD_DONE, enumType, payload })
 		} catch (err) {
-			if (axios.isCancel(err)) {
+			if (axios.isCancel(err) && (err as any)?.message !== 'stop loading') {
+				console.log({ err })
 				// Request bol preruseny novsim requestom, tym padom chceme, aby loading state pokracoval
-				// dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
+				dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
 			} else {
-				// dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType })
+				dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType })
 			}
+			// dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType })
 		}
 
 		if (clearVirtualEvent) {

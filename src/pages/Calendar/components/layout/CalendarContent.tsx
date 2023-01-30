@@ -220,29 +220,23 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	 * zavolá sa síce vždy, aj keď je event vrátený na rovnaké miesto - poskytuje však informácie len o pôvodnej polohe eventu, čo je zasa jeho veľka nevýhoda
 	 */
 
-	console.log({ isRefreshingEventsBefore: isRefreshingEvents })
-
 	const onEventChangeStart = useCallback(
 		(arg: EventDropArg | EventResizeStartArg) => {
 			clearRestartInterval()
 			// disable render on resize or drop start
 			// setDisableRender(true)
-			console.log({ isRefreshingEvents })
 
-			if (isRefreshingEvents) {
-				if (typeof cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY] !== typeof undefined) {
-					console.log('aaa')
-					cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY].cancel('Operation canceled due to new request.')
-					dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType: CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS })
-				}
-				if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION && typeof cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY] !== typeof undefined) {
-					console.log('bbbb')
-					cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY].cancel('Operation canceled due to new request.')
-					dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType: CALENDAR_EVENTS_KEYS.RESERVATIONS })
-					// canceledShiftTimeOffRequest.current = true
-				}
-				dispatch({ type: SET_IS_REFRESHING_EVENTS, payload: false })
+			if (typeof cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY] !== typeof undefined) {
+				console.log('aaa')
+				cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY].cancel('stop loading')
+				// dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType: CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS })
 			}
+			if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION && typeof cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY] !== typeof undefined) {
+				console.log('bbbb')
+				cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY].cancel('stop loading')
+				// dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType: CALENDAR_EVENTS_KEYS.RESERVATIONS })
+			}
+			// dispatch({ type: SET_IS_REFRESHING_EVENTS, payload: false })
 
 			// prevEvent.current = getEventForComparsion(view, arg.el)
 		},

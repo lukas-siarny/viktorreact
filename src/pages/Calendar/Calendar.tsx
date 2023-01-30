@@ -193,11 +193,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	/**
 	 * tzv. background load eventov - keďže nepoužívame Websockety, na pozadí sa v pravidelnom intervale obnovujú eventy v kalendári, aby bola aspoň takto zaistená ich aktuálnosť
 	 */
-	const clearRestartFetchInterval = () => window.clearInterval(fetchInterval.current)
+	const clearFetchInterval = () => window.clearInterval(fetchInterval.current)
 
 	const restartFetchInterval = async () => {
 		if (fetchInterval.current) {
-			clearRestartFetchInterval()
+			clearFetchInterval()
 		}
 
 		const interval = window.setInterval(async () => {
@@ -368,7 +368,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		;(async () => {
 			// if user uncheck all values from one of the filters => don't fetch new events
 			if (query?.employeeIDs === null || query?.categoryIDs === null) {
-				clearRestartFetchInterval()
+				clearFetchInterval()
 				dispatch(clearCalendarReservations())
 				dispatch(clearCalendarShiftsTimeoffs())
 				return
@@ -427,7 +427,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// clear on unmount
 		return () => {
 			if (fetchInterval.current) {
-				clearRestartFetchInterval()
+				clearFetchInterval()
 				message.destroy()
 			}
 		}
@@ -565,10 +565,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} finally {
 				setIsUpdatingEvent(false)
 				clearConfirmModal()
-				// v niektorych pripadoch je potrebne vypnut prerendrovanie kalendara a nasledne ho zapnut (vysevtlene v componente CalendarContnet.tsx)
-				if (values?.enableCalendarRender) {
-					values.enableCalendarRender()
-				}
 			}
 		},
 		[closeSiderForm, fetchEvents, salonID, query.eventId]
@@ -680,10 +676,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} finally {
 				setIsUpdatingEvent(false)
 				clearConfirmModal()
-				// v niektorych pripadoch je potrebne vypnut prerendrovanie kalendara a nasledne ho zapnut (vysevtlene v componente CalendarContnet.tsx)
-				if (values?.enableCalendarRender) {
-					values.enableCalendarRender()
-				}
 			}
 		},
 		[dispatch, fetchEvents, closeSiderForm, salonID, query.eventId]
@@ -849,7 +841,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						handleSubmitReservation={initSubmitReservationData}
 						handleSubmitEvent={initSubmitEventData}
 						onAddEvent={handleAddEvent}
-						clearRestartInterval={clearRestartFetchInterval}
+						clearFetchInterval={clearFetchInterval}
+						restartInterval={restartFetchInterval}
 					/>
 					{selectedSalon?.settings?.enabledReservations && (
 						<SiderEventManagement

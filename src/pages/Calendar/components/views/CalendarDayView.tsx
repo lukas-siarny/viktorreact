@@ -92,7 +92,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		onEventChangeStop
 	} = props
 
-	const dispatch = useDispatch()
 	const events = useMemo(() => {
 		const data = composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees)
 		// ak je virtualEvent definovany, zaradi sa do zdroja eventov pre Calendar
@@ -181,8 +180,5 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 })
 
 export default React.memo(CalendarDayView, (prevProps, nextProps) => {
-	if (nextProps.disableRender) {
-		return true
-	}
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
 })

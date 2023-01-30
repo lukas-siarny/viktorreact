@@ -18,7 +18,8 @@ import {
 	DATE_TIME_PARSER_DATE_FORMAT,
 	RESERVATION_STATE,
 	RESERVATION_SOURCE_TYPE,
-	RESERVATION_PAYMENT_METHOD
+	RESERVATION_PAYMENT_METHOD,
+	CANEL_TOKEN_MESSAGES
 } from '../../utils/enums'
 
 // utils
@@ -239,7 +240,7 @@ export const getCalendarEvents =
 
 			dispatch({ type: EVENTS.EVENTS_LOAD_DONE, enumType, payload })
 		} catch (err) {
-			if (axios.isCancel(err) && (err as any)?.message !== 'stop loading') {
+			if (axios.isCancel(err) && (err as any)?.message === CANEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST) {
 				console.log({ err })
 				// Request bol preruseny novsim requestom, tym padom chceme, aby loading state pokracoval
 				dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })

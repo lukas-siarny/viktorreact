@@ -322,8 +322,5 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 })
 
 export default React.memo(CalendarWeekView, (prevProps, nextProps) => {
-	if (nextProps.disableRender) {
-		return true
-	}
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
 })

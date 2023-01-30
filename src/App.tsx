@@ -8,7 +8,7 @@ import { AliasToken } from 'antd/es/theme/internal'
 import dayjs from 'dayjs'
 import { QueryParamProvider } from 'use-query-params'
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6'
-import { BrowserRouter, Router } from 'react-router-dom'
+import { BrowserRouter, createBrowserRouter, createRoutesFromElements, Route, Router } from 'react-router-dom'
 
 // import 'antd/dist/antd.min.css'
 import 'antd/dist/reset.css'
@@ -64,7 +64,8 @@ const App = () => {
 			})
 		})
 	}, [])
-
+	// TODO: nefunguje
+	// const router = createBrowserRouter(createRoutesFromElements(<Route path={'*'} element={<AppRoutes />} />))
 	return (
 		<Suspense
 			fallback={

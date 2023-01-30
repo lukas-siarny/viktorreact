@@ -919,7 +919,7 @@ export const hasAuthUserPermissionToEditRole = (
 			return result
 		}
 		// it's possible to edit role only if you have permission to edit
-		if (authUserSalonRole?.permissions.find((permission) => permission.name === SALON_PERMISSION.USER_ROLE_EDIT)) {
+		if (authUserSalonRole?.permissions.find((permission) => permission.name === SALON_PERMISSION.EMPLOYEE_ROLE_UPDATE)) {
 			return {
 				hasPermission: true,
 				tooltip: null

@@ -40,7 +40,14 @@ const IndustryForm: FC<Props> = (props) => {
 			<div className={'content-footer'}>
 				<Row justify='center'>
 					<Permissions
-						allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.USER_ROLE_EDIT]}
+						allowed={[
+							PERMISSION.NOTINO_SUPER_ADMIN,
+							PERMISSION.NOTINO_ADMIN,
+							PERMISSION.PARTNER,
+							SALON_PERMISSION.PARTNER_ADMIN,
+							SALON_PERMISSION.SERVICE_CREATE,
+							SALON_PERMISSION.SERVICE_DELETE
+						]}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Button
 								type={'primary'}

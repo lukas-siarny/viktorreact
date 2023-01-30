@@ -510,7 +510,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		(infoMessage || isPendingPublication) && (
 			<div className={cx('content-header flex-col gap-2', { warning: isPendingPublication })}>
 				{isPendingPublication && (
-					<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
+					<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.SALON_PUBLICATION_RESOLVE]}>
 						<Row justify={'space-between'} className={'w-full'}>
 							<Button
 								type={'primary'}

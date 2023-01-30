@@ -85,7 +85,7 @@ const AppRoutes: FC = () => {
 				<Route path={t('paths:users')} element={<AuthRoute layout={MainLayout} page={PAGE.USERS} />}>
 					<Route index element={<UsersPage />} />
 					<Route path={':userID'} element={<UserPage />} />
-					<Route path={t('path:createEntity')} element={<CreateUserPage />} />
+					<Route path={t('paths:createEntity')} element={<CreateUserPage />} />
 				</Route>
 				<Route path={t('paths:my-account')} element={<AuthRoute layout={MainLayout} page={PAGE.MY_ACCOUNT} />}>
 					<Route index element={<UserPage />} />
@@ -95,7 +95,7 @@ const AppRoutes: FC = () => {
 				</Route>
 				<Route path={t('paths:salons')} element={<AuthRoute layout={MainLayout} page={PAGE.SALONS} />}>
 					<Route index element={<SalonsPage />} />
-					<Route path={t('loc:createEntity')} element={<SalonPage salonID={NEW_SALON_ID} />} />
+					<Route path={t('paths:createEntity')} element={<SalonPage salonID={NEW_SALON_ID} />} />
 				</Route>
 				{/* // Salon view */}
 				<Route path={t('paths:salons')}>
@@ -107,7 +107,7 @@ const AppRoutes: FC = () => {
 				<Route path={t('paths:category-parameters')} element={<AuthRoute layout={MainLayout} page={PAGE.CATEGORY_PARAMETERS} />}>
 					<Route index element={<CategoryParamsPage />} />
 					<Route path={':parameterID'} element={<EditCategoryParamsPage />} />
-					<Route path={t('loc:createEntity')} element={<CreateCategoryParamsPage />} />
+					<Route path={t('paths:createEntity')} element={<CreateCategoryParamsPage />} />
 				</Route>
 				<Route path={t('paths:cosmetics')} element={<AuthRoute layout={MainLayout} page={PAGE.COSMETICS} />}>
 					<Route index element={<CosmeticsPage />} />
@@ -118,7 +118,7 @@ const AppRoutes: FC = () => {
 				<Route path={t('paths:support-contacts')} element={<AuthRoute layout={MainLayout} page={PAGE.SUPPORT_CONTACTS} />}>
 					<Route index element={<SupportContactsPage />} />
 					<Route path={':supportContactID'} element={<SupportContactPage />} />
-					<Route path={t('loc:createEntity')} element={<SupportContactPage />} />
+					<Route path={t('paths:createEntity')} element={<SupportContactPage />} />
 				</Route>
 				<Route path={t('paths:specialist-contacts')} element={<AuthRoute layout={MainLayout} page={PAGE.SPECIALIST_CONTACTS} />}>
 					<Route index element={<SpecialistContactsPage />} />

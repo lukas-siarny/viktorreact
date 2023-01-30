@@ -101,7 +101,7 @@ const SalonSubRoutes: FC = () => {
 			{/* CUSTOMERS */}
 			<Route path={t('paths:customers')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.CUSTOMERS} />}>
 				<Route index element={<CustomersPage parentPath={parentPath} salonID={salonID} />} />
-				<Route path={t('loc:createEntity')} element={<CreateCustomerPage parentPath={parentPath} salonID={salonID} />} />
+				<Route path={t('paths:createEntity')} element={<CreateCustomerPage parentPath={parentPath} salonID={salonID} />} />
 				<Route path={':customerID'} element={<CustomerPage parentPath={parentPath} />} />
 			</Route>
 			{/* SERVICES */}
@@ -112,7 +112,7 @@ const SalonSubRoutes: FC = () => {
 			{/* EMPLOYEES */}
 			<Route path={t('paths:employees')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.EMPLOYEES} />}>
 				<Route index element={<EmployeesPage parentPath={parentPath} salonID={salonID} />} />
-				<Route path={t('loc:createEntity')} element={<CreateEmployeePage parentPath={parentPath} salonID={salonID} />} />
+				<Route path={t('paths:createEntity')} element={<CreateEmployeePage parentPath={parentPath} salonID={salonID} />} />
 				<Route path={':employeeID'} element={<EmployeePage parentPath={parentPath} salonID={salonID as string} />} />
 			</Route>
 			{/* INDUSTRIES */}

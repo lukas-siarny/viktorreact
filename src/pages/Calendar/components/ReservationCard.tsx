@@ -120,7 +120,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 
 	const handleReservationClick = () => {
 		// NOTE: prevent proti kliknutiu na virutalny event rezervacie neotvori sa popover
-		if (startsWith(originalEventData.id, NEW_ID_PREFIX)) {
+		if (startsWith(originalEventData.id, NEW_ID_PREFIX) || isPlaceholder) {
 			return
 		}
 		if (originalEventData.id && cardRef.current) {

@@ -1,4 +1,4 @@
-import { EventDragStartArg, EventResizeDoneArg, EventResizeStartArg } from '@fullcalendar/interaction'
+import { EventDragStartArg, EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 import { EventDropArg, EventInput } from '@fullcalendar/core'
@@ -712,8 +712,9 @@ export interface ICalendarView {
 	onAddEvent: (event: INewCalendarEvent) => void
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
-	onEventChange?: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
-	onEventChangeStart?: (arg: EventDropArg | EventResizeStartArg) => void
+	onEventChange: (arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
+	onEventChangeStart: (arg: EventDropArg | EventResizeStartArg) => void
+	onEventChangeStop: (arg: EventDropArg | EventResizeStopArg) => void
 	loading?: boolean
 	virtualEvent?: EventInput
 	clearRestartInterval: () => void

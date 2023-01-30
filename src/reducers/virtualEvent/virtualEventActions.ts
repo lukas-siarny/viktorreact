@@ -47,7 +47,7 @@ export const clearEvent = (): ThunkResult<void> => (dispatch, getState) => {
 	// clear store
 	dispatch({ type: VIRTUAL_EVENT.VIRTUAL_EVENT_CLEAR, payload: { data: null } })
 	// destroy calendar forms
-	Object.keys(HANDLE_CALENDAR_FORMS).forEach((key) => dispatch(destroy(key)))
+	HANDLE_CALENDAR_FORMS.forEach((form) => dispatch(destroy(form)))
 	// remove event from Calendar API
 	if (calendarApi) {
 		const eventId = getState().virtualEvent.virtualEvent.data?.id
@@ -88,7 +88,7 @@ export const addOrUpdateEvent =
 		if (!formData) {
 			return
 		}
-		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID, note, noteFromB2CCustomer, reservationData } = formData
+		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID, reservationData } = formData
 
 		if (date && timeFrom && employee && eventType) {
 			let { eventId } = formData
@@ -132,21 +132,19 @@ export const addOrUpdateEvent =
 					},
 					customer: customer
 						? {
-								...(customer?.extra?.customerData || {}),
 								id: customer.key,
 								email: customer.label || customer.value
 						  }
 						: undefined,
 					service: service
 						? {
-								...(service?.extra?.serviceData || {}),
+								icon: service?.extra?.icon,
 								id: service.key,
 								name: service.label || service.value
 						  }
 						: undefined,
 					employee: employee
 						? {
-								...(employee?.extra?.employeeData || {}),
 								id: employee.key,
 								email: employee.label || employee.value
 						  }
@@ -156,12 +154,9 @@ export const addOrUpdateEvent =
 								id: calendarBulkEventID
 						  }
 						: undefined,
-					note,
-					noteFromB2CCustomer,
 					reservationData
 				}
 			}
-
 			const payload: IVirtualEventPayload = {
 				data: {
 					id: eventId,

@@ -49,13 +49,13 @@ const resourceGroupLaneContent = () => {
 const resourceAreaColumns = [
 	{
 		field: 'day',
-		headerContent: 'header', // NOTE: do not delete this - calendar header won't render correctly without this
+		headerContent: <span />, // NOTE: do not delete this - calendar header won't render correctly without this
 		width: 55,
-		cellContent: () => <span />
+		cellContent: <span /> // NOTE: do not delete this - calendar header won't render correctly without this
 	},
 	{
 		field: 'employee',
-		headerContent: 'header', // NOTE: do not delete this - calendar header won't render correctly without this
+		headerContent: <span />, // NOTE: do not delete this - calendar header won't render correctly without this
 		width: 145,
 		cellContent: (args: any) => {
 			const { resource } = args || {}
@@ -167,7 +167,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		virtualEvent,
 		setEventManagement,
 		enabledSalonReservations,
-		onEventChangeStart
+		onEventChangeStart,
+		onEventChangeStop
 	} = props
 
 	const dispatch = useDispatch()
@@ -289,9 +290,9 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				weekends
 				stickyFooterScrollbar
 				nowIndicator
+				selectable={enabledSalonReservations}
 				// data sources
 				events={events}
-				// eventSources={events}
 				resources={resources}
 				resourceAreaColumns={resourceAreaColumns}
 				// render hooks
@@ -303,12 +304,12 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				)}
 				nowIndicatorContent={() => <NowIndicator />}
 				// handlers
-				eventDrop={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
-				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.WEEK, arg)}
-				// select
-				selectable={enabledSalonReservations}
-				eventDragStart={(arg) => onEventChangeStart && onEventChangeStart(arg)}
-				eventResizeStart={(arg) => onEventChangeStart && onEventChangeStart(arg)}
+				eventDrop={onEventChange}
+				eventResize={onEventChange}
+				eventDragStart={onEventChangeStart}
+				eventResizeStart={onEventChangeStart}
+				eventDragStop={onEventChangeStop}
+				eventResizeStop={onEventChangeStop}
 				select={(selectedEvent) => handleNewEvent(selectedEvent)}
 				resourcesSet={() => setTimeout(updateCalendarSize, 0)}
 				eventsSet={() => {

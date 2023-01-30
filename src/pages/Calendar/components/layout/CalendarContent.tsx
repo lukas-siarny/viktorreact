@@ -5,12 +5,12 @@ import { Content } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { change } from 'redux-form'
-import { startsWith } from 'lodash'
+import { isEqual, startsWith } from 'lodash'
 import { DelimitedArrayParam, useQueryParams } from 'use-query-params'
 
 // fullcalendar
 import FullCalendar from '@fullcalendar/react'
-import { EventResizeDoneArg } from '@fullcalendar/interaction'
+import { EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
 import { EventDropArg } from '@fullcalendar/core'
 
 // enums
@@ -38,6 +38,55 @@ import { ForbiddenModal, permitted } from '../../../../utils/Permissions'
 import { getSelectedDateForCalendar, getWeekDays } from '../../calendarHelpers'
 import { history } from '../../../../utils/history'
 
+type ComparsionEventInfo = {
+	offsetTop: number | null
+	offsetTopRow: number | null
+	offsetLeft: number | null
+	height: number | null
+	width: number | null
+}
+
+const COMPARSION_INFO_DEFAULT = {
+	offsetTop: null,
+	offsetTopRow: null,
+	offsetLeft: null,
+	height: null,
+	width: null
+}
+
+const getEventForComparsion = (calendarView: CALENDAR_VIEW, element?: HTMLElement) => {
+	// const element = document.querySelector(`.${eventClassName}`)
+	let offsetTop = null
+	let offsetLeft = null
+	let offsetTopRow = null // relevant only for the week view
+	const clientRect = element?.getBoundingClientRect()
+	const height = clientRect?.height || null
+	const width = clientRect?.width || null
+	const parentWrapper = element?.parentElement
+
+	switch (calendarView) {
+		case CALENDAR_VIEW.DAY:
+			// offset of toptier parent card wrapper (.fc-timegrid-event-harness) from parent column (.fc-timegrid-col-events)
+			offsetTop = parentWrapper?.offsetTop ?? null
+			// offset of toptier parent col element (.fc-timegrid-col) from whole table
+			offsetLeft = parentWrapper?.parentElement?.parentElement?.parentElement?.offsetLeft ?? null
+			break
+		case CALENDAR_VIEW.WEEK: {
+			// offset of toptier parent card wrapper (.fc-timeline-event-harness) from parent timeline line (.fc-timeline-lane)
+			offsetTop = parentWrapper?.offsetTop ?? null
+			// offset of parent tr element from whole table
+			// it's neccessary to check this as well, becouse offsetTop is only relative to parentLine, not the whole table
+			offsetTopRow = parentWrapper?.parentElement?.parentElement?.parentElement?.parentElement?.offsetTop ?? null
+			offsetLeft = parentWrapper?.offsetLeft ?? null
+			break
+		}
+		default:
+			break
+	}
+
+	return { offsetTop, offsetTopRow, offsetLeft, width, height }
+}
+
 type Props = {
 	view: CALENDAR_VIEW
 	loading: boolean
@@ -46,7 +95,7 @@ type Props = {
 	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
 	enabledSalonReservations?: boolean
 	parentPath: string
-} & ICalendarView
+} & Omit<ICalendarView, 'onEventChange' | 'onEventChangeStart' | 'onEventChangeStop'>
 
 export type CalendarRefs = {
 	[CALENDAR_VIEW.DAY]?: InstanceType<typeof FullCalendar> | null
@@ -100,6 +149,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const selectedSalonuniqPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions)
 	const [visibleForbiddenModal, setVisibleForbiddenModal] = useState(false)
+	const prevEvent = useRef<ComparsionEventInfo>(COMPARSION_INFO_DEFAULT)
 
 	const sources = useMemo(() => {
 		// eventy, ktore sa posielaju o uroven nizsie do View, sa v pripade, ze existuje virtualEvent odfiltruju
@@ -124,9 +174,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const calendarSelectedDate = getSelectedDateForCalendar(view, selectedDate)
 	const dispatch = useDispatch()
 
-	const onEventChange = (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
-		console.log('onEventChange')
-
+	const onEventChange = (arg: EventDropArg | EventResizeDoneArg) => {
 		const hasPermissions = permitted(authUserPermissions || [], selectedSalonuniqPermissions, UPDATE_EVENT_PERMISSIONS)
 
 		const revertEvent = () => {
@@ -153,12 +201,12 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		const currentEmployeeId = eventExtenedProps?.eventData?.employee?.id
 
 		// NOTE: miesto eventAllow sa bude vyhodnocovat, ci sa dany event moze upravit tu
-		if (/* calendarView !== CALENDAR_VIEW.MONTH && */ eventData?.eventType !== CALENDAR_EVENT_TYPE.RESERVATION && !startsWith(event.id, NEW_ID_PREFIX)) {
+		if (/* view !== CALENDAR_VIEW.MONTH && */ eventData?.eventType !== CALENDAR_EVENT_TYPE.RESERVATION && !startsWith(event.id, NEW_ID_PREFIX)) {
 			if (newEmployeeId !== currentEmployeeId) {
 				notification.warning({
 					message: t('loc:Upozornenie'),
 					description: t('loc:{{ eventType }} nie je možné preradiť na iného zamestnanca.', {
-						eventType: eventData?.eventType ? EVENT_NAMES(eventData?.eventType as CALENDAR_EVENT_TYPE, true) : t('loc:Udalosť')
+						eventType: EVENT_NAMES(eventData?.eventType as CALENDAR_EVENT_TYPE, true)
 					})
 				})
 				revertEvent()
@@ -173,14 +221,14 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 		let date = startDajys.format(CALENDAR_DATE_FORMAT.QUERY)
 
-		if (calendarView === CALENDAR_VIEW.WEEK) {
+		if (view === CALENDAR_VIEW.WEEK) {
 			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
 			// (to sa bude diat len pri drope)
 			const resource = event.getResources()[0]
 			date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
 		}
 
-		if (calendarView === CALENDAR_VIEW.WEEK) {
+		if (view === CALENDAR_VIEW.WEEK) {
 			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
 			// (to sa bude diat len pri drope)
 			const resource = event.getResources()[0]
@@ -200,6 +248,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			},
 			eventId,
 			revertEvent,
+			// if the event has changed, it is necessary to enable rendering again.. however, only after completing the request for current data... otherwise, duplicate events may be created in the calendar
+			// if someone in another session changes the event and I start changing the same event during the nearest background load, this event would be duplicated with the rendering enabled
 			enableCalendarRender: () => setDisableRender(false),
 			updateFromCalendar: true
 		}
@@ -238,14 +288,24 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm)
 	}
 
-	console.log({ disableRender })
-
-	const onEventChangeStart = () => {
-		console.log('aaaaaaaaaa')
-		// este osetrit ze ked sa nezmeni dlzka eventu, tak aby sa nezapol disabled render
-		// respektive v onEventStop by sa to moholo osetrit
+	const onEventChangeStart = (arg: EventDropArg | EventResizeStartArg) => {
 		clearRestartInterval()
+		// disable render on resize or drop start
 		setDisableRender(true)
+		prevEvent.current = getEventForComparsion(view, arg.el)
+	}
+
+	const onEventChangeStop = (arg: EventDropArg | EventResizeStopArg) => {
+		// FC uses a "fake" element in the DOM for drag and resize
+		// it is therefore necessary to wait until the original DOM event is updated after the change and then find out its new coordinates
+		setTimeout(() => {
+			const dropEventInfo = getEventForComparsion(view, arg.el)
+			// if the old and new coordinates are the same, then onEventChange CB is not called (which would enable render again) and it is necessary to enable render here
+			if (isEqual(dropEventInfo, prevEvent.current)) {
+				setDisableRender(false)
+			}
+			prevEvent.current = COMPARSION_INFO_DEFAULT
+		}, 500)
 	}
 
 	const getView = () => {
@@ -338,6 +398,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					clearRestartInterval={clearRestartInterval}
 					onEventChange={onEventChange}
 					onEventChangeStart={onEventChangeStart}
+					onEventChangeStop={onEventChangeStop}
 					updateCalendarSize={() => weekView?.current?.getApi().updateSize()}
 				/>
 			)
@@ -362,6 +423,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				clearRestartInterval={clearRestartInterval}
 				onEventChange={onEventChange}
 				onEventChangeStart={onEventChangeStart}
+				onEventChangeStop={onEventChangeStop}
 			/>
 		)
 	}

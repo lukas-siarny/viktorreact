@@ -89,7 +89,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		enabledSalonReservations,
 		setEventManagement,
 		onEventChangeStart,
-		onReservationClick
+		onReservationClick,
+		onEventChangeStop
 	} = props
 
 	const dispatch = useDispatch()
@@ -104,8 +105,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	 * Spracuje input z calendara click/select a vytvori z neho init data, ktore vyuzije form v SiderEventManager
 	 */
 	const handleNewEvent = (event: DateSelectArg) => {
-		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
-		dispatch(clearEvent())
 		setEventManagement(undefined)
 
 		if (event.resource) {
@@ -159,6 +158,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				nowIndicator
 				allDaySlot={false}
 				stickyFooterScrollbar
+				selectable={enabledSalonReservations}
 				// data sources
 				events={events}
 				resources={resources}
@@ -169,14 +169,12 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				)}
 				slotLabelContent={slotLabelContent}
 				// handlers
-				eventDrop={(arg) => {
-					if (onEventChange) onEventChange(CALENDAR_VIEW.DAY, arg)
-				}}
-				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
-				// select
-				selectable={enabledSalonReservations}
-				eventDragStart={(arg) => onEventChangeStart && onEventChangeStart(arg)}
-				eventResizeStart={(arg) => onEventChangeStart && onEventChangeStart(arg)}
+				eventDrop={onEventChange}
+				eventResize={onEventChange}
+				eventDragStart={onEventChangeStart}
+				eventResizeStart={onEventChangeStart}
+				eventDragStop={onEventChangeStop}
+				eventResizeStop={onEventChangeStop}
 				select={handleNewEvent}
 			/>
 		</div>

@@ -49,13 +49,12 @@ const resourceGroupLaneContent = () => {
 const resourceAreaColumns = [
 	{
 		field: 'day',
-		headerContent: <span />, // NOTE: do not delete this - calendar header won't render correctly without this
+		headerContent: <span className={'invisible'}>{'header'}</span>, // NOTE: do not delete this - calendar header won't render correctly without this
 		width: 55,
 		cellContent: <span /> // NOTE: do not delete this - calendar header won't render correctly without this
 	},
 	{
 		field: 'employee',
-		headerContent: <span />, // NOTE: do not delete this - calendar header won't render correctly without this
 		width: 145,
 		cellContent: (args: any) => {
 			const { resource } = args || {}

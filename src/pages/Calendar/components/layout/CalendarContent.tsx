@@ -62,7 +62,7 @@ type Props = {
 	enabledSalonReservations?: boolean
 	parentPath: string
 	clearFetchInterval: () => void
-	restartInterval: () => void
+	restartFetchInterval: () => void
 } & Omit<ICalendarView, 'onEventChange' | 'onEventChangeStart' | 'onEventChangeStop'>
 
 export type CalendarRefs = {
@@ -89,7 +89,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		onEditEvent,
 		onReservationClick,
 		clearFetchInterval,
-		restartInterval,
+		restartFetchInterval,
 		parentPath
 	} = props
 
@@ -165,7 +165,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	 *
 	 * onEventChangeStop()
 	 * zavolá vždy po dokončení dnd alebo resizu, aj v prípade, že k zmene pozície eventu nedošlo
-	 * preto v tomto CB opatovne povoľujeme aktualizáciu dát - restartInterval()
+	 * preto v tomto CB opatovne povoľujeme aktualizáciu dát - restartFetchInterval()
 	 * poskytuje však informácie len o pôvodnom evente, neposkytuje informácie o novej polohe, resoruce, ani revert() funkciu, preto ho nemôžeme použit univerzálne miesto onEventChange()
 	 */
 
@@ -283,7 +283,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	}
 
 	const onEventChangeStop = () => {
-		restartInterval()
+		restartFetchInterval()
 	}
 
 	const getView = () => {

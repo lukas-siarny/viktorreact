@@ -842,7 +842,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						handleSubmitEvent={initSubmitEventData}
 						onAddEvent={handleAddEvent}
 						clearFetchInterval={clearFetchInterval}
-						restartInterval={restartFetchInterval}
+						restartFetchInterval={restartFetchInterval}
 					/>
 					{selectedSalon?.settings?.enabledReservations && (
 						<SiderEventManagement

@@ -88,7 +88,7 @@ const AppRoutes: FC = () => {
 				<Route path={t('paths:users')} element={<AuthRoute layout={MainLayout} page={PAGE.USERS} />}>
 					<Route index element={<UsersPage />} />
 					<Route path={':userID'} element={<UserPage />} />
-					<Route path={t('loc:createEntity')} element={<CreateUserPage />} />
+					<Route path={t('path:createEntity')} element={<CreateUserPage />} />
 				</Route>
 				<Route path={t('paths:my-account')} element={<AuthRoute layout={MainLayout} page={PAGE.MY_ACCOUNT} />}>
 					<Route index element={<UserPage />} />

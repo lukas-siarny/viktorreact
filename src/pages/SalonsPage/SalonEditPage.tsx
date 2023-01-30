@@ -359,7 +359,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	const requestApprovalButton = (className = '') => {
 		const disabled = isLoading || isDeletedSalon || (!isFormPristine && !isPendingPublication && (!isPublished || isBasic))
 
-		// / Workaround for disabled button inside tooltip: https://github.com/react-component/tooltip/issues/18
+		// Workaround for disabled button inside tooltip: https://github.com/react-component/tooltip/issues/18
 		return (
 			<Tooltip
 				title={disabled ? t('loc:V sálone boli vykonané zmeny, ktoré nie sú uložené. Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.') : null}

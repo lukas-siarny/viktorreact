@@ -72,6 +72,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
+	const location = useLocation()
 	const hasPermissions = useCallback(
 		(allowed: _Permissions = [], except: _Permissions = []) => {
 			return permitted(authUserPermissions || [], selectedSalon?.uniqPermissions, allowed, except)
@@ -238,7 +239,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 					// reset support contact data to empty in case there are some stored in redux
 					// otherwise language detection would not work correctly in t('paths:contact') page
 					dispatch(getSupportContact())
-					navigate(t('paths:contact'))
+					navigate(t('paths:contact'), { state: { from: location.pathname } })
 				},
 				icon: <HelpIcon />
 			},

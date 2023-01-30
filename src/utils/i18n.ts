@@ -9,6 +9,9 @@ import { initReactI18next } from 'react-i18next'
 import 'dayjs/locale/sk'
 import 'dayjs/locale/cs'
 import 'dayjs/locale/en'
+import 'dayjs/locale/hu'
+import 'dayjs/locale/ro'
+import 'dayjs/locale/bg'
 
 import { NAMESPACE, LANGUAGE, DEFAULT_LANGUAGE } from './enums'
 

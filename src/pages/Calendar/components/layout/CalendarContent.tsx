@@ -5,11 +5,11 @@ import { Content } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { change } from 'redux-form'
-import { isEqual, startsWith } from 'lodash'
+import { startsWith } from 'lodash'
 import { DelimitedArrayParam, useQueryParams } from 'use-query-params'
 
 // fullcalendar
-import { EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
+import { EventResizeDoneArg } from '@fullcalendar/interaction'
 import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 
 // enums

@@ -137,7 +137,7 @@ const UserPage: FC<Props> = () => {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/users/{userID}', { userID: id }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			if (isMyAccountPage) {
-				dispatch(logOutUser())
+				dispatch(logOutUser(navigate))
 				navigate(t('paths:login'))
 			} else {
 				navigate(t('paths:users'))

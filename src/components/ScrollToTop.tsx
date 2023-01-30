@@ -1,5 +1,5 @@
-import React, { FC, useEffect } from 'react'
-import { history } from '../utils/history'
+import React, { FC, useLayoutEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
 export const scrollToTopFn = () => {
 	window.scrollTo({
@@ -9,13 +9,15 @@ export const scrollToTopFn = () => {
 }
 
 const ScrollToTop: FC = (props) => {
-	useEffect(() => {
-		const unlisten = history.listen(scrollToTopFn)
+	const location = useLocation()
 
+	useLayoutEffect(() => {
+		scrollToTopFn()
 		return () => {
-			unlisten()
+			scrollToTopFn()
 		}
-	}, [history])
+		// NOTE: pocuva na zmenu location (ked sa zmeni url path)
+	}, [location])
 
 	return <>{props.children}</>
 }

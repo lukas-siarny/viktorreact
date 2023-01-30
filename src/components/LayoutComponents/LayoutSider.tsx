@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useEffect, useState } from 'react'
 import { Layout, Menu, Dropdown, Row, MenuProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import cx from 'classnames'
 
 // assets
@@ -71,7 +71,6 @@ const LayoutSider = (props: LayoutSiderProps) => {
 
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
-	const location = useLocation()
 	const navigate = useNavigate()
 	const hasPermissions = useCallback(
 		(allowed: _Permissions = [], except: _Permissions = []) => {
@@ -248,7 +247,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				key: 'logOut',
 				className: 'noti-logout-button',
 				label: t('loc:Odhlásiť'),
-				onClick: () => dispatch(logOutUser()),
+				onClick: () => dispatch(logOutUser(navigate)),
 				icon: <LogOutIcon />
 			},
 			{

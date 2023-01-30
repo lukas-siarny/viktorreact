@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { RouteProps, Navigate, Outlet } from 'react-router-dom'
+import { RouteProps, Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import BaseRoute from './BaseRoute'

@@ -1,8 +1,9 @@
 import React, { useEffect, ComponentType } from 'react'
-// import { withRouter } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { history } from './history'
+// https://github.com/remix-run/react-router/issues/8139
+import { UNSAFE_NavigationContext } from 'react-router-dom'
+
 // reducers
 import { RootState } from '../reducers'
 
@@ -11,8 +12,10 @@ export function withPromptUnsavedChanges(WrappedComponent: ComponentType<any>): 
 	return (props: any) => {
 		const { submitting, form } = props
 		const [t] = useTranslation()
-		const message = t('loc:Chcete zahodiť vykonané zmeny?')
+		// NOTE: https://github.com/remix-run/react-router/issues/8139
+		const { navigator } = React.useContext(UNSAFE_NavigationContext) as any
 
+		const message = t('loc:Chcete zahodiť vykonané zmeny?')
 		const formState: any = useSelector((state: RootState) => state.form?.[form])
 
 		let dirty = false
@@ -31,7 +34,7 @@ export function withPromptUnsavedChanges(WrappedComponent: ComponentType<any>): 
 
 		const enable = () => {
 			if (unblock) unblock()
-			unblock = history.block(message)
+			unblock = navigator.block(message)
 			window.addEventListener('beforeunload', onBrowserUnload)
 		}
 

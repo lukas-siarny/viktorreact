@@ -134,10 +134,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 						firstName: data.employee.firstName,
 						lastName: data.employee.lastName,
 						email: data.employee.email
-					}),
-					{
-						employeeData: data?.employee
-					}
+					})
 				),
 				...repeatOptions
 			}
@@ -153,7 +150,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 						initialize(FORM.CALENDAR_RESERVATION_FORM, {
 							...initData,
 							service: initializeLabelInValueSelect(data?.service?.id as string, data?.service?.name as string, {
-								serviceData: data?.service
+								icon: data?.service?.icon
 							}),
 							customer: initializeLabelInValueSelect(
 								data?.customer?.id as string,
@@ -162,13 +159,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 									firstName: data?.customer?.firstName,
 									lastName: data?.customer?.lastName,
 									email: data?.customer?.email
-								}),
-								{
-									customerData: data?.customer
-								}
+								})
 							),
-							note: data?.note,
-							noteFromB2CCustomer: data?.noteFromB2CCustomer,
 							reservationData: data?.reservationData
 						})
 					)
@@ -251,39 +243,10 @@ const SiderEventManagement: FC<Props> = (props) => {
 		}
 	}
 
-	const getTabContent = () => {
-		const tabs = {
-			[CALENDAR_EVENT_TYPE.RESERVATION]: {
-				key: CALENDAR_EVENT_TYPE.RESERVATION,
-				label: <>{t('loc:Rezervácia')}</>,
-				children: null
-			},
-			[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: {
-				key: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
-				label: <>{t('loc:Shift')}</>,
-				children: null
-			},
-			[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: {
-				key: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
-				label: <>{t('loc:Voľno')}</>,
-				children: null
-			},
-			[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: {
-				key: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
-				label: <>{t('loc:Prestávka')}</>,
-				children: null
-			}
-		}
-
-		if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-			return [tabs[CALENDAR_EVENT_TYPE.RESERVATION]]
-		}
-
-		return [tabs[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT], tabs[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF], tabs[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]]
-	}
+	const showTabs = !(eventId || eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION)
 
 	return (
-		<Sider className={cx('nc-sider-event-management', { edit: eventId })} collapsed={!sidebarView} width={240} collapsedWidth={0}>
+		<Sider className={cx('nc-sider-event-management', { 'without-tabs': !showTabs })} collapsed={!sidebarView} width={240} collapsedWidth={0}>
 			<div className={'nc-sider-event-management-header justify-between'}>
 				<div className={'font-semibold'}>{eventId ? STRINGS(t).edit(EVENT_NAMES(sidebarView)) : STRINGS(t).createRecord(EVENT_NAMES(sidebarView))}</div>
 				<div className={'flex-center'}>
@@ -321,12 +284,28 @@ const SiderEventManagement: FC<Props> = (props) => {
 					</Button>
 				</div>
 			</div>
-			{!eventId && sidebarView !== undefined && (
+			{showTabs && (
 				<TabsComponent
 					className={'nc-sider-event-management-tabs'}
 					activeKey={sidebarView}
 					onChange={(type: string) => initCreateEventForm(type as CALENDAR_EVENT_TYPE)}
-					items={getTabContent()}
+					tabsContent={[
+						{
+							tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
+							tab: <>{t('loc:Shift')}</>,
+							tabPaneContent: null
+						},
+						{
+							tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
+							tab: <>{t('loc:Voľno')}</>,
+							tabPaneContent: null
+						},
+						{
+							tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
+							tab: <>{t('loc:Prestávka')}</>,
+							tabPaneContent: null
+						}
+					]}
 					destroyInactiveTabPane
 				/>
 			)}

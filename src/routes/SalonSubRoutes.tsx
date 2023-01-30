@@ -1,10 +1,11 @@
-import React, { FC, useCallback, useEffect } from 'react'
-import { Route, Routes, useLocation, useMatches, useNavigate } from 'react-router-dom'
+import React, { FC, useEffect } from 'react'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { includes } from 'lodash'
-
 import { useParams } from 'react-router'
+
+// Auth
 import AuthRoute from './AuthRoute'
 
 // utils
@@ -48,16 +49,13 @@ import Calendar from '../pages/Calendar/Calendar'
 // reservations-settings
 import ReservationsSettingsPage from '../pages/ReservationsSettingsPage/ReservationsSettingsPage'
 
+// reservations
+import ReservationsPage from '../pages/ReservationsPage/ReservationsPage'
+
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
-import ReservationsPage from '../pages/ReservationsPage/ReservationsPage'
-import HomePage from '../pages/HomePage/HomePage'
 
-// const redirectoToForbiddenPage = () => {
-// 	history.push('/403')
-// }
-
-const SalonSubRoutes: FC = (props) => {
+const SalonSubRoutes: FC = () => {
 	const navigate = useNavigate()
 	const { salonID } = useParams()
 	if (!salonID) {
@@ -70,9 +68,7 @@ const SalonSubRoutes: FC = (props) => {
 	const currentUser = useSelector((state: RootState) => state.user.authUser)
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 
-	const parentPath = t('paths:salons/{{salonID}}', { salonID: ':salonID' })
-
-	// const getPath = useCallback((pathSuffix: string) => `${path}${pathSuffix}`, [path])
+	const parentPath = t('paths:salons/{{salonID}}', { salonID })
 
 	useEffect(() => {
 		if (currentUser.isLoading) {
@@ -98,26 +94,23 @@ const SalonSubRoutes: FC = (props) => {
 
 	return (
 		<Routes>
-			{/* // TODO: doriesit parentPath */}
 			{/* SALON DETAIL */}
-			{/* // TODO: nefunguje detail? */}
-			{/* <AuthRoute path={path} element={SalonPage} translatePathKey={path} salonID={salonID} layout={MainLayout} page={PAGE.SALONS} /> */}
 			<Route element={<AuthRoute layout={MainLayout} page={PAGE.SALONS} />}>
 				<Route index element={<SalonPage salonID={salonID as string} />} />
 			</Route>
 			{/* CUSTOMERS */}
-			<Route path={t('paths:customers')} element={<AuthRoute layout={MainLayout} page={PAGE.CUSTOMERS} />}>
+			<Route path={t('paths:customers')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.CUSTOMERS} />}>
 				<Route index element={<CustomersPage parentPath={parentPath} salonID={salonID} />} />
 				<Route path={t('loc:createEntity')} element={<CreateCustomerPage parentPath={parentPath} salonID={salonID} />} />
 				<Route path={':customerID'} element={<CustomerPage parentPath={parentPath} />} />
 			</Route>
 			{/* SERVICES */}
-			<Route path={t('paths:services-settings')} element={<AuthRoute layout={MainLayout} page={PAGE.SERVICES_SETTINGS} />}>
+			<Route path={t('paths:services-settings')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.SERVICES_SETTINGS} />}>
 				<Route index element={<ServicesPage parentPath={parentPath} salonID={salonID} />} />
 				<Route path={':serviceID'} element={<ServicePage parentPath={parentPath} salonID={salonID as string} />} />
 			</Route>
 			{/* EMPLOYEES */}
-			<Route path={t('paths:employees')} element={<AuthRoute layout={MainLayout} page={PAGE.EMPLOYEES} />}>
+			<Route path={t('paths:employees')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.EMPLOYEES} />}>
 				<Route index element={<EmployeesPage parentPath={parentPath} salonID={salonID} />} />
 				<Route path={t('loc:createEntity')} element={<CreateEmployeePage parentPath={parentPath} salonID={salonID} />} />
 				<Route path={':employeeID'} element={<EmployeePage parentPath={parentPath} salonID={salonID as string} />} />
@@ -128,7 +121,7 @@ const SalonSubRoutes: FC = (props) => {
 				<Route index element={<IndustriesPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* BILLING INFO */}
-			<Route path={t('paths:billing-info')} element={<AuthRoute layout={MainLayout} page={PAGE.BILLING_INFO} />}>
+			<Route path={t('paths:billing-info')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.BILLING_INFO} />}>
 				<Route index element={<BillingInfoPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* CALENDAR */}
@@ -136,6 +129,7 @@ const SalonSubRoutes: FC = (props) => {
 				path={t('paths:calendar')}
 				element={
 					<AuthRoute
+						preventShowDeletedSalon
 						parentPath={parentPath}
 						extra={{
 							contentClassName: 'z-30'
@@ -148,11 +142,11 @@ const SalonSubRoutes: FC = (props) => {
 				<Route index element={<Calendar salonID={salonID} parentPath={parentPath} />} />
 			</Route>
 			{/* RESERVATIONS */}
-			<Route path={t('paths:reservations')} element={<AuthRoute layout={MainLayout} page={PAGE.RESERVATIONS} />}>
+			<Route path={t('paths:reservations')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.RESERVATIONS} />}>
 				<Route index element={<ReservationsPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* RESERVATIONS SETTINGS */}
-			<Route path={t('paths:reservations-settings')} element={<AuthRoute layout={MainLayout} page={PAGE.SALON_SETTINGS} />}>
+			<Route path={t('paths:reservations-settings')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.SALON_SETTINGS} />}>
 				<Route index element={<ReservationsSettingsPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* 404 */}

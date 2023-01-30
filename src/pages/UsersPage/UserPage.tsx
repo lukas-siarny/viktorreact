@@ -5,7 +5,7 @@ import { Button, Row, Spin } from 'antd'
 import { initialize, isPristine, isSubmitting, submit } from 'redux-form'
 import { get } from 'lodash'
 import cx from 'classnames'
-import { useLocation, useNavigate, useParams, useRouteError } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 // components
 import UserAccountForm from './components/UserAccountForm'
@@ -49,11 +49,8 @@ const UserPage: FC<Props> = () => {
 	const submittingEditRoleForm = useSelector(isSubmitting(FORM.EDIT_USER_ROLE))
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser)) as any
-	// TODO: treba cez createRouter instanciu
-	// const error = useRouteError()
-	// TODO: vytiahnut pathname z location
-	const isMyAccountPath = false
-	// const isMyAccountPath = computedMatch.path === t('paths:my-account')
+
+	const isMyAccountPath = location.pathname === t('paths:my-account')
 	let submitPermissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_EDIT]
 
 	const [backUrl] = useBackUrl(t('paths:users'))

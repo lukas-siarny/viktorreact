@@ -21,7 +21,6 @@ type Props = {
 const CreatePasswordPage: FC<Props> = (props) => {
 	const [modalVisible, setModalVisible] = useState(false)
 	const dispatch = useDispatch()
-	console.log('props create page', props)
 	const handleSubmit = async (values: ICreatePasswordForm) => {
 		try {
 			const input = {

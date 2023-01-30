@@ -1,9 +1,8 @@
 import React, { FC } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 // authorized pages
-import { useParams } from 'react-router'
 import HomePage from '../pages/HomePage/HomePage'
 
 // routes middlewares
@@ -16,7 +15,7 @@ import MainLayout from '../layouts/MainLayout'
 import PublicLayout from '../layouts/PublicLayout'
 
 // utils
-import { PAGE, NEW_SALON_ID } from '../utils/enums'
+import { NEW_SALON_ID, PAGE } from '../utils/enums'
 
 // User
 import LoginPage from '../pages/LoginPage/LoginPage'
@@ -62,11 +61,9 @@ import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 
 const AppRoutes: FC = () => {
 	const [t] = useTranslation()
-	const { salonID } = useParams()
 	return (
 		<AppInit>
 			{/* <SalonSubRoutes /> */}
-
 			<Routes>
 				{/* // CreatePassword route */}
 				<Route element={<CreatePasswordRoute layout={PublicLayout} className={'noti-login-page'} />}>
@@ -101,8 +98,8 @@ const AppRoutes: FC = () => {
 					<Route path={t('loc:createEntity')} element={<SalonPage salonID={NEW_SALON_ID} />} />
 				</Route>
 				{/* // Salon view */}
-				<Route path={t('paths:salons/{{salonID}}', { salonID: ':salonID' })}>
-					<Route path={'*'} element={<SalonSubRoutes />} />
+				<Route path={t('paths:salons')}>
+					<Route path={':salonID/*'} element={<SalonSubRoutes />} />
 				</Route>
 				<Route path={t('paths:categories')} element={<AuthRoute layout={MainLayout} page={PAGE.CATEGORIES} />}>
 					<Route index element={<CategoriesPage />} />

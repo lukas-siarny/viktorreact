@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { history } from '../utils/history'
 
 export const scrollToTopFn = () => {
 	window.scrollTo({
@@ -9,16 +9,13 @@ export const scrollToTopFn = () => {
 }
 
 const ScrollToTop: FC = (props) => {
-	const navigate = useNavigate()
-	const location = useLocation()
 	useEffect(() => {
-		// TODO: listne neexistuje
-		// const unlisten = navigate.listen(scrollToTopFn)
-		//
-		// return () => {
-		// 	unlisten()
-		// }
-	}, [navigate])
+		const unlisten = history.listen(scrollToTopFn)
+
+		return () => {
+			unlisten()
+		}
+	}, [history])
 
 	return <>{props.children}</>
 }

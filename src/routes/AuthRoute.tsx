@@ -47,9 +47,8 @@ const AuthRoute: FC<Props> = (props) => {
 			<Navigate
 				to={{
 					pathname: t('paths:login')
-					// TODO: co je toto?
-					// state: { redirectFrom: pathname + search }
 				}}
+				state={{ redirectFrom: pathname + search }}
 			/>
 		)
 	}

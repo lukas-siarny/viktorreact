@@ -47,7 +47,6 @@ const MainLayout: FC<Props> = (props) => {
 	const navigate = useNavigate()
 	const { contentClassName = 'p-4 px-10 main-background' } = extra || {}
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
-	console.log('selectedSalon', selectedSalon)
 	const salonID = selectedSalon?.id
 	const salonOptions = useSelector((state: RootState) => state.selectedSalon.selectionOptions.data) || []
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)

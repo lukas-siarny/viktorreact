@@ -15,7 +15,7 @@ const BaseRoute: FC<Props> = (props) => {
 		document.title = 'Notino B2B'
 	}, [])
 	const { layout: Layout, preventShowDeletedSalon = false } = props
-	console.log('base route', props)
+
 	// TODO: zrusit ...props a vsetko otypovat
 	if (Layout) {
 		return (

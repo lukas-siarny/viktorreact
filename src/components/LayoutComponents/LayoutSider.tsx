@@ -62,9 +62,6 @@ const LOGO_HEIGHT = 72
 
 const LayoutSider = (props: LayoutSiderProps) => {
 	const { page, showNavigation = true, salonID, parentPath } = props
-	console.log('salonID', salonID)
-	const params = useParams()
-	console.log('params', params)
 	const collapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
@@ -242,8 +239,6 @@ const LayoutSider = (props: LayoutSiderProps) => {
 					// reset support contact data to empty in case there are some stored in redux
 					// otherwise language detection would not work correctly in t('paths:contact') page
 					dispatch(getSupportContact())
-					// TODO: ako toto funguje?
-					// navigate({ pathname: t('paths:contact'), state: { from: location.pathname } })
 					navigate(t('paths:contact'))
 				},
 				icon: <HelpIcon />

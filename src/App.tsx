@@ -45,11 +45,11 @@ const ANTD_THEME_VARIABLES_OVERRIDE: Partial<AliasToken> = {
 
 const App = () => {
 	const [antdLocale, setAntdLocale] = useState<Locale | undefined>(undefined)
-	const [state, setState] = useState({
+	const [setState] = useState({
 		action: history.action,
 		location: history.location
 	})
-	console.log('state', state)
+	// NOTE: spristupni history v routeri a umozni pouzivate history.push
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useLayoutEffect(() => history.listen(setState), [history])
 
@@ -64,8 +64,7 @@ const App = () => {
 			})
 		})
 	}, [])
-	// TODO: nefunguje
-	// const router = createBrowserRouter(createRoutesFromElements(<Route path={'*'} element={<AppRoutes />} />))
+
 	return (
 		<Suspense
 			fallback={

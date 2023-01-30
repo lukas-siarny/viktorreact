@@ -20,6 +20,7 @@ import TabsComponent from '../../components/TabsComponent'
 import { ADMIN_PERMISSIONS, FORM, PERMISSION, REVIEW_VERIFICATION_STATUS, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { deleteReq, patchReq } from '../../utils/request'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -31,7 +32,6 @@ import { IBreadcrumbs, Columns } from '../../types/interfaces'
 // assets
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as EyeIcon } from '../../assets/icons/eye-icon.svg'
-import Permissions, { withPermissions } from '../../utils/Permissions'
 
 enum TAB_KEYS {
 	PUBLISHED = 'published',

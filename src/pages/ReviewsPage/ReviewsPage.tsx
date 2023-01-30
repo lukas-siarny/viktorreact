@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BooleanParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Row, Spin, Rate, Progress, Tag, Button, Popconfirm } from 'antd'
+import { Col, Row, Spin, Rate, Progress, Tag, Button, Popconfirm, Tooltip } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
 import { isNil } from 'lodash'
+import cx from 'classnames'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -16,7 +17,7 @@ import DeleteButton from '../../components/DeleteButton'
 import TabsComponent from '../../components/TabsComponent'
 
 // utils
-import { FORM, PERMISSION, REVIEW_VERIFICATION_STATUS, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { ADMIN_PERMISSIONS, FORM, PERMISSION, REVIEW_VERIFICATION_STATUS, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { deleteReq, patchReq } from '../../utils/request'
 
@@ -29,14 +30,13 @@ import { IBreadcrumbs, Columns } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
-import { withPermissions } from '../../utils/Permissions'
+import { ReactComponent as EyeIcon } from '../../assets/icons/eye-icon.svg'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 
 enum TAB_KEYS {
 	PUBLISHED = 'published',
 	DELETED = 'deleted'
 }
-
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
 
 const ReviewsPage = () => {
 	const [t] = useTranslation()
@@ -154,13 +154,13 @@ const ReviewsPage = () => {
 		}
 	}
 
-	const hideReview = async (reviewID: string) => {
+	const changeVerificationStatus = async (reviewID: string, verificationStatus: REVIEW_VERIFICATION_STATUS) => {
 		if (isSubmitting) {
 			return
 		}
 		try {
 			setIsSubmitting(true)
-			await patchReq('/api/b2b/admin/reviews/{reviewID}/verification', { reviewID }, { verificationStatus: REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C })
+			await patchReq('/api/b2b/admin/reviews/{reviewID}/verification', { reviewID }, { verificationStatus })
 			fetchReviews()
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -174,11 +174,11 @@ const ReviewsPage = () => {
 		const columns: Columns = [
 			{
 				title: t('loc:Autor recenzie'),
-				dataIndex: 'userName',
-				key: 'userName',
+				dataIndex: 'reviewerName',
+				key: 'reviewerName',
 				ellipsis: true,
 				width: '20%',
-				render: (value) => value
+				render: (value) => value || '-'
 			},
 			{
 				title: t('loc:Dátum a čas vytvorenia'),
@@ -267,45 +267,113 @@ const ReviewsPage = () => {
 			columns.push({
 				key: 'actions',
 				ellipsis: true,
-				width: 90,
+				width: 130,
 				fixed: 'right',
 				render: (_value, record) => {
+					const disabledShowReview = record?.verificationStatus === REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C
+					const disabledHideReview = record?.verificationStatus === REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C
+
 					return (
 						<div className={'flex justify-end items-center gap-2'}>
-							<Popconfirm
-								placement={'top'}
-								title={t('loc:Naozaj chcete skryť recenziu?')}
-								okButtonProps={{
-									type: 'default',
-									className: 'noti-btn'
-								}}
-								cancelButtonProps={{
-									type: 'primary',
-									className: 'noti-btn'
-								}}
-								okText={t('loc:Áno')}
-								onConfirm={() => hideReview(record.id)}
-								cancelText={t('loc:Nie')}
-							>
-								<Button
-									htmlType={'button'}
-									type={'dashed'}
-									icon={<EyeoffIcon width={16} height={16} />}
-									className={'noti-btn'}
-									onClick={(e) => {
-										e.preventDefault()
-									}}
-								/>
-							</Popconfirm>
-
-							<DeleteButton
-								onConfirm={() => {
-									deleteReview(record.id)
-								}}
-								smallIcon
-								type={'default'}
-								entityName={t('loc:recenziu')}
-								onlyIcon
+							<Permissions
+								allowed={[...ADMIN_PERMISSIONS, PERMISSION.REVIEW_VERIFY]}
+								render={(hasPermission, { openForbiddenModal }) => (
+									<>
+										<Popconfirm
+											placement={'top'}
+											title={t('loc:Naozaj chcete publikovať recenziu?')}
+											okButtonProps={{
+												type: 'default',
+												className: 'noti-btn'
+											}}
+											cancelButtonProps={{
+												type: 'primary',
+												className: 'noti-btn'
+											}}
+											okText={t('loc:Áno')}
+											onConfirm={() => {
+												if (!hasPermission) {
+													openForbiddenModal()
+												}
+												changeVerificationStatus(record.id, REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C)
+											}}
+											cancelText={t('loc:Nie')}
+											disabled={disabledShowReview}
+										>
+											<Tooltip title={disabledShowReview ? t('loc:Recenzia je zobrazená v B2C') : null} destroyTooltipOnHide>
+												<span className={cx({ 'cursor-not-allowed': disabledShowReview })}>
+													<Button
+														htmlType={'button'}
+														type={'primary'}
+														icon={<EyeIcon width={16} height={16} />}
+														className={cx('noti-btn', {
+															'pointer-events-none': disabledShowReview
+														})}
+														disabled={disabledShowReview}
+														onClick={(e) => {
+															e.preventDefault()
+														}}
+													/>
+												</span>
+											</Tooltip>
+										</Popconfirm>
+										<Popconfirm
+											placement={'top'}
+											title={t('loc:Naozaj chcete skryť recenziu?')}
+											okButtonProps={{
+												type: 'default',
+												className: 'noti-btn'
+											}}
+											cancelButtonProps={{
+												type: 'primary',
+												className: 'noti-btn'
+											}}
+											okText={t('loc:Áno')}
+											onConfirm={() => {
+												if (!hasPermission) {
+													openForbiddenModal()
+												}
+												changeVerificationStatus(record.id, REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C)
+											}}
+											cancelText={t('loc:Nie')}
+											disabled={disabledHideReview}
+										>
+											<Tooltip title={disabledHideReview ? t('loc:Recenzia nie je zobrazená v B2C') : null} destroyTooltipOnHide>
+												<span className={cx({ 'cursor-not-allowed': disabledHideReview })}>
+													<Button
+														htmlType={'button'}
+														type={'dashed'}
+														icon={<EyeoffIcon width={16} height={16} />}
+														className={cx('noti-btn', {
+															'pointer-events-none': disabledHideReview
+														})}
+														disabled={disabledHideReview}
+														onClick={(e) => {
+															e.preventDefault()
+														}}
+													/>
+												</span>
+											</Tooltip>
+										</Popconfirm>
+									</>
+								)}
+							/>
+							<Permissions
+								allowed={[...ADMIN_PERMISSIONS, PERMISSION.REVIEW_DELETE]}
+								render={(hasPermission, { openForbiddenModal }) => (
+									<DeleteButton
+										onConfirm={() => {
+											if (!hasPermission) {
+												openForbiddenModal()
+											}
+											deleteReview(record.id)
+										}}
+										smallIcon
+										type={'default'}
+										entityName={t('loc:recenziu')}
+										onlyIcon
+									/>
+								)}
 							/>
 						</div>
 					)
@@ -386,4 +454,4 @@ const ReviewsPage = () => {
 	)
 }
 
-export default compose(withPermissions(permissions))(ReviewsPage)
+export default compose(withPermissions([...ADMIN_PERMISSIONS, PERMISSION.REVIEW_READ]))(ReviewsPage)

@@ -46,7 +46,7 @@ const makeEmailAccount = async () => {
 				// fetch latest message source
 				// client.mailbox includes information about currently selected mailbox
 				// "exists" value is also the largest sequence number available in the mailbox
-				message = await client.fetchOne(client.mailbox.exists, { source: true })
+				message = await client.fetchOne((client?.mailbox as any)?.exists, { source: true })
 				console.log('The message: %s', message.source.toString())
 
 				// list subjects for all messages

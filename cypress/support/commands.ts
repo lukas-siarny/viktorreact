@@ -10,5 +10,10 @@ Cypress.Commands.add('setValuesForPinField', (form: string, key: string, value: 
 	const elementId: string = form ? `#${form}-${key}` : `#${key}`
 	const nthInput = (n: number) => `${elementId} > :nth-child(${n})`
 	const pin = [...value]
-	pin.forEach((char: string, index) => cy.get(nthInput(index)).type(char).should('have.value', char))
+	pin.forEach((char: string, index) =>
+		cy
+			.get(nthInput(index + 1))
+			.type(char)
+			.should('have.value', char)
+	)
 })

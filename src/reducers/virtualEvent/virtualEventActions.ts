@@ -88,7 +88,7 @@ export const addOrUpdateEvent =
 		if (!formData) {
 			return
 		}
-		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID, reservationData } = formData
+		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID, reservationData, note, noteFromB2CCustomer } = formData
 
 		if (date && timeFrom && employee && eventType) {
 			let { eventId } = formData
@@ -132,19 +132,21 @@ export const addOrUpdateEvent =
 					},
 					customer: customer
 						? {
+								...(customer?.extra?.customerData || {}),
 								id: customer.key,
 								email: customer.label || customer.value
 						  }
 						: undefined,
 					service: service
 						? {
-								icon: service?.extra?.icon,
+								...(service?.extra?.serviceData || {}),
 								id: service.key,
 								name: service.label || service.value
 						  }
 						: undefined,
 					employee: employee
 						? {
+								...(employee?.extra?.employeeData || {}),
 								id: employee.key,
 								email: employee.label || employee.value
 						  }
@@ -154,6 +156,8 @@ export const addOrUpdateEvent =
 								id: calendarBulkEventID
 						  }
 						: undefined,
+					note,
+					noteFromB2CCustomer,
 					reservationData
 				}
 			}

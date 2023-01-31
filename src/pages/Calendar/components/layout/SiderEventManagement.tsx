@@ -134,7 +134,10 @@ const SiderEventManagement: FC<Props> = (props) => {
 						firstName: data.employee.firstName,
 						lastName: data.employee.lastName,
 						email: data.employee.email
-					})
+					}),
+					{
+						employeeData: data?.employee
+					}
 				),
 				...repeatOptions
 			}
@@ -150,7 +153,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 						initialize(FORM.CALENDAR_RESERVATION_FORM, {
 							...initData,
 							service: initializeLabelInValueSelect(data?.service?.id as string, data?.service?.name as string, {
-								icon: data?.service?.icon
+								serviceData: data?.service
 							}),
 							customer: initializeLabelInValueSelect(
 								data?.customer?.id as string,
@@ -159,8 +162,12 @@ const SiderEventManagement: FC<Props> = (props) => {
 									firstName: data?.customer?.firstName,
 									lastName: data?.customer?.lastName,
 									email: data?.customer?.email
-								})
+								}),
+								{
+									customerData: data?.customer
+								}
 							),
+							noteFromB2CCustomer: data?.noteFromB2CCustomer,
 							reservationData: data?.reservationData
 						})
 					)

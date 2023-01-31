@@ -29,15 +29,16 @@ import { ReactComponent as CreateIcon } from '../../../../assets/icons/plus-icon
 // components
 import DateField from '../../../../atoms/DateField'
 import SelectField from '../../../../atoms/SelectField'
+import TabsComponent from '../../../../components/TabsComponent'
 
 // hooks
 import useOnClickOutside from '../../../../hooks/useClickOutside'
-import useMedia from '../../../../hooks/useMedia'
 
 // utils
 import { getSelectedDateForCalendar } from '../../calendarHelpers'
+
+// types
 import { INewCalendarEvent } from '../../../../types/interfaces'
-import TabsComponent from '../../../../components/TabsComponent'
 
 const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 	switch (view) {
@@ -116,6 +117,8 @@ const CalendarHeader: FC<Props> = (props) => {
 	})
 
 	useEffect(() => setCurrentDate(selectedDate), [selectedDate])
+
+	// const isSmallerDevice = useMedia(['(max-width: 1200px)'], [true], false)
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const setSelectedDateDebounced = useCallback(debounce(setSelectedDate, CALENDAR_DEBOUNCE_DELAY), [setSelectedDate])

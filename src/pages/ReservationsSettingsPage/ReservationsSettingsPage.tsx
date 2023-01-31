@@ -125,7 +125,7 @@ const initDisabledNotifications = (notifications: DisabledNotificationsArray): I
 const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { salonID } = props
+	const { salonID, parentPath } = props
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const groupedSettings = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 
@@ -260,11 +260,11 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 
 		const reqData: PathSettingsBody = {
 			settings: {
-				enabledReservations: values.enabledReservations,
-				maxDaysB2cCreateReservation: values.maxDaysB2cCreateReservation,
-				maxHoursB2cCancelReservationBeforeStart: values.maxHoursB2cCancelReservationBeforeStart,
-				maxHoursB2cCreateReservationBeforeStart: values.maxHoursB2cCreateReservationBeforeStart,
-				minutesIntervalB2CReservations: (values.minutesIntervalB2CReservations as any) || undefined,
+				enabledReservations: values.enabledReservations ?? null,
+				maxDaysB2cCreateReservation: values.maxDaysB2cCreateReservation ?? null,
+				maxHoursB2cCancelReservationBeforeStart: values.maxHoursB2cCancelReservationBeforeStart ?? null,
+				maxHoursB2cCreateReservationBeforeStart: values.maxHoursB2cCreateReservationBeforeStart ?? null,
+				minutesIntervalB2CReservations: (values.minutesIntervalB2CReservations as any) ?? null,
 				disabledNotifications: disabledNotifications as any
 			},
 			servicesSettings
@@ -288,7 +288,12 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 				<Col span={24}>
 					<div className='content-body'>
 						<Spin spinning={salon.isLoading}>
-							<ReservationSystemSettingsForm onSubmit={handleSubmitSettings} salonID={salonID} excludedB2BNotifications={EXCLUDED_NOTIFICATIONS_B2B} />
+							<ReservationSystemSettingsForm
+								onSubmit={handleSubmitSettings}
+								salonID={salonID}
+								excludedB2BNotifications={EXCLUDED_NOTIFICATIONS_B2B}
+								parentPath={parentPath}
+							/>
 						</Spin>
 					</div>
 				</Col>

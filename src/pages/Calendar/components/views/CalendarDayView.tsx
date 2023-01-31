@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useMemo } from 'react'
 import { Element } from 'react-scroll'
 import dayjs from 'dayjs'
-import { useDispatch } from 'react-redux'
 
 // full calendar
 import FullCalendar, { SlotLabelContentArg, DateSelectArg } from '@fullcalendar/react' // must go before plugins
@@ -21,7 +20,6 @@ import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-
 
 // components
 import CalendarEventContent from '../CalendarEventContent'
-import { clearEvent } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 interface IResourceLabel {
 	image?: string
@@ -58,6 +56,9 @@ const resourceLabelContent = (data: any) => {
 	return <ResourceLabel image={employee?.image} color={color} isTimeOff={employee?.isTimeOff} name={employee?.name} description={employee?.description} />
 }
 
+/**
+ * kvoli nastaveniu height={'auto'} vo FullCalendari nefunguje scrollToTime a tuto funkcionalitu je potrebne spravit custom logikou
+ */
 const slotLabelContent = (data: SlotLabelContentArg) => {
 	const { time } = data || {}
 

@@ -244,7 +244,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			}
 			/**
 			 * meni sa range, pre tyzdenne view je potrebne si to poznacit do pomocnej premennej, aby sa nasledne spustil useEffect nizzsie
-			 * ten sa postara o nacitanie dat a nasledny scroll na novy datum
+			 * ten sa postara o scroll az po tom co sa dotiahnu nove data
 			 * */
 			initialScroll.current = false
 			return
@@ -265,6 +265,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		 * zmenil sa range, je potrebne pockat na nacitanie novych dat a opatovne vykrelsenie Fullcalendara a az tak zascrollovat na datum
 		 *  */
 		if (validCalendarView === CALENDAR_VIEW.WEEK && !loadingData && !initialScroll.current) {
+			// po loadingu dat je este potrebne pockat na vykreselenie kalendara (CALENDAR_INIT_TIME)
 			scrollToDateTimeout.current = setTimeout(() => {
 				scrollToSelectedDate(validSelectedDate, { smooth: true, duration: 300 })
 				initialScroll.current = true

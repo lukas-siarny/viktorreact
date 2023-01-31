@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import React, { useEffect, useMemo, useState } from 'react'
 import dayjs from 'dayjs'
 import useResizeObserver from '@react-hook/resize-observer'
@@ -23,6 +22,8 @@ import { ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
+
+// redux
 import { clearEvent } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 const getTodayLabelId = (date: string | dayjs.Dayjs) => `${dayjs(date).format(CALENDAR_DATE_FORMAT.QUERY)}-is-today`
@@ -87,7 +88,7 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 
 /**
  * keďže sa reálne jedná o denné zobrazenie, NowIndicator, ktorý ponúka FC sa zobrazí cez celú výšku kalendára
- * je preto potrebné ho osekať tak, aby sa zobrazoval len pre grupu riadkov, ktoré predstavujúcu dnešný deň
+ * je preto potrebné ho osekať tak, aby sa zobrazoval len pre grupu riadkov, ktoré predstavujúcu dnešný deň (ak sa nachádza v aktuálne zvolenom rozmedzí)
  */
 const NowIndicator = () => {
 	const [size, setSize] = useState<number>(0)
@@ -172,7 +173,7 @@ interface ICalendarWeekView extends ICalendarView {
 	]
  * každý riadok v timeline predstavuje jeden resource (čiže máme 2 zamesnacov x 7 dni = v timeline bude 14 riadkov)
  *
- * 2/ časy eventov, ktoré prídu z BE sa musia pretransformovať tak, aby odpovedali dátumu, ktorý je nastavený v FC (viac v komentari vo funkcii getSelectedDateForCalendar())
+ * 2/ časy eventov, ktoré prídu z BE sa musia pretransformovať tak, aby odpovedali dátumu, ktorý je nastavený v FC (ako sa nastavuje čas pre FC je popísáne v komentari vo funkcii getSelectedDateForCalendar())
  * teda ak dotiahnem data z BE pre range 2 - 8.1.2023 a v FC je nastavený dátum 2.1.2023, všetky eventy je potrebné pretransformovať tak, aby odpovedali tomuto dátumu (eventy s iným dátumom by sa v kalendári logicky nezobrazili)
  * BE event data: { startTime: '8.1.2023:11:00', endTime: '8.1.2023:12:00', employeeId: 'employeeID1' } => pretransformuje na FC event data: { startTime: '2.1.2023:11:00', endTime: '2.1.2023:12:00', resourceId: 'employeeID1_2023-01-08' }) - každému eventu je priradené resourceId, na základe ktorého ho potom vieme zaradiť na správne miesto v kalendári
  *

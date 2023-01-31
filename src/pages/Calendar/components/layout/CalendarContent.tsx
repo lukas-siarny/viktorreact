@@ -205,7 +205,12 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		const newEmployeeId = newResourceExtendedProps?.employee?.id || eventExtenedProps?.eventData?.employee?.id
 		const currentEmployeeId = eventExtenedProps?.eventData?.employee?.id
 
-		// NOTE: miesto eventAllow sa bude vyhodnocovat, ci sa dany event moze upravit tu
+		/**
+		 * vyhodnotí sa nová pozícia eventu - v prípade, že užívateľ nemá právo vykonať danú akciu, tak sa event vráti na pôvodne miesto
+		 * editácia eventu - rezervácia sa môže ľubovoľne presúvať medzi zamestnancami.. zmena, voľno a prestávka je možné presúvať len vrámci zamestnanca
+		 * vytváranie eventu - nie su žiadne reštrikcie
+		 * eventy v mesačnom view nie sú rozdelné podľa resouruces, čiže je to tiež bez reštrikcií
+		 */
 		if (/* view !== CALENDAR_VIEW.MONTH && */ eventData?.eventType !== CALENDAR_EVENT_TYPE.RESERVATION && !startsWith(event.id, NEW_ID_PREFIX)) {
 			if (newEmployeeId !== currentEmployeeId) {
 				notification.warning({
@@ -227,7 +232,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		let date = startDajys.format(CALENDAR_DATE_FORMAT.QUERY)
 
 		if (view === CALENDAR_VIEW.WEEK) {
-			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
+			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces - pozri komenty v CalendarWeekView pre upresnenie)
 			// (to sa bude diat len pri drope)
 			const resource = event.getResources()[0]
 			date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
@@ -254,7 +259,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			revertEvent()
 			return
 		}
-		// Ak existuje virualny event a isPlaceholder z eventu je true tak sa jedna o virtualny even a bude sa rovbit change nad formularmi a nezavola sa request na BE
+		// Ak existuje virualny event a isPlaceholder z eventu je true tak sa jedna o virtualny even a bude sa robit change nad formularmi a nezavola sa request na BE
 		if (virtualEvent && startsWith(event.id, NEW_ID_PREFIX)) {
 			const formName = eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION ? FORM.CALENDAR_RESERVATION_FORM : FORM.CALENDAR_EVENT_FORM
 			batch(() => {

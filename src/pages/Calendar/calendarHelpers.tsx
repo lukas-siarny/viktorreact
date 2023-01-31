@@ -382,6 +382,7 @@ export const composeWeekResources = (weekDays: string[], shiftsTimeOffs: ICalend
 }
 
 export const getWeekViewSelectedDate = (weekDays: string[]) => {
+	// vráti buď dnešok (ak sa nachadáza vo zvolenom týždni) alebo prvý deň zo zvoleného týždňa
 	const today = dayjs().startOf('day')
 	return weekDays.some((day) => dayjs(day).startOf('day').isSame(today)) ? today.format(CALENDAR_DATE_FORMAT.QUERY) : weekDays[0]
 }

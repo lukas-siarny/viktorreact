@@ -158,7 +158,7 @@ const SalonsFilterActive = (props: Props) => {
 		() => (
 			<div className={'flex items-center gap-2'}>
 				<Permissions
-					allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
+					allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.IMPORT_SALON]}
 					render={(hasPermission, { openForbiddenModal }) => (
 						<Button
 							onClick={() => {

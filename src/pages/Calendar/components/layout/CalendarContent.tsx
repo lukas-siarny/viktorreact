@@ -164,9 +164,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	 * musíme si pomôcť ďalším CB onEventChangeStop(), ktorý sa zavolá vždy
 	 *
 	 * onEventChangeStop()
-	 * zavolá vždy po dokončení dnd alebo resizu, aj v prípade, že k zmene pozície eventu nedošlo
+	 * zavolá sa vždy po dokončení dnd alebo resizu, aj v prípade, že k zmene pozície eventu nedošlo
 	 * preto v tomto CB opatovne povoľujeme aktualizáciu dát - restartFetchInterval()
-	 * poskytuje však informácie len o pôvodnom evente, neposkytuje informácie o novej polohe, resoruce, ani revert() funkciu, preto ho nemôžeme použit univerzálne miesto onEventChange()
+	 * poskytuje však informácie len o pôvodnom evente, neposkytuje informácie o novej polohe, resoruce, ani revert() funkciu, preto ho nemôžeme použit univerzálne miesto onEventChange() a musíme ich kombinovať
 	 */
 
 	const onEventChangeStart = useCallback(() => {

@@ -156,8 +156,8 @@ interface ICalendarWeekView extends ICalendarView {
 
 /**
  * síce sa jedná o týždenné view, no reálne sa používa FC plugin pre denné zobraznie - https://fullcalendar.io/docs/timeline-view, ktorý je ohnutý tak, aby pôsobil ako týždenné zobrazenie
- * žiadne z týždenných rozložení, ktoré FC ponúka, nám totiž neumožnil dosiahnúť požadovné rozloženie
- * v dennom view využívame možnosť rozdeliť ľavu resource osu na viacero stĺpcov - viď toto zobrazenie https://fullcalendar.io/docs/resourceAreaColumns-demo - prvý stĺpec u nás reprezentuje dni v týždni - 'day' column, druhý stĺpec zamestnancov - 'employee' column (viď vyššie zadefinované resourceAreaColumns)
+ * žiadne z týždenných zobrazení, ktoré FC ponúka, nám totiž neumožnil dosiahnúť požadovné rozloženie
+ * v dennom view využívame možnosť rozdeliť ľavu resource osu na viacero stĺpcov - viď https://fullcalendar.io/docs/resourceAreaColumns-demo - prvý stĺpec u nás reprezentuje dni v týždni - 'day' column, druhý stĺpec zamestnancov - 'employee' column (viď vyššie zadefinované resourceAreaColumns)
  * prináša to zo sebou viacero komplikácii:
  *
  * 1/ vždy je nutné zo zoznamu zamesnancov vyskladať reseources. Pre dvoch zamesnancov a range 2 - 8.1.2023 by to vyzeralo nejak takto:

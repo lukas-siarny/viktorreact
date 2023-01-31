@@ -147,7 +147,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 					break
 				case CALENDAR_EVENT_TYPE.RESERVATION:
 					/**
-					 * kvôli virtuálnym eventom je potrebné vyinicializovať všetky data, aby sa vedela správne zobraziť kartička eventu (virtuálny event sa vytvára z dát z formulára)
+					 * okrem dát, s ktorými sa manipuluje priamo vo formulári, je potrebné vyinicializovať aj všetky potrebné data pre správne zobrazenie virtuálneho eventu v kalendári
+					 * zatiaľ sú to reservationData a service icon
 					 */
 					dispatch(
 						initialize(FORM.CALENDAR_RESERVATION_FORM, {

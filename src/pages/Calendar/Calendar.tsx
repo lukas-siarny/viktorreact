@@ -234,7 +234,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// novy datum do query parametra sa nastavi vzdy
 		setQuery({ ...query, date: newDate })
 
-		// datum vo Fullcalendari a current range sa nastavi len vtedy, ked sa novy datum nenachadza v aktualne zvolenom rangi
+		// datum vo Fullcalendari a current range sa nastavi len vtedy, ked sa novy datum nenachadza v aktualne zvolenom rangi (currentRange state)
 		if (!isDateInRange(currentRange.start, currentRange.end, newDate)) {
 			setCurrentRange(getSelectedDateRange(validCalendarView, newDate))
 			const newCalendarDate = getSelectedDateForCalendar(validCalendarView, newDate)
@@ -265,7 +265,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		 * zmenil sa range, je potrebne pockat na nacitanie novych dat a opatovne vykrelsenie Fullcalendara a az tak zascrollovat na datum
 		 *  */
 		if (validCalendarView === CALENDAR_VIEW.WEEK && !loadingData && !initialScroll.current) {
-			// po loadingu dat je este potrebne pockat na vykreselenie kalendara (CALENDAR_INIT_TIME)
 			scrollToDateTimeout.current = setTimeout(() => {
 				scrollToSelectedDate(validSelectedDate, { smooth: true, duration: 300 })
 				initialScroll.current = true

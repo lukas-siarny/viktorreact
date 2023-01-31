@@ -155,7 +155,7 @@ const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string
 		end,
 		allDay: false,
 		eventData: {
-			...(event.originalEvent || event || {}),
+			...(event.originalEvent || event || {}), // multidnove eventy maju origialne data ulozene v objekte originalEvent
 			isMultiDayEvent: event.isMultiDayEvent,
 			isLastMultiDaylEventInCurrentRange: event.isLastMultiDaylEventInCurrentRange,
 			isFirstMultiDayEventInCurrentRange: event.isFirstMultiDayEventInCurrentRange

@@ -260,11 +260,11 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 
 		const reqData: PathSettingsBody = {
 			settings: {
-				enabledReservations: values.enabledReservations ?? null,
-				maxDaysB2cCreateReservation: values.maxDaysB2cCreateReservation ?? null,
-				maxHoursB2cCancelReservationBeforeStart: values.maxHoursB2cCancelReservationBeforeStart ?? null,
-				maxHoursB2cCreateReservationBeforeStart: values.maxHoursB2cCreateReservationBeforeStart ?? null,
-				minutesIntervalB2CReservations: (values.minutesIntervalB2CReservations as any) ?? null,
+				enabledReservations: values.enabledReservations,
+				maxDaysB2cCreateReservation: values.maxDaysB2cCreateReservation,
+				maxHoursB2cCancelReservationBeforeStart: values.maxHoursB2cCancelReservationBeforeStart,
+				maxHoursB2cCreateReservationBeforeStart: values.maxHoursB2cCreateReservationBeforeStart,
+				minutesIntervalB2CReservations: (values.minutesIntervalB2CReservations as any) || undefined,
 				disabledNotifications: disabledNotifications as any
 			},
 			servicesSettings

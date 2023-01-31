@@ -16,8 +16,9 @@
 		height: 20px
 		width: 20px
 		transition: border-color 250ms ease-in-out, background-color 250ms ease-in-out
-		&:hover
-			border: 1px solid $borderColor-notino-pink
+		&:not(.disabled)
+			&:hover
+				border: 1px solid $borderColor-notino-pink
 		&.checked
 			color: $textColor-notino-white
 			border: 1px solid $borderColor-notino-pink

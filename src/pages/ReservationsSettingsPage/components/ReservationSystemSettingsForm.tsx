@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { change, Field, FieldArray, FormSection, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
@@ -113,10 +113,8 @@ const ReservationSystemSettingsForm = (props: Props) => {
 		}
 	}, [dispatch, formValues?.servicesSettings])
 
-	const initialTreeLoad = useRef(true)
-
 	useEffect(() => {
-		if (!groupedServicesByCategoryLoading && groupedServicesByCategory && !disabled && initialTreeLoad.current) {
+		if (!groupedServicesByCategoryLoading && groupedServicesByCategory) {
 			const onChangeServiceCheck = (checked: boolean, type: SERVICE_TYPE, id: string) => {
 				// Ak je BOOKING false tak sa musi aj CONFIRM dat na false
 				if (type === SERVICE_TYPE.ONLINE_BOOKING && !checked) {
@@ -207,7 +205,6 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				return firstLevelNodes
 			}, [] as DataNode[])
 			setServicesDataTree(treeData)
-			initialTreeLoad.current = false
 		}
 	}, [groupedServicesByCategory, groupedServicesByCategoryLoading, dispatch, disabled])
 
@@ -220,7 +217,13 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			return (
 				<div className={'flex flex-col items-center mt-10'}>
 					<p className={'text-notino-grayDark mb-6 text-center'}>{t('loc:V salóne zatiaľ nemáte priradené žiadne služby')}</p>
-					<Button type={'primary'} htmlType={'button'} className={'noti-btn'} onClick={() => history.push(`${parentPath}${t('paths:industries-and-services')}`)}>
+					<Button
+						type={'primary'}
+						htmlType={'button'}
+						className={'noti-btn'}
+						onClick={() => history.push(`${parentPath}${t('paths:industries-and-services')}`)}
+						disabled={disabled}
+					>
 						{t('loc:Priradiť služby')}
 					</Button>
 				</div>

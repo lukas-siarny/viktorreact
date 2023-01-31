@@ -1450,11 +1450,12 @@ span.ant-tag .title
 						transition: background 300ms ease
 						.ant-tree-switcher
 							display: none
-						&:hover
-							background: $backgroundColor-trueGray-200
-							color: $textColor-notino-black
-						&.ant-tree-treenode-checkbox-checked
-							background: $backgroundColor-trueGray-200
+						&:not(.ant-tree-treenode-disabled)
+							&:hover
+								background: $backgroundColor-trueGray-200
+								color: $textColor-notino-black
+							&.ant-tree-treenode-checkbox-checked
+								background: $backgroundColor-trueGray-200
 	&.rs-services-settings-tree
 		.ant-tree-list
 			.ant-tree-node-content-wrapper

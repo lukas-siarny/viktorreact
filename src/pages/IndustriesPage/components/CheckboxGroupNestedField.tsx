@@ -26,7 +26,7 @@ export type NestedMultiselectDataItem = {
 }[]
 
 const CheckboxGroupNestedField = (props: Props) => {
-	const { dataTree, input, checkable = true, defaultExpandedKeys, className } = props
+	const { dataTree, input, checkable = true, defaultExpandedKeys, className, disabled } = props
 
 	const onCheck = (
 		checked:
@@ -50,6 +50,7 @@ const CheckboxGroupNestedField = (props: Props) => {
 			selectable={false}
 			treeData={dataTree}
 			defaultExpandAll
+			disabled={disabled}
 			// ak budu animacie robit problemy tak sa daju vypnut, ale nie je to ofic zdokumentovana propa
 			// motion={null}
 		/>

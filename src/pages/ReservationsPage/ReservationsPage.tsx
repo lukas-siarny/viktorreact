@@ -48,8 +48,7 @@ const ReservationsPage = (props: Props) => {
 		reservationCreateSourceType: StringParam,
 		reservationPaymentMethods: ArrayParam,
 		limit: NumberParam,
-		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'startDate:ASC')
+		page: withDefault(NumberParam, 1)
 	})
 
 	useEffect(() => {
@@ -74,7 +73,7 @@ const ReservationsPage = (props: Props) => {
 				reservationCreateSourceType: query.reservationCreateSourceType,
 				categoryIDs: query.categoryIDs,
 				page: query.page,
-				order: query.order,
+				order: 'startDate:ASC',
 				limit: query.limit
 			})
 		)
@@ -84,7 +83,6 @@ const ReservationsPage = (props: Props) => {
 		query.dateFrom,
 		query.employeeIDs,
 		query.limit,
-		query.order,
 		query.page,
 		query.reservationCreateSourceType,
 		query.reservationPaymentMethods,
@@ -131,9 +129,7 @@ const ReservationsPage = (props: Props) => {
 			dataIndex: 'startDate',
 			key: 'startDate',
 			ellipsis: true,
-			width: '20%',
-			sorter: true,
-			sortOrder: setOrder(query.order, 'startDate')
+			width: '20%'
 		},
 		{
 			title: t('loc:Trvanie'),

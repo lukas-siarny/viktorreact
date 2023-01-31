@@ -15,11 +15,11 @@ export enum NAMESPACE {
 export enum LANGUAGE {
 	SK = 'sk',
 	CZ = 'cs',
-	EN = 'en'
-	/* HU = 'hu',
+	EN = 'en',
+	HU = 'hu',
 	RO = 'ro',
-	BG = 'bg',
-	IT = 'it' */
+	BG = 'bg'
+	/* IT = 'it' */
 }
 
 export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
@@ -362,6 +362,10 @@ export const MAP = {
 	locations: {
 		[LANGUAGE.CZ]: PRAGUE_LOCATION,
 		[LANGUAGE.EN]: PRAGUE_LOCATION,
+		// TODO po rolloute nastavit hlavne mesto podla jazyka
+		[LANGUAGE.HU]: PRAGUE_LOCATION,
+		[LANGUAGE.RO]: PRAGUE_LOCATION,
+		[LANGUAGE.BG]: PRAGUE_LOCATION,
 		// Bratislava
 		[LANGUAGE.SK]: {
 			lat: 48.1485965,

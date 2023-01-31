@@ -285,7 +285,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 			</div>
 			{showTabs && (
 				<TabsComponent
-					className={'nc-sider-event-management-tabs'}
+					className={'nc-sider-event-management-tabs tabs-small'}
 					activeKey={sidebarView}
 					onChange={(type: string) => initCreateEventForm(type as CALENDAR_EVENT_TYPE)}
 					tabsContent={[

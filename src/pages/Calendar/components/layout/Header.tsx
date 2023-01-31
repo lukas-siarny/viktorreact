@@ -37,6 +37,7 @@ import useMedia from '../../../../hooks/useMedia'
 // utils
 import { getSelectedDateForCalendar } from '../../calendarHelpers'
 import { INewCalendarEvent } from '../../../../types/interfaces'
+import TabsComponent from '../../../../components/TabsComponent'
 
 const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 	switch (view) {
@@ -62,23 +63,15 @@ const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 	}
 }
 
-const SwitchViewButton: FC<{ label: string; isSmallerDevice: boolean; className: string; onClick: () => void }> = (props) => {
-	const { label, isSmallerDevice, className, onClick } = props
-
+const getSwitchViewLabel = (label: string, isSmallerDevice: boolean) => {
 	const timmedLabel = isSmallerDevice ? label.slice(0, 1) : label
-
-	const button = (
-		<button type={'button'} className={className} onClick={onClick}>
-			{timmedLabel}
-		</button>
-	)
 
 	return isSmallerDevice ? (
 		<Tooltip title={label} placement={'bottom'}>
-			{button}
+			{timmedLabel}
 		</Tooltip>
 	) : (
-		button
+		timmedLabel
 	)
 }
 
@@ -121,8 +114,6 @@ const CalendarHeader: FC<Props> = (props) => {
 	useOnClickOutside([calendarDropdownRef, dateButtonRef], () => {
 		setIsCalendarOpen(false)
 	})
-
-	const isSmallerDevice = useMedia(['(max-width: 1200px)'], [true], false)
 
 	useEffect(() => setCurrentDate(selectedDate), [selectedDate])
 
@@ -195,35 +186,38 @@ const CalendarHeader: FC<Props> = (props) => {
 				<button type={'button'} className={cx('nc-button', { active: !siderFilterCollapsed })} onClick={() => setSiderFilterCollapsed()}>
 					<NavIcon style={{ transform: siderFilterCollapsed ? 'rotate(180deg)' : undefined }} />
 				</button>
-				<div>
-					<SelectField
-						input={
-							{
-								value: calendarView,
-								onChange: (value: CALENDAR_VIEW) => setCalendarView(value)
-							} as any
+
+				<SelectField
+					input={
+						{
+							value: calendarView,
+							onChange: (value: CALENDAR_VIEW) => setCalendarView(value)
+						} as any
+					}
+					meta={{} as any}
+					onChange={(value) => setCalendarView(value)}
+					className={'p-0'}
+					options={calendarViewOptions}
+					dropdownMatchSelectWidth={false}
+				/>
+
+				<TabsComponent
+					className={'tabs-small -mt-1'}
+					activeKey={eventsViewType}
+					onChange={(newEvetsViewType: string) => setEventsViewType(newEvetsViewType as CALENDAR_EVENTS_VIEW_TYPE)}
+					tabsContent={[
+						{
+							tabKey: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
+							tab: getSwitchViewLabel(t('loc:Rezervácie'), false),
+							tabPaneContent: null
+						},
+						{
+							tabKey: CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF,
+							tab: getSwitchViewLabel(t('loc:Zmeny'), false),
+							tabPaneContent: null
 						}
-						meta={{} as any}
-						onChange={(value) => setCalendarView(value)}
-						className={'p-0'}
-						options={calendarViewOptions}
-						dropdownMatchSelectWidth={false}
-					/>
-				</div>
-				<div className={'nc-button-group'}>
-					<SwitchViewButton
-						label={t('loc:Rezervácie')}
-						className={cx({ active: eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION })}
-						onClick={() => setEventsViewType(CALENDAR_EVENTS_VIEW_TYPE.RESERVATION)}
-						isSmallerDevice={isSmallerDevice}
-					/>
-					<SwitchViewButton
-						label={t('loc:Shifts')}
-						className={cx({ active: eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF })}
-						onClick={() => setEventsViewType(CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF)}
-						isSmallerDevice={isSmallerDevice}
-					/>
-				</div>
+					]}
+				/>
 			</div>
 			<div className={'nav-middle'}>
 				<button type={'button'} className={'nc-button w-8 mr-2'} onClick={() => changeSelectedDate(currentDate, CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT, true)}>

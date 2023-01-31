@@ -213,7 +213,7 @@ const CalendarHeader: FC<Props> = (props) => {
 						},
 						{
 							tabKey: CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF,
-							tab: getSwitchViewLabel(t('loc:Zmeny'), false),
+							tab: getSwitchViewLabel(t('loc:Shifts'), false),
 							tabPaneContent: null
 						}
 					]}

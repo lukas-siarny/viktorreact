@@ -351,8 +351,8 @@ export const translateReservationPaymentMethod = (paymentMethod?: RESERVATION_PA
 			}
 		default:
 			return {
-				text: i18next.t('loc:Zaplatená'),
-				icon: <DollarIcon className={className} />
+				text: '',
+				icon: undefined
 			}
 	}
 }

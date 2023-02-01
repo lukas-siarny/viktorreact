@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import dayjs from 'dayjs'
 import colors from 'tailwindcss/colors'
 import { ButtonProps } from 'antd/es/button'
+import i18next from 'i18next'
 
 // assets
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon-16.svg'
@@ -15,6 +16,7 @@ import { ReactComponent as DotsIcon } from '../../../assets/icons/more-info-hori
 import { ReactComponent as MessageIcon } from '../../../assets/icons/message-icon-16-thin.svg'
 import { ReactComponent as ChevronDown } from '../../../assets/icons/chevron-down.svg'
 import { ReactComponent as NoteIcon } from '../../../assets/icons/note-icon.svg'
+import { ReactComponent as DollarIcon } from '../../../assets/icons/dollar.svg'
 import { ReactComponent as CrossedIcon } from '../../../assets/icons/crossed-red-16.svg'
 
 // components
@@ -364,6 +366,12 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 				}
 			}
 			case RESERVATION_STATE.REALIZED: {
+				if (!reservationData?.paymentMethod) {
+					return {
+						headerIcon: <DollarIcon className={'text-notino-success'} />,
+						headerState: i18next.t('loc:Zaplatená')
+					}
+				}
 				const { icon: headerIcon, text: headerState } = translateReservationPaymentMethod(
 					reservationData?.paymentMethod as RESERVATION_PAYMENT_METHOD,
 					'text-notino-success'

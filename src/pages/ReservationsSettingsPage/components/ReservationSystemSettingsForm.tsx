@@ -21,7 +21,7 @@ import { IReservationSystemSettingsForm, ISelectOptionItem } from '../../../type
 
 // utils
 import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS } from '../../../utils/enums'
-import { optionRenderNotiPinkCheckbox, showErrorNotification } from '../../../utils/helper'
+import { optionRenderNotiPinkCheckbox, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import { history } from '../../../utils/history'
 
@@ -320,7 +320,9 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							size={'large'}
 							disabled={disabled}
 							min={0}
-							className='flex-1'
+							className='flex-1 pb-1'
+							required
+							validate={validationRequiredNumber}
 						/>
 						<div className='s-regular ml-2 mt-1 min-w-100px'>{t('loc:Dni vopred')}</div>
 					</div>
@@ -337,7 +339,9 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							size={'large'}
 							disabled={disabled}
 							min={0}
-							className='flex-1'
+							className='flex-1 pb-1'
+							required
+							validate={validationRequiredNumber}
 						/>
 						<div className='s-regular ml-2 mt-1 min-w-100px'>{t('loc:Hodiny vopred')}</div>
 					</div>
@@ -355,7 +359,9 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							size={'large'}
 							disabled={disabled}
 							min={0}
-							className='flex-1'
+							className='flex-1 pb-1'
+							required
+							validate={validationRequiredNumber}
 						/>
 						<div className='s-regular ml-2 mt-1 min-w-100px'>{t('loc:Hodiny vopred')}</div>
 					</div>
@@ -373,7 +379,9 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							size={'large'}
 							allowClear
 							disabled={disabled}
-							className='flex-1'
+							className='flex-1 pb-1'
+							required
+							validate={validationRequiredNumber}
 						/>
 						<div className='s-regular ml-2 mt-1 min-w-100px'>{t('loc:Minúty')}</div>
 					</div>

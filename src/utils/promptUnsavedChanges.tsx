@@ -34,7 +34,7 @@ export function withPromptUnsavedChanges(WrappedComponent: ComponentType<any>): 
 
 		const enable = () => {
 			if (unblock) unblock()
-			unblock = navigator.block(message)
+			// unblock = navigator.block(message)
 			window.addEventListener('beforeunload', onBrowserUnload)
 		}
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { initialize } from 'redux-form'
+import { initialize, isSubmitting } from 'redux-form'
 import { Col, Row, Spin } from 'antd'
 import { forEach, includes, isEmpty, reduce } from 'lodash'
 
@@ -128,6 +128,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const { salonID, parentPath } = props
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const groupedSettings = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
+	const submitting = useSelector(isSubmitting(FORM.RESEVATION_SYSTEM_SETTINGS))
 
 	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
 	const authUserPermissions = currentUser?.uniqPermissions
@@ -287,7 +288,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<Spin spinning={salon.isLoading}>
+						<Spin spinning={salon.isLoading || submitting}>
 							<ReservationSystemSettingsForm
 								onSubmit={handleSubmitSettings}
 								salonID={salonID}

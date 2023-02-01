@@ -22,6 +22,7 @@ export default defineConfig({
 		})
 
 		require('cypress-localstorage-commands/plugin')(on, config)
+		require('./cypress/plugins/index.ts').default(on, config)
 		return config
     },
 	env: {
@@ -30,6 +31,6 @@ export default defineConfig({
 		sign_in_url: process.env.SIGN_IN_URL
 	},
 	experimentalRunAllSpecs: true,
-	baseUrl: 'http://localhost:80',
+	baseUrl: 'http://localhost:3000',
   },
 })

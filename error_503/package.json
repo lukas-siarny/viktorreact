@@ -21,18 +21,14 @@
     "preinstall": "npm install --package-lock-only --ignore-scripts && npx npm-force-resolutions"
   },
   "dependencies": {
-    "antd": "file:../node_modules/antd",
-    "antd-dayjs-webpack-plugin": "file:../node_modules/antd-dayjs-webpack-plugin",
+    "antd": "file:../node_modules/ant-design",
     "autoprefixer": "file:../node_modules/autoprefixer",
-    "babel-plugin-import": "file:../node_modules/babel-plugin-import",
     "classnames": "file:../node_modules/classnames",
     "customize-cra": "file:../node_modules/customize-cra",
     "gulp": "file:../node_modules/gulp",
     "i18next": "file:../node_modules/i18next",
     "i18next-browser-languagedetector": "file:../node_modules/i18next-browser-languagedetector",
     "i18next-scanner": "file:../node_modules/i18next-scanner",
-    "less": "file:../node_modules/less",
-    "less-loader": "file:../node_modules/less-loader",
     "npm-run-all": "file:../node_modules/npm-run-all",
     "postcss": "file:../node_modules/postcss",
     "qs": "file:../node_modules/qs",
@@ -70,5 +66,6 @@
   },
   "resolutions": {
     "react-error-overlay": "6.0.9"
-  }
+  },
+  "config-overrides-path": "../config-overrides.js"
 }

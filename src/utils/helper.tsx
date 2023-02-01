@@ -311,8 +311,8 @@ export const translateReservationState = (state?: RESERVATION_STATE) => {
 			}
 		case RESERVATION_STATE.REALIZED:
 			return {
-				text: i18next.t('loc:Zrealizovaná'),
-				icon: <CreditCardIcon color={'#008700'} />
+				text: i18next.t('loc:Zaplatená'),
+				icon: <DollarIcon color={'#008700'} />
 			}
 		case RESERVATION_STATE.CANCEL_BY_CUSTOMER:
 			return {
@@ -332,27 +332,27 @@ export const translateReservationState = (state?: RESERVATION_STATE) => {
 	}
 }
 
-export const translateReservationPaymentMethod = (paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
+export const translateReservationPaymentMethod = (paymentMethod?: RESERVATION_PAYMENT_METHOD, className?: string) => {
 	switch (paymentMethod) {
 		case RESERVATION_PAYMENT_METHOD.CARD:
 			return {
 				text: i18next.t('loc:Platba kartou'),
-				icon: <CreditCardIcon />
+				icon: <CreditCardIcon className={className} />
 			}
 		case RESERVATION_PAYMENT_METHOD.CASH:
 			return {
 				text: i18next.t('loc:Platba v hotovosti'),
-				icon: <WalletIcon />
+				icon: <WalletIcon className={className} />
 			}
 		case RESERVATION_PAYMENT_METHOD.OTHER:
 			return {
-				text: i18next.t('loc:Iné'),
-				icon: <DollarIcon />
+				text: i18next.t('loc:Iné spôsoby platby'),
+				icon: <DollarIcon className={className} />
 			}
 		default:
 			return {
-				text: '-',
-				icon: undefined
+				text: i18next.t('loc:Zaplatená'),
+				icon: <DollarIcon className={className} />
 			}
 	}
 }

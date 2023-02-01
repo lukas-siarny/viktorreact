@@ -1,15 +1,11 @@
-/* eslint-disable no-underscore-dangle,import/no-cycle */
-// eslint-disable-next-line max-classes-per-file
-import React, { Component, FC, useEffect, useState } from 'react'
-import { connect, useDispatch, useSelector } from 'react-redux'
-import { bindActionCreators, compose } from 'redux'
-import { get, indexOf, some, isEmpty, partition } from 'lodash'
+import React, { FC, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { indexOf, some, isEmpty, partition } from 'lodash'
 import { Button, Modal, notification, Result } from 'antd'
 import { useTranslation } from 'react-i18next'
-
 import { useNavigate } from 'react-router-dom'
-import * as UserActions from '../reducers/users/userActions'
-import { history } from './history'
+
+// eslint-disable-next-line import/no-cycle
 import { RootState } from '../reducers'
 import { PERMISSION, ADMIN_PERMISSIONS } from './enums'
 import { isEnumValue } from './helper'

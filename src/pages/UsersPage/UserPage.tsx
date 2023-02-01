@@ -137,7 +137,8 @@ const UserPage: FC<Props> = () => {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/users/{userID}', { userID: id }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			if (isMyAccountPage) {
-				dispatch(logOutUser(navigate))
+				dispatch(logOutUser())
+				// bez tohto navigate ostava user v aplikacii a moze sa snazit urobit nejake akcie, ktore generuju 401 error (az potom by bol redirect na Login)
 				navigate(t('paths:login'))
 			} else {
 				navigate(t('paths:users'))

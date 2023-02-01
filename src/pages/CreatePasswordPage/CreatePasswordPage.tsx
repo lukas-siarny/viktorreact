@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 
 // components
 import CreatePasswordForm from './components/CreatePasswordForm'
@@ -22,7 +21,6 @@ type Props = {
 const CreatePasswordPage: FC<Props> = (props) => {
 	const [modalVisible, setModalVisible] = useState(false)
 	const dispatch = useDispatch()
-	const navigate = useNavigate()
 	const handleSubmit = async (values: ICreatePasswordForm) => {
 		try {
 			const input = {
@@ -36,7 +34,7 @@ const CreatePasswordPage: FC<Props> = (props) => {
 			}
 
 			const { data } = await postReq('/api/b2b/admin/auth/reset-password', null, input, config)
-			return dispatch(processAuthorizationResult(data, undefined, navigate))
+			return dispatch(processAuthorizationResult(data, undefined))
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)

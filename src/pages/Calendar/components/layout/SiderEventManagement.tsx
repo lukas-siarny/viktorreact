@@ -103,8 +103,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 		try {
 			const { data } = await dispatch(getCalendarEventDetail(salonID, query.eventId as string))
 
-			if (!data) {
-				// NOTE: ak by bolo zle ID (zmazane alebo nenajdene) tak zatvorit drawer + zmaz eventId
+			// NOTE: event type v query parametroch musi sediet s event typom zobrazeneho detailu, inak sa zobrazi zly formular
+			if (!data || data.eventType !== query.sidebarView) {
 				onCloseSider()
 				return
 			}
@@ -182,6 +182,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query.eventId, query.sidebarView])
 
+	// TODO: toto nefunguje uplne spravne, zatvara sa to aj v pripade, ze mam otovreny popover a dam ESC (vtedy by sa mal zavriet len popover)
 	/* useKeyUp(
 		'Escape',
 		query.sidebarView

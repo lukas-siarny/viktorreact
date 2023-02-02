@@ -303,6 +303,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}, [scrollToTime])
 
 	useEffect(() => {
+		dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
+		dispatch(getServices({ salonID }))
+	}, [dispatch, salonID])
+
+	useEffect(() => {
 		// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
 		const loadSalonDetail = async () => {
 			const salonRes = await dispatch(selectSalon(salonID))
@@ -314,9 +319,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 
 		loadSalonDetail()
-		dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
-		dispatch(getServices({ salonID }))
-	}, [dispatch, salonID, authUserPermissions])
+	}, [authUserPermissions, dispatch, salonID])
 
 	useEffect(() => {
 		;(async () => {
@@ -393,7 +396,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}, [dispatch, setEventManagement])
 
 	const handleSubmitFilter = (values: ICalendarFilter) => {
-		// pri prernuti filtra sa zavrie sidebar ak existuje virtualny event, tak sa zmaze
+		// pri prepnuti filtra sa zavrie sidebar ak existuje virtualny event, tak sa zmaze
 		if (virtualEvent) {
 			dispatch(clearEvent())
 		}
@@ -422,7 +425,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			timeFrom: newEventData?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT),
 			timeTo,
 			employee: newEventData?.employee,
-			// ...(!forceDestroy && omit(prevInitData, 'eventType')), // prevData initne len pri prepinani selectu, pri znovu kliknuti na pridat sa tieto data nemerguju
 			eventType
 		}
 
@@ -433,6 +435,18 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			dispatch(initialize(FORM.CALENDAR_EVENT_FORM, initData))
 		}
 	}
+
+	useEffect(() => {
+		// ak je otvoreny sidebar a nemam eventID, tak initneme formular pre vytvorenie
+		if (query.sidebarView && !query.eventId) {
+			// Po refreshi tabu sa nevyvola vymazanie virtualneho eventu
+			if (virtualEvent) {
+				dispatch(clearEvent())
+			}
+			initCreateEventForm(query.sidebarView as CALENDAR_EVENT_TYPE)
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
 
 	const handleAddEvent = (initialData?: INewCalendarEvent, fromAddButton?: boolean) => {
 		/**

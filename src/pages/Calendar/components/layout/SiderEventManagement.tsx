@@ -59,7 +59,6 @@ type Props = {
 	calendarApi?: CalendarApi
 	changeCalendarDate: (newDate: string) => void
 	phonePrefix?: string
-	initCreateEventForm: (eventType: CALENDAR_EVENT_TYPE, newEventData?: INewCalendarEvent, forceDestroy?: boolean) => void
 }
 
 const SiderEventManagement: FC<Props> = (props) => {
@@ -74,8 +73,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 		eventsViewType,
 		calendarApi,
 		changeCalendarDate,
-		phonePrefix,
-		initCreateEventForm
+		phonePrefix
 	} = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -177,16 +175,9 @@ const SiderEventManagement: FC<Props> = (props) => {
 	}
 
 	useEffect(() => {
-		// ak je otvoreny sidebar, tak vyinicializujeme form
-		if (query.sidebarView && !donInitEventForm.current) {
-			// ak nemame eventId, znamena ze ideme vytvarat novy event
-			if (!query.eventId) {
-				initCreateEventForm(query.sidebarView as CALENDAR_EVENT_TYPE)
-			} else {
-				// inak ideme upravovat existujuci event
-				initUpdateEventForm()
-			}
-			donInitEventForm.current = false
+		// ak je otvoreny sidebar a mame eventID, tak znamena, ze pozerame detail existujuceho eventu
+		if (query.sidebarView && query.eventId) {
+			initUpdateEventForm()
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query.eventId, query.sidebarView])

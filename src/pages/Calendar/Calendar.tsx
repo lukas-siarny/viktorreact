@@ -393,8 +393,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}, [dispatch, setEventManagement])
 
 	const handleSubmitFilter = (values: ICalendarFilter) => {
-		// pri prernuti filtra sa zavrie sidebar a zaroven vymaze virtualny event
-		dispatch(clearEvent())
+		// pri prernuti filtra sa zavrie sidebar ak existuje virtualny event, tak sa zmaze
+		if (virtualEvent) {
+			dispatch(clearEvent())
+		}
 		setQuery({
 			...query,
 			...values,
@@ -407,22 +409,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		})
 	}
 
-	const initCreateEventForm = (eventType: CALENDAR_EVENT_TYPE, newEventData?: INewCalendarEvent, forceDestroy = false) => {
-		const prevEventType = query.sidebarView
-		// Mergnut predchadzajuce data ktore boli vybrane pred zmenou eventTypu
-		let prevInitData: Partial<ICalendarEventForm | ICalendarReservationForm> = {}
-		if (prevEventType === CALENDAR_EVENT_TYPE.RESERVATION) {
-			prevInitData = reservationFormValues
-			// CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT || CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK || CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
-		} else {
-			prevInitData = eventFormValues
-		}
-		// Nastavi sa aktualny event Type zo selectu
-		setQuery({
-			...query,
-			sidebarView: eventType
-		})
-
+	const initCreateEventForm = (eventType: CALENDAR_EVENT_TYPE, newEventData?: INewCalendarEvent) => {
 		let timeTo: string | undefined
 		if (newEventData?.timeTo) {
 			// use 23:59 instead of 00:00 as end of day
@@ -447,18 +434,22 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const handleAddEvent = (initialData?: INewCalendarEvent, clearVirtualEvent?: boolean) => {
-		if (clearVirtualEvent) {
-			dispatch(clearEvent())
+	const handleAddEvent = (initialData?: INewCalendarEvent, fromAddButton?: boolean) => {
+		/**
+		 * Ak kliknem hore v hlavicke na Pridat a akutalne uz mam otvoreny sidebar a vytvaram novy event
+		 * nebude sa vyinicializovavat formular, aby sme neprepisali uz uzivatelom naklikane data
+		 */
+		if (fromAddButton && query.sidebarView && !query.eventId) {
+			return
 		}
 
 		// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastav pracovnu zmenu
 		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-			setEventManagement(CALENDAR_EVENT_TYPE.RESERVATION)
-			initCreateEventForm(CALENDAR_EVENT_TYPE.RESERVATION, initialData, true)
+			setEventManagement(CALENDAR_EVENT_TYPE.RESERVATION, undefined)
+			initCreateEventForm(CALENDAR_EVENT_TYPE.RESERVATION, initialData)
 		} else {
-			setEventManagement(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
-			initCreateEventForm(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, initialData, true)
+			setEventManagement(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, undefined)
+			initCreateEventForm(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, initialData)
 		}
 	}
 
@@ -762,7 +753,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					setCalendarView={setCalendarView}
 					setEventsViewType={(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => {
 						// NOTE: Ak je otvoreny CREATE / EDIT sidebar tak pri prepnuti filtra ho zrusit + zmaze virtual event
-						dispatch(clearEvent())
+						if (virtualEvent) {
+							dispatch(clearEvent())
+						}
 						setQuery({ ...query, eventsViewType, sidebarView: undefined, eventId: undefined })
 					}}
 					setSelectedDate={setNewSelectedDate}
@@ -815,7 +808,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							handleSubmitEvent={initSubmitEventData}
 							calendarApi={calendarRefs?.current?.[validCalendarView]?.getApi()}
 							changeCalendarDate={setNewSelectedDate}
-							initCreateEventForm={initCreateEventForm}
 						/>
 					)}
 				</Layout>

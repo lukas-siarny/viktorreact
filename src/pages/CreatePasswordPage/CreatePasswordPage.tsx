@@ -34,7 +34,7 @@ const CreatePasswordPage: FC<Props> = (props) => {
 			}
 
 			const { data } = await postReq('/api/b2b/admin/auth/reset-password', null, input, config)
-			return dispatch(processAuthorizationResult(data, undefined))
+			return dispatch(processAuthorizationResult(data))
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)

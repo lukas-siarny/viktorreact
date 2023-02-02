@@ -61,8 +61,6 @@ const UserPage: FC<Props> = () => {
 
 	const isFormPristine = useSelector(isPristine(FORM.USER_ACCOUNT))
 
-	const isMyAccountPage: boolean = authUser.data?.id === get(userAccountDetail, 'data.user.id')
-
 	const isLoading = userAccountDetail.isLoading || isRemoving
 
 	useEffect(() => {
@@ -131,12 +129,12 @@ const UserPage: FC<Props> = () => {
 		}
 		try {
 			let id = userIDWrap
-			if (isMyAccountPage && authUser.data) {
+			if (isMyAccountPath && authUser.data) {
 				id = authUser.data.id
 			}
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/users/{userID}', { userID: id }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			if (isMyAccountPage) {
+			if (isMyAccountPath) {
 				dispatch(logOutUser())
 				// bez tohto navigate ostava user v aplikacii a moze sa snazit urobit nejake akcie, ktore generuju 401 error (az potom by bol redirect na Login)
 				navigate(t('paths:login'))
@@ -199,10 +197,10 @@ const UserPage: FC<Props> = () => {
 								className={'w-full md:w-auto md:min-w-50 xl:min-w-60'}
 								id={formFieldID(FORM.USER_ACCOUNT, DELETE_BUTTON_ID)}
 								onConfirm={deleteUser}
-								entityName={isMyAccountPage ? t('loc:účet') : t('loc:používateľa')}
+								entityName={isMyAccountPath ? t('loc:účet') : t('loc:používateľa')}
 								type={'default'}
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-								ignorePermissions={isMyAccountPage}
+								ignorePermissions={isMyAccountPath}
 							/>
 							<Permissions
 								allowed={submitPermissions}

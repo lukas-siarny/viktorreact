@@ -59,7 +59,6 @@ type Props = {
 	calendarApi?: CalendarApi
 	changeCalendarDate: (newDate: string) => void
 	phonePrefix?: string
-	initCreateEventForm: (eventType: CALENDAR_EVENT_TYPE, newEventData?: INewCalendarEvent, forceDestroy?: boolean) => void
 }
 
 const SiderEventManagement: FC<Props> = (props) => {
@@ -74,8 +73,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 		eventsViewType,
 		calendarApi,
 		changeCalendarDate,
-		phonePrefix,
-		initCreateEventForm
+		phonePrefix
 	} = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -105,8 +103,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 		try {
 			const { data } = await dispatch(getCalendarEventDetail(salonID, query.eventId as string))
 
-			if (!data) {
-				// NOTE: ak by bolo zle ID (zmazane alebo nenajdene) tak zatvorit drawer + zmaz eventId
+			// NOTE: event type v query parametroch musi sediet s event typom zobrazeneho detailu, inak sa zobrazi zly formular
+			if (!data || data.eventType !== query.sidebarView) {
 				onCloseSider()
 				return
 			}
@@ -177,20 +175,14 @@ const SiderEventManagement: FC<Props> = (props) => {
 	}
 
 	useEffect(() => {
-		// ak je otvoreny sidebar, tak vyinicializujeme form
-		if (query.sidebarView && !donInitEventForm.current) {
-			// ak nemame eventId, znamena ze ideme vytvarat novy event
-			if (!query.eventId) {
-				initCreateEventForm(query.sidebarView as CALENDAR_EVENT_TYPE)
-			} else {
-				// inak ideme upravovat existujuci event
-				initUpdateEventForm()
-			}
-			donInitEventForm.current = false
+		// ak je otvoreny sidebar a mame eventID, tak znamena, ze pozerame detail existujuceho eventu
+		if (query.sidebarView && query.eventId) {
+			initUpdateEventForm()
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query.eventId, query.sidebarView])
 
+	// TODO: toto nefunguje uplne spravne, zatvara sa to aj v pripade, ze mam otovreny popover a dam ESC (vtedy by sa mal zavriet len popover)
 	/* useKeyUp(
 		'Escape',
 		query.sidebarView
@@ -235,10 +227,19 @@ const SiderEventManagement: FC<Props> = (props) => {
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-				return <EventForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
+				return <EventForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE} />
 			case CALENDAR_EVENT_TYPE.RESERVATION:
 			default:
-				return <ReservationForm salonID={salonID} eventId={eventId} phonePrefix={phonePrefix} searchEmployes={searchEmployes} onSubmit={handleSubmitReservation} />
+				return (
+					<ReservationForm
+						salonID={salonID}
+						eventId={eventId}
+						phonePrefix={phonePrefix}
+						searchEmployes={searchEmployes}
+						onSubmit={handleSubmitReservation}
+						sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE}
+					/>
+				)
 		}
 	}
 

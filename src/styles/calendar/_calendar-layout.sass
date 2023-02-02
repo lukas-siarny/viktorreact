@@ -134,8 +134,6 @@
 				.nc-sider-event-management-content
 					height: calc(100% - 114px) // 100% - .nc-sider-event-management-header - .nc-sider-event-management-footer
 					padding-top: 0
-					transition: transformX(150px)
-					animation: sider-content-animation 200ms ease-in-out forwards
 			.nc-sider-event-management-tabs
 				height: 32px
 				.ant-tabs-nav
@@ -155,6 +153,8 @@
 				overflow-y: auto
 				overflow-x: hidden
 				padding: 16px
+				transition: transformX(150px)
+				animation: sider-content-animation 200ms ease-in-out forwards
 			.nc-sider-event-management-footer
 				height: 64px
 				padding: 8px 16px 16px 16px

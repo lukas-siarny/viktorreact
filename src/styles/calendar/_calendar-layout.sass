@@ -1,6 +1,11 @@
 @import "../tailwind-variables"
 @import "../variables"
 
+@keyframes sider-content-animation
+	0%
+		transform: translateX(150px)
+	100%
+		transform: translteX(0)
 
 .fc-timegrid-cols, .fc-timeline-body
 	&.active::after
@@ -129,6 +134,8 @@
 				.nc-sider-event-management-content
 					height: calc(100% - 114px) // 100% - .nc-sider-event-management-header - .nc-sider-event-management-footer
 					padding-top: 0
+					transition: transformX(150px)
+					animation: sider-content-animation 200ms ease-in-out forwards
 			.nc-sider-event-management-tabs
 				height: 32px
 				.ant-tabs-nav

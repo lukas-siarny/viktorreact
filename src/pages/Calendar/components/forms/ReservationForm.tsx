@@ -4,6 +4,7 @@ import { change, Field, Fields, initialize, InjectedFormProps, reduxForm, submit
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Form, Modal, Spin } from 'antd'
 import { flatten, map } from 'lodash'
+import { StringParam, useQueryParams } from 'use-query-params'
 
 // validate
 import validateReservationForm from './validateReservationForm'
@@ -54,6 +55,10 @@ const ReservationForm: FC<Props> = (props) => {
 	const [visibleCustomerDetailModal, setVisibleCustomerDetailModal] = useState(false)
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
+
+	const [query] = useQueryParams({
+		sidebarView: StringParam
+	})
 
 	// NOTE: pristine pouzivat len pri UPDATE eventu a pri CREATE povlit akciu vzdy
 	const disabledSubmitButton = !!(eventId && pristine) || submitting
@@ -194,7 +199,7 @@ const ReservationForm: FC<Props> = (props) => {
 	return (
 		<>
 			{modals}
-			<div className={'nc-sider-event-management-content'}>
+			<div className={'nc-sider-event-management-content'} key={`${eventId}${!!query.sidebarView}`}>
 				<Spin spinning={eventDetail.isLoading} size='large'>
 					<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 						<Permissions

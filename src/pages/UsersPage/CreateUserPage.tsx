@@ -74,7 +74,7 @@ const CreateUserPage = () => {
 			const { data } = await postReq('/api/b2b/admin/users/', null, {
 				email: formData?.email,
 				phone: formData?.phone,
-				phonePrefixCountryCode: formData?.phonePrefixCountryCode,
+				phonePrefixCountryCode: formData?.phone ? formData?.phonePrefixCountryCode : undefined,
 				roleID: formData?.roleID,
 				assignedCountryCode: formData?.assignedCountryCode
 			})

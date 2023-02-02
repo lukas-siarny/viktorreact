@@ -10,6 +10,7 @@ import * as Sentry from '@sentry/react'
 import { setIntervalImmediately } from '../utils/helper'
 import { REFRESH_TOKEN_INTERVAL, PERMISSION } from '../utils/enums'
 import { checkPermissions } from '../utils/Permissions'
+import Navigator from '../utils/navigation'
 
 // redux
 import { RootState } from '../reducers'
@@ -23,6 +24,12 @@ const AppInit: FC = (props) => {
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 	const [loading, setLoading] = useState<boolean>(true)
 	const navigate = useNavigate()
+
+	useEffect(() => {
+		Navigator.init(navigate)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
 	useEffect(() => {
 		// set accessible enumeration data for whole app
 		dispatch(getCountries())
@@ -30,7 +37,7 @@ const AppInit: FC = (props) => {
 
 		// periodically refresh tokens
 		const refreshInterval = setIntervalImmediately(async () => {
-			await dispatch(refreshToken(navigate))
+			await dispatch(refreshToken())
 			if (loading) {
 				setLoading(false)
 			}

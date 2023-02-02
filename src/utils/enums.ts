@@ -196,7 +196,7 @@ export enum RESOLUTIONS {
 	XXL = 'XXL',
 	XXXL = 'XXXL'
 }
-export const NOT_ALLOWED_REDIRECT_PATHS = ['/401', '/404', '/403']
+export const NOT_ALLOWED_REDIRECT_PATHS = ['/404', '/403']
 
 export enum SUBMENU_PARENT {
 	GENERAL = 'GENERAL',

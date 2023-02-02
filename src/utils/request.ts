@@ -32,8 +32,6 @@ type PatchUrls = {
 type DeleteUrls = {
 	[Q in FilteredKeys<PathsDictionary, { delete: any }>]: PathsDictionary[Q]
 }
-// TODO: opravit
-// const { store } = configureStore(rootReducer)
 
 export const showErrorNotifications = (error: AxiosError | Error | unknown, typeNotification = NOTIFICATION_TYPE.NOTIFICATION, skipRedirect = false) => {
 	let messages = get(error, 'response.data.messages')
@@ -48,7 +46,8 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 			]
 		}
 		showNotifications(messages, typeNotification)
-		// logOutUser(skipRedirect)(store.dispatch, store.getState, undefined)
+		const { store } = configureStore(rootReducer)
+		logOutUser(skipRedirect)(store.dispatch, store.getState, undefined)
 	} else if (get(error, 'response.status') === 504 || get(error, 'response') === undefined || get(error, 'message') === 'Network Error') {
 		messages = [
 			{

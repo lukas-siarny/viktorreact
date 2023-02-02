@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 // components
 import LoginForm from './components/LoginForm'
@@ -23,11 +23,10 @@ const LoginPage: FC<Props> = () => {
 	const dispatch = useDispatch()
 	const [t] = useTranslation()
 	const location = useLocation()
-	const navigate = useNavigate()
 	const handleLoginSubmit = async (values: ILoginForm) => {
 		try {
 			const { data } = await postReq('/api/b2b/admin/auth/login', null, values, { skipLoginRedirect: true })
-			dispatch(processAuthorizationResult(data, location?.state?.redirectFrom, navigate))
+			dispatch(processAuthorizationResult(data, location?.state?.redirectFrom))
 		} catch (error) {
 			// eslint-disable-next-line no-console
 			console.error(error)

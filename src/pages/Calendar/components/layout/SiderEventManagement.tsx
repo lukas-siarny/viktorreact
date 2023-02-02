@@ -1,10 +1,10 @@
-import React, { FC, useCallback, useEffect } from 'react'
+import React, { FC, useCallback, useEffect, useRef } from 'react'
 import Sider from 'antd/lib/layout/Sider'
 import { compact, map } from 'lodash'
 import cx from 'classnames'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { initialize } from 'redux-form'
+import { change, initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { StringParam, useQueryParams } from 'use-query-params'
 import { CalendarApi } from '@fullcalendar/react'
@@ -80,13 +80,15 @@ const SiderEventManagement: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const [query] = useQueryParams({
+	const [query, setQuery] = useQueryParams({
 		sidebarView: StringParam,
 		eventId: StringParam,
 		date: StringParam
 	})
 
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
+
+	const donInitEventForm = useRef(false)
 
 	useEffect(() => {
 		// nastavuje referenciu na CalendarApi, musi sa update-ovat, ked sa meni View, aby bola aktualna vo virtalEventActions
@@ -175,23 +177,21 @@ const SiderEventManagement: FC<Props> = (props) => {
 	}
 
 	useEffect(() => {
-		// init pre UPDATE form ak eventId existuje
-		if (query.eventId) {
-			initUpdateEventForm()
+		// ak je otvoreny sidebar, tak vyinicializujeme form
+		if (query.sidebarView && !donInitEventForm.current) {
+			// ak nemame eventId, znamena ze ideme vytvarat novy event
+			if (!query.eventId) {
+				initCreateEventForm(query.sidebarView as CALENDAR_EVENT_TYPE)
+			} else {
+				// inak ideme upravovat existujuci event
+				initUpdateEventForm()
+			}
+			donInitEventForm.current = false
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query.eventId, query.sidebarView])
 
-	useEffect(() => {
-		// zmena sideBar view
-		if (sidebarView !== undefined) {
-			// initnutie defaultu sidebaru pri nacitani bude COLLAPSED a ak bude existovat typ formu tak sa initne dany FORM (pri skopirovani URL na druhy tab)
-			initCreateEventForm(sidebarView as CALENDAR_EVENT_TYPE)
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
-
-	useKeyUp(
+	/* useKeyUp(
 		'Escape',
 		query.sidebarView
 			? () => {
@@ -200,7 +200,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 					if (highlight) highlight.remove()
 			  }
 			: undefined
-	)
+	) */
 
 	const searchEmployes = useCallback(
 		async (search: string, page: number) => {
@@ -287,7 +287,11 @@ const SiderEventManagement: FC<Props> = (props) => {
 				<TabsComponent
 					className={'nc-sider-event-management-tabs'}
 					activeKey={sidebarView}
-					onChange={(type: string) => initCreateEventForm(type as CALENDAR_EVENT_TYPE)}
+					onChange={(type: string) => {
+						donInitEventForm.current = true
+						setQuery({ ...query, sidebarView: type })
+						dispatch(change(FORM.CALENDAR_EVENT_FORM, 'eventType', type))
+					}}
 					tabsContent={[
 						{
 							tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,

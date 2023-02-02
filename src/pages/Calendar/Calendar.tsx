@@ -231,7 +231,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		setCurrentRange(getSelectedDateRange(newView, query.date))
 	}
 
-	const updateCalendarSize = useRef(() => calendarRefs?.current?.[validCalendarView]?.getApi()?.updateSize())
+	const updateCalendarSize = useRef(() => {
+		calendarRefs?.current?.[validCalendarView]?.getApi()?.updateSize()
+	})
 
 	const filteredEmployees = useCallback(() => {
 		// filter employees based on employeeIDs in the url queryParams (if there are any)
@@ -332,7 +334,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents])
 
 	useEffect(() => {
-		dispatch(clearEvent()) // Ak je otvoreny virtualny event tak sa zmaze virtualny event
 		dispatch(
 			initialize(FORM.CALENDAR_FILTER, {
 				eventsViewType: validEventsViewType,
@@ -392,6 +393,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}, [dispatch, setEventManagement])
 
 	const handleSubmitFilter = (values: ICalendarFilter) => {
+		// pri prernuti filtra sa zavrie sidebar a zaroven vymaze virtualny event
+		dispatch(clearEvent())
 		setQuery({
 			...query,
 			...values,
@@ -417,7 +420,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// Nastavi sa aktualny event Type zo selectu
 		setQuery({
 			...query,
-			eventId: undefined, // Pri create vynulovat eventID ak bol pred creatom otvoreny nejaky detail
 			sidebarView: eventType
 		})
 
@@ -433,7 +435,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			timeFrom: newEventData?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT),
 			timeTo,
 			employee: newEventData?.employee,
-			...(!forceDestroy && omit(prevInitData, 'eventType')), // prevData initne len pri prepinani selectu, pri znovu kliknuti na pridat sa tieto data nemerguju
+			// ...(!forceDestroy && omit(prevInitData, 'eventType')), // prevData initne len pri prepinani selectu, pri znovu kliknuti na pridat sa tieto data nemerguju
 			eventType
 		}
 
@@ -445,10 +447,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const handleAddEvent = (initialData?: INewCalendarEvent) => {
-		// NOTE: ak existuje vytvoreny virualny event a pouzivatel vytvori dalsi klikom na tlacidlo Pridat tak ho zmaze a otvori init create form eventu
-		if (virtualEvent || query.eventId) {
-			closeSiderForm()
+	const handleAddEvent = (initialData?: INewCalendarEvent, clearVirtualEvent?: boolean) => {
+		if (clearVirtualEvent) {
+			dispatch(clearEvent())
 		}
 
 		// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastav pracovnu zmenu
@@ -724,6 +725,17 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const initUpdateReservationStateData = (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) =>
 		setConfirmModalData({ key: CONFIRM_MODAL_DATA_TYPE.UPDATE_RESERVATION_STATE, calendarEventID, state, reason, paymentMethod })
 
+	const onEditEvent = (eventType: CALENDAR_EVENT_TYPE, eventId: string) => {
+		setQuery({
+			...query,
+			eventId,
+			sidebarView: eventType
+		})
+		if (validCalendarView === CALENDAR_VIEW.DAY) {
+			setTimeout(updateCalendarSize.current, 0)
+		}
+	}
+
 	const modals = (
 		<CalendarConfirmModal
 			data={confirmModalData}
@@ -736,17 +748,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			clearConfirmModal={clearConfirmModal}
 		/>
 	)
-
-	const onEditEvent = (eventType: CALENDAR_EVENT_TYPE, eventId: string) => {
-		setQuery({
-			...query,
-			eventId,
-			sidebarView: eventType
-		})
-		if (validCalendarView === CALENDAR_VIEW.DAY) {
-			setTimeout(updateCalendarSize.current, 0)
-		}
-	}
 
 	return (
 		<>
@@ -762,7 +763,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					setEventsViewType={(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => {
 						// NOTE: Ak je otvoreny CREATE / EDIT sidebar tak pri prepnuti filtra ho zrusit + zmaze virtual event
 						dispatch(clearEvent())
-						setQuery({ ...query, eventsViewType, sidebarView: undefined })
+						setQuery({ ...query, eventsViewType, sidebarView: undefined, eventId: undefined })
 					}}
 					setSelectedDate={setNewSelectedDate}
 					setSiderFilterCollapsed={() => {
@@ -778,7 +779,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					<CalendarContent
 						salonID={salonID}
 						enabledSalonReservations={selectedSalon?.settings?.enabledReservations}
-						setEventManagement={setEventManagement}
 						ref={calendarRefs}
 						selectedDate={validSelectedDate}
 						view={validCalendarView}
@@ -806,14 +806,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							phonePrefix={selectedSalon.address?.countryCode || selectedSalon.companyInvoiceAddress?.countryCode}
 							salonID={salonID}
 							selectedDate={validSelectedDate}
-							eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
+							eventsViewType={validEventsViewType}
 							eventId={query.eventId}
 							handleDeleteEvent={initDeleteEventData}
 							sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE}
 							onCloseSider={closeSiderForm}
 							handleSubmitReservation={initSubmitReservationData}
 							handleSubmitEvent={initSubmitEventData}
-							calendarApi={calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()}
+							calendarApi={calendarRefs?.current?.[validCalendarView]?.getApi()}
 							changeCalendarDate={setNewSelectedDate}
 							initCreateEventForm={initCreateEventForm}
 						/>

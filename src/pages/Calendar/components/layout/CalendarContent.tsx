@@ -91,7 +91,6 @@ type Props = {
 	loading: boolean
 	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
-	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
 	enabledSalonReservations?: boolean
 	parentPath: string
 } & Omit<ICalendarView, 'onEventChange' | 'onEventChangeStart' | 'onEventChangeStop'>
@@ -111,7 +110,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		handleSubmitReservation,
 		handleSubmitEvent,
 		selectedDate,
-		setEventManagement,
 		enabledSalonReservations,
 		salonID,
 		eventsViewType,
@@ -381,7 +379,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				<CalendarWeekView
 					ref={weekView}
 					enabledSalonReservations={enabledSalonReservations}
-					setEventManagement={setEventManagement}
 					disableRender={disableRender}
 					reservations={sources.reservations}
 					shiftsTimeOffs={sources.shiftsTimeOffs}
@@ -406,7 +403,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		return (
 			<CalendarDayView
 				enabledSalonReservations={enabledSalonReservations}
-				setEventManagement={setEventManagement}
 				ref={dayView}
 				disableRender={disableRender}
 				reservations={sources.reservations}

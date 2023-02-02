@@ -21,7 +21,7 @@
     "preinstall": "npm install --package-lock-only --ignore-scripts && npx npm-force-resolutions"
   },
   "dependencies": {
-    "antd": "file:../node_modules/ant-design",
+    "antd": "file:../node_modules/antd",
     "autoprefixer": "file:../node_modules/autoprefixer",
     "classnames": "file:../node_modules/classnames",
     "customize-cra": "file:../node_modules/customize-cra",
@@ -66,6 +66,5 @@
   },
   "resolutions": {
     "react-error-overlay": "6.0.9"
-  },
-  "config-overrides-path": "../config-overrides.js"
+  }
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Field, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
 import { Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -40,21 +40,6 @@ type ComponentProps = {}
 
 type Props = InjectedFormProps<IReservationsFilter, ComponentProps> & ComponentProps
 
-const RESERVATION_STATE_OPTIONS = map(RESERVATION_STATES, (item) => ({
-	key: item,
-	label: translateReservationState(item as RESERVATION_STATE)
-}))
-
-const RESERVATION_PAYMENT_METHOD_OPTIONS = map(RESERVATION_PAYMENT_METHODS, (item) => ({
-	key: item,
-	label: translateReservationPaymentMethod(item as RESERVATION_PAYMENT_METHOD)
-}))
-
-const RESERVATION_SOURCE_TYPE_OPTIONS = map(RESERVATION_SOURCE_TYPES, (item) => ({
-	key: item,
-	label: transalteReservationSourceType(item as RESERVATION_SOURCE_TYPE)
-}))
-
 const employeeIDsOptions = (employees: ReservationsEmployees) =>
 	map(employees, (employee) => {
 		return {
@@ -69,6 +54,32 @@ const employeeIDsOptions = (employees: ReservationsEmployees) =>
 	})
 
 const ReservationsFilter = (props: Props) => {
+	const RESERVATION_PAYMENT_METHOD_OPTIONS = useMemo(
+		() =>
+			map(RESERVATION_PAYMENT_METHODS, (item) => ({
+				key: item,
+				label: translateReservationPaymentMethod(item as RESERVATION_PAYMENT_METHOD)
+			})),
+		[]
+	)
+
+	const RESERVATION_SOURCE_TYPE_OPTIONS = useMemo(
+		() =>
+			map(RESERVATION_SOURCE_TYPES, (item) => ({
+				key: item,
+				label: transalteReservationSourceType(item as RESERVATION_SOURCE_TYPE)
+			})),
+		[]
+	)
+	const RESERVATION_STATE_OPTIONS = useMemo(
+		() =>
+			map(RESERVATION_STATES, (item) => ({
+				key: item,
+				label: translateReservationState(item as RESERVATION_STATE)
+			})),
+		[]
+	)
+
 	const { handleSubmit } = props
 	const [t] = useTranslation()
 	const reservations = useSelector((state: RootState) => state.calendar.paginatedReservations)

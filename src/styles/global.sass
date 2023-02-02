@@ -1379,6 +1379,19 @@ li.ant-list-item:hover
 		@media (max-width: 900px)
 			.noti-opening-hours-ranges
 				flex-direction: column
+	.ant-picker-dropdown
+		.ant-picker-time-panel-column
+			> li.ant-picker-time-panel-cell
+				margin-inline: 0
+				.ant-picker-time-panel-cell-inner
+					width: 100%
+				&.ant-picker-time-panel-cell-selected
+					.ant-picker-time-panel-cell-inner
+						border-radius: 0
+						color: $textColor-notino-white
+						background-color: $backgroundColor-notino-black
+			&.ant-picker-time-panel-column-active
+				background-color: $backgroundColor-notino-grayLight
 
 .service-badge
 	padding: 4px 8px

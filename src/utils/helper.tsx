@@ -334,6 +334,20 @@ export const normalizeQueryParams = (queryParams: any) =>
 		return queryParam
 	})
 
+// NOTE: Tuto normalize funkciu treba volat vsade tam kde sa nastavuju query params cez setSearchParams a je potencialne mozne ze sa resetuju tieto parametre na null lebo '' alebo undefined
+// Taketo params nemozu prejst do URL lebo react router ich nevie sam zmazat ako to vedel use query params
+// Staci volat len pri filtrovani v onSubmit metodach pri tabulkach a paginacii neni potrebne toto noramalizovanie
+export const normalizeSearchQueryParams = (queryParams: any) => {
+	return forEach(queryParams, (queryParam, key) => {
+		// 'null' je pre pripad ze sa v queryPrams nastavi default value paramName: '' a tento param sa potom vyresetuje tak sa nastavi nie na null ale na 'null'
+		if (queryParam === 'null' || queryParam === '' || queryParam === undefined || queryParam === null || queryParam === []) {
+			// Takyto non valid query param treba zmazat nestaci ho nastavit na undefined!!!
+			// eslint-disable-next-line no-param-reassign
+			delete queryParams[key]
+		}
+		return queryParams
+	})
+}
 // Number validators
 export const validationNumber = (value: string) => !isNaturalNonZero(value) && i18next.t('loc:Nie je validná číselná hodnota')
 export const validationDecimalNumber = (value: number) => isNotNumeric(value) && i18next.t('loc:Nie je validná číselná hodnota')

@@ -20,9 +20,9 @@ export interface IErrorMessage {
 }
 
 export interface IPaginationQuery {
-	limit?: number | null
-	page?: number | null
-	order?: string
+	limit?: number | null | string
+	page?: number | null | string
+	order?: string | null
 }
 
 export interface IResponsePagination {

@@ -338,13 +338,6 @@ export interface IConfirmUserForm extends ICreatePasswordForm {
 	surname: string
 }
 
-export interface IComputedMatch<Params> {
-	isExact: boolean
-	params: Params
-	path: string
-	url: string
-}
-
 export interface IBreadcrumbItem {
 	name: string
 	link?: string

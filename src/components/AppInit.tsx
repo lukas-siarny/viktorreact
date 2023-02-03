@@ -2,6 +2,8 @@ import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Spin } from 'antd'
 import { get } from 'lodash'
+import { useNavigate } from 'react-router-dom'
+
 import * as Sentry from '@sentry/react'
 
 // utils
@@ -20,7 +22,7 @@ const AppInit: FC = (props) => {
 	const currentUser = useSelector((state: RootState) => state.user.authUser)
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 	const [loading, setLoading] = useState<boolean>(true)
-
+	const navigate = useNavigate()
 	useEffect(() => {
 		// set accessible enumeration data for whole app
 		dispatch(getCountries())
@@ -28,7 +30,7 @@ const AppInit: FC = (props) => {
 
 		// periodically refresh tokens
 		const refreshInterval = setIntervalImmediately(async () => {
-			await dispatch(refreshToken())
+			await dispatch(refreshToken(navigate))
 			if (loading) {
 				setLoading(false)
 			}

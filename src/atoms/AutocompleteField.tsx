@@ -230,7 +230,7 @@ const AutocompleteField = (props: Props) => {
 		open,
 		showArrow,
 		menuItemSelectedIcon,
-		dropdownClassName,
+		popupClassName,
 		dropdownStyle,
 		dropdownMatchSelectWidth = true,
 		listHeight,
@@ -469,7 +469,7 @@ const AutocompleteField = (props: Props) => {
 				onSelect={onSelectWrap}
 				showArrow={showArrow}
 				menuItemSelectedIcon={renderMenuItemSelectedIcon(menuItemSelectedIcon, disableMenuItemSelectedIcon)}
-				dropdownClassName={cx(`noti-select-dropdown ${dropdownClassName}`, { 'dropdown-match-select-width': dropdownMatchSelectWidth })}
+				popupClassName={cx(`noti-select-dropdown ${popupClassName}`, { 'dropdown-match-select-width': dropdownMatchSelectWidth })}
 				dropdownStyle={dropdownStyle}
 				dropdownMatchSelectWidth={dropdownMatchSelectWidth}
 				listHeight={listHeight}
@@ -490,7 +490,7 @@ const AutocompleteField = (props: Props) => {
 		<>
 			{confirmSelection ? (
 				<Popconfirm
-					visible={confVisibility}
+					open={confVisibility}
 					placement={'bottom'}
 					title={
 						<>

@@ -37,7 +37,8 @@ import { SubmissionError, submit } from 'redux-form'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
-import { ArgsProps } from 'antd/lib/notification'
+import { ArgsProps } from 'antd/es/notification/interface'
+
 import cx from 'classnames'
 import showNotifications from './tsxHelpers'
 import {
@@ -563,11 +564,9 @@ export const transformNumberFieldValue = (rawValue: number | string | undefined 
 		} else if (isNumber(min) && isNumber(max) && value >= min && value <= max) {
 			result = value
 		}
-	} else if (Number.isNaN(value)) {
-		result = NaN
 	}
 
-	if (isFinite(result) && isNumber(precision)) {
+	if (!Number.isNaN(value) && isFinite(result) && isNumber(precision)) {
 		result = round(result as number, precision)
 	}
 
@@ -1037,6 +1036,20 @@ export const getSalonFilterRanges = (values?: IDateTimeFilterOption[]): { [key: 
 			[value.name]: [now.subtract(value.value, value.unit), now]
 		}
 	}, {})
+}
+
+export const getRangesForDatePicker = (values?: IDateTimeFilterOption[]): { [key: string]: Dayjs[] } => {
+	const options = values ?? Object.values(DEFAULT_DATE_TIME_OPTIONS())
+	const now = dayjs()
+	return options.reduce((ranges, value) => {
+		return [
+			...ranges,
+			{
+				label: value.name,
+				value: [now.subtract(value.value, value.unit), now]
+			}
+		]
+	}, [])
 }
 
 export const getFirstDayOfWeek = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).startOf('week')

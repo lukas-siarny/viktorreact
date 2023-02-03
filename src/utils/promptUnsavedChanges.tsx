@@ -1,18 +1,21 @@
 import React, { useEffect, ComponentType } from 'react'
-import { withRouter, RouteComponentProps } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
+// https://github.com/remix-run/react-router/issues/8139
+import { UNSAFE_NavigationContext } from 'react-router-dom'
 
 // reducers
 import { RootState } from '../reducers'
 
 // eslint-disable-next-line import/prefer-default-export
-export function withPromptUnsavedChanges(WrappedComponent: ComponentType<RouteComponentProps<any>> | ComponentType<any>): any {
-	return withRouter((props: any) => {
-		const { history, submitting, form } = props
+export function withPromptUnsavedChanges(WrappedComponent: ComponentType<any>): any {
+	return (props: any) => {
+		const { submitting, form } = props
 		const [t] = useTranslation()
-		const message = t('loc:Chcete zahodiť vykonané zmeny?')
+		// NOTE: https://github.com/remix-run/react-router/issues/8139
+		const { navigator } = React.useContext(UNSAFE_NavigationContext) as any
 
+		const message = t('loc:Chcete zahodiť vykonané zmeny?')
 		const formState: any = useSelector((state: RootState) => state.form?.[form])
 
 		let dirty = false
@@ -31,7 +34,7 @@ export function withPromptUnsavedChanges(WrappedComponent: ComponentType<RouteCo
 
 		const enable = () => {
 			if (unblock) unblock()
-			unblock = history.block(message)
+			unblock = navigator.block(message)
 			window.addEventListener('beforeunload', onBrowserUnload)
 		}
 
@@ -57,5 +60,5 @@ export function withPromptUnsavedChanges(WrappedComponent: ComponentType<RouteCo
 		}, [dirty, submitting])
 
 		return <WrappedComponent {...props} />
-	})
+	}
 }

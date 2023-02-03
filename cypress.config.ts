@@ -31,6 +31,6 @@ export default defineConfig({
 		sign_in_url: process.env.SIGN_IN_URL
 	},
 	experimentalRunAllSpecs: true,
-	baseUrl: 'http://localhost:3000',
+	baseUrl: 'http://localhost:80',
   },
 })

@@ -6,6 +6,7 @@ import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -15,7 +16,6 @@ import AdminUsersFilter, { IUsersFilter } from './components/AdminUsersFilter'
 // utils
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
-import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -35,6 +35,7 @@ const UsersPage = () => {
 	const users = useSelector((state: RootState) => state.user.users)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
+	const navigate = useNavigate()
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
@@ -172,7 +173,7 @@ const UsersPage = () => {
 									<AdminUsersFilter
 										createUser={() => {
 											if (hasPermission) {
-												history.push(getLinkWithEncodedBackUrl(t('paths:users/create')))
+												navigate(getLinkWithEncodedBackUrl(t('paths:users/create')))
 											} else {
 												openForbiddenModal()
 											}
@@ -192,7 +193,7 @@ const UsersPage = () => {
 								scroll={{ x: 800 }}
 								onRow={(record) => ({
 									onClick: () => {
-										history.push(getLinkWithEncodedBackUrl(t('paths:users/{{userID}}', { userID: record.id })))
+										navigate(getLinkWithEncodedBackUrl(t('paths:users/{{userID}}', { userID: record.id })))
 									}
 								})}
 								useCustomPagination

@@ -24,20 +24,17 @@ import { RootState } from '../../reducers'
 import { getServices } from '../../reducers/services/serviceActions'
 
 // types
-import { Columns, IBreadcrumbs, IComputedMatch, IReservationsFilter } from '../../types/interfaces'
+import { Columns, IBreadcrumbs, IReservationsFilter, SalonSubPageProps } from '../../types/interfaces'
 import { getPaginatedReservations } from '../../reducers/calendar/calendarActions'
 
-type Props = {
-	computedMatch: IComputedMatch<{ salonID: string }>
-}
+type Props = SalonSubPageProps
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 const ReservationsPage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { computedMatch } = props
-	const { salonID } = computedMatch.params
+	const { salonID } = props
 	const reservations = useSelector((state: RootState) => state.calendar.paginatedReservations)
 
 	const [query, setQuery] = useQueryParams({

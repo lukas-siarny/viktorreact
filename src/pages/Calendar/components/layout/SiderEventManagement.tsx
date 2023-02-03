@@ -191,7 +191,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	useKeyUp(
+	// NOTE: treba to doriesit zeby sa na Escape nezatvarlo aj to co nema (napr. ak je otovreny modal an detial / zalozenie klienta, tak sa po stlaceni ESC okrem modalu zavrie aj sider, co by sa nemal)
+	/* useKeyUp(
 		'Escape',
 		query.sidebarView
 			? () => {
@@ -200,7 +201,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 					if (highlight) highlight.remove()
 			  }
 			: undefined
-	)
+	) */
 
 	const searchEmployes = useCallback(
 		async (search: string, page: number) => {
@@ -288,21 +289,18 @@ const SiderEventManagement: FC<Props> = (props) => {
 					className={'nc-sider-event-management-tabs'}
 					activeKey={sidebarView}
 					onChange={(type: string) => initCreateEventForm(type as CALENDAR_EVENT_TYPE)}
-					tabsContent={[
+					items={[
 						{
-							tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
-							tab: <>{t('loc:Shift')}</>,
-							tabPaneContent: null
+							key: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
+							label: <>{t('loc:Shift')}</>
 						},
 						{
-							tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
-							tab: <>{t('loc:Voľno')}</>,
-							tabPaneContent: null
+							key: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
+							label: <>{t('loc:Voľno')}</>
 						},
 						{
-							tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
-							tab: <>{t('loc:Prestávka')}</>,
-							tabPaneContent: null
+							key: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
+							label: <>{t('loc:Prestávka')}</>
 						}
 					]}
 					destroyInactiveTabPane

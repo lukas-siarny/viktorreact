@@ -5,6 +5,7 @@ import { Button, Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import CustomTable from '../../../components/CustomTable'
@@ -13,7 +14,6 @@ import RejectedSuggestionsFilter from './filters/RejectedSuggestionsFilter'
 // utils
 import { FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
 import { normalizeDirectionKeys, setOrder, normalizeQueryParams, getLinkWithEncodedBackUrl } from '../../../utils/helper'
-import { history } from '../../../utils/history'
 import { deleteReq } from '../../../utils/request'
 
 // reducers
@@ -28,6 +28,7 @@ import { ReactComponent as IconCheck } from '../../../assets/icons/checker-icon.
 
 const RejectedSalonSuggestions = () => {
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
 	const salons = useSelector((state: RootState) => state.salons.rejectedSuggestions)
@@ -194,7 +195,7 @@ const RejectedSalonSuggestions = () => {
 							scroll={{ x: 800 }}
 							onRow={(record) => ({
 								onClick: () => {
-									history.push(getLinkWithEncodedBackUrl(t('paths:salons/{{salonID}}', { salonID: record.salonID })))
+									navigate(getLinkWithEncodedBackUrl(t('paths:salons/{{salonID}}', { salonID: record.salonID })))
 								}
 							})}
 							useCustomPagination

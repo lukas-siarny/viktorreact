@@ -40,7 +40,7 @@ type Props = InjectedFormProps<IEmployeeForm, ComponentProps> & ComponentProps
 
 const EmployeeForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, addService, setVisibleServiceEditModal, isEdit } = props
+	const { handleSubmit, addService, setVisibleServiceEditModal, isEdit, pristine } = props
 	const formValues: Partial<IEmployeeForm> = useSelector((state: RootState) => getFormValues(FORM.EMPLOYEE)(state))
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const services = useSelector((state: RootState) => state.service.services)
@@ -118,6 +118,7 @@ const EmployeeForm: FC<Props> = (props) => {
 								currencySymbol={salon.data?.currency.symbol}
 								isEmployeeDetail
 								setVisibleServiceEditModal={setVisibleServiceEditModal}
+								disabledEditButton={!pristine}
 							/>
 						</div>
 					)}

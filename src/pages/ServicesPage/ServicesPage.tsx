@@ -6,6 +6,7 @@ import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -16,7 +17,6 @@ import { AvatarGroup } from '../../components/AvatarComponents'
 // utils
 import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, getLinkWithEncodedBackUrl, normalizeDirectionKeys, normalizeQueryParams } from '../../utils/helper'
-import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -38,6 +38,7 @@ interface IAdminUsersFilter {
 
 const ServicesPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 	const { salonID, parentPath } = props
 
 	const dispatch = useDispatch()
@@ -173,7 +174,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 								twoToneRows
 								onRow={(record) => ({
 									onClick: () => {
-										history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:services-settings/{{serviceID}}', { serviceID: record.serviceID })))
+										navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:services-settings/{{serviceID}}', { serviceID: record.serviceID })))
 									}
 								})}
 								pagination={false}

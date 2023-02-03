@@ -1,7 +1,8 @@
 /* eslint-disable import/no-cycle */
 import i18next from 'i18next'
 import decode from 'jwt-decode'
-import { get, map, flatten, uniq } from 'lodash'
+import { NavigateFunction } from 'react-router-dom'
+import { get, map, flatten, uniq, includes } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
@@ -12,13 +13,13 @@ import { Paths } from '../../types/api'
 
 // utils
 import { setAccessToken, clearAccessToken, clearRefreshToken, isLoggedIn, hasRefreshToken, getRefreshToken, setRefreshToken, getAccessToken } from '../../utils/auth'
-import { history } from '../../utils/history'
 import { getReq, postReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
 
 // actions
 import { setSelectionOptions } from '../selectedSalon/selectedSalonActions'
 import { setSelectedCountry } from '../selectedCountry/selectedCountryActions'
+import { NOT_ALLOWED_REDIRECT_PATHS } from '../../utils/enums'
 
 export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers | IGetPendingInvites | IGetNotinoUsers
 
@@ -64,9 +65,10 @@ export interface IPendingInvitesPayload {
 }
 
 export const processAuthorizationResult =
-	(result: Paths.PostApiB2BAdminAuthLogin.Responses.$200, redirectPath = i18next.t('paths:index')): ThunkResult<void> =>
+	(result: Paths.PostApiB2BAdminAuthLogin.Responses.$200, redirectPath = i18next.t('paths:index'), navigate: NavigateFunction): ThunkResult<void> =>
 	async (dispatch) => {
 		let salons: Paths.GetApiB2BAdminUsersUserId.Responses.$200['user']['salons'] = []
+		const allowRedirectPath = includes(NOT_ALLOWED_REDIRECT_PATHS, redirectPath) ? i18next.t('paths:index') : redirectPath
 		try {
 			dispatch({ type: AUTH_USER.AUTH_USER_LOAD_START })
 			setAccessToken(result.accessToken)
@@ -92,10 +94,10 @@ export const processAuthorizationResult =
 			// set selected country code based on assignedCountryCode or phonePrefixCode
 			dispatch(setSelectedCountry(result.user?.assignedCountryCode || result.user?.phonePrefixCountryCode))
 
-			history.push(redirectPath)
+			navigate(allowRedirectPath)
 		} catch (e) {
 			dispatch({ type: AUTH_USER.AUTH_USER_LOAD_FAIL })
-			history.push(i18next.t('paths:login'))
+			navigate(i18next.t('paths:login'))
 			// eslint-disable-next-line no-console
 			console.log(e)
 		} finally {
@@ -142,7 +144,7 @@ export const getCurrentUser = (): ThunkResult<Promise<IAuthUserPayload>> => asyn
 }
 
 export const logOutUser =
-	(skipRedirect?: boolean): ThunkResult<Promise<void>> =>
+	(navigate: NavigateFunction, skipRedirect?: boolean): ThunkResult<Promise<void>> =>
 	async (dispatch) => {
 		try {
 			await postReq('/api/b2b/admin/auth/logout', null, undefined, undefined, false)
@@ -158,25 +160,27 @@ export const logOutUser =
 			})
 
 			if (!skipRedirect) {
-				history.push(i18next.t('paths:login'))
+				navigate(i18next.t('paths:login'))
 			}
 		}
 	}
 
-export const refreshToken = (): ThunkResult<Promise<void>> => async (dispatch) => {
-	if (isLoggedIn() && hasRefreshToken()) {
-		try {
-			const { data } = await postReq('/api/b2b/admin/auth/refresh-token', null, { refreshToken: getRefreshToken() as string })
-			setAccessToken(data.accessToken)
-			setRefreshToken(data.refreshToken)
-			dispatch(getCurrentUser())
-		} catch (error) {
-			// eslint-disable-next-line no-console
-			console.log(error)
-			dispatch(logOutUser())
+export const refreshToken =
+	(navigate: NavigateFunction): ThunkResult<Promise<void>> =>
+	async (dispatch) => {
+		if (isLoggedIn() && hasRefreshToken()) {
+			try {
+				const { data } = await postReq('/api/b2b/admin/auth/refresh-token', null, { refreshToken: getRefreshToken() as string })
+				setAccessToken(data.accessToken)
+				setRefreshToken(data.refreshToken)
+				dispatch(getCurrentUser())
+			} catch (error) {
+				// eslint-disable-next-line no-console
+				console.log(error)
+				dispatch(logOutUser(navigate))
+			}
 		}
 	}
-}
 
 export const getUserAccountDetails =
 	(userID: string): ThunkResult<Promise<IUserPayload>> =>

@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { change } from 'redux-form'
 import { isEqual, startsWith } from 'lodash'
 import { DelimitedArrayParam, useQueryParams } from 'use-query-params'
+import { useNavigate } from 'react-router-dom'
 
 // fullcalendar
 import { EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
@@ -35,7 +36,6 @@ import { RootState } from '../../../../reducers'
 // utils
 import { ForbiddenModal, permitted } from '../../../../utils/Permissions'
 import { getSelectedDateForCalendar, getWeekDays } from '../../calendarHelpers'
-import { history } from '../../../../utils/history'
 
 type ComparsionEventInfo = {
 	offsetTop: number | null
@@ -103,6 +103,8 @@ export type CalendarRefs = {
 }
 
 const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
+	const navigate = useNavigate()
+
 	const {
 		view,
 		loading,
@@ -312,7 +314,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			return (
 				<CalendarEmptyState
 					title={t('loc:Pre prácu s kalendárom je potrebné pridať do salónu aspoň jedného zamestnanca')}
-					onButtonClick={() => history.push(`${parentPath}${t('paths:employees')}`)}
+					onButtonClick={() => navigate(`${parentPath}${t('paths:employees')}`)}
 					buttonLabel={t('loc:Pridať zamestnancov')}
 				/>
 			)

@@ -283,13 +283,7 @@ const SpecialistContactsPage = () => {
 					</div>
 				</Col>
 			</Row>
-			<Modal
-				title={t('loc:Upozornenie')}
-				visible={visibleRestrictionModal}
-				getContainer={() => document.body}
-				onCancel={() => setVisibleRestrictionModal(false)}
-				footer={null}
-			>
+			<Modal title={t('loc:Upozornenie')} open={visibleRestrictionModal} getContainer={() => document.body} onCancel={() => setVisibleRestrictionModal(false)} footer={null}>
 				<Result
 					status='warning'
 					title={t('loc:Ďalšieho špecialistu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jedného.')}

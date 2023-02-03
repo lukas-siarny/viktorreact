@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { ArrayParam, BooleanParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Modal, Progress, Row, Spin, Image, Tooltip } from 'antd'
+import { Col, Modal, Progress, Row, Spin, Image, Tooltip, TabsProps } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize, isPristine, reset } from 'redux-form'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import { isEmpty } from 'lodash'
@@ -22,7 +23,6 @@ import RejectedSalonSuggestions from './components/RejectedSalonSuggestions'
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, getAssignedUserLabel, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
-import { history } from '../../utils/history'
 import { postReq } from '../../utils/request'
 import { getSalonTagChanges, getSalonTagCreateType, getSalonTagPublished, getSalonTagSourceType } from './components/salonUtils'
 
@@ -50,7 +50,7 @@ enum TAB_KEYS {
 const SalonsPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-
+	const navigate = useNavigate()
 	const salons = useSelector((state: RootState) => state.salons.salons)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 
@@ -506,7 +506,7 @@ const SalonsPage = () => {
 								}}
 								onRow={(record) => ({
 									onClick: () => {
-										history.push(getLinkWithEncodedBackUrl(t('paths:salons/{{salonID}}', { salonID: record.id })))
+										navigate(getLinkWithEncodedBackUrl(t('paths:salons/{{salonID}}', { salonID: record.id })))
 									}
 								})}
 							/>
@@ -517,21 +517,21 @@ const SalonsPage = () => {
 		)
 	}
 
-	const tabContent = [
+	const tabContent: TabsProps['items'] = [
 		{
-			tabKey: TAB_KEYS.ACTIVE,
-			tab: <>{t('loc:Aktívne')}</>,
-			tabPaneContent: getTabContent(TAB_KEYS.ACTIVE)
+			key: TAB_KEYS.ACTIVE,
+			label: <>{t('loc:Aktívne')}</>,
+			children: getTabContent(TAB_KEYS.ACTIVE)
 		},
 		{
-			tabKey: TAB_KEYS.DELETED,
-			tab: <>{t('loc:Vymazané')}</>,
-			tabPaneContent: getTabContent(TAB_KEYS.DELETED)
+			key: TAB_KEYS.DELETED,
+			label: <>{t('loc:Vymazané')}</>,
+			children: getTabContent(TAB_KEYS.DELETED)
 		},
 		{
-			tabKey: TAB_KEYS.MISTAKES,
-			tab: <>{t('loc:Omylom navrhnuté na spárovanie')}</>,
-			tabPaneContent: getTabContent(TAB_KEYS.MISTAKES)
+			key: TAB_KEYS.MISTAKES,
+			label: <>{t('loc:Omylom navrhnuté na spárovanie')}</>,
+			children: getTabContent(TAB_KEYS.MISTAKES)
 		}
 	]
 	return (
@@ -539,12 +539,12 @@ const SalonsPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<TabsComponent className={'box-tab'} activeKey={tabKey} onChange={onTabChange} tabsContent={tabContent} destroyInactiveTabPane />
+			<TabsComponent className={'box-tab'} activeKey={tabKey} onChange={onTabChange} items={tabContent} destroyInactiveTabPane />
 			<Modal
 				className='rounded-fields'
 				title={t('loc:Importovať salóny')}
 				centered
-				visible={salonImportsModalVisible}
+				open={salonImportsModalVisible}
 				footer={null}
 				onCancel={() => {
 					resetUploadForm()

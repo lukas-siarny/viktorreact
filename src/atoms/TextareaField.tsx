@@ -69,7 +69,7 @@ const TextareaField = (props: Props) => {
 			}
 			if (focusRow) {
 				setSutoSizeState({ minRows: focusRow, maxRows: 10 })
-				ref?.current?.resizableTextArea?.resizeOnNextFrame()
+				// ref?.current?.resizableTextArea?.resizeOnNextFrame()
 			}
 		},
 		[focusRow, input, setSutoSizeState]
@@ -83,7 +83,7 @@ const TextareaField = (props: Props) => {
 			}
 			if (focusRow) {
 				setSutoSizeState({ minRows: 1, maxRows: 10 })
-				ref?.current?.resizableTextArea?.resizeOnNextFrame()
+				// ref?.current?.resizableTextArea?.resizeOnNextFrame()
 			}
 		},
 		[focusRow, input, setSutoSizeState]

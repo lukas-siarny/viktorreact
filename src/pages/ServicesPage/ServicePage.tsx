@@ -4,11 +4,12 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 
 // components
+import { useParams } from 'react-router-dom'
 import ServiceEditPage from './ServiceEditPage'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // types
-import { IBreadcrumbs, IComputedMatch, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
 // reducers
@@ -17,14 +18,10 @@ import { getCategories } from '../../reducers/categories/categoriesActions'
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
 
-type Props = SalonSubPageProps & {
-	computedMatch: IComputedMatch<{
-		serviceID: string
-	}>
-}
+type Props = SalonSubPageProps
 
 const ServicePage = (props: Props) => {
-	const { serviceID } = props.computedMatch.params
+	const { serviceID } = useParams<Required<{ serviceID: string }>>()
 	const { salonID, parentPath } = props
 	const { t } = useTranslation()
 	const dispatch = useDispatch()

@@ -115,10 +115,10 @@ const CalendarHeader: FC<Props> = (props) => {
 
 	const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
-	const calendarDropdownRef = useRef<HTMLDivElement | null>(null)
+	const headerDatePickerRef = useRef<HTMLDivElement | null>(null)
 	const dateButtonRef = useRef<HTMLButtonElement | null>(null)
 
-	useOnClickOutside([calendarDropdownRef, dateButtonRef], () => {
+	useOnClickOutside([headerDatePickerRef, dateButtonRef], () => {
 		setIsCalendarOpen(false)
 	})
 
@@ -136,12 +136,12 @@ const CalendarHeader: FC<Props> = (props) => {
 			case CALENDAR_SET_NEW_DATE.FIND_START_ADD:
 				newQueryDate = dayjs(newDate)
 					.startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
-					.add(1, calendarView.toLowerCase() as dayjs.OpUnitType)
+					.add(1, calendarView.toLowerCase() as dayjs.ManipulateType)
 				break
 			case CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT:
 				newQueryDate = dayjs(newDate)
 					.startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
-					.subtract(1, calendarView.toLowerCase() as dayjs.OpUnitType)
+					.subtract(1, calendarView.toLowerCase() as dayjs.ManipulateType)
 				break
 			default:
 				break
@@ -156,21 +156,6 @@ const CalendarHeader: FC<Props> = (props) => {
 			setSelectedDate(newQueryDateFormatted)
 			setSelectedDateDebounced.cancel()
 		}
-	}
-
-	const datePicker = () => {
-		return (
-			<div ref={calendarDropdownRef}>
-				<DateField
-					input={{ value: currentDate, onChange: (newSelectedDate: string) => changeSelectedDate(newSelectedDate) } as unknown as WrappedFieldInputProps}
-					meta={{ error: false, touched: false } as unknown as WrappedFieldMetaProps}
-					open={true}
-					onSelect={() => setIsCalendarOpen(false)}
-					showToday={false}
-					className={'nc-header-date-picker'}
-				/>
-			</div>
-		)
 	}
 
 	const calendarViewOptions = useMemo(
@@ -232,19 +217,26 @@ const CalendarHeader: FC<Props> = (props) => {
 				<button type={'button'} className={'nc-button w-8'} onClick={() => changeSelectedDate(currentDate, CALENDAR_SET_NEW_DATE.FIND_START_ADD, true)}>
 					<ChevronLeft style={{ transform: 'rotate(180deg)' }} />
 				</button>
-				<Dropdown
-					overlay={datePicker}
-					placement='bottom'
-					trigger={['click']}
-					getPopupContainer={() => document.querySelector('#noti-calendar-header') as HTMLElement}
-					visible={isCalendarOpen}
-					destroyPopupOnHide
-				>
-					<button type={'button'} className={'nc-button-date mx-1'} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>
-						{formatHeaderDate(currentDate, calendarView)}
-						<ChevronDownGrayDark />
-					</button>
-				</Dropdown>
+				<div ref={headerDatePickerRef}>
+					<DateField
+						input={{ value: currentDate, onChange: (newSelectedDate: string) => changeSelectedDate(newSelectedDate) } as unknown as WrappedFieldInputProps}
+						meta={{ error: false, touched: false } as unknown as WrappedFieldMetaProps}
+						open={isCalendarOpen}
+						onSelect={() => setIsCalendarOpen(false)}
+						showToday={false}
+						className={'nc-header-date-picker'}
+						inputReadOnly
+						suffixIcon={null}
+						inputRender={() => {
+							return (
+								<button type={'button'} className={'nc-button-date mx-1'} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>
+									{formatHeaderDate(currentDate, calendarView)}
+									<ChevronDownGrayDark />
+								</button>
+							)
+						}}
+					/>
+				</div>
 				<button
 					type={'button'}
 					className={cx('nc-button', { active: dayjs(getSelectedDateForCalendar(calendarView, selectedDate)).isToday() })}

@@ -3,6 +3,7 @@ import { Button, Modal, Spin } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
+import { useNavigate } from 'react-router-dom'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
@@ -14,7 +15,6 @@ import { getSuggestedSalons } from '../../../../reducers/salons/salonsActions'
 import { selectSalon } from '../../../../reducers/selectedSalon/selectedSalonActions'
 
 // utils
-import { history } from '../../../../utils/history'
 import { getCountryPrefix } from '../../../../utils/helper'
 import { patchReq } from '../../../../utils/request'
 import { ENUMERATIONS_KEYS, NOTIFICATION_TYPE } from '../../../../utils/enums'
@@ -26,6 +26,7 @@ type Props = {
 
 const SalonSuggestionsModal = (props: Props) => {
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 	const salonSuggestions = useSelector((state: RootState) => state.salons.suggestedSalons) /* mocupData */
 	const { visible, setVisible } = props
 	const [isSubmitting, setIsSubmitting] = useState(false)
@@ -45,7 +46,7 @@ const SalonSuggestionsModal = (props: Props) => {
 			if (accept) {
 				await dispatch(getCurrentUser())
 				await dispatch(selectSalon(salonID))
-				history.push(t('paths:salons/{{salonID}}', { salonID }))
+				navigate(t('paths:salons/{{salonID}}', { salonID }))
 			} else {
 				const { data } = await dispatch(getSuggestedSalons())
 				if ((data?.salons?.length || 0) < 1) {
@@ -67,7 +68,7 @@ const SalonSuggestionsModal = (props: Props) => {
 			className='rounded-fields'
 			title={t('loc:Navrhované salóny')}
 			centered
-			visible={visible}
+			open={visible}
 			footer={null}
 			onCancel={() => setVisible(false)}
 			closeIcon={<CloseIcon />}

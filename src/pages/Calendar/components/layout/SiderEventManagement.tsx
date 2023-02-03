@@ -230,18 +230,6 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 		initCreateEventForm
 	}))
 
-	// TODO: toto nefunguje uplne spravne, zatvara sa to aj v pripade, ze mam otovreny popover a dam ESC (vtedy by sa mal zavriet len popover)
-	useKeyUp(
-		'Escape',
-		query.sidebarView
-			? () => {
-					onCloseSider()
-					const highlight = document.getElementsByClassName('fc-highlight')[0]
-					if (highlight) highlight.remove()
-			  }
-			: undefined
-	)
-
 	const searchEmployes = useCallback(
 		async (search: string, page: number) => {
 			try {

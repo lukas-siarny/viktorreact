@@ -23,14 +23,7 @@ import {
 
 // utils
 import { getReq } from '../../utils/request'
-import {
-	formatDateByLocale,
-	getDateTime,
-	normalizeQueryParams,
-	transalteReservationSourceType,
-	translateReservationPaymentMethod,
-	translateReservationState
-} from '../../utils/helper'
+import { formatDateByLocale, getDateTime, normalizeQueryParams, transalteReservationSourceType } from '../../utils/helper'
 
 import { clearEvent } from '../virtualEvent/virtualEventActions'
 
@@ -106,11 +99,11 @@ interface ISalonReservationsTableData {
 	time: string
 	createdAt: string | null
 	createSourceType: string
-	state: string
+	state: RESERVATION_STATE
 	employee: any // TODO: optypovat
 	customer: any
 	service: any
-	paymentMethod: string
+	paymentMethod: RESERVATION_PAYMENT_METHOD
 }
 
 export interface IGetSalonReservations {
@@ -379,11 +372,11 @@ export const getPaginatedReservations =
 					time: `${event.start.time} - ${event.end.time}`,
 					createdAt: formatDateByLocale(event.createdAt) as string,
 					createSourceType: transalteReservationSourceType(event.reservationData?.createSourceType as RESERVATION_SOURCE_TYPE),
-					state: translateReservationState(event.reservationData?.state as RESERVATION_STATE),
+					state: event.reservationData?.state as RESERVATION_STATE,
 					employee,
 					customer: event.customer,
 					service: event.service,
-					paymentMethod: translateReservationPaymentMethod(event.reservationData?.paymentMethod as RESERVATION_PAYMENT_METHOD)
+					paymentMethod: event.reservationData?.paymentMethod as RESERVATION_PAYMENT_METHOD
 				}
 			})
 			payload = {

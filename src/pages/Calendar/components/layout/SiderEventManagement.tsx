@@ -91,8 +91,6 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
 
-	const donInitEventForm = useRef(false)
-
 	useEffect(() => {
 		// nastavuje referenciu na CalendarApi, musi sa update-ovat, ked sa meni View, aby bola aktualna vo virtalEventActions
 		setCalendarApi(calendarApi)
@@ -322,7 +320,6 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 					className={'nc-sider-event-management-tabs'}
 					activeKey={sidebarView}
 					onChange={(type: string) => {
-						donInitEventForm.current = true
 						setQuery({ ...query, sidebarView: type })
 						dispatch(change(FORM.CALENDAR_EVENT_FORM, 'eventType', type))
 					}}

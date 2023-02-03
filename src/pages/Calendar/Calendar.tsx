@@ -26,7 +26,8 @@ import {
 	PERMISSION,
 	REFRESH_CALENDAR_INTERVAL,
 	RESERVATION_PAYMENT_METHOD,
-	RESERVATION_STATE
+	RESERVATION_STATE,
+	CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE
 } from '../../utils/enums'
 import { checkPermissions, isAdmin, withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
@@ -345,7 +346,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	useEffect(() => {
 		// update calendar size when main layout sider change
 		// wait for the end of sider menu animation and then update size of the calendar
-		const timeout = setTimeout(updateCalendarSize.current, 300)
+		const timeout = setTimeout(updateCalendarSize.current, CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE)
 		return () => clearTimeout(timeout)
 	}, [isMainLayoutSiderCollapsed])
 

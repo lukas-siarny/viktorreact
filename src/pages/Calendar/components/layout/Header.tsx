@@ -80,7 +80,7 @@ type Props = {
 	setCalendarView: (newView: CALENDAR_VIEW) => void
 	setSiderFilterCollapsed: () => void
 	setSelectedDate: (newDate: string) => void
-	onAddEvent: (initialData?: INewCalendarEvent, clearVirtualEvent?: boolean) => void
+	onAddEvent: (initialData?: INewCalendarEvent, fromAddButton?: boolean) => void
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	setEventsViewType: (newViewType: CALENDAR_EVENTS_VIEW_TYPE) => void
 	enabledSalonReservations?: boolean

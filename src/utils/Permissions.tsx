@@ -12,17 +12,24 @@ import { history } from './history'
 import { RootState } from '../reducers'
 import { PERMISSION, ADMIN_PERMISSIONS } from './enums'
 
+/**
+ * NOTE: by default are admin permissions allowed (SUPER_ADMIN, ADMIN). In other case use `except=ADMIN_PERMISSIONS`
+ * @param userPermissions permissions from users role and salons role
+ * @param allowed allowed permissions
+ * @param except excepted permissions
+ * @returns TRUE/FALSE
+ */
 export const checkPermissions = (userPermissions: PERMISSION[] = [], allowed: PERMISSION[] = [], except: PERMISSION[] = []) => {
 	if (except.length > 0 && some(except, (elem: any) => indexOf(userPermissions, elem) > -1)) {
 		return false
 	}
-	if (allowed.length > 0) {
-		if (some(allowed, (elem: any) => indexOf(userPermissions, elem) > -1)) {
-			return true
-		}
-		return false
+
+	const allowedPermissions = [...ADMIN_PERMISSIONS, ...allowed]
+
+	if (some(allowedPermissions, (elem: any) => indexOf(userPermissions, elem) > -1)) {
+		return true
 	}
-	return true
+	return false
 }
 
 export const withPermissions =

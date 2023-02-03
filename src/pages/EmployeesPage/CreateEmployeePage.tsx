@@ -183,4 +183,4 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]))(CreateEmployeePage)
+export default compose(withPermissions([PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]))(CreateEmployeePage)

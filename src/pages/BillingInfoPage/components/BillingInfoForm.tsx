@@ -35,7 +35,7 @@ const BillingInfoForm = (props: Props) => {
 
 	return (
 		<Permissions
-			allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_BILLING_UPDATE]}
+			allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_BILLING_UPDATE]}
 			render={(hasPermission) => (
 				<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
 					<Space className={'w-full'} direction='vertical' size={20}>

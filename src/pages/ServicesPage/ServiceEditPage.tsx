@@ -20,9 +20,9 @@ import { Paths } from '../../types/api'
 
 // utils
 import { patchReq } from '../../utils/request'
-import { FORM, NOTIFICATION_TYPE, PERMISSION, ADMIN_PERMISSIONS } from '../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 import { decodePrice, encodePrice } from '../../utils/helper'
-import Permissions, { withPermissions } from '../../utils/Permissions'
+import { withPermissions } from '../../utils/Permissions'
 import { history } from '../../utils/history'
 
 interface IParameterValue {

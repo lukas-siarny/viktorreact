@@ -41,7 +41,6 @@ import { ArgsProps } from 'antd/lib/notification'
 import cx from 'classnames'
 import showNotifications from './tsxHelpers'
 import {
-	ADMIN_PERMISSIONS,
 	BYTE_MULTIPLIER,
 	DATE_TIME_PARSER_DATE_FORMAT,
 	DATE_TIME_PARSER_FORMAT,
@@ -885,7 +884,7 @@ export const hasAuthUserPermissionToEditRole = (
 		return result
 	}
 
-	if (authUser.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+	if (authUser.uniqPermissions?.some((permission) => [PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
 		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
 		return {
 			hasPermission: true,
@@ -935,7 +934,7 @@ export const filterSalonRolesByPermission = (salonID?: string, authUser?: IAuthU
 		return salonRoles
 	}
 
-	if (authUser?.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+	if (authUser?.uniqPermissions?.some((permission) => [PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
 		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
 		// they automatically see all options
 		return salonRoles

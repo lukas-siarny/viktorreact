@@ -53,7 +53,7 @@ const SalonCreatePage: FC<SalonPageProps> = (props) => {
 	const isLoading = phonePrefixes?.isLoading || authUser?.isLoading || basicSalon.isLoading
 
 	// show salons searchbox with basic salon suggestions only for Partner users
-	const showBasicSalonsSuggestions = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser])
+	const showBasicSalonsSuggestions = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER], [PERMISSION.NOTINO]), [authUser])
 
 	useEffect(() => {
 		if (showBasicSalonsSuggestions) {

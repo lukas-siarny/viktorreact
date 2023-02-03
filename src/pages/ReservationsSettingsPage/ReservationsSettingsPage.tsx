@@ -10,7 +10,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import ReservationSystemSettingsForm from './components/ReservationSystemSettingsForm'
 
 // utils
-import { FORM, NOTIFICATION_TYPES, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
+import { FORM, NOTIFICATION_TYPES, PERMISSION, ADMIN_PERMISSIONS, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
@@ -126,6 +126,8 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const { salonID } = props
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const groupedSettings = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
+	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
+	const authUserPermissions = currentUser?.uniqPermissions
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -138,9 +140,15 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const fetchData = async () => {
 		const salonRes = await dispatch(selectSalon(salonID))
 		// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
-		const canVisitThisPage = checkPermissions([PERMISSION.NOTINO]) || (checkPermissions([PERMISSION.PARTNER]) && salonRes?.data?.settings?.enabledReservations)
+		const salonPermissions = salonRes?.data?.uniqPermissions || []
+		const userPermissions = [...(authUserPermissions || []), ...salonPermissions]
+
+		const canVisitThisPage =
+			checkPermissions(userPermissions, [PERMISSION.NOTINO]) ||
+			(checkPermissions(userPermissions, [PERMISSION.PARTNER], ADMIN_PERMISSIONS) && salonRes?.data?.settings?.enabledReservations)
 		if (!canVisitThisPage) {
 			history.push('/404')
+			return
 		}
 
 		const servicesRes = await dispatch(getServices({ salonID }))

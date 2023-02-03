@@ -30,7 +30,7 @@ import useBackUrl from '../../hooks/useBackUrl'
 // assets
 import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
-const permission: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_CREATE]
+const permission: PERMISSION[] = [PERMISSION.USER_CREATE]
 
 const CreateUserPage = () => {
 	const [t] = useTranslation()

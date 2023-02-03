@@ -16,7 +16,7 @@ import CosmeticForm from './components/CosmeticForm'
 import CosmeticsFilter from './components/CosmeticsFilter'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, CREATE_BUTTON_ID, ADMIN_PERMISSIONS } from '../../utils/enums'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, CREATE_BUTTON_ID } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
@@ -254,4 +254,4 @@ const CosmeticsPage = () => {
 	)
 }
 
-export default compose(withPermissions([...ADMIN_PERMISSIONS, PERMISSION.ENUM_EDIT]))(CosmeticsPage)
+export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(CosmeticsPage)

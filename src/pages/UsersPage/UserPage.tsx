@@ -50,7 +50,7 @@ const UserPage: FC<Props> = (props) => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser)) as any
 	const isMyAccountPath = computedMatch.path === t('paths:my-account')
-	let submitPermissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_EDIT]
+	let submitPermissions = [PERMISSION.USER_EDIT]
 
 	const [backUrl] = useBackUrl(t('paths:users'))
 
@@ -193,7 +193,7 @@ const UserPage: FC<Props> = (props) => {
 					<div className={'content-footer'}>
 						<div className={'flex flex-col gap-2 md:flex-row md:justify-between'}>
 							<DeleteButton
-								permissions={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_DELETE]}
+								permissions={[PERMISSION.USER_DELETE]}
 								className={'w-full md:w-auto md:min-w-50 xl:min-w-60'}
 								id={formFieldID(FORM.USER_ACCOUNT, DELETE_BUTTON_ID)}
 								onConfirm={deleteUser}

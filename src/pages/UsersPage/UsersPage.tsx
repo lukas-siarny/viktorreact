@@ -26,7 +26,7 @@ import { RootState } from '../../reducers'
 // types
 import { IBreadcrumbs, Columns } from '../../types/interfaces'
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_BROWSING]
+const permissions: PERMISSION[] = [PERMISSION.USER_BROWSING]
 
 const UsersPage = () => {
 	const [t] = useTranslation()
@@ -167,7 +167,7 @@ const UsersPage = () => {
 					<div className='content-body'>
 						<Spin spinning={users?.isLoading}>
 							<Permissions
-								allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_CREATE]}
+								allowed={[PERMISSION.USER_CREATE]}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<AdminUsersFilter
 										createUser={() => {

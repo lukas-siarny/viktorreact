@@ -12,7 +12,7 @@ import validateReservationForm from './validateReservationForm'
 import { formatLongQueryString, getAssignedUserLabel, getCountryPrefix, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { getReq, postReq } from '../../../../utils/request'
-import { CREATE_EVENT_PERMISSIONS, ENUMERATIONS_KEYS, FORM, PERMISSION, STRINGS, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import { CREATE_EVENT_PERMISSIONS, ENUMERATIONS_KEYS, FORM, PERMISSION, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // types
 import { ICalendarReservationForm, ICustomerForm } from '../../../../types/interfaces'

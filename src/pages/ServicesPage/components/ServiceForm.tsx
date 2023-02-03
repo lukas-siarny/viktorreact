@@ -414,7 +414,7 @@ const ServiceForm: FC<Props> = (props) => {
 	)
 	return (
 		<Permissions
-			allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_UPDATE]}
+			allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_UPDATE]}
 			render={(hasPermission) => (
 				<div className='content-body small'>
 					<Spin spinning={isLoading}>

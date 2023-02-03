@@ -43,7 +43,7 @@ export interface ISalonSelectionOptionsPayload {
 }
 
 export const selectSalon =
-	(salonID?: string): ThunkResult<Promise<any>> =>
+	(salonID?: string): ThunkResult<Promise<ISelectedSalonPayload | undefined>> =>
 	async (dispatch, getState) => {
 		let payload = {} as ISelectedSalonPayload
 		if (!salonID) {
@@ -88,8 +88,8 @@ export const selectSalon =
 
 			if (currentUser && currentUser.uniqPermissions) {
 				permissions = currentUser.uniqPermissions
-				// SUPER_ADMIN and ADMIN doesn't requires salon's permissions
-				if (!checkPermissions(permissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN])) {
+				// Notino user doesn't require salon's permissions
+				if (!checkPermissions(permissions, [PERMISSION.NOTINO])) {
 					const salon = find(currentUser.salons, (item) => item.id === salonID)
 					if (salon && salon.role) {
 						permissions = uniq(map(salon.role.permissions, 'name')) as any

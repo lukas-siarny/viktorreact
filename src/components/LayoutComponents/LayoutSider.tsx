@@ -32,7 +32,7 @@ import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
 
 // utils
 import { history } from '../../utils/history'
-import { PAGE, PERMISSION, ADMIN_PERMISSIONS } from '../../utils/enums'
+import { PAGE, PERMISSION } from '../../utils/enums'
 import { checkPermissions } from '../../utils/Permissions'
 
 // redux
@@ -99,7 +99,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 
 			if (!salonID) {
 				// ADMIN VIEW
-				if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.USER_BROWSING])) {
+				if (hasPermissions([PERMISSION.USER_BROWSING])) {
 					mainGroupItems.push({
 						key: PAGE.USERS,
 						label: t('loc:Používatelia'),
@@ -107,7 +107,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						icon: <UsersIcon />
 					})
 				}
-				if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.ENUM_EDIT])) {
+				if (hasPermissions([PERMISSION.ENUM_EDIT])) {
 					mainGroupItems.push(
 						{
 							key: PAGE.CATEGORIES,

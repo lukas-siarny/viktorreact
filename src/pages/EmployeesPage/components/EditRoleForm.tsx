@@ -47,7 +47,7 @@ const EditRoleForm: FC<Props> = (props) => {
 				<Divider className={'mb-3 mt-3'} />
 				<div className={'flex w-full flex-col md:flex-row md:gap-2'}>
 					<Permissions
-						allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_ROLE_UPDATE]}
+						allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_ROLE_UPDATE]}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<>
 								<SalonRolesField

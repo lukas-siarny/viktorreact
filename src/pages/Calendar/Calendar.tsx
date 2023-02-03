@@ -26,7 +26,8 @@ import {
 	PERMISSION,
 	REFRESH_CALENDAR_INTERVAL,
 	RESERVATION_PAYMENT_METHOD,
-	RESERVATION_STATE
+	RESERVATION_STATE,
+	ADMIN_PERMISSIONS
 } from '../../utils/enums'
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
@@ -300,7 +301,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		const loadSalonDetail = async () => {
 			const salonRes = await dispatch(selectSalon(salonID))
 
-			const canVisitThisPage = checkPermissions([PERMISSION.NOTINO]) || (checkPermissions([PERMISSION.PARTNER]) && salonRes?.data?.settings?.enabledReservations)
+			const salonPermissions = salonRes?.data?.uniqPermissions || []
+			const userPermissions = [...(authUserPermissions || []), ...salonPermissions]
+
+			const canVisitThisPage =
+				checkPermissions(userPermissions, [PERMISSION.NOTINO]) ||
+				(checkPermissions(userPermissions, [PERMISSION.PARTNER], ADMIN_PERMISSIONS) && salonRes?.data?.settings?.enabledReservations)
 			if (!canVisitThisPage) {
 				history.push('/404')
 			}

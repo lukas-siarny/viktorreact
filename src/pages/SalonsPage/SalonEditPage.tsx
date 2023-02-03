@@ -20,7 +20,7 @@ import SalonHistory from './components/SalonHistory'
 import SalonApprovalModal from './components/modals/SalonApprovalModal'
 
 // enums
-import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, ADMIN_PERMISSIONS, SALON_STATES, STRINGS, TAB_KEYS, SALON_CREATE_TYPE } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_STATES, STRINGS, TAB_KEYS, SALON_CREATE_TYPE } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -313,7 +313,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	const deleteButton = (className = '') => (
 		<DeleteButton
-			permissions={[...ADMIN_PERMISSIONS, PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_DELETE]}
+			permissions={[PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_DELETE]}
 			className={cx('w-full md:w-auto md:min-w-45 xl:min-w-60', className)}
 			onConfirm={deleteSalon}
 			entityName={t('loc:salón')}
@@ -326,7 +326,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	const hideSalonButton = (className = '') => (
 		<Permissions
-			allowed={[...ADMIN_PERMISSIONS, PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
+			allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
 			render={(hasPermission, { openForbiddenModal }) => (
 				<Button
 					type={'dashed'}
@@ -510,7 +510,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			<div className={cx('content-header flex-col gap-2', { warning: isPendingPublication })}>
 				{isPendingPublication && (
 					<Permissions
-						allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.SALON_PUBLICATION_RESOLVE]}
+						allowed={[PERMISSION.SALON_PUBLICATION_RESOLVE]}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Row justify={'space-between'} className={'w-full'}>
 								<Button
@@ -734,7 +734,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 				parentPath={`${t('paths:salons')}/${salonID}`}
 				submitButton={
 					<Permissions
-						allowed={[...ADMIN_PERMISSIONS, PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
+						allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Tooltip title={getApprovalButtonTooltipMessage()} getPopupContainer={() => document.querySelector('#noti-approval-modal-content') as HTMLElement}>
 								<span className={cx({ 'cursor-not-allowed': approvalButtonDisabled })}>

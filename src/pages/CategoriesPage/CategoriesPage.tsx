@@ -14,7 +14,7 @@ import CategoriesTree from './components/CategoriesTree'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // utils
-import { ROW_GUTTER_X_DEFAULT, PERMISSION, ADMIN_PERMISSIONS } from '../../utils/enums'
+import { ROW_GUTTER_X_DEFAULT, PERMISSION } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 
 // types
@@ -58,4 +58,4 @@ const CategoriesPage = () => {
 	)
 }
 
-export default compose(withPermissions([...ADMIN_PERMISSIONS, PERMISSION.ENUM_EDIT]))(CategoriesPage)
+export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(CategoriesPage)

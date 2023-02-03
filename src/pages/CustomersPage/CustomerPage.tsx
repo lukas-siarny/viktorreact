@@ -157,7 +157,7 @@ const CustomerPage = (props: Props) => {
 					<div className={'content-footer'}>
 						<div className={'flex flex-col gap-2 md:flex-row md:justify-between'}>
 							<DeleteButton
-								permissions={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_DELETE]}
+								permissions={[PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_DELETE]}
 								className={'w-full md:w-auto md:min-w-50 xl:min-w-60'}
 								onConfirm={deleteCustomer}
 								entityName={t('loc:zákazníka')}
@@ -166,7 +166,7 @@ const CustomerPage = (props: Props) => {
 								id={formFieldID(FORM.CUSTOMER, DELETE_BUTTON_ID)}
 							/>
 							<Permissions
-								allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_UPDATE]}
+								allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_UPDATE]}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
 										type={'primary'}

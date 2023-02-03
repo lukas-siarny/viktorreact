@@ -28,7 +28,7 @@ import {
 	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_STATE
 } from '../../utils/enums'
-import { checkPermissions, isAdmin, withPermissions } from '../../utils/Permissions'
+import { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
 import { history } from '../../utils/history'
@@ -300,7 +300,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		const loadSalonDetail = async () => {
 			const salonRes = await dispatch(selectSalon(salonID))
 
-			const canVisitThisPage = isAdmin(authUserPermissions) || (checkPermissions(authUserPermissions, [PERMISSION.PARTNER]) && salonRes?.data?.settings?.enabledReservations)
+			const canVisitThisPage = checkPermissions([PERMISSION.NOTINO]) || (checkPermissions([PERMISSION.PARTNER]) && salonRes?.data?.settings?.enabledReservations)
 			if (!canVisitThisPage) {
 				history.push('/404')
 			}
@@ -790,4 +790,4 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]))(Calendar)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(Calendar)

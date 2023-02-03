@@ -186,7 +186,7 @@ const MainLayout: FC<Props> = (props) => {
 					}
 				/>
 				<Permissions
-					allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
+					allowed={[PERMISSION.NOTINO]}
 					render={(hasPermission) =>
 						hasPermission &&
 						page === PAGE.HOME &&

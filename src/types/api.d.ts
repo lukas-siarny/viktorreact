@@ -61798,7 +61798,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCategories.Responses.$200>
   /**
-   * postApiB2BAdminEnumsCategories - Endpoint is used for creating an category., permissions:<ul><li>user</li></ul>
+   * postApiB2BAdminEnumsCategories - Endpoint is used for creating an category., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'postApiB2BAdminEnumsCategories'(
     parameters?: Parameters<Paths.PostApiB2BAdminEnumsCategories.HeaderParameters> | null,
@@ -61814,7 +61814,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
   /**
-   * patchApiB2BAdminEnumsCategoriesCategoryId - Endpoint is used for editing category informations., permissions:<ul><li>user</li></ul>
+   * patchApiB2BAdminEnumsCategoriesCategoryId - Endpoint is used for editing category informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'patchApiB2BAdminEnumsCategoriesCategoryId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
@@ -61822,7 +61822,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
   /**
-   * deleteApiB2BAdminEnumsCategoriesCategoryId - Endpoint is used for removing specific category. Succeds only if category or any of its children are not used., permissions:<ul><li>user</li></ul>
+   * deleteApiB2BAdminEnumsCategoriesCategoryId - Endpoint is used for removing specific category. Succeds only if category or any of its children are not used., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'deleteApiB2BAdminEnumsCategoriesCategoryId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
@@ -61838,7 +61838,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200>
   /**
-   * postApiB2BAdminEnumsCosmetics - Endpoint is used for creating an cosmetic., permissions:<ul><li>user</li></ul>
+   * postApiB2BAdminEnumsCosmetics - Endpoint is used for creating an cosmetic., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'postApiB2BAdminEnumsCosmetics'(
     parameters?: Parameters<Paths.PostApiB2BAdminEnumsCosmetics.HeaderParameters> | null,
@@ -61854,7 +61854,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCosmeticsCosmeticId.Responses.$200>
   /**
-   * patchApiB2BAdminEnumsCosmeticsCosmeticId - Endpoint is used for updating an cosmetic informations., permissions:<ul><li>user</li></ul>
+   * patchApiB2BAdminEnumsCosmeticsCosmeticId - Endpoint is used for updating an cosmetic informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'patchApiB2BAdminEnumsCosmeticsCosmeticId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCosmeticsCosmeticId.PathParameters & Paths.PatchApiB2BAdminEnumsCosmeticsCosmeticId.HeaderParameters> | null,
@@ -61862,7 +61862,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEnumsCosmeticsCosmeticId.Responses.$200>
   /**
-   * deleteApiB2BAdminEnumsCosmeticsCosmeticId - Endpoint is used for removing an cosmetic., permissions:<ul><li>user</li></ul>
+   * deleteApiB2BAdminEnumsCosmeticsCosmeticId - Endpoint is used for removing an cosmetic., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'deleteApiB2BAdminEnumsCosmeticsCosmeticId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.PathParameters & Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.HeaderParameters> | null,
@@ -61878,7 +61878,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsLanguages.Responses.$200>
   /**
-   * postApiB2BAdminEnumsLanguages - Endpoint is used for creating an language., permissions:<ul><li>user</li></ul>
+   * postApiB2BAdminEnumsLanguages - Endpoint is used for creating an language., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'postApiB2BAdminEnumsLanguages'(
     parameters?: Parameters<Paths.PostApiB2BAdminEnumsLanguages.HeaderParameters> | null,
@@ -61894,7 +61894,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsLanguagesLanguageId.Responses.$200>
   /**
-   * patchApiB2BAdminEnumsLanguagesLanguageId - Endpoint is used for updating an language data., permissions:<ul><li>user</li></ul>
+   * patchApiB2BAdminEnumsLanguagesLanguageId - Endpoint is used for updating an language data., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'patchApiB2BAdminEnumsLanguagesLanguageId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEnumsLanguagesLanguageId.PathParameters & Paths.PatchApiB2BAdminEnumsLanguagesLanguageId.HeaderParameters> | null,
@@ -61902,7 +61902,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEnumsLanguagesLanguageId.Responses.$200>
   /**
-   * deleteApiB2BAdminEnumsLanguagesLanguageId - Endpoint is used for removing an language., permissions:<ul><li>user</li></ul>
+   * deleteApiB2BAdminEnumsLanguagesLanguageId - Endpoint is used for removing an language., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'deleteApiB2BAdminEnumsLanguagesLanguageId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.PathParameters & Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.HeaderParameters> | null,
@@ -61918,7 +61918,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsSupportContacts.Responses.$200>
   /**
-   * postApiB2BAdminEnumsSupportContacts - Endpoint is used for creating an support contact., permissions:<ul><li>user</li></ul>
+   * postApiB2BAdminEnumsSupportContacts - Endpoint is used for creating an support contact., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'postApiB2BAdminEnumsSupportContacts'(
     parameters?: Parameters<Paths.PostApiB2BAdminEnumsSupportContacts.HeaderParameters> | null,
@@ -61934,7 +61934,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsSupportContactsSupportContactId.Responses.$200>
   /**
-   * patchApiB2BAdminEnumsSupportContactsSupportContactId - Endpoint is used for updating support contact informations., permissions:<ul><li>user</li></ul>
+   * patchApiB2BAdminEnumsSupportContactsSupportContactId - Endpoint is used for updating support contact informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'patchApiB2BAdminEnumsSupportContactsSupportContactId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.PathParameters & Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.HeaderParameters> | null,
@@ -61942,7 +61942,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.Responses.$200>
   /**
-   * deleteApiB2BAdminEnumsSupportContactsSupportContactId - Endpoint is used for removing an support contact., permissions:<ul><li>user</li></ul>
+   * deleteApiB2BAdminEnumsSupportContactsSupportContactId - Endpoint is used for removing an support contact., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'deleteApiB2BAdminEnumsSupportContactsSupportContactId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.PathParameters & Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.HeaderParameters> | null,
@@ -61958,7 +61958,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoryParameters.Responses.$200>
   /**
-   * postApiB2BAdminEnumsCategoryParameters - Endpoint is used for creating an category parameter., permissions:<ul><li>user</li></ul>
+   * postApiB2BAdminEnumsCategoryParameters - Endpoint is used for creating an category parameter., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'postApiB2BAdminEnumsCategoryParameters'(
     parameters?: Parameters<Paths.PostApiB2BAdminEnumsCategoryParameters.HeaderParameters> | null,
@@ -61974,7 +61974,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200>
   /**
-   * patchApiB2BAdminEnumsCategoryParametersCategoryParameterId - Endpoint is used for updating an category parameter informations., permissions:<ul><li>user</li></ul>
+   * patchApiB2BAdminEnumsCategoryParametersCategoryParameterId - Endpoint is used for updating an category parameter informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'patchApiB2BAdminEnumsCategoryParametersCategoryParameterId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoryParametersCategoryParameterId.PathParameters & Paths.PatchApiB2BAdminEnumsCategoryParametersCategoryParameterId.HeaderParameters> | null,
@@ -61982,7 +61982,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200>
   /**
-   * deleteApiB2BAdminEnumsCategoryParametersCategoryParameterId - Endpoint is used for removing category parameter. Category parameter can be deleted only if is not used., permissions:<ul><li>user</li></ul>
+   * deleteApiB2BAdminEnumsCategoryParametersCategoryParameterId - Endpoint is used for removing category parameter. Category parameter can be deleted only if is not used., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'deleteApiB2BAdminEnumsCategoryParametersCategoryParameterId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.HeaderParameters> | null,
@@ -61998,7 +61998,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsContacts.Responses.$200>
   /**
-   * postApiB2BAdminEnumsContacts - Endpoint is used for creating an contact., permissions:<ul><li>user</li></ul>
+   * postApiB2BAdminEnumsContacts - Endpoint is used for creating an contact., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'postApiB2BAdminEnumsContacts'(
     parameters?: Parameters<Paths.PostApiB2BAdminEnumsContacts.HeaderParameters> | null,
@@ -62014,7 +62014,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsContactsContactId.Responses.$200>
   /**
-   * patchApiB2BAdminEnumsContactsContactId - Endpoint is used for updating an contact informations., permissions:<ul><li>user</li></ul>
+   * patchApiB2BAdminEnumsContactsContactId - Endpoint is used for updating an contact informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'patchApiB2BAdminEnumsContactsContactId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEnumsContactsContactId.PathParameters & Paths.PatchApiB2BAdminEnumsContactsContactId.HeaderParameters> | null,
@@ -62022,7 +62022,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEnumsContactsContactId.Responses.$200>
   /**
-   * deleteApiB2BAdminEnumsContactsContactId - Endpoint is used for removing an contact., permissions:<ul><li>user</li></ul>
+   * deleteApiB2BAdminEnumsContactsContactId - Endpoint is used for removing an contact., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
    */
   'deleteApiB2BAdminEnumsContactsContactId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsContactsContactId.PathParameters & Paths.DeleteApiB2BAdminEnumsContactsContactId.HeaderParameters> | null,
@@ -62766,56 +62766,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiMaintenanceHealth.Responses.$200>
   /**
-   * getApiB2BAdminUsers - Endpoint is used for getting an array of users.
-   * 	It is possible to search by (firstName, lastName, email, phone), order (firstName, lastName, activatedAt, roleName, email), filter (roleID) and to use pagination., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminUsers'(
-    parameters?: Parameters<Paths.GetApiB2BAdminUsers.QueryParameters & Paths.GetApiB2BAdminUsers.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminUsers.Responses.$200>
-  /**
-   * postApiB2BAdminUsers - Endpoint is used for creating a user., permissions:<ul><li>user</li></ul>
-   */
-  'postApiB2BAdminUsers'(
-    parameters?: Parameters<Paths.PostApiB2BAdminUsers.HeaderParameters> | null,
-    data?: Paths.PostApiB2BAdminUsers.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BAdminUsers.Responses.$200>
-  /**
-   * getApiB2BAdminUsersNotinoUsers - Endpoint is used for getting an array of notino users., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminUsersNotinoUsers'(
-    parameters?: Parameters<Paths.GetApiB2BAdminUsersNotinoUsers.QueryParameters & Paths.GetApiB2BAdminUsersNotinoUsers.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminUsersNotinoUsers.Responses.$200>
-  /**
-   * getApiB2BAdminUsersUserId - Endpoint is used for getting an user detail., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminUsersUserId'(
-    parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters & Paths.GetApiB2BAdminUsersUserId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
-  /**
-   * patchApiB2BAdminUsersUserId - Endpoint is used for updating user informations., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminUsersUserId'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
-  /**
-   * deleteApiB2BAdminUsersUserId - Endpoint is used for removing user accounts., permissions:<ul><li>user</li></ul>
-   */
-  'deleteApiB2BAdminUsersUserId'(
-    parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserId.Responses.$200>
-  /**
-   * getApiB2BAdminUsersUserIdPendingEmployeeInvites - Endpoint is used for getting an array of pending employee invites., permissions:<ul><li>user</li></ul>
+   * getApiB2BAdminUsersUserIdPendingEmployeeInvites - Endpoint is used for getting an array of pending employee invites., permissions:<ul><li>notino</li><li>partner</li></ul>
    */
   'getApiB2BAdminUsersUserIdPendingEmployeeInvites'(
     parameters?: Parameters<Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.PathParameters & Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.HeaderParameters> | null,
@@ -62823,554 +62774,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.Responses.$200>
   /**
-   * patchApiB2BAdminUsersUserIdRole - Endpoint is used for updating user role., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminUsersUserIdRole'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserIdRole.PathParameters & Paths.PatchApiB2BAdminUsersUserIdRole.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminUsersUserIdRole.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminUsersUserIdRole.Responses.$200>
-  /**
-   * patchApiB2BAdminEnumsCategoriesCategoryIdReorder - Endpoint is used for reordering category items., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminEnumsCategoriesCategoryIdReorder'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.Responses.$200>
-  /**
-   * getApiB2BAdminRolesSystemUser - Endpoint is used for getting system user roles., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminRolesSystemUser'(
-    parameters?: Parameters<Paths.GetApiB2BAdminRolesSystemUser.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminRolesSystemUser.Responses.$200>
-  /**
-   * getApiB2BAdminRolesSalon - Endpoint is used for getting salon roles., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminRolesSalon'(
-    parameters?: Parameters<Paths.GetApiB2BAdminRolesSalon.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminRolesSalon.Responses.$200>
-  /**
-   * postApiB2BAdminFilesSignUrls - Endpoint is used for signing AWS urls of files., permissions:<ul><li>user</li></ul>
-   */
-  'postApiB2BAdminFilesSignUrls'(
-    parameters?: Parameters<Paths.PostApiB2BAdminFilesSignUrls.HeaderParameters> | null,
-    data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
-  /**
-   * postApiB2BAdminSalonsSalonIdCalendarEventsReservations - permissions:<ul><li>user</li></ul>
-   */
-  'postApiB2BAdminSalonsSalonIdCalendarEventsReservations'(
-    parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
-    data?: Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.Responses.$200>
-  /**
-   * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
-  /**
-   * deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user</li></ul>
-   */
-  'deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId'(
-    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
-  /**
-   * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
-  /**
-   * getApiB2BAdminSalonsSalonIdCalendarEvents - Endpoint is used for getting an array of calendar events (from provided date range). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminSalonsSalonIdCalendarEvents'(
-    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
-  /**
-   * postApiB2BAdminSalonsSalonIdCalendarEvents - Endpoint is used for creating calendar events., permissions:<ul><li>user</li></ul>
-   */
-  'postApiB2BAdminSalonsSalonIdCalendarEvents'(
-    parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
-    data?: Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
-  /**
-   * getApiB2BAdminSalonsSalonIdCalendarEventsPaginated - Endpoint is used for getting an array of calendar events (paginated list starting/ending on provided date). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminSalonsSalonIdCalendarEventsPaginated'(
-    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200>
-  /**
-   * getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for getting calendar event detail., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
-    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
-  /**
-   * patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for updating calendar events., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
-  /**
-   * deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for removing calendar events., permissions:<ul><li>user</li></ul>
-   */
-  'deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
-    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
-  /**
-   * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for updating a calendarBulkEvent., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
-  /**
-   * deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for removing calendarBulkEvents., permissions:<ul><li>user</li></ul>
-   */
-  'deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
-    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
-  /**
-   * getApiB2BAdminSalons - Endpoint is used for getting an array of salons.
-   * 	It possible to use search (name, zipCode, city, street, streetNumber, businessID),
-   * 	filter (categoryFirstLevelIDs, statuses, countryCode, pendingPublication, createType, sourceTypes, lastUpdatedAtFrom, lastUpdatedAtTo, hasSetOpeningHours, assignedUserID, premiumSourceUserType),
-   * 	order (name, fillingProgress, createdAt) and pagination., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminSalons'(
-    parameters?: Parameters<Paths.GetApiB2BAdminSalons.QueryParameters & Paths.GetApiB2BAdminSalons.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminSalons.Responses.$200>
-  /**
-   * postApiB2BAdminSalons - permissions:<ul><li>user</li></ul>
-   */
-  'postApiB2BAdminSalons'(
-    parameters?: Parameters<Paths.PostApiB2BAdminSalons.HeaderParameters> | null,
-    data?: Paths.PostApiB2BAdminSalons.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BAdminSalons.Responses.$200>
-  /**
-   * getApiB2BAdminSalonsBasic - Endpoint is used for getting an array of salons (type of BASIC). It is possible to search by salon name and to use pagination., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminSalonsBasic'(
-    parameters?: Parameters<Paths.GetApiB2BAdminSalonsBasic.QueryParameters & Paths.GetApiB2BAdminSalonsBasic.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminSalonsBasic.Responses.$200>
-  /**
-   * getApiB2BAdminSalonsBasicSuggestion - Endpoint is used for getting an array of basic salon suggestions., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminSalonsBasicSuggestion'(
-    parameters?: Parameters<Paths.GetApiB2BAdminSalonsBasicSuggestion.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminSalonsBasicSuggestion.Responses.$200>
-  /**
-   * getApiB2BAdminSalonsRejectedSuggestions - Endpoint is used for getting an array of rejected salon suggestions. It is possible to use search (lastName, firstName, email, name), order (userLastName, userEmail, salonName, createdAt) and pagination., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminSalonsRejectedSuggestions'(
-    parameters?: Parameters<Paths.GetApiB2BAdminSalonsRejectedSuggestions.QueryParameters & Paths.GetApiB2BAdminSalonsRejectedSuggestions.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminSalonsRejectedSuggestions.Responses.$200>
-  /**
-   * getApiB2BAdminSalonsSalonId - Endpoint is used for getting a salon detail informations., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminSalonsSalonId'(
-    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonId.PathParameters & Paths.GetApiB2BAdminSalonsSalonId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonId.Responses.$200>
-  /**
-   * patchApiB2BAdminSalonsSalonId - Endpoint is used for updating salon informations., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminSalonsSalonId'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonId.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminSalonsSalonId.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonId.Responses.$200>
-  /**
-   * deleteApiB2BAdminSalonsSalonId - Endpoint is used for removing specific salon., permissions:<ul><li>user</li></ul>
-   */
-  'deleteApiB2BAdminSalonsSalonId'(
-    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
-  /**
-   * getApiB2BAdminSalonsSalonIdBasic - Endpoint is used for getting salon (type of BASIC) detail., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminSalonsSalonIdBasic'(
-    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdBasic.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdBasic.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdBasic.Responses.$200>
-  /**
-   * getApiB2BAdminSalonsSalonIdHistory - Endpoint is used for getting specific salon historical data (max 30 days in past). In query parameters can be set dateFrom and dateTo. Those dates has to be set correctly (dateFrom cannot be greater than dateTo)., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminSalonsSalonIdHistory'(
-    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdHistory.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdHistory.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdHistory.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdHistory.Responses.$200>
-  /**
-   * getApiB2BAdminSalonsSalonIdDashboard - Endpoint is used for getting specific salon informations for dashboard (rating stats, employees, categories, etc...)., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminSalonsSalonIdDashboard'(
-    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdDashboard.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdDashboard.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdDashboard.Responses.$200>
-  /**
-   * patchApiB2BAdminSalonsSalonIdOpenHoursNote - Endpoint is used for setting salon opening hours note., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminSalonsSalonIdOpenHoursNote'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.Responses.$200>
-  /**
-   * patchApiB2BAdminSalonsSalonIdInvoice - Endpoint is used for updating salon invoicing informations., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminSalonsSalonIdInvoice'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdInvoice.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminSalonsSalonIdInvoice.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.Responses.$200>
-  /**
-   * patchApiB2BAdminSalonsSalonIdCategories - Endpoint is used for updating salon categories., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminSalonsSalonIdCategories'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCategories.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCategories.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminSalonsSalonIdCategories.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCategories.Responses.$200>
-  /**
-   * patchApiB2BAdminSalonsSalonIdRequestPublication - Endpoint is used for creating salon publication requests., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminSalonsSalonIdRequestPublication'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.Responses.$200>
-  /**
-   * patchApiB2BAdminSalonsSalonIdResolvePublication - Endpoint is used for resolving publication requests., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminSalonsSalonIdResolvePublication'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.Responses.$200>
-  /**
-   * patchApiB2BAdminSalonsSalonIdUnpublish - Endpoint is used for unpublishing a salon., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminSalonsSalonIdUnpublish'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.Responses.$200>
-  /**
-   * patchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite - Endpoint is used for accepting / rejecting an employee invite., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.Responses.$200>
-  /**
-   * patchApiB2BAdminSalonsSalonIdServices - Endpoint is used for updating salon services., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminSalonsSalonIdServices'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdServices.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdServices.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdServices.Responses.$200>
-  /**
-   * patchApiB2BAdminSalonsSalonIdBasicSuggestion - Endpoint is used for pairing an user with suggested salon., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminSalonsSalonIdBasicSuggestion'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.Responses.$200>
-  /**
-   * patchApiB2BAdminSalonsSalonIdAssignedUser - Endpoint is used for updating salon assigned user. Only notino users can be assigned to salon., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminSalonsSalonIdAssignedUser'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.Responses.$200>
-  /**
-   * patchApiB2BAdminSalonsSalonIdSettings - Endpoint is used for setting a salon and services settings., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminSalonsSalonIdSettings'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdSettings.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdSettings.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminSalonsSalonIdSettings.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdSettings.Responses.$200>
-  /**
-   * deleteApiB2BAdminSalonsSalonIdRejectedSuggestions - Endpoint is used for removing rejected suggested salons., permissions:<ul><li>user</li></ul>
-   */
-  'deleteApiB2BAdminSalonsSalonIdRejectedSuggestions'(
-    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.Responses.$200>
-  /**
-   * getApiB2BAdminServices - Endpoint is used for getting an array of services., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminServices'(
-    parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
-  /**
-   * getApiB2BAdminServicesServiceId - Endpoint is used for getting a service detail., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminServicesServiceId'(
-    parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminServicesServiceId.Responses.$200>
-  /**
-   * patchApiB2BAdminServicesServiceId - Endpoint is used for updating a service., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminServicesServiceId'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminServicesServiceId.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminServicesServiceId.Responses.$200>
-  /**
-   * deleteApiB2BAdminServicesServiceId - Endpoint is used for removing a service., permissions:<ul><li>user</li></ul>
-   */
-  'deleteApiB2BAdminServicesServiceId'(
-    parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
-  /**
-   * postApiB2BAdminServicesCategoryServiceSuggest - Endpoint is used for sending requests for a new service, permissions:<ul><li>user</li></ul>
-   */
-  'postApiB2BAdminServicesCategoryServiceSuggest'(
-    parameters?: Parameters<Paths.PostApiB2BAdminServicesCategoryServiceSuggest.HeaderParameters> | null,
-    data?: Paths.PostApiB2BAdminServicesCategoryServiceSuggest.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BAdminServicesCategoryServiceSuggest.Responses.$200>
-  /**
-   * getApiB2BAdminCustomers - Endpoint is used for getting an array of customers. Customers are returned based on relevant permissions. It is possible to use search (firstName, lastName, phone, email), filter (salonID), order (lastName, createdAt) and pagination., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminCustomers'(
-    parameters?: Parameters<Paths.GetApiB2BAdminCustomers.QueryParameters & Paths.GetApiB2BAdminCustomers.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminCustomers.Responses.$200>
-  /**
-   * postApiB2BAdminCustomers - Endpoint is used for creating customer., permissions:<ul><li>user</li></ul>
-   */
-  'postApiB2BAdminCustomers'(
-    parameters?: Parameters<Paths.PostApiB2BAdminCustomers.HeaderParameters> | null,
-    data?: Paths.PostApiB2BAdminCustomers.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BAdminCustomers.Responses.$200>
-  /**
-   * getApiB2BAdminCustomersCustomerId - permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminCustomersCustomerId'(
-    parameters?: Parameters<Paths.GetApiB2BAdminCustomersCustomerId.PathParameters & Paths.GetApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminCustomersCustomerId.Responses.$200>
-  /**
-   * patchApiB2BAdminCustomersCustomerId - Endpoint is used for updating customer information., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminCustomersCustomerId'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminCustomersCustomerId.PathParameters & Paths.PatchApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminCustomersCustomerId.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminCustomersCustomerId.Responses.$200>
-  /**
-   * deleteApiB2BAdminCustomersCustomerId - Endpoint is used for removing specific customer., permissions:<ul><li>user</li></ul>
-   */
-  'deleteApiB2BAdminCustomersCustomerId'(
-    parameters?: Parameters<Paths.DeleteApiB2BAdminCustomersCustomerId.PathParameters & Paths.DeleteApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.DeleteApiB2BAdminCustomersCustomerId.Responses.$200>
-  /**
-   * getApiB2BAdminEmployees - Endpoint is used for getting an array of employees. Employees are returned based on relevant permissions. It is possible to use search (firtName, lastName, email), filter (salonID, serviceID, accountState), order (lastName, createdAt or status) and to use pagination., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminEmployees'(
-    parameters?: Parameters<Paths.GetApiB2BAdminEmployees.QueryParameters & Paths.GetApiB2BAdminEmployees.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminEmployees.Responses.$200>
-  /**
-   * postApiB2BAdminEmployees - Endpoint is used for creating an employee., permissions:<ul><li>user</li></ul>
-   */
-  'postApiB2BAdminEmployees'(
-    parameters?: Parameters<Paths.PostApiB2BAdminEmployees.HeaderParameters> | null,
-    data?: Paths.PostApiB2BAdminEmployees.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BAdminEmployees.Responses.$200>
-  /**
-   * getApiB2BAdminEmployeesEmployeeId - Endpoint is used for getting employee detail informations., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminEmployeesEmployeeId'(
-    parameters?: Parameters<Paths.GetApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.GetApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200>
-  /**
-   * patchApiB2BAdminEmployeesEmployeeId - Endpoint is used for updating employee informations., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminEmployeesEmployeeId'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeId.Responses.$200>
-  /**
-   * deleteApiB2BAdminEmployeesEmployeeId - Endpoint is used for removing specific employee., permissions:<ul><li>user</li></ul>
-   */
-  'deleteApiB2BAdminEmployeesEmployeeId'(
-    parameters?: Parameters<Paths.DeleteApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.DeleteApiB2BAdminEmployeesEmployeeId.Responses.$200>
-  /**
-   * postApiB2BAdminEmployeesInvite - Endpoint is used to send an invitation to the salon by email for an employee., permissions:<ul><li>user</li></ul>
-   */
-  'postApiB2BAdminEmployeesInvite'(
-    parameters?: Parameters<Paths.PostApiB2BAdminEmployeesInvite.HeaderParameters> | null,
-    data?: Paths.PostApiB2BAdminEmployeesInvite.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BAdminEmployeesInvite.Responses.$200>
-  /**
-   * patchApiB2BAdminEmployeesEmployeeIdReorder - permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminEmployeesEmployeeIdReorder'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.Responses.$200>
-  /**
-   * patchApiB2BAdminEmployeesEmployeeIdRole - Endpoint is used for updating employee role., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminEmployeesEmployeeIdRole'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.Responses.$200>
-  /**
-   * patchApiB2BAdminEmployeesEmployeeIdServicesServiceId - Endpoint is used for updating employee service informations., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminEmployeesEmployeeIdServicesServiceId'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.Responses.$200>
-  /**
-   * postApiB2BAdminImportsSalons - Endpoint is used for importing salons from a file., permissions:<ul><li>user</li></ul>
-   */
-  'postApiB2BAdminImportsSalons'(
-    parameters?: Parameters<Paths.PostApiB2BAdminImportsSalons.HeaderParameters> | null,
-    data?: Paths.PostApiB2BAdminImportsSalons.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BAdminImportsSalons.Responses.$200>
-  /**
-   * getApiB2BAdminNotinoDashboard - Endpoint is used for getting statistics. (Counts of pending salons, declined salons, etc...), permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminNotinoDashboard'(
-    parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboard.QueryParameters & Paths.GetApiB2BAdminNotinoDashboard.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboard.Responses.$200>
-  /**
-   * getApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats - Endpoint is used for getting statistics of salons development in time., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats'(
-    parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.Responses.$200>
-  /**
-   * postApiB2BAdminCalendarSyncSyncToken - Endpoint is used for saving refresh tokens from third party services., permissions:<ul><li>user</li></ul>
-   */
-  'postApiB2BAdminCalendarSyncSyncToken'(
-    parameters?: Parameters<Paths.PostApiB2BAdminCalendarSyncSyncToken.HeaderParameters> | null,
-    data?: Paths.PostApiB2BAdminCalendarSyncSyncToken.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BAdminCalendarSyncSyncToken.Responses.$200>
-  /**
-   * getApiB2BAdminReviews - Endpoint is used for getting an array of reviews. It is possible to use search (salonName, review.reviewMessage), filter (verificationStatus, deleted, salonCountryCode, toxicityScoreFrom, toxicityScoreTo), order (toxicityScore) and pagination., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminReviews'(
-    parameters?: Parameters<Paths.GetApiB2BAdminReviews.QueryParameters & Paths.GetApiB2BAdminReviews.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminReviews.Responses.$200>
-  /**
-   * getApiB2BAdminReviewsReviewId - permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BAdminReviewsReviewId'(
-    parameters?: Parameters<Paths.GetApiB2BAdminReviewsReviewId.PathParameters & Paths.GetApiB2BAdminReviewsReviewId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminReviewsReviewId.Responses.$200>
-  /**
-   * deleteApiB2BAdminReviewsReviewId - Endpoint is used for removing specific salon review., permissions:<ul><li>user</li></ul>
-   */
-  'deleteApiB2BAdminReviewsReviewId'(
-    parameters?: Parameters<Paths.DeleteApiB2BAdminReviewsReviewId.PathParameters & Paths.DeleteApiB2BAdminReviewsReviewId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.DeleteApiB2BAdminReviewsReviewId.Responses.$200>
-  /**
-   * patchApiB2BAdminReviewsReviewIdVerification - Endpoint is used for verifying salon review., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BAdminReviewsReviewIdVerification'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminReviewsReviewIdVerification.PathParameters & Paths.PatchApiB2BAdminReviewsReviewIdVerification.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BAdminReviewsReviewIdVerification.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminReviewsReviewIdVerification.Responses.$200>
-  /**
-   * getApiB2BV1UsersPartners - permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BV1UsersPartners'(
-    parameters?: Parameters<Paths.GetApiB2BV1UsersPartners.QueryParameters & Paths.GetApiB2BV1UsersPartners.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BV1UsersPartners.Responses.$200>
-  /**
-   * getApiB2BV1UsersUserId - Endpoint is used for getting an user detail., permissions:<ul><li>user</li></ul>
+   * getApiB2BV1UsersUserId - Endpoint is used for getting an user detail., permissions:<ul><li>notino</li><li>partner</li></ul>
    */
   'getApiB2BV1UsersUserId'(
     parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters & Paths.GetApiB2BV1UsersUserId.HeaderParameters> | null,
@@ -63378,7 +62782,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1UsersUserId.Responses.$200>
   /**
-   * patchApiB2BV1UsersUserId - permissions:<ul><li>user</li></ul>
+   * patchApiB2BV1UsersUserId - permissions:<ul><li>notino</li><li>partner</li></ul>
    */
   'patchApiB2BV1UsersUserId'(
     parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters & Paths.PatchApiB2BV1UsersUserId.HeaderParameters> | null,
@@ -63386,7 +62790,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
   /**
-   * deleteApiB2BV1UsersUserId - Endpoint is used for removing user accounts., permissions:<ul><li>user</li></ul>
+   * deleteApiB2BV1UsersUserId - Endpoint is used for removing user accounts., permissions:<ul><li>notino</li><li>partner</li></ul>
    */
   'deleteApiB2BV1UsersUserId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserId.PathParameters & Paths.DeleteApiB2BV1UsersUserId.HeaderParameters> | null,
@@ -63394,7 +62798,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1UsersUserId.Responses.$200>
   /**
-   * getApiB2BV1UsersUserIdPendingEmployeeInvites - Endpoint is used for getting an array of pending employee invites., permissions:<ul><li>user</li></ul>
+   * getApiB2BV1UsersUserIdPendingEmployeeInvites - Endpoint is used for getting an array of pending employee invites., permissions:<ul><li>notino</li><li>partner</li></ul>
    */
   'getApiB2BV1UsersUserIdPendingEmployeeInvites'(
     parameters?: Parameters<Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.PathParameters & Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.HeaderParameters> | null,
@@ -63402,7 +62806,354 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.Responses.$200>
   /**
-   * postApiB2BV1FilesSignUrls - Endpoint is used for signing AWS urls of files., permissions:<ul><li>user</li></ul>
+   * getApiB2BAdminUsersUserId - Endpoint is used for getting an user detail., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+   */
+  'getApiB2BAdminUsersUserId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters & Paths.GetApiB2BAdminUsersUserId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
+  /**
+   * patchApiB2BAdminUsersUserId - Endpoint is used for updating user informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_EDIT]</li><li>partner</li></ul>
+   */
+  'patchApiB2BAdminUsersUserId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
+  /**
+   * deleteApiB2BAdminUsersUserId - Endpoint is used for removing user accounts., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_DELETE]</li><li>partner</li></ul>
+   */
+  'deleteApiB2BAdminUsersUserId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserId.Responses.$200>
+  /**
+   * getApiB2BAdminRolesSalon - Endpoint is used for getting salon roles., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BAdminRolesSalon'(
+    parameters?: Parameters<Paths.GetApiB2BAdminRolesSalon.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminRolesSalon.Responses.$200>
+  /**
+   * postApiB2BAdminFilesSignUrls - Endpoint is used for signing AWS urls of files., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   */
+  'postApiB2BAdminFilesSignUrls'(
+    parameters?: Parameters<Paths.PostApiB2BAdminFilesSignUrls.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonIdCalendarEvents - Endpoint is used for getting an array of calendar events (from provided date range). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonIdCalendarEvents'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
+  /**
+   * postApiB2BAdminSalonsSalonIdCalendarEvents - Endpoint is used for creating calendar events., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_CREATE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_CREATE]</li></ul>
+   */
+  'postApiB2BAdminSalonsSalonIdCalendarEvents'(
+    parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonIdCalendarEventsPaginated - Endpoint is used for getting an array of calendar events (paginated list starting/ending on provided date). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonIdCalendarEventsPaginated'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for getting calendar event detail., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for updating calendar events., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_UPDATE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+  /**
+   * deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for removing calendar events., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_DELETE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_DELETE]</li></ul>
+   */
+  'deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+  /**
+   * getApiB2BAdminSalons - Endpoint is used for getting an array of salons.
+   * 	It possible to use search (name, zipCode, city, street, streetNumber, businessID),
+   * 	filter (categoryFirstLevelIDs, statuses, countryCode, pendingPublication, createType, sourceTypes, lastUpdatedAtFrom, lastUpdatedAtTo, hasSetOpeningHours, assignedUserID, premiumSourceUserType),
+   * 	order (name, fillingProgress, createdAt) and pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+   */
+  'getApiB2BAdminSalons'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalons.QueryParameters & Paths.GetApiB2BAdminSalons.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalons.Responses.$200>
+  /**
+   * postApiB2BAdminSalons - permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   */
+  'postApiB2BAdminSalons'(
+    parameters?: Parameters<Paths.PostApiB2BAdminSalons.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminSalons.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminSalons.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsBasic - Endpoint is used for getting an array of salons (type of BASIC). It is possible to search by salon name and to use pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BAdminSalonsBasic'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsBasic.QueryParameters & Paths.GetApiB2BAdminSalonsBasic.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsBasic.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsBasicSuggestion - Endpoint is used for getting an array of basic salon suggestions., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BAdminSalonsBasicSuggestion'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsBasicSuggestion.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsBasicSuggestion.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsRejectedSuggestions - Endpoint is used for getting an array of rejected salon suggestions. It is possible to use search (lastName, firstName, email, name), order (userLastName, userEmail, salonName, createdAt) and pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+   */
+  'getApiB2BAdminSalonsRejectedSuggestions'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsRejectedSuggestions.QueryParameters & Paths.GetApiB2BAdminSalonsRejectedSuggestions.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsRejectedSuggestions.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonId - Endpoint is used for getting a salon detail informations., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonId.PathParameters & Paths.GetApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonId.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonId - Endpoint is used for updating salon informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_UPDATE]</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonId.Responses.$200>
+  /**
+   * deleteApiB2BAdminSalonsSalonId - Endpoint is used for removing specific salon., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_DELETE]</li><li>partner: [PARTNER_ADMIN, SALON_DELETE]</li></ul>
+   */
+  'deleteApiB2BAdminSalonsSalonId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonIdBasic - Endpoint is used for getting salon (type of BASIC) detail., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonIdBasic'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdBasic.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdBasic.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdBasic.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonIdHistory - Endpoint is used for getting specific salon historical data (max 30 days in past). In query parameters can be set dateFrom and dateTo. Those dates has to be set correctly (dateFrom cannot be greater than dateTo)., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonIdHistory'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdHistory.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdHistory.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdHistory.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdHistory.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonIdDashboard - Endpoint is used for getting specific salon informations for dashboard (rating stats, employees, categories, etc...)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonIdDashboard'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdDashboard.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdDashboard.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdDashboard.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite - Endpoint is used for accepting / rejecting an employee invite., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdBasicSuggestion - Endpoint is used for pairing an user with suggested salon., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdBasicSuggestion'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdAssignedUser - Endpoint is used for updating salon assigned user. Only notino users can be assigned to salon., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdAssignedUser'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.Responses.$200>
+  /**
+   * deleteApiB2BAdminSalonsSalonIdRejectedSuggestions - Endpoint is used for removing rejected suggested salons., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+   */
+  'deleteApiB2BAdminSalonsSalonIdRejectedSuggestions'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.Responses.$200>
+  /**
+   * getApiB2BAdminServices - Endpoint is used for getting an array of services., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BAdminServices'(
+    parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
+  /**
+   * getApiB2BAdminServicesServiceId - Endpoint is used for getting a service detail., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BAdminServicesServiceId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminServicesServiceId.Responses.$200>
+  /**
+   * patchApiB2BAdminServicesServiceId - Endpoint is used for updating a service., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SERVICE_UPDATE]</li><li>partner: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminServicesServiceId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminServicesServiceId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminServicesServiceId.Responses.$200>
+  /**
+   * deleteApiB2BAdminServicesServiceId - Endpoint is used for removing a service., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SERVICE_DELETE]</li><li>partner: [PARTNER_ADMIN, SERVICE_DELETE]</li></ul>
+   */
+  'deleteApiB2BAdminServicesServiceId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
+  /**
+   * getApiB2BAdminCustomers - Endpoint is used for getting an array of customers. Customers are returned based on relevant permissions. It is possible to use search (firstName, lastName, phone, email), filter (salonID), order (lastName, createdAt) and pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BAdminCustomers'(
+    parameters?: Parameters<Paths.GetApiB2BAdminCustomers.QueryParameters & Paths.GetApiB2BAdminCustomers.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminCustomers.Responses.$200>
+  /**
+   * postApiB2BAdminCustomers - Endpoint is used for creating customer., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CUSTOMER_CREATE]</li><li>partner: [PARTNER_ADMIN, CUSTOMER_CREATE]</li></ul>
+   */
+  'postApiB2BAdminCustomers'(
+    parameters?: Parameters<Paths.PostApiB2BAdminCustomers.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminCustomers.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminCustomers.Responses.$200>
+  /**
+   * getApiB2BAdminCustomersCustomerId - permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BAdminCustomersCustomerId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminCustomersCustomerId.PathParameters & Paths.GetApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminCustomersCustomerId.Responses.$200>
+  /**
+   * patchApiB2BAdminCustomersCustomerId - Endpoint is used for updating customer information., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CUSTOMER_UPDATE]</li><li>partner: [PARTNER_ADMIN, CUSTOMER_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminCustomersCustomerId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminCustomersCustomerId.PathParameters & Paths.PatchApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminCustomersCustomerId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminCustomersCustomerId.Responses.$200>
+  /**
+   * deleteApiB2BAdminCustomersCustomerId - Endpoint is used for removing specific customer., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CUSTOMER_DELETE]</li><li>partner: [PARTNER_ADMIN, CUSTOMER_DELETE]</li></ul>
+   */
+  'deleteApiB2BAdminCustomersCustomerId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminCustomersCustomerId.PathParameters & Paths.DeleteApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminCustomersCustomerId.Responses.$200>
+  /**
+   * getApiB2BAdminEmployees - Endpoint is used for getting an array of employees. Employees are returned based on relevant permissions. It is possible to use search (firtName, lastName, email), filter (salonID, serviceID, accountState), order (lastName, createdAt or status) and to use pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BAdminEmployees'(
+    parameters?: Parameters<Paths.GetApiB2BAdminEmployees.QueryParameters & Paths.GetApiB2BAdminEmployees.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminEmployees.Responses.$200>
+  /**
+   * postApiB2BAdminEmployees - Endpoint is used for creating an employee., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, EMPLOYEE_CREATE]</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_CREATE]</li></ul>
+   */
+  'postApiB2BAdminEmployees'(
+    parameters?: Parameters<Paths.PostApiB2BAdminEmployees.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminEmployees.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminEmployees.Responses.$200>
+  /**
+   * getApiB2BAdminEmployeesEmployeeId - Endpoint is used for getting employee detail informations., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BAdminEmployeesEmployeeId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.GetApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200>
+  /**
+   * patchApiB2BAdminEmployeesEmployeeId - Endpoint is used for updating employee informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, EMPLOYEE_UPDATE]</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminEmployeesEmployeeId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeId.Responses.$200>
+  /**
+   * deleteApiB2BAdminEmployeesEmployeeId - Endpoint is used for removing specific employee., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, EMPLOYEE_DELETE]</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_DELETE]</li></ul>
+   */
+  'deleteApiB2BAdminEmployeesEmployeeId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminEmployeesEmployeeId.Responses.$200>
+  /**
+   * getApiB2BAdminNotinoDashboard - Endpoint is used for getting statistics. (Counts of pending salons, declined salons, etc...), permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+   */
+  'getApiB2BAdminNotinoDashboard'(
+    parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboard.QueryParameters & Paths.GetApiB2BAdminNotinoDashboard.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboard.Responses.$200>
+  /**
+   * getApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats - Endpoint is used for getting statistics of salons development in time., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+   */
+  'getApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats'(
+    parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.Responses.$200>
+  /**
+   * postApiB2BAdminCalendarSyncSyncToken - Endpoint is used for saving refresh tokens from third party services., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
+   */
+  'postApiB2BAdminCalendarSyncSyncToken'(
+    parameters?: Parameters<Paths.PostApiB2BAdminCalendarSyncSyncToken.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminCalendarSyncSyncToken.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminCalendarSyncSyncToken.Responses.$200>
+  /**
+   * postApiB2BV1FilesSignUrls - Endpoint is used for signing AWS urls of files., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'postApiB2BV1FilesSignUrls'(
     parameters?: Parameters<Paths.PostApiB2BV1FilesSignUrls.HeaderParameters> | null,
@@ -63410,39 +63161,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1FilesSignUrls.Responses.$200>
   /**
-   * postApiB2BV1SalonsSalonIdCalendarEventsReservations - permissions:<ul><li>user</li></ul>
-   */
-  'postApiB2BV1SalonsSalonIdCalendarEventsReservations'(
-    parameters?: Parameters<Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
-    data?: Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.Responses.$200>
-  /**
-   * patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId'(
-    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
-  /**
-   * deleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user</li></ul>
-   */
-  'deleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId'(
-    parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
-  /**
-   * patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState'(
-    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
-  /**
-   * getApiB2BV1SalonsSalonIdCalendarEvents - Endpoint is used for getting an array of calendar events (from provided date range). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user</li></ul>
+   * getApiB2BV1SalonsSalonIdCalendarEvents - Endpoint is used for getting an array of calendar events (from provided date range). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BV1SalonsSalonIdCalendarEvents'(
     parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.PathParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.HeaderParameters> | null,
@@ -63450,7 +63169,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.Responses.$200>
   /**
-   * postApiB2BV1SalonsSalonIdCalendarEvents - Endpoint is used for creating calendar events., permissions:<ul><li>user</li></ul>
+   * postApiB2BV1SalonsSalonIdCalendarEvents - Endpoint is used for creating calendar events., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_CREATE]</li></ul>
    */
   'postApiB2BV1SalonsSalonIdCalendarEvents'(
     parameters?: Parameters<Paths.PostApiB2BV1SalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BV1SalonsSalonIdCalendarEvents.HeaderParameters> | null,
@@ -63458,7 +63177,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1SalonsSalonIdCalendarEvents.Responses.$200>
   /**
-   * getApiB2BV1SalonsSalonIdCalendarEventsPaginated - Endpoint is used for getting an array of calendar events (paginated list starting/ending on provided date). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user</li></ul>
+   * getApiB2BV1SalonsSalonIdCalendarEventsPaginated - Endpoint is used for getting an array of calendar events (paginated list starting/ending on provided date). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BV1SalonsSalonIdCalendarEventsPaginated'(
     parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdCalendarEventsPaginated.PathParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEventsPaginated.QueryParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEventsPaginated.HeaderParameters> | null,
@@ -63466,7 +63185,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdCalendarEventsPaginated.Responses.$200>
   /**
-   * getApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for getting calendar event detail., permissions:<ul><li>user</li></ul>
+   * getApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for getting calendar event detail., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId'(
     parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -63474,7 +63193,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
   /**
-   * patchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for updating calendar events., permissions:<ul><li>user</li></ul>
+   * patchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for updating calendar events., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
    */
   'patchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId'(
     parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -63482,7 +63201,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
   /**
-   * deleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for removing calendar events., permissions:<ul><li>user</li></ul>
+   * deleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for removing calendar events., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_DELETE]</li></ul>
    */
   'deleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -63490,23 +63209,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
   /**
-   * patchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for updating a calendarBulkEvent., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
-    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
-  /**
-   * deleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for removing calendarBulkEvents., permissions:<ul><li>user</li></ul>
-   */
-  'deleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
-    parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
-  /**
-   * getApiB2BV1Salons - permissions:<ul><li>user</li></ul>
+   * getApiB2BV1Salons - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BV1Salons'(
     parameters?: Parameters<Paths.GetApiB2BV1Salons.HeaderParameters> | null,
@@ -63514,7 +63217,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1Salons.Responses.$200>
   /**
-   * postApiB2BV1Salons - permissions:<ul><li>user</li></ul>
+   * postApiB2BV1Salons - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'postApiB2BV1Salons'(
     parameters?: Parameters<Paths.PostApiB2BV1Salons.HeaderParameters> | null,
@@ -63522,7 +63225,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1Salons.Responses.$200>
   /**
-   * getApiB2BV1SalonsBasic - Endpoint is used for getting an array of salons (type of BASIC). It is possible to search by salon name and to use pagination., permissions:<ul><li>user</li></ul>
+   * getApiB2BV1SalonsBasic - Endpoint is used for getting an array of salons (type of BASIC). It is possible to search by salon name and to use pagination., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BV1SalonsBasic'(
     parameters?: Parameters<Paths.GetApiB2BV1SalonsBasic.QueryParameters & Paths.GetApiB2BV1SalonsBasic.HeaderParameters> | null,
@@ -63530,7 +63233,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsBasic.Responses.$200>
   /**
-   * getApiB2BV1SalonsPreview - permissions:<ul><li>user</li></ul>
+   * getApiB2BV1SalonsPreview - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BV1SalonsPreview'(
     parameters?: Parameters<Paths.GetApiB2BV1SalonsPreview.HeaderParameters> | null,
@@ -63538,7 +63241,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsPreview.Responses.$200>
   /**
-   * getApiB2BV1SalonsBasicSuggestion - Endpoint is used for getting an array of basic salon suggestions., permissions:<ul><li>user</li></ul>
+   * getApiB2BV1SalonsBasicSuggestion - Endpoint is used for getting an array of basic salon suggestions., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BV1SalonsBasicSuggestion'(
     parameters?: Parameters<Paths.GetApiB2BV1SalonsBasicSuggestion.HeaderParameters> | null,
@@ -63546,7 +63249,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsBasicSuggestion.Responses.$200>
   /**
-   * getApiB2BV1SalonsSalonId - permissions:<ul><li>user</li></ul>
+   * getApiB2BV1SalonsSalonId - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BV1SalonsSalonId'(
     parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonId.PathParameters & Paths.GetApiB2BV1SalonsSalonId.HeaderParameters> | null,
@@ -63554,7 +63257,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsSalonId.Responses.$200>
   /**
-   * patchApiB2BV1SalonsSalonId - permissions:<ul><li>user</li></ul>
+   * patchApiB2BV1SalonsSalonId - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
    */
   'patchApiB2BV1SalonsSalonId'(
     parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonId.PathParameters & Paths.PatchApiB2BV1SalonsSalonId.HeaderParameters> | null,
@@ -63562,7 +63265,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonId.Responses.$200>
   /**
-   * deleteApiB2BV1SalonsSalonId - Endpoint is used for removing specific salon., permissions:<ul><li>user</li></ul>
+   * deleteApiB2BV1SalonsSalonId - Endpoint is used for removing specific salon., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_DELETE]</li></ul>
    */
   'deleteApiB2BV1SalonsSalonId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonId.HeaderParameters> | null,
@@ -63570,7 +63273,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonId.Responses.$200>
   /**
-   * getApiB2BV1SalonsSalonIdBasic - Endpoint is used for getting salon (type of BASIC) detail., permissions:<ul><li>user</li></ul>
+   * getApiB2BV1SalonsSalonIdBasic - Endpoint is used for getting salon (type of BASIC) detail., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BV1SalonsSalonIdBasic'(
     parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdBasic.PathParameters & Paths.GetApiB2BV1SalonsSalonIdBasic.HeaderParameters> | null,
@@ -63578,7 +63281,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdBasic.Responses.$200>
   /**
-   * getApiB2BV1SalonsSalonIdDashboard - Endpoint is used for getting specific salon informations for dashboard (rating stats, employees, categories, etc...)., permissions:<ul><li>user</li></ul>
+   * getApiB2BV1SalonsSalonIdDashboard - Endpoint is used for getting specific salon informations for dashboard (rating stats, employees, categories, etc...)., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BV1SalonsSalonIdDashboard'(
     parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdDashboard.PathParameters & Paths.GetApiB2BV1SalonsSalonIdDashboard.HeaderParameters> | null,
@@ -63586,7 +63289,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdDashboard.Responses.$200>
   /**
-   * postApiB2BV1SalonsSalonIdUserInvite - permissions:<ul><li>user</li></ul>
+   * postApiB2BV1SalonsSalonIdUserInvite - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'postApiB2BV1SalonsSalonIdUserInvite'(
     parameters?: Parameters<Paths.PostApiB2BV1SalonsSalonIdUserInvite.PathParameters & Paths.PostApiB2BV1SalonsSalonIdUserInvite.HeaderParameters> | null,
@@ -63594,39 +63297,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1SalonsSalonIdUserInvite.Responses.$200>
   /**
-   * patchApiB2BV1SalonsSalonIdInvoice - permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BV1SalonsSalonIdInvoice'(
-    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdInvoice.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdInvoice.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BV1SalonsSalonIdInvoice.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdInvoice.Responses.$200>
-  /**
-   * patchApiB2BV1SalonsSalonIdCategories - Endpoint is used for updating salon categories., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BV1SalonsSalonIdCategories'(
-    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCategories.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCategories.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BV1SalonsSalonIdCategories.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCategories.Responses.$200>
-  /**
-   * patchApiB2BV1SalonsSalonIdRequestPublication - Endpoint is used for creating salon publication requests., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BV1SalonsSalonIdRequestPublication'(
-    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.Responses.$200>
-  /**
-   * patchApiB2BV1SalonsSalonIdUnpublish - Endpoint is used for unpublishing a salon., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BV1SalonsSalonIdUnpublish'(
-    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdUnpublish.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdUnpublish.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BV1SalonsSalonIdUnpublish.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdUnpublish.Responses.$200>
-  /**
-   * patchApiB2BV1SalonsSalonIdAcceptEmployeeInvite - Endpoint is used for accepting / rejecting an employee invite., permissions:<ul><li>user</li></ul>
+   * patchApiB2BV1SalonsSalonIdAcceptEmployeeInvite - Endpoint is used for accepting / rejecting an employee invite., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'patchApiB2BV1SalonsSalonIdAcceptEmployeeInvite'(
     parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.HeaderParameters> | null,
@@ -63634,15 +63305,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.Responses.$200>
   /**
-   * patchApiB2BV1SalonsSalonIdServices - Endpoint is used for updating salon services., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BV1SalonsSalonIdServices'(
-    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdServices.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdServices.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BV1SalonsSalonIdServices.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdServices.Responses.$200>
-  /**
-   * patchApiB2BV1SalonsSalonIdBasicSuggestion - Endpoint is used for pairing an user with suggested salon., permissions:<ul><li>user</li></ul>
+   * patchApiB2BV1SalonsSalonIdBasicSuggestion - Endpoint is used for pairing an user with suggested salon., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'patchApiB2BV1SalonsSalonIdBasicSuggestion'(
     parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.HeaderParameters> | null,
@@ -63650,15 +63313,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.Responses.$200>
   /**
-   * patchApiB2BV1SalonsSalonIdSettings - Endpoint is used for setting a salon and services settings., permissions:<ul><li>user</li></ul>
-   */
-  'patchApiB2BV1SalonsSalonIdSettings'(
-    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdSettings.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdSettings.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BV1SalonsSalonIdSettings.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdSettings.Responses.$200>
-  /**
-   * getApiB2BV1Services - Endpoint is used for getting an array of services., permissions:<ul><li>user</li></ul>
+   * getApiB2BV1Services - Endpoint is used for getting an array of services., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BV1Services'(
     parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
@@ -63666,7 +63321,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
   /**
-   * getApiB2BV1ServicesServiceId - Endpoint is used for getting a service detail., permissions:<ul><li>user</li></ul>
+   * getApiB2BV1ServicesServiceId - Endpoint is used for getting a service detail., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -63674,7 +63329,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
   /**
-   * patchApiB2BV1ServicesServiceId - Endpoint is used for updating a service., permissions:<ul><li>user</li></ul>
+   * patchApiB2BV1ServicesServiceId - Endpoint is used for updating a service., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
    */
   'patchApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -63682,7 +63337,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
   /**
-   * deleteApiB2BV1ServicesServiceId - Endpoint is used for removing a service., permissions:<ul><li>user</li></ul>
+   * deleteApiB2BV1ServicesServiceId - Endpoint is used for removing a service., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SERVICE_DELETE]</li></ul>
    */
   'deleteApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -63690,15 +63345,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
   /**
-   * postApiB2BV1ServicesCategoryServiceSuggest - Endpoint is used for sending requests for a new service, permissions:<ul><li>user</li></ul>
-   */
-  'postApiB2BV1ServicesCategoryServiceSuggest'(
-    parameters?: Parameters<Paths.PostApiB2BV1ServicesCategoryServiceSuggest.HeaderParameters> | null,
-    data?: Paths.PostApiB2BV1ServicesCategoryServiceSuggest.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BV1ServicesCategoryServiceSuggest.Responses.$200>
-  /**
-   * getApiB2BV1Customers - Endpoint is used for getting an array of customers. Customers are returned based on relevant permissions. It is possible to use search (firstName, lastName, phone, email), filter (salonID), order (lastName, createdAt) and pagination., permissions:<ul><li>user</li></ul>
+   * getApiB2BV1Customers - Endpoint is used for getting an array of customers. Customers are returned based on relevant permissions. It is possible to use search (firstName, lastName, phone, email), filter (salonID), order (lastName, createdAt) and pagination., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BV1Customers'(
     parameters?: Parameters<Paths.GetApiB2BV1Customers.QueryParameters & Paths.GetApiB2BV1Customers.HeaderParameters> | null,
@@ -63706,7 +63353,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1Customers.Responses.$200>
   /**
-   * postApiB2BV1Customers - Endpoint is used for creating customer., permissions:<ul><li>user</li></ul>
+   * postApiB2BV1Customers - Endpoint is used for creating customer., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CUSTOMER_CREATE]</li></ul>
    */
   'postApiB2BV1Customers'(
     parameters?: Parameters<Paths.PostApiB2BV1Customers.HeaderParameters> | null,
@@ -63714,7 +63361,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1Customers.Responses.$200>
   /**
-   * getApiB2BV1CustomersCustomerId - permissions:<ul><li>user</li></ul>
+   * getApiB2BV1CustomersCustomerId - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BV1CustomersCustomerId'(
     parameters?: Parameters<Paths.GetApiB2BV1CustomersCustomerId.PathParameters & Paths.GetApiB2BV1CustomersCustomerId.HeaderParameters> | null,
@@ -63722,7 +63369,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1CustomersCustomerId.Responses.$200>
   /**
-   * patchApiB2BV1CustomersCustomerId - Endpoint is used for updating customer information., permissions:<ul><li>user</li></ul>
+   * patchApiB2BV1CustomersCustomerId - Endpoint is used for updating customer information., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CUSTOMER_UPDATE]</li></ul>
    */
   'patchApiB2BV1CustomersCustomerId'(
     parameters?: Parameters<Paths.PatchApiB2BV1CustomersCustomerId.PathParameters & Paths.PatchApiB2BV1CustomersCustomerId.HeaderParameters> | null,
@@ -63730,7 +63377,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1CustomersCustomerId.Responses.$200>
   /**
-   * deleteApiB2BV1CustomersCustomerId - Endpoint is used for removing specific customer., permissions:<ul><li>user</li></ul>
+   * deleteApiB2BV1CustomersCustomerId - Endpoint is used for removing specific customer., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CUSTOMER_DELETE]</li></ul>
    */
   'deleteApiB2BV1CustomersCustomerId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1CustomersCustomerId.PathParameters & Paths.DeleteApiB2BV1CustomersCustomerId.HeaderParameters> | null,
@@ -63738,7 +63385,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1CustomersCustomerId.Responses.$200>
   /**
-   * getApiB2BV1Employees - permissions:<ul><li>user</li></ul>
+   * getApiB2BV1Employees - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BV1Employees'(
     parameters?: Parameters<Paths.GetApiB2BV1Employees.QueryParameters & Paths.GetApiB2BV1Employees.HeaderParameters> | null,
@@ -63746,7 +63393,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1Employees.Responses.$200>
   /**
-   * postApiB2BV1Employees - Endpoint is used for creating an employee., permissions:<ul><li>user</li></ul>
+   * postApiB2BV1Employees - Endpoint is used for creating an employee., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_CREATE]</li></ul>
    */
   'postApiB2BV1Employees'(
     parameters?: Parameters<Paths.PostApiB2BV1Employees.HeaderParameters> | null,
@@ -63754,7 +63401,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1Employees.Responses.$200>
   /**
-   * getApiB2BV1EmployeesEmployeeId - Endpoint is used for getting employee detail informations., permissions:<ul><li>user</li></ul>
+   * getApiB2BV1EmployeesEmployeeId - Endpoint is used for getting employee detail informations., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BV1EmployeesEmployeeId'(
     parameters?: Parameters<Paths.GetApiB2BV1EmployeesEmployeeId.PathParameters & Paths.GetApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
@@ -63762,7 +63409,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EmployeesEmployeeId.Responses.$200>
   /**
-   * patchApiB2BV1EmployeesEmployeeId - permissions:<ul><li>user</li></ul>
+   * patchApiB2BV1EmployeesEmployeeId - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
    */
   'patchApiB2BV1EmployeesEmployeeId'(
     parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
@@ -63770,7 +63417,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeId.Responses.$200>
   /**
-   * deleteApiB2BV1EmployeesEmployeeId - Endpoint is used for removing specific employee., permissions:<ul><li>user</li></ul>
+   * deleteApiB2BV1EmployeesEmployeeId - Endpoint is used for removing specific employee., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_DELETE]</li></ul>
    */
   'deleteApiB2BV1EmployeesEmployeeId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1EmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
@@ -63778,7 +63425,368 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1EmployeesEmployeeId.Responses.$200>
   /**
-   * postApiB2BV1EmployeesInvite - Endpoint is used to send an invitation to the salon by email for an employee., permissions:<ul><li>user</li></ul>
+   * getApiB2BV1RolesSalon - Endpoint is used for getting salon roles., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
+   */
+  'getApiB2BV1RolesSalon'(
+    parameters?: Parameters<Paths.GetApiB2BV1RolesSalon.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1RolesSalon.Responses.$200>
+  /**
+   * getApiB2BAdminUsers - Endpoint is used for getting an array of users.
+   * 	It is possible to search by (firstName, lastName, email, phone), order (firstName, lastName, activatedAt, roleName, email), filter (roleID) and to use pagination., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_BROWSING]</li><li>partner</li></ul>
+   */
+  'getApiB2BAdminUsers'(
+    parameters?: Parameters<Paths.GetApiB2BAdminUsers.QueryParameters & Paths.GetApiB2BAdminUsers.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminUsers.Responses.$200>
+  /**
+   * postApiB2BAdminUsers - Endpoint is used for creating a user., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_CREATE]</li><li>partner</li></ul>
+   */
+  'postApiB2BAdminUsers'(
+    parameters?: Parameters<Paths.PostApiB2BAdminUsers.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminUsers.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminUsers.Responses.$200>
+  /**
+   * getApiB2BAdminUsersNotinoUsers - Endpoint is used for getting an array of notino users., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_BROWSING]</li><li>partner</li></ul>
+   */
+  'getApiB2BAdminUsersNotinoUsers'(
+    parameters?: Parameters<Paths.GetApiB2BAdminUsersNotinoUsers.QueryParameters & Paths.GetApiB2BAdminUsersNotinoUsers.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminUsersNotinoUsers.Responses.$200>
+  /**
+   * patchApiB2BAdminUsersUserIdRole - Endpoint is used for updating user role., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li><li>partner</li></ul>
+   */
+  'patchApiB2BAdminUsersUserIdRole'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserIdRole.PathParameters & Paths.PatchApiB2BAdminUsersUserIdRole.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminUsersUserIdRole.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminUsersUserIdRole.Responses.$200>
+  /**
+   * patchApiB2BAdminEnumsCategoriesCategoryIdReorder - Endpoint is used for reordering category items., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
+   */
+  'patchApiB2BAdminEnumsCategoriesCategoryIdReorder'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.Responses.$200>
+  /**
+   * getApiB2BAdminRolesSystemUser - Endpoint is used for getting system user roles., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_CREATE]</li><li>partner</li></ul>
+   */
+  'getApiB2BAdminRolesSystemUser'(
+    parameters?: Parameters<Paths.GetApiB2BAdminRolesSystemUser.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminRolesSystemUser.Responses.$200>
+  /**
+   * postApiB2BAdminSalonsSalonIdCalendarEventsReservations - permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_CREATE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_CREATE]</li></ul>
+   */
+  'postApiB2BAdminSalonsSalonIdCalendarEventsReservations'(
+    parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_UPDATE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
+  /**
+   * deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_DELETE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_DELETE]</li></ul>
+   */
+  'deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_UPDATE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for updating a calendarBulkEvent., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_UPDATE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+  /**
+   * deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for removing calendarBulkEvents., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_DELETE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_DELETE]</li></ul>
+   */
+  'deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdOpenHoursNote - Endpoint is used for setting salon opening hours note., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_UPDATE]</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdOpenHoursNote'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdInvoice - Endpoint is used for updating salon invoicing informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_BILLING_UPDATE]</li><li>partner: [PARTNER_ADMIN, SALON_BILLING_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdInvoice'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdInvoice.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdInvoice.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdCategories - Endpoint is used for updating salon categories., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_UPDATE]</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdCategories'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCategories.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCategories.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdCategories.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCategories.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdRequestPublication - Endpoint is used for creating salon publication requests., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_UPDATE]</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdRequestPublication'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdResolvePublication - Endpoint is used for resolving publication requests., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_PUBLICATION_RESOLVE]</li><li>partner</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdResolvePublication'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdUnpublish - Endpoint is used for unpublishing a salon., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_UPDATE]</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdUnpublish'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdServices - Endpoint is used for updating salon services., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SERVICE_CREATE, SERVICE_DELETE]</li><li>partner: [PARTNER_ADMIN, SERVICE_CREATE, SERVICE_DELETE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdServices'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdServices.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdServices.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdServices.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdSettings - Endpoint is used for setting a salon and services settings., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_UPDATE]</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdSettings'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdSettings.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdSettings.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdSettings.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdSettings.Responses.$200>
+  /**
+   * postApiB2BAdminServicesCategoryServiceSuggest - Endpoint is used for sending requests for a new service, permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SERVICE_UPDATE]</li><li>partner: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
+   */
+  'postApiB2BAdminServicesCategoryServiceSuggest'(
+    parameters?: Parameters<Paths.PostApiB2BAdminServicesCategoryServiceSuggest.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminServicesCategoryServiceSuggest.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminServicesCategoryServiceSuggest.Responses.$200>
+  /**
+   * postApiB2BAdminEmployeesInvite - Endpoint is used to send an invitation to the salon by email for an employee., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, EMPLOYEE_CREATE]</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_CREATE]</li></ul>
+   */
+  'postApiB2BAdminEmployeesInvite'(
+    parameters?: Parameters<Paths.PostApiB2BAdminEmployeesInvite.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminEmployeesInvite.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminEmployeesInvite.Responses.$200>
+  /**
+   * patchApiB2BAdminEmployeesEmployeeIdReorder - permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, EMPLOYEE_UPDATE]</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminEmployeesEmployeeIdReorder'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.Responses.$200>
+  /**
+   * patchApiB2BAdminEmployeesEmployeeIdRole - Endpoint is used for updating employee role., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, EMPLOYEE_ROLE_UPDATE]</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_ROLE_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminEmployeesEmployeeIdRole'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.Responses.$200>
+  /**
+   * patchApiB2BAdminEmployeesEmployeeIdServicesServiceId - Endpoint is used for updating employee service informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, EMPLOYEE_UPDATE]</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminEmployeesEmployeeIdServicesServiceId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.Responses.$200>
+  /**
+   * postApiB2BAdminImportsSalons - Endpoint is used for importing salons from a file., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, IMPORT_SALON]</li><li>partner</li></ul>
+   */
+  'postApiB2BAdminImportsSalons'(
+    parameters?: Parameters<Paths.PostApiB2BAdminImportsSalons.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminImportsSalons.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminImportsSalons.Responses.$200>
+  /**
+   * getApiB2BAdminReviews - Endpoint is used for getting an array of reviews. It is possible to use search (salonName, review.reviewMessage), filter (verificationStatus, deleted, salonCountryCode, toxicityScoreFrom, toxicityScoreTo), order (toxicityScore) and pagination., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, REVIEW_READ]</li><li>partner</li></ul>
+   */
+  'getApiB2BAdminReviews'(
+    parameters?: Parameters<Paths.GetApiB2BAdminReviews.QueryParameters & Paths.GetApiB2BAdminReviews.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminReviews.Responses.$200>
+  /**
+   * getApiB2BAdminReviewsReviewId - permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, REVIEW_READ]</li><li>partner</li></ul>
+   */
+  'getApiB2BAdminReviewsReviewId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminReviewsReviewId.PathParameters & Paths.GetApiB2BAdminReviewsReviewId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminReviewsReviewId.Responses.$200>
+  /**
+   * deleteApiB2BAdminReviewsReviewId - Endpoint is used for removing specific salon review., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, REVIEW_DELETE]</li><li>partner</li></ul>
+   */
+  'deleteApiB2BAdminReviewsReviewId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminReviewsReviewId.PathParameters & Paths.DeleteApiB2BAdminReviewsReviewId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminReviewsReviewId.Responses.$200>
+  /**
+   * patchApiB2BAdminReviewsReviewIdVerification - Endpoint is used for verifying salon review., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, REVIEW_VERIFY]</li><li>partner</li></ul>
+   */
+  'patchApiB2BAdminReviewsReviewIdVerification'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminReviewsReviewIdVerification.PathParameters & Paths.PatchApiB2BAdminReviewsReviewIdVerification.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminReviewsReviewIdVerification.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminReviewsReviewIdVerification.Responses.$200>
+  /**
+   * getApiB2BV1UsersPartners - permissions:<ul><li>notino: [NOTINO_ADMIN, LOGIN_AS_PARTNER]</li><li>partner</li></ul>
+   */
+  'getApiB2BV1UsersPartners'(
+    parameters?: Parameters<Paths.GetApiB2BV1UsersPartners.QueryParameters & Paths.GetApiB2BV1UsersPartners.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1UsersPartners.Responses.$200>
+  /**
+   * postApiB2BV1SalonsSalonIdCalendarEventsReservations - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_CREATE]</li></ul>
+   */
+  'postApiB2BV1SalonsSalonIdCalendarEventsReservations'(
+    parameters?: Parameters<Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+   */
+  'patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
+  /**
+   * deleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_DELETE]</li></ul>
+   */
+  'deleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId'(
+    parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+   */
+  'patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for updating a calendarBulkEvent., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+   */
+  'patchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+  /**
+   * deleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for removing calendarBulkEvents., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_DELETE]</li></ul>
+   */
+  'deleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
+    parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdInvoice - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_BILLING_UPDATE]</li></ul>
+   */
+  'patchApiB2BV1SalonsSalonIdInvoice'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdInvoice.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdInvoice.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdInvoice.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdInvoice.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdCategories - Endpoint is used for updating salon categories., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+   */
+  'patchApiB2BV1SalonsSalonIdCategories'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCategories.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCategories.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdCategories.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCategories.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdRequestPublication - Endpoint is used for creating salon publication requests., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+   */
+  'patchApiB2BV1SalonsSalonIdRequestPublication'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdUnpublish - Endpoint is used for unpublishing a salon., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+   */
+  'patchApiB2BV1SalonsSalonIdUnpublish'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdUnpublish.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdUnpublish.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdUnpublish.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdUnpublish.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdServices - Endpoint is used for updating salon services., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SERVICE_CREATE, SERVICE_DELETE]</li></ul>
+   */
+  'patchApiB2BV1SalonsSalonIdServices'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdServices.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdServices.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdServices.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdServices.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdSettings - Endpoint is used for setting a salon and services settings., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+   */
+  'patchApiB2BV1SalonsSalonIdSettings'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdSettings.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdSettings.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdSettings.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdSettings.Responses.$200>
+  /**
+   * postApiB2BV1ServicesCategoryServiceSuggest - Endpoint is used for sending requests for a new service, permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
+   */
+  'postApiB2BV1ServicesCategoryServiceSuggest'(
+    parameters?: Parameters<Paths.PostApiB2BV1ServicesCategoryServiceSuggest.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1ServicesCategoryServiceSuggest.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1ServicesCategoryServiceSuggest.Responses.$200>
+  /**
+   * postApiB2BV1EmployeesInvite - Endpoint is used to send an invitation to the salon by email for an employee., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_CREATE]</li></ul>
    */
   'postApiB2BV1EmployeesInvite'(
     parameters?: Parameters<Paths.PostApiB2BV1EmployeesInvite.HeaderParameters> | null,
@@ -63786,7 +63794,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1EmployeesInvite.Responses.$200>
   /**
-   * patchApiB2BV1EmployeesEmployeeIdReorder - permissions:<ul><li>user</li></ul>
+   * patchApiB2BV1EmployeesEmployeeIdReorder - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
    */
   'patchApiB2BV1EmployeesEmployeeIdReorder'(
     parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdReorder.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdReorder.HeaderParameters> | null,
@@ -63794,7 +63802,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdReorder.Responses.$200>
   /**
-   * patchApiB2BV1EmployeesEmployeeIdRole - Endpoint is used for updating employee role., permissions:<ul><li>user</li></ul>
+   * patchApiB2BV1EmployeesEmployeeIdRole - Endpoint is used for updating employee role., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_ROLE_UPDATE]</li></ul>
    */
   'patchApiB2BV1EmployeesEmployeeIdRole'(
     parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdRole.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdRole.HeaderParameters> | null,
@@ -63802,7 +63810,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdRole.Responses.$200>
   /**
-   * patchApiB2BV1EmployeesEmployeeIdServices - permissions:<ul><li>user</li></ul>
+   * patchApiB2BV1EmployeesEmployeeIdServices - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
    */
   'patchApiB2BV1EmployeesEmployeeIdServices'(
     parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdServices.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdServices.HeaderParameters> | null,
@@ -63810,21 +63818,13 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdServices.Responses.$200>
   /**
-   * patchApiB2BV1EmployeesEmployeeIdServicesServiceId - Endpoint is used for updating employee service informations., permissions:<ul><li>user</li></ul>
+   * patchApiB2BV1EmployeesEmployeeIdServicesServiceId - Endpoint is used for updating employee service informations., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
    */
   'patchApiB2BV1EmployeesEmployeeIdServicesServiceId'(
     parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.Responses.$200>
-  /**
-   * getApiB2BV1RolesSalon - Endpoint is used for getting salon roles., permissions:<ul><li>user</li></ul>
-   */
-  'getApiB2BV1RolesSalon'(
-    parameters?: Parameters<Paths.GetApiB2BV1RolesSalon.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BV1RolesSalon.Responses.$200>
 }
 
 export interface PathsDictionary {
@@ -63938,7 +63938,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCategories.Responses.$200>
     /**
-     * postApiB2BAdminEnumsCategories - Endpoint is used for creating an category., permissions:<ul><li>user</li></ul>
+     * postApiB2BAdminEnumsCategories - Endpoint is used for creating an category., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminEnumsCategories.HeaderParameters> | null,
@@ -63956,7 +63956,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
     /**
-     * patchApiB2BAdminEnumsCategoriesCategoryId - Endpoint is used for editing category informations., permissions:<ul><li>user</li></ul>
+     * patchApiB2BAdminEnumsCategoriesCategoryId - Endpoint is used for editing category informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
@@ -63964,7 +63964,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
     /**
-     * deleteApiB2BAdminEnumsCategoriesCategoryId - Endpoint is used for removing specific category. Succeds only if category or any of its children are not used., permissions:<ul><li>user</li></ul>
+     * deleteApiB2BAdminEnumsCategoriesCategoryId - Endpoint is used for removing specific category. Succeds only if category or any of its children are not used., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
@@ -63982,7 +63982,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200>
     /**
-     * postApiB2BAdminEnumsCosmetics - Endpoint is used for creating an cosmetic., permissions:<ul><li>user</li></ul>
+     * postApiB2BAdminEnumsCosmetics - Endpoint is used for creating an cosmetic., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminEnumsCosmetics.HeaderParameters> | null,
@@ -64000,7 +64000,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCosmeticsCosmeticId.Responses.$200>
     /**
-     * patchApiB2BAdminEnumsCosmeticsCosmeticId - Endpoint is used for updating an cosmetic informations., permissions:<ul><li>user</li></ul>
+     * patchApiB2BAdminEnumsCosmeticsCosmeticId - Endpoint is used for updating an cosmetic informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCosmeticsCosmeticId.PathParameters & Paths.PatchApiB2BAdminEnumsCosmeticsCosmeticId.HeaderParameters> | null,
@@ -64008,7 +64008,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEnumsCosmeticsCosmeticId.Responses.$200>
     /**
-     * deleteApiB2BAdminEnumsCosmeticsCosmeticId - Endpoint is used for removing an cosmetic., permissions:<ul><li>user</li></ul>
+     * deleteApiB2BAdminEnumsCosmeticsCosmeticId - Endpoint is used for removing an cosmetic., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.PathParameters & Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.HeaderParameters> | null,
@@ -64026,7 +64026,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsLanguages.Responses.$200>
     /**
-     * postApiB2BAdminEnumsLanguages - Endpoint is used for creating an language., permissions:<ul><li>user</li></ul>
+     * postApiB2BAdminEnumsLanguages - Endpoint is used for creating an language., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminEnumsLanguages.HeaderParameters> | null,
@@ -64044,7 +64044,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsLanguagesLanguageId.Responses.$200>
     /**
-     * patchApiB2BAdminEnumsLanguagesLanguageId - Endpoint is used for updating an language data., permissions:<ul><li>user</li></ul>
+     * patchApiB2BAdminEnumsLanguagesLanguageId - Endpoint is used for updating an language data., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEnumsLanguagesLanguageId.PathParameters & Paths.PatchApiB2BAdminEnumsLanguagesLanguageId.HeaderParameters> | null,
@@ -64052,7 +64052,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEnumsLanguagesLanguageId.Responses.$200>
     /**
-     * deleteApiB2BAdminEnumsLanguagesLanguageId - Endpoint is used for removing an language., permissions:<ul><li>user</li></ul>
+     * deleteApiB2BAdminEnumsLanguagesLanguageId - Endpoint is used for removing an language., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.PathParameters & Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.HeaderParameters> | null,
@@ -64070,7 +64070,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsSupportContacts.Responses.$200>
     /**
-     * postApiB2BAdminEnumsSupportContacts - Endpoint is used for creating an support contact., permissions:<ul><li>user</li></ul>
+     * postApiB2BAdminEnumsSupportContacts - Endpoint is used for creating an support contact., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminEnumsSupportContacts.HeaderParameters> | null,
@@ -64088,7 +64088,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsSupportContactsSupportContactId.Responses.$200>
     /**
-     * patchApiB2BAdminEnumsSupportContactsSupportContactId - Endpoint is used for updating support contact informations., permissions:<ul><li>user</li></ul>
+     * patchApiB2BAdminEnumsSupportContactsSupportContactId - Endpoint is used for updating support contact informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.PathParameters & Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.HeaderParameters> | null,
@@ -64096,7 +64096,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.Responses.$200>
     /**
-     * deleteApiB2BAdminEnumsSupportContactsSupportContactId - Endpoint is used for removing an support contact., permissions:<ul><li>user</li></ul>
+     * deleteApiB2BAdminEnumsSupportContactsSupportContactId - Endpoint is used for removing an support contact., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.PathParameters & Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.HeaderParameters> | null,
@@ -64114,7 +64114,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoryParameters.Responses.$200>
     /**
-     * postApiB2BAdminEnumsCategoryParameters - Endpoint is used for creating an category parameter., permissions:<ul><li>user</li></ul>
+     * postApiB2BAdminEnumsCategoryParameters - Endpoint is used for creating an category parameter., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminEnumsCategoryParameters.HeaderParameters> | null,
@@ -64132,7 +64132,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200>
     /**
-     * patchApiB2BAdminEnumsCategoryParametersCategoryParameterId - Endpoint is used for updating an category parameter informations., permissions:<ul><li>user</li></ul>
+     * patchApiB2BAdminEnumsCategoryParametersCategoryParameterId - Endpoint is used for updating an category parameter informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoryParametersCategoryParameterId.PathParameters & Paths.PatchApiB2BAdminEnumsCategoryParametersCategoryParameterId.HeaderParameters> | null,
@@ -64140,7 +64140,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200>
     /**
-     * deleteApiB2BAdminEnumsCategoryParametersCategoryParameterId - Endpoint is used for removing category parameter. Category parameter can be deleted only if is not used., permissions:<ul><li>user</li></ul>
+     * deleteApiB2BAdminEnumsCategoryParametersCategoryParameterId - Endpoint is used for removing category parameter. Category parameter can be deleted only if is not used., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.HeaderParameters> | null,
@@ -64158,7 +64158,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsContacts.Responses.$200>
     /**
-     * postApiB2BAdminEnumsContacts - Endpoint is used for creating an contact., permissions:<ul><li>user</li></ul>
+     * postApiB2BAdminEnumsContacts - Endpoint is used for creating an contact., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminEnumsContacts.HeaderParameters> | null,
@@ -64176,7 +64176,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsContactsContactId.Responses.$200>
     /**
-     * patchApiB2BAdminEnumsContactsContactId - Endpoint is used for updating an contact informations., permissions:<ul><li>user</li></ul>
+     * patchApiB2BAdminEnumsContactsContactId - Endpoint is used for updating an contact informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEnumsContactsContactId.PathParameters & Paths.PatchApiB2BAdminEnumsContactsContactId.HeaderParameters> | null,
@@ -64184,7 +64184,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEnumsContactsContactId.Responses.$200>
     /**
-     * deleteApiB2BAdminEnumsContactsContactId - Endpoint is used for removing an contact., permissions:<ul><li>user</li></ul>
+     * deleteApiB2BAdminEnumsContactsContactId - Endpoint is used for removing an contact., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsContactsContactId.PathParameters & Paths.DeleteApiB2BAdminEnumsContactsContactId.HeaderParameters> | null,
@@ -65104,64 +65104,9 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiMaintenanceHealth.Responses.$200>
   }
-  ['/api/b2b/admin/users/']: {
-    /**
-     * getApiB2BAdminUsers - Endpoint is used for getting an array of users.
-     * 	It is possible to search by (firstName, lastName, email, phone), order (firstName, lastName, activatedAt, roleName, email), filter (roleID) and to use pagination., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminUsers.QueryParameters & Paths.GetApiB2BAdminUsers.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminUsers.Responses.$200>
-    /**
-     * postApiB2BAdminUsers - Endpoint is used for creating a user., permissions:<ul><li>user</li></ul>
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BAdminUsers.HeaderParameters> | null,
-      data?: Paths.PostApiB2BAdminUsers.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BAdminUsers.Responses.$200>
-  }
-  ['/api/b2b/admin/users/notino-users']: {
-    /**
-     * getApiB2BAdminUsersNotinoUsers - Endpoint is used for getting an array of notino users., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminUsersNotinoUsers.QueryParameters & Paths.GetApiB2BAdminUsersNotinoUsers.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminUsersNotinoUsers.Responses.$200>
-  }
-  ['/api/b2b/admin/users/{userID}']: {
-    /**
-     * getApiB2BAdminUsersUserId - Endpoint is used for getting an user detail., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters & Paths.GetApiB2BAdminUsersUserId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
-    /**
-     * patchApiB2BAdminUsersUserId - Endpoint is used for updating user informations., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
-    /**
-     * deleteApiB2BAdminUsersUserId - Endpoint is used for removing user accounts., permissions:<ul><li>user</li></ul>
-     */
-    'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserId.Responses.$200>
-  }
   ['/api/b2b/admin/users/{userID}/pending-employee-invites']: {
     /**
-     * getApiB2BAdminUsersUserIdPendingEmployeeInvites - Endpoint is used for getting an array of pending employee invites., permissions:<ul><li>user</li></ul>
+     * getApiB2BAdminUsersUserIdPendingEmployeeInvites - Endpoint is used for getting an array of pending employee invites., permissions:<ul><li>notino</li><li>partner</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.PathParameters & Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.HeaderParameters> | null,
@@ -65169,658 +65114,9 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.Responses.$200>
   }
-  ['/api/b2b/admin/users/{userID}/role']: {
-    /**
-     * patchApiB2BAdminUsersUserIdRole - Endpoint is used for updating user role., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserIdRole.PathParameters & Paths.PatchApiB2BAdminUsersUserIdRole.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminUsersUserIdRole.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminUsersUserIdRole.Responses.$200>
-  }
-  ['/api/b2b/admin/enums/categories/{categoryID}/reorder']: {
-    /**
-     * patchApiB2BAdminEnumsCategoriesCategoryIdReorder - Endpoint is used for reordering category items., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.Responses.$200>
-  }
-  ['/api/b2b/admin/roles/system-user']: {
-    /**
-     * getApiB2BAdminRolesSystemUser - Endpoint is used for getting system user roles., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminRolesSystemUser.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminRolesSystemUser.Responses.$200>
-  }
-  ['/api/b2b/admin/roles/salon']: {
-    /**
-     * getApiB2BAdminRolesSalon - Endpoint is used for getting salon roles., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminRolesSalon.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminRolesSalon.Responses.$200>
-  }
-  ['/api/b2b/admin/files/sign-urls']: {
-    /**
-     * postApiB2BAdminFilesSignUrls - Endpoint is used for signing AWS urls of files., permissions:<ul><li>user</li></ul>
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BAdminFilesSignUrls.HeaderParameters> | null,
-      data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/calendar-events/reservations/']: {
-    /**
-     * postApiB2BAdminSalonsSalonIdCalendarEventsReservations - permissions:<ul><li>user</li></ul>
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
-      data?: Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}']: {
-    /**
-     * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
-    /**
-     * deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user</li></ul>
-     */
-    'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state']: {
-    /**
-     * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/calendar-events/']: {
-    /**
-     * getApiB2BAdminSalonsSalonIdCalendarEvents - Endpoint is used for getting an array of calendar events (from provided date range). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
-    /**
-     * postApiB2BAdminSalonsSalonIdCalendarEvents - Endpoint is used for creating calendar events., permissions:<ul><li>user</li></ul>
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
-      data?: Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/calendar-events/paginated']: {
-    /**
-     * getApiB2BAdminSalonsSalonIdCalendarEventsPaginated - Endpoint is used for getting an array of calendar events (paginated list starting/ending on provided date). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}']: {
-    /**
-     * getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for getting calendar event detail., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
-    /**
-     * patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for updating calendar events., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
-    /**
-     * deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for removing calendar events., permissions:<ul><li>user</li></ul>
-     */
-    'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}']: {
-    /**
-     * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for updating a calendarBulkEvent., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
-    /**
-     * deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for removing calendarBulkEvents., permissions:<ul><li>user</li></ul>
-     */
-    'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/']: {
-    /**
-     * getApiB2BAdminSalons - Endpoint is used for getting an array of salons.
-     * 	It possible to use search (name, zipCode, city, street, streetNumber, businessID),
-     * 	filter (categoryFirstLevelIDs, statuses, countryCode, pendingPublication, createType, sourceTypes, lastUpdatedAtFrom, lastUpdatedAtTo, hasSetOpeningHours, assignedUserID, premiumSourceUserType),
-     * 	order (name, fillingProgress, createdAt) and pagination., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminSalons.QueryParameters & Paths.GetApiB2BAdminSalons.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminSalons.Responses.$200>
-    /**
-     * postApiB2BAdminSalons - permissions:<ul><li>user</li></ul>
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BAdminSalons.HeaderParameters> | null,
-      data?: Paths.PostApiB2BAdminSalons.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BAdminSalons.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/basic']: {
-    /**
-     * getApiB2BAdminSalonsBasic - Endpoint is used for getting an array of salons (type of BASIC). It is possible to search by salon name and to use pagination., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminSalonsBasic.QueryParameters & Paths.GetApiB2BAdminSalonsBasic.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminSalonsBasic.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/basic-suggestion']: {
-    /**
-     * getApiB2BAdminSalonsBasicSuggestion - Endpoint is used for getting an array of basic salon suggestions., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminSalonsBasicSuggestion.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminSalonsBasicSuggestion.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/rejected-suggestions']: {
-    /**
-     * getApiB2BAdminSalonsRejectedSuggestions - Endpoint is used for getting an array of rejected salon suggestions. It is possible to use search (lastName, firstName, email, name), order (userLastName, userEmail, salonName, createdAt) and pagination., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminSalonsRejectedSuggestions.QueryParameters & Paths.GetApiB2BAdminSalonsRejectedSuggestions.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminSalonsRejectedSuggestions.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}']: {
-    /**
-     * getApiB2BAdminSalonsSalonId - Endpoint is used for getting a salon detail informations., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonId.PathParameters & Paths.GetApiB2BAdminSalonsSalonId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonId.Responses.$200>
-    /**
-     * patchApiB2BAdminSalonsSalonId - Endpoint is used for updating salon informations., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonId.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminSalonsSalonId.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonId.Responses.$200>
-    /**
-     * deleteApiB2BAdminSalonsSalonId - Endpoint is used for removing specific salon., permissions:<ul><li>user</li></ul>
-     */
-    'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/basic']: {
-    /**
-     * getApiB2BAdminSalonsSalonIdBasic - Endpoint is used for getting salon (type of BASIC) detail., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdBasic.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdBasic.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdBasic.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/history']: {
-    /**
-     * getApiB2BAdminSalonsSalonIdHistory - Endpoint is used for getting specific salon historical data (max 30 days in past). In query parameters can be set dateFrom and dateTo. Those dates has to be set correctly (dateFrom cannot be greater than dateTo)., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdHistory.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdHistory.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdHistory.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdHistory.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/dashboard']: {
-    /**
-     * getApiB2BAdminSalonsSalonIdDashboard - Endpoint is used for getting specific salon informations for dashboard (rating stats, employees, categories, etc...)., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdDashboard.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdDashboard.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdDashboard.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/open-hours-note']: {
-    /**
-     * patchApiB2BAdminSalonsSalonIdOpenHoursNote - Endpoint is used for setting salon opening hours note., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/invoice']: {
-    /**
-     * patchApiB2BAdminSalonsSalonIdInvoice - Endpoint is used for updating salon invoicing informations., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdInvoice.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminSalonsSalonIdInvoice.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/categories']: {
-    /**
-     * patchApiB2BAdminSalonsSalonIdCategories - Endpoint is used for updating salon categories., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCategories.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCategories.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminSalonsSalonIdCategories.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCategories.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/request-publication']: {
-    /**
-     * patchApiB2BAdminSalonsSalonIdRequestPublication - Endpoint is used for creating salon publication requests., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/resolve-publication']: {
-    /**
-     * patchApiB2BAdminSalonsSalonIdResolvePublication - Endpoint is used for resolving publication requests., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/unpublish']: {
-    /**
-     * patchApiB2BAdminSalonsSalonIdUnpublish - Endpoint is used for unpublishing a salon., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/accept-employee-invite']: {
-    /**
-     * patchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite - Endpoint is used for accepting / rejecting an employee invite., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/services']: {
-    /**
-     * patchApiB2BAdminSalonsSalonIdServices - Endpoint is used for updating salon services., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdServices.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdServices.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdServices.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/basic-suggestion']: {
-    /**
-     * patchApiB2BAdminSalonsSalonIdBasicSuggestion - Endpoint is used for pairing an user with suggested salon., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/assigned-user']: {
-    /**
-     * patchApiB2BAdminSalonsSalonIdAssignedUser - Endpoint is used for updating salon assigned user. Only notino users can be assigned to salon., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/settings']: {
-    /**
-     * patchApiB2BAdminSalonsSalonIdSettings - Endpoint is used for setting a salon and services settings., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdSettings.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdSettings.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminSalonsSalonIdSettings.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdSettings.Responses.$200>
-  }
-  ['/api/b2b/admin/salons/{salonID}/rejected-suggestions']: {
-    /**
-     * deleteApiB2BAdminSalonsSalonIdRejectedSuggestions - Endpoint is used for removing rejected suggested salons., permissions:<ul><li>user</li></ul>
-     */
-    'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.Responses.$200>
-  }
-  ['/api/b2b/admin/services/']: {
-    /**
-     * getApiB2BAdminServices - Endpoint is used for getting an array of services., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
-  }
-  ['/api/b2b/admin/services/{serviceID}']: {
-    /**
-     * getApiB2BAdminServicesServiceId - Endpoint is used for getting a service detail., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminServicesServiceId.Responses.$200>
-    /**
-     * patchApiB2BAdminServicesServiceId - Endpoint is used for updating a service., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminServicesServiceId.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminServicesServiceId.Responses.$200>
-    /**
-     * deleteApiB2BAdminServicesServiceId - Endpoint is used for removing a service., permissions:<ul><li>user</li></ul>
-     */
-    'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
-  }
-  ['/api/b2b/admin/services/category-service-suggest']: {
-    /**
-     * postApiB2BAdminServicesCategoryServiceSuggest - Endpoint is used for sending requests for a new service, permissions:<ul><li>user</li></ul>
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BAdminServicesCategoryServiceSuggest.HeaderParameters> | null,
-      data?: Paths.PostApiB2BAdminServicesCategoryServiceSuggest.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BAdminServicesCategoryServiceSuggest.Responses.$200>
-  }
-  ['/api/b2b/admin/customers/']: {
-    /**
-     * getApiB2BAdminCustomers - Endpoint is used for getting an array of customers. Customers are returned based on relevant permissions. It is possible to use search (firstName, lastName, phone, email), filter (salonID), order (lastName, createdAt) and pagination., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminCustomers.QueryParameters & Paths.GetApiB2BAdminCustomers.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminCustomers.Responses.$200>
-    /**
-     * postApiB2BAdminCustomers - Endpoint is used for creating customer., permissions:<ul><li>user</li></ul>
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BAdminCustomers.HeaderParameters> | null,
-      data?: Paths.PostApiB2BAdminCustomers.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BAdminCustomers.Responses.$200>
-  }
-  ['/api/b2b/admin/customers/{customerID}']: {
-    /**
-     * getApiB2BAdminCustomersCustomerId - permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminCustomersCustomerId.PathParameters & Paths.GetApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminCustomersCustomerId.Responses.$200>
-    /**
-     * patchApiB2BAdminCustomersCustomerId - Endpoint is used for updating customer information., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminCustomersCustomerId.PathParameters & Paths.PatchApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminCustomersCustomerId.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminCustomersCustomerId.Responses.$200>
-    /**
-     * deleteApiB2BAdminCustomersCustomerId - Endpoint is used for removing specific customer., permissions:<ul><li>user</li></ul>
-     */
-    'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BAdminCustomersCustomerId.PathParameters & Paths.DeleteApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.DeleteApiB2BAdminCustomersCustomerId.Responses.$200>
-  }
-  ['/api/b2b/admin/employees/']: {
-    /**
-     * getApiB2BAdminEmployees - Endpoint is used for getting an array of employees. Employees are returned based on relevant permissions. It is possible to use search (firtName, lastName, email), filter (salonID, serviceID, accountState), order (lastName, createdAt or status) and to use pagination., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminEmployees.QueryParameters & Paths.GetApiB2BAdminEmployees.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminEmployees.Responses.$200>
-    /**
-     * postApiB2BAdminEmployees - Endpoint is used for creating an employee., permissions:<ul><li>user</li></ul>
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BAdminEmployees.HeaderParameters> | null,
-      data?: Paths.PostApiB2BAdminEmployees.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BAdminEmployees.Responses.$200>
-  }
-  ['/api/b2b/admin/employees/{employeeID}']: {
-    /**
-     * getApiB2BAdminEmployeesEmployeeId - Endpoint is used for getting employee detail informations., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.GetApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200>
-    /**
-     * patchApiB2BAdminEmployeesEmployeeId - Endpoint is used for updating employee informations., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeId.Responses.$200>
-    /**
-     * deleteApiB2BAdminEmployeesEmployeeId - Endpoint is used for removing specific employee., permissions:<ul><li>user</li></ul>
-     */
-    'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.DeleteApiB2BAdminEmployeesEmployeeId.Responses.$200>
-  }
-  ['/api/b2b/admin/employees/invite']: {
-    /**
-     * postApiB2BAdminEmployeesInvite - Endpoint is used to send an invitation to the salon by email for an employee., permissions:<ul><li>user</li></ul>
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BAdminEmployeesInvite.HeaderParameters> | null,
-      data?: Paths.PostApiB2BAdminEmployeesInvite.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BAdminEmployeesInvite.Responses.$200>
-  }
-  ['/api/b2b/admin/employees/{employeeID}/reorder']: {
-    /**
-     * patchApiB2BAdminEmployeesEmployeeIdReorder - permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.Responses.$200>
-  }
-  ['/api/b2b/admin/employees/{employeeID}/role']: {
-    /**
-     * patchApiB2BAdminEmployeesEmployeeIdRole - Endpoint is used for updating employee role., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.Responses.$200>
-  }
-  ['/api/b2b/admin/employees/{employeeID}/services/{serviceID}']: {
-    /**
-     * patchApiB2BAdminEmployeesEmployeeIdServicesServiceId - Endpoint is used for updating employee service informations., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.Responses.$200>
-  }
-  ['/api/b2b/admin/imports/salons']: {
-    /**
-     * postApiB2BAdminImportsSalons - Endpoint is used for importing salons from a file., permissions:<ul><li>user</li></ul>
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BAdminImportsSalons.HeaderParameters> | null,
-      data?: Paths.PostApiB2BAdminImportsSalons.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BAdminImportsSalons.Responses.$200>
-  }
-  ['/api/b2b/admin/notino-dashboard/']: {
-    /**
-     * getApiB2BAdminNotinoDashboard - Endpoint is used for getting statistics. (Counts of pending salons, declined salons, etc...), permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboard.QueryParameters & Paths.GetApiB2BAdminNotinoDashboard.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboard.Responses.$200>
-  }
-  ['/api/b2b/admin/notino-dashboard/salon-development-time-stats']: {
-    /**
-     * getApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats - Endpoint is used for getting statistics of salons development in time., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.Responses.$200>
-  }
-  ['/api/b2b/admin/calendar-sync/sync-token']: {
-    /**
-     * postApiB2BAdminCalendarSyncSyncToken - Endpoint is used for saving refresh tokens from third party services., permissions:<ul><li>user</li></ul>
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BAdminCalendarSyncSyncToken.HeaderParameters> | null,
-      data?: Paths.PostApiB2BAdminCalendarSyncSyncToken.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BAdminCalendarSyncSyncToken.Responses.$200>
-  }
-  ['/api/b2b/admin/reviews/']: {
-    /**
-     * getApiB2BAdminReviews - Endpoint is used for getting an array of reviews. It is possible to use search (salonName, review.reviewMessage), filter (verificationStatus, deleted, salonCountryCode, toxicityScoreFrom, toxicityScoreTo), order (toxicityScore) and pagination., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminReviews.QueryParameters & Paths.GetApiB2BAdminReviews.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminReviews.Responses.$200>
-  }
-  ['/api/b2b/admin/reviews/{reviewID}']: {
-    /**
-     * getApiB2BAdminReviewsReviewId - permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminReviewsReviewId.PathParameters & Paths.GetApiB2BAdminReviewsReviewId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminReviewsReviewId.Responses.$200>
-    /**
-     * deleteApiB2BAdminReviewsReviewId - Endpoint is used for removing specific salon review., permissions:<ul><li>user</li></ul>
-     */
-    'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BAdminReviewsReviewId.PathParameters & Paths.DeleteApiB2BAdminReviewsReviewId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.DeleteApiB2BAdminReviewsReviewId.Responses.$200>
-  }
-  ['/api/b2b/admin/reviews/{reviewID}/verification']: {
-    /**
-     * patchApiB2BAdminReviewsReviewIdVerification - Endpoint is used for verifying salon review., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminReviewsReviewIdVerification.PathParameters & Paths.PatchApiB2BAdminReviewsReviewIdVerification.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BAdminReviewsReviewIdVerification.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminReviewsReviewIdVerification.Responses.$200>
-  }
-  ['/api/b2b/v1/users/partners']: {
-    /**
-     * getApiB2BV1UsersPartners - permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BV1UsersPartners.QueryParameters & Paths.GetApiB2BV1UsersPartners.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BV1UsersPartners.Responses.$200>
-  }
   ['/api/b2b/v1/users/{userID}']: {
     /**
-     * getApiB2BV1UsersUserId - Endpoint is used for getting an user detail., permissions:<ul><li>user</li></ul>
+     * getApiB2BV1UsersUserId - Endpoint is used for getting an user detail., permissions:<ul><li>notino</li><li>partner</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters & Paths.GetApiB2BV1UsersUserId.HeaderParameters> | null,
@@ -65828,7 +65124,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1UsersUserId.Responses.$200>
     /**
-     * patchApiB2BV1UsersUserId - permissions:<ul><li>user</li></ul>
+     * patchApiB2BV1UsersUserId - permissions:<ul><li>notino</li><li>partner</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters & Paths.PatchApiB2BV1UsersUserId.HeaderParameters> | null,
@@ -65836,7 +65132,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
     /**
-     * deleteApiB2BV1UsersUserId - Endpoint is used for removing user accounts., permissions:<ul><li>user</li></ul>
+     * deleteApiB2BV1UsersUserId - Endpoint is used for removing user accounts., permissions:<ul><li>notino</li><li>partner</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserId.PathParameters & Paths.DeleteApiB2BV1UsersUserId.HeaderParameters> | null,
@@ -65846,7 +65142,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/users/{userID}/pending-employee-invites']: {
     /**
-     * getApiB2BV1UsersUserIdPendingEmployeeInvites - Endpoint is used for getting an array of pending employee invites., permissions:<ul><li>user</li></ul>
+     * getApiB2BV1UsersUserIdPendingEmployeeInvites - Endpoint is used for getting an array of pending employee invites., permissions:<ul><li>notino</li><li>partner</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.PathParameters & Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.HeaderParameters> | null,
@@ -65854,9 +65150,410 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.Responses.$200>
   }
+  ['/api/b2b/admin/users/{userID}']: {
+    /**
+     * getApiB2BAdminUsersUserId - Endpoint is used for getting an user detail., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters & Paths.GetApiB2BAdminUsersUserId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
+    /**
+     * patchApiB2BAdminUsersUserId - Endpoint is used for updating user informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_EDIT]</li><li>partner</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
+    /**
+     * deleteApiB2BAdminUsersUserId - Endpoint is used for removing user accounts., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_DELETE]</li><li>partner</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserId.Responses.$200>
+  }
+  ['/api/b2b/admin/roles/salon']: {
+    /**
+     * getApiB2BAdminRolesSalon - Endpoint is used for getting salon roles., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminRolesSalon.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminRolesSalon.Responses.$200>
+  }
+  ['/api/b2b/admin/files/sign-urls']: {
+    /**
+     * postApiB2BAdminFilesSignUrls - Endpoint is used for signing AWS urls of files., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminFilesSignUrls.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdCalendarEvents - Endpoint is used for getting an array of calendar events (from provided date range). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
+    /**
+     * postApiB2BAdminSalonsSalonIdCalendarEvents - Endpoint is used for creating calendar events., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_CREATE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_CREATE]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/paginated']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdCalendarEventsPaginated - Endpoint is used for getting an array of calendar events (paginated list starting/ending on provided date). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for getting calendar event detail., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+    /**
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for updating calendar events., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_UPDATE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+    /**
+     * deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for removing calendar events., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_DELETE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_DELETE]</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/']: {
+    /**
+     * getApiB2BAdminSalons - Endpoint is used for getting an array of salons.
+     * 	It possible to use search (name, zipCode, city, street, streetNumber, businessID),
+     * 	filter (categoryFirstLevelIDs, statuses, countryCode, pendingPublication, createType, sourceTypes, lastUpdatedAtFrom, lastUpdatedAtTo, hasSetOpeningHours, assignedUserID, premiumSourceUserType),
+     * 	order (name, fillingProgress, createdAt) and pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalons.QueryParameters & Paths.GetApiB2BAdminSalons.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalons.Responses.$200>
+    /**
+     * postApiB2BAdminSalons - permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminSalons.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminSalons.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminSalons.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/basic']: {
+    /**
+     * getApiB2BAdminSalonsBasic - Endpoint is used for getting an array of salons (type of BASIC). It is possible to search by salon name and to use pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsBasic.QueryParameters & Paths.GetApiB2BAdminSalonsBasic.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsBasic.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/basic-suggestion']: {
+    /**
+     * getApiB2BAdminSalonsBasicSuggestion - Endpoint is used for getting an array of basic salon suggestions., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsBasicSuggestion.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsBasicSuggestion.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/rejected-suggestions']: {
+    /**
+     * getApiB2BAdminSalonsRejectedSuggestions - Endpoint is used for getting an array of rejected salon suggestions. It is possible to use search (lastName, firstName, email, name), order (userLastName, userEmail, salonName, createdAt) and pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsRejectedSuggestions.QueryParameters & Paths.GetApiB2BAdminSalonsRejectedSuggestions.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsRejectedSuggestions.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}']: {
+    /**
+     * getApiB2BAdminSalonsSalonId - Endpoint is used for getting a salon detail informations., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonId.PathParameters & Paths.GetApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonId.Responses.$200>
+    /**
+     * patchApiB2BAdminSalonsSalonId - Endpoint is used for updating salon informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_UPDATE]</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonId.Responses.$200>
+    /**
+     * deleteApiB2BAdminSalonsSalonId - Endpoint is used for removing specific salon., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_DELETE]</li><li>partner: [PARTNER_ADMIN, SALON_DELETE]</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/basic']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdBasic - Endpoint is used for getting salon (type of BASIC) detail., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdBasic.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdBasic.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdBasic.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/history']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdHistory - Endpoint is used for getting specific salon historical data (max 30 days in past). In query parameters can be set dateFrom and dateTo. Those dates has to be set correctly (dateFrom cannot be greater than dateTo)., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdHistory.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdHistory.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdHistory.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdHistory.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/dashboard']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdDashboard - Endpoint is used for getting specific salon informations for dashboard (rating stats, employees, categories, etc...)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdDashboard.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdDashboard.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdDashboard.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/accept-employee-invite']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite - Endpoint is used for accepting / rejecting an employee invite., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/basic-suggestion']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdBasicSuggestion - Endpoint is used for pairing an user with suggested salon., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/assigned-user']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdAssignedUser - Endpoint is used for updating salon assigned user. Only notino users can be assigned to salon., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/rejected-suggestions']: {
+    /**
+     * deleteApiB2BAdminSalonsSalonIdRejectedSuggestions - Endpoint is used for removing rejected suggested salons., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.Responses.$200>
+  }
+  ['/api/b2b/admin/services/']: {
+    /**
+     * getApiB2BAdminServices - Endpoint is used for getting an array of services., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
+  }
+  ['/api/b2b/admin/services/{serviceID}']: {
+    /**
+     * getApiB2BAdminServicesServiceId - Endpoint is used for getting a service detail., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminServicesServiceId.Responses.$200>
+    /**
+     * patchApiB2BAdminServicesServiceId - Endpoint is used for updating a service., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SERVICE_UPDATE]</li><li>partner: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminServicesServiceId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminServicesServiceId.Responses.$200>
+    /**
+     * deleteApiB2BAdminServicesServiceId - Endpoint is used for removing a service., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SERVICE_DELETE]</li><li>partner: [PARTNER_ADMIN, SERVICE_DELETE]</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
+  }
+  ['/api/b2b/admin/customers/']: {
+    /**
+     * getApiB2BAdminCustomers - Endpoint is used for getting an array of customers. Customers are returned based on relevant permissions. It is possible to use search (firstName, lastName, phone, email), filter (salonID), order (lastName, createdAt) and pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminCustomers.QueryParameters & Paths.GetApiB2BAdminCustomers.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminCustomers.Responses.$200>
+    /**
+     * postApiB2BAdminCustomers - Endpoint is used for creating customer., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CUSTOMER_CREATE]</li><li>partner: [PARTNER_ADMIN, CUSTOMER_CREATE]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminCustomers.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminCustomers.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminCustomers.Responses.$200>
+  }
+  ['/api/b2b/admin/customers/{customerID}']: {
+    /**
+     * getApiB2BAdminCustomersCustomerId - permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminCustomersCustomerId.PathParameters & Paths.GetApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminCustomersCustomerId.Responses.$200>
+    /**
+     * patchApiB2BAdminCustomersCustomerId - Endpoint is used for updating customer information., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CUSTOMER_UPDATE]</li><li>partner: [PARTNER_ADMIN, CUSTOMER_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminCustomersCustomerId.PathParameters & Paths.PatchApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminCustomersCustomerId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminCustomersCustomerId.Responses.$200>
+    /**
+     * deleteApiB2BAdminCustomersCustomerId - Endpoint is used for removing specific customer., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CUSTOMER_DELETE]</li><li>partner: [PARTNER_ADMIN, CUSTOMER_DELETE]</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminCustomersCustomerId.PathParameters & Paths.DeleteApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminCustomersCustomerId.Responses.$200>
+  }
+  ['/api/b2b/admin/employees/']: {
+    /**
+     * getApiB2BAdminEmployees - Endpoint is used for getting an array of employees. Employees are returned based on relevant permissions. It is possible to use search (firtName, lastName, email), filter (salonID, serviceID, accountState), order (lastName, createdAt or status) and to use pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminEmployees.QueryParameters & Paths.GetApiB2BAdminEmployees.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminEmployees.Responses.$200>
+    /**
+     * postApiB2BAdminEmployees - Endpoint is used for creating an employee., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, EMPLOYEE_CREATE]</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_CREATE]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminEmployees.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminEmployees.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminEmployees.Responses.$200>
+  }
+  ['/api/b2b/admin/employees/{employeeID}']: {
+    /**
+     * getApiB2BAdminEmployeesEmployeeId - Endpoint is used for getting employee detail informations., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.GetApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200>
+    /**
+     * patchApiB2BAdminEmployeesEmployeeId - Endpoint is used for updating employee informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, EMPLOYEE_UPDATE]</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeId.Responses.$200>
+    /**
+     * deleteApiB2BAdminEmployeesEmployeeId - Endpoint is used for removing specific employee., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, EMPLOYEE_DELETE]</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_DELETE]</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminEmployeesEmployeeId.Responses.$200>
+  }
+  ['/api/b2b/admin/notino-dashboard/']: {
+    /**
+     * getApiB2BAdminNotinoDashboard - Endpoint is used for getting statistics. (Counts of pending salons, declined salons, etc...), permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboard.QueryParameters & Paths.GetApiB2BAdminNotinoDashboard.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboard.Responses.$200>
+  }
+  ['/api/b2b/admin/notino-dashboard/salon-development-time-stats']: {
+    /**
+     * getApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats - Endpoint is used for getting statistics of salons development in time., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.Responses.$200>
+  }
+  ['/api/b2b/admin/calendar-sync/sync-token']: {
+    /**
+     * postApiB2BAdminCalendarSyncSyncToken - Endpoint is used for saving refresh tokens from third party services., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminCalendarSyncSyncToken.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminCalendarSyncSyncToken.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminCalendarSyncSyncToken.Responses.$200>
+  }
   ['/api/b2b/v1/files/sign-urls']: {
     /**
-     * postApiB2BV1FilesSignUrls - Endpoint is used for signing AWS urls of files., permissions:<ul><li>user</li></ul>
+     * postApiB2BV1FilesSignUrls - Endpoint is used for signing AWS urls of files., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1FilesSignUrls.HeaderParameters> | null,
@@ -65864,47 +65561,9 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1FilesSignUrls.Responses.$200>
   }
-  ['/api/b2b/v1/salons/{salonID}/calendar-events/reservations/']: {
-    /**
-     * postApiB2BV1SalonsSalonIdCalendarEventsReservations - permissions:<ul><li>user</li></ul>
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
-      data?: Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.Responses.$200>
-  }
-  ['/api/b2b/v1/salons/{salonID}/calendar-events/reservations/{calendarEventID}']: {
-    /**
-     * patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
-    /**
-     * deleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user</li></ul>
-     */
-    'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
-  }
-  ['/api/b2b/v1/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state']: {
-    /**
-     * patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
-  }
   ['/api/b2b/v1/salons/{salonID}/calendar-events/']: {
     /**
-     * getApiB2BV1SalonsSalonIdCalendarEvents - Endpoint is used for getting an array of calendar events (from provided date range). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user</li></ul>
+     * getApiB2BV1SalonsSalonIdCalendarEvents - Endpoint is used for getting an array of calendar events (from provided date range). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.PathParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.HeaderParameters> | null,
@@ -65912,7 +65571,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdCalendarEvents.Responses.$200>
     /**
-     * postApiB2BV1SalonsSalonIdCalendarEvents - Endpoint is used for creating calendar events., permissions:<ul><li>user</li></ul>
+     * postApiB2BV1SalonsSalonIdCalendarEvents - Endpoint is used for creating calendar events., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_CREATE]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1SalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BV1SalonsSalonIdCalendarEvents.HeaderParameters> | null,
@@ -65922,7 +65581,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/salons/{salonID}/calendar-events/paginated']: {
     /**
-     * getApiB2BV1SalonsSalonIdCalendarEventsPaginated - Endpoint is used for getting an array of calendar events (paginated list starting/ending on provided date). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>user</li></ul>
+     * getApiB2BV1SalonsSalonIdCalendarEventsPaginated - Endpoint is used for getting an array of calendar events (paginated list starting/ending on provided date). It is possible to filter by eventType, employeeIDs, categoryIDs, reservationStates., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdCalendarEventsPaginated.PathParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEventsPaginated.QueryParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEventsPaginated.HeaderParameters> | null,
@@ -65932,7 +65591,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/salons/{salonID}/calendar-events/{calendarEventID}']: {
     /**
-     * getApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for getting calendar event detail., permissions:<ul><li>user</li></ul>
+     * getApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for getting calendar event detail., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.GetApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -65940,7 +65599,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
     /**
-     * patchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for updating calendar events., permissions:<ul><li>user</li></ul>
+     * patchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for updating calendar events., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -65948,7 +65607,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
     /**
-     * deleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for removing calendar events., permissions:<ul><li>user</li></ul>
+     * deleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId - Endpoint is used for removing calendar events., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_DELETE]</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -65956,27 +65615,9 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
   }
-  ['/api/b2b/v1/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}']: {
-    /**
-     * patchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for updating a calendarBulkEvent., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
-    /**
-     * deleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for removing calendarBulkEvents., permissions:<ul><li>user</li></ul>
-     */
-    'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
-  }
   ['/api/b2b/v1/salons/']: {
     /**
-     * getApiB2BV1Salons - permissions:<ul><li>user</li></ul>
+     * getApiB2BV1Salons - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1Salons.HeaderParameters> | null,
@@ -65984,7 +65625,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Salons.Responses.$200>
     /**
-     * postApiB2BV1Salons - permissions:<ul><li>user</li></ul>
+     * postApiB2BV1Salons - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1Salons.HeaderParameters> | null,
@@ -65994,7 +65635,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/salons/basic']: {
     /**
-     * getApiB2BV1SalonsBasic - Endpoint is used for getting an array of salons (type of BASIC). It is possible to search by salon name and to use pagination., permissions:<ul><li>user</li></ul>
+     * getApiB2BV1SalonsBasic - Endpoint is used for getting an array of salons (type of BASIC). It is possible to search by salon name and to use pagination., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1SalonsBasic.QueryParameters & Paths.GetApiB2BV1SalonsBasic.HeaderParameters> | null,
@@ -66004,7 +65645,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/salons/preview']: {
     /**
-     * getApiB2BV1SalonsPreview - permissions:<ul><li>user</li></ul>
+     * getApiB2BV1SalonsPreview - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1SalonsPreview.HeaderParameters> | null,
@@ -66014,7 +65655,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/salons/basic-suggestion']: {
     /**
-     * getApiB2BV1SalonsBasicSuggestion - Endpoint is used for getting an array of basic salon suggestions., permissions:<ul><li>user</li></ul>
+     * getApiB2BV1SalonsBasicSuggestion - Endpoint is used for getting an array of basic salon suggestions., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1SalonsBasicSuggestion.HeaderParameters> | null,
@@ -66024,7 +65665,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/salons/{salonID}']: {
     /**
-     * getApiB2BV1SalonsSalonId - permissions:<ul><li>user</li></ul>
+     * getApiB2BV1SalonsSalonId - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonId.PathParameters & Paths.GetApiB2BV1SalonsSalonId.HeaderParameters> | null,
@@ -66032,7 +65673,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsSalonId.Responses.$200>
     /**
-     * patchApiB2BV1SalonsSalonId - permissions:<ul><li>user</li></ul>
+     * patchApiB2BV1SalonsSalonId - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonId.PathParameters & Paths.PatchApiB2BV1SalonsSalonId.HeaderParameters> | null,
@@ -66040,7 +65681,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonId.Responses.$200>
     /**
-     * deleteApiB2BV1SalonsSalonId - Endpoint is used for removing specific salon., permissions:<ul><li>user</li></ul>
+     * deleteApiB2BV1SalonsSalonId - Endpoint is used for removing specific salon., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_DELETE]</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonId.HeaderParameters> | null,
@@ -66050,7 +65691,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/salons/{salonID}/basic']: {
     /**
-     * getApiB2BV1SalonsSalonIdBasic - Endpoint is used for getting salon (type of BASIC) detail., permissions:<ul><li>user</li></ul>
+     * getApiB2BV1SalonsSalonIdBasic - Endpoint is used for getting salon (type of BASIC) detail., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdBasic.PathParameters & Paths.GetApiB2BV1SalonsSalonIdBasic.HeaderParameters> | null,
@@ -66060,7 +65701,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/salons/{salonID}/dashboard']: {
     /**
-     * getApiB2BV1SalonsSalonIdDashboard - Endpoint is used for getting specific salon informations for dashboard (rating stats, employees, categories, etc...)., permissions:<ul><li>user</li></ul>
+     * getApiB2BV1SalonsSalonIdDashboard - Endpoint is used for getting specific salon informations for dashboard (rating stats, employees, categories, etc...)., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdDashboard.PathParameters & Paths.GetApiB2BV1SalonsSalonIdDashboard.HeaderParameters> | null,
@@ -66070,7 +65711,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/salons/{salonID}/user-invite']: {
     /**
-     * postApiB2BV1SalonsSalonIdUserInvite - permissions:<ul><li>user</li></ul>
+     * postApiB2BV1SalonsSalonIdUserInvite - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1SalonsSalonIdUserInvite.PathParameters & Paths.PostApiB2BV1SalonsSalonIdUserInvite.HeaderParameters> | null,
@@ -66078,49 +65719,9 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1SalonsSalonIdUserInvite.Responses.$200>
   }
-  ['/api/b2b/v1/salons/{salonID}/invoice']: {
-    /**
-     * patchApiB2BV1SalonsSalonIdInvoice - permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdInvoice.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdInvoice.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BV1SalonsSalonIdInvoice.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdInvoice.Responses.$200>
-  }
-  ['/api/b2b/v1/salons/{salonID}/categories']: {
-    /**
-     * patchApiB2BV1SalonsSalonIdCategories - Endpoint is used for updating salon categories., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCategories.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCategories.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BV1SalonsSalonIdCategories.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCategories.Responses.$200>
-  }
-  ['/api/b2b/v1/salons/{salonID}/request-publication']: {
-    /**
-     * patchApiB2BV1SalonsSalonIdRequestPublication - Endpoint is used for creating salon publication requests., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.Responses.$200>
-  }
-  ['/api/b2b/v1/salons/{salonID}/unpublish']: {
-    /**
-     * patchApiB2BV1SalonsSalonIdUnpublish - Endpoint is used for unpublishing a salon., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdUnpublish.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdUnpublish.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BV1SalonsSalonIdUnpublish.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdUnpublish.Responses.$200>
-  }
   ['/api/b2b/v1/salons/{salonID}/accept-employee-invite']: {
     /**
-     * patchApiB2BV1SalonsSalonIdAcceptEmployeeInvite - Endpoint is used for accepting / rejecting an employee invite., permissions:<ul><li>user</li></ul>
+     * patchApiB2BV1SalonsSalonIdAcceptEmployeeInvite - Endpoint is used for accepting / rejecting an employee invite., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.HeaderParameters> | null,
@@ -66128,19 +65729,9 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.Responses.$200>
   }
-  ['/api/b2b/v1/salons/{salonID}/services']: {
-    /**
-     * patchApiB2BV1SalonsSalonIdServices - Endpoint is used for updating salon services., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdServices.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdServices.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BV1SalonsSalonIdServices.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdServices.Responses.$200>
-  }
   ['/api/b2b/v1/salons/{salonID}/basic-suggestion']: {
     /**
-     * patchApiB2BV1SalonsSalonIdBasicSuggestion - Endpoint is used for pairing an user with suggested salon., permissions:<ul><li>user</li></ul>
+     * patchApiB2BV1SalonsSalonIdBasicSuggestion - Endpoint is used for pairing an user with suggested salon., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.HeaderParameters> | null,
@@ -66148,19 +65739,9 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.Responses.$200>
   }
-  ['/api/b2b/v1/salons/{salonID}/settings']: {
-    /**
-     * patchApiB2BV1SalonsSalonIdSettings - Endpoint is used for setting a salon and services settings., permissions:<ul><li>user</li></ul>
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdSettings.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdSettings.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BV1SalonsSalonIdSettings.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdSettings.Responses.$200>
-  }
   ['/api/b2b/v1/services/']: {
     /**
-     * getApiB2BV1Services - Endpoint is used for getting an array of services., permissions:<ul><li>user</li></ul>
+     * getApiB2BV1Services - Endpoint is used for getting an array of services., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
@@ -66170,7 +65751,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/services/{serviceID}']: {
     /**
-     * getApiB2BV1ServicesServiceId - Endpoint is used for getting a service detail., permissions:<ul><li>user</li></ul>
+     * getApiB2BV1ServicesServiceId - Endpoint is used for getting a service detail., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -66178,7 +65759,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
     /**
-     * patchApiB2BV1ServicesServiceId - Endpoint is used for updating a service., permissions:<ul><li>user</li></ul>
+     * patchApiB2BV1ServicesServiceId - Endpoint is used for updating a service., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -66186,7 +65767,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
     /**
-     * deleteApiB2BV1ServicesServiceId - Endpoint is used for removing a service., permissions:<ul><li>user</li></ul>
+     * deleteApiB2BV1ServicesServiceId - Endpoint is used for removing a service., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SERVICE_DELETE]</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -66194,19 +65775,9 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
   }
-  ['/api/b2b/v1/services/category-service-suggest']: {
-    /**
-     * postApiB2BV1ServicesCategoryServiceSuggest - Endpoint is used for sending requests for a new service, permissions:<ul><li>user</li></ul>
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BV1ServicesCategoryServiceSuggest.HeaderParameters> | null,
-      data?: Paths.PostApiB2BV1ServicesCategoryServiceSuggest.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BV1ServicesCategoryServiceSuggest.Responses.$200>
-  }
   ['/api/b2b/v1/customers/']: {
     /**
-     * getApiB2BV1Customers - Endpoint is used for getting an array of customers. Customers are returned based on relevant permissions. It is possible to use search (firstName, lastName, phone, email), filter (salonID), order (lastName, createdAt) and pagination., permissions:<ul><li>user</li></ul>
+     * getApiB2BV1Customers - Endpoint is used for getting an array of customers. Customers are returned based on relevant permissions. It is possible to use search (firstName, lastName, phone, email), filter (salonID), order (lastName, createdAt) and pagination., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1Customers.QueryParameters & Paths.GetApiB2BV1Customers.HeaderParameters> | null,
@@ -66214,7 +65785,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Customers.Responses.$200>
     /**
-     * postApiB2BV1Customers - Endpoint is used for creating customer., permissions:<ul><li>user</li></ul>
+     * postApiB2BV1Customers - Endpoint is used for creating customer., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CUSTOMER_CREATE]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1Customers.HeaderParameters> | null,
@@ -66224,7 +65795,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/customers/{customerID}']: {
     /**
-     * getApiB2BV1CustomersCustomerId - permissions:<ul><li>user</li></ul>
+     * getApiB2BV1CustomersCustomerId - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1CustomersCustomerId.PathParameters & Paths.GetApiB2BV1CustomersCustomerId.HeaderParameters> | null,
@@ -66232,7 +65803,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1CustomersCustomerId.Responses.$200>
     /**
-     * patchApiB2BV1CustomersCustomerId - Endpoint is used for updating customer information., permissions:<ul><li>user</li></ul>
+     * patchApiB2BV1CustomersCustomerId - Endpoint is used for updating customer information., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CUSTOMER_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1CustomersCustomerId.PathParameters & Paths.PatchApiB2BV1CustomersCustomerId.HeaderParameters> | null,
@@ -66240,7 +65811,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1CustomersCustomerId.Responses.$200>
     /**
-     * deleteApiB2BV1CustomersCustomerId - Endpoint is used for removing specific customer., permissions:<ul><li>user</li></ul>
+     * deleteApiB2BV1CustomersCustomerId - Endpoint is used for removing specific customer., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CUSTOMER_DELETE]</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1CustomersCustomerId.PathParameters & Paths.DeleteApiB2BV1CustomersCustomerId.HeaderParameters> | null,
@@ -66250,7 +65821,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/employees/']: {
     /**
-     * getApiB2BV1Employees - permissions:<ul><li>user</li></ul>
+     * getApiB2BV1Employees - permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1Employees.QueryParameters & Paths.GetApiB2BV1Employees.HeaderParameters> | null,
@@ -66258,7 +65829,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Employees.Responses.$200>
     /**
-     * postApiB2BV1Employees - Endpoint is used for creating an employee., permissions:<ul><li>user</li></ul>
+     * postApiB2BV1Employees - Endpoint is used for creating an employee., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_CREATE]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1Employees.HeaderParameters> | null,
@@ -66268,7 +65839,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/employees/{employeeID}']: {
     /**
-     * getApiB2BV1EmployeesEmployeeId - Endpoint is used for getting employee detail informations., permissions:<ul><li>user</li></ul>
+     * getApiB2BV1EmployeesEmployeeId - Endpoint is used for getting employee detail informations., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1EmployeesEmployeeId.PathParameters & Paths.GetApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
@@ -66276,7 +65847,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EmployeesEmployeeId.Responses.$200>
     /**
-     * patchApiB2BV1EmployeesEmployeeId - permissions:<ul><li>user</li></ul>
+     * patchApiB2BV1EmployeesEmployeeId - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
@@ -66284,7 +65855,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeId.Responses.$200>
     /**
-     * deleteApiB2BV1EmployeesEmployeeId - Endpoint is used for removing specific employee., permissions:<ul><li>user</li></ul>
+     * deleteApiB2BV1EmployeesEmployeeId - Endpoint is used for removing specific employee., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_DELETE]</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1EmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
@@ -66292,9 +65863,448 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1EmployeesEmployeeId.Responses.$200>
   }
+  ['/api/b2b/v1/roles/salon']: {
+    /**
+     * getApiB2BV1RolesSalon - Endpoint is used for getting salon roles., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1RolesSalon.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1RolesSalon.Responses.$200>
+  }
+  ['/api/b2b/admin/users/']: {
+    /**
+     * getApiB2BAdminUsers - Endpoint is used for getting an array of users.
+     * 	It is possible to search by (firstName, lastName, email, phone), order (firstName, lastName, activatedAt, roleName, email), filter (roleID) and to use pagination., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_BROWSING]</li><li>partner</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminUsers.QueryParameters & Paths.GetApiB2BAdminUsers.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminUsers.Responses.$200>
+    /**
+     * postApiB2BAdminUsers - Endpoint is used for creating a user., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_CREATE]</li><li>partner</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminUsers.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminUsers.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminUsers.Responses.$200>
+  }
+  ['/api/b2b/admin/users/notino-users']: {
+    /**
+     * getApiB2BAdminUsersNotinoUsers - Endpoint is used for getting an array of notino users., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_BROWSING]</li><li>partner</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminUsersNotinoUsers.QueryParameters & Paths.GetApiB2BAdminUsersNotinoUsers.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminUsersNotinoUsers.Responses.$200>
+  }
+  ['/api/b2b/admin/users/{userID}/role']: {
+    /**
+     * patchApiB2BAdminUsersUserIdRole - Endpoint is used for updating user role., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li><li>partner</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserIdRole.PathParameters & Paths.PatchApiB2BAdminUsersUserIdRole.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminUsersUserIdRole.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminUsersUserIdRole.Responses.$200>
+  }
+  ['/api/b2b/admin/enums/categories/{categoryID}/reorder']: {
+    /**
+     * patchApiB2BAdminEnumsCategoriesCategoryIdReorder - Endpoint is used for reordering category items., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li><li>partner</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.Responses.$200>
+  }
+  ['/api/b2b/admin/roles/system-user']: {
+    /**
+     * getApiB2BAdminRolesSystemUser - Endpoint is used for getting system user roles., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_CREATE]</li><li>partner</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminRolesSystemUser.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminRolesSystemUser.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/reservations/']: {
+    /**
+     * postApiB2BAdminSalonsSalonIdCalendarEventsReservations - permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_CREATE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_CREATE]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_UPDATE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
+    /**
+     * deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_DELETE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_DELETE]</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_UPDATE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for updating a calendarBulkEvent., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_UPDATE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+    /**
+     * deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for removing calendarBulkEvents., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_DELETE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_DELETE]</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/open-hours-note']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdOpenHoursNote - Endpoint is used for setting salon opening hours note., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_UPDATE]</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/invoice']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdInvoice - Endpoint is used for updating salon invoicing informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_BILLING_UPDATE]</li><li>partner: [PARTNER_ADMIN, SALON_BILLING_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdInvoice.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdInvoice.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/categories']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdCategories - Endpoint is used for updating salon categories., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_UPDATE]</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCategories.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCategories.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdCategories.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCategories.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/request-publication']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdRequestPublication - Endpoint is used for creating salon publication requests., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_UPDATE]</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/resolve-publication']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdResolvePublication - Endpoint is used for resolving publication requests., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_PUBLICATION_RESOLVE]</li><li>partner</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/unpublish']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdUnpublish - Endpoint is used for unpublishing a salon., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_UPDATE]</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/services']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdServices - Endpoint is used for updating salon services., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SERVICE_CREATE, SERVICE_DELETE]</li><li>partner: [PARTNER_ADMIN, SERVICE_CREATE, SERVICE_DELETE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdServices.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdServices.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdServices.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/settings']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdSettings - Endpoint is used for setting a salon and services settings., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_UPDATE]</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdSettings.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdSettings.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdSettings.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdSettings.Responses.$200>
+  }
+  ['/api/b2b/admin/services/category-service-suggest']: {
+    /**
+     * postApiB2BAdminServicesCategoryServiceSuggest - Endpoint is used for sending requests for a new service, permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SERVICE_UPDATE]</li><li>partner: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminServicesCategoryServiceSuggest.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminServicesCategoryServiceSuggest.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminServicesCategoryServiceSuggest.Responses.$200>
+  }
+  ['/api/b2b/admin/employees/invite']: {
+    /**
+     * postApiB2BAdminEmployeesInvite - Endpoint is used to send an invitation to the salon by email for an employee., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, EMPLOYEE_CREATE]</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_CREATE]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminEmployeesInvite.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminEmployeesInvite.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminEmployeesInvite.Responses.$200>
+  }
+  ['/api/b2b/admin/employees/{employeeID}/reorder']: {
+    /**
+     * patchApiB2BAdminEmployeesEmployeeIdReorder - permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, EMPLOYEE_UPDATE]</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdReorder.Responses.$200>
+  }
+  ['/api/b2b/admin/employees/{employeeID}/role']: {
+    /**
+     * patchApiB2BAdminEmployeesEmployeeIdRole - Endpoint is used for updating employee role., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, EMPLOYEE_ROLE_UPDATE]</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_ROLE_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.Responses.$200>
+  }
+  ['/api/b2b/admin/employees/{employeeID}/services/{serviceID}']: {
+    /**
+     * patchApiB2BAdminEmployeesEmployeeIdServicesServiceId - Endpoint is used for updating employee service informations., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, EMPLOYEE_UPDATE]</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.Responses.$200>
+  }
+  ['/api/b2b/admin/imports/salons']: {
+    /**
+     * postApiB2BAdminImportsSalons - Endpoint is used for importing salons from a file., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, IMPORT_SALON]</li><li>partner</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminImportsSalons.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminImportsSalons.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminImportsSalons.Responses.$200>
+  }
+  ['/api/b2b/admin/reviews/']: {
+    /**
+     * getApiB2BAdminReviews - Endpoint is used for getting an array of reviews. It is possible to use search (salonName, review.reviewMessage), filter (verificationStatus, deleted, salonCountryCode, toxicityScoreFrom, toxicityScoreTo), order (toxicityScore) and pagination., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, REVIEW_READ]</li><li>partner</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminReviews.QueryParameters & Paths.GetApiB2BAdminReviews.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminReviews.Responses.$200>
+  }
+  ['/api/b2b/admin/reviews/{reviewID}']: {
+    /**
+     * getApiB2BAdminReviewsReviewId - permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, REVIEW_READ]</li><li>partner</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminReviewsReviewId.PathParameters & Paths.GetApiB2BAdminReviewsReviewId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminReviewsReviewId.Responses.$200>
+    /**
+     * deleteApiB2BAdminReviewsReviewId - Endpoint is used for removing specific salon review., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, REVIEW_DELETE]</li><li>partner</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminReviewsReviewId.PathParameters & Paths.DeleteApiB2BAdminReviewsReviewId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminReviewsReviewId.Responses.$200>
+  }
+  ['/api/b2b/admin/reviews/{reviewID}/verification']: {
+    /**
+     * patchApiB2BAdminReviewsReviewIdVerification - Endpoint is used for verifying salon review., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, REVIEW_VERIFY]</li><li>partner</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminReviewsReviewIdVerification.PathParameters & Paths.PatchApiB2BAdminReviewsReviewIdVerification.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminReviewsReviewIdVerification.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminReviewsReviewIdVerification.Responses.$200>
+  }
+  ['/api/b2b/v1/users/partners']: {
+    /**
+     * getApiB2BV1UsersPartners - permissions:<ul><li>notino: [NOTINO_ADMIN, LOGIN_AS_PARTNER]</li><li>partner</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1UsersPartners.QueryParameters & Paths.GetApiB2BV1UsersPartners.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1UsersPartners.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/calendar-events/reservations/']: {
+    /**
+     * postApiB2BV1SalonsSalonIdCalendarEventsReservations - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_CREATE]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BV1SalonsSalonIdCalendarEventsReservations.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/calendar-events/reservations/{calendarEventID}']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
+    /**
+     * deleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_DELETE]</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for updating a calendarBulkEvent., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+    /**
+     * deleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for removing calendarBulkEvents., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_DELETE]</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/invoice']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdInvoice - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_BILLING_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdInvoice.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdInvoice.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdInvoice.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdInvoice.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/categories']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdCategories - Endpoint is used for updating salon categories., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCategories.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCategories.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdCategories.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCategories.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/request-publication']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdRequestPublication - Endpoint is used for creating salon publication requests., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/unpublish']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdUnpublish - Endpoint is used for unpublishing a salon., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdUnpublish.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdUnpublish.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdUnpublish.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdUnpublish.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/services']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdServices - Endpoint is used for updating salon services., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SERVICE_CREATE, SERVICE_DELETE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdServices.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdServices.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdServices.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdServices.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/settings']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdSettings - Endpoint is used for setting a salon and services settings., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdSettings.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdSettings.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdSettings.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdSettings.Responses.$200>
+  }
+  ['/api/b2b/v1/services/category-service-suggest']: {
+    /**
+     * postApiB2BV1ServicesCategoryServiceSuggest - Endpoint is used for sending requests for a new service, permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1ServicesCategoryServiceSuggest.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1ServicesCategoryServiceSuggest.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BV1ServicesCategoryServiceSuggest.Responses.$200>
+  }
   ['/api/b2b/v1/employees/invite']: {
     /**
-     * postApiB2BV1EmployeesInvite - Endpoint is used to send an invitation to the salon by email for an employee., permissions:<ul><li>user</li></ul>
+     * postApiB2BV1EmployeesInvite - Endpoint is used to send an invitation to the salon by email for an employee., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_CREATE]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1EmployeesInvite.HeaderParameters> | null,
@@ -66304,7 +66314,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/employees/{employeeID}/reorder']: {
     /**
-     * patchApiB2BV1EmployeesEmployeeIdReorder - permissions:<ul><li>user</li></ul>
+     * patchApiB2BV1EmployeesEmployeeIdReorder - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdReorder.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdReorder.HeaderParameters> | null,
@@ -66314,7 +66324,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/employees/{employeeID}/role']: {
     /**
-     * patchApiB2BV1EmployeesEmployeeIdRole - Endpoint is used for updating employee role., permissions:<ul><li>user</li></ul>
+     * patchApiB2BV1EmployeesEmployeeIdRole - Endpoint is used for updating employee role., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_ROLE_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdRole.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdRole.HeaderParameters> | null,
@@ -66324,7 +66334,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/employees/{employeeID}/services']: {
     /**
-     * patchApiB2BV1EmployeesEmployeeIdServices - permissions:<ul><li>user</li></ul>
+     * patchApiB2BV1EmployeesEmployeeIdServices - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdServices.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdServices.HeaderParameters> | null,
@@ -66334,23 +66344,13 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/employees/{employeeID}/services/{serviceID}']: {
     /**
-     * patchApiB2BV1EmployeesEmployeeIdServicesServiceId - Endpoint is used for updating employee service informations., permissions:<ul><li>user</li></ul>
+     * patchApiB2BV1EmployeesEmployeeIdServicesServiceId - Endpoint is used for updating employee service informations., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.Responses.$200>
-  }
-  ['/api/b2b/v1/roles/salon']: {
-    /**
-     * getApiB2BV1RolesSalon - Endpoint is used for getting salon roles., permissions:<ul><li>user</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BV1RolesSalon.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BV1RolesSalon.Responses.$200>
   }
 }
 

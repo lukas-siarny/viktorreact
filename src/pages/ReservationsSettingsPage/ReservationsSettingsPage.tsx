@@ -11,7 +11,7 @@ import ReservationSystemSettingsForm from './components/ReservationSystemSetting
 
 // utils
 import { FORM, NOTIFICATION_TYPES, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
-import { withPermissions, checkPermissions, isAdmin } from '../../utils/Permissions'
+import { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
 
@@ -29,8 +29,6 @@ import {
 	PathSettingsBody,
 	SalonSubPageProps
 } from '../../types/interfaces'
-
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 const EXCLUDED_NOTIFICATIONS_B2B: string[] = [RS_NOTIFICATION.RESERVATION_REJECTED, RS_NOTIFICATION.RESERVATION_REMINDER]
 
@@ -129,9 +127,6 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const groupedSettings = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 
-	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
-	const authUserPermissions = currentUser?.uniqPermissions
-
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
@@ -143,7 +138,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const fetchData = async () => {
 		const salonRes = await dispatch(selectSalon(salonID))
 		// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
-		const canVisitThisPage = isAdmin(authUserPermissions) || (checkPermissions(authUserPermissions, [PERMISSION.PARTNER]) && salonRes?.data?.settings?.enabledReservations)
+		const canVisitThisPage = checkPermissions([PERMISSION.NOTINO]) || (checkPermissions([PERMISSION.PARTNER]) && salonRes?.data?.settings?.enabledReservations)
 		if (!canVisitThisPage) {
 			history.push('/404')
 		}
@@ -302,4 +297,4 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	)
 }
 
-export default withPermissions(permissions)(ReservationsSettingsPage)
+export default withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER])(ReservationsSettingsPage)

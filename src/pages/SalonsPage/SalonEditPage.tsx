@@ -20,7 +20,7 @@ import SalonHistory from './components/SalonHistory'
 import SalonApprovalModal from './components/modals/SalonApprovalModal'
 
 // enums
-import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES, STRINGS, TAB_KEYS, SALON_CREATE_TYPE } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, ADMIN_PERMISSIONS, SALON_STATES, STRINGS, TAB_KEYS, SALON_CREATE_TYPE } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -45,7 +45,7 @@ import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circ
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
 import NotinoUserForm from './components/forms/NotinoUserForm'
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
+const permissions: PERMISSION[] = [PERMISSION.NOTINO, PERMISSION.PARTNER]
 
 const pendingStates: string[] = [SALON_STATES.NOT_PUBLISHED_PENDING, SALON_STATES.PUBLISHED_PENDING]
 
@@ -57,7 +57,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const { salonID, isAdmin, backUrl, phonePrefixes, authUser, phonePrefixCountryCode } = props
+	const { salonID, isNotinoUser, backUrl, phonePrefixes, authUser, phonePrefixCountryCode } = props
 
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isSendingConfRequest, setIsSendingConfRequest] = useState<boolean>(false)
@@ -80,7 +80,6 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	const isPendingPublication = (salon.data && pendingStates.includes(salon.data.state)) || false
 	const isPublished = salon.data?.isPublished
 
-	const deletePermissions = [...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_DELETE]
 	const declinedSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED || salon.data?.state === SALON_STATES.PUBLISHED_DECLINED
 	const hiddenSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED && salon.data?.publicationDeclineReason
 	const isBasic = salon.data?.createType === SALON_CREATE_TYPE.BASIC
@@ -135,7 +134,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	// View
 	const breadcrumbs: IBreadcrumbs = {
-		items: isAdmin
+		items: isNotinoUser
 			? [
 					{
 						name: t('loc:Zoznam salónov'),
@@ -153,7 +152,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		try {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/salons/{salonID}', { salonID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			if (isAdmin) {
+			if (isNotinoUser) {
 				history.push(backUrl)
 			} else {
 				// check if there are any other salons assigned to user and redircet user to first of them
@@ -286,7 +285,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	const submitButton = (className = '') => (
 		<Permissions
-			allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
+			allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
 			render={(hasPermission, { openForbiddenModal }) => (
 				<Button
 					type={'primary'}
@@ -303,7 +302,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 						}
 					}}
 					// if is salon pending approval and user is not Admin
-					disabled={isLoading || isDeletedSalon || isFormPristine || (!isPublished && isPendingPublication && !isAdmin)}
+					disabled={isLoading || isDeletedSalon || isFormPristine || (!isPublished && isPendingPublication && !isNotinoUser)}
 					loading={submitting}
 				>
 					{t('loc:Uložiť')}
@@ -314,7 +313,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	const deleteButton = (className = '') => (
 		<DeleteButton
-			permissions={deletePermissions}
+			permissions={[...ADMIN_PERMISSIONS, PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_DELETE]}
 			className={cx('w-full md:w-auto md:min-w-45 xl:min-w-60', className)}
 			onConfirm={deleteSalon}
 			entityName={t('loc:salón')}
@@ -327,7 +326,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	const hideSalonButton = (className = '') => (
 		<Permissions
-			allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
+			allowed={[...ADMIN_PERMISSIONS, PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
 			render={(hasPermission, { openForbiddenModal }) => (
 				<Button
 					type={'dashed'}
@@ -411,8 +410,8 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 							return (
 								<Row className={'w-full gap-2 md:items-center flex-col md:flex-row md:justify-between md:flex-nowrap'}>
 									<Row className={'gap-2 flex-row-reverse justify-end w-full'}>
-										{/* if is admin show hide button */}
-										{isAdmin && hideSalonButton('')}
+										{/* if is admin show -> hide button */}
+										{isNotinoUser && hideSalonButton('')}
 										{deleteButton('')}
 									</Row>
 									{submitButton('')}
@@ -443,7 +442,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			case isDeletedSalon:
 				message = null
 				break
-			case isPendingPublication && !isAdmin:
+			case isPendingPublication && !isNotinoUser:
 				message = t('loc:Salón čaká na schválenie zmien. Údaje salónu, po túto dobu nie je možné editovať.')
 				break
 			case !isPendingPublication && !isFormPristine && (!isPublished || isBasic):
@@ -464,7 +463,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		}
 
 		return null
-	}, [isPendingPublication, isFormPristine, isPublished, isDeletedSalon, t, salon.data?.state, isAdmin, isBasic])
+	}, [isPendingPublication, isFormPristine, isPublished, isDeletedSalon, t, salon.data?.state, isNotinoUser, isBasic])
 
 	const declinedSalonMessage = useMemo(
 		() =>
@@ -510,39 +509,54 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		(infoMessage || isPendingPublication) && (
 			<div className={cx('content-header flex-col gap-2', { warning: isPendingPublication })}>
 				{isPendingPublication && (
-					<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.SALON_PUBLICATION_RESOLVE]}>
-						<Row justify={'space-between'} className={'w-full'}>
-							<Button
-								type={'primary'}
-								icon={<CloseCricleIcon />}
-								size={'middle'}
-								className={'ant-btn-dangerous noti-btn m-regular hover:shadow-none w-44 xl:w-56'}
-								onClick={() =>
-									setModalConfig({
-										title: t('loc:Dôvod zamietnutia'),
-										fieldPlaceholderText: t('loc:Sem napíšte dôvod zamietnutia'),
-										visible: true,
-										onSubmit: resolveConfirmationRequest
-									})
-								}
-								disabled={submitting}
-								loading={submitting}
-							>
-								{t('loc:Zamietnuť')}
-							</Button>
-							<Button
-								type={'primary'}
-								icon={<CheckIcon />}
-								size={'middle'}
-								className={'noti-btn m-regular w-44 xl:w-56'}
-								onClick={() => resolveConfirmationRequest()}
-								disabled={submitting}
-								loading={submitting}
-							>
-								{t('loc:Potvrdiť')}
-							</Button>
-						</Row>
-					</Permissions>
+					<Permissions
+						allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.SALON_PUBLICATION_RESOLVE]}
+						render={(hasPermission, { openForbiddenModal }) => (
+							<Row justify={'space-between'} className={'w-full'}>
+								<Button
+									type={'primary'}
+									icon={<CloseCricleIcon />}
+									size={'middle'}
+									className={'ant-btn-dangerous noti-btn m-regular hover:shadow-none w-44 xl:w-56'}
+									onClick={(e) => {
+										if (hasPermission) {
+											setModalConfig({
+												title: t('loc:Dôvod zamietnutia'),
+												fieldPlaceholderText: t('loc:Sem napíšte dôvod zamietnutia'),
+												visible: true,
+												onSubmit: resolveConfirmationRequest
+											})
+										} else {
+											e.preventDefault()
+											openForbiddenModal()
+										}
+									}}
+									disabled={submitting}
+									loading={submitting}
+								>
+									{t('loc:Zamietnuť')}
+								</Button>
+								<Button
+									type={'primary'}
+									icon={<CheckIcon />}
+									size={'middle'}
+									className={'noti-btn m-regular w-44 xl:w-56'}
+									onClick={(e) => {
+										if (hasPermission) {
+											resolveConfirmationRequest()
+										} else {
+											e.preventDefault()
+											openForbiddenModal()
+										}
+									}}
+									disabled={submitting}
+									loading={submitting}
+								>
+									{t('loc:Potvrdiť')}
+								</Button>
+							</Row>
+						)}
+					/>
 				)}
 				{infoMessage}
 			</div>
@@ -585,16 +599,16 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		<>
 			<div className='content-body'>
 				<Spin spinning={isLoading}>
-					{isAdmin ? renderContentHeaderAdmin() : renderContentHeaderPartner()}
+					{isNotinoUser ? renderContentHeaderAdmin() : renderContentHeaderPartner()}
 					{declinedSalonMessage}
 					{hiddenSalonMessage}
 					<SalonForm
 						onSubmit={handleSubmit}
 						// edit mode is turned off if salon is in approval process and user is not admin or is deleted 'read mode' only
-						disabledForm={isDeletedSalon || (isPendingPublication && !isAdmin)}
+						disabledForm={isDeletedSalon || (isPendingPublication && !isNotinoUser)}
 						deletedSalon={isDeletedSalon}
 						notinoUserModalControlButtons={
-							isAdmin && (
+							isNotinoUser && (
 								<Row className={'flex justify-start w-full gap-2 pb-4'}>
 									{salon?.data?.assignedUser?.id ? (
 										<>
@@ -652,7 +666,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 											size={'middle'}
 											className={'noti-btn m-regular mt-2'}
 											onClick={() => setOpeningHoursModalVisble(true)}
-											disabled={isDeletedSalon || (isPendingPublication && !isAdmin)}
+											disabled={isDeletedSalon || (isPendingPublication && !isNotinoUser)}
 										>
 											{STRINGS(t).edit(t('loc:poznámku'))}
 										</Button>
@@ -670,7 +684,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 										size={'middle'}
 										className={'noti-btn m-regular mt-2'}
 										onClick={() => setOpeningHoursModalVisble(true)}
-										disabled={isDeletedSalon || (isPendingPublication && !isAdmin)}
+										disabled={isDeletedSalon || (isPendingPublication && !isNotinoUser)}
 									>
 										{STRINGS(t).addRecord(t('loc:poznámku'))}
 									</Button>
@@ -720,7 +734,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 				parentPath={`${t('paths:salons')}/${salonID}`}
 				submitButton={
 					<Permissions
-						allowed={[...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
+						allowed={[...ADMIN_PERMISSIONS, PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Tooltip title={getApprovalButtonTooltipMessage()} getPopupContainer={() => document.querySelector('#noti-approval-modal-content') as HTMLElement}>
 								<span className={cx({ 'cursor-not-allowed': approvalButtonDisabled })}>
@@ -757,7 +771,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			{isAdmin && !isDeletedSalon ? (
+			{isNotinoUser && !isDeletedSalon ? (
 				<TabsComponent
 					className={'box-tab'}
 					activeKey={tabKey}

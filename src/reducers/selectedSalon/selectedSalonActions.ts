@@ -6,7 +6,7 @@ import { IResetStore } from '../generalTypes'
 import { ThunkResult } from '../index'
 import { SELECTED_SALON, SALON_OPTIONS } from './selectedSalonTypes'
 import { Paths } from '../../types/api'
-import { ISelectOptionItem, IPermissions, ICurrency, _Permissions } from '../../types/interfaces'
+import { ISelectOptionItem, IPermissions, ICurrency } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -82,7 +82,7 @@ export const selectSalon =
 				salonCurrency = DEFAULT_CURRENCY
 			}
 
-			let permissions: _Permissions = []
+			let permissions: PERMISSION[] = []
 
 			const currentUser = state.user.authUser.data
 

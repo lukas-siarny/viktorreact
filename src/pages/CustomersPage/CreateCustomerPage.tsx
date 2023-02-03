@@ -16,7 +16,7 @@ import { Paths } from '../../types/api'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION, STRINGS } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, PERMISSION, STRINGS } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import { getPrefixCountryCode } from '../../utils/helper'
@@ -29,8 +29,6 @@ import useBackUrl from '../../hooks/useBackUrl'
 
 // assets
 import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
-
-const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_CREATE]
 
 const CreateCustomerPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
@@ -130,4 +128,4 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(CreateCustomerPage)
+export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_CREATE]))(CreateCustomerPage)

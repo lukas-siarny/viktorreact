@@ -14,7 +14,7 @@ import SupportContactsFilter, { ISupportContactsFilter } from './components/Supp
 
 // utils
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { FORM, LANGUAGE, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { FORM, LANGUAGE, PERMISSION, ADMIN_PERMISSIONS, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { history } from '../../utils/history'
 import i18n from '../../utils/i18n'
 import { getLinkWithEncodedBackUrl, getCountryNameFromNameLocalizations, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
@@ -26,7 +26,7 @@ import { getSupportContacts } from '../../reducers/supportContacts/supportContac
 // types
 import { IBreadcrumbs, Columns } from '../../types/interfaces'
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
+const permissions: PERMISSION[] = [...ADMIN_PERMISSIONS, PERMISSION.ENUM_EDIT]
 
 const SupportContactsPage = () => {
 	const [t] = useTranslation()

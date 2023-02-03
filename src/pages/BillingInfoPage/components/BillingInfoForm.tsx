@@ -17,7 +17,7 @@ import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
 import { ReactComponent as LocationIcon } from '../../../assets/icons/location-16.svg'
 
 // utils
-import { PERMISSION, SALON_PERMISSION, FORM } from '../../../utils/enums'
+import { PERMISSION, FORM } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 import { showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
@@ -35,7 +35,7 @@ const BillingInfoForm = (props: Props) => {
 
 	return (
 		<Permissions
-			allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_BILLING_UPDATE]}
+			allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_BILLING_UPDATE]}
 			render={(hasPermission) => (
 				<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
 					<Space className={'w-full'} direction='vertical' size={20}>

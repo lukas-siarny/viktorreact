@@ -33,7 +33,7 @@ import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
 // utils
 import { history } from '../../utils/history'
 import { PAGE, PERMISSION, ADMIN_PERMISSIONS } from '../../utils/enums'
-import { permitted } from '../../utils/Permissions'
+import { checkPermissions } from '../../utils/Permissions'
 
 // redux
 import { logOutUser } from '../../reducers/users/userActions'
@@ -45,7 +45,6 @@ import { getLanguagePickerAsSubmenuItem } from '../LanguagePicker'
 import AvatarComponents from '../AvatarComponents'
 
 // types
-import { _Permissions } from '../../types/interfaces'
 import { setIsSiderCollapsed } from '../../reducers/helperSettings/helperSettingsActions'
 
 const { Sider } = Layout
@@ -75,8 +74,10 @@ const LayoutSider = (props: LayoutSiderProps) => {
 	const location = useLocation()
 
 	const hasPermissions = useCallback(
-		(allowed: _Permissions = [], except: _Permissions = []) => {
-			return permitted(authUserPermissions || [], selectedSalon?.uniqPermissions, allowed, except)
+		(allowed: PERMISSION[] = [], except: PERMISSION[] = []) => {
+			const rolePermissions = authUserPermissions || []
+			const salonPermission = selectedSalon?.uniqPermissions || []
+			return checkPermissions([...rolePermissions, ...salonPermission], allowed, except)
 		},
 		[authUserPermissions, selectedSalon?.uniqPermissions]
 	)
@@ -146,7 +147,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						}
 					)
 				}
-				if (hasPermissions([...ADMIN_PERMISSIONS])) {
+				if (hasPermissions([PERMISSION.NOTINO])) {
 					mainGroupItems.push({
 						key: PAGE.SALONS,
 						label: t('loc:Salóny'),
@@ -158,7 +159,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 
 			if (salonID) {
 				// SALON VIEW
-				if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.PARTNER])) {
+				if (hasPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER])) {
 					mainGroupItems.push(
 						{
 							key: PAGE.SALONS,
@@ -200,7 +201,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				}
 
 				// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
-				if (hasPermissions(ADMIN_PERMISSIONS) || (hasPermissions([PERMISSION.PARTNER]) && selectedSalon?.settings.enabledReservations)) {
+				if (hasPermissions([PERMISSION.NOTINO]) || (hasPermissions([PERMISSION.PARTNER]) && selectedSalon?.settings.enabledReservations)) {
 					mainGroupItems.push(
 						{
 							key: PAGE.RESERVATIONS_SETTINGS,

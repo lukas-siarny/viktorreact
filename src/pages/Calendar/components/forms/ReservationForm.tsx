@@ -12,7 +12,7 @@ import validateReservationForm from './validateReservationForm'
 import { formatLongQueryString, getAssignedUserLabel, getCountryPrefix, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { getReq, postReq } from '../../../../utils/request'
-import { CREATE_EVENT_PERMISSIONS, ENUMERATIONS_KEYS, FORM, SALON_PERMISSION, STRINGS, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import { CREATE_EVENT_PERMISSIONS, ENUMERATIONS_KEYS, FORM, PERMISSION, STRINGS, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // types
 import { ICalendarReservationForm, ICustomerForm } from '../../../../types/interfaces'
@@ -161,7 +161,7 @@ const ReservationForm: FC<Props> = (props) => {
 				<Spin spinning={eventDetail.isLoading} size='large'>
 					<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 						<Permissions
-							allowed={[SALON_PERMISSION.CUSTOMER_CREATE]}
+							allowed={[PERMISSION.CUSTOMER_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<Field
 									optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}

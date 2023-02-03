@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useRef } from 'react'
+import React, { FC, useCallback, useEffect, useImperativeHandle, useRef } from 'react'
 import Sider from 'antd/lib/layout/Sider'
 import { compact, map } from 'lodash'
 import cx from 'classnames'
@@ -8,6 +8,7 @@ import { change, initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { StringParam, useQueryParams } from 'use-query-params'
 import { CalendarApi } from '@fullcalendar/react'
+import dayjs from 'dayjs'
 
 // types
 import { ICalendarEventForm, ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'
@@ -25,13 +26,15 @@ import {
 	EVENT_NAMES,
 	EVERY_REPEAT,
 	FORM,
-	STRINGS
+	STRINGS,
+	DEFAULT_DATE_INIT_FORMAT,
+	DEFAULT_TIME_FORMAT
 } from '../../../../utils/enums'
 import Permissions from '../../../../utils/Permissions'
 
 // redux
 import { getCalendarEventDetail } from '../../../../reducers/calendar/calendarActions'
-import { setCalendarApi, setCalendarDateHandler } from '../../../../reducers/virtualEvent/virtualEventActions'
+import { clearEvent, setCalendarApi, setCalendarDateHandler } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 // components
 import ReservationForm from '../forms/ReservationForm'
@@ -61,7 +64,11 @@ type Props = {
 	phonePrefix?: string
 }
 
-const SiderEventManagement: FC<Props> = (props) => {
+export type SiderEventManagementRefs = {
+	initCreateEventForm: (eventType: CALENDAR_EVENT_TYPE, newEventData?: INewCalendarEvent) => void
+}
+
+const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((props, ref) => {
 	const {
 		onCloseSider,
 		handleSubmitReservation,
@@ -85,6 +92,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 	})
 
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
+	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
 
 	const donInitEventForm = useRef(false)
 
@@ -98,6 +106,30 @@ const SiderEventManagement: FC<Props> = (props) => {
 			setCalendarApi()
 		}
 	}, [calendarApi, changeCalendarDate])
+
+	const initCreateEventForm = (eventType: CALENDAR_EVENT_TYPE, newEventData?: INewCalendarEvent) => {
+		let timeTo: string | undefined
+		if (newEventData?.timeTo) {
+			// use 23:59 instead of 00:00 as end of day
+			timeTo = newEventData.timeTo === '00:00' ? '23:59' : newEventData.timeTo
+		}
+
+		// Initne sa event / reservation formular
+		const initData: Partial<ICalendarEventForm | ICalendarReservationForm> = {
+			date: newEventData?.date || query.date || dayjs().format(DEFAULT_DATE_INIT_FORMAT),
+			timeFrom: newEventData?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT),
+			timeTo,
+			employee: newEventData?.employee,
+			eventType
+		}
+
+		if (eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
+			dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
+		} else {
+			// CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT || CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK || CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
+			dispatch(initialize(FORM.CALENDAR_EVENT_FORM, initData))
+		}
+	}
 
 	const initUpdateEventForm = async () => {
 		try {
@@ -175,6 +207,18 @@ const SiderEventManagement: FC<Props> = (props) => {
 	}
 
 	useEffect(() => {
+		// ak je otvoreny sidebar a nemam eventID, tak initneme formular pre vytvorenie
+		if (query.sidebarView && !query.eventId) {
+			// Po refreshi tabu je potrebne premazat virtualny event
+			if (virtualEvent) {
+				dispatch(clearEvent())
+			}
+			initCreateEventForm(query.sidebarView as CALENDAR_EVENT_TYPE)
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
+	useEffect(() => {
 		// ak je otvoreny sidebar a mame eventID, tak znamena, ze pozerame detail existujuceho eventu
 		if (query.sidebarView && query.eventId) {
 			initUpdateEventForm()
@@ -182,8 +226,12 @@ const SiderEventManagement: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query.eventId, query.sidebarView])
 
+	useImperativeHandle(ref, () => ({
+		initCreateEventForm
+	}))
+
 	// TODO: toto nefunguje uplne spravne, zatvara sa to aj v pripade, ze mam otovreny popover a dam ESC (vtedy by sa mal zavriet len popover)
-	/* useKeyUp(
+	useKeyUp(
 		'Escape',
 		query.sidebarView
 			? () => {
@@ -192,7 +240,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 					if (highlight) highlight.remove()
 			  }
 			: undefined
-	) */
+	)
 
 	const searchEmployes = useCallback(
 		async (search: string, page: number) => {
@@ -316,6 +364,6 @@ const SiderEventManagement: FC<Props> = (props) => {
 			{getCalendarForm()}
 		</Sider>
 	)
-}
+})
 
 export default SiderEventManagement

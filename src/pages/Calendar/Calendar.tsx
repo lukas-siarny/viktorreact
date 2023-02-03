@@ -53,7 +53,7 @@ import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 // components
 import CalendarContent, { CalendarRefs } from './components/layout/CalendarContent'
 import CalendarHeader from './components/layout/Header'
-import SiderEventManagement from './components/layout/SiderEventManagement'
+import SiderEventManagement, { SiderEventManagementRefs } from './components/layout/SiderEventManagement'
 import SiderFilter from './components/layout/SiderFilter'
 
 // types
@@ -105,6 +105,7 @@ const CALENDAR_EVENTS_VIEW_TYPES = Object.keys(CALENDAR_EVENTS_VIEW_TYPE)
 const Calendar: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath = '' } = props
 	const calendarRefs = useRef<CalendarRefs>(null)
+	const siderEventManagementRefs = useRef<SiderEventManagementRefs>(null)
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	/*
@@ -159,9 +160,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		data: null,
 		position: null
 	})
-
-	const eventFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EVENT_FORM)(state))
-	const reservationFormValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
 
 	const fetchInterval = useRef<number | undefined>()
 
@@ -412,42 +410,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		})
 	}
 
-	const initCreateEventForm = (eventType: CALENDAR_EVENT_TYPE, newEventData?: INewCalendarEvent) => {
-		let timeTo: string | undefined
-		if (newEventData?.timeTo) {
-			// use 23:59 instead of 00:00 as end of day
-			timeTo = newEventData.timeTo === '00:00' ? '23:59' : newEventData.timeTo
-		}
-
-		// Initne sa event / reservation formular
-		const initData: Partial<ICalendarEventForm | ICalendarReservationForm> = {
-			date: newEventData?.date || query.date || dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-			timeFrom: newEventData?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT),
-			timeTo,
-			employee: newEventData?.employee,
-			eventType
-		}
-
-		if (eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
-			dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
-		} else {
-			// CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT || CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK || CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
-			dispatch(initialize(FORM.CALENDAR_EVENT_FORM, initData))
-		}
-	}
-
-	useEffect(() => {
-		// ak je otvoreny sidebar a nemam eventID, tak initneme formular pre vytvorenie
-		if (query.sidebarView && !query.eventId) {
-			// Po refreshi tabu sa nevyvola vymazanie virtualneho eventu
-			if (virtualEvent) {
-				dispatch(clearEvent())
-			}
-			initCreateEventForm(query.sidebarView as CALENDAR_EVENT_TYPE)
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
-
 	const handleAddEvent = (initialData?: INewCalendarEvent, fromAddButton?: boolean) => {
 		/**
 		 * Ak kliknem hore v hlavicke na Pridat a akutalne uz mam otvoreny sidebar a vytvaram novy event
@@ -460,10 +422,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastav pracovnu zmenu
 		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 			setEventManagement(CALENDAR_EVENT_TYPE.RESERVATION, undefined)
-			initCreateEventForm(CALENDAR_EVENT_TYPE.RESERVATION, initialData)
+			siderEventManagementRefs?.current?.initCreateEventForm(CALENDAR_EVENT_TYPE.RESERVATION, initialData)
 		} else {
 			setEventManagement(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, undefined)
-			initCreateEventForm(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, initialData)
+			siderEventManagementRefs?.current?.initCreateEventForm(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, initialData)
 		}
 	}
 
@@ -810,6 +772,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					/>
 					{selectedSalon?.settings?.enabledReservations && (
 						<SiderEventManagement
+							ref={siderEventManagementRefs}
 							phonePrefix={selectedSalon.address?.countryCode || selectedSalon.companyInvoiceAddress?.countryCode}
 							salonID={salonID}
 							selectedDate={validSelectedDate}

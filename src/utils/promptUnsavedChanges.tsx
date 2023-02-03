@@ -1,23 +1,20 @@
-import React, { useEffect, ComponentType } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-// https://github.com/remix-run/react-router/issues/8139
-import { UNSAFE_NavigationContext } from 'react-router-dom'
+// import ReactRouterPrompt from 'react-router-prompt'
 
 // reducers
 import { RootState } from '../reducers'
+import ConfirmModal from '../atoms/ConfirmModal'
 
 // eslint-disable-next-line import/prefer-default-export
-export function withPromptUnsavedChanges(WrappedComponent: ComponentType<any>): any {
-	return (props: any) => {
+export const withPromptUnsavedChanges = (WrappedComponent: any): any => {
+	const WithPrompt = (props: any) => {
 		const { submitting, form } = props
 		const [t] = useTranslation()
-		// NOTE: https://github.com/remix-run/react-router/issues/8139
-		const { navigator } = React.useContext(UNSAFE_NavigationContext) as any
-
 		const message = t('loc:Chcete zahodiť vykonané zmeny?')
 		const formState: any = useSelector((state: RootState) => state.form?.[form])
-
+		const [isBlocked, setIsBlocked] = useState(false)
 		let dirty = false
 
 		if (formState) {
@@ -26,7 +23,6 @@ export function withPromptUnsavedChanges(WrappedComponent: ComponentType<any>): 
 		}
 
 		let unblock: undefined | (() => void)
-
 		const onBrowserUnload = (event: any) => {
 			// eslint-disable-next-line no-param-reassign
 			event.returnValue = message
@@ -34,14 +30,14 @@ export function withPromptUnsavedChanges(WrappedComponent: ComponentType<any>): 
 
 		const enable = () => {
 			if (unblock) unblock()
-			unblock = navigator.block(message)
+			// unblock = navigator.block(message) // TODO: zmazat
 			window.addEventListener('beforeunload', onBrowserUnload)
 		}
-
 		const disable = () => {
 			if (unblock) {
 				unblock()
 				unblock = undefined
+				// setIsBlocked(true)
 			}
 			window.removeEventListener('beforeunload', onBrowserUnload)
 		}
@@ -58,7 +54,45 @@ export function withPromptUnsavedChanges(WrappedComponent: ComponentType<any>): 
 			}
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, [dirty, submitting])
-
-		return <WrappedComponent {...props} />
+		// TODO: nefunguje
+		// const prompt = (
+		// 	<ReactRouterPrompt when={true}>
+		// 		{({ isActive, onConfirm, onCancel }) =>
+		// 			isActive && (
+		// 				<div className='lightbox'>
+		// 					<div className='container'>
+		// 						<p>Do you really want to leave?</p>
+		// 						<button type={'button'} onClick={onCancel}>
+		// 							Cancel
+		// 						</button>
+		// 						<button type={'button'} onClick={onConfirm}>
+		// 							Ok
+		// 						</button>
+		// 					</div>
+		// 				</div>
+		// 			)
+		// 		}
+		// 	</ReactRouterPrompt>
+		// )
+		const modal = (
+			<ConfirmModal
+				className='rounded-fields'
+				title={'Opustate srtranku bez ulozenia'}
+				centered
+				destroyOnClose
+				open={isBlocked}
+				// onOk={() => dispatch(submit(FORM.CUSTOMER))}
+				// open={visibleCustomerCreateModal}
+				onCancel={() => setIsBlocked(false)}
+				// closeIcon={<CloseIcon />}
+			/>
+		)
+		return (
+			<div>
+				{modal}
+				<WrappedComponent />
+			</div>
+		)
 	}
+	return WithPrompt
 }

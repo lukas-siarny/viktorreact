@@ -46,9 +46,6 @@ import TabsComponent from '../../../../components/TabsComponent'
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 
-// hooks
-import useKeyUp from '../../../../hooks/useKeyUp'
-
 type Props = {
 	salonID: string
 	sidebarView: CALENDAR_EVENT_TYPE

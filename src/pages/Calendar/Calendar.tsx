@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import { includes, isEmpty, omit } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { destroy, getFormValues, initialize } from 'redux-form'
+import { destroy, initialize } from 'redux-form'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { useTranslation } from 'react-i18next'
 import Scroll from 'react-scroll'
@@ -20,8 +20,6 @@ import {
 	CALENDAR_VIEW,
 	CONFIRM_MODAL_DATA_TYPE,
 	DAY,
-	DEFAULT_DATE_INIT_FORMAT,
-	DEFAULT_TIME_FORMAT,
 	EVERY_REPEAT,
 	FORM,
 	NOTIFICATION_TYPE,

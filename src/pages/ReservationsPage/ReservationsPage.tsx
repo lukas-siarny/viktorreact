@@ -15,9 +15,9 @@ import UserAvatar from '../../components/AvatarComponents'
 import ReservationsFilter from './components/ReservationsFilter'
 
 // utils
-import { DEFAULT_DATE_INIT_FORMAT, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { DEFAULT_DATE_INIT_FORMAT, FORM, PERMISSION, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { getAssignedUserLabel, normalizeDirectionKeys, normalizeSearchQueryParams, setOrder } from '../../utils/helper'
+import { getAssignedUserLabel, normalizeDirectionKeys, normalizeSearchQueryParams, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -116,9 +116,7 @@ const ReservationsPage = (props: Props) => {
 			dataIndex: 'startDate',
 			key: 'startDate',
 			ellipsis: true,
-			width: '20%',
-			sorter: true,
-			sortOrder: setOrder(searchParams.get('order'), 'startDate')
+			width: '20%'
 		},
 		{
 			title: t('loc:Trvanie'),
@@ -139,7 +137,15 @@ const ReservationsPage = (props: Props) => {
 			dataIndex: 'state',
 			key: 'state',
 			ellipsis: true,
-			width: '20%'
+			width: '20%',
+			render: (value) => {
+				return (
+					<div className={'flex items-center'}>
+						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationState(value as RESERVATION_STATE).icon}</div>
+						<div>{translateReservationState(value as RESERVATION_STATE).text}</div>
+					</div>
+				)
+			}
 		},
 		{
 			title: t('loc:Spôsob úhrady'),
@@ -147,7 +153,14 @@ const ReservationsPage = (props: Props) => {
 			key: 'paymentMethod',
 			ellipsis: true,
 			width: '20%',
-			render: (value) => value || '-'
+			render: (value) => {
+				return (
+					<div className={'flex items-center'}>
+						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).icon}</div>
+						<div>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).text}</div>
+					</div>
+				)
+			}
 		},
 		{
 			title: t('loc:Zamestnanec'),

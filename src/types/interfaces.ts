@@ -446,9 +446,9 @@ export interface IUserAvatar {
 }
 
 export interface IQueryParams {
-	page?: number
+	page?: number | null | string
 	limit?: any | undefined
-	order?: string | undefined
+	order?: string | undefined | null
 	search?: string | undefined | null
 }
 

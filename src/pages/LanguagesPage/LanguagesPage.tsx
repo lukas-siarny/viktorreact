@@ -8,9 +8,9 @@ import { initialize } from 'redux-form'
 import cx from 'classnames'
 import { filter, get } from 'lodash'
 import { SorterResult } from 'antd/lib/table/interface'
+import { useSearchParams } from 'react-router-dom'
 
 // components
-import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import LanguagesForm from './components/LanguagesForm'
@@ -21,7 +21,7 @@ import { EMPTY_NAME_LOCALIZATIONS } from '../../components/LanguagePicker'
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, DEFAULT_LANGUAGE } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { normalizeDirectionKeys, normalizeNameLocalizations, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import { normalizeDirectionKeys, normalizeNameLocalizations, normalizeSearchQueryParams, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -48,10 +48,14 @@ const LanguagesPage = () => {
 
 	const languages = useSelector((state: RootState) => state.languages.languages)
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		order: withDefault(StringParam, 'name:ASC')
+	const [searchParams, setSearchParams] = useSearchParams({
+		search: '',
+		order: 'name:ASC'
 	})
+	const query = {
+		search: searchParams.get('search') || '',
+		order: searchParams.get('order') || ''
+	}
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -139,7 +143,7 @@ const LanguagesPage = () => {
 			changeFormVisibility()
 			// reset search in case of newly created entity
 			if (!languageID && query.search) {
-				setQuery({ ...query, search: null })
+				setSearchParams({ ...query, search: '' })
 			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -167,7 +171,7 @@ const LanguagesPage = () => {
 				...query,
 				order
 			}
-			setQuery(newQuery)
+			setSearchParams(newQuery)
 		}
 	}
 
@@ -219,7 +223,7 @@ const LanguagesPage = () => {
 						<Spin spinning={languages?.isLoading}>
 							<LanguagesFilter
 								total={languages?.data?.length}
-								onSubmit={(values: any) => setQuery({ ...query, search: values.search })}
+								onSubmit={(values: any) => setSearchParams(normalizeSearchQueryParams({ ...query, search: values.search }))}
 								addButton={
 									<Button
 										onClick={() => {

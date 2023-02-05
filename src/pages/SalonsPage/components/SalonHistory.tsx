@@ -1,10 +1,10 @@
 import React, { FC, PropsWithChildren, ReactNode, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Divider, List, Spin, Empty } from 'antd'
-import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { initialize } from 'redux-form'
 import dayjs from 'dayjs'
 import { isEmpty } from 'lodash'
+import { useSearchParams } from 'react-router-dom'
 
 // components
 import SalonHistoryFilter, { ISalonHistoryFilter } from './filters/SalonHistoryFilter'
@@ -20,7 +20,7 @@ import { RootState } from '../../../reducers'
 
 // utils
 import { FORM, SALON_HISTORY_OPERATIONS, SALON_HISTORY_OPERATIONS_COLORS, TAB_KEYS, DEFAULT_DATE_INIT_FORMAT } from '../../../utils/enums'
-import { formatDateByLocale } from '../../../utils/helper'
+import { formatDateByLocale, normalizeSearchQueryParams } from '../../../utils/helper'
 
 // assets
 import { ReactComponent as CheckIcon } from '../../../assets/icons/check-12.svg'
@@ -52,22 +52,30 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 	const { salonID, tabKey } = props
 	const now = dayjs()
 
-	const [query, setQuery] = useQueryParams({
-		limit: NumberParam,
-		page: withDefault(NumberParam, 1),
-		dateFrom: withDefault(StringParam, now.subtract(1, 'week').format(DEFAULT_DATE_INIT_FORMAT)),
-		dateTo: withDefault(StringParam, now.format(DEFAULT_DATE_INIT_FORMAT))
+	const [searchParams, setSearchParams] = useSearchParams({
+		dateFrom: now.subtract(1, 'week').format(DEFAULT_DATE_INIT_FORMAT),
+		dateTo: now.subtract(1, 'week').format(DEFAULT_DATE_INIT_FORMAT),
+		limit: '',
+		page: '1'
 	})
 
 	const salonHistory = useSelector((state: RootState) => state.salons.salonHistory)
-
+	console.log('searchParams', searchParams)
 	const fetchData = async () => {
-		dispatch(getSalonHistory({ dateFrom: query.dateFrom, dateTo: query.dateTo, salonID, page: query.page, limit: query.limit }))
+		dispatch(
+			getSalonHistory({
+				dateFrom: searchParams.get('dateFrom'),
+				dateTo: searchParams.get('dateTo'),
+				salonID,
+				page: searchParams.get('page'),
+				limit: searchParams.get('limit')
+			})
+		)
 		dispatch(
 			initialize(FORM.SALON_HISTORY_FILTER, {
 				dateFromTo: {
-					dateFrom: query.dateFrom,
-					dateTo: query.dateTo
+					dateFrom: searchParams.get('dateFrom'),
+					dateTo: searchParams.get('dateTo')
 				}
 			})
 		)
@@ -79,7 +87,7 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 			fetchData()
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, query.page, query.limit, query.dateFrom, query.dateTo, tabKey])
+	}, [dispatch, tabKey, searchParams])
 
 	const renderValues = (oldValues: any, newValues: any) => {
 		let values: any = {}
@@ -103,20 +111,20 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 
 	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
-			...query,
+			...searchParams,
 			limit,
 			page
 		}
-		setQuery(newQuery)
+		setSearchParams(newQuery)
 	}
 
 	const handleSubmit = (values: ISalonHistoryFilter) => {
 		const newQuery = {
-			...query,
+			...searchParams,
 			...values.dateFromTo,
 			page: 1
 		}
-		setQuery(newQuery)
+		setSearchParams(normalizeSearchQueryParams(newQuery))
 	}
 
 	return (

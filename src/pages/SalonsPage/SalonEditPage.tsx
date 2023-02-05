@@ -5,9 +5,8 @@ import { Alert, Button, Modal, Row, Spin, Tooltip } from 'antd'
 import { destroy, initialize, isPristine, reset, submit } from 'redux-form'
 import { get } from 'lodash'
 import { compose } from 'redux'
-import { BooleanParam, useQueryParams } from 'use-query-params'
 import cx from 'classnames'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 // components
 import DeleteButton from '../../components/DeleteButton'
@@ -34,7 +33,7 @@ import { IBreadcrumbs, INoteForm, INoteModal, INotinoUserForm, ISalonForm, Salon
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { formFieldID, getAssignedUserLabel } from '../../utils/helper'
+import { formFieldID, getAssignedUserLabel, normalizeSearchQueryParams } from '../../utils/helper'
 import { getSalonDataForSubmission, initSalonFormData } from './components/salonUtils'
 
 // assets
@@ -87,9 +86,12 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	const assignedUserLabel = getAssignedUserLabel(salon.data?.assignedUser)
 
-	const [query, setQuery] = useQueryParams({
-		history: BooleanParam
+	const [searchParams, setSearchParams] = useSearchParams({
+		history: ''
 	})
+	const query = {
+		history: searchParams.get('history') || ''
+	}
 
 	const dontUpdateFormData = useRef(false)
 
@@ -552,9 +554,9 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		// set query for history tab
 		const newQuery = {
 			...query,
-			history: selectedTabKey === TAB_KEYS.SALON_HISTORY
+			history: selectedTabKey === TAB_KEYS.SALON_HISTORY ? '1' : searchParams.delete('history')
 		}
-		setQuery(newQuery)
+		setSearchParams(normalizeSearchQueryParams(newQuery))
 		setTabKey(selectedTabKey as TAB_KEYS)
 	}
 

@@ -6,8 +6,8 @@ import { compose } from 'redux'
 import { initialize, reset } from 'redux-form'
 import { get } from 'lodash'
 import cx from 'classnames'
-import { StringParam, withDefault, useQueryParams } from 'use-query-params'
 import { SorterResult } from 'antd/lib/table/interface'
+import { useSearchParams } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -19,7 +19,7 @@ import CosmeticsFilter from './components/CosmeticsFilter'
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, CREATE_BUTTON_ID } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { normalizeDirectionKeys, setOrder, sortData } from '../../utils/helper'
+import { normalizeDirectionKeys, normalizeSearchQueryParams, setOrder, sortData } from '../../utils/helper'
 
 // reducers
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
@@ -41,10 +41,14 @@ const CosmeticsPage = () => {
 
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		order: withDefault(StringParam, 'name:ASC')
+	const [searchParams, setSearchParams] = useSearchParams({
+		search: '',
+		order: 'name:ASC'
 	})
+	const query = {
+		search: searchParams.get('search') || '',
+		order: searchParams.get('order') || ''
+	}
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -95,7 +99,7 @@ const CosmeticsPage = () => {
 				...query,
 				order
 			}
-			setQuery(newQuery)
+			setSearchParams(newQuery)
 		}
 	}
 
@@ -115,7 +119,7 @@ const CosmeticsPage = () => {
 			changeFormVisibility()
 			// reset search in case of newly created entity
 			if (!cosmeticID && query.search) {
-				setQuery({ ...query, search: null })
+				setSearchParams({ ...query, search: '' })
 			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -173,9 +177,9 @@ const CosmeticsPage = () => {
 				...query,
 				search: values.search
 			}
-			setQuery(newQuery)
+			setSearchParams(normalizeSearchQueryParams(newQuery))
 		},
-		[query, setQuery]
+		[query, setSearchParams]
 	)
 
 	const formClass = cx({

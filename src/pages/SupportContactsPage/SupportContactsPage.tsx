@@ -2,11 +2,10 @@ import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row, TablePaginationConfig } from 'antd'
 import { initialize } from 'redux-form'
 import { SorterResult } from 'antd/lib/table/interface'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -34,35 +33,38 @@ const SupportContactsPage = () => {
 
 	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
 	const navigate = useNavigate()
-	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		order: withDefault(StringParam, 'country:ASC')
+
+	const [searchParams, setSearchParams] = useSearchParams({
+		search: '',
+		order: 'country:ASC'
 	})
+
+	const searchParamsObj = Object.fromEntries(searchParams)
 
 	useEffect(() => {
 		dispatch(getSupportContacts())
 	}, [dispatch])
 
 	useEffect(() => {
-		dispatch(initialize(FORM.SUPPORT_CONTACTS_FILTER, { search: query.search }))
-	}, [dispatch, query.search])
+		dispatch(initialize(FORM.SUPPORT_CONTACTS_FILTER, { search: searchParams.get('search') }))
+	}, [dispatch, searchParams])
 
 	const handleSubmit = (values: ISupportContactsFilter) => {
 		const newQuery = {
-			...query,
+			...searchParamsObj,
 			...values
 		}
-		setQuery(newQuery)
+		setSearchParams(newQuery)
 	}
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
 			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
 			const newQuery = {
-				...query,
+				...searchParamsObj,
 				order
 			}
-			setQuery(newQuery)
+			setSearchParams(newQuery)
 		}
 	}
 
@@ -71,16 +73,16 @@ const SupportContactsPage = () => {
 			return []
 		}
 
-		return query.search
+		return searchParams.get('search')
 			? supportContacts.tableData.filter((country) => {
 					const countryName = transformToLowerCaseWithoutAccent(
 						getCountryNameFromNameLocalizations(country.country?.nameLocalizations, i18n.language as LANGUAGE) || country.country?.code
 					)
-					const searchedValue = transformToLowerCaseWithoutAccent(query.search || undefined)
+					const searchedValue = transformToLowerCaseWithoutAccent(searchParams.get('search') || undefined)
 					return countryName.includes(searchedValue)
 			  })
 			: supportContacts.tableData
-	}, [query.search, supportContacts])
+	}, [searchParams, supportContacts])
 
 	const columns: Columns = [
 		{
@@ -88,7 +90,7 @@ const SupportContactsPage = () => {
 			dataIndex: 'country',
 			key: 'country',
 			width: '30%',
-			sortOrder: setOrder(query.order, 'country'),
+			sortOrder: setOrder(searchParams.get('order'), 'country'),
 			sorter: {
 				compare: (a, b) => {
 					const aValue = getCountryNameFromNameLocalizations(a?.country?.nameLocalizations, i18n.language as LANGUAGE) || a?.country?.code

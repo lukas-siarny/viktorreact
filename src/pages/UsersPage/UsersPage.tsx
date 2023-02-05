@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -15,7 +14,7 @@ import AdminUsersFilter, { IUsersFilter } from './components/AdminUsersFilter'
 
 // utils
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
-import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, normalizeSearchQueryParams, setOrder } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -37,18 +36,28 @@ const UsersPage = () => {
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 	const navigate = useNavigate()
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		limit: NumberParam,
-		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'fullName:ASC'),
-		roleID: withDefault(StringParam, undefined)
+	const [searchParams, setSearchParams] = useSearchParams({
+		search: '',
+		limit: '',
+		page: '1',
+		order: 'fullName:ASC',
+		roleID: ''
 	})
 
+	const searchParamsObj = Object.fromEntries(searchParams)
+
 	useEffect(() => {
-		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: query.search, roleID: query.roleID }))
-		dispatch(getUsers({ page: query.page, limit: query.limit, order: query.order, search: query.search, roleID: query.roleID }))
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.roleID])
+		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: searchParams.get('search'), roleID: searchParams.get('roleID') }))
+		dispatch(
+			getUsers({
+				page: searchParams.get('page'),
+				limit: searchParams.get('limit'),
+				order: searchParams.get('order'),
+				search: searchParams.get('search'),
+				roleID: searchParams.get('roleID')
+			})
+		)
+	}, [dispatch, searchParams])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -65,29 +74,29 @@ const UsersPage = () => {
 		if (!(sorter instanceof Array)) {
 			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
 			const newQuery = {
-				...query,
+				...searchParamsObj,
 				order
 			}
-			setQuery(newQuery)
+			setSearchParams(newQuery)
 		}
 	}
 
 	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
-			...query,
-			limit,
-			page
+			...searchParamsObj,
+			limit: String(limit),
+			page: String(page)
 		}
-		setQuery(newQuery)
+		setSearchParams(newQuery)
 	}
 
 	const handleSubmit = (values: IUsersFilter) => {
 		const newQuery = {
-			...query,
+			...searchParamsObj,
 			...values,
 			page: 1
 		}
-		setQuery(newQuery)
+		setSearchParams(normalizeSearchQueryParams(newQuery))
 	}
 
 	const columns: Columns = [
@@ -97,7 +106,7 @@ const UsersPage = () => {
 			key: 'fullName',
 			ellipsis: true,
 			sorter: true,
-			sortOrder: setOrder(query.order, 'fullName'),
+			sortOrder: setOrder(searchParams.get('order'), 'fullName'),
 			width: '20%',
 			render: (_value, record) => {
 				if (!record?.firstName && !record?.lastName) {
@@ -117,7 +126,7 @@ const UsersPage = () => {
 			ellipsis: true,
 			sorter: true,
 			width: '25%',
-			sortOrder: setOrder(query.order, 'email')
+			sortOrder: setOrder(searchParams.get('order'), 'email')
 		},
 		{
 			title: t('loc:Telefón'),
@@ -137,7 +146,7 @@ const UsersPage = () => {
 			dataIndex: 'roles',
 			key: 'roleName',
 			sorter: true,
-			sortOrder: setOrder(query.order, 'roleName'),
+			sortOrder: setOrder(searchParams.get('order'), 'roleName'),
 			ellipsis: {
 				showTitle: false
 			},

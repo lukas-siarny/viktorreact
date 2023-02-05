@@ -1,6 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
@@ -45,16 +44,6 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
-
-	// const [query, setQuery] = useQueryParams({
-	// 	search: StringParam,
-	// 	limit: NumberParam,
-	// 	page: withDefault(NumberParam, 1),
-	// 	order: withDefault(StringParam, 'orderIndex:asc'),
-	// 	accountState: StringParam,
-	// 	serviceID: StringParam,
-	// 	salonID: StringParam
-	// })
 
 	const [searchParams, setSearchParams] = useSearchParams({
 		search: '',

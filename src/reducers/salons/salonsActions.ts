@@ -42,8 +42,8 @@ export interface IGetSalonsQueryParams extends IQueryParams {
 }
 
 export interface IGetSalonsHistoryQueryParams extends IQueryParams {
-	dateFrom: string
-	dateTo: string
+	dateFrom: string | null
+	dateTo: string | null
 	salonID: string
 }
 

@@ -88,10 +88,10 @@ export const withPromptUnsavedChanges = (WrappedComponent: any): any => {
 			/>
 		)
 		return (
-			<div>
+			<>
 				{modal}
-				<WrappedComponent />
-			</div>
+				<WrappedComponent {...props} />
+			</>
 		)
 	}
 	return WithPrompt

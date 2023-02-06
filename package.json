@@ -104,8 +104,7 @@
     "smtp-tester": "git+https://github.com/deitch/smtp-tester.git#d50cf2691b7fb48f4930f16358c254958d397dd6",
     "symlink-dir": "5.1.0",
     "tailwindcss": "3.2.4",
-    "tailwindcss-export-config": "4.1.0",
-    "use-query-params": "2.1.2"
+    "tailwindcss-export-config": "4.1.0"
   },
   "devDependencies": {
     "@goodrequest/antd-form-fields": "0.0.6",

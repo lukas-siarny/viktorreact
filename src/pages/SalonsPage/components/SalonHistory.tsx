@@ -60,7 +60,7 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 	})
 
 	const salonHistory = useSelector((state: RootState) => state.salons.salonHistory)
-	console.log('searchParams', searchParams)
+
 	const fetchData = async () => {
 		dispatch(
 			getSalonHistory({

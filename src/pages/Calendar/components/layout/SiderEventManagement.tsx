@@ -6,8 +6,8 @@ import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { StringParam, useQueryParams } from 'use-query-params'
 import { CalendarApi } from '@fullcalendar/react'
+import { useSearchParams } from 'react-router-dom'
 
 // types
 import { ICalendarEventForm, ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'
@@ -80,11 +80,17 @@ const SiderEventManagement: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const [query] = useQueryParams({
-		sidebarView: StringParam,
-		eventId: StringParam,
-		date: StringParam
+	const [searchParams] = useSearchParams({
+		sidebarView: '',
+		eventId: '',
+		date: ''
 	})
+
+	const query = {
+		sidebarView: searchParams.get('sidebarView') || '',
+		eventId: searchParams.get('eventId') || '',
+		date: searchParams.get('date') || ''
+	}
 
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 

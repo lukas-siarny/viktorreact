@@ -6,8 +6,7 @@ import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { change } from 'redux-form'
 import { isEqual, startsWith } from 'lodash'
-import { DelimitedArrayParam, useQueryParams } from 'use-query-params'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 // fullcalendar
 import { EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
@@ -133,10 +132,20 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const employeesOptions = useSelector((state: RootState) => state.employees.employees?.options)
 
 	// query
-	const [query, setQuery] = useQueryParams({
-		employeeIDs: DelimitedArrayParam,
-		categoryIDs: DelimitedArrayParam
+	// const [query, setQuery] = useQueryParams({
+	// 	employeeIDs: DelimitedArrayParam,
+	// 	categoryIDs: DelimitedArrayParam
+	// })
+
+	const [searchParams, setSearchParams] = useSearchParams({
+		employeeIDs: [],
+		categoryIDs: []
 	})
+	// TODO: initne sa zle RESERVATION FILTER
+	const query = {
+		employeeIDs: searchParams.getAll('employeeIDs') || '',
+		categoryIDs: searchParams.getAll('categoryIDs') || ''
+	}
 
 	const [disableRender, setDisableRender] = useState(false)
 
@@ -325,10 +334,10 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				<CalendarEmptyState
 					title={t('loc:Nie je vybratý zamestnanec ani služba')}
 					onButtonClick={() =>
-						setQuery({
+						setSearchParams({
 							...query,
-							employeeIDs: undefined, // undefined znamena ze sa setnu vsetky hodnoty do filtra
-							categoryIDs: undefined
+							employeeIDs: [], // undefined znamena ze sa setnu vsetky hodnoty do filtra
+							categoryIDs: []
 						})
 					}
 					buttonLabel={t('loc:Vybrať všetko')}
@@ -340,9 +349,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				<CalendarEmptyState
 					title={t('loc:Nie je vybratý zamestnanec')}
 					onButtonClick={() =>
-						setQuery({
+						setSearchParams({
 							...query,
-							employeeIDs: undefined
+							employeeIDs: []
 						})
 					}
 				/>
@@ -353,9 +362,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				<CalendarEmptyState
 					title={t('loc:Nie je vybratá služba')}
 					onButtonClick={() =>
-						setQuery({
+						setSearchParams({
 							...query,
-							categoryIDs: undefined
+							categoryIDs: []
 						})
 					}
 					buttonLabel={t('loc:Vybrať všetky')}

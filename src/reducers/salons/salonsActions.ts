@@ -26,19 +26,19 @@ interface IGetSalonHistory {
 }
 
 export interface IGetSalonsQueryParams extends IQueryParams {
-	categoryFirstLevelIDs?: (string | null)[] | null
-	statuses_all?: boolean | null
-	statuses_published?: (string | null)[] | SALON_FILTER_STATES[] | null
-	salonState?: string | null
-	statuses_changes?: (string | null)[] | SALON_FILTER_STATES[] | null
-	countryCode?: string | null
-	createType?: string | null
-	lastUpdatedAtFrom?: string | null
-	lastUpdatedAtTo?: string | null
-	hasSetOpeningHours?: string | null
-	sourceType?: string | null
-	premiumSourceUserType?: string | null
-	assignedUserID?: string | null
+	categoryFirstLevelIDs?: string | ''
+	statuses_all?: string | ''
+	statuses_published?: (string | null)[] | SALON_FILTER_STATES[] | null | ''
+	salonState?: string | ''
+	statuses_changes?: (string | null)[] | SALON_FILTER_STATES[] | ''
+	countryCode?: string | ''
+	createType?: string | ''
+	lastUpdatedAtFrom?: string | ''
+	lastUpdatedAtTo?: string | ''
+	hasSetOpeningHours?: string | ''
+	sourceType?: string | ''
+	premiumSourceUserType?: string | ''
+	assignedUserID?: string | ''
 }
 
 export interface IGetSalonsHistoryQueryParams extends IQueryParams {
@@ -112,7 +112,7 @@ interface IGetRejectedSuggestions {
 }
 
 export const getSalons =
-	(queryParams: IGetSalonsQueryParams): ThunkResult<Promise<ISalonsPayload>> =>
+	(queryParams: any): ThunkResult<Promise<ISalonsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISalonsPayload
 

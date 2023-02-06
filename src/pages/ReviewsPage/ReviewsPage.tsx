@@ -170,7 +170,7 @@ const ReviewsPage = () => {
 		}
 	}
 
-	const dropdownItemClassName = 'p-2 min-w-0 h-9 w-full'
+	const dropdownItemClassName = 'p-2 min-w-0 h-9 w-full whitespace-nowrap'
 
 	const getColumns = () => {
 		const columns: Columns = [
@@ -254,7 +254,7 @@ const ReviewsPage = () => {
 										key={'footer-checkout-dropdown'}
 										overlay={
 											<Menu
-												className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'}
+												className={'shadow-md max-w-xs min-w-48 mt-1 p-2 flex flex-col gap-2'}
 												items={[
 													{
 														key: 'visible_in_b2c',

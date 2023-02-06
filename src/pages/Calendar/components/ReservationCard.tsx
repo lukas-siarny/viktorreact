@@ -83,7 +83,8 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		noteFromB2CCustomer,
 		isPlaceholder,
 		isEdit,
-		onReservationClick
+		onReservationClick,
+		timeLeftClassName
 	} = props
 
 	const [t] = useTranslation()
@@ -153,25 +154,29 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 	return (
 		<div
 			ref={cardRef}
-			className={cx('nc-event reservation', {
-				'nc-day-event': calendarView === CALENDAR_VIEW.DAY,
-				'nc-week-event': calendarView === CALENDAR_VIEW.WEEK,
-				'multiday-event': isMultiDayEvent,
-				'multiday-event-first': isFirstMultiDayEventInCurrentRange,
-				'multiday-event-last': isLastMultiDaylEventInCurrentRange,
-				'min-15': Math.abs(diff) <= 15,
-				'min-30': Math.abs(diff) <= 30 && Math.abs(diff) > 15,
-				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
-				'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
-				'is-past': isPast,
-				'is-online': isOnline,
-				'state-pending': isPending,
-				'state-approved': isApproved,
-				'state-realized': isRealized,
-				'is-autoassigned': isEmployeeAutoassigned,
-				placeholder: isPlaceholder,
-				edit: isEdit || isPlaceholder
-			})}
+			className={cx(
+				'nc-event reservation',
+				{
+					'nc-day-event': calendarView === CALENDAR_VIEW.DAY,
+					'nc-week-event': calendarView === CALENDAR_VIEW.WEEK,
+					'multiday-event': isMultiDayEvent,
+					'multiday-event-first': isFirstMultiDayEventInCurrentRange,
+					'multiday-event-last': isLastMultiDaylEventInCurrentRange,
+					'min-15': Math.abs(diff) <= 15,
+					'min-30': Math.abs(diff) <= 30 && Math.abs(diff) > 15,
+					'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
+					'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
+					'is-past': isPast,
+					'is-online': isOnline,
+					'state-pending': isPending,
+					'state-approved': isApproved,
+					'state-realized': isRealized,
+					'is-autoassigned': isEmployeeAutoassigned,
+					placeholder: isPlaceholder,
+					edit: isEdit || isPlaceholder
+				},
+				timeLeftClassName
+			)}
 			onClick={handleReservationClick}
 			style={{
 				outlineColor: (isPending || isEdit) && !isPast ? backgroundColor : undefined

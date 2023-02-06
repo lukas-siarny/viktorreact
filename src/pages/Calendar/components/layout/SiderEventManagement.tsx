@@ -6,8 +6,8 @@ import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { CalendarApi } from '@fullcalendar/react'
 import { useSearchParams } from 'react-router-dom'
+import { CalendarApi } from '@fullcalendar/core'
 
 // types
 import { ICalendarEventForm, ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'

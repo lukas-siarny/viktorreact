@@ -1,7 +1,7 @@
 import { EventDragStartArg, EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
-import { EventDropArg, EventInput } from '@fullcalendar/react'
+import { EventDropArg, EventInput } from '@fullcalendar/core'
 
 // utils
 import {
@@ -738,6 +738,7 @@ export interface IEventCardProps {
 		startDateTime?: CalendarEvent['startDateTime']
 		endDateTime?: CalendarEvent['endDateTime']
 	}
+	timeLeftClassName?: string
 }
 
 export interface ICalendarReservationPopover {

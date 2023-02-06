@@ -223,7 +223,7 @@ const ReservationForm: FC<Props> = (props) => {
 		setVisibleCustomerDetailModal(true)
 	}
 
-	const getAndChangeReservationTime = async (serviceId?: string, employeeId?: string) => {
+	const setReservationTime = async (serviceId?: string, employeeId?: string) => {
 		let durationData: DurationData = {}
 
 		const service = findNodeInTree({ children: servicesOptions }, serviceId) as ICalendarReservationForm['service'] | undefined
@@ -269,7 +269,7 @@ const ReservationForm: FC<Props> = (props) => {
 		}
 
 		// set event time based on service duration data
-		if (!isEmpty(durationData) && !isNil(durationData.durationTo)) {
+		if (!isNil(durationData.durationTo)) {
 			const timeFrom = formValues?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT)
 			const [hoursFrom, minutesFrom] = timeFrom.split(':')
 			let timeTo = dayjs().startOf('day').add(Number(hoursFrom), 'hours').add(Number(minutesFrom), 'minutes').add(durationData.durationTo, 'minutes')
@@ -290,7 +290,7 @@ const ReservationForm: FC<Props> = (props) => {
 		const selectedServiceId = service?.value
 
 		if (selectedServiceId) {
-			getAndChangeReservationTime(selectedServiceId, selectedEmployeeId)
+			setReservationTime(selectedServiceId, selectedEmployeeId)
 		}
 	}
 
@@ -300,7 +300,7 @@ const ReservationForm: FC<Props> = (props) => {
 
 		// check service / employee duration data and change event time only when there is alerady a service selected
 		if (selectedEmployeeId && selectedServiceId) {
-			getAndChangeReservationTime(selectedServiceId as string, selectedEmployeeId)
+			setReservationTime(selectedServiceId as string, selectedEmployeeId)
 		}
 	}
 
@@ -418,7 +418,6 @@ const ReservationForm: FC<Props> = (props) => {
 							minuteStep={15}
 							suffixIcon={isSettingTime ? <LoadingIcon className={'animate-spin-2s'} /> : <TimerIcon className={'text-notino-grayDark'} />}
 							size={'large'}
-							disabled={isSettingTime}
 						/>
 						<Field
 							component={SelectField}

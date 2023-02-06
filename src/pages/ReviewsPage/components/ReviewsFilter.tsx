@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 
 // utils
 import { CHANGE_DEBOUNCE_TIME, ENUMERATIONS_KEYS, FIELD_MODE, FORM, REVIEW_VERIFICATION_STATUS, ROW_GUTTER_X_DEFAULT, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
-import { checkFiltersSizeWithoutSearch, optionRenderWithImage, optionRenderWithTag, validationString } from '../../../utils/helper'
+import { checkFiltersSizeWithoutSearch, optionRenderWithImage, validationString } from '../../../utils/helper'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -61,22 +61,14 @@ const ReviewsFilter = (props: Props) => {
 	const verificationStatusOptions = useMemo(
 		() => [
 			{
-				label: t('loc:Zverejnená'),
-				value: REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C,
-				key: REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C,
-				tagClassName: 'bg-status-published'
-			},
-			{
-				label: t('loc:Skrytá'),
+				label: t('loc:So skrytým textom'),
 				value: REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C,
-				key: REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C,
-				tagClassName: 'bg-status-notPublished'
+				key: REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C
 			},
 			{
 				label: t('loc:Na kontrolu'),
 				value: REVIEW_VERIFICATION_STATUS.NOT_VERIFIED,
-				key: REVIEW_VERIFICATION_STATUS.NOT_VERIFIED,
-				tagClassName: 'bg-status-pending'
+				key: REVIEW_VERIFICATION_STATUS.NOT_VERIFIED
 			}
 		],
 		[t]
@@ -91,13 +83,11 @@ const ReviewsFilter = (props: Props) => {
 							component={SelectField}
 							name={'verificationStatus'}
 							placeholder={t('loc:Stav recenzie')}
-							className={'select-with-tag-options'}
 							allowClear
 							size={'large'}
 							filterOptions
 							onDidMountSearch
 							options={verificationStatusOptions}
-							optionRender={optionRenderWithTag}
 						/>
 					</Col>
 					<Col span={8}>

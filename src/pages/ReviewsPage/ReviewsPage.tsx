@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BooleanParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Row, Spin, Rate, Progress, Tag, Button, Popconfirm, Tooltip } from 'antd'
+import { Col, Row, Spin, Rate, Progress, Tag, Button, Popconfirm, Tooltip, Menu, Dropdown } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
@@ -170,6 +170,8 @@ const ReviewsPage = () => {
 		}
 	}
 
+	const dropdownItemClassName = 'p-2 min-w-0 h-9 w-full'
+
 	const getColumns = () => {
 		const columns: Columns = [
 			{
@@ -219,7 +221,7 @@ const ReviewsPage = () => {
 				dataIndex: 'toxicityScore',
 				key: 'toxicityScore',
 				ellipsis: true,
-				width: 150,
+				width: 170,
 				sorter: true,
 				sortOrder: setOrder(query.order, 'toxicityScore'),
 				render: (value) =>
@@ -229,37 +231,6 @@ const ReviewsPage = () => {
 							<Progress percent={value} showInfo={false} strokeColor={'#000'} />
 						</Row>
 					) : null
-			},
-			{
-				title: t('loc:Stav recenzie'),
-				dataIndex: 'verificationStatus',
-				key: 'verificationStatus',
-				ellipsis: true,
-				width: 120,
-				render: (value) => {
-					switch (value) {
-						case REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C:
-							return (
-								<Tag className={'noti-tag bg-status-published'}>
-									<span>{t('loc:Zverejnená')}</span>
-								</Tag>
-							)
-						case REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C:
-							return (
-								<Tag className={'noti-tag bg-status-notPublished'}>
-									<span>{t('loc:Skrytá')}</span>
-								</Tag>
-							)
-						case REVIEW_VERIFICATION_STATUS.NOT_VERIFIED:
-							return (
-								<Tag className={'noti-tag bg-status-pending'}>
-									<span>{t('loc:Na kontrolu')}</span>
-								</Tag>
-							)
-						default:
-							return null
-					}
-				}
 			}
 		]
 
@@ -267,95 +238,66 @@ const ReviewsPage = () => {
 			columns.push({
 				key: 'actions',
 				ellipsis: true,
-				width: 130,
 				fixed: 'right',
+				width: 180,
 				render: (_value, record) => {
 					const disabledShowReview = record?.verificationStatus === REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C
 					const disabledHideReview = record?.verificationStatus === REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C
+					const showReviewText = record?.verificationStatus === REVIEW_VERIFICATION_STATUS.NOT_VERIFIED ? t('loc:Akceptovať text') : t('loc:Publikovať text')
 
 					return (
 						<div className={'flex justify-end items-center gap-2'}>
 							<Permissions
 								allowed={[...ADMIN_PERMISSIONS, PERMISSION.REVIEW_VERIFY]}
 								render={(hasPermission, { openForbiddenModal }) => (
-									<>
-										<Popconfirm
-											placement={'top'}
-											title={t('loc:Naozaj chcete publikovať recenziu?')}
-											okButtonProps={{
-												type: 'default',
-												className: 'noti-btn'
-											}}
-											cancelButtonProps={{
-												type: 'primary',
-												className: 'noti-btn'
-											}}
-											okText={t('loc:Áno')}
-											onConfirm={() => {
-												if (!hasPermission) {
-													openForbiddenModal()
-												}
-												changeVerificationStatus(record.id, REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C)
-											}}
-											cancelText={t('loc:Nie')}
-											disabled={disabledShowReview}
+									<Dropdown
+										key={'footer-checkout-dropdown'}
+										overlay={
+											<Menu
+												className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'}
+												items={[
+													{
+														key: 'visible_in_b2c',
+														label: showReviewText,
+														icon: <EyeIcon width={16} height={16} />,
+														className: dropdownItemClassName,
+														disabled: disabledShowReview,
+														onClick: () => {
+															if (!hasPermission) {
+																openForbiddenModal()
+															}
+															changeVerificationStatus(record.id, REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C)
+														}
+													},
+													{
+														key: 'hidden_in_b2c',
+														label: t('loc:Skryť text'),
+														icon: <EyeoffIcon width={16} height={16} />,
+														className: dropdownItemClassName,
+														disabled: disabledHideReview,
+														onClick: () => {
+															if (!hasPermission) {
+																openForbiddenModal()
+															}
+															changeVerificationStatus(record.id, REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C)
+														}
+													}
+												]}
+											/>
+										}
+										placement='bottomRight'
+										trigger={['click']}
+									>
+										<Button
+											type={'primary'}
+											htmlType={'button'}
+											size={'middle'}
+											className={'noti-btn h-8 w-32 hover:shadow-none'}
+											onClick={(e) => e.preventDefault()}
 										>
-											<Tooltip title={disabledShowReview ? t('loc:Recenzia je zobrazená v B2C') : null} destroyTooltipOnHide>
-												<span className={cx({ 'cursor-not-allowed': disabledShowReview })}>
-													<Button
-														htmlType={'button'}
-														type={'primary'}
-														icon={<EyeIcon width={16} height={16} />}
-														className={cx('noti-btn', {
-															'pointer-events-none': disabledShowReview
-														})}
-														disabled={disabledShowReview}
-														onClick={(e) => {
-															e.preventDefault()
-														}}
-													/>
-												</span>
-											</Tooltip>
-										</Popconfirm>
-										<Popconfirm
-											placement={'top'}
-											title={t('loc:Naozaj chcete skryť recenziu?')}
-											okButtonProps={{
-												type: 'default',
-												className: 'noti-btn'
-											}}
-											cancelButtonProps={{
-												type: 'primary',
-												className: 'noti-btn'
-											}}
-											okText={t('loc:Áno')}
-											onConfirm={() => {
-												if (!hasPermission) {
-													openForbiddenModal()
-												}
-												changeVerificationStatus(record.id, REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C)
-											}}
-											cancelText={t('loc:Nie')}
-											disabled={disabledHideReview}
-										>
-											<Tooltip title={disabledHideReview ? t('loc:Recenzia nie je zobrazená v B2C') : null} destroyTooltipOnHide>
-												<span className={cx({ 'cursor-not-allowed': disabledHideReview })}>
-													<Button
-														htmlType={'button'}
-														type={'dashed'}
-														icon={<EyeoffIcon width={16} height={16} />}
-														className={cx('noti-btn', {
-															'pointer-events-none': disabledHideReview
-														})}
-														disabled={disabledHideReview}
-														onClick={(e) => {
-															e.preventDefault()
-														}}
-													/>
-												</span>
-											</Tooltip>
-										</Popconfirm>
-									</>
+											{t('loc:Moderovať')}
+										</Button>
+									</Dropdown>
 								)}
 							/>
 							<Permissions
@@ -428,11 +370,17 @@ const ReviewsPage = () => {
 									className: record.verificationStatus === REVIEW_VERIFICATION_STATUS.NOT_VERIFIED ? 'noti-table-row-warning' : undefined
 								})}
 								expandable={{
-									expandedRowRender: (record) => (
-										<p className={'pb-1 pl-4 whitespace-pre-wrap'}>
-											<i>{record.reviewMessage || '-'}</i>
-										</p>
-									),
+									expandedRowRender: (record) => {
+										return (
+											<p
+												className={cx('pb-1 pl-4 whitespace-pre-wrap flex-1', {
+													'text-notino-gray': record.verificationStatus === REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C
+												})}
+											>
+												<i>{record.reviewMessage || '-'}</i>
+											</p>
+										)
+									},
 									showExpandColumn: false,
 									defaultExpandAllRows: true,
 									expandedRowKeys

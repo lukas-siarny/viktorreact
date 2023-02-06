@@ -332,7 +332,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 				<Button
 					type={'dashed'}
 					size={'middle'}
-					icon={<EyeoffIcon />}
+					icon={<EyeoffIcon color={'#000'} />}
 					className={cx('noti-btn m-regular w-full md:w-auto md:min-w-45 xl:min-w-60', className)}
 					onClick={(e) => {
 						if (hasPermission) {

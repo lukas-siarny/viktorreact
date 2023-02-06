@@ -6,7 +6,7 @@ import { Spin, ConfigProvider } from 'antd'
 import { Locale } from 'antd/lib/locale-provider'
 import { AliasToken } from 'antd/es/theme/internal'
 import dayjs from 'dayjs'
-import { BrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom'
 
 import 'antd/dist/reset.css'
 
@@ -41,7 +41,19 @@ const ANTD_THEME_VARIABLES_OVERRIDE: Partial<AliasToken> = {
 
 const App = () => {
 	const [antdLocale, setAntdLocale] = useState<Locale | undefined>(undefined)
-
+	// You can do this:
+	const router = createBrowserRouter(
+		createRoutesFromElements(
+			<Route
+				path={'*'}
+				element={
+					<ScrollToTop>
+						<AppRoutes />{' '}
+					</ScrollToTop>
+				}
+			/>
+		)
+	)
 	useEffect(() => {
 		i18n.on('languageChanged', (language) => {
 			const locale = LOCALES[language as LANGUAGE] || LOCALES[DEFAULT_LANGUAGE]
@@ -78,11 +90,7 @@ const App = () => {
 						}}
 					>
 						<Provider store={store}>
-							<BrowserRouter>
-								<ScrollToTop>
-									<AppRoutes />
-								</ScrollToTop>
-							</BrowserRouter>
+							<RouterProvider router={router} />
 						</Provider>
 					</ConfigProvider>
 				</PersistGate>

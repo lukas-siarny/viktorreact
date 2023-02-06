@@ -4,7 +4,8 @@ import dayjs from 'dayjs'
 import { useDispatch } from 'react-redux'
 
 // full calendar
-import FullCalendar, { SlotLabelContentArg, DateSelectArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar from '@fullcalendar/react' // must go before plugins
+import { SlotLabelContentArg, DateSelectArg } from '@fullcalendar/core'
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'

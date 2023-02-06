@@ -1,7 +1,7 @@
 import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
-import { FormatterInput } from '@fullcalendar/react'
+import { FormatterInput } from '@fullcalendar/core'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'

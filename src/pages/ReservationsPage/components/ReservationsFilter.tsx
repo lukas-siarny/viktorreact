@@ -20,6 +20,7 @@ import {
 import {
 	checkFiltersSizeWithoutSearch,
 	getAssignedUserLabel,
+	optionRenderWithIcon,
 	transalteReservationSourceType,
 	translateReservationPaymentMethod,
 	translateReservationState
@@ -118,6 +119,7 @@ const ReservationsFilter = (props: Props) => {
 					<Col span={6}>
 						<Field
 							component={SelectField}
+							optionRender={(itemData: any) => optionRenderWithIcon(itemData)}
 							mode={'multiple'}
 							name={'reservationStates'}
 							placeholder={t('loc:Stav')}
@@ -134,6 +136,7 @@ const ReservationsFilter = (props: Props) => {
 							mode={'multiple'}
 							name={'reservationPaymentMethods'}
 							placeholder={t('loc:Spôsob úhrady')}
+							optionRender={(itemData: any) => optionRenderWithIcon(itemData)}
 							allowClear
 							showSearch={false}
 							showArrow

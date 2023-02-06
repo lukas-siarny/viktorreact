@@ -55,7 +55,7 @@ export const withPermissions =
 
 			init = async () => {
 				this._mounted = true
-				const { userActions, authUserPermissions } = this.props
+				const { userActions, authUserPermissions, salonPermissions } = this.props
 				let permissions
 				try {
 					const { data } = await userActions.getAuthUserProfile()
@@ -64,6 +64,7 @@ export const withPermissions =
 					permissions = authUserPermissions
 				}
 
+				permissions = [...permissions, ...(salonPermissions || [])]
 				if (!checkPermissions(permissions, allowed, except)) {
 					if (this._mounted) {
 						this.setState(
@@ -87,7 +88,8 @@ export const withPermissions =
 			}
 		}
 		const mapStateToProps = (state: RootState) => ({
-			authUserPermissions: state.user.authUser?.data?.uniqPermissions
+			authUserPermissions: state.user.authUser?.data?.uniqPermissions,
+			salonPermissions: state.selectedSalon.selectedSalon.data?.uniqPermissions
 		})
 
 		const mapDispatchToProps = (dispatch: any) => ({

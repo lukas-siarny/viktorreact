@@ -55,7 +55,7 @@ const UserPage: FC<Props> = (props) => {
 	const [backUrl] = useBackUrl(t('paths:users'))
 
 	if (isMyAccountPath) {
-		submitPermissions = [...submitPermissions, PERMISSION.PARTNER]
+		submitPermissions = [...submitPermissions, PERMISSION.PARTNER, PERMISSION.NOTINO]
 	}
 
 	const isFormPristine = useSelector(isPristine(FORM.USER_ACCOUNT))

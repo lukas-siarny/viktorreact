@@ -44,20 +44,26 @@ const UsersPage = () => {
 		roleID: ''
 	})
 
-	const searchParamsObj = Object.fromEntries(searchParams)
+	const query = {
+		search: searchParams.get('search') || '',
+		limit: searchParams.get('limit') || '',
+		page: searchParams.get('page') || '',
+		order: searchParams.get('order') || '',
+		roleID: searchParams.get('roleID') || ''
+	}
 
 	useEffect(() => {
-		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: searchParams.get('search'), roleID: searchParams.get('roleID') }))
+		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: query.search, roleID: query.roleID }))
 		dispatch(
 			getUsers({
-				page: searchParams.get('page'),
-				limit: searchParams.get('limit'),
-				order: searchParams.get('order'),
-				search: searchParams.get('search'),
-				roleID: searchParams.get('roleID')
+				page: query.page,
+				limit: query.limit,
+				order: query.order,
+				search: query.search,
+				roleID: query.roleID
 			})
 		)
-	}, [dispatch, searchParams])
+	}, [dispatch, query.limit, query.order, query.page, query.roleID, query.search])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -74,7 +80,7 @@ const UsersPage = () => {
 		if (!(sorter instanceof Array)) {
 			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
 			const newQuery = {
-				...searchParamsObj,
+				...query,
 				order
 			}
 			setSearchParams(newQuery)
@@ -83,7 +89,7 @@ const UsersPage = () => {
 
 	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
-			...searchParamsObj,
+			...query,
 			limit: String(limit),
 			page: String(page)
 		}
@@ -92,7 +98,7 @@ const UsersPage = () => {
 
 	const handleSubmit = (values: IUsersFilter) => {
 		const newQuery = {
-			...searchParamsObj,
+			...query,
 			...values,
 			page: 1
 		}
@@ -106,7 +112,7 @@ const UsersPage = () => {
 			key: 'fullName',
 			ellipsis: true,
 			sorter: true,
-			sortOrder: setOrder(searchParams.get('order'), 'fullName'),
+			sortOrder: setOrder(query.order, 'fullName'),
 			width: '20%',
 			render: (_value, record) => {
 				if (!record?.firstName && !record?.lastName) {
@@ -126,7 +132,7 @@ const UsersPage = () => {
 			ellipsis: true,
 			sorter: true,
 			width: '25%',
-			sortOrder: setOrder(searchParams.get('order'), 'email')
+			sortOrder: setOrder(query.order, 'email')
 		},
 		{
 			title: t('loc:Telefón'),
@@ -146,7 +152,7 @@ const UsersPage = () => {
 			dataIndex: 'roles',
 			key: 'roleName',
 			sorter: true,
-			sortOrder: setOrder(searchParams.get('order'), 'roleName'),
+			sortOrder: setOrder(query.order, 'roleName'),
 			ellipsis: {
 				showTitle: false
 			},

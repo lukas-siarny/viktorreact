@@ -26,7 +26,7 @@ const PinField = (props: Props) => {
 
 	useEffect(() => {
 		if (inputRef.current) {
-			inputRef.current.inputs[0].focus()
+			inputRef?.current?.inputs?.[0]?.focus()
 		}
 	}, [inputRef])
 

@@ -38,20 +38,22 @@ const SupportContactsPage = () => {
 		search: '',
 		order: 'country:ASC'
 	})
-
-	const searchParamsObj = Object.fromEntries(searchParams)
+	const query = {
+		search: searchParams.get('search') || '',
+		order: searchParams.get('order') || ''
+	}
 
 	useEffect(() => {
 		dispatch(getSupportContacts())
 	}, [dispatch])
 
 	useEffect(() => {
-		dispatch(initialize(FORM.SUPPORT_CONTACTS_FILTER, { search: searchParams.get('search') }))
-	}, [dispatch, searchParams])
+		dispatch(initialize(FORM.SUPPORT_CONTACTS_FILTER, { search: query.search }))
+	}, [dispatch, query.search])
 
 	const handleSubmit = (values: ISupportContactsFilter) => {
 		const newQuery = {
-			...searchParamsObj,
+			...query,
 			...values
 		}
 		setSearchParams(newQuery)
@@ -61,7 +63,7 @@ const SupportContactsPage = () => {
 		if (!(sorter instanceof Array)) {
 			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
 			const newQuery = {
-				...searchParamsObj,
+				...query,
 				order
 			}
 			setSearchParams(newQuery)
@@ -73,16 +75,16 @@ const SupportContactsPage = () => {
 			return []
 		}
 
-		return searchParams.get('search')
+		return query.search
 			? supportContacts.tableData.filter((country) => {
 					const countryName = transformToLowerCaseWithoutAccent(
 						getCountryNameFromNameLocalizations(country.country?.nameLocalizations, i18n.language as LANGUAGE) || country.country?.code
 					)
-					const searchedValue = transformToLowerCaseWithoutAccent(searchParams.get('search') || undefined)
+					const searchedValue = transformToLowerCaseWithoutAccent(query.search || undefined)
 					return countryName.includes(searchedValue)
 			  })
 			: supportContacts.tableData
-	}, [searchParams, supportContacts])
+	}, [query.search, supportContacts])
 
 	const columns: Columns = [
 		{
@@ -90,7 +92,7 @@ const SupportContactsPage = () => {
 			dataIndex: 'country',
 			key: 'country',
 			width: '30%',
-			sortOrder: setOrder(searchParams.get('order'), 'country'),
+			sortOrder: setOrder(query.order, 'country'),
 			sorter: {
 				compare: (a, b) => {
 					const aValue = getCountryNameFromNameLocalizations(a?.country?.nameLocalizations, i18n.language as LANGUAGE) || a?.country?.code

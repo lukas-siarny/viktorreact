@@ -1,9 +1,10 @@
 import React, { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { change, Field, Fields, initialize, InjectedFormProps, reduxForm, submit } from 'redux-form'
+import { change, Field, Fields, getFormValues, initialize, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Form, Modal, Spin } from 'antd'
 import { flatten, map } from 'lodash'
+import cx from 'classnames'
 
 // validate
 import validateReservationForm from './validateReservationForm'
@@ -35,6 +36,7 @@ import CustomerForm from '../../../CustomersPage/components/CustomerForm'
 // redux
 import { RootState } from '../../../../reducers'
 import { getCustomer } from '../../../../reducers/customers/customerActions'
+import CalendarDetailPopover from '../CustomerDetailPopover'
 
 type ComponentProps = {
 	salonID: string
@@ -54,6 +56,7 @@ const ReservationForm: FC<Props> = (props) => {
 	const [visibleCustomerDetailModal, setVisibleCustomerDetailModal] = useState(false)
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
+	const reservationFormValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
 
 	// NOTE: pristine pouzivat len pri UPDATE eventu a pri CREATE povlit akciu vzdy
 	const disabledSubmitButton = !!(eventId && pristine) || submitting
@@ -146,7 +149,7 @@ const ReservationForm: FC<Props> = (props) => {
 		}
 	}
 	const onChangeCustomer = async (customer: any) => {
-		const { data } = await dispatch(getCustomer(customer.key))
+		/* const { data } = await dispatch(getCustomer(customer.key))
 		dispatch(
 			initialize(FORM.CUSTOMER, {
 				...data?.customer,
@@ -155,7 +158,7 @@ const ReservationForm: FC<Props> = (props) => {
 					: null
 			})
 		)
-		setVisibleCustomerDetailModal(true)
+		setVisibleCustomerDetailModal(true) */
 	}
 
 	const modals = (
@@ -200,36 +203,39 @@ const ReservationForm: FC<Props> = (props) => {
 						<Permissions
 							allowed={[SALON_PERMISSION.CUSTOMER_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
-								<Field
-									optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}
-									component={SelectField}
-									label={t('loc:Zákazník')}
-									placeholder={t('loc:Vyber zákazníka')}
-									name={'customer'}
-									className={'pb-0'}
-									size={'large'}
-									onChange={onChangeCustomer}
-									optionLabelProp={'label'}
-									suffixIcon={<CustomerIcon className={'text-notino-grayDark'} width={16} height={16} />}
-									update={(itemKey: number, ref: any) => ref.blur()}
-									filterOption={false}
-									allowInfinityScroll
-									showSearch
-									labelInValue
-									required
-									onSearch={searchCustomers}
-									actions={[
-										{
-											title: t('loc:Nový zákaznik'),
-											onAction: hasPermission
-												? () => {
-														dispatch(initialize(FORM.CUSTOMER, { phonePrefixCountryCode: phonePrefix }))
-														setVisibleCustomerCreateModal(true)
-												  }
-												: openForbiddenModal
-										}
-									]}
-								/>
+								<div className='relative'>
+									<CalendarDetailPopover />
+									<Field
+										optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}
+										component={SelectField}
+										label={t('loc:Zákazník')}
+										placeholder={t('loc:Vyber zákazníka')}
+										name={'customer'}
+										className={cx('pb-0', { 'customer-with-info-icon': reservationFormValues?.customer?.value })}
+										size={'large'}
+										onChange={onChangeCustomer}
+										optionLabelProp={'label'}
+										suffixIcon={<CustomerIcon className={'text-notino-grayDark'} width={16} height={16} />}
+										update={(itemKey: number, ref: any) => ref.blur()}
+										filterOption={false}
+										allowInfinityScroll
+										showSearch
+										labelInValue
+										required
+										onSearch={searchCustomers}
+										actions={[
+											{
+												title: t('loc:Nový zákaznik'),
+												onAction: hasPermission
+													? () => {
+															dispatch(initialize(FORM.CUSTOMER, { phonePrefixCountryCode: phonePrefix }))
+															setVisibleCustomerCreateModal(true)
+													  }
+													: openForbiddenModal
+											}
+										]}
+									/>
+								</div>
 							)}
 						/>
 						<Field

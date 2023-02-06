@@ -71,14 +71,14 @@ const PopoverContent: FC<ContentProps> = (props) => {
 	const hasFooter = !!footerButtons?.length
 
 	return (
-		<div className='nc-event-popover-content text-notino-black w-80'>
+		<div className='nc-popover-content text-notino-black w-80'>
 			<header className={'flex items-center justify-between px-4 h-13'}>
 				<Row className={'state-wrapper gap-2'}>
 					{headerIcon}
 					<span className={'text-sm leading-4'}>{headerState}</span>
 				</Row>
 				<Row className={'buttons gap-4'}>
-					<button className={'nc-event-popover-header-button'} type={'button'} onClick={onEdit}>
+					<button className={'nc-popover-header-button'} type={'button'} onClick={onEdit}>
 						<EditIcon />
 					</button>
 					{(moreMenuItems || []).length > 0 && (
@@ -87,12 +87,12 @@ const PopoverContent: FC<ContentProps> = (props) => {
 							placement='bottomRight'
 							trigger={['click']}
 						>
-							<button className={'nc-event-popover-header-button'} type={'button'} onClick={(e) => e.preventDefault()}>
+							<button className={'nc-popover-header-button'} type={'button'} onClick={(e) => e.preventDefault()}>
 								<DotsIcon style={{ transform: 'rotate(90deg)' }} />
 							</button>
 						</Dropdown>
 					)}
-					<button className={'nc-event-popover-header-button'} type={'button'} onClick={onClose}>
+					<button className={'nc-popover-header-button'} type={'button'} onClick={onClose}>
 						<CloseIcon />
 					</button>
 				</Row>
@@ -202,7 +202,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
-	const overlayClassName = `nc-event-popover-overlay_${id || ''}`
+	const overlayClassName = `nc-popover-overlay_${id || ''}`
 	const itemClassName = 'p-2 font-medium min-w-0 h-9 w-full relative'
 
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS]).data
@@ -410,7 +410,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 			destroyTooltipOnHide={{ keepParent: true }}
 			trigger={'click'}
 			placement={placement}
-			overlayClassName={`${overlayClassName} nc-event-popover-overlay`}
+			overlayClassName={`${overlayClassName} nc-popover-overlay nc-popover-overlay-fixed`}
 			content={
 				<PopoverContent
 					start={start || null}

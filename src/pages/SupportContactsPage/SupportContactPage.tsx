@@ -49,7 +49,7 @@ import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
 type SupportContactPatch = Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.RequestBody
 
-const permissions: PERMISSION[] = []
+const permissions: PERMISSION[] = [PERMISSION.ENUM_EDIT]
 
 type Props = {
 	computedMatch: IComputedMatch<{

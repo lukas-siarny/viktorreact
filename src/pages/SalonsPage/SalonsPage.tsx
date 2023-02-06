@@ -72,25 +72,6 @@ const SalonsPage = () => {
 		dispatch(selectSalon())
 	}, [dispatch])
 
-	// const [query, setQuery] = useQueryParams({
-	// 	search: StringParam,
-	// 	categoryFirstLevelIDs: ArrayParam,
-	// 	statuses_all: withDefault(BooleanParam, false),
-	// 	statuses_published: ArrayParam,
-	// 	salonState: withDefault(StringParam, TAB_KEYS.ACTIVE),
-	// 	statuses_changes: ArrayParam,
-	// 	limit: NumberParam,
-	// 	page: withDefault(NumberParam, 1),
-	// 	order: withDefault(StringParam, 'createdAt:DESC'),
-	// 	countryCode: StringParam,
-	// 	createType: StringParam,
-	// 	lastUpdatedAtFrom: StringParam,
-	// 	lastUpdatedAtTo: StringParam,
-	// 	hasSetOpeningHours: StringParam,
-	// 	sourceType: StringParam,
-	// 	assignedUserID: StringParam,
-	// 	premiumSourceUserType: StringParam
-	// })
 	const [searchParams, setSearchParams] = useSearchParams({
 		search: '',
 		categoryFirstLevelIDs: [],
@@ -111,26 +92,28 @@ const SalonsPage = () => {
 		premiumSourceUserType: ''
 	})
 
-	const query = {
-		search: searchParams.get('search') || '',
-		limit: searchParams.get('limit') || '',
-		page: searchParams.get('page') || '',
-		order: searchParams.get('order') || '',
-		categoryFirstLevelIDs: searchParams.getAll('categoryFirstLevelIDs') || [],
-		salonState: searchParams.get('salonState') || '',
-		statuses_changes: searchParams.getAll('statuses_changes') || [],
-		statuses_all: searchParams.get('statuses_all') || '',
-		statuses_published: searchParams.getAll('statuses_published') || [],
-		countryCode: searchParams.get('countryCode') || '',
-		createType: searchParams.get('createType') || '',
-		lastUpdatedAtFrom: searchParams.get('lastUpdatedAtFrom') || '',
-		lastUpdatedAtTo: searchParams.get('lastUpdatedAtTo') || '',
-		hasSetOpeningHours: searchParams.get('hasSetOpeningHours') || '',
-		sourceType: searchParams.get('sourceType') || '',
-		assignedUserID: searchParams.get('assignedUserID') || '',
-		premiumSourceUserType: searchParams.get('premiumSourceUserType') || ''
-	}
-	console.log('query', query)
+	const query = useMemo(
+		() => ({
+			search: searchParams.get('search') || '',
+			limit: searchParams.get('limit') || '',
+			page: searchParams.get('page') || '',
+			order: searchParams.get('order') || '',
+			categoryFirstLevelIDs: searchParams.getAll('categoryFirstLevelIDs') || [],
+			salonState: searchParams.get('salonState') || '',
+			statuses_changes: searchParams.getAll('statuses_changes') || [],
+			statuses_all: searchParams.get('statuses_all') || '',
+			statuses_published: searchParams.getAll('statuses_published') || [],
+			countryCode: searchParams.get('countryCode') || '',
+			createType: searchParams.get('createType') || '',
+			lastUpdatedAtFrom: searchParams.get('lastUpdatedAtFrom') || '',
+			lastUpdatedAtTo: searchParams.get('lastUpdatedAtTo') || '',
+			hasSetOpeningHours: searchParams.get('hasSetOpeningHours') || '',
+			sourceType: searchParams.get('sourceType') || '',
+			assignedUserID: searchParams.get('assignedUserID') || '',
+			premiumSourceUserType: searchParams.get('premiumSourceUserType') || ''
+		}),
+		[searchParams]
+	)
 	const resetQuery = (selectedTabKey: string) => {
 		// reset query when switching between tabs
 		setSearchParams({

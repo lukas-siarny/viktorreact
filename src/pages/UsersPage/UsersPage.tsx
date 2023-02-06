@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -15,7 +14,7 @@ import AdminUsersFilter, { IUsersFilter } from './components/AdminUsersFilter'
 
 // utils
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
-import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, normalizeSearchQueryParams, setOrder } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -37,18 +36,34 @@ const UsersPage = () => {
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 	const navigate = useNavigate()
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		limit: NumberParam,
-		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'fullName:ASC'),
-		roleID: withDefault(StringParam, undefined)
+	const [searchParams, setSearchParams] = useSearchParams({
+		search: '',
+		limit: '',
+		page: '1',
+		order: 'fullName:ASC',
+		roleID: ''
 	})
+
+	const query = {
+		search: searchParams.get('search') || '',
+		limit: searchParams.get('limit') || '',
+		page: searchParams.get('page') || '',
+		order: searchParams.get('order') || '',
+		roleID: searchParams.get('roleID') || ''
+	}
 
 	useEffect(() => {
 		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: query.search, roleID: query.roleID }))
-		dispatch(getUsers({ page: query.page, limit: query.limit, order: query.order, search: query.search, roleID: query.roleID }))
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.roleID])
+		dispatch(
+			getUsers({
+				page: query.page,
+				limit: query.limit,
+				order: query.order,
+				search: query.search,
+				roleID: query.roleID
+			})
+		)
+	}, [dispatch, query.limit, query.order, query.page, query.roleID, query.search])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -68,17 +83,17 @@ const UsersPage = () => {
 				...query,
 				order
 			}
-			setQuery(newQuery)
+			setSearchParams(newQuery)
 		}
 	}
 
 	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
 			...query,
-			limit,
-			page
+			limit: String(limit),
+			page: String(page)
 		}
-		setQuery(newQuery)
+		setSearchParams(newQuery)
 	}
 
 	const handleSubmit = (values: IUsersFilter) => {
@@ -87,7 +102,7 @@ const UsersPage = () => {
 			...values,
 			page: 1
 		}
-		setQuery(newQuery)
+		setSearchParams(normalizeSearchQueryParams(newQuery))
 	}
 
 	const columns: Columns = [

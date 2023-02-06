@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { reset, initialize } from 'redux-form'
 import { map } from 'lodash'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import queryString from 'query-string'
 
 // components
@@ -31,7 +31,6 @@ const RegistrationPage: FC<Props> = () => {
 	const { search } = useLocation()
 	const { email } = queryString.parse(search, { decode: false })
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
-	const navigate = useNavigate()
 	const handleSubmit = async (values: IRegistrationForm) => {
 		try {
 			const reqData = {
@@ -45,7 +44,7 @@ const RegistrationPage: FC<Props> = () => {
 
 			const { data } = await postReq('/api/b2b/admin/users/registration', null, reqData)
 			dispatch(reset(FORM.REGISTRATION))
-			return dispatch(processAuthorizationResult(data, t('paths:activation'), navigate))
+			return dispatch(processAuthorizationResult(data, t('paths:activation')))
 			// return res
 		} catch (e) {
 			// eslint-disable-next-line no-console

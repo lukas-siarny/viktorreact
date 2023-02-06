@@ -35,7 +35,7 @@ const IndustryForm: FC<Props> = (props) => {
 	const { handleSubmit, submitting, pristine, dataTree, disabledForm, isLoadingTree } = props
 
 	return (
-		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			{!isLoadingTree && <Field name={'categoryIDs'} component={CheckboxGroupNestedField} dataTree={dataTree} disabled={disabledForm} />}
 			<div className={'content-footer'}>
 				<Row justify='center'>

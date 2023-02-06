@@ -20,6 +20,7 @@ import {
 import {
 	checkFiltersSizeWithoutSearch,
 	getAssignedUserLabel,
+	optionRenderWithIcon,
 	transalteReservationSourceType,
 	translateReservationPaymentMethod,
 	translateReservationState
@@ -42,12 +43,14 @@ type Props = InjectedFormProps<IReservationsFilter, ComponentProps> & ComponentP
 
 const RESERVATION_STATE_OPTIONS = map(RESERVATION_STATES, (item) => ({
 	key: item,
-	label: translateReservationState(item as RESERVATION_STATE)
+	label: translateReservationState(item as RESERVATION_STATE).text,
+	icon: translateReservationState(item as RESERVATION_STATE).icon
 }))
 
 const RESERVATION_PAYMENT_METHOD_OPTIONS = map(RESERVATION_PAYMENT_METHODS, (item) => ({
 	key: item,
-	label: translateReservationPaymentMethod(item as RESERVATION_PAYMENT_METHOD)
+	label: translateReservationPaymentMethod(item as RESERVATION_PAYMENT_METHOD).text,
+	icon: translateReservationPaymentMethod(item as RESERVATION_PAYMENT_METHOD).icon
 }))
 
 const RESERVATION_SOURCE_TYPE_OPTIONS = map(RESERVATION_SOURCE_TYPES, (item) => ({
@@ -107,6 +110,7 @@ const ReservationsFilter = (props: Props) => {
 					<Col span={6}>
 						<Field
 							component={SelectField}
+							optionRender={(itemData: any) => optionRenderWithIcon(itemData)}
 							mode={'multiple'}
 							name={'reservationStates'}
 							placeholder={t('loc:Stav')}
@@ -123,6 +127,7 @@ const ReservationsFilter = (props: Props) => {
 							mode={'multiple'}
 							name={'reservationPaymentMethods'}
 							placeholder={t('loc:Spôsob úhrady')}
+							optionRender={(itemData: any) => optionRenderWithIcon(itemData)}
 							allowClear
 							showSearch={false}
 							showArrow

@@ -4,10 +4,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Col, Row, Button, TablePaginationConfig } from 'antd'
 import { compose } from 'redux'
 import { find, join } from 'lodash'
-import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { initialize } from 'redux-form'
 import { SorterResult } from 'antd/lib/table/interface'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -17,7 +16,15 @@ import CategoryParamsFilter from './components/CategoryParamsFilter'
 // utils
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, STRINGS, DEFAULT_LANGUAGE, FORM } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { setOrder, transformToLowerCaseWithoutAccent, formatDateByLocale, normalizeDirectionKeys, sortData, getLinkWithEncodedBackUrl } from '../../utils/helper'
+import {
+	setOrder,
+	transformToLowerCaseWithoutAccent,
+	formatDateByLocale,
+	normalizeDirectionKeys,
+	sortData,
+	getLinkWithEncodedBackUrl,
+	normalizeSearchQueryParams
+} from '../../utils/helper'
 
 // reducers
 import { getCategoryParameters } from '../../reducers/categoryParams/categoryParamsActions'
@@ -35,10 +42,15 @@ const CategoryParamsPage = () => {
 
 	const parameters = useSelector((state: RootState) => state.categoryParams.parameters)
 	const navigate = useNavigate()
-	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		order: withDefault(StringParam, 'name:ASC')
+
+	const [searchParams, setSearchParams] = useSearchParams({
+		search: '',
+		order: 'name:ASC'
 	})
+	const query = {
+		search: searchParams.get('search') || '',
+		order: searchParams.get('order') || ''
+	}
 
 	useEffect(() => {
 		dispatch(getCategoryParameters())
@@ -59,7 +71,7 @@ const CategoryParamsPage = () => {
 				...query,
 				order
 			}
-			setQuery(newQuery)
+			setSearchParams(newQuery)
 		}
 	}
 
@@ -149,7 +161,7 @@ const CategoryParamsPage = () => {
 					<div className='content-body'>
 						<CategoryParamsFilter
 							total={parameters?.data?.length}
-							onSubmit={(values: any) => setQuery({ ...query, search: values.search })}
+							onSubmit={(values: any) => setSearchParams(normalizeSearchQueryParams({ ...query, search: values.search }))}
 							addButton={
 								<Button
 									onClick={() => {

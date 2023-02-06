@@ -2,11 +2,10 @@ import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row, TablePaginationConfig } from 'antd'
 import { initialize } from 'redux-form'
 import { SorterResult } from 'antd/lib/table/interface'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -34,10 +33,15 @@ const SupportContactsPage = () => {
 
 	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
 	const navigate = useNavigate()
-	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		order: withDefault(StringParam, 'country:ASC')
+
+	const [searchParams, setSearchParams] = useSearchParams({
+		search: '',
+		order: 'country:ASC'
 	})
+	const query = {
+		search: searchParams.get('search') || '',
+		order: searchParams.get('order') || ''
+	}
 
 	useEffect(() => {
 		dispatch(getSupportContacts())
@@ -52,7 +56,7 @@ const SupportContactsPage = () => {
 			...query,
 			...values
 		}
-		setQuery(newQuery)
+		setSearchParams(newQuery)
 	}
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
@@ -62,7 +66,7 @@ const SupportContactsPage = () => {
 				...query,
 				order
 			}
-			setQuery(newQuery)
+			setSearchParams(newQuery)
 		}
 	}
 

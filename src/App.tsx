@@ -10,7 +10,6 @@ import { QueryParamProvider } from 'use-query-params'
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6'
 import { BrowserRouter } from 'react-router-dom'
 
-// import 'antd/dist/antd.min.css'
 import 'antd/dist/reset.css'
 
 import rootReducer from './reducers'

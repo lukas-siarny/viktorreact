@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -16,7 +15,7 @@ import UserAvatar from '../../components/AvatarComponents'
 
 // utils
 import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
-import { normalizeDirectionKeys, setOrder, normalizeQueryParams, formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
+import { normalizeDirectionKeys, setOrder, formatDateByLocale, getLinkWithEncodedBackUrl, normalizeSearchQueryParams } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -37,17 +36,19 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		limit: NumberParam,
-		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'lastName:ASC')
+	const [searchParams, setSearchParams] = useSearchParams({
+		search: '',
+		limit: '',
+		page: '1',
+		order: 'lastName:ASC'
 	})
 
+	const searchParamsObj = Object.fromEntries(searchParams)
+
 	useEffect(() => {
-		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: query.search }))
-		dispatch(getCustomers({ page: query.page, limit: query.limit, order: query.order, search: query.search, salonID }))
-	}, [dispatch, query.page, query.limit, query.search, query.order, salonID])
+		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: searchParams.get('search') }))
+		dispatch(getCustomers({ page: searchParams.get('page'), limit: searchParams.get('limit'), order: searchParams.get('order'), search: searchParams.get('search'), salonID }))
+	}, [dispatch, searchParams, salonID])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -63,29 +64,29 @@ const CustomersPage = (props: SalonSubPageProps) => {
 		if (!(sorter instanceof Array)) {
 			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
 			const newQuery = {
-				...query,
+				...searchParamsObj,
 				order
 			}
-			setQuery(newQuery)
+			setSearchParams(newQuery)
 		}
 	}
 
 	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
-			...query,
-			limit,
-			page
+			...searchParamsObj,
+			limit: String(limit),
+			page: String(page)
 		}
-		setQuery(newQuery)
+		setSearchParams(newQuery)
 	}
 
 	const handleSubmit = (values: ISearchFilter) => {
 		const newQuery = {
-			...query,
-			...values,
+			...searchParamsObj,
+			search: values.search,
 			page: 1
 		}
-		setQuery(normalizeQueryParams(newQuery))
+		setSearchParams(normalizeSearchQueryParams(newQuery))
 	}
 
 	const columns: Columns = [
@@ -95,7 +96,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 			key: 'lastName',
 			ellipsis: true,
 			sorter: true,
-			sortOrder: setOrder(query.order, 'lastName'),
+			sortOrder: setOrder(searchParams.get('order'), 'lastName'),
 			render: (value, record) => (
 				<>
 					<UserAvatar className={'mr-1'} src={record.profileImage?.resizedImages?.thumbnail} fallBackSrc={record.profileImage?.original} size={'small'} />
@@ -130,7 +131,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 			key: 'createdAt',
 			ellipsis: true,
 			sorter: true,
-			sortOrder: setOrder(query.order, 'createdAt'),
+			sortOrder: setOrder(searchParams.get('order'), 'createdAt'),
 			render: (value) => formatDateByLocale(value) ?? '-'
 		}
 	]

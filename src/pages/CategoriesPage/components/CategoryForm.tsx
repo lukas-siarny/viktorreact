@@ -113,7 +113,7 @@ const CategoryForm: FC<Props> = (props) => {
 	}
 
 	return (
-		<Form layout={'vertical'} className={'w-full top-0 sticky overflow-hidden p-1'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
+		<Form layout={'vertical'} className={'w-full top-0 sticky overflow-hidden pt-1 px-6 pb-6 -mx-6'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<Spin wrapperClassName={'w-full'} spinning={category.isLoading || categoriesParameters.isLoading}>
 				<Col className={'flex'}>
 					<Row className={'w-full h-full block'} justify='center'>

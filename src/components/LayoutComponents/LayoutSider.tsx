@@ -248,7 +248,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				key: 'logOut',
 				className: 'noti-logout-button',
 				label: t('loc:Odhlásiť'),
-				onClick: () => dispatch(logOutUser(navigate)),
+				onClick: () => dispatch(logOutUser()),
 				icon: <LogOutIcon />
 			},
 			{

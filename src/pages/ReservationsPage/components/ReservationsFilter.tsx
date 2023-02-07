@@ -85,7 +85,7 @@ const ReservationsFilter = (props: Props) => {
 	const [t] = useTranslation()
 	const reservations = useSelector((state: RootState) => state.calendar.paginatedReservations)
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.RESERVATIONS_FILTER)(state))
-	const servicesOptions = useSelector((state: RootState) => state.service.services.options)
+	const categoriesOptions = useSelector((state: RootState) => state.service.services.categoriesOptions)
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
@@ -107,13 +107,13 @@ const ReservationsFilter = (props: Props) => {
 							component={SelectField}
 							name={'categoryIDs'}
 							mode={'multiple'}
-							placeholder={t('loc:Služba')}
+							placeholder={t('loc:Kategórie')}
 							allowClear
 							showArrow
 							size={'middle'}
 							showSearch={false}
 							onDidMountSearch
-							options={servicesOptions}
+							options={categoriesOptions}
 						/>
 					</Col>
 					<Col span={6}>

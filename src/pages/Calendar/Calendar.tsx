@@ -246,12 +246,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	// fetch new events
 	const fetchEvents: any = useCallback(
 		async (clearVirtualEvent?: boolean) => {
-			restartFetchInterval()
-
 			// bez zamestanncov nefunguje nic v kalendari, takze ani nema zmysel dotahovat data
 			if (!employees.options?.length) {
 				return
 			}
+
+			restartFetchInterval()
 
 			if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 				Promise.all([

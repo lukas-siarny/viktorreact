@@ -71,7 +71,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 		if (salon.data) {
 			dispatch(initialize(FORM.EMPLOYEE, { phonePrefixCountryCode: salon.data.companyContactPerson?.phonePrefixCountryCode || salon.data.address?.countryCode }))
 		}
-	}, [dispatch, salon.data, salonID])
+	}, [dispatch, salon.data])
 
 	useEffect(() => {
 		dispatch(getSalonRoles())

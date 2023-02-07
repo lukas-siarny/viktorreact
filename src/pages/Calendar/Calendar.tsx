@@ -70,7 +70,6 @@ import {
 // atoms
 import CalendarReservationPopover from './components/CalendarReservationPopover'
 import CalendarConfirmModal from './components/CalendarConfirmModal'
-import { normalizeSearchQueryParams } from '../../utils/helper'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]

@@ -1,5 +1,4 @@
 import { defineConfig } from 'cypress'
-const makeEmailAccount = require('./cypress/plugins/email-account')
 
 export default defineConfig({
   projectId: 'hcowar',
@@ -10,17 +9,6 @@ export default defineConfig({
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
     setupNodeEvents: async (on, config) => {
-		const emailAccount = await makeEmailAccount()
-
-		on('task', {
-			getUserEmail() {
-				return emailAccount.user
-			},
-			getLastEmail() {
-				return emailAccount.getLastEmail()
-			}
-		})
-
 		require('cypress-localstorage-commands/plugin')(on, config)
 		require('./cypress/plugins/index.ts').default(on, config)
 		return config

@@ -1,5 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { recurse } from 'cypress-recurse'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { parse } from 'node-html-parser'
+
+import { generateRandomString } from '../../support/helpers'
 
 // utils
 import { FORM } from '../../../src/utils/enums'
@@ -7,16 +11,7 @@ import { FORM } from '../../../src/utils/enums'
 import user from '../../fixtures/user.json'
 
 context('Auth', () => {
-	let userEmail: string
-
-	before(() => {
-		// get and check the test email only once before the tests
-		cy.task('getUserEmail').then((emailUser: any) => {
-			cy.log('Email address:', emailUser.email)
-			expect(emailUser.email).to.be.a('string')
-			userEmail = emailUser.email
-		})
-	})
+	const userEmail = `${generateRandomString(5)}_${user.emailSuffix}`
 
 	it('Sign up', () => {
 		cy.intercept({
@@ -39,37 +34,32 @@ context('Auth', () => {
 		// check redirect to activation page
 		cy.location('pathname').should('eq', '/activation')
 
-		// retry fetching the email
-		recurse(
-			() => cy.task('getLastEmail'), // Cypress commands to retry
-			Cypress._.isObject, // keep retrying until the task returns an object
-			{
-				timeout: 60000, // retry up to 1 minute
-				delay: 5000 // wait 5 seconds between attempts
+		// SMTP server has probably received the email
+		recurse(() => cy.task('getLastEmail', userEmail), Cypress._.isString, {
+			timeout: 60000, // retry up to 1 minute
+			delay: 5000, // wait 5 seconds between attempts
+			log: false
+		}).then((email: string) => {
+			// cy.log(email)
+			const emailHtml = parse(email)
+			const htmlTag = emailHtml.querySelector('#activation-code')
+			if (htmlTag) {
+				cy.log('Activation code: ', htmlTag.text)
+				cy.visit('/activation')
+				cy.intercept({
+					method: 'POST',
+					url: '/api/b2b/admin/users/activation'
+				}).as('activation')
+				cy.setValuesForPinField(FORM.ACTIVATION, 'code', htmlTag.text)
+				cy.get('form').submit()
+				cy.wait('@activation').then((interception: any) => {
+					// check status code of registration request
+					expect(interception.response.statusCode).to.equal(200)
+					// take local storage snapshot
+					cy.saveLocalStorage()
+				})
 			}
-		)
-			.its('html')
-			.then((html: any) => {
-				cy.document({ log: false }).invoke({ log: false }, 'write', html)
-				cy.get('strong')
-					.invoke('text')
-					.then((txt) => {
-						cy.log('Activation code: ', txt.toString())
-						cy.visit('/activation')
-						cy.intercept({
-							method: 'POST',
-							url: '/api/b2b/admin/users/activation'
-						}).as('activation')
-						cy.setValuesForPinField(FORM.ACTIVATION, 'code', txt.toString())
-						cy.get('form').submit()
-						cy.wait('@activation').then((interception: any) => {
-							// check status code of registration request
-							expect(interception.response.statusCode).to.equal(200)
-							// take local storage snapshot
-							cy.saveLocalStorage()
-						})
-					})
-			})
+		})
 	})
 
 	it('Sign out', () => {

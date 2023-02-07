@@ -7,8 +7,9 @@ initializeCustomCommands()
 
 // eslint-disable-next-line import/prefer-default-export
 Cypress.Commands.add('setValuesForPinField', (form: string, key: string, value: string) => {
-	const elementId: string = form ? `#${form}-${key}` : `#${key}`
-	const nthInput = (n: number) => `${elementId} > :nth-child(${n})`
+	// const elementId: string = form ? `#${form}-${key}` : `#${key}`
+	// TODO - check how to select pin inputs
+	const nthInput = (n: number) => `.ant-form-item-control-input-content > :nth-child(${n})`
 	const pin = [...value]
 	pin.forEach((char: string, index) =>
 		cy

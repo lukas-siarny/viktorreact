@@ -120,7 +120,7 @@
   },
   "devDependencies": {
     "@goodrequest/antd-form-fields": "0.0.3",
-    "@goodrequest/convert-translations-i18next": "1.0.7",
+    "@goodrequest/convert-translations-i18next": "1.0.8",
     "@goodrequest/eslint-config-typescript-react": "1.1.1",
     "@storybook/addon-actions": "6.5.12",
     "@storybook/addon-essentials": "6.5.12",

@@ -55,24 +55,30 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		salonID: ''
 	})
 
-	const searchParamsObj = Object.fromEntries(searchParams)
+	const query = {
+		search: searchParams.get('search') || '',
+		limit: searchParams.get('limit') || '',
+		page: searchParams.get('page') || '',
+		order: searchParams.get('order') || '',
+		accountState: searchParams.get('accountState') || '',
+		serviceID: searchParams.get('serviceID') || '',
+		salonID: searchParams.get('salonID') || ''
+	}
 
 	useEffect(() => {
-		dispatch(
-			initialize(FORM.EMPLOYEES_FILTER, { search: searchParams.get('search'), serviceID: searchParams.get('serviceID'), accountState: searchParams.get('accountState') })
-		)
+		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search, serviceID: query.serviceID, accountState: query.accountState }))
 		dispatch(
 			getEmployees({
-				page: searchParams.get('page'),
-				limit: searchParams.get('limit'),
-				order: searchParams.get('order'),
-				search: searchParams.get('search'),
-				accountState: searchParams.get('accountState'),
-				serviceID: searchParams.get('serviceID'),
+				page: query.page,
+				limit: query.limit,
+				order: query.order,
+				search: query.search,
+				accountState: query.accountState,
+				serviceID: query.serviceID,
 				salonID
 			})
 		)
-	}, [dispatch, searchParams, salonID])
+	}, [dispatch, query.accountState, query.limit, query.order, query.page, query.search, query.serviceID, salonID])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -92,7 +98,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		if (!(sorter instanceof Array)) {
 			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
 			const newQuery = {
-				...searchParamsObj,
+				...query,
 				order
 			}
 			setSearchParams(newQuery)
@@ -101,7 +107,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 
 	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
-			...searchParamsObj,
+			...query,
 			limit: String(limit),
 			page: String(page)
 		}
@@ -110,7 +116,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 
 	const handleSubmit = (values: IEmployeesFilter) => {
 		const newQuery = {
-			...searchParamsObj,
+			...query,
 			...values,
 			page: 1
 		}
@@ -124,7 +130,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			key: 'lastName',
 			ellipsis: true,
 			sorter: true,
-			sortOrder: setOrder(searchParams.get('order'), 'lastName'),
+			sortOrder: setOrder(query.order, 'lastName'),
 			width: '25%',
 			render: (_value, record) => {
 				return (
@@ -178,7 +184,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			ellipsis: true,
 			sorter: true,
 			width: 90,
-			sortOrder: setOrder(searchParams.get('order'), 'status'),
+			sortOrder: setOrder(query.order, 'status'),
 			render: (value, record) => (
 				<div className={'flex justify-center'}>
 					{value === false && !record?.inviteEmail ? (
@@ -225,18 +231,18 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 				// NOTE: V pripade ak BE reorder zlyha pouzi povodne radenie
 				dispatch(
 					getEmployees({
-						page: searchParams.get('page'),
-						limit: searchParams.get('limit'),
-						order: searchParams.get('order'),
-						search: searchParams.get('search'),
-						accountState: searchParams.get('accountState'),
-						serviceID: searchParams.get('serviceID'),
+						page: query.page,
+						limit: query.limit,
+						order: query.order,
+						search: query.search,
+						accountState: query.accountState,
+						serviceID: query.serviceID,
 						salonID
 					})
 				)
 			}
 		},
-		[dispatch, employees?.data?.employees, searchParams, salonID]
+		[dispatch, employees?.data?.employees, query.accountState, query.limit, query.order, query.page, query.search, query.serviceID, salonID]
 	)
 
 	return (

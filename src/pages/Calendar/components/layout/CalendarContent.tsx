@@ -132,12 +132,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	const employeesOptions = useSelector((state: RootState) => state.employees.employees?.options)
 
-	// query
-	// const [query, setQuery] = useQueryParams({
-	// 	employeeIDs: DelimitedArrayParam,
-	// 	categoryIDs: DelimitedArrayParam
-	// })
-
 	const [searchParams, setSearchParams] = useSearchParams({
 		employeeIDs: [],
 		categoryIDs: []

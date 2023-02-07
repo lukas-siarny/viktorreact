@@ -38,7 +38,8 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 		backgroundColor,
 		isBulkEvent,
 		isPlaceholder,
-		isEdit
+		isEdit,
+		timeLeftClassName
 	} = props
 
 	const duration = parseTimeFromMinutes(diff)
@@ -48,22 +49,26 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 
 	return (
 		<div
-			className={cx('nc-event', {
-				'nc-day-event': calendarView === CALENDAR_VIEW.DAY,
-				'nc-week-event': calendarView === CALENDAR_VIEW.WEEK,
-				shift: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
-				timeoff: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
-				break: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
-				'multiday-event': isMultiDayEvent,
-				'multiday-event-first': isFirstMultiDayEventInCurrentRange,
-				'multiday-event-last': isLastMultiDaylEventInCurrentRange,
-				'min-15': Math.abs(diff) <= 15,
-				'min-30': Math.abs(diff) <= 30 && Math.abs(diff) > 15,
-				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
-				'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
-				placeholder: isPlaceholder,
-				edit: isEdit || isPlaceholder
-			})}
+			className={cx(
+				'nc-event',
+				{
+					'nc-day-event': calendarView === CALENDAR_VIEW.DAY,
+					'nc-week-event': calendarView === CALENDAR_VIEW.WEEK,
+					shift: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
+					timeoff: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
+					break: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
+					'multiday-event': isMultiDayEvent,
+					'multiday-event-first': isFirstMultiDayEventInCurrentRange,
+					'multiday-event-last': isLastMultiDaylEventInCurrentRange,
+					'min-15': Math.abs(diff) <= 15,
+					'min-30': Math.abs(diff) <= 30 && Math.abs(diff) > 15,
+					'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
+					'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
+					placeholder: isPlaceholder,
+					edit: isEdit || isPlaceholder
+				},
+				timeLeftClassName
+			)}
 			onClick={() => {
 				if (originalEventData?.id) {
 					onEditEvent(eventType, originalEventData.id)

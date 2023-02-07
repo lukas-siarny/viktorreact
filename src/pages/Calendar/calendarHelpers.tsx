@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { DateSpanApi, EventApi } from '@fullcalendar/react'
+import { DateSpanApi, EventApi } from '@fullcalendar/core'
 import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { uniqueId, startsWith } from 'lodash'

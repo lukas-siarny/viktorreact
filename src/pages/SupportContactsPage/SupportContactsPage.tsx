@@ -2,10 +2,10 @@ import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row, TablePaginationConfig } from 'antd'
 import { initialize } from 'redux-form'
 import { SorterResult } from 'antd/lib/table/interface'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -15,7 +15,6 @@ import SupportContactsFilter, { ISupportContactsFilter } from './components/Supp
 // utils
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { FORM, LANGUAGE, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { history } from '../../utils/history'
 import i18n from '../../utils/i18n'
 import { getLinkWithEncodedBackUrl, getCountryNameFromNameLocalizations, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
@@ -33,11 +32,16 @@ const SupportContactsPage = () => {
 	const dispatch = useDispatch()
 
 	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
+	const navigate = useNavigate()
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		order: withDefault(StringParam, 'country:ASC')
+	const [searchParams, setSearchParams] = useSearchParams({
+		search: '',
+		order: 'country:ASC'
 	})
+	const query = {
+		search: searchParams.get('search') || '',
+		order: searchParams.get('order') || ''
+	}
 
 	useEffect(() => {
 		dispatch(getSupportContacts())
@@ -52,7 +56,7 @@ const SupportContactsPage = () => {
 			...query,
 			...values
 		}
-		setQuery(newQuery)
+		setSearchParams(newQuery)
 	}
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
@@ -62,7 +66,7 @@ const SupportContactsPage = () => {
 				...query,
 				order
 			}
-			setQuery(newQuery)
+			setSearchParams(newQuery)
 		}
 	}
 
@@ -163,7 +167,7 @@ const SupportContactsPage = () => {
 									total={supportContacts.data?.supportContacts?.length || 0}
 									createSupportContact={() => {
 										if (hasPermission) {
-											history.push(getLinkWithEncodedBackUrl(t('paths:support-contacts/create')))
+											navigate(getLinkWithEncodedBackUrl(t('paths:support-contacts/create')))
 										} else {
 											openForbiddenModal()
 										}
@@ -184,7 +188,7 @@ const SupportContactsPage = () => {
 							onRow={(record) => {
 								return {
 									onClick: () => {
-										history.push(getLinkWithEncodedBackUrl(t('paths:support-contacts/{{supportContactID}}', { supportContactID: record.supportContactID })))
+										navigate(getLinkWithEncodedBackUrl(t('paths:support-contacts/{{supportContactID}}', { supportContactID: record.supportContactID })))
 									}
 								}
 							}}

@@ -5,6 +5,7 @@ import { Action, compose, Dispatch } from 'redux'
 import { notification } from 'antd'
 import i18next from 'i18next'
 import { forEach, isNil, unionBy } from 'lodash'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import ServiceForm from './components/ServiceForm'
@@ -24,7 +25,6 @@ import { patchReq } from '../../utils/request'
 import { FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { decodePrice, encodePrice, getAssignedUserLabel, getEmployeeServiceDataForPatch, getServicePriceAndDurationData } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { history } from '../../utils/history'
 
 type Props = SalonSubPageProps & {
 	serviceID: string
@@ -230,6 +230,7 @@ const parseEmployeesInit = (service: ServiceDetail) => {
 const ServiceEditPage = (props: Props) => {
 	const { serviceID, salonID, parentPath } = props
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const service = useSelector((state: RootState) => state.service.service.data?.service)
@@ -242,7 +243,7 @@ const ServiceEditPage = (props: Props) => {
 		const { data } = await dispatch(getService(serviceID))
 		const { categoryParameterValues } = await dispatch(getCategory(data?.service?.category?.child?.child?.id))
 		if (!data?.service?.id) {
-			history.push('/404')
+			navigate('/404')
 		}
 		if (data) {
 			// union parameter values form service and category detail based on categoryParameterValueID

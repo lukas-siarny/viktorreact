@@ -4,11 +4,11 @@ import { Col, Row } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { initialize } from 'redux-form'
-import { ArrayParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-
-// components
+import { useSearchParams } from 'react-router-dom'
 import dayjs from 'dayjs'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
+
+// components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import UserAvatar from '../../components/AvatarComponents'
@@ -17,78 +17,64 @@ import ReservationsFilter from './components/ReservationsFilter'
 // utils
 import { DEFAULT_DATE_INIT_FORMAT, FORM, PERMISSION, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { getAssignedUserLabel, normalizeDirectionKeys, setOrder, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
+import { getAssignedUserLabel, normalizeDirectionKeys, normalizeSearchQueryParams, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
 import { getServices } from '../../reducers/services/serviceActions'
 
 // types
-import { Columns, IBreadcrumbs, IComputedMatch, IReservationsFilter } from '../../types/interfaces'
+import { Columns, IBreadcrumbs, IReservationsFilter, SalonSubPageProps } from '../../types/interfaces'
 import { getPaginatedReservations } from '../../reducers/calendar/calendarActions'
 
-type Props = {
-	computedMatch: IComputedMatch<{ salonID: string }>
-}
+type Props = SalonSubPageProps
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 const ReservationsPage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { computedMatch } = props
-	const { salonID } = computedMatch.params
+	const { salonID } = props
 	const reservations = useSelector((state: RootState) => state.calendar.paginatedReservations)
-
-	const [query, setQuery] = useQueryParams({
-		dateFrom: withDefault(StringParam, dayjs().format(DEFAULT_DATE_INIT_FORMAT)),
-		employeeIDs: ArrayParam,
-		categoryIDs: ArrayParam,
-		reservationStates: ArrayParam,
-		reservationCreateSourceType: StringParam,
-		reservationPaymentMethods: ArrayParam,
-		limit: NumberParam,
-		page: withDefault(NumberParam, 1)
+	const [searchParams, setSearchParams] = useSearchParams({
+		dateFrom: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
+		employeeIDs: [],
+		categoryIDs: [],
+		reservationStates: [],
+		reservationCreateSourceType: '',
+		reservationPaymentMethods: [],
+		limit: '',
+		page: '1',
+		order: 'startDate:ASC'
 	})
 
 	useEffect(() => {
 		// NOTE: viac ako 3 mesiace
 		dispatch(
 			initialize(FORM.RESERVATIONS_FILTER, {
-				reservationStates: query.reservationStates,
-				employeeIDs: query.employeeIDs,
-				reservationPaymentMethods: query.reservationPaymentMethods,
-				reservationCreateSourceType: query.reservationCreateSourceType,
-				dateFrom: query.dateFrom,
-				categoryIDs: query.categoryIDs
+				reservationStates: searchParams.getAll('reservationStates'),
+				employeeIDs: searchParams.getAll('employeeIDs'),
+				reservationPaymentMethods: searchParams.getAll('reservationPaymentMethods'),
+				reservationCreateSourceType: searchParams.get('reservationCreateSourceType'),
+				dateFrom: searchParams.get('dateFrom'),
+				categoryIDs: searchParams.getAll('categoryIDs')
 			})
 		)
 		dispatch(
 			getPaginatedReservations({
 				salonID,
-				dateFrom: query.dateFrom,
-				reservationStates: query.reservationStates,
-				employeeIDs: query.employeeIDs,
-				reservationPaymentMethods: query.reservationPaymentMethods,
-				reservationCreateSourceType: query.reservationCreateSourceType,
-				categoryIDs: query.categoryIDs,
-				page: query.page,
-				order: 'startDate:ASC',
-				limit: query.limit
+				dateFrom: searchParams.get('dateFrom'),
+				reservationStates: searchParams.getAll('reservationStates'),
+				employeeIDs: searchParams.getAll('employeeIDs'),
+				reservationPaymentMethods: searchParams.getAll('reservationPaymentMethods'),
+				reservationCreateSourceType: searchParams.get('reservationCreateSourceType'),
+				categoryIDs: searchParams.getAll('categoryIDs'),
+				page: searchParams.get('page'),
+				order: searchParams.get('order'),
+				limit: searchParams.get('limit')
 			})
 		)
-	}, [
-		dispatch,
-		query.categoryIDs,
-		query.dateFrom,
-		query.employeeIDs,
-		query.limit,
-		query.page,
-		query.reservationCreateSourceType,
-		query.reservationPaymentMethods,
-		query.reservationStates,
-		salonID
-	])
+	}, [dispatch, salonID, searchParams])
 
 	useEffect(() => {
 		dispatch(getServices({ salonID }))
@@ -96,31 +82,32 @@ const ReservationsPage = (props: Props) => {
 
 	const handleSubmit = (values: IReservationsFilter) => {
 		const newQuery = {
-			...query,
+			...searchParams,
 			...values
 		}
-		setQuery(newQuery)
+		setSearchParams(normalizeSearchQueryParams(newQuery))
 	}
+
 	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
 			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
 			const newQuery = {
-				...query,
+				...searchParams,
 				limit: pagination.pageSize,
 				page: pagination.current,
 				order
 			}
-			setQuery(newQuery)
+			setSearchParams(newQuery)
 		}
 	}
 
 	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
-			...query,
+			...searchParams,
 			limit,
 			page
 		}
-		setQuery(newQuery)
+		setSearchParams(newQuery)
 	}
 
 	const columns: Columns = [

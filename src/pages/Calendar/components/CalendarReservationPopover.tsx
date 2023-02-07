@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import React, { FC, useEffect, useCallback, useRef } from 'react'
-import { Button, Col, Divider, Dropdown, Menu, Popover, Row, Tag } from 'antd'
+import { Button, Col, Divider, Dropdown, Popover, Row, Tag } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { ItemType } from 'antd/lib/menu/hooks/useItems'
 import { useSelector } from 'react-redux'
@@ -83,7 +83,10 @@ const PopoverContent: FC<ContentProps> = (props) => {
 					</button>
 					{(moreMenuItems || []).length > 0 && (
 						<Dropdown
-							overlay={<Menu className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'} items={moreMenuItems} />}
+							menu={{
+								className: 'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2',
+								items: moreMenuItems
+							}}
 							placement='bottomRight'
 							trigger={['click']}
 						>
@@ -306,7 +309,10 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 		return items?.length ? (
 			<Dropdown
 				key={'footer-checkout-dropdown'}
-				overlay={<Menu className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'} items={items} />}
+				menu={{
+					className: 'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2',
+					items
+				}}
 				placement='bottomRight'
 				trigger={['click']}
 			>
@@ -406,7 +412,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 
 	return (
 		<Popover
-			visible={isOpen}
+			open={isOpen}
 			destroyTooltipOnHide={{ keepParent: true }}
 			trigger={'click'}
 			placement={placement}

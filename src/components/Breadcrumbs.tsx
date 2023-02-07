@@ -23,13 +23,13 @@ const Breadcrumbs = (props: Props) => {
 
 	return (
 		<div className={'flex items-center flex-wrap w-full mb-2 mt-2'}>
-			{backButtonPath && <BackButton path={backButtonPath} defaultBackButtonAction={defaultBackButtonAction} />}
+			{backButtonPath && <BackButton path={backButtonPath} defaultBackButtonAction={defaultBackButtonAction} className={'breadcrumb-back-btn'} />}
 			{breadcrumbs && (
 				<Breadcrumb className={'noti-breadcrumb'} separator={<BreadcrumbSeparator className={'text-gray-600'} />}>
 					{map(breadcrumbs.items, (item: IBreadcrumbItem, index) => (
 						<Item className={cx({ last: index + 1 === breadcrumbs.items.length })} key={index}>
 							{item.link ? (
-								<Link onClick={item.action} to={item.link} className={'group flex'}>
+								<Link onClick={item.action} to={item.link} className={'group'}>
 									<span className='text-gray-600 text-base group-hover:text-notino-black font-normal'>{item.name}</span>
 									{item.titleName && <span className={'text-gray-600 group-hover:text-notino-black text-base'}> - {item.titleName}</span>}
 								</Link>

@@ -1,38 +1,59 @@
 import React, { Suspense, useEffect, useState } from 'react'
 import { Provider } from 'react-redux'
-import { Router, Route } from 'react-router'
 import { I18nextProvider } from 'react-i18next'
 import { PersistGate } from 'redux-persist/es/integration/react'
-import { QueryParamProvider, ExtendedStringifyOptions, transformSearchStringJsonSafe } from 'use-query-params'
 import { Spin, ConfigProvider } from 'antd'
 import { Locale } from 'antd/lib/locale-provider'
+import { AliasToken } from 'antd/es/theme/internal'
 import dayjs from 'dayjs'
+import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom'
 
-import 'antd/dist/antd.min.css'
-
-import Routes from './routes/Routes'
+import 'antd/dist/reset.css'
 
 import rootReducer from './reducers'
 
 // utils
 import configureStore from './utils/configureStore'
 import i18n from './utils/i18n'
-import { history } from './utils/history'
 import { LANGUAGE, DEFAULT_LANGUAGE } from './utils/enums'
 
 // components
 import ScrollToTop from './components/ScrollToTop'
 import { LOCALES } from './components/LanguagePicker'
-
-const queryStringifyOptions: ExtendedStringifyOptions = {
-	transformSearchString: transformSearchStringJsonSafe
-}
+import AppRoutes from './routes/AppRoutes'
 
 const { store, persistor } = configureStore(rootReducer)
 
+const ANTD_THEME_VARIABLES_OVERRIDE: Partial<AliasToken> = {
+	// Override AntD colors
+	colorPrimary: '#000000', // black
+	colorLink: '#DC0069', // notino-pink
+	colorText: '#404040', // true-gray-700,
+	colorTextHeading: '#3F3F46', // cool-gray-900
+	colorTextSecondary: '#BFBFBF', // notino-gray
+	colorTextDisabled: '#9CA3AF', // cool-gray-100,
+	colorSuccess: '#008700', // notino-success
+	colorWarning: '#D97706', // amber-600
+	colorError: '#D21414', // notino-red
+	colorTextPlaceholder: '#BFBFBF', // notino-gray
+	borderRadius: 2
+}
+
 const App = () => {
 	const [antdLocale, setAntdLocale] = useState<Locale | undefined>(undefined)
-
+	// You can do this:
+	const router = createBrowserRouter(
+		createRoutesFromElements(
+			<Route
+				path={'*'}
+				element={
+					<ScrollToTop>
+						<AppRoutes />{' '}
+					</ScrollToTop>
+				}
+			/>
+		)
+	)
 	useEffect(() => {
 		i18n.on('languageChanged', (language) => {
 			const locale = LOCALES[language as LANGUAGE] || LOCALES[DEFAULT_LANGUAGE]
@@ -62,15 +83,14 @@ const App = () => {
 					}
 					persistor={persistor}
 				>
-					<ConfigProvider locale={antdLocale}>
+					<ConfigProvider
+						locale={antdLocale}
+						theme={{
+							token: ANTD_THEME_VARIABLES_OVERRIDE
+						}}
+					>
 						<Provider store={store}>
-							<Router history={history}>
-								<QueryParamProvider ReactRouterRoute={Route} stringifyOptions={queryStringifyOptions}>
-									<ScrollToTop>
-										<Routes />
-									</ScrollToTop>
-								</QueryParamProvider>
-							</Router>
+							<RouterProvider router={router} />
 						</Provider>
 					</ConfigProvider>
 				</PersistGate>

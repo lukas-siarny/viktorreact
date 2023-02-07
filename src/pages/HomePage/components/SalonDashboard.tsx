@@ -2,6 +2,7 @@ import React, { FC, useEffect, useCallback } from 'react'
 import { Spin } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 // redux
 import { RootState } from '../../../reducers'
@@ -11,7 +12,6 @@ import { getCustomers } from '../../../reducers/customers/customerActions'
 
 // utils
 import { SALON_STATES } from '../../../utils/enums'
-import { history } from '../../../utils/history'
 
 // components
 import Alert from '../../../components/Dashboards/Alert'
@@ -23,6 +23,7 @@ import { ReactComponent as EyeOffIcon } from '../../../assets/icons/eye-off-pink
 const SalonDashboard: FC = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
 	const { children } = props
 
@@ -61,7 +62,7 @@ const SalonDashboard: FC = (props) => {
 							message={selectedSalon.data?.publicationDeclineReason}
 							actionLabel={t('loc:Upraviť údaje salónu')}
 							icon={<EyeOffIcon />}
-							onActionItemClick={() => history.push(basePath)}
+							onActionItemClick={() => navigate(basePath)}
 						/>
 					)}
 					{/* declined salon */}
@@ -72,7 +73,7 @@ const SalonDashboard: FC = (props) => {
 							subTitle={`${t('loc:Salón bol zamietnutý z dôvodu')}:`}
 							message={selectedSalon.data?.publicationDeclineReason ?? t('loc:Bez udania dôvodu.')}
 							actionLabel={t('loc:Upraviť údaje salónu')}
-							onActionItemClick={() => history.push(basePath)}
+							onActionItemClick={() => navigate(basePath)}
 						/>
 					)}
 
@@ -80,19 +81,19 @@ const SalonDashboard: FC = (props) => {
 						<Statistics
 							title={t('loc:Počet zákazníkov')}
 							count={customers.data?.pagination.totalCount}
-							onActionItemClick={() => history.push(getPath(t('paths:customers')))}
+							onActionItemClick={() => navigate(getPath(t('paths:customers')))}
 						/>
 						<Statistics
 							title={t('loc:Počet aktívnych služieb')}
 							count={services?.tableData?.length}
-							onActionItemClick={() => history.push(getPath(t('paths:services-settings')))}
+							onActionItemClick={() => navigate(getPath(t('paths:services-settings')))}
 						/>
 						<Statistics
 							title={t('loc:Počet zamestnancov')}
 							count={employees?.data?.pagination.totalCount}
-							onActionItemClick={() => history.push(getPath(t('paths:employees')))}
+							onActionItemClick={() => navigate(getPath(t('paths:employees')))}
 						/>
-						<Statistics title={t('loc:Vyplnenosť profilu')} count={`${selectedSalon.data.fillingProgressSalon}%`} onActionItemClick={() => history.push(basePath)} />
+						<Statistics title={t('loc:Vyplnenosť profilu')} count={`${selectedSalon.data.fillingProgressSalon}%`} onActionItemClick={() => navigate(basePath)} />
 					</div>
 				</div>
 			) : (

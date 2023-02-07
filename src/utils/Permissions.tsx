@@ -1,14 +1,11 @@
-/* eslint-disable no-underscore-dangle,import/no-cycle */
-// eslint-disable-next-line max-classes-per-file
-import React, { Component, FC, useState } from 'react'
-import { connect, useSelector } from 'react-redux'
-import { bindActionCreators, compose } from 'redux'
-import { get, indexOf, some, isEmpty, partition } from 'lodash'
+import React, { FC, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { indexOf, some, isEmpty, partition } from 'lodash'
 import { Button, Modal, notification, Result } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
-import * as UserActions from '../reducers/users/userActions'
-import { history } from './history'
+// eslint-disable-next-line import/no-cycle
 import { RootState } from '../reducers'
 import { PERMISSION, ADMIN_PERMISSIONS } from './enums'
 import { isEnumValue } from './helper'
@@ -30,66 +27,25 @@ export const checkPermissions = (authUserPermissions: _Permissions = [], allowed
 export const withPermissions =
 	(allowed: _Permissions = [], except: _Permissions = []) =>
 	(WrappedComponent: any) => {
-		class WithPermissionsClass extends Component<any> {
-			_mounted = false
-
-			constructor(props: any) {
-				super(props)
-				this.state = {
-					visible: true
+		const WithPermissions = (props: any) => {
+			const [visible, setVisible] = useState(false)
+			const navigate = useNavigate()
+			const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
+			useEffect(() => {
+				if (!checkPermissions(authUserPermissions, allowed, except)) {
+					setVisible(false)
+					navigate('/403')
+				} else {
+					setVisible(true)
 				}
-			}
+			}, [])
 
-			componentDidMount() {
-				this.init()
+			if (!visible) {
+				return null
 			}
-
-			componentWillUnmount() {
-				this._mounted = false
-			}
-
-			init = async () => {
-				this._mounted = true
-				const { userActions, authUserPermissions } = this.props
-				let permissions
-				try {
-					const { data } = await userActions.getAuthUserProfile()
-					permissions = get(data, 'uniqPermissions')
-				} catch (e) {
-					permissions = authUserPermissions
-				}
-
-				if (!checkPermissions(permissions, allowed, except)) {
-					if (this._mounted) {
-						this.setState(
-							{
-								visible: false
-							},
-							() => {
-								history.push('/403')
-							}
-						)
-					}
-				}
-			}
-
-			render() {
-				const { visible } = this.state as any
-				if (!visible) {
-					return null
-				}
-				return <WrappedComponent {...this.props} />
-			}
+			return <WrappedComponent {...props} />
 		}
-		const mapStateToProps = (state: RootState) => ({
-			authUserPermissions: state.user.authUser?.data?.uniqPermissions
-		})
-
-		const mapDispatchToProps = (dispatch: any) => ({
-			userActions: bindActionCreators(UserActions, dispatch)
-		})
-
-		return compose(connect(mapStateToProps, mapDispatchToProps))(WithPermissionsClass)
+		return WithPermissions
 	}
 
 type Props = {
@@ -124,7 +80,7 @@ export const ForbiddenModal: FC<{ visible: boolean; onCancel: () => void; item?:
 
 	return (
 		<>
-			<Modal title={t('loc:Upozornenie')} visible={visible} getContainer={() => document.body} onCancel={onCancel} footer={null}>
+			<Modal title={t('loc:Upozornenie')} open={visible} getContainer={() => document.body} onCancel={onCancel} footer={null}>
 				<Result
 					status='warning'
 					title={t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')}

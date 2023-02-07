@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StringParam, useQueryParams } from 'use-query-params'
 import { Col, Row, Spin } from 'antd'
-import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -14,9 +13,8 @@ import ServicesFilter from './components/ServicesFilter'
 import { AvatarGroup } from '../../components/AvatarComponents'
 
 // utils
-import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { formatDateByLocale, getLinkWithEncodedBackUrl, normalizeDirectionKeys, normalizeQueryParams } from '../../utils/helper'
-import { history } from '../../utils/history'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_PERMISSION } from '../../utils/enums'
+import { formatDateByLocale, getLinkWithEncodedBackUrl, normalizeSearchQueryParams } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -25,7 +23,7 @@ import { getServices } from '../../reducers/services/serviceActions'
 import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
-import { IBreadcrumbs, IUserAvatar, SalonSubPageProps, Columns } from '../../types/interfaces'
+import { Columns, IBreadcrumbs, IUserAvatar, SalonSubPageProps } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
@@ -33,11 +31,12 @@ import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circ
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 interface IAdminUsersFilter {
-	search: string
+	rootCategoryID: string
 }
 
 const ServicesPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 	const { salonID, parentPath } = props
 
 	const dispatch = useDispatch()
@@ -48,9 +47,13 @@ const ServicesPage = (props: SalonSubPageProps) => {
 		// test()
 	}, [dispatch])
 
-	const [query, setQuery] = useQueryParams({
-		rootCategoryID: StringParam
+	const [searchParams, setSearchParams] = useSearchParams({
+		rootCategoryID: ''
 	})
+
+	const query = {
+		rootCategoryID: searchParams.get('rootCategoryID')
+	}
 
 	useEffect(() => {
 		dispatch(initialize(FORM.SERVICES_FILTER, { rootCategoryID: query.rootCategoryID }))
@@ -62,24 +65,12 @@ const ServicesPage = (props: SalonSubPageProps) => {
 		)
 	}, [dispatch, salonID, query.rootCategoryID])
 
-	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
-		if (!(sorter instanceof Array)) {
-			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
-			const newQuery = {
-				...query,
-				order
-			}
-			setQuery(newQuery)
-		}
-	}
-
 	const handleSubmit = (values: IAdminUsersFilter) => {
 		const newQuery = {
 			...query,
-			...values,
-			page: 1
+			rootCategoryID: values.rootCategoryID
 		}
-		setQuery(normalizeQueryParams(newQuery))
+		setSearchParams(normalizeSearchQueryParams(newQuery))
 	}
 
 	const columns: Columns = [
@@ -165,7 +156,6 @@ const ServicesPage = (props: SalonSubPageProps) => {
 							<Permissions allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_CREATE]} render={() => <ServicesFilter onSubmit={handleSubmit} />} />
 							<CustomTable
 								className='table-fixed'
-								onChange={onChangeTable}
 								columns={columns}
 								dataSource={services?.tableData}
 								rowClassName={'clickable-row'}
@@ -173,7 +163,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 								twoToneRows
 								onRow={(record) => ({
 									onClick: () => {
-										history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:services-settings/{{serviceID}}', { serviceID: record.serviceID })))
+										navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:services-settings/{{serviceID}}', { serviceID: record.serviceID })))
 									}
 								})}
 								pagination={false}

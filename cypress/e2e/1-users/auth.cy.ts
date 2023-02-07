@@ -36,7 +36,7 @@ context('Auth', () => {
 		}).as('authLogout')
 		cy.visit('/')
 		cy.get('.noti-my-account').click()
-		cy.get('#logOut').click()
+		cy.get('.noti-logout-button').click()
 		cy.wait('@authLogout').then((interception: any) => {
 			// check status code of logout request
 			expect(interception.response.statusCode).to.equal(200)

@@ -1,12 +1,12 @@
 import React, { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
 import { find } from 'lodash'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -18,8 +18,7 @@ import UserAvatar from '../../components/AvatarComponents'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, NOTIFICATION_TYPE } from '../../utils/enums'
-import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
-import { history } from '../../utils/history'
+import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, normalizeSearchQueryParams, setOrder } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -40,20 +39,31 @@ const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOT
 const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 	const { salonID, parentPath } = props
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		limit: NumberParam,
-		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'orderIndex:asc'),
-		accountState: StringParam,
-		serviceID: StringParam,
-		salonID: StringParam
+	const [searchParams, setSearchParams] = useSearchParams({
+		search: '',
+		limit: '',
+		page: '1',
+		order: 'orderIndex:ASC',
+		accountState: '',
+		serviceID: '',
+		salonID: ''
 	})
+
+	const query = {
+		search: searchParams.get('search') || '',
+		limit: searchParams.get('limit') || '',
+		page: searchParams.get('page') || '',
+		order: searchParams.get('order') || '',
+		accountState: searchParams.get('accountState') || '',
+		serviceID: searchParams.get('serviceID') || '',
+		salonID: searchParams.get('salonID') || ''
+	}
 
 	useEffect(() => {
 		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search, serviceID: query.serviceID, accountState: query.accountState }))
@@ -68,7 +78,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 				salonID
 			})
 		)
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.accountState, query.serviceID, salonID])
+	}, [dispatch, query.accountState, query.limit, query.order, query.page, query.search, query.serviceID, salonID])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -91,17 +101,17 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 				...query,
 				order
 			}
-			setQuery(newQuery)
+			setSearchParams(newQuery)
 		}
 	}
 
 	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
 			...query,
-			limit,
-			page
+			limit: String(limit),
+			page: String(page)
 		}
-		setQuery(newQuery)
+		setSearchParams(newQuery)
 	}
 
 	const handleSubmit = (values: IEmployeesFilter) => {
@@ -110,7 +120,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			...values,
 			page: 1
 		}
-		setQuery(newQuery)
+		setSearchParams(normalizeSearchQueryParams(newQuery))
 	}
 
 	const columns: Columns = [
@@ -250,7 +260,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 									<EmployeesFilter
 										createEmployee={() => {
 											if (hasPermission) {
-												history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/create')))
+												navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/create')))
 											} else {
 												openForbiddenModal()
 											}
@@ -272,7 +282,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 								scroll={{ x: 800 }}
 								onRow={(record) => ({
 									onClick: () => {
-										history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id })))
+										navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id })))
 									}
 								})}
 								useCustomPagination

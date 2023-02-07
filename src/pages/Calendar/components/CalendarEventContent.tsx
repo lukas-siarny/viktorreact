@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
-import { StringParam, useQueryParams } from 'use-query-params'
+import { useSearchParams } from 'react-router-dom'
 
 // full calendar
 import { EventContentArg } from '@fullcalendar/core'
@@ -60,8 +60,8 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 		isPlaceholder
 	} = eventData || {}
 
-	const [query] = useQueryParams({
-		eventId: StringParam
+	const [searchParams] = useSearchParams({
+		eventId: ''
 	})
 
 	// background events
@@ -84,7 +84,8 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 		endDateTime
 	}
 
-	const isEdit = query?.eventId === originalEventData.id
+	const isEdit = searchParams.get('eventId') === originalEventData.id
+
 	const timeLeftToEndOfaDay = calendarView === CALENDAR_VIEW.DAY || calendarView === CALENDAR_VIEW.WEEK ? dayjs(start).endOf('day').diff(dayjs(start), 'minutes') : undefined
 	const timeLeftClassName = timeLeftToEndOfaDay && timeLeftToEndOfaDay < 14 ? `end-of-day-${14 - timeLeftToEndOfaDay}` : undefined
 

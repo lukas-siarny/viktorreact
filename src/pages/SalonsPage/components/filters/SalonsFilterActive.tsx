@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { debounce, filter, isEmpty, isNil, size } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
 import cx from 'classnames'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import Filters from '../../../../components/Filters'
@@ -32,9 +33,8 @@ import {
 	FILTER_ENTITY,
 	CHANGE_DEBOUNCE_TIME
 } from '../../../../utils/enums'
-import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getSalonFilterRanges } from '../../../../utils/helper'
+import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getRangesForDatePicker } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
-import { history } from '../../../../utils/history'
 import searchWrapper from '../../../../utils/filters'
 
 // atoms
@@ -92,6 +92,7 @@ const SalonsFilterActive = (props: Props) => {
 	const { handleSubmit, openSalonImportsModal } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER_ACITVE])
 	const categories = useSelector((state: RootState) => state.categories.categories)
@@ -184,7 +185,7 @@ const SalonsFilterActive = (props: Props) => {
 						<Button
 							onClick={() => {
 								if (hasPermission) {
-									history.push(getLinkWithEncodedBackUrl(t('paths:salons/create')))
+									navigate(getLinkWithEncodedBackUrl(t('paths:salons/create')))
 								} else {
 									openForbiddenModal()
 								}
@@ -350,8 +351,8 @@ const SalonsFilterActive = (props: Props) => {
 									placeholder={[t('loc:Úpravy od'), t('loc:Úpravy do')]}
 									allowClear
 									name={'dateFromTo'}
-									ranges={getSalonFilterRanges()}
-									dropdownAlign={{ points: ['tr', 'br'] }}
+									presets={getRangesForDatePicker()}
+									dropdownAlign={{ points: ['tl', 'bl'] }}
 									allowEmpty={[false, false]}
 								/>
 							</Col>

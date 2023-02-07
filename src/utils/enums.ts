@@ -196,6 +196,7 @@ export enum RESOLUTIONS {
 	XXL = 'XXL',
 	XXXL = 'XXXL'
 }
+export const NOT_ALLOWED_REDIRECT_PATHS = ['/404', '/403']
 
 export enum SUBMENU_PARENT {
 	GENERAL = 'GENERAL',
@@ -848,8 +849,8 @@ export const RS_NOTIFICATION_FIELD_TEXTS = (notificationType: RS_NOTIFICATION, c
 	const entity = i18next.t(channel === NOTIFICATION_CHANNEL.B2B ? 'loc:Zamestnanec' : 'loc:Zákazník')
 
 	const result = {
-		title: undefined,
-		tooltip: undefined
+		title: '',
+		tooltip: ''
 	}
 
 	switch (notificationType) {

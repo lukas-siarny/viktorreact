@@ -6,8 +6,8 @@ import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { change, initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { StringParam, useQueryParams } from 'use-query-params'
 import dayjs from 'dayjs'
+import { useSearchParams } from 'react-router-dom'
 import { CalendarApi } from '@fullcalendar/core'
 
 // types
@@ -82,11 +82,17 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const [query, setQuery] = useQueryParams({
-		sidebarView: StringParam,
-		eventId: StringParam,
-		date: StringParam
+	const [searchParams, setSearchParams] = useSearchParams({
+		sidebarView: '',
+		eventId: '',
+		date: ''
 	})
+
+	const query = {
+		sidebarView: searchParams.get('sidebarView') || '',
+		eventId: searchParams.get('eventId') || '',
+		date: searchParams.get('date') || ''
+	}
 
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
@@ -320,24 +326,21 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 					className={'nc-sider-event-management-tabs'}
 					activeKey={sidebarView}
 					onChange={(type: string) => {
-						setQuery({ ...query, sidebarView: type })
+						setSearchParams({ ...query, sidebarView: type })
 						dispatch(change(FORM.CALENDAR_EVENT_FORM, 'eventType', type))
 					}}
-					tabsContent={[
+					items={[
 						{
-							tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
-							tab: <>{t('loc:Shift')}</>,
-							tabPaneContent: null
+							key: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
+							label: <>{t('loc:Shift')}</>
 						},
 						{
-							tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
-							tab: <>{t('loc:Voľno')}</>,
-							tabPaneContent: null
+							key: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
+							label: <>{t('loc:Voľno')}</>
 						},
 						{
-							tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
-							tab: <>{t('loc:Prestávka')}</>,
-							tabPaneContent: null
+							key: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
+							label: <>{t('loc:Prestávka')}</>
 						}
 					]}
 					destroyInactiveTabPane

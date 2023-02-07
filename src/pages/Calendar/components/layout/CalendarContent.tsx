@@ -9,8 +9,9 @@ import { isEqual, startsWith } from 'lodash'
 import { DelimitedArrayParam, useQueryParams } from 'use-query-params'
 
 // fullcalendar
+import FullCalendar from '@fullcalendar/react'
 import { EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
-import FullCalendar, { EventDropArg } from '@fullcalendar/react'
+import { EventDropArg } from '@fullcalendar/core'
 
 // enums
 import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, EVENT_NAMES, FORM, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'

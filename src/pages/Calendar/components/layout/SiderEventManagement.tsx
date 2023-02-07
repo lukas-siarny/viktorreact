@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useImperativeHandle, useRef } from 'react'
+import React, { useCallback, useEffect, useImperativeHandle } from 'react'
 import Sider from 'antd/lib/layout/Sider'
 import { compact, map } from 'lodash'
 import cx from 'classnames'
@@ -7,8 +7,8 @@ import { useTranslation } from 'react-i18next'
 import { change, initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { StringParam, useQueryParams } from 'use-query-params'
-import { CalendarApi } from '@fullcalendar/react'
 import dayjs from 'dayjs'
+import { CalendarApi } from '@fullcalendar/core'
 
 // types
 import { ICalendarEventForm, ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'

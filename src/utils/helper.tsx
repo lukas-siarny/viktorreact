@@ -88,6 +88,12 @@ import { Paths } from '../types/api'
 import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
 import { ReactComponent as ClockIcon } from '../assets/icons/clock-icon.svg'
 import { ReactComponent as CouponIcon } from '../assets/icons/coupon.svg'
+import { ReactComponent as NotRealizedIcon } from '../assets/icons/alert-circle.svg'
+import { ReactComponent as CheckSuccessIcon } from '../assets/icons/approwed-icon.svg'
+import { ReactComponent as CreditCardIcon } from '../assets/icons/credit-card.svg'
+import { ReactComponent as WalletIcon } from '../assets/icons/wallet.svg'
+import { ReactComponent as DollarIcon } from '../assets/icons/dollar.svg'
+import { ReactComponent as CrossedIcon } from '../assets/icons/crossed-red-16.svg'
 // eslint-disable-next-line import/no-cycle
 import { LOCALES } from '../components/LanguagePicker'
 
@@ -284,34 +290,70 @@ export const transalteReservationSourceType = (sourceType: RESERVATION_SOURCE_TY
 export const translateReservationState = (state?: RESERVATION_STATE) => {
 	switch (state) {
 		case RESERVATION_STATE.NOT_REALIZED:
-			return i18next.t('loc:Nezrealizovaná')
+			return {
+				text: i18next.t('loc:Nezrealizovaná'),
+				icon: <NotRealizedIcon />
+			}
 		case RESERVATION_STATE.PENDING:
-			return i18next.t('loc:Čakajúca')
+			return {
+				text: i18next.t('loc:Čakajúca'),
+				icon: <ClockIcon color={'#FF9500'} />
+			}
 		case RESERVATION_STATE.CANCEL_BY_SALON:
-			return i18next.t('loc:Zrušená salónom')
+			return {
+				text: i18next.t('loc:Zrušená salónom'),
+				icon: <CrossedIcon />
+			}
 		case RESERVATION_STATE.APPROVED:
-			return i18next.t('loc:Potvrdená')
+			return {
+				text: i18next.t('loc:Potvrdená'),
+				icon: <CheckSuccessIcon color={'#008700'} />
+			}
 		case RESERVATION_STATE.REALIZED:
-			return i18next.t('loc:Zrealizovaná')
+			return {
+				text: i18next.t('loc:Zaplatená'),
+				icon: <DollarIcon color={'#008700'} />
+			}
 		case RESERVATION_STATE.CANCEL_BY_CUSTOMER:
-			return i18next.t('loc:Zrušená zákaznikom')
+			return {
+				text: i18next.t('loc:Zrušená zákaznikom'),
+				icon: <CrossedIcon />
+			}
 		case RESERVATION_STATE.DECLINED:
-			return i18next.t('loc:Odmietnutá')
+			return {
+				text: i18next.t('loc:Odmietnutá'),
+				icon: <CrossedIcon />
+			}
 		default:
-			return ''
+			return {
+				text: '-',
+				icon: undefined
+			}
 	}
 }
 
-export const translateReservationPaymentMethod = (paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
+export const translateReservationPaymentMethod = (paymentMethod?: RESERVATION_PAYMENT_METHOD, className?: string) => {
 	switch (paymentMethod) {
 		case RESERVATION_PAYMENT_METHOD.CARD:
-			return i18next.t('loc:Platba kartou')
+			return {
+				text: i18next.t('loc:Platba kartou'),
+				icon: <CreditCardIcon className={className} />
+			}
 		case RESERVATION_PAYMENT_METHOD.CASH:
-			return i18next.t('loc:Platba v hotovosti')
+			return {
+				text: i18next.t('loc:Platba v hotovosti'),
+				icon: <WalletIcon className={className} />
+			}
 		case RESERVATION_PAYMENT_METHOD.OTHER:
-			return i18next.t('loc:Iné')
+			return {
+				text: i18next.t('loc:Iné spôsoby platby'),
+				icon: <DollarIcon className={className} />
+			}
 		default:
-			return ''
+			return {
+				text: '',
+				icon: undefined
+			}
 	}
 }
 
@@ -802,6 +844,20 @@ export const flattenTree = (array: any[], callback?: (item: any, level: number) 
 	return output
 }
 
+export const findNodeInTree = (node: any, value: any, valueKey = 'id', nestingKey = 'children') => {
+	let result = null
+	if (node) {
+		if (node[valueKey] === value) {
+			return node
+		}
+		if (node[nestingKey]) {
+			// eslint-disable-next-line no-return-assign
+			node[nestingKey].some((childrenNode: any) => (result = findNodeInTree(childrenNode, value)))
+		}
+	}
+	return result
+}
+
 export const isEnumValue = <T extends { [k: string]: string }>(checkValue: any, enumObject: T): checkValue is T[keyof T] =>
 	typeof checkValue === 'string' && Object.values(enumObject).includes(checkValue)
 
@@ -869,6 +925,19 @@ export const optionRenderWithImage = (itemData: any, fallbackIcon?: React.ReactN
 					{fallbackIcon}
 				</div>
 			)}
+			{label}
+		</div>
+	)
+}
+
+export const optionRenderWithIcon = (itemData: any, fallbackIcon?: React.ReactNode, imageWidth = 16, imageHeight = 16) => {
+	const { label, icon } = itemData
+	const style = { width: imageWidth, height: imageHeight }
+	return (
+		<div className='flex items-center'>
+			<div style={style} className={'mr-2 flex items-center'}>
+				{icon || fallbackIcon}
+			</div>
 			{label}
 		</div>
 	)
@@ -977,7 +1046,7 @@ export const hasAuthUserPermissionToEditRole = (
 			return result
 		}
 		// it's possible to edit role only if you have permission to edit
-		if (authUserSalonRole?.permissions.find((permission) => permission.name === SALON_PERMISSION.USER_ROLE_EDIT)) {
+		if (authUserSalonRole?.permissions.find((permission) => permission.name === (SALON_PERMISSION.USER_ROLE_EDIT as any))) {
 			return {
 				hasPermission: true,
 				tooltip: null

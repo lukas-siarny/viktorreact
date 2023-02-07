@@ -321,7 +321,7 @@
   "Salón bol skrytý z dôvodu": "The salon was hidden for a reason",
   "Salón bol vymazaný": "The salon has been deleted",
   "Salón bol zamietnutý z dôvodu": "The salon was rejected for a reason",
-  "Salón čaká na schválenie zmien. Údaje salónu, po túto dobu nie je možné editovať.": "\"The salon is awaiting approval",
+  "Salón čaká na schválenie zmien. Údaje salónu, po túto dobu nie je možné editovať.": "The salon is awaiting approval, you cannot currently edit it.",
   "Salóny": "Salons",
   "Salóny čakajúce na schválenie": "Salons awaiting approval",
   "Schvalovací proces": "The approval process",

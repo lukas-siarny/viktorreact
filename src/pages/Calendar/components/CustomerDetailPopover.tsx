@@ -10,7 +10,6 @@ import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-16
 import { ReactComponent as MessageIcon } from '../../../assets/icons/message-icon-16-thin.svg'
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
 import { ReactComponent as LoadingIcon } from '../../../assets/icons/loading-icon.svg'
-import { ReactComponent as CustomerIcon } from '../../../assets/icons/customer-24-icon.svg'
 
 // components
 import UserAvatar from '../../../components/AvatarComponents'
@@ -24,7 +23,6 @@ import { ICalendarReservationForm } from '../../../types/interfaces'
 import { ENUMERATIONS_KEYS, FORM } from '../../../utils/enums'
 import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
 import { getCustomer, ICustomerPayload } from '../../../reducers/customers/customerActions'
-import useOnClickOutside from '../../../hooks/useClickOutside'
 
 type ContentProps = {
 	onClose: () => void
@@ -63,11 +61,11 @@ const PopoverContent: FC<ContentProps> = (props) => {
 										</span>
 										{prefix && customer.phone && <span className={'text-xxs text-notino-grayDark leading-3'}>{`${prefix} ${customer.phone}`}</span>}
 									</Row>
-									{customer.email && (
+									{/* customer.email && (
 										<a href={`mailto:${customer.email}`} className={'leading-3'}>
 											<MessageIcon />
 										</a>
-									)}
+									) */}
 								</Row>
 								{customer.note && (
 									<Ellipsis text={customer.note} className={'p-3 m-0 bg-notino-grayLighter text-xs leading-4 rounded-md rounded-t-none whitespace-pre-wrap'} />
@@ -82,18 +80,14 @@ const PopoverContent: FC<ContentProps> = (props) => {
 	)
 }
 
-type ICalendarReservationPopoverProps = {
-	isSearchingCustomers?: boolean
-}
+type ICalendarReservationPopoverProps = {}
 
-const CalendarDetailPopover: FC<ICalendarReservationPopoverProps> = (props) => {
+const CalendarDetailPopover: FC<ICalendarReservationPopoverProps> = () => {
 	const [isOpen, setIsOpen] = useState(false)
 	const dispatch = useDispatch()
 
 	const customer = useSelector((state: RootState) => state.customers.customer)
 	const reservationFormValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
-	// const popoverRef = useRef<HTMLElement | null>(null)
-	// const triggerRef = useRef<HTMLButtonElement | null>(null)
 
 	const overlayClassName = 'nc-customer-detail-popover'
 
@@ -132,19 +126,6 @@ const CalendarDetailPopover: FC<ICalendarReservationPopoverProps> = (props) => {
 		}
 	}, [isOpen, overlayClassName])
 
-	/* useEffect(() => {
-		if (isOpen) {
-			const popoverNode = document.querySelector('.nc-customer-detail-popover')
-			if (popoverNode) {
-				popoverRef.current = popoverNode as HTMLElement
-			}
-		}
-	}, [isOpen])
-
-	useOnClickOutside([popoverRef, triggerRef], () => {
-		setIsOpen(false)
-	}) */
-
 	if (!reservationFormValues?.customer?.value) {
 		return null
 	}
@@ -162,12 +143,7 @@ const CalendarDetailPopover: FC<ICalendarReservationPopoverProps> = (props) => {
 				{customer?.isLoading ? (
 					<LoadingIcon className={'animate-spin w-4 h-4 text-notino-grayDark'} />
 				) : (
-					<button
-						// ref={triggerRef}
-						onClick={openPopover}
-						type={'button'}
-						className={'text-notino-pink w-4 h-4 p-0 m-0 bg-transparent outline-none border-0 cursor-pointer z-50'}
-					>
+					<button onClick={openPopover} type={'button'} className={'text-notino-pink w-4 h-4 p-0 m-0 bg-transparent outline-none border-0 cursor-pointer z-50'}>
 						<InfoIcon className='w-4 h-4' />
 					</button>
 				)}

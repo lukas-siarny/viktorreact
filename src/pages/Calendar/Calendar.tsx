@@ -116,15 +116,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			* this is usefull, becouse when we first initialize page, we want to set default value (if there are no employeeIDs in the URL)
 			* but when user unchecks all employeeIDs options in the filter, we want to show no employees
 	*/
-	// const [query, setQuery] = useQueryParams({
-	// 	view: withDefault(StringParam, CALENDAR_VIEW.DAY),
-	// 	date: withDefault(StringParam, dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
-	// 	employeeIDs: DelimitedArrayParam,
-	// 	categoryIDs: DelimitedArrayParam,
-	// 	sidebarView: StringParam,
-	// 	eventId: StringParam,
-	// 	eventsViewType: withDefault(StringParam, CALENDAR_EVENTS_VIEW_TYPE.RESERVATION)
-	// })
 
 	const [searchParams, setSearchParams] = useSearchParams({
 		view: CALENDAR_VIEW.DAY,
@@ -137,17 +128,19 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	})
 
 	// TODO: initne sa zle RESERVATION FILTER
-	const query = {
-		view: searchParams.get('view') || '',
-		date: searchParams.get('date') || '',
-		employeeIDs: searchParams.getAll('employeeIDs') || '',
-		categoryIDs: searchParams.getAll('categoryIDs') || '',
-		sidebarView: searchParams.get('sidebarView') || '',
-		eventId: searchParams.get('eventId') || '',
-		eventsViewType: searchParams.get('eventsViewType') || ''
-	}
+	const query = useMemo(
+		() => ({
+			view: searchParams.get('view') || '',
+			date: searchParams.get('date') || '',
+			employeeIDs: searchParams.getAll('employeeIDs') || '',
+			categoryIDs: searchParams.getAll('categoryIDs') || '',
+			sidebarView: searchParams.get('sidebarView') || '',
+			eventId: searchParams.get('eventId') || '',
+			eventsViewType: searchParams.get('eventsViewType') || ''
+		}),
+		[searchParams]
+	)
 
-	console.log('parent query', query)
 	const validSelectedDate = useMemo(() => (dayjs(query.date).isValid() ? query.date : dayjs().format(CALENDAR_DATE_FORMAT.QUERY)), [query.date])
 	const validCalendarView = useMemo(() => (CALENDAR_VIEWS.includes(query.view) ? query.view : CALENDAR_VIEW.DAY), [query.view]) as CALENDAR_VIEW
 	const validEventsViewType = useMemo(

@@ -50,8 +50,8 @@ const PopoverContent: FC<ContentProps> = (props) => {
 							<Col flex={'32px'}>
 								<UserAvatar size={24} className={'shrink-0'} src={customer?.profileImage?.resizedImages?.thumbnail} />
 							</Col>
-							<Col flex={'auto'} className={'flex flex-col gap-2 pr-6'}>
-								<Row align={'top'} justify={'space-between'} wrap={false} className={'gap-2'}>
+							<Col flex={'auto'} className={'flex flex-col gap-2'}>
+								<Row align={'top'} justify={'space-between'} wrap={false} className={'gap-2 pr-6'}>
 									<Row className={'flex-col gap-1'}>
 										<span className={'text-sm leading-4 break-all'}>
 											{getAssignedUserLabel({
@@ -63,13 +63,11 @@ const PopoverContent: FC<ContentProps> = (props) => {
 										</span>
 										{prefix && customer.phone && <span className={'text-xxs text-notino-grayDark leading-3'}>{`${prefix} ${customer.phone}`}</span>}
 									</Row>
-									<Row align={'middle'} className={'gap-2 h-8'} wrap={false}>
-										{customer.email && (
-											<a href={`mailto:${customer.email}`} className={'leading-3'}>
-												<MessageIcon />
-											</a>
-										)}
-									</Row>
+									{customer.email && (
+										<a href={`mailto:${customer.email}`} className={'leading-3'}>
+											<MessageIcon />
+										</a>
+									)}
 								</Row>
 								{customer.note && (
 									<Ellipsis text={customer.note} className={'p-3 m-0 bg-notino-grayLighter text-xs leading-4 rounded-md rounded-t-none whitespace-pre-wrap'} />
@@ -168,7 +166,7 @@ const CalendarDetailPopover: FC<ICalendarReservationPopoverProps> = (props) => {
 						// ref={triggerRef}
 						onClick={openPopover}
 						type={'button'}
-						className={'text-notino-grayDark w-4 h-4 p-0 m-0 bg-transparent outline-none border-0 cursor-pointer z-50'}
+						className={'text-notino-pink w-4 h-4 p-0 m-0 bg-transparent outline-none border-0 cursor-pointer z-50'}
 					>
 						<InfoIcon className='w-4 h-4' />
 					</button>

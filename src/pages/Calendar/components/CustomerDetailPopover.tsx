@@ -1,13 +1,11 @@
 /* eslint-disable import/no-cycle */
-import React, { FC, useEffect, useRef, useState } from 'react'
-import { Col, Divider, Popover, Row } from 'antd'
+import React, { FC, useEffect, useState } from 'react'
+import { Divider, Popover, Row } from 'antd'
 import { getFormValues } from 'redux-form'
-import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-16.svg'
-import { ReactComponent as MessageIcon } from '../../../assets/icons/message-icon-16-thin.svg'
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
 import { ReactComponent as LoadingIcon } from '../../../assets/icons/loading-icon.svg'
 
@@ -30,14 +28,33 @@ type ContentProps = {
 }
 
 const PopoverContent: FC<ContentProps> = (props) => {
-	const [t] = useTranslation()
 	const { customer, onClose } = props
 
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 	const prefix = getCountryPrefix(countriesData.data, customer?.phonePrefixCountryCode)
 
+	const hasAddress = customer?.address?.street || customer?.address?.city || customer?.address?.countryCode
+
 	return (
 		<div className='nc-popover-content text-notino-black w-80'>
+			<header className={'flex items-center justify-between px-4 h-13'}>
+				<Row className={'state-wrapper gap-2 items-center'}>
+					<UserAvatar size={24} className={'shrink-0'} src={customer?.profileImage?.resizedImages?.thumbnail} />
+					<span className={'text-sm leading-4 break-all'}>
+						{getAssignedUserLabel({
+							firstName: customer?.firstName,
+							lastName: customer?.lastName,
+							email: customer?.email,
+							id: customer?.id || ''
+						})}
+					</span>
+				</Row>
+
+				<button className={'nc-popover-header-button'} type={'button'} onClick={onClose}>
+					<CloseIcon />
+				</button>
+			</header>
+			<Divider className={'m-0'} />
 			<main className={'px-4 overflow-y-auto'} style={{ maxHeight: 'calc(100vh - 100px)' }}>
 				{customer && (
 					<>
@@ -45,34 +62,44 @@ const PopoverContent: FC<ContentProps> = (props) => {
 							<CloseIcon />
 						</button>
 						<section className={'flex py-4'}>
-							<Col flex={'32px'}>
-								<UserAvatar size={24} className={'shrink-0'} src={customer?.profileImage?.resizedImages?.thumbnail} />
-							</Col>
-							<Col flex={'auto'} className={'flex flex-col gap-2'}>
-								<Row align={'top'} justify={'space-between'} wrap={false} className={'gap-2 pr-6'}>
-									<Row className={'flex-col gap-1'}>
-										<span className={'text-sm leading-4 break-all'}>
-											{getAssignedUserLabel({
-												firstName: customer.firstName,
-												lastName: customer.lastName,
-												email: customer.email,
-												id: customer.id
-											})}
-										</span>
-										{prefix && customer.phone && <span className={'text-xxs text-notino-grayDark leading-3'}>{`${prefix} ${customer.phone}`}</span>}
-									</Row>
-									{/* customer.email && (
-										<a href={`mailto:${customer.email}`} className={'leading-3'}>
-											<MessageIcon />
-										</a>
-									) */}
-								</Row>
-								{customer.note && (
-									<Ellipsis text={customer.note} className={'p-3 m-0 bg-notino-grayLighter text-xs leading-4 rounded-md rounded-t-none whitespace-pre-wrap'} />
+							<ul className={'noti-contact-list text-xs leading-4 flex flex-col gap-1 mb-0'}>
+								{customer.phone && (
+									<li className={'phone-list-item'}>
+										<a href={`tel:${prefix}${customer.phone}`}>{`${prefix} ${customer.phone}`}</a>
+									</li>
 								)}
-							</Col>
+								{customer.email && (
+									<li className={'email-list-item break-all'}>
+										<a href={`mailto:${customer.email}`}>{customer.email}</a>
+									</li>
+								)}
+								{hasAddress && (
+									<li className={'address-list-item leading-4'}>
+										<div className={'flex flex-col'}>
+											{customer?.address?.street && (
+												<div>
+													<span className={'break-all mr-1'}>{customer.address.street.trim()}</span>
+													{customer?.address?.streetNumber?.trim()}
+												</div>
+											)}
+											<div>
+												{customer?.address?.zipCode && <span className={'mr-1'}>{customer?.address?.zipCode?.trim()}</span>}
+												<span className={'break-all'}>{customer?.address?.city?.trim()}</span>
+											</div>
+											{customer?.address?.countryCode}
+										</div>
+									</li>
+								)}
+								{customer.note && (
+									<li className={'note-list-item'}>
+										<Ellipsis
+											text={customer.note}
+											className={'p-3 m-0 bg-notino-grayLighter text-xs leading-4 rounded-md rounded-t-none whitespace-pre-wrap'}
+										/>
+									</li>
+								)}
+							</ul>
 						</section>
-						<Divider className={'m-0'} />
 					</>
 				)}
 			</main>
@@ -137,7 +164,7 @@ const CalendarDetailPopover: FC<ICalendarReservationPopoverProps> = () => {
 			placement={'leftTop'}
 			overlayClassName={`${overlayClassName} nc-popover-overlay nc-popover-overlay-fixed`}
 			content={<PopoverContent customer={customer.data?.customer} onClose={() => setIsOpen(false)} />}
-			align={{ offset: [-160, -25] }}
+			align={{ offset: [-160, -32] }}
 		>
 			<div className={'absolute right-7 z-50 w-6 h-6 bg-notino-white flex items-center justify-center'} style={{ top: 30 }}>
 				{customer?.isLoading ? (

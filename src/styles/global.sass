@@ -1018,22 +1018,26 @@ span.ant-tag
 			content: ''
 			display: block
 			width: 16px
-			height: 16px
-			margin-top: 4px
+			height: 21px
+			display: flex
+			align-items: center
 			flex: 0 0 auto
+			background-size: contain
+			background-repeat: no-repeat
+			background-position: center center
 		&.phone-list-item
 			&::before
-				background: url("../assets/icons/phone-icon-16.svg") no-repeat center center
+				background-image: url("../assets/icons/phone-icon-16.svg")
 		&.email-list-item
 			&::before
-				background: url("../assets/icons/message-icon-16-thin.svg") no-repeat center center
+				background-image: url("../assets/icons/message-icon-16-thin.svg")
 		&.address-list-item
 			&::before
-				background: url("../assets/icons/home-icon-16.svg") no-repeat center center
+				background-image: url("../assets/icons/home-icon-16.svg")
 		&.note-list-item
 			margin-top: 14px
 			&::before
-				background: url("../assets/icons/pencil-icon-16.svg") no-repeat center center
+				background-image: url("../assets/icons/pencil-icon-16.svg")
 
 .noti-opening-hours-table
 	display: flex

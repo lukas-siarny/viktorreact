@@ -38,7 +38,6 @@ import CalendarDetailPopover from '../CustomerDetailPopover'
 
 // redux
 import { RootState } from '../../../../reducers'
-import { getCustomer } from '../../../../reducers/customers/customerActions'
 import { getEmployee } from '../../../../reducers/employees/employeesActions'
 
 type ComponentProps = {
@@ -207,24 +206,6 @@ const ReservationForm: FC<Props> = (props) => {
 			console.error(error.message)
 		}
 	}
-	const onChangeCustomer = async (customer: any) => {
-		/* const { data } = await dispatch(getCustomer(customer.key))
-		dispatch(
-			initialize(FORM.CUSTOMER, {
-				...data?.customer,
-				avatar: data?.customer?.profileImage
-					? [
-							{
-								url: data?.customer?.profileImage?.original,
-								thumbnail: data?.customer?.profileImage?.resizedImages?.thumbnail,
-								uid: data?.customer?.profileImage?.id
-							}
-					  ]
-					: null
-			})
-		)
-		setVisibleCustomerDetailModal(true) */
-	}
 
 	const setReservationTime = async (serviceId?: string, employeeId?: string) => {
 		let durationData: DurationData = {}
@@ -359,7 +340,6 @@ const ReservationForm: FC<Props> = (props) => {
 										name={'customer'}
 										className={cx('pb-0', { 'customer-with-info-icon': reservationFormValues?.customer?.value })}
 										size={'large'}
-										onChange={onChangeCustomer}
 										optionLabelProp={'label'}
 										suffixIcon={<CustomerIcon className={'text-notino-grayDark'} width={16} height={16} />}
 										update={(itemKey: number, ref: any) => ref.blur()}

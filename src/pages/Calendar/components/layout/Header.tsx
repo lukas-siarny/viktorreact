@@ -2,7 +2,6 @@ import React, { FC, useCallback, useRef, useState, useMemo, useEffect } from 're
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 import { Button, Dropdown } from 'antd'
-import Tooltip from 'antd/es/tooltip'
 import { Header } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
 import { debounce } from 'lodash'
@@ -64,18 +63,6 @@ const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 	}
 }
 
-const getSwitchViewLabel = (label: string, isSmallerDevice: boolean) => {
-	const timmedLabel = isSmallerDevice ? label.slice(0, 1) : label
-
-	return isSmallerDevice ? (
-		<Tooltip title={label} placement={'bottom'}>
-			{timmedLabel}
-		</Tooltip>
-	) : (
-		timmedLabel
-	)
-}
-
 type Props = {
 	selectedDate: string
 	calendarView: CALENDAR_VIEW
@@ -117,8 +104,6 @@ const CalendarHeader: FC<Props> = (props) => {
 	})
 
 	useEffect(() => setCurrentDate(selectedDate), [selectedDate])
-
-	// const isSmallerDevice = useMedia(['(max-width: 1200px)'], [true], false)
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const setSelectedDateDebounced = useCallback(debounce(setSelectedDate, CALENDAR_DEBOUNCE_DELAY), [setSelectedDate])
@@ -211,12 +196,12 @@ const CalendarHeader: FC<Props> = (props) => {
 					tabsContent={[
 						{
 							tabKey: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
-							tab: getSwitchViewLabel(t('loc:Rezervácie'), false),
+							tab: t('loc:Rezervácie'),
 							tabPaneContent: null
 						},
 						{
 							tabKey: CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF,
-							tab: getSwitchViewLabel(t('loc:Shifts'), false),
+							tab: t('loc:Shifts'),
 							tabPaneContent: null
 						}
 					]}

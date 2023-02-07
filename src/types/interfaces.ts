@@ -32,13 +32,13 @@ export interface IResponsePagination {
 	totalCount: number
 }
 
-export interface ISelectOptionItem {
+export interface ISelectOptionItem<ExtraType = any> {
 	key: number | string
 	label: string
 	value: number | string
 	disabled?: boolean
 	hardSelected?: boolean
-	extra?: any
+	extra?: ExtraType
 	className?: string
 	level?: number
 }
@@ -57,7 +57,7 @@ export interface IInviteEmployeeForm {
 
 export type ServiceRootCategory = Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200['employee']['categories']
 
-type ServiceType = NonNullable<
+export type ServiceType = NonNullable<
 	NonNullable<Paths.GetApiB2BV1Services.Responses.$200['groupedServicesByCategory'][0]['category']>['children'][0]['category']
 >['children'][0]['service']
 
@@ -222,9 +222,19 @@ export interface IServiceForm {
 	}
 }
 
+export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
+export interface ICalendarEventDetailPayload {
+	data: CalendarEventDetail | null
+}
 export interface ICalendarReservationForm {
 	customer: ISelectOptionItem
-	service: ISelectOptionItem
+	service: ISelectOptionItem<{
+		priceAndDurationData?: ServiceType['priceAndDurationData'],
+		useCategoryParameter?: ServiceType['useCategoryParameter'],
+		serviceCategoryParameter?: ServiceType['serviceCategoryParameter'],
+		categoryId?: string
+		icon?: NonNullable<NonNullable<ICalendarEventDetailPayload['data']>['service']>['icon']
+	}>
 	employee: ISelectOptionItem
 	date: string
 	timeFrom: string
@@ -634,6 +644,8 @@ export interface IAuthUserPayload {
 export interface IEmployeePayload {
 	data: Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200 | null
 }
+
+export type EmployeeService = NonNullable<IEmployeePayload['data']>['employee']['categories'][0]['children'][0]['children'][0]
 
 export interface SalonPageProps {
 	isAdmin: boolean

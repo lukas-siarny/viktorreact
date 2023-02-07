@@ -114,7 +114,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 
 	const iconState = getIconState({ isPast, isApproved, isRealized, notRealized, service })
 	const iconPending = isPending && <ClockIcon className={'icon clock'} style={{ color: bgColor }} />
-	const iconAutoAssigned = <AvatarIcon className={'icon employee'} />
+	const iconAutoAssigned = isEmployeeAutoassigned && <AvatarIcon className={'icon employee'} />
 
 	const cardRef = useRef<HTMLDivElement | null>(null)
 
@@ -200,15 +200,17 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 							return (
 								<>
 									<div className={'title-wrapper'}>
-										<span className={'title'}>{customerName}</span>
-										{onlineIndicatior}
+										<div className={'title-inner-wrapper'}>
+											{iconState}
+											<span className={'title'}>{customerName}</span>
+											{onlineIndicatior}
+										</div>
+										<div className={'icons'}>
+											{iconPending}
+											{iconAutoAssigned}
+										</div>
 									</div>
 									{service?.name && <span className={'desc'}>{service.name}</span>}
-									<div className={'icons'}>
-										{iconPending}
-										{iconAutoAssigned}
-										{iconState}
-									</div>
 								</>
 							)
 						}
@@ -216,19 +218,20 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 						default: {
 							return (
 								<>
-									<div className={'event-info'}>
-										<div className={'title-wrapper'}>
+									<div className={'title-wrapper'}>
+										<div className={'title-inner-wrapper'}>
+											{iconState}
 											<span className={'title'}>{customerName}</span>
 											{onlineIndicatior}
+											<span className={'time'}>{timeText}</span>
 										</div>
-										<span className={'time'}>{timeText}</span>
-										{service?.name && <span className={'desc'}>{service.name}</span>}
+										<div className={'icons'}>
+											{iconPending}
+											{iconAutoAssigned}
+										</div>
 									</div>
-									<div className={'icons'}>
-										{iconPending}
-										{iconAutoAssigned}
-										{iconState}
-									</div>
+									<span className={'time'}>{timeText}</span>
+									{service?.name && <span className={'desc'}>{service.name}</span>}
 								</>
 							)
 						}

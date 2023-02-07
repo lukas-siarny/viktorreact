@@ -15,9 +15,9 @@ import UserAvatar from '../../components/AvatarComponents'
 import ReservationsFilter from './components/ReservationsFilter'
 
 // utils
-import { DEFAULT_DATE_INIT_FORMAT, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { DEFAULT_DATE_INIT_FORMAT, FORM, PERMISSION, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { getAssignedUserLabel, normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { getAssignedUserLabel, normalizeDirectionKeys, setOrder, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -48,8 +48,7 @@ const ReservationsPage = (props: Props) => {
 		reservationCreateSourceType: StringParam,
 		reservationPaymentMethods: ArrayParam,
 		limit: NumberParam,
-		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'startDate:ASC')
+		page: withDefault(NumberParam, 1)
 	})
 
 	useEffect(() => {
@@ -74,7 +73,7 @@ const ReservationsPage = (props: Props) => {
 				reservationCreateSourceType: query.reservationCreateSourceType,
 				categoryIDs: query.categoryIDs,
 				page: query.page,
-				order: query.order,
+				order: 'startDate:ASC',
 				limit: query.limit
 			})
 		)
@@ -84,7 +83,6 @@ const ReservationsPage = (props: Props) => {
 		query.dateFrom,
 		query.employeeIDs,
 		query.limit,
-		query.order,
 		query.page,
 		query.reservationCreateSourceType,
 		query.reservationPaymentMethods,
@@ -131,9 +129,7 @@ const ReservationsPage = (props: Props) => {
 			dataIndex: 'startDate',
 			key: 'startDate',
 			ellipsis: true,
-			width: '20%',
-			sorter: true,
-			sortOrder: setOrder(query.order, 'startDate')
+			width: '20%'
 		},
 		{
 			title: t('loc:Trvanie'),
@@ -154,7 +150,15 @@ const ReservationsPage = (props: Props) => {
 			dataIndex: 'state',
 			key: 'state',
 			ellipsis: true,
-			width: '20%'
+			width: '20%',
+			render: (value) => {
+				return (
+					<div className={'flex items-center'}>
+						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationState(value as RESERVATION_STATE).icon}</div>
+						<div>{translateReservationState(value as RESERVATION_STATE).text}</div>
+					</div>
+				)
+			}
 		},
 		{
 			title: t('loc:Spôsob úhrady'),
@@ -162,7 +166,14 @@ const ReservationsPage = (props: Props) => {
 			key: 'paymentMethod',
 			ellipsis: true,
 			width: '20%',
-			render: (value) => value || '-'
+			render: (value) => {
+				return (
+					<div className={'flex items-center'}>
+						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).icon}</div>
+						<div>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).text}</div>
+					</div>
+				)
+			}
 		},
 		{
 			title: t('loc:Zamestnanec'),

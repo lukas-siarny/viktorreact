@@ -17,11 +17,7 @@ import { ReactComponent as DotsIcon } from '../../../assets/icons/more-info-hori
 import { ReactComponent as MessageIcon } from '../../../assets/icons/message-icon-16-thin.svg'
 import { ReactComponent as ChevronDown } from '../../../assets/icons/chevron-down.svg'
 import { ReactComponent as NoteIcon } from '../../../assets/icons/note-icon.svg'
-import { ReactComponent as CheckSuccessIcon } from '../../../assets/icons/check-icon-success-16.svg'
-import { ReactComponent as CreditCardIcon } from '../../../assets/icons/credit-card.svg'
-import { ReactComponent as WalletIcon } from '../../../assets/icons/wallet.svg'
 import { ReactComponent as DollarIcon } from '../../../assets/icons/dollar.svg'
-import { ReactComponent as ClockIcon } from '../../../assets/icons/clock.svg'
 import { ReactComponent as CrossedIcon } from '../../../assets/icons/crossed-red-16.svg'
 
 // components
@@ -34,7 +30,7 @@ import { CalendarEvent, ICalendarReservationPopover } from '../../../types/inter
 
 /// utils
 import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, FORM, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE, STRINGS } from '../../../utils/enums'
-import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
+import { getAssignedUserLabel, getCountryPrefix, translateReservationPaymentMethod, translateReservationState } from '../../../utils/helper'
 import { parseTimeFromMinutes, getTimeText } from '../calendarHelpers'
 
 // hooks
@@ -61,31 +57,6 @@ type ContentProps = {
 	color?: string
 	notes?: PopoverNote[]
 	showUnsavedChangesMessage?: boolean
-}
-
-const getPaymentMethodHeaderProps = (method?: NonNullable<CalendarEvent['reservationData']>['paymentMethod']) => {
-	switch (method) {
-		case RESERVATION_PAYMENT_METHOD.CARD:
-			return {
-				headerIcon: <CreditCardIcon className={'text-notino-success'} />,
-				headerState: i18next.t('loc:Platba kartou')
-			}
-		case RESERVATION_PAYMENT_METHOD.CASH:
-			return {
-				headerIcon: <WalletIcon className={'text-notino-success'} />,
-				headerState: i18next.t('loc:Platba v hotovosti')
-			}
-		case RESERVATION_PAYMENT_METHOD.OTHER:
-			return {
-				headerIcon: <DollarIcon className={'text-notino-success'} />,
-				headerState: i18next.t('loc:Iné spôsoby platby')
-			}
-		default:
-			return {
-				headerIcon: <DollarIcon className={'text-notino-success'} />,
-				headerState: i18next.t('loc:Zaplatená')
-			}
-	}
 }
 
 const getCloseButton = (onClose: () => void) => (
@@ -138,7 +109,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 				</>
 			)}
 			{/* footerHeight = 72px, headerHeight = 52px. dividerHeight = 1px (header and footer dividers), padding top and bottom = 2*16px */}
-			<main className={'px-4 overflow-y-auto relative bg-greyDarker'} style={{ maxHeight: `calc(100vh - 32px - ${hasFooter ? `${134}px` : `${53}px`})` }}>
+			<main className={'px-4 overflow-y-auto relative'} style={{ maxHeight: `calc(100vh - 32px - ${hasFooter ? `${134}px` : `${53}px`})` }}>
 				{showUnsavedChangesMessage ? (
 					<>
 						<div className={'absolute right-4 top-4'}>{getCloseButton(onClose)}</div>
@@ -318,30 +289,33 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 		const items = []
 
 		if (selectedSalon?.data?.payByCard) {
+			const { icon } = translateReservationPaymentMethod(RESERVATION_PAYMENT_METHOD.CARD)
 			items.push({
 				key: 'realized-card',
 				label: t('loc:Kartou'),
-				icon: <CreditCardIcon />,
+				icon,
 				className: itemClassName,
 				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED, RESERVATION_PAYMENT_METHOD.CARD)
 			})
 		}
 
 		if (selectedSalon?.data?.payByCash) {
+			const { icon } = translateReservationPaymentMethod(RESERVATION_PAYMENT_METHOD.CASH)
 			items.push({
 				key: 'realized-cash',
 				label: t('loc:Hotovosťou'),
-				icon: <WalletIcon />,
+				icon,
 				className: itemClassName,
 				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED, RESERVATION_PAYMENT_METHOD.CASH)
 			})
 		}
 
 		if (selectedSalon?.data?.otherPaymentMethods) {
+			const { icon } = translateReservationPaymentMethod(RESERVATION_PAYMENT_METHOD.OTHER)
 			items.push({
 				key: 'realized-other',
 				label: t('loc:Iným spôsobom'),
-				icon: <DollarIcon />,
+				icon,
 				className: itemClassName,
 				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED, RESERVATION_PAYMENT_METHOD.OTHER)
 			})
@@ -386,17 +360,19 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 	const getPopoverContentSpecificProps = () => {
 		switch (reservationData?.state) {
 			case RESERVATION_STATE.APPROVED: {
+				const { icon: headerIcon, text: headerState } = translateReservationState(RESERVATION_STATE.APPROVED)
 				return {
-					headerIcon: <CheckSuccessIcon />,
-					headerState: t('loc:Potvrdená'),
+					headerIcon,
+					headerState,
 					moreMenuItems: [headerMoreItems.cancel_by_salon],
 					footerButtons: [getFooterCancelButton('cancel-button-not-realized', t('loc:Nezrealizovaná'), RESERVATION_STATE.NOT_REALIZED), getFooterCheckoutButton()]
 				}
 			}
-			case RESERVATION_STATE.PENDING:
+			case RESERVATION_STATE.PENDING: {
+				const { icon: headerIcon, text: headerState } = translateReservationState(RESERVATION_STATE.PENDING)
 				return {
-					headerIcon: <ClockIcon color={'#FF9500'} />,
-					headerState: t('loc:Čakajúca'),
+					headerIcon,
+					headerState,
 					moreMenuItems: [headerMoreItems.cancel_by_salon],
 					footerButtons: [
 						getFooterCancelButton('cancel-button-declined', t('loc:Zamietnuť'), RESERVATION_STATE.DECLINED),
@@ -412,14 +388,28 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 						</Button>
 					]
 				}
-			case RESERVATION_STATE.REALIZED:
-				return getPaymentMethodHeaderProps(reservationData?.paymentMethod)
-			case RESERVATION_STATE.NOT_REALIZED:
-			default:
-				return {
-					headerIcon: <CrossedIcon />,
-					headerState: t('loc:Nezrealizovaná')
+			}
+			case RESERVATION_STATE.REALIZED: {
+				if (!reservationData?.paymentMethod) {
+					return {
+						headerIcon: <DollarIcon className={'text-notino-success'} />,
+						headerState: i18next.t('loc:Zaplatená')
+					}
 				}
+				const { icon: headerIcon, text: headerState } = translateReservationPaymentMethod(
+					reservationData?.paymentMethod as RESERVATION_PAYMENT_METHOD,
+					'text-notino-success'
+				)
+				return { headerIcon, headerState }
+			}
+			case RESERVATION_STATE.NOT_REALIZED:
+			default: {
+				const { icon: headerIcon, text: headerState } = translateReservationState(RESERVATION_STATE.NOT_REALIZED)
+				return {
+					headerIcon,
+					headerState
+				}
+			}
 		}
 	}
 
@@ -439,7 +429,6 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 	}
 
 	const showUnsavedChangesMessage = isEdit && !isReservationFormPriste
-
 	return (
 		<Popover
 			visible={isOpen}

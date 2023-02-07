@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { CalendarApi, EventApi, EventInput } from '@fullcalendar/react'
+import { CalendarApi, EventApi, EventInput } from '@fullcalendar/core'
 import dayjs from 'dayjs'
 import { destroy } from 'redux-form'
 

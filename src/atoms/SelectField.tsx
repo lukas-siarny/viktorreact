@@ -20,7 +20,7 @@ import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon.svg'
 
 // utils
 import { FIELD_MODE, FORM } from '../utils/enums'
-import { createSlug, formFieldID } from '../utils/helper'
+import { createSlug, findNodeInTree, formFieldID } from '../utils/helper'
 
 // assets
 import { ReactComponent as LoadingIcon } from '../assets/icons/loading-icon.svg'
@@ -187,7 +187,7 @@ const customDropdown = (actions: Action[] | null | undefined, menu: React.ReactE
 }
 
 const handleChange = async (data: any) => {
-	const { value, options, autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update } = data
+	const { value, options, antdOptions, autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update } = data
 	let val = value
 	// NOTE condition for checking if select field has 'tags' mode with maxTagLength prop for checking length string of added tag
 	// if input value's length is larger than maxTagLength, filter this value from tags
@@ -195,15 +195,28 @@ const handleChange = async (data: any) => {
 		val = filter(value, (v, i: number) => i !== value.length - 1)
 	}
 	// NOTE: extra data k value, key, label ak potrebujeme poslat ine data -> eg. pri reservacii sa neposiela ID travelera ale cely objekt
-	if ((mode === 'tags' || mode === 'multiple') && hasExtra) {
-		val = map(value, (valInput) => ({
-			...valInput,
-			extra: find(options, (item) => item.value === valInput.value)?.extra
-		}))
-	} else if (hasExtra && options?.extra) {
-		val = {
-			...value,
-			extra: options?.extra
+	if (hasExtra) {
+		if (mode === 'tags' || mode === 'multiple') {
+			val = map(value, (valInput) =>
+				typeof valInput === 'object'
+					? {
+							...valInput,
+							extra: find(antdOptions, (item) => item.value === valInput.value)?.extra
+					  }
+					: valInput
+			)
+		} else if (antdOptions?.extra && typeof value === 'object') {
+			val = {
+				...value,
+				extra: antdOptions.extra
+			}
+		} else if (typeof value === 'object') {
+			// NOTE: v niektorych pripadoch Antd odfiltruje extra objekt z antdOptions
+			const nodeFromOptions = findNodeInTree({ children: options }, value?.value)
+			val = {
+				...val,
+				extra: nodeFromOptions?.extra
+			}
 		}
 	}
 	if (maxTagsLimit && val?.length > maxTagsLimit) {
@@ -387,9 +400,21 @@ const SelectField = (props: Props) => {
 				setConfVisibility(true)
 				return
 			}
-			handleChange({ value, options: antdOptions, autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update })
+			handleChange({
+				value,
+				antdOptions,
+				autoBlur,
+				hasExtra,
+				input,
+				itemRef,
+				maxTagLength,
+				maxTagsLimit,
+				mode,
+				update,
+				options: props.onSearch && filterOption === false ? selectState.data : options
+			})
 		},
-		[autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update, confirmSelection]
+		[autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update, confirmSelection, props.onSearch, filterOption, selectState, options]
 	)
 
 	const onSelectWrap = async (value: any, option: any) => {

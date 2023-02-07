@@ -19,6 +19,7 @@ import ServiceEditModal from './components/ServiceEditModal'
 
 // types
 import {
+	EmployeeService,
 	EmployeeServiceData,
 	IBreadcrumbs,
 	IEditEmployeeRoleForm,
@@ -65,8 +66,6 @@ import useBackUrl from '../../hooks/useBackUrl'
 type Props = SalonSubPageProps
 
 type EmployeePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody
-
-type EmployeeService = NonNullable<IEmployeePayload['data']>['employee']['categories'][0]['children'][0]['children'][0]
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 

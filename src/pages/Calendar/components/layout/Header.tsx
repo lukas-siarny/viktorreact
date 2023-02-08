@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useRef, useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
-import { Button, Dropdown } from 'antd'
+import { Button } from 'antd'
 import { Header } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
 import { debounce } from 'lodash'
@@ -169,16 +169,16 @@ const CalendarHeader: FC<Props> = (props) => {
 					className={'tabs-small -mt-1'}
 					activeKey={eventsViewType}
 					onChange={(newEvetsViewType: string) => setEventsViewType(newEvetsViewType as CALENDAR_EVENTS_VIEW_TYPE)}
-					tabsContent={[
+					items={[
 						{
+							key: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
 							tabKey: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
-							tab: t('loc:Rezervácie'),
-							tabPaneContent: null
+							label: t('loc:Rezervácie')
 						},
 						{
+							key: CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF,
 							tabKey: CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF,
-							tab: t('loc:Shifts'),
-							tabPaneContent: null
+							label: t('loc:Shifts')
 						}
 					]}
 				/>

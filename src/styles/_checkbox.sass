@@ -12,11 +12,13 @@
 	.custom-rounded-checkbox
 		border: 1px solid $borderColor-notino-gray
 		border-radius: 999px
-		background: $backgroundColor-notino-grayLighter
-		height: 22px
-		width: 22px
-		&:hover
-			border: 1px solid $borderColor-notino-pink
+		background: $backgroundColor-notino-white
+		height: 20px
+		width: 20px
+		transition: border-color 250ms ease-in-out, background-color 250ms ease-in-out
+		&:not(.disabled)
+			&:hover
+				border: 1px solid $borderColor-notino-pink
 		&.checked
 			color: $textColor-notino-white
 			border: 1px solid $borderColor-notino-pink

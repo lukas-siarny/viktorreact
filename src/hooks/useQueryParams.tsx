@@ -2,9 +2,11 @@ import { isArray } from 'lodash'
 import { useCallback, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-interface IQueryParams {
+export interface IQueryParams {
 	[key: string]: any
 }
+
+export type SetQueryParams = (newValues: IQueryParams) => void
 
 interface IQueryParamsInitial {
 	[key: string]: ParamType
@@ -27,7 +29,7 @@ const serializeInitialParams = (initialValues?: IQueryParamsInitial) =>
 			return { ...acc }
 		}
 		if (value.value === null || (isArray(value.value) && !value.value.length)) {
-			// nastavi mu prazdnu hodnotu, eg. &foo=, resp. &foo
+			// nastavi mu prazdnu hodnotu, napr. &foo=, resp. &foo
 			return {
 				...acc,
 				[key]: {
@@ -131,8 +133,17 @@ export const StringParam = (param?: string | null): ParamType => {
 	}
 }
 
+/**
+ * v inicializacnom objekte je vzdy potrebne zadefinovat typ query parametra (zatial mame len StringParam(initValue) a ArrayParam(initValue))
+ * { foo: StringParam(), baz: ArrayParam(['init value 1', 'init value 2']) }
+ * obalit inicializacne hodnoty do typovych funkcii je potrebne kvoli tomu, aby sme vedeli spravne rozparsovat query parameter
+ * tento hook uz potom vrati objekt v tvare: { foo: undefined, baz: ['init value 1', 'init value 2'] }
+ * zaroven vrati setovaciu funkciu pre update query parameterov
+ * { foo: undefined } => odstrani queryParam foo z URL
+ * { foo: '' } || { foo: [] } || { foo: null } => &foo=
+ */
 const useQueryParams = (queryParamsInitial?: IQueryParamsInitial): [IQueryParams, (newValues: IQueryParams) => void] => {
-	// prekonvertujeme initial objekt (ktory obsahuje informacie o type query parametru - Array x String) do jednoduchsie objektu key:value vhodneho pre useSearchParams hook
+	// prekonvertujeme initial objekt (ktory obsahuje informacie o type query parametru - Array x String) do jednoduchsieho objektu key:value vhodneho pre useSearchParams hook
 	const intialValuesForSearchParams = mapInitialValuesToQueryReturnValues(serializeInitialParams(queryParamsInitial))
 	const [searchParams, setSearchParams] = useSearchParams(intialValuesForSearchParams)
 

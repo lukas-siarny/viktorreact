@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next'
 import { change, initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import dayjs from 'dayjs'
-import { useSearchParams } from 'react-router-dom'
 import { CalendarApi } from '@fullcalendar/core'
 
 // types
@@ -59,6 +58,8 @@ type Props = {
 	calendarApi?: CalendarApi
 	changeCalendarDate: (newDate: string) => void
 	phonePrefix?: string
+	query: any
+	setQuery: any
 }
 
 export type SiderEventManagementRefs = {
@@ -77,22 +78,12 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 		eventsViewType,
 		calendarApi,
 		changeCalendarDate,
-		phonePrefix
+		phonePrefix,
+		query,
+		setQuery
 	} = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-
-	const [searchParams, setSearchParams] = useSearchParams({
-		sidebarView: '',
-		eventId: '',
-		date: ''
-	})
-
-	const query = {
-		sidebarView: searchParams.get('sidebarView') || '',
-		eventId: searchParams.get('eventId') || '',
-		date: searchParams.get('date') || ''
-	}
 
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
@@ -337,7 +328,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 					className={'nc-sider-event-management-tabs tabs-small'}
 					activeKey={sidebarView}
 					onChange={(type: string) => {
-						setSearchParams({ ...query, sidebarView: type })
+						setQuery({ ...query, sidebarView: type })
 						dispatch(change(FORM.CALENDAR_EVENT_FORM, 'eventType', type))
 					}}
 					items={[

@@ -811,6 +811,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						eventsViewType={validEventsViewType}
 						employees={filteredEmployees() || []}
 						parentPath={parentPath}
+						query={query}
+						setQuery={setQuery}
 						onEditEvent={onEditEvent}
 						onReservationClick={(data?: ReservationPopoverData, position?: ReservationPopoverPosition) => {
 							setReservationPopover({
@@ -840,6 +842,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							handleSubmitEvent={initSubmitEventData}
 							calendarApi={calendarRefs?.current?.[validCalendarView]?.getApi()}
 							changeCalendarDate={setNewSelectedDate}
+							query={query}
+							setQuery={setQuery}
 						/>
 					)}
 				</Layout>

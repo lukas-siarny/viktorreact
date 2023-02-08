@@ -5,7 +5,7 @@ import { Content } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { change } from 'redux-form'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { startsWith } from 'lodash'
 
 // fullcalendar
@@ -49,6 +49,7 @@ import { ForbiddenModal, permitted } from '../../../../utils/Permissions'
 import { getSelectedDateForCalendar, getWeekDays } from '../../calendarHelpers'
 import { cancelGetTokens } from '../../../../utils/request'
 import { getCalendarEventsCancelTokenKey } from '../../../../reducers/calendar/calendarActions'
+import { IQueryParams } from '../../../../hooks/useQueryParams'
 
 const GET_RESERVATIONS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.RESERVATIONS)
 const GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS)
@@ -62,6 +63,8 @@ type Props = {
 	parentPath: string
 	clearFetchInterval: () => void
 	restartFetchInterval: () => void
+	query: IQueryParams
+	setQuery: (newValues: IQueryParams) => void
 } & Omit<ICalendarView, 'onEventChange' | 'onEventChangeStart' | 'onEventChangeStop'>
 
 export type CalendarRefs = {
@@ -90,7 +93,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		onReservationClick,
 		clearFetchInterval,
 		restartFetchInterval,
-		parentPath
+		parentPath,
+		query,
+		setQuery
 	} = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -99,16 +104,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const [t] = useTranslation()
 
 	const employeesOptions = useSelector((state: RootState) => state.employees.employees?.options)
-
-	const [searchParams, setSearchParams] = useSearchParams({
-		employeeIDs: [],
-		categoryIDs: []
-	})
-	// TODO: initne sa zle RESERVATION FILTER
-	const query = {
-		employeeIDs: searchParams.getAll('employeeIDs') || '',
-		categoryIDs: searchParams.getAll('categoryIDs') || ''
-	}
 
 	useImperativeHandle(ref, () => ({
 		[CALENDAR_VIEW.DAY]: dayView?.current,
@@ -311,10 +306,10 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				<CalendarEmptyState
 					title={t('loc:Nie je vybratý zamestnanec ani služba')}
 					onButtonClick={() =>
-						setSearchParams({
+						setQuery({
 							...query,
-							employeeIDs: [], // undefined znamena ze sa setnu vsetky hodnoty do filtra
-							categoryIDs: []
+							employeeIDs: undefined, // undefined znamena ze sa setnu vsetky hodnoty do filtra
+							categoryIDs: undefined
 						})
 					}
 					buttonLabel={t('loc:Vybrať všetko')}
@@ -326,9 +321,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				<CalendarEmptyState
 					title={t('loc:Nie je vybratý zamestnanec')}
 					onButtonClick={() =>
-						setSearchParams({
+						setQuery({
 							...query,
-							employeeIDs: []
+							employeeIDs: undefined
 						})
 					}
 				/>
@@ -339,9 +334,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				<CalendarEmptyState
 					title={t('loc:Nie je vybratá služba')}
 					onButtonClick={() =>
-						setSearchParams({
+						setQuery({
 							...query,
-							categoryIDs: []
+							categoryIDs: undefined
 						})
 					}
 					buttonLabel={t('loc:Vybrať všetky')}

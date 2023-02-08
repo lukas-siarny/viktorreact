@@ -382,7 +382,8 @@ export const normalizeQueryParams = (queryParams: any) =>
 export const normalizeSearchQueryParams = (queryParams: any) => {
 	return forEach(queryParams, (queryParam, key) => {
 		// 'null' je pre pripad ze sa v queryPrams nastavi default value paramName: '' a tento param sa potom vyresetuje tak sa nastavi nie na null ale na 'null'
-		if (queryParam === 'null' || queryParam === '' || queryParam === undefined || queryParam === null || queryParam === []) {
+		// if (queryParam === 'null' || queryParam === '' || queryParam === undefined || queryParam === null || queryParam === []) {
+		if (queryParam === undefined || queryParam === null) {
 			// Takyto non valid query param treba zmazat nestaci ho nastavit na undefined!!!
 			// eslint-disable-next-line no-param-reassign
 			delete queryParams[key]

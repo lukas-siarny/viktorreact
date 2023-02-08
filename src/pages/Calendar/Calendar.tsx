@@ -128,8 +128,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		eventId: StringParam()
 	})
 
-	console.log({ query })
-
 	const validSelectedDate = useMemo(
 		() => (dayjs(query.date).isValid() ? dayjs(query.date).format(CALENDAR_DATE_FORMAT.QUERY) : dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
 		[query.date]

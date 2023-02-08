@@ -7,6 +7,7 @@ declare global {
 			FULLCALENDAR_LICENSE_KEY: string
 			REACT_APP_SENTRY_ENV: string
 			REACT_APP_SENTRY_DSN: string
+			REACT_APP_GOOGLE_OAUTH_CLIENT_ID: string
 		}
 	}
 }

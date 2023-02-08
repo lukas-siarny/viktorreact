@@ -7,6 +7,7 @@ import { QueryParamProvider, ExtendedStringifyOptions, transformSearchStringJson
 import { Spin, ConfigProvider } from 'antd'
 import { Locale } from 'antd/lib/locale-provider'
 import dayjs from 'dayjs'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 
 import 'antd/dist/antd.min.css'
 
@@ -63,15 +64,21 @@ const App = () => {
 					persistor={persistor}
 				>
 					<ConfigProvider locale={antdLocale}>
-						<Provider store={store}>
-							<Router history={history}>
-								<QueryParamProvider ReactRouterRoute={Route} stringifyOptions={queryStringifyOptions}>
-									<ScrollToTop>
-										<Routes />
-									</ScrollToTop>
-								</QueryParamProvider>
-							</Router>
-						</Provider>
+						<GoogleOAuthProvider
+							clientId={window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
+							onScriptLoadError={() => console.error('GoogleOAuth error')}
+							onScriptLoadSuccess={() => console.log('GoogleOAuth load success')}
+						>
+							<Provider store={store}>
+								<Router history={history}>
+									<QueryParamProvider ReactRouterRoute={Route} stringifyOptions={queryStringifyOptions}>
+										<ScrollToTop>
+											<Routes />
+										</ScrollToTop>
+									</QueryParamProvider>
+								</Router>
+							</Provider>
+						</GoogleOAuthProvider>
 					</ConfigProvider>
 				</PersistGate>
 			</I18nextProvider>

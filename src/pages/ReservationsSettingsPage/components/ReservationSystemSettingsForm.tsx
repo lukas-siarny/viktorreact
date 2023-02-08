@@ -14,6 +14,7 @@ import CheckboxField from '../../../atoms/CheckboxField'
 
 // components
 import NotificationArrayFields from './NotificationArrayFields'
+import CalendarIntegrations from './CalendarIntegrations'
 import CheckboxGroupNestedField from '../../IndustriesPage/components/CheckboxGroupNestedField'
 
 // types
@@ -301,6 +302,15 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			<p className='x-regular text-notino-grayDark mb-0'>
 				{t('loc:Zapína a vypína rezervačný systém, cez ktorý je možné v kalendári spravovať salónové rezervácie a smeny zamestnancov.')}
 			</p>
+			{/* Integrations: Google, Outlook, iCal */}
+			<div className={'flex mt-10'}>
+				<h3 className={'mb-0 mt-0 flex items-center'}>
+					<SettingsIcon className={'text-notino-black mr-2'} />
+					{t('loc:Integrácie')}
+				</h3>
+			</div>
+			<CalendarIntegrations />
+			<Divider className={'my-3'} />
 			<div className={'flex mt-10'}>
 				<h3 className={'mb-0 mt-0 flex items-center'}>
 					<SettingsIcon className={'text-notino-black mr-2'} />

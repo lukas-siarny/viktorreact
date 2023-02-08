@@ -227,15 +227,19 @@ export interface ICalendarEventDetailPayload {
 	data: CalendarEventDetail | null
 }
 export interface ICalendarReservationForm {
-	customer: ISelectOptionItem
+	customer: ISelectOptionItem<{
+		customerData?: NonNullable<ICalendarEventDetailPayload['data']>['customer']
+	}>
 	service: ISelectOptionItem<{
 		priceAndDurationData?: ServiceType['priceAndDurationData'],
 		useCategoryParameter?: ServiceType['useCategoryParameter'],
 		serviceCategoryParameter?: ServiceType['serviceCategoryParameter'],
 		categoryId?: string
-		icon?: NonNullable<NonNullable<ICalendarEventDetailPayload['data']>['service']>['icon']
+		serviceData?: NonNullable<ICalendarEventDetailPayload['data']>['service']
 	}>
-	employee: ISelectOptionItem
+	employee: ISelectOptionItem<{
+		employeeData?: NonNullable<ICalendarEventDetailPayload['data']>['employee']
+	}>
 	date: string
 	timeFrom: string
 	timeTo: string
@@ -785,6 +789,7 @@ export type ReservationPopoverData = {
 	originalEventData: IEventCardProps['originalEventData']
 	note?: CalendarEvent['note']
 	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
+	isEdit?: boolean
 }
 
 export interface IBulkConfirmForm {

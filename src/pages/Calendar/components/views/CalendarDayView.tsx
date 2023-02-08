@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useMemo } from 'react'
 import { Element } from 'react-scroll'
 import dayjs from 'dayjs'
-import { useDispatch } from 'react-redux'
 
 // full calendar
 import FullCalendar from '@fullcalendar/react' // must go before plugins
@@ -22,7 +21,6 @@ import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-
 
 // components
 import CalendarEventContent from '../CalendarEventContent'
-import { clearEvent } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 interface IResourceLabel {
 	image?: string
@@ -59,6 +57,9 @@ const resourceLabelContent = (data: any) => {
 	return <ResourceLabel image={employee?.image} color={color} isTimeOff={employee?.isTimeOff} name={employee?.name} description={employee?.description} />
 }
 
+/**
+ * kvoli nastaveniu height={'auto'} vo FullCalendari nefunguje scrollToTime a tuto funkcionalitu je potrebne spravit custom logikou
+ */
 const slotLabelContent = (data: SlotLabelContentArg) => {
 	const { time } = data || {}
 
@@ -93,7 +94,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		onEventChangeStop
 	} = props
 
-	const dispatch = useDispatch()
 	const events = useMemo(() => {
 		const data = composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees)
 		// ak je virtualEvent definovany, zaradi sa do zdroja eventov pre Calendar
@@ -182,8 +182,5 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 })
 
 export default React.memo(CalendarDayView, (prevProps, nextProps) => {
-	if (nextProps.disableRender) {
-		return true
-	}
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
 })

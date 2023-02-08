@@ -43,6 +43,10 @@ const AuthRoute: FC<Props> = (props) => {
 	const { pathname, search } = useLocation()
 
 	if (!isLoggedIn()) {
+		/**
+		 * v pripade, ze uzivatel nebol prihlaseny a v prehliadaci zvolil nejaku autorizovanu URL, tak ho to redirectne na login pagu
+		 * do statu si ulozime URL, z ktorej bol presmerovany a nasledne po uspesnom prihlaseny presmerujeme naspät
+		 */
 		return (
 			<Redirect
 				to={{

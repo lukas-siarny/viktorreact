@@ -916,3 +916,8 @@ export enum CONFIRM_MODAL_DATA_TYPE {
 export const RESERVATION_STATES = Object.keys(RESERVATION_STATE)
 export const RESERVATION_PAYMENT_METHODS = Object.keys(RESERVATION_PAYMENT_METHOD)
 export const RESERVATION_SOURCE_TYPES = Object.keys(RESERVATION_SOURCE_TYPE)
+
+export enum CANEL_TOKEN_MESSAGES {
+	CANCELED_DUE_TO_NEW_REQUEST = 'Operation canceled due to new request.',
+	CANCELED_ON_DEMAND = 'Operation canceled.'
+}

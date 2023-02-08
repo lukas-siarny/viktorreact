@@ -242,7 +242,6 @@ export interface ICalendarReservationForm {
 	note?: string
 	eventId?: string
 	revertEvent?: () => void
-	enableCalendarRender?: () => void
 	updateFromCalendar?: boolean
 	noteFromB2CCustomer?: string
 	reservationData?: CalendarEvent['reservationData']
@@ -263,7 +262,6 @@ export interface ICalendarEventForm {
 	eventId?: string | null
 	calendarBulkEventID?: string
 	revertEvent?: () => void
-	enableCalendarRender?: () => void
 	updateFromCalendar?: boolean
 }
 
@@ -729,7 +727,6 @@ export interface ICalendarView {
 	onEventChangeStop: (arg: EventDropArg | EventResizeStopArg) => void
 	loading?: boolean
 	virtualEvent?: EventInput
-	clearRestartInterval: () => void
 	disableRender?: boolean
 	view?: CALENDAR_VIEW
 	enabledSalonReservations?: boolean

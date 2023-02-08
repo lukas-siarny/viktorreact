@@ -227,22 +227,25 @@ export interface ICalendarEventDetailPayload {
 	data: CalendarEventDetail | null
 }
 export interface ICalendarReservationForm {
-	customer: ISelectOptionItem
+	customer: ISelectOptionItem<{
+		customerData?: NonNullable<ICalendarEventDetailPayload['data']>['customer']
+	}>
 	service: ISelectOptionItem<{
 		priceAndDurationData?: ServiceType['priceAndDurationData'],
 		useCategoryParameter?: ServiceType['useCategoryParameter'],
 		serviceCategoryParameter?: ServiceType['serviceCategoryParameter'],
 		categoryId?: string
-		icon?: NonNullable<NonNullable<ICalendarEventDetailPayload['data']>['service']>['icon']
+		serviceData?: NonNullable<ICalendarEventDetailPayload['data']>['service']
 	}>
-	employee: ISelectOptionItem
+	employee: ISelectOptionItem<{
+		employeeData?: NonNullable<ICalendarEventDetailPayload['data']>['employee']
+	}>
 	date: string
 	timeFrom: string
 	timeTo: string
 	note?: string
 	eventId?: string
 	revertEvent?: () => void
-	enableCalendarRender?: () => void
 	updateFromCalendar?: boolean
 	noteFromB2CCustomer?: string
 	reservationData?: CalendarEvent['reservationData']
@@ -263,7 +266,6 @@ export interface ICalendarEventForm {
 	eventId?: string | null
 	calendarBulkEventID?: string
 	revertEvent?: () => void
-	enableCalendarRender?: () => void
 	updateFromCalendar?: boolean
 }
 
@@ -722,7 +724,6 @@ export interface ICalendarView {
 	onEventChangeStop: (arg: EventDropArg | EventResizeStopArg) => void
 	loading?: boolean
 	virtualEvent?: EventInput
-	clearRestartInterval: () => void
 	disableRender?: boolean
 	view?: CALENDAR_VIEW
 	enabledSalonReservations?: boolean
@@ -780,6 +781,7 @@ export type ReservationPopoverData = {
 	originalEventData: IEventCardProps['originalEventData']
 	note?: CalendarEvent['note']
 	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
+	isEdit?: boolean
 }
 
 export interface IBulkConfirmForm {

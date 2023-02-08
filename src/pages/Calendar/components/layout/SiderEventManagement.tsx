@@ -167,7 +167,10 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 						firstName: data.employee.firstName,
 						lastName: data.employee.lastName,
 						email: data.employee.email
-					})
+					}),
+					{
+						employeeData: data?.employee
+					}
 				),
 				...repeatOptions
 			}
@@ -179,11 +182,15 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 					dispatch(initialize(FORM.CALENDAR_EVENT_FORM, initData))
 					break
 				case CALENDAR_EVENT_TYPE.RESERVATION:
+					/**
+					 * okrem dát, s ktorými sa manipuluje priamo vo formulári, je potrebné vyinicializovať aj všetky potrebné data pre správne zobrazenie virtuálneho eventu v kalendári
+					 * zatiaľ sú to reservationData a service icon
+					 */
 					dispatch(
 						initialize(FORM.CALENDAR_RESERVATION_FORM, {
 							...initData,
 							service: initializeLabelInValueSelect(data?.service?.id as string, data?.service?.name as string, {
-								icon: data?.service?.icon
+								serviceData: data?.service
 							}),
 							customer: initializeLabelInValueSelect(
 								data?.customer?.id as string,
@@ -192,8 +199,12 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 									firstName: data?.customer?.firstName,
 									lastName: data?.customer?.lastName,
 									email: data?.customer?.email
-								})
+								}),
+								{
+									customerData: data?.customer
+								}
 							),
+							noteFromB2CCustomer: data?.noteFromB2CCustomer,
 							reservationData: data?.reservationData
 						})
 					)
@@ -323,7 +334,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 			</div>
 			{showTabs && (
 				<TabsComponent
-					className={'nc-sider-event-management-tabs'}
+					className={'nc-sider-event-management-tabs tabs-small'}
 					activeKey={sidebarView}
 					onChange={(type: string) => {
 						setSearchParams({ ...query, sidebarView: type })

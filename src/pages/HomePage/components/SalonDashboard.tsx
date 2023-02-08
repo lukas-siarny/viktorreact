@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useCallback } from 'react'
+import React, { FC, useEffect, useCallback, PropsWithChildren } from 'react'
 import { Spin } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -20,7 +20,7 @@ import Statistics from '../../../components/Dashboards/Statistics'
 // assets
 import { ReactComponent as EyeOffIcon } from '../../../assets/icons/eye-off-pink.svg'
 
-const SalonDashboard: FC = (props) => {
+const SalonDashboard: FC<PropsWithChildren> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()

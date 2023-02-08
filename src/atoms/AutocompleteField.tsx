@@ -376,7 +376,7 @@ const AutocompleteField = (props: Props) => {
 		})
 
 		// refetch options if any value is missing
-		if (values.size > 0) handleSearch('', 1, [...values])
+		if (values.size > 0) handleSearch('', 1, [...(values as never)])
 
 		checkInitialSelectedValues.current = false
 		// eslint-disable-next-line react-hooks/exhaustive-deps

@@ -48,7 +48,7 @@ const App = () => {
 				path={'*'}
 				element={
 					<ScrollToTop>
-						<AppRoutes />{' '}
+						<AppRoutes />
 					</ScrollToTop>
 				}
 			/>

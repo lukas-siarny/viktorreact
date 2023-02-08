@@ -16,7 +16,7 @@ import { isLoggedIn } from '../utils/auth'
 import { PAGE, SUBMENU_PARENT, REFRESH_PAGE_INTERVAL } from '../utils/enums'
 
 type Props = RouteProps & {
-	layout?: React.ReactNode
+	layout?: any
 	element?: React.ReactNode
 	translatePathKey?: string
 	page?: PAGE

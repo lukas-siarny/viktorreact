@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { WrappedFieldProps } from 'redux-form'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import cx from 'classnames'
 import { FormItemProps } from 'antd/lib/form/FormItem'
 import { Form, DatePicker } from 'antd'
@@ -79,7 +79,7 @@ const DateField = (props: Props) => {
 	}
 
 	const disabledDateWrap = useCallback(
-		(currentDate) => {
+		(currentDate: Dayjs) => {
 			let disable = false
 			if (disabledDate) {
 				disable = disabledDate(currentDate)

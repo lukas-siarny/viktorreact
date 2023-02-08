@@ -26,19 +26,19 @@ interface IGetSalonHistory {
 }
 
 export interface IGetSalonsQueryParams extends IQueryParams {
-	categoryFirstLevelIDs?: string | ''
-	statuses_all?: string | ''
-	statuses_published?: (string | null)[] | SALON_FILTER_STATES[] | null | ''
-	salonState?: string | ''
-	statuses_changes?: (string | null)[] | SALON_FILTER_STATES[] | ''
-	countryCode?: string | ''
-	createType?: string | ''
-	lastUpdatedAtFrom?: string | ''
-	lastUpdatedAtTo?: string | ''
-	hasSetOpeningHours?: string | ''
-	sourceType?: string | ''
-	premiumSourceUserType?: string | ''
-	assignedUserID?: string | ''
+	categoryFirstLevelIDs?: (string | null)[] | null
+	statuses_all?: boolean | null
+	statuses_published?: string | SALON_FILTER_STATES | null
+	salonState?: string | null
+	statuses_changes?: string | SALON_FILTER_STATES | null
+	countryCode?: string | null
+	createType?: string | null
+	lastUpdatedAtFrom?: string | null
+	lastUpdatedAtTo?: string | null
+	hasSetOpeningHours?: string | null
+	sourceType?: string | null
+	premiumSourceUserType?: string | null
+	assignedUserID?: string | null
 }
 
 export interface IGetSalonsHistoryQueryParams extends IQueryParams {
@@ -128,7 +128,12 @@ export const getSalons =
 		}
 
 		if (!queryParams.statuses_all) {
-			statuses = [...statuses, ...(queryParams.statuses_published || []), ...(queryParams.statuses_changes || [])]
+			if (queryParams.statuses_published) {
+				statuses.push(queryParams.statuses_published)
+			}
+			if (queryParams.statuses_changes) {
+				statuses.push(queryParams.statuses_changes)
+			}
 		}
 
 		if (queryParams.hasSetOpeningHours === SALON_FILTER_OPENING_HOURS.SET) {

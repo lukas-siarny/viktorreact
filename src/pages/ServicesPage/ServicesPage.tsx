@@ -4,7 +4,7 @@ import { Col, Row, Spin } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -14,7 +14,7 @@ import { AvatarGroup } from '../../components/AvatarComponents'
 
 // utils
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_PERMISSION } from '../../utils/enums'
-import { formatDateByLocale, getLinkWithEncodedBackUrl, normalizeSearchQueryParams } from '../../utils/helper'
+import { formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -27,6 +27,9 @@ import { Columns, IBreadcrumbs, IUserAvatar, SalonSubPageProps } from '../../typ
 
 // assets
 import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
+
+// hooks
+import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -47,13 +50,9 @@ const ServicesPage = (props: SalonSubPageProps) => {
 		// test()
 	}, [dispatch])
 
-	const [searchParams, setSearchParams] = useSearchParams({
-		rootCategoryID: ''
+	const [query, setQuery] = useQueryParams({
+		rootCategoryID: StringParam()
 	})
-
-	const query = {
-		rootCategoryID: searchParams.get('rootCategoryID')
-	}
 
 	useEffect(() => {
 		dispatch(initialize(FORM.SERVICES_FILTER, { rootCategoryID: query.rootCategoryID }))
@@ -70,7 +69,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			...query,
 			rootCategoryID: values.rootCategoryID
 		}
-		setSearchParams(normalizeSearchQueryParams(newQuery))
+		setQuery(newQuery)
 	}
 
 	const columns: Columns = [

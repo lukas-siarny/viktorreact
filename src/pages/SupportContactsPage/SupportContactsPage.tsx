@@ -5,7 +5,7 @@ import { compose } from 'redux'
 import { Col, Row, TablePaginationConfig } from 'antd'
 import { initialize } from 'redux-form'
 import { SorterResult } from 'antd/lib/table/interface'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -25,6 +25,9 @@ import { getSupportContacts } from '../../reducers/supportContacts/supportContac
 // types
 import { IBreadcrumbs, Columns } from '../../types/interfaces'
 
+// hooks
+import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
 
 const SupportContactsPage = () => {
@@ -34,14 +37,10 @@ const SupportContactsPage = () => {
 	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
 	const navigate = useNavigate()
 
-	const [searchParams, setSearchParams] = useSearchParams({
-		search: '',
-		order: 'country:ASC'
+	const [query, setQuery] = useQueryParams({
+		search: StringParam(),
+		order: StringParam('country:ASC')
 	})
-	const query = {
-		search: searchParams.get('search') || '',
-		order: searchParams.get('order') || ''
-	}
 
 	useEffect(() => {
 		dispatch(getSupportContacts())
@@ -56,7 +55,7 @@ const SupportContactsPage = () => {
 			...query,
 			...values
 		}
-		setSearchParams(newQuery)
+		setQuery(newQuery)
 	}
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
@@ -66,7 +65,7 @@ const SupportContactsPage = () => {
 				...query,
 				order
 			}
-			setSearchParams(newQuery)
+			setQuery(newQuery)
 		}
 	}
 

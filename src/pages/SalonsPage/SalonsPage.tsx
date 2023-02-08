@@ -5,7 +5,7 @@ import { compose } from 'redux'
 import { Col, Modal, Progress, Row, Spin, Image, Tooltip, TabsProps } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize, isPristine, reset } from 'redux-form'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { isEmpty } from 'lodash'
 
 // components
@@ -37,6 +37,9 @@ import { IBreadcrumbs, IDataUploadForm, Columns } from '../../types/interfaces'
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
+
+// hooks
+import useQueryParams, { ArrayParam, BooleanParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
 
@@ -72,94 +75,51 @@ const SalonsPage = () => {
 		dispatch(selectSalon())
 	}, [dispatch])
 
-	const [searchParams, setSearchParams] = useSearchParams({
-		search: '',
-		categoryFirstLevelIDs: [],
-		statuses_all: 'false',
-		statuses_published: [],
-		salonState: TAB_KEYS.ACTIVE,
-		statuses_changes: [],
-		limit: '',
-		page: '1',
-		order: 'createdAt:DESC',
-		countryCode: '',
-		createType: '',
-		lastUpdatedAtFrom: '',
-		lastUpdatedAtTo: '',
-		hasSetOpeningHours: '',
-		sourceType: '',
-		assignedUserID: '',
-		premiumSourceUserType: ''
+	const [query, setQuery] = useQueryParams({
+		search: StringParam(),
+		categoryFirstLevelIDs: ArrayParam(),
+		statuses_all: BooleanParam(false),
+		statuses_published: StringParam(),
+		salonState: StringParam(TAB_KEYS.ACTIVE),
+		statuses_changes: StringParam(),
+		limit: NumberParam(),
+		page: NumberParam(1),
+		order: StringParam('createdAt:DESC'),
+		countryCode: StringParam(),
+		createType: StringParam(),
+		lastUpdatedAtFrom: StringParam(),
+		lastUpdatedAtTo: StringParam(),
+		hasSetOpeningHours: StringParam(),
+		sourceType: StringParam(),
+		assignedUserID: StringParam(),
+		premiumSourceUserType: StringParam()
 	})
 
-	const query = useMemo(
-		() => ({
-			search: searchParams.get('search') || '',
-			limit: searchParams.get('limit') || '',
-			page: searchParams.get('page') || '',
-			order: searchParams.get('order') || '',
-			categoryFirstLevelIDs: searchParams.getAll('categoryFirstLevelIDs') || [],
-			salonState: searchParams.get('salonState') || '',
-			statuses_changes: searchParams.getAll('statuses_changes') || [],
-			statuses_all: searchParams.get('statuses_all') || '',
-			statuses_published: searchParams.getAll('statuses_published') || [],
-			countryCode: searchParams.get('countryCode') || '',
-			createType: searchParams.get('createType') || '',
-			lastUpdatedAtFrom: searchParams.get('lastUpdatedAtFrom') || '',
-			lastUpdatedAtTo: searchParams.get('lastUpdatedAtTo') || '',
-			hasSetOpeningHours: searchParams.get('hasSetOpeningHours') || '',
-			sourceType: searchParams.get('sourceType') || '',
-			assignedUserID: searchParams.get('assignedUserID') || '',
-			premiumSourceUserType: searchParams.get('premiumSourceUserType') || ''
-		}),
-		[searchParams]
-	)
+	// console.log({ query })
+
 	const resetQuery = (selectedTabKey: string) => {
 		// reset query when switching between tabs
-		setSearchParams({
-			search: '',
-			categoryFirstLevelIDs: [],
-			statuses_all: '',
-			statuses_published: [],
-			statuses_changes: [],
-			limit: '',
-			page: '1',
+		setQuery({
+			search: undefined,
+			categoryFirstLevelIDs: undefined,
+			statuses_all: undefined,
+			statuses_published: undefined,
+			statuses_changes: undefined,
+			limit: undefined,
+			page: 1,
 			order: 'createdAt:DESC',
 			// get default selected country form redux store
-			countryCode: selectedCountry || '',
-			createType: '',
-			lastUpdatedAtFrom: '',
-			lastUpdatedAtTo: '',
+			countryCode: selectedCountry,
+			createType: undefined,
+			lastUpdatedAtFrom: undefined,
+			lastUpdatedAtTo: undefined,
 			salonState: selectedTabKey,
-			hasSetOpeningHours: '',
-			sourceType: '',
-			premiumSourceUserType: '',
-			assignedUserID: ''
+			hasSetOpeningHours: undefined,
+			sourceType: undefined,
+			premiumSourceUserType: undefined,
+			assignedUserID: undefined
 		})
 	}
-	// const resetQuery = (selectedTabKey: string) => {
-	// 	// reset query when switching between tabs
-	// 	setQuery({
-	// 		search: undefined,
-	// 		categoryFirstLevelIDs: undefined,
-	// 		statuses_all: undefined,
-	// 		statuses_published: undefined,
-	// 		statuses_changes: undefined,
-	// 		limit: undefined,
-	// 		page: 1,
-	// 		order: 'createdAt:DESC',
-	// 		// get default selected country form redux store
-	// 		countryCode: selectedCountry,
-	// 		createType: undefined,
-	// 		lastUpdatedAtFrom: undefined,
-	// 		lastUpdatedAtTo: undefined,
-	// 		salonState: selectedTabKey,
-	// 		hasSetOpeningHours: undefined,
-	// 		sourceType: undefined,
-	// 		premiumSourceUserType: undefined,
-	// 		assignedUserID: undefined
-	// 	})
-	// }
 
 	const isAdmin = useMemo(() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUserPermissions])
 
@@ -265,17 +225,17 @@ const SalonsPage = () => {
 				...query,
 				order
 			}
-			setSearchParams(newQuery)
+			setQuery(newQuery)
 		}
 	}
 
 	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
 			...query,
-			limit: String(limit),
-			page: String(page)
+			limit,
+			page
 		}
-		setSearchParams(newQuery)
+		setQuery(newQuery)
 	}
 
 	const handleSubmitActive = (values: ISalonsFilterActive) => {
@@ -292,7 +252,7 @@ const SalonsPage = () => {
 			page: 1
 		}
 
-		setSearchParams(normalizeSearchQueryParams(newQuery))
+		setQuery(newQuery)
 	}
 
 	const handleSubmitDeleted = (values: ISalonsFilterDeleted) => {
@@ -302,9 +262,9 @@ const SalonsPage = () => {
 		const newQuery = {
 			...query,
 			...values,
-			page: '1'
+			page: 1
 		}
-		setSearchParams(normalizeSearchQueryParams(newQuery))
+		setQuery(newQuery)
 	}
 
 	const salonImportsSubmit = async (values: IDataUploadForm) => {

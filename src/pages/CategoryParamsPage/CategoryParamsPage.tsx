@@ -6,7 +6,7 @@ import { compose } from 'redux'
 import { find, join } from 'lodash'
 import { initialize } from 'redux-form'
 import { SorterResult } from 'antd/lib/table/interface'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -16,15 +16,7 @@ import CategoryParamsFilter from './components/CategoryParamsFilter'
 // utils
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, STRINGS, DEFAULT_LANGUAGE, FORM } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import {
-	setOrder,
-	transformToLowerCaseWithoutAccent,
-	formatDateByLocale,
-	normalizeDirectionKeys,
-	sortData,
-	getLinkWithEncodedBackUrl,
-	normalizeSearchQueryParams
-} from '../../utils/helper'
+import { setOrder, transformToLowerCaseWithoutAccent, formatDateByLocale, normalizeDirectionKeys, sortData, getLinkWithEncodedBackUrl } from '../../utils/helper'
 
 // reducers
 import { getCategoryParameters } from '../../reducers/categoryParams/categoryParamsActions'
@@ -36,6 +28,9 @@ import { IBreadcrumbs, Columns } from '../../types/interfaces'
 // assets
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
+// hooks
+import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+
 const CategoryParamsPage = () => {
 	const { t, i18n } = useTranslation()
 	const dispatch = useDispatch()
@@ -43,14 +38,10 @@ const CategoryParamsPage = () => {
 	const parameters = useSelector((state: RootState) => state.categoryParams.parameters)
 	const navigate = useNavigate()
 
-	const [searchParams, setSearchParams] = useSearchParams({
-		search: '',
-		order: 'name:ASC'
+	const [query, setQuery] = useQueryParams({
+		search: StringParam(),
+		order: StringParam('name:ASC')
 	})
-	const query = {
-		search: searchParams.get('search') || '',
-		order: searchParams.get('order') || ''
-	}
 
 	useEffect(() => {
 		dispatch(getCategoryParameters())
@@ -71,7 +62,7 @@ const CategoryParamsPage = () => {
 				...query,
 				order
 			}
-			setSearchParams(newQuery)
+			setQuery(newQuery)
 		}
 	}
 
@@ -161,7 +152,7 @@ const CategoryParamsPage = () => {
 					<div className='content-body'>
 						<CategoryParamsFilter
 							total={parameters?.data?.length}
-							onSubmit={(values: any) => setSearchParams(normalizeSearchQueryParams({ ...query, search: values.search }))}
+							onSubmit={(values: any) => setQuery({ ...query, search: values.search })}
 							addButton={
 								<Button
 									onClick={() => {

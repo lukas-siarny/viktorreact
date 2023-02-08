@@ -2,7 +2,7 @@ import React, { useMemo, useCallback } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Col, Divider, Form, Row, Tag } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { debounce, filter, isEmpty, isNil, size } from 'lodash'
+import { debounce, filter, isArray, isEmpty, isNil, size } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
 import cx from 'classnames'
 import { useNavigate } from 'react-router-dom'
@@ -81,6 +81,9 @@ export const checkSalonFiltersSize = (formValues: any) =>
 			if (typeof value === 'boolean') {
 				return value
 			}
+			if (isArray(value) && isEmpty(value)) {
+				return false
+			}
 			if (key === 'dateFromTo' && !value?.dateFrom && !value?.dateTo) {
 				return false
 			}
@@ -98,6 +101,8 @@ const SalonsFilterActive = (props: Props) => {
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 	const notinoUsers = useSelector((state: RootState) => state.user.notinoUsers)
+
+	console.log({ formValues: form?.values })
 
 	const searchNotinoUsers = useCallback(
 		async (search: string, page: number) => {

@@ -63,7 +63,7 @@ const SpecialistContactForm: FC<Props> = (props) => {
 			<div className={'h-full'}>
 				<h3 className={'mb-0 mt-3 relative pr-7'}>
 					{specialistContactID ? t('loc:Upraviť špecialistu') : t('loc:Vytvoriť špecialistu')}
-					<Button className='noti-close-form-btn absolute top-1 right-0' onClick={closeForm}>
+					<Button className='noti-close-form-btn absolute top-1 right-0' onClick={() => closeForm()}>
 						<CloseIcon />
 					</Button>
 				</h3>

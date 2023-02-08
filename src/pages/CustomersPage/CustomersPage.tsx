@@ -5,7 +5,7 @@ import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -15,7 +15,7 @@ import UserAvatar from '../../components/AvatarComponents'
 
 // utils
 import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
-import { normalizeDirectionKeys, setOrder, formatDateByLocale, getLinkWithEncodedBackUrl, normalizeSearchQueryParams } from '../../utils/helper'
+import { normalizeDirectionKeys, setOrder, formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -24,6 +24,9 @@ import { getCustomers } from '../../reducers/customers/customerActions'
 
 // types
 import { IBreadcrumbs, ISearchFilter, SalonSubPageProps, Columns } from '../../types/interfaces'
+
+// hooks
+import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -36,19 +39,12 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 
-	const [searchParams, setSearchParams] = useSearchParams({
-		search: '',
-		limit: '',
-		page: '1',
-		order: 'lastName:ASC'
+	const [query, setQuery] = useQueryParams({
+		search: StringParam(),
+		limit: NumberParam(),
+		page: NumberParam(1),
+		order: StringParam('lastName:ASC')
 	})
-
-	const query = {
-		search: searchParams.get('search') || '',
-		limit: searchParams.get('limit') || '',
-		page: searchParams.get('page') || '',
-		order: searchParams.get('order') || ''
-	}
 
 	useEffect(() => {
 		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: query.search }))
@@ -72,26 +68,26 @@ const CustomersPage = (props: SalonSubPageProps) => {
 				...query,
 				order
 			}
-			setSearchParams(newQuery)
+			setQuery(newQuery)
 		}
 	}
 
 	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
 			...query,
-			limit: String(limit),
-			page: String(page)
+			limit,
+			page
 		}
-		setSearchParams(newQuery)
+		setQuery(newQuery)
 	}
 
 	const handleSubmit = (values: ISearchFilter) => {
 		const newQuery = {
 			...query,
 			search: values.search,
-			page: '1'
+			page: 1
 		}
-		setSearchParams(normalizeSearchQueryParams(newQuery))
+		setQuery(newQuery)
 	}
 
 	const columns: Columns = [

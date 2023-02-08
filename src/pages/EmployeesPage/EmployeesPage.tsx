@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
 import { find } from 'lodash'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -18,7 +18,7 @@ import UserAvatar from '../../components/AvatarComponents'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, NOTIFICATION_TYPE } from '../../utils/enums'
-import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, normalizeSearchQueryParams, setOrder } from '../../utils/helper'
+import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -34,6 +34,9 @@ import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-off
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question.svg'
 import { patchReq } from '../../utils/request'
 
+// hooks
+import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
+
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 const EmployeesPage: FC<SalonSubPageProps> = (props) => {
@@ -45,25 +48,15 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 
-	const [searchParams, setSearchParams] = useSearchParams({
-		search: '',
-		limit: '',
-		page: '1',
-		order: 'orderIndex:ASC',
-		accountState: '',
-		serviceID: '',
-		salonID: ''
+	const [query, setQuery] = useQueryParams({
+		search: StringParam(),
+		limit: NumberParam(),
+		page: NumberParam(1),
+		order: StringParam('orderIndex:asc'),
+		accountState: StringParam(),
+		serviceID: StringParam(),
+		salonID: StringParam()
 	})
-
-	const query = {
-		search: searchParams.get('search') || '',
-		limit: searchParams.get('limit') || '',
-		page: searchParams.get('page') || '',
-		order: searchParams.get('order') || '',
-		accountState: searchParams.get('accountState') || '',
-		serviceID: searchParams.get('serviceID') || '',
-		salonID: searchParams.get('salonID') || ''
-	}
 
 	useEffect(() => {
 		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search, serviceID: query.serviceID, accountState: query.accountState }))
@@ -101,17 +94,17 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 				...query,
 				order
 			}
-			setSearchParams(newQuery)
+			setQuery(newQuery)
 		}
 	}
 
 	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
 			...query,
-			limit: String(limit),
-			page: String(page)
+			limit,
+			page
 		}
-		setSearchParams(newQuery)
+		setQuery(newQuery)
 	}
 
 	const handleSubmit = (values: IEmployeesFilter) => {
@@ -120,7 +113,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			...values,
 			page: 1
 		}
-		setSearchParams(normalizeSearchQueryParams(newQuery))
+		setQuery(newQuery)
 	}
 
 	const columns: Columns = [

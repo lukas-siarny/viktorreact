@@ -40,6 +40,7 @@
     "generate-runtime-env": "cross-env env-cmd runtime-env-cra --config-name=./public/runtime-env.js --env-file=.env.template"
   },
   "dependencies": {
+    "@ant-design/cssinjs": "1.5.6",
     "@fullcalendar/core": "6.1.0",
     "@fullcalendar/daygrid": "6.1.0",
     "@fullcalendar/interaction": "6.1.0",

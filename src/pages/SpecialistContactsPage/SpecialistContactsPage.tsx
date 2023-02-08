@@ -7,7 +7,6 @@ import { initialize } from 'redux-form'
 import { map } from 'lodash'
 import cx from 'classnames'
 import { SorterResult } from 'antd/lib/table/interface'
-import { useSearchParams } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -19,15 +18,7 @@ import SpecialistContactFilter from './components/SpecialistContactsFilter'
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, LANGUAGE } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import {
-	getPrefixCountryCode,
-	getCountryNameFromNameLocalizations,
-	normalizeDirectionKeys,
-	setOrder,
-	sortData,
-	transformToLowerCaseWithoutAccent,
-	normalizeSearchQueryParams
-} from '../../utils/helper'
+import { getPrefixCountryCode, getCountryNameFromNameLocalizations, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 import i18n from '../../utils/i18n'
 
 // reducers
@@ -40,20 +31,20 @@ import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 import { IBreadcrumbs, Columns, ISpecialistContact, ISpecialistContactForm, ISpecialistContactFilter } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
+// hooks
+import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+
 const SpecialistContactsPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
 	const [visibleForm, setVisibleForm] = useState<boolean>(false)
 
-	const [searchParams, setSearchParams] = useSearchParams({
-		search: '',
-		order: 'country:ASC'
+	const [query, setQuery] = useQueryParams({
+		search: StringParam(),
+		order: StringParam('country:ASC')
 	})
-	const query = {
-		search: searchParams.get('search') || '',
-		order: searchParams.get('order') || ''
-	}
+
 	// undefined - represents new record
 	const [specialistContactID, setSpecialistContactID] = useState<string | undefined>(undefined)
 	const [visibleRestrictionModal, setVisibleRestrictionModal] = useState(false)
@@ -139,7 +130,7 @@ const SpecialistContactsPage = () => {
 				...query,
 				order
 			}
-			setSearchParams(newQuery)
+			setQuery(newQuery)
 		}
 	}
 
@@ -161,7 +152,7 @@ const SpecialistContactsPage = () => {
 			changeFormVisibility()
 			// reset search in case of newly created entity
 			if (!specialistContactID && query.search) {
-				setSearchParams({ ...query, search: '' })
+				setQuery({ ...query, search: '' })
 			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -242,7 +233,7 @@ const SpecialistContactsPage = () => {
 							<SpecialistContactFilter
 								total={specialistContacts?.data?.length}
 								onSubmit={(values: ISpecialistContactFilter) => {
-									setSearchParams(normalizeSearchQueryParams({ ...query, search: values.search }))
+									setQuery({ ...query, search: values.search })
 								}}
 								specialistContactID={specialistContactID}
 								addButton={

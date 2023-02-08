@@ -70,6 +70,8 @@ import {
 // atoms
 import CalendarReservationPopover from './components/CalendarReservationPopover'
 import CalendarConfirmModal from './components/CalendarConfirmModal'
+
+// hooks
 import useQueryParams, { ArrayParam, StringParam } from '../../hooks/useQueryParams'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {

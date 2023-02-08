@@ -924,4 +924,3 @@ export enum CANEL_TOKEN_MESSAGES {
 	CANCELED_DUE_TO_NEW_REQUEST = 'Operation canceled due to new request.',
 	CANCELED_ON_DEMAND = 'Operation canceled.'
 }
-

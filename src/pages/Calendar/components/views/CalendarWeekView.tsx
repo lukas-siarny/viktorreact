@@ -5,7 +5,8 @@ import useResizeObserver from '@react-hook/resize-observer'
 import { useDispatch } from 'react-redux'
 
 // full calendar
-import FullCalendar, { DateSelectArg, EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar from '@fullcalendar/react' // must go before plugins
+import { DateSelectArg, EventContentArg, SlotLabelContentArg } from '@fullcalendar/core'
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
@@ -48,13 +49,12 @@ const resourceGroupLaneContent = () => {
 const resourceAreaColumns = [
 	{
 		field: 'day',
-		headerContent: null,
+		headerContent: <span className={'invisible'}>{'header'}</span>, // NOTE: do not delete this - calendar header won't render correctly without this
 		width: 55,
-		cellContent: () => null
+		cellContent: <span /> // NOTE: do not delete this - calendar header won't render correctly without this
 	},
 	{
 		field: 'employee',
-		headerContent: null,
 		width: 145,
 		cellContent: (args: any) => {
 			const { resource } = args || {}
@@ -164,13 +164,11 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		updateCalendarSize,
 		onAddEvent,
 		virtualEvent,
-		setEventManagement,
 		enabledSalonReservations,
 		onEventChangeStart,
 		onEventChangeStop
 	} = props
 
-	const dispatch = useDispatch()
 	const events = useMemo(() => {
 		const data = composeWeekViewEvents(selectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees)
 
@@ -199,10 +197,6 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 	}, [selectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees, virtualEvent])
 
 	const handleNewEvent = (event: DateSelectArg) => {
-		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
-		dispatch(clearEvent())
-		setEventManagement(undefined)
-
 		if (event.resource) {
 			// eslint-disable-next-line no-underscore-dangle
 			const { day, employee } = event.resource._resource.extendedProps

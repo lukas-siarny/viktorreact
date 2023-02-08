@@ -6,9 +6,7 @@ import { Spin, ConfigProvider } from 'antd'
 import { Locale } from 'antd/lib/locale-provider'
 import { AliasToken } from 'antd/es/theme/internal'
 import dayjs from 'dayjs'
-import { QueryParamProvider } from 'use-query-params'
-import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6'
-import { BrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom'
 
 import 'antd/dist/reset.css'
 
@@ -43,7 +41,19 @@ const ANTD_THEME_VARIABLES_OVERRIDE: Partial<AliasToken> = {
 
 const App = () => {
 	const [antdLocale, setAntdLocale] = useState<Locale | undefined>(undefined)
-
+	// You can do this:
+	const router = createBrowserRouter(
+		createRoutesFromElements(
+			<Route
+				path={'*'}
+				element={
+					<ScrollToTop>
+						<AppRoutes />{' '}
+					</ScrollToTop>
+				}
+			/>
+		)
+	)
 	useEffect(() => {
 		i18n.on('languageChanged', (language) => {
 			const locale = LOCALES[language as LANGUAGE] || LOCALES[DEFAULT_LANGUAGE]
@@ -80,16 +90,7 @@ const App = () => {
 						}}
 					>
 						<Provider store={store}>
-							<BrowserRouter>
-								<QueryParamProvider
-									// changelog v2: https://github.com/pbeshai/use-query-params/releases
-									adapter={ReactRouter6Adapter}
-								>
-									<ScrollToTop>
-										<AppRoutes />
-									</ScrollToTop>
-								</QueryParamProvider>
-							</BrowserRouter>
+							<RouterProvider router={router} />
 						</Provider>
 					</ConfigProvider>
 				</PersistGate>

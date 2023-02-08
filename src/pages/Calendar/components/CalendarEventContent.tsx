@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
-import { StringParam, useQueryParams } from 'use-query-params'
+import { useSearchParams } from 'react-router-dom'
 
 // full calendar
-import { EventContentArg } from '@fullcalendar/react' // must go before plugins
+import { EventContentArg } from '@fullcalendar/core'
 
 // utils
 import { CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../utils/enums'
@@ -60,8 +60,8 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 		isPlaceholder
 	} = eventData || {}
 
-	const [query] = useQueryParams({
-		eventId: StringParam
+	const [searchParams] = useSearchParams({
+		eventId: ''
 	})
 
 	// background events
@@ -84,7 +84,10 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 		endDateTime
 	}
 
-	const isEdit = query?.eventId === originalEventData.id
+	const isEdit = searchParams.get('eventId') === originalEventData.id
+
+	const timeLeftToEndOfaDay = calendarView === CALENDAR_VIEW.DAY || calendarView === CALENDAR_VIEW.WEEK ? dayjs(start).endOf('day').diff(dayjs(start), 'minutes') : undefined
+	const timeLeftClassName = timeLeftToEndOfaDay && timeLeftToEndOfaDay < 14 ? `end-of-day-${14 - timeLeftToEndOfaDay}` : undefined
 
 	// normal events
 	switch (eventType) {
@@ -110,6 +113,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					isBulkEvent={!!calendarBulkEvent?.id}
 					isPlaceholder={isPlaceholder}
 					isEdit={isEdit}
+					timeLeftClassName={timeLeftClassName}
 				/>
 			)
 		case CALENDAR_EVENT_TYPE.RESERVATION: {
@@ -136,6 +140,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					originalEventData={originalEventData}
 					isEdit={isEdit}
 					isPlaceholder={isPlaceholder}
+					timeLeftClassName={timeLeftClassName}
 				/>
 			)
 		}

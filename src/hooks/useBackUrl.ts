@@ -1,22 +1,26 @@
 import { useEffect, useState } from 'react'
 import qs from 'qs'
 import { get, split } from 'lodash'
-import { StringParam, useQueryParams } from 'use-query-params'
+import { useSearchParams } from 'react-router-dom'
 
 import { decodeBackDataQuery } from '../utils/helper'
 import { BACK_DATA_QUERY } from '../utils/enums'
 
 /**
  * @param fallbackUrl Ak v adrese prehliadača chýba ?backUrl nastav ?backUrl=fallbackUrl
+ * @param queryName
  */
 export default <BackData>(fallbackUrl?: string, queryName: string = BACK_DATA_QUERY) => {
 	const [decodedBackUrl, setDecodedBackUrl] = useState<string | undefined>()
 	const [parsedBackData, setParsedBackData] = useState<BackData>()
 
-	const [query] = useQueryParams({
+	const [searchParams] = useSearchParams({
 		// NOTE: fix - pri pouziti withDefault sa resetovala backURL pri preklikavani tabou a nastavil s fallback aj ked mala exiustovat backURL
-		backUrl: StringParam
+		backUrl: ''
 	})
+	const query = {
+		backUrl: searchParams.get('backUrl')
+	}
 
 	useEffect(() => {
 		if (query.backUrl) {

@@ -43,12 +43,17 @@ const CustomersPage = (props: SalonSubPageProps) => {
 		order: 'lastName:ASC'
 	})
 
-	const searchParamsObj = Object.fromEntries(searchParams)
+	const query = {
+		search: searchParams.get('search') || '',
+		limit: searchParams.get('limit') || '',
+		page: searchParams.get('page') || '',
+		order: searchParams.get('order') || ''
+	}
 
 	useEffect(() => {
-		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: searchParams.get('search') }))
-		dispatch(getCustomers({ page: searchParams.get('page'), limit: searchParams.get('limit'), order: searchParams.get('order'), search: searchParams.get('search'), salonID }))
-	}, [dispatch, searchParams, salonID])
+		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: query.search }))
+		dispatch(getCustomers({ page: query.page, limit: query.limit, order: query.order, search: query.search, salonID }))
+	}, [dispatch, query.limit, query.order, query.page, query.search, salonID])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -64,7 +69,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 		if (!(sorter instanceof Array)) {
 			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
 			const newQuery = {
-				...searchParamsObj,
+				...query,
 				order
 			}
 			setSearchParams(newQuery)
@@ -73,7 +78,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 
 	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
-			...searchParamsObj,
+			...query,
 			limit: String(limit),
 			page: String(page)
 		}
@@ -82,9 +87,9 @@ const CustomersPage = (props: SalonSubPageProps) => {
 
 	const handleSubmit = (values: ISearchFilter) => {
 		const newQuery = {
-			...searchParamsObj,
+			...query,
 			search: values.search,
-			page: 1
+			page: '1'
 		}
 		setSearchParams(normalizeSearchQueryParams(newQuery))
 	}
@@ -96,7 +101,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 			key: 'lastName',
 			ellipsis: true,
 			sorter: true,
-			sortOrder: setOrder(searchParams.get('order'), 'lastName'),
+			sortOrder: setOrder(query.order, 'lastName'),
 			render: (value, record) => (
 				<>
 					<UserAvatar className={'mr-1'} src={record.profileImage?.resizedImages?.thumbnail} fallBackSrc={record.profileImage?.original} size={'small'} />
@@ -131,7 +136,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 			key: 'createdAt',
 			ellipsis: true,
 			sorter: true,
-			sortOrder: setOrder(searchParams.get('order'), 'createdAt'),
+			sortOrder: setOrder(query.order, 'createdAt'),
 			render: (value) => formatDateByLocale(value) ?? '-'
 		}
 	]

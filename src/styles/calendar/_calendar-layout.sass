@@ -1,6 +1,11 @@
 @import "../tailwind-variables"
 @import "../variables"
 
+@keyframes sider-content-animation
+	0%
+		transform: translateX(150px)
+	100%
+		transform: translteX(0)
 
 .fc-timegrid-cols, .fc-timeline-body
 	&.active::after
@@ -149,6 +154,8 @@
 				overflow-y: auto
 				overflow-x: hidden
 				padding: 16px
+				transition: transformX(150px)
+				animation: sider-content-animation 200ms ease-in-out forwards
 			.nc-sider-event-management-footer
 				height: 64px
 				padding: 8px 16px 16px 16px

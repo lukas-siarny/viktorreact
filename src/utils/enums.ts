@@ -1,7 +1,7 @@
 import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
-import { FormatterInput } from '@fullcalendar/react'
+import { FormatterInput } from '@fullcalendar/core'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
@@ -917,3 +917,5 @@ export enum CONFIRM_MODAL_DATA_TYPE {
 export const RESERVATION_STATES = Object.keys(RESERVATION_STATE)
 export const RESERVATION_PAYMENT_METHODS = Object.keys(RESERVATION_PAYMENT_METHOD)
 export const RESERVATION_SOURCE_TYPES = Object.keys(RESERVATION_SOURCE_TYPE)
+
+export const CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE = 300 // in ms

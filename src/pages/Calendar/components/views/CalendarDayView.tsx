@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useMemo } from 'react'
 import { Element } from 'react-scroll'
 import dayjs from 'dayjs'
-import { useDispatch } from 'react-redux'
 
 // full calendar
-import FullCalendar, { SlotLabelContentArg, DateSelectArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar from '@fullcalendar/react' // must go before plugins
+import { SlotLabelContentArg, DateSelectArg } from '@fullcalendar/core'
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
@@ -21,7 +21,6 @@ import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-
 
 // components
 import CalendarEventContent from '../CalendarEventContent'
-import { clearEvent } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 interface IResourceLabel {
 	image?: string
@@ -86,13 +85,11 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		onAddEvent,
 		virtualEvent,
 		enabledSalonReservations,
-		setEventManagement,
 		onEventChangeStart,
 		onReservationClick,
 		onEventChangeStop
 	} = props
 
-	const dispatch = useDispatch()
 	const events = useMemo(() => {
 		const data = composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees)
 		// ak je virtualEvent definovany, zaradi sa do zdroja eventov pre Calendar
@@ -104,8 +101,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	 * Spracuje input z calendara click/select a vytvori z neho init data, ktore vyuzije form v SiderEventManager
 	 */
 	const handleNewEvent = (event: DateSelectArg) => {
-		setEventManagement(undefined)
-
 		if (event.resource) {
 			// eslint-disable-next-line no-underscore-dangle
 			const { employee } = event.resource._resource.extendedProps

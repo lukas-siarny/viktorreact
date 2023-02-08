@@ -6,12 +6,12 @@ import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { change } from 'redux-form'
 import { isEqual, startsWith } from 'lodash'
-import { DelimitedArrayParam, useQueryParams } from 'use-query-params'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 // fullcalendar
+import FullCalendar from '@fullcalendar/react'
 import { EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
-import FullCalendar, { EventDropArg } from '@fullcalendar/react'
+import { EventDropArg } from '@fullcalendar/core'
 
 // enums
 import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, EVENT_NAMES, FORM, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
@@ -91,7 +91,6 @@ type Props = {
 	loading: boolean
 	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
-	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
 	enabledSalonReservations?: boolean
 	parentPath: string
 } & Omit<ICalendarView, 'onEventChange' | 'onEventChangeStart' | 'onEventChangeStop'>
@@ -113,7 +112,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		handleSubmitReservation,
 		handleSubmitEvent,
 		selectedDate,
-		setEventManagement,
 		enabledSalonReservations,
 		salonID,
 		eventsViewType,
@@ -132,11 +130,15 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	const employeesOptions = useSelector((state: RootState) => state.employees.employees?.options)
 
-	// query
-	const [query, setQuery] = useQueryParams({
-		employeeIDs: DelimitedArrayParam,
-		categoryIDs: DelimitedArrayParam
+	const [searchParams, setSearchParams] = useSearchParams({
+		employeeIDs: [],
+		categoryIDs: []
 	})
+	// TODO: initne sa zle RESERVATION FILTER
+	const query = {
+		employeeIDs: searchParams.getAll('employeeIDs') || '',
+		categoryIDs: searchParams.getAll('categoryIDs') || ''
+	}
 
 	const [disableRender, setDisableRender] = useState(false)
 
@@ -325,10 +327,10 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				<CalendarEmptyState
 					title={t('loc:Nie je vybratý zamestnanec ani služba')}
 					onButtonClick={() =>
-						setQuery({
+						setSearchParams({
 							...query,
-							employeeIDs: undefined, // undefined znamena ze sa setnu vsetky hodnoty do filtra
-							categoryIDs: undefined
+							employeeIDs: [], // undefined znamena ze sa setnu vsetky hodnoty do filtra
+							categoryIDs: []
 						})
 					}
 					buttonLabel={t('loc:Vybrať všetko')}
@@ -340,9 +342,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				<CalendarEmptyState
 					title={t('loc:Nie je vybratý zamestnanec')}
 					onButtonClick={() =>
-						setQuery({
+						setSearchParams({
 							...query,
-							employeeIDs: undefined
+							employeeIDs: []
 						})
 					}
 				/>
@@ -353,9 +355,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				<CalendarEmptyState
 					title={t('loc:Nie je vybratá služba')}
 					onButtonClick={() =>
-						setQuery({
+						setSearchParams({
 							...query,
-							categoryIDs: undefined
+							categoryIDs: []
 						})
 					}
 					buttonLabel={t('loc:Vybrať všetky')}
@@ -383,7 +385,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				<CalendarWeekView
 					ref={weekView}
 					enabledSalonReservations={enabledSalonReservations}
-					setEventManagement={setEventManagement}
 					disableRender={disableRender}
 					reservations={sources.reservations}
 					shiftsTimeOffs={sources.shiftsTimeOffs}
@@ -408,7 +409,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		return (
 			<CalendarDayView
 				enabledSalonReservations={enabledSalonReservations}
-				setEventManagement={setEventManagement}
 				ref={dayView}
 				disableRender={disableRender}
 				reservations={sources.reservations}

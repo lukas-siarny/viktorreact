@@ -2,14 +2,13 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { ArrayParam, BooleanParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Modal, Progress, Row, Spin, Image, Tooltip, TabsProps } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize, isPristine, reset } from 'redux-form'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { isEmpty } from 'lodash'
 
 // components
-import { isEmpty } from 'lodash'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonsImportForm from './components/forms/SalonsImportForm'
@@ -22,7 +21,7 @@ import RejectedSalonSuggestions from './components/RejectedSalonSuggestions'
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { formatDateByLocale, getAssignedUserLabel, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { formatDateByLocale, getAssignedUserLabel, getLinkWithEncodedBackUrl, normalizeDirectionKeys, normalizeSearchQueryParams, setOrder } from '../../utils/helper'
 import { postReq } from '../../utils/request'
 import { getSalonTagChanges, getSalonTagCreateType, getSalonTagPublished, getSalonTagSourceType } from './components/salonUtils'
 
@@ -73,49 +72,94 @@ const SalonsPage = () => {
 		dispatch(selectSalon())
 	}, [dispatch])
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		categoryFirstLevelIDs: ArrayParam,
-		statuses_all: withDefault(BooleanParam, false),
-		statuses_published: ArrayParam,
-		salonState: withDefault(StringParam, TAB_KEYS.ACTIVE),
-		statuses_changes: ArrayParam,
-		limit: NumberParam,
-		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'createdAt:DESC'),
-		countryCode: StringParam,
-		createType: StringParam,
-		lastUpdatedAtFrom: StringParam,
-		lastUpdatedAtTo: StringParam,
-		hasSetOpeningHours: StringParam,
-		sourceType: StringParam,
-		assignedUserID: StringParam,
-		premiumSourceUserType: StringParam
+	const [searchParams, setSearchParams] = useSearchParams({
+		search: '',
+		categoryFirstLevelIDs: [],
+		statuses_all: 'false',
+		statuses_published: [],
+		salonState: TAB_KEYS.ACTIVE,
+		statuses_changes: [],
+		limit: '',
+		page: '1',
+		order: 'createdAt:DESC',
+		countryCode: '',
+		createType: '',
+		lastUpdatedAtFrom: '',
+		lastUpdatedAtTo: '',
+		hasSetOpeningHours: '',
+		sourceType: '',
+		assignedUserID: '',
+		premiumSourceUserType: ''
 	})
 
+	const query = useMemo(
+		() => ({
+			search: searchParams.get('search') || '',
+			limit: searchParams.get('limit') || '',
+			page: searchParams.get('page') || '',
+			order: searchParams.get('order') || '',
+			categoryFirstLevelIDs: searchParams.getAll('categoryFirstLevelIDs') || [],
+			salonState: searchParams.get('salonState') || '',
+			statuses_changes: searchParams.getAll('statuses_changes') || [],
+			statuses_all: searchParams.get('statuses_all') || '',
+			statuses_published: searchParams.getAll('statuses_published') || [],
+			countryCode: searchParams.get('countryCode') || '',
+			createType: searchParams.get('createType') || '',
+			lastUpdatedAtFrom: searchParams.get('lastUpdatedAtFrom') || '',
+			lastUpdatedAtTo: searchParams.get('lastUpdatedAtTo') || '',
+			hasSetOpeningHours: searchParams.get('hasSetOpeningHours') || '',
+			sourceType: searchParams.get('sourceType') || '',
+			assignedUserID: searchParams.get('assignedUserID') || '',
+			premiumSourceUserType: searchParams.get('premiumSourceUserType') || ''
+		}),
+		[searchParams]
+	)
 	const resetQuery = (selectedTabKey: string) => {
 		// reset query when switching between tabs
-		setQuery({
-			search: undefined,
-			categoryFirstLevelIDs: undefined,
-			statuses_all: undefined,
-			statuses_published: undefined,
-			statuses_changes: undefined,
-			limit: undefined,
-			page: 1,
+		setSearchParams({
+			search: '',
+			categoryFirstLevelIDs: [],
+			statuses_all: '',
+			statuses_published: [],
+			statuses_changes: [],
+			limit: '',
+			page: '1',
 			order: 'createdAt:DESC',
 			// get default selected country form redux store
-			countryCode: selectedCountry,
-			createType: undefined,
-			lastUpdatedAtFrom: undefined,
-			lastUpdatedAtTo: undefined,
+			countryCode: selectedCountry || '',
+			createType: '',
+			lastUpdatedAtFrom: '',
+			lastUpdatedAtTo: '',
 			salonState: selectedTabKey,
-			hasSetOpeningHours: undefined,
-			sourceType: undefined,
-			premiumSourceUserType: undefined,
-			assignedUserID: undefined
+			hasSetOpeningHours: '',
+			sourceType: '',
+			premiumSourceUserType: '',
+			assignedUserID: ''
 		})
 	}
+	// const resetQuery = (selectedTabKey: string) => {
+	// 	// reset query when switching between tabs
+	// 	setQuery({
+	// 		search: undefined,
+	// 		categoryFirstLevelIDs: undefined,
+	// 		statuses_all: undefined,
+	// 		statuses_published: undefined,
+	// 		statuses_changes: undefined,
+	// 		limit: undefined,
+	// 		page: 1,
+	// 		order: 'createdAt:DESC',
+	// 		// get default selected country form redux store
+	// 		countryCode: selectedCountry,
+	// 		createType: undefined,
+	// 		lastUpdatedAtFrom: undefined,
+	// 		lastUpdatedAtTo: undefined,
+	// 		salonState: selectedTabKey,
+	// 		hasSetOpeningHours: undefined,
+	// 		sourceType: undefined,
+	// 		premiumSourceUserType: undefined,
+	// 		assignedUserID: undefined
+	// 	})
+	// }
 
 	const isAdmin = useMemo(() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUserPermissions])
 
@@ -144,7 +188,7 @@ const SalonsPage = () => {
 		if (isFormPristine) {
 			salonsQueries = {
 				...salonsQueries,
-				countryCode: selectedCountry
+				countryCode: selectedCountry as any
 			}
 		}
 
@@ -221,17 +265,17 @@ const SalonsPage = () => {
 				...query,
 				order
 			}
-			setQuery(newQuery)
+			setSearchParams(newQuery)
 		}
 	}
 
 	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
 			...query,
-			limit,
-			page
+			limit: String(limit),
+			page: String(page)
 		}
-		setQuery(newQuery)
+		setSearchParams(newQuery)
 	}
 
 	const handleSubmitActive = (values: ISalonsFilterActive) => {
@@ -248,7 +292,7 @@ const SalonsPage = () => {
 			page: 1
 		}
 
-		setQuery(newQuery)
+		setSearchParams(normalizeSearchQueryParams(newQuery))
 	}
 
 	const handleSubmitDeleted = (values: ISalonsFilterDeleted) => {
@@ -258,9 +302,9 @@ const SalonsPage = () => {
 		const newQuery = {
 			...query,
 			...values,
-			page: 1
+			page: '1'
 		}
-		setQuery(newQuery)
+		setSearchParams(normalizeSearchQueryParams(newQuery))
 	}
 
 	const salonImportsSubmit = async (values: IDataUploadForm) => {

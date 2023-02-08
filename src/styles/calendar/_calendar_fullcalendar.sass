@@ -41,6 +41,36 @@
 	background: rgba($backgroundColor-notino-pink, 0.1)
 
 // daily view
+.fc-timegrid-event-harness
+	&:has(.end-of-day-14)
+		transform: translateY(-14px)
+	&:has(.end-of-day-13)
+		transform: translateY(-13px)
+	&:has(.end-of-day-12)
+		transform: translateY(-12px)
+	&:has(.end-of-day-11)
+		transform: translateY(-11px)
+	&:has(.end-of-day-10)
+		transform: translateY(-10px)
+	&:has(.end-of-day-9)
+		transform: translateY(-9px)
+	&:has(.end-of-day-8)
+		transform: translateY(-8px)
+	&:has(.end-of-day-7)
+		transform: translateY(-7px)
+	&:has(.end-of-day-6)
+		transform: translateY(-6px)
+	&:has(.end-of-day-5)
+		transform: translateY(-5px)
+	&:has(.end-of-day-4)
+		transform: translateY(-4px)
+	&:has(.end-of-day-3)
+		transform: translateY(-3px)
+	&:has(.end-of-day-2)
+		transform: translateY(-2px)
+	&:has(.end-of-day-1)
+		transform: translateY(-1px)
+
 .fc-timegrid-col-bg
 	.fc-timegrid-bg-harness
 		.fc-bg-event
@@ -153,6 +183,36 @@
 							@include scrollbar-styles
 
 // weekly view
+.fc-timeline-event-harness
+	&:has(.end-of-day-14)
+		transform: translateX(-21px)
+	&:has(.end-of-day-13)
+		transform: translateX(-21px)
+	&:has(.end-of-day-12)
+		transform: translateX(-20px)
+	&:has(.end-of-day-11)
+		transform: translateX(-18px)
+	&:has(.end-of-day-10)
+		transform: translateX(-16px)
+	&:has(.end-of-day-9)
+		transform: translateX(-15px)
+	&:has(.end-of-day-8)
+		transform: translateX(-13px)
+	&:has(.end-of-day-7)
+		transform: translateX(-11px)
+	&:has(.end-of-day-6)
+		transform: translateX(-10px)
+	&:has(.end-of-day-5)
+		transform: translateX(-8px)
+	&:has(.end-of-day-4)
+		transform: translateX(-7px)
+	&:has(.end-of-day-3)
+		transform: translateX(-5px)
+	&:has(.end-of-day-2)
+		transform: translateX(-3px)
+	&:has(.end-of-day-1)
+		transform: translateX(-2px)
+
 .fc .fc-timeline-now-indicator-arrow
 	display: none
 .fc .fc-timeline-now-indicator-line
@@ -341,8 +401,3 @@
 											.fc-datagrid-cell-frame
 												&::after
 													display: none
-
-
-.fc-timegrid-event-harness:has(.nc-event.edit),
-.fc-timeline-event-harness:has(.nc-event.edit)
-	z-index: 999 !important

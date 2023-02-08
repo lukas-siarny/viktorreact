@@ -104,6 +104,12 @@ const CALENDAR_EVENTS_VIEW_TYPES = Object.keys(CALENDAR_EVENTS_VIEW_TYPE)
 const Calendar: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath = '' } = props
 	const navigate = useNavigate()
+	/**
+	 * referencie na jednotlivé inštancie Fullcalendar-a - pre každé view sa používa zvlášť inštancia (denné, týždenné, mesačné) - viď CalendarContent.tsx
+	 * každá inštancia má dostupné metódy render() a getCalendarApi(), napr. calendarRefs.current.DAY.getCalendarApi()
+	 * render() - umožňuje programovo vyrendrovať kalendár - https://fullcalendar.io/docs/render
+	 * getCalendarApi() - umožňuje programovo volať ďalšie FC metódy napr. calendarRefs.current.DAY.getCalendarApi().updateSize() - viď dokumentácia https://fullcalendar.io/docs
+	 * */
 	const calendarRefs = useRef<CalendarRefs>(null)
 	const siderEventManagementRefs = useRef<SiderEventManagementRefs>(null)
 	const [t] = useTranslation()
@@ -138,6 +144,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		[query.eventsViewType]
 	) as CALENDAR_EVENTS_VIEW_TYPE
 
+	/**
+	 * okrem aktuálne zvoleného dátumu (query.date resp. validSelectedDate) si udržujeme aj aktuálne zvolený range napr. currentRange = { view: DAY, start: 2023-01-22 end: 2023-01-29 }
+	 * hlavne kvoli týždennému a mesačnému, kde sa vždy na základe zvoleného dátumu (validSelectedDate) dopočíta celý range, na základe ktorého sa potom dotiahnu data z BE
+	 */
 	const [currentRange, setCurrentRange] = useState(getSelectedDateRange(validCalendarView, validSelectedDate))
 	const [confirmModalData, setConfirmModalData] = useState<ConfirmModalData>(null)
 
@@ -167,11 +177,27 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const fetchInterval = useRef<number | undefined>()
 
-	const clearRestartFetchInterval = () => window.clearInterval(fetchInterval.current)
+	/**
+	 * pri praci s kalendarom pouzivame tuto kolekciu zamesnancov, ktora zohladnuje filtre aplikovane uzivatelom
+	 */
+	const filteredEmployees = useCallback(() => {
+		// filter employees based on employeeIDs in the url queryParams (if there are any)
+		if (!isEmpty(query.employeeIDs)) {
+			return employees?.data?.employees.filter((employee: any) => query.employeeIDs?.includes(employee.id))
+		}
+
+		// null means empty filter otherwise return all employes as default value
+		return query?.employeeIDs === null ? [] : employees?.data?.employees
+	}, [employees?.data?.employees, query.employeeIDs])
+
+	/**
+	 * tzv. background load eventov - keďže nepoužívame Websockety, na pozadí sa v pravidelnom intervale obnovujú eventy v kalendári, aby bola aspoň takto zaistená ich aktuálnosť
+	 */
+	const clearFetchInterval = () => window.clearInterval(fetchInterval.current)
 
 	const restartFetchInterval = async () => {
 		if (fetchInterval.current) {
-			clearRestartFetchInterval()
+			clearFetchInterval()
 		}
 
 		const interval = window.setInterval(async () => {
@@ -193,14 +219,26 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || isUpdatingEvent
 
+	/**
+	 * initialScroll = pomocna premenna pre tyzdenne view
+	 * v tyzdennom view sa po zmene datumu zascrolluje zobrazenie na novy datum - mozu nastat 2 situacie:
+	 * 1/ novo zvoleny datum sa nachadza v aktualnom rangi - teda mam vybraty tyzden 2 - 8.1.2023 a novy datum bude napr. 5.1.2023:
+	 * v takom pripade nepotrebujeme nacitavat nove data a v aktualnom zobrazeni sa len zaskroluje na zvoleny datum
+	 * 2/ novy datum sa nenachadza v aktualnom rangi:
+	 * v takom pripade potrebujeme pockat na nacitanie novych eventov z BE a vykreslenie Fullcalendara a az tak zascrollovat na danu poziciu (vyska tyzdenneho nie je fixna ale meni sa v zavislosti na rozlozeni eventov)
+	 * ak je intialScroll.current = true, tak vieme, ze sa jedna o druhy pripad
+	 */
 	const initialScroll = useRef(false)
 	const scrollToDateTimeout = useRef<any>(null)
 
+	/**
+	 * nastavi novy datum do query, novy current range a tiez datum pre aktualne zobrazenu instanciu Fullcalendara
+	 */
 	const setNewSelectedDate = (newDate: string) => {
 		// query sa nastavi vzdy ked sa zmeni datum
 		setQuery({ ...query, date: newDate })
 
-		// datum v kalendari a current range sa nastavi len vtedy, ked sa novy datum nenachadza v aktualnom rangi
+		// datum vo Fullcalendari a current range sa nastavi len vtedy, ked sa novy datum nenachadza v aktualne zvolenom rangi (currentRange state)
 		if (!isDateInRange(currentRange.start, currentRange.end, newDate)) {
 			setCurrentRange(getSelectedDateRange(validCalendarView, newDate))
 			const newCalendarDate = getSelectedDateForCalendar(validCalendarView, newDate)
@@ -208,20 +246,28 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			if (!dayjs(newCalendarDate).isSame(calendarRefs?.current?.[validCalendarView]?.getApi()?.getDate())) {
 				calendarRefs?.current?.[validCalendarView]?.getApi()?.gotoDate(newCalendarDate)
 			}
-
+			/**
+			 * meni sa range, pre tyzdenne view je potrebne si to poznacit do pomocnej premennej, aby sa nasledne spustil useEffect nizzsie
+			 * ten sa postara o scroll az po tom co sa dotiahnu nove data
+			 * */
 			initialScroll.current = false
 			return
 		}
 
-		// ak sa novy datum nachadza v rovnakom rangi ako predtym, tak sa v tyzdenom view len zascrolluje na jeho poziciu
-		// nenacitavaju nove data a netreba cakat na opatovne vykreslenie kalenadara
+		/**
+		 * ak sa novy datum nachadza v rovnakom rangi ako predtym, tak sa v tyzdennom view len zascrolluje na jeho poziciu
+		 * nenacitavaju nove data a teda netreba cakat na opatovne vykreslenie Fullcalendara
+		 */
 		if (validCalendarView === CALENDAR_VIEW.WEEK) {
 			scrollToSelectedDate(newDate, { smooth: true, duration: 300 })
 		}
 	}
 
 	useEffect(() => {
-		// zmenil sa range, je potrebne pockat na nacitanie novych dat a opatovne vykrelsenie kalenara a az tak zascrollovat na datum
+		/**
+		 * plati len pre tyzdenne view
+		 * zmenil sa range, je potrebne pockat na nacitanie novych dat a opatovne vykrelsenie Fullcalendara a az tak zascrollovat na datum
+		 *  */
 		if (validCalendarView === CALENDAR_VIEW.WEEK && !loadingData && !initialScroll.current) {
 			scrollToDateTimeout.current = setTimeout(() => {
 				scrollToSelectedDate(validSelectedDate, { smooth: true, duration: 300 })
@@ -232,24 +278,19 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		return () => clearTimeout(scrollToDateTimeout.current)
 	}, [loadingData, validSelectedDate, query.view, currentRange.start, currentRange.end, validCalendarView])
 
+	/**
+	 * pri prepnuti zobrazenia (denne / tyzdenne / mesacne) je potrebne zmenit aj zvoleny range
+	 */
 	const setCalendarView = (newView: CALENDAR_VIEW) => {
 		setQuery({ ...query, view: newView })
 		setCurrentRange(getSelectedDateRange(newView, validSelectedDate))
 	}
 
-	const updateCalendarSize = useRef(() => {
-		calendarRefs?.current?.[validCalendarView]?.getApi()?.updateSize()
-	})
-
-	const filteredEmployees = useCallback(() => {
-		// filter employees based on employeeIDs in the url queryParams (if there are any)
-		if (!isEmpty(query.employeeIDs)) {
-			return employees?.data?.employees.filter((employee: any) => query.employeeIDs?.includes(employee.id))
-		}
-
-		// null means empty filter otherwise return all employes as default value
-		return query?.employeeIDs === null ? [] : employees?.data?.employees
-	}, [employees?.data?.employees, query.employeeIDs])
+	/**
+	 * obcasne je potrebne programovo updatenut velkost, pretoze Fullcalednar sam nezaregistruje zmenu, ktora bola vyvolana niekde z vyssieho kontaineru
+	 * napr. ked sa zatvori bocny filter alebo sidebar na upravu eventu
+	 */
+	const updateCalendarSize = useRef(() => calendarRefs?.current?.[validCalendarView]?.getApi()?.updateSize())
 
 	// fetch new events
 	const fetchEvents: any = useCallback(
@@ -259,6 +300,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				return
 			}
 
+			// restartuje sa interval pre background load
 			restartFetchInterval()
 
 			if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
@@ -292,11 +334,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			// od nej sa este odrataju 2 hodiny, aby bolo vidiet aj co sa deje pred tymto casom
 			const scrollTimeId = getTimeScrollId(Math.max(hour - 2, 0))
 			if (validCalendarView === CALENDAR_VIEW.DAY) {
+				// v dennom view sa pouziva custom logika, pretoze interny scroll nefunguje ak sa vo Fullcalendari pozuva height='auto'
 				Scroll.scroller.scrollTo(scrollTimeId, {
 					containerId: 'nc-calendar-day-wrapper',
 					offset: -80 // - hlavicka
 				})
 			} else {
+				// v tyzdennom view sa pouzije interny scroll, pretoze sa scrolluje v x-ovej osi a aj v pripade height='auto' je to funkcne
 				calendarRefs?.current?.[validCalendarView]?.getApi().scrollToTime(scrollTimeId)
 			}
 		},
@@ -331,14 +375,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		;(async () => {
 			// if user uncheck all values from employeesIDs filter => clear reservations and shifts and dot't fetch new data
 			if (query?.employeeIDs === null) {
-				clearRestartFetchInterval()
+				restartFetchInterval()
 				dispatch(clearCalendarReservations())
 				dispatch(clearCalendarShiftsTimeoffs())
 				return
 			}
 			// if user uncheck all values from categoryIDs filter => clear reservations, but keep shifts and dot't fetch new data
 			if (query?.categoryIDs === null) {
-				clearRestartFetchInterval()
+				restartFetchInterval()
 				dispatch(clearCalendarReservations())
 				return
 			}
@@ -395,7 +439,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// clear on unmount
 		return () => {
 			if (fetchInterval.current) {
-				clearRestartFetchInterval()
+				clearFetchInterval()
 				message.destroy()
 			}
 		}
@@ -500,9 +544,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} finally {
 				setIsUpdatingEvent(false)
 				clearConfirmModal()
-				if (values?.enableCalendarRender) {
-					values?.enableCalendarRender()
-				}
 			}
 		},
 		[closeSiderForm, fetchEvents, salonID, query.eventId]
@@ -614,9 +655,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} finally {
 				setIsUpdatingEvent(false)
 				clearConfirmModal()
-				if (values?.enableCalendarRender) {
-					values?.enableCalendarRender()
-				}
 			}
 		},
 		[dispatch, fetchEvents, closeSiderForm, salonID, query.eventId]
@@ -784,7 +822,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						handleSubmitReservation={initSubmitReservationData}
 						handleSubmitEvent={initSubmitEventData}
 						onAddEvent={handleAddEvent}
-						clearRestartInterval={clearRestartFetchInterval}
+						clearFetchInterval={clearFetchInterval}
+						restartFetchInterval={restartFetchInterval}
 					/>
 					{selectedSalon?.settings?.enabledReservations && (
 						<SiderEventManagement

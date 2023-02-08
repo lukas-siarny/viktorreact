@@ -62,7 +62,7 @@ const TextareaField = (props: Props) => {
 	)
 
 	const onFocus = useCallback(
-		(e) => {
+		(e: React.FocusEvent<HTMLTextAreaElement>) => {
 			e.target.selectionEnd = 1
 			if (input.onFocus) {
 				input.onFocus(e)
@@ -76,7 +76,7 @@ const TextareaField = (props: Props) => {
 	)
 
 	const onBlur = useCallback(
-		(e) => {
+		(e: React.FocusEvent<HTMLTextAreaElement>) => {
 			if (input.onBlur) {
 				const val = parseValue(get(e, 'target.value'))
 				input.onBlur(val as any, e.target.name)

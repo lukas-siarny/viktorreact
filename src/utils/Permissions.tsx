@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, PropsWithChildren, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { indexOf, some, isEmpty, partition } from 'lodash'
 import { Button, Modal, notification, Result } from 'antd'
@@ -48,7 +48,7 @@ export const withPermissions =
 		return WithPermissions
 	}
 
-type Props = {
+type Props = PropsWithChildren & {
 	render?: (hasPermission: boolean, object: any) => React.ReactNode
 	allowed?: _Permissions
 	except?: _Permissions

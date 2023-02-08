@@ -16,7 +16,7 @@ import { isLoggedIn } from '../utils/auth'
 import { PAGE, SUBMENU_PARENT, REFRESH_PAGE_INTERVAL } from '../utils/enums'
 
 type Props = RouteProps & {
-	layout?: React.ReactNode
+	layout?: any
 	element?: React.ReactNode
 	translatePathKey?: string
 	page?: PAGE
@@ -43,6 +43,10 @@ const AuthRoute: FC<Props> = (props) => {
 	const { pathname, search } = useLocation()
 
 	if (!isLoggedIn()) {
+		/**
+		 * v pripade, ze uzivatel nebol prihlaseny a v prehliadaci zvolil nejaku autorizovanu URL, tak ho to redirectne na login pagu
+		 * do statu si ulozime URL, z ktorej bol presmerovany a nasledne po uspesnom prihlaseny presmerujeme naspät
+		 */
 		return (
 			<Navigate
 				to={{

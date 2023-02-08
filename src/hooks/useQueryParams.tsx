@@ -27,7 +27,7 @@ const serializeInitialParams = (initialValues?: IQueryParamsInitial) =>
 			return { ...acc }
 		}
 		if (value.value === null || (isArray(value.value) && !value.value.length)) {
-			// nastavi mu prazdnu hodnotu
+			// nastavi mu prazdnu hodnotu, eg. &foo=, resp. &foo
 			return {
 				...acc,
 				[key]: {

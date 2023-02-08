@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from 'react'
+import React, { FC, PropsWithChildren, ReactElement } from 'react'
 import { useSelector } from 'react-redux'
 import { Button, Result } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -11,7 +11,7 @@ import { RootState } from '../reducers'
 // assets
 import { ReactComponent as TrashIcon } from '../assets/icons/deleted.svg'
 
-type Props = {}
+type Props = PropsWithChildren
 
 const PreventShowDeletedSalon: FC<Props> = (props) => {
 	const { children } = props

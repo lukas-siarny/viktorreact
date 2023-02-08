@@ -1,4 +1,4 @@
-import React, { FC, useLayoutEffect } from 'react'
+import React, { FC, PropsWithChildren, useLayoutEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
 export const scrollToTopFn = () => {
@@ -8,7 +8,7 @@ export const scrollToTopFn = () => {
 	})
 }
 
-const ScrollToTop: FC = (props) => {
+const ScrollToTop: FC<PropsWithChildren> = (props) => {
 	const location = useLocation()
 
 	useLayoutEffect(() => {

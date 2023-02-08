@@ -591,7 +591,7 @@ export const FILTER_PATHS = (from?: string, to?: string) => ({
 		[SALON_FILTER_STATES.DECLINED]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.DECLINED}`,
 		[SALON_FILTER_STATES.PENDING_PUBLICATION]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.PENDING_PUBLICATION}`,
 		[SALON_CREATE_TYPE.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.BASIC}`,
-		publishedChanges: `${i18next.t('paths:salons')}?salonState=active&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}`,
+		publishedChanges: `${i18next.t('paths:salons')}?salonState=active&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
 		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`,
 		publishedBasics: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
 		publishedPremiums: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.NON_BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`

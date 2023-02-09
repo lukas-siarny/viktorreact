@@ -58,9 +58,6 @@ const PopoverContent: FC<ContentProps> = (props) => {
 			<main className={'px-4 overflow-y-auto'} style={{ maxHeight: 'calc(100vh - 100px)' }}>
 				{customer && (
 					<>
-						<button className={'nc-popover-header-button absolute right-4 top-4 z-50'} type={'button'} onClick={onClose}>
-							<CloseIcon />
-						</button>
 						<section className={'flex py-4'}>
 							<ul className={'noti-contact-list text-xs leading-4 flex flex-col gap-1 mb-0'}>
 								{customer.phone && (
@@ -164,7 +161,7 @@ const CalendarDetailPopover: FC<ICalendarReservationPopoverProps> = () => {
 			placement={'leftTop'}
 			overlayClassName={`${overlayClassName} nc-popover-overlay nc-popover-overlay-fixed`}
 			content={<PopoverContent customer={customer.data?.customer} onClose={() => setIsOpen(false)} />}
-			align={{ offset: [-160, -32] }}
+			align={{ offset: [-175, -18] }}
 		>
 			<div className={'absolute right-7 z-50 w-6 h-6 bg-notino-white flex items-center justify-center'} style={{ top: 30 }}>
 				{customer?.isLoading ? (

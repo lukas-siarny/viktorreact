@@ -18,7 +18,7 @@ const SalonApprovalModal = (props: Props) => {
 	const { onCancel, visible, submitButton, parentPath } = props
 
 	return (
-		<Modal centered visible={visible} onCancel={onCancel} footer={null} closable={false} className={'p-4'} forceRender width={600}>
+		<Modal centered open={visible} onCancel={onCancel} footer={null} closable={false} className={'p-4'} forceRender width={600}>
 			<div className={'noti-modal-content noti-approval-modal-content'} id={'noti-approval-modal-content'}>
 				<header>
 					<button type={'button'} onClick={onCancel}>
@@ -30,13 +30,13 @@ const SalonApprovalModal = (props: Props) => {
 				</header>
 				<main>
 					{submitButton}
-					<h2 className={'mt-6'}>{t('loc:Prečo salóny schvaľujeme?')}</h2>
+					<h2 className={'mt-6 text-notino-black'}>{t('loc:Prečo salóny schvaľujeme?')}</h2>
 					<p>
 						{t(
 							'loc:Našim zákazníkom chceme priniesť najlepší salón lokátor na trhu. Preto pri schvaľovaní kontrolujeme kvalitu obsahu, pravdivosť a aktuálnosť informácii. Taktiež chceme chrániť vás, majiteľov salónov, pred podvodníkmi a zneužitím informácií.'
 						)}
 					</p>
-					<h2>{t('loc:Pred schválením je potrebné')}</h2>
+					<h2 className={'text-notino-black'}>{t('loc:Pred schválením je potrebné')}</h2>
 					<ul className={'requirements'}>
 						{/* <li>
 							<Link to={parentPath + t('paths:employees')} className={'req-list-item req-list-item-link employee'}>
@@ -59,7 +59,7 @@ const SalonApprovalModal = (props: Props) => {
 						</li>
 						<li className={'req-list-item progress'}>{t('loc:vyplniť čo najviac relevantných dát o salóne')}</li>
 					</ul>
-					<h2>{t('loc:Čo sa bude diať ďalej?')}</h2>
+					<h2 className={'text-notino-black'}>{t('loc:Čo sa bude diať ďalej?')}</h2>
 					<ul className={'what-next mb-0'}>
 						<li>
 							{t('loc:Schvalovací proces')} <strong>{t('loc:môže trvať 48 hodín')}</strong>

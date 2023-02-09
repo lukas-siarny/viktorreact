@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 const useKeyUp = (keyName = 'Enter', onKeyUp?: () => void) => {
 	useEffect(() => {
 		const handleKeyUp = (event: KeyboardEvent) => {
+			event.stopPropagation()
 			if (event.key === keyName && onKeyUp) {
 				onKeyUp()
 			}

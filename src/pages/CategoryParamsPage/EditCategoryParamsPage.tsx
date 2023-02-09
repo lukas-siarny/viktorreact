@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Spin } from 'antd'
 import { initialize } from 'redux-form'
+import { useNavigate, useParams } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -18,34 +19,30 @@ import { withPermissions } from '../../utils/Permissions'
 import { PERMISSION, FORM, PARAMETERS_VALUE_TYPES, PARAMETERS_UNIT_TYPES } from '../../utils/enums'
 import { normalizeNameLocalizations } from '../../utils/helper'
 import { patchReq, deleteReq } from '../../utils/request'
-import { history } from '../../utils/history'
 
 // types
-import { IBreadcrumbs, IComputedMatch, ICategoryParamForm } from '../../types/interfaces'
+import { IBreadcrumbs, ICategoryParamForm } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
 
-type Props = {
-	computedMatch: IComputedMatch<{ parameterID: string }>
-}
-
-const EditCategoryParamsPage = (props: Props) => {
+const EditCategoryParamsPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
+	const { parameterID } = useParams<Required<{ parameterID: string }>>()
 
-	const { parameterID } = props.computedMatch.params
 	const parameter = useSelector((state: RootState) => state.categoryParams.parameter)
 
 	const [backUrl] = useBackUrl(t('paths:category-parameters'))
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const { data } = await dispatch(getCategoryParameter(parameterID))
+			const { data } = await dispatch(getCategoryParameter(parameterID as string))
 
 			if (!data?.id) {
-				history.push('/404')
+				navigate('/404')
 			}
 
 			if (data) {
@@ -90,8 +87,8 @@ const EditCategoryParamsPage = (props: Props) => {
 				values,
 				unitType
 			}
-			await patchReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}', { categoryParameterID: parameterID }, reqBody)
-			dispatch(getCategoryParameter(parameterID))
+			await patchReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}', { categoryParameterID: parameterID as string }, reqBody)
+			dispatch(getCategoryParameter(parameterID as string))
 			dispatch(initialize(FORM.CATEGORY_PARAMS, formData))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -101,8 +98,8 @@ const EditCategoryParamsPage = (props: Props) => {
 
 	const handleDelete = async () => {
 		try {
-			await deleteReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}', { categoryParameterID: parameterID })
-			history.push(t('paths:category-parameters'))
+			await deleteReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}', { categoryParameterID: parameterID as string })
+			navigate(t('paths:category-parameters'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

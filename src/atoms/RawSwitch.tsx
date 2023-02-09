@@ -9,7 +9,7 @@ type Props = SwitchProps & {
 const RawSwitch: FC<Props> = (props) => {
 	const { className, size, checked, disabled, onChangeFn, onChangeParam1 } = props
 
-	const onChange = useCallback((value) => onChangeFn(value, onChangeParam1), [onChangeFn, onChangeParam1])
+	const onChange = useCallback((value: any) => onChangeFn(value, onChangeParam1), [onChangeFn, onChangeParam1])
 
 	return <Switch className={className} size={size} checked={checked} disabled={disabled} onChange={onChange} />
 }

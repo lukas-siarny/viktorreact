@@ -6,7 +6,6 @@ import { compose } from 'redux'
 import { initialize, reset } from 'redux-form'
 import { get } from 'lodash'
 import cx from 'classnames'
-import { StringParam, withDefault, useQueryParams } from 'use-query-params'
 import { SorterResult } from 'antd/lib/table/interface'
 
 // components
@@ -31,6 +30,9 @@ import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 // types
 import { IBreadcrumbs, ICosmetic, ICosmeticForm, Columns, ISearchFilter } from '../../types/interfaces'
 
+// hooks
+import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+
 const CosmeticsPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -42,8 +44,8 @@ const CosmeticsPage = () => {
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 
 	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		order: withDefault(StringParam, 'name:ASC')
+		search: StringParam(),
+		order: StringParam('name:ASC')
 	})
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -115,7 +117,7 @@ const CosmeticsPage = () => {
 			changeFormVisibility()
 			// reset search in case of newly created entity
 			if (!cosmeticID && query.search) {
-				setQuery({ ...query, search: null })
+				setQuery({ ...query, search: '' })
 			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -152,7 +154,7 @@ const CosmeticsPage = () => {
 			title: t('loc:Logo'),
 			dataIndex: 'image',
 			key: 'image',
-			render: (value, record) =>
+			render: (_value, record) =>
 				record?.image ? (
 					<Image
 						src={record?.image?.resizedImages.thumbnail as string}

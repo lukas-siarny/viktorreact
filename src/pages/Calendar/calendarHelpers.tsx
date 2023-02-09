@@ -155,7 +155,7 @@ const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string
 		end,
 		allDay: false,
 		eventData: {
-			...(event.originalEvent || event || {}),
+			...(event.originalEvent || event || {}), // multidnove eventy maju origialne data ulozene v objekte originalEvent
 			isMultiDayEvent: event.isMultiDayEvent,
 			isLastMultiDaylEventInCurrentRange: event.isLastMultiDaylEventInCurrentRange,
 			isFirstMultiDayEventInCurrentRange: event.isFirstMultiDayEventInCurrentRange
@@ -382,6 +382,7 @@ export const composeWeekResources = (weekDays: string[], shiftsTimeOffs: ICalend
 }
 
 export const getWeekViewSelectedDate = (weekDays: string[]) => {
+	// vráti buď dnešok (ak sa nachadáza vo zvolenom týždni) alebo prvý deň zo zvoleného týždňa
 	const today = dayjs().startOf('day')
 	return weekDays.some((day) => dayjs(day).startOf('day').isSame(today)) ? today.format(CALENDAR_DATE_FORMAT.QUERY) : weekDays[0]
 }
@@ -524,9 +525,12 @@ export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null) 
 export const getSelectedDateForCalendar = (view: CALENDAR_VIEW, selectedDate: string) => {
 	switch (view) {
 		case CALENDAR_VIEW.WEEK: {
-			// v tyzdenom view je potrebne skontrolovat, ci sa vramci novo nastaveneho tyzdnoveho rangu nachadza dnesok
-			// ak ano, je potrebne ho nastavit ako aktualny den do kalendara, aby sa ukazal now indicator
-			// kedze realne sa na tyzdenne view pouziva denne view
+			/**
+			 * aj ked sa jedna o tyzdenne view, realne sa pouziva denne view, ktore je pozgrupovane tak, ze posobi ako tyzdenne
+			 * je potrebne skontrolovat, ci sa vramci novo nastaveneho tyzdnoveho rangu nachadza dnesok
+			 * ak ano, je potrebne ho nastavit ako aktualny den do Fullcalendara, aby sa ukazal now indicator, ak nie, tak sa nastavy ako aktualny datum prvy den zo zvoleneho tyzdna
+			 * tym, ze sa nastavi bud dnesok alebo prvy den z tyzdna, sa zamedzi zbytocnym prerendrovaniam Fullcalendara, ktore su hlavne v tyzdennom view, kde moze byt dost vela eventov, narocne
+			 */
 			const weekDays = getWeekDays(selectedDate)
 			return getWeekViewSelectedDate(weekDays)
 		}

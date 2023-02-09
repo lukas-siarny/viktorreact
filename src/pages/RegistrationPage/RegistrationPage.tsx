@@ -31,7 +31,6 @@ const RegistrationPage: FC<Props> = () => {
 	const { search } = useLocation()
 	const { email } = queryString.parse(search, { decode: false })
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
-
 	const handleSubmit = async (values: IRegistrationForm) => {
 		try {
 			const reqData = {

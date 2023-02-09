@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Button, Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import CustomTable from '../../../components/CustomTable'
@@ -12,8 +12,7 @@ import RejectedSuggestionsFilter from './filters/RejectedSuggestionsFilter'
 
 // utils
 import { FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
-import { normalizeDirectionKeys, setOrder, normalizeQueryParams, getLinkWithEncodedBackUrl } from '../../../utils/helper'
-import { history } from '../../../utils/history'
+import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../../utils/helper'
 import { deleteReq } from '../../../utils/request'
 
 // reducers
@@ -21,13 +20,17 @@ import { RootState } from '../../../reducers'
 import { getRejectedSuggestions } from '../../../reducers/salons/salonsActions'
 
 // types
-import { ISearchFilter, Columns } from '../../../types/interfaces'
+import { Columns, ISearchFilter } from '../../../types/interfaces'
 
 // assets
 import { ReactComponent as IconCheck } from '../../../assets/icons/checker-icon.svg'
 
+// hooks
+import useQueryParams, { NumberParam, StringParam } from '../../../hooks/useQueryParams'
+
 const RejectedSalonSuggestions = () => {
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 	const dispatch = useDispatch()
 
 	const salons = useSelector((state: RootState) => state.salons.rejectedSuggestions)
@@ -36,10 +39,10 @@ const RejectedSalonSuggestions = () => {
 	const loading = salons?.isLoading || submitting
 
 	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		limit: NumberParam,
-		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'salonName:ASC')
+		search: StringParam(),
+		limit: NumberParam(),
+		page: NumberParam(1),
+		order: StringParam('salonName:ASC')
 	})
 
 	useEffect(() => {
@@ -73,7 +76,7 @@ const RejectedSalonSuggestions = () => {
 			...values,
 			page: 1
 		}
-		setQuery(normalizeQueryParams(newQuery))
+		setQuery(newQuery)
 	}
 
 	const markRejectedSalonAsDone = async (salonID: string) => {
@@ -194,7 +197,7 @@ const RejectedSalonSuggestions = () => {
 							scroll={{ x: 800 }}
 							onRow={(record) => ({
 								onClick: () => {
-									history.push(getLinkWithEncodedBackUrl(t('paths:salons/{{salonID}}', { salonID: record.salonID })))
+									navigate(getLinkWithEncodedBackUrl(t('paths:salons/{{salonID}}', { salonID: record.salonID })))
 								}
 							})}
 							useCustomPagination

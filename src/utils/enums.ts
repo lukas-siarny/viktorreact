@@ -1,6 +1,7 @@
 import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
+import { AliasToken } from 'antd/es/theme/internal'
 import { FormatterInput } from '@fullcalendar/core'
 
 export enum KEYBOARD_KEY {
@@ -196,6 +197,7 @@ export enum RESOLUTIONS {
 	XXL = 'XXL',
 	XXXL = 'XXXL'
 }
+export const NOT_ALLOWED_REDIRECT_PATHS = ['/404', '/403']
 
 export enum SUBMENU_PARENT {
 	GENERAL = 'GENERAL',
@@ -513,6 +515,21 @@ export enum UPLOAD_IMG_CATEGORIES {
 	COSMETIC = 'COSMETIC_IMAGE',
 	CUSTOMER = 'CUSTOMER_IMAGE',
 	LANGUAGE_IMAGE = 'LANGUAGE_IMAGE'
+}
+
+export const ANTD_THEME_VARIABLES_OVERRIDE: Partial<AliasToken> = {
+	// Override AntD colors
+	colorPrimary: '#000000', // black
+	colorLink: '#DC0069', // notino-pink
+	colorText: '#404040', // true-gray-700,
+	colorTextHeading: '#3F3F46', // cool-gray-900
+	colorTextSecondary: '#BFBFBF', // notino-gray
+	colorTextDisabled: '#9CA3AF', // cool-gray-100,
+	colorSuccess: '#008700', // notino-success
+	colorWarning: '#D97706', // amber-600
+	colorError: '#D21414', // notino-red
+	colorTextPlaceholder: '#BFBFBF', // notino-gray
+	borderRadius: 2
 }
 
 export const URL_UPLOAD_IMAGES = '/api/b2b/admin/files/sign-urls'
@@ -848,8 +865,8 @@ export const RS_NOTIFICATION_FIELD_TEXTS = (notificationType: RS_NOTIFICATION, c
 	const entity = i18next.t(channel === NOTIFICATION_CHANNEL.B2B ? 'loc:Zamestnanec' : 'loc:Zákazník')
 
 	const result = {
-		title: undefined,
-		tooltip: undefined
+		title: '',
+		tooltip: ''
 	}
 
 	switch (notificationType) {
@@ -916,3 +933,10 @@ export enum CONFIRM_MODAL_DATA_TYPE {
 export const RESERVATION_STATES = Object.keys(RESERVATION_STATE)
 export const RESERVATION_PAYMENT_METHODS = Object.keys(RESERVATION_PAYMENT_METHOD)
 export const RESERVATION_SOURCE_TYPES = Object.keys(RESERVATION_SOURCE_TYPE)
+
+export const CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE = 300 // in ms
+
+export enum CANEL_TOKEN_MESSAGES {
+	CANCELED_DUE_TO_NEW_REQUEST = 'Operation canceled due to new request.',
+	CANCELED_ON_DEMAND = 'Operation canceled.'
+}

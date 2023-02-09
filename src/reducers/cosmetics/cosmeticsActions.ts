@@ -4,7 +4,8 @@ import { IResetStore } from '../generalTypes'
 // types
 import { COSMETICS } from './cosmeticsTypes'
 import { ThunkResult } from '../index'
-import { ISelectOptionItem, ICosmetic, ISearchableWithoutPagination, IQueryParams } from '../../types/interfaces'
+import { ISelectOptionItem, IQueryParams, ISearchable } from '../../types/interfaces'
+import { Paths } from '../../types/api'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -17,7 +18,7 @@ interface IGetCosmetics {
 	payload: ICosmeticsPayload
 }
 
-export interface ICosmeticsPayload extends ISearchableWithoutPagination<ICosmetic[]> {}
+export interface ICosmeticsPayload extends ISearchable<Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200> {}
 
 export const getCosmetics =
 	(queryParams?: IQueryParams): ThunkResult<Promise<ICosmeticsPayload>> =>
@@ -36,7 +37,7 @@ export const getCosmetics =
 				}
 			}))
 
-			payload = { data: data?.cosmetics, options }
+			payload = { data, options }
 			dispatch({ type: COSMETICS.COSMETICS_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: COSMETICS.COSMETICS_LOAD_FAIL })

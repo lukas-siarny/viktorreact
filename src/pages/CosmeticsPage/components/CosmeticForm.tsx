@@ -26,7 +26,6 @@ type ComponentProps = {
 	cosmeticID?: string
 	closeForm: () => void
 	onDelete: () => void
-	usedBrands?: string[]
 }
 
 type Props = InjectedFormProps<ICosmeticForm, ComponentProps> & ComponentProps

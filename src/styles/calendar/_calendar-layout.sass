@@ -1,6 +1,11 @@
 @import "../tailwind-variables"
 @import "../variables"
 
+@keyframes sider-content-animation
+	0%
+		transform: translateX(150px)
+	100%
+		transform: translteX(0)
 
 .fc-timegrid-cols, .fc-timeline-body
 	&.active::after
@@ -49,22 +54,23 @@
 			display: flex
 			align-items: center
 			justify-content: flex-end
+		.nc-date-selector
+			position: relative
+			.nc-date-selector-dropdown
+				position: absolute
+				width: 280px
+				height: 300px
+				background: lime
+			&.is-open
+				.nc-date-selector-dropdown
+					display: block
 		.nc-header-date-picker
-			height: 0
-			line-height: 0
 			padding-bottom: 0
-			.ant-form-item-row
-				height: 0
-			.ant-form-item-control,
-			.ant-form-item-control-input,
-			.ant-form-item-control-input-content
-				line-height: 0
-				min-height: 0
+			margin-left: 1px
+			margin-right: 1px
 			.ant-picker
 				padding: 0
 				border: 0
-				.ant-picker-input
-					display: none
 
 	// main section
 	.noti-calendar-main-section
@@ -139,6 +145,8 @@
 				overflow-y: auto
 				overflow-x: hidden
 				padding: 16px
+				transition: transformX(150px)
+				animation: sider-content-animation 200ms ease-in-out forwards
 			.nc-sider-event-management-footer
 				height: 64px
 				padding: 8px 16px 16px 16px
@@ -190,6 +198,9 @@
 				padding: 4px 8px
 				background: $backgroundColor-notino-grayLighter
 				min-height: 0
+				display: flex
+				align-items: center
+				@include baseOutlineStyle()
 				.ant-collapse-header-text
 					font-size: 14px
 					line-height: 16px
@@ -200,20 +211,25 @@
 					min-height: 0
 					max-width: calc(100% - 24px)
 				.ant-collapse-expand-icon
+					font-size: 12px
+					line-height: 12px
+					height: 12px
+					display: flex
+					align-items: center
 					svg
 						right: 8px
 						width: 12px
 						height: 12px
-						transform: translateY(-50%)
 						transform-origin: center
 						transition: transform 250ms ease-in-out
 						&.is-active
-							transform: translateY(-50%) rotate(180deg)
+							transform: rotate(180deg)
+				&:focus-visible
+					@include focusOutlineStyle()
 			.ant-collapse-content-box
 				padding: 8px 0 0 8px
 	.nc-button
 		padding: 8px
-		outline: none
 		border-radius: 4px
 		color: $textColor-notino-black
 		font-size: 14px
@@ -225,13 +241,15 @@
 		white-space: nowrap
 		background: $backgroundColor-notino-white
 		border: 1px solid $textColor-notino-grayLight
+		@include baseOutlineStyle()
 		&.active
 			border-color: $backgroundColor-notino-grayLighter
 			background: $backgroundColor-notino-grayLighter
-		&:hover,
-		&:focus-visible
+		&:hover
 			background-color: $backgroundColor-notino-grayLight
 			border-color: $backgroundColor-notino-grayLight
+		&:focus-visible
+			@include focusOutlineStyle()
 
 	.nc-button-group
 		background: $backgroundColor-notino-grayLighter
@@ -245,18 +263,19 @@
 			line-height: 16px
 			font-weight: 400
 			border: none
-			outline: none
 			padding: 6px 10px
 			cursor: pointer
 			height: 28px
 			transition: all 300ms ease-in-out
+			@include baseOutlineStyle()
 			&:not(.active)
-				&:hover,
-				&:focus-visible
+				&:hover
 					background-color: $backgroundColor-notino-grayLight
 			&.active
 				background: $backgroundColor-notino-white
 				box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05)
+			&:focus-visible
+					@include focusOutlineStyle()
 
 	.nc-button-date
 		color: $textColor-notino-black
@@ -265,7 +284,6 @@
 		font-size: 16px
 		line-height: 19px
 		font-weight: 600
-		outline: none
 		display: flex
 		align-items: center
 		height: 32px
@@ -274,8 +292,9 @@
 		cursor: pointer
 		text-transform: capitalize
 		transition: all 300ms ease-in-out
+		@include baseOutlineStyle()
 		&:focus-visible
-			border-color: $borderColor-notino-gray
+			@include focusOutlineStyle()
 
 	.nc-select
 		.nc-select-button

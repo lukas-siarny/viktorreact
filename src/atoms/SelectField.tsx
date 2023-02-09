@@ -321,7 +321,7 @@ const SelectField = (props: Props) => {
 		open,
 		showArrow,
 		menuItemSelectedIcon,
-		dropdownClassName,
+		popupClassName,
 		dropdownStyle,
 		dropdownMatchSelectWidth = true,
 		listHeight,
@@ -514,7 +514,7 @@ const SelectField = (props: Props) => {
 		})
 
 		// refetch options if any value is missing
-		if (values.size > 0) handleSearch('', 1, [...values])
+		if (values.size > 0) handleSearch('', 1, [...(values as never)])
 
 		checkInitialSelectedValues.current = false
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -596,7 +596,7 @@ const SelectField = (props: Props) => {
 			onSelect={onSelectWrap}
 			showArrow={showArrow}
 			menuItemSelectedIcon={renderMenuItemSelectedIcon(mode, menuItemSelectedIcon, disableMenuItemSelectedIcon)}
-			dropdownClassName={cx(`noti-select-dropdown ${dropdownClassName}`, { 'dropdown-match-select-width': dropdownMatchSelectWidth })}
+			popupClassName={cx(`noti-select-dropdown ${popupClassName}`, { 'dropdown-match-select-width': dropdownMatchSelectWidth })}
 			dropdownStyle={dropdownStyle}
 			dropdownMatchSelectWidth={dropdownMatchSelectWidth}
 			listHeight={listHeight}
@@ -630,7 +630,7 @@ const SelectField = (props: Props) => {
 		<>
 			{confirmSelection ? (
 				<Popconfirm
-					visible={confVisibility}
+					open={confVisibility}
 					placement={'bottom'}
 					title={
 						<>

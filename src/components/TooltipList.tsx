@@ -13,15 +13,7 @@ type Props = {
 
 const TooltipList: FC<Props> = (props) => {
 	const { elements, className } = props
-	return (
-		<Tooltip
-			title={() => {
-				elements?.map((element) => <div className={cx('text-gray-600 text-xs', className)}>{element.name}</div>)
-			}}
-		>
-			{`${elements?.[0]?.name} +`}
-		</Tooltip>
-	)
+	return <Tooltip title={() => elements?.map((element) => <div className={cx('text-gray-600 text-xs', className)}>{element.name}</div>)}>{`${elements?.[0]?.name} +`}</Tooltip>
 }
 
 export default TooltipList

@@ -46,13 +46,14 @@ import { RootState } from '../../../../reducers'
 type ComponentProps = {
 	eventId?: string | null
 	searchEmployes: (search: string, page: number) => Promise<any>
+	sidebarView?: CALENDAR_EVENT_TYPE
 }
 
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
 const formName = FORM.CALENDAR_EVENT_FORM
 
 const EventForm: FC<Props> = (props) => {
-	const { handleSubmit, eventId, searchEmployes, pristine, submitting } = props
+	const { handleSubmit, eventId, searchEmployes, pristine, submitting, sidebarView } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const formValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(formName)(state))
@@ -126,7 +127,7 @@ const EventForm: FC<Props> = (props) => {
 
 	return (
 		<>
-			<div className={'nc-sider-event-management-content'}>
+			<div className={'nc-sider-event-management-content'} key={`${eventId}${sidebarView}`}>
 				<Spin spinning={eventDetail.isLoading} size='large'>
 					<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 						<Field

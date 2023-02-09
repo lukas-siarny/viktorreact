@@ -24,9 +24,6 @@ import { ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
 
-// redux
-import { clearEvent } from '../../../../reducers/virtualEvent/virtualEventActions'
-
 const getTodayLabelId = (date: string | dayjs.Dayjs) => `${dayjs(date).format(CALENDAR_DATE_FORMAT.QUERY)}-is-today`
 
 const resourceGroupLabelContent = () => {
@@ -199,13 +196,11 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		updateCalendarSize,
 		onAddEvent,
 		virtualEvent,
-		setEventManagement,
 		enabledSalonReservations,
 		onEventChangeStart,
 		onEventChangeStop
 	} = props
 
-	const dispatch = useDispatch()
 	const events = useMemo(() => {
 		const data = composeWeekViewEvents(selectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees)
 
@@ -234,10 +229,6 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 	}, [selectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees, virtualEvent])
 
 	const handleNewEvent = (event: DateSelectArg) => {
-		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
-		dispatch(clearEvent())
-		setEventManagement(undefined)
-
 		if (event.resource) {
 			// eslint-disable-next-line no-underscore-dangle
 			const { day, employee } = event.resource._resource.extendedProps
@@ -338,7 +329,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				nowIndicator
 				selectable={enabledSalonReservations}
 				// data sources
-				events={events}
+				eventSources={[events]}
 				resources={resources}
 				resourceAreaColumns={resourceAreaColumns}
 				// render hooks

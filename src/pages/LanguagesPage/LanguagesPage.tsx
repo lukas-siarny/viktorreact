@@ -10,7 +10,6 @@ import { filter, get } from 'lodash'
 import { SorterResult } from 'antd/lib/table/interface'
 
 // components
-import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import LanguagesForm from './components/LanguagesForm'
@@ -34,6 +33,9 @@ import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 import { IBreadcrumbs, ILanguage, ILanguageForm } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
+// hooks
+import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+
 type Columns = ColumnsType<any>
 
 type LanguagesPatch = Paths.PatchApiB2BAdminEnumsLanguagesLanguageId.RequestBody
@@ -49,8 +51,8 @@ const LanguagesPage = () => {
 	const languages = useSelector((state: RootState) => state.languages.languages)
 
 	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		order: withDefault(StringParam, 'name:ASC')
+		search: StringParam(),
+		order: StringParam('name:ASC')
 	})
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -139,7 +141,7 @@ const LanguagesPage = () => {
 			changeFormVisibility()
 			// reset search in case of newly created entity
 			if (!languageID && query.search) {
-				setQuery({ ...query, search: null })
+				setQuery({ ...query, search: '' })
 			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console

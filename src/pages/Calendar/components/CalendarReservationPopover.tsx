@@ -330,7 +330,10 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 		return items?.length ? (
 			<Dropdown
 				key={'footer-checkout-dropdown'}
-				overlay={<Menu className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'} items={items} />}
+				menu={{
+					className: 'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2',
+					items
+				}}
 				placement='bottomRight'
 				trigger={['click']}
 			>
@@ -431,7 +434,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 	const showUnsavedChangesMessage = isEdit && !isReservationFormPriste
 	return (
 		<Popover
-			visible={isOpen}
+			open={isOpen}
 			destroyTooltipOnHide={{ keepParent: true }}
 			trigger={'click'}
 			placement={placement}

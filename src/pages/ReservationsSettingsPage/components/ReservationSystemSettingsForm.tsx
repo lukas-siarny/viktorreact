@@ -7,6 +7,7 @@ import { forEach, includes, isEmpty, map } from 'lodash'
 import { DataNode } from 'antd/lib/tree'
 
 // atoms
+import { useNavigate } from 'react-router-dom'
 import SwitchField from '../../../atoms/SwitchField'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SelectField from '../../../atoms/SelectField'
@@ -23,7 +24,6 @@ import { IReservationSystemSettingsForm, ISelectOptionItem } from '../../../type
 import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS } from '../../../utils/enums'
 import { optionRenderNotiPinkCheckbox, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
-import { history } from '../../../utils/history'
 
 // assets
 import { ReactComponent as ChevronDown } from '../../../assets/icons/chevron-down.svg'
@@ -59,6 +59,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const groupedServicesByCategory = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 	const groupedServicesByCategoryLoading = useSelector((state: RootState) => state.service.services.isLoading)
 	const formValues: Partial<IReservationSystemSettingsForm> = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
+	const navigate = useNavigate()
 
 	const disabled = !formValues?.enabledReservations
 	const defaultExpandedKeys: any = []
@@ -221,7 +222,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						type={'primary'}
 						htmlType={'button'}
 						className={'noti-btn'}
-						onClick={() => history.push(`${parentPath}${t('paths:industries-and-services')}`)}
+						onClick={() => navigate(`${parentPath}${t('paths:industries-and-services')}`)}
 						disabled={disabled}
 					>
 						{t('loc:Priradiť služby')}

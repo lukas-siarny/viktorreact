@@ -11,6 +11,7 @@ import { Doughnut, Line } from 'react-chartjs-2'
 import annotationPlugin from 'chartjs-plugin-annotation'
 import colors from 'tailwindcss/colors'
 import cx from 'classnames'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import SalonDashboard from './SalonDashboard'
@@ -30,7 +31,6 @@ import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron
 
 // utils
 import { FILTER_PATHS, SALON_FILTER_STATES, SALONS_TIME_STATS_TYPE } from '../../../utils/enums'
-import { history } from '../../../utils/history'
 import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData } from './dashboardUtils'
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin)
@@ -175,6 +175,7 @@ const NotinoDashboard: FC = () => {
 	const [monthStatsDate, setMonthStatsDate] = useState<Dayjs>(now)
 	const { notino, salonsAnnualStats, salonsMonthStats } = useSelector((state: RootState) => state.dashboard)
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		dispatch(getNotinoDashboard(selectedCountry))
@@ -203,14 +204,14 @@ const NotinoDashboard: FC = () => {
 
 			const alertData: AlertData[] = [
 				{
-					label: t('loc:Salóny čakajúce na schválenie'),
+					label: <>{t('loc:Salóny čakajúce na schválenie')}</>,
 					count: notino.data.pendingSalons,
-					onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PENDING_PUBLICATION])
+					onClick: () => navigate(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PENDING_PUBLICATION])
 				},
 				{
-					label: t('loc:BASIC salóny, systémom omylom navrhnuté na spárovanie'),
+					label: <>{t('loc:BASIC salóny, systémom omylom navrhnuté na spárovanie')}</>,
 					count: notino.data.suggestionIncidents,
-					onClick: () => history.push(FILTER_PATHS().SALONS.rejectedSuggestions)
+					onClick: () => navigate(FILTER_PATHS().SALONS.rejectedSuggestions)
 				},
 				{
 					label: (
@@ -220,7 +221,7 @@ const NotinoDashboard: FC = () => {
 						</span>
 					),
 					count: notino.data.lastUpdated?.oneDayAgo,
-					onClick: () => history.push(FILTER_PATHS(ranges[0].from, ranges[0].to).SALONS.publishedChanges) // 24h ago
+					onClick: () => navigate(FILTER_PATHS(ranges[0].from, ranges[0].to).SALONS.publishedChanges) // 24h ago
 				},
 				{
 					label: (
@@ -230,7 +231,7 @@ const NotinoDashboard: FC = () => {
 						</span>
 					),
 					count: notino.data.lastUpdated?.twoDaysAgo,
-					onClick: () => history.push(FILTER_PATHS(ranges[1].from, ranges[1].to).SALONS.publishedChanges) // 48h ago
+					onClick: () => navigate(FILTER_PATHS(ranges[1].from, ranges[1].to).SALONS.publishedChanges) // 48h ago
 				},
 				{
 					label: (
@@ -240,7 +241,7 @@ const NotinoDashboard: FC = () => {
 						</span>
 					),
 					count: notino.data.lastUpdated?.sevenDaysAgo,
-					onClick: () => history.push(FILTER_PATHS(ranges[2].from, ranges[2].to).SALONS.publishedChanges) // week ago
+					onClick: () => navigate(FILTER_PATHS(ranges[2].from, ranges[2].to).SALONS.publishedChanges) // week ago
 				}
 			]
 
@@ -264,13 +265,13 @@ const NotinoDashboard: FC = () => {
 					{
 						data: notino.data.basicSalons,
 						background: colors.blue[200],
-						onClick: () => history.push(FILTER_PATHS().SALONS.publishedBasics),
+						onClick: () => navigate(FILTER_PATHS().SALONS.publishedBasics),
 						label: t('loc:BASIC salóny')
 					},
 					{
 						data: notino.data.nonBasicSalons,
 						background: colors.blue[700],
-						onClick: () => history.push(FILTER_PATHS().SALONS.publishedPremiums),
+						onClick: () => navigate(FILTER_PATHS().SALONS.publishedPremiums),
 						label: t('loc:PREMIUM salóny')
 					}
 				],
@@ -278,25 +279,25 @@ const NotinoDashboard: FC = () => {
 					{
 						data: notino.data.declinedSalons,
 						background: colors.red[200],
-						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.DECLINED]),
+						onClick: () => navigate(FILTER_PATHS().SALONS[SALON_FILTER_STATES.DECLINED]),
 						label: t('loc:Zamietnuté')
 					},
 					{
 						data: notino.data.pendingSalons,
 						background: colors.yellow[400],
-						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PENDING_PUBLICATION]),
+						onClick: () => navigate(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PENDING_PUBLICATION]),
 						label: t('loc:Na schválenie')
 					},
 					{
 						data: notino.data.unpublishedSalons,
 						background: colors.neutral[200],
-						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.NOT_PUBLISHED]),
+						onClick: () => navigate(FILTER_PATHS().SALONS[SALON_FILTER_STATES.NOT_PUBLISHED]),
 						label: t('loc:Nepublikované')
 					},
 					{
 						data: notino.data.publishedSalons,
 						background: colors.green[200],
-						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PUBLISHED]),
+						onClick: () => navigate(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PUBLISHED]),
 						label: t('loc:Všetky publikované')
 					}
 				]
@@ -323,6 +324,7 @@ const NotinoDashboard: FC = () => {
 			allowClear={false}
 			format={dateFormat}
 			disabledDate={(date) => dayjs(date).year() < 2022}
+			getPopupContainer={(node) => node.parentElement || document.body}
 		/>
 	)
 
@@ -342,7 +344,7 @@ const NotinoDashboard: FC = () => {
 						<div className='flex add-button justify-center items-center mt-16'>
 							<div className='m-auto text-center'>
 								<h1 className='text-5xl font-bold'>{t('loc:Začnite vytvorením salónu')}</h1>
-								<Button onClick={() => history.push(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'} icon={<PlusIcon />}>
+								<Button onClick={() => navigate(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'} icon={<PlusIcon />}>
 									{t('loc:Pridať salón')}
 								</Button>
 							</div>

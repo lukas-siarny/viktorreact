@@ -40,7 +40,7 @@ type Props = {
 }
 
 const INIT_CONFIRM_MODAL_VALUES = {
-	visible: false,
+	open: false,
 	onOk: undefined,
 	onCancel: undefined,
 	content: null,
@@ -68,7 +68,7 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 
 		if (eventId) {
 			setConfirmModal({
-				visible: true,
+				open: true,
 				title: STRINGS(t).edit(t('loc:rezerváciu')),
 				onOk: () => handleSubmitReservation(values, eventId),
 				onCancel: () => {
@@ -101,7 +101,7 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 			}
 
 			setConfirmModal({
-				visible: true,
+				open: true,
 				title: STRINGS(t).edit(t('loc:udalosť')),
 				onOk: () => dispatch(submit(FORM.CONFIRM_BULK_FORM)),
 				onCancel: () => {
@@ -151,7 +151,7 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 		}
 
 		setConfirmModal({
-			visible: true,
+			open: true,
 			title: STRINGS(t).delete(t('loc:udalosť')),
 			onCancel: () => clearConfirmModal(),
 			...modalProps
@@ -198,7 +198,7 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 			}
 
 			setConfirmModal({
-				visible: true,
+				open: true,
 				onOk: () => handleUpdateReservationState(calendarEventID, state, reason, paymentMethod),
 				onCancel: () => clearConfirmModal(),
 				okText: t('loc:Áno'),

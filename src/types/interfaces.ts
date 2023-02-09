@@ -20,9 +20,9 @@ export interface IErrorMessage {
 }
 
 export interface IPaginationQuery {
-	limit?: number | null
-	page?: number | null
-	order?: string
+	limit?: number | null | string
+	page?: number | null | string
+	order?: string | null
 }
 
 export interface IResponsePagination {
@@ -350,13 +350,6 @@ export interface IConfirmUserForm extends ICreatePasswordForm {
 	surname: string
 }
 
-export interface IComputedMatch<Params> {
-	isExact: boolean
-	params: Params
-	path: string
-	url: string
-}
-
 export interface IBreadcrumbItem {
 	name: string
 	link?: string
@@ -465,9 +458,9 @@ export interface IUserAvatar {
 }
 
 export interface IQueryParams {
-	page?: number
+	page?: number | null | string
 	limit?: any | undefined
-	order?: string | undefined
+	order?: string | undefined | null
 	search?: string | undefined | null
 }
 
@@ -734,7 +727,6 @@ export interface ICalendarView {
 	disableRender?: boolean
 	view?: CALENDAR_VIEW
 	enabledSalonReservations?: boolean
-	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
 }
 
 export interface IEventCardProps {

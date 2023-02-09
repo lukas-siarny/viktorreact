@@ -36,12 +36,12 @@ const Filters = (props: Props) => {
 							<Row gutter={ROW_GUTTER_X_DEFAULT} justify={'end'} align={'middle'}>
 								{children && (
 									<Col>
-										<Badge count={activeFilters} style={{ top: '8px', right: '10px', background: '#DC0069' }}>
+										<Badge count={activeFilters} className={'mr-1'} style={{ top: '8px', right: '10px', background: '#DC0069' }}>
 											<Button
 												onClick={onClick}
 												htmlType='button'
 												type='link'
-												className={'mr-2 w-full h-full flex items-center'}
+												className={'noti-filter-button w-full h-full px-1 flex items-center'}
 												disabled={disableFilter}
 												icon={<FilterIcon className={'text-gray-600 hover:text-gray-900'} />}
 											/>

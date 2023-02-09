@@ -88,7 +88,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		onAddEvent,
 		virtualEvent,
 		enabledSalonReservations,
-		setEventManagement,
 		onEventChangeStart,
 		onReservationClick,
 		onEventChangeStop
@@ -105,8 +104,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	 * Spracuje input z calendara click/select a vytvori z neho init data, ktore vyuzije form v SiderEventManager
 	 */
 	const handleNewEvent = (event: DateSelectArg) => {
-		setEventManagement(undefined)
-
 		if (event.resource) {
 			// eslint-disable-next-line no-underscore-dangle
 			const { employee } = event.resource._resource.extendedProps
@@ -160,7 +157,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				stickyFooterScrollbar
 				selectable={enabledSalonReservations}
 				// data sources
-				events={events}
+				eventSources={[events]}
 				resources={resources}
 				// render hooks
 				resourceLabelContent={resourceLabelContent}

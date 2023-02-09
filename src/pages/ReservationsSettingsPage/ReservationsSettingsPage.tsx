@@ -6,6 +6,7 @@ import { Col, Row, Spin } from 'antd'
 import { forEach, includes, isEmpty, reduce } from 'lodash'
 
 // components
+import { useNavigate } from 'react-router-dom'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ReservationSystemSettingsForm from './components/ReservationSystemSettingsForm'
 
@@ -13,7 +14,6 @@ import ReservationSystemSettingsForm from './components/ReservationSystemSetting
 import { FORM, NOTIFICATION_TYPES, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
 import { withPermissions, checkPermissions, isAdmin } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
-import { history } from '../../utils/history'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -125,7 +125,9 @@ const initDisabledNotifications = (notifications: DisabledNotificationsArray): I
 const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { salonID, parentPath } = props
+	const navigate = useNavigate()
+	const { salonID } = props
+	const { parentPath } = props
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const groupedSettings = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 	const submitting = useSelector(isSubmitting(FORM.RESEVATION_SYSTEM_SETTINGS))
@@ -146,7 +148,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 		// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
 		const canVisitThisPage = isAdmin(authUserPermissions) || (checkPermissions(authUserPermissions, [PERMISSION.PARTNER]) && salonRes?.data?.settings?.enabledReservations)
 		if (!canVisitThisPage) {
-			history.push('/404')
+			navigate('/404')
 		}
 
 		const servicesRes = await dispatch(getServices({ salonID }))

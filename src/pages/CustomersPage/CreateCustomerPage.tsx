@@ -4,6 +4,7 @@ import { Button, Row, Spin } from 'antd'
 import { initialize, isPristine, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -17,7 +18,6 @@ import { Paths } from '../../types/api'
 import { withPermissions } from '../../utils/Permissions'
 import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION, STRINGS } from '../../utils/enums'
 import { postReq } from '../../utils/request'
-import { history } from '../../utils/history'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -32,6 +32,7 @@ const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PER
 
 const CreateCustomerPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const { salonID, parentPath } = props
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
@@ -89,7 +90,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 				profileImageID: (formData?.avatar?.[0]?.id ?? formData?.avatar?.[0]?.uid) || null
 			})
 
-			history.push(backUrl)
+			navigate(backUrl as string)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

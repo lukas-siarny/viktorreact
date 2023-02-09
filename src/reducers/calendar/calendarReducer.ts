@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
-import { ICalendarActions, ICalendarEventDetailPayload, ISalonReservationsPayload } from './calendarActions'
-import { ICalendarEventsPayload, ILoadingAndFailure } from '../../types/interfaces'
+import { ICalendarActions, ISalonReservationsPayload } from './calendarActions'
+import { ICalendarEventsPayload, ILoadingAndFailure, ICalendarEventDetailPayload } from '../../types/interfaces'
 import { EVENTS, EVENT_DETAIL, RESERVATIONS, SET_IS_REFRESHING_EVENTS } from './calendarTypes'
 import { CALENDAR_EVENTS_KEYS } from '../../utils/enums'
 
@@ -51,8 +51,9 @@ export default (state = initState, action: ICalendarActions) => {
 			return {
 				...state,
 				[action.enumType]: {
-					...initState[action.enumType],
-					isFailure: true
+					...state[action.enumType],
+					isFailure: true,
+					isLoading: false
 				}
 			}
 		case EVENTS.EVENTS_LOAD_DONE:

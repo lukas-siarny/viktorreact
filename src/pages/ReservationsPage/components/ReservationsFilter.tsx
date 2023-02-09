@@ -59,7 +59,8 @@ const ReservationsFilter = (props: Props) => {
 		() =>
 			map(RESERVATION_PAYMENT_METHODS, (item) => ({
 				key: item,
-				label: translateReservationPaymentMethod(item as RESERVATION_PAYMENT_METHOD)
+				label: translateReservationPaymentMethod(item as RESERVATION_PAYMENT_METHOD).text,
+				icon: translateReservationPaymentMethod(item as RESERVATION_PAYMENT_METHOD).icon
 			})),
 		[]
 	)
@@ -76,7 +77,8 @@ const ReservationsFilter = (props: Props) => {
 		() =>
 			map(RESERVATION_STATES, (item) => ({
 				key: item,
-				label: translateReservationState(item as RESERVATION_STATE)
+				label: translateReservationState(item as RESERVATION_STATE).text,
+				icon: translateReservationState(item as RESERVATION_STATE).icon
 			})),
 		[]
 	)
@@ -85,7 +87,7 @@ const ReservationsFilter = (props: Props) => {
 	const [t] = useTranslation()
 	const reservations = useSelector((state: RootState) => state.calendar.paginatedReservations)
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.RESERVATIONS_FILTER)(state))
-	const servicesOptions = useSelector((state: RootState) => state.service.services.options)
+	const categoriesOptions = useSelector((state: RootState) => state.service.services.categoriesOptions)
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
@@ -107,13 +109,13 @@ const ReservationsFilter = (props: Props) => {
 							component={SelectField}
 							name={'categoryIDs'}
 							mode={'multiple'}
-							placeholder={t('loc:Služba')}
+							placeholder={t('loc:Kategórie')}
 							allowClear
 							showArrow
 							size={'middle'}
 							showSearch={false}
 							onDidMountSearch
-							options={servicesOptions}
+							options={categoriesOptions}
 						/>
 					</Col>
 					<Col span={6}>

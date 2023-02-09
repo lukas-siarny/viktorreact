@@ -89,9 +89,9 @@ const ServicesListField: FC<Props> = (props) => {
 		return (
 			<div className={'flex gap-1 items-center ml-2'}>
 				{!field?.useCategoryParameter && renderPriceAndDurationInfo(salonPriceAndDuration, employeePriceAndDuration, hasOverridenData, currencySymbol)}
-				<div onClick={(e) => e.stopPropagation()}>
+				<div onClick={(e) => e.stopPropagation()} className={'flex items-center'}>
 					<Tooltip title={disabledEditButton ? disabledEditButtonTooltip : null} destroyTooltipOnHide>
-						<span className={cx('w-full md:w-auto', { 'cursor-not-allowed': disabledEditButton })}>
+						<span className={cx('w-full flex items-center md:w-auto', { 'cursor-not-allowed': disabledEditButton })}>
 							<Button
 								htmlType={'button'}
 								size={'small'}

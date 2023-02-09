@@ -37,7 +37,8 @@ import { SubmissionError, submit } from 'redux-form'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
-import { ArgsProps } from 'antd/lib/notification'
+import { ArgsProps } from 'antd/es/notification/interface'
+
 import cx from 'classnames'
 import showNotifications from './tsxHelpers'
 import {
@@ -375,6 +376,20 @@ export const normalizeQueryParams = (queryParams: any) =>
 		return queryParam
 	})
 
+// NOTE: Tuto normalize funkciu treba volat vsade tam kde sa nastavuju query params cez setSearchParams a je potencialne mozne ze sa resetuju tieto parametre na null lebo '' alebo undefined
+// Taketo params nemozu prejst do URL lebo react router ich nevie sam zmazat ako to vedel use query params
+// Staci volat len pri filtrovani v onSubmit metodach pri tabulkach a paginacii neni potrebne toto noramalizovanie
+export const normalizeSearchQueryParams = (queryParams: any) => {
+	return forEach(queryParams, (queryParam, key) => {
+		// 'null' je pre pripad ze sa v queryPrams nastavi default value paramName: '' a tento param sa potom vyresetuje tak sa nastavi nie na null ale na 'null'
+		if (queryParam === 'null' || queryParam === '' || queryParam === undefined || queryParam === null || queryParam === []) {
+			// Takyto non valid query param treba zmazat nestaci ho nastavit na undefined!!!
+			// eslint-disable-next-line no-param-reassign
+			delete queryParams[key]
+		}
+		return queryParams
+	})
+}
 // Number validators
 export const validationNumber = (value: string) => !isNaturalNonZero(value) && i18next.t('loc:Nie je validná číselná hodnota')
 export const validationDecimalNumber = (value: number) => isNotNumeric(value) && i18next.t('loc:Nie je validná číselná hodnota')
@@ -605,11 +620,9 @@ export const transformNumberFieldValue = (rawValue: number | string | undefined 
 		} else if (isNumber(min) && isNumber(max) && value >= min && value <= max) {
 			result = value
 		}
-	} else if (Number.isNaN(value)) {
-		result = NaN
 	}
 
-	if (isFinite(result) && isNumber(precision)) {
+	if (!Number.isNaN(value) && isFinite(result) && isNumber(precision)) {
 		result = round(result as number, precision)
 	}
 
@@ -844,6 +857,20 @@ export const flattenTree = (array: any[], callback?: (item: any, level: number) 
 	return output
 }
 
+export const findNodeInTree = (node: any, value: any, valueKey = 'id', nestingKey = 'children') => {
+	let result = null
+	if (node) {
+		if (node[valueKey] === value) {
+			return node
+		}
+		if (node[nestingKey]) {
+			// eslint-disable-next-line no-return-assign
+			node[nestingKey].some((childrenNode: any) => (result = findNodeInTree(childrenNode, value)))
+		}
+	}
+	return result
+}
+
 export const isEnumValue = <T extends { [k: string]: string }>(checkValue: any, enumObject: T): checkValue is T[keyof T] =>
 	typeof checkValue === 'string' && Object.values(enumObject).includes(checkValue)
 
@@ -886,11 +913,12 @@ export const sortData = (a?: any, b?: any) => {
 	return 0
 }
 
-export const optionRenderNotiPinkCheckbox = (text: any, checked: any) => {
+export const optionRenderNotiPinkCheckbox = (text: any, checked: boolean, disabled: boolean) => {
 	return (
 		<div
 			className={cx('custom-rounded-checkbox', {
-				checked
+				checked,
+				disabled
 			})}
 		>
 			{text}
@@ -1101,6 +1129,20 @@ export const getSalonFilterRanges = (values?: IDateTimeFilterOption[]): { [key: 
 			[value.name]: [now.subtract(value.value, value.unit), now]
 		}
 	}, {})
+}
+
+export const getRangesForDatePicker = (values?: IDateTimeFilterOption[]): { [key: string]: Dayjs[] } => {
+	const options = values ?? Object.values(DEFAULT_DATE_TIME_OPTIONS())
+	const now = dayjs()
+	return options.reduce((ranges, value) => {
+		return [
+			...ranges,
+			{
+				label: value.name,
+				value: [now.subtract(value.value, value.unit), now]
+			}
+		]
+	}, [])
 }
 
 export const getFirstDayOfWeek = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).startOf('week')

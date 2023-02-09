@@ -62,11 +62,12 @@
 				background: $textColor-gray-50
 	table
 		border-spacing: 0 4px
+		border-collapse: initial
 		// Header tabulky
 		thead
 			tr
 				th
-					font-weight: 700
+					font-weight: 700 !important
 					background: $backgroundColor-white !important
 					border-bottom: 1px solid $borderColor-gray-200
 					&:before
@@ -118,6 +119,9 @@
 		// Telo tabulky
 		tbody
 			// riadok
+			> tr
+				> td
+					border-top: none !important
 			// selectnuty
 			tr.ant-table-row-selected
 				color: $textColor-gray-900
@@ -168,7 +172,7 @@
 						.noti-input-number
 							background-color: $backgroundColor-gray-200
 					td, td.ant-table-column-sort
-						background: $backgroundColor-gray-100
+						background: $backgroundColor-gray-100 !important
 						button.noti-table-btn
 							visibility: visible
 							svg
@@ -203,6 +207,8 @@
 				> td
 					background-color: transparent
 					border: none
+					&:hover
+						background-color: transparent
 			.ant-table-expanded-row-fixed
 				padding: 16px 0 !important
 
@@ -210,6 +216,9 @@
 		background: $backgroundColor-white
 		margin-top: 16px
 		padding: 0
+
+.ant-table-wrapper .ant-table:not(.ant-table-bordered) .ant-table-tbody >tr:last-child>td
+	border: none
 
 .table-footer-custom-pagination
 	position: sticky
@@ -223,3 +232,11 @@
 	&:not(:empty)
 		padding: 6px 24px
 
+
+.ant-table-wrapper
+	.ant-table-thead
+		>tr>th,
+.ant-table-wrapper
+	.ant-table-thead
+		>tr>td
+			background: white

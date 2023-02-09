@@ -64,7 +64,7 @@ const IndustriesForm: FC<Props> = (props) => {
 	})
 
 	return (
-		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form w-full'} onSubmitCapture={handleSubmit}>
 			<h3 className={'mb-0 mt-0 flex items-center space-'}>
 				<CategoryIcon className={'text-notino-black mr-2'} />
 				{t('loc:Odvetvia a služby')}

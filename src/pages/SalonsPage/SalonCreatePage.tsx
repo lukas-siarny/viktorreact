@@ -6,6 +6,7 @@ import { initialize, submit } from 'redux-form'
 import { isEmpty } from 'lodash'
 import { compose } from 'redux'
 import cx from 'classnames'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -28,7 +29,6 @@ import { CategoriesPatch, IBreadcrumbs, ISalonForm, SalonPageProps } from '../..
 
 // utils
 import { patchReq, postReq } from '../../utils/request'
-import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import searchWrapper from '../../utils/filters'
 
@@ -41,6 +41,7 @@ const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOT
 const SalonCreatePage: FC<SalonPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
 	const { isAdmin, backUrl, phonePrefixCountryCode, authUser, phonePrefixes } = props
 
@@ -94,7 +95,7 @@ const SalonCreatePage: FC<SalonPageProps> = (props) => {
 				// load new salon for current user
 				await dispatch(getCurrentUser())
 				// select new salon
-				history.push(t('paths:salons/{{salonID}}', { salonID: result.data.salon.id }))
+				navigate(t('paths:salons/{{salonID}}', { salonID: result.data.salon.id }))
 			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console

@@ -5,6 +5,7 @@ import { Button, Row, Spin } from 'antd'
 import { initialize, isPristine, isSubmitting, submit } from 'redux-form'
 import { get } from 'lodash'
 import cx from 'classnames'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 // components
 import UserAccountForm from './components/UserAccountForm'
@@ -21,11 +22,10 @@ import { getSystemRoles } from '../../reducers/roles/rolesActions'
 import EditUserRoleForm from './components/EditUserRoleForm'
 
 // types
-import { IBreadcrumbs, IComputedMatch, IEditUserRoleForm, IUserAccountForm } from '../../types/interfaces'
+import { IBreadcrumbs, IEditUserRoleForm, IUserAccountForm } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
-import { history } from '../../utils/history'
 import Permissions from '../../utils/Permissions'
 import { formFieldID } from '../../utils/helper'
 
@@ -35,21 +35,22 @@ import useBackUrl from '../../hooks/useBackUrl'
 // assets
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
 
-type Props = {
-	computedMatch: IComputedMatch<{ userID: string }>
-}
+type Props = {}
 
-const UserPage: FC<Props> = (props) => {
+const UserPage: FC<Props> = () => {
 	const [t] = useTranslation()
 	const authUser = useSelector((state: RootState) => state.user.authUser)
-	const { computedMatch } = props
-	const userID = computedMatch.params.userID || get(authUser, 'data.id')
+	const { userID } = useParams<{ userID?: string }>()
+	const location = useLocation()
+	const navigate = useNavigate()
+	const userIDWrap = userID || get(authUser, 'data.id')
 	const dispatch = useDispatch()
 	const submittingAccountForm = useSelector(isSubmitting(FORM.USER_ACCOUNT))
 	const submittingEditRoleForm = useSelector(isSubmitting(FORM.EDIT_USER_ROLE))
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser)) as any
-	const isMyAccountPath = computedMatch.path === t('paths:my-account')
+
+	const isMyAccountPath = location.pathname === t('paths:my-account')
 	let submitPermissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_EDIT]
 
 	const [backUrl] = useBackUrl(t('paths:users'))
@@ -60,15 +61,13 @@ const UserPage: FC<Props> = (props) => {
 
 	const isFormPristine = useSelector(isPristine(FORM.USER_ACCOUNT))
 
-	const isMyAccountPage: boolean = authUser.data?.id === get(userAccountDetail, 'data.user.id')
-
 	const isLoading = userAccountDetail.isLoading || isRemoving
 
 	useEffect(() => {
 		const fetchUserData = async () => {
-			const { data } = await dispatch(getUserAccountDetails(userID))
+			const { data } = await dispatch(getUserAccountDetails(userIDWrap))
 			if (!data?.user?.id) {
-				history.push('/404')
+				navigate('/404')
 			}
 
 			dispatch(
@@ -98,7 +97,7 @@ const UserPage: FC<Props> = (props) => {
 				assignedCountryCode: data?.assignedCountryCode
 			}
 
-			await patchReq('/api/b2b/admin/users/{userID}', { userID }, userData)
+			await patchReq('/api/b2b/admin/users/{userID}', { userID: userIDWrap }, userData)
 			if (!userID || authUser.data?.id === userID) dispatch(getCurrentUser())
 			dispatch(initialize(FORM.USER_ACCOUNT, data))
 		} catch (error: any) {
@@ -129,17 +128,18 @@ const UserPage: FC<Props> = (props) => {
 			return
 		}
 		try {
-			let id = userID
-			if (isMyAccountPage && authUser.data) {
+			let id = userIDWrap
+			if (isMyAccountPath && authUser.data) {
 				id = authUser.data.id
 			}
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/users/{userID}', { userID: id }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			if (isMyAccountPage) {
+			if (isMyAccountPath) {
 				dispatch(logOutUser())
-				history.push(t('paths:login'))
+				// bez tohto navigate ostava user v aplikacii a moze sa snazit urobit nejake akcie, ktore generuju 401 error (az potom by bol redirect na Login)
+				navigate(t('paths:login'))
 			} else {
-				history.push(t('paths:users'))
+				navigate(t('paths:users'))
 			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -156,12 +156,12 @@ const UserPage: FC<Props> = (props) => {
 		try {
 			await patchReq(
 				'/api/b2b/admin/users/{userID}/role',
-				{ userID },
+				{ userID: userIDWrap },
 				{
 					roleID: data?.roleID
 				}
 			)
-			await dispatch(getUserAccountDetails(userID))
+			await dispatch(getUserAccountDetails(userIDWrap))
 			dispatch(initialize(FORM.EDIT_USER_ROLE, data))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -197,10 +197,10 @@ const UserPage: FC<Props> = (props) => {
 								className={'w-full md:w-auto md:min-w-50 xl:min-w-60'}
 								id={formFieldID(FORM.USER_ACCOUNT, DELETE_BUTTON_ID)}
 								onConfirm={deleteUser}
-								entityName={isMyAccountPage ? t('loc:účet') : t('loc:používateľa')}
+								entityName={isMyAccountPath ? t('loc:účet') : t('loc:používateľa')}
 								type={'default'}
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-								ignorePermissions={isMyAccountPage}
+								ignorePermissions={isMyAccountPath}
 							/>
 							<Permissions
 								allowed={submitPermissions}

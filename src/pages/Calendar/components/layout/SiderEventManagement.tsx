@@ -1,12 +1,12 @@
-import React, { FC, useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useImperativeHandle } from 'react'
 import Sider from 'antd/lib/layout/Sider'
 import { compact, map } from 'lodash'
 import cx from 'classnames'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { initialize } from 'redux-form'
+import { change, initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { StringParam, useQueryParams } from 'use-query-params'
+import dayjs from 'dayjs'
 import { CalendarApi } from '@fullcalendar/core'
 
 // types
@@ -25,13 +25,15 @@ import {
 	EVENT_NAMES,
 	EVERY_REPEAT,
 	FORM,
-	STRINGS
+	STRINGS,
+	DEFAULT_DATE_INIT_FORMAT,
+	DEFAULT_TIME_FORMAT
 } from '../../../../utils/enums'
 import Permissions from '../../../../utils/Permissions'
 
 // redux
 import { getCalendarEventDetail } from '../../../../reducers/calendar/calendarActions'
-import { setCalendarApi, setCalendarDateHandler } from '../../../../reducers/virtualEvent/virtualEventActions'
+import { clearEvent, setCalendarApi, setCalendarDateHandler } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 // components
 import ReservationForm from '../forms/ReservationForm'
@@ -42,9 +44,6 @@ import TabsComponent from '../../../../components/TabsComponent'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
-
-// hooks
-import useKeyUp from '../../../../hooks/useKeyUp'
 
 type Props = {
 	salonID: string
@@ -59,10 +58,15 @@ type Props = {
 	calendarApi?: CalendarApi
 	changeCalendarDate: (newDate: string) => void
 	phonePrefix?: string
-	initCreateEventForm: (eventType: CALENDAR_EVENT_TYPE, newEventData?: INewCalendarEvent, forceDestroy?: boolean) => void
+	query: any
+	setQuery: any
 }
 
-const SiderEventManagement: FC<Props> = (props) => {
+export type SiderEventManagementRefs = {
+	initCreateEventForm: (eventType: CALENDAR_EVENT_TYPE, newEventData?: INewCalendarEvent) => void
+}
+
+const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((props, ref) => {
 	const {
 		onCloseSider,
 		handleSubmitReservation,
@@ -75,18 +79,14 @@ const SiderEventManagement: FC<Props> = (props) => {
 		calendarApi,
 		changeCalendarDate,
 		phonePrefix,
-		initCreateEventForm
+		query,
+		setQuery
 	} = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const [query] = useQueryParams({
-		sidebarView: StringParam,
-		eventId: StringParam,
-		date: StringParam
-	})
-
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
+	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
 
 	useEffect(() => {
 		// nastavuje referenciu na CalendarApi, musi sa update-ovat, ked sa meni View, aby bola aktualna vo virtalEventActions
@@ -99,12 +99,36 @@ const SiderEventManagement: FC<Props> = (props) => {
 		}
 	}, [calendarApi, changeCalendarDate])
 
+	const initCreateEventForm = (eventType: CALENDAR_EVENT_TYPE, newEventData?: INewCalendarEvent) => {
+		let timeTo: string | undefined
+		if (newEventData?.timeTo) {
+			// use 23:59 instead of 00:00 as end of day
+			timeTo = newEventData.timeTo === '00:00' ? '23:59' : newEventData.timeTo
+		}
+
+		// Initne sa event / reservation formular
+		const initData: Partial<ICalendarEventForm | ICalendarReservationForm> = {
+			date: newEventData?.date || query.date || dayjs().format(DEFAULT_DATE_INIT_FORMAT),
+			timeFrom: newEventData?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT),
+			timeTo,
+			employee: newEventData?.employee,
+			eventType
+		}
+
+		if (eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
+			dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
+		} else {
+			// CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT || CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK || CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
+			dispatch(initialize(FORM.CALENDAR_EVENT_FORM, initData))
+		}
+	}
+
 	const initUpdateEventForm = async () => {
 		try {
 			const { data } = await dispatch(getCalendarEventDetail(salonID, query.eventId as string))
 
-			if (!data) {
-				// NOTE: ak by bolo zle ID (zmazane alebo nenajdene) tak zatvorit drawer + zmaz eventId
+			// NOTE: event type v query parametroch musi sediet s event typom zobrazeneho detailu, inak sa zobrazi zly formular
+			if (!data || data.eventType !== query.sidebarView) {
 				onCloseSider()
 				return
 			}
@@ -134,7 +158,10 @@ const SiderEventManagement: FC<Props> = (props) => {
 						firstName: data.employee.firstName,
 						lastName: data.employee.lastName,
 						email: data.employee.email
-					})
+					}),
+					{
+						employeeData: data?.employee
+					}
 				),
 				...repeatOptions
 			}
@@ -146,11 +173,15 @@ const SiderEventManagement: FC<Props> = (props) => {
 					dispatch(initialize(FORM.CALENDAR_EVENT_FORM, initData))
 					break
 				case CALENDAR_EVENT_TYPE.RESERVATION:
+					/**
+					 * okrem dát, s ktorými sa manipuluje priamo vo formulári, je potrebné vyinicializovať aj všetky potrebné data pre správne zobrazenie virtuálneho eventu v kalendári
+					 * zatiaľ sú to reservationData a service icon
+					 */
 					dispatch(
 						initialize(FORM.CALENDAR_RESERVATION_FORM, {
 							...initData,
 							service: initializeLabelInValueSelect(data?.service?.id as string, data?.service?.name as string, {
-								icon: data?.service?.icon
+								serviceData: data?.service
 							}),
 							customer: initializeLabelInValueSelect(
 								data?.customer?.id as string,
@@ -159,8 +190,12 @@ const SiderEventManagement: FC<Props> = (props) => {
 									firstName: data?.customer?.firstName,
 									lastName: data?.customer?.lastName,
 									email: data?.customer?.email
-								})
+								}),
+								{
+									customerData: data?.customer
+								}
 							),
+							noteFromB2CCustomer: data?.noteFromB2CCustomer,
 							reservationData: data?.reservationData
 						})
 					)
@@ -175,32 +210,28 @@ const SiderEventManagement: FC<Props> = (props) => {
 	}
 
 	useEffect(() => {
-		// init pre UPDATE form ak eventId existuje
-		if (query.eventId) {
+		// ak je otvoreny sidebar a nemam eventID, tak initneme formular pre vytvorenie
+		if (query.sidebarView && !query.eventId) {
+			// Po refreshi tabu je potrebne premazat virtualny event
+			if (virtualEvent) {
+				dispatch(clearEvent())
+			}
+			initCreateEventForm(query.sidebarView as CALENDAR_EVENT_TYPE)
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
+	useEffect(() => {
+		// ak je otvoreny sidebar a mame eventID, tak znamena, ze pozerame detail existujuceho eventu
+		if (query.sidebarView && query.eventId) {
 			initUpdateEventForm()
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query.eventId, query.sidebarView])
 
-	useEffect(() => {
-		// zmena sideBar view
-		if (sidebarView !== undefined) {
-			// initnutie defaultu sidebaru pri nacitani bude COLLAPSED a ak bude existovat typ formu tak sa initne dany FORM (pri skopirovani URL na druhy tab)
-			initCreateEventForm(sidebarView as CALENDAR_EVENT_TYPE)
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
-
-	useKeyUp(
-		'Escape',
-		query.sidebarView
-			? () => {
-					onCloseSider()
-					const highlight = document.getElementsByClassName('fc-highlight')[0]
-					if (highlight) highlight.remove()
-			  }
-			: undefined
-	)
+	useImperativeHandle(ref, () => ({
+		initCreateEventForm
+	}))
 
 	const searchEmployes = useCallback(
 		async (search: string, page: number) => {
@@ -235,14 +266,23 @@ const SiderEventManagement: FC<Props> = (props) => {
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-				return <EventForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
+				return <EventForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE} />
 			case CALENDAR_EVENT_TYPE.RESERVATION:
 			default:
-				return <ReservationForm salonID={salonID} eventId={eventId} phonePrefix={phonePrefix} searchEmployes={searchEmployes} onSubmit={handleSubmitReservation} />
+				return (
+					<ReservationForm
+						salonID={salonID}
+						eventId={eventId}
+						phonePrefix={phonePrefix}
+						searchEmployes={searchEmployes}
+						onSubmit={handleSubmitReservation}
+						sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE}
+					/>
+				)
 		}
 	}
 
-	const showTabs = !(eventId || eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION)
+	const showTabs = !(eventId || eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) && sidebarView
 
 	return (
 		<Sider className={cx('nc-sider-event-management', { 'without-tabs': !showTabs })} collapsed={!sidebarView} width={240} collapsedWidth={0}>
@@ -285,24 +325,24 @@ const SiderEventManagement: FC<Props> = (props) => {
 			</div>
 			{showTabs && (
 				<TabsComponent
-					className={'nc-sider-event-management-tabs'}
+					className={'nc-sider-event-management-tabs tabs-small'}
 					activeKey={sidebarView}
-					onChange={(type: string) => initCreateEventForm(type as CALENDAR_EVENT_TYPE)}
-					tabsContent={[
+					onChange={(type: string) => {
+						setQuery({ ...query, sidebarView: type })
+						dispatch(change(FORM.CALENDAR_EVENT_FORM, 'eventType', type))
+					}}
+					items={[
 						{
-							tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
-							tab: <>{t('loc:Shift')}</>,
-							tabPaneContent: null
+							key: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
+							label: <>{t('loc:Shift')}</>
 						},
 						{
-							tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
-							tab: <>{t('loc:Voľno')}</>,
-							tabPaneContent: null
+							key: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
+							label: <>{t('loc:Voľno')}</>
 						},
 						{
-							tabKey: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
-							tab: <>{t('loc:Prestávka')}</>,
-							tabPaneContent: null
+							key: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
+							label: <>{t('loc:Prestávka')}</>
 						}
 					]}
 					destroyInactiveTabPane
@@ -311,6 +351,6 @@ const SiderEventManagement: FC<Props> = (props) => {
 			{getCalendarForm()}
 		</Sider>
 	)
-}
+})
 
 export default SiderEventManagement

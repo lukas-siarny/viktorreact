@@ -33,7 +33,7 @@ const InviteModal = (props: Props) => {
 	)
 
 	return (
-		<Modal centered visible={visible} onCancel={onCancel} footer={null} closable={false} className={'p-4'} width={450}>
+		<Modal centered open={visible} onCancel={onCancel} footer={null} closable={false} className={'p-4'} width={450}>
 			<div className={'noti-modal-content noti-invite-modal-content'} id={'noti-approval-modal-content'}>
 				<header
 					style={

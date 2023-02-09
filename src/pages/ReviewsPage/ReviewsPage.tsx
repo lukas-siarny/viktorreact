@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BooleanParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Row, Spin, Rate, Progress, Tag, Button, Popconfirm, Tooltip, Menu, Dropdown } from 'antd'
+import { Col, Row, Spin, Rate, Progress, Button, Menu, Dropdown } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
@@ -33,6 +32,9 @@ import { IBreadcrumbs, Columns } from '../../types/interfaces'
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as EyeIcon } from '../../assets/icons/eye-icon.svg'
 
+// hooks
+import useQueryParams, { BooleanParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
+
 enum TAB_KEYS {
 	PUBLISHED = 'published',
 	DELETED = 'deleted'
@@ -43,15 +45,15 @@ const ReviewsPage = () => {
 	const dispatch = useDispatch()
 
 	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		limit: NumberParam,
-		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'toxicityScore:DESC'),
-		deleted: withDefault(BooleanParam, false),
-		toxicityScoreFrom: NumberParam,
-		toxicityScoreTo: NumberParam,
-		salonCountryCode: StringParam,
-		verificationStatus: StringParam
+		search: StringParam(),
+		limit: NumberParam(),
+		page: NumberParam(1),
+		order: StringParam('toxicityScore:DESC'),
+		deleted: BooleanParam(false),
+		toxicityScoreFrom: NumberParam(),
+		toxicityScoreTo: NumberParam(),
+		salonCountryCode: StringParam(),
+		verificationStatus: StringParam()
 	})
 
 	const reviews = useSelector((state: RootState) => state.reviews.reviews)
@@ -239,14 +241,14 @@ const ReviewsPage = () => {
 				key: 'actions',
 				ellipsis: true,
 				fixed: 'right',
-				width: 180,
+				width: 190,
 				render: (_value, record) => {
 					const disabledShowReview = record?.verificationStatus === REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C
 					const disabledHideReview = record?.verificationStatus === REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C
 					const showReviewText = record?.verificationStatus === REVIEW_VERIFICATION_STATUS.NOT_VERIFIED ? t('loc:Akceptovať text') : t('loc:Publikovať text')
 
 					return (
-						<div className={'flex justify-end items-center gap-2'}>
+						<div className={'flex justify-center items-center gap-2 p-1'}>
 							<Permissions
 								allowed={[...ADMIN_PERMISSIONS, PERMISSION.REVIEW_VERIFY]}
 								render={(hasPermission, { openForbiddenModal }) => (
@@ -254,7 +256,7 @@ const ReviewsPage = () => {
 										key={'footer-checkout-dropdown'}
 										overlay={
 											<Menu
-												className={'shadow-md max-w-xs min-w-48 mt-1 p-2 flex flex-col gap-2'}
+												className={'shadow-md max-w-xs min-w-52 mt-1 p-2 flex flex-col gap-2'}
 												items={[
 													{
 														key: 'visible_in_b2c',
@@ -336,14 +338,14 @@ const ReviewsPage = () => {
 
 	const tabContent = [
 		{
+			key: TAB_KEYS.PUBLISHED,
 			tabKey: TAB_KEYS.PUBLISHED,
-			tab: <>{t('loc:Publikované')}</>,
-			tabPaneContent: null
+			label: t('loc:Publikované')
 		},
 		{
+			key: TAB_KEYS.PUBLISHED,
 			tabKey: TAB_KEYS.DELETED,
-			tab: <>{t('loc:Vymazané')}</>,
-			tabPaneContent: null
+			label: t('loc:Vymazané')
 		}
 	]
 
@@ -352,7 +354,7 @@ const ReviewsPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<TabsComponent className={'box-tab'} activeKey={tabKey} onChange={onTabChange} tabsContent={tabContent} destroyInactiveTabPane />
+			<TabsComponent className={'box-tab'} activeKey={tabKey} onChange={onTabChange} items={tabContent} destroyInactiveTabPane />
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>

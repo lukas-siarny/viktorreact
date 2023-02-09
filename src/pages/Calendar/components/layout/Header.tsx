@@ -1,24 +1,14 @@
 import React, { FC, useCallback, useRef, useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
-import { Button, Dropdown } from 'antd'
-import Tooltip from 'antd/es/tooltip'
+import { Button } from 'antd'
 import { Header } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
 import { debounce } from 'lodash'
 import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
 
 // enums
-import {
-	CALENDAR_DATE_FORMAT,
-	CALENDAR_EVENTS_VIEW_TYPE,
-	CALENDAR_SET_NEW_DATE,
-	CALENDAR_VIEW,
-	STRINGS,
-	CALENDAR_DEBOUNCE_DELAY,
-	DEFAULT_DATE_INIT_FORMAT,
-	DEFAULT_TIME_FORMAT
-} from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, STRINGS, CALENDAR_DEBOUNCE_DELAY } from '../../../../utils/enums'
 
 // assets
 import { ReactComponent as ChevronDownGrayDark } from '../../../../assets/icons/chevron-down-grayDark-12.svg'
@@ -29,13 +19,15 @@ import { ReactComponent as CreateIcon } from '../../../../assets/icons/plus-icon
 // components
 import DateField from '../../../../atoms/DateField'
 import SelectField from '../../../../atoms/SelectField'
+import TabsComponent from '../../../../components/TabsComponent'
 
 // hooks
 import useOnClickOutside from '../../../../hooks/useClickOutside'
-import useMedia from '../../../../hooks/useMedia'
 
 // utils
 import { getSelectedDateForCalendar } from '../../calendarHelpers'
+
+// types
 import { INewCalendarEvent } from '../../../../types/interfaces'
 
 const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
@@ -60,26 +52,6 @@ const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 		default:
 			return dayjs(date).format(CALENDAR_DATE_FORMAT.HEADER_DAY)
 	}
-}
-
-const SwitchViewButton: FC<{ label: string; isSmallerDevice: boolean; className: string; onClick: () => void }> = (props) => {
-	const { label, isSmallerDevice, className, onClick } = props
-
-	const timmedLabel = isSmallerDevice ? label.slice(0, 1) : label
-
-	const button = (
-		<button type={'button'} className={className} onClick={onClick}>
-			{timmedLabel}
-		</button>
-	)
-
-	return isSmallerDevice ? (
-		<Tooltip title={label} placement={'bottom'}>
-			{button}
-		</Tooltip>
-	) : (
-		button
-	)
 }
 
 type Props = {
@@ -115,14 +87,12 @@ const CalendarHeader: FC<Props> = (props) => {
 
 	const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
-	const calendarDropdownRef = useRef<HTMLDivElement | null>(null)
+	const headerDatePickerRef = useRef<HTMLDivElement | null>(null)
 	const dateButtonRef = useRef<HTMLButtonElement | null>(null)
 
-	useOnClickOutside([calendarDropdownRef, dateButtonRef], () => {
+	useOnClickOutside([headerDatePickerRef, dateButtonRef], () => {
 		setIsCalendarOpen(false)
 	})
-
-	const isSmallerDevice = useMedia(['(max-width: 1200px)'], [true], false)
 
 	useEffect(() => setCurrentDate(selectedDate), [selectedDate])
 
@@ -136,12 +106,12 @@ const CalendarHeader: FC<Props> = (props) => {
 			case CALENDAR_SET_NEW_DATE.FIND_START_ADD:
 				newQueryDate = dayjs(newDate)
 					.startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
-					.add(1, calendarView.toLowerCase() as dayjs.OpUnitType)
+					.add(1, calendarView.toLowerCase() as dayjs.ManipulateType)
 				break
 			case CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT:
 				newQueryDate = dayjs(newDate)
 					.startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
-					.subtract(1, calendarView.toLowerCase() as dayjs.OpUnitType)
+					.subtract(1, calendarView.toLowerCase() as dayjs.ManipulateType)
 				break
 			default:
 				break
@@ -156,21 +126,6 @@ const CalendarHeader: FC<Props> = (props) => {
 			setSelectedDate(newQueryDateFormatted)
 			setSelectedDateDebounced.cancel()
 		}
-	}
-
-	const datePicker = () => {
-		return (
-			<div ref={calendarDropdownRef}>
-				<DateField
-					input={{ value: currentDate, onChange: (newSelectedDate: string) => changeSelectedDate(newSelectedDate) } as unknown as WrappedFieldInputProps}
-					meta={{ error: false, touched: false } as unknown as WrappedFieldMetaProps}
-					open={true}
-					onSelect={() => setIsCalendarOpen(false)}
-					showToday={false}
-					className={'nc-header-date-picker'}
-				/>
-			</div>
-		)
 	}
 
 	const calendarViewOptions = useMemo(
@@ -195,35 +150,38 @@ const CalendarHeader: FC<Props> = (props) => {
 				<button type={'button'} className={cx('nc-button', { active: !siderFilterCollapsed })} onClick={() => setSiderFilterCollapsed()}>
 					<NavIcon style={{ transform: siderFilterCollapsed ? 'rotate(180deg)' : undefined }} />
 				</button>
-				<div>
-					<SelectField
-						input={
-							{
-								value: calendarView,
-								onChange: (value: CALENDAR_VIEW) => setCalendarView(value)
-							} as any
+
+				<SelectField
+					input={
+						{
+							value: calendarView,
+							onChange: (value: CALENDAR_VIEW) => setCalendarView(value)
+						} as any
+					}
+					meta={{} as any}
+					onChange={(value) => setCalendarView(value)}
+					className={'p-0'}
+					options={calendarViewOptions}
+					dropdownMatchSelectWidth={false}
+				/>
+
+				<TabsComponent
+					className={'tabs-small -mt-1'}
+					activeKey={eventsViewType}
+					onChange={(newEvetsViewType: string) => setEventsViewType(newEvetsViewType as CALENDAR_EVENTS_VIEW_TYPE)}
+					items={[
+						{
+							key: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
+							tabKey: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
+							label: t('loc:Rezervácie')
+						},
+						{
+							key: CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF,
+							tabKey: CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF,
+							label: t('loc:Shifts')
 						}
-						meta={{} as any}
-						onChange={(value) => setCalendarView(value)}
-						className={'p-0'}
-						options={calendarViewOptions}
-						dropdownMatchSelectWidth={false}
-					/>
-				</div>
-				<div className={'nc-button-group'}>
-					<SwitchViewButton
-						label={t('loc:Rezervácie')}
-						className={cx({ active: eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION })}
-						onClick={() => setEventsViewType(CALENDAR_EVENTS_VIEW_TYPE.RESERVATION)}
-						isSmallerDevice={isSmallerDevice}
-					/>
-					<SwitchViewButton
-						label={t('loc:Shifts')}
-						className={cx({ active: eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF })}
-						onClick={() => setEventsViewType(CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF)}
-						isSmallerDevice={isSmallerDevice}
-					/>
-				</div>
+					]}
+				/>
 			</div>
 			<div className={'nav-middle'}>
 				<button type={'button'} className={'nc-button w-8 mr-2'} onClick={() => changeSelectedDate(currentDate, CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT, true)}>
@@ -232,19 +190,26 @@ const CalendarHeader: FC<Props> = (props) => {
 				<button type={'button'} className={'nc-button w-8'} onClick={() => changeSelectedDate(currentDate, CALENDAR_SET_NEW_DATE.FIND_START_ADD, true)}>
 					<ChevronLeft style={{ transform: 'rotate(180deg)' }} />
 				</button>
-				<Dropdown
-					overlay={datePicker}
-					placement='bottom'
-					trigger={['click']}
-					getPopupContainer={() => document.querySelector('#noti-calendar-header') as HTMLElement}
-					visible={isCalendarOpen}
-					destroyPopupOnHide
-				>
-					<button type={'button'} className={'nc-button-date mx-1'} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>
-						{formatHeaderDate(currentDate, calendarView)}
-						<ChevronDownGrayDark />
-					</button>
-				</Dropdown>
+				<div ref={headerDatePickerRef}>
+					<DateField
+						input={{ value: currentDate, onChange: (newSelectedDate: string) => changeSelectedDate(newSelectedDate) } as unknown as WrappedFieldInputProps}
+						meta={{ error: false, touched: false } as unknown as WrappedFieldMetaProps}
+						open={isCalendarOpen}
+						onSelect={() => setIsCalendarOpen(false)}
+						showToday={false}
+						className={'nc-header-date-picker'}
+						inputReadOnly
+						suffixIcon={null}
+						inputRender={() => {
+							return (
+								<button type={'button'} className={'nc-button-date mx-1'} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>
+									{formatHeaderDate(currentDate, calendarView)}
+									<ChevronDownGrayDark />
+								</button>
+							)
+						}}
+					/>
+				</div>
 				<button
 					type={'button'}
 					className={cx('nc-button', { active: dayjs(getSelectedDateForCalendar(calendarView, selectedDate)).isToday() })}
@@ -256,13 +221,7 @@ const CalendarHeader: FC<Props> = (props) => {
 			<div className={'nav-right'}>
 				<Button
 					type={'primary'}
-					onClick={() =>
-						onAddEvent({
-							// NOTE: ak klikne pouzivatel na tlacidlo pridat tak sa initnu len date a timeFrom kedze nie je vybraty kolega
-							date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-							timeFrom: dayjs().format(DEFAULT_TIME_FORMAT)
-						} as INewCalendarEvent)
-					}
+					onClick={() => onAddEvent(undefined, true)}
 					icon={<CreateIcon />}
 					disabled={!enabledSalonReservations}
 					htmlType={'button'}

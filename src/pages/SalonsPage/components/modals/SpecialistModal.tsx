@@ -100,7 +100,7 @@ const SpecialistModal = (props: Props) => {
 					className={'noti-select-input w-full'}
 					size={'large'}
 					labelInValue
-					dropdownClassName={'noti-select-dropdown dropdown-match-select-width'}
+					popupClassName={'noti-select-dropdown dropdown-match-select-width'}
 					getPopupContainer={() => document.querySelector('.noti-specialist-contact-wrapper') as HTMLElement}
 				>
 					{specialistContacts?.options?.map((option: any) => (
@@ -142,7 +142,7 @@ const SpecialistModal = (props: Props) => {
 	}
 
 	return (
-		<Modal key={'noti-specialist'} visible={visible} footer={null} closable={false} width={450} centered onCancel={onCancel}>
+		<Modal key={'noti-specialist'} open={visible} footer={null} closable={false} width={450} centered onCancel={onCancel}>
 			<div className={'noti-modal-content noti-specialist-modal-content'}>
 				<header>
 					<button type={'button'} onClick={onCancel}>
@@ -165,7 +165,7 @@ const SpecialistModal = (props: Props) => {
 							{t('loc:Cena')}: {t('loc:zdarma')}
 						</p>
 						<div>
-							<h2>{t('loc:Kontaktovať Špecialistu')}</h2>
+							<h2 className={'text-notino-black'}>{t('loc:Kontaktovať Špecialistu')}</h2>
 							<div className={'ant-form-item mb-0 pb-0'}>{specialistContent()}</div>
 						</div>
 					</main>

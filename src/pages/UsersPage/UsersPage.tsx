@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -15,7 +15,6 @@ import AdminUsersFilter, { IUsersFilter } from './components/AdminUsersFilter'
 // utils
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
-import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -26,6 +25,9 @@ import { RootState } from '../../reducers'
 // types
 import { IBreadcrumbs, Columns } from '../../types/interfaces'
 
+// hooks
+import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
+
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_BROWSING]
 
 const UsersPage = () => {
@@ -35,19 +37,28 @@ const UsersPage = () => {
 	const users = useSelector((state: RootState) => state.user.users)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
+	const navigate = useNavigate()
 
 	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		limit: NumberParam,
-		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'fullName:ASC'),
-		roleID: withDefault(StringParam, undefined)
+		search: StringParam(),
+		limit: NumberParam(),
+		page: NumberParam(1),
+		order: StringParam('fullName:ASC'),
+		roleID: StringParam()
 	})
 
 	useEffect(() => {
 		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: query.search, roleID: query.roleID }))
-		dispatch(getUsers({ page: query.page, limit: query.limit, order: query.order, search: query.search, roleID: query.roleID }))
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.roleID])
+		dispatch(
+			getUsers({
+				page: query.page,
+				limit: query.limit,
+				order: query.order,
+				search: query.search,
+				roleID: query.roleID
+			})
+		)
+	}, [dispatch, query.limit, query.order, query.page, query.roleID, query.search])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -172,7 +183,7 @@ const UsersPage = () => {
 									<AdminUsersFilter
 										createUser={() => {
 											if (hasPermission) {
-												history.push(getLinkWithEncodedBackUrl(t('paths:users/create')))
+												navigate(getLinkWithEncodedBackUrl(t('paths:users/create')))
 											} else {
 												openForbiddenModal()
 											}
@@ -192,7 +203,7 @@ const UsersPage = () => {
 								scroll={{ x: 800 }}
 								onRow={(record) => ({
 									onClick: () => {
-										history.push(getLinkWithEncodedBackUrl(t('paths:users/{{userID}}', { userID: record.id })))
+										navigate(getLinkWithEncodedBackUrl(t('paths:users/{{userID}}', { userID: record.id })))
 									}
 								})}
 								useCustomPagination

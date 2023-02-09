@@ -124,6 +124,7 @@ module.exports = {
 		animation: {
 			none: 'none',
 			spin: 'spin 1s linear infinite',
+			'spin-2s': 'spin 2s linear infinite',
 			ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
 			pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
 			bounce: 'bounce 1s infinite'
@@ -682,7 +683,8 @@ module.exports = {
 			300: '300ms',
 			500: '500ms',
 			700: '700ms',
-			1000: '1000ms'
+			1000: '1000ms',
+			2000: '2000ms'
 		},
 		transitionDelay: {
 			75: '75ms',

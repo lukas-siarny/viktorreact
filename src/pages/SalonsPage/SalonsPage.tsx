@@ -2,13 +2,13 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { ArrayParam, BooleanParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Modal, Progress, Row, Spin, Image, Tooltip } from 'antd'
+import { Col, Modal, Progress, Row, Spin, Image, Tooltip, TabsProps } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize, isPristine, reset } from 'redux-form'
+import { useNavigate } from 'react-router-dom'
+import { isEmpty } from 'lodash'
 
 // components
-import { isEmpty } from 'lodash'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonsImportForm from './components/forms/SalonsImportForm'
@@ -21,8 +21,7 @@ import RejectedSalonSuggestions from './components/RejectedSalonSuggestions'
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { formatDateByLocale, getAssignedUserLabel, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
-import { history } from '../../utils/history'
+import { formatDateByLocale, getAssignedUserLabel, getLinkWithEncodedBackUrl, normalizeDirectionKeys, normalizeSearchQueryParams, setOrder } from '../../utils/helper'
 import { postReq } from '../../utils/request'
 import { getSalonTagChanges, getSalonTagCreateType, getSalonTagPublished, getSalonTagSourceType } from './components/salonUtils'
 
@@ -39,6 +38,9 @@ import { IBreadcrumbs, IDataUploadForm, Columns } from '../../types/interfaces'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 
+// hooks
+import useQueryParams, { ArrayParam, BooleanParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
+
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
 
 enum TAB_KEYS {
@@ -50,7 +52,7 @@ enum TAB_KEYS {
 const SalonsPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-
+	const navigate = useNavigate()
 	const salons = useSelector((state: RootState) => state.salons.salons)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 
@@ -74,24 +76,26 @@ const SalonsPage = () => {
 	}, [dispatch])
 
 	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		categoryFirstLevelIDs: ArrayParam,
-		statuses_all: withDefault(BooleanParam, false),
-		statuses_published: ArrayParam,
-		salonState: withDefault(StringParam, TAB_KEYS.ACTIVE),
-		statuses_changes: ArrayParam,
-		limit: NumberParam,
-		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'createdAt:DESC'),
-		countryCode: StringParam,
-		createType: StringParam,
-		lastUpdatedAtFrom: StringParam,
-		lastUpdatedAtTo: StringParam,
-		hasSetOpeningHours: StringParam,
-		sourceType: StringParam,
-		assignedUserID: StringParam,
-		premiumSourceUserType: StringParam
+		search: StringParam(),
+		categoryFirstLevelIDs: ArrayParam(),
+		statuses_all: BooleanParam(false),
+		statuses_published: StringParam(),
+		salonState: StringParam(TAB_KEYS.ACTIVE),
+		statuses_changes: StringParam(),
+		limit: NumberParam(),
+		page: NumberParam(1),
+		order: StringParam('createdAt:DESC'),
+		countryCode: StringParam(),
+		createType: StringParam(),
+		lastUpdatedAtFrom: StringParam(),
+		lastUpdatedAtTo: StringParam(),
+		hasSetOpeningHours: StringParam(),
+		sourceType: StringParam(),
+		assignedUserID: StringParam(),
+		premiumSourceUserType: StringParam()
 	})
+
+	// console.log({ query })
 
 	const resetQuery = (selectedTabKey: string) => {
 		// reset query when switching between tabs
@@ -144,7 +148,7 @@ const SalonsPage = () => {
 		if (isFormPristine) {
 			salonsQueries = {
 				...salonsQueries,
-				countryCode: selectedCountry
+				countryCode: selectedCountry as any
 			}
 		}
 
@@ -506,7 +510,7 @@ const SalonsPage = () => {
 								}}
 								onRow={(record) => ({
 									onClick: () => {
-										history.push(getLinkWithEncodedBackUrl(t('paths:salons/{{salonID}}', { salonID: record.id })))
+										navigate(getLinkWithEncodedBackUrl(t('paths:salons/{{salonID}}', { salonID: record.id })))
 									}
 								})}
 							/>
@@ -517,21 +521,21 @@ const SalonsPage = () => {
 		)
 	}
 
-	const tabContent = [
+	const tabContent: TabsProps['items'] = [
 		{
-			tabKey: TAB_KEYS.ACTIVE,
-			tab: <>{t('loc:Aktívne')}</>,
-			tabPaneContent: getTabContent(TAB_KEYS.ACTIVE)
+			key: TAB_KEYS.ACTIVE,
+			label: <>{t('loc:Aktívne')}</>,
+			children: getTabContent(TAB_KEYS.ACTIVE)
 		},
 		{
-			tabKey: TAB_KEYS.DELETED,
-			tab: <>{t('loc:Vymazané')}</>,
-			tabPaneContent: getTabContent(TAB_KEYS.DELETED)
+			key: TAB_KEYS.DELETED,
+			label: <>{t('loc:Vymazané')}</>,
+			children: getTabContent(TAB_KEYS.DELETED)
 		},
 		{
-			tabKey: TAB_KEYS.MISTAKES,
-			tab: <>{t('loc:Omylom navrhnuté na spárovanie')}</>,
-			tabPaneContent: getTabContent(TAB_KEYS.MISTAKES)
+			key: TAB_KEYS.MISTAKES,
+			label: <>{t('loc:Omylom navrhnuté na spárovanie')}</>,
+			children: getTabContent(TAB_KEYS.MISTAKES)
 		}
 	]
 	return (
@@ -539,12 +543,12 @@ const SalonsPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<TabsComponent className={'box-tab'} activeKey={tabKey} onChange={onTabChange} tabsContent={tabContent} destroyInactiveTabPane />
+			<TabsComponent className={'box-tab'} activeKey={tabKey} onChange={onTabChange} items={tabContent} destroyInactiveTabPane />
 			<Modal
 				className='rounded-fields'
 				title={t('loc:Importovať salóny')}
 				centered
-				visible={salonImportsModalVisible}
+				open={salonImportsModalVisible}
 				footer={null}
 				onCancel={() => {
 					resetUploadForm()

@@ -26,6 +26,8 @@ type ComponentProps = {
 
 export interface IEmployeesFilter {
 	search: string
+	accountState: ACCOUNT_STATE
+	serviceID: string
 }
 
 type Props = InjectedFormProps<IEmployeesFilter, ComponentProps> & ComponentProps

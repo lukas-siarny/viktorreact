@@ -63,7 +63,6 @@ const AppRoutes: FC = () => {
 	const [t] = useTranslation()
 	return (
 		<AppInit>
-			{/* <SalonSubRoutes /> */}
 			<Routes>
 				{/* // CreatePassword route */}
 				<Route element={<CreatePasswordRoute layout={PublicLayout} className={'noti-login-page'} />}>

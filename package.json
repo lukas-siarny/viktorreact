@@ -108,7 +108,7 @@
     "tailwindcss-export-config": "4.1.0"
   },
   "devDependencies": {
-    "@goodrequest/antd-form-fields": "0.0.9",
+    "@goodrequest/antd-form-fields": "0.0.3",
     "@goodrequest/convert-translations-i18next": "1.0.9",
     "@goodrequest/eslint-config-typescript-react": "1.2.0",
     "@types/classnames": "2.3.1",

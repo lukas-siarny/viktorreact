@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
 import { useSelector } from 'react-redux'
 import cx from 'classnames'
+import { useNavigate } from 'react-router-dom'
 
 // reducers
-import { useNavigate } from 'react-router-dom'
 import { RootState } from '../../../../reducers'
 
 // assets

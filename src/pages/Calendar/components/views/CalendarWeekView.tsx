@@ -24,9 +24,6 @@ import { ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
 
-// redux
-import { clearEvent } from '../../../../reducers/virtualEvent/virtualEventActions'
-
 const getTodayLabelId = (date: string | dayjs.Dayjs) => `${dayjs(date).format(CALENDAR_DATE_FORMAT.QUERY)}-is-today`
 
 const resourceGroupLabelContent = () => {
@@ -332,7 +329,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				nowIndicator
 				selectable={enabledSalonReservations}
 				// data sources
-				events={events}
+				eventSources={[events]}
 				resources={resources}
 				resourceAreaColumns={resourceAreaColumns}
 				// render hooks

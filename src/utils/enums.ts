@@ -1,6 +1,7 @@
 import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
+import { AliasToken } from 'antd/es/theme/internal'
 import { FormatterInput } from '@fullcalendar/core'
 
 export enum KEYBOARD_KEY {
@@ -514,6 +515,21 @@ export enum UPLOAD_IMG_CATEGORIES {
 	COSMETIC = 'COSMETIC_IMAGE',
 	CUSTOMER = 'CUSTOMER_IMAGE',
 	LANGUAGE_IMAGE = 'LANGUAGE_IMAGE'
+}
+
+export const ANTD_THEME_VARIABLES_OVERRIDE: Partial<AliasToken> = {
+	// Override AntD colors
+	colorPrimary: '#000000', // black
+	colorLink: '#DC0069', // notino-pink
+	colorText: '#404040', // true-gray-700,
+	colorTextHeading: '#3F3F46', // cool-gray-900
+	colorTextSecondary: '#BFBFBF', // notino-gray
+	colorTextDisabled: '#9CA3AF', // cool-gray-100,
+	colorSuccess: '#008700', // notino-success
+	colorWarning: '#D97706', // amber-600
+	colorError: '#D21414', // notino-red
+	colorTextPlaceholder: '#BFBFBF', // notino-gray
+	borderRadius: 2
 }
 
 export const URL_UPLOAD_IMAGES = '/api/b2b/admin/files/sign-urls'

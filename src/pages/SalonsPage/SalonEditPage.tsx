@@ -6,7 +6,7 @@ import { destroy, initialize, isPristine, reset, submit } from 'redux-form'
 import { get } from 'lodash'
 import { compose } from 'redux'
 import cx from 'classnames'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import DeleteButton from '../../components/DeleteButton'
@@ -33,7 +33,7 @@ import { IBreadcrumbs, INoteForm, INoteModal, INotinoUserForm, ISalonForm, Salon
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { formFieldID, getAssignedUserLabel, normalizeSearchQueryParams } from '../../utils/helper'
+import { formFieldID, getAssignedUserLabel } from '../../utils/helper'
 import { getSalonDataForSubmission, initSalonFormData } from './components/salonUtils'
 
 // assets
@@ -43,6 +43,9 @@ import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
 import NotinoUserForm from './components/forms/NotinoUserForm'
+
+// hooks
+import useQueryParams, { BooleanParam } from '../../hooks/useQueryParams'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -86,12 +89,9 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	const assignedUserLabel = getAssignedUserLabel(salon.data?.assignedUser)
 
-	const [searchParams, setSearchParams] = useSearchParams({
-		history: ''
+	const [query, setQuery] = useQueryParams({
+		history: BooleanParam(false)
 	})
-	const query = {
-		history: searchParams.get('history') || ''
-	}
 
 	const dontUpdateFormData = useRef(false)
 
@@ -554,9 +554,9 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		// set query for history tab
 		const newQuery = {
 			...query,
-			history: selectedTabKey === TAB_KEYS.SALON_HISTORY ? '1' : searchParams.delete('history')
+			history: selectedTabKey === TAB_KEYS.SALON_HISTORY
 		}
-		setSearchParams(normalizeSearchQueryParams(newQuery))
+		setQuery(newQuery)
 		setTabKey(selectedTabKey as TAB_KEYS)
 	}
 

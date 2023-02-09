@@ -17,6 +17,18 @@
 			@include baseOutlineStyle()
 			&:focus-visible
 				@include focusOutlineStyle($textColor-notino-pink)
+	&.tabs-small
+		height: 32px
+		.ant-tabs-nav
+			margin-bottom: 0
+		.ant-tabs-content-holder
+			display: none
+		.ant-tabs-tab
+			font-size: 14px
+			line-height: 16px
+			padding: 8px 0
+			& +.ant-tabs-tab
+				margin: 0 0 0 16px
 
 
 .ant-tabs-nav

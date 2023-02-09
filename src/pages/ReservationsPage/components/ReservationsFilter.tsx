@@ -59,7 +59,8 @@ const ReservationsFilter = (props: Props) => {
 		() =>
 			map(RESERVATION_PAYMENT_METHODS, (item) => ({
 				key: item,
-				label: translateReservationPaymentMethod(item as RESERVATION_PAYMENT_METHOD)
+				label: translateReservationPaymentMethod(item as RESERVATION_PAYMENT_METHOD).text,
+				icon: translateReservationPaymentMethod(item as RESERVATION_PAYMENT_METHOD).icon
 			})),
 		[]
 	)
@@ -76,7 +77,8 @@ const ReservationsFilter = (props: Props) => {
 		() =>
 			map(RESERVATION_STATES, (item) => ({
 				key: item,
-				label: translateReservationState(item as RESERVATION_STATE)
+				label: translateReservationState(item as RESERVATION_STATE).text,
+				icon: translateReservationState(item as RESERVATION_STATE).icon
 			})),
 		[]
 	)

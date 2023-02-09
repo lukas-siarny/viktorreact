@@ -57,6 +57,9 @@ const resourceLabelContent = (data: any) => {
 	return <ResourceLabel image={employee?.image} color={color} isTimeOff={employee?.isTimeOff} name={employee?.name} description={employee?.description} />
 }
 
+/**
+ * kvoli nastaveniu height={'auto'} vo FullCalendari nefunguje scrollToTime a tuto funkcionalitu je potrebne spravit custom logikou
+ */
 const slotLabelContent = (data: SlotLabelContentArg) => {
 	const { time } = data || {}
 
@@ -176,8 +179,5 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 })
 
 export default React.memo(CalendarDayView, (prevProps, nextProps) => {
-	if (nextProps.disableRender) {
-		return true
-	}
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
 })

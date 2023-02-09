@@ -913,11 +913,12 @@ export const sortData = (a?: any, b?: any) => {
 	return 0
 }
 
-export const optionRenderNotiPinkCheckbox = (text: any, checked: any) => {
+export const optionRenderNotiPinkCheckbox = (text: any, checked: boolean, disabled: boolean) => {
 	return (
 		<div
 			className={cx('custom-rounded-checkbox', {
-				checked
+				checked,
+				disabled
 			})}
 		>
 			{text}

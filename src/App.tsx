@@ -3,6 +3,7 @@ import { Provider } from 'react-redux'
 import { I18nextProvider } from 'react-i18next'
 import { PersistGate } from 'redux-persist/es/integration/react'
 import { Spin, ConfigProvider } from 'antd'
+import { StyleProvider } from '@ant-design/cssinjs'
 import { Locale } from 'antd/lib/locale-provider'
 import { AliasToken } from 'antd/es/theme/internal'
 import dayjs from 'dayjs'
@@ -48,7 +49,7 @@ const App = () => {
 				path={'*'}
 				element={
 					<ScrollToTop>
-						<AppRoutes />{' '}
+						<AppRoutes />
 					</ScrollToTop>
 				}
 			/>
@@ -90,7 +91,9 @@ const App = () => {
 						}}
 					>
 						<Provider store={store}>
-							<RouterProvider router={router} />
+							<StyleProvider hashPriority={'low'}>
+								<RouterProvider router={router} />
+							</StyleProvider>
 						</Provider>
 					</ConfigProvider>
 				</PersistGate>

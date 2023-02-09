@@ -5,7 +5,7 @@ import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -14,7 +14,7 @@ import AdminUsersFilter, { IUsersFilter } from './components/AdminUsersFilter'
 
 // utils
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
-import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, normalizeSearchQueryParams, setOrder } from '../../utils/helper'
+import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -24,6 +24,9 @@ import { RootState } from '../../reducers'
 
 // types
 import { IBreadcrumbs, Columns } from '../../types/interfaces'
+
+// hooks
+import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_BROWSING]
 
@@ -36,21 +39,13 @@ const UsersPage = () => {
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 	const navigate = useNavigate()
 
-	const [searchParams, setSearchParams] = useSearchParams({
-		search: '',
-		limit: '',
-		page: '1',
-		order: 'fullName:ASC',
-		roleID: ''
+	const [query, setQuery] = useQueryParams({
+		search: StringParam(),
+		limit: NumberParam(),
+		page: NumberParam(1),
+		order: StringParam('fullName:ASC'),
+		roleID: StringParam()
 	})
-
-	const query = {
-		search: searchParams.get('search') || '',
-		limit: searchParams.get('limit') || '',
-		page: searchParams.get('page') || '',
-		order: searchParams.get('order') || '',
-		roleID: searchParams.get('roleID') || ''
-	}
 
 	useEffect(() => {
 		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: query.search, roleID: query.roleID }))
@@ -83,17 +78,17 @@ const UsersPage = () => {
 				...query,
 				order
 			}
-			setSearchParams(newQuery)
+			setQuery(newQuery)
 		}
 	}
 
 	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
 			...query,
-			limit: String(limit),
-			page: String(page)
+			limit,
+			page
 		}
-		setSearchParams(newQuery)
+		setQuery(newQuery)
 	}
 
 	const handleSubmit = (values: IUsersFilter) => {
@@ -102,7 +97,7 @@ const UsersPage = () => {
 			...values,
 			page: 1
 		}
-		setSearchParams(normalizeSearchQueryParams(newQuery))
+		setQuery(newQuery)
 	}
 
 	const columns: Columns = [

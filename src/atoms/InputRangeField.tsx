@@ -18,7 +18,7 @@ const FieldItem: FC<{ name: string; topProp: any; index: number }> = ({ name, to
 	// NOTE: split kvoli tomu ak by bol field wrapnuty v FormSectione a ten by posielal names ako formSectionName.inputName
 	const input = get(topProp, `[${last(split(name, '.'))}].input`) as InputNumberProps
 	const onChange = useCallback(
-		(val) => {
+		(val: any) => {
 			if (input.onChange) {
 				if (val) {
 					input.onChange(Number(val))

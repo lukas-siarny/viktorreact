@@ -7,7 +7,6 @@ import { initialize, reset } from 'redux-form'
 import { get } from 'lodash'
 import cx from 'classnames'
 import { SorterResult } from 'antd/lib/table/interface'
-import { useSearchParams } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -19,7 +18,7 @@ import CosmeticsFilter from './components/CosmeticsFilter'
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, CREATE_BUTTON_ID } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { normalizeDirectionKeys, normalizeSearchQueryParams, setOrder, sortData } from '../../utils/helper'
+import { normalizeDirectionKeys, setOrder, sortData } from '../../utils/helper'
 
 // reducers
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
@@ -31,6 +30,9 @@ import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 // types
 import { IBreadcrumbs, ICosmetic, ICosmeticForm, Columns, ISearchFilter } from '../../types/interfaces'
 
+// hooks
+import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+
 const CosmeticsPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -41,14 +43,10 @@ const CosmeticsPage = () => {
 
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 
-	const [searchParams, setSearchParams] = useSearchParams({
-		search: '',
-		order: 'name:ASC'
+	const [query, setQuery] = useQueryParams({
+		search: StringParam(),
+		order: StringParam('name:ASC')
 	})
-	const query = {
-		search: searchParams.get('search') || '',
-		order: searchParams.get('order') || ''
-	}
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -99,7 +97,7 @@ const CosmeticsPage = () => {
 				...query,
 				order
 			}
-			setSearchParams(newQuery)
+			setQuery(newQuery)
 		}
 	}
 
@@ -119,7 +117,7 @@ const CosmeticsPage = () => {
 			changeFormVisibility()
 			// reset search in case of newly created entity
 			if (!cosmeticID && query.search) {
-				setSearchParams({ ...query, search: '' })
+				setQuery({ ...query, search: '' })
 			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -156,7 +154,7 @@ const CosmeticsPage = () => {
 			title: t('loc:Logo'),
 			dataIndex: 'image',
 			key: 'image',
-			render: (value, record) =>
+			render: (_value, record) =>
 				record?.image ? (
 					<Image
 						src={record?.image?.resizedImages.thumbnail as string}
@@ -177,9 +175,9 @@ const CosmeticsPage = () => {
 				...query,
 				search: values.search
 			}
-			setSearchParams(normalizeSearchQueryParams(newQuery))
+			setQuery(newQuery)
 		},
-		[query, setSearchParams]
+		[query, setQuery]
 	)
 
 	const formClass = cx({

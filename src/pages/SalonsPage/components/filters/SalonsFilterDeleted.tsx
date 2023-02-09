@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { debounce, filter, isEmpty, isNil, size } from 'lodash'
+import { debounce, filter, isArray, isEmpty, isNil, size } from 'lodash'
 
 // components
 import { useSelector } from 'react-redux'
@@ -43,6 +43,9 @@ export const checkSalonFiltersSize = (formValues: any) =>
 		filter(formValues, (value, key) => {
 			if (typeof value === 'boolean') {
 				return value
+			}
+			if (isArray(value) && isEmpty(value)) {
+				return false
 			}
 			if (key === 'dateFromTo' && !value?.dateFrom && !value?.dateTo) {
 				return false

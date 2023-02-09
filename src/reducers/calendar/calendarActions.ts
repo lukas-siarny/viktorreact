@@ -18,7 +18,8 @@ import {
 	DATE_TIME_PARSER_DATE_FORMAT,
 	RESERVATION_STATE,
 	RESERVATION_SOURCE_TYPE,
-	RESERVATION_PAYMENT_METHOD
+	RESERVATION_PAYMENT_METHOD,
+	CANEL_TOKEN_MESSAGES
 } from '../../utils/enums'
 
 // utils
@@ -110,6 +111,8 @@ const storedPreviousParams: any = {
 	[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS]: {}
 }
 
+export const getCalendarEventsCancelTokenKey = (enumType: CALENDAR_EVENTS_KEYS) => `calendar-events-${enumType}`
+
 export const getCalendarEvents =
 	(
 		enumType: CALENDAR_EVENTS_KEYS = CALENDAR_EVENTS_KEYS.EVENTS,
@@ -141,7 +144,7 @@ export const getCalendarEvents =
 				undefined,
 				undefined,
 				true,
-				`calendar-events-${enumType}`
+				getCalendarEventsCancelTokenKey(enumType)
 			)
 
 			// employees z Reduxu, budu sa mapovat do eventov
@@ -158,6 +161,9 @@ export const getCalendarEvents =
 					endDateTime: getDateTime(event.end.date, event.end.time)
 				}
 
+				/**
+				 * priprava na viacdnove eventy - v dennom a tyzdennom view ich potrebujeme rozdelit na jednodnove eventy
+				 */
 				if (splitMultidayEventsIntoOneDayEvents) {
 					const eventStartStartOfDay = dayjs(event.start.date).startOf('day')
 					const eventEndStartOfDay = dayjs(event.end.date).startOf('day')
@@ -196,9 +202,9 @@ export const getCalendarEvents =
 								startDateTime: getDateTime(newStart.date, newStart.time),
 								endDateTime: getDateTime(newEnd.date, newEnd.time),
 								isMultiDayEvent: true,
-								isFirstMultiDayEventInCurrentRange: i === 0 && startDifference === 0,
-								isLastMultiDaylEventInCurrentRange: i === currentRangeDaysCount && !endDifference,
-								originalEvent: editedEvent
+								isFirstMultiDayEventInCurrentRange: i === 0 && startDifference === 0, // ak vytvaram event z multidnoveho eventu o trvani 2-5.1.2023, tak toto bude true v pripade, ze startTime je 2.1
+								isLastMultiDaylEventInCurrentRange: i === currentRangeDaysCount && !endDifference, // ak vytvaram event z multidnoveho eventu o trvani 2-5.1.2023, tak toto bude true v pripade, ze endTime je 5.1
+								originalEvent: editedEvent // pri multidnovych eventoch si ulozime aj originalny objekt, hlavne kvoli casovym udajom a IDcku
 							}
 
 							multiDayEvents.push(multiDayEvent)
@@ -224,12 +230,13 @@ export const getCalendarEvents =
 
 			dispatch({ type: EVENTS.EVENTS_LOAD_DONE, enumType, payload })
 		} catch (err) {
-			if (axios.isCancel(err)) {
+			if (axios.isCancel(err) && (err as any)?.message === CANEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST) {
 				// Request bol preruseny novsim requestom, tym padom chceme, aby loading state pokracoval
 				dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
 			} else {
 				dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType })
 			}
+			// dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType })
 		}
 
 		if (clearVirtualEvent) {

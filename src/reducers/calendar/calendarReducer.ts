@@ -51,8 +51,9 @@ export default (state = initState, action: ICalendarActions) => {
 			return {
 				...state,
 				[action.enumType]: {
-					...initState[action.enumType],
-					isFailure: true
+					...state[action.enumType],
+					isFailure: true,
+					isLoading: false
 				}
 			}
 		case EVENTS.EVENTS_LOAD_DONE:

@@ -1,17 +1,17 @@
 import React, { FC, useEffect, useMemo } from 'react'
 import { Element } from 'react-scroll'
 import dayjs from 'dayjs'
-import { useDispatch } from 'react-redux'
 
 // full calendar
-import FullCalendar, { SlotLabelContentArg, DateSelectArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar from '@fullcalendar/react' // must go before plugins
+import { SlotLabelContentArg, DateSelectArg } from '@fullcalendar/core'
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
-import { composeDayViewEvents, composeDayViewResources, eventAllow, getTimeScrollId } from '../../calendarHelpers'
+import { composeDayViewEvents, composeDayViewResources, getTimeScrollId } from '../../calendarHelpers'
 import eventContent from '../../eventContent'
 
 // types
@@ -19,9 +19,6 @@ import { Employees, ICalendarView, IDayViewResourceExtenedProps } from '../../..
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
-
-// components
-import { clearEvent } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 interface IResourceLabel {
 	image?: string
@@ -58,6 +55,9 @@ const resourceLabelContent = (data: any) => {
 	return <ResourceLabel image={employee?.image} color={color} isTimeOff={employee?.isTimeOff} name={employee?.name} description={employee?.description} />
 }
 
+/**
+ * kvoli nastaveniu height={'auto'} vo FullCalendari nefunguje scrollToTime a tuto funkcionalitu je potrebne spravit custom logikou
+ */
 const slotLabelContent = (data: SlotLabelContentArg) => {
 	const { time } = data || {}
 
@@ -87,12 +87,11 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		onAddEvent,
 		virtualEvent,
 		enabledSalonReservations,
-		setEventManagement,
 		onEventChangeStart,
-		onReservationClick
+		onReservationClick,
+		onEventChangeStop
 	} = props
 
-	const dispatch = useDispatch()
 	const events = useMemo(() => {
 		const data = composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees)
 		// ak je virtualEvent definovany, zaradi sa do zdroja eventov pre Calendar
@@ -104,10 +103,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	 * Spracuje input z calendara click/select a vytvori z neho init data, ktore vyuzije form v SiderEventManager
 	 */
 	const handleNewEvent = (event: DateSelectArg) => {
-		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
-		dispatch(clearEvent())
-		setEventManagement(undefined)
-
 		if (event.resource) {
 			// eslint-disable-next-line no-underscore-dangle
 			const { employee } = event.resource._resource.extendedProps
@@ -159,22 +154,21 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				nowIndicator
 				allDaySlot={false}
 				stickyFooterScrollbar
+				selectable={enabledSalonReservations}
 				// data sources
-				events={events}
+				eventSources={[events]}
 				resources={resources}
 				// render hooks
 				resourceLabelContent={resourceLabelContent}
 				eventContent={(data) => eventContent(data, CALENDAR_VIEW.DAY, onEditEvent, onReservationClick)}
 				slotLabelContent={slotLabelContent}
 				// handlers
-				eventAllow={eventAllow}
-				eventDrop={(arg) => {
-					if (onEventChange) onEventChange(CALENDAR_VIEW.DAY, arg)
-				}}
-				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
-				selectable={enabledSalonReservations}
-				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
-				eventResizeStart={() => onEventChangeStart && onEventChangeStart()}
+				eventDrop={onEventChange}
+				eventResize={onEventChange}
+				eventDragStart={onEventChangeStart}
+				eventResizeStart={onEventChangeStart}
+				eventDragStop={onEventChangeStop}
+				eventResizeStop={onEventChangeStop}
 				select={handleNewEvent}
 			/>
 		</div>
@@ -182,8 +176,5 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 })
 
 export default React.memo(CalendarDayView, (prevProps, nextProps) => {
-	if (nextProps.disableRender) {
-		return true
-	}
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
 })

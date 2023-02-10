@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Col, Row, Spin } from 'antd'
 import { compose } from 'redux'
 import { initialize, isSubmitting } from 'redux-form'
+import { useNavigate } from 'react-router-dom'
 
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
@@ -18,7 +19,6 @@ import { scrollToTopFn } from '../../components/ScrollToTop'
 // utils
 import { ROW_GUTTER_X_DEFAULT, PERMISSION, FORM } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { history } from '../../utils/history'
 import { patchReq } from '../../utils/request'
 
 // types
@@ -28,6 +28,7 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const { salonID, parentPath } = props
+	const navigate = useNavigate()
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const services = useSelector((state: RootState) => state.service.services)
@@ -98,7 +99,7 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 								onSubmit={handleSubmit}
 								disabledForm={categories.isLoading || services.isLoading || isCategoriesFromSubmitting}
 								onShowMore={(industryID) => {
-									history.push(parentPath + t('paths:industries-and-services/{{industryID}}', { industryID }))
+									navigate(parentPath + t('paths:industries-and-services/{{industryID}}', { industryID }))
 								}}
 							/>
 						</Spin>
@@ -109,4 +110,4 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]))(IndustriesPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(IndustriesPage)

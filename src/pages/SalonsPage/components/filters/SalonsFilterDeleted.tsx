@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { debounce, filter, isEmpty, isNil, size } from 'lodash'
+import { debounce, filter, isArray, isEmpty, isNil, size } from 'lodash'
 
 // components
 import { useSelector } from 'react-redux'
@@ -16,7 +16,7 @@ import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.s
 import { ReactComponent as CategoryIcon } from '../../../../assets/icons/categories-24-icon.svg'
 
 // utils
-import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, ENUMERATIONS_KEYS, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../../utils/enums'
 import { optionRenderWithImage, validationString } from '../../../../utils/helper'
 
 // atoms
@@ -43,6 +43,9 @@ export const checkSalonFiltersSize = (formValues: any) =>
 		filter(formValues, (value, key) => {
 			if (typeof value === 'boolean') {
 				return value
+			}
+			if (isArray(value) && isEmpty(value)) {
+				return false
 			}
 			if (key === 'dateFromTo' && !value?.dateFrom && !value?.dateTo) {
 				return false
@@ -124,7 +127,7 @@ const form = reduxForm({
 		if (anyTouched) {
 			submit()
 		}
-	}, 300),
+	}, CHANGE_DEBOUNCE_TIME),
 	destroyOnUnmount: true
 })(SalonsFilterDeleted)
 

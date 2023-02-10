@@ -10,7 +10,7 @@ const { Item } = Form
 type Props = WrappedFieldProps &
 	InputProps &
 	FormItemLabelProps & {
-		optionRender?: (option: any, isChecked: boolean) => React.ReactNode
+		optionRender?: (option: any, isChecked: boolean, disabled?: boolean) => React.ReactNode
 		hideChecker?: boolean
 	}
 
@@ -39,7 +39,7 @@ const CheckboxField = (props: Props) => {
 		>
 			<Row>
 				<Checkbox {...input} checked={!!input.value} disabled={disabled}>
-					{optionRender ? optionRender(placeholder, !!input.value) : placeholder}
+					{optionRender ? optionRender(placeholder, !!input.value, disabled) : placeholder}
 				</Checkbox>
 			</Row>
 		</Item>

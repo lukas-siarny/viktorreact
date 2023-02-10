@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
 import { Link } from 'react-router-dom'
-import { useTranslation, WithTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { Result } from 'antd'
 
-type Props = WithTranslation
+type Props = {}
 
 const ForbiddenPage: FC<Props> = () => {
 	const [t] = useTranslation()

@@ -20,3 +20,40 @@
 		cursor: unset
 	& span.anticon.anticon-right.ant-collapse-arrow
 		display: none
+
+.ant-collapse-item.employee-collapse-panel
+	& > .ant-collapse-header
+		min-height: 48px
+		padding: 8px 12px
+	& > .ant-collapse-content .ant-collapse-content-box
+		padding: 0 16px
+	&.ant-collapse-item-disabled
+		& > .ant-collapse-header
+			cursor: unset
+
+.ant-collapse
+	&:not(.noti-collapse)
+		> .ant-collapse-item
+			border-bottom: none
+
+.noti-collapse
+	background: transparent
+	.ant-collapse-item
+		border-bottom: 1px solid $borderColor-notino-grayLight
+		.ant-collapse-header
+			padding: 0
+			position: relative
+			display: flex
+			align-items: center
+			justify-content: space-between
+		.ant-collapse-content
+			.ant-collapse-content-box
+				padding: 0
+
+	&.noti-support-collapse
+		max-width: 528px
+		@media (max-width: 1280px)
+			max-width: 416px
+			width: 100%
+		@media (max-width: 744px)
+			max-width: 100%

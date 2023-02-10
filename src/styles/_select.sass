@@ -29,10 +29,12 @@
 
 .ant-select-item
 	&.ant-select-item-option-selected
-		color: $textColor-white
-		font-weight: $fontWeight-normal
-		display: flex
-		justify-content: space-between
+		&:not(.ant-select-item-option-disabled)
+			color: $textColor-black
+			font-weight: $fontWeight-normal
+			display: flex
+			justify-content: space-between
+			background-color: $backgroundColor-notino-grayLight
 	&.ant-select-item-option
 		&.ant-select-item-option-active
 			// color: $textColor-notino-white
@@ -49,16 +51,16 @@
 			& svg path
 				stroke: $backgroundColor-notino-black
 
-.ant-select-item-option-selected:not(.ant-select-item-option-disabled)
-		color: $textColor-notino-black
-		font-weight: 400
-		background-color: $backgroundColor-notino-grayLight
-
 .ant-select-item-option-disabled.ant-select-item-option-selected
 	color: $textColor-notino-grayLight
 	background-color: $textColor-notino-grayDark
 
-.ant-select-multiple
+.ant-select-multiple,
+.ant-select-multiple.ant-select-lg,
+.ant-select-multiple.ant-select-sm
+	.ant-select-selection-item
+		background-color: $backgroundColor-notino-grayLighter
+		border-color: #f0f0f0
 	span.ant-select-selection-item-remove svg path
 		stroke: $backgroundColor-notino-black
 	& .ant-select-selection-item-remove

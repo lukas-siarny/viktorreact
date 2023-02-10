@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { CalendarApi, EventApi, EventInput } from '@fullcalendar/react'
+import { CalendarApi, EventApi, EventInput } from '@fullcalendar/core'
 import dayjs from 'dayjs'
 import { destroy } from 'redux-form'
 
@@ -39,7 +39,7 @@ export const setCalendarApi = (api?: CalendarApi) => {
 	calendarApi = api
 }
 
-export const setCalendarDateHandler = (handler: (newDate: string) => void) => {
+export const setCalendarDateHandler = (handler: (newDate: string, monthViewFullRange?: boolean) => void) => {
 	changeCalendarDate = handler
 }
 
@@ -47,7 +47,7 @@ export const clearEvent = (): ThunkResult<void> => (dispatch, getState) => {
 	// clear store
 	dispatch({ type: VIRTUAL_EVENT.VIRTUAL_EVENT_CLEAR, payload: { data: null } })
 	// destroy calendar forms
-	Object.keys(HANDLE_CALENDAR_FORMS).forEach((key) => dispatch(destroy(key)))
+	HANDLE_CALENDAR_FORMS.forEach((form) => dispatch(destroy(form)))
 	// remove event from Calendar API
 	if (calendarApi) {
 		const eventId = getState().virtualEvent.virtualEvent.data?.id
@@ -88,7 +88,7 @@ export const addOrUpdateEvent =
 		if (!formData) {
 			return
 		}
-		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID } = formData
+		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID, reservationData, note, noteFromB2CCustomer } = formData
 
 		if (date && timeFrom && employee && eventType) {
 			let { eventId } = formData
@@ -106,7 +106,7 @@ export const addOrUpdateEvent =
 			const newDate = dayjs(date)
 
 			if (!calendarViewDate.isSame(newDate) && changeCalendarDate) {
-				changeCalendarDate(date)
+				changeCalendarDate(date, true)
 			}
 
 			const eventInput: EventInput = {
@@ -132,18 +132,21 @@ export const addOrUpdateEvent =
 					},
 					customer: customer
 						? {
+								...(customer?.extra?.customerData || {}),
 								id: customer.key,
 								email: customer.label || customer.value
 						  }
 						: undefined,
 					service: service
 						? {
+								...(service?.extra?.serviceData || {}),
 								id: service.key,
 								name: service.label || service.value
 						  }
 						: undefined,
 					employee: employee
 						? {
+								...(employee?.extra?.employeeData || {}),
 								id: employee.key,
 								email: employee.label || employee.value
 						  }
@@ -152,10 +155,12 @@ export const addOrUpdateEvent =
 						? {
 								id: calendarBulkEventID
 						  }
-						: undefined
+						: undefined,
+					note,
+					noteFromB2CCustomer,
+					reservationData
 				}
 			}
-
 			const payload: IVirtualEventPayload = {
 				data: {
 					id: eventId,

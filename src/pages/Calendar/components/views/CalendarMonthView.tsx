@@ -1,10 +1,10 @@
-import React, { useMemo, useCallback, FC, useRef, useEffect, useState, memo } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useMemo, FC, useRef, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import cx from 'classnames'
-import { DelimitedArrayParam, useQueryParams } from 'use-query-params'
 
 // full calendar
-import FullCalendar, { DayCellContentArg, DayHeaderContentArg, MoreLinkContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar from '@fullcalendar/react' // must go before plugins
+import { DateSelectArg, DayCellContentArg, DayHeaderContentArg } from '@fullcalendar/core'
 import interactionPlugin from '@fullcalendar/interaction'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
@@ -12,8 +12,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 // types
 import dayjs from 'dayjs'
 import { t } from 'i18next'
-import { Spin } from 'antd'
-import { CalendarEvent, ICalendarDayEvents, ICalendarDayEventsMap, ICalendarEventContent, ICalendarView, PopoverTriggerPosition } from '../../../../types/interfaces'
+import { CalendarEvent, ICalendarView, PopoverTriggerPosition } from '../../../../types/interfaces'
 
 // enums
 import {
@@ -21,26 +20,48 @@ import {
 	CALENDAR_DATE_FORMAT,
 	CALENDAR_DAY_EVENTS_SHOWN,
 	CALENDAR_EVENTS_VIEW_TYPE,
-	CALENDAR_EVENT_DISPLAY_TYPE,
-	CALENDAR_EVENT_TYPE,
-	CALENDAR_VIEW
+	CALENDAR_VIEW,
+	DEFAULT_DATE_INIT_FORMAT,
+	DEFAULT_TIME_FORMAT
 } from '../../../../utils/enums'
-import { composeMonthViewEvents, getBusinessHours, getOpnenigHoursMap, OpeningHoursMap } from '../../calendarHelpers'
+import { compareAndSortDayEvents, composeMonthViewEvents, getBusinessHours, getOpnenigHoursMap, OpeningHoursMap } from '../../calendarHelpers'
 import { RootState } from '../../../../reducers'
 import eventContent from '../../eventContent'
 
 // assets
-import { ReactComponent as ChevronDownIcon } from '../../../../assets/icons/chevron-down-currentColor-12.svg'
-import { getDayDetialEvents } from '../../../../reducers/calendar/calendarActions'
-import { ReactComponent as LoadingIcon } from '../../../../assets/icons/loading-icon.svg'
+import { IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
 
-const getDayEventsMap = (dayEvents: ICalendarDayEvents): ICalendarDayEventsMap => {
-	return Object.entries(dayEvents).reduce((dayEventsMap, [date, events]) => {
-		return {
-			...dayEventsMap,
-			[date]: Math.max(events.length - CALENDAR_DAY_EVENTS_SHOWN, 0)
+const getCurrentDayEventsCount = (selectedDate: string, dayEvents: CalendarEvent[], virtualEvent: IVirtualEventPayload['data'] | null): number => {
+	let eventsCount = dayEvents.reduce((count, event) => {
+		if (event.id === virtualEvent?.id) {
+			return count
 		}
-	}, {} as ICalendarDayEventsMap)
+
+		return count + 1
+	}, 0)
+
+	const virtualEventStartTime = virtualEvent?.event?.eventData?.start.date
+	const virtualEventEndTime = virtualEvent?.event?.eventData?.end.date
+	if (virtualEventStartTime && virtualEventEndTime && selectedDate && dayjs(selectedDate).isBetween(virtualEventStartTime, virtualEventEndTime, 'day', '[]')) {
+		eventsCount += 1
+	}
+	return Math.max(eventsCount - CALENDAR_DAY_EVENTS_SHOWN, 0)
+}
+
+const getLinkMoreText = (eventsCount?: number) => {
+	switch (eventsCount) {
+		case undefined:
+		case 0:
+			return t('loc:ďalšie')
+		case 1:
+			return `${eventsCount} ${t('loc:ďalší')}`
+		case 2:
+		case 3:
+		case 4:
+			return `${eventsCount} ${t('loc:ďalšie')}`
+		default:
+			return `${eventsCount} ${t('loc:ďalších')}`
+	}
 }
 
 const dayHeaderContent = (arg: DayHeaderContentArg, openingHoursMap: OpeningHoursMap) => {
@@ -48,205 +69,147 @@ const dayHeaderContent = (arg: DayHeaderContentArg, openingHoursMap: OpeningHour
 	const dayNumber = dayjs(date).day()
 	return <div className={cx('nc-month-day-header', { shaded: !openingHoursMap[dayNumber] })}>{dayjs(date).format(CALENDAR_DATE_FORMAT.MONTH_HEADER_DAY_NAME)}</div>
 }
-
-interface IMoreLinkContent {
-	moreCount: number
-	salonID: string
-	onShowMore: (date: string, data: CalendarEvent[], position?: PopoverTriggerPosition) => void
-	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
-}
-
 interface IDayCellContent {
 	date: Date
 	dayNumberText: string
 	salonID: string
-	onShowMore: (date: string, data: CalendarEvent[], position?: PopoverTriggerPosition) => void
+	onShowMore: (date: string, position?: PopoverTriggerPosition) => void
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 }
 
-const MoreLinkContent: FC<IMoreLinkContent> = memo((props) => {
-	const { salonID, onShowMore, eventsViewType, moreCount } = props
-	const dispatch = useDispatch()
-	const dayEvents = useSelector((state: RootState) => state.calendar.dayEvents)
-	const dayEventsMap = useMemo(() => getDayEventsMap(dayEvents), [dayEvents])
-
-	const [query] = useQueryParams({
-		employeeIDs: DelimitedArrayParam,
-		categoryIDs: DelimitedArrayParam
-	})
-
-	console.log(moreCount)
-
-	const [cellDate, setCellDate] = useState<string | null>(null)
-	const [isFetching, setIsFetching] = useState(false)
-
-	const eventsCount = cellDate ? dayEventsMap[cellDate] : 0
-
-	const moreLinkRef = useRef<HTMLButtonElement | null>(null)
-
-	const dayDetilEvents = useSelector((state: RootState) => state.calendar.dayDetail)
-
-	/* const handleShowMore = useCallback(async () => {
-		if (cellDate) {
-			try {
-				setIsFetching(true)
-				const { data } = await dispatch(
-					getDayDetialEvents(cellDate, {
-						salonID,
-						categoryIDs: query.categoryIDs,
-						employeeIDs: query.employeeIDs,
-						eventTypes: [
-							eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION
-								? CALENDAR_EVENT_TYPE.RESERVATION
-								: (CALENDAR_EVENT_TYPE.RESERVATION, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF, CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK)
-						]
-					})
-				)
-				console.log({ data })
-			} catch (e) {
-				// eslint-disable-next-line no-console
-				console.log(e)
-			} finally {
-				setIsFetching(false)
-			}
-		}
-	}, [cellDate, dispatch, query.categoryIDs, query.employeeIDs, eventsViewType, salonID]) */
-
-	const handleShowMore = useCallback(async () => {
-		if (cellDate && moreLinkRef.current) {
-			const currentDateEvents = dayEvents[cellDate]
-
-			const clientRect = moreLinkRef.current.getBoundingClientRect()
-
-			const position: PopoverTriggerPosition = {
-				top: clientRect.top,
-				left: clientRect.left,
-				width: clientRect.width + 10,
-				height: clientRect.bottom - clientRect.top
-			}
-			onShowMore(cellDate, currentDateEvents, position)
-		}
-	}, [cellDate, dayEvents, onShowMore])
-
-	useEffect(() => {
-		if (moreLinkRef.current) {
-			const { date } = moreLinkRef.current.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.dataset || {}
-			moreLinkRef.current?.parentElement?.setAttribute('title', '')
-			if (date) {
-				setCellDate(date)
-				/* const eventsCount = dayEventsMap[date]
-				const moreLink = moreLinkRef.current.querySelector('.text-more')
-				if (moreLink) {
-					moreLink.innerHTML = `${eventsCount} ${t('loc:viac')}`
-				} */
-			}
-		}
-	}, [dayEventsMap])
-
-	useEffect(() => {
-		if (moreLinkRef.current) {
-			const moreLink = moreLinkRef.current.querySelector('.text-more')
-			if (moreLink && eventsCount) {
-				moreLink.innerHTML = `${eventsCount} ${t('loc:viac')}`
-			}
-		}
-	}, [eventsCount])
-
-	return (
-		<button
-			type={'button'}
-			onClick={(e) => {
-				e.stopPropagation()
-				handleShowMore()
-			}}
-			className={'nc-month-more-button'}
-			ref={moreLinkRef}
-			disabled={dayDetilEvents?.isLoading}
-		>
-			<Spin spinning={isFetching} size={'small'}>
-				<span className={'text-more'}>{t('loc:viac')}</span>
-				<ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
-			</Spin>
-		</button>
-	)
-})
-
-const moreLinkClick = () => 'day'
-
-/* const DayCellContent: FC<IDayCellContent> = memo((props) => {
+const DayCellContent: FC<IDayCellContent> = (props) => {
 	const { onShowMore, date, dayNumberText } = props
 
+	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
 	const dayEvents = useSelector((state: RootState) => state.calendar.dayEvents)
-	const dayEventsMap = useMemo(() => getDayEventsMap(dayEvents), [dayEvents])
 
 	const cellDate = dayjs(date).format(CALENDAR_DATE_FORMAT.QUERY)
 
-	const moreLinkRef = useRef<HTMLButtonElement | null>(null)
+	const currentDayEvents = dayEvents[cellDate]
 
-	const handleShowMore = useCallback(async () => {
-		if (cellDate && moreLinkRef.current) {
-			const currentDateEvents = dayEvents[cellDate]
+	const dayNumerRef = useRef<HTMLSpanElement | null>(null)
 
-			const clientRect = moreLinkRef.current.getBoundingClientRect()
+	const eventsCount = getCurrentDayEventsCount(cellDate, currentDayEvents || [], virtualEvent)
 
-			const position: PopoverTriggerPosition = {
-				top: clientRect.top,
-				left: clientRect.left,
-				width: clientRect.width + 10,
-				height: clientRect.bottom - clientRect.top
+	useEffect(() => {
+		if (dayNumerRef.current) {
+			const dayGridDayBottom = dayNumerRef.current.parentNode?.parentNode?.parentNode?.querySelector('.fc-daygrid-day-events')?.querySelector('.fc-daygrid-day-bottom')
+
+			if (dayGridDayBottom) {
+				const existingButton = dayGridDayBottom?.querySelector('.nc-month-more-button')
+				const textMore = existingButton?.querySelector('.text-more')
+				if (existingButton && textMore) {
+					if (!eventsCount) {
+						textMore.innerHTML = ''
+						existingButton.classList.add('nc-month-more-button-hidden')
+					} else {
+						textMore.innerHTML = getLinkMoreText(eventsCount)
+						existingButton.classList.remove('nc-month-more-button-hidden')
+					}
+				} else if (eventsCount) {
+					const handleShowMore = async (clientRect: DOMRect) => {
+						if (cellDate && clientRect) {
+							const position: PopoverTriggerPosition = {
+								top: clientRect.top,
+								left: clientRect.left,
+								width: clientRect.width + 10,
+								height: clientRect.bottom - clientRect.top
+							}
+							onShowMore(cellDate, position)
+						}
+					}
+
+					const link = document.createElement('a')
+					link.className = 'fc-daygrid-more-link fc-more-link nc-more-link'
+					link.setAttribute('aria-expanded', 'false')
+					link.setAttribute('tabindex', '0')
+
+					const button = document.createElement('button')
+					button.className = 'nc-month-more-button'
+
+					const span = document.createElement('span')
+					span.className = 'text-more'
+					span.innerHTML = getLinkMoreText(eventsCount || 0)
+
+					const arrow = document.createElement('span')
+					arrow.className = 'arrow'
+
+					button.appendChild(span)
+					button.appendChild(arrow)
+					link.appendChild(button)
+					dayGridDayBottom.appendChild(link)
+
+					button.addEventListener('click', () => {
+						const clientRect = button.getBoundingClientRect()
+						handleShowMore(clientRect)
+					})
+				}
 			}
-			onShowMore(cellDate, currentDateEvents, position)
 		}
-	}, [cellDate, dayEvents, onShowMore])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [eventsCount, cellDate])
 
-	const eventsCount = dayEventsMap[cellDate]
+	return <span ref={dayNumerRef}>{dayNumberText}</span>
+}
 
-	return (
-		<div className={'nc-month-day-bottom'}>
-			{eventsCount ? (
-				<button
-					type={'button'}
-					onClick={(e) => {
-						e.stopPropagation()
-						handleShowMore()
-					}}
-					className={'nc-month-more-button'}
-					ref={moreLinkRef}
-				>
-					<Spin spinning={false} size={'small'}>
-						<span className={'text-more'}>
-							{eventsCount} {t('loc:viac')}
-						</span>
-						<ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
-					</Spin>
-				</button>
-			) : null}
-			<span className={'nc-month-day-number'}>{dayNumberText}</span>
-		</div>
-	)
-}) */
+const eventOrder = (a: any, b: any) => {
+	const aStart = a.eventData?.originalEvent?.startDateTime || a.eventData?.startDateTime
+	const aEnd = a.eventData?.originalEvent?.endDateTime || a.eventData?.endDateTime
+	const bStart = b.eventData?.originalEvent?.startDateTime || b.eventData?.startDateTime
+	const bEnd = b.eventData?.originalEvent?.endDateTime || b.eventData?.endDateTime
+	return compareAndSortDayEvents(aStart, aEnd, bStart, bEnd, a.id, b.id)
+}
 
 interface ICalendarMonthView extends ICalendarView {
 	salonID: string
-	onShowMore: (date: string, data: CalendarEvent[], position?: PopoverTriggerPosition) => void
+	onShowMore: (date: string, position?: PopoverTriggerPosition) => void
 }
 
 const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarMonthView>((props, ref) => {
-	const { selectedDate, eventsViewType, reservations, shiftsTimeOffs, onEditEvent, onReservationClick, salonID, onShowMore } = props
+	const {
+		selectedDate,
+		eventsViewType,
+		reservations,
+		shiftsTimeOffs,
+		onEditEvent,
+		onReservationClick,
+		salonID,
+		onShowMore,
+		onEventChange,
+		onEventChangeStart,
+		virtualEvent,
+		onAddEvent
+	} = props
 
 	const openingHours = useSelector((state: RootState) => state.selectedSalon.selectedSalon).data?.openingHours
 
-	// const dispatch = useDispatch()
-
 	const events = useMemo(() => {
-		const data = composeMonthViewEvents(eventsViewType, reservations || [], shiftsTimeOffs)
+		const data = composeMonthViewEvents(eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION ? reservations : shiftsTimeOffs)
 		// ak je virtualEvent definovany, zaradi sa do zdroja eventov pre Calendar
-		// return virtualEvent ? [...data, virtualEvent] : data
-		return data
-	}, [eventsViewType, reservations, shiftsTimeOffs])
+		return virtualEvent ? [...data, virtualEvent] : data
+	}, [eventsViewType, reservations, shiftsTimeOffs, virtualEvent])
 
 	const openingHoursMap = useMemo(() => getOpnenigHoursMap(openingHours), [openingHours])
 	const businessHours = useMemo(() => getBusinessHours(openingHoursMap), [openingHoursMap])
+
+	/**
+	 * Spracuje input z calendara click/select a vytvori z neho init data, ktore vyuzije form v SiderEventManager
+	 */
+	const handleNewEvent = (event: DateSelectArg) => {
+		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
+		const eventStart = dayjs(event.startStr)
+
+		onAddEvent({
+			date: eventStart.format(DEFAULT_DATE_INIT_FORMAT),
+			timeFrom: eventStart.format(DEFAULT_TIME_FORMAT),
+			timeTo: dayjs(event.endStr).format(DEFAULT_TIME_FORMAT),
+			employee: {
+				value: '',
+				key: '',
+				label: ''
+			}
+		})
+	}
 
 	return (
 		<div className={'nc-calendar-wrapper'}>
@@ -272,26 +235,28 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 				firstDay={1}
 				dayMaxEvents={5}
 				dayMinWidth={120}
+				eventOrderStrict
+				eventOrder={eventOrder as any}
+				selectConstraint={CALENDAR_COMMON_SETTINGS.SELECT_CONSTRAINT}
 				// data sources
 				events={events}
 				businessHours={businessHours}
 				// render hooks
-				/* dayCellContent={(args: DayCellContentArg) => (
+				dayCellContent={(args: DayCellContentArg) => (
 					<DayCellContent date={args.date} dayNumberText={args.dayNumberText} salonID={salonID} eventsViewType={eventsViewType} onShowMore={onShowMore} />
-				)} */
+				)}
 				dayHeaderContent={(args) => dayHeaderContent(args, openingHoursMap)}
 				eventContent={(data) => eventContent(data, CALENDAR_VIEW.MONTH, onEditEvent, onReservationClick)}
-				moreLinkContent={(args: MoreLinkContentArg) => <MoreLinkContent moreCount={args.num} salonID={salonID} eventsViewType={eventsViewType} onShowMore={onShowMore} />}
+				moreLinkContent={null}
 				// handlers
-				moreLinkClick={moreLinkClick}
+				eventDrop={onEventChange}
+				eventDragStart={onEventChangeStart}
+				select={handleNewEvent}
 			/>
 		</div>
 	)
 })
 
 export default React.memo(CalendarMonthView, (prevProps, nextProps) => {
-	if (nextProps.disableRender) {
-		return true
-	}
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
 })

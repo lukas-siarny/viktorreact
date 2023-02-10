@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { initialize } from 'redux-form'
+import { initialize, isSubmitting } from 'redux-form'
 import { Col, Row, Spin } from 'antd'
-import { forEach, includes, reduce } from 'lodash'
+import { forEach, includes, isEmpty, reduce } from 'lodash'
 
 // components
+import { useNavigate } from 'react-router-dom'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ReservationSystemSettingsForm from './components/ReservationSystemSettingsForm'
 
 // utils
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
-import { withPermissions, checkPermissions, isAdmin } from '../../utils/Permissions'
+import { FORM, NOTIFICATION_TYPES, PERMISSION, ADMIN_PERMISSIONS, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
+import { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
-import { history } from '../../utils/history'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -21,14 +21,24 @@ import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getServices } from '../../reducers/services/serviceActions'
 
 // types
-import { IBreadcrumbs, IReservationSystemSettingsForm, SalonSubPageProps } from '../../types/interfaces'
-
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
+import {
+	DisabledNotificationsArray,
+	IBreadcrumbs,
+	IReservationsSettingsNotification,
+	IReservationSystemSettingsForm,
+	PathSettingsBody,
+	SalonSubPageProps
+} from '../../types/interfaces'
 
 const EXCLUDED_NOTIFICATIONS_B2B: string[] = [RS_NOTIFICATION.RESERVATION_REJECTED, RS_NOTIFICATION.RESERVATION_REMINDER]
 
-const NOTIFICATIONS = Object.keys(RS_NOTIFICATION)
-const NOTIFICATION_TYPES = Object.keys(RS_NOTIFICATION_TYPE)
+const NOTIFICATIONS = Object.keys(RS_NOTIFICATION) as RS_NOTIFICATION[]
+
+type InitDisabledNotifications = {
+	[key in RS_NOTIFICATION]: IReservationsSettingsNotification
+}
+
+type PatchDisabledNotifications = NonNullable<NonNullable<PathSettingsBody['settings']>['disabledNotifications']>
 
 const transformNotificationsChannelForRequest = (
 	channel: {
@@ -47,46 +57,78 @@ const transformNotificationsChannelForRequest = (
 	})
 }
 
-const initDisabledNotifications = (notifications: any[]): IReservationSystemSettingsForm['disabledNotifications'] => {
+const getNotificationFormName = (notification?: string) => {
+	if (notification && (notification.endsWith('EMPLOYEE') || notification.endsWith('CUSTOMER'))) {
+		const lastIndexOf = notification.lastIndexOf('_')
+		const notificationName = notification.substring(0, lastIndexOf) as RS_NOTIFICATION
+		return NOTIFICATIONS.includes(notificationName) ? notificationName : undefined
+	}
+	return undefined
+}
+
+const defualtNotification = {
+	b2cChannels: NOTIFICATION_TYPES.map((type) => ({ [type]: true })),
+	b2bChannels: NOTIFICATION_TYPES.flatMap((type) => (EXCLUDED_NOTIFICATIONS_B2B.includes(type) ? [] : [{ [type]: true }]))
+}
+
+const initDisabledNotifications = (notifications: DisabledNotificationsArray): IReservationSystemSettingsForm['disabledNotifications'] => {
 	// find all relevant notifications
-	const relevantNotifications = notifications.filter((notification) => NOTIFICATIONS.includes(notification.eventType as string))
+	const relevantNotifications = notifications.filter((notification) => !!getNotificationFormName(notification.eventType) && !isEmpty(notification.channels))
+
 	// transform into object of type IReservationSystemSettingsForm.disabledNotifications
-	const current = reduce(
-		relevantNotifications,
-		(data: any, item) => {
-			// eslint-disable-next-line no-param-reassign
-			data[item.eventType as string] = {
-				// included notification types of RS_NOTIFICATION_TYPE(EMAIL, PUSH) means switch is OFF (false value)
-				b2cChannels: NOTIFICATION_TYPES.map((type) => ({ [type]: !item.b2cChannels.includes(type as RS_NOTIFICATION_TYPE) })),
-				b2bChannels: NOTIFICATION_TYPES.map((type) => ({ [type]: !item.b2bChannels.includes(type as RS_NOTIFICATION_TYPE) }))
-			}
+	const current = relevantNotifications?.reduce((data, item) => {
+		const isB2BChannel = item.eventType?.endsWith('EMPLOYEE') // B2B internal (employee)
+		const isB2CChannel = item.eventType?.endsWith('CUSTOMER') // B2C customer
+		const notificationFormName = getNotificationFormName(item.eventType)
 
-			return data
-		},
-		{}
-	)
-	return reduce(
-		NOTIFICATIONS,
-		(data: any, key) => {
-			// fullfill notifications: current from API + default values (TRUE - switch is ON)
-			// eslint-disable-next-line no-param-reassign
-			data[key] = current[key] ?? {
-				b2cChannels: NOTIFICATION_TYPES.map((type) => ({ [type]: true })),
-				b2bChannels: NOTIFICATION_TYPES.flatMap((type) => (EXCLUDED_NOTIFICATIONS_B2B.includes(type) ? [] : [{ [type]: true }]))
+		if (notificationFormName) {
+			if (isB2CChannel) {
+				return {
+					...data,
+					[notificationFormName]: {
+						...data[notificationFormName],
+						b2bChannels: data[notificationFormName]?.b2bChannels || defualtNotification.b2bChannels,
+						b2cChannels: NOTIFICATION_TYPES.map((type) => ({ [type]: !item.channels.includes(type as RS_NOTIFICATION_TYPE) }))
+					}
+				}
 			}
+			if (isB2BChannel) {
+				return {
+					...data,
+					[notificationFormName]: {
+						...data[notificationFormName],
+						b2cChannels: data[notificationFormName]?.b2cChannels || defualtNotification.b2cChannels,
+						b2bChannels: NOTIFICATION_TYPES.map((type) => ({ [type]: !item.channels.includes(type as RS_NOTIFICATION_TYPE) }))
+					}
+				}
+			}
+		}
 
-			return data
-		},
-		{}
-	)
+		return data
+	}, {} as InitDisabledNotifications)
+
+	const result = NOTIFICATIONS.reduce((data, key) => {
+		return {
+			...data,
+			[key]: current[key] || {
+				b2cChannels: defualtNotification.b2cChannels,
+				b2bChannels: defualtNotification.b2bChannels
+			}
+		}
+	}, {} as InitDisabledNotifications)
+
+	return result
 }
 
 const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 	const { salonID } = props
+	const { parentPath } = props
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const groupedSettings = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
+	const submitting = useSelector(isSubmitting(FORM.RESEVATION_SYSTEM_SETTINGS))
 
 	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
 	const authUserPermissions = currentUser?.uniqPermissions
@@ -101,11 +143,16 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 
 	const fetchData = async () => {
 		const salonRes = await dispatch(selectSalon(salonID))
-
 		// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
-		const canVisitThisPage = isAdmin(authUserPermissions) || (checkPermissions(authUserPermissions, [PERMISSION.PARTNER]) && salonRes?.data?.settings?.enabledReservations)
+		const salonPermissions = salonRes?.data?.uniqPermissions || []
+		const userPermissions = [...(authUserPermissions || []), ...salonPermissions]
+
+		const canVisitThisPage =
+			checkPermissions(userPermissions, [PERMISSION.NOTINO]) ||
+			(checkPermissions(userPermissions, [PERMISSION.PARTNER], ADMIN_PERMISSIONS) && salonRes?.data?.settings?.enabledReservations)
 		if (!canVisitThisPage) {
-			history.push('/404')
+			navigate('/404')
+			return
 		}
 
 		const servicesRes = await dispatch(getServices({ salonID }))
@@ -117,7 +164,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 				forEach(level1.category?.children, (level2) =>
 					forEach(level2.category?.children, (level3) => {
 						autoConfirmItems.push({
-							[level3.service.id]: level3.service.settings.autoApproveReservatons
+							[level3.service.id]: level3.service.settings.autoApproveReservations
 						})
 						onlineReservationItems.push({
 							[level3.service.id]: level3.service.settings.enabledB2cReservations
@@ -184,39 +231,54 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 		const servicesSettings: any[] = []
 		forEach(allIds, (serviceID) => {
 			const enabledB2cReservations = includes(allowedOnlineBookingIds, serviceID)
-			const autoApproveReservatons = includes(allowedAutoConfirmIds, serviceID)
+			const autoApproveReservations = includes(allowedAutoConfirmIds, serviceID)
 			servicesSettings.push({
 				id: serviceID,
 				settings: {
 					enabledB2cReservations: enabledB2cReservations || false, // ONLINE_BOOKING
-					autoApproveReservatons: autoApproveReservatons || false // AUTO_CONFIRM
+					autoApproveReservations: autoApproveReservations || false // AUTO_CONFIRM
 				}
 			})
 		})
 		// Notifications
 		// find notification which are OFF - relevant for API
-		const disabledNotifications = NOTIFICATIONS.map((type: string) => {
-			return {
-				eventType: type,
-				b2bChannels: transformNotificationsChannelForRequest(values.disabledNotifications[type as RS_NOTIFICATION].b2bChannels),
-				b2cChannels: transformNotificationsChannelForRequest(values.disabledNotifications[type as RS_NOTIFICATION].b2cChannels)
-			}
-		})
+		const disabledNotifications = NOTIFICATIONS.reduce((result: any, item) => {
+			const notificationValues = values.disabledNotifications[item]
+			const b2cChannel = transformNotificationsChannelForRequest(notificationValues.b2cChannels) as NonNullable<PatchDisabledNotifications[0]>['channels']
+			const b2bChannel = transformNotificationsChannelForRequest(notificationValues.b2bChannels) as NonNullable<PatchDisabledNotifications[0]>['channels']
+			const items = [] as PatchDisabledNotifications
 
-		const reqData = {
+			if (!isEmpty(b2cChannel)) {
+				items.push({
+					eventType: `${item}_CUSTOMER`,
+					channels: b2cChannel
+				})
+			}
+
+			if (!isEmpty(b2bChannel)) {
+				items.push({
+					eventType: `${item}_EMPLOYEE` as any,
+					channels: b2bChannel
+				})
+			}
+
+			return [...result, ...items]
+		}, [] as PatchDisabledNotifications)
+
+		const reqData: PathSettingsBody = {
 			settings: {
 				enabledReservations: values.enabledReservations,
 				maxDaysB2cCreateReservation: values.maxDaysB2cCreateReservation,
 				maxHoursB2cCancelReservationBeforeStart: values.maxHoursB2cCancelReservationBeforeStart,
 				maxHoursB2cCreateReservationBeforeStart: values.maxHoursB2cCreateReservationBeforeStart,
-				minutesIntervalB2CReservations: values.minutesIntervalB2CReservations,
-				disabledNotifications
+				minutesIntervalB2CReservations: (values.minutesIntervalB2CReservations as any) || undefined,
+				disabledNotifications: disabledNotifications as any
 			},
 			servicesSettings
 		}
 
 		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/settings' as any, { salonID }, reqData)
+			await patchReq('/api/b2b/admin/salons/{salonID}/settings', { salonID }, reqData)
 			fetchData()
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -232,8 +294,13 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<Spin spinning={salon.isLoading}>
-							<ReservationSystemSettingsForm onSubmit={handleSubmitSettings} salonID={salonID} excludedB2BNotifications={EXCLUDED_NOTIFICATIONS_B2B} />
+						<Spin spinning={salon.isLoading || submitting}>
+							<ReservationSystemSettingsForm
+								onSubmit={handleSubmitSettings}
+								salonID={salonID}
+								excludedB2BNotifications={EXCLUDED_NOTIFICATIONS_B2B}
+								parentPath={parentPath}
+							/>
 						</Spin>
 					</div>
 				</Col>
@@ -242,4 +309,4 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	)
 }
 
-export default withPermissions(permissions)(ReservationsSettingsPage)
+export default withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER])(ReservationsSettingsPage)

@@ -4,6 +4,7 @@ import React, { FC, useRef } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
 import { startsWith } from 'lodash'
+import { useTranslation } from 'react-i18next'
 
 // utils
 import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NEW_ID_PREFIX } from '../../../utils/enums'
@@ -15,6 +16,7 @@ import { ReactComponent as CheckIcon } from '../../../assets/icons/check-10.svg'
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/service-icon-10.svg'
 import { ReactComponent as AvatarIcon } from '../../../assets/icons/avatar-10.svg'
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-12.svg'
+import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-12.svg'
 
 // types
 import { CalendarEvent, IEventCardProps, ReservationPopoverData, PopoverTriggerPosition } from '../../../types/interfaces'
@@ -28,7 +30,7 @@ interface IReservationCardProps extends IEventCardProps {
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
 }
 
-const getIcon = ({
+const getIconState = ({
 	isPast,
 	isRealized,
 	isApproved,
@@ -54,9 +56,9 @@ const getIcon = ({
 	}
 
 	return service?.icon?.resizedImages ? (
-		<img src={service.icon.resizedImages.thumbnail} alt={service?.name} width={10} height={10} className={'object-contain'} />
+		<img src={service.icon.resizedImages.thumbnail} alt={service?.name} width={10} height={10} className={'object-contain shrink-0'} />
 	) : (
-		<ServiceIcon />
+		<ServiceIcon className={'icon service'} />
 	)
 }
 
@@ -147,20 +149,27 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		isPlaceholder,
 		isEdit,
 		onReservationClick,
-		isDayEventsPopover
+		isDayEventsPopover,
+		timeLeftClassName
 	} = props
+
+	const [t] = useTranslation()
 
 	const isPast = dayjs(originalEventData?.endDateTime || end).isBefore(dayjs())
 	const isPending = reservationData?.state === RESERVATION_STATE.PENDING
 	const isApproved = reservationData?.state === RESERVATION_STATE.APPROVED
 	const isRealized = reservationData?.state === RESERVATION_STATE.REALIZED
 	const notRealized = reservationData?.state === RESERVATION_STATE.NOT_REALIZED
-	const isOnline = reservationData?.createSourceType !== RESERVATION_SOURCE_TYPE.ONLINE
+	const isOnline = reservationData?.createSourceType === RESERVATION_SOURCE_TYPE.ONLINE
 	const isEmployeeAutoassigned = reservationData?.employeeAssignmentType === RESERVATION_ASSIGNMENT_TYPE.SYSTEM
 
 	const bgColor = !isPast ? backgroundColor : undefined
 
-	const onlineIndicatior = reservationData?.createSourceType === RESERVATION_SOURCE_TYPE.ONLINE ? <div className={'state'} style={{ backgroundColor: bgColor }} /> : null
+	const onlineIndicatior = isOnline ? (
+		<div className={'state'} style={{ color: bgColor }}>
+			{t('loc:Online')}
+		</div>
+	) : null
 
 	const customerName = getAssignedUserLabel({
 		id: customer?.id || '-',
@@ -169,7 +178,9 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		email: customer?.email
 	})
 
-	const icon = getIcon({ isPast, isApproved, isRealized, notRealized, service })
+	const iconState = getIconState({ isPast, isApproved, isRealized, notRealized, service })
+	const iconPending = isPending && <ClockIcon className={'icon clock'} style={{ color: bgColor }} />
+	const iconAutoAssigned = isEmployeeAutoassigned && <AvatarIcon className={'icon employee'} />
 
 	const cardRef = useRef<HTMLDivElement | null>(null)
 
@@ -179,6 +190,8 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 			return
 		}
 		if (originalEventData.id && cardRef.current) {
+			// NOTE: vzdy ked sa bude pridavat nejaky novy atribut do dat pre popover, je potrebne tie data pridat aj pri inicializacii formularu v SiderEventManagement.tsx
+			// pretoze z formularovych dat sa potom vytvara virtualny event, ktory pri editacii nahradza realny event - a tento virtualny event musi do popovera posielat rovnake data ako realny
 			const data: ReservationPopoverData = {
 				start,
 				end,
@@ -189,7 +202,8 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 				color: backgroundColor,
 				reservationData,
 				note,
-				noteFromB2CCustomer
+				noteFromB2CCustomer,
+				isEdit
 			}
 
 			const clientRect = cardRef.current.getBoundingClientRect()
@@ -209,6 +223,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 			ref={cardRef}
 			className={cx(
 				'nc-event reservation',
+				timeLeftClassName,
 				getWrapperClassnames({
 					diff,
 					calendarView,
@@ -248,7 +263,10 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 						case CALENDAR_VIEW.MONTH:
 							return (
 								<>
-									<span className={'title'}>{customerName}</span>
+									<div className={'flex gap-1 min-w-0'}>
+										{isDayEventsPopover && <div className={'icons'}>{iconState}</div>}
+										<span className={'title truncate'}>{customerName}</span>
+									</div>
 									<span className={'time'}>{timeText}</span>
 								</>
 							)
@@ -256,15 +274,17 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 							return (
 								<>
 									<div className={'title-wrapper'}>
-										<span className={'title'}>{customerName}</span>
-										{onlineIndicatior}
+										<div className={'title-inner-wrapper'}>
+											{iconState}
+											<span className={'title'}>{customerName}</span>
+											{onlineIndicatior}
+										</div>
+										<div className={'icons'}>
+											{iconPending}
+											{iconAutoAssigned}
+										</div>
 									</div>
 									{service?.name && <span className={'desc'}>{service.name}</span>}
-									<div className={'icons'}>
-										<AvatarIcon className={'icon employee'} />
-										{icon}
-										{onlineIndicatior}
-									</div>
 								</>
 							)
 						}
@@ -272,18 +292,20 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 						default: {
 							return (
 								<>
-									<div className={'event-info'}>
-										<div className={'title-wrapper'}>
+									<div className={'title-wrapper'}>
+										<div className={'title-inner-wrapper'}>
+											{iconState}
 											<span className={'title'}>{customerName}</span>
 											{onlineIndicatior}
+											<span className={'time'}>{timeText}</span>
 										</div>
-										<span className={'time'}>{timeText}</span>
-										{service?.name && <span className={'desc'}>{service.name}</span>}
+										<div className={'icons'}>
+											{iconPending}
+											{iconAutoAssigned}
+										</div>
 									</div>
-									<div className={'icons'}>
-										<AvatarIcon className={'icon employee'} />
-										{icon}
-									</div>
+									<span className={'time'}>{timeText}</span>
+									{service?.name && <span className={'desc'}>{service.name}</span>}
 								</>
 							)
 						}

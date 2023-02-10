@@ -37,11 +37,11 @@ import { SubmissionError, submit } from 'redux-form'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
-import { ArgsProps } from 'antd/lib/notification'
+import { ArgsProps } from 'antd/es/notification/interface'
+
 import cx from 'classnames'
 import showNotifications from './tsxHelpers'
 import {
-	ADMIN_PERMISSIONS,
 	BYTE_MULTIPLIER,
 	DATE_TIME_PARSER_DATE_FORMAT,
 	DATE_TIME_PARSER_FORMAT,
@@ -62,15 +62,38 @@ import {
 	MSG_TYPE,
 	NOTIFICATION_TYPE,
 	QUERY_LIMIT,
-	SALON_PERMISSION
+	RESERVATION_STATE,
+	PERMISSION,
+	RESERVATION_PAYMENT_METHOD,
+	RESERVATION_SOURCE_TYPE
 } from './enums'
 
-import { CountriesData, IAuthUserPayload, IDateTimeFilterOption, IEmployeePayload, IPrice, ISelectOptionItem, IStructuredAddress } from '../types/interfaces'
+import {
+	CountriesData,
+	FormPriceAndDurationData,
+	IAuthUserPayload,
+	IDateTimeFilterOption,
+	IEmployeePayload,
+	IEmployeeServiceEditForm,
+	IPrice,
+	ISelectOptionItem,
+	IStructuredAddress,
+	ServicePatchBody,
+	ServicePriceAndDurationData
+} from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
 
 import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
+import { ReactComponent as ClockIcon } from '../assets/icons/clock-icon.svg'
+import { ReactComponent as CouponIcon } from '../assets/icons/coupon.svg'
+import { ReactComponent as NotRealizedIcon } from '../assets/icons/alert-circle.svg'
+import { ReactComponent as CheckSuccessIcon } from '../assets/icons/approwed-icon.svg'
+import { ReactComponent as CreditCardIcon } from '../assets/icons/credit-card.svg'
+import { ReactComponent as WalletIcon } from '../assets/icons/wallet.svg'
+import { ReactComponent as DollarIcon } from '../assets/icons/dollar.svg'
+import { ReactComponent as CrossedIcon } from '../assets/icons/crossed-red-16.svg'
 // eslint-disable-next-line import/no-cycle
 import { LOCALES } from '../components/LanguagePicker'
 
@@ -135,7 +158,7 @@ export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: strin
 
 /**
  * @param date Date
- * @param locale iso country code sk,cz,en,... etc.
+ * @param skipTime
  * @return string
  *
  * Returns formatted date by location
@@ -254,6 +277,83 @@ export const translateDayName = (day: DAY | typeof MONDAY_TO_FRIDAY, shortName?:
 			return shortName ? i18next.t('loc:Po - Pia') : i18next.t('loc:Pondelok - Piatok')
 		default:
 			return ''
+	}
+}
+
+export const transalteReservationSourceType = (sourceType: RESERVATION_SOURCE_TYPE) => {
+	if (sourceType === RESERVATION_SOURCE_TYPE.ONLINE) {
+		return i18next.t('loc:B2C')
+	}
+	return i18next.t('loc:B2B')
+}
+
+export const translateReservationState = (state?: RESERVATION_STATE) => {
+	switch (state) {
+		case RESERVATION_STATE.NOT_REALIZED:
+			return {
+				text: i18next.t('loc:Nezrealizovaná'),
+				icon: <NotRealizedIcon />
+			}
+		case RESERVATION_STATE.PENDING:
+			return {
+				text: i18next.t('loc:Čakajúca'),
+				icon: <ClockIcon color={'#FF9500'} />
+			}
+		case RESERVATION_STATE.CANCEL_BY_SALON:
+			return {
+				text: i18next.t('loc:Zrušená salónom'),
+				icon: <CrossedIcon />
+			}
+		case RESERVATION_STATE.APPROVED:
+			return {
+				text: i18next.t('loc:Potvrdená'),
+				icon: <CheckSuccessIcon color={'#008700'} />
+			}
+		case RESERVATION_STATE.REALIZED:
+			return {
+				text: i18next.t('loc:Zaplatená'),
+				icon: <DollarIcon color={'#008700'} />
+			}
+		case RESERVATION_STATE.CANCEL_BY_CUSTOMER:
+			return {
+				text: i18next.t('loc:Zrušená zákaznikom'),
+				icon: <CrossedIcon />
+			}
+		case RESERVATION_STATE.DECLINED:
+			return {
+				text: i18next.t('loc:Odmietnutá'),
+				icon: <CrossedIcon />
+			}
+		default:
+			return {
+				text: '-',
+				icon: undefined
+			}
+	}
+}
+
+export const translateReservationPaymentMethod = (paymentMethod?: RESERVATION_PAYMENT_METHOD, className?: string) => {
+	switch (paymentMethod) {
+		case RESERVATION_PAYMENT_METHOD.CARD:
+			return {
+				text: i18next.t('loc:Platba kartou'),
+				icon: <CreditCardIcon className={className} />
+			}
+		case RESERVATION_PAYMENT_METHOD.CASH:
+			return {
+				text: i18next.t('loc:Platba v hotovosti'),
+				icon: <WalletIcon className={className} />
+			}
+		case RESERVATION_PAYMENT_METHOD.OTHER:
+			return {
+				text: i18next.t('loc:Iné spôsoby platby'),
+				icon: <DollarIcon className={className} />
+			}
+		default:
+			return {
+				text: '',
+				icon: undefined
+			}
 	}
 }
 
@@ -505,11 +605,9 @@ export const transformNumberFieldValue = (rawValue: number | string | undefined 
 		} else if (isNumber(min) && isNumber(max) && value >= min && value <= max) {
 			result = value
 		}
-	} else if (Number.isNaN(value)) {
-		result = NaN
 	}
 
-	if (isFinite(result) && isNumber(precision)) {
+	if (!Number.isNaN(value) && isFinite(result) && isNumber(precision)) {
 		result = round(result as number, precision)
 	}
 
@@ -744,6 +842,20 @@ export const flattenTree = (array: any[], callback?: (item: any, level: number) 
 	return output
 }
 
+export const findNodeInTree = (node: any, value: any, valueKey = 'id', nestingKey = 'children') => {
+	let result = null
+	if (node) {
+		if (node[valueKey] === value) {
+			return node
+		}
+		if (node[nestingKey]) {
+			// eslint-disable-next-line no-return-assign
+			node[nestingKey].some((childrenNode: any) => (result = findNodeInTree(childrenNode, value)))
+		}
+	}
+	return result
+}
+
 export const isEnumValue = <T extends { [k: string]: string }>(checkValue: any, enumObject: T): checkValue is T[keyof T] =>
 	typeof checkValue === 'string' && Object.values(enumObject).includes(checkValue)
 
@@ -786,11 +898,12 @@ export const sortData = (a?: any, b?: any) => {
 	return 0
 }
 
-export const optionRenderNotiPinkCheckbox = (text: any, checked: any) => {
+export const optionRenderNotiPinkCheckbox = (text: any, checked: boolean, disabled: boolean) => {
 	return (
 		<div
 			className={cx('custom-rounded-checkbox', {
-				checked
+				checked,
+				disabled
 			})}
 		>
 			{text}
@@ -811,6 +924,19 @@ export const optionRenderWithImage = (itemData: any, fallbackIcon?: React.ReactN
 					{fallbackIcon}
 				</div>
 			)}
+			{label}
+		</div>
+	)
+}
+
+export const optionRenderWithIcon = (itemData: any, fallbackIcon?: React.ReactNode, imageWidth = 16, imageHeight = 16) => {
+	const { label, icon } = itemData
+	const style = { width: imageWidth, height: imageHeight }
+	return (
+		<div className='flex items-center'>
+			<div style={style} className={'mr-2 flex items-center'}>
+				{icon || fallbackIcon}
+			</div>
 			{label}
 		</div>
 	)
@@ -885,7 +1011,7 @@ export const hasAuthUserPermissionToEditRole = (
 		return result
 	}
 
-	if (authUser.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+	if (authUser.uniqPermissions?.some((permission) => [PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
 		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
 		return {
 			hasPermission: true,
@@ -919,7 +1045,7 @@ export const hasAuthUserPermissionToEditRole = (
 			return result
 		}
 		// it's possible to edit role only if you have permission to edit
-		if (authUserSalonRole?.permissions.find((permission) => permission.name === SALON_PERMISSION.USER_ROLE_EDIT)) {
+		if (authUserSalonRole?.permissions.find((permission) => permission.name === PERMISSION.EMPLOYEE_ROLE_UPDATE)) {
 			return {
 				hasPermission: true,
 				tooltip: null
@@ -935,7 +1061,7 @@ export const filterSalonRolesByPermission = (salonID?: string, authUser?: IAuthU
 		return salonRoles
 	}
 
-	if (authUser?.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+	if (authUser?.uniqPermissions?.some((permission) => [PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
 		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
 		// they automatically see all options
 		return salonRoles
@@ -981,6 +1107,20 @@ export const getSalonFilterRanges = (values?: IDateTimeFilterOption[]): { [key: 
 	}, {})
 }
 
+export const getRangesForDatePicker = (values?: IDateTimeFilterOption[]): { [key: string]: Dayjs[] } => {
+	const options = values ?? Object.values(DEFAULT_DATE_TIME_OPTIONS())
+	const now = dayjs()
+	return options.reduce((ranges, value) => {
+		return [
+			...ranges,
+			{
+				label: value.name,
+				value: [now.subtract(value.value, value.unit), now]
+			}
+		]
+	}, [])
+}
+
 export const getFirstDayOfWeek = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).startOf('week')
 
 export const getFirstDayOfMonth = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).startOf('month')
@@ -1024,13 +1164,211 @@ export const getAssignedUserLabel = (assignedUser?: Paths.GetApiB2BAdminSalons.R
 			return assignedUser.id
 	}
 }
+
+export const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: React.ReactNode, extra?: string, className = '') => {
+	if ((!isNil(from) && !Number.isNaN(from)) || (!isNil(to) && !Number.isNaN(to))) {
+		return (
+			<div className={cx('flex items-center gap-1', className)}>
+				{icon}
+				{from}
+				{variable && !isNil(to) && !Number.isNaN(to) && from !== to ? ` - ${to}` : undefined} {extra}
+			</div>
+		)
+	}
+	return undefined
+}
+
+export const renderPriceAndDurationInfo = (
+	salonPriceAndDuration?: FormPriceAndDurationData,
+	employeePriceAndDuration?: FormPriceAndDurationData,
+	hasOverridenData?: boolean,
+	currencySymbol?: string
+) => {
+	return (
+		<div className='flex flex-col items-end'>
+			<div className={cx('flex gap-1 whitespace-nowrap text-xs font-normal text-notino-grayDark', { 'service-original-data-overriden': hasOverridenData })}>
+				{renderFromTo(
+					salonPriceAndDuration?.durationFrom,
+					salonPriceAndDuration?.durationTo,
+					!!salonPriceAndDuration?.variableDuration,
+					<ClockIcon className='w-3 h-3' />,
+					i18next.t('loc:min')
+				)}
+				{renderFromTo(
+					salonPriceAndDuration?.priceFrom,
+					salonPriceAndDuration?.priceTo,
+					!!salonPriceAndDuration?.variablePrice,
+					<CouponIcon className='w-3 h-3' />,
+					currencySymbol
+				)}
+			</div>
+
+			{hasOverridenData && (
+				<div className={'flex gap-1 whitespace-nowrap font-bold text-xs text-notino-pink'}>
+					{renderFromTo(
+						employeePriceAndDuration?.durationFrom,
+						employeePriceAndDuration?.durationTo,
+						!!employeePriceAndDuration?.variableDuration,
+						<ClockIcon className='w-3 h-3' />,
+						i18next.t('loc:min')
+					)}
+					{renderFromTo(
+						employeePriceAndDuration?.priceFrom,
+						employeePriceAndDuration?.priceTo,
+						!!employeePriceAndDuration?.variablePrice,
+						<CouponIcon className='w-3 h-3' />,
+						currencySymbol
+					)}
+				</div>
+			)}
+		</div>
+	)
+}
+
+export const getServicePriceAndDurationData = (
+	durationFrom?: number,
+	durationTo?: number,
+	priceFrom?: ServicePriceAndDurationData['priceFrom'],
+	priceTo?: ServicePriceAndDurationData['priceTo']
+): FormPriceAndDurationData => {
+	const decodedPriceFrom = decodePrice(priceFrom)
+	let decodedPriceTo
+	let variablePrice = false
+
+	if (!isNil(decodedPriceFrom)) {
+		decodedPriceTo = decodePrice(priceTo)
+		if (!isNil(decodedPriceTo) && decodedPriceTo !== decodedPriceFrom) {
+			variablePrice = true
+		}
+	}
+
+	const variableDuration = !!(!isNil(durationFrom) && !isNil(durationTo) && durationFrom !== durationTo)
+
+	return {
+		durationFrom: durationFrom || null,
+		durationTo: durationTo || null,
+		priceFrom: decodedPriceFrom || null,
+		priceTo: decodedPriceTo || null,
+		variableDuration,
+		variablePrice
+	}
+}
+
+export const arePriceAndDurationDataEmpty = (data?: FormPriceAndDurationData) => {
+	let emptyPrice = true
+	let emptyDuration = true
+
+	if (data?.variableDuration) {
+		emptyDuration = (isNil(data?.durationFrom) || Number.isNaN(data?.durationFrom)) && (isNil(data?.durationTo) || Number.isNaN(data?.durationTo))
+	} else {
+		emptyDuration = isNil(data?.durationFrom) || Number.isNaN(data?.durationFrom)
+	}
+	if (data?.variablePrice) {
+		emptyPrice = (isNil(data?.priceFrom) || Number.isNaN(data?.priceFrom)) && (isNil(data?.priceTo) || Number.isNaN(data?.priceTo))
+	} else {
+		emptyPrice = isNil(data?.priceFrom) || Number.isNaN(data?.priceFrom)
+	}
+
+	return emptyPrice && emptyDuration && !data?.variableDuration && !data?.variablePrice
+}
+
+export const validatePriceAndDurationData = (priceAndDurationData?: FormPriceAndDurationData) => {
+	const employeePriceAndDurationErrors: any = {}
+
+	if (isNil(priceAndDurationData?.priceFrom)) {
+		employeePriceAndDurationErrors.priceFrom = i18next.t('loc:Toto pole je povinné')
+	}
+	if (priceAndDurationData?.variablePrice) {
+		if (isNil(priceAndDurationData?.priceTo)) {
+			employeePriceAndDurationErrors.priceTo = i18next.t('loc:Toto pole je povinné')
+		}
+		if (!isNil(priceAndDurationData?.priceFrom) && !isNil(priceAndDurationData?.priceTo) && priceAndDurationData?.priceFrom >= priceAndDurationData?.priceTo) {
+			employeePriceAndDurationErrors.priceFrom = i18next.t('loc:Chybný rozsah')
+			employeePriceAndDurationErrors.priceTo = true
+		}
+	}
+	if (priceAndDurationData?.variableDuration) {
+		if (isNil(priceAndDurationData?.durationFrom)) {
+			employeePriceAndDurationErrors.durationFrom = i18next.t('loc:Toto pole je povinné')
+		}
+		if (isNil(priceAndDurationData?.durationTo)) {
+			employeePriceAndDurationErrors.durationTo = i18next.t('loc:Toto pole je povinné')
+		}
+		if (!isNil(priceAndDurationData?.durationFrom) && !isNil(priceAndDurationData?.durationTo) && priceAndDurationData?.durationFrom >= priceAndDurationData?.durationTo) {
+			employeePriceAndDurationErrors.durationFrom = i18next.t('loc:Chybný rozsah')
+			employeePriceAndDurationErrors.durationTo = true
+		}
+	}
+	return employeePriceAndDurationErrors
+}
+
+export const getEmployeeServiceDataForPatch = (values: IEmployeeServiceEditForm, resetUserServiceData?: boolean) => {
+	let employeePatchServiceData: ServicePatchBody = {}
+
+	if (resetUserServiceData) {
+		employeePatchServiceData = {
+			priceAndDurationData: null,
+			serviceCategoryParameterValues: null
+		}
+	} else if (values?.useCategoryParameter) {
+		const areAllParameterValuesEmpty = !values?.serviceCategoryParameter?.some((parameterValue) => !arePriceAndDurationDataEmpty(parameterValue.employeePriceAndDurationData))
+
+		if (areAllParameterValuesEmpty) {
+			employeePatchServiceData = {
+				...employeePatchServiceData,
+				serviceCategoryParameterValues: null
+			}
+		} else if ((values?.serviceCategoryParameter?.length || 0) <= 100) {
+			const serviceCategoryParameterValues: ServicePatchBody['serviceCategoryParameterValues'] = []
+			values?.serviceCategoryParameter?.forEach((parameterValue) => {
+				serviceCategoryParameterValues.push({
+					id: parameterValue.id,
+					priceAndDurationData: {
+						durationFrom: parameterValue.employeePriceAndDurationData?.durationFrom,
+						durationTo: parameterValue.employeePriceAndDurationData?.variableDuration ? parameterValue.employeePriceAndDurationData?.durationTo : undefined,
+						priceFrom: encodePrice(parameterValue.employeePriceAndDurationData?.priceFrom as number),
+						priceTo:
+							parameterValue.employeePriceAndDurationData?.variablePrice && !isNil(parameterValue.employeePriceAndDurationData?.priceTo)
+								? encodePrice(parameterValue.employeePriceAndDurationData?.priceTo)
+								: undefined
+					}
+				})
+			})
+			employeePatchServiceData = {
+				...employeePatchServiceData,
+				serviceCategoryParameterValues
+			}
+		}
+	} else {
+		const priceAndDurationData = values?.employeePriceAndDurationData
+		if (arePriceAndDurationDataEmpty(priceAndDurationData)) {
+			employeePatchServiceData = {
+				...employeePatchServiceData,
+				priceAndDurationData: null
+			}
+		} else if (!isNil(priceAndDurationData?.priceFrom)) {
+			employeePatchServiceData = {
+				...employeePatchServiceData,
+				priceAndDurationData: {
+					durationFrom: priceAndDurationData?.durationFrom,
+					durationTo: priceAndDurationData?.variableDuration ? priceAndDurationData?.durationTo : undefined,
+					priceFrom: encodePrice(priceAndDurationData?.priceFrom as number),
+					priceTo: priceAndDurationData?.variablePrice && !isNil(priceAndDurationData?.priceTo) ? encodePrice(priceAndDurationData?.priceTo) : undefined
+				}
+			}
+		}
+	}
+	return employeePatchServiceData
+}
+
 // NOTE: treba dodrziat tento shape aby spravne fungoval isPristine selector pre selecty typu labelInValue (maju BE vyhladavanie)
-export const initializeLabelInValueSelect = (key: string | number, label: string, disabled?: boolean, title?: boolean) => {
+export const initializeLabelInValueSelect = (key: string | number, label: string, extra?: any, disabled?: boolean, title?: boolean) => {
 	return {
 		disabled,
 		title,
 		key,
 		value: key,
-		label
+		label,
+		extra
 	}
 }

@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Redirect, RouteProps, useLocation } from 'react-router-dom'
+import { Navigate, RouteProps, useLocation } from 'react-router-dom'
 import IdleTimer from 'react-idle-timer'
 import { Dictionary } from 'lodash'
 import { useSelector } from 'react-redux'
@@ -16,8 +16,8 @@ import { isLoggedIn } from '../utils/auth'
 import { PAGE, SUBMENU_PARENT, REFRESH_PAGE_INTERVAL } from '../utils/enums'
 
 type Props = RouteProps & {
-	layout: React.ReactNode
-	component: React.ReactNode
+	layout?: any
+	element?: React.ReactNode
 	translatePathKey?: string
 	page?: PAGE
 	submenuParent?: {
@@ -43,24 +43,28 @@ const AuthRoute: FC<Props> = (props) => {
 	const { pathname, search } = useLocation()
 
 	if (!isLoggedIn()) {
+		/**
+		 * v pripade, ze uzivatel nebol prihlaseny a v prehliadaci zvolil nejaku autorizovanu URL, tak ho to redirectne na login pagu
+		 * do statu si ulozime URL, z ktorej bol presmerovany a nasledne po uspesnom prihlaseny presmerujeme naspät
+		 */
 		return (
-			<Redirect
+			<Navigate
 				to={{
-					pathname: t('paths:login'),
-					state: { redirectFrom: pathname + search }
+					pathname: t('paths:login')
 				}}
+				state={{ redirectFrom: pathname + search }}
 			/>
 		)
 	}
 
 	// account is not activated, redirect to route '/activation'
 	if (!isActivated && page !== PAGE.ACTIVATION) {
-		return currentUser.isLoading || !currentUser.data ? <></> : <Redirect to={t('paths:activation')} />
+		return currentUser.isLoading || !currentUser.data ? <></> : <Navigate to={t('paths:activation')} />
 	}
 
 	// account is activated, disabled route '/activation'
 	if (!!isActivated && page === PAGE.ACTIVATION) {
-		return <Redirect to={t('paths:index')} />
+		return <Navigate to={t('paths:index')} />
 	}
 
 	return (

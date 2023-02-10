@@ -19,10 +19,26 @@ const ConfirmModal: FC<IConfirmModal> = (props) => {
 		<Modal {...restProps} closeIcon={<CloseIcon />} onCancel={onCancel} onOk={onOk} footer={null}>
 			{children}
 			<div className={'flex gap-4 mt-6'}>
-				<Button type={'dashed'} size={'middle'} className={cx('noti-btn w-1/2')} htmlType={'button'} onClick={onCancel} disabled={disabled} loading={loading}>
+				<Button
+					type={'dashed'}
+					size={'middle'}
+					className={cx(props.cancelButtonProps?.className, 'noti-btn w-1/2')}
+					htmlType={'button'}
+					onClick={onCancel as any}
+					disabled={disabled}
+					loading={loading}
+				>
 					{cancelText || t('loc:Zrušiť')}
 				</Button>
-				<Button type={'primary'} size={'middle'} className={cx('noti-btn w-1/2')} htmlType={'button'} onClick={onOk} disabled={disabled} loading={loading}>
+				<Button
+					type={'primary'}
+					size={'middle'}
+					className={cx(props.okButtonProps?.className, 'noti-btn w-1/2')}
+					htmlType={'button'}
+					onClick={onOk as any}
+					disabled={disabled}
+					loading={loading}
+				>
 					{okText || 'Ok'}
 				</Button>
 			</div>

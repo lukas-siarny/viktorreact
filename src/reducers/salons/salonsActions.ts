@@ -1,19 +1,19 @@
 /* eslint-disable import/no-cycle */
-import { map, isEmpty } from 'lodash'
+import { isEmpty, map } from 'lodash'
 import { IResetStore } from '../generalTypes'
 
 // types
-import { SALON, SALONS, SUGGESTED_SALONS, BASIC_SALON, BASIC_SALONS, SALON_HISTORY, REJECTED_SUGGESTIONS } from './salonsTypes'
+import { BASIC_SALON, BASIC_SALONS, REJECTED_SUGGESTIONS, SALON, SALON_HISTORY, SALONS, SUGGESTED_SALONS } from './salonsTypes'
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
 import { IQueryParams, ISearchable } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { SALON_FILTER_STATES, SALON_FILTER_OPENING_HOURS, SALONS_TAB_KEYS } from '../../utils/enums'
+import { SALON_FILTER_OPENING_HOURS, SALON_FILTER_STATES, SALONS_TAB_KEYS } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
-export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGeBasictSalon | IGetBasicSalons | IGetSalonHistory | IGetRejectedSuggestions
+export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGetBasictSalon | IGetBasicSalons | IGetSalonHistory | IGetRejectedSuggestions
 
 interface IGetSalons {
 	type: SALONS
@@ -28,9 +28,9 @@ interface IGetSalonHistory {
 export interface IGetSalonsQueryParams extends IQueryParams {
 	categoryFirstLevelIDs?: (string | null)[] | null
 	statuses_all?: boolean | null
-	statuses_published?: (string | null)[] | SALON_FILTER_STATES[] | null
+	statuses_published?: string | SALON_FILTER_STATES | null
 	salonState?: string | null
-	statuses_changes?: (string | null)[] | SALON_FILTER_STATES[] | null
+	statuses_changes?: string | SALON_FILTER_STATES | null
 	countryCode?: string | null
 	createType?: string | null
 	lastUpdatedAtFrom?: string | null
@@ -42,8 +42,8 @@ export interface IGetSalonsQueryParams extends IQueryParams {
 }
 
 export interface IGetSalonsHistoryQueryParams extends IQueryParams {
-	dateFrom: string
-	dateTo: string
+	dateFrom: string | null
+	dateTo: string | null
 	salonID: string
 }
 
@@ -52,7 +52,7 @@ export interface IGetSalon {
 	payload: ISalonPayload
 }
 
-export interface IGeBasictSalon {
+export interface IGetBasictSalon {
 	type: BASIC_SALON
 	payload: IBasicSalonPayload
 }
@@ -112,7 +112,7 @@ interface IGetRejectedSuggestions {
 }
 
 export const getSalons =
-	(queryParams: IGetSalonsQueryParams): ThunkResult<Promise<ISalonsPayload>> =>
+	(queryParams: any): ThunkResult<Promise<ISalonsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISalonsPayload
 
@@ -128,7 +128,12 @@ export const getSalons =
 		}
 
 		if (!queryParams.statuses_all) {
-			statuses = [...statuses, ...(queryParams.statuses_published || []), ...(queryParams.statuses_changes || [])]
+			if (queryParams.statuses_published) {
+				statuses.push(queryParams.statuses_published)
+			}
+			if (queryParams.statuses_changes) {
+				statuses.push(queryParams.statuses_changes)
+			}
 		}
 
 		if (queryParams.hasSetOpeningHours === SALON_FILTER_OPENING_HOURS.SET) {
@@ -309,6 +314,7 @@ export const getRejectedSuggestions =
 				const { address } = suggestion.salon
 				const formattedAddress = `${address?.city}${address?.street ? `, ${address.street}` : ''}`
 				return {
+					id: suggestion.salon.id,
 					key: suggestion.salon.id,
 					salonID: suggestion.salon.id,
 					salonName: suggestion.salon.name ?? '-',

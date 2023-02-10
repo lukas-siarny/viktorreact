@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Col, Row, Button, TablePaginationConfig } from 'antd'
 import { compose } from 'redux'
 import { find, join } from 'lodash'
-import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { initialize } from 'redux-form'
 import { SorterResult } from 'antd/lib/table/interface'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -15,7 +15,6 @@ import CategoryParamsFilter from './components/CategoryParamsFilter'
 
 // utils
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, STRINGS, DEFAULT_LANGUAGE, FORM } from '../../utils/enums'
-import { history } from '../../utils/history'
 import { withPermissions } from '../../utils/Permissions'
 import { setOrder, transformToLowerCaseWithoutAccent, formatDateByLocale, normalizeDirectionKeys, sortData, getLinkWithEncodedBackUrl } from '../../utils/helper'
 
@@ -29,15 +28,19 @@ import { IBreadcrumbs, Columns } from '../../types/interfaces'
 // assets
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
+// hooks
+import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+
 const CategoryParamsPage = () => {
 	const { t, i18n } = useTranslation()
 	const dispatch = useDispatch()
 
 	const parameters = useSelector((state: RootState) => state.categoryParams.parameters)
+	const navigate = useNavigate()
 
 	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		order: withDefault(StringParam, 'name:ASC')
+		search: StringParam(),
+		order: StringParam('name:ASC')
 	})
 
 	useEffect(() => {
@@ -153,7 +156,7 @@ const CategoryParamsPage = () => {
 							addButton={
 								<Button
 									onClick={() => {
-										history.push(getLinkWithEncodedBackUrl(t('paths:category-parameters/create')))
+										navigate(getLinkWithEncodedBackUrl(t('paths:category-parameters/create')))
 									}}
 									type='primary'
 									htmlType='button'
@@ -174,7 +177,7 @@ const CategoryParamsPage = () => {
 								twoToneRows
 								pagination={false}
 								onRow={(record) => ({
-									onClick: () => history.push(getLinkWithEncodedBackUrl(t('paths:category-parameters/{{parameterID}}', { parameterID: record.id })))
+									onClick: () => navigate(getLinkWithEncodedBackUrl(t('paths:category-parameters/{{parameterID}}', { parameterID: record.id })))
 								})}
 								loading={parameters.isLoading}
 							/>
@@ -186,4 +189,4 @@ const CategoryParamsPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]))(CategoryParamsPage)
+export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(CategoryParamsPage)

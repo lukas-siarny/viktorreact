@@ -1,27 +1,12 @@
-import React, { FC, ReactNode } from 'react'
-import { Tabs, TabsProps, TabPaneProps } from 'antd'
+import React, { FC } from 'react'
+import { Tabs, TabsProps } from 'antd'
 
-const { TabPane } = Tabs
-
-type TabPaneCustomProps = TabPaneProps & {
-	tabPaneContent: ReactNode
-}
-type Props = TabsProps & {
-	tabsContent: TabPaneCustomProps[]
-}
+type Props = TabsProps
 
 const TabsComponent: FC<Props> = (props) => {
-	const { tabsContent, className, ...restProps } = props
+	const { className, ...restProps } = props
 
-	return (
-		<Tabs {...restProps} className={`noti-tabs ${className ?? ''}`}>
-			{tabsContent?.map((tabPane) => (
-				<TabPane closeIcon={tabPane.closeIcon} forceRender={tabPane.forceRender} disabled={tabPane.disabled} tab={tabPane.tab} key={tabPane.tabKey}>
-					{tabPane.tabPaneContent}
-				</TabPane>
-			))}
-		</Tabs>
-	)
+	return <Tabs {...restProps} className={`noti-tabs ${className ?? ''}`} />
 }
 
 export default TabsComponent

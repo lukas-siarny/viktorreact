@@ -41,6 +41,36 @@
 	background: rgba($backgroundColor-notino-pink, 0.1)
 
 // daily view
+.fc-timegrid-event-harness
+	&:has(.end-of-day-14)
+		transform: translateY(-14px)
+	&:has(.end-of-day-13)
+		transform: translateY(-13px)
+	&:has(.end-of-day-12)
+		transform: translateY(-12px)
+	&:has(.end-of-day-11)
+		transform: translateY(-11px)
+	&:has(.end-of-day-10)
+		transform: translateY(-10px)
+	&:has(.end-of-day-9)
+		transform: translateY(-9px)
+	&:has(.end-of-day-8)
+		transform: translateY(-8px)
+	&:has(.end-of-day-7)
+		transform: translateY(-7px)
+	&:has(.end-of-day-6)
+		transform: translateY(-6px)
+	&:has(.end-of-day-5)
+		transform: translateY(-5px)
+	&:has(.end-of-day-4)
+		transform: translateY(-4px)
+	&:has(.end-of-day-3)
+		transform: translateY(-3px)
+	&:has(.end-of-day-2)
+		transform: translateY(-2px)
+	&:has(.end-of-day-1)
+		transform: translateY(-1px)
+
 .fc-timegrid-col-bg
 	.fc-timegrid-bg-harness
 		.fc-bg-event
@@ -88,6 +118,7 @@
 				border-top-width: 2px
 		.fc-scrollgrid-section-header
 			background: transparent
+			line-height: 1.5 !important
 			.fc-col-header-cell
 				border-bottom-color: transparent
 			.fc-col-header-cell-cushion
@@ -153,6 +184,36 @@
 							@include scrollbar-styles
 
 // weekly view
+.fc-timeline-event-harness
+	&:has(.end-of-day-14)
+		transform: translateX(-21px)
+	&:has(.end-of-day-13)
+		transform: translateX(-21px)
+	&:has(.end-of-day-12)
+		transform: translateX(-20px)
+	&:has(.end-of-day-11)
+		transform: translateX(-18px)
+	&:has(.end-of-day-10)
+		transform: translateX(-16px)
+	&:has(.end-of-day-9)
+		transform: translateX(-15px)
+	&:has(.end-of-day-8)
+		transform: translateX(-13px)
+	&:has(.end-of-day-7)
+		transform: translateX(-11px)
+	&:has(.end-of-day-6)
+		transform: translateX(-10px)
+	&:has(.end-of-day-5)
+		transform: translateX(-8px)
+	&:has(.end-of-day-4)
+		transform: translateX(-7px)
+	&:has(.end-of-day-3)
+		transform: translateX(-5px)
+	&:has(.end-of-day-2)
+		transform: translateX(-3px)
+	&:has(.end-of-day-1)
+		transform: translateX(-2px)
+
 .fc .fc-timeline-now-indicator-arrow
 	display: none
 .fc .fc-timeline-now-indicator-line
@@ -262,7 +323,7 @@
 											pointer-events: none
 											padding: 0
 											width: 100%
-											height: 100%
+											height: 24px
 		.fc-scrollgrid-section-body
 			.fc-cell-shaded
 				background: white
@@ -399,23 +460,9 @@
 				background-color: $backgroundColor-notino-grayLighter
 			.fc-daygrid-day-frame
 				position: relative
-				/*.fc-daygrid-day-top
-					position: absolute
-					bottom: 0
-					right: 0
-					left: 0
-					height: 20px
-					z-index: 333
-					.fc-daygrid-day-number
-						pointer-events: none
-						width: 100%
-						height: 100%
-						padding: 0
-						display: block
-				/*.fc-daygrid-day-bottom
-					display: none
 				.fc-daygrid-day-top
 					position: absolute
+					z-index: 10
 					bottom: 0
 					right: 0
 					width: 20px
@@ -445,10 +492,8 @@
 					font-size: 12px
 					color: $textColor-notino-grayDark
 					padding-right: 20px
-					.fc-daygrid-more-link
-						display: block
-						width: 100%
-						height: 100%
+					.fc-daygrid-more-link:not(.nc-more-link)
+						display: none
 			&.fc-day-today
 				.fc-daygrid-day-frame
 					.fc-daygrid-day-top
@@ -459,6 +504,8 @@
 				.fc-daygrid-day-frame
 					.fc-daygrid-day-top
 						opacity: 1
+						.fc-daygrid-day-number
+							color: $textColor-notino-gray
 		.fc-daygrid-event
 			margin: 4px 10px 0 4px
 			padding: 0

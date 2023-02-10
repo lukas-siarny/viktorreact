@@ -1,10 +1,9 @@
 /* eslint-disable import/no-cycle */
-import { BusinessHoursInput, DateSpanApi, EventApi } from '@fullcalendar/react'
+import { DateSpanApi, EventApi, BusinessHoursInput } from '@fullcalendar/core'
 import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
-import { isEmpty, uniqueId, startsWith } from 'lodash'
+import { uniqueId, startsWith, isEmpty } from 'lodash'
 import Scroll from 'react-scroll'
-import { Paths } from '../../types/api'
 
 // types
 import {
@@ -16,8 +15,12 @@ import {
 	IResourceEmployee,
 	IWeekViewResourceExtenedProps,
 	IDayViewResourceExtenedProps,
-	RawOpeningHours
+	RawOpeningHours,
+	ICalendarDayEvents,
+	DisabledNotificationsArray
 } from '../../types/interfaces'
+import { Paths } from '../../types/api'
+import { IVirtualEventPayload } from '../../reducers/virtualEvent/virtualEventActions'
 
 // utils
 import {
@@ -28,15 +31,67 @@ import {
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_VIEW,
 	DAY,
-	NEW_ID_PREFIX
+	NEW_ID_PREFIX,
+	NOTIFICATION_TYPES
 } from '../../utils/enums'
 import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
 
-export const compareDayEventsDates = (aStart: string, aEnd: string, bStart: string, bEnd: string) => {
+export const getCalendarMonthFullRangeDates = (selectedMonthFirstDay: string | dayjs.Dayjs, format: string | false = CALENDAR_DATE_FORMAT.QUERY) => {
+	// v mesacnom view je potrebne vyplnit cely kalendar - 7 x 6 buniek (od PO - NE) = 42
+	const queryParamsStart = dayjs(selectedMonthFirstDay).startOf('week')
+	const queryParamsEnd = dayjs(queryParamsStart).add(41, 'days')
+	return {
+		queryParamsStart: format ? queryParamsStart.format(format) : queryParamsStart,
+		queryParamsEnd: format ? queryParamsEnd.format(CALENDAR_DATE_FORMAT.QUERY) : queryParamsEnd
+	}
+}
+
+export const getDayEventsSource = (dayEvents: ICalendarDayEvents, virtualEvent: IVirtualEventPayload['data'] | null, currentRangeStart: string) => {
+	if (!virtualEvent) {
+		return dayEvents
+	}
+
+	let newDayEvents: ICalendarDayEvents = {
+		...dayEvents
+	}
+	Object.entries({ ...dayEvents }).some(([date, events]) => {
+		const originalEVentsLength = events.length
+		const filteredArray = events.filter((event) => {
+			return event.id !== virtualEvent?.event?.id
+		})
+		if (originalEVentsLength !== filteredArray.length) {
+			newDayEvents = {
+				...newDayEvents,
+				[date]: filteredArray
+			}
+			return true
+		}
+
+		return false
+	})
+	const { queryParamsStart, queryParamsEnd } = getCalendarMonthFullRangeDates(currentRangeStart)
+	// createMultiDayEvents(virtualEvent?.event.eventData, queryParamsStart, queryParamsEnd, false, newDayEvents)
+	const newEventData = virtualEvent.event.eventData
+	if (newEventData.start.date) {
+		return {
+			...newDayEvents,
+			[newEventData.start.date]: [...newDayEvents[newEventData.start.date], newEventData]
+		}
+	}
+	return newDayEvents
+}
+
+export const compareAndSortDayEvents = (aStart: string, aEnd: string, bStart: string, bEnd: string, aId: string, bId: string) => {
+	if (aId.startsWith(NEW_ID_PREFIX) || bId.startsWith(NEW_ID_PREFIX)) {
+		return -1
+	}
 	if (dayjs(aStart).isBefore(bStart)) {
 		return -1
 	}
 	if (dayjs(aStart).isSame(bStart)) {
+		if (dayjs(aEnd).isSame(bEnd)) {
+			return aId > bId ? -1 : 1
+		}
 		if (dayjs(aEnd).isAfter(dayjs(bEnd))) {
 			return -1
 		}
@@ -45,11 +100,11 @@ export const compareDayEventsDates = (aStart: string, aEnd: string, bStart: stri
 	return 0
 }
 
-export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null) => {
+export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null, calendarView?: CALENDAR_VIEW) => {
 	const extenedProps: IEventExtenedProps | undefined = movingEvent?.extendedProps
 	const { eventData } = extenedProps || {}
 
-	if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION || startsWith(movingEvent?.id, NEW_ID_PREFIX)) {
+	if (eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION || startsWith(movingEvent?.id, NEW_ID_PREFIX) || calendarView === CALENDAR_VIEW.MONTH) {
 		return true
 	}
 
@@ -72,7 +127,11 @@ export const getSelectedDateRange = (view: CALENDAR_VIEW, selectedDate: string, 
 	let result = {
 		view,
 		start: dayjs(selectedDate).startOf('day'),
-		end: dayjs(selectedDate).endOf('day')
+		end: dayjs(selectedDate).endOf('day'),
+		selectedMonth: {
+			month: dayjs(selectedDate).month(),
+			year: dayjs(selectedDate).year()
+		}
 	}
 
 	switch (view) {
@@ -81,9 +140,25 @@ export const getSelectedDateRange = (view: CALENDAR_VIEW, selectedDate: string, 
 			const end = dayjs(selectedDate).endOf('month')
 			result = {
 				...result,
-				view,
-				start: monthViewFull ? start.startOf('week') : start,
-				end: monthViewFull ? end.endOf('week').add(1, 'week') : end
+				selectedMonth: {
+					month: start.month(),
+					year: start.year()
+				}
+			}
+			if (monthViewFull) {
+				const { queryParamsStart, queryParamsEnd } = getCalendarMonthFullRangeDates(start, false)
+				result = {
+					...result,
+					start: queryParamsStart as dayjs.Dayjs,
+					end: queryParamsEnd as dayjs.Dayjs
+				}
+			} else {
+				result = {
+					...result,
+					view,
+					start,
+					end
+				}
 			}
 			break
 		}
@@ -103,7 +178,8 @@ export const getSelectedDateRange = (view: CALENDAR_VIEW, selectedDate: string, 
 	return {
 		view: result.view,
 		start: format ? result.start.format(format) : result.start.toISOString(),
-		end: format ? result.end.format(format) : result.end.toISOString()
+		end: format ? result.end.format(format) : result.end.toISOString(),
+		selectedMonth: result.selectedMonth
 	}
 }
 
@@ -147,29 +223,51 @@ export const scrollToSelectedDate = (scrollId: string, options?: Object) => {
 	})
 }
 
+/**
+ * @param baseNotificationText base notification text
+ * @param disabledNotificationTypes array of disabled notification types to check if they are included in disabled notications types source
+ * @param disabledNotificationsSource source of disabled notifications types
+ * @return string
+ *
+ *  Return base notification text including information whether employee, customer, both or none of them will be notified
+ *
+ */
 export const getConfirmModalText = (
-	baseText: string,
-	disabledNotificationType: CALENDAR_DISABLED_NOTIFICATION_TYPE,
-	disabledNotifications?: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']
+	baseNotificationText: string,
+	disabledNotificationTypesToCheck: CALENDAR_DISABLED_NOTIFICATION_TYPE[],
+	disabledNotificationsSource?: DisabledNotificationsArray
 ) => {
-	const disabledNotification = disabledNotifications?.find((notification) => notification.eventType === disabledNotificationType)
-	const isCustomerNotified = isEmpty(disabledNotification?.b2cChannels)
-	const isEmployeeNotified = isEmpty(disabledNotification?.b2bChannels)
+	let isCustomerNotified = true
+	let isEmployeeNotified = true
+
+	disabledNotificationTypesToCheck.forEach((notificationToCheck) => {
+		const disabledNotificationSource = disabledNotificationsSource?.find((notificationSource) => notificationSource.eventType === notificationToCheck)
+		// when array length is equal to NOTIFICATION_TYPES length it means all notifications are disabled for entity
+		if (disabledNotificationSource && disabledNotificationSource?.channels?.length === NOTIFICATION_TYPES.length) {
+			if (disabledNotificationSource?.eventType?.endsWith('CUSTOMER')) {
+				isCustomerNotified = false
+			}
+			if (disabledNotificationSource?.eventType?.endsWith('EMPLOYEE')) {
+				isEmployeeNotified = false
+			}
+		}
+	})
+
 	const notifiactionText = (entity: string) => i18next.t('loc:{{entity}} dostane notifikáciu.', { entity })
 
 	if (isCustomerNotified && isEmployeeNotified) {
-		return `${baseText} ${i18next.t('loc:Zamestnanec aj zákazník dostanú notifikáciu.')}`
+		return `${baseNotificationText} ${i18next.t('loc:Zamestnanec aj zákazník dostanú notifikáciu.')}`
 	}
 
 	if (isCustomerNotified) {
-		return `${baseText} ${notifiactionText(i18next.t('loc:Zákazník'))}`
+		return `${baseNotificationText} ${notifiactionText(i18next.t('loc:Zákazník'))}`
 	}
 
 	if (isEmployeeNotified) {
-		return `${baseText} ${notifiactionText(i18next.t('loc:Zamestnanec'))}`
+		return `${baseNotificationText} ${notifiactionText(i18next.t('loc:Zamestnanec'))}`
 	}
 
-	return baseText
+	return baseNotificationText
 }
 
 export const getWeekDays = (selectedDate: string) => {
@@ -182,6 +280,7 @@ export const getWeekDays = (selectedDate: string) => {
 }
 
 export const getWeekViewSelectedDate = (weekDays: string[]) => {
+	// vráti buď dnešok (ak sa nachadáza vo zvolenom týždni) alebo prvý deň zo zvoleného týždňa
 	const today = dayjs().startOf('day')
 	return weekDays.some((day) => dayjs(day).startOf('day').isSame(today)) ? today.format(CALENDAR_DATE_FORMAT.QUERY) : weekDays[0]
 }
@@ -195,9 +294,12 @@ export const getSelectedDateForCalendar = (view: CALENDAR_VIEW, selectedDate: st
 			return dayjs(selectedDate).startOf('month').format(CALENDAR_DATE_FORMAT.QUERY)
 		}
 		case CALENDAR_VIEW.WEEK: {
-			// v tyzdenom view je potrebne skontrolovat, ci sa vramci novo nastaveneho tyzdnoveho rangu nachadza dnesok
-			// ak ano, je potrebne ho nastavit ako aktualny den do kalendara, aby sa ukazal now indicator
-			// kedze realne sa na tyzdenne view pouziva denne view
+			/**
+			 * aj ked sa jedna o tyzdenne view, realne sa pouziva denne view, ktore je pozgrupovane tak, ze posobi ako tyzdenne
+			 * je potrebne skontrolovat, ci sa vramci novo nastaveneho tyzdnoveho rangu nachadza dnesok
+			 * ak ano, je potrebne ho nastavit ako aktualny den do Fullcalendara, aby sa ukazal now indicator, ak nie, tak sa nastavy ako aktualny datum prvy den zo zvoleneho tyzdna
+			 * tym, ze sa nastavi bud dnesok alebo prvy den z tyzdna, sa zamedzi zbytocnym prerendrovaniam Fullcalendara, ktore su hlavne v tyzdennom view, kde moze byt dost vela eventov, narocne
+			 */
 			const weekDays = getWeekDays(selectedDate)
 			return getWeekViewSelectedDate(weekDays)
 		}
@@ -261,7 +363,7 @@ const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string
 		end,
 		allDay: false,
 		eventData: {
-			...(event.originalEvent || event || {}),
+			...(event.originalEvent || event || {}), // multidnove eventy maju origialne data ulozene v objekte originalEvent
 			isMultiDayEvent: event.isMultiDayEvent,
 			isLastMultiDaylEventInCurrentRange: event.isLastMultiDaylEventInCurrentRange,
 			isFirstMultiDayEventInCurrentRange: event.isFirstMultiDayEventInCurrentRange
@@ -605,13 +707,13 @@ type DayMap = {
 }
 
 export const DAY_MAP: DayMap = {
-	[DAY.SATURDAY]: 0,
+	[DAY.SUNDAY]: 0,
 	[DAY.MONDAY]: 1,
 	[DAY.TUESDAY]: 2,
 	[DAY.WEDNESDAY]: 3,
 	[DAY.THURSDAY]: 4,
 	[DAY.FRIDAY]: 5,
-	[DAY.SUNDAY]: 6
+	[DAY.SATURDAY]: 6
 }
 
 export type OpeningHoursMap = {
@@ -652,32 +754,21 @@ export const getBusinessHours = (openingHoursMap: OpeningHoursMap): BusinessHour
 	}
 }
 
-const composeMonthViewReservations = (reservations: ICalendarEventsPayload['data']) => {
+export const composeMonthViewEvents = (events: ICalendarEventsPayload['data']) => {
 	const composedEvents: any[] = []
 
-	reservations?.forEach((event) => {
+	events?.forEach((event) => {
 		const employeeID = event.employee?.id
 		const start = event.startDateTime
 		const end = event.endDateTime
 
 		if (employeeID && dayjs(start).isBefore(end)) {
-			composedEvents.push(createBaseEvent(event, employeeID, start, end))
+			composedEvents.push({
+				...createBaseEvent(event, employeeID, start, end),
+				groupId: event?.calendarBulkEvent?.id
+			})
 		}
 	})
 
 	return composedEvents
-}
-
-export const composeMonthViewEvents = (
-	eventTypeFilter: CALENDAR_EVENTS_VIEW_TYPE,
-	reservations: ICalendarEventsPayload['data'],
-	shiftsTimeOffs: ICalendarEventsPayload['data']
-) => {
-	switch (eventTypeFilter) {
-		case CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF:
-			return []
-		case CALENDAR_EVENTS_VIEW_TYPE.RESERVATION:
-		default:
-			return composeMonthViewReservations(reservations)
-	}
 }

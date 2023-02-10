@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -14,9 +14,8 @@ import CustomersFilter from './components/CustomersFilter'
 import UserAvatar from '../../components/AvatarComponents'
 
 // utils
-import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
-import { normalizeDirectionKeys, setOrder, normalizeQueryParams, formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
-import { history } from '../../utils/history'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { normalizeDirectionKeys, setOrder, formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -26,10 +25,12 @@ import { getCustomers } from '../../reducers/customers/customerActions'
 // types
 import { IBreadcrumbs, ISearchFilter, SalonSubPageProps, Columns } from '../../types/interfaces'
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
+// hooks
+import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
 
 const CustomersPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const { salonID, parentPath } = props
 	const customers = useSelector((state: RootState) => state.customers.customers)
@@ -37,16 +38,16 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 
 	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		limit: NumberParam,
-		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'lastName:ASC')
+		search: StringParam(),
+		limit: NumberParam(),
+		page: NumberParam(1),
+		order: StringParam('lastName:ASC')
 	})
 
 	useEffect(() => {
 		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: query.search }))
 		dispatch(getCustomers({ page: query.page, limit: query.limit, order: query.order, search: query.search, salonID }))
-	}, [dispatch, query.page, query.limit, query.search, query.order, salonID])
+	}, [dispatch, query.limit, query.order, query.page, query.search, salonID])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -81,10 +82,10 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const handleSubmit = (values: ISearchFilter) => {
 		const newQuery = {
 			...query,
-			...values,
+			search: values.search,
 			page: 1
 		}
-		setQuery(normalizeQueryParams(newQuery))
+		setQuery(newQuery)
 	}
 
 	const columns: Columns = [
@@ -152,7 +153,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 					<div className='content-body'>
 						<Spin spinning={customers?.isLoading}>
 							<Permissions
-								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_CREATE]}
+								allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_CREATE]}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<CustomersFilter
 										onSubmit={handleSubmit}
@@ -161,7 +162,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 											if (!hasPermission) {
 												openForbiddenModal()
 											} else {
-												history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:customers/create')))
+												navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:customers/create')))
 											}
 										}}
 									/>
@@ -178,7 +179,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 								scroll={{ x: 800 }}
 								onRow={(record) => ({
 									onClick: () => {
-										history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:customers/{{customerID}}', { customerID: record.id })))
+										navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:customers/{{customerID}}', { customerID: record.id })))
 									}
 								})}
 								useCustomPagination
@@ -198,4 +199,4 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(CustomersPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(CustomersPage)

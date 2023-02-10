@@ -59,7 +59,7 @@ const fixLength1500 = validationString(VALIDATION_MAX_LENGTH.LENGTH_1500)
 
 type Props = InjectedFormProps<ICategoryForm, ComponentProps> & ComponentProps
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]
+const permissions: PERMISSION[] = [PERMISSION.ENUM_EDIT]
 
 const CategoryForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
@@ -113,7 +113,7 @@ const CategoryForm: FC<Props> = (props) => {
 	}
 
 	return (
-		<Form layout={'vertical'} className={'w-full top-0 sticky overflow-hidden'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
+		<Form layout={'vertical'} className={'w-full top-0 sticky overflow-hidden pt-1 px-6 pb-6 -mx-6'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<Spin wrapperClassName={'w-full'} spinning={category.isLoading || categoriesParameters.isLoading}>
 				<Col className={'flex'}>
 					<Row className={'w-full h-full block'} justify='center'>
@@ -127,13 +127,13 @@ const CategoryForm: FC<Props> = (props) => {
 									okText={t('loc:Pokračovať')}
 									getPopupContainer={() => documentFooter}
 									allowedButton={
-										<Button className='absolute top-1 right-0 p-0 border-none shadow-none'>
+										<Button className='noti-close-form-btn absolute top-1 right-0'>
 											<CloseIcon />
 										</Button>
 									}
 								/>
 							) : (
-								<Button className='absolute top-1 right-0 p-0 border-none shadow-none' onClick={closeCategoryForm}>
+								<Button className='noti-close-form-btn absolute top-1 right-0' onClick={closeCategoryForm}>
 									<CloseIcon />
 								</Button>
 							)}

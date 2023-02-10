@@ -4,19 +4,18 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Divider, Row, Spin } from 'antd'
 import { initialize, isPristine, isSubmitting, submit } from 'redux-form'
-import { map, get } from 'lodash'
+import { get } from 'lodash'
+import { useNavigate } from 'react-router-dom'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { PERMISSION, SALON_PERMISSION, FORM, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { PERMISSION, FORM } from '../../utils/enums'
 import { postReq } from '../../utils/request'
-import { history } from '../../utils/history'
-import { filterSalonRolesByPermission, getPrefixCountryCode } from '../../utils/helper'
+import { filterSalonRolesByPermission } from '../../utils/helper'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import EmployeeForm from './components/EmployeeForm'
-import { addService, ServiceData /* , parseServicesForCreateAndUpdate */ } from './EmployeePage'
 import InviteForm from './components/InviteForm'
 
 // types
@@ -33,19 +32,16 @@ import useBackUrl from '../../hooks/useBackUrl'
 import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.svg'
 import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
-const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]
-
 const CreateEmployeePage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 	const { salonID, parentPath } = props
 	const dispatch = useDispatch()
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const isInviteFromSubmitting = useSelector(isSubmitting(FORM.INVITE_EMPLOYEE))
-
-	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
+	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const isFormPristine = useSelector(isPristine(FORM.EMPLOYEE))
 	const isInviteFormPristine = useSelector(isPristine(FORM.INVITE_EMPLOYEE))
-	const form = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE])
 	const services = useSelector((state: RootState) => state.service.services)
 	const currentAuthUser = useSelector((state: RootState) => state.user.authUser)
 	const salonRoles = useSelector((state: RootState) => state.roles.salonRoles)
@@ -70,12 +66,11 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 			}
 		]
 	}
-
 	useEffect(() => {
-		const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
-		dispatch(initialize(FORM.EMPLOYEE, { phonePrefixCountryCode }))
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [salonID])
+		if (salon.data) {
+			dispatch(initialize(FORM.EMPLOYEE, { phonePrefixCountryCode: salon.data.companyContactPerson?.phonePrefixCountryCode || salon.data.address?.countryCode }))
+		}
+	}, [dispatch, salon.data])
 
 	useEffect(() => {
 		dispatch(getSalonRoles())
@@ -88,9 +83,6 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				firstName: formData?.firstName,
 				lastName: formData?.lastName,
 				email: formData?.email,
-				serviceIDs: formData?.services?.map((service: ServiceData) => service.id),
-				// TODO - for change duration and price in employee detail
-				// parseServicesForCreateAndUpdate(formData?.services),
 				salonID,
 				imageID: get(formData, 'avatar[0].id') || get(formData, 'avatar[0].uid')
 			}
@@ -104,7 +96,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 			}
 
 			await postReq('/api/b2b/admin/employees/', {}, reqBody)
-			history.push(backUrl)
+			navigate(backUrl as string)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -124,7 +116,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 					roleID: formData?.roleID
 				}
 			)
-			history.push(backUrl)
+			navigate(backUrl as string)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -162,7 +154,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				</div>
 				<h2 className={'content-body-width-small'}>{t('loc:Vytvoriť profil kolegu')}</h2>
 				<div className='content-body small without-content-footer'>
-					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={createEmployee} />
+					<EmployeeForm salonID={salonID} onSubmit={createEmployee} />
 					<Row justify={'center'}>
 						<Button
 							type={'primary'}
@@ -185,4 +177,4 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(CreateEmployeePage)
+export default compose(withPermissions([PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]))(CreateEmployeePage)

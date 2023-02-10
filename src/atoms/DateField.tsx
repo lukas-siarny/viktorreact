@@ -1,13 +1,16 @@
 import React, { useCallback } from 'react'
 import { WrappedFieldProps } from 'redux-form'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import cx from 'classnames'
 import { FormItemProps } from 'antd/lib/form/FormItem'
 import { Form, DatePicker } from 'antd'
 import { DatePickerProps } from 'antd/lib/date-picker'
+
+// assets
 import { ReactComponent as DateSuffixIcon } from '../assets/icons/date-suffix-icon.svg'
 import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'
 
+// utils
 import { DEFAULT_DATE_INIT_FORMAT, DEFAULT_DATE_INPUT_FORMAT, DROPDOWN_POSITION } from '../utils/enums'
 import { formFieldID } from '../utils/helper'
 
@@ -53,7 +56,7 @@ const DateField = (props: Props) => {
 		size,
 		rounded,
 		readOnly,
-		suffixIcon,
+		suffixIcon = <DateSuffixIcon className={'text-gray-600'} />,
 		clearIcon,
 		showToday = true,
 		defaultPickerValue,
@@ -64,7 +67,9 @@ const DateField = (props: Props) => {
 		className,
 		pickerClassName,
 		dropdownAlign,
-		showInReservationDrawer
+		showInReservationDrawer,
+		inputReadOnly,
+		inputRender
 	} = props
 
 	let value
@@ -74,7 +79,7 @@ const DateField = (props: Props) => {
 	}
 
 	const disabledDateWrap = useCallback(
-		(currentDate) => {
+		(currentDate: Dayjs) => {
 			let disable = false
 			if (disabledDate) {
 				disable = disabledDate(currentDate)
@@ -140,20 +145,22 @@ const DateField = (props: Props) => {
 				defaultPickerValue={defaultPickerValue}
 				size={size}
 				clearIcon={clearIcon || <RemoveIcon className={'text-gray-600'} />}
-				suffixIcon={suffixIcon || <DateSuffixIcon className={'text-gray-600'} />}
+				suffixIcon={suffixIcon}
 				placeholder={placeholder}
 				disabledDate={disabledDateWrap}
-				dropdownClassName={cx({ showInReservationDrawer })}
+				popupClassName={cx({ showInReservationDrawer })}
 				disabled={disabled}
 				allowClear={allowClear}
 				getPopupContainer={getPopupContainer || ((node) => node)}
 				showToday={showToday}
-				inputReadOnly={true}
+				inputReadOnly={inputReadOnly}
 				mode={mode}
 				open={open}
 				onSelect={onSelect}
+				inputRender={inputRender}
 			/>
 		</Form.Item>
 	)
 }
+
 export default DateField

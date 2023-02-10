@@ -50,6 +50,7 @@ import { ReactComponent as SocialTikTok } from '../../../../assets/icons/social-
 import { ReactComponent as CosmeticIcon } from '../../../../assets/icons/cosmetic-icon-24.svg'
 import { ReactComponent as LanguagesIcon } from '../../../../assets/icons/languages-24-icon.svg'
 import { ReactComponent as InfoIcon16 } from '../../../../assets/icons/info-icon-16.svg'
+import { ReactComponent as LocationIcon } from '../../../../assets/icons/location-16.svg'
 
 type ComponentProps = {
 	disabledForm?: boolean
@@ -259,6 +260,11 @@ const SalonForm: FC<Props> = (props) => {
 							size={'large'}
 							disabled={disabledForm}
 						/>
+						<h3 className={'mb-0 flex items-center'}>
+							<LocationIcon width={20} height={20} className={'text-notino-black mr-2'} />
+							{t('loc:Adresa')}
+						</h3>
+						<Divider className={'mb-3 mt-3'} />
 						<Field
 							component={AddressFields}
 							inputValues={{

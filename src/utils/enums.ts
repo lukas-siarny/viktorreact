@@ -1,6 +1,7 @@
 import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
+import { LoadScriptUrlOptions } from '@react-google-maps/api/dist/utils/make-load-script-url'
 import { AliasToken } from 'antd/es/theme/internal'
 import { FormatterInput } from '@fullcalendar/core'
 
@@ -374,6 +375,13 @@ export const MAP = {
 			lng: 17.1077477
 		}
 	}
+}
+
+export const mapApiConfig: LoadScriptUrlOptions = {
+	// https://react-google-maps-api-docs.netlify.app/#usejsapiloader
+	libraries: ['places'],
+	// eslint-disable-next-line no-underscore-dangle
+	googleMapsApiKey: window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_MAPS_API_KEY
 }
 
 export enum SALON_FILTER_STATES {

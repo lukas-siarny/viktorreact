@@ -157,7 +157,7 @@ const CalendarDetailPopover: FC<ICalendarReservationPopoverProps> = () => {
 
 	return (
 		<Popover
-			visible={isOpen}
+			open={isOpen}
 			destroyTooltipOnHide={{ keepParent: true }}
 			placement={'leftTop'}
 			overlayClassName={`${overlayClassName} nc-popover-overlay nc-popover-overlay-fixed`}

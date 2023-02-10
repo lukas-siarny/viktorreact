@@ -269,7 +269,7 @@ const ServiceForm: FC<Props> = (props) => {
 																className={'pb-0'}
 																component={SwitchField}
 																label={t('loc:Automatické potvrdenie')}
-																name={'autoApproveReservatons'}
+																name={'autoApproveReservations'}
 																size={'middle'}
 															/>
 															<div className={'text-xs text-notino-grayDark mt-2'}>

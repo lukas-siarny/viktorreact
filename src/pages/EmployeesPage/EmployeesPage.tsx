@@ -117,9 +117,9 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const columns: Columns = [
-		{
-			key: 'sort'
-		},
+		// {
+		// 	key: 'sort'
+		// },
 		{
 			title: t('loc:Meno'),
 			dataIndex: 'fullName',
@@ -272,7 +272,6 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 								columns={columns}
 								dataSource={employees?.tableData}
 								rowClassName={'clickable-row'}
-								dndEnabled
 								dndDrop={handleDrop}
 								twoToneRows
 								scroll={{ x: 800 }}

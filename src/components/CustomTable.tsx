@@ -1,16 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { HTML5Backend } from 'react-dnd-html5-backend'
 import { forEach, includes, isEmpty } from 'lodash'
-import { DndProvider } from 'react-dnd'
 import cx from 'classnames'
 
+// Drag and drop
 import type { DragEndEvent, UniqueIdentifier } from '@dnd-kit/core'
 import { DndContext } from '@dnd-kit/core'
-import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 
 // ant
 import { Empty, Table } from 'antd'
 import { TableProps } from 'antd/lib/table'
+
+// components
 import CustomPagination from './CustomPagination'
 import { IPagination } from '../types/interfaces'
 import DragableTableRow from './DragableTableRow'
@@ -39,13 +40,12 @@ type ComponentProps<RecordType> = TableProps<RecordType> & {
 	useCustomPagination?: boolean
 	pagination?: IPagination | false
 
-	dndEnabled?: boolean
 	dndDrop?: (oldIndex: UniqueIdentifier, newIndex?: UniqueIdentifier) => any
 	dndCanDrag?: boolean
 }
 
 const CustomTable = <RecordType extends object = any>(props: ComponentProps<RecordType>) => {
-	const { disabled = false, className, useCustomPagination, pagination, dndEnabled, dndDrop, dndCanDrag = true } = props
+	const { disabled = false, className, useCustomPagination, pagination, dndDrop, dndCanDrag = true } = props
 	const [isProcessingDrop, setIsProcessingDrop] = useState(false)
 
 	const onClickOptionSizeChanger = useCallback(
@@ -121,13 +121,13 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 
 	let loadingWrap = props.loading
 
-	if (dndEnabled && !isEmpty(props.dataSource)) {
+	if (dndDrop && !isEmpty(props.dataSource)) {
 		loadingWrap = false
 	}
 	// NOTE: Memo fixuje problém infinite volaní akcie UPDATE_SYNC_ERRORS pri dnd tabuľkách
 	const componentsWrap = useMemo(() => {
 		let components = props?.components
-		if (dndEnabled) {
+		if (dndDrop) {
 			components = {
 				...props?.components,
 				body: {
@@ -140,26 +140,26 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 			}
 		}
 		return components
-	}, [dndEnabled, props?.components])
+	}, [dndDrop, props?.components])
 
-	const columns = props?.columns || []
+	let columns = props?.columns || []
 	const isFirstColFixed = props?.columns?.[0]?.fixed ? true : undefined
-	// if (dndEnabled) {
-	// 	// Samostatny column aby sa nedrag and dropoval cely riadok ale len cast stlpa (moze sa dat kliknut na riadok na prepnutie detailu entity)
-	// 	const DND_COL = {
-	// 		key: 'dnd',
-	// 		width: 25,
-	// 		className: cx('ignore-cell-click text-center text-gray-600', {
-	// 			'cursor-move': dndCanDrag,
-	// 			'cursor-not-allowed opacity-40': !dndCanDrag
-	// 		}),
-	// 		fixed: isFirstColFixed,
-	// 		render() {
-	// 			return <DragIcon className={'text-blue-600'} />
-	// 		}
-	// 	}
-	// 	columns = [DND_COL, ...columns]
-	// }
+	if (dndDrop) {
+		// Samostatny column aby sa nedrag and dropoval cely riadok ale len cast stlpa (moze sa dat kliknut na riadok na prepnutie detailu entity)
+		const DND_COL = {
+			key: 'sort',
+			width: 25,
+			className: cx('ignore-cell-click text-center text-gray-600', {
+				'cursor-move': dndDrop,
+				'cursor-not-allowed opacity-40': !dndDrop
+			}),
+			fixed: isFirstColFixed
+			// render() {
+			// 	return <DragIcon className={'text-blue-600'} />
+			// }
+		}
+		columns = [DND_COL, ...columns]
+	}
 	const onRow = (record: any, index?: number) => {
 		const onRowProp = props?.onRow?.(record, index)
 		let rowProps: any = {
@@ -192,7 +192,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 
 		// NOTE:    Pre tabuľku bez dnd neposielame propu moveRow vôbec (ani ako undefined),
 		//          inak vznikne chyba, lebo sa snaží nastaviť moveRow ako html atribút <td> elementu ale moveRow nie je html atribút
-		if (dndEnabled) {
+		if (dndDrop) {
 			rowProps = { ...rowProps, dndCanDrag }
 		}
 
@@ -202,34 +202,27 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 	const table = (
 		<div className={cx({ 'disabled-state': disabled })}>
 			{/* // TODO: ak by trebalo tak wrappnut tabulku kvoli dnd do permissions - moze byt pouzivatel ktory ma prava na citanie ale nie na upravu? */}
-			<DndContext onDragEnd={onDragEnd}>
-				<SortableContext
-					// rowKey array
-					items={props?.dataSource?.map((item: any) => item.key) as any}
-					strategy={verticalListSortingStrategy}
-				>
-					<Table
-						{...props}
-						columns={columns}
-						loading={loadingWrap}
-						defaultExpandAllRows
-						className={cx('noti-table', props.className, { 'two-tone-table-style': props.twoToneRows })}
-						onRow={onRow}
-						components={componentsWrap}
-						pagination={
-							useCustomPagination
-								? false
-								: pagination &&
-								  ({
-										...pagination,
-										className: 'ant-table-pagination ant-table-pagination-right'
-								  } as any)
-						}
-						locale={emptyLocale}
-						bordered={props.bordered || false}
-					/>
-				</SortableContext>
-			</DndContext>
+			<Table
+				{...props}
+				columns={columns}
+				loading={loadingWrap}
+				defaultExpandAllRows
+				className={cx('noti-table', props.className, { 'two-tone-table-style': props.twoToneRows })}
+				onRow={onRow}
+				components={componentsWrap}
+				pagination={
+					useCustomPagination
+						? false
+						: pagination &&
+						  ({
+								...pagination,
+								className: 'ant-table-pagination ant-table-pagination-right'
+						  } as any)
+				}
+				locale={emptyLocale}
+				bordered={props.bordered || false}
+			/>
+
 			{useCustomPagination && pagination && (
 				<div className='table-footer-custom-pagination'>
 					<CustomPagination {...pagination} />
@@ -238,8 +231,18 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 		</div>
 	)
 
-	if (dndEnabled) {
-		return <DndProvider backend={HTML5Backend}>{table}</DndProvider>
+	if (dndDrop) {
+		return (
+			<DndContext onDragEnd={onDragEnd}>
+				<SortableContext
+					// rowKey array
+					items={props?.dataSource?.map((item: any) => item.key) as any}
+					strategy={verticalListSortingStrategy}
+				>
+					{table}
+				</SortableContext>
+			</DndContext>
+		)
 	}
 	return table
 }

@@ -218,7 +218,7 @@ export interface IServiceForm {
 	employees: EmployeeServiceData[]
 	settings: {
 		enabledB2cReservations: boolean
-		autoApproveReservatons: boolean
+		autoApproveReservations: boolean
 	}
 }
 

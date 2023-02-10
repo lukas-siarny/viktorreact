@@ -27,7 +27,7 @@ const Row = ({ children, ...props }: RowProps) => {
 					return React.cloneElement(child as React.ReactElement, {
 						children: (
 							<div ref={setActivatorNodeRef} {...listeners}>
-								<DragIcon style={{ touchAction: 'none', cursor: 'move' }} />
+								<DragIcon style={{ touchAction: 'none', cursor: 'move' }} className={'text-blue-600'} />
 							</div>
 						)
 					})

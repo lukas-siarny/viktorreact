@@ -44,10 +44,14 @@ export const getEmployees =
 					color: employee.color
 				}
 			})
-
+			const tableData = map(data.employees, (employee) => ({
+				...employee,
+				key: employee.orderIndex
+			}))
 			payload = {
 				data,
-				options: employeesOptions
+				options: employeesOptions,
+				tableData
 			}
 			dispatch({ type: EMPLOYEES.EMPLOYEES_LOAD_DONE, payload })
 		} catch (err) {

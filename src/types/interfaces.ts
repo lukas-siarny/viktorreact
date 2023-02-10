@@ -484,6 +484,8 @@ export interface ISelectable<T> {
 export interface ISearchable<T extends IDataPagination> {
 	options?: ISelectOptionItem[] | undefined
 	data: T | null
+	// TODO: spravit novy interface na tableData?
+	tableData?: any
 }
 
 /**

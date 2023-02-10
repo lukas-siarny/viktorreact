@@ -118,6 +118,9 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 
 	const columns: Columns = [
 		{
+			key: 'sort'
+		},
+		{
 			title: t('loc:Meno'),
 			dataIndex: 'fullName',
 			key: 'lastName',
@@ -204,14 +207,16 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const handleDrop = useCallback(
-		async (oldIndex: number, newIndex: number) => {
+		async (oldIndex: any, newIndex?: any) => {
+			console.log('oldIndex', oldIndex)
+			console.log('newIndex', newIndex)
 			try {
-				const employee = find(employees?.data?.employees, { orderIndex: oldIndex + 1 })
+				const employee = find(employees?.data?.employees, { orderIndex: oldIndex })
 				if (employee?.id && oldIndex !== newIndex) {
 					await patchReq(
 						`/api/b2b/admin/employees/{employeeID}/reorder`,
 						{ employeeID: employee?.id },
-						{ orderIndex: newIndex + 1 },
+						{ orderIndex: newIndex },
 						undefined,
 						NOTIFICATION_TYPE.NOTIFICATION,
 						true
@@ -237,7 +242,6 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		},
 		[dispatch, employees?.data?.employees, query.accountState, query.limit, query.order, query.page, query.search, query.serviceID, salonID]
 	)
-
 	return (
 		<>
 			<Row>
@@ -266,9 +270,8 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 								className='table-fixed'
 								onChange={onChangeTable}
 								columns={columns}
-								dataSource={employees?.data?.employees}
+								dataSource={employees?.tableData}
 								rowClassName={'clickable-row'}
-								rowKey='orderIndex'
 								dndEnabled
 								dndDrop={handleDrop}
 								twoToneRows

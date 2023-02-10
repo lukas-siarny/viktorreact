@@ -4,6 +4,10 @@ import { forEach, includes, isEmpty } from 'lodash'
 import { DndProvider } from 'react-dnd'
 import cx from 'classnames'
 
+import type { DragEndEvent, UniqueIdentifier } from '@dnd-kit/core'
+import { DndContext } from '@dnd-kit/core'
+import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
+
 // ant
 import { Empty, Table } from 'antd'
 import { TableProps } from 'antd/lib/table'
@@ -36,7 +40,7 @@ type ComponentProps<RecordType> = TableProps<RecordType> & {
 	pagination?: IPagination | false
 
 	dndEnabled?: boolean
-	dndDrop?: (oldIndex: number, newIndex: number) => any
+	dndDrop?: (oldIndex: UniqueIdentifier, newIndex?: UniqueIdentifier) => any
 	dndCanDrag?: boolean
 }
 
@@ -75,8 +79,11 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 		}
 	}, [onClickOptionSizeChanger])
 
-	const dndDropWrap = useCallback(
-		async (oldIndex: number, newIndex: number) => {
+	const onDragEnd = useCallback(
+		async ({ active, over }: DragEndEvent) => {
+			const oldIndex = active.id
+			const newIndex = over?.id
+
 			if (isProcessingDrop) {
 				return
 			}
@@ -89,6 +96,15 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 				console.error(e)
 				setIsProcessingDrop(false)
 			}
+
+			console.log('called dragging', active, over)
+			// if (active.id !== over?.id) {
+			// 	setDataSource((previous) => {
+			// 		const activeIndex = previous.findIndex((i) => i.key === active.id)
+			// 		const overIndex = previous.findIndex((i) => i.key === over?.id)
+			// 		return arrayMove(previous, activeIndex, overIndex)
+			// 	})
+			// }
 		},
 		[dndDrop, isProcessingDrop]
 	)
@@ -126,25 +142,24 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 		return components
 	}, [dndEnabled, props?.components])
 
-	let columns = props?.columns || []
+	const columns = props?.columns || []
 	const isFirstColFixed = props?.columns?.[0]?.fixed ? true : undefined
-	if (dndEnabled) {
-		// Samostatny column aby sa nedrag and dropoval cely riadok ale len cast stlpa (moze sa dat kliknut na riadok na prepnutie detailu entity)
-		const DND_COL = {
-			key: 'dnd',
-			width: 25,
-			className: cx('ignore-cell-click text-center text-gray-600', {
-				'cursor-move': dndCanDrag,
-				'cursor-not-allowed opacity-40': !dndCanDrag
-			}),
-			fixed: isFirstColFixed,
-			render() {
-				return <DragIcon className={'text-blue-600'} />
-			}
-		}
-		columns = [DND_COL, ...columns]
-	}
-
+	// if (dndEnabled) {
+	// 	// Samostatny column aby sa nedrag and dropoval cely riadok ale len cast stlpa (moze sa dat kliknut na riadok na prepnutie detailu entity)
+	// 	const DND_COL = {
+	// 		key: 'dnd',
+	// 		width: 25,
+	// 		className: cx('ignore-cell-click text-center text-gray-600', {
+	// 			'cursor-move': dndCanDrag,
+	// 			'cursor-not-allowed opacity-40': !dndCanDrag
+	// 		}),
+	// 		fixed: isFirstColFixed,
+	// 		render() {
+	// 			return <DragIcon className={'text-blue-600'} />
+	// 		}
+	// 	}
+	// 	columns = [DND_COL, ...columns]
+	// }
 	const onRow = (record: any, index?: number) => {
 		const onRowProp = props?.onRow?.(record, index)
 		let rowProps: any = {
@@ -178,7 +193,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 		// NOTE:    Pre tabuľku bez dnd neposielame propu moveRow vôbec (ani ako undefined),
 		//          inak vznikne chyba, lebo sa snaží nastaviť moveRow ako html atribút <td> elementu ale moveRow nie je html atribút
 		if (dndEnabled) {
-			rowProps = { ...rowProps, dndDrop: dndDropWrap, dndCanDrag }
+			rowProps = { ...rowProps, dndCanDrag }
 		}
 
 		return rowProps
@@ -187,26 +202,34 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 	const table = (
 		<div className={cx({ 'disabled-state': disabled })}>
 			{/* // TODO: ak by trebalo tak wrappnut tabulku kvoli dnd do permissions - moze byt pouzivatel ktory ma prava na citanie ale nie na upravu? */}
-			<Table
-				{...props}
-				columns={columns}
-				loading={loadingWrap}
-				defaultExpandAllRows
-				className={cx('noti-table', props.className, { 'two-tone-table-style': props.twoToneRows })}
-				onRow={onRow}
-				components={componentsWrap}
-				pagination={
-					useCustomPagination
-						? false
-						: pagination &&
-						  ({
-								...pagination,
-								className: 'ant-table-pagination ant-table-pagination-right'
-						  } as any)
-				}
-				locale={emptyLocale}
-				bordered={props.bordered || false}
-			/>
+			<DndContext onDragEnd={onDragEnd}>
+				<SortableContext
+					// rowKey array
+					items={props?.dataSource?.map((item: any) => item.key) as any}
+					strategy={verticalListSortingStrategy}
+				>
+					<Table
+						{...props}
+						columns={columns}
+						loading={loadingWrap}
+						defaultExpandAllRows
+						className={cx('noti-table', props.className, { 'two-tone-table-style': props.twoToneRows })}
+						onRow={onRow}
+						components={componentsWrap}
+						pagination={
+							useCustomPagination
+								? false
+								: pagination &&
+								  ({
+										...pagination,
+										className: 'ant-table-pagination ant-table-pagination-right'
+								  } as any)
+						}
+						locale={emptyLocale}
+						bordered={props.bordered || false}
+					/>
+				</SortableContext>
+			</DndContext>
 			{useCustomPagination && pagination && (
 				<div className='table-footer-custom-pagination'>
 					<CustomPagination {...pagination} />

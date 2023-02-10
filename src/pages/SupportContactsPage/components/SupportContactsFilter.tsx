@@ -102,7 +102,7 @@ const SupportContactsFilter = (props: Props) => {
 					</Col>
 				</Row>
 			</Filters> */}
-			<Modal title={t('loc:Upozornenie')} visible={visibleModal} getContainer={() => document.body} onCancel={() => setVisibleModal(false)} footer={null}>
+			<Modal title={t('loc:Upozornenie')} open={visibleModal} getContainer={() => document.body} onCancel={() => setVisibleModal(false)} footer={null}>
 				<Result
 					status='warning'
 					title={t('loc:Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu.')}

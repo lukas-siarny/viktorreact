@@ -8,9 +8,9 @@
   },
   "scripts": {
     "start": "cross-env SKIP_PREFLIGHT_CHECK=true DISABLE_ESLINT_PLUGIN=true npm-run-all -p start-watch translate-watch build:tailwind",
-    "start-watch": "cross-env REACT_APP_VERSION=$npm_package_version react-app-rewired start",
+    "start-watch": "cross-env REACT_APP_VERSION=$npm_package_version react-scripts start",
     "prebuild": "cross-env NODE_ENV=production npm-run-all -p build:tailwind rebuild:sass",
-    "build": "cross-env SKIP_PREFLIGHT_CHECK=true DISABLE_ESLINT_PLUGIN=true NODE_ENV=production REACT_APP_VERSION=$npm_package_version react-app-rewired build",
+    "build": "cross-env SKIP_PREFLIGHT_CHECK=true DISABLE_ESLINT_PLUGIN=true NODE_ENV=production REACT_APP_VERSION=$npm_package_version react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "translate-scan": "i18next-scanner 'src/**/*.{js,jsx,ts,tsx}'",
@@ -22,17 +22,13 @@
   },
   "dependencies": {
     "antd": "file:../node_modules/antd",
-    "antd-dayjs-webpack-plugin": "file:../node_modules/antd-dayjs-webpack-plugin",
     "autoprefixer": "file:../node_modules/autoprefixer",
-    "babel-plugin-import": "file:../node_modules/babel-plugin-import",
     "classnames": "file:../node_modules/classnames",
     "customize-cra": "file:../node_modules/customize-cra",
     "gulp": "file:../node_modules/gulp",
     "i18next": "file:../node_modules/i18next",
     "i18next-browser-languagedetector": "file:../node_modules/i18next-browser-languagedetector",
     "i18next-scanner": "file:../node_modules/i18next-scanner",
-    "less": "file:../node_modules/less",
-    "less-loader": "file:../node_modules/less-loader",
     "npm-run-all": "file:../node_modules/npm-run-all",
     "postcss": "file:../node_modules/postcss",
     "qs": "file:../node_modules/qs",
@@ -53,7 +49,6 @@
     "@types/react-i18next": "file:../node_modules/@types/react-i18next",
     "cross-env": "file:../node_modules/cross-env",
     "postcss-loader": "file:../node_modules/postcss-loader",
-    "react-app-rewired": "file:../node_modules/react-app-rewired",
     "typescript": "file:../node_modules/typescript"
   },
   "browserslist": {

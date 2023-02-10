@@ -1,12 +1,12 @@
 import React, { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
 import { find } from 'lodash'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -17,9 +17,8 @@ import TooltipEllipsis from '../../components/TooltipEllipsis'
 import UserAvatar from '../../components/AvatarComponents'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, NOTIFICATION_TYPE } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, NOTIFICATION_TYPE } from '../../utils/enums'
 import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
-import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -35,24 +34,26 @@ import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-off
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question.svg'
 import { patchReq } from '../../utils/request'
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
+// hooks
+import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
 
 const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 	const { salonID, parentPath } = props
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 
 	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		limit: NumberParam,
-		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'orderIndex:asc'),
-		accountState: StringParam,
-		serviceID: StringParam,
-		salonID: StringParam
+		search: StringParam(),
+		limit: NumberParam(),
+		page: NumberParam(1),
+		order: StringParam('orderIndex:asc'),
+		accountState: StringParam(),
+		serviceID: StringParam(),
+		salonID: StringParam()
 	})
 
 	useEffect(() => {
@@ -68,7 +69,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 				salonID
 			})
 		)
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.accountState, query.serviceID, salonID])
+	}, [dispatch, query.accountState, query.limit, query.order, query.page, query.search, query.serviceID, salonID])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -245,12 +246,12 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 					<div className='content-body'>
 						<Spin spinning={employees?.isLoading}>
 							<Permissions
-								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]}
+								allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<EmployeesFilter
 										createEmployee={() => {
 											if (hasPermission) {
-												history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/create')))
+												navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/create')))
 											} else {
 												openForbiddenModal()
 											}
@@ -272,7 +273,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 								scroll={{ x: 800 }}
 								onRow={(record) => ({
 									onClick: () => {
-										history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id })))
+										navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id })))
 									}
 								})}
 								useCustomPagination
@@ -292,4 +293,4 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(EmployeesPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(EmployeesPage)

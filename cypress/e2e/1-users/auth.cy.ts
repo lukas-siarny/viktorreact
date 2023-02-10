@@ -1,18 +1,25 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { recurse } from 'cypress-recurse'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { parse } from 'node-html-parser'
+
+import { generateRandomString } from '../../support/helpers'
+
 // utils
 import { FORM } from '../../../src/utils/enums'
-import { generateRandomString } from '../../support/helpers'
 
 import user from '../../fixtures/user.json'
 
 context('Auth', () => {
+	const userEmail = `${generateRandomString(5)}_${user.emailSuffix}`
+
 	it('Sign up', () => {
-		cy.clearLocalStorage()
 		cy.intercept({
 			method: 'POST',
 			url: '/api/b2b/admin/users/registration'
 		}).as('registration')
 		cy.visit('/signup')
-		cy.setInputValue(FORM.REGISTRATION, 'email', `${generateRandomString(5)}_${user.emailSuffix}`)
+		cy.setInputValue(FORM.REGISTRATION, 'email', userEmail)
 		cy.setInputValue(FORM.REGISTRATION, 'password', user.password)
 		cy.setInputValue(FORM.REGISTRATION, 'phone', user.phone)
 		cy.clickButton('gdpr', FORM.REGISTRATION, true)
@@ -26,6 +33,33 @@ context('Auth', () => {
 		})
 		// check redirect to activation page
 		cy.location('pathname').should('eq', '/activation')
+
+		// SMTP server has probably received the email
+		recurse(() => cy.task('getLastEmail', userEmail), Cypress._.isString, {
+			timeout: 60000, // retry up to 1 minute
+			delay: 5000, // wait 5 seconds between attempts
+			log: false
+		}).then((email: string) => {
+			// cy.log(email)
+			const emailHtml = parse(email)
+			const htmlTag = emailHtml.querySelector('#activation-code')
+			if (htmlTag) {
+				cy.log('Activation code: ', htmlTag.text)
+				cy.visit('/activation')
+				cy.intercept({
+					method: 'POST',
+					url: '/api/b2b/admin/users/activation'
+				}).as('activation')
+				cy.setValuesForPinField(FORM.ACTIVATION, 'code', htmlTag.text)
+				cy.get('form').submit()
+				cy.wait('@activation').then((interception: any) => {
+					// check status code of registration request
+					expect(interception.response.statusCode).to.equal(200)
+					// take local storage snapshot
+					cy.saveLocalStorage()
+				})
+			}
+		})
 	})
 
 	it('Sign out', () => {
@@ -36,7 +70,7 @@ context('Auth', () => {
 		}).as('authLogout')
 		cy.visit('/')
 		cy.get('.noti-my-account').click()
-		cy.get('#logOut').click()
+		cy.get('.noti-logout-button').click()
 		cy.wait('@authLogout').then((interception: any) => {
 			// check status code of logout request
 			expect(interception.response.statusCode).to.equal(200)
@@ -55,8 +89,8 @@ context('Auth', () => {
 			url: '/api/b2b/admin/auth/login'
 		}).as('authLogin')
 		cy.visit('/login')
-		cy.setInputValue(FORM.LOGIN, 'email', Cypress.env('auth_email'))
-		cy.setInputValue(FORM.LOGIN, 'password', Cypress.env('auth_password'))
+		cy.setInputValue(FORM.LOGIN, 'email', userEmail)
+		cy.setInputValue(FORM.LOGIN, 'password', user.password)
 		cy.get('form').submit()
 		cy.wait('@authLogin').then((interception: any) => {
 			// check status code of login request

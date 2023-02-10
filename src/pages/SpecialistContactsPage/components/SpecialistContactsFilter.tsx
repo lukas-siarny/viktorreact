@@ -64,7 +64,7 @@ const CosmeticsFilter = (props: Props) => {
 }
 
 const form = reduxForm({
-	form: FORM.COSMETICS_FILTER,
+	form: FORM.SPECIALIST_CONTACT_FILTER,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	onChange: debounce((_values, _dispatch, { submit, anyTouched }) => {

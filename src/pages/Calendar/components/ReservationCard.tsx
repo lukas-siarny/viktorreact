@@ -83,7 +83,8 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		noteFromB2CCustomer,
 		isPlaceholder,
 		isEdit,
-		onReservationClick
+		onReservationClick,
+		timeLeftClassName
 	} = props
 
 	const [t] = useTranslation()
@@ -113,13 +114,13 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 
 	const iconState = getIconState({ isPast, isApproved, isRealized, notRealized, service })
 	const iconPending = isPending && <ClockIcon className={'icon clock'} style={{ color: bgColor }} />
-	const iconAutoAssigned = <AvatarIcon className={'icon employee'} />
+	const iconAutoAssigned = isEmployeeAutoassigned && <AvatarIcon className={'icon employee'} />
 
 	const cardRef = useRef<HTMLDivElement | null>(null)
 
 	const handleReservationClick = () => {
 		// NOTE: prevent proti kliknutiu na virutalny event rezervacie neotvori sa popover
-		if (startsWith(originalEventData.id, NEW_ID_PREFIX) || isPlaceholder) {
+		if (startsWith(originalEventData.id, NEW_ID_PREFIX)) {
 			return
 		}
 		if (originalEventData.id && cardRef.current) {
@@ -135,7 +136,8 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 				color: backgroundColor,
 				reservationData,
 				note,
-				noteFromB2CCustomer
+				noteFromB2CCustomer,
+				isEdit
 			}
 
 			const clientRect = cardRef.current.getBoundingClientRect()
@@ -153,25 +155,29 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 	return (
 		<div
 			ref={cardRef}
-			className={cx('nc-event reservation', {
-				'nc-day-event': calendarView === CALENDAR_VIEW.DAY,
-				'nc-week-event': calendarView === CALENDAR_VIEW.WEEK,
-				'multiday-event': isMultiDayEvent,
-				'multiday-event-first': isFirstMultiDayEventInCurrentRange,
-				'multiday-event-last': isLastMultiDaylEventInCurrentRange,
-				'min-15': Math.abs(diff) <= 15,
-				'min-30': Math.abs(diff) <= 30 && Math.abs(diff) > 15,
-				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
-				'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
-				'is-past': isPast,
-				'is-online': isOnline,
-				'state-pending': isPending,
-				'state-approved': isApproved,
-				'state-realized': isRealized,
-				'is-autoassigned': isEmployeeAutoassigned,
-				placeholder: isPlaceholder,
-				edit: isEdit || isPlaceholder
-			})}
+			className={cx(
+				'nc-event reservation',
+				{
+					'nc-day-event': calendarView === CALENDAR_VIEW.DAY,
+					'nc-week-event': calendarView === CALENDAR_VIEW.WEEK,
+					'multiday-event': isMultiDayEvent,
+					'multiday-event-first': isFirstMultiDayEventInCurrentRange,
+					'multiday-event-last': isLastMultiDaylEventInCurrentRange,
+					'min-15': Math.abs(diff) <= 15,
+					'min-30': Math.abs(diff) <= 30 && Math.abs(diff) > 15,
+					'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
+					'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
+					'is-past': isPast,
+					'is-online': isOnline,
+					'state-pending': isPending,
+					'state-approved': isApproved,
+					'state-realized': isRealized,
+					'is-autoassigned': isEmployeeAutoassigned,
+					placeholder: isPlaceholder,
+					edit: isEdit || isPlaceholder
+				},
+				timeLeftClassName
+			)}
 			onClick={handleReservationClick}
 			style={{
 				outlineColor: (isPending || isEdit) && !isPast ? backgroundColor : undefined
@@ -195,15 +201,17 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 							return (
 								<>
 									<div className={'title-wrapper'}>
-										<span className={'title'}>{customerName}</span>
-										{onlineIndicatior}
+										<div className={'title-inner-wrapper'}>
+											{iconState}
+											<span className={'title'}>{customerName}</span>
+											{onlineIndicatior}
+										</div>
+										<div className={'icons'}>
+											{iconPending}
+											{iconAutoAssigned}
+										</div>
 									</div>
 									{service?.name && <span className={'desc'}>{service.name}</span>}
-									<div className={'icons'}>
-										{iconPending}
-										{iconAutoAssigned}
-										{iconState}
-									</div>
 								</>
 							)
 						}
@@ -211,19 +219,20 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 						default: {
 							return (
 								<>
-									<div className={'event-info'}>
-										<div className={'title-wrapper'}>
+									<div className={'title-wrapper'}>
+										<div className={'title-inner-wrapper'}>
+											{iconState}
 											<span className={'title'}>{customerName}</span>
 											{onlineIndicatior}
+											<span className={'time'}>{timeText}</span>
 										</div>
-										<span className={'time'}>{timeText}</span>
-										{service?.name && <span className={'desc'}>{service.name}</span>}
+										<div className={'icons'}>
+											{iconPending}
+											{iconAutoAssigned}
+										</div>
 									</div>
-									<div className={'icons'}>
-										{iconPending}
-										{iconAutoAssigned}
-										{iconState}
-									</div>
+									<span className={'time'}>{timeText}</span>
+									{service?.name && <span className={'desc'}>{service.name}</span>}
 								</>
 							)
 						}

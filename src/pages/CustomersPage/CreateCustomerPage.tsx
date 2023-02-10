@@ -4,7 +4,7 @@ import { Button, Row, Spin } from 'antd'
 import { initialize, isPristine, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { map } from 'lodash'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -16,10 +16,8 @@ import { Paths } from '../../types/api'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION, STRINGS } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, PERMISSION, STRINGS } from '../../utils/enums'
 import { postReq } from '../../utils/request'
-import { history } from '../../utils/history'
-import { getPrefixCountryCode } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -30,12 +28,12 @@ import useBackUrl from '../../hooks/useBackUrl'
 // assets
 import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
-const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_CREATE]
-
 const CreateCustomerPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const { salonID, parentPath } = props
+	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const isFormPristine = useSelector(isPristine(FORM.CUSTOMER))
 	const countriesPhonePrefix = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
@@ -58,8 +56,9 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 	}
 
 	const fetchData = async () => {
-		const phonePrefixCountryCode = getPrefixCountryCode(map(countriesPhonePrefix?.data, (item) => item.code))
-		dispatch(initialize(FORM.CUSTOMER, { phonePrefixCountryCode }))
+		if (salon.data) {
+			dispatch(initialize(FORM.CUSTOMER, { phonePrefixCountryCode: salon.data.companyContactPerson?.phonePrefixCountryCode || salon.data.address?.countryCode }))
+		}
 	}
 
 	useEffect(() => {
@@ -89,7 +88,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 				profileImageID: (formData?.avatar?.[0]?.id ?? formData?.avatar?.[0]?.uid) || null
 			})
 
-			history.push(backUrl)
+			navigate(backUrl as string)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -130,4 +129,4 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(CreateCustomerPage)
+export default compose(withPermissions([PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_CREATE]))(CreateCustomerPage)

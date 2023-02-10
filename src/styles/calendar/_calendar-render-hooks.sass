@@ -36,7 +36,6 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 	background-image: linear-gradient(135deg, $color 12.50%, transparent 12.50%, transparent 50%, $color 62.50%, $color 62.50%, transparent 60%, transparent 100%)
 
 // casy na casovej osi
-.nc-day-slot-label
 .nc-week-slot-label
 	color: $textColor-notino-grayDarker
 	font-size: 10px
@@ -224,21 +223,20 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 			text-overflow: ellipsis
 		.icons
 			overflow: hidden
-			.icon
-				flex: 0 0 auto
-				width: 10px
-				height: 10px
-				&.employee
-					color: $textColor-notino-black
-					display: none
-				&.service
-					color: $textColor-notino-black
-				&.check
-					color: $textColor-notino-success
-				&.question-mark
-					color: $textColor-notino-red
-				&.not-realized
-					color: $textColor-notino-red
+		.icon
+			flex: 0 0 auto
+			width: 10px
+			height: 10px
+			&.employee
+				color: $textColor-notino-black
+			&.service
+				color: $textColor-notino-black
+			&.check
+				color: $textColor-notino-success
+			&.question-mark
+				color: $textColor-notino-red
+			&.not-realized
+				color: $textColor-notino-red
 	&.multiday-event
 		.time
 			display: inline-flex
@@ -285,11 +283,11 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 		.event-content
 			overflow: hidden
 			width: 100%
-			// position: sticky
 			top: 0
 			max-height: 100%
 			z-index: 3
 			word-break: break-all
+			max-width: 100%
 			.time
 				font-weight: 400
 				color: $textColor-notino-grayDark
@@ -302,55 +300,68 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 			.event-content
 				padding: 2px 2px 2px 8px
 				min-width: 0
-				.event-info
+				display: flex
+				flex-direction: column
+				align-items: flex-start
+				gap: 4px
+				min-width: 0
+				overflow: hidden
+				max-width: 100%
+				.title-wrapper
 					display: flex
-					flex-direction: column
 					align-items: flex-start
-					gap: 4px
+					gap: 2px
 					min-width: 0
 					overflow: hidden
-					max-width: 100%
-					.title-wrapper
-						display: inline-flex
-						align-items: flex-start
+					width: 100%
+					flex: 0 0 auto
+					.title-inner-wrapper
+						display: flex
 						gap: 2px
 						min-width: 0
 						overflow: hidden
-						max-width: calc(100% - 14px)
+						flex: 1
 						.title
 							white-space: nowrap
 							overflow: hidden
 							text-overflow: ellipsis
 							max-width: 100%
-						/* .state
-							margin-top: 3px
-							border-radius: 50%
-					.desc
-						white-space: nowrap
-						overflow: hidden
-						text-overflow: ellipsis
-						max-width: 100%
-			.icons
-				position: absolute
-				right: 2px
-				top: 2px
-				display: flex
-				gap: 2px
-				justify-content: flex-end
-				max-width: calc(100% - 8px)
+						.time
+							display: none
+					.icons
+						display: flex
+						gap: 2px
+						justify-content: flex-end
+						flex: 0 0 auto
+						margin-left: auto
+						padding-left: 2px
+						parring-right: 2px
+				.desc
+					white-space: nowrap
+					overflow: hidden
+					text-overflow: ellipsis
+					max-width: 100%
 			&.min-15
 				.event-content
 					padding-top: 1px
 					padding-bottom: 0
-					.event-info
-						flex-direction: row
-						margin-right: 12px
-						.title-wrapper
-							margin-right: 0
-						.desc
-							display: none
-				.icons
-					top: 1px
+					padding-left: 4px
+					flex-direction: row
+					.title-wrapper
+						overflow: hidden
+						max-width: 100%
+						.title-inner-wrapper
+							.time
+								display: inline-flex
+								min-width: 0
+								white-space: nowrap
+								overflow: hidden
+								text-overflow: ellipsis
+								flex: unset
+					.desc
+						display: none
+					> .time
+						display: none
 		&.shift,
 		&.timeoff,
 		&.break
@@ -389,14 +400,13 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 			&.min-15
 				.event-content
 					padding: 0 4px
-					.event-info
-						.title
-							margin-top: 0
-						.icon
-							width: 11px
-							height: 11px
-						.duration
-							margin-top: 0
+					.title
+						margin-top: 0
+					.icon
+						width: 11px
+						height: 11px
+					.duration
+						margin-top: 0
 
 		&.shift
 			.event-content
@@ -410,6 +420,8 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 				.event-info
 					.time
 						color: $textColor-notino-grayDarker
+		&.is-end-of-day
+			top: -12px
 	// event weekly view
 	&.nc-week-event
 		min-width: 21px // ak sa zmeni minimalna sirka najmenjsieho dielika, je potrebne aj toto upravit!!
@@ -430,45 +442,47 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 				align-items: flex-start
 				min-width: 0
 				.title-wrapper
-					display: inline-flex
+					display: flex
 					align-items: flex-start
-					padding-right: 14px
-					// position: sticky
-					left: 2px
+					gap: 2px
 					min-width: 0
+					overflow: hidden
+					width: 100%
+					flex: 0 0 auto
 					margin-bottom: 4px
-					max-width: 100%
-					.title
-						max-width: 100%
-						white-space: nowrap
-						overflow: hidden
-						text-overflow: ellipsis
-						display: inline-block
+					.title-inner-wrapper
+						display: flex
+						gap: 2px
 						min-width: 0
-						min-height: 11px
-						&:not(:empty):not(:last-child)
-							margin-right: 2px
+						overflow: hidden
+						flex: 1
+						.title
+							max-width: 100%
+							white-space: nowrap
+							overflow: hidden
+							text-overflow: ellipsis
+							display: inline-block
+							min-width: 0
+							min-height: 11px
+							&:not(:empty):not(:last-child)
+								margin-right: 2px
+					.icons
+						display: flex
+						gap: 2px
+						justify-content: flex-end
+						flex: 0 0 auto
+						padding: 0 2px
 				.desc
 					max-width: 100%
 					white-space: nowrap
 					overflow: hidden
 					text-overflow: ellipsis
 					overflow: hidden
-					// position: sticky
 					left: 2px
 					display: inline-block
 					min-width: 0
-				.icons
-					position: absolute
-					right: 4px
-					top: 2px
-					display: flex
-					align-items: center
-					gap: 2px
-					justify-content: flex-end
-					max-width: calc(100% - 8px)
-					.state
-						display: none
+				> .state
+					display: none
 			&.min-15,
 			&.min-30,
 			&.min-45
@@ -476,28 +490,30 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 					.title-wrapper
 						padding-right: 0
 						margin-bottom: 0
-						.title
-							min-height: 0
-							&:not(:empty)
-								margin-bottom: 4px
-					.desc
-						display: none
-					.icons
-						top: unset
-						right: unset
-						position: relative
-						display: flex
-						align-items: center
+						.title-inner-wrapper
+							.title
+								min-height: 0
+								&:not(:empty)
+									margin-bottom: 4px
+						.icons
+							top: unset
+							right: unset
+							position: relative
+							display: flex
+							align-items: center
 			&.min-15,
 			&.mint-30
 				.event-content
 					padding-left: 4px
-				.icons
-					padding-left: 1px
-					max-width: unset
-					.clock,
-					.employee
-						display: none
+					.title-wrapper
+						.title-inner-wrapper
+							min-width: 10px
+						.icons
+							padding-left: 1px
+							max-width: unset
+							.clock,
+							.employee
+								display: none
 		&.shift,
 		&.timeoff,
 		&.break
@@ -512,7 +528,6 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 						align-items: center
 						gap: 4px
 						min-width: 0
-						// position: sticky
 						left: 2px
 						margin-right: 4px
 						.time
@@ -573,7 +588,6 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 						margin-left: unset
 						word-break: break-all
 						white-space: normal
-						// position: sticky
 						left: 0
 						text-align: center
 	// reservation state specific styles
@@ -615,68 +629,6 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 					outline-color: $borderColor-notino-grayDark
 					.event-accent
 						@include event-hatch($backgroundColor-notino-grayDark)
-			&:not(.is-autoassigned)
-				&.nc-day-event
-					.event-content
-						.event-info
-							.title-wrapper
-								max-width: calc(100% - 26px)
-					&.min-15
-						.event-content
-							.event-info
-								margin-right: 24px
-				&.nc-week-event
-					.event-content
-						.title-wrapper
-							padding-right: 26px
-					&.min-15,
-					&.min-30,
-					&.min-45
-						.event-content
-							.title-wrapper
-								padding-right: 0
-		&.is-autoassigned
-			.icons
-				.employee
-					display: block
-			&.nc-day-event
-				.event-content
-					.event-info
-						.title-wrapper
-							max-width: calc(100% - 26px)
-				&.min-15
-					.event-content
-						.event-info
-							margin-right: 24px
-				&.state-pending
-					&.nc-day-event
-						.event-content
-							.event-info
-								.title-wrapper
-									max-width: calc(100% - 36px)
-						&.min-15
-							.event-content
-								.event-info
-									margin-right: 36px
-			&.nc-week-event
-				.event-content
-					.title-wrapper
-						padding-right: 26px
-				&.state-pending
-					.event-content
-						.title-wrapper
-							padding-right: 36px
-				&.min-15,
-				&.min-30,
-				&.min-45
-					.event-content
-						.title-wrapper
-							padding-right: 0
-				&.min-30,
-				&.min-15
-					.icons
-						.employee
-							display: none
 	// absences specific styles
 	&.shift,
 	&.timeoff,

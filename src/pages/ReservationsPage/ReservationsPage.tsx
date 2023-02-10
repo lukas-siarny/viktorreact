@@ -4,52 +4,50 @@ import { Col, Row } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { initialize } from 'redux-form'
-import { ArrayParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-
-// components
 import dayjs from 'dayjs'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
+
+// components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import UserAvatar from '../../components/AvatarComponents'
 import ReservationsFilter from './components/ReservationsFilter'
 
 // utils
-import { DEFAULT_DATE_INIT_FORMAT, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { DEFAULT_DATE_INIT_FORMAT, FORM, PERMISSION, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { getAssignedUserLabel, normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { getAssignedUserLabel, normalizeDirectionKeys, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
 import { getServices } from '../../reducers/services/serviceActions'
 
 // types
-import { Columns, IBreadcrumbs, IComputedMatch, IReservationsFilter } from '../../types/interfaces'
+import { Columns, IBreadcrumbs, IReservationsFilter, SalonSubPageProps } from '../../types/interfaces'
 import { getPaginatedReservations } from '../../reducers/calendar/calendarActions'
 
-type Props = {
-	computedMatch: IComputedMatch<{ salonID: string }>
-}
+// hooks
+import useQueryParams, { ArrayParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
+
+type Props = SalonSubPageProps
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 const ReservationsPage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { computedMatch } = props
-	const { salonID } = computedMatch.params
+	const { salonID } = props
 	const reservations = useSelector((state: RootState) => state.calendar.paginatedReservations)
 
 	const [query, setQuery] = useQueryParams({
-		dateFrom: withDefault(StringParam, dayjs().format(DEFAULT_DATE_INIT_FORMAT)),
-		employeeIDs: ArrayParam,
-		categoryIDs: ArrayParam,
-		reservationStates: ArrayParam,
-		reservationCreateSourceType: StringParam,
-		reservationPaymentMethods: ArrayParam,
-		limit: NumberParam,
-		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'startDate:ASC')
+		dateFrom: StringParam(dayjs().format(DEFAULT_DATE_INIT_FORMAT)),
+		employeeIDs: ArrayParam(),
+		categoryIDs: ArrayParam(),
+		reservationStates: ArrayParam(),
+		reservationCreateSourceType: StringParam(),
+		reservationPaymentMethods: ArrayParam(),
+		limit: NumberParam(),
+		page: NumberParam(1)
 	})
 
 	useEffect(() => {
@@ -74,7 +72,7 @@ const ReservationsPage = (props: Props) => {
 				reservationCreateSourceType: query.reservationCreateSourceType,
 				categoryIDs: query.categoryIDs,
 				page: query.page,
-				order: query.order,
+				order: 'startDate:ASC',
 				limit: query.limit
 			})
 		)
@@ -84,7 +82,6 @@ const ReservationsPage = (props: Props) => {
 		query.dateFrom,
 		query.employeeIDs,
 		query.limit,
-		query.order,
 		query.page,
 		query.reservationCreateSourceType,
 		query.reservationPaymentMethods,
@@ -94,7 +91,7 @@ const ReservationsPage = (props: Props) => {
 
 	useEffect(() => {
 		dispatch(getServices({ salonID }))
-	}, [])
+	}, [salonID, dispatch])
 
 	const handleSubmit = (values: IReservationsFilter) => {
 		const newQuery = {
@@ -131,9 +128,7 @@ const ReservationsPage = (props: Props) => {
 			dataIndex: 'startDate',
 			key: 'startDate',
 			ellipsis: true,
-			width: '20%',
-			sorter: true,
-			sortOrder: setOrder(query.order, 'startDate')
+			width: '20%'
 		},
 		{
 			title: t('loc:Trvanie'),
@@ -154,7 +149,15 @@ const ReservationsPage = (props: Props) => {
 			dataIndex: 'state',
 			key: 'state',
 			ellipsis: true,
-			width: '20%'
+			width: '20%',
+			render: (value) => {
+				return (
+					<div className={'flex items-center'}>
+						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationState(value as RESERVATION_STATE).icon}</div>
+						<div>{translateReservationState(value as RESERVATION_STATE).text}</div>
+					</div>
+				)
+			}
 		},
 		{
 			title: t('loc:Spôsob úhrady'),
@@ -162,7 +165,14 @@ const ReservationsPage = (props: Props) => {
 			key: 'paymentMethod',
 			ellipsis: true,
 			width: '20%',
-			render: (value) => value || '-'
+			render: (value) => {
+				return (
+					<div className={'flex items-center'}>
+						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).icon}</div>
+						<div>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).text}</div>
+					</div>
+				)
+			}
 		},
 		{
 			title: t('loc:Zamestnanec'),

@@ -5,6 +5,7 @@ import { Button, Row, Spin } from 'antd'
 import { get, map } from 'lodash'
 import { compose } from 'redux'
 import { initialize, submit, isPristine } from 'redux-form'
+import { useNavigate, useParams } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -12,7 +13,7 @@ import DeleteButton from '../../components/DeleteButton'
 import CustomerForm from './components/CustomerForm'
 
 // types
-import { IBreadcrumbs, IComputedMatch, ICustomerForm, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, ICustomerForm, SalonSubPageProps } from '../../types/interfaces'
 
 // reducers
 import { getCustomer } from '../../reducers/customers/customerActions'
@@ -20,9 +21,8 @@ import { RootState } from '../../reducers'
 
 // utils
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 import { deleteReq, patchReq } from '../../utils/request'
-import { history } from '../../utils/history'
 import { Paths } from '../../types/api'
 
 // hooks
@@ -32,32 +32,27 @@ import { formFieldID } from '../../utils/helper'
 // assets
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
 
-type Props = SalonSubPageProps & {
-	computedMatch: IComputedMatch<{
-		customerID: string
-	}>
-}
-
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
+type Props = SalonSubPageProps
 
 const CustomerPage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const { parentPath } = props
-	const { customerID } = props.computedMatch.params
+	const { customerID } = useParams<{ customerID?: string }>()
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const isFormPristine = useSelector(isPristine(FORM.CUSTOMER))
 	const customer = useSelector((state: RootState) => state.customers.customer)
+	const navigate = useNavigate()
 
 	const isLoading = customer?.isLoading || isRemoving
 
 	const [backUrl] = useBackUrl(parentPath + t('paths:customers'))
 
 	const fetchCustomerData = async () => {
-		const { data } = await dispatch(getCustomer(customerID))
+		const { data } = await dispatch(getCustomer(customerID as string))
 		if (!data?.customer?.id) {
-			history.push('/404')
+			navigate('/404')
 		}
 		dispatch(
 			initialize(FORM.CUSTOMER, {
@@ -103,7 +98,7 @@ const CustomerPage = (props: Props) => {
 			setSubmitting(true)
 			await patchReq(
 				'/api/b2b/admin/customers/{customerID}',
-				{ customerID },
+				{ customerID: customerID as string },
 				{
 					email: data.email,
 					city: data.city,
@@ -123,7 +118,7 @@ const CustomerPage = (props: Props) => {
 				}
 			)
 
-			history.push(backUrl)
+			navigate(backUrl as string)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -138,8 +133,8 @@ const CustomerPage = (props: Props) => {
 		}
 		try {
 			setIsRemoving(true)
-			await deleteReq('/api/b2b/admin/customers/{customerID}', { customerID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			history.push(parentPath + t('paths:customers'))
+			await deleteReq('/api/b2b/admin/customers/{customerID}', { customerID: customerID as string }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			navigate(parentPath + t('paths:customers'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -159,7 +154,7 @@ const CustomerPage = (props: Props) => {
 					<div className={'content-footer'}>
 						<div className={'flex flex-col gap-2 md:flex-row md:justify-between'}>
 							<DeleteButton
-								permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_DELETE]}
+								permissions={[PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_DELETE]}
 								className={'w-full md:w-auto md:min-w-50 xl:min-w-60'}
 								onConfirm={deleteCustomer}
 								entityName={t('loc:zákazníka')}
@@ -168,7 +163,7 @@ const CustomerPage = (props: Props) => {
 								id={formFieldID(FORM.CUSTOMER, DELETE_BUTTON_ID)}
 							/>
 							<Permissions
-								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_UPDATE]}
+								allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_UPDATE]}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
 										type={'primary'}
@@ -199,4 +194,4 @@ const CustomerPage = (props: Props) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(CustomerPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(CustomerPage)

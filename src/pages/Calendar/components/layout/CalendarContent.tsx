@@ -1,19 +1,31 @@
-import React, { useImperativeHandle, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { batch, useDispatch, useSelector } from 'react-redux'
 import { notification, Spin } from 'antd'
 import { Content } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { change } from 'redux-form'
-import { isEqual, startsWith } from 'lodash'
-import { DelimitedArrayParam, useQueryParams } from 'use-query-params'
+import { useNavigate } from 'react-router-dom'
+import { startsWith } from 'lodash'
 
 // fullcalendar
-import { EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
-import FullCalendar, { EventDropArg } from '@fullcalendar/react'
+import FullCalendar from '@fullcalendar/react'
+import { EventResizeDoneArg } from '@fullcalendar/interaction'
+import { EventDropArg } from '@fullcalendar/core'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, EVENT_NAMES, FORM, NEW_ID_PREFIX, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import {
+	CALENDAR_DATE_FORMAT,
+	CALENDAR_EVENTS_KEYS,
+	CALENDAR_EVENTS_VIEW_TYPE,
+	CALENDAR_EVENT_TYPE,
+	CALENDAR_VIEW,
+	CANEL_TOKEN_MESSAGES,
+	EVENT_NAMES,
+	FORM,
+	NEW_ID_PREFIX,
+	UPDATE_EVENT_PERMISSIONS
+} from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
@@ -33,67 +45,26 @@ import {
 import { RootState } from '../../../../reducers'
 
 // utils
-import { ForbiddenModal, permitted } from '../../../../utils/Permissions'
+import { ForbiddenModal, checkPermissions } from '../../../../utils/Permissions'
 import { getSelectedDateForCalendar, getWeekDays } from '../../calendarHelpers'
-import { history } from '../../../../utils/history'
+import { cancelGetTokens } from '../../../../utils/request'
+import { getCalendarEventsCancelTokenKey } from '../../../../reducers/calendar/calendarActions'
+import { IQueryParams } from '../../../../hooks/useQueryParams'
 
-type ComparsionEventInfo = {
-	offsetTop: number | null
-	offsetTopRow: number | null
-	offsetLeft: number | null
-	height: number | null
-	width: number | null
-}
-
-const COMPARSION_INFO_DEFAULT = {
-	offsetTop: null,
-	offsetTopRow: null,
-	offsetLeft: null,
-	height: null,
-	width: null
-}
-
-const getEventForComparsion = (calendarView: CALENDAR_VIEW, element?: HTMLElement) => {
-	// const element = document.querySelector(`.${eventClassName}`)
-	let offsetTop = null
-	let offsetLeft = null
-	let offsetTopRow = null // relevant only for the week view
-	const clientRect = element?.getBoundingClientRect()
-	const height = clientRect?.height || null
-	const width = clientRect?.width || null
-	const parentWrapper = element?.parentElement
-
-	switch (calendarView) {
-		case CALENDAR_VIEW.DAY:
-			// offset of toptier parent card wrapper (.fc-timegrid-event-harness) from parent column (.fc-timegrid-col-events)
-			offsetTop = parentWrapper?.offsetTop ?? null
-			// offset of toptier parent col element (.fc-timegrid-col) from whole table
-			offsetLeft = parentWrapper?.parentElement?.parentElement?.parentElement?.offsetLeft ?? null
-			break
-		case CALENDAR_VIEW.WEEK: {
-			// offset of toptier parent card wrapper (.fc-timeline-event-harness) from parent timeline line (.fc-timeline-lane)
-			offsetTop = parentWrapper?.offsetTop ?? null
-			// offset of parent tr element from whole table
-			// it's neccessary to check this as well, becouse offsetTop is only relative to parentLine, not the whole table
-			offsetTopRow = parentWrapper?.parentElement?.parentElement?.parentElement?.parentElement?.offsetTop ?? null
-			offsetLeft = parentWrapper?.offsetLeft ?? null
-			break
-		}
-		default:
-			break
-	}
-
-	return { offsetTop, offsetTopRow, offsetLeft, width, height }
-}
+const GET_RESERVATIONS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.RESERVATIONS)
+const GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS)
 
 type Props = {
 	view: CALENDAR_VIEW
 	loading: boolean
 	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
-	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
 	enabledSalonReservations?: boolean
 	parentPath: string
+	clearFetchInterval: () => void
+	restartFetchInterval: () => void
+	query: IQueryParams
+	setQuery: (newValues: IQueryParams) => void
 } & Omit<ICalendarView, 'onEventChange' | 'onEventChangeStart' | 'onEventChangeStop'>
 
 export type CalendarRefs = {
@@ -103,6 +74,8 @@ export type CalendarRefs = {
 }
 
 const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
+	const navigate = useNavigate()
+
 	const {
 		view,
 		loading,
@@ -111,7 +84,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		handleSubmitReservation,
 		handleSubmitEvent,
 		selectedDate,
-		setEventManagement,
 		enabledSalonReservations,
 		salonID,
 		eventsViewType,
@@ -119,8 +91,11 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		onAddEvent,
 		onEditEvent,
 		onReservationClick,
-		clearRestartInterval,
-		parentPath
+		clearFetchInterval,
+		restartFetchInterval,
+		parentPath,
+		query,
+		setQuery
 	} = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -130,14 +105,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	const employeesOptions = useSelector((state: RootState) => state.employees.employees?.options)
 
-	// query
-	const [query, setQuery] = useQueryParams({
-		employeeIDs: DelimitedArrayParam,
-		categoryIDs: DelimitedArrayParam
-	})
-
-	const [disableRender, setDisableRender] = useState(false)
-
 	useImperativeHandle(ref, () => ({
 		[CALENDAR_VIEW.DAY]: dayView?.current,
 		[CALENDAR_VIEW.WEEK]: weekView?.current
@@ -146,9 +113,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
-	const selectedSalonuniqPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions)
+	const salonPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions || [])
 	const [visibleForbiddenModal, setVisibleForbiddenModal] = useState(false)
-	const prevEvent = useRef<ComparsionEventInfo>(COMPARSION_INFO_DEFAULT)
 
 	const sources = useMemo(() => {
 		// eventy, ktore sa posielaju o uroven nizsie do View, sa v pripade, ze existuje virtualEvent odfiltruju
@@ -170,14 +136,53 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	}, [reservations, shiftsTimeOffs, virtualEvent])
 
 	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
+	/**
+	 * calendarSelectedDate = datum, ktory ma nastaveny Fullcalendar
+	 * v tyzdennom view sa casto lisi od datumu, ktory je v URLcke, viac v komentari vo funkcii getSelectedDateForCalendar()
+	 */
 	const calendarSelectedDate = getSelectedDateForCalendar(view, selectedDate)
+
 	const dispatch = useDispatch()
 
+	/**
+	 * onEventChangeStart()
+	 * táto funkcia sa zavolá vždy na začiatku resizovania alebo drag'n'dropovania eventu
+	 * počas práce s eventom je potrebné zamedziť tomu, aby sa spúštala aktualizácia kalendára na pozadí (tvz. "background load" - vysvetlené v komponetne Calendar.tsx), pretože môžu vznikať duplicitné eventy
+	 * problém súvisí s tým, ako Fullcalendar funguje - pri dnd alebo resize eventu Fullcalendar skryje originálny event a vytvorý v DOMku nový "placeholder", ktorý ho nahradí počas celej doby, ako s ním užívateľ manipuluje - čiže od momentu, kedy sa zavolá onEventChangeStart() až po onEventChange() / onEventChangeStop()
+	 * ak by sa počas toho, ako úživateľ mení event cez dnd alebo resize dotiahli nové data na pozadí, ktoré by boli odlišné od predošlých (napr. by iný užívateľ v inom sessions zmenil niektorý z eventov), dôdje k prerendrovaniu kalendára a zduplikovaniu eventov
+	 * a to tak, že v novo dotiahnutej kolekcii sa bude stále nachádzať event, ktorý užívateľ začal meniť a zároveň by druhý krát existoval ako placeholder v jeho "ruke" (a to aj potom, čo by ho "pustil z ruky" naspäť do kalendára)
+	 * clearInterval(), ktorý sa zavolá na začiatku zmeny eventu zčasti tento problém rieši, ak začnem meniť event a aktuálne na pozadí neprebieha background load, tak táto funkcia zastaví ďalšie aktualizovanie až dovtedy, pokiaľ s resizom alebo dnd neprestanem - až potom sa opäť spustí restartFetchInterval()
+	 * môže ešte nastať prípad, kedy začnem meniť event počas toho, ako background load prebieha (vtedy mi clearInterval() zruší až ďalšiu aktualizáciu, no nie tu prebiehajúcu)
+	 * tento prípad riešia cancel tokeny, ktoré aktuálne prebiehajúci request zrušia
+	 *
+	 * onEventChange()
+	 * obsahuje informácie ako o novej polohe eventu, tak aj o pôvodnej polohe - a tiež funkciu revert(), ktorá ho do pôvodnej polohy ľahko vráti - to je užitočné v prípade, že neprejde request alebo sa užívateľ rozhodne nepotvrdiť zmenu eventu v confirm modale
+	 * v tomto CB sa vyhodnocuje, či užívateľ môže spraviť úpravu a ak áno, odosielajú sa ďalej data na BE
+	 * zavolá sa však len vtedy, keď reálne došlo k nejakej zmene eventu, teda ak som zobral event do ruky, ale vrátim ho na pôvodne miesto, tak bude odignorovaný
+	 * to je problém, pretože po dokončení resizu alebo dnd potrebujeme opätovne povoliť "background load" aj v prípade, že k žiadnej zmene nedošlo
+	 * musíme si pomôcť ďalším CB onEventChangeStop(), ktorý sa zavolá vždy
+	 *
+	 * onEventChangeStop()
+	 * zavolá sa vždy po dokončení dnd alebo resizu, aj v prípade, že k zmene pozície eventu nedošlo
+	 * preto v tomto CB opatovne povoľujeme aktualizáciu dát - restartFetchInterval()
+	 * poskytuje však informácie len o pôvodnom evente, neposkytuje informácie o novej polohe, resoruce, ani revert() funkciu, preto ho nemôžeme použit univerzálne miesto onEventChange() a musíme ich kombinovať
+	 */
+
+	const onEventChangeStart = useCallback(() => {
+		clearFetchInterval()
+
+		if (typeof cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY] !== typeof undefined) {
+			cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY].cancel(CANEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
+		}
+		if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION && typeof cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY] !== typeof undefined) {
+			cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY].cancel(CANEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
+		}
+	}, [clearFetchInterval, eventsViewType])
+
 	const onEventChange = (arg: EventDropArg | EventResizeDoneArg) => {
-		const hasPermissions = permitted(authUserPermissions || [], selectedSalonuniqPermissions, UPDATE_EVENT_PERMISSIONS)
+		const hasPermissions = checkPermissions([...authUserPermissions, ...salonPermissions], UPDATE_EVENT_PERMISSIONS)
 
 		const revertEvent = () => {
-			setDisableRender(false)
 			arg.revert()
 		}
 
@@ -199,7 +204,12 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		const newEmployeeId = newResourceExtendedProps?.employee?.id || eventExtenedProps?.eventData?.employee?.id
 		const currentEmployeeId = eventExtenedProps?.eventData?.employee?.id
 
-		// NOTE: miesto eventAllow sa bude vyhodnocovat, ci sa dany event moze upravit tu
+		/**
+		 * vyhodnotí sa nová pozícia eventu - v prípade, že užívateľ nemá právo vykonať danú akciu, tak sa event vráti na pôvodne miesto
+		 * editácia eventu - rezervácia sa môže ľubovoľne presúvať medzi zamestnancami.. zmena, voľno a prestávka je možné presúvať len vrámci zamestnanca
+		 * vytváranie eventu - nie su žiadne reštrikcie
+		 * eventy v mesačnom view nie sú rozdelné podľa resouruces, čiže je to tiež bez reštrikcií
+		 */
 		if (/* view !== CALENDAR_VIEW.MONTH && */ eventData?.eventType !== CALENDAR_EVENT_TYPE.RESERVATION && !startsWith(event.id, NEW_ID_PREFIX)) {
 			if (newEmployeeId !== currentEmployeeId) {
 				notification.warning({
@@ -221,14 +231,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		let date = startDajys.format(CALENDAR_DATE_FORMAT.QUERY)
 
 		if (view === CALENDAR_VIEW.WEEK) {
-			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
-			// (to sa bude diat len pri drope)
-			const resource = event.getResources()[0]
-			date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
-		}
-
-		if (view === CALENDAR_VIEW.WEEK) {
-			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
+			// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces - pozri komenty v CalendarWeekView pre upresnenie)
 			// (to sa bude diat len pri drope)
 			const resource = event.getResources()[0]
 			date = newResource ? (newResourceExtendedProps as IWeekViewResourceExtenedProps)?.day : resource?.extendedProps?.day
@@ -247,9 +250,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			},
 			eventId,
 			revertEvent,
-			// if the event has changed, it is necessary to enable rendering again.. however, only after completing the request for current data... otherwise, duplicate events may be created in the calendar
-			// if someone in another session changes the event and I start changing the same event during the nearest background load, this event would be duplicated with the rendering enabled
-			enableCalendarRender: () => setDisableRender(false),
 			updateFromCalendar: true
 		}
 
@@ -258,7 +258,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			revertEvent()
 			return
 		}
-		// Ak existuje virualny event a isPlaceholder z eventu je true tak sa jedna o virtualny even a bude sa rovbit change nad formularmi a nezavola sa request na BE
+		// Ak existuje virualny event a isPlaceholder z eventu je true tak sa jedna o virtualny even a bude sa robit change nad formularmi a nezavola sa request na BE
 		if (virtualEvent && startsWith(event.id, NEW_ID_PREFIX)) {
 			const formName = eventData?.eventType === CALENDAR_EVENT_TYPE.RESERVATION ? FORM.CALENDAR_RESERVATION_FORM : FORM.CALENDAR_EVENT_FORM
 			batch(() => {
@@ -273,7 +273,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					})
 				)
 			})
-			setDisableRender(false)
 			return
 		}
 
@@ -287,24 +286,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm)
 	}
 
-	const onEventChangeStart = (arg: EventDropArg | EventResizeStartArg) => {
-		clearRestartInterval()
-		// disable render on resize or drop start
-		setDisableRender(true)
-		prevEvent.current = getEventForComparsion(view, arg.el)
-	}
-
-	const onEventChangeStop = (arg: EventDropArg | EventResizeStopArg) => {
-		// FC uses a "fake" element in the DOM for drag and resize
-		// it is therefore necessary to wait until the original DOM event is updated after the change and then find out its new coordinates
-		setTimeout(() => {
-			const dropEventInfo = getEventForComparsion(view, arg.el)
-			// if the old and new coordinates are the same, then onEventChange CB is not called (which would enable render again) and it is necessary to enable render here
-			if (isEqual(dropEventInfo, prevEvent.current)) {
-				setDisableRender(false)
-			}
-			prevEvent.current = COMPARSION_INFO_DEFAULT
-		}, 500)
+	const onEventChangeStop = () => {
+		restartFetchInterval()
 	}
 
 	const getView = () => {
@@ -312,7 +295,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			return (
 				<CalendarEmptyState
 					title={t('loc:Pre prácu s kalendárom je potrebné pridať do salónu aspoň jedného zamestnanca')}
-					onButtonClick={() => history.push(`${parentPath}${t('paths:employees')}`)}
+					onButtonClick={() => navigate(`${parentPath}${t('paths:employees')}`)}
 					buttonLabel={t('loc:Pridať zamestnancov')}
 				/>
 			)
@@ -381,8 +364,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				<CalendarWeekView
 					ref={weekView}
 					enabledSalonReservations={enabledSalonReservations}
-					setEventManagement={setEventManagement}
-					disableRender={disableRender}
 					reservations={sources.reservations}
 					shiftsTimeOffs={sources.shiftsTimeOffs}
 					virtualEvent={sources.virtualEvent}
@@ -394,7 +375,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					onEditEvent={onEditEvent}
 					onReservationClick={onReservationClick}
 					onAddEvent={onAddEvent}
-					clearRestartInterval={clearRestartInterval}
 					onEventChange={onEventChange}
 					onEventChangeStart={onEventChangeStart}
 					onEventChangeStop={onEventChangeStop}
@@ -406,9 +386,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		return (
 			<CalendarDayView
 				enabledSalonReservations={enabledSalonReservations}
-				setEventManagement={setEventManagement}
 				ref={dayView}
-				disableRender={disableRender}
 				reservations={sources.reservations}
 				shiftsTimeOffs={sources.shiftsTimeOffs}
 				virtualEvent={sources.virtualEvent}
@@ -419,7 +397,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				onAddEvent={onAddEvent}
 				onEditEvent={onEditEvent}
 				onReservationClick={onReservationClick}
-				clearRestartInterval={clearRestartInterval}
 				onEventChange={onEventChange}
 				onEventChangeStart={onEventChangeStart}
 				onEventChangeStop={onEventChangeStop}

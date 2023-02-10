@@ -8,6 +8,7 @@ import dayjs from 'dayjs'
 import colors from 'tailwindcss/colors'
 import i18next from 'i18next'
 import { ButtonProps } from 'antd/es/button'
+import { isPristine } from 'redux-form'
 
 // assets
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon-16.svg'
@@ -16,11 +17,7 @@ import { ReactComponent as DotsIcon } from '../../../assets/icons/more-info-hori
 import { ReactComponent as MessageIcon } from '../../../assets/icons/message-icon-16-thin.svg'
 import { ReactComponent as ChevronDown } from '../../../assets/icons/chevron-down.svg'
 import { ReactComponent as NoteIcon } from '../../../assets/icons/note-icon.svg'
-import { ReactComponent as CheckSuccessIcon } from '../../../assets/icons/check-icon-success-16.svg'
-import { ReactComponent as CreditCardIcon } from '../../../assets/icons/credit-card.svg'
-import { ReactComponent as WalletIcon } from '../../../assets/icons/wallet.svg'
 import { ReactComponent as DollarIcon } from '../../../assets/icons/dollar.svg'
-import { ReactComponent as ClockIcon } from '../../../assets/icons/clock.svg'
 import { ReactComponent as CrossedIcon } from '../../../assets/icons/crossed-red-16.svg'
 
 // components
@@ -32,8 +29,8 @@ import { RootState } from '../../../reducers'
 import { CalendarEvent, ICalendarReservationPopover } from '../../../types/interfaces'
 
 /// utils
-import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE, STRINGS } from '../../../utils/enums'
-import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
+import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, FORM, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE, STRINGS } from '../../../utils/enums'
+import { getAssignedUserLabel, getCountryPrefix, translateReservationPaymentMethod, translateReservationState } from '../../../utils/helper'
 import { parseTimeFromMinutes, getTimeText } from '../calendarHelpers'
 
 // hooks
@@ -59,36 +56,18 @@ type ContentProps = {
 	employee?: CalendarEvent['employee']
 	color?: string
 	notes?: PopoverNote[]
+	showUnsavedChangesMessage?: boolean
 }
 
-const getPaymentMethodHeaderProps = (method?: NonNullable<CalendarEvent['reservationData']>['paymentMethod']) => {
-	switch (method) {
-		case RESERVATION_PAYMENT_METHOD.CARD:
-			return {
-				headerIcon: <CreditCardIcon className={'text-notino-success'} />,
-				headerState: i18next.t('loc:Platba kartou')
-			}
-		case RESERVATION_PAYMENT_METHOD.CASH:
-			return {
-				headerIcon: <WalletIcon className={'text-notino-success'} />,
-				headerState: i18next.t('loc:Platba v hotovosti')
-			}
-		case RESERVATION_PAYMENT_METHOD.OTHER:
-			return {
-				headerIcon: <DollarIcon className={'text-notino-success'} />,
-				headerState: i18next.t('loc:Iné spôsoby platby')
-			}
-		default:
-			return {
-				headerIcon: <DollarIcon className={'text-notino-success'} />,
-				headerState: i18next.t('loc:Zaplatená')
-			}
-	}
-}
+const getCloseButton = (onClose: () => void) => (
+	<button className={'nc-event-popover-header-button'} type={'button'} onClick={onClose}>
+		<CloseIcon />
+	</button>
+)
 
 const PopoverContent: FC<ContentProps> = (props) => {
 	const [t] = useTranslation()
-	const { headerIcon, headerState, moreMenuItems, footerButtons, start, end, service, customer, employee, notes, color, onEdit, onClose } = props
+	const { headerIcon, headerState, moreMenuItems, footerButtons, start, end, service, customer, employee, notes, color, onEdit, onClose, showUnsavedChangesMessage } = props
 
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 	const prefix = getCountryPrefix(countriesData.data, customer?.phonePrefixCountryCode)
@@ -97,118 +76,132 @@ const PopoverContent: FC<ContentProps> = (props) => {
 	const dayNumber = dayjs(start).format('D')
 	const isToday = dayjs(start).isToday()
 
-	const hasFooter = !!footerButtons?.length
+	const hasFooter = !!footerButtons?.length && !showUnsavedChangesMessage
 
 	return (
 		<div className='nc-event-popover-content text-notino-black w-80'>
-			<header className={'flex items-center justify-between px-4 h-13'}>
-				<Row className={'state-wrapper gap-2'}>
-					{headerIcon}
-					<span className={'text-sm leading-4'}>{headerState}</span>
-				</Row>
-				<Row className={'buttons gap-4'}>
-					<button className={'nc-event-popover-header-button'} type={'button'} onClick={onEdit}>
-						<EditIcon />
-					</button>
-					{(moreMenuItems || []).length > 0 && (
-						<Dropdown
-							overlay={<Menu className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'} items={moreMenuItems} />}
-							placement='bottomRight'
-							trigger={['click']}
-						>
-							<button className={'nc-event-popover-header-button'} type={'button'} onClick={(e) => e.preventDefault()}>
-								<DotsIcon style={{ transform: 'rotate(90deg)' }} />
+			{!showUnsavedChangesMessage && (
+				<>
+					<header className={'flex items-center justify-between px-4 h-13'}>
+						<Row className={'state-wrapper gap-2'}>
+							{headerIcon}
+							<span className={'text-sm leading-4'}>{headerState}</span>
+						</Row>
+						<Row className={'buttons gap-4'}>
+							<button className={'nc-event-popover-header-button'} type={'button'} onClick={onEdit}>
+								<EditIcon />
 							</button>
-						</Dropdown>
-					)}
-					<button className={'nc-event-popover-header-button'} type={'button'} onClick={onClose}>
-						<CloseIcon />
-					</button>
-				</Row>
-			</header>
-			<Divider className={'m-0'} />
+							{(moreMenuItems || []).length > 0 && (
+								<Dropdown
+									overlay={<Menu className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'} items={moreMenuItems} />}
+									placement='bottomRight'
+									trigger={['click']}
+								>
+									<button className={'nc-event-popover-header-button'} type={'button'} onClick={(e) => e.preventDefault()}>
+										<DotsIcon style={{ transform: 'rotate(90deg)' }} />
+									</button>
+								</Dropdown>
+							)}
+							{getCloseButton(onClose)}
+						</Row>
+					</header>
+					<Divider className={'m-0'} />
+				</>
+			)}
 			{/* footerHeight = 72px, headerHeight = 52px. dividerHeight = 1px (header and footer dividers), padding top and bottom = 2*16px */}
-			<main className={'px-4 overflow-y-auto'} style={{ maxHeight: `calc(100vh - 32px - ${hasFooter ? `${134}px` : `${53}px`})` }}>
-				{customer && (
+			<main className={'px-4 overflow-y-auto relative'} style={{ maxHeight: `calc(100vh - 32px - ${hasFooter ? `${134}px` : `${53}px`})` }}>
+				{showUnsavedChangesMessage ? (
 					<>
-						<section className={'flex py-4'}>
-							<Col flex={'32px'}>
-								<UserAvatar size={24} className={'shrink-0'} src={customer?.profileImage?.resizedImages?.thumbnail} />
-							</Col>
-							<Col flex={'auto'} className={'flex flex-col gap-2'}>
-								<Row align={'top'} justify={'space-between'} wrap={false} className={'gap-2'}>
-									<Row className={'flex-col gap-1'}>
-										<span className={'text-sm leading-4 break-all'}>
-											{getAssignedUserLabel({
-												firstName: customer.firstName,
-												lastName: customer.lastName,
-												email: customer.email,
-												id: customer.id
-											})}
-										</span>
-										{prefix && customer.phone && <span className={'text-xxs text-notino-grayDark leading-3'}>{`${prefix} ${customer.phone}`}</span>}
-									</Row>
-									<Row align={'middle'} className={'gap-2 h-8'} wrap={false}>
-										{/* <Tag className={'nc-event-popover-tag tag-new'}>{t('loc:Nový klient')}</Tag> */}
-										{customer.email && (
-											<a href={`mailto:${customer.email}`} className={'leading-3'}>
-												<MessageIcon />
-											</a>
+						<div className={'absolute right-4 top-4'}>{getCloseButton(onClose)}</div>
+						<p className={'pt-4 pr-8 text-white'}>{t('loc:Prosím uložte si rozpracované zmeny vo formulári pre úpravu rezervácie')}</p>
+					</>
+				) : (
+					<>
+						{customer && (
+							<>
+								<section className={'flex py-4'}>
+									<Col flex={'32px'}>
+										<UserAvatar size={24} className={'shrink-0'} src={customer?.profileImage?.resizedImages?.thumbnail} />
+									</Col>
+									<Col flex={'auto'} className={'flex flex-col gap-2'}>
+										<Row align={'top'} justify={'space-between'} wrap={false} className={'gap-2'}>
+											<Row className={'flex-col gap-1'}>
+												<span className={'text-sm leading-4 break-all'}>
+													{getAssignedUserLabel({
+														firstName: customer.firstName,
+														lastName: customer.lastName,
+														email: customer.email,
+														id: customer.id
+													})}
+												</span>
+												{prefix && customer.phone && <span className={'text-xxs text-notino-grayDark leading-3'}>{`${prefix} ${customer.phone}`}</span>}
+											</Row>
+											<Row align={'middle'} className={'gap-2 h-8'} wrap={false}>
+												{/* <Tag className={'nc-event-popover-tag tag-new'}>{t('loc:Nový klient')}</Tag> */}
+												{customer.email && (
+													<a href={`mailto:${customer.email}`} className={'leading-3'}>
+														<MessageIcon />
+													</a>
+												)}
+											</Row>
+										</Row>
+										{customer.note && (
+											<Ellipsis
+												text={customer.note}
+												className={'p-3 m-0 bg-notino-grayLighter text-xs leading-4 rounded-md rounded-t-none whitespace-pre-wrap'}
+											/>
 										)}
-									</Row>
+									</Col>
+								</section>
+								<Divider className={'m-0'} />
+							</>
+						)}
+						<section className={'py-4 flex'}>
+							<Col flex={'32px'}>
+								<div className={`text-center flex flex-col ${isToday ? 'text-notino-pink' : ''}`}>
+									<span className={'block text-sm leading-4'}>{dayNumber}</span>
+									<span className={'text-xxs leading-3'}>{dayName}</span>
+								</div>
+							</Col>
+							<Col flex={'auto'}>
+								<Row className={'gap-2'} justify={'space-between'} align={'top'} wrap={false}>
+									<div className={'flex flex-col pl-3 gap-1'} style={{ borderLeft: `2px solid ${color || '#000000'}` }}>
+										<span className={'text-notino-grayDark text-xxs leading-3'}>{`${getTimeText(start, end)} (${parseTimeFromMinutes(
+											dayjs(end).diff(start, 'minutes')
+										)})`}</span>
+										{service?.name && <span className={'block text-sm text-notino-black leading-4 break-all'}>{service.name}</span>}
+									</div>
+									<UserAvatar
+										size={24}
+										className={'shrink-0 mt-1'}
+										src={employee?.image?.resizedImages?.thumbnail}
+										style={{ border: `2px solid ${color || colors.neutral[200]}` }}
+									/>
 								</Row>
-								{customer.note && (
-									<Ellipsis text={customer.note} className={'p-3 m-0 bg-notino-grayLighter text-xs leading-4 rounded-md rounded-t-none whitespace-pre-wrap'} />
-								)}
 							</Col>
 						</section>
-						<Divider className={'m-0'} />
+						{notes?.map((note) => {
+							return (
+								<React.Fragment key={note.key}>
+									<Divider className={'m-0'} />
+									<section className={'py-4'}>
+										<div className={'note flex break-all text-sm leading-4'}>
+											<Col flex={'32px'} className={'flex justify-center'}>
+												<NoteIcon className={'shrink-0 text-notino-grayDark'} />
+											</Col>
+											<Col flex={'auto'}>
+												<Row className={'gap-1'} align={'top'}>
+													<Ellipsis text={note.text} className={'m-0 p-0 whitespace-pre-wrap flex-1'} />
+													{note.internal && <Tag className={'nc-event-popover-tag'}>{t('loc:Interná')}</Tag>}
+												</Row>
+											</Col>
+										</div>
+									</section>
+								</React.Fragment>
+							)
+						})}
 					</>
 				)}
-				<section className={'py-4 flex'}>
-					<Col flex={'32px'}>
-						<div className={`text-center flex flex-col ${isToday ? 'text-notino-pink' : ''}`}>
-							<span className={'block text-sm leading-4'}>{dayNumber}</span>
-							<span className={'text-xxs leading-3'}>{dayName}</span>
-						</div>
-					</Col>
-					<Col flex={'auto'}>
-						<Row className={'gap-2'} justify={'space-between'} align={'top'} wrap={false}>
-							<div className={'flex flex-col pl-3 gap-1'} style={{ borderLeft: `2px solid ${color || '#000000'}` }}>
-								<span className={'text-notino-grayDark text-xxs leading-3'}>{`${getTimeText(start, end)} (${parseTimeFromMinutes(
-									dayjs(end).diff(start, 'minutes')
-								)})`}</span>
-								{service?.name && <span className={'block text-sm text-notino-black leading-4 break-all'}>{service.name}</span>}
-							</div>
-							<UserAvatar
-								size={24}
-								className={'shrink-0 mt-1'}
-								src={employee?.image?.resizedImages?.thumbnail}
-								style={{ border: `2px solid ${color || colors.neutral[200]}` }}
-							/>
-						</Row>
-					</Col>
-				</section>
-				{notes?.map((note) => {
-					return (
-						<React.Fragment key={note.key}>
-							<Divider className={'m-0'} />
-							<section className={'py-4'}>
-								<div className={'note flex break-all text-sm leading-4'}>
-									<Col flex={'32px'} className={'flex justify-center'}>
-										<NoteIcon className={'shrink-0 text-notino-grayDark'} />
-									</Col>
-									<Col flex={'auto'}>
-										<Row className={'gap-1'} align={'top'}>
-											<Ellipsis text={note.text} className={'m-0 p-0 whitespace-pre-wrap flex-1'} />
-											{note.internal && <Tag className={'nc-event-popover-tag'}>{t('loc:Interná')}</Tag>}
-										</Row>
-									</Col>
-								</div>
-							</section>
-						</React.Fragment>
-					)
-				})}
 			</main>
 			{hasFooter && (
 				<>
@@ -223,11 +216,13 @@ const PopoverContent: FC<ContentProps> = (props) => {
 const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 	const { data, position, setIsOpen, handleUpdateReservationState, onEditEvent, placement, isOpen } = props
 
-	const { start, end, color, reservationData, service, customer, employee, note, noteFromB2CCustomer, originalEventData } = data || {}
+	const { start, end, color, reservationData, service, customer, employee, note, noteFromB2CCustomer, originalEventData, isEdit } = data || {}
 
 	const { id } = originalEventData || {}
 
 	const [t] = useTranslation()
+
+	const isReservationFormPriste = useSelector(isPristine(FORM.CALENDAR_RESERVATION_FORM))
 
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
@@ -294,30 +289,33 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 		const items = []
 
 		if (selectedSalon?.data?.payByCard) {
+			const { icon } = translateReservationPaymentMethod(RESERVATION_PAYMENT_METHOD.CARD)
 			items.push({
 				key: 'realized-card',
 				label: t('loc:Kartou'),
-				icon: <CreditCardIcon />,
+				icon,
 				className: itemClassName,
 				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED, RESERVATION_PAYMENT_METHOD.CARD)
 			})
 		}
 
 		if (selectedSalon?.data?.payByCash) {
+			const { icon } = translateReservationPaymentMethod(RESERVATION_PAYMENT_METHOD.CASH)
 			items.push({
 				key: 'realized-cash',
 				label: t('loc:Hotovosťou'),
-				icon: <WalletIcon />,
+				icon,
 				className: itemClassName,
 				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED, RESERVATION_PAYMENT_METHOD.CASH)
 			})
 		}
 
 		if (selectedSalon?.data?.otherPaymentMethods) {
+			const { icon } = translateReservationPaymentMethod(RESERVATION_PAYMENT_METHOD.OTHER)
 			items.push({
 				key: 'realized-other',
 				label: t('loc:Iným spôsobom'),
-				icon: <DollarIcon />,
+				icon,
 				className: itemClassName,
 				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED, RESERVATION_PAYMENT_METHOD.OTHER)
 			})
@@ -332,7 +330,10 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 		return items?.length ? (
 			<Dropdown
 				key={'footer-checkout-dropdown'}
-				overlay={<Menu className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'} items={items} />}
+				menu={{
+					className: 'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2',
+					items
+				}}
 				placement='bottomRight'
 				trigger={['click']}
 			>
@@ -362,17 +363,19 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 	const getPopoverContentSpecificProps = () => {
 		switch (reservationData?.state) {
 			case RESERVATION_STATE.APPROVED: {
+				const { icon: headerIcon, text: headerState } = translateReservationState(RESERVATION_STATE.APPROVED)
 				return {
-					headerIcon: <CheckSuccessIcon />,
-					headerState: t('loc:Potvrdená'),
+					headerIcon,
+					headerState,
 					moreMenuItems: [headerMoreItems.cancel_by_salon],
 					footerButtons: [getFooterCancelButton('cancel-button-not-realized', t('loc:Nezrealizovaná'), RESERVATION_STATE.NOT_REALIZED), getFooterCheckoutButton()]
 				}
 			}
-			case RESERVATION_STATE.PENDING:
+			case RESERVATION_STATE.PENDING: {
+				const { icon: headerIcon, text: headerState } = translateReservationState(RESERVATION_STATE.PENDING)
 				return {
-					headerIcon: <ClockIcon color={'#FF9500'} />,
-					headerState: t('loc:Čakajúca'),
+					headerIcon,
+					headerState,
 					moreMenuItems: [headerMoreItems.cancel_by_salon],
 					footerButtons: [
 						getFooterCancelButton('cancel-button-declined', t('loc:Zamietnuť'), RESERVATION_STATE.DECLINED),
@@ -388,14 +391,28 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 						</Button>
 					]
 				}
-			case RESERVATION_STATE.REALIZED:
-				return getPaymentMethodHeaderProps(reservationData?.paymentMethod)
-			case RESERVATION_STATE.NOT_REALIZED:
-			default:
-				return {
-					headerIcon: <CrossedIcon />,
-					headerState: t('loc:Nezrealizovaná')
+			}
+			case RESERVATION_STATE.REALIZED: {
+				if (!reservationData?.paymentMethod) {
+					return {
+						headerIcon: <DollarIcon className={'text-notino-success'} />,
+						headerState: i18next.t('loc:Zaplatená')
+					}
 				}
+				const { icon: headerIcon, text: headerState } = translateReservationPaymentMethod(
+					reservationData?.paymentMethod as RESERVATION_PAYMENT_METHOD,
+					'text-notino-success'
+				)
+				return { headerIcon, headerState }
+			}
+			case RESERVATION_STATE.NOT_REALIZED:
+			default: {
+				const { icon: headerIcon, text: headerState } = translateReservationState(RESERVATION_STATE.NOT_REALIZED)
+				return {
+					headerIcon,
+					headerState
+				}
+			}
 		}
 	}
 
@@ -414,13 +431,14 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 		return notes
 	}
 
+	const showUnsavedChangesMessage = isEdit && !isReservationFormPriste
 	return (
 		<Popover
-			visible={isOpen}
+			open={isOpen}
 			destroyTooltipOnHide={{ keepParent: true }}
 			trigger={'click'}
 			placement={placement}
-			overlayClassName={`${overlayClassName} nc-event-popover-overlay`}
+			overlayClassName={`${overlayClassName} ${showUnsavedChangesMessage ? 'dark-style' : ''} nc-event-popover-overlay`}
 			content={
 				<PopoverContent
 					start={start || null}
@@ -437,6 +455,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 					}}
 					onClose={handleClosePopover}
 					notes={getNotes()}
+					showUnsavedChangesMessage={showUnsavedChangesMessage}
 					{...getPopoverContentSpecificProps()}
 				/>
 			}

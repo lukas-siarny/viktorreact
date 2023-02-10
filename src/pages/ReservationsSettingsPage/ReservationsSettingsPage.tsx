@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { initialize } from 'redux-form'
+import { initialize, isSubmitting } from 'redux-form'
 import { Col, Row, Spin } from 'antd'
 import { forEach, includes, isEmpty, reduce } from 'lodash'
 
 // components
+import { useNavigate } from 'react-router-dom'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ReservationSystemSettingsForm from './components/ReservationSystemSettingsForm'
 
 // utils
-import { FORM, NOTIFICATION_TYPES, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
-import { withPermissions, checkPermissions, isAdmin } from '../../utils/Permissions'
+import { FORM, NOTIFICATION_TYPES, PERMISSION, ADMIN_PERMISSIONS, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
+import { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
-import { history } from '../../utils/history'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -29,8 +29,6 @@ import {
 	PathSettingsBody,
 	SalonSubPageProps
 } from '../../types/interfaces'
-
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 const EXCLUDED_NOTIFICATIONS_B2B: string[] = [RS_NOTIFICATION.RESERVATION_REJECTED, RS_NOTIFICATION.RESERVATION_REMINDER]
 
@@ -125,9 +123,12 @@ const initDisabledNotifications = (notifications: DisabledNotificationsArray): I
 const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 	const { salonID } = props
+	const { parentPath } = props
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const groupedSettings = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
+	const submitting = useSelector(isSubmitting(FORM.RESEVATION_SYSTEM_SETTINGS))
 
 	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
 	const authUserPermissions = currentUser?.uniqPermissions
@@ -143,9 +144,15 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const fetchData = async () => {
 		const salonRes = await dispatch(selectSalon(salonID))
 		// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
-		const canVisitThisPage = isAdmin(authUserPermissions) || (checkPermissions(authUserPermissions, [PERMISSION.PARTNER]) && salonRes?.data?.settings?.enabledReservations)
+		const salonPermissions = salonRes?.data?.uniqPermissions || []
+		const userPermissions = [...(authUserPermissions || []), ...salonPermissions]
+
+		const canVisitThisPage =
+			checkPermissions(userPermissions, [PERMISSION.NOTINO]) ||
+			(checkPermissions(userPermissions, [PERMISSION.PARTNER], ADMIN_PERMISSIONS) && salonRes?.data?.settings?.enabledReservations)
 		if (!canVisitThisPage) {
-			history.push('/404')
+			navigate('/404')
+			return
 		}
 
 		const servicesRes = await dispatch(getServices({ salonID }))
@@ -157,7 +164,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 				forEach(level1.category?.children, (level2) =>
 					forEach(level2.category?.children, (level3) => {
 						autoConfirmItems.push({
-							[level3.service.id]: level3.service.settings.autoApproveReservatons
+							[level3.service.id]: level3.service.settings.autoApproveReservations
 						})
 						onlineReservationItems.push({
 							[level3.service.id]: level3.service.settings.enabledB2cReservations
@@ -224,12 +231,12 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 		const servicesSettings: any[] = []
 		forEach(allIds, (serviceID) => {
 			const enabledB2cReservations = includes(allowedOnlineBookingIds, serviceID)
-			const autoApproveReservatons = includes(allowedAutoConfirmIds, serviceID)
+			const autoApproveReservations = includes(allowedAutoConfirmIds, serviceID)
 			servicesSettings.push({
 				id: serviceID,
 				settings: {
 					enabledB2cReservations: enabledB2cReservations || false, // ONLINE_BOOKING
-					autoApproveReservatons: autoApproveReservatons || false // AUTO_CONFIRM
+					autoApproveReservations: autoApproveReservations || false // AUTO_CONFIRM
 				}
 			})
 		})
@@ -287,8 +294,13 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<Spin spinning={salon.isLoading}>
-							<ReservationSystemSettingsForm onSubmit={handleSubmitSettings} salonID={salonID} excludedB2BNotifications={EXCLUDED_NOTIFICATIONS_B2B} />
+						<Spin spinning={salon.isLoading || submitting}>
+							<ReservationSystemSettingsForm
+								onSubmit={handleSubmitSettings}
+								salonID={salonID}
+								excludedB2BNotifications={EXCLUDED_NOTIFICATIONS_B2B}
+								parentPath={parentPath}
+							/>
 						</Spin>
 					</div>
 				</Col>
@@ -297,4 +309,4 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	)
 }
 
-export default withPermissions(permissions)(ReservationsSettingsPage)
+export default withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER])(ReservationsSettingsPage)

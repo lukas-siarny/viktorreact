@@ -67,7 +67,7 @@ const InputField = (props: Props) => {
 	)
 
 	const onBlur = useCallback(
-		async (e) => {
+		async (e: React.ChangeEvent<HTMLInputElement>) => {
 			// NOTE: prevent to have "" empty string as empty value
 			const val = e.target.value ? trim(e.target.value) : undefined
 
@@ -82,9 +82,9 @@ const InputField = (props: Props) => {
 	)
 
 	const onFocus = useCallback(
-		async (e) => {
+		async (e: React.FocusEvent<HTMLInputElement>) => {
 			// NOTE: prevent to have "" empty string as empty value
-			const val = e.target.value ? e.target.value : null
+			const val: any = e.target.value ? e.target.value : undefined
 			if (input.onFocus) {
 				input.onFocus(val)
 			}

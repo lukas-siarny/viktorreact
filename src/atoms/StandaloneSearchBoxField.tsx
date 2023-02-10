@@ -7,6 +7,7 @@ import { InputProps } from 'antd/lib/input'
 
 import { formFieldID } from '../utils/helper'
 import { ReactComponent as SearchIcon } from '../assets/icons/search-icon-16.svg'
+import { mapApiConfig } from '../utils/enums'
 
 type Props = FormItemLabelProps &
 	InputProps & {
@@ -20,13 +21,7 @@ const StandaloneSearchBoxField = (props: Props) => {
 	const { placeholder, label, required, type, style, className, error, disabled, form, name, onPlaceSelected } = props
 	const [loaded, setLoaded] = useState(false)
 
-	const { isLoaded, loadError } = useJsApiLoader({
-		// https://react-google-maps-api-docs.netlify.app/#usejsapiloader
-		id: 'google-map',
-		// eslint-disable-next-line no-underscore-dangle
-		googleMapsApiKey: window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_MAPS_API_KEY,
-		libraries: ['places']
-	})
+	const { isLoaded, loadError } = useJsApiLoader(mapApiConfig)
 	const autocompleteRef = useRef<any>(null)
 
 	useEffect(() => {

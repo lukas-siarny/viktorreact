@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { GoogleMap, Marker, GoogleMapProps, useJsApiLoader } from '@react-google-maps/api'
 import { Spin } from 'antd'
 
-import { LANGUAGE, MAP } from '../utils/enums'
+import { LANGUAGE, MAP, mapApiConfig } from '../utils/enums'
 
 type Props = GoogleMapProps & {
 	lat: number
@@ -12,19 +12,14 @@ type Props = GoogleMapProps & {
 	onError: (message: string) => void
 	disabled?: boolean
 }
+
 // https://react-google-maps-api-docs.netlify.app/
 const MapContainer = (props: Props) => {
 	const { i18n } = useTranslation()
 	const { lng, lat, onLocationChange, disabled, zoom, onError, options } = props
 	const [position, setPosition] = useState<google.maps.LatLng | google.maps.LatLngLiteral>(MAP.defaultLocation)
 
-	const { isLoaded, loadError } = useJsApiLoader({
-		// https://react-google-maps-api-docs.netlify.app/#usejsapiloader
-		id: 'google-map',
-		libraries: ['places'],
-		// eslint-disable-next-line no-underscore-dangle
-		googleMapsApiKey: window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_MAPS_API_KEY
-	})
+	const { isLoaded, loadError } = useJsApiLoader(mapApiConfig)
 
 	window.gm_authFailure = () => {
 		onError('Goggle Map auth error')

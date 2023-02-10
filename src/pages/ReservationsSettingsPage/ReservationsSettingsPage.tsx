@@ -11,8 +11,8 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import ReservationSystemSettingsForm from './components/ReservationSystemSettingsForm'
 
 // utils
-import { FORM, NOTIFICATION_TYPES, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
-import { withPermissions, checkPermissions, isAdmin } from '../../utils/Permissions'
+import { FORM, NOTIFICATION_TYPES, PERMISSION, ADMIN_PERMISSIONS, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
+import { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 
 // reducers
@@ -29,8 +29,6 @@ import {
 	PathSettingsBody,
 	SalonSubPageProps
 } from '../../types/interfaces'
-
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 const EXCLUDED_NOTIFICATIONS_B2B: string[] = [RS_NOTIFICATION.RESERVATION_REJECTED, RS_NOTIFICATION.RESERVATION_REMINDER]
 
@@ -146,9 +144,15 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const fetchData = async () => {
 		const salonRes = await dispatch(selectSalon(salonID))
 		// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
-		const canVisitThisPage = isAdmin(authUserPermissions) || (checkPermissions(authUserPermissions, [PERMISSION.PARTNER]) && salonRes?.data?.settings?.enabledReservations)
+		const salonPermissions = salonRes?.data?.uniqPermissions || []
+		const userPermissions = [...(authUserPermissions || []), ...salonPermissions]
+
+		const canVisitThisPage =
+			checkPermissions(userPermissions, [PERMISSION.NOTINO]) ||
+			(checkPermissions(userPermissions, [PERMISSION.PARTNER], ADMIN_PERMISSIONS) && salonRes?.data?.settings?.enabledReservations)
 		if (!canVisitThisPage) {
 			navigate('/404')
+			return
 		}
 
 		const servicesRes = await dispatch(getServices({ salonID }))
@@ -232,7 +236,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 				id: serviceID,
 				settings: {
 					enabledB2cReservations: enabledB2cReservations || false, // ONLINE_BOOKING
-					autoApproveReservatons: autoApproveReservations || false // AUTO_CONFIRM
+					autoApproveReservations: autoApproveReservations || false // AUTO_CONFIRM
 				}
 			})
 		})
@@ -305,4 +309,4 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	)
 }
 
-export default withPermissions(permissions)(ReservationsSettingsPage)
+export default withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER])(ReservationsSettingsPage)

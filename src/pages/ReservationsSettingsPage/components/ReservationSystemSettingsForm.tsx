@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { change, Field, FieldArray, FormSection, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
+import { change, Field, FieldArray, FormSection, InjectedFormProps, reduxForm, getFormValues, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Divider, Form, Row, Spin } from 'antd'
 import { forEach, includes, isEmpty, map } from 'lodash'
@@ -21,9 +21,10 @@ import CheckboxGroupNestedField from '../../IndustriesPage/components/CheckboxGr
 import { IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
-import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS } from '../../../utils/enums'
+import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION } from '../../../utils/enums'
 import { optionRenderNotiPinkCheckbox, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
+import Permissions from '../../../utils/Permissions'
 
 // assets
 import { ReactComponent as ChevronDown } from '../../../assets/icons/chevron-down.svg'
@@ -460,16 +461,29 @@ const ReservationSystemSettingsForm = (props: Props) => {
 
 			<div className={'content-footer'}>
 				<Row className='justify-center'>
-					<Button
-						type={'primary'}
-						className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
-						htmlType={'submit'}
-						icon={<EditIcon />}
-						disabled={submitting || pristine}
-						loading={submitting}
-					>
-						{STRINGS(t).save(t('loc:nastavenia'))}
-					</Button>
+					<Permissions
+						allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
+						render={(hasPermission, { openForbiddenModal }) => (
+							<Button
+								type={'primary'}
+								className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
+								htmlType={'submit'}
+								icon={<EditIcon />}
+								disabled={submitting || pristine}
+								loading={submitting}
+								onClick={(e) => {
+									if (hasPermission) {
+										dispatch(submit(FORM.RESEVATION_SYSTEM_SETTINGS))
+									} else {
+										e.preventDefault()
+										openForbiddenModal()
+									}
+								}}
+							>
+								{STRINGS(t).save(t('loc:nastavenia'))}
+							</Button>
+						)}
+					/>
 				</Row>
 			</div>
 		</Form>

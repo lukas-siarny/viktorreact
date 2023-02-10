@@ -4,7 +4,6 @@ import { Field, InjectedFormProps, WrappedFieldProps } from 'redux-form'
 import { Alert, Col, Row } from 'antd'
 import cx from 'classnames'
 import { get } from 'lodash'
-import i18next from 'i18next'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
@@ -79,40 +78,6 @@ export interface IAddressValues {
 	city?: string
 	country?: string
 	zipCode?: string
-}
-
-export const AddressLayout = (values?: IAddressValues, className?: string) => {
-	const street = values?.street
-	const streetNumber = values?.streetNumber
-	const city = values?.city
-	const zipCode = values?.zipCode
-	const country = values?.country
-
-	const isEmpty = !street && !streetNumber && !city && !zipCode && !country
-
-	return (
-		<Row className={cx('address-field-address gap-2 items-start', className)} wrap={false}>
-			<Col className={'flex flex-col gap-1 text-base'}>
-				{isEmpty ? (
-					<i>{i18next.t('loc:Vyhľadajte adresu na mape alebo vo vyhľadávači')}</i>
-				) : (
-					<>
-						{street || streetNumber ? (
-							<span>
-								{street} {streetNumber}
-							</span>
-						) : null}
-						{zipCode || city ? (
-							<span>
-								{zipCode} {city}
-							</span>
-						) : null}
-						{country}
-					</>
-				)}
-			</Col>
-		</Row>
-	)
 }
 
 const AddressFields = (props: Props) => {
@@ -308,17 +273,65 @@ const AddressFields = (props: Props) => {
 											<div className={cx('text-danger', { hidden: !(error && touched) })}>{error}</div>
 										</Col>
 										<Col span={24}>
-											<Row>
-												<Col span={6}>
-													{AddressLayout({
-														street: get(inputValues, 'street'),
-														streetNumber: get(inputValues, 'streetNumber'),
-														city: get(inputValues, 'city'),
-														zipCode: get(inputValues, 'zipCode'),
-														country: get(inputValues, 'country')
-													})}
+											<Row gutter={[8, 8]}>
+												<Col span={8}>
+													<Field
+														component={InputField}
+														label={t('loc:Ulica')}
+														placeholder={t('loc:Zadajte ulicu')}
+														name={'street'}
+														size={'large'}
+														validate={validationRequired}
+														required
+													/>
+													<Field
+														component={InputField}
+														label={t('loc:Mesto')}
+														placeholder={t('loc:Zadajte mesto')}
+														name={'city'}
+														size={'large'}
+														validate={validationRequired}
+														required
+													/>
+													<Row gutter={[8, 8]}>
+														<Col span={12}>
+															<Field
+																component={InputField}
+																label={t('loc:PSČ')}
+																placeholder={t('loc:Zadajte smerovacie číslo')}
+																name={'zipCode'}
+																size={'large'}
+																validate={validationRequired}
+																required
+															/>
+														</Col>
+														<Col span={12}>
+															<Field
+																component={InputField}
+																label={t('loc:Popisné číslo')}
+																placeholder={t('loc:Zadajte číslo')}
+																required
+																name={'streetNumber'}
+																validate={validationRequired}
+																size={'large'}
+															/>
+														</Col>
+													</Row>
+													<Field
+														component={SelectField}
+														optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
+														label={t('loc:Štát')}
+														placeholder={t('loc:Vyber krajinu')}
+														options={countries?.enumerationsOptions || []}
+														name={'country'}
+														size={'large'}
+														readOnly
+														loading={countries?.isLoading}
+														validate={validationRequired}
+														required
+													/>
 												</Col>
-												<Col span={18}>
+												<Col span={16}>
 													<MapContainer
 														onError={() => setMapError(true)}
 														onLocationChange={changeLocation}

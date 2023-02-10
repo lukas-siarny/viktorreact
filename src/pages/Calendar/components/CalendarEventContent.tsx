@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
-import { StringParam, useQueryParams } from 'use-query-params'
+import { useSearchParams } from 'react-router-dom'
 
 // utils
 import { CALENDAR_EVENT_DISPLAY_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../utils/enums'
@@ -46,8 +46,8 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 		isPlaceholder
 	} = eventData || {}
 
-	const [query] = useQueryParams({
-		eventId: StringParam
+	const [searchParams] = useSearchParams({
+		eventId: ''
 	})
 
 	// background events
@@ -70,8 +70,11 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 		endDateTime
 	}
 
-	const isEdit = query?.eventId === originalEventData.id
+	const isEdit = searchParams.get('eventId') === originalEventData.id
 	const color = calendarView === CALENDAR_VIEW.MONTH ? employee?.color : backgroundColor
+
+	const timeLeftToEndOfaDay = calendarView === CALENDAR_VIEW.DAY || calendarView === CALENDAR_VIEW.WEEK ? dayjs(start).endOf('day').diff(dayjs(start), 'minutes') : undefined
+	const timeLeftClassName = timeLeftToEndOfaDay && timeLeftToEndOfaDay < 14 ? `end-of-day-${14 - timeLeftToEndOfaDay}` : undefined
 
 	// normal events
 	switch (eventType) {
@@ -98,6 +101,7 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 					isPlaceholder={isPlaceholder}
 					isEdit={isEdit}
 					isDayEventsPopover={isDayEventsPopover}
+					timeLeftClassName={timeLeftClassName}
 				/>
 			)
 		case CALENDAR_EVENT_TYPE.RESERVATION: {
@@ -124,6 +128,7 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 					isEdit={isEdit}
 					isPlaceholder={isPlaceholder}
 					isDayEventsPopover={isDayEventsPopover}
+					timeLeftClassName={timeLeftClassName}
 				/>
 			)
 		}

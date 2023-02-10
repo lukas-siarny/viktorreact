@@ -9,16 +9,14 @@ import { get } from 'lodash'
 import { ItemType } from 'antd/lib/menu/hooks/useItems'
 
 // utils
-import sk_SK from 'antd/lib/locale-provider/sk_SK'
-import cs_CZ from 'antd/lib/locale-provider/cs_CZ'
-import en_GB from 'antd/lib/locale-provider/en_GB'
-/* import hu_HU from 'antd/lib/locale-provider/hu_HU'
-import ro_RO from 'antd/lib/locale-provider/ro_RO'
-import bg_BG from 'antd/lib/locale-provider/bg_BG'
-import it_IT from 'antd/lib/locale-provider/it_IT' */
-// import { useSelector } from 'react-redux'
-// eslint-disable-next-line import/no-cycle
-// import { RootState } from '../reducers'
+import sk_SK from 'antd/locale/sk_SK'
+import cs_CZ from 'antd/locale/cs_CZ'
+import en_GB from 'antd/locale/en_GB'
+import hu_HU from 'antd/locale/hu_HU'
+import ro_RO from 'antd/locale/ro_RO'
+import bg_BG from 'antd/locale/bg_BG'
+/* import it_IT from 'antd/locale/it_IT' */
+
 import { LANGUAGE, DEFAULT_LANGUAGE } from '../utils/enums'
 
 // hooks
@@ -32,10 +30,10 @@ import { getCountries } from '../reducers/enumerations/enumerationActions'
 import { ReactComponent as SK_Flag } from '../assets/flags/SK.svg'
 import { ReactComponent as EN_Flag } from '../assets/flags/GB.svg'
 import { ReactComponent as CZ_Flag } from '../assets/flags/CZ.svg'
-/* import { ReactComponent as HU_Flag } from '../assets/flags/HU.svg'
+import { ReactComponent as HU_Flag } from '../assets/flags/HU.svg'
 import { ReactComponent as RO_Flag } from '../assets/flags/RO.svg'
 import { ReactComponent as BG_Flag } from '../assets/flags/BG.svg'
-import { ReactComponent as IT_Flag } from '../assets/flags/IT.svg' */
+/* import { ReactComponent as IT_Flag } from '../assets/flags/IT.svg' */
 
 export const LOCALES = {
 	[LANGUAGE.SK]: {
@@ -56,7 +54,7 @@ export const LOCALES = {
 		antD: en_GB,
 		icon: EN_Flag,
 		countryCode: 'EN'
-	} /* ,
+	},
 	[LANGUAGE.HU]: {
 		ISO_639: 'hu',
 		antD: hu_HU,
@@ -74,7 +72,7 @@ export const LOCALES = {
 		antD: bg_BG,
 		icon: BG_Flag,
 		countryCode: 'BG'
-	},
+	} /* ,
 	[LANGUAGE.IT]: {
 		ISO_639: 'it',
 		antD: it_IT,
@@ -128,7 +126,7 @@ export const getLanguagePickerAsSubmenuItem = (dispatch: any, reloadPageAfterCha
 		case LANGUAGE.EN:
 			currentLanguage = LANGUAGE.EN
 			break
-		/* case LANGUAGE.HU:
+		case LANGUAGE.HU:
 			currentLanguage = LANGUAGE.HU
 			break
 		case LANGUAGE.BG:
@@ -137,7 +135,7 @@ export const getLanguagePickerAsSubmenuItem = (dispatch: any, reloadPageAfterCha
 		case LANGUAGE.RO:
 			currentLanguage = LANGUAGE.RO
 			break
-		case LANGUAGE.IT:
+		/* case LANGUAGE.IT:
 			currentLanguage = LANGUAGE.IT
 			break */
 		default:
@@ -171,7 +169,7 @@ const LanguagePicker: FC<Props> = (props) => {
 				defaultValue={i18next.resolvedLanguage}
 				onChange={(value) => handleLanguageChange(value, dispatch, reloadPageAfterChange)}
 				className={'noti-select-input'}
-				dropdownClassName={'noti-select-dropdown'}
+				popupClassName={'noti-select-dropdown'}
 			>
 				{options?.map((option: any, index: number) => (
 					<Option value={option.value} key={index}>

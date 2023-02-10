@@ -1,9 +1,9 @@
-import { SET_DAY_EVENTS, EVENTS, EVENT_DETAIL, SET_IS_REFRESHING_EVENTS, SET_DAY_DETAIL_DATE } from './calendarTypes'
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
-import { ICalendarActions, ICalendarEventDetailPayload, ISetDayDetailPayload } from './calendarActions'
-import { ICalendarDayEvents, ICalendarEventsPayload, ILoadingAndFailure } from '../../types/interfaces'
+import { ICalendarActions, ISalonReservationsPayload, ISetDayDetailPayload } from './calendarActions'
+import { ICalendarEventsPayload, ILoadingAndFailure, ICalendarEventDetailPayload, ICalendarDayEvents } from '../../types/interfaces'
 import { CALENDAR_EVENTS_KEYS } from '../../utils/enums'
+import { SET_DAY_EVENTS, EVENTS, EVENT_DETAIL, SET_IS_REFRESHING_EVENTS, SET_DAY_DETAIL_DATE, RESERVATIONS } from './calendarTypes'
 
 export const initState = {
 	[CALENDAR_EVENTS_KEYS.EVENTS]: {
@@ -33,7 +33,13 @@ export const initState = {
 		isFailure: false
 	} as ICalendarEventsPayload & ISetDayDetailPayload & ILoadingAndFailure,
 	dayEvents: {} as ICalendarDayEvents,
-	isRefreshingEvents: false
+	isRefreshingEvents: false,
+	paginatedReservations: {
+		data: null,
+		tableData: [],
+		isLoading: false,
+		isFailure: false
+	} as ISalonReservationsPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -52,8 +58,9 @@ export default (state = initState, action: ICalendarActions) => {
 			return {
 				...state,
 				[action.enumType]: {
-					...initState[action.enumType],
-					isFailure: true
+					...state[action.enumType],
+					isFailure: true,
+					isLoading: false
 				}
 			}
 		case EVENTS.EVENTS_LOAD_DONE:
@@ -127,6 +134,32 @@ export default (state = initState, action: ICalendarActions) => {
 			return {
 				...state,
 				isRefreshingEvents: action.payload
+			}
+		// Reservations
+		case RESERVATIONS.RESERVATIONS_LOAD_START:
+			return {
+				...state,
+				paginatedReservations: {
+					...state.paginatedReservations,
+					isLoading: true
+				}
+			}
+		case RESERVATIONS.RESERVATIONS_LOAD_FAIL:
+			return {
+				...state,
+				paginatedReservations: {
+					...initState.paginatedReservations,
+					isFailure: true
+				}
+			}
+		case RESERVATIONS.RESERVATIONS_LOAD_DONE:
+			return {
+				...state,
+				paginatedReservations: {
+					...initState.paginatedReservations,
+					data: action.payload.data,
+					tableData: action.payload.tableData
+				}
 			}
 		case RESET_STORE:
 			return initState

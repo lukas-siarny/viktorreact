@@ -6,7 +6,7 @@ import { debounce } from 'lodash'
 import { useSelector } from 'react-redux'
 
 // utils
-import { FIELD_MODE, FORM } from '../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, FIELD_MODE, FORM } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize } from '../../../utils/helper'
 
 // atoms
@@ -64,14 +64,14 @@ const CosmeticsFilter = (props: Props) => {
 }
 
 const form = reduxForm({
-	form: FORM.COSMETICS_FILTER,
+	form: FORM.SPECIALIST_CONTACT_FILTER,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	onChange: debounce((_values, _dispatch, { submit, anyTouched }) => {
 		if (anyTouched) {
 			submit()
 		}
-	}, 300),
+	}, CHANGE_DEBOUNCE_TIME),
 	destroyOnUnmount: true
 })(CosmeticsFilter)
 

@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import ActivationForm from './components/ActivationForm'
 
 // utils
 import { postReq } from '../../utils/request'
-import { history } from '../../utils/history'
 
 // redux
 import { RootState } from '../../reducers'
@@ -19,13 +19,14 @@ import { IActivationForm } from '../../types/interfaces'
 
 const ActivationPage = () => {
 	const { t } = useTranslation()
+	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
 
 	useEffect(() => {
 		if (currentUser?.activateAt) {
-			history.push(t('paths:index'))
+			navigate(t('paths:index'))
 		}
 	}, [t, currentUser])
 

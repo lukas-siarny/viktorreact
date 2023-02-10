@@ -1,7 +1,9 @@
 import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
-import { FormatterInput } from '@fullcalendar/react'
+import { LoadScriptUrlOptions } from '@react-google-maps/api/dist/utils/make-load-script-url'
+import { AliasToken } from 'antd/es/theme/internal'
+import { FormatterInput } from '@fullcalendar/core'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
@@ -15,12 +17,14 @@ export enum NAMESPACE {
 export enum LANGUAGE {
 	SK = 'sk',
 	CZ = 'cs',
-	EN = 'en'
-	/* HU = 'hu',
+	EN = 'en',
+	HU = 'hu',
 	RO = 'ro',
-	BG = 'bg',
-	IT = 'it' */
+	BG = 'bg'
+	/* IT = 'it' */
 }
+
+export const CHANGE_DEBOUNCE_TIME = 300 // 300ms change debounce time for forms that have onChange submit
 
 export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
 
@@ -68,7 +72,8 @@ export enum FILTER_ENTITY {
 	SERVICE = 'SERVICE',
 	USER = 'USER',
 	BASIC_SALON = 'BASIC_SALON',
-	NOTINO_USER = 'NOTINO_USER'
+	NOTINO_USER = 'NOTINO_USER',
+	COSMETICS = 'COSMETICS'
 }
 
 export enum TABS_TYPE {
@@ -113,6 +118,7 @@ export enum FORM {
 	USER_PROFILE = 'USER_PROFILE',
 	ADMIN_USERS_FILTER = 'ADMIN_USERS_FILTER',
 	EMPLOYEES_FILTER = 'EMPLOYEES_FILTER',
+	RESERVATIONS_FILTER = 'RESERVATIONS_FILTER',
 	CREATE_SALON_FROM = 'CREATE_SALON_FROM',
 	ROLE_FORM = 'ROLE_FORM',
 	ADMIN_CREATE_USER = 'ADMIN_CREATE_USER',
@@ -149,26 +155,27 @@ export enum FORM {
 	CALENDAR_EVENT_FORM = 'CALENDAR_EVENT_FORM'
 }
 
-// System permissions
 export enum PERMISSION {
 	NOTINO_SUPER_ADMIN = 'NOTINO_SUPER_ADMIN',
 	NOTINO_ADMIN = 'NOTINO_ADMIN',
+	NOTINO = 'NOTINO',
 	PARTNER = 'PARTNER',
 	USER_CREATE = 'USER_CREATE',
 	USER_BROWSING = 'USER_BROWSING',
 	USER_EDIT = 'USER_EDIT',
 	USER_DELETE = 'USER_DELETE',
-	ENUM_EDIT = 'ENUM_EDIT'
-}
-
-// Salon's permissions
-export enum SALON_PERMISSION {
+	ENUM_EDIT = 'ENUM_EDIT',
+	SALON_PUBLICATION_RESOLVE = 'SALON_PUBLICATION_RESOLVE',
+	IMPORT_SALON = 'IMPORT_SALON',
+	REVIEW_READ = 'REVIEW_READ',
+	REVIEW_VERIFY = 'REVIEW_VERIFY',
+	REVIEW_DELETE = 'REVIEW_DELETE',
 	PARTNER_ADMIN = 'PARTNER_ADMIN',
 	SALON_UPDATE = 'SALON_UPDATE',
 	SALON_DELETE = 'SALON_DELETE',
 	SALON_BILLING_UPDATE = 'SALON_BILLING_UPDATE',
 	SERVICE_CREATE = 'SERVICE_CREATE',
-	SERVICE_UPDATE = 'SERVICE_UDPATE',
+	SERVICE_UPDATE = 'SERVICE_UPDATE',
 	SERVICE_DELETE = 'SERVICE_DELETE',
 	CUSTOMER_CREATE = 'CUSTOMER_CREATE',
 	CUSTOMER_UPDATE = 'CUSTOMER_UPDATE',
@@ -176,7 +183,7 @@ export enum SALON_PERMISSION {
 	EMPLOYEE_CREATE = 'EMPLOYEE_CREATE',
 	EMPLOYEE_UPDATE = 'EMPLOYEE_UPDATE',
 	EMPLOYEE_DELETE = 'EMPLOYEE_DELETE',
-	USER_ROLE_EDIT = 'USER_ROLE_EDIT',
+	EMPLOYEE_ROLE_UPDATE = 'EMPLOYEE_ROLE_UPDATE',
 	CALENDAR_EVENT_CREATE = 'CALENDAR_EVENT_CREATE',
 	CALENDAR_EVENT_UPDATE = 'CALENDAR_EVENT_UPDATE',
 	CALENDAR_EVENT_DELETE = 'CALENDAR_EVENT_DELETE'
@@ -192,6 +199,7 @@ export enum RESOLUTIONS {
 	XXL = 'XXL',
 	XXXL = 'XXXL'
 }
+export const NOT_ALLOWED_REDIRECT_PATHS = ['/404', '/403']
 
 export enum SUBMENU_PARENT {
 	GENERAL = 'GENERAL',
@@ -240,7 +248,8 @@ export enum PAGE {
 	SPECIALIST_CONTACTS = 'SPECIALIST_CONTACTS',
 	BILLING_INFO = 'BILLING_INFO',
 	CALENDAR = 'CALENDAR',
-	RESERVATIONS_SETTINGS = 'RESERVATIONS_SETTINGS'
+	SALON_SETTINGS = 'SALON_SETTINGS',
+	RESERVATIONS = 'RESERVATIONS'
 }
 
 export enum PARAMETER_TYPE {
@@ -349,19 +358,30 @@ export const MAP = {
 	maxLatitude: 90,
 	minLongitude: -180,
 	maxLongitude: 180,
-	minZoom: 1,
+	minZoom: 8,
 	maxZoom: 20,
 	placeZoom: 16,
 	defaultLocation: PRAGUE_LOCATION,
 	locations: {
 		[LANGUAGE.CZ]: PRAGUE_LOCATION,
 		[LANGUAGE.EN]: PRAGUE_LOCATION,
+		// TODO po rolloute nastavit hlavne mesto podla jazyka
+		[LANGUAGE.HU]: PRAGUE_LOCATION,
+		[LANGUAGE.RO]: PRAGUE_LOCATION,
+		[LANGUAGE.BG]: PRAGUE_LOCATION,
 		// Bratislava
 		[LANGUAGE.SK]: {
 			lat: 48.1485965,
 			lng: 17.1077477
 		}
 	}
+}
+
+export const mapApiConfig: LoadScriptUrlOptions = {
+	// https://react-google-maps-api-docs.netlify.app/#usejsapiloader
+	libraries: ['places'],
+	// eslint-disable-next-line no-underscore-dangle
+	googleMapsApiKey: window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_MAPS_API_KEY
 }
 
 export enum SALON_FILTER_STATES {
@@ -510,6 +530,21 @@ export enum UPLOAD_IMG_CATEGORIES {
 	LANGUAGE_IMAGE = 'LANGUAGE_IMAGE'
 }
 
+export const ANTD_THEME_VARIABLES_OVERRIDE: Partial<AliasToken> = {
+	// Override AntD colors
+	colorPrimary: '#000000', // black
+	colorLink: '#DC0069', // notino-pink
+	colorText: '#404040', // true-gray-700,
+	colorTextHeading: '#3F3F46', // cool-gray-900
+	colorTextSecondary: '#BFBFBF', // notino-gray
+	colorTextDisabled: '#9CA3AF', // cool-gray-100,
+	colorSuccess: '#008700', // notino-success
+	colorWarning: '#D97706', // amber-600
+	colorError: '#D21414', // notino-red
+	colorTextPlaceholder: '#BFBFBF', // notino-gray
+	borderRadius: 2
+}
+
 export const URL_UPLOAD_IMAGES = '/api/b2b/admin/files/sign-urls'
 export const PUBLICATION_STATUSES = Object.keys(PUBLICATION_STATUS)
 export const GENDERS = Object.keys(GENDER) as GENDER[]
@@ -586,7 +621,7 @@ export const FILTER_PATHS = (from?: string, to?: string) => ({
 		[SALON_FILTER_STATES.DECLINED]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.DECLINED}`,
 		[SALON_FILTER_STATES.PENDING_PUBLICATION]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.PENDING_PUBLICATION}`,
 		[SALON_CREATE_TYPE.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.BASIC}`,
-		publishedChanges: `${i18next.t('paths:salons')}?salonState=active&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}`,
+		publishedChanges: `${i18next.t('paths:salons')}?salonState=active&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
 		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`,
 		publishedBasics: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
 		publishedPremiums: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.NON_BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`
@@ -775,9 +810,9 @@ export enum HANDLE_CALENDAR_ACTIONS {
 	CHANGE = 'CHANGE',
 	INITIALIZE = 'INITIALIZE'
 }
-export const CREATE_EVENT_PERMISSIONS = [...ADMIN_PERMISSIONS, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CALENDAR_EVENT_CREATE]
-export const UPDATE_EVENT_PERMISSIONS = [...ADMIN_PERMISSIONS, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CALENDAR_EVENT_UPDATE]
-export const DELETE_EVENT_PERMISSIONS = [...ADMIN_PERMISSIONS, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CALENDAR_EVENT_DELETE]
+export const CREATE_EVENT_PERMISSIONS = [PERMISSION.PARTNER_ADMIN, PERMISSION.CALENDAR_EVENT_CREATE]
+export const UPDATE_EVENT_PERMISSIONS = [PERMISSION.PARTNER_ADMIN, PERMISSION.CALENDAR_EVENT_UPDATE]
+export const DELETE_EVENT_PERMISSIONS = [PERMISSION.PARTNER_ADMIN, PERMISSION.CALENDAR_EVENT_DELETE]
 
 export const getDayNameFromNumber = (day: number) => {
 	switch (day) {
@@ -827,8 +862,8 @@ export enum RS_NOTIFICATION {
 	RESERVATION_AWAITING_APPROVAL = 'RESERVATION_AWAITING_APPROVAL',
 	RESERVATION_CONFIRMED = 'RESERVATION_CONFIRMED',
 	RESERVATION_CHANGED = 'RESERVATION_CHANGED',
-	RESERVATION_REJECTED = 'RESERVATION_REJECTED',
 	RESERVATION_CANCELLED = 'RESERVATION_CANCELLED',
+	RESERVATION_REJECTED = 'RESERVATION_REJECTED',
 	RESERVATION_REMINDER = 'RESERVATION_REMINDER'
 }
 
@@ -837,6 +872,8 @@ export enum RS_NOTIFICATION_TYPE {
 	EMAIL = 'EMAIL',
 	PUSH = 'PUSH'
 }
+
+export const NOTIFICATION_TYPES = Object.keys(RS_NOTIFICATION_TYPE)
 
 export enum NOTIFICATION_CHANNEL {
 	B2B = 'B2B',
@@ -847,8 +884,8 @@ export const RS_NOTIFICATION_FIELD_TEXTS = (notificationType: RS_NOTIFICATION, c
 	const entity = i18next.t(channel === NOTIFICATION_CHANNEL.B2B ? 'loc:Zamestnanec' : 'loc:Zákazník')
 
 	const result = {
-		title: undefined,
-		tooltip: undefined
+		title: '',
+		tooltip: ''
 	}
 
 	switch (notificationType) {
@@ -897,9 +934,12 @@ export const RS_NOTIFICATION_FIELD_TEXTS = (notificationType: RS_NOTIFICATION, c
 }
 
 export enum CALENDAR_DISABLED_NOTIFICATION_TYPE {
-	RESERVATION_CHANGED = 'RESERVATION_CHANGED',
-	RESERVATION_REJECTED = 'RESERVATION_REJECTED',
-	RESERVATION_CANCELLED = 'RESERVATION_CANCELLED'
+	RESERVATION_CHANGED_CUSTOMER = 'RESERVATION_CHANGED_CUSTOMER',
+	RESERVATION_REJECTED_CUSTOMER = 'RESERVATION_REJECTED_CUSTOMER',
+	RESERVATION_CANCELLED_CUSTOMER = 'RESERVATION_CANCELLED_CUSTOMER',
+	RESERVATION_CHANGED_EMPLOYEE = 'RESERVATION_CHANGED_EMPLOYEE',
+	RESERVATION_CANCELLED_EMPLOYEE = 'RESERVATION_CANCELLED_EMPLOYEE',
+	RESERVATION_REJECTED_EMPLOYEE = 'RESERVATION_REJECTED_EMPLOYEE'
 }
 
 export enum CONFIRM_MODAL_DATA_TYPE {
@@ -917,3 +957,13 @@ export enum CALENDAR_EVENT_DISPLAY_TYPE {
 
 export const CALENDAR_DAY_EVENTS_SHOWN = 5
 export const CALENDAR_DAY_EVENTS_LIMIT = CALENDAR_DAY_EVENTS_SHOWN + 1
+export const RESERVATION_STATES = Object.keys(RESERVATION_STATE)
+export const RESERVATION_PAYMENT_METHODS = Object.keys(RESERVATION_PAYMENT_METHOD)
+export const RESERVATION_SOURCE_TYPES = Object.keys(RESERVATION_SOURCE_TYPE)
+
+export const CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE = 300 // in ms
+
+export enum CANEL_TOKEN_MESSAGES {
+	CANCELED_DUE_TO_NEW_REQUEST = 'Operation canceled due to new request.',
+	CANCELED_ON_DEMAND = 'Operation canceled.'
+}

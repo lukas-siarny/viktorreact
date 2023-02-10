@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
 import { useSelector } from 'react-redux'
 import cx from 'classnames'
+import { useNavigate } from 'react-router-dom'
 
 // reducers
 import { RootState } from '../../../../reducers'
@@ -16,7 +17,6 @@ import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employ
 
 // utils
 import { CALENDAR_DEBOUNCE_DELAY, CALENDAR_EVENTS_VIEW_TYPE, FORM } from '../../../../utils/enums'
-import { history } from '../../../../utils/history'
 
 // atoms
 import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
@@ -67,9 +67,8 @@ const checkboxOptionRender = (option: any, checked?: boolean, disabled?: boolean
 	return (
 		<div className={cx('nc-checkbox-group-checkbox', { checked, disabled })}>
 			<input type='checkbox' className='checkbox-input' value={value} />
-			<div className={'checker'}>
-				<span className={'background-color'} style={{ borderColor: color, backgroundColor: checked ? color : undefined }} />
-				<span className={'checkbox-focus'} style={{ boxShadow: `0px 0px 4px 2px ${color || '#000'}`, border: `1px solid ${color}` }} />
+			<div className={'checker'} style={{ borderColor: color, backgroundColor: checked ? color : undefined }}>
+				<span className={'checkbox-focus'} style={{ outlineColor: `${color || '#000'}`, border: `1px solid ${color}` }} />
 			</div>
 			{option?.label}
 		</div>
@@ -78,6 +77,7 @@ const checkboxOptionRender = (option: any, checked?: boolean, disabled?: boolean
 const CalendarFilter = (props: Props) => {
 	const { handleSubmit, parentPath, eventsViewType, loadingData } = props
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 
 	const services = useSelector((state: RootState) => state.service.services)
 	const employees = useSelector((state: RootState) => state.employees.employees)
@@ -110,8 +110,8 @@ const CalendarFilter = (props: Props) => {
 								icon={<EmployeesIcon />}
 								infoMessage={t('loc:V salóne zatiaľ nemáte pridaných žiadnych zamestnancov')}
 								buttonLabel={t('loc:Pridať zamestnancov')}
-								buttonOnClick={() => history.push(`${parentPath}${t('paths:employees')}`)}
 								buttonDissabled={loadingData}
+								buttonOnClick={() => navigate(`${parentPath}${t('paths:employees')}`)}
 							/>
 						)}
 					</Spin>
@@ -134,8 +134,8 @@ const CalendarFilter = (props: Props) => {
 								icon={<ServicesIcon />}
 								infoMessage={t('loc:V salóne zatiaľ nemáte priradené žiadne služby')}
 								buttonLabel={t('loc:Priradiť služby')}
-								buttonOnClick={() => history.push(`${parentPath}${t('paths:industries-and-services')}`)}
 								buttonDissabled={loadingData}
+								buttonOnClick={() => navigate(`${parentPath}${t('paths:industries-and-services')}`)}
 							/>
 						)}
 					</Spin>

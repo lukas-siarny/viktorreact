@@ -2,12 +2,14 @@ import React from 'react'
 import { WrappedFieldProps } from 'redux-form'
 import { Tree } from 'antd'
 import { DataNode, TreeProps } from 'antd/lib/tree'
+import cx from 'classnames'
 
 type ComponentProps = TreeProps & {
 	checkboxGroupStyles?: React.CSSProperties
 	horizontal?: boolean
 	large?: boolean
 	dataTree?: DataNode[]
+	className?: string
 }
 
 type Props = WrappedFieldProps & ComponentProps
@@ -24,7 +26,7 @@ export type NestedMultiselectDataItem = {
 }[]
 
 const CheckboxGroupNestedField = (props: Props) => {
-	const { dataTree, input, checkable = true, defaultExpandedKeys } = props
+	const { dataTree, input, checkable = true, defaultExpandedKeys, className, disabled } = props
 
 	const onCheck = (
 		checked:
@@ -39,7 +41,7 @@ const CheckboxGroupNestedField = (props: Props) => {
 
 	return (
 		<Tree
-			className={'noti-services-tree'}
+			className={cx(className, 'noti-services-tree')}
 			checkable={checkable}
 			blockNode
 			onCheck={onCheck}
@@ -48,6 +50,7 @@ const CheckboxGroupNestedField = (props: Props) => {
 			selectable={false}
 			treeData={dataTree}
 			defaultExpandAll
+			disabled={disabled}
 			// ak budu animacie robit problemy tak sa daju vypnut, ale nie je to ofic zdokumentovana propa
 			// motion={null}
 		/>

@@ -83,7 +83,8 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 		isBulkEvent,
 		isPlaceholder,
 		isEdit,
-		isDayEventsPopover
+		isDayEventsPopover,
+		timeLeftClassName
 	} = props
 
 	const duration = parseTimeFromMinutes(diff)
@@ -100,6 +101,7 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 		<div
 			className={cx(
 				'nc-event',
+				timeLeftClassName,
 				getWrapperClassnames({
 					calendarView,
 					eventType,

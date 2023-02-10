@@ -1,38 +1,45 @@
 import React, { Suspense, useEffect, useState } from 'react'
 import { Provider } from 'react-redux'
-import { Router, Route } from 'react-router'
 import { I18nextProvider } from 'react-i18next'
 import { PersistGate } from 'redux-persist/es/integration/react'
-import { QueryParamProvider, ExtendedStringifyOptions, transformSearchStringJsonSafe } from 'use-query-params'
 import { Spin, ConfigProvider } from 'antd'
+import { StyleProvider } from '@ant-design/cssinjs'
 import { Locale } from 'antd/lib/locale-provider'
+
 import dayjs from 'dayjs'
+import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom'
 
-import 'antd/dist/antd.min.css'
-
-import Routes from './routes/Routes'
+import 'antd/dist/reset.css'
 
 import rootReducer from './reducers'
 
 // utils
 import configureStore from './utils/configureStore'
 import i18n from './utils/i18n'
-import { history } from './utils/history'
-import { LANGUAGE, DEFAULT_LANGUAGE } from './utils/enums'
+import { LANGUAGE, DEFAULT_LANGUAGE, ANTD_THEME_VARIABLES_OVERRIDE } from './utils/enums'
 
 // components
 import ScrollToTop from './components/ScrollToTop'
 import { LOCALES } from './components/LanguagePicker'
-
-const queryStringifyOptions: ExtendedStringifyOptions = {
-	transformSearchString: transformSearchStringJsonSafe
-}
+import AppRoutes from './routes/AppRoutes'
 
 const { store, persistor } = configureStore(rootReducer)
 
 const App = () => {
 	const [antdLocale, setAntdLocale] = useState<Locale | undefined>(undefined)
-
+	// You can do this:
+	const router = createBrowserRouter(
+		createRoutesFromElements(
+			<Route
+				path={'*'}
+				element={
+					<ScrollToTop>
+						<AppRoutes />
+					</ScrollToTop>
+				}
+			/>
+		)
+	)
 	useEffect(() => {
 		i18n.on('languageChanged', (language) => {
 			const locale = LOCALES[language as LANGUAGE] || LOCALES[DEFAULT_LANGUAGE]
@@ -62,15 +69,16 @@ const App = () => {
 					}
 					persistor={persistor}
 				>
-					<ConfigProvider locale={antdLocale}>
+					<ConfigProvider
+						locale={antdLocale}
+						theme={{
+							token: ANTD_THEME_VARIABLES_OVERRIDE
+						}}
+					>
 						<Provider store={store}>
-							<Router history={history}>
-								<QueryParamProvider ReactRouterRoute={Route} stringifyOptions={queryStringifyOptions}>
-									<ScrollToTop>
-										<Routes />
-									</ScrollToTop>
-								</QueryParamProvider>
-							</Router>
+							<StyleProvider hashPriority={'low'}>
+								<RouterProvider router={router} />
+							</StyleProvider>
 						</Provider>
 					</ConfigProvider>
 				</PersistGate>

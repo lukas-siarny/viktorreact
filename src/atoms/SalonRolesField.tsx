@@ -63,12 +63,12 @@ const SalonRolesField: FC<Props> = (props) => {
 			<Modal
 				className={'noti-roles-tooltip-modal rounded-fields md:p-4'}
 				title={
-					<Row align={'middle'} className={'gap-1'}>
+					<div className={'gap-1 flex items-center'}>
 						<InfoIcon24 />
 						{t('loc:Výber role')}
-					</Row>
+					</div>
 				}
-				visible={visible}
+				open={visible}
 				centered
 				footer={null}
 				onCancel={() => setVisible(false)}

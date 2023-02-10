@@ -42,7 +42,7 @@ type TreeCategories = {
 	isParentDeleted: boolean
 }
 
-const editPermissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]
+const editPermissions = [PERMISSION.ENUM_EDIT]
 
 const CategoriesTree = () => {
 	const dispatch = useDispatch()

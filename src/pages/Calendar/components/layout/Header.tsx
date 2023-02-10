@@ -1,8 +1,7 @@
 import React, { FC, useCallback, useRef, useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
-import { Button, Dropdown } from 'antd'
-import Tooltip from 'antd/es/tooltip'
+import { Button } from 'antd'
 import { Header } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
 import { debounce } from 'lodash'
@@ -20,13 +19,16 @@ import { ReactComponent as CreateIcon } from '../../../../assets/icons/plus-icon
 // components
 import DateField from '../../../../atoms/DateField'
 import SelectField from '../../../../atoms/SelectField'
+import TabsComponent from '../../../../components/TabsComponent'
 
 // hooks
 import useOnClickOutside from '../../../../hooks/useClickOutside'
-import useMedia from '../../../../hooks/useMedia'
 
 // utils
 import { getSelectedDateForCalendar } from '../../calendarHelpers'
+
+// types
+import { INewCalendarEvent } from '../../../../types/interfaces'
 
 const getDateFromSelectedMonth = (selectedMonth: { year: number; month: number }) => {
 	return dayjs(new Date(selectedMonth?.year, selectedMonth.month, 1))
@@ -59,28 +61,6 @@ const formatHeaderDate = (date: string, view: CALENDAR_VIEW, selectedMonth?: { y
 	}
 }
 
-const disabledDatePickerFnc = () => true
-
-const SwitchViewButton: FC<{ label: string; isSmallerDevice: boolean; className: string; onClick: () => void; disabled?: boolean }> = (props) => {
-	const { label, isSmallerDevice, className, onClick, disabled } = props
-
-	const trimmedLabel = isSmallerDevice ? label.slice(0, 1) : label
-
-	const button = (
-		<button type={'button'} className={className} onClick={onClick} disabled={disabled}>
-			{trimmedLabel}
-		</button>
-	)
-
-	return isSmallerDevice ? (
-		<Tooltip title={label} placement={'bottom'}>
-			{button}
-		</Tooltip>
-	) : (
-		button
-	)
-}
-
 type Props = {
 	selectedDate: string
 	calendarView: CALENDAR_VIEW
@@ -88,7 +68,7 @@ type Props = {
 	setCalendarView: (newView: CALENDAR_VIEW) => void
 	setSiderFilterCollapsed: () => void
 	setSelectedDate: (newDate: string) => void
-	onAddEvent: () => void
+	onAddEvent: (initialData?: INewCalendarEvent, fromAddButton?: boolean) => void
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	setEventsViewType: (newViewType: CALENDAR_EVENTS_VIEW_TYPE) => void
 	enabledSalonReservations?: boolean
@@ -120,14 +100,12 @@ const CalendarHeader: FC<Props> = (props) => {
 
 	const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
-	const calendarDropdownRef = useRef<HTMLDivElement | null>(null)
+	const headerDatePickerRef = useRef<HTMLDivElement | null>(null)
 	const dateButtonRef = useRef<HTMLButtonElement | null>(null)
 
-	useOnClickOutside([calendarDropdownRef, dateButtonRef], () => {
+	useOnClickOutside([headerDatePickerRef, dateButtonRef], () => {
 		setIsCalendarOpen(false)
 	})
-
-	const isSmallerDevice = useMedia(['(max-width: 1200px)'], [true], false)
 
 	useEffect(() => {
 		setCurrentDate(selectedDate)
@@ -140,6 +118,7 @@ const CalendarHeader: FC<Props> = (props) => {
 	useEffect(() => {
 		setFormattedDate(formatHeaderDate(currentDate, calendarView, currentSelectedMonth))
 	}, [currentDate, calendarView, currentSelectedMonth])
+	useEffect(() => setCurrentDate(selectedDate), [selectedDate])
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const setSelectedDateDebounced = useCallback(debounce(setSelectedDate, CALENDAR_DEBOUNCE_DELAY), [setSelectedDate])
@@ -156,9 +135,9 @@ const CalendarHeader: FC<Props> = (props) => {
 					newQueryDate = dayjs(newDate).startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
 
 					if (type === CALENDAR_SET_NEW_DATE.FIND_START_ADD) {
-						newQueryDate = (calendarView === CALENDAR_VIEW?.MONTH ? newSelectedMonthDate : newQueryDate).add(1, calendarView.toLowerCase() as dayjs.OpUnitType)
+						newQueryDate = (calendarView === CALENDAR_VIEW?.MONTH ? newSelectedMonthDate : newQueryDate).add(1, calendarView.toLowerCase() as dayjs.ManipulateType)
 					} else {
-						newQueryDate = (calendarView === CALENDAR_VIEW?.MONTH ? newSelectedMonthDate : newQueryDate).subtract(1, calendarView.toLowerCase() as dayjs.OpUnitType)
+						newQueryDate = (calendarView === CALENDAR_VIEW?.MONTH ? newSelectedMonthDate : newQueryDate).subtract(1, calendarView.toLowerCase() as dayjs.ManipulateType)
 					}
 					newSelectedMonth = {
 						year: dayjs(newQueryDate).year(),
@@ -184,22 +163,6 @@ const CalendarHeader: FC<Props> = (props) => {
 		},
 		[calendarView, setSelectedDate, setSelectedDateDebounced, currentSelectedMonth]
 	)
-
-	const datePicker = useMemo(() => {
-		return (
-			<div ref={calendarDropdownRef}>
-				<DateField
-					input={{ value: currentDate, onChange: (newSelectedDate: string) => changeSelectedDate(newSelectedDate) } as unknown as WrappedFieldInputProps}
-					meta={{ error: false, touched: false } as unknown as WrappedFieldMetaProps}
-					open={true}
-					onSelect={() => setIsCalendarOpen(false)}
-					showToday={false}
-					className={'nc-header-date-picker'}
-					disabledDate={loadingData ? disabledDatePickerFnc : undefined}
-				/>
-			</div>
-		)
-	}, [currentDate, loadingData, changeSelectedDate])
 
 	const calendarViewOptions = useMemo(
 		() => [
@@ -228,38 +191,38 @@ const CalendarHeader: FC<Props> = (props) => {
 				<button type={'button'} className={cx('nc-button', { active: !siderFilterCollapsed })} onClick={() => setSiderFilterCollapsed()}>
 					<NavIcon style={{ transform: siderFilterCollapsed ? 'rotate(180deg)' : undefined }} />
 				</button>
-				<div>
-					<SelectField
-						input={
-							{
-								value: calendarView,
-								onChange: (value: CALENDAR_VIEW) => setCalendarView(value)
-							} as any
+
+				<SelectField
+					input={
+						{
+							value: calendarView,
+							onChange: (value: CALENDAR_VIEW) => setCalendarView(value)
+						} as any
+					}
+					meta={{} as any}
+					onChange={(value) => setCalendarView(value)}
+					className={'p-0'}
+					options={calendarViewOptions}
+					dropdownMatchSelectWidth={false}
+				/>
+
+				<TabsComponent
+					className={'tabs-small -mt-1'}
+					activeKey={eventsViewType}
+					onChange={(newEvetsViewType: string) => setEventsViewType(newEvetsViewType as CALENDAR_EVENTS_VIEW_TYPE)}
+					items={[
+						{
+							key: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
+							tabKey: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
+							label: t('loc:Rezervácie')
+						},
+						{
+							key: CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF,
+							tabKey: CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF,
+							label: t('loc:Shifts')
 						}
-						meta={{} as any}
-						onChange={(value) => setCalendarView(value)}
-						className={'p-0'}
-						options={calendarViewOptions}
-						dropdownMatchSelectWidth={false}
-						disabled={loadingData}
-					/>
-				</div>
-				<div className={'nc-button-group'}>
-					<SwitchViewButton
-						label={t('loc:Rezervácie')}
-						className={cx({ active: eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION })}
-						onClick={() => setEventsViewType(CALENDAR_EVENTS_VIEW_TYPE.RESERVATION)}
-						isSmallerDevice={isSmallerDevice}
-						disabled={loadingData}
-					/>
-					<SwitchViewButton
-						label={t('loc:Shifts')}
-						className={cx({ active: eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF })}
-						onClick={() => setEventsViewType(CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF)}
-						isSmallerDevice={isSmallerDevice}
-						disabled={loadingData}
-					/>
-				</div>
+					]}
+				/>
 			</div>
 			<div className={'nav-middle'}>
 				<button
@@ -278,19 +241,26 @@ const CalendarHeader: FC<Props> = (props) => {
 				>
 					<ChevronLeft style={{ transform: 'rotate(180deg)' }} />
 				</button>
-				<Dropdown
-					overlay={datePicker}
-					placement='bottom'
-					trigger={['click']}
-					getPopupContainer={() => document.querySelector('#noti-calendar-header') as HTMLElement}
-					visible={isCalendarOpen}
-					destroyPopupOnHide
-				>
-					<button type={'button'} className={'nc-button-date mx-1'} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>
-						{formattedDate}
-						<ChevronDownGrayDark color={'#808080'} />
-					</button>
-				</Dropdown>
+				<div ref={headerDatePickerRef}>
+					<DateField
+						input={{ value: currentDate, onChange: (newSelectedDate: string) => changeSelectedDate(newSelectedDate) } as unknown as WrappedFieldInputProps}
+						meta={{ error: false, touched: false } as unknown as WrappedFieldMetaProps}
+						open={isCalendarOpen}
+						onSelect={() => setIsCalendarOpen(false)}
+						showToday={false}
+						className={'nc-header-date-picker'}
+						inputReadOnly
+						suffixIcon={null}
+						inputRender={() => {
+							return (
+								<button type={'button'} className={'nc-button-date mx-1'} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>
+									{formattedDate}
+									<ChevronDownGrayDark />
+								</button>
+							)
+						}}
+					/>
+				</div>
 				<button
 					type={'button'}
 					className={cx('nc-button', { active: dayjs(getSelectedDateForCalendar(calendarView, selectedDate)).isToday() })}
@@ -301,8 +271,15 @@ const CalendarHeader: FC<Props> = (props) => {
 				</button>
 			</div>
 			<div className={'nav-right'}>
-				<Button type={'primary'} onClick={onAddEvent} icon={<CreateIcon />} disabled={!enabledSalonReservations} htmlType={'button'} className={'noti-btn'}>
-					{STRINGS(t).addRecord('').trim()}
+				<Button
+					type={'primary'}
+					onClick={() => onAddEvent(undefined, true)}
+					icon={<CreateIcon />}
+					disabled={!enabledSalonReservations}
+					htmlType={'button'}
+					className={'noti-btn'}
+				>
+					{STRINGS(t).addRecord('')}
 				</Button>
 			</div>
 		</Header>

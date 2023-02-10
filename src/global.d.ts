@@ -55,3 +55,22 @@ declare module 'tailwindcss/colors' {
 	export const blueGray: { '100': string; '200': string; '300': string; '400': string; '500': string; '600': string; '700': string; '800': string; '900': string; '50': string }
 	export const neutral: { '100': string; '200': string; '300': string; '400': string; '500': string; '600': string; '700': string; '800': string; '900': string; '50': string }
 }
+
+interface Window {
+	gm_authFailure: any
+	__REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: any
+}
+
+declare function useSearchParams(defaultInit?: URLSearchParamsInit): [URLSearchParams, SetURLSearchParams]
+
+type ParamKeyValuePair = [string, string]
+
+type URLSearchParamsInit = string | ParamKeyValuePair[] | Record<string, string | string[]> | URLSearchParams
+
+type SetURLSearchParams = (nextInit?: URLSearchParamsInit | ((prev: URLSearchParams) => URLSearchParamsInit), navigateOpts?: NavigateOptions) => void
+
+interface NavigateOptions {
+	replace?: boolean
+	state?: any
+	preventScrollReset?: boolean
+}

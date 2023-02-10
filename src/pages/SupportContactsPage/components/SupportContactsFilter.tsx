@@ -15,7 +15,7 @@ import { RootState } from '../../../reducers'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { ENUMERATIONS_KEYS, FIELD_MODE, FORM } from '../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, ENUMERATIONS_KEYS, FIELD_MODE, FORM } from '../../../utils/enums'
 import { checkFiltersSize, checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
 
 // atoms
@@ -102,7 +102,7 @@ const SupportContactsFilter = (props: Props) => {
 					</Col>
 				</Row>
 			</Filters> */}
-			<Modal title={t('loc:Upozornenie')} visible={visibleModal} getContainer={() => document.body} onCancel={() => setVisibleModal(false)} footer={null}>
+			<Modal title={t('loc:Upozornenie')} open={visibleModal} getContainer={() => document.body} onCancel={() => setVisibleModal(false)} footer={null}>
 				<Result
 					status='warning'
 					title={t('loc:Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu.')}
@@ -125,7 +125,7 @@ const form = reduxForm({
 		if (anyTouched) {
 			submit()
 		}
-	}, 300),
+	}, CHANGE_DEBOUNCE_TIME),
 	destroyOnUnmount: true
 })(SupportContactsFilter)
 

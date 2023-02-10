@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { CalendarApi, EventApi, EventInput } from '@fullcalendar/react'
+import { CalendarApi, EventApi, EventInput } from '@fullcalendar/core'
 import dayjs from 'dayjs'
 import { destroy } from 'redux-form'
 
@@ -47,7 +47,7 @@ export const clearEvent = (): ThunkResult<void> => (dispatch, getState) => {
 	// clear store
 	dispatch({ type: VIRTUAL_EVENT.VIRTUAL_EVENT_CLEAR, payload: { data: null } })
 	// destroy calendar forms
-	Object.keys(HANDLE_CALENDAR_FORMS).forEach((key) => dispatch(destroy(key)))
+	HANDLE_CALENDAR_FORMS.forEach((form) => dispatch(destroy(form)))
 	// remove event from Calendar API
 	if (calendarApi) {
 		const eventId = getState().virtualEvent.virtualEvent.data?.id
@@ -88,7 +88,7 @@ export const addOrUpdateEvent =
 		if (!formData) {
 			return
 		}
-		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID, note, noteFromB2CCustomer, reservationData } = formData
+		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID, reservationData, note, noteFromB2CCustomer } = formData
 
 		if (date && timeFrom && employee && eventType) {
 			let { eventId } = formData
@@ -161,7 +161,6 @@ export const addOrUpdateEvent =
 					reservationData
 				}
 			}
-
 			const payload: IVirtualEventPayload = {
 				data: {
 					id: eventId,

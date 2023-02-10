@@ -3,26 +3,44 @@ import dayjs from 'dayjs'
 import axios from 'axios'
 
 // types
+import { find, map } from 'lodash'
 import { ThunkResult } from '../index'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { CalendarEvent, ICalendarDayEvents, ICalendarEventsPayload } from '../../types/interfaces'
+import { CalendarEvent, ICalendarEventsPayload, IPaginationQuery, ISearchable, ICalendarEventDetailPayload, ICalendarDayEvents } from '../../types/interfaces'
 
 // enums
-import { EVENTS, EVENT_DETAIL, SET_DAY_DETAIL_DATE, SET_IS_REFRESHING_EVENTS, UPDATE_EVENT, SET_DAY_EVENTS } from './calendarTypes'
-import { CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, DATE_TIME_PARSER_DATE_FORMAT, RESERVATION_STATE } from '../../utils/enums'
+import { EVENTS, EVENT_DETAIL, SET_DAY_DETAIL_DATE, UPDATE_EVENT, SET_DAY_EVENTS, RESERVATIONS, SET_IS_REFRESHING_EVENTS } from './calendarTypes'
+import {
+	CALENDAR_EVENTS_VIEW_TYPE,
+	CALENDAR_EVENTS_KEYS,
+	CALENDAR_EVENT_TYPE,
+	DATE_TIME_PARSER_DATE_FORMAT,
+	RESERVATION_STATE,
+	RESERVATION_SOURCE_TYPE,
+	RESERVATION_PAYMENT_METHOD,
+	CANEL_TOKEN_MESSAGES
+} from '../../utils/enums'
 
 // utils
 import { getReq } from '../../utils/request'
-import { getDateTime, normalizeQueryParams } from '../../utils/helper'
-
-import { clearEvent } from '../virtualEvent/virtualEventActions'
-import fakeEvents from './events'
+import { formatDateByLocale, getDateTime, normalizeQueryParams, transalteReservationSourceType } from '../../utils/helper'
 import { compareAndSortDayEvents } from '../../pages/Calendar/calendarHelpers'
+
+// redux
+import { clearEvent } from '../virtualEvent/virtualEventActions'
 
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
 
-export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
+interface IGetSalonReservationsQueryParams extends IPaginationQuery {
+	dateFrom?: string | null
+	employeeIDs?: (string | null)[] | null
+	categoryIDs?: (string | null)[] | null
+	reservationStates?: (string | null)[] | null
+	reservationCreateSourceType?: string | null
+	reservationPaymentMethods?: (string | null)[] | null
+	salonID: string
+}
 
 interface ICalendarEventsQueryParams {
 	salonID: string
@@ -54,7 +72,10 @@ export interface ISetDayDetailPayload {
 	date: string | null
 }
 
-export type ICalendarActions = IResetStore | IGetCalendarEvents | IGetCalendarEventDetail | ISetIsRefreshingEvents | ISetDayDetailDay | ISetDayEvents
+export type ICalendarActions = IResetStore | IGetCalendarEvents | IGetCalendarEventDetail | ISetIsRefreshingEvents | ISetDayDetailDay | ISetDayEvents | IGetSalonReservations
+export interface ISalonReservationsPayload extends ISearchable<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200> {
+	tableData: ISalonReservationsTableData[]
+}
 
 interface IGetCalendarEvents {
 	type: EVENTS
@@ -65,10 +86,6 @@ interface IGetCalendarEvents {
 interface IGetCalendarEventDetail {
 	type: EVENT_DETAIL
 	payload: ICalendarEventDetailPayload
-}
-
-export interface ICalendarEventDetailPayload {
-	data: CalendarEventDetail | null
 }
 
 interface ISetIsRefreshingEvents {
@@ -84,6 +101,23 @@ interface ISetDayDetailDay {
 interface ISetDayEvents {
 	type: typeof SET_DAY_EVENTS
 	payload: ICalendarDayEvents
+}
+interface ISalonReservationsTableData {
+	key: string
+	startDate: string | null
+	time: string
+	createdAt: string | null
+	createSourceType: string
+	state: RESERVATION_STATE
+	employee: any // TODO: optypovat
+	customer: any
+	service: any
+	paymentMethod: RESERVATION_PAYMENT_METHOD
+}
+
+export interface IGetSalonReservations {
+	type: RESERVATIONS
+	payload: ISalonReservationsPayload
 }
 
 const storedPreviousParams: any = {
@@ -138,8 +172,8 @@ export const createMultiDayEvents = (event: CalendarEvent, queryParamsStart: str
 				startDateTime: getDateTime(newStart.date, newStart.time),
 				endDateTime: getDateTime(newEnd.date, newEnd.time),
 				isMultiDayEvent: true,
-				isFirstMultiDayEventInCurrentRange: i === 0 && startDifference === 0,
-				isLastMultiDaylEventInCurrentRange: i === currentRangeDaysCount && !endDifference,
+				isFirstMultiDayEventInCurrentRange: i === 0 && startDifference === 0, // ak vytvaram event z multidnoveho eventu o trvani 2-5.1.2023, tak toto bude true v pripade, ze startTime je 2.1
+				isLastMultiDaylEventInCurrentRange: i === currentRangeDaysCount && !endDifference, // ak vytvaram event z multidnoveho eventu o trvani 2-5.1.2023, tak toto bude true v pripade, ze endTime je 5.1
 				originalEvent: event
 			}
 
@@ -219,6 +253,9 @@ export const getCalendarEvents =
 					endDateTime: getDateTime(event.end.date, event.end.time)
 				}
 
+				/**
+				 * priprava na viacdnove eventy - v dennom a tyzdennom view ich potrebujeme rozdelit na jednodnove eventy
+				 */
 				if (splitMultidayEventsIntoOneDayEvents) {
 					return [...newEventsArray, ...createMultiDayEvents(editedEvent, queryParams.start, queryParams.end)]
 				}
@@ -270,8 +307,8 @@ export const getCalendarEvents =
 
 			dispatch({ type: EVENTS.EVENTS_LOAD_DONE, enumType, payload })
 		} catch (err) {
-			if (axios.isCancel(err)) {
-				// Request bol preruseny novsim requestom, tym padom chceme, aby loading state porkacoval
+			if (axios.isCancel(err) && (err as any)?.message === CANEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST) {
+				// Request bol preruseny novsim requestom, tym padom chceme, aby loading state pokracoval
 				dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
 			} else {
 				dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType })
@@ -427,3 +464,57 @@ export const getDayDetialEvents = (
 	setDayDetailDate(date)
 	return getCalendarEvents(CALENDAR_EVENTS_KEYS.DAY_DETAIL, { ...queryParams, start: date, end: date }, splitMultidayEventsIntoOneDayEvents, clearVirtualEvent, false)
 }
+
+export const getPaginatedReservations =
+	(queryParams: IGetSalonReservationsQueryParams): ThunkResult<Promise<ISalonReservationsPayload>> =>
+	async (dispatch) => {
+		let payload = {} as ISalonReservationsPayload
+		try {
+			const queryParamsEditedForRequest = {
+				salonID: queryParams.salonID,
+				dateFrom: queryParams.dateFrom,
+				reservationStates: queryParams.reservationStates,
+				employeeIDs: queryParams.employeeIDs,
+				reservationPaymentMethods: queryParams.reservationPaymentMethods,
+				reservationCreateSourceType: queryParams.reservationCreateSourceType,
+				categoryIDs: queryParams.categoryIDs,
+				limit: queryParams.limit,
+				page: queryParams.page,
+				order: queryParams.order
+			}
+
+			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_START })
+
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/paginated', {
+				...(normalizeQueryParams(queryParamsEditedForRequest) as any),
+				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION]
+			})
+
+			const tableData: ISalonReservationsTableData[] = map(data.calendarEvents, (event) => {
+				const employee = find(data.employees, { id: event.employee.id })
+				return {
+					key: event.id,
+					startDate: formatDateByLocale(event.start.date, true) as string,
+					time: `${event.start.time} - ${event.end.time}`,
+					createdAt: formatDateByLocale(event.createdAt) as string,
+					createSourceType: transalteReservationSourceType(event.reservationData?.createSourceType as RESERVATION_SOURCE_TYPE),
+					state: event.reservationData?.state as RESERVATION_STATE,
+					employee,
+					customer: event.customer,
+					service: event.service,
+					paymentMethod: event.reservationData?.paymentMethod as RESERVATION_PAYMENT_METHOD
+				}
+			})
+			payload = {
+				data,
+				tableData
+			}
+			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}

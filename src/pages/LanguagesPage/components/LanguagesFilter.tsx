@@ -6,7 +6,7 @@ import { debounce } from 'lodash'
 import { useSelector } from 'react-redux'
 
 // utils
-import { FIELD_MODE, FORM } from '../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, FIELD_MODE, FORM } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize } from '../../../utils/helper'
 
 // atoms
@@ -72,7 +72,7 @@ const form = reduxForm({
 		if (anyTouched) {
 			submit()
 		}
-	}, 300),
+	}, CHANGE_DEBOUNCE_TIME),
 	destroyOnUnmount: true
 })(LanguagesFilter)
 

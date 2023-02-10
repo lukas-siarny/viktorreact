@@ -7,6 +7,7 @@ import { getFormValues, initialize, isSubmitting, reset } from 'redux-form'
 import { DataNode } from 'antd/lib/tree'
 import { isEmpty, map } from 'lodash'
 import i18next from 'i18next'
+import { useNavigate, useParams } from 'react-router-dom'
 
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
@@ -20,14 +21,13 @@ import { NestedMultiselectDataItem } from './components/CheckboxGroupNestedField
 import RequestNewServiceForm, { IRequestNewServiceForm } from './components/RequestNewServiceForm'
 
 // utils
-import { ROW_GUTTER_X_DEFAULT, PERMISSION, FORM, SALON_PERMISSION, NOTIFICATION_TYPE } from '../../utils/enums'
+import { ROW_GUTTER_X_DEFAULT, FORM, PERMISSION, NOTIFICATION_TYPE } from '../../utils/enums'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { patchReq, postReq } from '../../utils/request'
 import { flattenTree } from '../../utils/helper'
-import { history } from '../../utils/history'
 
 // types
-import { IBreadcrumbs, IIndustryForm, SalonSubPageProps, IComputedMatch } from '../../types/interfaces'
+import { IBreadcrumbs, IIndustryForm, SalonSubPageProps } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // assets
@@ -36,9 +36,7 @@ import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.s
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
-type Props = SalonSubPageProps & {
-	computedMatch: IComputedMatch<{ industryID: string }>
-}
+type Props = SalonSubPageProps
 type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody
 
 type ServiceCategorySuggestPost = Paths.PostApiB2BAdminServicesCategoryServiceSuggest.RequestBody
@@ -108,9 +106,10 @@ const mapCategoriesForDataTree = (parentId: string | null, children: any[] | und
 
 const IndustryPage = (props: Props) => {
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const { salonID, parentPath } = props
-	const { industryID } = props.computedMatch.params
+	const { industryID } = useParams<{ industryID?: string }>()
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const services = useSelector((state: RootState) => state.service.services)
@@ -197,7 +196,7 @@ const IndustryPage = (props: Props) => {
 				const serviceID = getCategoryById(updatedUserRootCategory, categoryIDs[0])?.service?.id
 				// redirect
 				if (serviceID) {
-					history.push(parentPath + t('paths:services-settings/{{serviceID}}', { serviceID }))
+					navigate(parentPath + t('paths:services-settings/{{serviceID}}', { serviceID }))
 				}
 			}
 		} catch (e) {
@@ -228,7 +227,7 @@ const IndustryPage = (props: Props) => {
 									{t('loc:Priradiť služby')}
 								</h3>
 								<Permissions
-									allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_CREATE]}
+									allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE]}
 									render={(hasPermission, { openForbiddenModal }) => (
 										<Button
 											onClick={() => {
@@ -269,7 +268,7 @@ const IndustryPage = (props: Props) => {
 			<Modal
 				key={'requestNewServiceModal'}
 				title={t('loc:Žiadosť o novú službu')}
-				visible={isVisible}
+				open={isVisible}
 				onCancel={() => {
 					dispatch(reset(FORM.REQUEST_NEW_SERVICE_FORM))
 					setIsVisible(false)
@@ -283,4 +282,4 @@ const IndustryPage = (props: Props) => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]))(IndustryPage)
+export default compose(withPermissions([PERMISSION.PARTNER]))(IndustryPage)

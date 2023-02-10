@@ -13,7 +13,7 @@ import { getServicesCategoryKeys } from '../IndustryPage'
 import validateCategoryFrom from './validateIndustriesFrom'
 
 // utils
-import { FORM, PERMISSION, SALON_PERMISSION } from '../../../utils/enums'
+import { FORM, PERMISSION } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 import { showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
@@ -64,7 +64,7 @@ const IndustriesForm: FC<Props> = (props) => {
 	})
 
 	return (
-		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form w-full'} onSubmitCapture={handleSubmit}>
 			<h3 className={'mb-0 mt-0 flex items-center space-'}>
 				<CategoryIcon className={'text-notino-black mr-2'} />
 				{t('loc:Odvetvia a služby')}
@@ -74,7 +74,7 @@ const IndustriesForm: FC<Props> = (props) => {
 			<div className={'content-footer'}>
 				<Row justify='center'>
 					<Permissions
-						allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
+						allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Button
 								type={'primary'}

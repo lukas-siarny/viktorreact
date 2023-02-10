@@ -1,9 +1,10 @@
 import React, { useMemo, FC, useRef, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import cx from 'classnames'
 
 // full calendar
-import FullCalendar, { DateSelectArg, DayCellContentArg, DayHeaderContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar from '@fullcalendar/react' // must go before plugins
+import { DateSelectArg, DayCellContentArg, DayHeaderContentArg } from '@fullcalendar/core'
 import interactionPlugin from '@fullcalendar/interaction'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
@@ -23,12 +24,12 @@ import {
 	DEFAULT_DATE_INIT_FORMAT,
 	DEFAULT_TIME_FORMAT
 } from '../../../../utils/enums'
-import { compareAndSortDayEvents, composeMonthViewEvents, getBusinessHours, getOpnenigHoursMap, OpeningHoursMap, eventAllow } from '../../calendarHelpers'
+import { compareAndSortDayEvents, composeMonthViewEvents, getBusinessHours, getOpnenigHoursMap, OpeningHoursMap } from '../../calendarHelpers'
 import { RootState } from '../../../../reducers'
 import eventContent from '../../eventContent'
 
 // assets
-import { clearEvent, IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
+import { IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 const getCurrentDayEventsCount = (selectedDate: string, dayEvents: CalendarEvent[], virtualEvent: IVirtualEventPayload['data'] | null): number => {
 	let eventsCount = dayEvents.reduce((count, event) => {
@@ -177,13 +178,10 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 		onEventChange,
 		onEventChangeStart,
 		virtualEvent,
-		onAddEvent,
-		setEventManagement
+		onAddEvent
 	} = props
 
 	const openingHours = useSelector((state: RootState) => state.selectedSalon.selectedSalon).data?.openingHours
-
-	const dispatch = useDispatch()
 
 	const events = useMemo(() => {
 		const data = composeMonthViewEvents(eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION ? reservations : shiftsTimeOffs)
@@ -200,8 +198,6 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 	const handleNewEvent = (event: DateSelectArg) => {
 		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
 		const eventStart = dayjs(event.startStr)
-		dispatch(clearEvent())
-		setEventManagement(undefined)
 
 		onAddEvent({
 			date: eventStart.format(DEFAULT_DATE_INIT_FORMAT),
@@ -253,13 +249,8 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 				eventContent={(data) => eventContent(data, CALENDAR_VIEW.MONTH, onEditEvent, onReservationClick)}
 				moreLinkContent={null}
 				// handlers
-				eventAllow={(dropInfo, movingEvent) => eventAllow(dropInfo, movingEvent, CALENDAR_VIEW.MONTH)}
-				eventDrop={(arg) => {
-					if (onEventChange) {
-						onEventChange(CALENDAR_VIEW.MONTH, arg)
-					}
-				}}
-				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
+				eventDrop={onEventChange}
+				eventDragStart={onEventChangeStart}
 				select={handleNewEvent}
 			/>
 		</div>
@@ -267,8 +258,5 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 })
 
 export default React.memo(CalendarMonthView, (prevProps, nextProps) => {
-	if (nextProps.disableRender) {
-		return true
-	}
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
 })

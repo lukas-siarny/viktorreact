@@ -32,16 +32,17 @@ const PinField = (props: Props) => {
 
 	return (
 		<Form.Item style={style} validateStatus={error && touched ? 'error' : undefined}>
-			<ReactPinField
-				id={formFieldID(form, input.name)}
-				ref={inputRef}
-				length={length}
-				format={formatPin}
-				onComplete={(code) => input.onBlur(code)}
-				onChange={(code) => input.onChange(code)}
-				className={cx('pin-field heading-4 mr-2 rounded-DEFAULT', { 'pin-error': error && touched })}
-			/>
-			<div className={cx('mt-2 text-danger h-6', { invisible: !(error && touched) })}>{error}</div>
+			<div id={formFieldID(form, input.name)}>
+				<ReactPinField
+					ref={inputRef}
+					length={length}
+					format={formatPin}
+					onComplete={(code) => input.onBlur(code)}
+					onChange={(code) => input.onChange(code)}
+					className={cx('pin-field heading-4 mr-2 rounded-DEFAULT', { 'pin-error': error && touched })}
+				/>
+				<div className={cx('mt-2 text-danger h-6', { invisible: !(error && touched) })}>{error}</div>
+			</div>
 		</Form.Item>
 	)
 }

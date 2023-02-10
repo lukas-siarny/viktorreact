@@ -57,7 +57,6 @@ services:
       # mail server is running with cypress test define in cypress plugins
       - SMTP_PORT=7777
       - SMTP_FROM_ADDRESS=e2e@goodrequest.com
-      - WHITELIST_EMAILS=@goodrequest.com
     depends_on:
       - "localstack"
       - "redis"

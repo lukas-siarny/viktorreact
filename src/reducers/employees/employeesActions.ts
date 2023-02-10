@@ -44,15 +44,18 @@ export const getEmployees =
 					color: employee.color
 				}
 			})
+
 			const tableData = map(data.employees, (employee) => ({
 				...employee,
 				key: employee.orderIndex
 			}))
+
 			payload = {
 				data,
 				options: employeesOptions,
 				tableData
 			}
+
 			dispatch({ type: EMPLOYEES.EMPLOYEES_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: EMPLOYEES.EMPLOYEES_LOAD_FAIL })
@@ -61,6 +64,15 @@ export const getEmployees =
 		}
 
 		return payload
+	}
+
+export const reorderEmployees =
+	(reorderedTableData: IEmployeesPayload['tableData']): ThunkResult<void> =>
+	async (dispatch) => {
+		const payload = {
+			tableData: reorderedTableData
+		}
+		dispatch({ type: EMPLOYEES.EMPLOYEES_REORDER, payload })
 	}
 
 export const getEmployee =

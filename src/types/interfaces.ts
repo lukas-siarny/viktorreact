@@ -484,8 +484,6 @@ export interface ISelectable<T> {
 export interface ISearchable<T extends IDataPagination> {
 	options?: ISelectOptionItem[] | undefined
 	data: T | null
-	// TODO: spravit novy interface na tableData?
-	tableData?: any
 }
 
 /**
@@ -688,7 +686,9 @@ export interface ICalendarFilter {
 	categoryIDs?: string[]
 }
 
-export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {}
+export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {
+	tableData: (Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0] & { key: number })[]
+}
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]

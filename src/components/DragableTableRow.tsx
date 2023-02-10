@@ -8,7 +8,7 @@ interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
 	'data-row-key': string
 }
 
-const Row = ({ children, ...props }: RowProps) => {
+const DragableTableRow = ({ children, ...props }: RowProps) => {
 	const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({
 		id: props['data-row-key']
 	})
@@ -27,7 +27,7 @@ const Row = ({ children, ...props }: RowProps) => {
 					return React.cloneElement(child as React.ReactElement, {
 						children: (
 							<div ref={setActivatorNodeRef} {...listeners}>
-								<DragIcon style={{ touchAction: 'none', cursor: 'move' }} className={'text-blue-600'} />
+								<DragIcon style={{ touchAction: 'none', cursor: 'move' }} className={'text-blue-600 w-4 h-4 flex'} />
 							</div>
 						)
 					})
@@ -38,4 +38,4 @@ const Row = ({ children, ...props }: RowProps) => {
 	)
 }
 
-export default Row
+export default DragableTableRow

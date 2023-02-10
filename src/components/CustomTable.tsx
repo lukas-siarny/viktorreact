@@ -3,7 +3,7 @@ import { forEach, includes, isEmpty } from 'lodash'
 import cx from 'classnames'
 
 // Drag and drop
-import type { DragEndEvent, UniqueIdentifier } from '@dnd-kit/core'
+import type { DragEndEvent } from '@dnd-kit/core'
 import { DndContext } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 
@@ -15,8 +15,8 @@ import { TableProps } from 'antd/lib/table'
 import CustomPagination from './CustomPagination'
 import { IPagination } from '../types/interfaces'
 import DragableTableRow from './DragableTableRow'
-
 import { ReactComponent as DragIcon } from '../assets/icons/drag-icon.svg'
+import { TABLE_DRAG_AND_DROP_KEY } from '../utils/enums'
 
 type ComponentProps<RecordType> = TableProps<RecordType> & {
 	emptyText?: string
@@ -40,12 +40,11 @@ type ComponentProps<RecordType> = TableProps<RecordType> & {
 	useCustomPagination?: boolean
 	pagination?: IPagination | false
 
-	dndDrop?: (oldIndex: UniqueIdentifier, newIndex?: UniqueIdentifier) => any
-	dndCanDrag?: boolean
+	dndDrop?: (oldIndex: number, newIndex: number) => any
 }
 
 const CustomTable = <RecordType extends object = any>(props: ComponentProps<RecordType>) => {
-	const { disabled = false, className, useCustomPagination, pagination, dndDrop, dndCanDrag = true } = props
+	const { disabled = false, className, useCustomPagination, pagination, dndDrop } = props
 	const [isProcessingDrop, setIsProcessingDrop] = useState(false)
 
 	const onClickOptionSizeChanger = useCallback(
@@ -81,8 +80,8 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 
 	const onDragEnd = useCallback(
 		async ({ active, over }: DragEndEvent) => {
-			const oldIndex = active.id
-			const newIndex = over?.id
+			const oldIndex = Number(active.id)
+			const newIndex = Number(over?.id)
 
 			if (isProcessingDrop) {
 				return
@@ -96,15 +95,6 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 				console.error(e)
 				setIsProcessingDrop(false)
 			}
-
-			console.log('called dragging', active, over)
-			// if (active.id !== over?.id) {
-			// 	setDataSource((previous) => {
-			// 		const activeIndex = previous.findIndex((i) => i.key === active.id)
-			// 		const overIndex = previous.findIndex((i) => i.key === over?.id)
-			// 		return arrayMove(previous, activeIndex, overIndex)
-			// 	})
-			// }
 		},
 		[dndDrop, isProcessingDrop]
 	)
@@ -144,25 +134,20 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 
 	let columns = props?.columns || []
 	const isFirstColFixed = props?.columns?.[0]?.fixed ? true : undefined
+
 	if (dndDrop) {
 		// Samostatny column aby sa nedrag and dropoval cely riadok ale len cast stlpa (moze sa dat kliknut na riadok na prepnutie detailu entity)
 		const DND_COL = {
-			key: 'sort',
+			key: TABLE_DRAG_AND_DROP_KEY,
+			title: <DragIcon style={{ touchAction: 'none', cursor: 'default' }} className={'w-4 h-4 flex'} />,
 			width: 25,
-			className: cx('ignore-cell-click text-center text-gray-600', {
-				'cursor-move': dndDrop,
-				'cursor-not-allowed opacity-40': !dndDrop
-			}),
 			fixed: isFirstColFixed
-			// render() {
-			// 	return <DragIcon className={'text-blue-600'} />
-			// }
 		}
 		columns = [DND_COL, ...columns]
 	}
 	const onRow = (record: any, index?: number) => {
 		const onRowProp = props?.onRow?.(record, index)
-		let rowProps: any = {
+		const rowProps: any = {
 			...onRowProp,
 			onClick: onRowProp?.onClick
 				? (e: React.MouseEvent<HTMLElement>) => {
@@ -188,12 +173,6 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 				  }
 				: undefined,
 			index
-		}
-
-		// NOTE:    Pre tabuľku bez dnd neposielame propu moveRow vôbec (ani ako undefined),
-		//          inak vznikne chyba, lebo sa snaží nastaviť moveRow ako html atribút <td> elementu ale moveRow nie je html atribút
-		if (dndDrop) {
-			rowProps = { ...rowProps, dndCanDrag }
 		}
 
 		return rowProps
@@ -236,7 +215,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 			<DndContext onDragEnd={onDragEnd}>
 				<SortableContext
 					// rowKey array
-					items={props?.dataSource?.map((item: any) => item.key) as any}
+					items={props.dataSource && (props.dataSource.map((item: any) => item.key) as any)}
 					strategy={verticalListSortingStrategy}
 				>
 					{table}

@@ -7,6 +7,7 @@ import { initialize } from 'redux-form'
 import { compose } from 'redux'
 import { find } from 'lodash'
 import { useNavigate } from 'react-router-dom'
+import { arrayMove } from '@dnd-kit/sortable'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -22,12 +23,12 @@ import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
-import { getEmployees } from '../../reducers/employees/employeesActions'
+import { getEmployees, reorderEmployees } from '../../reducers/employees/employeesActions'
 import { RootState } from '../../reducers'
 import { getServices } from '../../reducers/services/serviceActions'
 
 // types
-import { IBreadcrumbs, SalonSubPageProps, Columns } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps, Columns, IEmployeesPayload } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-offline.svg'
@@ -205,12 +206,16 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const handleDrop = useCallback(
-		async (oldIndex: any, newIndex?: any) => {
-			console.log('oldIndex', oldIndex)
-			console.log('newIndex', newIndex)
+		async (oldIndex: number, newIndex: number) => {
 			try {
-				const employee = find(employees?.data?.employees, { orderIndex: oldIndex })
+				const employee = find(employees?.tableData, { orderIndex: oldIndex })
+				// oldIndex je v tomto pripade employee.orderIndex
 				if (employee?.id && oldIndex !== newIndex) {
+					// ordering v dnd libke je od 0 .. n ale na BE je od 1 ... n
+					const reorderedData = arrayMove(employees?.tableData, employee.orderIndex - 1, newIndex - 1)
+					// Akcia na update data v reduxe
+					dispatch(reorderEmployees(reorderedData))
+					// Update na BE
 					await patchReq(
 						`/api/b2b/admin/employees/{employeeID}/reorder`,
 						{ employeeID: employee?.id },
@@ -224,7 +229,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 				// eslint-disable-next-line no-console
 				console.error(e)
 			} finally {
-				// NOTE: V pripade ak BE reorder zlyha pouzi povodne radenie
+				// Data treba vzdy updatnut aj po uspesnom alebo neuspesom requeste. Aby sa pri dalsiom a dalsiom reorderi pracovalo s aktualne updatnutymi datami.
 				dispatch(
 					getEmployees({
 						page: query.page,
@@ -238,8 +243,9 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 				)
 			}
 		},
-		[dispatch, employees?.data?.employees, query.accountState, query.limit, query.order, query.page, query.search, query.serviceID, salonID]
+		[dispatch, employees.tableData, query.accountState, query.limit, query.order, query.page, query.search, query.serviceID, salonID]
 	)
+
 	return (
 		<>
 			<Row>

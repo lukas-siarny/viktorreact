@@ -50,6 +50,14 @@ export default (state = initState, action: IEmployeesActions) => {
 					options: action.payload.options
 				}
 			}
+		case EMPLOYEES.EMPLOYEES_REORDER:
+			return {
+				...state,
+				employees: {
+					...state.employees,
+					tableData: action.payload.tableData
+				}
+			}
 		// Employee
 		case EMPLOYEE.EMPLOYEE_LOAD_START:
 			return {

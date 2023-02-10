@@ -14,7 +14,7 @@ import CustomersFilter from './components/CustomersFilter'
 import UserAvatar from '../../components/AvatarComponents'
 
 // utils
-import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, normalizeQueryParams, formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
@@ -25,8 +25,6 @@ import { getCustomers } from '../../reducers/customers/customerActions'
 
 // types
 import { IBreadcrumbs, ISearchFilter, SalonSubPageProps, Columns } from '../../types/interfaces'
-
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 const CustomersPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
@@ -152,7 +150,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 					<div className='content-body'>
 						<Spin spinning={customers?.isLoading}>
 							<Permissions
-								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_CREATE]}
+								allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_CREATE]}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<CustomersFilter
 										onSubmit={handleSubmit}
@@ -198,4 +196,4 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(CustomersPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(CustomersPage)

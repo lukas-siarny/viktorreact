@@ -20,9 +20,9 @@ import { Paths } from '../../types/api'
 
 // utils
 import { patchReq } from '../../utils/request'
-import { FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 import { decodePrice, encodePrice } from '../../utils/helper'
-import Permissions, { withPermissions } from '../../utils/Permissions'
+import { withPermissions } from '../../utils/Permissions'
 import { history } from '../../utils/history'
 
 interface IParameterValue {
@@ -45,8 +45,6 @@ type ServiceEmployees = Paths.GetApiB2BAdminServicesServiceId.Responses.$200['se
 type ServiceParameterValues = NonNullable<Paths.GetApiB2BAdminServicesServiceId.Responses.$200['service']['serviceCategoryParameter']>['values']
 type ServicePatch = Paths.PatchApiB2BAdminServicesServiceId.RequestBody
 type ServiceParameterValuesPatch = ServicePatch['categoryParameterValues']
-
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 export const parseEmployeeCreateAndUpdate = (employees: any[]): any => {
 	return employees?.map((employee: any) => employee?.id)
@@ -240,25 +238,16 @@ const ServiceEditPage = (props: Props) => {
 		}
 	}
 	return (
-		<Permissions
-			allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_UPDATE]}
-			render={(hasPermission, { openForbiddenModal }) => (
-				<ServiceForm
-					backUrl={parentPath}
-					addEmployee={() => addEmployee(employees, form, dispatch)}
-					onSubmit={(formData: IServiceForm) => {
-						if (hasPermission) {
-							handleSubmit(formData)
-						} else {
-							openForbiddenModal()
-						}
-					}}
-					salonID={salonID}
-					serviceID={serviceID}
-				/>
-			)}
+		<ServiceForm
+			backUrl={parentPath}
+			addEmployee={() => addEmployee(employees, form, dispatch)}
+			onSubmit={(formData: IServiceForm) => {
+				handleSubmit(formData)
+			}}
+			salonID={salonID}
+			serviceID={serviceID}
 		/>
 	)
 }
 
-export default compose(withPermissions(permissions))(ServiceEditPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(ServiceEditPage)

@@ -20,7 +20,6 @@ import {
 	FORM,
 	getDayNameFromNumber,
 	SHORTCUT_DAYS_OPTIONS,
-	STRINGS,
 	UPDATE_EVENT_PERMISSIONS
 } from '../../../../utils/enums'
 import Permissions from '../../../../utils/Permissions'

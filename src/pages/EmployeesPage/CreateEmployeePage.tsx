@@ -8,7 +8,7 @@ import { map, get } from 'lodash'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { PERMISSION, SALON_PERMISSION, FORM, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { PERMISSION, FORM, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import { filterSalonRolesByPermission, getPrefixCountryCode } from '../../utils/helper'
@@ -32,8 +32,6 @@ import useBackUrl from '../../hooks/useBackUrl'
 // assets
 import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.svg'
 import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
-
-const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]
 
 const CreateEmployeePage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
@@ -185,4 +183,4 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(CreateEmployeePage)
+export default compose(withPermissions([PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]))(CreateEmployeePage)

@@ -22,7 +22,7 @@ import { Paths } from '../../types/api'
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { DELETE_BUTTON_ID, FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
 import { /* decodePrice, encodePrice, */ filterSalonRolesByPermission, formFieldID, hasAuthUserPermissionToEditRole } from '../../utils/helper'
 
@@ -50,8 +50,6 @@ export type ServiceData = {
 	name?: string
 	category?: string
 }
-
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 // TODO - for change duration and price in employee detail
 /* export const parseServicesForCreateAndUpdate = (oldServices: any[]) => {
@@ -353,7 +351,7 @@ const EmployeePage = (props: Props) => {
 						>
 							{isEmployeeExists ? (
 								<DeleteButton
-									permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_DELETE]}
+									permissions={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_DELETE]}
 									className={'w-full lg:w-auto lg:min-w-50 xl:min-w-60'}
 									onConfirm={deleteEmployee}
 									entityName={t('loc:zamestnanca')}
@@ -365,7 +363,7 @@ const EmployeePage = (props: Props) => {
 							<div className={'flex flex-col lg:flex-row gap-2'}>
 								{isProfileInActive && (
 									<Permissions
-										allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]}
+										allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]}
 										render={(hasPermission, { openForbiddenModal }) => (
 											<Button
 												type={'dashed'}
@@ -391,7 +389,7 @@ const EmployeePage = (props: Props) => {
 									/>
 								)}
 								<Permissions
-									allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_UPDATE]}
+									allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_UPDATE]}
 									render={(hasPermission, { openForbiddenModal }) => (
 										<Button
 											type={'primary'}
@@ -449,4 +447,4 @@ const EmployeePage = (props: Props) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(EmployeePage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(EmployeePage)

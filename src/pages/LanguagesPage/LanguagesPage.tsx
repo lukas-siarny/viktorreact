@@ -264,4 +264,4 @@ const LanguagesPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]))(LanguagesPage)
+export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(LanguagesPage)

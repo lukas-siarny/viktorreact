@@ -39,7 +39,7 @@ import { IBreadcrumbs, IDataUploadForm, Columns } from '../../types/interfaces'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
+const permissions: PERMISSION[] = [PERMISSION.NOTINO]
 
 enum TAB_KEYS {
 	ACTIVE = 'active',
@@ -67,6 +67,8 @@ const SalonsPage = () => {
 		() => data?.reduce((result, industry) => ({ ...result, [industry.id]: { image: industry.image?.resizedImages?.thumbnail, name: industry.name } }), {}) || {},
 		[data]
 	)
+
+	const isNotinoUser = useMemo(() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO]), [authUserPermissions])
 
 	useEffect(() => {
 		dispatch(getCategories())
@@ -116,8 +118,6 @@ const SalonsPage = () => {
 			assignedUserID: undefined
 		})
 	}
-
-	const isAdmin = useMemo(() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUserPermissions])
 
 	useEffect(() => {
 		let salonsQueries = {
@@ -287,7 +287,7 @@ const SalonsPage = () => {
 	}
 
 	// View
-	const breadcrumbs: IBreadcrumbs | undefined = isAdmin
+	const breadcrumbs: IBreadcrumbs | undefined = isNotinoUser
 		? {
 				items: [
 					{

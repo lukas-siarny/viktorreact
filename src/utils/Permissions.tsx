@@ -3,7 +3,7 @@
 import React, { Component, FC, useState } from 'react'
 import { connect, useSelector } from 'react-redux'
 import { bindActionCreators, compose } from 'redux'
-import { get, indexOf, some, isEmpty, partition } from 'lodash'
+import { get, indexOf, some } from 'lodash'
 import { Button, Modal, notification, Result } from 'antd'
 import { useTranslation } from 'react-i18next'
 
@@ -11,24 +11,29 @@ import * as UserActions from '../reducers/users/userActions'
 import { history } from './history'
 import { RootState } from '../reducers'
 import { PERMISSION, ADMIN_PERMISSIONS } from './enums'
-import { isEnumValue } from './helper'
-import { _Permissions } from '../types/interfaces'
 
-export const checkPermissions = (authUserPermissions: _Permissions = [], allowed: _Permissions = [], except: _Permissions = []) => {
-	if (except.length > 0 && some(except, (elem: any) => indexOf(authUserPermissions, elem) > -1)) {
+/**
+ * NOTE: by default are admin permissions allowed (SUPER_ADMIN, ADMIN). In other case use `except=ADMIN_PERMISSIONS`
+ * @param userPermissions permissions from users role and salons role
+ * @param allowed allowed permissions
+ * @param except excepted permissions
+ * @returns TRUE/FALSE
+ */
+export const checkPermissions = (userPermissions: PERMISSION[] = [], allowed: PERMISSION[] = [], except: PERMISSION[] = []) => {
+	if (except.length > 0 && some(except, (elem: any) => indexOf(userPermissions, elem) > -1)) {
 		return false
 	}
-	if (allowed.length > 0) {
-		if (some(allowed, (elem: any) => indexOf(authUserPermissions, elem) > -1)) {
-			return true
-		}
-		return false
+
+	const allowedPermissions = [...ADMIN_PERMISSIONS, ...allowed]
+
+	if (some(allowedPermissions, (elem: any) => indexOf(userPermissions, elem) > -1)) {
+		return true
 	}
-	return true
+	return false
 }
 
 export const withPermissions =
-	(allowed: _Permissions = [], except: _Permissions = []) =>
+	(allowed: PERMISSION[] = [], except: PERMISSION[] = []) =>
 	(WrappedComponent: any) => {
 		class WithPermissionsClass extends Component<any> {
 			_mounted = false
@@ -50,7 +55,7 @@ export const withPermissions =
 
 			init = async () => {
 				this._mounted = true
-				const { userActions, authUserPermissions } = this.props
+				const { userActions, authUserPermissions, salonPermissions } = this.props
 				let permissions
 				try {
 					const { data } = await userActions.getAuthUserProfile()
@@ -59,6 +64,7 @@ export const withPermissions =
 					permissions = authUserPermissions
 				}
 
+				permissions = [...permissions, ...(salonPermissions || [])]
 				if (!checkPermissions(permissions, allowed, except)) {
 					if (this._mounted) {
 						this.setState(
@@ -82,7 +88,8 @@ export const withPermissions =
 			}
 		}
 		const mapStateToProps = (state: RootState) => ({
-			authUserPermissions: state.user.authUser?.data?.uniqPermissions
+			authUserPermissions: state.user.authUser?.data?.uniqPermissions,
+			salonPermissions: state.selectedSalon.selectedSalon.data?.uniqPermissions
 		})
 
 		const mapDispatchToProps = (dispatch: any) => ({
@@ -94,27 +101,8 @@ export const withPermissions =
 
 type Props = {
 	render?: (hasPermission: boolean, object: any) => React.ReactNode
-	allowed?: _Permissions
-	except?: _Permissions
-}
-
-export const isAdmin = (authUserPermissions: _Permissions = []): boolean => checkPermissions(authUserPermissions, ADMIN_PERMISSIONS)
-
-export const permitted = (userPermissions: _Permissions = [], salonsPermissions: _Permissions = [], allowed: _Permissions = [], except: _Permissions = []): boolean => {
-	// split into SYSTEM (index 0) and SALON (index 1) permissions
-	const allowedPermissions = partition(allowed, (permission) => isEnumValue(permission, PERMISSION)) as _Permissions[]
-	const exceptedPermissions = partition(except, (permission) => isEnumValue(permission, PERMISSION)) as _Permissions[]
-
-	const hasSystemPermissions = checkPermissions(userPermissions, allowedPermissions[0], exceptedPermissions[0])
-
-	if (isEmpty(allowedPermissions[1]) && isEmpty(exceptedPermissions[1])) {
-		return hasSystemPermissions
-	}
-
-	const hasSalonPermissions = checkPermissions(salonsPermissions, allowedPermissions[1], exceptedPermissions[1])
-
-	// For system permissions SUPER_ADMIN and ADMIN are salons permissions ignored
-	return (hasSalonPermissions || isAdmin(userPermissions)) && hasSystemPermissions
+	allowed?: PERMISSION[]
+	except?: PERMISSION[]
 }
 
 export const ForbiddenModal: FC<{ visible: boolean; onCancel: () => void; item?: any }> = (props) => {
@@ -144,8 +132,9 @@ const Permissions: FC<Props> = (props) => {
 	const { render, allowed, except, children } = props
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
+	const salonPermission = selectedSalon?.uniqPermissions ?? []
 
-	const hasPermissions = permitted(authUserPermissions, selectedSalon?.uniqPermissions, allowed, except)
+	const hasPermissions = checkPermissions([...authUserPermissions, ...salonPermission], allowed, except) // permitted(authUserPermissions, selectedSalon?.uniqPermissions, allowed, except)
 
 	const [visibleModal, setVisibleModal] = useState(false)
 	const [t] = useTranslation()
@@ -161,7 +150,7 @@ const Permissions: FC<Props> = (props) => {
 					description: t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')
 				})
 			},
-			checkPermissions: (allowedPermissions: _Permissions) => checkPermissions(authUserPermissions, allowedPermissions)
+			checkPermissions: (allowedPermissions: PERMISSION[]) => checkPermissions(authUserPermissions, allowedPermissions)
 		})
 		const modal: any = <ForbiddenModal visible={visibleModal} onCancel={() => setVisibleModal(false)} item={item} />
 		return modal

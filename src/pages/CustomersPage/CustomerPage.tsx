@@ -20,7 +20,7 @@ import { RootState } from '../../reducers'
 
 // utils
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import { Paths } from '../../types/api'
@@ -37,8 +37,6 @@ type Props = SalonSubPageProps & {
 		customerID: string
 	}>
 }
-
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 const CustomerPage = (props: Props) => {
 	const [t] = useTranslation()
@@ -159,7 +157,7 @@ const CustomerPage = (props: Props) => {
 					<div className={'content-footer'}>
 						<div className={'flex flex-col gap-2 md:flex-row md:justify-between'}>
 							<DeleteButton
-								permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_DELETE]}
+								permissions={[PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_DELETE]}
 								className={'w-full md:w-auto md:min-w-50 xl:min-w-60'}
 								onConfirm={deleteCustomer}
 								entityName={t('loc:zákazníka')}
@@ -168,7 +166,7 @@ const CustomerPage = (props: Props) => {
 								id={formFieldID(FORM.CUSTOMER, DELETE_BUTTON_ID)}
 							/>
 							<Permissions
-								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_UPDATE]}
+								allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_UPDATE]}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
 										type={'primary'}
@@ -199,4 +197,4 @@ const CustomerPage = (props: Props) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(CustomerPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(CustomerPage)

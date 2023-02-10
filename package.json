@@ -1,6 +1,6 @@
 {
   "name": "notino_b2b_web",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "main": "src/index.ts",
   "repository": "git@bitbucket.org:GoodRequest/notino_b2b_web.git",
   "author": "Jan Cvencek <jan.cvencek@goodrequest.com>",
@@ -120,7 +120,7 @@
   },
   "devDependencies": {
     "@goodrequest/antd-form-fields": "0.0.3",
-    "@goodrequest/convert-translations-i18next": "1.0.7",
+    "@goodrequest/convert-translations-i18next": "1.0.9",
     "@goodrequest/eslint-config-typescript-react": "1.1.1",
     "@storybook/addon-actions": "6.5.12",
     "@storybook/addon-essentials": "6.5.12",

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { change, Field, FieldArray, FormSection, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
+import { change, Field, FieldArray, FormSection, InjectedFormProps, reduxForm, getFormValues, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Divider, Form, Row, Spin } from 'antd'
 import { forEach, includes, map } from 'lodash'
@@ -19,8 +19,9 @@ import CheckboxGroupNestedField from '../../IndustriesPage/components/CheckboxGr
 import { IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
-import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE } from '../../../utils/enums'
+import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, PERMISSION } from '../../../utils/enums'
 import { optionRenderNotiPinkCheckbox, showErrorNotification } from '../../../utils/helper'
+import Permissions from '../../../utils/Permissions'
 
 // assets
 import { ReactComponent as ChevronDown } from '../../../assets/icons/chevron-down.svg'
@@ -414,9 +415,29 @@ const ReservationSystemSettingsForm = (props: Props) => {
 
 			<div className={'content-footer'}>
 				<Row className='justify-end'>
-					<Button type={'primary'} className={'noti-btn'} htmlType={'submit'} icon={<EditIcon />} disabled={submitting || pristine} loading={submitting}>
-						{t('loc:Uložiť')}
-					</Button>
+					<Permissions
+						allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
+						render={(hasPermission, { openForbiddenModal }) => (
+							<Button
+								type={'primary'}
+								className={'noti-btn'}
+								htmlType={'submit'}
+								icon={<EditIcon />}
+								disabled={submitting || pristine}
+								loading={submitting}
+								onClick={(e) => {
+									if (hasPermission) {
+										dispatch(submit(FORM.RESEVATION_SYSTEM_SETTINGS))
+									} else {
+										e.preventDefault()
+										openForbiddenModal()
+									}
+								}}
+							>
+								{t('loc:Uložiť')}
+							</Button>
+						)}
+					/>
 				</Row>
 			</div>
 		</Form>

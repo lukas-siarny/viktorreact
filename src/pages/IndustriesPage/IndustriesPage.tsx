@@ -109,4 +109,4 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]))(IndustriesPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(IndustriesPage)

@@ -55,6 +55,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 				</button>
 			</header>
 			<Divider className={'m-0'} />
+			{/* 100vh - 100px - aby bol zabezpecny nejaky spacing od vrchu a spodku obrazovky */}
 			<main className={'px-4 overflow-y-auto'} style={{ maxHeight: 'calc(100vh - 100px)' }}>
 				{customer && (
 					<>
@@ -106,14 +107,14 @@ const PopoverContent: FC<ContentProps> = (props) => {
 
 type ICalendarReservationPopoverProps = {}
 
+const overlayClassName = 'nc-customer-detail-popover'
+
 const CalendarDetailPopover: FC<ICalendarReservationPopoverProps> = () => {
 	const [isOpen, setIsOpen] = useState(false)
 	const dispatch = useDispatch()
 
 	const customer = useSelector((state: RootState) => state.customers.customer)
 	const reservationFormValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
-
-	const overlayClassName = 'nc-customer-detail-popover'
 
 	const openPopover = async () => {
 		if (reservationFormValues?.customer?.value && reservationFormValues.customer.value !== customer?.data?.customer.id) {
@@ -148,7 +149,7 @@ const CalendarDetailPopover: FC<ICalendarReservationPopoverProps> = () => {
 			document.removeEventListener('mousedown', listener)
 			document.removeEventListener('touchstart', listener)
 		}
-	}, [isOpen, overlayClassName])
+	}, [isOpen])
 
 	if (!reservationFormValues?.customer?.value) {
 		return null

@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash'
 
 // utils
 import { FORM, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
-import { showErrorNotification } from '../../../utils/helper'
+import { showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
@@ -80,21 +80,21 @@ const EmployeeForm: FC<Props> = (props) => {
 							phoneName={'phone'}
 							formName={FORM.EMPLOYEE}
 						/>
-						<Field
-							className={'pb-0'}
-							component={InputNumberField}
-							label={t('loc:Poradie kolegu')}
-							placeholder={t('loc:Zadajte poradie')}
-							name='orderIndex'
-							precision={0}
-							step={1}
-							min={0}
-							size={'large'}
-							required
-						/>
 					</div>
 					{isEdit && (
 						<div>
+							<Field
+								component={InputNumberField}
+								label={t('loc:Poradie kolegu')}
+								placeholder={t('loc:Zadajte poradie')}
+								name='orderIndex'
+								precision={0}
+								step={1}
+								min={0}
+								size={'large'}
+								validate={[validationRequiredNumber]}
+								required
+							/>
 							<h3 className={'mb-0 mt-0 flex items-center'}>
 								<ServiceIcon className={'text-notino-black mr-2'} /> {t('loc:Priradené služby')}
 							</h3>

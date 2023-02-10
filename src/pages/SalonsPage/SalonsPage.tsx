@@ -21,7 +21,7 @@ import RejectedSalonSuggestions from './components/RejectedSalonSuggestions'
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { formatDateByLocale, getAssignedUserLabel, getLinkWithEncodedBackUrl, normalizeDirectionKeys, normalizeSearchQueryParams, setOrder } from '../../utils/helper'
+import { formatDateByLocale, getAssignedUserLabel, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { postReq } from '../../utils/request'
 import { getSalonTagChanges, getSalonTagCreateType, getSalonTagPublished, getSalonTagSourceType } from './components/salonUtils'
 
@@ -41,7 +41,7 @@ import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCount
 // hooks
 import useQueryParams, { ArrayParam, BooleanParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
+const permissions: PERMISSION[] = [PERMISSION.NOTINO]
 
 enum TAB_KEYS {
 	ACTIVE = 'active',
@@ -69,6 +69,8 @@ const SalonsPage = () => {
 		() => data?.reduce((result, industry) => ({ ...result, [industry.id]: { image: industry.image?.resizedImages?.thumbnail, name: industry.name } }), {}) || {},
 		[data]
 	)
+
+	const isNotinoUser = useMemo(() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO]), [authUserPermissions])
 
 	useEffect(() => {
 		dispatch(getCategories())
@@ -120,8 +122,6 @@ const SalonsPage = () => {
 			assignedUserID: undefined
 		})
 	}
-
-	const isAdmin = useMemo(() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUserPermissions])
 
 	useEffect(() => {
 		let salonsQueries = {
@@ -291,7 +291,7 @@ const SalonsPage = () => {
 	}
 
 	// View
-	const breadcrumbs: IBreadcrumbs | undefined = isAdmin
+	const breadcrumbs: IBreadcrumbs | undefined = isNotinoUser
 		? {
 				items: [
 					{

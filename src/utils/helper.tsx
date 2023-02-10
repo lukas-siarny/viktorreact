@@ -42,7 +42,6 @@ import { ArgsProps } from 'antd/es/notification/interface'
 import cx from 'classnames'
 import showNotifications from './tsxHelpers'
 import {
-	ADMIN_PERMISSIONS,
 	BYTE_MULTIPLIER,
 	DATE_TIME_PARSER_DATE_FORMAT,
 	DATE_TIME_PARSER_FORMAT,
@@ -64,7 +63,7 @@ import {
 	NOTIFICATION_TYPE,
 	QUERY_LIMIT,
 	RESERVATION_STATE,
-	SALON_PERMISSION,
+	PERMISSION,
 	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_SOURCE_TYPE
 } from './enums'
@@ -376,20 +375,6 @@ export const normalizeQueryParams = (queryParams: any) =>
 		return queryParam
 	})
 
-// NOTE: Tuto normalize funkciu treba volat vsade tam kde sa nastavuju query params cez setSearchParams a je potencialne mozne ze sa resetuju tieto parametre na null lebo '' alebo undefined
-// Taketo params nemozu prejst do URL lebo react router ich nevie sam zmazat ako to vedel use query params
-// Staci volat len pri filtrovani v onSubmit metodach pri tabulkach a paginacii neni potrebne toto noramalizovanie
-export const normalizeSearchQueryParams = (queryParams: any) => {
-	return forEach(queryParams, (queryParam, key) => {
-		// 'null' je pre pripad ze sa v queryPrams nastavi default value paramName: '' a tento param sa potom vyresetuje tak sa nastavi nie na null ale na 'null'
-		if (queryParam === 'null' || queryParam === '' || queryParam === undefined || queryParam === null || queryParam === []) {
-			// Takyto non valid query param treba zmazat nestaci ho nastavit na undefined!!!
-			// eslint-disable-next-line no-param-reassign
-			delete queryParams[key]
-		}
-		return queryParams
-	})
-}
 // Number validators
 export const validationNumber = (value: string) => !isNaturalNonZero(value) && i18next.t('loc:Nie je validná číselná hodnota')
 export const validationDecimalNumber = (value: number) => isNotNumeric(value) && i18next.t('loc:Nie je validná číselná hodnota')
@@ -1035,7 +1020,7 @@ export const hasAuthUserPermissionToEditRole = (
 		return result
 	}
 
-	if (authUser.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+	if (authUser.uniqPermissions?.some((permission) => [PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
 		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
 		return {
 			hasPermission: true,
@@ -1069,7 +1054,7 @@ export const hasAuthUserPermissionToEditRole = (
 			return result
 		}
 		// it's possible to edit role only if you have permission to edit
-		if (authUserSalonRole?.permissions.find((permission) => permission.name === (SALON_PERMISSION.USER_ROLE_EDIT as any))) {
+		if (authUserSalonRole?.permissions.find((permission) => permission.name === PERMISSION.EMPLOYEE_ROLE_UPDATE)) {
 			return {
 				hasPermission: true,
 				tooltip: null
@@ -1085,7 +1070,7 @@ export const filterSalonRolesByPermission = (salonID?: string, authUser?: IAuthU
 		return salonRoles
 	}
 
-	if (authUser?.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+	if (authUser?.uniqPermissions?.some((permission) => [PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
 		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
 		// they automatically see all options
 		return salonRoles

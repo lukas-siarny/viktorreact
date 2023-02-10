@@ -23,7 +23,7 @@ import validateServiceForm from './validateServiceForm'
 
 // utils
 import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
-import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, SALON_PERMISSION, STRINGS } from '../../../utils/enums'
+import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, STRINGS } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import searchWrapper from '../../../utils/filters'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
@@ -95,7 +95,7 @@ const ServiceForm: FC<Props> = (props) => {
 	)
 	return (
 		<Permissions
-			allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
+			allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_UPDATE]}
 			render={(hasPermission) => (
 				<div className='content-body small'>
 					<Spin spinning={isLoading}>
@@ -192,7 +192,14 @@ const ServiceForm: FC<Props> = (props) => {
 												</Row>
 												<Row gutter={8} align='top' justify='center'>
 													<Col className={'mt-5'} span={8}>
-														<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={'variablePrice'} size={'middle'} />
+														<Field
+															disabled={!hasPermission}
+															className={'mb-0'}
+															component={SwitchField}
+															label={t('loc:Variabilná cena')}
+															name={'variablePrice'}
+															size={'middle'}
+														/>
 													</Col>
 													<Col span={variablePrice ? 8 : 16}>
 														<Field
@@ -269,7 +276,7 @@ const ServiceForm: FC<Props> = (props) => {
 																className={'pb-0'}
 																component={SwitchField}
 																label={t('loc:Automatické potvrdenie')}
-																name={'autoApproveReservatons'}
+																name={'autoApproveReservations'}
 																size={'middle'}
 															/>
 															<div className={'text-xs text-notino-grayDark mt-2'}>
@@ -306,8 +313,9 @@ const ServiceForm: FC<Props> = (props) => {
 											mode={'multiple'}
 											showSearch
 											allowInfinityScroll
+											disabled={!hasPermission}
+											tooltipSelect={!hasPermission ? t('loc:Pre túto akciu nemáte dostatočné oprávnenia.') : null}
 										/>
-
 										<Button
 											type={'primary'}
 											size={'middle'}
@@ -325,6 +333,7 @@ const ServiceForm: FC<Props> = (props) => {
 										isEmployeeDetail={false}
 										setVisibleServiceEditModal={setVisibleServiceEditModal}
 										disabledEditButton={!pristine}
+										disabled={!hasPermission}
 									/>
 									{hasPermission && (
 										<div className={'content-footer pt-0'} id={'content-footer-container'}>
@@ -335,7 +344,7 @@ const ServiceForm: FC<Props> = (props) => {
 														getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 														onConfirm={onConfirmDelete}
 														entityName={t('loc:službu')}
-														permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_DELETE]}
+														permissions={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_DELETE]}
 													/>
 												) : null}
 

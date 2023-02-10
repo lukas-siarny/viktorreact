@@ -17,7 +17,7 @@ import TooltipEllipsis from '../../components/TooltipEllipsis'
 import UserAvatar from '../../components/AvatarComponents'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, NOTIFICATION_TYPE } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, NOTIFICATION_TYPE } from '../../utils/enums'
 import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
@@ -36,8 +36,6 @@ import { patchReq } from '../../utils/request'
 
 // hooks
 import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
-
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
@@ -248,7 +246,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 					<div className='content-body'>
 						<Spin spinning={employees?.isLoading}>
 							<Permissions
-								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]}
+								allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<EmployeesFilter
 										createEmployee={() => {
@@ -295,4 +293,4 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(EmployeesPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(EmployeesPage)

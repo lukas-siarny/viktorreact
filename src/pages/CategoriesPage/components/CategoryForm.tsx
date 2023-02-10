@@ -59,7 +59,7 @@ const fixLength1500 = validationString(VALIDATION_MAX_LENGTH.LENGTH_1500)
 
 type Props = InjectedFormProps<ICategoryForm, ComponentProps> & ComponentProps
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]
+const permissions: PERMISSION[] = [PERMISSION.ENUM_EDIT]
 
 const CategoryForm: FC<Props> = (props) => {
 	const [t] = useTranslation()

@@ -5,7 +5,7 @@ import { EventDropArg, EventInput } from '@fullcalendar/core'
 
 // utils
 import {
-	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT,
+	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT,
 	CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, DAY,
 	RESERVATION_SOURCE_TYPE, SERVICE_TYPE, RESERVATION_STATE, RESERVATION_PAYMENT_METHOD, CONFIRM_MODAL_DATA_TYPE, PARAMETER_TYPE
 } from '../utils/enums'
@@ -218,7 +218,7 @@ export interface IServiceForm {
 	employees: EmployeeServiceData[]
 	settings: {
 		enabledB2cReservations: boolean
-		autoApproveReservatons: boolean
+		autoApproveReservations: boolean
 	}
 }
 
@@ -507,10 +507,8 @@ export interface SalonSubPageProps {
 	parentPath?: string
 }
 
-export type _Permissions = (PERMISSION | SALON_PERMISSION)[]
-
 export interface IPermissions {
-	uniqPermissions?: _Permissions
+	uniqPermissions?: PERMISSION[]
 }
 
 export interface ICurrency {
@@ -643,7 +641,7 @@ export interface IEmployeePayload {
 export type EmployeeService = NonNullable<IEmployeePayload['data']>['employee']['categories'][0]['children'][0]['children'][0]
 
 export interface SalonPageProps {
-	isAdmin: boolean
+	isNotinoUser: boolean
 	backUrl?: string
 	phonePrefixCountryCode: string
 	authUser: IAuthUserPayload & ILoadingAndFailure

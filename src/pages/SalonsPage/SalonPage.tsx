@@ -11,7 +11,7 @@ import SalonEditPage from './SalonEditPage'
 import { getPrefixCountryCode } from '../../utils/helper'
 
 // enums
-import { ENUMERATIONS_KEYS, FORM, NEW_SALON_ID } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, NEW_SALON_ID, PERMISSION } from '../../utils/enums'
 
 // reducers
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
@@ -20,7 +20,7 @@ import { getSalonLanguages } from '../../reducers/languages/languagesActions'
 // types
 import { SalonPageProps, SalonSubPageProps } from '../../types/interfaces'
 import { RootState } from '../../reducers'
-import { isAdmin } from '../../utils/Permissions'
+import { checkPermissions } from '../../utils/Permissions'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
@@ -39,7 +39,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 
-	const isAuthUserAdmin = useMemo(() => isAdmin(authUser.data?.uniqPermissions), [authUser])
+	const isNotinoUser = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO]), [authUser])
 
 	const isNewSalon = salonID === NEW_SALON_ID
 
@@ -56,7 +56,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	}, [dispatch])
 
 	const commonProps: SalonPageProps = {
-		isAdmin: isAuthUserAdmin,
+		isNotinoUser,
 		backUrl,
 		phonePrefixCountryCode,
 		authUser,

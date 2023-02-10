@@ -28,7 +28,7 @@ import { IBreadcrumbs, Columns } from '../../types/interfaces'
 // hooks
 import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
+const permissions: PERMISSION[] = [PERMISSION.ENUM_EDIT]
 
 const SupportContactsPage = () => {
 	const [t] = useTranslation()

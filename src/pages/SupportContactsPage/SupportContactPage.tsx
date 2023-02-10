@@ -48,7 +48,7 @@ import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
 type SupportContactPatch = Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.RequestBody
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
+const permissions: PERMISSION[] = [PERMISSION.ENUM_EDIT]
 
 type Props = {}
 

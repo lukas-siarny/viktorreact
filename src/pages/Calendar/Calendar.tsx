@@ -29,7 +29,8 @@ import {
 	RESERVATION_STATE,
 	CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE,
 	ADMIN_PERMISSIONS,
-	CALENDAR_DAY_EVENTS_LIMIT
+	CALENDAR_DAY_EVENTS_LIMIT,
+	CANEL_TOKEN_MESSAGES
 } from '../../utils/enums'
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { cancelGetTokens, deleteReq, patchReq, postReq } from '../../utils/request'
@@ -109,8 +110,6 @@ const CALENDAR_VIEWS = Object.keys(CALENDAR_VIEW)
 const CALENDAR_EVENTS_VIEW_TYPES = Object.keys(CALENDAR_EVENTS_VIEW_TYPE)
 const GET_RESERVATIONS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.RESERVATIONS)
 const GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS)
-
-// const cancelGetTokens = {} as { [key: string]: CancelTokenSource }
 
 const Calendar: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath = '' } = props
@@ -260,9 +259,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const initialScroll = useRef(false)
 	const scrollToDateTimeout = useRef<any>(null)
 
-	const canceledReservationRequest = useRef(false)
-	const canceledShiftTimeOffRequest = useRef(false)
-
 	const setRangeInformationForMonthlyView = (date: string) => {
 		setMonthlyViewFullRange(getSelectedDateRange(CALENDAR_VIEW.MONTH, date, true))
 	}
@@ -339,15 +335,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 		setQuery({ ...query, eventsViewType: newEventsViewType, sidebarView: undefined, eventId: undefined })
 		if (newEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF && typeof cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY] !== typeof undefined) {
-			cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY].cancel('Operation canceled due to new request.')
-			canceledReservationRequest.current = true
+			cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY].cancel(CANEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
 		} else if (
 			validCalendarView === CALENDAR_VIEW.MONTH &&
 			newEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION &&
 			typeof cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY] !== typeof undefined
 		) {
-			cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY].cancel('Operation canceled due to new request.')
-			canceledShiftTimeOffRequest.current = true
+			cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY].cancel(CANEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
 		}
 	}
 
@@ -409,15 +403,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				}
 			} else if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
 				await dispatch(dispatchGetShiftsTimeOff)
-			}
-			// v tomto pripade bol request zruseny bez toho, aby pokracoval dalsi request, tym padom je potrebne zrusit loading state
-			if (canceledReservationRequest.current) {
-				dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType: CALENDAR_EVENTS_KEYS.RESERVATIONS })
-				canceledReservationRequest.current = false
-			}
-			if (canceledShiftTimeOffRequest.current) {
-				dispatch({ type: EVENTS.EVENTS_LOAD_FAIL, enumType: CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS })
-				canceledShiftTimeOffRequest.current = false
 			}
 		},
 

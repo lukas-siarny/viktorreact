@@ -17,6 +17,7 @@ import { RootState } from '../../../reducers'
 import InputField from '../../../atoms/InputField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
 import SelectField from '../../../atoms/SelectField'
+import InputNumberField from '../../../atoms/InputNumberField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
@@ -78,6 +79,18 @@ const EmployeeForm: FC<Props> = (props) => {
 							prefixName={'phonePrefixCountryCode'}
 							phoneName={'phone'}
 							formName={FORM.EMPLOYEE}
+						/>
+						<Field
+							className={'pb-0'}
+							component={InputNumberField}
+							label={t('loc:Poradie kolegu')}
+							placeholder={t('loc:Zadajte poradie')}
+							name='orderIndex'
+							precision={0}
+							step={1}
+							min={0}
+							size={'large'}
+							required
 						/>
 					</div>
 					{isEdit && (

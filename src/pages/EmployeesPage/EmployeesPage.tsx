@@ -116,9 +116,6 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const columns: Columns = [
-		// {
-		// 	key: 'sort'
-		// },
 		{
 			title: t('loc:Meno'),
 			dataIndex: 'fullName',

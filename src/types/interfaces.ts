@@ -417,6 +417,7 @@ export interface IEmployeeForm {
 	avatar?: any
 	role: number
 	hasActiveAccount?: boolean
+	orderIndex?: number
 }
 
 export interface ICosmeticForm {

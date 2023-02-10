@@ -28,8 +28,6 @@ import { IBreadcrumbs, Columns } from '../../types/interfaces'
 // hooks
 import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_BROWSING]
-
 const UsersPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -178,7 +176,7 @@ const UsersPage = () => {
 					<div className='content-body'>
 						<Spin spinning={users?.isLoading}>
 							<Permissions
-								allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_CREATE]}
+								allowed={[PERMISSION.USER_CREATE]}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<AdminUsersFilter
 										createUser={() => {
@@ -223,4 +221,4 @@ const UsersPage = () => {
 	)
 }
 
-export default compose(withPermissions(permissions))(UsersPage)
+export default compose(withPermissions([PERMISSION.USER_BROWSING]))(UsersPage)

@@ -18,7 +18,7 @@ import { setSelectedCountry } from '../reducers/selectedCountry/selectedCountryA
 
 // utils
 import Permissions from '../utils/Permissions'
-import { FORM, PAGE, PERMISSION } from '../utils/enums'
+import { ADMIN_PERMISSIONS, FORM, PAGE, PERMISSION } from '../utils/enums'
 
 // assets
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon.svg'
@@ -162,6 +162,7 @@ const MainLayout: FC<Props> = (props) => {
 			<Layout>
 				<Permissions
 					allowed={[PERMISSION.PARTNER]}
+					except={[...ADMIN_PERMISSIONS]}
 					render={(hasPermission) =>
 						(hasPermission || !!salonID) && (
 							<Header className='shadow-md bg-notino-white sticky top-0 px-4 flex items-center w-full z-40' id={'noti-header'}>
@@ -188,7 +189,7 @@ const MainLayout: FC<Props> = (props) => {
 					}
 				/>
 				<Permissions
-					allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
+					allowed={[PERMISSION.NOTINO]}
 					render={(hasPermission) =>
 						hasPermission &&
 						page === PAGE.HOME &&

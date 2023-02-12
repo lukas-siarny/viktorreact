@@ -7,10 +7,18 @@ import { find, map } from 'lodash'
 import { ThunkResult } from '../index'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { CalendarEvent, ICalendarEventsPayload, IPaginationQuery, ISearchable, ICalendarEventDetailPayload, ICalendarDayEvents } from '../../types/interfaces'
+import {
+	CalendarEvent,
+	ICalendarEventsPayload,
+	IPaginationQuery,
+	ISearchable,
+	ICalendarEventDetailPayload,
+	ICalendarDayEvents,
+	ICalendarMonthlyReservationsPayload
+} from '../../types/interfaces'
 
 // enums
-import { EVENTS, EVENT_DETAIL, SET_DAY_DETAIL_DATE, UPDATE_EVENT, SET_DAY_EVENTS, RESERVATIONS, SET_IS_REFRESHING_EVENTS } from './calendarTypes'
+import { EVENTS, EVENT_DETAIL, MONTHLY_RESERVATIONS, SET_DAY_EVENTS, RESERVATIONS, SET_IS_REFRESHING_EVENTS } from './calendarTypes'
 import {
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_EVENTS_KEYS,
@@ -19,7 +27,9 @@ import {
 	RESERVATION_STATE,
 	RESERVATION_SOURCE_TYPE,
 	RESERVATION_PAYMENT_METHOD,
-	CANEL_TOKEN_MESSAGES
+	CANEL_TOKEN_MESSAGES,
+	MONTHLY_RESERVATIONS_KEY,
+	CALENDAR_DATE_FORMAT
 } from '../../utils/enums'
 
 // utils
@@ -30,6 +40,9 @@ import { compareAndSortDayEvents } from '../../pages/Calendar/calendarHelpers'
 // redux
 import { clearEvent } from '../virtualEvent/virtualEventActions'
 
+import fakeMonthlyEvents from './fakeMonthlyEvents'
+
+// query params types
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
 
 interface IGetSalonReservationsQueryParams extends IPaginationQuery {
@@ -52,6 +65,15 @@ interface ICalendarEventsQueryParams {
 	reservationStates?: (string | null)[] | null
 }
 
+interface ICalendarMonthlyReservationsQueryParams {
+	salonID: string
+	start: string
+	end: string
+	employeeIDs?: (string | null)[] | null
+	categoryIDs?: (string | null)[] | null
+	reservationStates?: (string | null)[] | null
+}
+
 interface ICalendarReservationsQueryParams {
 	salonID: string
 	start: string
@@ -68,11 +90,16 @@ interface ICalendarShiftsTimeOffQueryParams {
 	employeeIDs?: (string | null)[] | null
 }
 
-export interface ISetDayDetailPayload {
-	date: string | null
-}
+// action types
+export type ICalendarActions =
+	| IResetStore
+	| IGetCalendarEvents
+	| IGetCalendarMonthlyViewReservations
+	| IGetCalendarEventDetail
+	| ISetIsRefreshingEvents
+	| ISetDayEvents
+	| IGetSalonReservations
 
-export type ICalendarActions = IResetStore | IGetCalendarEvents | IGetCalendarEventDetail | ISetIsRefreshingEvents | ISetDayDetailDay | ISetDayEvents | IGetSalonReservations
 export interface ISalonReservationsPayload extends ISearchable<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200> {
 	tableData: ISalonReservationsTableData[]
 }
@@ -83,6 +110,11 @@ interface IGetCalendarEvents {
 	payload: ICalendarEventsPayload
 }
 
+interface IGetCalendarMonthlyViewReservations {
+	type: MONTHLY_RESERVATIONS
+	payload: ICalendarMonthlyReservationsPayload
+}
+
 interface IGetCalendarEventDetail {
 	type: EVENT_DETAIL
 	payload: ICalendarEventDetailPayload
@@ -91,11 +123,6 @@ interface IGetCalendarEventDetail {
 interface ISetIsRefreshingEvents {
 	type: typeof SET_IS_REFRESHING_EVENTS
 	payload: boolean
-}
-
-interface ISetDayDetailDay {
-	type: typeof SET_DAY_DETAIL_DATE
-	payload: ISetDayDetailPayload
 }
 
 interface ISetDayEvents {
@@ -121,9 +148,12 @@ export interface IGetSalonReservations {
 }
 
 const storedPreviousParams: any = {
+	[MONTHLY_RESERVATIONS_KEY]: {},
 	[CALENDAR_EVENTS_KEYS.RESERVATIONS]: {},
 	[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS]: {}
 }
+
+export const getCalendarEventsCancelTokenKey = (enumType: CALENDAR_EVENTS_KEYS) => `calendar-events-${enumType}`
 
 export const setDayEvents =
 	(dayEvents: ICalendarDayEvents): ThunkResult<Promise<ICalendarDayEvents>> =>
@@ -131,8 +161,6 @@ export const setDayEvents =
 		dispatch({ type: SET_DAY_EVENTS, payload: dayEvents })
 		return dayEvents
 	}
-
-export const getCalendarEventsCancelTokenKey = (enumType: CALENDAR_EVENTS_KEYS) => `calendar-events-${enumType}`
 
 export const createMultiDayEvents = (event: CalendarEvent, queryParamsStart: string, queryParamsEnd: string, pushToArray = true, multiDayEventsObject?: ICalendarDayEvents) => {
 	const eventStartStartOfDay = dayjs(event.start.date).startOf('day')
@@ -296,15 +324,6 @@ export const getCalendarEvents =
 				data: eventsDayLimit ? eventsWithDayLimit : editedEvents
 			}
 
-			if (storePreviousParams) {
-				storedPreviousParams[enumType] = {
-					queryParams,
-					splitMultidayEventsIntoOneDayEvents,
-					clearVirtualEvent,
-					eventsDayLimit
-				}
-			}
-
 			dispatch({ type: EVENTS.EVENTS_LOAD_DONE, enumType, payload })
 		} catch (err) {
 			if (axios.isCancel(err) && (err as any)?.message === CANEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST) {
@@ -315,6 +334,15 @@ export const getCalendarEvents =
 			}
 			// eslint-disable-next-line no-console
 			console.error(err)
+		}
+
+		if (storePreviousParams) {
+			storedPreviousParams[enumType] = {
+				queryParams,
+				splitMultidayEventsIntoOneDayEvents,
+				clearVirtualEvent,
+				eventsDayLimit
+			}
 		}
 
 		if (clearVirtualEvent) {
@@ -370,6 +398,112 @@ export const clearCalendarReservations = (): ThunkResult<Promise<void>> => clear
 
 export const clearCalendarShiftsTimeoffs = (): ThunkResult<Promise<void>> => clearCalendarEvents(CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS)
 
+export const getCalendarMonthlyViewReservations =
+	(queryParams: ICalendarMonthlyReservationsQueryParams, clearVirtualEvent = true, storePreviousParams = true): ThunkResult<Promise<ICalendarMonthlyReservationsPayload>> =>
+	async (dispatch) => {
+		let payload = {} as ICalendarMonthlyReservationsPayload
+		try {
+			const queryParamsEditedForRequest = {
+				...queryParams
+			}
+
+			dispatch({ type: MONTHLY_RESERVATIONS.MONTHLY_RESERVATIONS_LOAD_START })
+
+			setTimeout(() => {
+				const { data } = fakeMonthlyEvents
+
+				const employees = {} as any
+				data.employees.forEach((employee) => {
+					employees[employee.id] = employee
+				})
+
+				const editedData = Object.entries(data.calendarEvents).reduce((acc, [key, value]) => {
+					return {
+						...acc,
+						[dayjs(key).format(CALENDAR_DATE_FORMAT.QUERY)]: value.map((day) => ({
+							id: day.id,
+							employee: employees[day.employeeId],
+							eventsCount: day.eventsCount,
+							eventsDuration: day.eventsDuration
+						}))
+					}
+				}, {} as ICalendarMonthlyReservationsPayload['data'])
+
+				payload = {
+					data: editedData
+				}
+				dispatch({ type: MONTHLY_RESERVATIONS.MONTHLY_RESERVATIONS_LOAD_DONE, payload })
+			}, 300)
+		} catch (err) {
+			if (axios.isCancel(err) && (err as any)?.message === CANEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST) {
+				// Request bol preruseny novsim requestom, tym padom chceme, aby loading state pokracoval
+				dispatch({ type: MONTHLY_RESERVATIONS.MONTHLY_RESERVATIONS_LOAD_START })
+			} else {
+				dispatch({ type: MONTHLY_RESERVATIONS.MONTHLY_RESERVATIONS_LOAD_FAIL })
+			}
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		if (storePreviousParams) {
+			storedPreviousParams[MONTHLY_RESERVATIONS_KEY] = {
+				queryParams,
+				clearVirtualEvent
+			}
+		}
+
+		if (clearVirtualEvent) {
+			dispatch(clearEvent())
+		}
+
+		return payload
+	}
+
+export const refreshEvents =
+	(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE, isMonthlyView = false): ThunkResult<Promise<void>> =>
+	async (dispatch) => {
+		const reservation = storedPreviousParams[CALENDAR_EVENTS_KEYS.RESERVATIONS]
+		const shiftsTimeOff = storedPreviousParams[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS]
+		const monthlyReservations = storedPreviousParams[MONTHLY_RESERVATIONS_KEY]
+
+		try {
+			dispatch({ type: SET_IS_REFRESHING_EVENTS, payload: true })
+			const dispatchShiftsTimeOff = getCalendarShiftsTimeoff(
+				shiftsTimeOff.queryParams,
+				shiftsTimeOff.splitMultidayEventsIntoOneDayEvents,
+				shiftsTimeOff.clearVirtualEvent,
+				true,
+				shiftsTimeOff.eventsDayLimit
+			)
+
+			if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
+				if (isMonthlyView) {
+					await dispatch(getCalendarMonthlyViewReservations(monthlyReservations.queryParams, monthlyReservations.clearEvent, true))
+				} else {
+					await Promise.all([
+						dispatch(
+							getCalendarReservations(
+								reservation.queryParams,
+								reservation.splitMultidayEventsIntoOneDayEvents,
+								reservation.clearVirtualEvent,
+								true,
+								reservation.eventsDayLimit
+							)
+						),
+						dispatch(dispatchShiftsTimeOff)
+					])
+				}
+			} else if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
+				await dispatch(dispatchShiftsTimeOff)
+			}
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		} finally {
+			dispatch({ type: SET_IS_REFRESHING_EVENTS, payload: false })
+		}
+	}
+
 export const getCalendarEventDetail =
 	(salonID: string, calendarEventID: string): ThunkResult<Promise<ICalendarEventDetailPayload>> =>
 	async (dispatch) => {
@@ -392,78 +526,6 @@ export const getCalendarEventDetail =
 
 		return payload
 	}
-
-export const updateCalendarEvent =
-	(updatedEvent: CalendarEvent): ThunkResult<Promise<CalendarEvent[]>> =>
-	async (dispatch, getState) => {
-		const events = getState().calendar.events.data || []
-		const newEvents = events.map((event) => {
-			if (event.id === updatedEvent.id) {
-				return { ...event, ...updatedEvent }
-			}
-			return event
-		})
-
-		dispatch({ type: UPDATE_EVENT, newEvents })
-		return newEvents
-	}
-
-export const refreshEvents =
-	(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE, isMonthlyView = false): ThunkResult<Promise<void>> =>
-	async (dispatch) => {
-		const reservation = storedPreviousParams[CALENDAR_EVENTS_KEYS.RESERVATIONS]
-		const shiftsTimeOff = storedPreviousParams[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS]
-
-		try {
-			dispatch({ type: SET_IS_REFRESHING_EVENTS, payload: true })
-			const dispatchShiftsTimeOff = getCalendarShiftsTimeoff(
-				shiftsTimeOff.queryParams,
-				shiftsTimeOff.splitMultidayEventsIntoOneDayEvents,
-				shiftsTimeOff.clearVirtualEvent,
-				true,
-				shiftsTimeOff.eventsDayLimit
-			)
-
-			if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-				const dispatchReservations = getCalendarReservations(
-					reservation.queryParams,
-					reservation.splitMultidayEventsIntoOneDayEvents,
-					reservation.clearVirtualEvent,
-					true,
-					reservation.eventsDayLimit
-				)
-
-				if (isMonthlyView) {
-					await dispatch(dispatchReservations)
-				} else {
-					await Promise.all([dispatch(dispatchReservations), dispatch(dispatchShiftsTimeOff)])
-				}
-			} else if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
-				await dispatch(dispatchShiftsTimeOff)
-			}
-		} catch (e) {
-			// eslint-disable-next-line no-console
-			console.error(e)
-		} finally {
-			dispatch({ type: SET_IS_REFRESHING_EVENTS, payload: false })
-		}
-	}
-
-export const setDayDetailDate =
-	(date: string | null): ThunkResult<Promise<void>> =>
-	async (dispatch) => {
-		dispatch({ type: SET_DAY_DETAIL_DATE, payload: { date } })
-	}
-
-export const getDayDetialEvents = (
-	date: string,
-	queryParams: Omit<ICalendarEventsQueryParams, 'reservationStates' | 'start' | 'end'>,
-	splitMultidayEventsIntoOneDayEvents = false,
-	clearVirtualEvent?: boolean
-): ThunkResult<Promise<ICalendarEventsPayload>> => {
-	setDayDetailDate(date)
-	return getCalendarEvents(CALENDAR_EVENTS_KEYS.DAY_DETAIL, { ...queryParams, start: date, end: date }, splitMultidayEventsIntoOneDayEvents, clearVirtualEvent, false)
-}
 
 export const getPaginatedReservations =
 	(queryParams: IGetSalonReservationsQueryParams): ThunkResult<Promise<ISalonReservationsPayload>> =>

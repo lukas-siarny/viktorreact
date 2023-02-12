@@ -1,27 +1,28 @@
 /* eslint-disable import/no-cycle */
-import React, { FC, useEffect, useCallback } from 'react'
+import React, { FC, useEffect, useCallback, PropsWithChildren } from 'react'
 import { Divider, Popover, Spin } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import dayjs from 'dayjs'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-16.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon-16.svg'
 
 // components
-import CalendarEventContent from './CalendarEventContent'
+import CalendarEventContent from '../eventCards/CalendarEventContent'
 
 // types
-import { RootState } from '../../../reducers'
-import { CalendarEvent, ICalendarDayEventsPopover, ICalendarEventContent, PopoverTriggerPosition, ReservationPopoverData } from '../../../types/interfaces'
+import { RootState } from '../../../../reducers'
+import { CalendarEvent, Employees, ICalendarDayEventsPopover, ICalendarEventContent, PopoverTriggerPosition, ReservationPopoverData } from '../../../../types/interfaces'
 
 /// utils
-import { CALENDAR_EVENT_DISPLAY_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../utils/enums'
-import { compareAndSortDayEvents } from '../calendarHelpers'
+import { CALENDAR_EVENT_DISPLAY_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, MONTHLY_RESERVATIONS_KEY } from '../../../../utils/enums'
+import { compareAndSortDayEvents } from '../../calendarHelpers'
 
 // hooks
-import useKeyUp from '../../../hooks/useKeyUp'
-import { IVirtualEventPayload } from '../../../reducers/virtualEvent/virtualEventActions'
+import useKeyUp from '../../../../hooks/useKeyUp'
+import { IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
+import MonthlyReservationCard from '../eventCards/MonthlyReservationCard'
 
 const getEventsForPopover = (
 	date: string | null,
@@ -80,15 +81,14 @@ const getEventsForPopover = (
 
 type ContentProps = {
 	date: string | null
-	events: ICalendarEventContent[]
 	onClose: () => void
 	isLoading?: boolean
 	isUpdatingEvent?: boolean
-}
+} & PropsWithChildren
 
 const PopoverContent: FC<ContentProps> = (props) => {
 	const [t] = useTranslation()
-	const { date, onClose, events, isLoading, isUpdatingEvent } = props
+	const { date, onClose, isLoading, isUpdatingEvent, children } = props
 
 	const isToday = dayjs(date).isToday()
 
@@ -104,26 +104,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 			{/* footerHeight = 72px, headerHeight = 52px. dividerHeight = 1px (header and footer dividers), padding top and bottom = 2*16px */}
 			<main className={'overflow-y-auto'} style={{ maxHeight: 'calc(100vh - 120px)' }}>
 				<Spin spinning={isUpdatingEvent || isLoading}>
-					<div className={'flex flex-col gap-1 p-6'}>
-						{events?.map((event, i) => {
-							return (
-								<React.Fragment key={i}>
-									<CalendarEventContent
-										id={event.id}
-										start={event.start}
-										end={event.end}
-										eventData={event.eventData}
-										onEditEvent={event.onEditEvent}
-										onReservationClick={event.onReservationClick}
-										backgroundColor={event.backgroundColor}
-										calendarView={event.calendarView}
-										eventDisplayType={event.eventDisplayType}
-										isDayEventsPopover
-									/>
-								</React.Fragment>
-							)
-						})}
-					</div>
+					<div className={'flex flex-col gap-1 p-6'}>{children}</div>
 				</Spin>
 			</main>
 		</div>
@@ -131,17 +112,16 @@ const PopoverContent: FC<ContentProps> = (props) => {
 }
 
 const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
-	const { position, setIsOpen, isOpen, date, onEditEvent, onReservationClick, isHidden, isLoading, isUpdatingEvent } = props
+	const { position, setIsOpen, isOpen, date, onEditEvent, onReservationClick, isHidden, isLoading, isUpdatingEvent, isReservationsView, employees } = props
 
 	const [t] = useTranslation()
 
 	const overlayClassName = `nc-event-popover-overlay_${date || ''}`
 
 	const dayEvents = useSelector((state: RootState) => state.calendar.dayEvents)
+	const monthlyReservations = useSelector((state: RootState) => state.calendar[MONTHLY_RESERVATIONS_KEY])
 
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
-
-	const cellDateEvents = date ? dayEvents[date] : []
 
 	const handleClosePopover = useCallback(() => setIsOpen(false), [setIsOpen])
 
@@ -173,16 +153,64 @@ const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
 
 	useKeyUp('Escape', isOpen ? handleClosePopover : undefined)
 
-	const eventsForPopover = getEventsForPopover(date, cellDateEvents, virtualEvent, onEditEvent, onReservationClick)
+	const getPopoverContent = () => {
+		if (isReservationsView) {
+			const cellDateEvents = date ? (monthlyReservations?.data || {})[date] : []
+
+			// NOTE: toto nebude treba robit ked budu posielat orderIndex v zozname zamestancov
+			const employeesMap: { [key: string]: Employees[0] } = {}
+			employees?.forEach((employee) => {
+				employeesMap[employee.id] = employee
+			})
+
+			return cellDateEvents.map((dayEmployee) => {
+				const { orderIndex } = employeesMap[dayEmployee.employee.id] || {}
+				return (
+					<React.Fragment key={dayEmployee.employee.id}>
+						<MonthlyReservationCard eventData={{ ...dayEmployee, orderIndex }} isDayEventsPopover />
+					</React.Fragment>
+				)
+			})
+		}
+
+		const cellDateEvents = date ? dayEvents[date] : []
+		const eventsForPopover = getEventsForPopover(date, cellDateEvents, virtualEvent, onEditEvent, onReservationClick)
+		return eventsForPopover?.map((event, i) => {
+			return (
+				<React.Fragment key={i}>
+					<CalendarEventContent
+						id={event.id}
+						start={event.start}
+						end={event.end}
+						eventData={event.eventData}
+						onEditEvent={event.onEditEvent}
+						onReservationClick={event.onReservationClick}
+						backgroundColor={event.backgroundColor}
+						calendarView={event.calendarView}
+						eventDisplayType={event.eventDisplayType}
+						isDayEventsPopover
+					/>
+				</React.Fragment>
+			)
+		})
+	}
+
+	// console.log({ isReservationsView })
 
 	return (
 		<Popover
-			visible={isOpen}
+			open={isOpen}
 			destroyTooltipOnHide={{ keepParent: true }}
 			trigger={'click'}
 			placement={'right'}
-			overlayClassName={`${overlayClassName} nc-day-events-popover-overlay ${isHidden ? 'is-hidden' : ''}`}
-			content={!isHidden && <PopoverContent date={date} events={eventsForPopover} onClose={handleClosePopover} isLoading={isLoading} isUpdatingEvent={isUpdatingEvent} />}
+			overlayClassName={`${overlayClassName} nc-popover-overlay nc-day-events-popover-overlay ${isHidden ? 'is-hidden' : ''}`}
+			content={
+				!isHidden && (
+					<PopoverContent date={date} onClose={handleClosePopover} isLoading={isLoading} isUpdatingEvent={isUpdatingEvent}>
+						{getPopoverContent()}
+					</PopoverContent>
+				)
+			}
 		>
 			<div style={{ top: position?.top, left: position?.left, width: position?.width, height: position?.height, position: 'fixed' }} />
 		</Popover>

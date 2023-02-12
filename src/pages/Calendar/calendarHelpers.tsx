@@ -16,16 +16,16 @@ import {
 	IWeekViewResourceExtenedProps,
 	IDayViewResourceExtenedProps,
 	RawOpeningHours,
-	ICalendarDayEvents,
-	DisabledNotificationsArray
+	DisabledNotificationsArray,
+	ICalendarMonthlyReservationsPayload,
+	ICalendarMonthlyReservationsCardData
 } from '../../types/interfaces'
-import { Paths } from '../../types/api'
-import { IVirtualEventPayload } from '../../reducers/virtualEvent/virtualEventActions'
 
 // utils
 import {
 	CALENDAR_COMMON_SETTINGS,
 	CALENDAR_DATE_FORMAT,
+	CALENDAR_DAY_EVENTS_SHOWN,
 	CALENDAR_DISABLED_NOTIFICATION_TYPE,
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_EVENT_TYPE,
@@ -46,41 +46,6 @@ export const getCalendarMonthFullRangeDates = (selectedMonthFirstDay: string | d
 	}
 }
 
-export const getDayEventsSource = (dayEvents: ICalendarDayEvents, virtualEvent: IVirtualEventPayload['data'] | null, currentRangeStart: string) => {
-	if (!virtualEvent) {
-		return dayEvents
-	}
-
-	let newDayEvents: ICalendarDayEvents = {
-		...dayEvents
-	}
-	Object.entries({ ...dayEvents }).some(([date, events]) => {
-		const originalEVentsLength = events.length
-		const filteredArray = events.filter((event) => {
-			return event.id !== virtualEvent?.event?.id
-		})
-		if (originalEVentsLength !== filteredArray.length) {
-			newDayEvents = {
-				...newDayEvents,
-				[date]: filteredArray
-			}
-			return true
-		}
-
-		return false
-	})
-	const { queryParamsStart, queryParamsEnd } = getCalendarMonthFullRangeDates(currentRangeStart)
-	// createMultiDayEvents(virtualEvent?.event.eventData, queryParamsStart, queryParamsEnd, false, newDayEvents)
-	const newEventData = virtualEvent.event.eventData
-	if (newEventData.start.date) {
-		return {
-			...newDayEvents,
-			[newEventData.start.date]: [...newDayEvents[newEventData.start.date], newEventData]
-		}
-	}
-	return newDayEvents
-}
-
 export const compareAndSortDayEvents = (aStart: string, aEnd: string, bStart: string, bEnd: string, aId: string, bId: string) => {
 	if (aId.startsWith(NEW_ID_PREFIX) || bId.startsWith(NEW_ID_PREFIX)) {
 		return -1
@@ -99,6 +64,8 @@ export const compareAndSortDayEvents = (aStart: string, aEnd: string, bStart: st
 	}
 	return 0
 }
+
+export const compareMonthlyReservations = (aOrderIndex: number, bOrderIndex: number) => aOrderIndex - bOrderIndex
 
 export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null, calendarView?: CALENDAR_VIEW) => {
 	const extenedProps: IEventExtenedProps | undefined = movingEvent?.extendedProps
@@ -754,7 +721,7 @@ export const getBusinessHours = (openingHoursMap: OpeningHoursMap): BusinessHour
 	}
 }
 
-export const composeMonthViewEvents = (events: ICalendarEventsPayload['data']) => {
+export const composeMonthViewAbsences = (events: ICalendarEventsPayload['data']) => {
 	const composedEvents: any[] = []
 
 	events?.forEach((event) => {
@@ -763,12 +730,45 @@ export const composeMonthViewEvents = (events: ICalendarEventsPayload['data']) =
 		const end = event.endDateTime
 
 		if (employeeID && dayjs(start).isBefore(end)) {
-			composedEvents.push({
-				...createBaseEvent(event, employeeID, start, end),
-				groupId: event?.calendarBulkEvent?.id
-			})
+			composedEvents.push(createBaseEvent(event, employeeID, start, end))
 		}
 	})
+
+	return composedEvents
+}
+
+export const getMonthlyReservationCalendarEventId = (day: string, employeeId: string) => `${day}_${employeeId}`
+
+export const composeMonthViewReservations = (days: ICalendarMonthlyReservationsPayload['data'], employees: Employees) => {
+	// NOTE: toto nebude treba robit ked budu posielat orderIndex v zozname zamestancov
+	const employeesMap: { [key: string]: Employees[0] } = {}
+	employees.forEach((employee) => {
+		employeesMap[employee.id] = employee
+	})
+
+	const composedEvents = Object.entries(days || {}).reduce((acc, [day, dayEmployees]) => {
+		const dayEvents: ICalendarMonthlyReservationsCardData[] = []
+		dayEmployees.forEach((dayEmployee) => {
+			const { orderIndex } = employeesMap[dayEmployee.employee.id] || {}
+			dayEvents.push({
+				id: getMonthlyReservationCalendarEventId(day, dayEmployee.employee.id),
+				start: dayjs(day).startOf('day').toISOString(),
+				end: dayjs(day).endOf('day').subtract(1, 'hours').toISOString(),
+				allDay: false,
+				eventData: {
+					...dayEmployee,
+					// order index bude sluzit na zoradenie eventov v kalendari
+					orderIndex
+				}
+			})
+		})
+		/**
+		 * pre kazdy den potrebujeme poslat do kolenadra len take mnozstvo eventov, ktore je v nom realne vidiet
+		 * zvysne sa potom zobrazia v popoveri
+		 */
+		const sortedAndSlicedDayEvents = dayEvents.sort((a, b) => compareMonthlyReservations(a.eventData.orderIndex, b.eventData.orderIndex)).slice(0, CALENDAR_DAY_EVENTS_SHOWN)
+		return [...acc, ...sortedAndSlicedDayEvents]
+	}, [] as ICalendarMonthlyReservationsCardData[])
 
 	return composedEvents
 }

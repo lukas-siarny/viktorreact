@@ -5,17 +5,17 @@ import cx from 'classnames'
 import { useTranslation } from 'react-i18next'
 
 // utils
-import { CALENDAR_EVENT_TYPE, CALENDAR_VIEW, NEW_ID_PREFIX } from '../../../utils/enums'
-import { parseTimeFromMinutes } from '../calendarHelpers'
+import { CALENDAR_EVENT_TYPE, CALENDAR_VIEW, NEW_ID_PREFIX } from '../../../../utils/enums'
+import { parseTimeFromMinutes } from '../../calendarHelpers'
 
 // assets
-import { ReactComponent as AbsenceIcon } from '../../../assets/icons/absence-icon.svg'
-import { ReactComponent as BreakIcon } from '../../../assets/icons/break-icon-16.svg'
-import { ReactComponent as RepeatIcon } from '../../../assets/icons/repeat.svg'
+import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
+import { ReactComponent as BreakIcon } from '../../../../assets/icons/break-icon-16.svg'
+import { ReactComponent as RepeatIcon } from '../../../../assets/icons/repeat.svg'
 
 // types
-import { IEventCardProps } from '../../../types/interfaces'
-import { getAssignedUserLabel } from '../../../utils/helper'
+import { IEventCardProps } from '../../../../types/interfaces'
+import { getAssignedUserLabel } from '../../../../utils/helper'
 
 interface IAbsenceCardProps extends IEventCardProps {
 	eventType: CALENDAR_EVENT_TYPE

@@ -23,6 +23,7 @@ import {
 	CANEL_TOKEN_MESSAGES,
 	EVENT_NAMES,
 	FORM,
+	MONTHLY_RESERVATIONS_KEY,
 	NEW_ID_PREFIX,
 	UPDATE_EVENT_PERMISSIONS
 } from '../../../../utils/enums'
@@ -37,6 +38,7 @@ import CalendarEmptyState from '../CalendarEmptyState'
 import {
 	Employees,
 	ICalendarEventForm,
+	ICalendarMonthlyReservationsPayload,
 	ICalendarReservationForm,
 	ICalendarView,
 	IDayViewResourceExtenedProps,
@@ -65,11 +67,12 @@ type Props = {
 	employees: Employees
 	parentPath: string
 	salonID: string
-	onShowMore: (date: string, position?: PopoverTriggerPosition) => void
+	onShowMore: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean) => void
 	clearFetchInterval: () => void
 	restartFetchInterval: () => void
 	query: IQueryParams
 	setQuery: (newValues: IQueryParams) => void
+	monthlyReservations: ICalendarMonthlyReservationsPayload['data']
 } & Omit<ICalendarView, 'onEventChange' | 'onEventChangeStart' | 'onEventChangeStop'>
 
 export type CalendarRefs = {
@@ -85,6 +88,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		view,
 		loading,
 		reservations,
+		monthlyReservations,
 		shiftsTimeOffs,
 		handleSubmitReservation,
 		handleSubmitEvent,
@@ -127,6 +131,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		// eventy, ktore sa posielaju o uroven nizsie do View, sa v pripade, ze existuje virtualEvent odfiltruju
 		const allSources = {
 			reservations,
+			monthlyReservations,
 			shiftsTimeOffs,
 			virtualEvent: virtualEvent?.event
 		}
@@ -140,7 +145,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		}
 
 		return allSources
-	}, [reservations, shiftsTimeOffs, virtualEvent])
+	}, [reservations, monthlyReservations, shiftsTimeOffs, virtualEvent])
 
 	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
 	/**
@@ -178,6 +183,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const onEventChangeStart = useCallback(() => {
 		clearFetchInterval()
 
+		if (typeof cancelGetTokens[MONTHLY_RESERVATIONS_KEY] !== typeof undefined) {
+			cancelGetTokens[MONTHLY_RESERVATIONS_KEY].cancel(CANEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
+		}
 		if (typeof cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY] !== typeof undefined) {
 			cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY].cancel(CANEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
 		}
@@ -360,9 +368,10 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					ref={monthView}
 					enabledSalonReservations={enabledSalonReservations}
 					selectedDate={calendarSelectedDate}
-					reservations={sources.reservations}
+					monthlyReservations={sources.monthlyReservations}
+					employees={employees}
 					shiftsTimeOffs={sources.shiftsTimeOffs}
-					virtualEvent={sources.virtualEvent}
+					virtualEvent={eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION ? undefined : sources.virtualEvent}
 					eventsViewType={eventsViewType}
 					salonID={salonID}
 					onEditEvent={onEditEvent}

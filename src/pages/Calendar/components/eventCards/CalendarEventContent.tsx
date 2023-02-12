@@ -4,13 +4,13 @@ import dayjs from 'dayjs'
 import { useSearchParams } from 'react-router-dom'
 
 // utils
-import { CALENDAR_EVENT_DISPLAY_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../utils/enums'
-import { getTimeText } from '../calendarHelpers'
+import { CALENDAR_EVENT_DISPLAY_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
+import { getTimeText } from '../../calendarHelpers'
 
 // components
 import AbsenceCard from './AbsenceCard'
 import ReservationCard from './ReservationCard'
-import { ICalendarEventContent } from '../../../types/interfaces'
+import { ICalendarEventContent } from '../../../../types/interfaces'
 
 const InverseBackgroundEvent = React.memo(() => <div className={cx('nc-bg-event not-set-availability')} />)
 
@@ -127,7 +127,6 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 					originalEventData={originalEventData}
 					isEdit={isEdit}
 					isPlaceholder={isPlaceholder}
-					isDayEventsPopover={isDayEventsPopover}
 					timeLeftClassName={timeLeftClassName}
 				/>
 			)

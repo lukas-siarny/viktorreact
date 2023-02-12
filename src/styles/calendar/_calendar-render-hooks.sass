@@ -606,6 +606,8 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 						white-space: normal
 						left: 0
 						text-align: center
+
+	// event monthly view
 	&.nc-month-event
 		height: 20px
 		flex: 0 0 auto
@@ -620,11 +622,6 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 				text-overflow: ellipsis
 				white-space: nowrap
 				overflow: hidden
-		&.reservation
-			.event-content
-				padding: 0 4px 0 8px
-			.time
-				color: $textColor-notino-grayDark
 		&.shift,
 		&.timeoff,
 		&.break
@@ -658,12 +655,24 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 			background: url("../../assets/images/gray-bold-background-pattern.png")
 			&:not(.edit)
 				outline: 1px solid $borderColor-notino-grayLight
+		&.reservation
+			padding-left: 8px
+			.event-avatar
+				width: 16px
+				height: 16px
+				border-radius: 50%
+				background-color: $backgroundColor-notino-grayLight
+				overflow: hidden
+			.events-stats
+				display: flex
+				flex: 0 0 auto
+				gap: 2px
+				.events-count
+					color: $textColor-notino-black
+					.duration
+						color: $textColor-notino-grayDark
 	&.is-day-events-popover
 		box-shadow: none
-		&.reservation
-			border-radius: 0
-			.event-accent
-				border-radius: 0
 		&.timeoff,
 		&.break
 			&:not(.edit)
@@ -775,6 +784,7 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 		transition: border 0.2s ease-in-out
 	&:hover,
 	&:focus-visible
+		background: transparent
 		color: $textColor-notino-pink
 		.arrow
 			border-right-color: $textColor-notino-pink

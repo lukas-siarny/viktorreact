@@ -12,7 +12,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 // types
 import dayjs from 'dayjs'
 import { t } from 'i18next'
-import { CalendarEvent, ICalendarView, PopoverTriggerPosition } from '../../../../types/interfaces'
+import { CalendarEvent, ICalendarMonthlyReservationsPayload, ICalendarMonthlyViewEvent, ICalendarView, PopoverTriggerPosition } from '../../../../types/interfaces'
 
 // enums
 import {
@@ -22,17 +22,28 @@ import {
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_VIEW,
 	DEFAULT_DATE_INIT_FORMAT,
-	DEFAULT_TIME_FORMAT
+	DEFAULT_TIME_FORMAT,
+	MONTHLY_RESERVATIONS_KEY
 } from '../../../../utils/enums'
-import { compareAndSortDayEvents, composeMonthViewEvents, getBusinessHours, getOpnenigHoursMap, OpeningHoursMap } from '../../calendarHelpers'
+import {
+	compareAndSortDayEvents,
+	composeMonthViewAbsences,
+	composeMonthViewReservations,
+	getBusinessHours,
+	getOpnenigHoursMap,
+	OpeningHoursMap,
+	compareMonthlyReservations
+} from '../../calendarHelpers'
 import { RootState } from '../../../../reducers'
 import eventContent from '../../eventContent'
 
 // assets
 import { IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
+import MonthlyReservationCard from '../eventCards/MonthlyReservationCard'
 
-const getCurrentDayEventsCount = (selectedDate: string, dayEvents: CalendarEvent[], virtualEvent: IVirtualEventPayload['data'] | null): number => {
+const getCurrentDayEventsCount = (selectedDate: string, dayEvents: (CalendarEvent | ICalendarMonthlyViewEvent)[], virtualEvent?: IVirtualEventPayload['data'] | null): number => {
 	let eventsCount = dayEvents.reduce((count, event) => {
+		// virtualny event odignorujeme, pretoze kolekcia
 		if (event.id === virtualEvent?.id) {
 			return count
 		}
@@ -49,19 +60,7 @@ const getCurrentDayEventsCount = (selectedDate: string, dayEvents: CalendarEvent
 }
 
 const getLinkMoreText = (eventsCount?: number) => {
-	switch (eventsCount) {
-		case undefined:
-		case 0:
-			return t('loc:ďalšie')
-		case 1:
-			return `${eventsCount} ${t('loc:ďalší')}`
-		case 2:
-		case 3:
-		case 4:
-			return `${eventsCount} ${t('loc:ďalšie')}`
-		default:
-			return `${eventsCount} ${t('loc:ďalších')}`
-	}
+	return `Viac (${eventsCount})`
 }
 
 const dayHeaderContent = (arg: DayHeaderContentArg, openingHoursMap: OpeningHoursMap) => {
@@ -73,28 +72,36 @@ interface IDayCellContent {
 	date: Date
 	dayNumberText: string
 	salonID: string
-	onShowMore: (date: string, position?: PopoverTriggerPosition) => void
-	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
+	onShowMore: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean) => void
+	isReservationsView: boolean
 }
 
 const DayCellContent: FC<IDayCellContent> = (props) => {
-	const { onShowMore, date, dayNumberText } = props
+	const { onShowMore, date, dayNumberText, isReservationsView } = props
 
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
 	const dayEvents = useSelector((state: RootState) => state.calendar.dayEvents)
+	const monthlyReservations = useSelector((state: RootState) => state.calendar[MONTHLY_RESERVATIONS_KEY])
 
 	const cellDate = dayjs(date).format(CALENDAR_DATE_FORMAT.QUERY)
 
-	const currentDayEvents = dayEvents[cellDate]
+	const currentDayEvents = isReservationsView ? (monthlyReservations?.data || {})[cellDate] : dayEvents[cellDate]
 
 	const dayNumerRef = useRef<HTMLSpanElement | null>(null)
 
-	const eventsCount = getCurrentDayEventsCount(cellDate, currentDayEvents || [], virtualEvent)
+	const eventsCount = getCurrentDayEventsCount(cellDate, currentDayEvents || [], isReservationsView ? undefined : virtualEvent)
 
 	useEffect(() => {
+		/**
+		 * v tomto useEffecte sa vytvara custom "show more" button
+		 * hlavne z optimalizacnych dovodov - kvoli odlachceniu DOMka sa do Fullcalendara neposielaju vsetky eventy, ale len tie, ktore je vidiet v zakladnom zobrazeni (momentalne 5 na den)
+		 * ak ich je pre dany den viac ako poskytuje zobrazenie, zobrazi sa button "show more"
+		 * fullcalendar sice poskytuje aj vlastny showMore button, avsak aby sa zobrazoval spravne, museli by sme do neho poslat vsetky eventy, ktore su potom aj vyrendrovane v DOMku (sice s visibility hidden, ale nody existuju)
+		 * pri pridavani custom buttonu je potrebne, aby bol vytvoreny element <a> a mal priradene class='fc-daygrid-more-link fc-more-link'
+		 * inak by pri kliku na tento element potom FC volal "select" Callback, takto ho odignoruje
+		 */
 		if (dayNumerRef.current) {
 			const dayGridDayBottom = dayNumerRef.current.parentNode?.parentNode?.parentNode?.querySelector('.fc-daygrid-day-events')?.querySelector('.fc-daygrid-day-bottom')
-
 			if (dayGridDayBottom) {
 				const existingButton = dayGridDayBottom?.querySelector('.nc-month-more-button')
 				const textMore = existingButton?.querySelector('.text-more')
@@ -115,7 +122,7 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 								width: clientRect.width + 10,
 								height: clientRect.bottom - clientRect.top
 							}
-							onShowMore(cellDate, position)
+							onShowMore(cellDate, position, isReservationsView)
 						}
 					}
 
@@ -147,7 +154,7 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [eventsCount, cellDate])
+	}, [eventsCount, cellDate, isReservationsView])
 
 	return <span ref={dayNumerRef}>{dayNumberText}</span>
 }
@@ -160,16 +167,23 @@ const eventOrder = (a: any, b: any) => {
 	return compareAndSortDayEvents(aStart, aEnd, bStart, bEnd, a.id, b.id)
 }
 
-interface ICalendarMonthView extends ICalendarView {
+const reservationOrder = (a: any, b: any) => {
+	const aIndex = a.eventData?.orderIndex || 0
+	const bIndex = b.eventData?.orderIndex || 0
+	return compareMonthlyReservations(aIndex, bIndex)
+}
+
+interface ICalendarMonthView extends Omit<ICalendarView, 'reservations'> {
 	salonID: string
-	onShowMore: (date: string, position?: PopoverTriggerPosition) => void
+	onShowMore: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean) => void
+	monthlyReservations: ICalendarMonthlyReservationsPayload['data']
 }
 
 const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarMonthView>((props, ref) => {
 	const {
 		selectedDate,
+		monthlyReservations,
 		eventsViewType,
-		reservations,
 		shiftsTimeOffs,
 		onEditEvent,
 		onReservationClick,
@@ -178,16 +192,21 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 		onEventChange,
 		onEventChangeStart,
 		virtualEvent,
-		onAddEvent
+		onAddEvent,
+		employees
 	} = props
 
 	const openingHours = useSelector((state: RootState) => state.selectedSalon.selectedSalon).data?.openingHours
+	const isReservationsView = eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION
 
 	const events = useMemo(() => {
-		const data = composeMonthViewEvents(eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION ? reservations : shiftsTimeOffs)
+		if (isReservationsView) {
+			return composeMonthViewReservations(monthlyReservations, employees)
+		}
+		const data = composeMonthViewAbsences(shiftsTimeOffs)
 		// ak je virtualEvent definovany, zaradi sa do zdroja eventov pre Calendar
 		return virtualEvent ? [...data, virtualEvent] : data
-	}, [eventsViewType, reservations, shiftsTimeOffs, virtualEvent])
+	}, [isReservationsView, monthlyReservations, shiftsTimeOffs, virtualEvent, employees])
 
 	const openingHoursMap = useMemo(() => getOpnenigHoursMap(openingHours), [openingHours])
 	const businessHours = useMemo(() => getBusinessHours(openingHoursMap), [openingHoursMap])
@@ -227,8 +246,8 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 				initialView={'dayGridMonth'}
 				initialDate={selectedDate}
 				eventMinHeight={15}
-				editable
-				selectable
+				editable={!isReservationsView}
+				selectable={!isReservationsView}
 				weekends
 				stickyFooterScrollbar
 				showNonCurrentDates
@@ -236,22 +255,28 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 				dayMaxEvents={5}
 				dayMinWidth={120}
 				eventOrderStrict
-				eventOrder={eventOrder as any}
+				eventOrder={isReservationsView ? reservationOrder : eventOrder}
 				selectConstraint={CALENDAR_COMMON_SETTINGS.SELECT_CONSTRAINT}
 				// data sources
 				events={events}
 				businessHours={businessHours}
 				// render hooks
 				dayCellContent={(args: DayCellContentArg) => (
-					<DayCellContent date={args.date} dayNumberText={args.dayNumberText} salonID={salonID} eventsViewType={eventsViewType} onShowMore={onShowMore} />
+					<DayCellContent date={args.date} dayNumberText={args.dayNumberText} salonID={salonID} isReservationsView={isReservationsView} onShowMore={onShowMore} />
 				)}
 				dayHeaderContent={(args) => dayHeaderContent(args, openingHoursMap)}
-				eventContent={(data) => eventContent(data, CALENDAR_VIEW.MONTH, onEditEvent, onReservationClick)}
+				eventContent={(data) =>
+					isReservationsView ? (
+						<MonthlyReservationCard eventData={data?.event?.extendedProps?.eventData} />
+					) : (
+						eventContent(data, CALENDAR_VIEW.MONTH, onEditEvent, onReservationClick)
+					)
+				}
 				moreLinkContent={null}
 				// handlers
-				eventDrop={onEventChange}
-				eventDragStart={onEventChangeStart}
-				select={handleNewEvent}
+				eventDrop={isReservationsView ? undefined : onEventChange}
+				eventDragStart={isReservationsView ? undefined : onEventChangeStart}
+				select={isReservationsView ? undefined : handleNewEvent}
 			/>
 		</div>
 	)

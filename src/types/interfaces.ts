@@ -720,8 +720,22 @@ export type CalendarEvent = CalendarEvents[0] & {
 	isPlaceholder?: boolean
 }
 
+
 export interface ICalendarEventsPayload {
 	data: CalendarEvent[] | null
+}
+
+export type ICalendarMonthlyViewEvent = {
+	id: string
+	employee: CalendarEmployee
+	eventsCount: number
+	eventsDuration: number
+}
+
+export type ICalendarMonthlyViewDay = { [key: string]: ICalendarMonthlyViewEvent[]  }
+
+export interface ICalendarMonthlyReservationsPayload {
+	data: ICalendarMonthlyViewDay | null
 }
 
 export interface ICalendarView {
@@ -740,6 +754,7 @@ export interface ICalendarView {
 	disableRender?: boolean
 	view?: CALENDAR_VIEW
 	enabledSalonReservations?: boolean
+	employees: Employees
 }
 
 export interface IEventCardProps {
@@ -788,12 +803,14 @@ export interface ICalendarDayEventsPopover {
 	date: string | null
 	position: PopoverTriggerPosition | null
 	isOpen: boolean
+	isReservationsView?: boolean
 	setIsOpen: (isOpen: boolean) => void
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
 	isHidden: boolean
 	isLoading?: boolean
 	isUpdatingEvent?: boolean
+	employees?: Employees
 }
 
 export type ReservationPopoverData = {
@@ -846,6 +863,10 @@ export interface ICalendarEventCardData {
 	allDay: boolean
 	isPlaceholder?: boolean
 	eventData: CalendarEvent
+}
+
+export interface ICalendarMonthlyReservationsCardData extends Omit<ICalendarEventCardData, 'resourceId' | 'eventData'> {
+	eventData: ICalendarMonthlyViewEvent & { orderIndex: number }
 }
 
 export type ConfirmModalReservationData = {

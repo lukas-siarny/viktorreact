@@ -761,9 +761,10 @@ export const SHORTCUT_DAYS_OPTIONS = (length = 2) => [
 export enum CALENDAR_EVENTS_KEYS {
 	EVENTS = 'events',
 	RESERVATIONS = 'reservations',
-	SHIFTS_TIME_OFFS = 'shiftsTimeOffs',
-	DAY_DETAIL = 'dayDetail'
+	SHIFTS_TIME_OFFS = 'shiftsTimeOffs'
 }
+
+export const MONTHLY_RESERVATIONS_KEY = 'monthlyReservations'
 
 export enum CONFIRM_BULK {
 	BULK = 'BULK',
@@ -956,7 +957,7 @@ export enum CALENDAR_EVENT_DISPLAY_TYPE {
 }
 
 export const CALENDAR_DAY_EVENTS_SHOWN = 5
-export const CALENDAR_DAY_EVENTS_LIMIT = CALENDAR_DAY_EVENTS_SHOWN + 1
+export const CALENDAR_DAY_EVENTS_LIMIT = CALENDAR_DAY_EVENTS_SHOWN
 export const RESERVATION_STATES = Object.keys(RESERVATION_STATE)
 export const RESERVATION_PAYMENT_METHODS = Object.keys(RESERVATION_PAYMENT_METHOD)
 export const RESERVATION_SOURCE_TYPES = Object.keys(RESERVATION_SOURCE_TYPE)

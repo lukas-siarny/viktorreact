@@ -2,7 +2,7 @@ import React from 'react'
 import { EventContentArg } from '@fullcalendar/core'
 import { PopoverTriggerPosition, ReservationPopoverData } from '../../types/interfaces'
 import { CALENDAR_EVENT_DISPLAY_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../utils/enums'
-import CalendarEventContent from './components/CalendarEventContent'
+import CalendarEventContent from './components/eventCards/CalendarEventContent'
 
 export default (
 	data: EventContentArg,
@@ -12,7 +12,6 @@ export default (
 ) => {
 	const { event, backgroundColor } = data || {}
 	const { display = CALENDAR_EVENT_DISPLAY_TYPE.REGULAR, start, end, extendedProps } = event || {}
-
 	return (
 		<CalendarEventContent
 			id={event.id}

@@ -1,9 +1,9 @@
 /* eslint-disable import/no-cycle */
+import { MONTHLY_RESERVATIONS_KEY, CALENDAR_EVENTS_KEYS } from '../../utils/enums'
+import { MONTHLY_RESERVATIONS, SET_DAY_EVENTS, EVENTS, EVENT_DETAIL, SET_IS_REFRESHING_EVENTS, RESERVATIONS } from './calendarTypes'
 import { RESET_STORE } from '../generalTypes'
-import { ICalendarActions, ISalonReservationsPayload, ISetDayDetailPayload } from './calendarActions'
-import { ICalendarEventsPayload, ILoadingAndFailure, ICalendarEventDetailPayload, ICalendarDayEvents } from '../../types/interfaces'
-import { CALENDAR_EVENTS_KEYS } from '../../utils/enums'
-import { SET_DAY_EVENTS, EVENTS, EVENT_DETAIL, SET_IS_REFRESHING_EVENTS, SET_DAY_DETAIL_DATE, RESERVATIONS } from './calendarTypes'
+import { ICalendarActions, ISalonReservationsPayload } from './calendarActions'
+import { ICalendarEventsPayload, ILoadingAndFailure, ICalendarEventDetailPayload, ICalendarDayEvents, ICalendarMonthlyReservationsPayload } from '../../types/interfaces'
 
 export const initState = {
 	[CALENDAR_EVENTS_KEYS.EVENTS]: {
@@ -21,17 +21,16 @@ export const initState = {
 		isLoading: false,
 		isFailure: false
 	} as ICalendarEventsPayload & ILoadingAndFailure,
+	[MONTHLY_RESERVATIONS_KEY]: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as ICalendarMonthlyReservationsPayload & ILoadingAndFailure,
 	eventDetail: {
 		data: null,
 		isLoading: false,
 		isFailure: false
 	} as ICalendarEventDetailPayload & ILoadingAndFailure,
-	[CALENDAR_EVENTS_KEYS.DAY_DETAIL]: {
-		date: null,
-		data: null,
-		isLoading: false,
-		isFailure: false
-	} as ICalendarEventsPayload & ISetDayDetailPayload & ILoadingAndFailure,
 	dayEvents: {} as ICalendarDayEvents,
 	isRefreshingEvents: false,
 	paginatedReservations: {
@@ -71,7 +70,32 @@ export default (state = initState, action: ICalendarActions) => {
 					data: action.payload.data
 				}
 			}
-
+		case MONTHLY_RESERVATIONS.MONTHLY_RESERVATIONS_LOAD_START:
+			return {
+				...state,
+				[MONTHLY_RESERVATIONS_KEY]: {
+					...state[MONTHLY_RESERVATIONS_KEY],
+					isLoading: true
+				}
+			}
+		case MONTHLY_RESERVATIONS.MONTHLY_RESERVATIONS_LOAD_FAIL:
+			return {
+				...state,
+				[MONTHLY_RESERVATIONS_KEY]: {
+					...state[MONTHLY_RESERVATIONS_KEY],
+					isFailure: true,
+					isLoading: false
+				}
+			}
+		case MONTHLY_RESERVATIONS.MONTHLY_RESERVATIONS_LOAD_DONE:
+			return {
+				...state,
+				[MONTHLY_RESERVATIONS_KEY]: {
+					...initState[MONTHLY_RESERVATIONS_KEY],
+					data: action.payload.data
+				}
+			}
+		// Events refresh
 		case EVENTS.EVENTS_REFRESH:
 			return {
 				...state,
@@ -103,15 +127,6 @@ export default (state = initState, action: ICalendarActions) => {
 				eventDetail: {
 					...initState.eventDetail,
 					data: action.payload.data
-				}
-			}
-		// set day detail day
-		case SET_DAY_DETAIL_DATE:
-			return {
-				...state,
-				[CALENDAR_EVENTS_KEYS.DAY_DETAIL]: {
-					...state[CALENDAR_EVENTS_KEYS.DAY_DETAIL],
-					date: action.payload.date
 				}
 			}
 		// set day events

@@ -30,7 +30,8 @@ import {
 	CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE,
 	ADMIN_PERMISSIONS,
 	CALENDAR_DAY_EVENTS_LIMIT,
-	CANEL_TOKEN_MESSAGES
+	CANEL_TOKEN_MESSAGES,
+	MONTHLY_RESERVATIONS_KEY
 } from '../../utils/enums'
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { cancelGetTokens, deleteReq, patchReq, postReq } from '../../utils/request'
@@ -42,6 +43,7 @@ import {
 	clearCalendarShiftsTimeoffs,
 	getCalendarEventDetail,
 	getCalendarEventsCancelTokenKey,
+	getCalendarMonthlyViewReservations,
 	getCalendarReservations,
 	getCalendarShiftsTimeoff,
 	refreshEvents
@@ -72,13 +74,12 @@ import {
 } from '../../types/interfaces'
 
 // atoms
-import CalendarReservationPopover from './components/CalendarReservationPopover'
+import CalendarReservationPopover from './components/popovers/CalendarReservationPopover'
 import CalendarConfirmModal from './components/CalendarConfirmModal'
 
 // hooks
 import useQueryParams, { ArrayParam, StringParam } from '../../hooks/useQueryParams'
-import CalendarDayEventsPopover from './components/CalendarDayEventsPopover'
-import { EVENTS } from '../../reducers/calendar/calendarTypes'
+import CalendarDayEventsPopover from './components/popovers/CalendarDayEventsPopover'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -169,6 +170,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const services = useSelector((state: RootState) => state.service.services)
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
+	const monthlyReservations = useSelector((state: RootState) => state.calendar[MONTHLY_RESERVATIONS_KEY])
 	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS])
 	const isRefreshingEvents = useSelector((state: RootState) => state.calendar.isRefreshingEvents)
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
@@ -195,11 +197,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		isHidden: boolean
 		date: string | null
 		position: PopoverTriggerPosition | null
+		isReservationsView?: boolean
 	}>({
 		isOpen: true,
 		isHidden: true,
 		date: null,
-		position: null
+		position: null,
+		isReservationsView: false
 	})
 
 	const fetchInterval = useRef<number | undefined>()
@@ -208,13 +212,21 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	 * pri praci s kalendarom pouzivame tuto kolekciu zamesnancov, ktora zohladnuje filtre aplikovane uzivatelom
 	 */
 	const filteredEmployees = useCallback(() => {
-		// filter employees based on employeeIDs in the url queryParams (if there are any)
-		if (!isEmpty(query.employeeIDs)) {
-			return employees?.data?.employees.filter((employee: any) => query.employeeIDs?.includes(employee.id))
+		// null means empty filter
+		if (query?.employeeIDs === null) {
+			return []
 		}
 
-		// null means empty filter otherwise return all employes as default value
-		return query?.employeeIDs === null ? [] : employees?.data?.employees
+		// all employes as default value
+		let emp = employees?.data?.employees
+
+		// filter employees based on employeeIDs in the url queryParams (if there are any)
+		if (!isEmpty(query.employeeIDs)) {
+			emp = employees?.data?.employees.filter((employee: any) => query.employeeIDs?.includes(employee.id))
+		}
+
+		// sort employees by orderIndex
+		return emp?.sort((a, b) => a.orderIndex - b.orderIndex)
 	}, [employees?.data?.employees, query.employeeIDs])
 
 	/**
@@ -244,7 +256,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		fetchInterval.current = interval
 	}
 
-	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || isUpdatingEvent
+	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || monthlyReservations?.isLoading || isUpdatingEvent
 	const isLoading = isRefreshingEvents ? false : loadingData
 
 	/**
@@ -382,14 +394,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			)
 
 			if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
+				const reservationsQueryparams = {
+					salonID,
+					start: startQueryParam,
+					end: endQueryParam,
+					employeeIDs: query.employeeIDs,
+					categoryIDs: getFullCategoryIdsFromUrl(query?.categoryIDs)
+				}
 				const dispatchGetReservations = getCalendarReservations(
-					{
-						salonID,
-						start: startQueryParam,
-						end: endQueryParam,
-						employeeIDs: query.employeeIDs,
-						categoryIDs: getFullCategoryIdsFromUrl(query?.categoryIDs)
-					},
+					reservationsQueryparams,
 					validCalendarView !== CALENDAR_VIEW.MONTH,
 					clearVirtualEvent,
 					true,
@@ -397,7 +410,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				)
 
 				if (validCalendarView === CALENDAR_VIEW.MONTH) {
-					await dispatch(dispatchGetReservations)
+					await dispatch(getCalendarMonthlyViewReservations(reservationsQueryparams))
 				} else {
 					await Promise.all([dispatch(dispatchGetReservations), dispatch(dispatchGetShiftsTimeOff)])
 				}
@@ -888,19 +901,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					selectedMonth={monthlyViewFullRange.selectedMonth}
 				/>
 				<Layout hasSider className={'noti-calendar-main-section'}>
-					<SiderFilter
-						collapsed={siderFilterCollapsed}
-						handleSubmit={handleSubmitFilter}
-						parentPath={parentPath}
-						eventsViewType={validEventsViewType}
-						loadingData={isLoading}
-					/>
+					<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} parentPath={parentPath} eventsViewType={validEventsViewType} />
 					<CalendarContent
 						salonID={salonID}
 						enabledSalonReservations={selectedSalon?.settings?.enabledReservations}
 						ref={calendarRefs}
 						selectedDate={validSelectedDate}
 						view={validCalendarView}
+						monthlyReservations={monthlyReservations?.data || {}}
 						reservations={reservations?.data || []}
 						shiftsTimeOffs={shiftsTimeOffs?.data || []}
 						loading={isLoading}
@@ -911,12 +919,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						setQuery={setQuery}
 						onEditEvent={onEditEvent}
 						onReservationClick={onReservationClick}
-						onShowMore={(date: string, position?: PopoverTriggerPosition) => {
+						onShowMore={(date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean) => {
+							// console.log({ isReservationsViewTop: isReservationsView })
 							setDayEventsPopover({
 								date,
 								isHidden: false,
 								isOpen: true,
-								position: position || null
+								position: position || null,
+								isReservationsView
 							})
 						}}
 						handleSubmitReservation={initSubmitReservationData}
@@ -942,7 +952,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							changeCalendarDate={setNewSelectedDate}
 							query={query}
 							setQuery={setQuery}
-							loadingData={isLoading}
 						/>
 					)}
 				</Layout>
@@ -951,12 +960,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				date={dayEventsPopover.date}
 				position={dayEventsPopover.position}
 				isOpen={dayEventsPopover.isOpen}
+				isReservationsView={dayEventsPopover.isReservationsView}
 				setIsOpen={(isOpen: boolean) => setDayEventsPopover((prevState) => ({ ...prevState, isOpen }))}
 				onEditEvent={onEditEvent}
 				onReservationClick={onReservationClick}
 				isHidden={dayEventsPopover.isHidden}
 				isLoading={isLoading}
 				isUpdatingEvent={isUpdatingEvent}
+				employees={filteredEmployees()}
 			/>
 			<CalendarReservationPopover
 				data={reservationPopover.data}

@@ -117,7 +117,6 @@ const ReservationForm: FC<Props> = (props) => {
 	const [isSettingTime, setIsSettingTime] = useState(false)
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
-	const reservationFormValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
 	const formValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(formName)(state))
 	const services = useSelector((state: RootState) => state.service.services)
 
@@ -336,7 +335,7 @@ const ReservationForm: FC<Props> = (props) => {
 										label={t('loc:Zákazník')}
 										placeholder={t('loc:Vyber zákazníka')}
 										name={'customer'}
-										className={cx('pb-0', { 'customer-with-info-icon': reservationFormValues?.customer?.value })}
+										className={cx('pb-0', { 'customer-with-info-icon': formValues?.customer?.value })}
 										size={'large'}
 										optionLabelProp={'label'}
 										suffixIcon={<CustomerIcon className={'text-notino-grayDark'} width={16} height={16} />}

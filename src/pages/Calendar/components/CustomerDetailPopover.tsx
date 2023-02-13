@@ -20,32 +20,34 @@ import { ICalendarReservationForm } from '../../../types/interfaces'
 /// utils
 import { ENUMERATIONS_KEYS, FORM } from '../../../utils/enums'
 import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
+
+// reducers
 import { getCustomer, ICustomerPayload } from '../../../reducers/customers/customerActions'
 
 type ContentProps = {
 	onClose: () => void
-	customer?: NonNullable<ICustomerPayload['data']>['customer']
+	customer: NonNullable<ICustomerPayload['data']>['customer']
 }
 
 const PopoverContent: FC<ContentProps> = (props) => {
 	const { customer, onClose } = props
 
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
-	const prefix = getCountryPrefix(countriesData.data, customer?.phonePrefixCountryCode)
+	const prefix = getCountryPrefix(countriesData.data, customer.phonePrefixCountryCode)
 
-	const hasAddress = customer?.address?.street || customer?.address?.city || customer?.address?.countryCode
+	const hasAddress = customer.address?.street || customer.address?.city || customer.address?.countryCode
 
 	return (
 		<div className='nc-popover-content text-notino-black w-80'>
 			<header className={'flex items-center justify-between px-4 h-13'}>
 				<Row className={'state-wrapper gap-2 items-center'}>
-					<UserAvatar size={24} className={'shrink-0'} src={customer?.profileImage?.resizedImages?.thumbnail} />
+					<UserAvatar size={24} className={'shrink-0'} src={customer.profileImage?.resizedImages?.thumbnail} />
 					<span className={'text-sm leading-4 break-all'}>
 						{getAssignedUserLabel({
-							firstName: customer?.firstName,
-							lastName: customer?.lastName,
-							email: customer?.email,
-							id: customer?.id || ''
+							firstName: customer.firstName,
+							lastName: customer.lastName,
+							email: customer.email,
+							id: customer.id
 						})}
 					</span>
 				</Row>
@@ -74,17 +76,17 @@ const PopoverContent: FC<ContentProps> = (props) => {
 								{hasAddress && (
 									<li className={'address-list-item leading-4'}>
 										<div className={'flex flex-col'}>
-											{customer?.address?.street && (
+											{customer.address?.street && (
 												<div>
 													<span className={'break-all mr-1'}>{customer.address.street.trim()}</span>
-													{customer?.address?.streetNumber?.trim()}
+													{customer.address?.streetNumber?.trim()}
 												</div>
 											)}
 											<div>
-												{customer?.address?.zipCode && <span className={'mr-1'}>{customer?.address?.zipCode?.trim()}</span>}
-												<span className={'break-all'}>{customer?.address?.city?.trim()}</span>
+												{customer.address?.zipCode && <span className={'mr-1'}>{customer.address?.zipCode?.trim()}</span>}
+												<span className={'break-all'}>{customer.address?.city?.trim()}</span>
 											</div>
-											{customer?.address?.countryCode}
+											{customer.address?.countryCode}
 										</div>
 									</li>
 								)}
@@ -105,11 +107,11 @@ const PopoverContent: FC<ContentProps> = (props) => {
 	)
 }
 
-type ICalendarReservationPopoverProps = {}
+type ICustomerDetailPopoverProps = {}
 
 const overlayClassName = 'nc-customer-detail-popover'
 
-const CalendarDetailPopover: FC<ICalendarReservationPopoverProps> = () => {
+const CalendarDetailPopover: FC<ICustomerDetailPopoverProps> = () => {
 	const [isOpen, setIsOpen] = useState(false)
 	const dispatch = useDispatch()
 
@@ -119,8 +121,6 @@ const CalendarDetailPopover: FC<ICalendarReservationPopoverProps> = () => {
 	const openPopover = async () => {
 		if (reservationFormValues?.customer?.value && reservationFormValues.customer.value !== customer?.data?.customer.id) {
 			await dispatch(getCustomer(reservationFormValues.customer.value as string))
-			setIsOpen(true)
-			return
 		}
 		setIsOpen(true)
 	}
@@ -161,8 +161,8 @@ const CalendarDetailPopover: FC<ICalendarReservationPopoverProps> = () => {
 			destroyTooltipOnHide={{ keepParent: true }}
 			placement={'leftTop'}
 			overlayClassName={`${overlayClassName} nc-popover-overlay nc-popover-overlay-fixed`}
-			content={<PopoverContent customer={customer.data?.customer} onClose={() => setIsOpen(false)} />}
-			align={{ offset: [-175, -18] }}
+			content={customer.data && <PopoverContent customer={customer.data.customer} onClose={() => setIsOpen(false)} />}
+			align={{ offset: [-175, -18] }} // offset popoveru od "InfoIcon" trigger buttonu
 		>
 			<div className={'absolute right-7 z-50 w-6 h-6 bg-notino-white flex items-center justify-center'} style={{ top: 30 }}>
 				{customer?.isLoading ? (

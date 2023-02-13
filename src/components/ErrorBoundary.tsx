@@ -16,8 +16,6 @@ class ErrorBoundary extends React.Component<PropsWithChildren, any> {
 	}
 
 	componentDidCatch(error: any, errorInfo: any) {
-		// eslint-disable-next-line react/no-unused-state
-		this.setState({ error })
 		Sentry.withScope((scope: any) => {
 			scope.setExtras(errorInfo)
 			const eventId = Sentry.captureException(error)

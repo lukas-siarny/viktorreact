@@ -325,7 +325,8 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 		return {
 			id: employee.id,
 			eventBackgroundColor: employee.color,
-			employee: createEmployeeResourceData(employee, !!employeeTimeOff.length, description)
+			employee: createEmployeeResourceData(employee, !!employeeTimeOff.length, description),
+			title: `${employee.orderIndex}` // used for ordering
 		}
 	})
 }
@@ -374,7 +375,8 @@ export const composeWeekResources = (weekDays: string[], shiftsTimeOffs: ICalend
 				id: getWeekDayResourceID(employee.id, weekDay),
 				eventBackgroundColor: employee.color,
 				day: weekDay,
-				employee: createEmployeeResourceData(employee, !!timeOffsWeekDay?.filter((timeOff) => timeOff.employee?.id === employee.id).length)
+				employee: createEmployeeResourceData(employee, !!timeOffsWeekDay?.filter((timeOff) => timeOff.employee?.id === employee.id).length),
+				title: `${employee.orderIndex}` // used for ordering
 			}
 		})
 		return [...resources, ...weekDayEmployees]

@@ -308,11 +308,11 @@ const ServiceForm: FC<Props> = (props) => {
 											name={'employee'}
 											optionLabelProp={'label'}
 											onSearch={searchEmployees}
-											filterOption={true}
-											options={employees?.options}
+											filterOption={false}
 											mode={'multiple'}
 											showSearch
 											allowInfinityScroll
+											onDidMountSearch
 											disabled={!hasPermission}
 											tooltipSelect={!hasPermission ? t('loc:Pre túto akciu nemáte dostatočné oprávnenia.') : null}
 										/>

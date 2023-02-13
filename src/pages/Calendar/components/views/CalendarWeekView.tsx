@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import dayjs from 'dayjs'
 import useResizeObserver from '@react-hook/resize-observer'
-import { useDispatch } from 'react-redux'
 
 // full calendar
 import FullCalendar from '@fullcalendar/react' // must go before plugins
@@ -325,6 +324,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				stickyFooterScrollbar
 				nowIndicator
 				selectable={enabledSalonReservations}
+				resourceOrder='title'
 				// data sources
 				eventSources={[events]}
 				resources={resources}

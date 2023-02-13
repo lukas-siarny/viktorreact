@@ -24,7 +24,7 @@ const Filters = (props: Props) => {
 	}, [visible])
 
 	return (search || customSearchContent) && (customContent || children) ? (
-		<Collapse activeKey={visible} ghost className='ghost-filters'>
+		<Collapse collapsible={'disabled'} activeKey={visible} ghost className='ghost-filters'>
 			<Panel
 				header={
 					<Row justify={'space-between'} gutter={ROW_GUTTER_X_DEFAULT}>

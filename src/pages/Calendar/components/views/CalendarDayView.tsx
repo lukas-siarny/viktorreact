@@ -153,6 +153,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				allDaySlot={false}
 				stickyFooterScrollbar
 				selectable={enabledSalonReservations}
+				resourceOrder='title'
 				// data sources
 				eventSources={[events]}
 				resources={resources}

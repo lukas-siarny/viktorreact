@@ -93,8 +93,6 @@ const SalonsFilterActive = (props: Props) => {
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 	const notinoUsers = useSelector((state: RootState) => state.user.notinoUsers)
 
-	console.log({ formValues: form?.values })
-
 	const searchNotinoUsers = useCallback(
 		async (search: string, page: number) => {
 			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.NOTINO_USER)

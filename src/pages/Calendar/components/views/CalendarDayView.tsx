@@ -161,6 +161,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				resources={resources}
 				// render hooks
 				resourceLabelContent={resourceLabelContent}
+				resourceOrder='title'
 				eventContent={(data) => (
 					<CalendarEventContent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} onReservationClick={onReservationClick} />
 				)}

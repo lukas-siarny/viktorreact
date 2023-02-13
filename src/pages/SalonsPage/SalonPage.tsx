@@ -52,7 +52,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		dispatch(getSalonLanguages())
-		dispatch(getCosmetics())
 	}, [dispatch])
 
 	const commonProps: SalonPageProps = {

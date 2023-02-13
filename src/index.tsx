@@ -51,9 +51,5 @@ Sentry.init({
 	tracesSampleRate: 0.05
 })
 
-const app = (
-	<ErrorBoundary>
-		<App />
-	</ErrorBoundary>
-)
+const app = <App />
 render(app, document.getElementById('root'))

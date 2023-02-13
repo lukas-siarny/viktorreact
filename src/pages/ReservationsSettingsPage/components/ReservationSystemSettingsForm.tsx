@@ -304,7 +304,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			<p className='x-regular text-notino-grayDark mb-0'>
 				{t('loc:Zapína a vypína rezervačný systém, cez ktorý je možné v kalendári spravovať salónové rezervácie a smeny zamestnancov.')}
 			</p>
-			{/* Integrations: Google, Outlook, iCal */}
+			{/* Integrate RS calendar to: Google, Outlook, iCal */}
 			<div className={'flex mt-10'}>
 				<h3 className={'mb-0 mt-0 flex items-center'}>
 					<SettingsIcon className={'text-notino-black mr-2'} />

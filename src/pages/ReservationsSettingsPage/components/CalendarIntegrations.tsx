@@ -19,7 +19,7 @@ const CalendarIntegrations = (props: Props) => {
 				'/api/b2b/admin/calendar-sync/sync-token',
 				null,
 				{
-					refreshToken: tokenResponse.access_token, // tokenResponse.code,
+					authCode: tokenResponse.access_token, // tokenResponse.code,
 					calendarType: 'GOOGLE'
 				},
 				undefined,

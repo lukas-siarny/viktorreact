@@ -399,7 +399,7 @@ export const clearCalendarReservations = (): ThunkResult<Promise<void>> => clear
 export const clearCalendarShiftsTimeoffs = (): ThunkResult<Promise<void>> => clearCalendarEvents(CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS)
 
 export const getCalendarMonthlyViewReservations =
-	(queryParams: ICalendarMonthlyReservationsQueryParams, clearVirtualEvent = true, storePreviousParams = true): ThunkResult<Promise<ICalendarMonthlyReservationsPayload>> =>
+	(queryParams: ICalendarMonthlyReservationsQueryParams, clearVirtualEvent?: boolean, storePreviousParams = true): ThunkResult<Promise<ICalendarMonthlyReservationsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ICalendarMonthlyReservationsPayload
 		try {

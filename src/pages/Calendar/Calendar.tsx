@@ -410,7 +410,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				)
 
 				if (validCalendarView === CALENDAR_VIEW.MONTH) {
-					await dispatch(getCalendarMonthlyViewReservations(reservationsQueryparams))
+					await dispatch(getCalendarMonthlyViewReservations(reservationsQueryparams, clearVirtualEvent, true))
 				} else {
 					await Promise.all([dispatch(dispatchGetReservations), dispatch(dispatchGetShiftsTimeOff)])
 				}
@@ -920,7 +920,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						onEditEvent={onEditEvent}
 						onReservationClick={onReservationClick}
 						onShowMore={(date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean) => {
-							// console.log({ isReservationsViewTop: isReservationsView })
 							setDayEventsPopover({
 								date,
 								isHidden: false,

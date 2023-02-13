@@ -153,8 +153,7 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 				}
 			}
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [eventsCount, cellDate, isReservationsView])
+	}, [eventsCount, cellDate, isReservationsView, onShowMore])
 
 	return <span ref={dayNumerRef}>{dayNumberText}</span>
 }

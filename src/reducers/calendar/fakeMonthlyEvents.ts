@@ -119,13 +119,13 @@ const fakeMontlyEvents = {
 				id: 'id1',
 				employeeId: 'd55d56a7-de69-4710-a7e0-b5ee76fb5fa0',
 				eventsCount: 9,
-				eventsDuration: 500
+				eventsDuration: 480
 			},
 			{
 				id: 'id2',
 				employeeId: '0fe51bab-5a01-41bb-9a11-37072c8c6165',
-				eventsCount: 7,
-				eventsDuration: 400
+				eventsCount: 16,
+				eventsDuration: 1225
 			},
 			{
 				id: 'id3',

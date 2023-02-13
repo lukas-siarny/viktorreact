@@ -44,7 +44,7 @@ import TabsComponent from '../../../../components/TabsComponent'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
-import { IQueryParams } from '../../../../hooks/useQueryParams'
+import { IUseQueryParams } from '../../../../hooks/useQueryParams'
 
 type Props = {
 	salonID: string
@@ -60,8 +60,8 @@ type Props = {
 	changeCalendarDate: (newDate: string) => void
 	phonePrefix?: string
 	loadingData?: boolean
-	query: IQueryParams
-	setQuery: (newValues: IQueryParams) => void
+	query: IUseQueryParams
+	setQuery: (newValues: IUseQueryParams) => void
 }
 
 export type SiderEventManagementRefs = {

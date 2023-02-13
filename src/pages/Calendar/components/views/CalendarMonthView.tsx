@@ -1,6 +1,7 @@
 import React, { useMemo, FC, useRef, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import cx from 'classnames'
+import dayjs from 'dayjs'
 
 // full calendar
 import FullCalendar from '@fullcalendar/react' // must go before plugins
@@ -10,9 +11,14 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // types
-import dayjs from 'dayjs'
-import { t } from 'i18next'
-import { CalendarEvent, ICalendarMonthlyReservationsPayload, ICalendarMonthlyViewEvent, ICalendarView, PopoverTriggerPosition } from '../../../../types/interfaces'
+import {
+	CalendarEvent,
+	EmployeeReservationsPopoverData,
+	ICalendarMonthlyReservationsPayload,
+	ICalendarMonthlyViewEvent,
+	ICalendarView,
+	PopoverTriggerPosition
+} from '../../../../types/interfaces'
 
 // enums
 import {
@@ -102,6 +108,17 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 		 */
 		if (dayNumerRef.current) {
 			const dayGridDayBottom = dayNumerRef.current.parentNode?.parentNode?.parentNode?.querySelector('.fc-daygrid-day-events')?.querySelector('.fc-daygrid-day-bottom')
+			const handleShowMore = (clientRect: DOMRect) => {
+				if (cellDate && clientRect) {
+					const position: PopoverTriggerPosition = {
+						top: clientRect.top,
+						left: clientRect.left,
+						width: clientRect.width + 20,
+						height: clientRect.bottom - clientRect.top
+					}
+					onShowMore(cellDate, position, isReservationsView)
+				}
+			}
 			if (dayGridDayBottom) {
 				const existingButton = dayGridDayBottom?.querySelector('.nc-month-more-button')
 				const textMore = existingButton?.querySelector('.text-more')
@@ -112,20 +129,12 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 					} else {
 						textMore.innerHTML = getLinkMoreText(eventsCount)
 						existingButton.classList.remove('nc-month-more-button-hidden')
+						existingButton.addEventListener('click', () => {
+							const clientRect = existingButton.getBoundingClientRect()
+							handleShowMore(clientRect)
+						})
 					}
 				} else if (eventsCount) {
-					const handleShowMore = async (clientRect: DOMRect) => {
-						if (cellDate && clientRect) {
-							const position: PopoverTriggerPosition = {
-								top: clientRect.top,
-								left: clientRect.left,
-								width: clientRect.width + 10,
-								height: clientRect.bottom - clientRect.top
-							}
-							onShowMore(cellDate, position, isReservationsView)
-						}
-					}
-
 					const link = document.createElement('a')
 					link.className = 'fc-daygrid-more-link fc-more-link nc-more-link'
 					link.setAttribute('aria-expanded', 'false')
@@ -176,6 +185,7 @@ interface ICalendarMonthView extends Omit<ICalendarView, 'reservations'> {
 	salonID: string
 	onShowMore: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean) => void
 	monthlyReservations: ICalendarMonthlyReservationsPayload['data']
+	onMonthlyReservationClick: (data: EmployeeReservationsPopoverData, position?: PopoverTriggerPosition) => void
 }
 
 const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarMonthView>((props, ref) => {
@@ -192,7 +202,8 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 		onEventChangeStart,
 		virtualEvent,
 		onAddEvent,
-		employees
+		employees,
+		onMonthlyReservationClick
 	} = props
 
 	const openingHours = useSelector((state: RootState) => state.selectedSalon.selectedSalon).data?.openingHours
@@ -266,7 +277,11 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 				dayHeaderContent={(args) => dayHeaderContent(args, openingHoursMap)}
 				eventContent={(data) =>
 					isReservationsView ? (
-						<MonthlyReservationCard eventData={data?.event?.extendedProps?.eventData} />
+						<MonthlyReservationCard
+							date={dayjs(data.event.start).format(CALENDAR_DATE_FORMAT.QUERY)}
+							eventData={data?.event?.extendedProps?.eventData}
+							onMonthlyReservationClick={onMonthlyReservationClick}
+						/>
 					) : (
 						eventContent(data, CALENDAR_VIEW.MONTH, onEditEvent, onReservationClick)
 					)

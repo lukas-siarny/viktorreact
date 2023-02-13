@@ -622,6 +622,23 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 				text-overflow: ellipsis
 				white-space: nowrap
 				overflow: hidden
+		&.reservation
+			padding-left: 8px
+			.event-avatar
+				width: 16px
+				height: 16px
+				border-radius: 50%
+				background-color: $backgroundColor-notino-grayLight
+				overflow: hidden
+				flex: 0 0 auto
+			.events-stats
+				display: flex
+				flex: 0 0 auto
+				gap: 2px
+				.events-count
+					color: $textColor-notino-black
+					span
+						color: $textColor-notino-grayDark
 		&.shift,
 		&.timeoff,
 		&.break
@@ -655,28 +672,18 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 			background: url("../../assets/images/gray-bold-background-pattern.png")
 			&:not(.edit)
 				outline: 1px solid $borderColor-notino-grayLight
-		&.reservation
-			padding-left: 8px
-			.event-avatar
-				width: 16px
-				height: 16px
-				border-radius: 50%
-				background-color: $backgroundColor-notino-grayLight
-				overflow: hidden
-			.events-stats
-				display: flex
-				flex: 0 0 auto
-				gap: 2px
-				.events-count
-					color: $textColor-notino-black
-					.duration
-						color: $textColor-notino-grayDark
 	&.is-day-events-popover
 		box-shadow: none
 		&.reservation
 			border-radius: 0
 			.event-accent
 				border-radius: 0
+			.events-stats
+				flex: 1
+				justify-content: space-between
+				.events-count
+					display: flex
+					gap: 2px
 		&.timeoff,
 		&.break
 			&:not(.edit)

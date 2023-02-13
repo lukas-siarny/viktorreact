@@ -1,3 +1,4 @@
+import { IUseQueryParams } from './../hooks/useQueryParams'
 import { EventDragStartArg, EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
@@ -807,6 +808,7 @@ export interface ICalendarDayEventsPopover {
 	setIsOpen: (isOpen: boolean) => void
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
+	onMonthlyReservationClick: (data: EmployeeReservationsPopoverData, position?: PopoverTriggerPosition) => void
 	isHidden: boolean
 	isLoading?: boolean
 	isUpdatingEvent?: boolean
@@ -825,6 +827,20 @@ export type ReservationPopoverData = {
 	note?: CalendarEvent['note']
 	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
 	isEdit?: boolean
+}
+
+export interface ICalendarEmployeeReservationsPopover {
+	data: EmployeeReservationsPopoverData | null
+	position: PopoverTriggerPosition | null
+	isOpen: boolean
+	setIsOpen: (isOpen: boolean) => void
+	parentPath: string
+	query: IUseQueryParams
+}
+
+export type EmployeeReservationsPopoverData = {
+	employeeId: string
+	date: string
 }
 
 export interface IBulkConfirmForm {

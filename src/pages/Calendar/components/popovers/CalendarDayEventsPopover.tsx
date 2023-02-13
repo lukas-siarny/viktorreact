@@ -112,7 +112,8 @@ const PopoverContent: FC<ContentProps> = (props) => {
 }
 
 const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
-	const { position, setIsOpen, isOpen, date, onEditEvent, onReservationClick, isHidden, isLoading, isUpdatingEvent, isReservationsView, employees } = props
+	const { position, setIsOpen, isOpen, date, onEditEvent, onReservationClick, isHidden, isLoading, isUpdatingEvent, isReservationsView, employees, onMonthlyReservationClick } =
+		props
 
 	const [t] = useTranslation()
 
@@ -154,10 +155,9 @@ const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
 	useKeyUp('Escape', isOpen ? handleClosePopover : undefined)
 
 	const getPopoverContent = () => {
-		if (isReservationsView) {
-			const cellDateEvents = date ? (monthlyReservations?.data || {})[date] : []
+		if (isReservationsView && date) {
+			const cellDateEvents = (monthlyReservations?.data || {})[date]
 
-			// NOTE: toto nebude treba robit ked budu posielat orderIndex v zozname zamestancov
 			const employeesMap: { [key: string]: Employees[0] } = {}
 			employees?.forEach((employee) => {
 				employeesMap[employee.id] = employee
@@ -167,7 +167,7 @@ const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
 				const { orderIndex } = employeesMap[dayEmployee.employee.id] || {}
 				return (
 					<React.Fragment key={dayEmployee.employee.id}>
-						<MonthlyReservationCard eventData={{ ...dayEmployee, orderIndex }} isDayEventsPopover />
+						<MonthlyReservationCard date={date} eventData={{ ...dayEmployee, orderIndex }} onMonthlyReservationClick={onMonthlyReservationClick} isDayEventsPopover />
 					</React.Fragment>
 				)
 			})
@@ -194,8 +194,6 @@ const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
 			)
 		})
 	}
-
-	// console.log({ isReservationsView })
 
 	return (
 		<Popover

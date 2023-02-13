@@ -70,7 +70,8 @@ import {
 	INewCalendarEvent,
 	ReservationPopoverData,
 	PopoverTriggerPosition,
-	SalonSubPageProps
+	SalonSubPageProps,
+	EmployeeReservationsPopoverData
 } from '../../types/interfaces'
 
 // atoms
@@ -80,6 +81,7 @@ import CalendarConfirmModal from './components/CalendarConfirmModal'
 // hooks
 import useQueryParams, { ArrayParam, StringParam } from '../../hooks/useQueryParams'
 import CalendarDayEventsPopover from './components/popovers/CalendarDayEventsPopover'
+import CalendarEmployeeReservationsPopover from './components/popovers/CalendarEmployeeReservationsPopover'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -204,6 +206,16 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		date: null,
 		position: null,
 		isReservationsView: false
+	})
+
+	const [employeeReservationsPopover, setEmployeeReservationsPopover] = useState<{
+		isOpen: boolean
+		data: EmployeeReservationsPopoverData | null
+		position: PopoverTriggerPosition | null
+	}>({
+		isOpen: false,
+		data: null,
+		position: null
 	})
 
 	const fetchInterval = useRef<number | undefined>()
@@ -865,6 +877,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		})
 	}
 
+	const onMonthlyReservationClick = (data: EmployeeReservationsPopoverData, position?: PopoverTriggerPosition) => {
+		setEmployeeReservationsPopover({
+			isOpen: true,
+			data,
+			position: position || null
+		})
+	}
+
 	const modals = (
 		<CalendarConfirmModal
 			data={confirmModalData}
@@ -878,9 +898,46 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		/>
 	)
 
+	const popovers = (
+		<>
+			<CalendarDayEventsPopover
+				date={dayEventsPopover.date}
+				position={dayEventsPopover.position}
+				isOpen={dayEventsPopover.isOpen}
+				isReservationsView={dayEventsPopover.isReservationsView}
+				setIsOpen={(isOpen: boolean) => setDayEventsPopover((prevState) => ({ ...prevState, isOpen }))}
+				onEditEvent={onEditEvent}
+				onReservationClick={onReservationClick}
+				onMonthlyReservationClick={onMonthlyReservationClick}
+				isHidden={dayEventsPopover.isHidden}
+				isLoading={isLoading}
+				isUpdatingEvent={isUpdatingEvent}
+				employees={filteredEmployees()}
+			/>
+			<CalendarReservationPopover
+				data={reservationPopover.data}
+				position={reservationPopover.position}
+				isOpen={reservationPopover.isOpen}
+				setIsOpen={(isOpen: boolean) => setReservationPopover((prevState) => ({ ...prevState, isOpen }))}
+				handleUpdateReservationState={initUpdateReservationStateData}
+				onEditEvent={onEditEvent}
+				placement={validCalendarView === CALENDAR_VIEW.WEEK ? 'bottom' : 'left'}
+			/>
+			<CalendarEmployeeReservationsPopover
+				data={employeeReservationsPopover.data}
+				position={employeeReservationsPopover.position}
+				isOpen={employeeReservationsPopover.isOpen}
+				setIsOpen={(isOpen: boolean) => setEmployeeReservationsPopover((prevState) => ({ ...prevState, isOpen }))}
+				parentPath={parentPath}
+				query={query}
+			/>
+		</>
+	)
+
 	return (
 		<>
 			{modals}
+			{popovers}
 			<Layout className='noti-calendar-layout'>
 				<CalendarHeader
 					enabledSalonReservations={selectedSalon?.settings?.enabledReservations}
@@ -928,6 +985,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 								isReservationsView
 							})
 						}}
+						onMonthlyReservationClick={onMonthlyReservationClick}
 						handleSubmitReservation={initSubmitReservationData}
 						handleSubmitEvent={initSubmitEventData}
 						onAddEvent={handleAddEvent}
@@ -955,28 +1013,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					)}
 				</Layout>
 			</Layout>
-			<CalendarDayEventsPopover
-				date={dayEventsPopover.date}
-				position={dayEventsPopover.position}
-				isOpen={dayEventsPopover.isOpen}
-				isReservationsView={dayEventsPopover.isReservationsView}
-				setIsOpen={(isOpen: boolean) => setDayEventsPopover((prevState) => ({ ...prevState, isOpen }))}
-				onEditEvent={onEditEvent}
-				onReservationClick={onReservationClick}
-				isHidden={dayEventsPopover.isHidden}
-				isLoading={isLoading}
-				isUpdatingEvent={isUpdatingEvent}
-				employees={filteredEmployees()}
-			/>
-			<CalendarReservationPopover
-				data={reservationPopover.data}
-				position={reservationPopover.position}
-				isOpen={reservationPopover.isOpen}
-				setIsOpen={(isOpen: boolean) => setReservationPopover((prevState) => ({ ...prevState, isOpen }))}
-				handleUpdateReservationState={initUpdateReservationStateData}
-				onEditEvent={onEditEvent}
-				placement={validCalendarView === CALENDAR_VIEW.WEEK ? 'bottom' : 'left'}
-			/>
 		</>
 	)
 }

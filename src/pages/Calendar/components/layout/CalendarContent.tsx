@@ -36,6 +36,7 @@ import CalendarEmptyState from '../CalendarEmptyState'
 
 // types
 import {
+	EmployeeReservationsPopoverData,
 	Employees,
 	ICalendarEventForm,
 	ICalendarMonthlyReservationsPayload,
@@ -53,7 +54,7 @@ import { ForbiddenModal, checkPermissions } from '../../../../utils/Permissions'
 import { getSelectedDateForCalendar, getWeekDays } from '../../calendarHelpers'
 import { cancelGetTokens } from '../../../../utils/request'
 import { getCalendarEventsCancelTokenKey } from '../../../../reducers/calendar/calendarActions'
-import { IQueryParams } from '../../../../hooks/useQueryParams'
+import { IUseQueryParams } from '../../../../hooks/useQueryParams'
 
 const GET_RESERVATIONS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.RESERVATIONS)
 const GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS)
@@ -70,9 +71,10 @@ type Props = {
 	onShowMore: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean) => void
 	clearFetchInterval: () => void
 	restartFetchInterval: () => void
-	query: IQueryParams
-	setQuery: (newValues: IQueryParams) => void
+	query: IUseQueryParams
+	setQuery: (newValues: IUseQueryParams) => void
 	monthlyReservations: ICalendarMonthlyReservationsPayload['data']
+	onMonthlyReservationClick: (data: EmployeeReservationsPopoverData, position?: PopoverTriggerPosition) => void
 } & Omit<ICalendarView, 'onEventChange' | 'onEventChangeStart' | 'onEventChangeStop'>
 
 export type CalendarRefs = {
@@ -105,7 +107,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		onShowMore,
 		parentPath,
 		query,
-		setQuery
+		setQuery,
+		onMonthlyReservationClick
 	} = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -381,6 +384,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					onEventChangeStart={onEventChangeStart}
 					onEventChangeStop={onEventChangeStop}
 					onShowMore={onShowMore}
+					onMonthlyReservationClick={onMonthlyReservationClick}
 				/>
 			)
 		}

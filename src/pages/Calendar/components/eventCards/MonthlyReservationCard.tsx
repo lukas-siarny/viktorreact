@@ -8,16 +8,18 @@ import cx from 'classnames'
 import { ReactComponent as CalendarIcon } from '../../../../assets/icons/calendar-24.svg'
 
 // types
-import { ICalendarMonthlyReservationsCardData } from '../../../../types/interfaces'
+import { EmployeeReservationsPopoverData, ICalendarMonthlyReservationsCardData, PopoverTriggerPosition } from '../../../../types/interfaces'
 import { parseTimeFromMinutes } from '../../calendarHelpers'
 
 interface IMonthlyReservationCardProps {
+	date: string
 	eventData?: ICalendarMonthlyReservationsCardData['eventData']
 	isDayEventsPopover?: boolean
+	onMonthlyReservationClick: (data: EmployeeReservationsPopoverData, position?: PopoverTriggerPosition) => void
 }
 
 const MonthlyReservationCard: FC<IMonthlyReservationCardProps> = (props) => {
-	const { eventData, isDayEventsPopover } = props
+	const { eventData, isDayEventsPopover, onMonthlyReservationClick, date } = props
 	const { employee, eventsCount, eventsDuration } = eventData || {}
 
 	const [t] = useTranslation()
@@ -29,7 +31,22 @@ const MonthlyReservationCard: FC<IMonthlyReservationCardProps> = (props) => {
 	const cardRef = useRef<HTMLDivElement | null>(null)
 
 	const handleReservationClick = () => {
-		// NOTE: prevent proti kliknutiu na virutalny event rezervacie neotvori sa popover
+		if (cardRef.current && employee) {
+			const data: EmployeeReservationsPopoverData = {
+				employeeId: employee.id,
+				date
+			}
+
+			const clientRect = cardRef.current.getBoundingClientRect()
+
+			const position: PopoverTriggerPosition = {
+				top: clientRect.top,
+				left: clientRect.left,
+				width: clientRect.width,
+				height: clientRect.bottom - clientRect.top
+			}
+			onMonthlyReservationClick(data, position)
+		}
 	}
 
 	return (
@@ -46,20 +63,18 @@ const MonthlyReservationCard: FC<IMonthlyReservationCardProps> = (props) => {
 				<div className={'events-stats'}>
 					{isDayEventsPopover ? (
 						<>
-							<div className={'events-count'}>
-								<span>{t('loc:Rezervácie')}</span>
-								{eventsCount}
+							<div className={'events-count count'}>
+								<span>{t('loc:Rezervácie')}</span> {eventsCount}
 							</div>
-							<div className={'duration'}>
-								<span>{t('loc:Trvanie')}</span>
-								{duration}
+							<div className={'events-count duration'}>
+								<span>{t('loc:Trvanie')}</span> {duration}
 							</div>
 						</>
 					) : (
 						<>
 							<CalendarIcon width={10} height={10} />
 							<span className={'events-count'}>
-								{eventsCount} <span className={'duration'}>{`(${duration})`}</span>
+								{eventsCount} <span>{`(${duration})`}</span>
 							</span>
 						</>
 					)}

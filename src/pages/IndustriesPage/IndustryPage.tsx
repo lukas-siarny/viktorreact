@@ -21,7 +21,7 @@ import { NestedMultiselectDataItem } from './components/CheckboxGroupNestedField
 import RequestNewServiceForm, { IRequestNewServiceForm } from './components/RequestNewServiceForm'
 
 // utils
-import { ROW_GUTTER_X_DEFAULT, PERMISSION, FORM, SALON_PERMISSION, NOTIFICATION_TYPE } from '../../utils/enums'
+import { ROW_GUTTER_X_DEFAULT, FORM, PERMISSION, NOTIFICATION_TYPE } from '../../utils/enums'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { patchReq, postReq } from '../../utils/request'
 import { flattenTree } from '../../utils/helper'
@@ -227,7 +227,7 @@ const IndustryPage = (props: Props) => {
 									{t('loc:Priradiť služby')}
 								</h3>
 								<Permissions
-									allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_CREATE]}
+									allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE]}
 									render={(hasPermission, { openForbiddenModal }) => (
 										<Button
 											onClick={() => {
@@ -282,4 +282,4 @@ const IndustryPage = (props: Props) => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]))(IndustryPage)
+export default compose(withPermissions([PERMISSION.PARTNER]))(IndustryPage)

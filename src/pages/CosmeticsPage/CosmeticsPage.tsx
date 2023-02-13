@@ -256,4 +256,4 @@ const CosmeticsPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]))(CosmeticsPage)
+export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(CosmeticsPage)

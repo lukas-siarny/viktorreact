@@ -13,7 +13,7 @@ import ServicesFilter from './components/ServicesFilter'
 import { AvatarGroup } from '../../components/AvatarComponents'
 
 // utils
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_PERMISSION } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
@@ -30,8 +30,6 @@ import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circ
 
 // hooks
 import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
-
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 interface IAdminUsersFilter {
 	rootCategoryID: string
@@ -152,7 +150,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 				<Col span={24}>
 					<div className='content-body'>
 						<Spin spinning={services?.isLoading}>
-							<Permissions allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_CREATE]} render={() => <ServicesFilter onSubmit={handleSubmit} />} />
+							<Permissions allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE]} render={() => <ServicesFilter onSubmit={handleSubmit} />} />
 							<CustomTable
 								className='table-fixed'
 								columns={columns}
@@ -175,4 +173,4 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(ServicesPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(ServicesPage)

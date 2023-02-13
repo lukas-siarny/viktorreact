@@ -45,7 +45,7 @@ import {
 import { RootState } from '../../../../reducers'
 
 // utils
-import { ForbiddenModal, permitted } from '../../../../utils/Permissions'
+import { ForbiddenModal, checkPermissions } from '../../../../utils/Permissions'
 import { getSelectedDateForCalendar, getWeekDays } from '../../calendarHelpers'
 import { cancelGetTokens } from '../../../../utils/request'
 import { getCalendarEventsCancelTokenKey } from '../../../../reducers/calendar/calendarActions'
@@ -113,7 +113,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
-	const selectedSalonuniqPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions)
+	const salonPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions || [])
 	const [visibleForbiddenModal, setVisibleForbiddenModal] = useState(false)
 
 	const sources = useMemo(() => {
@@ -180,7 +180,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	}, [clearFetchInterval, eventsViewType])
 
 	const onEventChange = (arg: EventDropArg | EventResizeDoneArg) => {
-		const hasPermissions = permitted(authUserPermissions || [], selectedSalonuniqPermissions, UPDATE_EVENT_PERMISSIONS)
+		const hasPermissions = checkPermissions([...authUserPermissions, ...salonPermissions], UPDATE_EVENT_PERMISSIONS)
 
 		const revertEvent = () => {
 			arg.revert()

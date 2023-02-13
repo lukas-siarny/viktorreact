@@ -9,8 +9,8 @@ import { useParams } from 'react-router'
 import AuthRoute from './AuthRoute'
 
 // utils
-import { PAGE } from '../utils/enums'
-import { isAdmin } from '../utils/Permissions'
+import { PAGE, PERMISSION } from '../utils/enums'
+import { checkPermissions } from '../utils/Permissions'
 
 // redux
 import { RootState } from '../reducers'
@@ -75,9 +75,9 @@ const SalonSubRoutes: FC = () => {
 			return
 		}
 		if (currentUser.data) {
-			// Only SUPER_ADMIN, ADMIN or PARTNER with assigned salon
+			// Only NOTINO users or PARTNER with assigned salon
 			if (
-				isAdmin(currentUser.data.uniqPermissions) ||
+				checkPermissions(currentUser.data.uniqPermissions, [PERMISSION.NOTINO]) ||
 				includes(
 					currentUser.data.salons.map((salon) => salon.id),
 					salonID

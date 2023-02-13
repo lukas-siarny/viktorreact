@@ -1,6 +1,6 @@
 import React, { FC, PropsWithChildren, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { indexOf, some, isEmpty, partition } from 'lodash'
+import { indexOf, some } from 'lodash'
 import { Button, Modal, notification, Result } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -8,36 +8,44 @@ import { useNavigate } from 'react-router-dom'
 // eslint-disable-next-line import/no-cycle
 import { RootState } from '../reducers'
 import { PERMISSION, ADMIN_PERMISSIONS } from './enums'
-import { isEnumValue } from './helper'
-import { _Permissions } from '../types/interfaces'
 
-export const checkPermissions = (authUserPermissions: _Permissions = [], allowed: _Permissions = [], except: _Permissions = []) => {
-	if (except.length > 0 && some(except, (elem: any) => indexOf(authUserPermissions, elem) > -1)) {
+/**
+ * NOTE: by default are admin permissions allowed (SUPER_ADMIN, ADMIN). In other case use `except=ADMIN_PERMISSIONS`
+ * @param userPermissions permissions from users role and salons role
+ * @param allowed allowed permissions
+ * @param except excepted permissions
+ * @returns TRUE/FALSE
+ */
+export const checkPermissions = (userPermissions: PERMISSION[] = [], allowed: PERMISSION[] = [], except: PERMISSION[] = []) => {
+	if (except.length > 0 && some(except, (elem: any) => indexOf(userPermissions, elem) > -1)) {
 		return false
 	}
-	if (allowed.length > 0) {
-		if (some(allowed, (elem: any) => indexOf(authUserPermissions, elem) > -1)) {
-			return true
-		}
-		return false
+
+	const allowedPermissions = [...ADMIN_PERMISSIONS, ...allowed]
+
+	if (some(allowedPermissions, (elem: any) => indexOf(userPermissions, elem) > -1)) {
+		return true
 	}
-	return true
+	return false
 }
 
 export const withPermissions =
-	(allowed: _Permissions = [], except: _Permissions = []) =>
+	(allowed: PERMISSION[] = [], except: PERMISSION[] = []) =>
 	(WrappedComponent: any) => {
 		const WithPermissions = (props: any) => {
 			const [visible, setVisible] = useState(false)
 			const navigate = useNavigate()
 			const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
+			const salonPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions ?? [])
+
 			useEffect(() => {
-				if (!checkPermissions(authUserPermissions, allowed, except)) {
+				if (!checkPermissions([...authUserPermissions, ...salonPermissions], allowed, except)) {
 					setVisible(false)
 					navigate('/403')
 				} else {
 					setVisible(true)
 				}
+				// eslint-disable-next-line react-hooks/exhaustive-deps
 			}, [])
 
 			if (!visible) {
@@ -50,27 +58,8 @@ export const withPermissions =
 
 type Props = PropsWithChildren & {
 	render?: (hasPermission: boolean, object: any) => React.ReactNode
-	allowed?: _Permissions
-	except?: _Permissions
-}
-
-export const isAdmin = (authUserPermissions: _Permissions = []): boolean => checkPermissions(authUserPermissions, ADMIN_PERMISSIONS)
-
-export const permitted = (userPermissions: _Permissions = [], salonsPermissions: _Permissions = [], allowed: _Permissions = [], except: _Permissions = []): boolean => {
-	// split into SYSTEM (index 0) and SALON (index 1) permissions
-	const allowedPermissions = partition(allowed, (permission) => isEnumValue(permission, PERMISSION)) as _Permissions[]
-	const exceptedPermissions = partition(except, (permission) => isEnumValue(permission, PERMISSION)) as _Permissions[]
-
-	const hasSystemPermissions = checkPermissions(userPermissions, allowedPermissions[0], exceptedPermissions[0])
-
-	if (isEmpty(allowedPermissions[1]) && isEmpty(exceptedPermissions[1])) {
-		return hasSystemPermissions
-	}
-
-	const hasSalonPermissions = checkPermissions(salonsPermissions, allowedPermissions[1], exceptedPermissions[1])
-
-	// For system permissions SUPER_ADMIN and ADMIN are salons permissions ignored
-	return (hasSalonPermissions || isAdmin(userPermissions)) && hasSystemPermissions
+	allowed?: PERMISSION[]
+	except?: PERMISSION[]
 }
 
 export const ForbiddenModal: FC<{ visible: boolean; onCancel: () => void; item?: any }> = (props) => {
@@ -100,8 +89,9 @@ const Permissions: FC<Props> = (props) => {
 	const { render, allowed, except, children } = props
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
+	const salonPermission = selectedSalon?.uniqPermissions ?? []
 
-	const hasPermissions = permitted(authUserPermissions, selectedSalon?.uniqPermissions, allowed, except)
+	const hasPermissions = checkPermissions([...authUserPermissions, ...salonPermission], allowed, except) // permitted(authUserPermissions, selectedSalon?.uniqPermissions, allowed, except)
 
 	const [visibleModal, setVisibleModal] = useState(false)
 	const [t] = useTranslation()
@@ -117,7 +107,7 @@ const Permissions: FC<Props> = (props) => {
 					description: t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')
 				})
 			},
-			checkPermissions: (allowedPermissions: _Permissions) => checkPermissions(authUserPermissions, allowedPermissions)
+			checkPermissions: (allowedPermissions: PERMISSION[]) => checkPermissions(authUserPermissions, allowedPermissions)
 		})
 		const modal: any = <ForbiddenModal visible={visibleModal} onCancel={() => setVisibleModal(false)} item={item} />
 		return modal

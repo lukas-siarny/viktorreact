@@ -266,8 +266,9 @@ const ReviewsPage = () => {
 													onClick: () => {
 														if (!hasPermission) {
 															openForbiddenModal()
+														} else {
+															changeVerificationStatus(record.id, REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C)
 														}
-														changeVerificationStatus(record.id, REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C)
 													}
 												},
 												{
@@ -279,8 +280,9 @@ const ReviewsPage = () => {
 													onClick: () => {
 														if (!hasPermission) {
 															openForbiddenModal()
+														} else {
+															changeVerificationStatus(record.id, REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C)
 														}
-														changeVerificationStatus(record.id, REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C)
 													}
 												}
 											]

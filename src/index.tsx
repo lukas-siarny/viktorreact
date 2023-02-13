@@ -26,8 +26,6 @@ import 'regenerator-runtime/runtime'
 import './styles/main.css'
 import './styles/global.sass'
 
-import ErrorBoundary from './components/ErrorBoundary'
-
 // dayjs extended plugins
 dayjs.extend(isBetween)
 dayjs.extend(utcPlugin)

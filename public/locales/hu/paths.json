@@ -15,7 +15,7 @@
   "employees": "/employees",
   "employees/create": "/employees/create",
   "employees/{{employeeID}}": "/employees/{{employeeID}}",
-  "index": "/index",
+  "index": "/",
   "industries-and-services": "/industries-and-services",
   "industries-and-services/{{industryID}}": "/industries-and-services/{{industryID}}",
   "invite": "/invite",

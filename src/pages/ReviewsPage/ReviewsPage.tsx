@@ -254,39 +254,37 @@ const ReviewsPage = () => {
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Dropdown
 										key={'footer-checkout-dropdown'}
-										overlay={
-											<Menu
-												className={'shadow-md max-w-xs min-w-52 mt-1 p-2 flex flex-col gap-2'}
-												items={[
-													{
-														key: 'visible_in_b2c',
-														label: showReviewText,
-														icon: <EyeIcon width={16} height={16} />,
-														className: dropdownItemClassName,
-														disabled: disabledShowReview,
-														onClick: () => {
-															if (!hasPermission) {
-																openForbiddenModal()
-															}
-															changeVerificationStatus(record.id, REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C)
+										menu={{
+											className: 'shadow-md max-w-xs min-w-52 mt-1 p-2 flex flex-col gap-2',
+											items: [
+												{
+													key: 'visible_in_b2c',
+													label: showReviewText,
+													icon: <EyeIcon width={16} height={16} />,
+													className: dropdownItemClassName,
+													disabled: disabledShowReview,
+													onClick: () => {
+														if (!hasPermission) {
+															openForbiddenModal()
 														}
-													},
-													{
-														key: 'hidden_in_b2c',
-														label: t('loc:Skryť text'),
-														icon: <EyeoffIcon width={16} height={16} />,
-														className: dropdownItemClassName,
-														disabled: disabledHideReview,
-														onClick: () => {
-															if (!hasPermission) {
-																openForbiddenModal()
-															}
-															changeVerificationStatus(record.id, REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C)
-														}
+														changeVerificationStatus(record.id, REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C)
 													}
-												]}
-											/>
-										}
+												},
+												{
+													key: 'hidden_in_b2c',
+													label: t('loc:Skryť text'),
+													icon: <EyeoffIcon width={16} height={16} />,
+													className: dropdownItemClassName,
+													disabled: disabledHideReview,
+													onClick: () => {
+														if (!hasPermission) {
+															openForbiddenModal()
+														}
+														changeVerificationStatus(record.id, REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C)
+													}
+												}
+											]
+										}}
 										placement='bottomRight'
 										trigger={['click']}
 									>
@@ -343,7 +341,7 @@ const ReviewsPage = () => {
 			label: t('loc:Publikované')
 		},
 		{
-			key: TAB_KEYS.PUBLISHED,
+			key: TAB_KEYS.DELETED,
 			tabKey: TAB_KEYS.DELETED,
 			label: t('loc:Vymazané')
 		}

@@ -27,7 +27,7 @@ const DragableTableRow = ({ children, ...props }: RowProps) => {
 					return React.cloneElement(child as React.ReactElement, {
 						children: (
 							<div ref={setActivatorNodeRef} {...listeners}>
-								<DragIcon style={{ touchAction: 'none', cursor: 'move' }} className={'text-blue-600 w-4 h-4 flex'} />
+								<DragIcon style={{ touchAction: 'none', cursor: 'move' }} className={'text-notino-pink w-4 h-4 flex'} />
 							</div>
 						)
 					})

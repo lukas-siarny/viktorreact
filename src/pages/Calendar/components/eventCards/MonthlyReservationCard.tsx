@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { FC, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import cx from 'classnames'
 
 // assets
 import { ReactComponent as CalendarIcon } from '../../../../assets/icons/calendar-24.svg'
@@ -32,7 +33,7 @@ const MonthlyReservationCard: FC<IMonthlyReservationCardProps> = (props) => {
 	}
 
 	return (
-		<div ref={cardRef} className={'nc-event nc-month-event reservation'} onClick={handleReservationClick}>
+		<div ref={cardRef} className={cx('nc-event nc-month-event reservation', { 'is-day-events-popover': isDayEventsPopover })} onClick={handleReservationClick}>
 			<div
 				className={'event-accent'}
 				style={{
@@ -43,10 +44,25 @@ const MonthlyReservationCard: FC<IMonthlyReservationCardProps> = (props) => {
 			<div className={'event-content'}>
 				<div className={'event-avatar'}>{avatar && <img src={avatar} alt={''} width={16} height={16} />}</div>
 				<div className={'events-stats'}>
-					<CalendarIcon width={10} height={10} />
-					<span className={'events-count'}>
-						{eventsCount} <span className={'duration'}>{`(${duration})`}</span>
-					</span>
+					{isDayEventsPopover ? (
+						<>
+							<div className={'events-count'}>
+								<span>{t('loc:Rezervácie')}</span>
+								{eventsCount}
+							</div>
+							<div className={'duration'}>
+								<span>{t('loc:Trvanie')}</span>
+								{duration}
+							</div>
+						</>
+					) : (
+						<>
+							<CalendarIcon width={10} height={10} />
+							<span className={'events-count'}>
+								{eventsCount} <span className={'duration'}>{`(${duration})`}</span>
+							</span>
+						</>
+					)}
 				</div>
 			</div>
 		</div>

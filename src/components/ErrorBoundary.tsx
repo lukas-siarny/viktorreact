@@ -26,40 +26,39 @@ class ErrorBoundary extends React.Component<PropsWithChildren, any> {
 	}
 
 	render() {
-		if (this.state.error) {
-			const { language } = i18next
-			const texts = ERROR_BOUNDARY_TEXTS()
+		const { language } = i18next
+		const texts = ERROR_BOUNDARY_TEXTS()
 
-			return (
-				<div className={'error-page-wrapper'}>
-					<>
-						<Result
-							status='500'
-							title='500'
-							subTitle={texts.result.subtitle}
-							extra={
-								<Button onClick={() => this.setState({ isOpen: true })} type='primary'>
-									{texts.result.buttonLabel}
-								</Button>
-							}
-						/>
-						{this.state.isOpen &&
-							Sentry.showReportDialog({
-								eventId: this.state.eventId,
-								successMessage: texts.reportDialog.successMessage,
-								title: texts.reportDialog.title,
-								subtitle: texts.reportDialog.subtitle,
-								subtitle2: '',
-								labelName: texts.reportDialog.labelName,
-								labelComments: texts.reportDialog.labelComments,
-								labelClose: texts.reportDialog.labelClose,
-								labelSubmit: texts.reportDialog.labelSubmit,
-								lang: language
-							})}
-					</>
-				</div>
-			)
-		}
+		return (
+			<div className={'error-page-wrapper'}>
+				<>
+					<Result
+						status='500'
+						title='500'
+						subTitle={texts.result.subtitle}
+						extra={
+							<Button onClick={() => this.setState({ isOpen: true })} type='primary'>
+								{texts.result.buttonLabel}
+							</Button>
+						}
+					/>
+					{this.state.isOpen &&
+						Sentry.showReportDialog({
+							eventId: this.state.eventId,
+							successMessage: texts.reportDialog.successMessage,
+							title: texts.reportDialog.title,
+							subtitle: texts.reportDialog.subtitle,
+							subtitle2: '',
+							labelName: texts.reportDialog.labelName,
+							labelComments: texts.reportDialog.labelComments,
+							labelClose: texts.reportDialog.labelClose,
+							labelSubmit: texts.reportDialog.labelSubmit,
+							lang: language
+						})}
+				</>
+			</div>
+		)
+
 		return this.props.children
 	}
 }

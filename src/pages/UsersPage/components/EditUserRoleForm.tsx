@@ -11,7 +11,7 @@ import SelectField from '../../../atoms/SelectField'
 import { IEditUserRoleForm } from '../../../types/interfaces'
 
 // utils
-import { FORM, PERMISSION, STRINGS } from '../../../utils/enums'
+import { FORM, ADMIN_PERMISSIONS, STRINGS } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 
 // validate
@@ -43,7 +43,7 @@ const EditUserRoleForm: FC<Props> = (props) => {
 				<Divider className={'mb-3 mt-3'} />
 				<div className={'flex w-full flex-col md:flex-row md:gap-2'}>
 					<Permissions
-						allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
+						allowed={ADMIN_PERMISSIONS}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<>
 								<Field

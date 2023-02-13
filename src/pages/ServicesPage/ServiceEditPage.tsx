@@ -5,6 +5,7 @@ import { Action, compose, Dispatch } from 'redux'
 import { notification } from 'antd'
 import i18next from 'i18next'
 import { forEach, isNil, unionBy } from 'lodash'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import ServiceForm from './components/ServiceForm'
@@ -21,10 +22,9 @@ import { Paths } from '../../types/api'
 
 // utils
 import { patchReq } from '../../utils/request'
-import { FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION } from '../../utils/enums'
 import { decodePrice, encodePrice, getAssignedUserLabel, getEmployeeServiceDataForPatch, getServicePriceAndDurationData } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { history } from '../../utils/history'
 
 type Props = SalonSubPageProps & {
 	serviceID: string
@@ -33,8 +33,6 @@ type Props = SalonSubPageProps & {
 type ServiceParameterValues = NonNullable<Paths.GetApiB2BAdminServicesServiceId.Responses.$200['service']['serviceCategoryParameter']>['values']
 type ServicePatch = Paths.PatchApiB2BAdminServicesServiceId.RequestBody
 type ServiceParameterValuesPatch = ServicePatch['categoryParameterValues']
-
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 export const parseEmployeeCreateAndUpdate = (employees: IServiceForm['employees']): any => {
 	return employees?.map((employeeService) => employeeService?.employee?.id)
@@ -230,6 +228,7 @@ const parseEmployeesInit = (service: ServiceDetail) => {
 const ServiceEditPage = (props: Props) => {
 	const { serviceID, salonID, parentPath } = props
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const service = useSelector((state: RootState) => state.service.service.data?.service)
@@ -242,7 +241,7 @@ const ServiceEditPage = (props: Props) => {
 		const { data } = await dispatch(getService(serviceID))
 		const { categoryParameterValues } = await dispatch(getCategory(data?.service?.category?.child?.child?.id))
 		if (!data?.service?.id) {
-			history.push('/404')
+			navigate('/404')
 		}
 		if (data) {
 			// union parameter values form service and category detail based on categoryParameterValueID
@@ -264,7 +263,7 @@ const ServiceEditPage = (props: Props) => {
 			}
 			dispatch(initialize(FORM.SERVICE_FORM, initData || {}))
 		}
-	}, [dispatch, serviceID])
+	}, [dispatch, serviceID, navigate])
 
 	const editEmployeeService = async (values: IEmployeeServiceEditForm, _dispatch?: Dispatch<any>, customProps?: any) => {
 		const employeeID = values.employee?.id
@@ -322,7 +321,7 @@ const ServiceEditPage = (props: Props) => {
 
 	return (
 		<Permissions
-			allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_UPDATE]}
+			allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_UPDATE]}
 			render={(hasPermission, { openForbiddenModal }) => (
 				<>
 					<ServiceForm
@@ -355,4 +354,4 @@ const ServiceEditPage = (props: Props) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(ServiceEditPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(ServiceEditPage)

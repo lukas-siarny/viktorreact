@@ -62,28 +62,28 @@ const TextareaField = (props: Props) => {
 	)
 
 	const onFocus = useCallback(
-		(e) => {
+		(e: React.FocusEvent<HTMLTextAreaElement>) => {
 			e.target.selectionEnd = 1
 			if (input.onFocus) {
 				input.onFocus(e)
 			}
 			if (focusRow) {
 				setSutoSizeState({ minRows: focusRow, maxRows: 10 })
-				ref?.current?.resizableTextArea?.resizeOnNextFrame()
+				// ref?.current?.resizableTextArea?.resizeOnNextFrame()
 			}
 		},
 		[focusRow, input, setSutoSizeState]
 	)
 
 	const onBlur = useCallback(
-		(e) => {
+		(e: React.FocusEvent<HTMLTextAreaElement>) => {
 			if (input.onBlur) {
 				const val = parseValue(get(e, 'target.value'))
 				input.onBlur(val as any, e.target.name)
 			}
 			if (focusRow) {
 				setSutoSizeState({ minRows: 1, maxRows: 10 })
-				ref?.current?.resizableTextArea?.resizeOnNextFrame()
+				// ref?.current?.resizableTextArea?.resizeOnNextFrame()
 			}
 		},
 		[focusRow, input, setSutoSizeState]

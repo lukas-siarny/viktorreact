@@ -2,13 +2,13 @@ import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 're
 import Layout from 'antd/lib/layout/layout'
 import { message } from 'antd'
 import dayjs from 'dayjs'
-import { includes, isEmpty, omit } from 'lodash'
+import { includes, isArray, isEmpty, omit } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { destroy, getFormValues, initialize } from 'redux-form'
-import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
+import { destroy, initialize } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import Scroll from 'react-scroll'
+import { useNavigate } from 'react-router-dom'
 
 // utils
 import {
@@ -20,20 +20,19 @@ import {
 	CALENDAR_VIEW,
 	CONFIRM_MODAL_DATA_TYPE,
 	DAY,
-	DEFAULT_DATE_INIT_FORMAT,
-	DEFAULT_TIME_FORMAT,
 	EVERY_REPEAT,
 	FORM,
 	NOTIFICATION_TYPE,
 	PERMISSION,
 	REFRESH_CALENDAR_INTERVAL,
 	RESERVATION_PAYMENT_METHOD,
-	RESERVATION_STATE
+	RESERVATION_STATE,
+	CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE,
+	ADMIN_PERMISSIONS
 } from '../../utils/enums'
-import { checkPermissions, isAdmin, withPermissions } from '../../utils/Permissions'
+import { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
-import { history } from '../../utils/history'
 
 // reducers
 import {
@@ -53,7 +52,7 @@ import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 // components
 import CalendarContent, { CalendarRefs } from './components/layout/CalendarContent'
 import CalendarHeader from './components/layout/Header'
-import SiderEventManagement from './components/layout/SiderEventManagement'
+import SiderEventManagement, { SiderEventManagementRefs } from './components/layout/SiderEventManagement'
 import SiderFilter from './components/layout/SiderFilter'
 
 // types
@@ -73,6 +72,9 @@ import {
 import CalendarReservationPopover from './components/CalendarReservationPopover'
 import CalendarConfirmModal from './components/CalendarConfirmModal'
 
+// hooks
+import useQueryParams, { ArrayParam, StringParam } from '../../hooks/useQueryParams'
+
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
 }
@@ -88,7 +90,7 @@ const getFullCategoryIdsFromUrl = (ids?: (string | null)[] | null) => {
 }
 
 const getShortCategoryIdsForUrl = (ids?: (string | null)[] | null) => {
-	return ids?.length
+	return isArray(ids) && ids?.length
 		? ids?.reduce((cv, id) => {
 				if (id) {
 					const splittedId = id.split('-')
@@ -104,6 +106,7 @@ const CALENDAR_EVENTS_VIEW_TYPES = Object.keys(CALENDAR_EVENTS_VIEW_TYPE)
 
 const Calendar: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath = '' } = props
+	const navigate = useNavigate()
 	/**
 	 * referencie na jednotlivé inštancie Fullcalendar-a - pre každé view sa používa zvlášť inštancia (denné, týždenné, mesačné) - viď CalendarContent.tsx
 	 * každá inštancia má dostupné metódy render() a getCalendarApi(), napr. calendarRefs.current.DAY.getCalendarApi()
@@ -111,30 +114,33 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	 * getCalendarApi() - umožňuje programovo volať ďalšie FC metódy napr. calendarRefs.current.DAY.getCalendarApi().updateSize() - viď dokumentácia https://fullcalendar.io/docs
 	 * */
 	const calendarRefs = useRef<CalendarRefs>(null)
+	const siderEventManagementRefs = useRef<SiderEventManagementRefs>(null)
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	/**
-	 * undefined queryParam value means there is no filter applied (e.g query = { view: 'DAY', employeeIDs: undefined, date: '2022-11-03' }, url: &view=DAY&date=2022-11-03)
-	 * we would set default value for employees in this case (all employes)
-	 * null queryParam value means empty filter (e.g query = { view: 'DAY', employeeIDs: null, date: '2022-11-03' } => url: &view=DAY&employeeIDS&date=2022-11-03)
-	 * we would set no emoployees in this case
-	 * this is usefull, becouse when we first initialize page, we want to set default value (if there are no employeeIDs in the URL)
-	 * but when user unchecks all employeeIDs options in the filter, we want to show no employees
-	 */
+
+	/*
+		NOTE:
+		* undefined queryParam value means there is no filter applied (e.g query = { view: 'DAY', employeeIDs: undefined, date: '2022-11-03' }, url: &view=DAY&date=2022-11-03)
+		* we would set default value for employees in this case (all employes)
+		* null queryParam value means empty filter (e.g query = { view: 'DAY', employeeIDs: null, date: '2022-11-03' } => url: &view=DAY&employeeIDS&date=2022-11-03)
+		* we would set no emoployees in this case
+		* this is usefull, becouse when we first initialize page, we want to set default value (if there are no employeeIDs in the URL)
+		* but when user unchecks all employeeIDs options in the filter, we want to show no employees
+	*/
 	const [query, setQuery] = useQueryParams({
-		view: withDefault(StringParam, CALENDAR_VIEW.DAY),
-		date: withDefault(StringParam, dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
-		employeeIDs: DelimitedArrayParam,
-		categoryIDs: DelimitedArrayParam,
-		sidebarView: StringParam,
-		eventId: StringParam,
-		eventsViewType: withDefault(StringParam, CALENDAR_EVENTS_VIEW_TYPE.RESERVATION)
+		view: StringParam(CALENDAR_VIEW.DAY),
+		date: StringParam(dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
+		eventsViewType: StringParam(CALENDAR_EVENTS_VIEW_TYPE.RESERVATION),
+		employeeIDs: ArrayParam(),
+		categoryIDs: ArrayParam(),
+		sidebarView: StringParam(),
+		eventId: StringParam()
 	})
 
-	/**
-	 * ďalej v kóde je potrebné používať tieto zvalidované hodnoty miesto query.view, query.date a query.eventsViewType
-	 */
-	const validSelectedDate = useMemo(() => (dayjs(query.date).isValid() ? query.date : dayjs().format(CALENDAR_DATE_FORMAT.QUERY)), [query.date])
+	const validSelectedDate = useMemo(
+		() => (dayjs(query.date).isValid() ? dayjs(query.date).format(CALENDAR_DATE_FORMAT.QUERY) : dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
+		[query.date]
+	)
 	const validCalendarView = useMemo(() => (CALENDAR_VIEWS.includes(query.view) ? query.view : CALENDAR_VIEW.DAY), [query.view]) as CALENDAR_VIEW
 	const validEventsViewType = useMemo(
 		() => (CALENDAR_EVENTS_VIEW_TYPES.includes(query.eventsViewType) ? query.eventsViewType : CALENDAR_EVENTS_VIEW_TYPE.RESERVATION),
@@ -172,9 +178,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		position: null
 	})
 
-	const eventFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EVENT_FORM)(state))
-	const reservationFormValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
-
 	const fetchInterval = useRef<number | undefined>()
 
 	/**
@@ -201,11 +204,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 
 		const interval = window.setInterval(async () => {
-			message.open({
-				type: 'loading',
-				content: t('loc:Kalendár sa aktualizuje'),
-				duration: 0
-			})
+			const messageExists = document.querySelector('.nc-calendar-msg-refresh')
+			if (!messageExists) {
+				message.open({
+					type: 'loading',
+					className: 'nc-calendar-msg-refresh',
+					content: t('loc:Kalendár sa aktualizuje'),
+					duration: 0
+				})
+			}
 			await dispatch(refreshEvents(validEventsViewType))
 			message.destroy()
 		}, REFRESH_CALENDAR_INTERVAL)
@@ -231,7 +238,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	 * nastavi novy datum do query, novy current range a tiez datum pre aktualne zobrazenu instanciu Fullcalendara
 	 */
 	const setNewSelectedDate = (newDate: string) => {
-		// novy datum do query parametra sa nastavi vzdy
+		// query sa nastavi vzdy ked sa zmeni datum
 		setQuery({ ...query, date: newDate })
 
 		// datum vo Fullcalendari a current range sa nastavi len vtedy, ked sa novy datum nenachadza v aktualne zvolenom rangi (currentRange state)
@@ -279,7 +286,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	 */
 	const setCalendarView = (newView: CALENDAR_VIEW) => {
 		setQuery({ ...query, view: newView })
-		setCurrentRange(getSelectedDateRange(newView, query.date))
+		setCurrentRange(getSelectedDateRange(newView, validSelectedDate))
 	}
 
 	/**
@@ -349,28 +356,42 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}, [scrollToTime])
 
 	useEffect(() => {
+		dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
+		dispatch(getServices({ salonID }))
+	}, [dispatch, salonID])
+
+	useEffect(() => {
 		// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
 		const loadSalonDetail = async () => {
 			const salonRes = await dispatch(selectSalon(salonID))
 
-			const canVisitThisPage = isAdmin(authUserPermissions) || (checkPermissions(authUserPermissions, [PERMISSION.PARTNER]) && salonRes?.data?.settings?.enabledReservations)
+			const salonPermissions = salonRes?.data?.uniqPermissions || []
+			const userPermissions = [...(authUserPermissions || []), ...salonPermissions]
+
+			const canVisitThisPage =
+				checkPermissions(userPermissions, [PERMISSION.NOTINO]) ||
+				(checkPermissions(userPermissions, [PERMISSION.PARTNER], ADMIN_PERMISSIONS) && salonRes?.data?.settings?.enabledReservations)
 			if (!canVisitThisPage) {
-				history.push('/404')
+				navigate('/404')
 			}
 		}
 
 		loadSalonDetail()
-		dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
-		dispatch(getServices({ salonID }))
-	}, [dispatch, salonID, authUserPermissions])
+	}, [authUserPermissions, dispatch, salonID])
 
 	useEffect(() => {
 		;(async () => {
-			// if user uncheck all values from one of the filters => don't fetch new events
-			if (query?.employeeIDs === null || query?.categoryIDs === null) {
-				clearFetchInterval()
+			// if user uncheck all values from employeesIDs filter => clear reservations and shifts and dot't fetch new data
+			if (query?.employeeIDs === null) {
+				restartFetchInterval()
 				dispatch(clearCalendarReservations())
 				dispatch(clearCalendarShiftsTimeoffs())
+				return
+			}
+			// if user uncheck all values from categoryIDs filter => clear reservations, but keep shifts and dot't fetch new data
+			if (query?.categoryIDs === null) {
+				restartFetchInterval()
+				dispatch(clearCalendarReservations())
 				return
 			}
 
@@ -380,7 +401,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents])
 
 	useEffect(() => {
-		dispatch(clearEvent()) // Ak je otvoreny virtualny event tak sa zmaze virtualny event
 		dispatch(
 			initialize(FORM.CALENDAR_FILTER, {
 				eventsViewType: validEventsViewType,
@@ -393,7 +413,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	useEffect(() => {
 		// update calendar size when main layout sider change
 		// wait for the end of sider menu animation and then update size of the calendar
-		const timeout = setTimeout(updateCalendarSize.current, 300)
+		const timeout = setTimeout(updateCalendarSize.current, CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE)
 		return () => clearTimeout(timeout)
 	}, [isMainLayoutSiderCollapsed])
 
@@ -403,7 +423,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			if (!newView) {
 				setQuery({
 					...query,
-					eventId: undefined,
+					evendId: undefined,
 					sidebarView: undefined
 				})
 			} else {
@@ -440,11 +460,16 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}, [dispatch, setEventManagement])
 
 	const handleSubmitFilter = (values: ICalendarFilter) => {
+		// pri prepnuti filtra sa zavrie sidebar ak existuje virtualny event, tak sa zmaze
+		if (virtualEvent) {
+			dispatch(clearEvent())
+		}
+
 		setQuery({
 			...query,
 			...values,
-			// ak su vybrati vsetci zamestnanci alebo vsetky kategorie, tak je zbytocne posielat na BE vsetky IDcka
-			// BE vrati rovnake zaznamy ako ked sa tam neposle nic
+			// // ak su vybrati vsetci zamestnanci alebo vsetky kategorie, tak je zbytocne posielat na BE vsetky IDcka
+			// // BE vrati rovnake zaznamy ako ked sa tam neposle nic
 			employeeIDs: values?.employeeIDs?.length === employees?.options?.length ? undefined : values.employeeIDs,
 			categoryIDs: values?.categoryIDs?.length === services?.categoriesOptions?.length ? undefined : getShortCategoryIdsForUrl(values.categoryIDs),
 			eventId: undefined,
@@ -452,60 +477,22 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		})
 	}
 
-	const initCreateEventForm = (eventType: CALENDAR_EVENT_TYPE, newEventData?: INewCalendarEvent, forceDestroy = false) => {
-		const prevEventType = query.sidebarView
-		// Mergnut predchadzajuce data ktore boli vybrane pred zmenou eventTypu
-		let prevInitData: Partial<ICalendarEventForm | ICalendarReservationForm> = {}
-		if (prevEventType === CALENDAR_EVENT_TYPE.RESERVATION) {
-			prevInitData = reservationFormValues
-			// CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT || CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK || CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
-		} else {
-			prevInitData = eventFormValues
-		}
-		// Nastavi sa aktualny event Type zo selectu
-		setQuery({
-			...query,
-			eventId: undefined, // Pri create vynulovat eventID ak bol pred creatom otvoreny nejaky detail
-			sidebarView: eventType
-		})
-
-		let timeTo: string | undefined
-		if (newEventData?.timeTo) {
-			// use 23:59 instead of 00:00 as end of day
-			timeTo = newEventData.timeTo === '00:00' ? '23:59' : newEventData.timeTo
-		}
-
-		// Initne sa event / reservation formular
-		const initData: Partial<ICalendarEventForm | ICalendarReservationForm> = {
-			date: newEventData?.date || query.date || dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-			timeFrom: newEventData?.timeFrom ?? dayjs().format(DEFAULT_TIME_FORMAT),
-			timeTo,
-			employee: newEventData?.employee,
-			...(!forceDestroy && omit(prevInitData, 'eventType')), // prevData initne len pri prepinani selectu, pri znovu kliknuti na pridat sa tieto data nemerguju
-			eventType
-		}
-
-		if (eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
-			dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
-		} else {
-			// CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT || CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK || CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
-			dispatch(initialize(FORM.CALENDAR_EVENT_FORM, initData))
-		}
-	}
-
-	const handleAddEvent = (initialData?: INewCalendarEvent) => {
-		// NOTE: ak existuje vytvoreny virualny event a pouzivatel vytvori dalsi klikom na tlacidlo Pridat tak ho zmaze a otvori init create form eventu
-		if (virtualEvent || query.eventId) {
-			closeSiderForm()
+	const handleAddEvent = (initialData?: INewCalendarEvent, fromAddButton?: boolean) => {
+		/**
+		 * Ak kliknem hore v hlavicke na Pridat a akutalne uz mam otvoreny sidebar a vytvaram novy event
+		 * nebude sa vyinicializovavat formular, aby sme neprepisali uz uzivatelom naklikane data
+		 */
+		if (fromAddButton && query.sidebarView && !query.eventId) {
+			return
 		}
 
 		// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastav pracovnu zmenu
 		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-			setEventManagement(CALENDAR_EVENT_TYPE.RESERVATION)
-			initCreateEventForm(CALENDAR_EVENT_TYPE.RESERVATION, initialData, true)
+			setEventManagement(CALENDAR_EVENT_TYPE.RESERVATION, undefined)
+			siderEventManagementRefs?.current?.initCreateEventForm(CALENDAR_EVENT_TYPE.RESERVATION, initialData)
 		} else {
-			setEventManagement(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
-			initCreateEventForm(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, initialData, true)
+			setEventManagement(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, undefined)
+			siderEventManagementRefs?.current?.initCreateEventForm(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, initialData)
 		}
 	}
 
@@ -766,6 +753,18 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const initUpdateReservationStateData = (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) =>
 		setConfirmModalData({ key: CONFIRM_MODAL_DATA_TYPE.UPDATE_RESERVATION_STATE, calendarEventID, state, reason, paymentMethod })
 
+	const onEditEvent = (eventType: CALENDAR_EVENT_TYPE, eventId: string) => {
+		setQuery({
+			...query,
+			eventId,
+			sidebarView: eventType
+		})
+
+		if (validCalendarView === CALENDAR_VIEW.DAY) {
+			setTimeout(updateCalendarSize.current, 0)
+		}
+	}
+
 	const modals = (
 		<CalendarConfirmModal
 			data={confirmModalData}
@@ -778,17 +777,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			clearConfirmModal={clearConfirmModal}
 		/>
 	)
-
-	const onEditEvent = (eventType: CALENDAR_EVENT_TYPE, eventId: string) => {
-		setQuery({
-			...query,
-			eventId,
-			sidebarView: eventType
-		})
-		if (validCalendarView === CALENDAR_VIEW.DAY) {
-			setTimeout(updateCalendarSize.current, 0)
-		}
-	}
 
 	return (
 		<>
@@ -803,8 +791,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					setCalendarView={setCalendarView}
 					setEventsViewType={(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => {
 						// NOTE: Ak je otvoreny CREATE / EDIT sidebar tak pri prepnuti filtra ho zrusit + zmaze virtual event
-						dispatch(clearEvent())
-						setQuery({ ...query, eventsViewType, sidebarView: undefined })
+						if (virtualEvent) {
+							dispatch(clearEvent())
+						}
+						setQuery({ ...query, eventsViewType, sidebarView: undefined, eventId: undefined })
 					}}
 					setSelectedDate={setNewSelectedDate}
 					setSiderFilterCollapsed={() => {
@@ -820,7 +810,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					<CalendarContent
 						salonID={salonID}
 						enabledSalonReservations={selectedSalon?.settings?.enabledReservations}
-						setEventManagement={setEventManagement}
 						ref={calendarRefs}
 						selectedDate={validSelectedDate}
 						view={validCalendarView}
@@ -830,6 +819,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						eventsViewType={validEventsViewType}
 						employees={filteredEmployees() || []}
 						parentPath={parentPath}
+						query={query}
+						setQuery={setQuery}
 						onEditEvent={onEditEvent}
 						onReservationClick={(data?: ReservationPopoverData, position?: ReservationPopoverPosition) => {
 							setReservationPopover({
@@ -846,19 +837,21 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					/>
 					{selectedSalon?.settings?.enabledReservations && (
 						<SiderEventManagement
+							ref={siderEventManagementRefs}
 							phonePrefix={selectedSalon.address?.countryCode || selectedSalon.companyInvoiceAddress?.countryCode}
 							salonID={salonID}
 							selectedDate={validSelectedDate}
-							eventsViewType={validEventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
+							eventsViewType={validEventsViewType}
 							eventId={query.eventId}
 							handleDeleteEvent={initDeleteEventData}
 							sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE}
 							onCloseSider={closeSiderForm}
 							handleSubmitReservation={initSubmitReservationData}
 							handleSubmitEvent={initSubmitEventData}
-							calendarApi={calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()}
+							calendarApi={calendarRefs?.current?.[validCalendarView]?.getApi()}
 							changeCalendarDate={setNewSelectedDate}
-							initCreateEventForm={initCreateEventForm}
+							query={query}
+							setQuery={setQuery}
 						/>
 					)}
 				</Layout>
@@ -876,4 +869,4 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]))(Calendar)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(Calendar)

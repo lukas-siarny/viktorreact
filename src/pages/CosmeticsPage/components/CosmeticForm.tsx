@@ -1,12 +1,11 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Divider, Form, Button } from 'antd'
 
 // utils
-import { isEmpty } from 'lodash'
-import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, VALIDATION_MAX_LENGTH, DELETE_BUTTON_ID } from '../../../utils/enums'
-import { showErrorNotification, checkUploadingBeforeSubmit, formFieldID } from '../../../utils/helper'
+import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, DELETE_BUTTON_ID } from '../../../utils/enums'
+import { showErrorNotification, checkUploadingBeforeSubmit, formFieldID, validationRequired } from '../../../utils/helper'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -27,43 +26,25 @@ type ComponentProps = {
 	cosmeticID?: string
 	closeForm: () => void
 	onDelete: () => void
-	usedBrands?: string[]
 }
 
 type Props = InjectedFormProps<ICosmeticForm, ComponentProps> & ComponentProps
 
 const CosmeticForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, cosmeticID, closeForm, onDelete, usedBrands = [], submitting, pristine } = props
-
-	const validateName = useCallback(
-		(value: string) => {
-			if (isEmpty(value)) {
-				return t('loc:Toto pole je povinné')
-			}
-
-			if (value.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
-				return t('loc:Max. počet znakov je {{max}}', {
-					max: VALIDATION_MAX_LENGTH.LENGTH_100
-				})
-			}
-
-			// each cosmetic name is unique brand and can be created only once
-			if (!cosmeticID && usedBrands.includes(value)) {
-				return t('loc:Kozmetika so zadaným názvom už existuje')
-			}
-
-			return undefined
-		},
-		[usedBrands, t, cosmeticID]
-	)
+	const { handleSubmit, cosmeticID, closeForm, onDelete, submitting, pristine } = props
 
 	return (
-		<Form id={`${FORM.COSMETIC}-form`} layout={'vertical'} className={'w-full top-0 sticky overflow-hidden'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
+		<Form
+			id={`${FORM.COSMETIC}-form`}
+			layout={'vertical'}
+			className={'w-full top-0 sticky overflow-hidden pt-1 px-6 pb-6 -mx-6'}
+			onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}
+		>
 			<div className={'h-full'}>
 				<h3 className={'mb-0 mt-3 relative pr-7'}>
 					{cosmeticID ? t('loc:Upraviť kozmetiku') : t('loc:Vytvoriť kozmetiku')}
-					<Button className='absolute top-1 right-0 p-0 border-none shadow-none' onClick={() => closeForm()}>
+					<Button className='noti-close-form-btn absolute top-1 right-0' onClick={() => closeForm()}>
 						<CloseIcon />
 					</Button>
 				</h3>
@@ -77,7 +58,7 @@ const CosmeticForm: FC<Props> = (props) => {
 					size={'large'}
 					required
 					className='w-full'
-					validate={validateName}
+					validate={validationRequired}
 				/>
 				<Field
 					className={'m-0 '}

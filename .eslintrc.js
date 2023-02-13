@@ -9,8 +9,9 @@ module.exports = {
 	rules: {
 		'@typescript-eslint/no-explicit-any': 'off',
 		'@typescript-eslint/no-empty-interface': 'off',
-		'react/jsx-no-useless-fragment': 'off',
+		'@typescript-eslint/default-param-last': 'off',
 		'@typescript-eslint/no-unused-vars': 'warn',
+		'react/jsx-no-useless-fragment': 'off',
 		'no-underscore-dangle': 'warn'
 	}
 }

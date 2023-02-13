@@ -5,12 +5,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Button, Divider, Row, Spin } from 'antd'
 import { initialize, isPristine, isSubmitting, submit } from 'redux-form'
 import { get } from 'lodash'
+import { useNavigate } from 'react-router-dom'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { PERMISSION, SALON_PERMISSION, FORM, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { PERMISSION, FORM } from '../../utils/enums'
 import { postReq } from '../../utils/request'
-import { history } from '../../utils/history'
 import { filterSalonRolesByPermission } from '../../utils/helper'
 
 // components
@@ -32,10 +32,9 @@ import useBackUrl from '../../hooks/useBackUrl'
 import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.svg'
 import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
-const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]
-
 const CreateEmployeePage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 	const { salonID, parentPath } = props
 	const dispatch = useDispatch()
 	const [submitting, setSubmitting] = useState<boolean>(false)
@@ -97,7 +96,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 			}
 
 			await postReq('/api/b2b/admin/employees/', {}, reqBody)
-			history.push(backUrl)
+			navigate(backUrl as string)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -117,7 +116,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 					roleID: formData?.roleID
 				}
 			)
-			history.push(backUrl)
+			navigate(backUrl as string)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -178,4 +177,4 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(CreateEmployeePage)
+export default compose(withPermissions([PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]))(CreateEmployeePage)

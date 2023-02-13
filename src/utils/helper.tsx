@@ -37,11 +37,11 @@ import { SubmissionError, submit } from 'redux-form'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
-import { ArgsProps } from 'antd/lib/notification'
+import { ArgsProps } from 'antd/es/notification/interface'
+
 import cx from 'classnames'
 import showNotifications from './tsxHelpers'
 import {
-	ADMIN_PERMISSIONS,
 	BYTE_MULTIPLIER,
 	DATE_TIME_PARSER_DATE_FORMAT,
 	DATE_TIME_PARSER_FORMAT,
@@ -63,7 +63,7 @@ import {
 	NOTIFICATION_TYPE,
 	QUERY_LIMIT,
 	RESERVATION_STATE,
-	SALON_PERMISSION,
+	PERMISSION,
 	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_SOURCE_TYPE
 } from './enums'
@@ -605,11 +605,9 @@ export const transformNumberFieldValue = (rawValue: number | string | undefined 
 		} else if (isNumber(min) && isNumber(max) && value >= min && value <= max) {
 			result = value
 		}
-	} else if (Number.isNaN(value)) {
-		result = NaN
 	}
 
-	if (isFinite(result) && isNumber(precision)) {
+	if (!Number.isNaN(value) && isFinite(result) && isNumber(precision)) {
 		result = round(result as number, precision)
 	}
 
@@ -1013,7 +1011,7 @@ export const hasAuthUserPermissionToEditRole = (
 		return result
 	}
 
-	if (authUser.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+	if (authUser.uniqPermissions?.some((permission) => [PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
 		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
 		return {
 			hasPermission: true,
@@ -1047,7 +1045,7 @@ export const hasAuthUserPermissionToEditRole = (
 			return result
 		}
 		// it's possible to edit role only if you have permission to edit
-		if (authUserSalonRole?.permissions.find((permission) => permission.name === (SALON_PERMISSION.USER_ROLE_EDIT as any))) {
+		if (authUserSalonRole?.permissions.find((permission) => permission.name === PERMISSION.EMPLOYEE_ROLE_UPDATE)) {
 			return {
 				hasPermission: true,
 				tooltip: null
@@ -1063,7 +1061,7 @@ export const filterSalonRolesByPermission = (salonID?: string, authUser?: IAuthU
 		return salonRoles
 	}
 
-	if (authUser?.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+	if (authUser?.uniqPermissions?.some((permission) => [PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
 		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
 		// they automatically see all options
 		return salonRoles
@@ -1107,6 +1105,20 @@ export const getSalonFilterRanges = (values?: IDateTimeFilterOption[]): { [key: 
 			[value.name]: [now.subtract(value.value, value.unit), now]
 		}
 	}, {})
+}
+
+export const getRangesForDatePicker = (values?: IDateTimeFilterOption[]): { [key: string]: Dayjs[] } => {
+	const options = values ?? Object.values(DEFAULT_DATE_TIME_OPTIONS())
+	const now = dayjs()
+	return options.reduce((ranges, value) => {
+		return [
+			...ranges,
+			{
+				label: value.name,
+				value: [now.subtract(value.value, value.unit), now]
+			}
+		]
+	}, [])
 }
 
 export const getFirstDayOfWeek = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).startOf('week')

@@ -6,7 +6,6 @@ import { compose } from 'redux'
 import { initialize, reset } from 'redux-form'
 import { get } from 'lodash'
 import cx from 'classnames'
-import { StringParam, withDefault, useQueryParams } from 'use-query-params'
 import { SorterResult } from 'antd/lib/table/interface'
 
 // components
@@ -19,7 +18,7 @@ import CosmeticsFilter from './components/CosmeticsFilter'
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, CREATE_BUTTON_ID } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { normalizeDirectionKeys, setOrder, sortData } from '../../utils/helper'
+import { normalizeDirectionKeys } from '../../utils/helper'
 
 // reducers
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
@@ -30,6 +29,9 @@ import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
 import { IBreadcrumbs, ICosmetic, ICosmeticForm, Columns, ISearchFilter } from '../../types/interfaces'
+
+// hooks
+import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
 
 const CosmeticsPage = () => {
 	const [t] = useTranslation()
@@ -42,8 +44,9 @@ const CosmeticsPage = () => {
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 
 	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		order: withDefault(StringParam, 'name:ASC')
+		search: StringParam(),
+		limit: NumberParam(25),
+		page: NumberParam(1)
 	})
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -55,8 +58,8 @@ const CosmeticsPage = () => {
 	}
 
 	useEffect(() => {
-		dispatch(getCosmetics({ search: query.search as string }))
-	}, [dispatch, query.search])
+		dispatch(getCosmetics({ search: query.search, page: query.page, limit: query.limit }))
+	}, [dispatch, query.search, query.page, query.limit])
 
 	useEffect(() => {
 		dispatch(
@@ -113,9 +116,9 @@ const CosmeticsPage = () => {
 			}
 			dispatch(getCosmetics())
 			changeFormVisibility()
-			// reset search in case of newly created entity
+			// reset search and page in case of newly created entity
 			if (!cosmeticID && query.search) {
-				setQuery({ ...query, search: null })
+				setQuery({ ...query, search: '', page: 1 })
 			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -142,17 +145,13 @@ const CosmeticsPage = () => {
 			dataIndex: 'name',
 			key: 'name',
 			ellipsis: true,
-			render: (value) => <span className='base-regular'>{value}</span>,
-			sortOrder: setOrder(query.order, 'name'),
-			sorter: {
-				compare: (a, b) => sortData(a.name, b.name)
-			}
+			render: (value) => <span className='base-regular'>{value}</span>
 		},
 		{
 			title: t('loc:Logo'),
 			dataIndex: 'image',
 			key: 'image',
-			render: (value, record) =>
+			render: (_value, record) =>
 				record?.image ? (
 					<Image
 						src={record?.image?.resizedImages.thumbnail as string}
@@ -178,6 +177,15 @@ const CosmeticsPage = () => {
 		[query, setQuery]
 	)
 
+	const onChangePagination = (page: number, limit: number) => {
+		const newQuery = {
+			...query,
+			limit,
+			page
+		}
+		setQuery(newQuery)
+	}
+
 	const formClass = cx({
 		'w-2/3 xl:w-1/2': visibleForm
 	})
@@ -192,7 +200,7 @@ const CosmeticsPage = () => {
 					<div className='content-body'>
 						<Spin spinning={cosmetics?.isLoading}>
 							<CosmeticsFilter
-								total={cosmetics?.data?.length}
+								total={cosmetics?.data?.pagination.totalCount}
 								onSubmit={searchSubmit}
 								addButton={
 									<Button
@@ -215,27 +223,28 @@ const CosmeticsPage = () => {
 									<CustomTable
 										className='table-fixed'
 										columns={columns}
-										dataSource={cosmetics.data || []}
+										dataSource={cosmetics.data?.cosmetics || []}
 										rowClassName={'clickable-row'}
 										twoToneRows
 										rowKey={'id'}
 										onChange={onChangeTable}
-										pagination={false}
 										onRow={(record) => ({
 											onClick: () => changeFormVisibility(true, record)
 										})}
+										useCustomPagination
+										pagination={{
+											pageSize: query.limit,
+											total: cosmetics?.data?.pagination?.totalCount,
+											current: cosmetics?.data?.pagination?.page,
+											disabled: cosmetics?.isLoading,
+											onChange: onChangePagination
+										}}
 									/>
 								</div>
 								{visibleForm ? (
 									<div className={'w-6/12 flex items-start'}>
 										<Divider className={'h-full mx-6 xl:mx-9'} type={'vertical'} />
-										<CosmeticForm
-											closeForm={changeFormVisibility}
-											cosmeticID={cosmeticID}
-											onSubmit={handleSubmit}
-											onDelete={handleDelete}
-											usedBrands={cosmetics.data?.map((item) => item.name)}
-										/>
+										<CosmeticForm closeForm={changeFormVisibility} cosmeticID={cosmeticID} onSubmit={handleSubmit} onDelete={handleDelete} />
 									</div>
 								) : undefined}
 							</div>
@@ -247,4 +256,4 @@ const CosmeticsPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]))(CosmeticsPage)
+export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(CosmeticsPage)

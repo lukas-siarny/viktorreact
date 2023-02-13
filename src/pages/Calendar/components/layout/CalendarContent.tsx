@@ -5,8 +5,8 @@ import { Content } from 'antd/lib/layout/layout'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { change } from 'redux-form'
+import { useNavigate } from 'react-router-dom'
 import { startsWith } from 'lodash'
-import { DelimitedArrayParam, useQueryParams } from 'use-query-params'
 
 // fullcalendar
 import FullCalendar from '@fullcalendar/react'
@@ -45,11 +45,11 @@ import {
 import { RootState } from '../../../../reducers'
 
 // utils
-import { ForbiddenModal, permitted } from '../../../../utils/Permissions'
+import { ForbiddenModal, checkPermissions } from '../../../../utils/Permissions'
 import { getSelectedDateForCalendar, getWeekDays } from '../../calendarHelpers'
-import { history } from '../../../../utils/history'
 import { cancelGetTokens } from '../../../../utils/request'
 import { getCalendarEventsCancelTokenKey } from '../../../../reducers/calendar/calendarActions'
+import { IQueryParams } from '../../../../hooks/useQueryParams'
 
 const GET_RESERVATIONS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.RESERVATIONS)
 const GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS)
@@ -59,11 +59,12 @@ type Props = {
 	loading: boolean
 	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
-	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
 	enabledSalonReservations?: boolean
 	parentPath: string
 	clearFetchInterval: () => void
 	restartFetchInterval: () => void
+	query: IQueryParams
+	setQuery: (newValues: IQueryParams) => void
 } & Omit<ICalendarView, 'onEventChange' | 'onEventChangeStart' | 'onEventChangeStop'>
 
 export type CalendarRefs = {
@@ -73,6 +74,8 @@ export type CalendarRefs = {
 }
 
 const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
+	const navigate = useNavigate()
+
 	const {
 		view,
 		loading,
@@ -81,7 +84,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		handleSubmitReservation,
 		handleSubmitEvent,
 		selectedDate,
-		setEventManagement,
 		enabledSalonReservations,
 		salonID,
 		eventsViewType,
@@ -91,7 +93,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		onReservationClick,
 		clearFetchInterval,
 		restartFetchInterval,
-		parentPath
+		parentPath,
+		query,
+		setQuery
 	} = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -101,12 +105,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	const employeesOptions = useSelector((state: RootState) => state.employees.employees?.options)
 
-	// query
-	const [query, setQuery] = useQueryParams({
-		employeeIDs: DelimitedArrayParam,
-		categoryIDs: DelimitedArrayParam
-	})
-
 	useImperativeHandle(ref, () => ({
 		[CALENDAR_VIEW.DAY]: dayView?.current,
 		[CALENDAR_VIEW.WEEK]: weekView?.current
@@ -115,7 +113,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
-	const selectedSalonuniqPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions)
+	const salonPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions || [])
 	const [visibleForbiddenModal, setVisibleForbiddenModal] = useState(false)
 
 	const sources = useMemo(() => {
@@ -182,7 +180,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	}, [clearFetchInterval, eventsViewType])
 
 	const onEventChange = (arg: EventDropArg | EventResizeDoneArg) => {
-		const hasPermissions = permitted(authUserPermissions || [], selectedSalonuniqPermissions, UPDATE_EVENT_PERMISSIONS)
+		const hasPermissions = checkPermissions([...authUserPermissions, ...salonPermissions], UPDATE_EVENT_PERMISSIONS)
 
 		const revertEvent = () => {
 			arg.revert()
@@ -297,7 +295,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			return (
 				<CalendarEmptyState
 					title={t('loc:Pre prácu s kalendárom je potrebné pridať do salónu aspoň jedného zamestnanca')}
-					onButtonClick={() => history.push(`${parentPath}${t('paths:employees')}`)}
+					onButtonClick={() => navigate(`${parentPath}${t('paths:employees')}`)}
 					buttonLabel={t('loc:Pridať zamestnancov')}
 				/>
 			)
@@ -366,7 +364,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				<CalendarWeekView
 					ref={weekView}
 					enabledSalonReservations={enabledSalonReservations}
-					setEventManagement={setEventManagement}
 					reservations={sources.reservations}
 					shiftsTimeOffs={sources.shiftsTimeOffs}
 					virtualEvent={sources.virtualEvent}
@@ -389,7 +386,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		return (
 			<CalendarDayView
 				enabledSalonReservations={enabledSalonReservations}
-				setEventManagement={setEventManagement}
 				ref={dayView}
 				reservations={sources.reservations}
 				shiftsTimeOffs={sources.shiftsTimeOffs}

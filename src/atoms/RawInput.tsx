@@ -85,7 +85,7 @@ const RawInputWrapp: FC<WrappedComponent> = (props) => {
 	const { disabled, onBlurFn, onBlurParam1, onBlurParam2, onBlurParam3, onBlurParam4, onBlurParam5, value, size, resetOnBlur, style, className, readOnly } = props
 
 	const onBlur = useCallback(
-		(val) => {
+		(val: any) => {
 			onBlurFn(val, onBlurParam1, onBlurParam2, onBlurParam3, onBlurParam4, onBlurParam5)
 		},
 		[onBlurFn, onBlurParam1, onBlurParam2, onBlurParam3, onBlurParam4, onBlurParam5]

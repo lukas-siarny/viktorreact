@@ -3,13 +3,11 @@ import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import SalonDashboard from './SalonDashboard'
 import PendingInvites from './PendingInvites'
-
-// utils
-import { history } from '../../../utils/history'
 
 // redux
 import { RootState } from '../../../reducers'
@@ -21,6 +19,7 @@ type Props = {}
 
 const PartnerDashboard: FC<Props> = () => {
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 
 	const salonOptions = useSelector((state: RootState) => state.selectedSalon.selectionOptions.data)
 
@@ -32,7 +31,7 @@ const PartnerDashboard: FC<Props> = () => {
 					<div className='flex add-button justify-center items-center'>
 						<div className='m-auto text-center'>
 							<h1 className='text-5xl font-bold'>{t('loc:Začnite vytvorením salónu')}</h1>
-							<Button onClick={() => history.push(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'} icon={<PlusIcon />}>
+							<Button onClick={() => navigate(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'} icon={<PlusIcon />}>
 								{t('loc:Pridať salón')}
 							</Button>
 						</div>

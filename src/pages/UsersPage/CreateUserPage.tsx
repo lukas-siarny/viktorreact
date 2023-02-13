@@ -5,6 +5,7 @@ import { initialize, submit, isPristine } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { map } from 'lodash'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import CreateUserAccountForm from './components/CreateUserAccountForm'
@@ -14,7 +15,6 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import { IBreadcrumbs, ICreateUserForm } from '../../types/interfaces'
 
 // utils
-import { history } from '../../utils/history'
 import { FORM, PERMISSION, ENUMERATIONS_KEYS, STRINGS } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
@@ -30,10 +30,11 @@ import useBackUrl from '../../hooks/useBackUrl'
 // assets
 import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
-const permission: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_CREATE]
+const permission: PERMISSION[] = [PERMISSION.USER_CREATE]
 
 const CreateUserPage = () => {
 	const [t] = useTranslation()
+	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const isFormPristine = useSelector(isPristine(FORM.ADMIN_CREATE_USER))
@@ -73,13 +74,13 @@ const CreateUserPage = () => {
 			const { data } = await postReq('/api/b2b/admin/users/', null, {
 				email: formData?.email,
 				phone: formData?.phone,
-				phonePrefixCountryCode: formData?.phonePrefixCountryCode,
+				phonePrefixCountryCode: formData?.phone ? formData?.phonePrefixCountryCode : undefined,
 				roleID: formData?.roleID,
 				assignedCountryCode: formData?.assignedCountryCode
 			})
 
 			const userID = data.user.id
-			history.push(userID ? t('paths:users/{{userID}}', { userID }) : t('paths:users'))
+			navigate(userID ? t('paths:users/{{userID}}', { userID }) : t('paths:users'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

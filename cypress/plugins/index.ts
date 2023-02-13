@@ -8,13 +8,10 @@
 // You can read more here:
 // https://on.cypress.io/plugins-guide
 // ***********************************************************
-
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ms = require('smtp-tester')
-
 /**
  * @type {Cypress.PluginConfig}
  */
@@ -24,12 +21,33 @@ export default (on: any, config: any) => {
 	const mailServer = ms.init(port)
 	console.log('mail server at port %d', port)
 
+	// [receiver email]: email text
+	let lastEmail: any = {}
+
 	// process all emails
-	mailServer.bind((addr: string, id: string, email: string) => {
-		console.log('--- email ---')
-		// TODO: figure out how it would be possible use received emails
-		// console.log(addr, id, email)
+	mailServer.bind((addr: any, id: any, email: any) => {
+		console.log('--- email to %s ---', email.headers.to)
+		console.log(email.body)
+		console.log('--- end ---')
+		// store the email by the receiver email
+		lastEmail[email.headers.to] = email.html || email.body
 	})
 
-	return config
+	on('task', {
+		resetEmails(email: string) {
+			console.log('reset all emails')
+			if (email) {
+				delete lastEmail[email]
+			} else {
+				lastEmail = {}
+			}
+			return null
+		},
+
+		getLastEmail(email: string) {
+			return lastEmail[email] || null
+		}
+	})
+
+	return on
 }

@@ -24,7 +24,7 @@ const ConfirmModal: FC<IConfirmModal> = (props) => {
 					size={'middle'}
 					className={cx(props.cancelButtonProps?.className, 'noti-btn w-1/2')}
 					htmlType={'button'}
-					onClick={onCancel}
+					onClick={onCancel as any}
 					disabled={disabled}
 					loading={loading}
 				>
@@ -35,7 +35,7 @@ const ConfirmModal: FC<IConfirmModal> = (props) => {
 					size={'middle'}
 					className={cx(props.okButtonProps?.className, 'noti-btn w-1/2')}
 					htmlType={'button'}
-					onClick={onOk}
+					onClick={onOk as any}
 					disabled={disabled}
 					loading={loading}
 				>

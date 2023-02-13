@@ -13,7 +13,7 @@ import validateReservationForm from './validateReservationForm'
 import { formatLongQueryString, getAssignedUserLabel, getCountryPrefix, optionRenderWithAvatar, showErrorNotification, findNodeInTree } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { getReq, postReq } from '../../../../utils/request'
-import { CREATE_EVENT_PERMISSIONS, DEFAULT_TIME_FORMAT, ENUMERATIONS_KEYS, FORM, SALON_PERMISSION, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import { CALENDAR_EVENT_TYPE, DEFAULT_TIME_FORMAT, ENUMERATIONS_KEYS, FORM, PERMISSION, CREATE_EVENT_PERMISSIONS, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // types
 import { EmployeeService, ICalendarReservationForm, ICustomerForm, ServiceType } from '../../../../types/interfaces'
@@ -33,6 +33,7 @@ import TextareaField from '../../../../atoms/TextareaField'
 import TimeRangeField from '../../../../atoms/TimeRangeField'
 import SelectField from '../../../../atoms/SelectField'
 import CustomerForm from '../../../CustomersPage/components/CustomerForm'
+import ConfirmModal from '../../../../atoms/ConfirmModal'
 
 // redux
 import { RootState } from '../../../../reducers'
@@ -44,6 +45,7 @@ type ComponentProps = {
 	searchEmployes: (search: string, page: number) => Promise<any>
 	eventId?: string | null
 	phonePrefix?: string
+	sidebarView?: CALENDAR_EVENT_TYPE
 }
 const formName = FORM.CALENDAR_RESERVATION_FORM
 
@@ -106,7 +108,7 @@ const getCategoryById = (category: any, serviceCategoryID?: string): EmployeeSer
 }
 
 const ReservationForm: FC<Props> = (props) => {
-	const { handleSubmit, salonID, searchEmployes, eventId, phonePrefix, pristine, submitting } = props
+	const { handleSubmit, salonID, searchEmployes, eventId, phonePrefix, pristine, submitting, sidebarView } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [visibleCustomerCreateModal, setVisibleCustomerCreateModal] = useState(false)
@@ -306,31 +308,27 @@ const ReservationForm: FC<Props> = (props) => {
 
 	const modals = (
 		<>
-			<Modal
+			<ConfirmModal
 				className='rounded-fields'
 				title={t('loc:Pridať nového zákaznika')}
 				centered
 				destroyOnClose
 				onOk={() => dispatch(submit(FORM.CUSTOMER))}
-				visible={visibleCustomerCreateModal}
+				open={visibleCustomerCreateModal}
 				onCancel={() => setVisibleCustomerCreateModal(false)}
 				closeIcon={<CloseIcon />}
 			>
 				<CustomerForm onSubmit={handleSubmitCustomer} inModal />
-			</Modal>
+			</ConfirmModal>
 			<Modal
 				className='rounded-fields'
 				title={t('loc:Detail klienta')}
 				centered
 				destroyOnClose
-				visible={visibleCustomerDetailModal}
+				open={visibleCustomerDetailModal}
 				onCancel={() => setVisibleCustomerDetailModal(false)}
 				closeIcon={<CloseIcon />}
-				footer={[
-					<Button type={'dashed'} className={'noti-btn'} size={'middle'} onClick={() => setVisibleCustomerDetailModal(false)}>
-						{t('loc:Zatvoriť')}
-					</Button>
-				]}
+				footer={null}
 			>
 				<CustomerForm inModal disabled />
 			</Modal>
@@ -340,11 +338,11 @@ const ReservationForm: FC<Props> = (props) => {
 	return (
 		<>
 			{modals}
-			<div className={'nc-sider-event-management-content'}>
+			<div className={'nc-sider-event-management-content'} key={`${eventId}${sidebarView}`}>
 				<Spin spinning={eventDetail.isLoading} size='large'>
 					<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 						<Permissions
-							allowed={[SALON_PERMISSION.CUSTOMER_CREATE]}
+							allowed={[PERMISSION.CUSTOMER_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<Field
 									optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}

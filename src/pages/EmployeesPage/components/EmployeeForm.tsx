@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash'
 
 // utils
 import { FORM, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
-import { showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
+import { showErrorNotification } from '../../../utils/helper'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
@@ -17,7 +17,6 @@ import { RootState } from '../../../reducers'
 import InputField from '../../../atoms/InputField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
 import SelectField from '../../../atoms/SelectField'
-import InputNumberField from '../../../atoms/InputNumberField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
@@ -83,18 +82,6 @@ const EmployeeForm: FC<Props> = (props) => {
 					</div>
 					{isEdit && (
 						<div>
-							<Field
-								component={InputNumberField}
-								label={t('loc:Poradie kolegu')}
-								placeholder={t('loc:Zadajte poradie')}
-								name='orderIndex'
-								precision={0}
-								step={1}
-								min={0}
-								size={'large'}
-								validate={[validationRequiredNumber]}
-								required
-							/>
 							<h3 className={'mb-0 mt-0 flex items-center'}>
 								<ServiceIcon className={'text-notino-black mr-2'} /> {t('loc:Priradené služby')}
 							</h3>

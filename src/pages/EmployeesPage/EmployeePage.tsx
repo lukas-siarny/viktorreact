@@ -346,8 +346,7 @@ const EmployeePage = (props: Props) => {
 				lastName: data?.lastName,
 				email: data?.email,
 				imageID: get(data, 'avatar[0].id') || get(data, 'avatar[0].uid'),
-				serviceIDs: data?.services?.map((service: EmployeeServiceData) => service.id),
-				orderIndex: data.orderIndex
+				serviceIDs: data?.services?.map((service: EmployeeServiceData) => service.id)
 			}
 
 			if (data?.phonePrefixCountryCode && data?.phone) {

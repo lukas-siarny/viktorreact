@@ -1,0 +1,14 @@
+{
+	"create": {
+		"email": "test@goodrequest.com",
+		"phonePrefixCountryCode": "SK",
+		"phone": "956520900",
+		"countryCode": "SK"
+	},
+	"update": {
+		"email": "test@goodrequest.com",
+		"phonePrefixCountryCode": "SK",
+		"phone": "956520900",
+		"countryCode": "CZ"
+	}
+}

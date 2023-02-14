@@ -18,5 +18,6 @@ public/runtime-env.js
 
 src/styles/main.css
 src/styles/tailwind-variables.sass
+notino_backend
 
 cypress/videos/*

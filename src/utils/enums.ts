@@ -381,7 +381,7 @@ export const mapApiConfig: LoadScriptUrlOptions = {
 	// https://react-google-maps-api-docs.netlify.app/#usejsapiloader
 	libraries: ['places'],
 	// eslint-disable-next-line no-underscore-dangle
-	googleMapsApiKey: window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_MAPS_API_KEY
+	googleMapsApiKey: ''
 }
 
 export enum SALON_FILTER_STATES {

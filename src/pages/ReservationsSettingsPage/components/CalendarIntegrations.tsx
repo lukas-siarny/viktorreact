@@ -32,7 +32,7 @@ const CalendarIntegrations = (props: Props) => {
 
 	return (
 		<>
-			<GoogleLogin
+			{/* <GoogleLogin
 				onSuccess={(credentialResponse) => {
 					console.log(credentialResponse)
 				}}
@@ -42,7 +42,7 @@ const CalendarIntegrations = (props: Props) => {
 				locale={i18n.language}
 				type='icon'
 				theme='filled_black'
-			/>
+			/> */}
 			<button onClick={() => login()} type='button'>
 				Log in to Google
 			</button>

@@ -261,6 +261,10 @@ const SalonForm: FC<Props> = (props) => {
 							size={'large'}
 							disabled={disabledForm}
 						/>
+					</Col>
+				</Row>
+				<Row>
+					<Col span={24}>
 						<h3 className={'mb-0 flex items-center'}>
 							<LocationIcon width={20} height={20} className={'text-notino-black mr-2'} />
 							{t('loc:Adresa')}

@@ -5,5 +5,6 @@ declare namespace Cypress {
 		 * @example cy.setValuesForPinField('FORM.test', 'test', '12345')
 		 */
 		setValuesForPinField(form: string, key: string, value: string): Chainable<Element>
+		clickDeleteButtonWithConfCustom(form: string, key?: string): Chainable<Element>
 	}
 }

@@ -68,7 +68,7 @@ context('User', () => {
 			url: `/api/b2b/admin/users/${userID}`
 		}).as('deleteUser')
 		cy.visit(`/users/${userID}`)
-		cy.clickDeleteButtonWithConf(FORM.USER_ACCOUNT)
+		cy.clickDeleteButtonWithConfCustom(FORM.USER_ACCOUNT)
 		cy.wait('@deleteUser').then((interception: any) => {
 			// check status code
 			expect(interception.response.statusCode).to.equal(200)

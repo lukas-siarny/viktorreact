@@ -70,7 +70,7 @@ const SpecialistContactForm: FC<Props> = (props) => {
 				<Divider className={'my-3'} />
 				<Field
 					component={SelectField}
-					optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
+					// optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
 					label={t('loc:Krajina')}
 					placeholder={t('loc:Vyberte krajinu')}
 					options={countriesOptions}

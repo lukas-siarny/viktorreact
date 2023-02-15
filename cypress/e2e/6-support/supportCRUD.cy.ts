@@ -1,4 +1,4 @@
-import { CREATE_BUTTON_ID, FORM, SUPPORT_FORM_FIELDS } from '../../../src/utils/enums'
+import { CREATE_BUTTON_ID, FORM } from '../../../src/utils/enums'
 
 // fixtures
 import supportContact from '../../fixtures/support.json'

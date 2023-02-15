@@ -160,7 +160,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 				forEach(level1.category?.children, (level2) =>
 					forEach(level2.category?.children, (level3) => {
 						autoConfirmItems.push({
-							[level3.service.id]: level3.service.settings.autoApproveReservatons
+							[level3.service.id]: level3.service.settings.autoApproveReservations
 						})
 						onlineReservationItems.push({
 							[level3.service.id]: level3.service.settings.enabledB2cReservations
@@ -227,12 +227,12 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 		const servicesSettings: any[] = []
 		forEach(allIds, (serviceID) => {
 			const enabledB2cReservations = includes(allowedOnlineBookingIds, serviceID)
-			const autoApproveReservatons = includes(allowedAutoConfirmIds, serviceID)
+			const autoApproveReservations = includes(allowedAutoConfirmIds, serviceID)
 			servicesSettings.push({
 				id: serviceID,
 				settings: {
 					enabledB2cReservations: enabledB2cReservations || false, // ONLINE_BOOKING
-					autoApproveReservatons: autoApproveReservatons || false // AUTO_CONFIRM
+					autoApproveReservations: autoApproveReservations || false // AUTO_CONFIRM
 				}
 			})
 		})

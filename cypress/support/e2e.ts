@@ -2,9 +2,9 @@ import './commands'
 
 describe('Hooks', () => {
 	it('loginViaApi', () => {
-		cy.log(`sign_in_url is ${Cypress.env('SIGN_IN_URL')}`)
+		cy.log(`sign_in_url is ${Cypress.env('sign_in_url')}`)
 		cy.log(`auth_email is ${Cypress.env('auth_email')}`)
-		cy.log(`auth_password is ${Cypress.env('AUTH_PASSWORD')}`)
+		cy.log(`auth_password is ${Cypress.env('auth_password')}`)
 		cy.apiAuth(Cypress.env('auth_email'), Cypress.env('auth_password'), Cypress.env('sign_in_url'))
 	})
 })

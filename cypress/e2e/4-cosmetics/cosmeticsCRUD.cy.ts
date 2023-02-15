@@ -15,7 +15,7 @@ describe('Cosmetics', () => {
 		cy.saveLocalStorage()
 	})
 
-	/* it('Create cosmetics', () => {
+	it('Create cosmetics', () => {
 		cy.intercept({
 			method: 'POST',
 			url: '/api/b2b/admin/enums/cosmetics/'
@@ -38,8 +38,31 @@ describe('Cosmetics', () => {
 			method: 'DELETE',
 			url: `/api/b2b/admin/enums/cosmetics/${cosmeticsID}`
 		}).as('deleteCosmetics')
+		/* cy.intercept({
+			method: 'GET',
+			url: `/api/b2b/admin/enums/cosmetics`,
+			query: {
+				limit: '25',
+				page: '1',
+				search: cosmetics.name
+			}
+		}).as('getCosmetics') */
 		cy.visit('/cosmetics')
 		cy.setInputValue(FORM.COSMETICS_FILTER, 'search', cosmetics.name)
+		/* cy.wait('@getCosmetics').then((getInterception: any) => {
+			// check status code
+			expect(getInterception.response.statusCode).to.equal(200)
+			cy.get('.ant-table-row > :nth-child(1)').click()
+			cy.clickDeleteButtonWithConf(FORM.COSMETIC)
+			cy.wait('@deleteCosmetics').then((interception: any) => {
+				// check status code
+				expect(interception.response.statusCode).to.equal(200)
+				// check conf toast message
+				cy.checkSuccessToastMessage()
+				cy.location('pathname').should('eq', '/cosmetics')
+			})
+		}) */
+		cy.wait(5000)
 		cy.get('.ant-table-row > :nth-child(1)').click()
 		cy.clickDeleteButtonWithConf(FORM.COSMETIC)
 		cy.wait('@deleteCosmetics').then((interception: any) => {
@@ -49,5 +72,5 @@ describe('Cosmetics', () => {
 			cy.checkSuccessToastMessage()
 			cy.location('pathname').should('eq', '/cosmetics')
 		})
-	}) */
+	})
 })

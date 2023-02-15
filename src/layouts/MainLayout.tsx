@@ -45,7 +45,7 @@ const MainLayout: FC<Props> = (props) => {
 	const { children, extra, page } = props
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
-	const { contentClassName = 'p-4 px-10 main-background' } = extra || {}
+	const { contentClassName = 'p-4 md:px-1 px-10 main-background' } = extra || {}
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 	const salonID = selectedSalon?.id
 	const salonOptions = useSelector((state: RootState) => state.selectedSalon.selectionOptions.data) || []

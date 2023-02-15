@@ -306,11 +306,13 @@ const ReviewsPage = () => {
 								allowed={[...ADMIN_PERMISSIONS, PERMISSION.REVIEW_DELETE]}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<DeleteButton
-										onConfirm={() => {
+										onConfirm={(e) => {
 											if (!hasPermission) {
+												e?.preventDefault()
 												openForbiddenModal()
+											} else {
+												deleteReview(record.id)
 											}
-											deleteReview(record.id)
 										}}
 										smallIcon
 										type={'default'}

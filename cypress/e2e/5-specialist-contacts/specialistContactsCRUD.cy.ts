@@ -24,8 +24,8 @@ describe('Specialit contacts', () => {
 		cy.clickButton(FORM.SPECIALIST_CONTACT, CREATE_BUTTON_ID)
 		cy.selectOptionDropdown(FORM.SPECIALIST_CONTACT, 'countryCode', specialistContact.create.countryCode)
 		cy.get('h3.form-title').as('formTitle').click()
-		// cy.selectOptionDropdown(FORM.SPECIALIST_CONTACT, 'phonePrefixCountryCode', specialistContact.create.phonePrefixCountryCode)
-		// cy.get('@formTitle').click()
+		cy.selectOptionDropdownCustom(FORM.SPECIALIST_CONTACT, 'phonePrefixCountryCode', specialistContact.create.phonePrefixCountryCode, true)
+		cy.get('@formTitle').click()
 		cy.setInputValue(FORM.SPECIALIST_CONTACT, 'phone', specialistContact.create.phone)
 		cy.setInputValue(FORM.SPECIALIST_CONTACT, 'email', specialistContact.create.email)
 		cy.get(`#${FORM.SPECIALIST_CONTACT}-form`).submit()
@@ -43,14 +43,18 @@ describe('Specialit contacts', () => {
 			method: 'PATCH',
 			url: `/api/b2b/admin/enums/contacts/${specialistContactID}`
 		}).as('updateSpecialistContact')
+		cy.intercept({
+			method: 'GET',
+			url: `/api/b2b/admin/enums/contacts/${specialistContactID}`
+		}).as('getSpecialistContact')
 		cy.visit('/specialist-contacts')
-		cy.clickButton(FORM.SPECIALIST_CONTACT, CREATE_BUTTON_ID)
-		cy.selectOptionDropdown(FORM.SPECIALIST_CONTACT, 'countryCode', specialistContact.update.countryCode)
+		cy.get(`[data-row-key="${specialistContactID}"]`).click()
+		cy.selectOptionDropdownCustom(FORM.SPECIALIST_CONTACT, 'countryCode', specialistContact.update.countryCode, true)
 		cy.get('h3.form-title').as('formTitle').click()
-		// cy.selectOptionDropdown(FORM.SPECIALIST_CONTACT, 'phonePrefixCountryCode', specialistContact.update.phonePrefixCountryCode)
-		// cy.get('@formTitle').click()
-		cy.setInputValue(FORM.SPECIALIST_CONTACT, 'phone', specialistContact.update.phone)
-		cy.setInputValue(FORM.SPECIALIST_CONTACT, 'email', specialistContact.update.email)
+		cy.selectOptionDropdownCustom(FORM.SPECIALIST_CONTACT, 'phonePrefixCountryCode', specialistContact.update.phonePrefixCountryCode, true)
+		cy.get('@formTitle').click()
+		cy.setInputValue(FORM.SPECIALIST_CONTACT, 'phone', specialistContact.update.phone, false, true)
+		cy.setInputValue(FORM.SPECIALIST_CONTACT, 'email', specialistContact.update.email, false, true)
 		cy.get(`#${FORM.SPECIALIST_CONTACT}-form`).submit()
 		cy.wait('@updateSpecialistContact').then((interception: any) => {
 			// check status code of request
@@ -63,11 +67,11 @@ describe('Specialit contacts', () => {
 	it('Delete specialist contact', () => {
 		cy.intercept({
 			method: 'DELETE',
-			url: `/api/b2b/admin/enums/cosmetics/${specialistContactID}`
+			url: `/api/b2b/admin/enums/contacts/${specialistContactID}`
 		}).as('deleteSpecialistContact')
 		cy.visit('/specialist-contacts')
 		cy.get(`[data-row-key="${specialistContactID}"]`).click()
-		cy.clickDeleteButtonWithConf(FORM.SPECIALIST_CONTACT)
+		cy.clickDeleteButtonWithConfCustom(FORM.SPECIALIST_CONTACT)
 		cy.wait('@deleteSpecialistContact').then((interception: any) => {
 			// check status code
 			expect(interception.response.statusCode).to.equal(200)

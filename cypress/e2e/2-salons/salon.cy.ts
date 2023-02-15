@@ -157,7 +157,7 @@ describe('Salons', () => {
 				url: `/api/b2b/admin/customers/${customerID}`
 			}).as('deleteCustomer')
 			cy.visit(`/salons/${createdSalonID}/customers/${customerID}`)
-			cy.clickDeleteButtonWithConf(FORM.CUSTOMER)
+			cy.clickDeleteButtonWithConfCustom(FORM.CUSTOMER)
 			cy.wait('@deleteCustomer').then((interception: any) => {
 				// check status code
 				expect(interception.response.statusCode).to.equal(200)
@@ -217,7 +217,7 @@ describe('Salons', () => {
 				url: `/api/b2b/admin/employees/${employeeID}`
 			}).as('deleteEmployee')
 			cy.visit(`/salons/${createdSalonID}/employees/${employeeID}`)
-			cy.clickDeleteButtonWithConf(FORM.EMPLOYEE)
+			cy.clickDeleteButtonWithConfCustom(FORM.EMPLOYEE)
 			cy.wait('@deleteEmployee').then((interception: any) => {
 				// check status code
 				expect(interception.response.statusCode).to.equal(200)
@@ -255,7 +255,7 @@ describe('Salons', () => {
 			cy.visit(`/salons/${createdSalonID}`)
 			// wait duw to animations and fetch data
 			cy.wait(5000)
-			cy.clickDeleteButtonWithConf(FORM.SALON)
+			cy.clickDeleteButtonWithConfCustom(FORM.SALON)
 			cy.wait('@deleteSalon').then((interception: any) => {
 				// check status code
 				expect(interception.response.statusCode).to.equal(200)

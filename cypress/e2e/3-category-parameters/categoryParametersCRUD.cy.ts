@@ -57,7 +57,7 @@ describe('Category parameters', () => {
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}`
 		}).as('deleteCategoryParameters')
 		cy.visit(`/category-parameters/${categoryParameterID}`)
-		cy.clickDeleteButtonWithConf(FORM.CATEGORY_PARAMS)
+		cy.clickDeleteButtonWithConfCustom(FORM.CATEGORY_PARAMS)
 		cy.wait('@deleteCategoryParameters').then((interception: any) => {
 			// check status code
 			expect(interception.response.statusCode).to.equal(200)

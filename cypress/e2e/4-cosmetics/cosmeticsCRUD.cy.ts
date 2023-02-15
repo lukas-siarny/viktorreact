@@ -22,7 +22,7 @@ describe('Cosmetics', () => {
 		}).as('createCosmetics')
 		cy.visit('/cosmetics')
 		cy.clickButton(FORM.COSMETIC, CREATE_BUTTON_ID)
-		cy.setInputValue(FORM.COSMETIC, 'name', cosmetics.name)
+		cy.setInputValue(FORM.COSMETIC, 'name', cosmetics.create.name)
 		cy.get(`#${FORM.COSMETIC}-form`).submit()
 		cy.wait('@createCosmetics').then((interception: any) => {
 			// check status code of login request
@@ -33,27 +33,58 @@ describe('Cosmetics', () => {
 		})
 	})
 
+	it('Update cosmetics', () => {
+		cy.intercept({
+			method: 'PATCH',
+			url: `/api/b2b/admin/enums/cosmetics/${cosmeticsID}`
+		}).as('updateCosmetics')
+		cy.intercept({
+			method: 'GET',
+			pathname: `/api/b2b/admin/enums/cosmetics`,
+			query: {
+				limit: '25',
+				page: '1',
+				search: cosmetics.create.name
+			}
+		}).as('getCosmetics')
+		cy.visit('/cosmetics')
+		cy.setInputValue(FORM.COSMETICS_FILTER, 'search', cosmetics.create.name)
+		cy.wait('@getCosmetics').then((getInterception: any) => {
+			// check status code
+			expect(getInterception.response.statusCode).to.equal(200)
+			cy.get(`[data-row-key="${cosmeticsID}"]`).click()
+			cy.setInputValue(FORM.COSMETIC, 'name', cosmetics.update.name, false, true)
+			cy.get(`#${FORM.COSMETIC}-form`).submit()
+			cy.wait('@updateCosmetics').then((interception: any) => {
+				// check status code of login request
+				expect(interception.response.statusCode).to.equal(200)
+				// check conf toast message
+				cy.checkSuccessToastMessage()
+			})
+		})
+	})
+
 	it('Delete cosmetics', () => {
 		cy.intercept({
 			method: 'DELETE',
 			url: `/api/b2b/admin/enums/cosmetics/${cosmeticsID}`
 		}).as('deleteCosmetics')
-		/* cy.intercept({
+		cy.intercept({
 			method: 'GET',
-			url: `/api/b2b/admin/enums/cosmetics`,
+			pathname: `/api/b2b/admin/enums/cosmetics`,
 			query: {
 				limit: '25',
 				page: '1',
-				search: cosmetics.name
+				search: cosmetics.update.name
 			}
-		}).as('getCosmetics') */
+		}).as('getCosmetics')
 		cy.visit('/cosmetics')
-		cy.setInputValue(FORM.COSMETICS_FILTER, 'search', cosmetics.name)
-		/* cy.wait('@getCosmetics').then((getInterception: any) => {
+		cy.setInputValue(FORM.COSMETICS_FILTER, 'search', cosmetics.update.name, false, true)
+		cy.wait('@getCosmetics').then((getInterception: any) => {
 			// check status code
 			expect(getInterception.response.statusCode).to.equal(200)
 			cy.get('.ant-table-row > :nth-child(1)').click()
-			cy.clickDeleteButtonWithConf(FORM.COSMETIC)
+			cy.clickDeleteButtonWithConfCustom(FORM.COSMETIC)
 			cy.wait('@deleteCosmetics').then((interception: any) => {
 				// check status code
 				expect(interception.response.statusCode).to.equal(200)
@@ -61,16 +92,6 @@ describe('Cosmetics', () => {
 				cy.checkSuccessToastMessage()
 				cy.location('pathname').should('eq', '/cosmetics')
 			})
-		}) */
-		cy.wait(5000)
-		cy.get('.ant-table-row > :nth-child(1)').click()
-		cy.clickDeleteButtonWithConf(FORM.COSMETIC)
-		cy.wait('@deleteCosmetics').then((interception: any) => {
-			// check status code
-			expect(interception.response.statusCode).to.equal(200)
-			// check conf toast message
-			cy.checkSuccessToastMessage()
-			cy.location('pathname').should('eq', '/cosmetics')
 		})
 	})
 })

@@ -24,6 +24,7 @@ describe('Specialit contacts', () => {
 		cy.clickButton(FORM.SPECIALIST_CONTACT, CREATE_BUTTON_ID)
 		cy.selectOptionDropdown(FORM.SPECIALIST_CONTACT, 'countryCode', specialistContact.create.countryCode)
 		cy.get('h3.form-title').as('formTitle').click()
+		// TODO: fix select selector in update
 		// cy.selectOptionDropdown(FORM.SPECIALIST_CONTACT, 'phonePrefixCountryCode', specialistContact.create.phonePrefixCountryCode)
 		// cy.get('@formTitle').click()
 		cy.setInputValue(FORM.SPECIALIST_CONTACT, 'phone', specialistContact.create.phone)
@@ -49,11 +50,11 @@ describe('Specialit contacts', () => {
 		}).as('getSpecialistContact')
 		cy.visit('/specialist-contacts')
 		cy.get(`[data-row-key="${specialistContactID}"]`).click()
-		// cy.clearDropdownSelection('countryCode')
-		// cy.selectOptionDropdown(FORM.SPECIALIST_CONTACT, 'countryCode', specialistContact.update.countryCode)
+		// TODO: fix select selector in update
+		/* cy.selectOptionDropdown(FORM.SPECIALIST_CONTACT, 'countryCode', specialistContact.update.countryCode)
 		cy.get('h3.form-title').as('formTitle').click()
-		// cy.selectOptionDropdown(FORM.SPECIALIST_CONTACT, 'phonePrefixCountryCode', specialistContact.update.phonePrefixCountryCode)
-		// cy.get('@formTitle').click()
+		cy.selectOptionDropdown(FORM.SPECIALIST_CONTACT, 'phonePrefixCountryCode', specialistContact.update.phonePrefixCountryCode)
+		cy.get('@formTitle').click() */
 		cy.setInputValue(FORM.SPECIALIST_CONTACT, 'phone', specialistContact.update.phone, false, true)
 		cy.setInputValue(FORM.SPECIALIST_CONTACT, 'email', specialistContact.update.email, false, true)
 		cy.get(`#${FORM.SPECIALIST_CONTACT}-form`).submit()
@@ -68,7 +69,7 @@ describe('Specialit contacts', () => {
 	it('Delete specialist contact', () => {
 		cy.intercept({
 			method: 'DELETE',
-			url: `/api/b2b/admin/enums/cosmetics/${specialistContactID}`
+			url: `/api/b2b/admin/enums/contacts/${specialistContactID}`
 		}).as('deleteSpecialistContact')
 		cy.visit('/specialist-contacts')
 		cy.get(`[data-row-key="${specialistContactID}"]`).click()

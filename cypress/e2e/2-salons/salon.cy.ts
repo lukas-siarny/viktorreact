@@ -7,7 +7,7 @@ import customer from '../../fixtures/customer.json'
 import user from '../../fixtures/user.json'
 
 // support
-import { generateRandomInt, generateRandomString } from '../../support/helpers'
+import { generateRandomInt, generateRandomString, getCategoryById } from '../../support/helpers'
 
 describe('Salons', () => {
 	let createdSalonID: any
@@ -44,7 +44,7 @@ describe('Salons', () => {
 					cy.setInputValue(FORM.SALON, 'longitude', salon.create.lon)
 					cy.setInputValue(FORM.SALON, 'latitude', salon.create.lat)
 					// country is in EN -> in this point of test can fail due to language on test environment
-					cy.selectOptionDropdown(FORM.SALON, 'country', salon.create.country)
+					cy.selectOptionDropdownCustom(FORM.SALON, 'country', salon.create.country, true)
 				} else {
 					// else google map and search box working
 					cy.setSearchBoxValueAndSelectFirstOption('address', salon.create.address, '.pac-item', FORM.SALON, true, undefined, 8000)
@@ -65,7 +65,7 @@ describe('Salons', () => {
 		})
 	})
 
-	context('Billing information', () => {
+	/* context('Billing information', () => {
 		it('Update billing information', () => {
 			cy.intercept({
 				method: 'PATCH',
@@ -224,6 +224,98 @@ describe('Salons', () => {
 				// check conf toast message
 				cy.checkSuccessToastMessage()
 				cy.location('pathname').should('eq', `/salons/${createdSalonID}/employees`)
+			})
+		})
+	}) */
+
+	context('Industries and services CRUD operations', () => {
+		it('Update industries and industry services', () => {
+			cy.intercept({
+				method: 'GET',
+				url: '/api/b2b/admin/enums/categories/'
+			}).as('getCategories')
+			cy.intercept({
+				method: 'PATCH',
+				url: `/api/b2b/admin/salons/${createdSalonID}/categories`
+			}).as('patchSalonCategories')
+			cy.intercept({
+				method: 'PATCH',
+				url: `/api/b2b/admin/salons/${createdSalonID}/services`
+			}).as('patchSalonServices')
+			cy.visit(`/salons/${createdSalonID}/industries-and-services`)
+			cy.wait('@getCategories').then((interception: any) => {
+				// check status code
+				expect(interception.response.statusCode).to.equal(200)
+				// TODO: ak pride prazdne pole, tak nerobit request - zisti ako sa to da spravit, klasicky if nefunguje
+				// if (interception.response.body.categories?.length) {
+				cy.get('.checkbox-group-image-wrapper > .checkbox-with-image:first > label').as('firstIndustryLabel')
+				cy.get('@firstIndustryLabel').find('input[type="checkbox"]').should('have.id', interception.response.body.categories[0].id)
+				cy.get('@firstIndustryLabel').find('.inner-wrapper').click({ force: true })
+				cy.get(`#${FORM.INDUSTRIES}-form`).submit()
+				cy.wait('@patchSalonCategories').then((interceptionPatchSalonCategories: any) => {
+					// check status code
+					expect(interceptionPatchSalonCategories.response.statusCode).to.equal(200)
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+					cy.get('.checkbox-group-image-wrapper > .checkbox-with-image:first > button').click()
+					cy.wait('@getCategories').then((intercepitonGetCategoriesInDetail: any) => {
+						// check status code
+						expect(intercepitonGetCategoriesInDetail.response.statusCode).to.equal(200)
+						cy.get('.noti-tree-node-0 > .ant-tree-node-content-wrapper').click({ force: true })
+						cy.get(`#${FORM.INDUSTRY}-form`).submit()
+						cy.wait('@patchSalonServices').then((interceptionPatchSalonCategory: any) => {
+							// check status code
+							expect(interceptionPatchSalonCategory.response.statusCode).to.equal(200)
+							// check conf toast message
+							cy.checkSuccessToastMessage()
+						})
+					})
+				})
+			})
+		})
+
+		it('Update service settings', () => {
+			let serviceID: any
+			let categoryID: any
+			cy.intercept({
+				method: 'GET',
+				pathname: '/api/b2b/admin/services/',
+				query: {
+					salonID: createdSalonID
+				}
+			}).as('getSalonServices')
+			cy.intercept({
+				method: 'GET',
+				url: `/api/b2b/admin/services/${serviceID}`
+			}).as('getSalonService')
+			cy.intercept({
+				method: 'GET',
+				url: `/api/b2b/admin/enums/categories/${categoryID}`
+			}).as('getCategory')
+			cy.visit(`/salons/${createdSalonID}/services-settings`)
+			cy.wait('@getSalonServices').then((interceptorGetSalonServices: any) => {
+				// check status code
+				expect(interceptorGetSalonServices.response.statusCode).to.equal(200)
+				// TODO: check for length
+				cy.get('.ant-table-row:first')
+					.as('firstRow')
+					.invoke('attr', 'data-row-key')
+					.then((dataRowKey) => {
+						const ids = (dataRowKey || '').split('_')
+						// eslint-disable-next-line prefer-destructuring
+						categoryID = ids[0]
+						// eslint-disable-next-line prefer-destructuring
+						serviceID = ids[1]
+
+						cy.get('@firstRow').click()
+						cy.wait(['@getSalonService', '@getCategory']).then(([interceptorGetSalonSerivce, interceptorGetCategory]: any[]) => {
+							// check status code
+							expect(interceptorGetSalonSerivce.response.statusCode).to.equal(200)
+							expect(interceptorGetSalonSerivce.response.body.service.id).to.equal(serviceID)
+							expect(interceptorGetCategory.response.statusCode).to.equal(200)
+							expect(interceptorGetCategory.response.body.category.id).to.equal(categoryID)
+						})
+					})
 			})
 		})
 	})

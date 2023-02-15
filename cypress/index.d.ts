@@ -7,5 +7,14 @@ declare namespace Cypress {
 		setValuesForPinField(form: string, key: string, value: string): Chainable<Element>
 		clickDeleteButtonWithConfCustom(form: string, key?: string): Chainable<Element>
 		selectOptionDropdownCustom(form: string, key: string, value?: string, force?: boolean): Chainable<Element>
+		setSearchBoxValueAndSelectFirstOptionCustom(
+			key: string,
+			value: string,
+			selectListKey: string,
+			form?: string,
+			googleGeocoding?: boolean,
+			clear?: boolean,
+			timeout?: number
+		): Chainable<Element>
 	}
 }

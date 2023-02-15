@@ -91,7 +91,7 @@ const AddressFields = (props: Props) => {
 	const { t } = useTranslation()
 
 	const [googleMapUrl, setGoogleMapUrl] = useState<string | undefined>(undefined)
-	const [mapError, setMapError] = useState<boolean>(false)
+	const [mapError, setMapError] = useState<boolean>(true) // TODO: len pre dev ucely, zmenit na false
 
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 

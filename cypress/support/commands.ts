@@ -44,3 +44,22 @@ Cypress.Commands.add('selectOptionDropdownCustom', (form: string, key: string, v
 		cy.get('.ant-select-dropdown :not(.ant-select-dropdown-hidden)', { timeout: 10000 }).should('be.visible').find('.ant-select-item-option').first().click({ force: true })
 	}
 })
+
+// TODO: upravit v antd-form fields kniznici a potom to pouzit odtial
+Cypress.Commands.add(
+	'setSearchBoxValueAndSelectFirstOptionCustom',
+	(key: string, value: string, selectListKey: string, form?: string, googleGeocoding?: boolean, clear?: boolean, timeout?: number) => {
+		const elementId: string = form ? `#${form}-${key}` : `#${key}`
+		if (clear) {
+			cy.get(elementId).clear().type(value, { timeout }).should('have.value', value)
+		} else {
+			cy.get(elementId).type(value, { timeout }).should('have.value', value)
+		}
+		cy.get(selectListKey, { timeout: 10000 }).should('be.visible')
+		// select option for google geocoding list
+		if (googleGeocoding) {
+			cy.get(elementId).type('{downarrow}')
+		}
+		cy.get(elementId).type('{enter}')
+	}
+)

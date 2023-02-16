@@ -1,12 +1,13 @@
 @import "../tailwind-variables"
 @import "../variables"
 
-.nc-event-popover-overlay
-	padding: 16px
-	&::before
-		content: ''
-		position: fixed
-		inset: 0
+// event popover
+.nc-popover-overlay
+	&.nc-popover-overlay-fixed
+		&::before
+			content: ''
+			position: fixed
+			inset: 0
 	.ant-popover-content
 		padding: 0
 	.ant-popover-inner
@@ -14,62 +15,92 @@
 		background-color: $backgroundColor-notino-white
 		border-radius: 6px
 		padding: 0
+		border: 1px solid $borderColor-notino-grayLight
 	.ant-popover-inner-content
 		padding: 0
-	.nc-event-popover-content
-		overflow: hidden
-		> header
-			.state-wrapper
-				svg
-					width: 16px
-					height: 16px
-		.nc-event-popover-tag
-			font-size: 10px
-			line-height: 11px
-			border: none
-			padding: 4px 8px
-			border-radius: 4px
-			background-color: $backgroundColor-notino-grayLight
-			color: $textColor-notino-grayDarker
-			min-width: unset
-			margin: 0
-			&.tag-new
-				// TODO: tailwind colors
-				color: #0E7090
-				background-color: #ECFDFF
-		.nc-event-popover-header-button
-			outline: none
-			border-radius: 4px
-			color: $textColor-notino-black
-			font-size: 16px
-			line-height: 16px
-			cursor: pointer
-			transition: all 300ms ease-in-out
-			height: 20px
-			width: 20px
-			white-space: nowrap
-			background: $backgroundColor-notino-white
-			border: none
-			display: flex
-			align-items: center
-			justify-content: center
-			background: transparent
-			svg
-				width: 16px
-				height: 16px
-				flex: 0 0 auto
-			&:hover,
-			&:focus-visible
-				background-color: $backgroundColor-notino-grayLight
+	.ant-popover-arrow
+		transform: translateY(-50%) translateX(calc(100% - 1px)) rotate(90deg)
 	&.dark-style
 		.ant-popover-inner
 			background-color: $backgroundColor-notino-grayDarker
 			color: $textColor-notino-white
 		.ant-popover-arrow
-			.ant-popover-arrow-content::before
+			&::before
 				background: $backgroundColor-notino-grayDarker
-		.nc-event-popover-header-button
+		.nc-popover-header-button
 			color: $textColor-notino-white
 			&:hover,
 			&:focus-visible
 				background-color: rgba(0,0,0,0.1)
+
+.nc-popover-content
+	overflow: hidden
+	> header
+		.state-wrapper
+			svg
+				width: 16px
+				height: 16px
+	.nc-event-popover-tag
+		font-size: 10px
+		line-height: 11px
+		border: none
+		padding: 4px 8px
+		border-radius: 4px
+		background-color: $backgroundColor-notino-grayLight
+		color: $textColor-notino-grayDarker
+		min-width: unset
+		margin: 0
+		&.tag-new
+			// TODO: tailwind colors
+			color: #0E7090
+			background-color: #ECFDFF
+.nc-popover-header-button
+	outline: none
+	border-radius: 4px
+	color: $textColor-notino-black
+	font-size: 16px
+	line-height: 16px
+	cursor: pointer
+	transition: all 300ms ease-in-out
+	height: 20px
+	width: 20px
+	white-space: nowrap
+	background: $backgroundColor-notino-white
+	border: none
+	display: flex
+	align-items: center
+	justify-content: center
+	background: transparent
+	svg
+		width: 16px
+		height: 16px
+		flex: 0 0 auto
+	&:hover,
+	&:focus-visible
+		background-color: $backgroundColor-notino-grayLight
+
+// day events popover
+.nc-day-events-popover-overlay
+	&:not(.is-hidden)
+		padding: 16px
+		&::before
+			content: ''
+			position: fixed
+			inset: 0
+		.ant-popover-content
+			padding: 0
+		.ant-popover-inner
+			box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)
+			background-color: $backgroundColor-notino-white
+			border-radius: 8px
+			border: 1px solid $borderColor-notino-grayLight
+		.ant-popover-inner-content
+			padding: 0
+		.ant-popover-arrow
+			display: none
+
+// customer detail popover
+.nc-customer-detail-popover
+	&.ant-popover-placement-leftTop
+		.ant-popover-arrow
+			top: 28px // polovica vysky hlaviky popoveru

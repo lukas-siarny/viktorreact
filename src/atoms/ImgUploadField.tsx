@@ -157,7 +157,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 	const renderGalleryImage = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: { download: any; preview: any; remove: any }) => (
 		<>
 			<div className={'ant-upload-list-item ant-upload-list-item-done ant-upload-list-item-list-type-picture-card p-0'}>
-				<div className={'ant-upload-list-item-info flex items-center justify-center'}>
+				<div className={'ant-upload-list-item-info flex items-center justify-center overflow-hidden'}>
 					{file.type === 'application/pdf' || !!isFilePDF(file.url) ? (
 						<div className={'flex items-center justify-center'}>
 							<PdfIcon />

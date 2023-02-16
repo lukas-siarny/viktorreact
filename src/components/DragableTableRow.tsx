@@ -1,61 +1,39 @@
 import React from 'react'
-import { useDrag, useDrop } from 'react-dnd'
-import { forEach, isArray } from 'lodash'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
-const type = 'DragableBodyRow'
+import { ReactComponent as DragIcon } from '../assets/icons/drag-icon.svg'
 
-// NOTE: https://ant.design/components/table/#components-table-demo-drag-sorting
-const DragableTableRow = (props: any) => {
-	const { index, dndDrop, className, dndCanDrag, children, ...restProps } = props
+interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
+	'data-row-key': string
+}
 
-	const rowRef = React.useRef()
-	let cells = children
-
-	const [{ isOver, dropClassName }, drop] = useDrop({
-		accept: type,
-		collect: (monitor: any) => {
-			const { index: dragIndex } = monitor.getItem() || {}
-			if (dragIndex === index) {
-				return {}
-			}
-			return {
-				isOver: monitor.isOver(),
-				dropClassName: dragIndex < index ? ' drop-over-downward' : ' drop-over-upward'
-			}
-		},
-		drop: (item: any) => {
-			dndDrop?.(item.index, index)
-		}
+const DragableTableRow = ({ children, ...props }: RowProps) => {
+	const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({
+		id: props['data-row-key']
 	})
 
-	const [, drag, preview] = useDrag({
-		type,
-		item() {
-			// NOTE: Na začiatok dragovania schovaj tooltip aby nezavadzal pri dropovaní
-			const tooltips = window.document.getElementsByClassName('ant-tooltip')
-			forEach(tooltips, (tooltipEl) => tooltipEl?.classList?.add('ant-tooltip-hidden'))
-			return { index }
-		},
-		collect: (monitor: any) => ({
-			isDragging: monitor.isDragging()
-		}),
-		canDrag: dndCanDrag
-	})
-
-	// NOTE: Pre fungovanie dragovania musí mať tabuľka aspoň 2 stlĺpce
-	if (isArray(children) && children.length >= 2) {
-		const [firstCell, ...restCells] = children
-		const draggableCell = React.cloneElement(firstCell, { ref: drag })
-		cells = [draggableCell, ...restCells]
-	}
-
-	if (dndDrop) {
-		preview(drop(rowRef))
+	const style: React.CSSProperties = {
+		...props.style,
+		transform: CSS.Transform.toString(transform && { ...transform, scaleY: 1 }),
+		transition,
+		...(isDragging ? { position: 'relative', zIndex: 9999 } : {})
 	}
 
 	return (
-		<tr ref={rowRef} className={`${className}${isOver ? dropClassName : ''}`} {...restProps}>
-			{cells}
+		<tr {...props} ref={setNodeRef} style={style} {...attributes}>
+			{React.Children.map(children, (child) => {
+				if ((child as React.ReactElement).key === 'sort') {
+					return React.cloneElement(child as React.ReactElement, {
+						children: (
+							<div ref={setActivatorNodeRef} {...listeners}>
+								<DragIcon style={{ touchAction: 'none', cursor: 'move' }} className={'text-notino-pink w-4 h-4 flex'} />
+							</div>
+						)
+					})
+				}
+				return child
+			})}
 		</tr>
 	)
 }

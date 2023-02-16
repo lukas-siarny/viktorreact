@@ -54,6 +54,7 @@ import ReservationsPage from '../pages/ReservationsPage/ReservationsPage'
 
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
+import ErrorBoundary from '../components/ErrorBoundary'
 
 const SalonSubRoutes: FC = () => {
 	const navigate = useNavigate()
@@ -95,37 +96,46 @@ const SalonSubRoutes: FC = () => {
 	return (
 		<Routes>
 			{/* SALON DETAIL */}
-			<Route element={<AuthRoute layout={MainLayout} page={PAGE.SALONS} />}>
+			<Route errorElement={<ErrorBoundary />} element={<AuthRoute layout={MainLayout} page={PAGE.SALONS} />}>
 				<Route index element={<SalonPage salonID={salonID as string} />} />
 			</Route>
 			{/* CUSTOMERS */}
-			<Route path={t('paths:customers')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.CUSTOMERS} />}>
+			<Route errorElement={<ErrorBoundary />} path={t('paths:customers')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.CUSTOMERS} />}>
 				<Route index element={<CustomersPage parentPath={parentPath} salonID={salonID} />} />
 				<Route path={t('paths:createEntity')} element={<CreateCustomerPage parentPath={parentPath} salonID={salonID} />} />
 				<Route path={':customerID'} element={<CustomerPage parentPath={parentPath} />} />
 			</Route>
 			{/* SERVICES */}
-			<Route path={t('paths:services-settings')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.SERVICES_SETTINGS} />}>
+			<Route
+				errorElement={<ErrorBoundary />}
+				path={t('paths:services-settings')}
+				element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.SERVICES_SETTINGS} />}
+			>
 				<Route index element={<ServicesPage parentPath={parentPath} salonID={salonID} />} />
 				<Route path={':serviceID'} element={<ServicePage parentPath={parentPath} salonID={salonID as string} />} />
 			</Route>
 			{/* EMPLOYEES */}
-			<Route path={t('paths:employees')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.EMPLOYEES} />}>
+			<Route errorElement={<ErrorBoundary />} path={t('paths:employees')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.EMPLOYEES} />}>
 				<Route index element={<EmployeesPage parentPath={parentPath} salonID={salonID} />} />
 				<Route path={t('paths:createEntity')} element={<CreateEmployeePage parentPath={parentPath} salonID={salonID} />} />
 				<Route path={':employeeID'} element={<EmployeePage parentPath={parentPath} salonID={salonID as string} />} />
 			</Route>
 			{/* INDUSTRIES */}
-			<Route path={t('paths:industries-and-services')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.INDUSTRIES_AND_SERVICES} />}>
+			<Route
+				errorElement={<ErrorBoundary />}
+				path={t('paths:industries-and-services')}
+				element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.INDUSTRIES_AND_SERVICES} />}
+			>
 				<Route path={':industryID'} element={<IndustryPage parentPath={parentPath} salonID={salonID as string} />} />
 				<Route index element={<IndustriesPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* BILLING INFO */}
-			<Route path={t('paths:billing-info')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.BILLING_INFO} />}>
+			<Route errorElement={<ErrorBoundary />} path={t('paths:billing-info')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.BILLING_INFO} />}>
 				<Route index element={<BillingInfoPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* CALENDAR */}
 			<Route
+				errorElement={<ErrorBoundary />}
 				path={t('paths:calendar')}
 				element={
 					<AuthRoute
@@ -142,11 +152,15 @@ const SalonSubRoutes: FC = () => {
 				<Route index element={<Calendar salonID={salonID} parentPath={parentPath} />} />
 			</Route>
 			{/* RESERVATIONS */}
-			<Route path={t('paths:reservations')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.RESERVATIONS} />}>
+			<Route errorElement={<ErrorBoundary />} path={t('paths:reservations')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.RESERVATIONS} />}>
 				<Route index element={<ReservationsPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* RESERVATIONS SETTINGS */}
-			<Route path={t('paths:reservations-settings')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.SALON_SETTINGS} />}>
+			<Route
+				errorElement={<ErrorBoundary />}
+				path={t('paths:reservations-settings')}
+				element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.SALON_SETTINGS} />}
+			>
 				<Route index element={<ReservationsSettingsPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* 404 */}

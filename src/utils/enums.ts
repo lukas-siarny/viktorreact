@@ -463,7 +463,7 @@ export const STRINGS = (t: TFunction) => ({
 	MISSING_PERMISSIONS_TEXT: t('loc:Používateľovi chýbajú oprávnenia na akciu'),
 	EMPTY_TABLE_COLUMN_PLACEHOLDER: '---'
 })
-
+export const TABLE_DRAG_AND_DROP_KEY = 'sort'
 export enum PUBLICATION_STATUS {
 	PUBLISHED = 'PUBLISHED',
 	UNPUBLISHED = 'UNPUBLISHED'

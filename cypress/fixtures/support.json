@@ -2,8 +2,12 @@
 	"create" : {
 		"phones": [
 			{
-				"phonePrefixCountryCode": "SK",
+				"phonePrefixCountryCode": "+421",
 				"phone": "906047188"
+			},
+			{
+				"phonePrefixCountryCode": "+421",
+				"phone": "906047187"
 			}
 		],
 		"emails": [
@@ -22,7 +26,7 @@
 				"state": "CUSTOM_ORDER"
 			}
 		],
-		"countryCode": "SK",
+		"countryCode": "IT",
 		"address": {
 			"countryCode": "SK",
 			"city": "Žilina",

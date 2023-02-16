@@ -79,7 +79,7 @@ const SupportContactsFilter = (props: Props) => {
 						htmlType='button'
 						className={'noti-btn w-full mb-2'}
 						icon={<PlusIcon />}
-						id={`${FORM.SUPPORT_CONTACT}-${CREATE_BUTTON_ID}`}
+						id={`${CREATE_BUTTON_ID}-${FORM.SUPPORT_CONTACT}`}
 					>
 						{t('loc:Pridať podporu')}
 					</Button>

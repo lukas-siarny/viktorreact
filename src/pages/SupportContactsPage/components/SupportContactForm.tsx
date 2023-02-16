@@ -61,7 +61,7 @@ const SupportContactForm: FC<Props> = (props) => {
 	}, [supportContact?.data?.supportContact?.country.code, countries?.enumerationsOptions, supportContacts?.data?.supportContacts])
 
 	return (
-		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
+		<Form id={`${FORM.SUPPORT_CONTACT}-form`} layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<Space className={'w-full'} direction='vertical' size={36}>
 				<Row>
 					<Col span={24}>

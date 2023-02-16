@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { Divider, Form, Button } from 'antd'
 
 // utils
-import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS } from '../../../utils/enums'
-import { showErrorNotification, validationString, checkUploadingBeforeSubmit } from '../../../utils/helper'
+import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, CREATE_BUTTON_ID, DELETE_BUTTON_ID } from '../../../utils/enums'
+import { showErrorNotification, validationString, checkUploadingBeforeSubmit, formFieldID } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // atoms
@@ -42,7 +42,12 @@ const LanguagesForm: FC<Props> = (props) => {
 	const { handleSubmit, languageID, closeForm, onDelete, submitting, pristine } = props
 
 	return (
-		<Form layout={'vertical'} className={'w-full top-0 sticky overflow-hidden pt-1 px-6 pb-6 -mx-6'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
+		<Form
+			id={`${FORM.LANGUAGES}-form`}
+			layout={'vertical'}
+			className={'w-full top-0 sticky overflow-hidden pt-1 px-6 pb-6 -mx-6'}
+			onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}
+		>
 			<div className={'h-full '}>
 				<h3 className={'mb-0 mt-3 relative pr-7'}>
 					{languageID ? t('loc:Upraviť jazyk') : t('loc:Vytvoriť jazyk')}
@@ -92,6 +97,7 @@ const LanguagesForm: FC<Props> = (props) => {
 						<DeleteButton
 							onConfirm={onDelete}
 							entityName={''}
+							id={formFieldID(FORM.LANGUAGES, DELETE_BUTTON_ID)}
 							type={'default'}
 							className='w-full xl:w-auto xl:min-w-40'
 							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}

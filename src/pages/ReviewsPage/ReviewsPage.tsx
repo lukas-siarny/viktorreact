@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Row, Spin, Rate, Progress, Button, Menu, Dropdown } from 'antd'
+import { Col, Row, Spin, Rate, Progress, Button, Dropdown } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
@@ -263,8 +263,9 @@ const ReviewsPage = () => {
 													icon: <EyeIcon width={16} height={16} />,
 													className: dropdownItemClassName,
 													disabled: disabledShowReview,
-													onClick: () => {
+													onClick: (menuInfo) => {
 														if (!hasPermission) {
+															menuInfo.domEvent.preventDefault()
 															openForbiddenModal()
 														} else {
 															changeVerificationStatus(record.id, REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C)
@@ -277,8 +278,9 @@ const ReviewsPage = () => {
 													icon: <EyeoffIcon width={16} height={16} />,
 													className: dropdownItemClassName,
 													disabled: disabledHideReview,
-													onClick: () => {
+													onClick: (menuInfo) => {
 														if (!hasPermission) {
+															menuInfo.domEvent.preventDefault()
 															openForbiddenModal()
 														} else {
 															changeVerificationStatus(record.id, REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C)

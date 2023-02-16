@@ -42,7 +42,7 @@ import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
 import { cancelGetTokens } from '../../utils/request'
 
 /**
- * zrusi prebiehajuci request - pouzivame pre zrusenie background loadu pri urcitych akciach, napr. pri zaciatku resizovania eventu alebo pred zavolanim updatu dat na BE
+ * zrusi prebiehajuci request - pouzivame pre zrusenie background loadu pri urcitych akciach, napr. pri zaciatku resizovania/dnd eventu alebo pred zavolanim updatu dat na BE
  */
 export const cancelEventsRequestOnDemand = () => {
 	const GET_RESERVATIONS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.RESERVATIONS)

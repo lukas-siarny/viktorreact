@@ -60,6 +60,10 @@ import CalendarContent, { CalendarRefs } from './components/layout/CalendarConte
 import CalendarHeader from './components/layout/Header'
 import SiderEventManagement, { SiderEventManagementRefs } from './components/layout/SiderEventManagement'
 import SiderFilter from './components/layout/SiderFilter'
+import CalendarDayEventsPopover from './components/popovers/CalendarDayEventsPopover'
+import CalendarEmployeeReservationsPopover from './components/popovers/CalendarEmployeeReservationsPopover'
+import CalendarReservationPopover from './components/popovers/CalendarReservationPopover'
+import CalendarConfirmModal from './components/CalendarConfirmModal'
 
 // types
 import {
@@ -75,14 +79,8 @@ import {
 	EmployeeReservationsPopoverData
 } from '../../types/interfaces'
 
-// atoms
-import CalendarReservationPopover from './components/popovers/CalendarReservationPopover'
-import CalendarConfirmModal from './components/CalendarConfirmModal'
-
 // hooks
 import useQueryParams, { ArrayParam, StringParam } from '../../hooks/useQueryParams'
-import CalendarDayEventsPopover from './components/popovers/CalendarDayEventsPopover'
-import CalendarEmployeeReservationsPopover from './components/popovers/CalendarEmployeeReservationsPopover'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -165,7 +163,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const [currentRange, setCurrentRange] = useState(getSelectedDateRange(validCalendarView, validSelectedDate))
 	/**
 	 * tento state je relevantny len pre mesacne view
-	 * obsahuje informacie o celom rangi v mesacnom view - teda aj datumy z minuleho a dalsieho mesiaca, ktore doplnaju cely mesacneho view grid 7x6
+	 * obsahuje informacie o celom rangi v mesacnom view - teda aj datumy z minuleho a dalsieho mesiaca, ktore doplnaju cely grid 7x6
 	 */
 	const [monthlyViewFullRange, setMonthlyViewFullRange] = useState(getSelectedDateRange(validCalendarView, validSelectedDate, true))
 
@@ -296,7 +294,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}
 
 	/**
-	 * nastavi novy datum do query, novy current range a tiez datum pre aktualne zobrazenu instanciu Fullcalendara
+	 * nastavy novy datum do query, novy current range a tiez datum pre aktualne zobrazenu instanciu Fullcalendara
 	 */
 	const setNewSelectedDate = (newDate: string, monthViewFullRange = false) => {
 		// query sa nastavi vzdy ked sa zmeni datum
@@ -558,11 +556,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				})
 			}
 
-			if (validCalendarView === CALENDAR_VIEW.DAY || validCalendarView === CALENDAR_VIEW.MONTH) {
-				setTimeout(updateCalendarSize.current, 100)
-			}
+			setTimeout(updateCalendarSize.current, 100)
 		},
-		[query, setQuery, validCalendarView]
+		[query, setQuery]
 	)
 
 	useEffect(() => {
@@ -886,9 +882,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			sidebarView: eventType
 		})
 
-		if (validCalendarView === CALENDAR_VIEW.DAY || validCalendarView === CALENDAR_VIEW.MONTH) {
-			setTimeout(updateCalendarSize.current, 100)
-		}
+		setTimeout(updateCalendarSize.current, 100)
 	}
 
 	const onReservationClick = (data?: ReservationPopoverData, position?: PopoverTriggerPosition) => {
@@ -971,9 +965,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					setSelectedDate={setNewSelectedDate}
 					setSiderFilterCollapsed={() => {
 						setSiderFilterCollapsed(!siderFilterCollapsed)
-						if (validCalendarView === CALENDAR_VIEW.DAY || validCalendarView === CALENDAR_VIEW.MONTH) {
-							setTimeout(updateCalendarSize.current, 100)
-						}
+						setTimeout(updateCalendarSize.current, 100)
 					}}
 					onAddEvent={handleAddEvent}
 					selectedMonth={monthlyViewFullRange.selectedMonth}

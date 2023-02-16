@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 import MapContainer from './MapContainer'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, MAP } from '../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, MAP, mapApiConfig } from '../utils/enums'
 import {
 	getGoogleMapUrl,
 	parseAddressComponents,
@@ -91,7 +91,7 @@ const AddressFields = (props: Props) => {
 	const { t } = useTranslation()
 
 	const [googleMapUrl, setGoogleMapUrl] = useState<string | undefined>(undefined)
-	const [mapError, setMapError] = useState<boolean>(true) // TODO: len pre dev ucely, zmenit na false
+	const [mapError, setMapError] = useState<boolean>(false)
 
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
@@ -170,7 +170,7 @@ const AddressFields = (props: Props) => {
 			{googleMapUrl && (
 				<>
 					<Row className={'mb-4 gap-4'} wrap={false}>
-						{mapError ? (
+						{mapError || !mapApiConfig.googleMapsApiKey ? (
 							<Row className={'w-full h-full block'} justify='center'>
 								<Alert message={t('loc:Google mapa je aktuálne nedostupná.')} showIcon type={'warning'} className={'noti-alert mb-4 google-map-warning'} />
 								<Row justify={'space-between'}>

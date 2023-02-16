@@ -814,7 +814,6 @@ export interface ICalendarDayEventsPopover {
 	isHidden: boolean
 	isLoading?: boolean
 	isUpdatingEvent?: boolean
-	employees?: Employees
 }
 
 export type ReservationPopoverData = {

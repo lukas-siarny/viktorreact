@@ -411,6 +411,10 @@ export const clearCalendarEvents =
 
 export const clearCalendarReservations = (): ThunkResult<Promise<void>> => clearCalendarEvents(CALENDAR_EVENTS_KEYS.RESERVATIONS)
 
+export const clearCalendarMonthlyReservations = (): ThunkResult<Promise<void>> => async (dispatch) => {
+	dispatch({ type: MONTHLY_RESERVATIONS.MONTHLY_RESERVATIONS_CLEAR })
+}
+
 export const clearCalendarShiftsTimeoffs = (): ThunkResult<Promise<void>> => clearCalendarEvents(CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS)
 
 export const getCalendarMonthlyViewReservations =

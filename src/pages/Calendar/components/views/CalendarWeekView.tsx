@@ -16,7 +16,7 @@ import { getDateTime } from '../../../../utils/helper'
 import eventContent from '../../eventContent'
 
 // types
-import { Employees, ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/interfaces'
+import { ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'

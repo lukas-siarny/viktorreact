@@ -10,6 +10,8 @@ import { getTimeText } from '../../calendarHelpers'
 // components
 import AbsenceCard from './AbsenceCard'
 import ReservationCard from './ReservationCard'
+
+// types
 import { ICalendarEventContent } from '../../../../types/interfaces'
 
 const InverseBackgroundEvent = React.memo(() => <div className={cx('nc-bg-event not-set-availability')} />)

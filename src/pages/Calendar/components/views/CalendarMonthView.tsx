@@ -19,6 +19,8 @@ import {
 	ICalendarView,
 	PopoverTriggerPosition
 } from '../../../../types/interfaces'
+import { RootState } from '../../../../reducers'
+import { IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 // enums
 import {
@@ -32,6 +34,8 @@ import {
 	DEFAULT_TIME_FORMAT,
 	MONTHLY_RESERVATIONS_KEY
 } from '../../../../utils/enums'
+
+// utils
 import {
 	compareAndSortDayEvents,
 	composeMonthViewAbsences,
@@ -41,11 +45,9 @@ import {
 	OpeningHoursMap,
 	compareMonthlyReservations
 } from '../../calendarHelpers'
-import { RootState } from '../../../../reducers'
 import eventContent from '../../eventContent'
 
-// assets
-import { IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
+// components
 import MonthlyReservationCard from '../eventCards/MonthlyReservationCard'
 
 const getCurrentDayEventsCount = (selectedDate: string, dayEvents: (CalendarEvent | ICalendarMonthlyViewEvent)[], virtualEvent?: IVirtualEventPayload['data'] | null): number => {
@@ -101,7 +103,7 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 	useEffect(() => {
 		/**
 		 * v tomto useEffecte sa vytvara custom "show more" button
-		 * hlavne z optimalizacnych dovodov - kvoli odlachceniu DOMka sa do Fullcalendara neposielaju vsetky eventy, ale len tie, ktore je vidiet v zakladnom zobrazeni (momentalne 5 na den)
+		 * hlavne z optimalizacnych dovodov - kvoli odlachceniu DOMka sa do Fullcalendara neposielaju vsetky eventy, ale len tie, ktore je vidiet v zakladnom zobrazeni (momentalne 5 na den) + v pripade ze je povoleny DND (teda u nas pri zmenach), tak este o jeden naviac (samozrejmel len ak ich je v dany den viac ako 5), ktory sa po presune nejakeho eventu na iny den posunie na jeho miesto
 		 * ak ich je pre dany den viac ako poskytuje zobrazenie, zobrazi sa button "show more"
 		 * fullcalendar sice poskytuje aj vlastny showMore button, avsak aby sa zobrazoval spravne, museli by sme do neho poslat vsetky eventy, ktore su potom aj vyrendrovane v DOMku (sice s visibility hidden, ale nody existuju)
 		 * pri pridavani custom buttonu je potrebne, aby bol vytvoreny element <a> a mal priradene class='fc-daygrid-more-link fc-more-link'

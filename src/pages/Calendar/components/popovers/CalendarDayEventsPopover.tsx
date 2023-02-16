@@ -1,7 +1,6 @@
 /* eslint-disable import/no-cycle */
 import React, { FC, useEffect, useCallback, PropsWithChildren } from 'react'
 import { Divider, Popover, Spin } from 'antd'
-import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import dayjs from 'dayjs'
 
@@ -10,19 +9,19 @@ import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon
 
 // components
 import CalendarEventContent from '../eventCards/CalendarEventContent'
+import MonthlyReservationCard from '../eventCards/MonthlyReservationCard'
 
 // types
 import { RootState } from '../../../../reducers'
-import { CalendarEvent, Employees, ICalendarDayEventsPopover, ICalendarEventContent, PopoverTriggerPosition, ReservationPopoverData } from '../../../../types/interfaces'
+import { CalendarEvent, ICalendarDayEventsPopover, ICalendarEventContent, PopoverTriggerPosition, ReservationPopoverData } from '../../../../types/interfaces'
+import { IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 /// utils
 import { CALENDAR_EVENT_DISPLAY_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, MONTHLY_RESERVATIONS_KEY } from '../../../../utils/enums'
-import { compareAndSortDayEvents, compareMonthlyReservations } from '../../calendarHelpers'
+import { compareAndSortDayEvents } from '../../calendarHelpers'
 
 // hooks
 import useKeyUp from '../../../../hooks/useKeyUp'
-import { IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
-import MonthlyReservationCard from '../eventCards/MonthlyReservationCard'
 
 const getEventsForPopover = (
 	date: string | null,
@@ -102,10 +101,7 @@ type ContentProps = {
 } & PropsWithChildren
 
 const PopoverContent: FC<ContentProps> = (props) => {
-	const [t] = useTranslation()
 	const { date, onClose, isLoading, isUpdatingEvent, children } = props
-
-	const isToday = dayjs(date).isToday()
 
 	return (
 		<div className='nc-day-events-popover-content text-notino-black w-56'>
@@ -116,7 +112,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 				</button>
 			</header>
 			<Divider className={'m-0'} />
-			{/* footerHeight = 72px, headerHeight = 52px. dividerHeight = 1px (header and footer dividers), padding top and bottom = 2*16px */}
+			{/* 120px = headerHeight = 52px + 68px nejaky spacing od vrchu a spdoku */}
 			<main className={'overflow-y-auto'} style={{ maxHeight: 'calc(100vh - 120px)' }}>
 				<Spin spinning={isUpdatingEvent || isLoading}>
 					<div className={'flex flex-col gap-1 p-6'}>{children}</div>
@@ -127,10 +123,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 }
 
 const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
-	const { position, setIsOpen, isOpen, date, onEditEvent, onReservationClick, isHidden, isLoading, isUpdatingEvent, isReservationsView, employees, onMonthlyReservationClick } =
-		props
-
-	const [t] = useTranslation()
+	const { position, setIsOpen, isOpen, date, onEditEvent, onReservationClick, isHidden, isLoading, isUpdatingEvent, isReservationsView, onMonthlyReservationClick } = props
 
 	const overlayClassName = `nc-event-popover-overlay_${date || ''}`
 

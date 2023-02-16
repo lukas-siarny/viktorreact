@@ -421,6 +421,7 @@ const ReservationForm: FC<Props> = (props) => {
 							labelInValue
 							onSearch={searchEmployes}
 							onChange={onChangeEmployee}
+							hasExtra
 						/>
 						<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 					</Form>

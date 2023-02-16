@@ -39,6 +39,7 @@ import { cancelEventsRequestOnDemand, getSelectedDateForCalendar, getSelectedDat
 
 // reducers
 import {
+	clearCalendarMonthlyReservations,
 	clearCalendarReservations,
 	clearCalendarShiftsTimeoffs,
 	getCalendarEventDetail,
@@ -162,7 +163,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	 * hlavne kvoli týždennému a mesačnému, kde sa vždy na základe zvoleného dátumu (validSelectedDate) dopočíta celý range, na základe ktorého sa potom dotiahnu data z BE
 	 */
 	const [currentRange, setCurrentRange] = useState(getSelectedDateRange(validCalendarView, validSelectedDate))
-	// tento state je relevantny len pre mesacne view
+	/**
+	 * tento state je relevantny len pre mesacne view
+	 * obsahuje informacie o celom rangi v mesacnom view - teda aj datumy z minuleho a dalsieho mesiaca, ktore doplnaju cely mesacneho view grid 7x6
+	 */
 	const [monthlyViewFullRange, setMonthlyViewFullRange] = useState(getSelectedDateRange(validCalendarView, validSelectedDate, true))
 
 	const [confirmModalData, setConfirmModalData] = useState<ConfirmModalData>(null)
@@ -193,9 +197,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		data: null,
 		position: null
 	})
-	// dayEventsPopover by mal byt vzdy nizzsie ako reservationPopover
-	// je potrebne ho preto predrendrovat (cez z-indexy to v tomto pripade nejde, pretoze antd ich cez portaly dynamicky injectuje do DOMka, navyse bez classnamu)
-	// ak je isHidden = true, znamena, ze existuje v DOMku ale ma nulovu velkost
+	/**
+	 * dayEventsPopover by mal byt vzdy nizzsie ako reservationPopover
+	 * je potrebne ho preto predrendrovat (cez z-indexy to v tomto pripade nejde, pretoze antd ich cez portaly dynamicky injectuje do DOMka, navyse bez classnamu)
+	 * ak je isHidden = true, znamena, ze existuje v DOMku ale ma nulovu velkost
+	 */
 	const [dayEventsPopover, setDayEventsPopover] = useState<{
 		isOpen: boolean
 		isHidden: boolean
@@ -298,7 +304,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 		const newCalendarDate = getSelectedDateForCalendar(validCalendarView, newDate)
 
-		// datum vo Fullcalendari a current range sa nastavi len vtedy, ked sa novy datum nenachadza v aktualne zvolenom rangi (currentRange state)
+		// datum vo Fullcalendari a current range sa nastavi len vtedy, ked sa novy datum nenachadza v aktualne zvolenom rangi (currentRange state alebo monthlyViewFullRange)
 		if (!isDateInRange(monthViewFullRange ? monthlyViewFullRange.start : currentRange.start, monthViewFullRange ? monthlyViewFullRange.end : currentRange.end, newDate)) {
 			setCurrentRange(getSelectedDateRange(validCalendarView, newDate))
 
@@ -388,13 +394,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			// restartuje sa interval pre background load
 			restartFetchInterval()
 
-			let eventdsDayLimit = 0
+			let eventsDayLimit = 0
 			let startQueryParam = currentRange.start
 			let endQueryParam = currentRange.end
 
 			if (validCalendarView === CALENDAR_VIEW.MONTH) {
 				// v mesacnom view je potrebne vyplnit cely kalendar - 7 x 6 buniek (od PO - NE) = 42
-				eventdsDayLimit = CALENDAR_DAY_EVENTS_LIMIT
+				eventsDayLimit = CALENDAR_DAY_EVENTS_LIMIT
 				startQueryParam = dayjs(startQueryParam).startOf('week').format(CALENDAR_DATE_FORMAT.QUERY)
 				endQueryParam = dayjs(startQueryParam).add(41, 'days').format(CALENDAR_DATE_FORMAT.QUERY)
 			}
@@ -404,7 +410,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				validCalendarView !== CALENDAR_VIEW.MONTH,
 				clearVirtualEvent,
 				true,
-				eventdsDayLimit
+				eventsDayLimit
 			)
 
 			if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
@@ -415,13 +421,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					employeeIDs: query.employeeIDs,
 					categoryIDs: getFullCategoryIdsFromUrl(query?.categoryIDs)
 				}
-				const dispatchGetReservations = getCalendarReservations(
-					reservationsQueryparams,
-					validCalendarView !== CALENDAR_VIEW.MONTH,
-					clearVirtualEvent,
-					true,
-					eventdsDayLimit
-				)
+				const dispatchGetReservations = getCalendarReservations(reservationsQueryparams, validCalendarView !== CALENDAR_VIEW.MONTH, clearVirtualEvent, true, eventsDayLimit)
 
 				if (validCalendarView === CALENDAR_VIEW.MONTH) {
 					await dispatch(getCalendarMonthlyViewReservations(reservationsQueryparams, clearVirtualEvent, true))
@@ -490,20 +490,29 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		;(async () => {
+			// v reduxe sa do eventov sa mapuju zamestnanci, preto sa musia dotiahnut predtym nez sa dotiahnu eventy
 			if (!areEmployeesLoaded) {
 				return
 			}
 			// if user uncheck all values from employeesIDs filter => clear reservations and shifts and dot't fetch new data
 			if (query?.employeeIDs === null) {
 				restartFetchInterval()
-				dispatch(clearCalendarReservations())
+				if (validCalendarView === CALENDAR_VIEW.MONTH) {
+					dispatch(clearCalendarMonthlyReservations())
+				} else {
+					dispatch(clearCalendarReservations())
+				}
 				dispatch(clearCalendarShiftsTimeoffs())
 				return
 			}
 			// if user uncheck all values from categoryIDs filter => clear reservations, but keep shifts and dot't fetch new data
 			if (query?.categoryIDs === null) {
 				restartFetchInterval()
-				dispatch(clearCalendarReservations())
+				if (validCalendarView === CALENDAR_VIEW.MONTH) {
+					dispatch(clearCalendarMonthlyReservations())
+				} else {
+					dispatch(clearCalendarReservations())
+				}
 				return
 			}
 
@@ -511,7 +520,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			fetchEvents(false)
 		})()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents, areEmployeesLoaded])
+	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents, areEmployeesLoaded, validCalendarView])
 
 	useEffect(() => {
 		dispatch(
@@ -925,7 +934,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				isHidden={dayEventsPopover.isHidden}
 				isLoading={isLoading}
 				isUpdatingEvent={isUpdatingEvent}
-				employees={filteredEmployees()}
 			/>
 			<CalendarReservationPopover
 				data={reservationPopover.data}

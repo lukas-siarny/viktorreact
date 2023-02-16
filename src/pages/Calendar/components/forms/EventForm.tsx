@@ -140,7 +140,7 @@ const EventForm: FC<Props> = (props) => {
 							name={'employee'}
 							size={'large'}
 							optionLabelProp={'label'}
-							update={(itemKey: number, ref: any) => ref.blur()}
+							update={(_itemKey: number, ref: any) => ref.blur()}
 							filterOption={false}
 							allowInfinityScroll
 							showSearch
@@ -149,6 +149,7 @@ const EventForm: FC<Props> = (props) => {
 							className={'pb-0'}
 							labelInValue
 							onSearch={searchEmployes}
+							hasExtra
 						/>
 						<Field
 							name={'date'}

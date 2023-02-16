@@ -259,7 +259,12 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 						email: employee.email
 					}),
 					borderColor: employee.color,
-					thumbNail: employee.image.resizedImages.thumbnail
+					thumbNail: employee.image.resizedImages.thumbnail,
+					extra: {
+						employeeData: {
+							color: employee.color
+						}
+					}
 				}))
 				return { pagination: data.pagination, data: selectOptions }
 			} catch (e) {

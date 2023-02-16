@@ -95,15 +95,6 @@ export default (state = initState, action: ICalendarActions) => {
 					data: action.payload.data
 				}
 			}
-		// Events refresh
-		case EVENTS.EVENTS_REFRESH:
-			return {
-				...state,
-				[action.enumType]: {
-					...state[action.enumType]
-				}
-			}
-
 		// Event detail
 		case EVENT_DETAIL.EVENT_DETAIL_LOAD_START:
 			return {
@@ -141,6 +132,15 @@ export default (state = initState, action: ICalendarActions) => {
 				...state,
 				[action.enumType]: {
 					...state[action.enumType],
+					data: null
+				}
+			}
+		// clear events
+		case MONTHLY_RESERVATIONS.MONTHLY_RESERVATIONS_CLEAR:
+			return {
+				...state,
+				[MONTHLY_RESERVATIONS_KEY]: {
+					...state[MONTHLY_RESERVATIONS_KEY],
 					data: null
 				}
 			}

@@ -26,6 +26,7 @@ import {
 	CALENDAR_DATE_FORMAT,
 	CALENDAR_DAY_EVENTS_SHOWN,
 	CALENDAR_EVENTS_VIEW_TYPE,
+	CALENDAR_EVENT_TYPE,
 	CALENDAR_VIEW,
 	DEFAULT_DATE_INIT_FORMAT,
 	DEFAULT_TIME_FORMAT,
@@ -168,11 +169,24 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 }
 
 const eventOrder = (a: any, b: any) => {
-	const aStart = a.eventData?.originalEvent?.startDateTime || a.eventData?.startDateTime
-	const aEnd = a.eventData?.originalEvent?.endDateTime || a.eventData?.endDateTime
-	const bStart = b.eventData?.originalEvent?.startDateTime || b.eventData?.startDateTime
-	const bEnd = b.eventData?.originalEvent?.endDateTime || b.eventData?.endDateTime
-	return compareAndSortDayEvents(aStart, aEnd, bStart, bEnd, a.id, b.id)
+	const aData = {
+		start: a.eventData?.originalEvent?.startDateTime || a.eventData?.startDateTime,
+		end: a.eventData?.originalEvent?.endDateTime || a.eventData?.endDateTime,
+		id: a.id,
+		employeeId: a.eventData?.employee.id,
+		eventType: a.eventData?.eventType as CALENDAR_EVENT_TYPE,
+		orderIndex: a.eventData?.employee.orderIndex
+	}
+	const bData = {
+		start: b.eventData?.originalEvent?.startDateTime || b.eventData?.startDateTime,
+		end: b.eventData?.originalEvent?.endDateTime || b.eventData?.endDateTime,
+		id: b.eventData?.id,
+		employeeId: b.eventData?.employee.id,
+		eventType: b.eventData?.eventType as CALENDAR_EVENT_TYPE,
+		orderIndex: b.eventData?.employee.orderIndex
+	}
+
+	return compareAndSortDayEvents(aData, bData)
 }
 
 const reservationOrder = (a: any, b: any) => {
@@ -202,8 +216,8 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 		onEventChangeStart,
 		virtualEvent,
 		onAddEvent,
-		employees,
-		onMonthlyReservationClick
+		onMonthlyReservationClick,
+		enabledSalonReservations
 	} = props
 
 	const openingHours = useSelector((state: RootState) => state.selectedSalon.selectedSalon).data?.openingHours
@@ -211,12 +225,12 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 
 	const events = useMemo(() => {
 		if (isReservationsView) {
-			return composeMonthViewReservations(monthlyReservations, employees)
+			return composeMonthViewReservations(monthlyReservations)
 		}
 		const data = composeMonthViewAbsences(shiftsTimeOffs)
 		// ak je virtualEvent definovany, zaradi sa do zdroja eventov pre Calendar
 		return virtualEvent ? [...data, virtualEvent] : data
-	}, [isReservationsView, monthlyReservations, shiftsTimeOffs, virtualEvent, employees])
+	}, [isReservationsView, monthlyReservations, shiftsTimeOffs, virtualEvent])
 
 	const openingHoursMap = useMemo(() => getOpnenigHoursMap(openingHours), [openingHours])
 	const businessHours = useMemo(() => getBusinessHours(openingHoursMap), [openingHoursMap])
@@ -225,13 +239,11 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 	 * Spracuje input z calendara click/select a vytvori z neho init data, ktore vyuzije form v SiderEventManager
 	 */
 	const handleNewEvent = (event: DateSelectArg) => {
-		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
 		const eventStart = dayjs(event.startStr)
-
 		onAddEvent({
 			date: eventStart.format(DEFAULT_DATE_INIT_FORMAT),
-			timeFrom: eventStart.format(DEFAULT_TIME_FORMAT),
-			timeTo: dayjs(event.endStr).format(DEFAULT_TIME_FORMAT),
+			timeFrom: dayjs().format(DEFAULT_TIME_FORMAT),
+			timeTo: dayjs().add(1, 'hours').format(DEFAULT_TIME_FORMAT),
 			employee: {
 				value: '',
 				key: '',
@@ -239,6 +251,14 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 			}
 		})
 	}
+
+	useEffect(() => {
+		// NOTE: ak neni je povoleny online booking tak sa nastavi disabled state nad kalendarom
+		if (!enabledSalonReservations) {
+			const body = document.getElementsByClassName('fc-daygrid-body')[0]
+			body.classList.add('active')
+		}
+	}, [enabledSalonReservations])
 
 	return (
 		<div className={'nc-calendar-wrapper'}>
@@ -256,8 +276,8 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 				initialView={'dayGridMonth'}
 				initialDate={selectedDate}
 				eventMinHeight={15}
-				editable={!isReservationsView}
-				selectable={!isReservationsView}
+				editable={!isReservationsView && enabledSalonReservations}
+				selectable={!isReservationsView && enabledSalonReservations}
 				weekends
 				stickyFooterScrollbar
 				showNonCurrentDates
@@ -265,7 +285,7 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 				dayMaxEvents={5}
 				dayMinWidth={120}
 				eventOrderStrict
-				eventOrder={isReservationsView ? reservationOrder : eventOrder}
+				eventOrder={isReservationsView ? (reservationOrder as any) : (eventOrder as any)}
 				selectConstraint={CALENDAR_COMMON_SETTINGS.SELECT_CONSTRAINT}
 				// data sources
 				events={events}

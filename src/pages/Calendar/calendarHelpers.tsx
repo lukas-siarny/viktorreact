@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { uniqueId, startsWith, isEmpty } from 'lodash'
 import Scroll from 'react-scroll'
+import { getCalendarEventsCancelTokenKey } from '../../reducers/calendar/calendarActions'
 
 // types
 import {
@@ -27,14 +28,36 @@ import {
 	CALENDAR_DATE_FORMAT,
 	CALENDAR_DAY_EVENTS_SHOWN,
 	CALENDAR_DISABLED_NOTIFICATION_TYPE,
+	CALENDAR_EVENTS_KEYS,
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_VIEW,
+	CANEL_TOKEN_MESSAGES,
 	DAY,
+	MONTHLY_RESERVATIONS_KEY,
 	NEW_ID_PREFIX,
 	NOTIFICATION_TYPES
 } from '../../utils/enums'
 import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
+import { cancelGetTokens } from '../../utils/request'
+
+/**
+ * zrusi prebiehajuci request - pouzivame pre zrusenie background loadu pri urcitych akciach, napr. pri zaciatku resizovania eventu alebo pred zavolanim updatu dat na BE
+ */
+export const cancelEventsRequestOnDemand = () => {
+	const GET_RESERVATIONS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.RESERVATIONS)
+	const GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS)
+
+	if (typeof cancelGetTokens[MONTHLY_RESERVATIONS_KEY] !== typeof undefined) {
+		cancelGetTokens[MONTHLY_RESERVATIONS_KEY].cancel(CANEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
+	}
+	if (typeof cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY] !== typeof undefined) {
+		cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY].cancel(CANEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
+	}
+	if (typeof cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY] !== typeof undefined) {
+		cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY].cancel(CANEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
+	}
+}
 
 export const getCalendarMonthFullRangeDates = (selectedMonthFirstDay: string | dayjs.Dayjs, format: string | false = CALENDAR_DATE_FORMAT.QUERY) => {
 	// v mesacnom view je potrebne vyplnit cely kalendar - 7 x 6 buniek (od PO - NE) = 42
@@ -46,22 +69,58 @@ export const getCalendarMonthFullRangeDates = (selectedMonthFirstDay: string | d
 	}
 }
 
-export const compareAndSortDayEvents = (aStart: string, aEnd: string, bStart: string, bEnd: string, aId: string, bId: string) => {
+interface IComapreAndSortDayEventsData {
+	start: string
+	end: string
+	id: string
+	employeeId: string
+	eventType: CALENDAR_EVENT_TYPE
+	orderIndex: number
+}
+
+const CALENDAR_EVENT_TYPES_ORDER = {
+	[CALENDAR_EVENT_TYPE.RESERVATION]: 0,
+	[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: 1,
+	[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: 2,
+	[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: 3
+}
+
+export const compareAndSortDayEvents = (dataA: IComapreAndSortDayEventsData, dataB: IComapreAndSortDayEventsData) => {
+	const { start: aStart, end: aEnd, id: aId, employeeId: aEmployeeId, eventType: aEventType, orderIndex: aOrderIndex } = dataA
+	const { start: bStart, end: bEnd, id: bId, employeeId: bEmployeeId, eventType: bEventType, orderIndex: bOrderIndex } = dataB
+
+	// najprv sa zobrazi novo vytvarany virtualny event
 	if (aId.startsWith(NEW_ID_PREFIX) || bId.startsWith(NEW_ID_PREFIX)) {
 		return -1
 	}
-	if (dayjs(aStart).isBefore(bStart)) {
-		return -1
-	}
-	if (dayjs(aStart).isSame(bStart)) {
-		if (dayjs(aEnd).isSame(bEnd)) {
-			return aId > bId ? -1 : 1
+	// potom sa porovnava podla employee id a orderIndex
+	if (aEmployeeId === bEmployeeId) {
+		const aEventTypeOrder = CALENDAR_EVENT_TYPES_ORDER[aEventType]
+		const bEventTypeOrder = CALENDAR_EVENT_TYPES_ORDER[bEventType]
+		// potom sa porovnava podla event typu
+		if (aEventTypeOrder === bEventTypeOrder) {
+			// potom sa porovnava podla zaciatku - skorsi event ide najprv
+			if (dayjs(aStart).isBefore(bStart)) {
+				return -1
+			}
+			// ak je rovnaky zaciatok - potom sa porovnava podla konca - dlhsi event ide najprv
+			if (dayjs(aStart).isSame(bStart)) {
+				// ak je aj koniec rovnaky tak podla id eventu
+				if (dayjs(aEnd).isSame(bEnd)) {
+					return aId > bId ? -1 : 1
+				}
+				if (dayjs(aEnd).isAfter(dayjs(bEnd))) {
+					return -1
+				}
+				return 1
+			}
+		} else {
+			return aEventTypeOrder - bEventTypeOrder
 		}
-		if (dayjs(aEnd).isAfter(dayjs(bEnd))) {
-			return -1
-		}
-		return 1
+	} else {
+		return aOrderIndex - bOrderIndex
 	}
+
 	return 0
 }
 
@@ -741,34 +800,25 @@ export const composeMonthViewAbsences = (events: ICalendarEventsPayload['data'])
 
 export const getMonthlyReservationCalendarEventId = (day: string, employeeId: string) => `${day}_${employeeId}`
 
-export const composeMonthViewReservations = (days: ICalendarMonthlyReservationsPayload['data'], employees: Employees) => {
-	// NOTE: toto nebude treba robit ked budu posielat orderIndex v zozname zamestancov
-	const employeesMap: { [key: string]: Employees[0] } = {}
-	employees.forEach((employee) => {
-		employeesMap[employee.id] = employee
-	})
-
+export const composeMonthViewReservations = (days: ICalendarMonthlyReservationsPayload['data']) => {
 	const composedEvents = Object.entries(days || {}).reduce((acc, [day, dayEmployees]) => {
 		const dayEvents: ICalendarMonthlyReservationsCardData[] = []
 		dayEmployees.forEach((dayEmployee) => {
-			const { orderIndex } = employeesMap[dayEmployee.employee.id] || {}
 			dayEvents.push({
-				id: getMonthlyReservationCalendarEventId(day, dayEmployee.employee.id),
+				id: dayEmployee.id,
 				start: dayjs(day).startOf('day').toISOString(),
 				end: dayjs(day).endOf('day').subtract(1, 'hours').toISOString(),
 				allDay: false,
-				eventData: {
-					...dayEmployee,
-					// order index bude sluzit na zoradenie eventov v kalendari
-					orderIndex
-				}
+				eventData: dayEmployee
 			})
 		})
 		/**
 		 * pre kazdy den potrebujeme poslat do kolenadra len take mnozstvo eventov, ktore je v nom realne vidiet
 		 * zvysne sa potom zobrazia v popoveri
 		 */
-		const sortedAndSlicedDayEvents = dayEvents.sort((a, b) => compareMonthlyReservations(a.eventData.orderIndex, b.eventData.orderIndex)).slice(0, CALENDAR_DAY_EVENTS_SHOWN)
+		const sortedAndSlicedDayEvents = dayEvents
+			.sort((a, b) => compareMonthlyReservations(a.eventData.employee.orderIndex, b.eventData.employee.orderIndex))
+			.slice(0, CALENDAR_DAY_EVENTS_SHOWN)
 		return [...acc, ...sortedAndSlicedDayEvents]
 	}, [] as ICalendarMonthlyReservationsCardData[])
 

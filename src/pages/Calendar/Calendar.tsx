@@ -35,7 +35,7 @@ import {
 } from '../../utils/enums'
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { cancelGetTokens, deleteReq, patchReq, postReq } from '../../utils/request'
-import { getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
+import { cancelEventsRequestOnDemand, getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
 
 // reducers
 import {
@@ -169,7 +169,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const clearConfirmModal = () => setConfirmModalData(null)
 
-	const employees = useSelector((state: RootState) => state.employees.employees)
+	const employees = useSelector((state: RootState) => state.employees.employees || [])
 	const services = useSelector((state: RootState) => state.service.services)
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
 	const monthlyReservations = useSelector((state: RootState) => state.calendar[MONTHLY_RESERVATIONS_KEY])
@@ -185,6 +185,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState(false)
 	const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)
+
+	const [areEmployeesLoaded, setAreEmployeesLoaded] = useState(false)
 
 	const [reservationPopover, setReservationPopover] = useState<{ isOpen: boolean; data: ReservationPopoverData | null; position: PopoverTriggerPosition | null }>({
 		isOpen: false,
@@ -460,8 +462,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}, [scrollToTime])
 
 	useEffect(() => {
-		dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
-		dispatch(getServices({ salonID }))
+		;(async () => {
+			dispatch(getServices({ salonID }))
+			await dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
+			setAreEmployeesLoaded(true)
+		})()
 	}, [dispatch, salonID])
 
 	useEffect(() => {
@@ -485,6 +490,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		;(async () => {
+			if (!areEmployeesLoaded) {
+				return
+			}
 			// if user uncheck all values from employeesIDs filter => clear reservations and shifts and dot't fetch new data
 			if (query?.employeeIDs === null) {
 				restartFetchInterval()
@@ -502,7 +510,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			// fetch new events
 			fetchEvents(false)
 		})()
-	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents, areEmployeesLoaded])
 
 	useEffect(() => {
 		dispatch(
@@ -527,7 +536,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			if (!newView) {
 				setQuery({
 					...query,
-					evendId: undefined,
+					eventId: undefined,
 					sidebarView: undefined
 				})
 			} else {
@@ -609,6 +618,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			const { revertEvent } = values
 
 			try {
+				cancelEventsRequestOnDemand()
 				setIsUpdatingEvent(true)
 				const reqData = {
 					start: {
@@ -682,6 +692,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				: undefined
 
 			try {
+				cancelEventsRequestOnDemand()
 				setIsUpdatingEvent(true)
 				const reqData = {
 					eventType: values.eventType as any,
@@ -693,7 +704,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						date: values.date,
 						time: values.timeTo
 					},
-					employeeID: values.employee.key as string,
+					employeeID: values.employee?.key as string,
 					note: values.note,
 					repeatEvent
 				}
@@ -778,6 +789,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				return
 			}
 			try {
+				cancelEventsRequestOnDemand()
 				setIsRemoving(true)
 				if (query.sidebarView === CALENDAR_EVENT_TYPE.RESERVATION) {
 					// DELETE reservation
@@ -824,6 +836,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const handleUpdateReservationState = useCallback(
 		async (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
 			try {
+				cancelEventsRequestOnDemand()
 				await patchReq(
 					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state',
 					{ calendarEventID, salonID },
@@ -865,7 +878,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		})
 
 		if (validCalendarView === CALENDAR_VIEW.DAY || validCalendarView === CALENDAR_VIEW.MONTH) {
-			setTimeout(updateCalendarSize.current, 0)
+			setTimeout(updateCalendarSize.current, 100)
 		}
 	}
 
@@ -951,7 +964,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					setSiderFilterCollapsed={() => {
 						setSiderFilterCollapsed(!siderFilterCollapsed)
 						if (validCalendarView === CALENDAR_VIEW.DAY || validCalendarView === CALENDAR_VIEW.MONTH) {
-							setTimeout(updateCalendarSize.current, 0)
+							setTimeout(updateCalendarSize.current, 100)
 						}
 					}}
 					onAddEvent={handleAddEvent}
@@ -1009,6 +1022,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							changeCalendarDate={setNewSelectedDate}
 							query={query}
 							setQuery={setQuery}
+							areEmployeesLoaded={areEmployeesLoaded}
 						/>
 					)}
 				</Layout>

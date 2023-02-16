@@ -256,7 +256,7 @@ export interface ICalendarReservationForm {
 		serviceData?: NonNullable<ICalendarEventDetailPayload['data']>['service']
 	}>
 	employee: ISelectOptionItem<{
-		employeeData?: NonNullable<ICalendarEventDetailPayload['data']>['employee']
+		employeeData?: Employee
 	}>
 	date: string
 	timeFrom: string
@@ -269,7 +269,9 @@ export interface ICalendarReservationForm {
 	reservationData?: CalendarEvent['reservationData']
 }
 export interface ICalendarEventForm {
-	employee: ISelectOptionItem
+	employee: ISelectOptionItem<{
+		employeeData?: Employee
+	}>
 	date: string
 	timeFrom: string
 	timeTo: string
@@ -717,7 +719,7 @@ export type CalendarEvent = CalendarEvents[0] & {
 	isFirstMultiDayEventInCurrentRange?: boolean
 	isLastMultiDaylEventInCurrentRange?: boolean
 	originalEvent?: CalendarEvent
-	employee: CalendarEmployee
+	employee: Employee
 	isPlaceholder?: boolean
 }
 
@@ -726,13 +728,10 @@ export interface ICalendarEventsPayload {
 	data: CalendarEvent[] | null
 }
 
-export type ICalendarMonthlyViewEvent = {
+export type ICalendarMonthlyViewEvent = Omit<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCountsAndDurations.Responses.$200['calendarEvents'][0][0], 'employeeID'> & {
 	id: string
-	employee: CalendarEmployee
-	eventsCount: number
-	eventsDuration: number
+	employee: Employee
 }
-
 export type ICalendarMonthlyViewDay = { [key: string]: ICalendarMonthlyViewEvent[]  }
 
 export interface ICalendarMonthlyReservationsPayload {
@@ -882,7 +881,7 @@ export interface ICalendarEventCardData {
 }
 
 export interface ICalendarMonthlyReservationsCardData extends Omit<ICalendarEventCardData, 'resourceId' | 'eventData'> {
-	eventData: ICalendarMonthlyViewEvent & { orderIndex: number }
+	eventData: ICalendarMonthlyViewEvent
 }
 
 export type ConfirmModalReservationData = {

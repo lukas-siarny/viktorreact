@@ -34,13 +34,11 @@ import {
 
 // utils
 import { getReq } from '../../utils/request'
-import { formatDateByLocale, getDateTime, normalizeQueryParams, transalteReservationSourceType } from '../../utils/helper'
-import { compareAndSortDayEvents } from '../../pages/Calendar/calendarHelpers'
+import { formatDateByLocale, getDateTime, normalizeDataById, normalizeQueryParams, transalteReservationSourceType } from '../../utils/helper'
+import { compareAndSortDayEvents, compareMonthlyReservations, getMonthlyReservationCalendarEventId } from '../../pages/Calendar/calendarHelpers'
 
 // redux
 import { clearEvent } from '../virtualEvent/virtualEventActions'
-
-import fakeMonthlyEvents from './fakeMonthlyEvents'
 
 // query params types
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
@@ -153,6 +151,8 @@ const storedPreviousParams: any = {
 	[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS]: {}
 }
 
+const RESRAVION_STATES = [RESERVATION_STATE.APPROVED, RESERVATION_STATE.PENDING, RESERVATION_STATE.REALIZED, RESERVATION_STATE.NOT_REALIZED]
+
 export const getCalendarEventsCancelTokenKey = (enumType: CALENDAR_EVENTS_KEYS) => `calendar-events-${enumType}`
 
 export const setDayEvents =
@@ -241,7 +241,7 @@ export const getCalendarEvents =
 		storePreviousParams = true,
 		eventsDayLimit = 0
 	): ThunkResult<Promise<ICalendarEventsPayload>> =>
-	async (dispatch) => {
+	async (dispatch, getState) => {
 		dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
 
 		let payload = {} as ICalendarEventsPayload
@@ -268,10 +268,7 @@ export const getCalendarEvents =
 			)
 
 			// employees sa mapuju do eventov
-			const employees = {} as any
-			data.employees.forEach((employee) => {
-				employees[employee.id] = employee
-			})
+			const employees = normalizeDataById(getState().employees.employees?.data?.employees)
 
 			const editedEvents = data.calendarEvents.reduce((newEventsArray, event) => {
 				const editedEvent: CalendarEvent = {
@@ -293,7 +290,25 @@ export const getCalendarEvents =
 
 			let eventsWithDayLimit: CalendarEvent[] = []
 			if (eventsDayLimit) {
-				const sortedEvents = [...editedEvents].sort((a, b) => compareAndSortDayEvents(a.startDateTime, a.endDateTime, b.startDateTime, b.endDateTime, a.id, b.id))
+				const sortedEvents = [...editedEvents].sort((a, b) => {
+					const aData = {
+						start: a.startDateTime,
+						end: a.endDateTime,
+						id: a.id,
+						employeeId: a.employee.id,
+						eventType: a.eventType as CALENDAR_EVENT_TYPE,
+						orderIndex: a.employee.orderIndex
+					}
+					const bData = {
+						start: b.startDateTime,
+						end: b.endDateTime,
+						id: b.id,
+						employeeId: b.employee.id,
+						eventType: b.eventType as CALENDAR_EVENT_TYPE,
+						orderIndex: b.employee.orderIndex
+					}
+					return compareAndSortDayEvents(aData, bData)
+				})
 
 				// multidnove eventy pre popover je potrebne rozdelit na jednotlive dni
 				const dividedEventsIntoDays: ICalendarDayEvents = {}
@@ -364,7 +379,7 @@ export const getCalendarReservations = (
 		{
 			...queryParams,
 			eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
-			reservationStates: [RESERVATION_STATE.APPROVED, RESERVATION_STATE.PENDING, RESERVATION_STATE.REALIZED, RESERVATION_STATE.NOT_REALIZED]
+			reservationStates: RESRAVION_STATES
 		},
 		splitMultidayEventsIntoOneDayEvents,
 		clearVirtualEvent,
@@ -400,40 +415,52 @@ export const clearCalendarShiftsTimeoffs = (): ThunkResult<Promise<void>> => cle
 
 export const getCalendarMonthlyViewReservations =
 	(queryParams: ICalendarMonthlyReservationsQueryParams, clearVirtualEvent?: boolean, storePreviousParams = true): ThunkResult<Promise<ICalendarMonthlyReservationsPayload>> =>
-	async (dispatch) => {
+	async (dispatch, getState) => {
 		let payload = {} as ICalendarMonthlyReservationsPayload
 		try {
 			const queryParamsEditedForRequest = {
-				...queryParams
+				salonID: queryParams.salonID,
+				categoryIDs: queryParams.categoryIDs,
+				employeeIDs: queryParams.employeeIDs,
+				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
+				dateFrom: queryParams.start,
+				dateTo: queryParams.end,
+				reservationStates: RESRAVION_STATES
 			}
 
 			dispatch({ type: MONTHLY_RESERVATIONS.MONTHLY_RESERVATIONS_LOAD_START })
 
-			setTimeout(() => {
-				const { data } = fakeMonthlyEvents
+			const { data } = await getReq(
+				'/api/b2b/admin/salons/{salonID}/calendar-events/counts-and-durations',
+				normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams,
+				undefined,
+				undefined,
+				undefined,
+				true,
+				MONTHLY_RESERVATIONS_KEY
+			)
 
-				const employees = {} as any
-				data.employees.forEach((employee) => {
-					employees[employee.id] = employee
-				})
+			const employees = normalizeDataById(getState().employees.employees?.data?.employees)
 
-				const editedData = Object.entries(data.calendarEvents).reduce((acc, [key, value]) => {
-					return {
-						...acc,
-						[dayjs(key).format(CALENDAR_DATE_FORMAT.QUERY)]: value.map((day) => ({
-							id: day.id,
-							employee: employees[day.employeeId],
+			const editedData = Object.entries(data.calendarEvents).reduce((acc, [key, value]) => {
+				const formatedDay = dayjs(key).format(CALENDAR_DATE_FORMAT.QUERY)
+				return {
+					...acc,
+					[dayjs(key).format(CALENDAR_DATE_FORMAT.QUERY)]: value
+						.map((day) => ({
+							id: getMonthlyReservationCalendarEventId(formatedDay, day.employeeID),
+							employee: employees[day.employeeID],
 							eventsCount: day.eventsCount,
 							eventsDuration: day.eventsDuration
 						}))
-					}
-				}, {} as ICalendarMonthlyReservationsPayload['data'])
-
-				payload = {
-					data: editedData
+						.sort((a, b) => compareMonthlyReservations(a.employee.orderIndex, b.employee.orderIndex))
 				}
-				dispatch({ type: MONTHLY_RESERVATIONS.MONTHLY_RESERVATIONS_LOAD_DONE, payload })
-			}, 300)
+			}, {} as ICalendarMonthlyReservationsPayload['data'])
+
+			payload = {
+				data: editedData
+			}
+			dispatch({ type: MONTHLY_RESERVATIONS.MONTHLY_RESERVATIONS_LOAD_DONE, payload })
 		} catch (err) {
 			if (axios.isCancel(err) && (err as any)?.message === CANEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST) {
 				// Request bol preruseny novsim requestom, tym padom chceme, aby loading state pokracoval

@@ -16,14 +16,11 @@ import { EventDropArg } from '@fullcalendar/core'
 // enums
 import {
 	CALENDAR_DATE_FORMAT,
-	CALENDAR_EVENTS_KEYS,
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_VIEW,
-	CANEL_TOKEN_MESSAGES,
 	EVENT_NAMES,
 	FORM,
-	MONTHLY_RESERVATIONS_KEY,
 	NEW_ID_PREFIX,
 	UPDATE_EVENT_PERMISSIONS
 } from '../../../../utils/enums'
@@ -48,16 +45,11 @@ import {
 	PopoverTriggerPosition
 } from '../../../../types/interfaces'
 import { RootState } from '../../../../reducers'
+import { IUseQueryParams } from '../../../../hooks/useQueryParams'
 
 // utils
 import { ForbiddenModal, checkPermissions } from '../../../../utils/Permissions'
-import { getSelectedDateForCalendar, getWeekDays } from '../../calendarHelpers'
-import { cancelGetTokens } from '../../../../utils/request'
-import { getCalendarEventsCancelTokenKey } from '../../../../reducers/calendar/calendarActions'
-import { IUseQueryParams } from '../../../../hooks/useQueryParams'
-
-const GET_RESERVATIONS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.RESERVATIONS)
-const GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS)
+import { cancelEventsRequestOnDemand, getSelectedDateForCalendar, getWeekDays } from '../../calendarHelpers'
 
 type Props = {
 	view: CALENDAR_VIEW
@@ -185,17 +177,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	const onEventChangeStart = useCallback(() => {
 		clearFetchInterval()
-
-		if (typeof cancelGetTokens[MONTHLY_RESERVATIONS_KEY] !== typeof undefined) {
-			cancelGetTokens[MONTHLY_RESERVATIONS_KEY].cancel(CANEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
-		}
-		if (typeof cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY] !== typeof undefined) {
-			cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY].cancel(CANEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
-		}
-		if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION && typeof cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY] !== typeof undefined) {
-			cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY].cancel(CANEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
-		}
-	}, [clearFetchInterval, eventsViewType])
+		cancelEventsRequestOnDemand()
+	}, [clearFetchInterval])
 
 	const onEventChange = (arg: EventDropArg | EventResizeDoneArg) => {
 		const hasPermissions = checkPermissions([...authUserPermissions, ...salonPermissions], UPDATE_EVENT_PERMISSIONS)

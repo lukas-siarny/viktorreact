@@ -17,7 +17,7 @@ import { CalendarEvent, Employees, ICalendarDayEventsPopover, ICalendarEventCont
 
 /// utils
 import { CALENDAR_EVENT_DISPLAY_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, MONTHLY_RESERVATIONS_KEY } from '../../../../utils/enums'
-import { compareAndSortDayEvents } from '../../calendarHelpers'
+import { compareAndSortDayEvents, compareMonthlyReservations } from '../../calendarHelpers'
 
 // hooks
 import useKeyUp from '../../../../hooks/useKeyUp'
@@ -32,6 +32,7 @@ const getEventsForPopover = (
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
 ): ICalendarEventContent[] => {
 	const newEvents = (events || []).reduce((editedEvents: ICalendarEventContent[], event) => {
+		// ak existuje virtualny event tak odfiltrujeme original
 		if (event.id === virtualEvent?.id) {
 			return editedEvents
 		}
@@ -52,8 +53,10 @@ const getEventsForPopover = (
 		]
 	}, [])
 
+	// skontrolujeme, ci sa vramci dna nachadza virtualny event
 	const virtualEventStartTime = virtualEvent?.event?.eventData?.start.date
 	const virtualEventEndTime = virtualEvent?.event?.eventData?.end.date
+
 	if (virtualEventStartTime && virtualEventEndTime && date && dayjs(date).isBetween(virtualEventStartTime, virtualEventEndTime, 'day', '[]')) {
 		newEvents.push({
 			id: virtualEvent.id,
@@ -71,11 +74,23 @@ const getEventsForPopover = (
 		if (!a.eventData || !b.eventData) {
 			return 0
 		}
-		const aStart = a.eventData.originalEvent?.startDateTime || a.eventData.startDateTime
-		const aEnd = a.eventData.originalEvent?.endDateTime || a.eventData.endDateTime
-		const bStart = b.eventData.originalEvent?.startDateTime || b.eventData.startDateTime
-		const bEnd = b.eventData.originalEvent?.endDateTime || b.eventData.endDateTime
-		return compareAndSortDayEvents(aStart, aEnd, bStart, bEnd, a.id, b.id)
+		const aData = {
+			start: a.eventData.originalEvent?.startDateTime || a.eventData.startDateTime,
+			end: a.eventData.originalEvent?.endDateTime || a.eventData.endDateTime,
+			id: a.id,
+			employeeId: a.eventData?.employee.id,
+			eventType: a.eventData?.eventType as CALENDAR_EVENT_TYPE,
+			orderIndex: a.eventData?.employee.orderIndex
+		}
+		const bData = {
+			start: b.eventData.originalEvent?.startDateTime || b.eventData.startDateTime,
+			end: b.eventData.originalEvent?.endDateTime || b.eventData.endDateTime,
+			id: b.eventData.id,
+			employeeId: b.eventData.employee.id,
+			eventType: b.eventData.eventType as CALENDAR_EVENT_TYPE,
+			orderIndex: b.eventData.employee.orderIndex
+		}
+		return compareAndSortDayEvents(aData, bData)
 	})
 }
 
@@ -158,16 +173,10 @@ const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
 		if (isReservationsView && date) {
 			const cellDateEvents = (monthlyReservations?.data || {})[date]
 
-			const employeesMap: { [key: string]: Employees[0] } = {}
-			employees?.forEach((employee) => {
-				employeesMap[employee.id] = employee
-			})
-
-			return cellDateEvents.map((dayEmployee) => {
-				const { orderIndex } = employeesMap[dayEmployee.employee.id] || {}
+			return cellDateEvents?.map((dayEmployee) => {
 				return (
 					<React.Fragment key={dayEmployee.employee.id}>
-						<MonthlyReservationCard date={date} eventData={{ ...dayEmployee, orderIndex }} onMonthlyReservationClick={onMonthlyReservationClick} isDayEventsPopover />
+						<MonthlyReservationCard date={date} eventData={dayEmployee} onMonthlyReservationClick={onMonthlyReservationClick} isDayEventsPopover />
 					</React.Fragment>
 				)
 			})

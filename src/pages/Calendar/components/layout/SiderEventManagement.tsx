@@ -15,7 +15,7 @@ import { RootState } from '../../../../reducers'
 
 // utils
 import { getReq } from '../../../../utils/request'
-import { formatLongQueryString, getAssignedUserLabel, initializeLabelInValueSelect } from '../../../../utils/helper'
+import { formatLongQueryString, getAssignedUserLabel, initializeLabelInValueSelect, normalizeDataById } from '../../../../utils/helper'
 import {
 	CALENDAR_COMMON_SETTINGS,
 	CALENDAR_EVENT_TYPE,
@@ -62,6 +62,7 @@ type Props = {
 	loadingData?: boolean
 	query: IUseQueryParams
 	setQuery: (newValues: IUseQueryParams) => void
+	areEmployeesLoaded: boolean
 }
 
 export type SiderEventManagementRefs = {
@@ -83,13 +84,15 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 		phonePrefix,
 		loadingData,
 		query,
-		setQuery
+		setQuery,
+		areEmployeesLoaded
 	} = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
+	const employees = useSelector((state: RootState) => state.employees.employees)
 
 	useEffect(() => {
 		// nastavuje referenciu na CalendarApi, musi sa update-ovat, ked sa meni View, aby bola aktualna vo virtalEventActions
@@ -145,6 +148,8 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 				  }
 				: {}
 
+			const employee = employees.data?.employees?.find((emp) => data?.employee.id === emp.id)
+
 			const initData: ICalendarEventForm = {
 				eventId: data.id,
 				date: data.start.date,
@@ -163,7 +168,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 						email: data.employee.email
 					}),
 					{
-						employeeData: data?.employee
+						employeeData: employee || data.employee
 					}
 				),
 				...repeatOptions
@@ -226,11 +231,11 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 
 	useEffect(() => {
 		// ak je otvoreny sidebar a mame eventID, tak znamena, ze pozerame detail existujuceho eventu
-		if (query.sidebarView && query.eventId) {
+		if (query.sidebarView && query.eventId && areEmployeesLoaded) {
 			initUpdateEventForm()
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [query.eventId, query.sidebarView])
+	}, [query.eventId, query.sidebarView, areEmployeesLoaded])
 
 	useImperativeHandle(ref, () => ({
 		initCreateEventForm

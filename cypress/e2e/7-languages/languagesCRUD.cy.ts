@@ -1,7 +1,7 @@
 import { CREATE_BUTTON_ID, FORM } from '../../../src/utils/enums'
 
 // fixtures
-import specialistContact from '../../fixtures/specialist-contact.json'
+import languages from '../../fixtures/languages.json'
 
 describe('Languages', () => {
 	let languageID: any
@@ -14,19 +14,18 @@ describe('Languages', () => {
 		// take snapshot of local storage with new refresh and access token
 		cy.saveLocalStorage()
 	})
-
+	// CREATE
 	it('Create language', () => {
 		cy.intercept({
 			method: 'POST',
 			url: '/api/b2b/admin/enums/languages/'
 		}).as('createLanguage')
+
 		cy.visit('/languages-in-salons')
 		cy.clickButton(FORM.LANGUAGES, CREATE_BUTTON_ID)
-		// TODO: ako by sa spraviklo enum na field arraye?
-		cy.setInputValue(FORM.LANGUAGES, 'nameLocalizations-0-value', 'test')
-		// TODO: upload a ostatne optional fieldy nefunguje upoload
-		// cy.uploadFile('image', '../images/test.jpg', FORM.LANGUAGES)
-
+		cy.setInputValue(FORM.LANGUAGES, 'nameLocalizations-0-value', languages.create.SK)
+		cy.uploadFile('image', '../images/test.jpg', FORM.LANGUAGES)
+		cy.wait(1000) // Cas ktory treba pockat kyms a nahra signed url obrazok
 		cy.get(`#${FORM.LANGUAGES}-form`).submit()
 		cy.wait('@createLanguage').then((interception: any) => {
 			// check status code of request
@@ -36,7 +35,7 @@ describe('Languages', () => {
 			cy.checkSuccessToastMessage()
 		})
 	})
-
+	// UPDATE
 	it('Update language', () => {
 		cy.intercept({
 			method: 'PATCH',
@@ -45,7 +44,7 @@ describe('Languages', () => {
 
 		cy.visit('/languages-in-salons')
 		cy.get(`[data-row-key="${languageID}"]`).click()
-		cy.setInputValue(FORM.LANGUAGES, 'nameLocalizations-0-value', 'updated test', false, true)
+		cy.setInputValue(FORM.LANGUAGES, 'nameLocalizations-0-value', languages.update.SK, false, true)
 		cy.get(`#${FORM.LANGUAGES}-form`).submit()
 		cy.wait('@updateLanguage').then((interception: any) => {
 			// check status code of request
@@ -54,8 +53,8 @@ describe('Languages', () => {
 			cy.checkSuccessToastMessage()
 		})
 	})
-
-	it('Delete specialist contact', () => {
+	// DELETE
+	it('Delete language', () => {
 		cy.intercept({
 			method: 'DELETE',
 			url: `/api/b2b/admin/enums/languages/${languageID}`
@@ -68,6 +67,20 @@ describe('Languages', () => {
 			expect(interception.response.statusCode).to.equal(200)
 			// check conf toast message
 			cy.checkSuccessToastMessage()
+			cy.location('pathname').should('eq', '/languages-in-salons')
+		})
+	})
+	// FILTER
+	it('Filter language', () => {
+		cy.intercept({
+			method: 'GET',
+			url: '/api/b2b/admin/enums/languages/'
+		}).as('filterLanguage')
+		cy.visit('/languages-in-salons')
+		cy.setInputValue(FORM.LANGUAGES_FILTER, 'search', languages.filter.search)
+		cy.wait('@filterLanguage').then((interception: any) => {
+			// check status code
+			expect(interception.response.statusCode).to.equal(200)
 			cy.location('pathname').should('eq', '/languages-in-salons')
 		})
 	})

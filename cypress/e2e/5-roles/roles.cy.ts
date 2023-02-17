@@ -1,30 +1,20 @@
-import { data } from '../../fixtures/roles.json'
+import data from '../../fixtures/roles'
 
-context('dynamic test for roles', () => {
-	data.forEach((user: any) => {
-		if (user.test.includes('1')) {
-			it('test 1', () => {
-				cy.log('user: ', user.credentials.user)
-				cy.log('password: ', user.credentials.password)
-			})
-		}
-		if (user.test.includes('2')) {
-			it('test 2', () => {
-				cy.log('user: ', user.credentials.user)
-				cy.log('password: ', user.credentials.password)
-			})
-		}
-		if (user.test.includes('3')) {
-			it('test 3', () => {
-				cy.log('user: ', user.credentials.user)
-				cy.log('password: ', user.credentials.password)
-			})
-		}
-		if (user.test.includes('4')) {
-			it('test 4', () => {
-				cy.log('user: ', user.credentials.user)
-				cy.log('password: ', user.credentials.password)
-			})
-		}
+// testSuits
+import userCRUDTestSuit from '../1-users/userCRUD.tests'
+import cosmeticsTestSuit from '../4-cosmetics/cosmeticsCRD.tests'
+
+// enums
+import { LIST_OF_TESTS_SUITS } from '../../enums'
+
+describe('Dynamic tests for roles', () => {
+	data.forEach((user) => {
+		user.tests.forEach((test) => {
+			if (test.name === LIST_OF_TESTS_SUITS.USER_CRUD) {
+				// cy.log('user: ', user.credentials.user)
+				// cy.log('password: ', user.credentials.password)
+				context(`UserCRUD as ${user.role}`, () => userCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
+			}
+		})
 	})
 })

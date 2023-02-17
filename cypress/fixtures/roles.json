@@ -1,8 +1,0 @@
-{
-	"data": [
-		{ "role": "ADMIN", "credentials": { "user": "admin", "password": "admin 123" }, "test": ["1", "2", "3"] },
-		{ "role": "MANAGER", "credentials": { "user": "manager", "password": "manager 123" }, "test": ["1", "2"] },
-		{ "role": "EMPLOYEE","credentials": { "user": "employee", "password": "employee 123" }, "test": ["1", "3", "4"] },
-		{ "role": "EMPLOYEE2","credentials": { "user": "employee2", "password": "employee 1232" }, "test": ["1", "4"] }
-	]
-}

@@ -17,3 +17,10 @@ Cypress.Commands.add('setValuesForPinField', (form: string, key: string, value: 
 			.should('have.value', char)
 	)
 })
+
+// TODO: upravit v antd-form fields kniznici a potom to pouzit odtial
+Cypress.Commands.add('clickDeleteButtonWithConfCustom', (form?: string, key = 'delete-btn') => {
+	cy.clickButton(key, form)
+	// get popover conf box and click confirmation button
+	cy.get('.ant-popover-inner-content', { timeout: 10000 }).should('be.visible').find('.ant-popconfirm-buttons > :nth-child(2)').click()
+})

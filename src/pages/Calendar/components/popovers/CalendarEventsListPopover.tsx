@@ -104,7 +104,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 	const { date, onClose, isLoading, isUpdatingEvent, children } = props
 
 	return (
-		<div className='nc-day-events-popover-content text-notino-black min-w-56'>
+		<div className='text-notino-black min-w-56'>
 			<header className={'flex items-center justify-between px-6 h-16 min-w-0 gap-2'}>
 				<span className={'capitalize text-sm font-semibold truncate'}>{dayjs(date).format('dddd, D MMM')}</span>
 				<button className={'nc-popover-header-button'} type={'button'} onClick={onClose}>
@@ -206,7 +206,7 @@ const CalendarEventsListPopover: FC<ICalendarEventsListPopover> = (props) => {
 			destroyTooltipOnHide={{ keepParent: true }}
 			trigger={'click'}
 			placement={'right'}
-			overlayClassName={`${overlayClassName} nc-popover-overlay nc-day-events-popover-overlay ${isHidden ? 'is-hidden' : ''}`}
+			overlayClassName={`${overlayClassName} nc-popover-overlay nc-events-list-popover-overlay ${isHidden ? 'is-hidden' : ''}`}
 			content={
 				!isHidden && (
 					<PopoverContent date={date} onClose={handleClosePopover} isLoading={isLoading} isUpdatingEvent={isUpdatingEvent}>

@@ -30,6 +30,7 @@ import { ReactComponent as ChevronRightIcon } from '../../assets/icons/chevron-r
 import { ReactComponent as CalendarIcon } from '../../assets/icons/calendar-24.svg'
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
 import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations.svg'
+import { ReactComponent as ReviewsIcon } from '../../assets/icons/reviews-icon.svg'
 
 // utils
 import { PAGE, PERMISSION } from '../../utils/enums'
@@ -143,6 +144,12 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							label: t('loc:Špecialisti'),
 							onClick: () => navigate(t('paths:specialist-contacts')),
 							icon: <SpecialistIcon />
+						},
+						{
+							key: PAGE.REVIEWS,
+							label: t('loc:Recenzie'),
+							onClick: () => navigate(t('paths:reviews')),
+							icon: <ReviewsIcon />
 						}
 					)
 				}

@@ -25,6 +25,7 @@
   "reservations": "/reservations",
   "reservations-settings": "/reservations-settings",
   "reset-password": "/reset-password",
+  "reviews": "/reviews",
   "salons": "/salons",
   "salons/create": "/salons/create",
   "salons/{{salonID}}": "/salons/{{salonID}}",

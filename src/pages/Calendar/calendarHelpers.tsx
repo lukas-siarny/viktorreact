@@ -4,7 +4,6 @@ import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { uniqueId, startsWith, isEmpty } from 'lodash'
 import Scroll from 'react-scroll'
-import { getCalendarEventsCancelTokenKey } from '../../reducers/calendar/calendarActions'
 
 // types
 import {
@@ -32,7 +31,7 @@ import {
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_VIEW,
-	CANEL_TOKEN_MESSAGES,
+	CANCEL_TOKEN_MESSAGES,
 	DAY,
 	MONTHLY_RESERVATIONS_KEY,
 	NEW_ID_PREFIX,
@@ -40,6 +39,9 @@ import {
 } from '../../utils/enums'
 import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
 import { cancelGetTokens } from '../../utils/request'
+
+// redux
+import { getCalendarEventsCancelTokenKey } from '../../reducers/calendar/calendarActions'
 
 /**
  * zrusi prebiehajuci request - pouzivame pre zrusenie background loadu pri urcitych akciach, napr. pri zaciatku resizovania/dnd eventu alebo pred zavolanim updatu dat na BE
@@ -49,13 +51,13 @@ export const cancelEventsRequestOnDemand = () => {
 	const GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY = getCalendarEventsCancelTokenKey(CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS)
 
 	if (typeof cancelGetTokens[MONTHLY_RESERVATIONS_KEY] !== typeof undefined) {
-		cancelGetTokens[MONTHLY_RESERVATIONS_KEY].cancel(CANEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
+		cancelGetTokens[MONTHLY_RESERVATIONS_KEY].cancel(CANCEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
 	}
 	if (typeof cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY] !== typeof undefined) {
-		cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY].cancel(CANEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
+		cancelGetTokens[GET_SHIFTS_TIME_OFFS_CANCEL_TOKEN_KEY].cancel(CANCEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
 	}
 	if (typeof cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY] !== typeof undefined) {
-		cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY].cancel(CANEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
+		cancelGetTokens[GET_RESERVATIONS_CANCEL_TOKEN_KEY].cancel(CANCEL_TOKEN_MESSAGES.CANCELED_ON_DEMAND)
 	}
 }
 

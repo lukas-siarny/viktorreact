@@ -963,8 +963,9 @@ export const RESERVATION_PAYMENT_METHODS = Object.keys(RESERVATION_PAYMENT_METHO
 export const RESERVATION_SOURCE_TYPES = Object.keys(RESERVATION_SOURCE_TYPE)
 
 export const CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE = 300 // in ms
+export const CALENDAR_UPDATE_SIZE_DELAY = 100 // in ms
 
-export enum CANEL_TOKEN_MESSAGES {
+export enum CANCEL_TOKEN_MESSAGES {
 	CANCELED_DUE_TO_NEW_REQUEST = 'Operation canceled due to new request.',
 	CANCELED_ON_DEMAND = 'Operation canceled.'
 }

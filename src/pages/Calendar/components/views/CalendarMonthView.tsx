@@ -13,7 +13,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 // types
 import {
 	CalendarEvent,
-	EmployeeReservationsPopoverData,
+	EmployeeTooltipPopoverData,
 	ICalendarMonthlyReservationsPayload,
 	ICalendarMonthlyViewEvent,
 	ICalendarView,
@@ -201,7 +201,7 @@ interface ICalendarMonthView extends Omit<ICalendarView, 'reservations'> {
 	salonID: string
 	onShowMore: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean) => void
 	monthlyReservations: ICalendarMonthlyReservationsPayload['data']
-	onMonthlyReservationClick: (data: EmployeeReservationsPopoverData, position?: PopoverTriggerPosition) => void
+	onMonthlyReservationClick: (data: EmployeeTooltipPopoverData, position?: PopoverTriggerPosition) => void
 }
 
 const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarMonthView>((props, ref) => {

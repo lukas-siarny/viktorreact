@@ -7,18 +7,19 @@ import queryString from 'query-string'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon-16.svg'
+import { ReactComponent as ChevronDownIcon } from '../../../../assets/icons/chevron-down-currentColor-12.svg'
 
 // interfaces
-import { ICalendarEmployeeReservationsPopover } from '../../../../types/interfaces'
+import { ICalendarEmployeeTooltipPopover } from '../../../../types/interfaces'
 
 /// utils
 import { CALENDAR_VIEW } from '../../../../utils/enums'
 
 // hooks
-import useKeyUp from '../../../../hooks/useKeyUp'
 import { serializeParams } from '../../../../hooks/useQueryParams'
+import { getAssignedUserLabel } from '../../../../utils/helper'
 
-const CalendarEmployeeReservationsPopover: FC<ICalendarEmployeeReservationsPopover> = (props) => {
+const CalendarEmployeeTooltipPopover: FC<ICalendarEmployeeTooltipPopover> = (props) => {
 	const { position, setIsOpen, data, isOpen, parentPath, query } = props
 
 	const [t] = useTranslation()
@@ -51,15 +52,13 @@ const CalendarEmployeeReservationsPopover: FC<ICalendarEmployeeReservationsPopov
 		}
 	}, [isOpen, handleClosePopover])
 
-	useKeyUp('Escape', isOpen ? handleClosePopover : undefined)
-
 	const getEmployeeLink = () => {
-		if (!data?.date || !data?.employeeId) {
+		if (!data?.date || !data?.employee) {
 			return ''
 		}
 		const linkSearchParams = {
 			...query,
-			employeeIDs: data?.employeeId,
+			employeeIDs: data?.employee.id,
 			view: CALENDAR_VIEW.DAY,
 			date: data?.date
 		}
@@ -76,12 +75,13 @@ const CalendarEmployeeReservationsPopover: FC<ICalendarEmployeeReservationsPopov
 			placement={'left'}
 			overlayClassName={'dark-style nc-popover-overlay nc-popover-overlay-fixed nc-popover-show'}
 			content={
-				linkToDayEmployeeDetail && (
-					<div className='nc-popover-content text-notino-black w-60'>
-						<main className={'m-2 overflow-y-auto relative flex items-center justify-between h-5 gap-2'}>
+				linkToDayEmployeeDetail &&
+				data?.employee && (
+					<div className='nc-popover-content text-notino-black min-w-40 max-w-xl'>
+						<main className={'flex itmes-center m-2 relative w-full relative mr-10'}>
 							<Link
 								id={'calendar-employees-reservation-popover-link'}
-								className={'p-0 m-0 text-white text-xs underline hover:no-underline whitespace-nowrap truncate'}
+								className={'flex gap-1 overflow-hidden items-center'}
 								to={linkToDayEmployeeDetail}
 								target='_blank'
 								rel='noreferrer'
@@ -90,10 +90,19 @@ const CalendarEmployeeReservationsPopover: FC<ICalendarEmployeeReservationsPopov
 									handleClosePopover()
 								}}
 							>
-								{t('loc:Zobraziť rezervácie zamestnanca')}
+								<span className={'p-0 m-0 text-white truncate'}>
+									{`${t('loc:Zobraziť rezervácie zamestnanca')}
+								${getAssignedUserLabel({
+									firstName: data.employee.firstName,
+									lastName: data.employee.lastName,
+									email: data.employee.email,
+									id: data.employee.id
+								})}`}
+								</span>
+								<ChevronDownIcon className='shrink-0' width={10} height={10} color={'#fff'} style={{ transform: 'rotate(-90deg)' }} />
 							</Link>
 
-							<button className={'nc-popover-header-button'} type={'button'} onClick={handleClosePopover}>
+							<button className={'nc-popover-header-button absolute right-4 top-0'} type={'button'} onClick={handleClosePopover}>
 								<CloseIcon />
 							</button>
 						</main>
@@ -106,4 +115,4 @@ const CalendarEmployeeReservationsPopover: FC<ICalendarEmployeeReservationsPopov
 	)
 }
 
-export default CalendarEmployeeReservationsPopover
+export default CalendarEmployeeTooltipPopover

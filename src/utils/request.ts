@@ -7,7 +7,7 @@ import qs from 'qs'
 import rootReducer from '../reducers'
 import { logOutUser } from '../reducers/users/userActions'
 import { getAccessToken, isLoggedIn } from './auth'
-import { CANEL_TOKEN_MESSAGES, MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES } from './enums'
+import { CANCEL_TOKEN_MESSAGES, MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES } from './enums'
 import configureStore from './configureStore'
 
 // types
@@ -133,7 +133,7 @@ export const getReq = async <T extends keyof GetUrls>(
 	if (allowCancelToken) {
 		const cancelTokenStorageKey = cancelTokenKey || fullfilURL
 		if (typeof cancelGetTokens[cancelTokenStorageKey] !== typeof undefined) {
-			cancelGetTokens[cancelTokenStorageKey].cancel(CANEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST)
+			cancelGetTokens[cancelTokenStorageKey].cancel(CANCEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST)
 		}
 		// Save the cancel token for the current request
 		cancelGetTokens[cancelTokenStorageKey] = axios.CancelToken.source()
@@ -217,7 +217,7 @@ export const postReq = async <T extends keyof PostUrls>(
 	if (allowCancelToken) {
 		const cancelTokenStorageKey = cancelTokenKey || fullfilURL
 		if (typeof cancelPostTokens[cancelTokenStorageKey] !== typeof undefined) {
-			cancelPostTokens[cancelTokenStorageKey].cancel(CANEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST)
+			cancelPostTokens[cancelTokenStorageKey].cancel(CANCEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST)
 		}
 		// Save the cancel token for the current request
 		cancelPostTokens[cancelTokenStorageKey] = axios.CancelToken.source()
@@ -298,7 +298,7 @@ export const patchReq = async <T extends keyof PatchUrls>(
 	if (allowCancelToken) {
 		const cancelTokenStorageKey = cancelTokenKey || fullfilURL
 		if (typeof cancelPatchTokens[cancelTokenStorageKey] !== typeof undefined) {
-			cancelPatchTokens[cancelTokenStorageKey].cancel(CANEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST)
+			cancelPatchTokens[cancelTokenStorageKey].cancel(CANCEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST)
 		}
 		// Save the cancel token for the current request
 		cancelPatchTokens[cancelTokenStorageKey] = axios.CancelToken.source()

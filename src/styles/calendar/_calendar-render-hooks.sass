@@ -611,6 +611,7 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 	&.nc-month-event
 		height: 20px
 		flex: 0 0 auto
+		box-shadow: none
 		.event-content
 			display: flex
 			justify-content: space-between
@@ -642,7 +643,6 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 		&.shift,
 		&.timeoff,
 		&.break
-			box-shadow: none
 			&:not(.edit)
 				outline: none
 			.event-content
@@ -672,7 +672,7 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 			background: url("../../assets/images/gray-bold-background-pattern.png")
 			&:not(.edit)
 				outline: 1px solid $borderColor-notino-grayLight
-	&.is-day-events-popover
+	&.is-events-list-popover
 		box-shadow: none
 		&.reservation
 			border-radius: 0
@@ -684,6 +684,12 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 				.events-count
 					display: flex
 					gap: 2px
+					white-space: nowrap
+					&:first-of-type
+						margin-right: 16px
+		&.shift
+			.event-background
+				display: none
 		&.timeoff,
 		&.break
 			&:not(.edit)
@@ -692,7 +698,7 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 	// reservation state specific styles
 	&.reservation
 		&.is-past
-			&:not(.is-day-events-popover)
+			&:not(.is-events-list-popover)
 				background-color: #eef0f1
 			.event-background
 				display: none

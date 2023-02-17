@@ -13,7 +13,7 @@ import MonthlyReservationCard from '../eventCards/MonthlyReservationCard'
 
 // types
 import { RootState } from '../../../../reducers'
-import { CalendarEvent, ICalendarDayEventsPopover, ICalendarEventContent, PopoverTriggerPosition, ReservationPopoverData } from '../../../../types/interfaces'
+import { CalendarEvent, ICalendarEventsListPopover, ICalendarEventContent, PopoverTriggerPosition, ReservationPopoverData } from '../../../../types/interfaces'
 import { IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 /// utils
@@ -104,7 +104,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 	const { date, onClose, isLoading, isUpdatingEvent, children } = props
 
 	return (
-		<div className='nc-day-events-popover-content text-notino-black w-56'>
+		<div className='nc-day-events-popover-content text-notino-black min-w-56'>
 			<header className={'flex items-center justify-between px-6 h-16 min-w-0 gap-2'}>
 				<span className={'capitalize text-sm font-semibold truncate'}>{dayjs(date).format('dddd, D MMM')}</span>
 				<button className={'nc-popover-header-button'} type={'button'} onClick={onClose}>
@@ -122,7 +122,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 	)
 }
 
-const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
+const CalendarEventsListPopover: FC<ICalendarEventsListPopover> = (props) => {
 	const { position, setIsOpen, isOpen, date, onEditEvent, onReservationClick, isHidden, isLoading, isUpdatingEvent, isReservationsView, onMonthlyReservationClick } = props
 
 	const overlayClassName = `nc-event-popover-overlay_${date || ''}`
@@ -163,19 +163,22 @@ const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
 	useKeyUp('Escape', isOpen ? handleClosePopover : undefined)
 
 	const getPopoverContent = () => {
-		if (isReservationsView && date) {
+		if (!date) {
+			return []
+		}
+		if (isReservationsView) {
 			const cellDateEvents = (monthlyReservations?.data || {})[date]
 
 			return cellDateEvents?.map((dayEmployee) => {
 				return (
 					<React.Fragment key={dayEmployee.employee.id}>
-						<MonthlyReservationCard date={date} eventData={dayEmployee} onMonthlyReservationClick={onMonthlyReservationClick} isDayEventsPopover />
+						<MonthlyReservationCard date={date} eventData={dayEmployee} onMonthlyReservationClick={onMonthlyReservationClick} isEventsListPopover />
 					</React.Fragment>
 				)
 			})
 		}
 
-		const cellDateEvents = date ? dayEvents[date] : []
+		const cellDateEvents = dayEvents[date]
 		const eventsForPopover = getEventsForPopover(date, cellDateEvents, virtualEvent, onEditEvent, onReservationClick)
 		return eventsForPopover?.map((event, i) => {
 			return (
@@ -190,7 +193,7 @@ const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
 						backgroundColor={event.backgroundColor}
 						calendarView={event.calendarView}
 						eventDisplayType={event.eventDisplayType}
-						isDayEventsPopover
+						isEventsListPopover
 					/>
 				</React.Fragment>
 			)
@@ -217,4 +220,4 @@ const CalendarDayEventsPopover: FC<ICalendarDayEventsPopover> = (props) => {
 	)
 }
 
-export default CalendarDayEventsPopover
+export default CalendarEventsListPopover

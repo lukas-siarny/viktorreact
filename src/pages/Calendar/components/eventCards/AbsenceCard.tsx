@@ -32,9 +32,9 @@ const getWrapperClassnames = (params: {
 	isMultiDayEvent?: boolean
 	isFirstMultiDayEventInCurrentRange?: boolean
 	isLastMultiDaylEventInCurrentRange?: boolean
-	isDayEventsPopover?: boolean
+	isEventsListPopover?: boolean
 }) => {
-	const { calendarView, eventType, isPlaceholder, isEdit, isMultiDayEvent, isFirstMultiDayEventInCurrentRange, isLastMultiDaylEventInCurrentRange, diff, isDayEventsPopover } =
+	const { calendarView, eventType, isPlaceholder, isEdit, isMultiDayEvent, isFirstMultiDayEventInCurrentRange, isLastMultiDaylEventInCurrentRange, diff, isEventsListPopover } =
 		params
 
 	const commonProps = {
@@ -48,7 +48,7 @@ const getWrapperClassnames = (params: {
 		'multiday-event-last': isLastMultiDaylEventInCurrentRange,
 		placeholder: isPlaceholder,
 		edit: isEdit || isPlaceholder,
-		'is-day-events-popover': isDayEventsPopover
+		'is-events-list-popover': isEventsListPopover
 	}
 
 	if (calendarView === CALENDAR_VIEW.MONTH) {
@@ -83,7 +83,7 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 		isBulkEvent,
 		isPlaceholder,
 		isEdit,
-		isDayEventsPopover,
+		isEventsListPopover,
 		timeLeftClassName
 	} = props
 
@@ -111,7 +111,7 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 					diff,
 					isPlaceholder,
 					isEdit,
-					isDayEventsPopover
+					isEventsListPopover
 				})
 			)}
 			onClick={() => {
@@ -121,7 +121,7 @@ const AbsenceCard: FC<IAbsenceCardProps> = (props) => {
 				}
 			}}
 		>
-			{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT && calendarView !== CALENDAR_VIEW.MONTH && <div className={'event-background'} style={{ backgroundColor }} />}
+			{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT && <div className={'event-background'} style={{ backgroundColor }} />}
 			<div className={'event-content'}>
 				{(() => {
 					switch (calendarView) {

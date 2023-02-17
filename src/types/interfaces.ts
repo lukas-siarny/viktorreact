@@ -773,7 +773,7 @@ export interface IEventCardProps {
 	employee?: CalendarEvent['employee']
 	backgroundColor?: string
 	isPlaceholder?: boolean
-	isDayEventsPopover?: boolean
+	isEventsListPopover?: boolean
 	isEdit?: boolean
 	originalEventData: {
 		id?: CalendarEvent['id']
@@ -802,7 +802,7 @@ export interface ICalendarReservationPopover {
 	placement: TooltipPlacement
 }
 
-export interface ICalendarDayEventsPopover {
+export interface ICalendarEventsListPopover {
 	date: string | null
 	position: PopoverTriggerPosition | null
 	isOpen: boolean
@@ -810,7 +810,7 @@ export interface ICalendarDayEventsPopover {
 	setIsOpen: (isOpen: boolean) => void
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
-	onMonthlyReservationClick: (data: EmployeeReservationsPopoverData, position?: PopoverTriggerPosition) => void
+	onMonthlyReservationClick: (data: EmployeeTooltipPopoverData, position?: PopoverTriggerPosition) => void
 	isHidden: boolean
 	isLoading?: boolean
 	isUpdatingEvent?: boolean
@@ -830,8 +830,8 @@ export type ReservationPopoverData = {
 	isEdit?: boolean
 }
 
-export interface ICalendarEmployeeReservationsPopover {
-	data: EmployeeReservationsPopoverData | null
+export interface ICalendarEmployeeTooltipPopover {
+	data: EmployeeTooltipPopoverData | null
 	position: PopoverTriggerPosition | null
 	isOpen: boolean
 	setIsOpen: (isOpen: boolean) => void
@@ -839,8 +839,8 @@ export interface ICalendarEmployeeReservationsPopover {
 	query: IUseQueryParams
 }
 
-export type EmployeeReservationsPopoverData = {
-	employeeId: string
+export type EmployeeTooltipPopoverData = {
+	employee: Employee
 	date: string
 }
 
@@ -925,7 +925,7 @@ export interface ICalendarEventContent {
 	calendarView: CALENDAR_VIEW
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
-	isDayEventsPopover?: boolean
+	isEventsListPopover?: boolean
 }
 
 export interface ICalendarDayEvents {

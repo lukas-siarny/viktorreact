@@ -8,18 +8,19 @@ import cx from 'classnames'
 import { ReactComponent as CalendarIcon } from '../../../../assets/icons/calendar-24.svg'
 
 // types
-import { EmployeeReservationsPopoverData, ICalendarMonthlyReservationsCardData, PopoverTriggerPosition } from '../../../../types/interfaces'
+import { EmployeeTooltipPopoverData, ICalendarMonthlyReservationsCardData, PopoverTriggerPosition } from '../../../../types/interfaces'
 import { parseTimeFromMinutes } from '../../calendarHelpers'
+import { getAssignedUserLabel } from '../../../../utils/helper'
 
 interface IMonthlyReservationCardProps {
 	date: string
 	eventData?: ICalendarMonthlyReservationsCardData['eventData']
-	isDayEventsPopover?: boolean
-	onMonthlyReservationClick: (data: EmployeeReservationsPopoverData, position?: PopoverTriggerPosition) => void
+	isEventsListPopover?: boolean
+	onMonthlyReservationClick: (data: EmployeeTooltipPopoverData, position?: PopoverTriggerPosition) => void
 }
 
 const MonthlyReservationCard: FC<IMonthlyReservationCardProps> = (props) => {
-	const { eventData, isDayEventsPopover, onMonthlyReservationClick, date } = props
+	const { eventData, isEventsListPopover, onMonthlyReservationClick, date } = props
 	const { employee, eventsCount, eventsDuration } = eventData || {}
 
 	const [t] = useTranslation()
@@ -32,8 +33,8 @@ const MonthlyReservationCard: FC<IMonthlyReservationCardProps> = (props) => {
 
 	const handleReservationClick = () => {
 		if (cardRef.current && employee) {
-			const data: EmployeeReservationsPopoverData = {
-				employeeId: employee.id,
+			const data: EmployeeTooltipPopoverData = {
+				employee,
 				date
 			}
 
@@ -50,18 +51,36 @@ const MonthlyReservationCard: FC<IMonthlyReservationCardProps> = (props) => {
 	}
 
 	return (
-		<div ref={cardRef} className={cx('nc-event nc-month-event reservation', { 'is-day-events-popover': isDayEventsPopover })} onClick={handleReservationClick}>
+		<div ref={cardRef} className={cx('nc-event nc-month-event reservation', { 'is-events-list-popover': isEventsListPopover })} onClick={handleReservationClick}>
 			<div
 				className={'event-accent'}
 				style={{
 					backgroundColor: bgColor
 				}}
 			/>
-			{!isDayEventsPopover && <div className={'event-background'} style={{ backgroundColor: bgColor }} />}
+			{!isEventsListPopover && <div className={'event-background'} style={{ backgroundColor: bgColor }} />}
 			<div className={'event-content'}>
-				<div className={'event-avatar'}>{avatar && <img src={avatar} alt={''} width={16} height={16} />}</div>
+				<div className={'event-avatar'}>
+					{avatar && (
+						<img
+							src={avatar}
+							alt={
+								employee
+									? getAssignedUserLabel({
+											firstName: employee.firstName,
+											lastName: employee.lastName,
+											email: employee.email,
+											id: employee.id
+									  })
+									: ''
+							}
+							width={16}
+							height={16}
+						/>
+					)}
+				</div>
 				<div className={'events-stats'}>
-					{isDayEventsPopover ? (
+					{isEventsListPopover ? (
 						<>
 							<div className={'events-count count'}>
 								<span>{t('loc:Rezervácie')}</span> {eventsCount}

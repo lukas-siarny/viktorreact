@@ -33,7 +33,7 @@ import CalendarEmptyState from '../CalendarEmptyState'
 
 // types
 import {
-	EmployeeReservationsPopoverData,
+	EmployeeTooltipPopoverData,
 	Employees,
 	ICalendarEventForm,
 	ICalendarMonthlyReservationsPayload,
@@ -66,7 +66,7 @@ type Props = {
 	query: IUseQueryParams
 	setQuery: (newValues: IUseQueryParams) => void
 	monthlyReservations: ICalendarMonthlyReservationsPayload['data']
-	onMonthlyReservationClick: (data: EmployeeReservationsPopoverData, position?: PopoverTriggerPosition) => void
+	onMonthlyReservationClick: (data: EmployeeTooltipPopoverData, position?: PopoverTriggerPosition) => void
 } & Omit<ICalendarView, 'onEventChange' | 'onEventChangeStart' | 'onEventChangeStop'>
 
 export type CalendarRefs = {

@@ -23,9 +23,13 @@
 		transform: translateY(-50%) translateX(calc(100% - 1px)) rotate(90deg)
 	&.dark-style
 		.ant-popover-inner
+			position: relative
 			background-color: $backgroundColor-notino-grayDarker
 			color: $textColor-notino-white
+			border-color: $borderColor-notino-grayDarker
+			z-index: 2
 		.ant-popover-arrow
+			z-index: 1
 			&::before
 				background: $backgroundColor-notino-grayDarker
 		.nc-popover-header-button
@@ -104,3 +108,10 @@
 	&.ant-popover-placement-leftTop
 		.ant-popover-arrow
 			top: 28px // polovica vysky hlaviky popoveru
+
+// calendar employee reservations popover
+#calendar-employees-reservation-popover-link
+	span
+		display: inline
+		line-height: 20px
+		font-size: 12px

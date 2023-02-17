@@ -27,7 +27,7 @@ import {
 	RESERVATION_STATE,
 	RESERVATION_SOURCE_TYPE,
 	RESERVATION_PAYMENT_METHOD,
-	CANEL_TOKEN_MESSAGES,
+	CANCEL_TOKEN_MESSAGES,
 	MONTHLY_RESERVATIONS_KEY,
 	CALENDAR_DATE_FORMAT
 } from '../../utils/enums'
@@ -151,7 +151,7 @@ const storedPreviousParams: any = {
 	[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS]: {}
 }
 
-const RESRAVION_STATES = [RESERVATION_STATE.APPROVED, RESERVATION_STATE.PENDING, RESERVATION_STATE.REALIZED, RESERVATION_STATE.NOT_REALIZED]
+const RESERVATION_STATES = [RESERVATION_STATE.APPROVED, RESERVATION_STATE.PENDING, RESERVATION_STATE.REALIZED, RESERVATION_STATE.NOT_REALIZED]
 
 export const getCalendarEventsCancelTokenKey = (enumType: CALENDAR_EVENTS_KEYS) => `calendar-events-${enumType}`
 
@@ -341,7 +341,7 @@ export const getCalendarEvents =
 
 			dispatch({ type: EVENTS.EVENTS_LOAD_DONE, enumType, payload })
 		} catch (err) {
-			if (axios.isCancel(err) && (err as any)?.message === CANEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST) {
+			if (axios.isCancel(err) && (err as any)?.message === CANCEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST) {
 				// Request bol preruseny novsim requestom, tym padom chceme, aby loading state pokracoval
 				dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
 			} else {
@@ -379,7 +379,7 @@ export const getCalendarReservations = (
 		{
 			...queryParams,
 			eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
-			reservationStates: RESRAVION_STATES
+			reservationStates: RESERVATION_STATES
 		},
 		splitMultidayEventsIntoOneDayEvents,
 		clearVirtualEvent,
@@ -429,7 +429,7 @@ export const getCalendarMonthlyViewReservations =
 				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
 				dateFrom: queryParams.start,
 				dateTo: queryParams.end,
-				reservationStates: RESRAVION_STATES
+				reservationStates: RESERVATION_STATES
 			}
 
 			dispatch({ type: MONTHLY_RESERVATIONS.MONTHLY_RESERVATIONS_LOAD_START })
@@ -466,7 +466,7 @@ export const getCalendarMonthlyViewReservations =
 			}
 			dispatch({ type: MONTHLY_RESERVATIONS.MONTHLY_RESERVATIONS_LOAD_DONE, payload })
 		} catch (err) {
-			if (axios.isCancel(err) && (err as any)?.message === CANEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST) {
+			if (axios.isCancel(err) && (err as any)?.message === CANCEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST) {
 				// Request bol preruseny novsim requestom, tym padom chceme, aby loading state pokracoval
 				dispatch({ type: MONTHLY_RESERVATIONS.MONTHLY_RESERVATIONS_LOAD_START })
 			} else {

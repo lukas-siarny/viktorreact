@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import React, { FC, useCallback, useEffect } from 'react'
+import React, { FC, useCallback, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Popover } from 'antd'
 import { Link } from 'react-router-dom'
@@ -26,12 +26,14 @@ const CalendarEmployeeTooltipPopover: FC<ICalendarEmployeeTooltipPopover> = (pro
 
 	const handleClosePopover = useCallback(() => setIsOpen(false), [setIsOpen])
 
+	const linkRef = useRef<any>(null)
+
 	useEffect(() => {
 		const contentOverlay = document.querySelector('#nc-content-overlay') as HTMLElement
 
 		const listener = (e: Event) => {
-			const popoverLink = document.querySelector('#calendar-employees-reservation-popover-link')
-			if ((e?.target as HTMLElement)?.id !== popoverLink?.id) {
+			const el = linkRef.current
+			if (!el.contains((e?.target as Node) || null)) {
 				handleClosePopover()
 			}
 		}
@@ -73,21 +75,20 @@ const CalendarEmployeeTooltipPopover: FC<ICalendarEmployeeTooltipPopover> = (pro
 			destroyTooltipOnHide={{ keepParent: true }}
 			open={isOpen}
 			placement={'left'}
-			overlayClassName={'dark-style nc-popover-overlay nc-popover-overlay-fixed nc-popover-show'}
+			overlayClassName={'dark-style nc-popover-overlay nc-popover-overlay-fixed nc-popover-'}
 			content={
 				linkToDayEmployeeDetail &&
 				data?.employee && (
 					<div className='nc-popover-content text-notino-black min-w-40 max-w-xl'>
 						<main className={'flex itmes-center m-2 relative w-full relative mr-10'}>
 							<Link
-								id={'calendar-employees-reservation-popover-link'}
-								className={'flex gap-1 overflow-hidden items-center'}
+								ref={linkRef}
+								className={'calendar-employee-tooltip-popover-link flex gap-1 overflow-hidden items-center'}
 								to={linkToDayEmployeeDetail}
 								target='_blank'
 								rel='noreferrer'
 								onClick={(e) => {
 									e.stopPropagation()
-									handleClosePopover()
 								}}
 							>
 								<span className={'p-0 m-0 text-white truncate'}>

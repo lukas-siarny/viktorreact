@@ -12,7 +12,8 @@ import { CRUD_OPERATIONS } from '../../enums'
 
 const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
 	// test id of user
-	let userID = '0000000-0000-0000-0000-000000000009'
+	// let userID = '0000000-0000-0000-0000-000000000009'
+	let userID = 'd2bba937-4e61-4ee0-942a-e85368e8d0d8'
 
 	before(() => {
 		loginViaApi(email, password)
@@ -110,6 +111,9 @@ const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?:
 				cy.location('pathname').should('eq', `/users`)
 			})
 		} else {
+			// TODO - remove check for forbidden modal
+			/* cy.clickButton('delete-btn', FORM.USER_ACCOUNT)
+			cy.checkForbiddenModal() */
 			cy.intercept({
 				method: 'GET',
 				url: '/api/b2b/admin/roles/system-user'

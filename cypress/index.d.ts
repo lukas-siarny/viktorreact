@@ -6,5 +6,6 @@ declare namespace Cypress {
 		 */
 		setValuesForPinField(form: string, key: string, value: string): Chainable<Element>
 		clickDeleteButtonWithConfCustom(form: string, key?: string): Chainable<Element>
+		checkForbiddenModal(): Chainable<Element>
 	}
 }

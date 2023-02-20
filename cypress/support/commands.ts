@@ -2,6 +2,7 @@
 import 'cypress-localstorage-commands'
 import '@goodrequest/antd-form-fields'
 import initializeCustomCommands from '@goodrequest/antd-form-fields/dist/commands/cypressCommands'
+import { CYPRESS_CLASS_NAMES } from '../../src/utils/enums'
 
 initializeCustomCommands()
 
@@ -23,4 +24,8 @@ Cypress.Commands.add('clickDeleteButtonWithConfCustom', (form?: string, key = 'd
 	cy.clickButton(key, form)
 	// get popover conf box and click confirmation button
 	cy.get('.ant-popover-inner-content', { timeout: 10000 }).should('be.visible').find('.ant-popconfirm-buttons > :nth-child(2)').click()
+})
+
+Cypress.Commands.add('checkForbiddenModal', () => {
+	cy.get(`.${CYPRESS_CLASS_NAMES.FORBIDDEN_MODAL}`).find('.ant-result-title').should('have.text', 'You do not have sufficient credentials for this action')
 })

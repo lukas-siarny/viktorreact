@@ -3,7 +3,7 @@ import { CREATE_BUTTON_ID, FORM } from '../../../src/utils/enums'
 // fixtures
 import specialistContact from '../../fixtures/specialist-contact.json'
 
-describe('Specialit contacts', () => {
+describe('Specialist contacts', () => {
 	let specialistContactID: any
 	beforeEach(() => {
 		// restore local storage with tokens and salon id from snapshot

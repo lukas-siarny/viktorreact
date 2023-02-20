@@ -82,7 +82,7 @@ export const getServices =
 							thirdCategory?.service?.rangePriceAndDurationData?.priceFrom?.currency
 
 						tableData.push({
-							key: `${thirdCategory?.category?.id}_${thirdCategory?.service?.id}`, // NOTE: zachovat tvar, vyuziva sa ako selector pri testoch
+							key: `${thirdCategory?.category?.id}_${thirdCategory?.service?.id}`, // NOTE: zachovat tvar, vyuziva sa ako selector pri testovani nastaveni sluzieb
 							serviceID: thirdCategory?.service?.id,
 							name: thirdCategory?.category?.name || '-',
 							categoryFirst: parentCategory?.category?.name || '-',

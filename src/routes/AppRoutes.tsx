@@ -53,6 +53,9 @@ import ContactPage from '../pages/Contact/ContactPage'
 // Specialist contacts
 import SpecialistContactsPage from '../pages/SpecialistContactsPage/SpecialistContactsPage'
 
+// Reviews
+import ReviewsPage from '../pages/ReviewsPage/ReviewsPage'
+
 import AppInit from '../components/AppInit'
 
 // 404, 403
@@ -125,6 +128,9 @@ const AppRoutes: FC = () => {
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:specialist-contacts')} element={<AuthRoute layout={MainLayout} page={PAGE.SPECIALIST_CONTACTS} />}>
 					<Route index element={<SpecialistContactsPage />} />
+				</Route>
+				<Route path={t('paths:reviews')} element={<AuthRoute layout={MainLayout} page={PAGE.REVIEWS} />}>
+					<Route index element={<ReviewsPage />} />
 				</Route>
 				<Route path={'/403'} element={<AuthRoute layout={MainLayout} />}>
 					<Route index element={<ForbiddenPage />} />

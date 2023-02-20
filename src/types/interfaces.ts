@@ -417,6 +417,7 @@ export interface IEmployeeForm {
 	avatar?: any
 	role: number
 	hasActiveAccount?: boolean
+	orderIndex?: number
 }
 
 export interface ICosmeticForm {
@@ -686,7 +687,9 @@ export interface ICalendarFilter {
 	categoryIDs?: string[]
 }
 
-export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {}
+export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {
+	tableData: (Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0] & { key: number })[]
+}
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]

@@ -10,6 +10,7 @@ import { Key } from 'antd/lib/table/interface'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
+import { ReactComponent as DragIcon } from '../../../assets/icons/drag-icon.svg'
 
 // reducers
 import { getCategories, getCategory } from '../../../reducers/categories/categoriesActions'
@@ -369,7 +370,9 @@ const CategoriesTree = () => {
 						onDrop={onDrop}
 						showIcon
 						showLine
-						draggable
+						draggable={{
+							icon: <DragIcon style={{ touchAction: 'none', cursor: 'move' }} className={'text-notino-pink w-4 h-4 flex'} />
+						}}
 						onSelect={onCategoryClickHandler}
 						onExpand={(expandedKeys) => {
 							setTreeExpandedKeys(expandedKeys)

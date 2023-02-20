@@ -5,9 +5,10 @@ import { FORM } from '../../../src/utils/enums'
 import salon from '../../fixtures/salon.json'
 import customer from '../../fixtures/customer.json'
 import user from '../../fixtures/user.json'
+import service from '../../fixtures/service.json'
 
 // support
-import { generateRandomInt, generateRandomString, getCategoryById } from '../../support/helpers'
+import { generateRandomInt, generateRandomString } from '../../support/helpers'
 
 describe('Salons', () => {
 	let createdSalonID: any
@@ -21,7 +22,7 @@ describe('Salons', () => {
 		cy.saveLocalStorage()
 	})
 
-	context('Create', () => {
+	context('Salon CRU operations', () => {
 		it('Create salon', () => {
 			// prepare image for upload
 			cy.intercept({
@@ -63,9 +64,27 @@ describe('Salons', () => {
 				cy.checkSuccessToastMessage()
 			})
 		})
+
+		it('Update created salon', () => {
+			cy.intercept({
+				method: 'PATCH',
+				url: `/api/b2b/admin/salons/${createdSalonID}`
+			}).as('updateSalon')
+			cy.visit(`/salons/${createdSalonID}`)
+			cy.setInputValue(FORM.SALON, 'name', salon.update.name, false, true)
+			cy.setInputValue(FORM.SALON, 'socialLinkWebPage', salon.update.socialLinkWebPage)
+			cy.setInputValue(FORM.SALON, 'socialLinkFB', salon.update.socialLinkFB)
+			cy.get('form').submit()
+			cy.wait('@updateSalon').then((interception: any) => {
+				// check status code
+				expect(interception.response.statusCode).to.equal(200)
+				// check conf toast message
+				cy.checkSuccessToastMessage()
+			})
+		})
 	})
 
-	/* context('Billing information', () => {
+	context('Billing information', () => {
 		it('Update billing information', () => {
 			cy.intercept({
 				method: 'PATCH',
@@ -94,10 +113,9 @@ describe('Salons', () => {
 		})
 	})
 
-	context('Customer CRUD operations', () => {
-		// id of customer
-		let customerID = 0
-
+	// id of customer
+	let customerID = 0
+	context('Customer CRU operations', () => {
 		it('Create customer', () => {
 			cy.intercept({
 				method: 'POST',
@@ -150,28 +168,11 @@ describe('Salons', () => {
 				cy.checkSuccessToastMessage()
 			})
 		})
-
-		it('Delete customer', () => {
-			cy.intercept({
-				method: 'DELETE',
-				url: `/api/b2b/admin/customers/${customerID}`
-			}).as('deleteCustomer')
-			cy.visit(`/salons/${createdSalonID}/customers/${customerID}`)
-			cy.clickDeleteButtonWithConfCustom(FORM.CUSTOMER)
-			cy.wait('@deleteCustomer').then((interception: any) => {
-				// check status code
-				expect(interception.response.statusCode).to.equal(200)
-				// check conf toast message
-				cy.checkSuccessToastMessage()
-				cy.location('pathname').should('eq', `/salons/${createdSalonID}/customers`)
-			})
-		})
 	})
 
-	context('Employee CRUD operations', () => {
-		// id of customer
-		let employeeID = 0
-
+	// id of employee
+	let employeeID = 0
+	context('Employee CRU operations', () => {
 		it('Create employee', () => {
 			cy.intercept({
 				method: 'POST',
@@ -210,25 +211,9 @@ describe('Salons', () => {
 				cy.checkSuccessToastMessage()
 			})
 		})
+	})
 
-		it('Delete employee', () => {
-			cy.intercept({
-				method: 'DELETE',
-				url: `/api/b2b/admin/employees/${employeeID}`
-			}).as('deleteEmployee')
-			cy.visit(`/salons/${createdSalonID}/employees/${employeeID}`)
-			cy.clickDeleteButtonWithConfCustom(FORM.EMPLOYEE)
-			cy.wait('@deleteEmployee').then((interception: any) => {
-				// check status code
-				expect(interception.response.statusCode).to.equal(200)
-				// check conf toast message
-				cy.checkSuccessToastMessage()
-				cy.location('pathname').should('eq', `/salons/${createdSalonID}/employees`)
-			})
-		})
-	}) */
-
-	context('Industries and services CRUD operations', () => {
+	context('Industries and services CRU operations', () => {
 		it('Update industries and industry services', () => {
 			cy.intercept({
 				method: 'GET',
@@ -292,11 +277,14 @@ describe('Salons', () => {
 				method: 'GET',
 				url: `/api/b2b/admin/enums/categories/${categoryID}`
 			}).as('getCategory')
+			cy.intercept({
+				method: 'PATCH',
+				pathname: `/api/b2b/admin/services/${serviceID}`
+			}).as('updateSalonService')
 			cy.visit(`/salons/${createdSalonID}/services-settings`)
 			cy.wait('@getSalonServices').then((interceptorGetSalonServices: any) => {
 				// check status code
 				expect(interceptorGetSalonServices.response.statusCode).to.equal(200)
-				// TODO: check for length
 				cy.get('.ant-table-row:first')
 					.as('firstRow')
 					.invoke('attr', 'data-row-key')
@@ -316,28 +304,51 @@ describe('Salons', () => {
 							expect(interceptorGetCategory.response.statusCode).to.equal(200)
 							expect(interceptorGetCategory.response.body.category.id).to.equal(categoryID)
 						}) */
-						cy.wait(5000) // Zatial pre dev ucely workoround
+						cy.wait(2000) // Zatial pre dev ucely workoround
+						cy.setInputValue(FORM.SERVICE_FORM, 'durationFrom', service.create.durationFrom)
+						cy.setInputValue(FORM.SERVICE_FORM, 'priceFrom', service.create.priceFrom)
+						cy.selectOptionDropdown(FORM.SERVICE_FORM, 'employee')
+						// cy.get('h3').click()
+						cy.get(`#${FORM.SERVICE_FORM}-add-employee`).click()
+						cy.get(`#${FORM.SERVICE_FORM}-form`).submit()
+						cy.wait('@updateSalonService').then((interceptorUpdateSalonService: any) => {
+							expect(interceptorUpdateSalonService.response.statusCode).to.equal(200)
+						})
 					})
 			})
 		})
 	})
 
-	context('Update and delete', () => {
-		it('Update created salon', () => {
+	context('Delete', () => {
+		it('Delete employee', () => {
 			cy.intercept({
-				method: 'PATCH',
-				url: `/api/b2b/admin/salons/${createdSalonID}`
-			}).as('updateSalon')
-			cy.visit(`/salons/${createdSalonID}`)
-			cy.setInputValue(FORM.SALON, 'name', salon.update.name, false, true)
-			cy.setInputValue(FORM.SALON, 'socialLinkWebPage', salon.update.socialLinkWebPage)
-			cy.setInputValue(FORM.SALON, 'socialLinkFB', salon.update.socialLinkFB)
-			cy.get('form').submit()
-			cy.wait('@updateSalon').then((interception: any) => {
+				method: 'DELETE',
+				url: `/api/b2b/admin/employees/${employeeID}`
+			}).as('deleteEmployee')
+			cy.visit(`/salons/${createdSalonID}/employees/${employeeID}`)
+			cy.clickDeleteButtonWithConfCustom(FORM.EMPLOYEE)
+			cy.wait('@deleteEmployee').then((interception: any) => {
 				// check status code
 				expect(interception.response.statusCode).to.equal(200)
 				// check conf toast message
 				cy.checkSuccessToastMessage()
+				cy.location('pathname').should('eq', `/salons/${createdSalonID}/employees`)
+			})
+		})
+
+		it('Delete customer', () => {
+			cy.intercept({
+				method: 'DELETE',
+				url: `/api/b2b/admin/customers/${customerID}`
+			}).as('deleteCustomer')
+			cy.visit(`/salons/${createdSalonID}/customers/${customerID}`)
+			cy.clickDeleteButtonWithConfCustom(FORM.CUSTOMER)
+			cy.wait('@deleteCustomer').then((interception: any) => {
+				// check status code
+				expect(interception.response.statusCode).to.equal(200)
+				// check conf toast message
+				cy.checkSuccessToastMessage()
+				cy.location('pathname').should('eq', `/salons/${createdSalonID}/customers`)
 			})
 		})
 

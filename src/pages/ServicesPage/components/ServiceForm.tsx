@@ -22,8 +22,8 @@ import ServiceBreadcrumbs from './ServiceBreadcrumbs'
 import validateServiceForm from './validateServiceForm'
 
 // utils
-import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
-import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, STRINGS } from '../../../utils/enums'
+import { formFieldID, showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { DELETE_BUTTON_ID, FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, STRINGS } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import searchWrapper from '../../../utils/filters'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
@@ -99,7 +99,7 @@ const ServiceForm: FC<Props> = (props) => {
 			render={(hasPermission) => (
 				<div className='content-body small'>
 					<Spin spinning={isLoading}>
-						<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
+						<Form id={`${FORM.SERVICE_FORM}-form`} layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
 							<ServiceBreadcrumbs
 								wrapperClassname={'mb-4'}
 								breadcrumbs={[
@@ -317,6 +317,7 @@ const ServiceForm: FC<Props> = (props) => {
 											tooltipSelect={!hasPermission ? t('loc:Pre túto akciu nemáte dostatočné oprávnenia.') : null}
 										/>
 										<Button
+											id={`${FORM.SERVICE_FORM}-add-employee`}
 											type={'primary'}
 											size={'middle'}
 											className={'self-start noti-btn m-regular md:mt-5'}
@@ -345,6 +346,7 @@ const ServiceForm: FC<Props> = (props) => {
 														onConfirm={onConfirmDelete}
 														entityName={t('loc:službu')}
 														permissions={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_DELETE]}
+														id={formFieldID(FORM.SERVICE_FORM, DELETE_BUTTON_ID)}
 													/>
 												) : null}
 

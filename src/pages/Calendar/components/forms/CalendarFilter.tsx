@@ -61,20 +61,6 @@ const FilterEmptyState: FC<IFilterEmptyState> = (props) => {
 	)
 }
 
-const checkboxOptionRender = (option: any, checked?: boolean, disabled?: boolean) => {
-	const { color, value } = option || {}
-
-	return (
-		<div className={cx('nc-checkbox-group-checkbox', { checked, disabled })}>
-			<input type='checkbox' className='checkbox-input' value={value} />
-			<div className={'checker'}>
-				<span className={'background-color'} style={{ borderColor: color, backgroundColor: checked ? color : undefined }} />
-				<span className={'checkbox-focus'} style={{ outlineColor: `${color || '#000'}`, border: `1px solid ${color}` }} />
-			</div>
-			{option?.label}
-		</div>
-	)
-}
 const CalendarFilter = (props: Props) => {
 	const { handleSubmit, parentPath, eventsViewType, loadingData } = props
 	const [t] = useTranslation()
@@ -101,8 +87,8 @@ const CalendarFilter = (props: Props) => {
 								name={'employeeIDs'}
 								options={employees?.options}
 								size={'small'}
-								hideChecker
-								optionRender={checkboxOptionRender}
+								rounded
+								useCustomColor
 								nullAsEmptyValue
 								disabled={loadingData}
 							/>

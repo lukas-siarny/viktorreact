@@ -32,7 +32,7 @@ import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
 import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations.svg'
 
 // utils
-import { PAGE, PERMISSION } from '../../utils/enums'
+import { CYPRESS_CLASS_NAMES, PAGE, PERMISSION } from '../../utils/enums'
 import { checkPermissions } from '../../utils/Permissions'
 
 // redux
@@ -229,6 +229,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 		const myAccontMenuItems: MenuProps['items'] = [
 			{
 				key: 'myProfile',
+				className: CYPRESS_CLASS_NAMES.MY_ACCOUNT_BUTTON,
 				label: t('loc:Môj profil'),
 				onClick: () => navigate(t('paths:my-account')),
 				icon: <ProfileIcon />
@@ -247,7 +248,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			getLanguagePickerAsSubmenuItem(dispatch),
 			{
 				key: 'logOut',
-				className: 'noti-logout-button',
+				className: CYPRESS_CLASS_NAMES.LOGOUT_BUTTON,
 				label: t('loc:Odhlásiť'),
 				onClick: () => dispatch(logOutUser()),
 				icon: <LogOutIcon />

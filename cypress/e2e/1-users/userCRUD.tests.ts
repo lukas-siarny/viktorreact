@@ -1,4 +1,4 @@
-import { FORM } from '../../../src/utils/enums'
+import { CYPRESS_CLASS_NAMES, FORM } from '../../../src/utils/enums'
 
 // fixtures
 import user from '../../fixtures/user.json'
@@ -11,8 +11,8 @@ import { loginViaApi } from '../../support/e2e'
 import { CRUD_OPERATIONS } from '../../enums'
 
 const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
-	// id of created user
-	let userID = 0
+	// test id of user
+	let userID = '0000000-0000-0000-0000-000000000009'
 
 	before(() => {
 		loginViaApi(email, password)
@@ -29,7 +29,10 @@ const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?:
 	})
 
 	it('Update my account info', () => {
-		cy.visit('/my-account')
+		cy.visit('/')
+		cy.get('.noti-my-account').click()
+		cy.get(`.${CYPRESS_CLASS_NAMES.MY_ACCOUNT_BUTTON}`).click()
+		cy.location('pathname').should('eq', '/my-account')
 		cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.firstName, false, true)
 		cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.lastName, false, true)
 		cy.setInputValue(FORM.USER_ACCOUNT, 'phone', user.phone, false, true)
@@ -62,12 +65,12 @@ const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?:
 	})
 
 	it('Update partner info', () => {
-		cy.intercept({
-			method: 'PATCH',
-			url: `/api/b2b/admin/users/${userID}`
-		}).as('updateUser')
 		cy.visit(`/users/${userID}`)
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+			cy.intercept({
+				method: 'PATCH',
+				url: `/api/b2b/admin/users/${userID}`
+			}).as('updateUser')
 			cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.firstName, false, true)
 			cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.lastName, false, true)
 			cy.get(`#${FORM.USER_ACCOUNT}-form`).submit()
@@ -78,8 +81,16 @@ const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?:
 				cy.checkSuccessToastMessage()
 			})
 		} else {
-			// check redirect to 403 unauthorized page
-			cy.location('pathname').should('eq', '/403')
+			cy.intercept({
+				method: 'GET',
+				url: '/api/b2b/admin/roles/system-user'
+			}).as('systemUser')
+			cy.wait('@systemUser').then((interception: any) => {
+				// check status code for be roles check
+				expect(interception.response.statusCode).to.equal(403)
+				// check redirect to 404 notfound page
+				cy.location('pathname').should('eq', '/404')
+			})
 		}
 	})
 
@@ -99,8 +110,16 @@ const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?:
 				cy.location('pathname').should('eq', `/users`)
 			})
 		} else {
-			// check redirect to 403 unauthorized page
-			cy.location('pathname').should('eq', '/403')
+			cy.intercept({
+				method: 'GET',
+				url: '/api/b2b/admin/roles/system-user'
+			}).as('systemUser')
+			cy.wait('@systemUser').then((interception: any) => {
+				// check status code for be roles check
+				expect(interception.response.statusCode).to.equal(403)
+				// check redirect to 404 notfound page
+				cy.location('pathname').should('eq', '/404')
+			})
 		}
 	})
 }

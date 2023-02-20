@@ -6,7 +6,7 @@ import { parse } from 'node-html-parser'
 import { generateRandomString } from '../../support/helpers'
 
 // utils
-import { FORM } from '../../../src/utils/enums'
+import { CYPRESS_CLASS_NAMES, FORM } from '../../../src/utils/enums'
 
 import user from '../../fixtures/user.json'
 
@@ -70,7 +70,7 @@ context('Auth', () => {
 		}).as('authLogout')
 		cy.visit('/')
 		cy.get('.noti-my-account').click()
-		cy.get('.noti-logout-button').click()
+		cy.get(`.${CYPRESS_CLASS_NAMES.LOGOUT_BUTTON}`).click()
 		cy.wait('@authLogout').then((interception: any) => {
 			// check status code of logout request
 			expect(interception.response.statusCode).to.equal(200)

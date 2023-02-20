@@ -5,6 +5,11 @@ import { LoadScriptUrlOptions } from '@react-google-maps/api/dist/utils/make-loa
 import { AliasToken } from 'antd/es/theme/internal'
 import { FormatterInput } from '@fullcalendar/core'
 
+export enum CYPRESS_CLASS_NAMES {
+	LOGOUT_BUTTON = 'noti-logout-button',
+	MY_ACCOUNT_BUTTON = 'noti-my-account-button'
+}
+
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
 }

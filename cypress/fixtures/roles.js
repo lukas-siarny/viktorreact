@@ -5,7 +5,7 @@ const data = [
 	{
 		role: PERMISSION.NOTINO_SUPER_ADMIN,
 		credentials: {
-			user: 'roman.haluska@goodrequest.com',
+			user: 'lubomir.igonda@goodrequest.com',
 			password: 'Lopaty123.'
 		},
 		tests: [
@@ -26,7 +26,8 @@ const data = [
 				name: LIST_OF_TESTS_SUITS.USER_CRUD,
 				actions: [CRUD_OPERATIONS.ALL]
 			}
-		]
+		],
+		isInActive: true
 	},
 	{
 		role: PERMISSION.PARTNER_ADMIN,
@@ -42,5 +43,7 @@ const data = [
 		]
 	}
 ]
+
+// { name: CRUD_OPERATIONS.READ, result: OPERATION_RESULT.FAILED }
 
 export default data

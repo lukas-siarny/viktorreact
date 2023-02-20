@@ -283,7 +283,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	}
 
 	return (
-		<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
+		<Form id={`${FORM.RESEVATION_SYSTEM_SETTINGS}-form`} layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
 			<div className={'flex'}>
 				<h3 className={'mb-0 mt-0 flex items-center'}>
 					<GlobeIcon className={'text-notino-black mr-2'} />

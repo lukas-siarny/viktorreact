@@ -44,7 +44,6 @@ const SwitchField = (props: Props) => {
 	} = props
 	// NOTE: ak existuje label znamena to ze switch je pouzity ako label vo forme a vtedy sa pouzije novy layout ikona + label text + switch
 	// Ak nie je label pouzite je v tabulke alebo vo filtri a vtedy sa nerenderuje label ani ikona ale len samotny switch field
-
 	const checkedState = input.value === 'true' || input.value === true || checked
 	const onChange = useCallback(
 		(chck: boolean) => {
@@ -96,7 +95,9 @@ const SwitchField = (props: Props) => {
 					</div>
 				</div>
 			) : (
-				<Switch onChange={onChange} checked={checkedState} disabled={disabled} size={size} onClick={onClick} />
+				<span id={formFieldID(form, input.name)}>
+					<Switch onChange={onChange} checked={checkedState} disabled={disabled} size={size} onClick={onClick} />
+				</span>
 			)}
 		</Item>
 	)

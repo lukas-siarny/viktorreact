@@ -224,21 +224,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	 * pri praci s kalendarom pouzivame tuto kolekciu zamesnancov, ktora zohladnuje filtre aplikovane uzivatelom
 	 */
 	const filteredEmployees = useCallback(() => {
-		// null means empty filter
-		if (query?.employeeIDs === null) {
-			return []
-		}
-
-		// all employes as default value
-		let emp = employees?.data?.employees
-
 		// filter employees based on employeeIDs in the url queryParams (if there are any)
 		if (!isEmpty(query.employeeIDs)) {
-			emp = employees?.data?.employees.filter((employee: any) => query.employeeIDs?.includes(employee.id))
+			return employees?.data?.employees.filter((employee: any) => query.employeeIDs?.includes(employee.id))
 		}
 
-		// sort employees by orderIndex
-		return emp?.sort((a, b) => a.orderIndex - b.orderIndex)
+		// null means empty filter otherwise return all employes as default value
+		return query?.employeeIDs === null ? [] : employees?.data?.employees
 	}, [employees?.data?.employees, query.employeeIDs])
 
 	/**

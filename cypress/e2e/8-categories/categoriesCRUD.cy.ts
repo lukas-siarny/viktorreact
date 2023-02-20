@@ -115,7 +115,7 @@ describe('Categories', () => {
 				expect(interceptorGetCategories.response.statusCode).to.equal(200)
 				cy.get(`.ant-tree-treenode.${industryID} .ant-tree-node-content-wrapper`).click()
 				cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.industry.update.title, false, true)
-				// TODO: dorobit update obrazkov
+				// TODO: test upload of new images
 				cy.get(`#${FORM.CATEGORY}-form`).submit()
 				cy.wait('@updateCategory').then((interceptionUpdateCategory: any) => {
 					// check status code of request

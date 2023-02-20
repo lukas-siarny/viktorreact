@@ -214,7 +214,7 @@ describe('Salons', () => {
 		})
 	})
 
-	context('Industries and services CRU operations', () => {
+	context('Industries and services', () => {
 		it('Update industries and industry services', () => {
 			cy.intercept({
 				method: 'GET',
@@ -245,6 +245,7 @@ describe('Salons', () => {
 					cy.wait('@getCategories').then((intercepitonGetCategoriesInDetail: any) => {
 						// check status code
 						expect(intercepitonGetCategoriesInDetail.response.statusCode).to.equal(200)
+						// select first industry (at least one industry with at least one service must exist in order to test work properly!!)
 						cy.get('.noti-tree-node-0 > .ant-tree-node-content-wrapper').click({ force: true })
 						cy.get(`#${FORM.INDUSTRY}-form`).submit()
 						cy.wait('@patchSalonServices').then((interceptionPatchSalonCategory: any) => {
@@ -312,6 +313,7 @@ describe('Salons', () => {
 
 								cy.setInputValue(FORM.SERVICE_FORM, 'durationFrom', service.create.durationFrom)
 								cy.setInputValue(FORM.SERVICE_FORM, 'priceFrom', service.create.priceFrom)
+								// add employee from Select with async search (at least one employee must exit in the salon in order to test work properly!!)
 								cy.get(generateElementId('employee', FORM.SERVICE_FORM)).click()
 								cy.wait('@getEmployees').then((interceptorGetEmlpoyeesSearch: any) => {
 									expect(interceptorGetEmlpoyeesSearch.response.statusCode).to.equal(200)
@@ -324,6 +326,7 @@ describe('Salons', () => {
 
 									cy.get(`#${FORM.SERVICE_FORM}-add-employee`).click()
 									cy.get(`#${FORM.SERVICE_FORM}-form`).submit()
+									// TODO: test service with category parameter
 									cy.wait('@updateSalonService').then((interceptorUpdateSalonService: any) => {
 										expect(interceptorUpdateSalonService.response.statusCode).to.equal(200)
 									})
@@ -374,7 +377,7 @@ describe('Salons', () => {
 				url: `/api/b2b/admin/salons/${createdSalonID}`
 			}).as('deleteSalon')
 			cy.visit(`/salons/${createdSalonID}`)
-			// wait duw to animations and fetch data
+			// wait due to animations and fetch data
 			cy.wait(5000)
 			cy.clickDeleteButtonWithConfCustom(FORM.SALON)
 			cy.wait('@deleteSalon').then((interception: any) => {

@@ -1,3 +1,4 @@
+import { generateElementId } from '../../support/helpers'
 // utils
 import { FORM } from '../../../src/utils/enums'
 
@@ -231,8 +232,6 @@ describe('Salons', () => {
 			cy.wait('@getCategories').then((interception: any) => {
 				// check status code
 				expect(interception.response.statusCode).to.equal(200)
-				// TODO: ak pride prazdne pole, tak nerobit request - zisti ako sa to da spravit, klasicky if nefunguje
-				// if (interception.response.body.categories?.length) {
 				cy.get('.checkbox-group-image-wrapper > .checkbox-with-image:first > label').as('firstIndustryLabel')
 				cy.get('@firstIndustryLabel').find('input[type="checkbox"]').should('have.id', interception.response.body.categories[0].id)
 				cy.get('@firstIndustryLabel').find('.inner-wrapper').click({ force: true })
@@ -260,8 +259,6 @@ describe('Salons', () => {
 		})
 
 		it('Update service settings', () => {
-			let serviceID: any
-			let categoryID: any
 			cy.intercept({
 				method: 'GET',
 				pathname: '/api/b2b/admin/services/',
@@ -269,18 +266,6 @@ describe('Salons', () => {
 					salonID: createdSalonID
 				}
 			}).as('getSalonServices')
-			cy.intercept({
-				method: 'GET',
-				url: `/api/b2b/admin/services/${serviceID}`
-			}).as('getSalonService')
-			cy.intercept({
-				method: 'GET',
-				url: `/api/b2b/admin/enums/categories/${categoryID}`
-			}).as('getCategory')
-			cy.intercept({
-				method: 'PATCH',
-				pathname: `/api/b2b/admin/services/${serviceID}`
-			}).as('updateSalonService')
 			cy.visit(`/salons/${createdSalonID}/services-settings`)
 			cy.wait('@getSalonServices').then((interceptorGetSalonServices: any) => {
 				// check status code
@@ -289,31 +274,62 @@ describe('Salons', () => {
 					.as('firstRow')
 					.invoke('attr', 'data-row-key')
 					.then((dataRowKey) => {
-						const ids = (dataRowKey || '').split('_')
-						// eslint-disable-next-line prefer-destructuring
-						categoryID = ids[0]
-						// eslint-disable-next-line prefer-destructuring
-						serviceID = ids[1]
+						const [categoryID, serviceID] = (dataRowKey || '').split('_')
+
+						cy.intercept({
+							method: 'GET',
+							url: `/api/b2b/admin/services/${serviceID}`
+						}).as('getSalonService')
+						cy.intercept({
+							method: 'GET',
+							url: `/api/b2b/admin/enums/categories/${categoryID}`
+						}).as('getCategory')
+						cy.intercept({
+							method: 'GET',
+							url: '/api/b2b/admin/enums/categories/'
+						}).as('getCategories')
+						cy.intercept({
+							method: 'GET',
+							pathname: '/api/b2b/admin/employees/',
+							query: {
+								page: '1',
+								salonID: createdSalonID
+							}
+						}).as('getEmployees')
+						cy.intercept({
+							method: 'PATCH',
+							pathname: `/api/b2b/admin/services/${serviceID}`
+						}).as('updateSalonService')
 
 						cy.get('@firstRow').click()
-						// TODO: vyriesiet preco sa nedaju odchytit requesti
-						/* cy.wait(['@getSalonService', '@getCategory']).then(([interceptorGetSalonSerivce, interceptorGetCategory]: any[]) => {
-							// check status code
-							expect(interceptorGetSalonSerivce.response.statusCode).to.equal(200)
-							expect(interceptorGetSalonSerivce.response.body.service.id).to.equal(serviceID)
-							expect(interceptorGetCategory.response.statusCode).to.equal(200)
-							expect(interceptorGetCategory.response.body.category.id).to.equal(categoryID)
-						}) */
-						cy.wait(2000) // Zatial pre dev ucely workoround
-						cy.setInputValue(FORM.SERVICE_FORM, 'durationFrom', service.create.durationFrom)
-						cy.setInputValue(FORM.SERVICE_FORM, 'priceFrom', service.create.priceFrom)
-						cy.selectOptionDropdown(FORM.SERVICE_FORM, 'employee')
-						// cy.get('h3').click()
-						cy.get(`#${FORM.SERVICE_FORM}-add-employee`).click()
-						cy.get(`#${FORM.SERVICE_FORM}-form`).submit()
-						cy.wait('@updateSalonService').then((interceptorUpdateSalonService: any) => {
-							expect(interceptorUpdateSalonService.response.statusCode).to.equal(200)
-						})
+						cy.wait(['@getSalonService', '@getCategory', '@getCategories', '@getEmployees']).then(
+							([interceptorGetSalonSerivce, interceptorGetCategory, interceptorGetCategories, interceptorGetEmlpoyees]: any[]) => {
+								// check status codes
+								expect(interceptorGetSalonSerivce.response.statusCode).to.equal(200)
+								expect(interceptorGetCategory.response.statusCode).to.equal(200)
+								expect(interceptorGetCategories.response.statusCode).to.equal(200)
+								expect(interceptorGetEmlpoyees.response.statusCode).to.equal(200)
+
+								cy.setInputValue(FORM.SERVICE_FORM, 'durationFrom', service.create.durationFrom)
+								cy.setInputValue(FORM.SERVICE_FORM, 'priceFrom', service.create.priceFrom)
+								cy.get(generateElementId('employee', FORM.SERVICE_FORM)).click()
+								cy.wait('@getEmployees').then((interceptorGetEmlpoyeesSearch: any) => {
+									expect(interceptorGetEmlpoyeesSearch.response.statusCode).to.equal(200)
+									// select first employee from the list
+									cy.get('.ant-select-dropdown :not(.ant-select-dropdown-hidden)', { timeout: 10000 })
+										.should('be.visible')
+										.find('.ant-select-item-option')
+										.first()
+										.click({ force: true })
+
+									cy.get(`#${FORM.SERVICE_FORM}-add-employee`).click()
+									cy.get(`#${FORM.SERVICE_FORM}-form`).submit()
+									cy.wait('@updateSalonService').then((interceptorUpdateSalonService: any) => {
+										expect(interceptorUpdateSalonService.response.statusCode).to.equal(200)
+									})
+								})
+							}
+						)
 					})
 			})
 		})

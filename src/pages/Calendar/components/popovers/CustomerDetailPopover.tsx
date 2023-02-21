@@ -5,24 +5,24 @@ import { getFormValues } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-16.svg'
-import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
-import { ReactComponent as LoadingIcon } from '../../../assets/icons/loading-icon.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon-16.svg'
+import { ReactComponent as InfoIcon } from '../../../../assets/icons/info-icon.svg'
+import { ReactComponent as LoadingIcon } from '../../../../assets/icons/loading-icon.svg'
 
 // components
-import UserAvatar from '../../../components/AvatarComponents'
-import Ellipsis from '../../../atoms/Ellipsis'
+import UserAvatar from '../../../../components/AvatarComponents'
+import Ellipsis from '../../../../atoms/Ellipsis'
 
 // types
-import { RootState } from '../../../reducers'
-import { ICalendarReservationForm } from '../../../types/interfaces'
+import { RootState } from '../../../../reducers'
+import { ICalendarReservationForm } from '../../../../types/interfaces'
 
 /// utils
-import { ENUMERATIONS_KEYS, FORM } from '../../../utils/enums'
-import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
+import { ENUMERATIONS_KEYS, FORM } from '../../../../utils/enums'
+import { getAssignedUserLabel, getCountryPrefix } from '../../../../utils/helper'
 
 // reducers
-import { getCustomer, ICustomerPayload } from '../../../reducers/customers/customerActions'
+import { getCustomer, ICustomerPayload } from '../../../../reducers/customers/customerActions'
 
 type ContentProps = {
 	onClose: () => void
@@ -162,7 +162,7 @@ const CalendarDetailPopover: FC<ICustomerDetailPopoverProps> = () => {
 			placement={'leftTop'}
 			overlayClassName={`${overlayClassName} nc-popover-overlay nc-popover-overlay-fixed`}
 			content={customer.data && <PopoverContent customer={customer.data.customer} onClose={() => setIsOpen(false)} />}
-			align={{ offset: [-175, -18] }} // offset popoveru od "InfoIcon" trigger buttonu
+			align={{ offset: [-175, -32] }} // offset popoveru od "InfoIcon" trigger buttonu
 		>
 			<div className={'absolute right-7 z-50 w-6 h-6 bg-notino-white flex items-center justify-center'} style={{ top: 30 }}>
 				{customer?.isLoading ? (

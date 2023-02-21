@@ -1381,3 +1381,11 @@ export const initializeLabelInValueSelect = (key: string | number, label: string
 		extra
 	}
 }
+
+export const normalizeDataById = <T extends { id: string }>(data?: T[]): { [key: string]: T } => {
+	const normalizedData: { [key: string]: T } = {}
+	data?.forEach((item) => {
+		normalizedData[item.id] = item
+	})
+	return normalizedData
+}

@@ -2,6 +2,7 @@ import React, { useMemo, FC, useRef, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import cx from 'classnames'
 import dayjs from 'dayjs'
+import i18next from 'i18next'
 
 // full calendar
 import FullCalendar from '@fullcalendar/react' // must go before plugins
@@ -69,7 +70,7 @@ const getCurrentDayEventsCount = (selectedDate: string, dayEvents: (CalendarEven
 }
 
 const getLinkMoreText = (eventsCount?: number) => {
-	return `Viac (${eventsCount})`
+	return `${i18next.t('loc:Viac')} (${eventsCount})`
 }
 
 const dayHeaderContent = (arg: DayHeaderContentArg, openingHoursMap: OpeningHoursMap) => {

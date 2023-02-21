@@ -3,6 +3,7 @@ import React, { FC, useEffect, useCallback, PropsWithChildren } from 'react'
 import { Divider, Popover, Spin } from 'antd'
 import { useSelector } from 'react-redux'
 import dayjs from 'dayjs'
+import cx from 'classnames'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon-16.svg'
@@ -17,7 +18,7 @@ import { CalendarEvent, ICalendarEventsListPopover, ICalendarEventContent, Popov
 import { IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
 
 /// utils
-import { CALENDAR_EVENT_DISPLAY_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, MONTHLY_RESERVATIONS_KEY } from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_DISPLAY_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, MONTHLY_RESERVATIONS_KEY } from '../../../../utils/enums'
 import { compareAndSortDayEvents } from '../../calendarHelpers'
 
 // hooks
@@ -106,7 +107,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 	return (
 		<div className='text-notino-black min-w-56'>
 			<header className={'flex items-center justify-between px-6 h-16 min-w-0 gap-2'}>
-				<span className={'capitalize text-sm font-semibold truncate'}>{dayjs(date).format('dddd, D MMM')}</span>
+				<span className={'capitalize text-sm font-semibold truncate'}>{dayjs(date).format(CALENDAR_DATE_FORMAT.EVENTS_LIST_POPOVER)}</span>
 				<button className={'nc-popover-header-button'} type={'button'} onClick={onClose}>
 					<CloseIcon />
 				</button>
@@ -206,7 +207,8 @@ const CalendarEventsListPopover: FC<ICalendarEventsListPopover> = (props) => {
 			destroyTooltipOnHide={{ keepParent: true }}
 			trigger={'click'}
 			placement={'right'}
-			overlayClassName={`${overlayClassName} nc-popover-overlay nc-events-list-popover-overlay ${isHidden ? 'is-hidden' : ''}`}
+			// overlayClassName={`${overlayClassName} nc-popover-overlay nc-events-list-popover-overlay ${isHidden ? 'is-hidden' : ''}`}
+			overlayClassName={cx(overlayClassName, 'nc-popover-overlay nc-events-list-popover-overlay', { 'is-hidden': isHidden })}
 			content={
 				!isHidden && (
 					<PopoverContent date={date} onClose={handleClosePopover} isLoading={isLoading} isUpdatingEvent={isUpdatingEvent}>

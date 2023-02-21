@@ -43,7 +43,7 @@ describe('Support contacts', () => {
 	it('Update support contact', () => {
 		cy.intercept({
 			method: 'PATCH',
-			url: '/api/b2b/admin/enums/support-contacts/'
+			url: `/api/b2b/admin/enums/support-contacts/${supportContactID}`
 		}).as('updateSupportContact')
 		cy.visit('/support-contacts')
 		cy.get(`[data-row-key="${supportContactID}"]`).click()
@@ -56,13 +56,12 @@ describe('Support contacts', () => {
 		cy.setInputValue(FORM.SUPPORT_CONTACT, 'streetNumber', supportContact.update.address.streetNumber, false, true)
 		cy.setInputValue(FORM.SUPPORT_CONTACT, 'zipCode', supportContact.update.address.zipCode, false, true)
 		cy.get(`#${FORM.SUPPORT_CONTACT}-form`).submit()
-		// TODO: pada to sem? preco?
-		// cy.wait('@updateSupportContact').then((interception: any) => {
-		// 	// check status code of request
-		// 	expect(interception.response.statusCode).to.equal(200)
-		// 	// check conf toast message
-		// 	cy.checkSuccessToastMessage()
-		// })
+		cy.wait('@updateSupportContact').then((interception: any) => {
+			// check status code of request
+			expect(interception.response.statusCode).to.equal(200)
+			// check conf toast message
+			cy.checkSuccessToastMessage()
+		})
 	})
 	// DELETE
 	it('Delete support contact', () => {

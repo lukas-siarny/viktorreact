@@ -15,7 +15,7 @@ import { RootState } from '../../../../reducers'
 
 // utils
 import { getReq } from '../../../../utils/request'
-import { formatLongQueryString, getAssignedUserLabel, initializeLabelInValueSelect, normalizeDataById } from '../../../../utils/helper'
+import { formatLongQueryString, getAssignedUserLabel, initializeLabelInValueSelect } from '../../../../utils/helper'
 import {
 	CALENDAR_COMMON_SETTINGS,
 	CALENDAR_EVENT_TYPE,

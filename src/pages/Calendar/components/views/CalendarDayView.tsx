@@ -15,7 +15,7 @@ import { composeDayViewEvents, composeDayViewResources, getTimeScrollId } from '
 import eventContent from '../../eventContent'
 
 // types
-import { Employees, ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/interfaces'
+import { ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'

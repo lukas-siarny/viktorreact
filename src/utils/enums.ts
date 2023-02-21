@@ -671,14 +671,18 @@ export const CALENDAR_COMMON_SETTINGS = {
 	EVENT_CONSTRAINT: {
 		startTime: '00:00',
 		endTime: '23:59'
+	},
+	SELECT_CONSTRAINT: {
+		startTime: '00:00',
+		endTime: '24:00'
 	}
 }
 
 export enum CALENDAR_VIEW {
 	// eslint-disable-next-line @typescript-eslint/no-shadow
 	DAY = 'DAY',
-	WEEK = 'WEEK' /* ,
-	MONTH = 'MONTH' */
+	WEEK = 'WEEK',
+	MONTH = 'MONTH'
 }
 
 export enum CALENDAR_EVENT_TYPE {
@@ -701,7 +705,9 @@ export enum CALENDAR_DATE_FORMAT {
 	HEADER_WEEK_START_TURN_OF_THE_MONTH = 'D MMM',
 	HEADER_WEEK_END_TURN_OF_THE_MONTH = 'D MMM YY',
 	HEADER_MONTH = 'MMMM YY',
-	TIME = 'HH:mm'
+	TIME = 'HH:mm',
+	MONTH_HEADER_DAY_NAME = 'ddd',
+	EVENTS_LIST_POPOVER = 'dddd, D MMM'
 }
 
 export enum CALENDAR_SET_NEW_DATE {
@@ -727,25 +733,25 @@ export const EVERY_REPEAT_OPTIONS = () => [
 	}
 ]
 
-export const EVENT_NAMES = (eventType?: CALENDAR_EVENT_TYPE, capitalizeFirstLetter = false) => {
-	let string = i18next.t('loc:udalosť')
+export const EVENT_NAMES = (t: TFunction, eventType?: CALENDAR_EVENT_TYPE, capitalizeFirstLetter = false) => {
+	let string = ''
 	switch (eventType) {
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-			string = i18next.t('loc:prestávku')
+			string = t('loc:prestávku')
 			break
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-			string = i18next.t('loc:shift-akuzativ')
+			string = t('loc:shift-akuzativ')
 			break
 		case CALENDAR_EVENT_TYPE.RESERVATION:
-			string = i18next.t('loc:rezerváciu')
+			string = t('loc:rezerváciu')
 			break
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-			string = i18next.t('loc:voľno')
+			string = t('loc:voľno')
 			break
 		default:
 			break
 	}
-	if (capitalizeFirstLetter) {
+	if (capitalizeFirstLetter && string) {
 		const firstLetterCapitalized = string.charAt(0).toUpperCase()
 		return firstLetterCapitalized + string.slice(1)
 	}
@@ -767,6 +773,8 @@ export enum CALENDAR_EVENTS_KEYS {
 	RESERVATIONS = 'reservations',
 	SHIFTS_TIME_OFFS = 'shiftsTimeOffs'
 }
+
+export const MONTHLY_RESERVATIONS_KEY = 'monthlyReservations'
 
 export enum CONFIRM_BULK {
 	BULK = 'BULK',
@@ -952,13 +960,22 @@ export enum CONFIRM_MODAL_DATA_TYPE {
 	UPDATE_RESERVATION_STATE = 'UPDATE_RESERVATION_STATE'
 }
 
+export enum CALENDAR_EVENT_DISPLAY_TYPE {
+	REGULAR = 'regular',
+	BACKGROUND = 'background',
+	INVERSE_BACKGROUND = 'inverse-background'
+}
+
+export const CALENDAR_DAY_EVENTS_SHOWN = 5
+export const CALENDAR_DAY_EVENTS_LIMIT = CALENDAR_DAY_EVENTS_SHOWN + 1
 export const RESERVATION_STATES = Object.keys(RESERVATION_STATE)
 export const RESERVATION_PAYMENT_METHODS = Object.keys(RESERVATION_PAYMENT_METHOD)
 export const RESERVATION_SOURCE_TYPES = Object.keys(RESERVATION_SOURCE_TYPE)
 
 export const CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE = 300 // in ms
+export const CALENDAR_UPDATE_SIZE_DELAY = 100 // in ms
 
-export enum CANEL_TOKEN_MESSAGES {
+export enum CANCEL_TOKEN_MESSAGES {
 	CANCELED_DUE_TO_NEW_REQUEST = 'Operation canceled due to new request.',
 	CANCELED_ON_DEMAND = 'Operation canceled.'
 }

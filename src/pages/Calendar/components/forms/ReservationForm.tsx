@@ -34,7 +34,7 @@ import TextareaField from '../../../../atoms/TextareaField'
 import TimeRangeField from '../../../../atoms/TimeRangeField'
 import SelectField from '../../../../atoms/SelectField'
 import CustomerForm from '../../../CustomersPage/components/CustomerForm'
-import CalendarDetailPopover from '../CustomerDetailPopover'
+import CalendarDetailPopover from '../popovers/CustomerDetailPopover'
 import ConfirmModal from '../../../../atoms/ConfirmModal'
 
 // redux
@@ -46,6 +46,7 @@ type ComponentProps = {
 	searchEmployes: (search: string, page: number) => Promise<any>
 	eventId?: string | null
 	phonePrefix?: string
+	loadingData?: boolean
 	sidebarView?: CALENDAR_EVENT_TYPE
 }
 const formName = FORM.CALENDAR_RESERVATION_FORM
@@ -109,7 +110,7 @@ const getCategoryById = (category: any, serviceCategoryID?: string): EmployeeSer
 }
 
 const ReservationForm: FC<Props> = (props) => {
-	const { handleSubmit, salonID, searchEmployes, eventId, phonePrefix, pristine, submitting, sidebarView } = props
+	const { handleSubmit, salonID, searchEmployes, eventId, phonePrefix, pristine, submitting, loadingData, sidebarView } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [visibleCustomerCreateModal, setVisibleCustomerCreateModal] = useState(false)
@@ -147,7 +148,7 @@ const ReservationForm: FC<Props> = (props) => {
 	)
 
 	// NOTE: pristine pouzivat len pri UPDATE eventu a pri CREATE povlit akciu vzdy
-	const disabledSubmitButton = !!(eventId && pristine) || submitting
+	const disabledSubmitButton = !!(eventId && pristine) || submitting || loadingData
 
 	const searchCustomers = useCallback(
 		async (search: string, page: number) => {
@@ -420,6 +421,7 @@ const ReservationForm: FC<Props> = (props) => {
 							labelInValue
 							onSearch={searchEmployes}
 							onChange={onChangeEmployee}
+							hasExtra
 						/>
 						<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 					</Form>

@@ -11,30 +11,30 @@ import { ButtonProps } from 'antd/es/button'
 import { isPristine } from 'redux-form'
 
 // assets
-import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon-16.svg'
-import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-16.svg'
-import { ReactComponent as DotsIcon } from '../../../assets/icons/more-info-horizontal-icon.svg'
-import { ReactComponent as MessageIcon } from '../../../assets/icons/message-icon-16-thin.svg'
-import { ReactComponent as ChevronDown } from '../../../assets/icons/chevron-down.svg'
-import { ReactComponent as NoteIcon } from '../../../assets/icons/note-icon.svg'
-import { ReactComponent as DollarIcon } from '../../../assets/icons/dollar.svg'
-import { ReactComponent as CrossedIcon } from '../../../assets/icons/crossed-red-16.svg'
+import { ReactComponent as EditIcon } from '../../../../assets/icons/edit-icon-16.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon-16.svg'
+import { ReactComponent as DotsIcon } from '../../../../assets/icons/more-info-horizontal-icon.svg'
+import { ReactComponent as MessageIcon } from '../../../../assets/icons/message-icon-16-thin.svg'
+import { ReactComponent as ChevronDown } from '../../../../assets/icons/chevron-down.svg'
+import { ReactComponent as NoteIcon } from '../../../../assets/icons/note-icon.svg'
+import { ReactComponent as DollarIcon } from '../../../../assets/icons/dollar.svg'
+import { ReactComponent as CrossedIcon } from '../../../../assets/icons/crossed-red-16.svg'
 
 // components
-import UserAvatar from '../../../components/AvatarComponents'
-import Ellipsis from '../../../atoms/Ellipsis'
+import UserAvatar from '../../../../components/AvatarComponents'
+import Ellipsis from '../../../../atoms/Ellipsis'
 
 // types
-import { RootState } from '../../../reducers'
-import { CalendarEvent, ICalendarReservationPopover } from '../../../types/interfaces'
+import { RootState } from '../../../../reducers'
+import { CalendarEvent, ICalendarReservationPopover } from '../../../../types/interfaces'
 
 /// utils
-import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, FORM, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE, STRINGS } from '../../../utils/enums'
-import { getAssignedUserLabel, getCountryPrefix, translateReservationPaymentMethod, translateReservationState } from '../../../utils/helper'
-import { parseTimeFromMinutes, getTimeText } from '../calendarHelpers'
+import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, FORM, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE, STRINGS } from '../../../../utils/enums'
+import { getAssignedUserLabel, getCountryPrefix, translateReservationPaymentMethod, translateReservationState } from '../../../../utils/helper'
+import { parseTimeFromMinutes, getTimeText } from '../../calendarHelpers'
 
 // hooks
-import useKeyUp from '../../../hooks/useKeyUp'
+import useKeyUp from '../../../../hooks/useKeyUp'
 
 type PopoverNote = {
 	key: string

@@ -28,7 +28,7 @@ const SalonsImportForm: FC<Props> = (props) => {
 			<Field
 				component={FileUploadField}
 				name={'file'}
-				label={t('loc:Vyberte súbor vo formáte .xls/.xlsx')}
+				label={t('loc:Vyberte súbor vo formáte .xlsx')}
 				accept={'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel'}
 				maxCount={1}
 				type={'file'}

@@ -50,7 +50,7 @@ const data = [
 			},
 			{
 				name: LIST_OF_TESTS_SUITS.USER_CRUD,
-				actions: [CRUD_OPERATIONS.READ]
+				actions: []
 			}
 		]
 	}

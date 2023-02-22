@@ -56,6 +56,4 @@ const data = [
 	}
 ]
 
-// { name: CRUD_OPERATIONS.READ, result: OPERATION_RESULT.FAILED }
-
 export default data

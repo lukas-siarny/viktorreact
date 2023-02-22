@@ -1,11 +1,12 @@
-import { CREATE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
-
-// fixtures
-import cosmetics from '../../fixtures/cosmetics.json'
-import { CRUD_OPERATIONS } from '../../enums'
 import { loginViaApi } from '../../support/e2e'
 
-const cosmeticsTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
+import cosmetics from '../../fixtures/cosmetics.json'
+
+// enums
+import { CREATE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
+import { CRUD_OPERATIONS } from '../../enums'
+
+const cosmeticsCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
 	let cosmeticsID: any
 
 	before(() => {
@@ -103,4 +104,4 @@ const cosmeticsTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?
 	})
 }
 
-export default cosmeticsTestSuit
+export default cosmeticsCRUDTestSuit

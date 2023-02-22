@@ -1,6 +1,3 @@
-import { SUBMIT_BUTTON_ID, FORM } from '../../../src/utils/enums'
-
-// fixtures
 import user from '../../fixtures/user.json'
 
 // support
@@ -8,6 +5,7 @@ import { generateRandomString } from '../../support/helpers'
 import { loginViaApi } from '../../support/e2e'
 
 // enums
+import { SUBMIT_BUTTON_ID, FORM } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS } from '../../enums'
 
 const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {

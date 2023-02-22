@@ -1,7 +1,8 @@
 export enum LIST_OF_TESTS_SUITS {
 	USER_UPDATE_MY_ACCOUNT = 'updateMyAccountInfo',
 	USER_CRUD = 'userCRUD',
-	COSMETICS_CRUD = 'cosmeticsCRUD'
+	COSMETICS_CRUD = 'cosmeticsCRUD',
+	SPECIALIST_CRUD = 'specialistCRUD'
 }
 
 export enum CRUD_OPERATIONS {

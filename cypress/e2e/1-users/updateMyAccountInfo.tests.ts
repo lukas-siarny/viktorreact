@@ -1,10 +1,8 @@
-import { CYPRESS_CLASS_NAMES, FORM } from '../../../src/utils/enums'
+import { loginViaApi } from '../../support/e2e'
 
-// fixtures
 import user from '../../fixtures/user.json'
 
-// support
-import { loginViaApi } from '../../support/e2e'
+import { CYPRESS_CLASS_NAMES, FORM } from '../../../src/utils/enums'
 
 const updateMyAccountTestSuit = (email?: string, password?: string): void => {
 	before(() => {

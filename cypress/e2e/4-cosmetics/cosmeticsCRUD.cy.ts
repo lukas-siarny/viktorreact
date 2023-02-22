@@ -1,8 +1,7 @@
-import cosmeticsTestSuit from './cosmeticsCRUD.tests'
+import cosmeticsCRUDTestSuit from './cosmeticsCRUD.tests'
 
-// enums
 import { CRUD_OPERATIONS } from '../../enums'
 
 describe('Cosmetics', () => {
-	cosmeticsTestSuit([CRUD_OPERATIONS.ALL])
+	cosmeticsCRUDTestSuit([CRUD_OPERATIONS.ALL])
 })

@@ -5,8 +5,8 @@ import { Divider, Form, Button } from 'antd'
 import { useSelector } from 'react-redux'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, STRINGS } from '../../../utils/enums'
-import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
+import { DELETE_BUTTON_ID, ENUMERATIONS_KEYS, FORM, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { formFieldID, optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // atoms
@@ -100,6 +100,7 @@ const SpecialistContactForm: FC<Props> = (props) => {
 						disabled={submitting || pristine}
 						loading={submitting}
 						icon={specialistContactID ? <EditIcon /> : <CreateIcon />}
+						id={formFieldID(FORM.SPECIALIST_CONTACT, SUBMIT_BUTTON_ID)}
 					>
 						{specialistContactID ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:špecialistu'))}
 					</Button>
@@ -110,6 +111,7 @@ const SpecialistContactForm: FC<Props> = (props) => {
 							type={'default'}
 							className='w-full xl:w-auto xl:min-w-40'
 							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+							id={formFieldID(FORM.SPECIALIST_CONTACT, DELETE_BUTTON_ID)}
 						/>
 					)}
 				</div>

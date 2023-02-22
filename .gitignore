@@ -19,5 +19,6 @@ notino_backend
 
 src/styles/main.css
 src/styles/tailwind-variables.sass
+notino_backend
 
 cypress/videos/*

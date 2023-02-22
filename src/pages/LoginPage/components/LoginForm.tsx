@@ -11,8 +11,8 @@ import InputField from '../../../atoms/InputField'
 import { ILoginForm } from '../../../types/interfaces'
 
 // utils
-import { FORM } from '../../../utils/enums'
-import { showErrorNotification } from '../../../utils/helper'
+import { FORM, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { formFieldID, showErrorNotification } from '../../../utils/helper'
 
 // validate
 
@@ -47,7 +47,15 @@ const LoginForm: FC<Props> = (props) => {
 				</Button>
 			</Row>
 			<div className='mt-6'>
-				<Button type={'primary'} block className={`noti-btn m-regular mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
+				<Button
+					id={formFieldID(FORM.LOGIN, SUBMIT_BUTTON_ID)}
+					type={'primary'}
+					block
+					className={`noti-btn m-regular mb-4`}
+					htmlType={'submit'}
+					disabled={submitting}
+					loading={submitting}
+				>
 					{t('loc:Prihlásiť sa')}
 				</Button>
 				<span className='flex items-center md:justify-center text-notino-black font-medium'>

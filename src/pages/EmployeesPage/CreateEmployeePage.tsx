@@ -9,9 +9,9 @@ import { useNavigate } from 'react-router-dom'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { PERMISSION, FORM } from '../../utils/enums'
+import { PERMISSION, FORM, SUBMIT_BUTTON_ID } from '../../utils/enums'
 import { postReq } from '../../utils/request'
-import { filterSalonRolesByPermission } from '../../utils/helper'
+import { filterSalonRolesByPermission, formFieldID } from '../../utils/helper'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -157,6 +157,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 					<EmployeeForm salonID={salonID} onSubmit={createEmployee} />
 					<Row justify={'center'}>
 						<Button
+							id={formFieldID(FORM.EMPLOYEE, SUBMIT_BUTTON_ID)}
 							type={'primary'}
 							size={'middle'}
 							icon={<CreateIcon />}

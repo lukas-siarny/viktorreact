@@ -20,7 +20,7 @@ import SalonHistory from './components/SalonHistory'
 import SalonApprovalModal from './components/modals/SalonApprovalModal'
 
 // enums
-import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_STATES, STRINGS, TAB_KEYS, SALON_CREATE_TYPE } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_STATES, STRINGS, TAB_KEYS, SALON_CREATE_TYPE, SUBMIT_BUTTON_ID } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -290,6 +290,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
 			render={(hasPermission, { openForbiddenModal }) => (
 				<Button
+					id={formFieldID(FORM.SALON, SUBMIT_BUTTON_ID)}
 					type={'primary'}
 					icon={<EditIcon />}
 					size={'middle'}

@@ -22,6 +22,9 @@ context('User', () => {
 		cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.updateMyAccount.firstName, false, true)
 		cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.updateMyAccount.lastName, false, true)
 		cy.setInputValue(FORM.USER_ACCOUNT, 'phone', user.updateMyAccount.phone, false, true)
+		// TODO: tento test pada, pretoze submit button je disabled z nejakeho dovodu, aj ked by nemal byt
+		// zatial workaround ze sa zavola submit nad formom
+		// cy.clickButton(SUBMIT_BUTTON_ID, FORM.USER_ACCOUNT)
 		cy.get('form').submit()
 		cy.checkSuccessToastMessage()
 	})

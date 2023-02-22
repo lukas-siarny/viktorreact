@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { Modal, Collapse, Row, Spin } from 'antd'
+import { Modal, Collapse, Spin } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { Field } from 'redux-form'
 

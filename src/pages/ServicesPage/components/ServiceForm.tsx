@@ -22,8 +22,8 @@ import ServiceBreadcrumbs from './ServiceBreadcrumbs'
 import validateServiceForm from './validateServiceForm'
 
 // utils
-import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
-import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, STRINGS } from '../../../utils/enums'
+import { formFieldID, showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { DELETE_BUTTON_ID, FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import searchWrapper from '../../../utils/filters'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
@@ -308,15 +308,16 @@ const ServiceForm: FC<Props> = (props) => {
 											name={'employee'}
 											optionLabelProp={'label'}
 											onSearch={searchEmployees}
-											filterOption={true}
-											options={employees?.options}
+											filterOption={false}
 											mode={'multiple'}
 											showSearch
 											allowInfinityScroll
+											onDidMountSearch
 											disabled={!hasPermission}
 											tooltipSelect={!hasPermission ? t('loc:Pre túto akciu nemáte dostatočné oprávnenia.') : null}
 										/>
 										<Button
+											id={`${FORM.SERVICE_FORM}-add-employee`}
 											type={'primary'}
 											size={'middle'}
 											className={'self-start noti-btn m-regular md:mt-5'}
@@ -345,6 +346,7 @@ const ServiceForm: FC<Props> = (props) => {
 														onConfirm={onConfirmDelete}
 														entityName={t('loc:službu')}
 														permissions={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_DELETE]}
+														id={formFieldID(FORM.SERVICE_FORM, DELETE_BUTTON_ID)}
 													/>
 												) : null}
 
@@ -355,6 +357,7 @@ const ServiceForm: FC<Props> = (props) => {
 													icon={serviceID ? <EditIcon /> : <CreateIcon />}
 													disabled={submitting || pristine}
 													loading={submitting}
+													id={formFieldID(FORM.SERVICE_FORM, SUBMIT_BUTTON_ID)}
 												>
 													{serviceID ? STRINGS(t).save(t('loc:službu')) : STRINGS(t).createRecord(t('loc:službu'))}
 												</Button>

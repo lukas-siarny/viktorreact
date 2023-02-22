@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Avatar, Popover } from 'antd'
 import { AvatarProps, GroupProps } from 'antd/lib/avatar'
 import { SizeContextProvider } from 'antd/lib/avatar/SizeContext'
@@ -12,6 +12,7 @@ type UserAvatarProps = AvatarProps & {
 
 const UserAvatar = (props: UserAvatarProps) => {
 	const { alt, gap, icon, shape, size, src, srcSet, draggable, crossOrigin, onError, text, className, fallBackSrc, style } = props
+	const [loadError, setLoadError] = useState<boolean>(false)
 
 	return (
 		<>
@@ -23,15 +24,16 @@ const UserAvatar = (props: UserAvatarProps) => {
 					icon={icon}
 					shape={shape}
 					size={size}
-					src={src}
+					src={loadError ? fallBackSrc : src}
 					srcSet={srcSet}
 					draggable={draggable}
 					crossOrigin={crossOrigin}
-					onError={onError}
+					onError={() => {
+						setLoadError(true)
+						return true
+					}}
 					style={style}
-				>
-					<img src={fallBackSrc} alt={'avatar'} />
-				</Avatar>
+				/>
 			) : (
 				<Avatar
 					className={className}

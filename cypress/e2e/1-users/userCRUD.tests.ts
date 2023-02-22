@@ -1,4 +1,4 @@
-import { CYPRESS_CLASS_NAMES, FORM } from '../../../src/utils/enums'
+import { CYPRESS_CLASS_NAMES, SUBMIT_BUTTON_ID, FORM } from '../../../src/utils/enums'
 
 // fixtures
 import user from '../../fixtures/user.json'
@@ -12,8 +12,7 @@ import { CRUD_OPERATIONS } from '../../enums'
 
 const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
 	// test id of user
-	// let userID = '0000000-0000-0000-0000-000000000009'
-	let userID = 'd2bba937-4e61-4ee0-942a-e85368e8d0d8'
+	let userID = ''
 
 	before(() => {
 		loginViaApi(email, password)
@@ -34,9 +33,9 @@ const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?:
 		cy.get('.noti-my-account').click()
 		cy.get(`.${CYPRESS_CLASS_NAMES.MY_ACCOUNT_BUTTON}`).click()
 		cy.location('pathname').should('eq', '/my-account')
-		cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.firstName, false, true)
-		cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.lastName, false, true)
-		cy.setInputValue(FORM.USER_ACCOUNT, 'phone', user.phone, false, true)
+		cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.updateMyAccount.firstName, false, true)
+		cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.updateMyAccount.lastName, false, true)
+		cy.setInputValue(FORM.USER_ACCOUNT, 'phone', user.updateMyAccount.phone, false, true)
 		cy.get('form').submit()
 		cy.checkSuccessToastMessage()
 	})
@@ -48,10 +47,10 @@ const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?:
 		}).as('createPartner')
 		cy.visit('/users/create')
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
-			cy.setInputValue(FORM.ADMIN_CREATE_USER, 'email', `${generateRandomString(6)}_${user.emailSuffix}`)
-			cy.setInputValue(FORM.ADMIN_CREATE_USER, 'phone', user.phone)
+			cy.setInputValue(FORM.ADMIN_CREATE_USER, 'email', `${generateRandomString(6)}_${user.create.emailSuffix}`)
+			cy.setInputValue(FORM.ADMIN_CREATE_USER, 'phone', user.create.phone)
 			cy.selectOptionDropdown(FORM.ADMIN_CREATE_USER, 'roleID', 'Partner')
-			cy.get('form').submit()
+			cy.clickButton(SUBMIT_BUTTON_ID, FORM.ADMIN_CREATE_USER)
 			cy.wait('@createPartner').then((interception: any) => {
 				// check status code of login request
 				expect(interception.response.statusCode).to.equal(200)
@@ -69,17 +68,26 @@ const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?:
 		cy.visit(`/users/${userID}`)
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
 			cy.intercept({
+				method: 'GET',
+				url: `/api/b2b/admin/users/${userID}`
+			}).as('getUser')
+			cy.intercept({
 				method: 'PATCH',
 				url: `/api/b2b/admin/users/${userID}`
 			}).as('updateUser')
-			cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.firstName, false, true)
-			cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.lastName, false, true)
-			cy.get(`#${FORM.USER_ACCOUNT}-form`).submit()
-			cy.wait('@updateUser').then((interception: any) => {
-				// check status code of login request
-				expect(interception.response.statusCode).to.equal(200)
-				// check conf toast message
-				cy.checkSuccessToastMessage()
+			cy.wait('@getUser').then((interceptorGetUser: any) => {
+				// check status code of get user detail data request
+				expect(interceptorGetUser.response.statusCode).to.equal(200)
+				cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.update.firstName, false, true)
+				cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.update.lastName, false, true)
+				cy.setInputValue(FORM.USER_ACCOUNT, 'phone', user.update.phone, false, true)
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.USER_ACCOUNT)
+				cy.wait('@updateUser').then((interception: any) => {
+					// check status code of login request
+					expect(interception.response.statusCode).to.equal(200)
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+				})
 			})
 		} else {
 			cy.intercept({
@@ -97,18 +105,26 @@ const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?:
 
 	it('Delete partner', () => {
 		cy.intercept({
+			method: 'GET',
+			url: `/api/b2b/admin/users/${userID}`
+		}).as('getUser')
+		cy.intercept({
 			method: 'DELETE',
 			url: `/api/b2b/admin/users/${userID}`
 		}).as('deleteUser')
 		cy.visit(`/users/${userID}`)
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
-			cy.clickDeleteButtonWithConfCustom(FORM.USER_ACCOUNT)
-			cy.wait('@deleteUser').then((interception: any) => {
-				// check status code
-				expect(interception.response.statusCode).to.equal(200)
-				// check conf toast message
-				cy.checkSuccessToastMessage()
-				cy.location('pathname').should('eq', `/users`)
+			cy.wait('@getUser').then((interceptorGetUser: any) => {
+				// check status code of login request
+				expect(interceptorGetUser.response.statusCode).to.equal(200)
+				cy.clickDeleteButtonWithConfCustom(FORM.USER_ACCOUNT)
+				cy.wait('@deleteUser').then((interception: any) => {
+					// check status code
+					expect(interception.response.statusCode).to.equal(200)
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+					cy.location('pathname').should('eq', `/users`)
+				})
 			})
 		} else {
 			// TODO - remove check for forbidden modal

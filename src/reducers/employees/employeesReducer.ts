@@ -9,6 +9,7 @@ export const initState = {
 	employees: {
 		data: null,
 		options: [],
+		tableData: [],
 		isLoading: false,
 		isFailure: false
 	} as IEmployeesPayload & ILoadingAndFailure,
@@ -45,7 +46,16 @@ export default (state = initState, action: IEmployeesActions) => {
 				employees: {
 					...initState.employees,
 					data: action.payload.data,
+					tableData: action.payload.tableData,
 					options: action.payload.options
+				}
+			}
+		case EMPLOYEES.EMPLOYEES_REORDER:
+			return {
+				...state,
+				employees: {
+					...state.employees,
+					tableData: action.payload.tableData
 				}
 			}
 		// Employee

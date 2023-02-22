@@ -1027,22 +1027,26 @@ span.ant-tag
 			content: ''
 			display: block
 			width: 16px
-			height: 16px
-			margin-top: 4px
+			height: 21px
+			display: flex
+			align-items: center
 			flex: 0 0 auto
+			background-size: contain
+			background-repeat: no-repeat
+			background-position: center center
 		&.phone-list-item
 			&::before
-				background: url("../assets/icons/phone-icon-16.svg") no-repeat center center
+				background-image: url("../assets/icons/phone-icon-16.svg")
 		&.email-list-item
 			&::before
-				background: url("../assets/icons/message-icon-16-thin.svg") no-repeat center center
+				background-image: url("../assets/icons/message-icon-16-thin.svg")
 		&.address-list-item
 			&::before
-				background: url("../assets/icons/home-icon-16.svg") no-repeat center center
+				background-image: url("../assets/icons/home-icon-16.svg")
 		&.note-list-item
 			margin-top: 14px
 			&::before
-				background: url("../assets/icons/pencil-icon-16.svg") no-repeat center center
+				background-image: url("../assets/icons/pencil-icon-16.svg")
 
 .noti-opening-hours-table
 	display: flex
@@ -1579,19 +1583,19 @@ li.ant-list-item:hover
 		@media (max-width: 900px)
 			.noti-opening-hours-ranges
 				flex-direction: column
-	.ant-picker-dropdown
-		.ant-picker-time-panel-column
-			> li.ant-picker-time-panel-cell
-				margin-inline: 0
+.ant-picker-dropdown
+	.ant-picker-time-panel-column
+		> li.ant-picker-time-panel-cell
+			margin-inline: 0
+			.ant-picker-time-panel-cell-inner
+				width: 100%
+			&.ant-picker-time-panel-cell-selected
 				.ant-picker-time-panel-cell-inner
-					width: 100%
-				&.ant-picker-time-panel-cell-selected
-					.ant-picker-time-panel-cell-inner
-						border-radius: 0
-						color: $textColor-notino-white
-						background-color: $backgroundColor-notino-black
-			&.ant-picker-time-panel-column-active
-				background-color: $backgroundColor-notino-grayLight
+					border-radius: 0
+					color: $textColor-notino-white
+					background-color: $backgroundColor-notino-black
+		&.ant-picker-time-panel-column-active
+			background-color: $backgroundColor-notino-grayLight
 
 .service-badge
 	padding: 4px 8px

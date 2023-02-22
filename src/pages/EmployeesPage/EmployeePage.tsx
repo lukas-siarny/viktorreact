@@ -38,7 +38,7 @@ import { Paths } from '../../types/api'
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { DELETE_BUTTON_ID, FORM, PARAMETER_TYPE, PERMISSION } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, PARAMETER_TYPE, PERMISSION, SUBMIT_BUTTON_ID } from '../../utils/enums'
 import {
 	filterSalonRolesByPermission,
 	formFieldID,
@@ -546,6 +546,7 @@ const EmployeePage = (props: Props) => {
 									allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_UPDATE]}
 									render={(hasPermission, { openForbiddenModal }) => (
 										<Button
+											id={formFieldID(FORM.EMPLOYEE, SUBMIT_BUTTON_ID)}
 											type={'primary'}
 											icon={<EditIcon />}
 											size={'middle'}

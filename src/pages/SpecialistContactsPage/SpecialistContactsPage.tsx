@@ -15,7 +15,7 @@ import SpecialistContactForm from './components/SpecialistContactsForm'
 import SpecialistContactFilter from './components/SpecialistContactsFilter'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, LANGUAGE } from '../../utils/enums'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, LANGUAGE, CREATE_BUTTON_ID } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { getPrefixCountryCode, getCountryNameFromNameLocalizations, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
@@ -250,6 +250,7 @@ const SpecialistContactsPage = () => {
 										htmlType='button'
 										className={'noti-btn'}
 										icon={<PlusIcon />}
+										id={`${CREATE_BUTTON_ID}-${FORM.SPECIALIST_CONTACT}`}
 									>
 										{STRINGS(t).addRecord(t('loc:špecialistu'))}
 									</Button>

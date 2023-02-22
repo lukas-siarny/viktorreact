@@ -6,12 +6,12 @@ import { parse } from 'node-html-parser'
 import { generateRandomString } from '../../support/helpers'
 
 // utils
-import { CYPRESS_CLASS_NAMES, FORM } from '../../../src/utils/enums'
+import { CYPRESS_CLASS_NAMES, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 
 import user from '../../fixtures/user.json'
 
 context('Auth', () => {
-	const userEmail = `${generateRandomString(5)}_${user.emailSuffix}`
+	const userEmail = `${generateRandomString(5)}_${user.create.emailSuffix}`
 
 	it('Sign up', () => {
 		cy.intercept({
@@ -20,11 +20,11 @@ context('Auth', () => {
 		}).as('registration')
 		cy.visit('/signup')
 		cy.setInputValue(FORM.REGISTRATION, 'email', userEmail)
-		cy.setInputValue(FORM.REGISTRATION, 'password', user.password)
-		cy.setInputValue(FORM.REGISTRATION, 'phone', user.phone)
+		cy.setInputValue(FORM.REGISTRATION, 'password', user.create.password)
+		cy.setInputValue(FORM.REGISTRATION, 'phone', user.create.phone)
 		cy.clickButton('gdpr', FORM.REGISTRATION, true)
 		cy.clickButton('marketing', FORM.REGISTRATION, true)
-		cy.get('form').submit()
+		cy.clickButton(SUBMIT_BUTTON_ID, FORM.REGISTRATION)
 		cy.wait('@registration').then((interception: any) => {
 			// check status code of registration request
 			expect(interception.response.statusCode).to.equal(200)
@@ -51,7 +51,7 @@ context('Auth', () => {
 					url: '/api/b2b/admin/users/activation'
 				}).as('activation')
 				cy.setValuesForPinField(FORM.ACTIVATION, 'code', htmlTag.text)
-				cy.get('form').submit()
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.REGISTRATION)
 				cy.wait('@activation').then((interception: any) => {
 					// check status code of registration request
 					expect(interception.response.statusCode).to.equal(200)
@@ -90,8 +90,8 @@ context('Auth', () => {
 		}).as('authLogin')
 		cy.visit('/login')
 		cy.setInputValue(FORM.LOGIN, 'email', userEmail)
-		cy.setInputValue(FORM.LOGIN, 'password', user.password)
-		cy.get('form').submit()
+		cy.setInputValue(FORM.LOGIN, 'password', user.create.password)
+		cy.clickButton(SUBMIT_BUTTON_ID, FORM.LOGIN)
 		cy.wait('@authLogin').then((interception: any) => {
 			// check status code of login request
 			expect(interception.response.statusCode).to.equal(200)

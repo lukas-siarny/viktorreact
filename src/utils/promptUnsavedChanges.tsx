@@ -9,7 +9,7 @@ import { RootState } from '../reducers'
 // eslint-disable-next-line import/prefer-default-export
 export const withPromptUnsavedChanges = (WrappedComponent: any): any => {
 	const WithPrompt = (props: any) => {
-		const { form } = props
+		const { form, submitting } = props
 		const [t] = useTranslation()
 		const message = t('loc:Chcete zahodiť vykonané zmeny?')
 		const formState: any = useSelector((state: RootState) => state.form?.[form])
@@ -20,7 +20,7 @@ export const withPromptUnsavedChanges = (WrappedComponent: any): any => {
 			dirty = JSON.stringify(initial) !== JSON.stringify(values)
 		}
 
-		unstable_usePrompt({ when: dirty, message })
+		unstable_usePrompt({ when: dirty && !submitting, message })
 
 		return <WrappedComponent {...props} />
 	}

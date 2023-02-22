@@ -112,8 +112,8 @@ const SalonForm: FC<Props> = (props) => {
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 
 	const searchCosmetics = useCallback(
-		async (search: string) => {
-			return searchWrapper(dispatch, { search }, FILTER_ENTITY.COSMETICS)
+		async (search: string, page: string) => {
+			return searchWrapper(dispatch, { search, limit: 100, page }, FILTER_ENTITY.COSMETICS)
 		},
 		[dispatch]
 	)
@@ -203,7 +203,6 @@ const SalonForm: FC<Props> = (props) => {
 						/>
 						<Field
 							component={SelectField}
-							options={cosmetics.options}
 							label={t('loc:Kozmetika')}
 							placeholder={t('loc:Vyberte kozmetiku')}
 							name={'cosmeticIDs'}
@@ -216,6 +215,8 @@ const SalonForm: FC<Props> = (props) => {
 							mode={'multiple'}
 							disabled={disabledForm}
 							allowClear
+							allowInfinityScroll
+							onDidMountSearch
 						/>
 						<Field
 							component={ImgUploadField}
@@ -260,6 +261,10 @@ const SalonForm: FC<Props> = (props) => {
 							size={'large'}
 							disabled={disabledForm}
 						/>
+					</Col>
+				</Row>
+				<Row>
+					<Col span={24}>
 						<h3 className={'mb-0 flex items-center'}>
 							<LocationIcon width={20} height={20} className={'text-notino-black mr-2'} />
 							{t('loc:Adresa')}

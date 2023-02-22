@@ -1,12 +1,24 @@
 {
-	"emailSuffix": "test@goodrequest.com",
-	"password": "Test 123.",
-	"phone": "956520900",
-	"firstName": "Martin",
-	"lastName": "Testovic",
-	"companyName": "Test s.r.o.",
-	"businessID": "01234567",
-	"street": "Teslova 23",
-	"city": "Bratislava",
-	"zipCode": "84107"
+	"create": {
+		"emailSuffix": "test@goodrequest.com",
+		"password": "Test 123.",
+		"phone": "956520900",
+		"firstName": "Martin",
+		"lastName": "Testovic",
+		"companyName": "Test s.r.o.",
+		"businessID": "01234567",
+		"street": "Teslova 23",
+		"city": "Bratislava",
+		"zipCode": "84107"
+	},
+	"update": {
+		"firstName": "Jane",
+		"lastName": "Doe",
+		"phone": "956520901"
+	},
+	"updateMyAccount": {
+		"firstName": "John",
+		"lastName": "Doe",
+		"phone": "956520902"
+	}
 }

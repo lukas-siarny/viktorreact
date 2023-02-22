@@ -14,8 +14,8 @@ import CheckboxGroupNestedField from './CheckboxGroupNestedField'
 import validateIndustryFrom from './validateIndustryFrom'
 
 // utils
-import { FORM, PERMISSION } from '../../../utils/enums'
-import { showErrorNotification } from '../../../utils/helper'
+import { FORM, PERMISSION, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { formFieldID, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
 
@@ -43,6 +43,7 @@ const IndustryForm: FC<Props> = (props) => {
 						allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE, PERMISSION.SERVICE_DELETE]}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Button
+								id={formFieldID(FORM.INDUSTRY, SUBMIT_BUTTON_ID)}
 								type={'primary'}
 								size={'middle'}
 								htmlType={'submit'}

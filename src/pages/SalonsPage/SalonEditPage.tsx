@@ -20,7 +20,7 @@ import SalonHistory from './components/SalonHistory'
 import SalonApprovalModal from './components/modals/SalonApprovalModal'
 
 // enums
-import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_STATES, STRINGS, TAB_KEYS, SALON_CREATE_TYPE } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_STATES, STRINGS, TAB_KEYS, SALON_CREATE_TYPE, SUBMIT_BUTTON_ID } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -290,6 +290,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
 			render={(hasPermission, { openForbiddenModal }) => (
 				<Button
+					id={formFieldID(FORM.SALON, SUBMIT_BUTTON_ID)}
 					type={'primary'}
 					icon={<EditIcon />}
 					size={'middle'}
@@ -333,7 +334,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 				<Button
 					type={'dashed'}
 					size={'middle'}
-					icon={<EyeoffIcon />}
+					icon={<EyeoffIcon color={'#000'} />}
 					className={cx('noti-btn m-regular w-full md:w-auto md:min-w-45 xl:min-w-60', className)}
 					onClick={(e) => {
 						if (hasPermission) {
@@ -360,7 +361,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	const requestApprovalButton = (className = '') => {
 		const disabled = isLoading || isDeletedSalon || (!isFormPristine && !isPendingPublication && (!isPublished || isBasic))
 
-		// / Workaround for disabled button inside tooltip: https://github.com/react-component/tooltip/issues/18
+		// Workaround for disabled button inside tooltip: https://github.com/react-component/tooltip/issues/18
 		return (
 			<Tooltip
 				title={disabled ? t('loc:V sálone boli vykonané zmeny, ktoré nie sú uložené. Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.') : null}

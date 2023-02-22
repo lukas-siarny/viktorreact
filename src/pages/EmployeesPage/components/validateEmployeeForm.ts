@@ -1,9 +1,12 @@
 import i18next from 'i18next'
 import { isEmail } from 'lodash-checkit'
-import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { FormErrors } from 'redux-form'
 
-export default (values: any) => {
-	const errors: any = {}
+import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { IEmployeeForm } from '../../../types/interfaces'
+
+export default (values: IEmployeeForm) => {
+	const errors: FormErrors<IEmployeeForm> = {}
 
 	if (!values?.lastName) {
 		errors.lastName = i18next.t('loc:Toto pole je povinné')

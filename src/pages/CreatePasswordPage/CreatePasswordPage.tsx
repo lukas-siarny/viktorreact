@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 // components
@@ -14,13 +14,16 @@ import { processAuthorizationResult } from '../../reducers/users/userActions'
 // utils
 import { postReq } from '../../utils/request'
 
-type Props = {
-	token?: string
-}
+// hooks
+import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
 
-const CreatePasswordPage: FC<Props> = (props) => {
+const CreatePasswordPage = () => {
 	const [modalVisible, setModalVisible] = useState(false)
 	const dispatch = useDispatch()
+	const [query] = useQueryParams({
+		t: StringParam()
+	})
+
 	const handleSubmit = async (values: ICreatePasswordForm) => {
 		try {
 			const input = {
@@ -29,7 +32,7 @@ const CreatePasswordPage: FC<Props> = (props) => {
 
 			const config = {
 				headers: {
-					Authorization: `Bearer ${props.token}`
+					Authorization: `Bearer ${query.t}`
 				}
 			}
 

@@ -14,7 +14,6 @@ import { getPrefixCountryCode } from '../../utils/helper'
 import { ENUMERATIONS_KEYS, FORM, NEW_SALON_ID, PERMISSION } from '../../utils/enums'
 
 // reducers
-import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
 import { getSalonLanguages } from '../../reducers/languages/languagesActions'
 
 // types
@@ -52,7 +51,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		dispatch(getSalonLanguages())
-		dispatch(getCosmetics())
 	}, [dispatch])
 
 	const commonProps: SalonPageProps = {

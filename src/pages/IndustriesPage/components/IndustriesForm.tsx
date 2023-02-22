@@ -13,9 +13,9 @@ import { getServicesCategoryKeys } from '../IndustryPage'
 import validateCategoryFrom from './validateIndustriesFrom'
 
 // utils
-import { FORM, PERMISSION } from '../../../utils/enums'
+import { FORM, PERMISSION, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
-import { showErrorNotification } from '../../../utils/helper'
+import { formFieldID, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // redux
@@ -64,7 +64,7 @@ const IndustriesForm: FC<Props> = (props) => {
 	})
 
 	return (
-		<Form id={`${FORM.INDUSTRIES}-form`} layout={'vertical'} className={'form w-full'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form w-full'} onSubmitCapture={handleSubmit}>
 			<h3 className={'mb-0 mt-0 flex items-center space-'}>
 				<CategoryIcon className={'text-notino-black mr-2'} />
 				{t('loc:Odvetvia a služby')}
@@ -77,6 +77,7 @@ const IndustriesForm: FC<Props> = (props) => {
 						allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Button
+								id={formFieldID(FORM.INDUSTRIES, SUBMIT_BUTTON_ID)}
 								type={'primary'}
 								size={'middle'}
 								icon={<EditIcon />}

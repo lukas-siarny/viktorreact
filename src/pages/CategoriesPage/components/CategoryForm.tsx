@@ -26,7 +26,7 @@ import validateCategoryFrom from './validateCategoryFrom'
 
 // utils
 import { validationString, checkUploadingBeforeSubmit, formFieldID } from '../../../utils/helper'
-import { DELETE_BUTTON_ID, FORM, PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, PERMISSION, STRINGS, SUBMIT_BUTTON_ID, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -108,12 +108,7 @@ const CategoryForm: FC<Props> = (props) => {
 	}
 
 	return (
-		<Form
-			id={`${FORM.CATEGORY}-form`}
-			layout={'vertical'}
-			className={'w-full top-0 sticky overflow-hidden pt-1 px-6 pb-6 -mx-6'}
-			onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}
-		>
+		<Form layout={'vertical'} className={'w-full top-0 sticky overflow-hidden pt-1 px-6 pb-6 -mx-6'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<Spin wrapperClassName={'w-full'} spinning={category.isLoading || categoriesParameters.isLoading}>
 				<Col className={'flex'}>
 					<Row className={'w-full h-full block'} justify='center'>
@@ -238,6 +233,7 @@ const CategoryForm: FC<Props> = (props) => {
 											disabled={submitting || pristine}
 											loading={submitting}
 											icon={values?.id ? <EditIcon /> : <CreateIcon />}
+											id={formFieldID(FORM.CATEGORY, SUBMIT_BUTTON_ID)}
 										>
 											{values?.id ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:kategóriu'))}
 										</Button>

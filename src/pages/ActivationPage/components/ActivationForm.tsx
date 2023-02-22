@@ -10,7 +10,8 @@ import PinField from '../../../atoms/PinField'
 import { IActivationForm } from '../../../types/interfaces'
 
 // utils
-import { FORM } from '../../../utils/enums'
+import { FORM, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { formFieldID } from '../../../utils/helper'
 
 // validate
 import validateActivationForm, { PIN_LENGTH } from './validateActivationForm'
@@ -31,7 +32,16 @@ const ActivationForm: FC<Props> = (props) => {
 		<Form onSubmitCapture={handleSubmit}>
 			<Space className={'w-full'} direction={'vertical'} size={16}>
 				<Field component={PinField} name={'code'} length={PIN_LENGTH} formatPin={(char: string) => (char ? char.toUpperCase() : char)} />
-				<Button type={'primary'} block size={'large'} className={`noti-btn m-regular mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
+				<Button
+					id={formFieldID(FORM.ACTIVATION, SUBMIT_BUTTON_ID)}
+					type={'primary'}
+					block
+					size={'large'}
+					className={`noti-btn m-regular mb-4`}
+					htmlType={'submit'}
+					disabled={submitting}
+					loading={submitting}
+				>
 					{t('loc:Aktivovať')}
 				</Button>
 			</Space>

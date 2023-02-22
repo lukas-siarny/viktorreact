@@ -23,7 +23,7 @@ import validateServiceForm from './validateServiceForm'
 
 // utils
 import { formFieldID, showErrorNotification, validationNumberMin } from '../../../utils/helper'
-import { DELETE_BUTTON_ID, FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, STRINGS } from '../../../utils/enums'
+import { DELETE_BUTTON_ID, FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import searchWrapper from '../../../utils/filters'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
@@ -99,7 +99,7 @@ const ServiceForm: FC<Props> = (props) => {
 			render={(hasPermission) => (
 				<div className='content-body small'>
 					<Spin spinning={isLoading}>
-						<Form id={`${FORM.SERVICE_FORM}-form`} layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
+						<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
 							<ServiceBreadcrumbs
 								wrapperClassname={'mb-4'}
 								breadcrumbs={[
@@ -357,6 +357,7 @@ const ServiceForm: FC<Props> = (props) => {
 													icon={serviceID ? <EditIcon /> : <CreateIcon />}
 													disabled={submitting || pristine}
 													loading={submitting}
+													id={formFieldID(FORM.SERVICE_FORM, SUBMIT_BUTTON_ID)}
 												>
 													{serviceID ? STRINGS(t).save(t('loc:službu')) : STRINGS(t).createRecord(t('loc:službu'))}
 												</Button>

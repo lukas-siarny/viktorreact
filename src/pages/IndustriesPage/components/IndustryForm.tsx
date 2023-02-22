@@ -14,8 +14,8 @@ import CheckboxGroupNestedField from './CheckboxGroupNestedField'
 import validateIndustryFrom from './validateIndustryFrom'
 
 // utils
-import { FORM, PERMISSION } from '../../../utils/enums'
-import { showErrorNotification } from '../../../utils/helper'
+import { FORM, PERMISSION, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { formFieldID, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
 
@@ -35,7 +35,7 @@ const IndustryForm: FC<Props> = (props) => {
 	const { handleSubmit, submitting, pristine, dataTree, disabledForm, isLoadingTree } = props
 
 	return (
-		<Form id={`${FORM.INDUSTRY}-form`} layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			{!isLoadingTree && <Field name={'categoryIDs'} component={CheckboxGroupNestedField} dataTree={dataTree} disabled={disabledForm} />}
 			<div className={'content-footer'}>
 				<Row justify='center'>
@@ -43,6 +43,7 @@ const IndustryForm: FC<Props> = (props) => {
 						allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE, PERMISSION.SERVICE_DELETE]}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Button
+								id={formFieldID(FORM.INDUSTRY, SUBMIT_BUTTON_ID)}
 								type={'primary'}
 								size={'middle'}
 								htmlType={'submit'}

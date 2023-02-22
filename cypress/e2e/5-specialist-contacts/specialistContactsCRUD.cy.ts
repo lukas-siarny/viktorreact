@@ -1,4 +1,4 @@
-import { CREATE_BUTTON_ID, FORM } from '../../../src/utils/enums'
+import { CREATE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 
 // fixtures
 import specialistContact from '../../fixtures/specialist-contact.json'
@@ -26,7 +26,7 @@ describe('Specialist contacts', () => {
 		cy.selectOptionDropdownCustom(FORM.SPECIALIST_CONTACT, 'phonePrefixCountryCode', specialistContact.create.phonePrefixCountryCode, true)
 		cy.setInputValue(FORM.SPECIALIST_CONTACT, 'phone', specialistContact.create.phone)
 		cy.setInputValue(FORM.SPECIALIST_CONTACT, 'email', specialistContact.create.email)
-		cy.get(`#${FORM.SPECIALIST_CONTACT}-form`).submit()
+		cy.clickButton(SUBMIT_BUTTON_ID, FORM.SPECIALIST_CONTACT)
 		cy.wait('@createSpecialistContact').then((interception: any) => {
 			// check status code of request
 			expect(interception.response.statusCode).to.equal(200)
@@ -51,7 +51,7 @@ describe('Specialist contacts', () => {
 		cy.selectOptionDropdownCustom(FORM.SPECIALIST_CONTACT, 'phonePrefixCountryCode', specialistContact.update.phonePrefixCountryCode, true)
 		cy.setInputValue(FORM.SPECIALIST_CONTACT, 'phone', specialistContact.update.phone, false, true)
 		cy.setInputValue(FORM.SPECIALIST_CONTACT, 'email', specialistContact.update.email, false, true)
-		cy.get(`#${FORM.SPECIALIST_CONTACT}-form`).submit()
+		cy.clickButton(SUBMIT_BUTTON_ID, FORM.SPECIALIST_CONTACT)
 		cy.wait('@updateSpecialistContact').then((interception: any) => {
 			// check status code of request
 			expect(interception.response.statusCode).to.equal(200)

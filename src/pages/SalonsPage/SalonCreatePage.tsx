@@ -17,7 +17,7 @@ import SpecialistModal from './components/modals/SpecialistModal'
 import { getSalonDataForSubmission, initEmptySalonFormData, initSalonFormData, SalonInitType } from './components/salonUtils'
 
 // enums
-import { FILTER_ENTITY, FORM, PERMISSION, STRINGS } from '../../utils/enums'
+import { FILTER_ENTITY, FORM, PERMISSION, STRINGS, SUBMIT_BUTTON_ID } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -31,6 +31,7 @@ import { CategoriesPatch, IBreadcrumbs, ISalonForm, SalonPageProps } from '../..
 import { patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions, checkPermissions } from '../../utils/Permissions'
 import searchWrapper from '../../utils/filters'
+import { formFieldID } from '../../utils/helper'
 
 // assets
 import { ReactComponent as SpecialistIcon } from '../../assets/icons/specialist-24-icon.svg'
@@ -163,6 +164,7 @@ const SalonCreatePage: FC<SalonPageProps> = (props) => {
 								allowed={permissions}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
+										id={formFieldID(FORM.SALON, SUBMIT_BUTTON_ID)}
 										type={'primary'}
 										size={'middle'}
 										className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}

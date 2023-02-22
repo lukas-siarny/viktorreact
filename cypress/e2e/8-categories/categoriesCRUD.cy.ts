@@ -1,4 +1,4 @@
-import { CREATE_BUTTON_ID, FORM } from '../../../src/utils/enums'
+import { CREATE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 
 // fixtures
 import category from '../../fixtures/category.json'
@@ -30,7 +30,7 @@ describe('Categories', () => {
 			cy.uploadFile('icon', '../images/test.jpg', FORM.CATEGORY)
 			// wait for file to be uploaded
 			cy.wait(2000)
-			cy.get(`#${FORM.CATEGORY}-form`).submit()
+			cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
 			cy.wait('@createCategory').then((interception: any) => {
 				// check status code of request
 				expect(interception.response.statusCode).to.equal(200)
@@ -55,7 +55,7 @@ describe('Categories', () => {
 				cy.get(`.ant-tree-treenode.${industryID} .ant-tree-node-content-wrapper`).click()
 				cy.get(`#${FORM.CATEGORY}-create-subcategory-button`).click()
 				cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.category.create.title)
-				cy.get(`#${FORM.CATEGORY}-form`).submit()
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
 				cy.wait('@createCategory').then((interception: any) => {
 					// check status code of request
 					expect(interception.response.statusCode).to.equal(200)
@@ -84,7 +84,7 @@ describe('Categories', () => {
 				cy.get(`#${FORM.CATEGORY}-create-subcategory-button`).click()
 				cy.selectOptionDropdownCustom(FORM.CATEGORY, 'categoryParameterID')
 				cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.service.create.title)
-				cy.get(`#${FORM.CATEGORY}-form`).submit()
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
 				cy.wait('@createCategory').then((interception: any) => {
 					// check status code of request
 					expect(interception.response.statusCode).to.equal(200)
@@ -103,10 +103,6 @@ describe('Categories', () => {
 				url: '/api/b2b/admin/enums/categories/'
 			}).as('getCategories')
 			cy.intercept({
-				method: 'POST',
-				url: '/api/b2b/admin/enums/categories/'
-			}).as('createCategory')
-			cy.intercept({
 				method: 'PATCH',
 				url: `/api/b2b/admin/enums/categories/${industryID}`
 			}).as('updateCategory')
@@ -116,7 +112,7 @@ describe('Categories', () => {
 				cy.get(`.ant-tree-treenode.${industryID} .ant-tree-node-content-wrapper`).click()
 				cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.industry.update.title, false, true)
 				// TODO: test upload of new images
-				cy.get(`#${FORM.CATEGORY}-form`).submit()
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
 				cy.wait('@updateCategory').then((interceptionUpdateCategory: any) => {
 					// check status code of request
 					expect(interceptionUpdateCategory.response.statusCode).to.equal(200)
@@ -132,10 +128,6 @@ describe('Categories', () => {
 				url: '/api/b2b/admin/enums/categories/'
 			}).as('getCategories')
 			cy.intercept({
-				method: 'POST',
-				url: '/api/b2b/admin/enums/categories/'
-			}).as('createCategory')
-			cy.intercept({
 				method: 'PATCH',
 				url: `/api/b2b/admin/enums/categories/${categoryID}`
 			}).as('updateCategory')
@@ -146,7 +138,7 @@ describe('Categories', () => {
 				cy.wait(200) // wait for the element to be visible
 				cy.get(`.ant-tree-treenode.${categoryID} .ant-tree-node-content-wrapper`).click()
 				cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.category.update.title, false, true)
-				cy.get(`#${FORM.CATEGORY}-form`).submit()
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
 				cy.wait('@updateCategory').then((interception: any) => {
 					// check status code of request
 					expect(interception.response.statusCode).to.equal(200)
@@ -162,10 +154,6 @@ describe('Categories', () => {
 				url: '/api/b2b/admin/enums/categories/'
 			}).as('getCategories')
 			cy.intercept({
-				method: 'POST',
-				url: '/api/b2b/admin/enums/categories/'
-			}).as('createCategory')
-			cy.intercept({
 				method: 'PATCH',
 				url: `/api/b2b/admin/enums/categories/${serviceID}`
 			}).as('updateCategory')
@@ -178,7 +166,7 @@ describe('Categories', () => {
 				cy.wait(200) // wait for the element to be visible
 				cy.get(`.ant-tree-treenode.${serviceID} .ant-tree-node-content-wrapper`).click()
 				cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.service.update.title, false, true)
-				cy.get(`#${FORM.CATEGORY}-form`).submit()
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
 				cy.wait('@updateCategory').then((interception: any) => {
 					// check status code of request
 					expect(interception.response.statusCode).to.equal(200)

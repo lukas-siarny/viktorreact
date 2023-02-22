@@ -15,7 +15,7 @@ import Localizations from '../../../components/Localizations'
 
 // utils
 import { formFieldID, showErrorNotification, validationString } from '../../../utils/helper'
-import { DELETE_BUTTON_ID, FORM, MAX_VALUES_PER_PARAMETER, PARAMETERS_VALUE_TYPES, STRINGS } from '../../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, MAX_VALUES_PER_PARAMETER, PARAMETERS_VALUE_TYPES, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../../components/LanguagePicker'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -201,6 +201,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 						disabled={submitting || pristine}
 						loading={submitting}
 						icon={onDelete ? <EditIcon /> : <PlusIcon />}
+						id={formFieldID(FORM.CATEGORY_PARAMS, SUBMIT_BUTTON_ID)}
 					>
 						{onDelete ? STRINGS(t).save(entityName) : STRINGS(t).createRecord(entityName)}
 					</Button>

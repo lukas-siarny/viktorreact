@@ -383,7 +383,7 @@ export const mapApiConfig: LoadScriptUrlOptions = {
 	// https://react-google-maps-api-docs.netlify.app/#usejsapiloader
 	libraries: ['places'],
 	// eslint-disable-next-line no-underscore-dangle
-	googleMapsApiKey: window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_MAPS_API_KEY
+	googleMapsApiKey: '' // window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_MAPS_API_KEY
 }
 
 export enum SALON_FILTER_STATES {
@@ -563,6 +563,8 @@ export const IMAGE_UPLOADING_PROP = 'imageUploading'
 export const DELETE_BUTTON_ID = 'delete-btn'
 
 export const CREATE_BUTTON_ID = 'create-btn'
+
+export const SUBMIT_BUTTON_ID = 'submit-btn'
 
 export const MAX_VALUES_PER_PARAMETER = 20
 

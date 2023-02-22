@@ -46,6 +46,7 @@ import { RootState } from '../../../../reducers'
 type ComponentProps = {
 	eventId?: string | null
 	searchEmployes: (search: string, page: number) => Promise<any>
+	loadingData?: boolean
 	sidebarView?: CALENDAR_EVENT_TYPE
 }
 
@@ -53,13 +54,13 @@ type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentPr
 const formName = FORM.CALENDAR_EVENT_FORM
 
 const EventForm: FC<Props> = (props) => {
-	const { handleSubmit, eventId, searchEmployes, pristine, submitting, sidebarView } = props
+	const { handleSubmit, eventId, searchEmployes, pristine, submitting, loadingData, sidebarView } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const formValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(formName)(state))
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 	// NOTE: pristine pouzivat len pri UPDATE eventu a pri CREATE povlit akciu vzdy
-	const disabledSubmitButton = !!(eventId && pristine) || submitting
+	const disabledSubmitButton = !!(eventId && pristine) || submitting || loadingData
 
 	const checkboxOptionRender = (option: any, checked?: boolean) => {
 		return <div className={cx('w-5 h-5 flex-center bg-notino-grayLighter rounded', { 'bg-notino-pink': checked, 'text-notino-white': checked })}>{option?.label}</div>
@@ -139,7 +140,7 @@ const EventForm: FC<Props> = (props) => {
 							name={'employee'}
 							size={'large'}
 							optionLabelProp={'label'}
-							update={(itemKey: number, ref: any) => ref.blur()}
+							update={(_itemKey: number, ref: any) => ref.blur()}
 							filterOption={false}
 							allowInfinityScroll
 							showSearch
@@ -148,6 +149,7 @@ const EventForm: FC<Props> = (props) => {
 							className={'pb-0'}
 							labelInValue
 							onSearch={searchEmployes}
+							hasExtra
 						/>
 						<Field
 							name={'date'}

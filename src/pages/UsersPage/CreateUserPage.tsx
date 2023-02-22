@@ -15,10 +15,10 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import { IBreadcrumbs, ICreateUserForm } from '../../types/interfaces'
 
 // utils
-import { FORM, PERMISSION, ENUMERATIONS_KEYS, STRINGS } from '../../utils/enums'
+import { FORM, PERMISSION, ENUMERATIONS_KEYS, STRINGS, SUBMIT_BUTTON_ID } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
-import { getPrefixCountryCode } from '../../utils/helper'
+import { formFieldID, getPrefixCountryCode } from '../../utils/helper'
 
 // reducers
 import { getSystemRoles } from '../../reducers/roles/rolesActions'
@@ -100,6 +100,7 @@ const CreateUserPage = () => {
 					<div className={'content-footer'}>
 						<Row justify='center'>
 							<Button
+								id={formFieldID(FORM.ADMIN_CREATE_USER, SUBMIT_BUTTON_ID)}
 								type={'primary'}
 								size={'middle'}
 								icon={<CreateIcon />}

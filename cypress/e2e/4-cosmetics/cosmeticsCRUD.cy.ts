@@ -1,4 +1,4 @@
-import { CREATE_BUTTON_ID, FORM } from '../../../src/utils/enums'
+import { CREATE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 
 // fixtures
 import cosmetics from '../../fixtures/cosmetics.json'
@@ -23,7 +23,7 @@ describe('Cosmetics', () => {
 		cy.visit('/cosmetics')
 		cy.clickButton(FORM.COSMETIC, CREATE_BUTTON_ID)
 		cy.setInputValue(FORM.COSMETIC, 'name', cosmetics.create.name)
-		cy.get(`#${FORM.COSMETIC}-form`).submit()
+		cy.clickButton(SUBMIT_BUTTON_ID, FORM.COSMETIC)
 		cy.wait('@createCosmetics').then((interception: any) => {
 			// check status code of login request
 			expect(interception.response.statusCode).to.equal(200)
@@ -54,7 +54,7 @@ describe('Cosmetics', () => {
 			expect(getInterception.response.statusCode).to.equal(200)
 			cy.get(`[data-row-key="${cosmeticsID}"]`).click()
 			cy.setInputValue(FORM.COSMETIC, 'name', cosmetics.update.name, false, true)
-			cy.get(`#${FORM.COSMETIC}-form`).submit()
+			cy.clickButton(SUBMIT_BUTTON_ID, FORM.COSMETIC)
 			cy.wait('@updateCosmetics').then((interception: any) => {
 				// check status code of login request
 				expect(interception.response.statusCode).to.equal(200)

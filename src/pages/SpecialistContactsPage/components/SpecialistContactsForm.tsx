@@ -5,7 +5,7 @@ import { Divider, Form, Button } from 'antd'
 import { useSelector } from 'react-redux'
 
 // utils
-import { DELETE_BUTTON_ID, ENUMERATIONS_KEYS, FORM, STRINGS } from '../../../utils/enums'
+import { DELETE_BUTTON_ID, ENUMERATIONS_KEYS, FORM, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { formFieldID, optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -59,9 +59,9 @@ const SpecialistContactForm: FC<Props> = (props) => {
 	}, [countries?.enumerationsOptions, specialistContacts.data, specialistContactID])
 
 	return (
-		<Form id={`${FORM.SPECIALIST_CONTACT}-form`} layout={'vertical'} className={'w-full top-0 sticky overflow-hidden pt-1 px-6 pb-6 -mx-6'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'w-full top-0 sticky overflow-hidden pt-1 px-6 pb-6 -mx-6'} onSubmitCapture={handleSubmit}>
 			<div className={'h-full'}>
-				<h3 className={'form-title mb-0 mt-3 relative pr-7'}>
+				<h3 className={'mb-0 mt-3 relative pr-7'}>
 					{specialistContactID ? t('loc:Upraviť špecialistu') : t('loc:Vytvoriť špecialistu')}
 					<Button className='noti-close-form-btn absolute top-1 right-0' onClick={() => closeForm()}>
 						<CloseIcon />
@@ -100,6 +100,7 @@ const SpecialistContactForm: FC<Props> = (props) => {
 						disabled={submitting || pristine}
 						loading={submitting}
 						icon={specialistContactID ? <EditIcon /> : <CreateIcon />}
+						id={formFieldID(FORM.SPECIALIST_CONTACT, SUBMIT_BUTTON_ID)}
 					>
 						{specialistContactID ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:špecialistu'))}
 					</Button>

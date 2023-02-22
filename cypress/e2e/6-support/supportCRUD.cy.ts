@@ -1,4 +1,4 @@
-import { CREATE_BUTTON_ID, FORM } from '../../../src/utils/enums'
+import { CREATE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 
 // fixtures
 import supportContact from '../../fixtures/support.json'
@@ -30,7 +30,7 @@ describe('Support contacts', () => {
 		cy.setInputValue(FORM.SUPPORT_CONTACT, 'city', supportContact.create.address.city)
 		cy.setInputValue(FORM.SUPPORT_CONTACT, 'streetNumber', supportContact.create.address.streetNumber)
 		cy.setInputValue(FORM.SUPPORT_CONTACT, 'zipCode', supportContact.create.address.zipCode)
-		cy.get(`#${FORM.SUPPORT_CONTACT}-form`).submit()
+		cy.clickButton(SUBMIT_BUTTON_ID, FORM.SUPPORT_CONTACT)
 		cy.wait('@createSupportContact').then((interception: any) => {
 			// check status code of request
 			expect(interception.response.statusCode).to.equal(200)
@@ -43,7 +43,7 @@ describe('Support contacts', () => {
 	it('Update support contact', () => {
 		cy.intercept({
 			method: 'PATCH',
-			url: '/api/b2b/admin/enums/support-contacts/'
+			url: `/api/b2b/admin/enums/support-contacts/${supportContactID}`
 		}).as('updateSupportContact')
 		cy.visit('/support-contacts')
 		cy.get(`[data-row-key="${supportContactID}"]`).click()
@@ -55,14 +55,13 @@ describe('Support contacts', () => {
 		cy.setInputValue(FORM.SUPPORT_CONTACT, 'city', supportContact.update.address.city, false, true)
 		cy.setInputValue(FORM.SUPPORT_CONTACT, 'streetNumber', supportContact.update.address.streetNumber, false, true)
 		cy.setInputValue(FORM.SUPPORT_CONTACT, 'zipCode', supportContact.update.address.zipCode, false, true)
-		cy.get(`#${FORM.SUPPORT_CONTACT}-form`).submit()
-		// TODO: pada to sem? preco?
-		// cy.wait('@updateSupportContact').then((interception: any) => {
-		// 	// check status code of request
-		// 	expect(interception.response.statusCode).to.equal(200)
-		// 	// check conf toast message
-		// 	cy.checkSuccessToastMessage()
-		// })
+		cy.clickButton(SUBMIT_BUTTON_ID, FORM.SUPPORT_CONTACT)
+		cy.wait('@updateSupportContact').then((interception: any) => {
+			// check status code of request
+			expect(interception.response.statusCode).to.equal(200)
+			// check conf toast message
+			cy.checkSuccessToastMessage()
+		})
 	})
 	// DELETE
 	it('Delete support contact', () => {

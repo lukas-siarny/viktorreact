@@ -3,7 +3,9 @@ export enum LIST_OF_TESTS_SUITS {
 	USER_CRUD = 'userCRUD',
 	COSMETICS_CRUD = 'cosmeticsCRUD',
 	SPECIALIST_CRUD = 'specialistCRUD',
-	CATEGORIES_CRUD = 'categoriesCRUD'
+	CATEGORIES_CRUD = 'categoriesCRUD',
+	CATEGORY_PARAMETERS_CRUD = 'categoryParameterCRUD',
+	SALON = 'salon'
 }
 
 export enum CRUD_OPERATIONS {

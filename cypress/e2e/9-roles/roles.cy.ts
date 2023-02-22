@@ -5,6 +5,8 @@ import { LIST_OF_TESTS_SUITS } from '../../enums'
 // testSuits
 import updateMyAccountTestSuit from '../1-users/updateMyAccountInfo.tests'
 import userCRUDTestSuit from '../1-users/userCRUD.tests'
+import salonTestSuit from '../2-salons/salon.tests'
+import categoryParameterCRUDTestSuit from '../3-category-parameters/categoryParametersCRUD.test'
 import cosmeticsCRUDTestSuit from '../4-cosmetics/cosmeticsCRUD.tests'
 import specialistContactsCRUDTestSuit from '../5-specialist-contacts/specialistContactsCRUD.tests'
 import categoriesCRUDTestSuit from '../8-categories/categoriesCRUD.tests'
@@ -18,6 +20,12 @@ describe('Dynamic tests for roles', () => {
 				}
 				if (test.name === LIST_OF_TESTS_SUITS.USER_CRUD) {
 					context(`UserCRUD as ${user.role}`, () => userCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
+				}
+				if (test.name === LIST_OF_TESTS_SUITS.SALON) {
+					context(`UserCRUD as ${user.role}`, () => salonTestSuit(test.actions, user.credentials.user, user.credentials.password))
+				}
+				if (test.name === LIST_OF_TESTS_SUITS.CATEGORY_PARAMETERS_CRUD) {
+					context(`CategoryParametersCRUD as ${user.role}`, () => categoryParameterCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
 				}
 				if (test.name === LIST_OF_TESTS_SUITS.COSMETICS_CRUD) {
 					context(`CosmeticsCRUD as ${user.role}`, () => cosmeticsCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))

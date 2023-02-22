@@ -190,7 +190,7 @@ describe('Salons', () => {
 			cy.visit(`/salons/${createdSalonID}/employees/create`)
 			cy.setInputValue(FORM.EMPLOYEE, 'firstName', generateRandomString(6))
 			cy.setInputValue(FORM.EMPLOYEE, 'lastName', generateRandomString(6))
-			cy.setInputValue(FORM.EMPLOYEE, 'email', `${generateRandomString(6)}_${user.emailSuffix}`)
+			cy.setInputValue(FORM.EMPLOYEE, 'email', `${generateRandomString(6)}_${user.create.emailSuffix}`)
 			cy.setInputValue(FORM.EMPLOYEE, 'phone', customer.create.phone)
 			cy.clickButton(SUBMIT_BUTTON_ID, FORM.EMPLOYEE)
 			cy.wait('@createEmployee').then((interception: any) => {

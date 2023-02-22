@@ -8,5 +8,29 @@
 			"title": "test 123",
 			"value": "medium"
 		}
+	},
+	"industry": {
+		"create" : {
+			"title": "test industry"
+		},
+		"update" : {
+			"title": "test industry 123"
+		}
+	},
+	"category": {
+		"create" : {
+			"title": "test category"
+		},
+		"update" : {
+			"title": "test category 123"
+		}
+	},
+	"service": {
+		"create" : {
+			"title": "test service"
+		},
+		"update" : {
+			"title": "test service 123"
+		}
 	}
 }

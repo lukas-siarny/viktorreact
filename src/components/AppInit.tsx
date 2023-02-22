@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren, useEffect, useState } from 'react'
+import React, { PropsWithChildren, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Spin } from 'antd'
 import { get } from 'lodash'

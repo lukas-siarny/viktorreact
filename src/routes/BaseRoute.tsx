@@ -1,5 +1,5 @@
 import React, { useEffect, FC } from 'react'
-import { RouteProps, Route, Outlet } from 'react-router-dom'
+import { RouteProps, Outlet } from 'react-router-dom'
 
 // utils
 import PreventShowDeletedSalon from '../utils/PreventShowDeletedSalon'

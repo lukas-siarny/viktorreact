@@ -2,13 +2,13 @@ import { isArray } from 'lodash'
 import { useCallback, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-export interface IQueryParams {
+export interface IUseQueryParams {
 	[key: string]: any
 }
 
-export type SetQueryParams = (newValues: IQueryParams) => void
+export type SetQueryParams = (newValues: IUseQueryParams) => void
 
-interface IQueryParamsInitial {
+interface IUseQueryParamsInitial {
 	[key: string]: ParamType
 }
 
@@ -26,7 +26,7 @@ type ParamType<ValueType = any> = {
 
 // vystup z tejto funkcie ide do useSearchParams hooku
 // do neho potrebujeme prekonvertovat hodnoty na stringy a v pripade undefined ich uplne odstranit
-const serializeInitialParams = (initialValues?: IQueryParamsInitial) =>
+const serializeInitialParams = (initialValues?: IUseQueryParamsInitial) =>
 	Object.entries(initialValues || {}).reduce((acc, [key, value]) => {
 		if (value.value === undefined) {
 			// odstrani query parameter zo searchParams
@@ -55,11 +55,11 @@ const serializeInitialParams = (initialValues?: IQueryParamsInitial) =>
 			...acc,
 			[key]: value
 		}
-	}, {} as IQueryParams)
+	}, {} as IUseQueryParams)
 
 // z vystupom z tejto funkcie sa dalej pracuje v komponetoch
 // vystupne hodnoty budu mat typy podla typov zadefinonvaych v inicializacnom objekte
-const getInitialParams = (initialValues?: IQueryParamsInitial, URLSearchParams?: URLSearchParams) =>
+const getInitialParams = (initialValues?: IUseQueryParamsInitial, URLSearchParams?: URLSearchParams) =>
 	Object.entries(initialValues || {}).reduce((acc, [key, value]) => {
 		const paramTyme = {
 			paramType: value.paramType,
@@ -114,20 +114,20 @@ const getInitialParams = (initialValues?: IQueryParamsInitial, URLSearchParams?:
 		}
 		// inak initneme co sa nachadza v URL
 		return { ...acc, [key]: { ...paramTyme, value: URLValue } }
-	}, {} as IQueryParamsInitial)
+	}, {} as IUseQueryParamsInitial)
 
-const mapInitialParamsToReturnParams = (initialParams?: IQueryParamsInitial): IQueryParams => {
+const mapInitialParamsToReturnParams = (initialParams?: IUseQueryParamsInitial): IUseQueryParams => {
 	return Object.entries(initialParams || {}).reduce((acc, [key, value]) => {
 		return {
 			...acc,
 			[key]: value.value
 		}
-	}, {} as IQueryParams)
+	}, {} as IUseQueryParams)
 }
 
 // vystup z tejto funkcie ide do useSearchParams hooku
 // do neho potrebujeme prekonvertovat hodnoty na stringy a v pripade undefined ich uplne odstranit
-const serializeParams = (params?: IQueryParams) =>
+export const serializeParams = (params?: IUseQueryParams) =>
 	Object.entries(params || {}).reduce((acc, [key, value]) => {
 		if (value === undefined) {
 			// odstrani query parameter zo searchParams
@@ -150,7 +150,7 @@ const serializeParams = (params?: IQueryParams) =>
 			...acc,
 			[key]: value
 		}
-	}, {} as IQueryParams)
+	}, {} as IUseQueryParams)
 
 export const ArrayParam = (value?: string[] | null): ParamType => {
 	return {
@@ -189,7 +189,7 @@ export const NumberParam = (value?: number | null): ParamType => {
  * { foo: undefined } => odstrani queryParam foo z URL
  * { foo: '' } || { foo: [] } || { foo: null } => &foo=
  */
-const useQueryParams = (queryParamsInitial?: IQueryParamsInitial): [IQueryParams, (newValues: IQueryParams) => void] => {
+const useQueryParams = (queryParamsInitial?: IUseQueryParamsInitial): [IUseQueryParams, (newValues: IUseQueryParams) => void] => {
 	// prekonvertujeme initial objekt (ktory obsahuje informacie o type query parametru - Array x String) do jednoduchsieho objektu key:value vhodneho pre useSearchParams hook
 	const intialValuesForSearchParams = mapInitialParamsToReturnParams(serializeInitialParams(queryParamsInitial))
 	const [searchParams, setSearchParams] = useSearchParams(intialValuesForSearchParams)
@@ -198,12 +198,12 @@ const useQueryParams = (queryParamsInitial?: IQueryParamsInitial): [IQueryParams
 	const storedInitialValues = useRef(getInitialParams(queryParamsInitial, searchParams))
 
 	// do query nastavime zjednoduseny objekt bez typov, aby sa potom pri volani setQueryParams v komponente nemusli vsade posielat informacie o type, ale len jednoduchy key:value objekt
-	const [query, setQuery] = useState<IQueryParams | undefined>(mapInitialParamsToReturnParams(storedInitialValues.current))
+	const [query, setQuery] = useState<IUseQueryParams | undefined>(mapInitialParamsToReturnParams(storedInitialValues.current))
 
 	// console.log({ intialValuesForSearchParams, queryParamsInitial, query })
 
 	const setQueryParams = useCallback(
-		(newValues?: IQueryParams) => {
+		(newValues?: IUseQueryParams) => {
 			setSearchParams(serializeParams(newValues))
 			setQuery(newValues)
 		},

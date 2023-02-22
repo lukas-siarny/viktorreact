@@ -31,7 +31,7 @@ import {
 	toNumber,
 	trimEnd
 } from 'lodash'
-import { notification } from 'antd'
+import { notification, Tag } from 'antd'
 import slugify from 'slugify'
 import { SubmissionError, submit } from 'redux-form'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
@@ -973,6 +973,15 @@ export const langaugesOptionRender = (itemData: any) => {
 	)
 }
 
+export const optionRenderWithTag = (itemData: any) => {
+	const { value, label, tagClassName } = itemData
+	return (
+		<Tag key={value} className={cx('noti-tag', tagClassName)}>
+			<span>{label}</span>
+		</Tag>
+	)
+}
+
 export const formatLongQueryString = (search: string, limit?: number) => {
 	const maxQueryLimit = limit || QUERY_LIMIT.MAX_255
 	let formattedSearch = search
@@ -1371,4 +1380,12 @@ export const initializeLabelInValueSelect = (key: string | number, label: string
 		label,
 		extra
 	}
+}
+
+export const normalizeDataById = <T extends { id: string }>(data?: T[]): { [key: string]: T } => {
+	const normalizedData: { [key: string]: T } = {}
+	data?.forEach((item) => {
+		normalizedData[item.id] = item
+	})
+	return normalizedData
 }

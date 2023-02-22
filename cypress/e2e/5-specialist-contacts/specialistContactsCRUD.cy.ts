@@ -1,9 +1,9 @@
-import { CREATE_BUTTON_ID, FORM } from '../../../src/utils/enums'
+import { CREATE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 
 // fixtures
 import specialistContact from '../../fixtures/specialist-contact.json'
 
-describe('Specialit contacts', () => {
+describe('Specialist contacts', () => {
 	let specialistContactID: any
 	beforeEach(() => {
 		// restore local storage with tokens and salon id from snapshot
@@ -23,12 +23,10 @@ describe('Specialit contacts', () => {
 		cy.visit('/specialist-contacts')
 		cy.clickButton(FORM.SPECIALIST_CONTACT, CREATE_BUTTON_ID)
 		cy.selectOptionDropdown(FORM.SPECIALIST_CONTACT, 'countryCode', specialistContact.create.countryCode)
-		cy.get('h3.form-title').as('formTitle').click()
 		cy.selectOptionDropdownCustom(FORM.SPECIALIST_CONTACT, 'phonePrefixCountryCode', specialistContact.create.phonePrefixCountryCode, true)
-		cy.get('@formTitle').click()
 		cy.setInputValue(FORM.SPECIALIST_CONTACT, 'phone', specialistContact.create.phone)
 		cy.setInputValue(FORM.SPECIALIST_CONTACT, 'email', specialistContact.create.email)
-		cy.get(`#${FORM.SPECIALIST_CONTACT}-form`).submit()
+		cy.clickButton(SUBMIT_BUTTON_ID, FORM.SPECIALIST_CONTACT)
 		cy.wait('@createSpecialistContact').then((interception: any) => {
 			// check status code of request
 			expect(interception.response.statusCode).to.equal(200)
@@ -50,12 +48,10 @@ describe('Specialit contacts', () => {
 		cy.visit('/specialist-contacts')
 		cy.get(`[data-row-key="${specialistContactID}"]`).click()
 		cy.selectOptionDropdownCustom(FORM.SPECIALIST_CONTACT, 'countryCode', specialistContact.update.countryCode, true)
-		cy.get('h3.form-title').as('formTitle').click()
 		cy.selectOptionDropdownCustom(FORM.SPECIALIST_CONTACT, 'phonePrefixCountryCode', specialistContact.update.phonePrefixCountryCode, true)
-		cy.get('@formTitle').click()
 		cy.setInputValue(FORM.SPECIALIST_CONTACT, 'phone', specialistContact.update.phone, false, true)
 		cy.setInputValue(FORM.SPECIALIST_CONTACT, 'email', specialistContact.update.email, false, true)
-		cy.get(`#${FORM.SPECIALIST_CONTACT}-form`).submit()
+		cy.clickButton(SUBMIT_BUTTON_ID, FORM.SPECIALIST_CONTACT)
 		cy.wait('@updateSpecialistContact').then((interception: any) => {
 			// check status code of request
 			expect(interception.response.statusCode).to.equal(200)

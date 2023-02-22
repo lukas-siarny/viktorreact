@@ -16,8 +16,9 @@ import { Paths } from '../../types/api'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { ENUMERATIONS_KEYS, FORM, PERMISSION, STRINGS } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, PERMISSION, STRINGS, SUBMIT_BUTTON_ID } from '../../utils/enums'
 import { postReq } from '../../utils/request'
+import { formFieldID } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -108,6 +109,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 					<div className={'content-footer'}>
 						<Row justify='center'>
 							<Button
+								id={formFieldID(FORM.CUSTOMER, SUBMIT_BUTTON_ID)}
 								type={'primary'}
 								icon={<CreateIcon />}
 								size={'middle'}

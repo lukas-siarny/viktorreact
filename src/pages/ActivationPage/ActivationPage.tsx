@@ -58,7 +58,7 @@ const ActivationPage = () => {
 
 	return (
 		<div className='grid place-items-center h-full w-full text-center'>
-			<div style={{ width: '320px', height: '340px' }}>
+			<div style={{ width: '326px', height: '340px' }}>
 				<h3>{t('loc:Verifikácia')}</h3>
 				<p className='base-regular mt-7 mb-14'>
 					<span className='base-bold'>{t('loc:Zadajte PIN')}</span>{' '}

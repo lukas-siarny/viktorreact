@@ -1,17 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { HTML5Backend } from 'react-dnd-html5-backend'
 import { forEach, includes, isEmpty } from 'lodash'
-import { DndProvider } from 'react-dnd'
 import cx from 'classnames'
+
+// Drag and drop
+import type { DragEndEvent } from '@dnd-kit/core'
+import { DndContext } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 
 // ant
 import { Empty, Table } from 'antd'
 import { TableProps } from 'antd/lib/table'
+
+// components
 import CustomPagination from './CustomPagination'
 import { IPagination } from '../types/interfaces'
 import DragableTableRow from './DragableTableRow'
-
 import { ReactComponent as DragIcon } from '../assets/icons/drag-icon.svg'
+import { TABLE_DRAG_AND_DROP_KEY } from '../utils/enums'
 
 type ComponentProps<RecordType> = TableProps<RecordType> & {
 	emptyText?: string
@@ -35,13 +40,11 @@ type ComponentProps<RecordType> = TableProps<RecordType> & {
 	useCustomPagination?: boolean
 	pagination?: IPagination | false
 
-	dndEnabled?: boolean
 	dndDrop?: (oldIndex: number, newIndex: number) => any
-	dndCanDrag?: boolean
 }
 
 const CustomTable = <RecordType extends object = any>(props: ComponentProps<RecordType>) => {
-	const { disabled = false, className, useCustomPagination, pagination, dndEnabled, dndDrop, dndCanDrag = true } = props
+	const { disabled = false, className, useCustomPagination, pagination, dndDrop } = props
 	const [isProcessingDrop, setIsProcessingDrop] = useState(false)
 
 	const onClickOptionSizeChanger = useCallback(
@@ -75,8 +78,11 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 		}
 	}, [onClickOptionSizeChanger])
 
-	const dndDropWrap = useCallback(
-		async (oldIndex: number, newIndex: number) => {
+	const onDragEnd = useCallback(
+		async ({ active, over }: DragEndEvent) => {
+			const oldIndex = Number(active.id)
+			const newIndex = Number(over?.id)
+
 			if (isProcessingDrop) {
 				return
 			}
@@ -105,13 +111,13 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 
 	let loadingWrap = props.loading
 
-	if (dndEnabled && !isEmpty(props.dataSource)) {
+	if (dndDrop && !isEmpty(props.dataSource)) {
 		loadingWrap = false
 	}
 	// NOTE: Memo fixuje problém infinite volaní akcie UPDATE_SYNC_ERRORS pri dnd tabuľkách
 	const componentsWrap = useMemo(() => {
 		let components = props?.components
-		if (dndEnabled) {
+		if (dndDrop) {
 			components = {
 				...props?.components,
 				body: {
@@ -124,30 +130,24 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 			}
 		}
 		return components
-	}, [dndEnabled, props?.components])
+	}, [dndDrop, props?.components])
 
 	let columns = props?.columns || []
 	const isFirstColFixed = props?.columns?.[0]?.fixed ? true : undefined
-	if (dndEnabled) {
+
+	if (dndDrop) {
 		// Samostatny column aby sa nedrag and dropoval cely riadok ale len cast stlpa (moze sa dat kliknut na riadok na prepnutie detailu entity)
 		const DND_COL = {
-			key: 'dnd',
+			key: TABLE_DRAG_AND_DROP_KEY,
+			title: <DragIcon style={{ touchAction: 'none', cursor: 'default' }} className={'w-4 h-4 flex'} />,
 			width: 25,
-			className: cx('ignore-cell-click text-center text-gray-600', {
-				'cursor-move': dndCanDrag,
-				'cursor-not-allowed opacity-40': !dndCanDrag
-			}),
-			fixed: isFirstColFixed,
-			render() {
-				return <DragIcon className={'text-blue-600'} />
-			}
+			fixed: isFirstColFixed
 		}
 		columns = [DND_COL, ...columns]
 	}
-
 	const onRow = (record: any, index?: number) => {
 		const onRowProp = props?.onRow?.(record, index)
-		let rowProps: any = {
+		const rowProps: any = {
 			...onRowProp,
 			onClick: onRowProp?.onClick
 				? (e: React.MouseEvent<HTMLElement>) => {
@@ -173,12 +173,6 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 				  }
 				: undefined,
 			index
-		}
-
-		// NOTE:    Pre tabuľku bez dnd neposielame propu moveRow vôbec (ani ako undefined),
-		//          inak vznikne chyba, lebo sa snaží nastaviť moveRow ako html atribút <td> elementu ale moveRow nie je html atribút
-		if (dndEnabled) {
-			rowProps = { ...rowProps, dndDrop: dndDropWrap, dndCanDrag }
 		}
 
 		return rowProps
@@ -207,6 +201,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 				locale={emptyLocale}
 				bordered={props.bordered || false}
 			/>
+
 			{useCustomPagination && pagination && (
 				<div className='table-footer-custom-pagination'>
 					<CustomPagination {...pagination} />
@@ -215,8 +210,18 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 		</div>
 	)
 
-	if (dndEnabled) {
-		return <DndProvider backend={HTML5Backend}>{table}</DndProvider>
+	if (dndDrop) {
+		return (
+			<DndContext onDragEnd={onDragEnd}>
+				<SortableContext
+					// rowKey array
+					items={props.dataSource && (props.dataSource.map((item: any) => item.key) as any)}
+					strategy={verticalListSortingStrategy}
+				>
+					{table}
+				</SortableContext>
+			</DndContext>
+		)
 	}
 	return table
 }

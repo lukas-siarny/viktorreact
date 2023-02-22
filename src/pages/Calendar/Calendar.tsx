@@ -28,17 +28,19 @@ import {
 	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_STATE,
 	CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE,
-	ADMIN_PERMISSIONS
+	ADMIN_PERMISSIONS,
+	CALENDAR_DAY_EVENTS_LIMIT,
+	MONTHLY_RESERVATIONS_KEY,
+	CALENDAR_UPDATE_SIZE_DELAY
 } from '../../utils/enums'
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
+import { cancelEventsRequestOnDemand, getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
 
 // reducers
 import {
-	clearCalendarReservations,
-	clearCalendarShiftsTimeoffs,
 	getCalendarEventDetail,
+	getCalendarMonthlyViewReservations,
 	getCalendarReservations,
 	getCalendarShiftsTimeoff,
 	refreshEvents
@@ -54,6 +56,10 @@ import CalendarContent, { CalendarRefs } from './components/layout/CalendarConte
 import CalendarHeader from './components/layout/Header'
 import SiderEventManagement, { SiderEventManagementRefs } from './components/layout/SiderEventManagement'
 import SiderFilter from './components/layout/SiderFilter'
+import CalendarEventsListPopover from './components/popovers/CalendarEventsListPopover'
+import CalendarEmployeeTooltipPopover from './components/popovers/CalendarEmployeeTooltipPopover'
+import CalendarReservationPopover from './components/popovers/CalendarReservationPopover'
+import CalendarConfirmModal from './components/CalendarConfirmModal'
 
 // types
 import {
@@ -64,13 +70,10 @@ import {
 	IEmployeesPayload,
 	INewCalendarEvent,
 	ReservationPopoverData,
-	ReservationPopoverPosition,
-	SalonSubPageProps
+	PopoverTriggerPosition,
+	SalonSubPageProps,
+	EmployeeTooltipPopoverData
 } from '../../types/interfaces'
-
-// atoms
-import CalendarReservationPopover from './components/CalendarReservationPopover'
-import CalendarConfirmModal from './components/CalendarConfirmModal'
 
 // hooks
 import useQueryParams, { ArrayParam, StringParam } from '../../hooks/useQueryParams'
@@ -152,13 +155,20 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	 * hlavne kvoli týždennému a mesačnému, kde sa vždy na základe zvoleného dátumu (validSelectedDate) dopočíta celý range, na základe ktorého sa potom dotiahnu data z BE
 	 */
 	const [currentRange, setCurrentRange] = useState(getSelectedDateRange(validCalendarView, validSelectedDate))
+	/**
+	 * tento state je relevantny len pre mesacne view
+	 * obsahuje informacie o celom rangi v mesacnom view - teda aj datumy z minuleho a dalsieho mesiaca, ktore doplnaju cely grid 7x6
+	 */
+	const [monthlyViewFullRange, setMonthlyViewFullRange] = useState(getSelectedDateRange(validCalendarView, validSelectedDate, true))
+
 	const [confirmModalData, setConfirmModalData] = useState<ConfirmModalData>(null)
 
 	const clearConfirmModal = () => setConfirmModalData(null)
 
-	const employees = useSelector((state: RootState) => state.employees.employees)
+	const employees = useSelector((state: RootState) => state.employees.employees || [])
 	const services = useSelector((state: RootState) => state.service.services)
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
+	const monthlyReservations = useSelector((state: RootState) => state.calendar[MONTHLY_RESERVATIONS_KEY])
 	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS])
 	const isRefreshingEvents = useSelector((state: RootState) => state.calendar.isRefreshingEvents)
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
@@ -172,7 +182,37 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const [isRemoving, setIsRemoving] = useState(false)
 	const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)
 
-	const [reservationPopover, setReservationPopover] = useState<{ isOpen: boolean; data: ReservationPopoverData | null; position: ReservationPopoverPosition | null }>({
+	const [areEmployeesLoaded, setAreEmployeesLoaded] = useState(false)
+
+	const [reservationPopover, setReservationPopover] = useState<{ isOpen: boolean; data: ReservationPopoverData | null; position: PopoverTriggerPosition | null }>({
+		isOpen: false,
+		data: null,
+		position: null
+	})
+	/**
+	 * eventsListPopover by mal byt vzdy nizzsie ako reservationPopover
+	 * je potrebne ho preto predrendrovat (cez z-indexy to v tomto pripade nejde, pretoze antd ich cez portaly dynamicky injectuje do DOMka, navyse bez classnamu)
+	 * ak je isHidden = true, znamena, ze existuje v DOMku ale ma nulovu velkost
+	 */
+	const [eventsListPopover, setEventsListPopover] = useState<{
+		isOpen: boolean
+		isHidden: boolean
+		date: string | null
+		position: PopoverTriggerPosition | null
+		isReservationsView?: boolean
+	}>({
+		isOpen: true,
+		isHidden: true,
+		date: null,
+		position: null,
+		isReservationsView: false
+	})
+
+	const [employeeTooltipPopover, setEmployeeTooltipPopover] = useState<{
+		isOpen: boolean
+		data: EmployeeTooltipPopoverData | null
+		position: PopoverTriggerPosition | null
+	}>({
 		isOpen: false,
 		data: null,
 		position: null
@@ -213,14 +253,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					duration: 0
 				})
 			}
-			await dispatch(refreshEvents(validEventsViewType))
+			await dispatch(refreshEvents(validEventsViewType, validCalendarView === CALENDAR_VIEW.MONTH))
 			message.destroy()
 		}, REFRESH_CALENDAR_INTERVAL)
 
 		fetchInterval.current = interval
 	}
 
-	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || isUpdatingEvent
+	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || monthlyReservations?.isLoading || isUpdatingEvent
+	const isLoading = isRefreshingEvents ? false : loadingData
 
 	/**
 	 * initialScroll = pomocna premenna pre tyzdenne view
@@ -234,21 +275,31 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const initialScroll = useRef(false)
 	const scrollToDateTimeout = useRef<any>(null)
 
+	const setRangeInformationForMonthlyView = (date: string) => {
+		setMonthlyViewFullRange(getSelectedDateRange(CALENDAR_VIEW.MONTH, date, true))
+	}
+
 	/**
 	 * nastavi novy datum do query, novy current range a tiez datum pre aktualne zobrazenu instanciu Fullcalendara
 	 */
-	const setNewSelectedDate = (newDate: string) => {
+	const setNewSelectedDate = (newDate: string, monthViewFullRange = false) => {
 		// query sa nastavi vzdy ked sa zmeni datum
 		setQuery({ ...query, date: newDate })
 
-		// datum vo Fullcalendari a current range sa nastavi len vtedy, ked sa novy datum nenachadza v aktualne zvolenom rangi (currentRange state)
-		if (!isDateInRange(currentRange.start, currentRange.end, newDate)) {
+		const newCalendarDate = getSelectedDateForCalendar(validCalendarView, newDate)
+
+		// datum vo Fullcalendari a current range sa nastavi len vtedy, ked sa novy datum nenachadza v aktualne zvolenom rangi (currentRange state alebo monthlyViewFullRange)
+		if (!isDateInRange(monthViewFullRange ? monthlyViewFullRange.start : currentRange.start, monthViewFullRange ? monthlyViewFullRange.end : currentRange.end, newDate)) {
 			setCurrentRange(getSelectedDateRange(validCalendarView, newDate))
-			const newCalendarDate = getSelectedDateForCalendar(validCalendarView, newDate)
+
+			if (validCalendarView === CALENDAR_VIEW.MONTH) {
+				setRangeInformationForMonthlyView(newDate)
+			}
 
 			if (!dayjs(newCalendarDate).isSame(calendarRefs?.current?.[validCalendarView]?.getApi()?.getDate())) {
 				calendarRefs?.current?.[validCalendarView]?.getApi()?.gotoDate(newCalendarDate)
 			}
+
 			/**
 			 * meni sa range, pre tyzdenne view je potrebne si to poznacit do pomocnej premennej, aby sa nasledne spustil useEffect nizzsie
 			 * ten sa postara o scroll az po tom co sa dotiahnu nove data
@@ -284,9 +335,24 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	/**
 	 * pri prepnuti zobrazenia (denne / tyzdenne / mesacne) je potrebne zmenit aj zvoleny range
 	 */
-	const setCalendarView = (newView: CALENDAR_VIEW) => {
+	const setNewCalendarView = (newView: CALENDAR_VIEW) => {
 		setQuery({ ...query, view: newView })
 		setCurrentRange(getSelectedDateRange(newView, validSelectedDate))
+		if (newView === CALENDAR_VIEW.MONTH) {
+			setRangeInformationForMonthlyView(validSelectedDate)
+		}
+	}
+
+	const setNewEventsViewType = (newEventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => {
+		// NOTE: Ak je otvoreny CREATE / EDIT sidebar tak pri prepnuti filtra ho zrusit + zmaze virtual event
+		if (virtualEvent) {
+			dispatch(clearEvent())
+		}
+		/**
+		 * ak by uzivatel rychlo preklikol medzi tabom rezervacie / zmeny tak to zrusi predosli request
+		 */
+		cancelEventsRequestOnDemand()
+		setQuery({ ...query, eventsViewType: newEventsViewType, sidebarView: undefined, eventId: undefined })
 	}
 
 	/**
@@ -306,33 +372,52 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			// restartuje sa interval pre background load
 			restartFetchInterval()
 
+			let eventsDayLimit = 0
+			let startQueryParam = currentRange.start
+			let endQueryParam = currentRange.end
+
+			if (validCalendarView === CALENDAR_VIEW.MONTH) {
+				// v mesacnom view je potrebne vyplnit cely kalendar - 7 x 6 buniek (od PO - NE) = 42
+				eventsDayLimit = CALENDAR_DAY_EVENTS_LIMIT
+				startQueryParam = dayjs(startQueryParam).startOf('week').format(CALENDAR_DATE_FORMAT.QUERY)
+				endQueryParam = dayjs(startQueryParam).add(41, 'days').format(CALENDAR_DATE_FORMAT.QUERY)
+			}
+
+			const dispatchGetShiftsTimeOff = getCalendarShiftsTimeoff(
+				{ salonID, start: startQueryParam, end: endQueryParam, employeeIDs: query.employeeIDs },
+				validCalendarView !== CALENDAR_VIEW.MONTH,
+				clearVirtualEvent,
+				true,
+				eventsDayLimit
+			)
+
 			if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-				Promise.all([
-					dispatch(
-						getCalendarReservations(
-							{
-								salonID,
-								start: currentRange.start,
-								end: currentRange.end,
-								employeeIDs: query.employeeIDs,
-								categoryIDs: getFullCategoryIdsFromUrl(query?.categoryIDs)
-							},
-							true,
-							clearVirtualEvent
-						)
-					),
-					dispatch(getCalendarShiftsTimeoff({ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs }, true, clearVirtualEvent))
-				])
+				const reservationsQueryparams = {
+					salonID,
+					start: startQueryParam,
+					end: endQueryParam,
+					employeeIDs: query.employeeIDs,
+					categoryIDs: getFullCategoryIdsFromUrl(query?.categoryIDs)
+				}
+				const dispatchGetReservations = getCalendarReservations(reservationsQueryparams, validCalendarView !== CALENDAR_VIEW.MONTH, clearVirtualEvent, true, eventsDayLimit)
+
+				if (validCalendarView === CALENDAR_VIEW.MONTH) {
+					await dispatch(getCalendarMonthlyViewReservations(reservationsQueryparams, clearVirtualEvent, true))
+				} else {
+					await Promise.all([dispatch(dispatchGetReservations), dispatch(dispatchGetShiftsTimeOff)])
+				}
 			} else if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
-				dispatch(getCalendarShiftsTimeoff({ salonID, start: currentRange.start, end: currentRange.end, employeeIDs: query.employeeIDs }, true, clearVirtualEvent))
+				await dispatch(dispatchGetShiftsTimeOff)
 			}
 		},
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validEventsViewType, employees.options?.length]
+		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validEventsViewType, validCalendarView, employees.options?.length]
 	)
 
-	const scrollToTime = useCallback(
-		(hour: number) => {
+	// scroll to time after initialization
+	useEffect(() => {
+		const scrollToTime = (hour: number) => {
 			// scrollID je hodina, na ktoru chceme zascrollovat
 			// od nej sa este odrataju 2 hodiny, aby bolo vidiet aj co sa deje pred tymto casom
 			const scrollTimeId = getTimeScrollId(Math.max(hour - 2, 0))
@@ -346,18 +431,20 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				// v tyzdennom view sa pouzije interny scroll, pretoze sa scrolluje v x-ovej osi a aj v pripade height='auto' je to funkcne
 				calendarRefs?.current?.[validCalendarView]?.getApi().scrollToTime(scrollTimeId)
 			}
-		},
-		[validCalendarView]
-	)
+		}
 
-	// scroll to time after initialization
-	useEffect(() => {
-		scrollToTime(dayjs().hour())
-	}, [scrollToTime])
+		/**
+		 * je potrebne trochu pockat, kym sa kalendar vyinicializuje a az tak zavolaz scrollToTime
+		 */
+		setTimeout(() => scrollToTime(dayjs().hour()), CALENDAR_INIT_TIME)
+	}, [validCalendarView])
 
 	useEffect(() => {
-		dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
-		dispatch(getServices({ salonID }))
+		;(async () => {
+			dispatch(getServices({ salonID }))
+			await dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
+			setAreEmployeesLoaded(true)
+		})()
 	}, [dispatch, salonID])
 
 	useEffect(() => {
@@ -381,24 +468,16 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		;(async () => {
-			// if user uncheck all values from employeesIDs filter => clear reservations and shifts and dot't fetch new data
-			if (query?.employeeIDs === null) {
-				restartFetchInterval()
-				dispatch(clearCalendarReservations())
-				dispatch(clearCalendarShiftsTimeoffs())
+			// v reduxe sa do eventov sa mapuju zamestnanci, preto sa musia dotiahnut predtym nez sa dotiahnu eventy
+			// ak uzivatel odksrtne vsetkych zamestancov alebo kategorie, zobrazi sa empty state a nie je potrebne dotahovat nove data
+			if (!areEmployeesLoaded || query?.employeeIDs === null || query?.categoryIDs === null) {
 				return
 			}
-			// if user uncheck all values from categoryIDs filter => clear reservations, but keep shifts and dot't fetch new data
-			if (query?.categoryIDs === null) {
-				restartFetchInterval()
-				dispatch(clearCalendarReservations())
-				return
-			}
-
 			// fetch new events
 			fetchEvents(false)
 		})()
-	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents, areEmployeesLoaded])
 
 	useEffect(() => {
 		dispatch(
@@ -423,7 +502,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			if (!newView) {
 				setQuery({
 					...query,
-					evendId: undefined,
+					eventId: undefined,
 					sidebarView: undefined
 				})
 			} else {
@@ -436,9 +515,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				})
 			}
 
-			if (query.view === CALENDAR_VIEW.DAY) {
-				setTimeout(updateCalendarSize.current, 0)
-			}
+			setTimeout(updateCalendarSize.current, CALENDAR_UPDATE_SIZE_DELAY)
 		},
 		[query, setQuery]
 	)
@@ -505,6 +582,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			const { revertEvent } = values
 
 			try {
+				cancelEventsRequestOnDemand()
 				setIsUpdatingEvent(true)
 				const reqData = {
 					start: {
@@ -578,6 +656,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				: undefined
 
 			try {
+				cancelEventsRequestOnDemand()
 				setIsUpdatingEvent(true)
 				const reqData = {
 					eventType: values.eventType as any,
@@ -589,7 +668,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						date: values.date,
 						time: values.timeTo
 					},
-					employeeID: values.employee.key as string,
+					employeeID: values.employee?.key as string,
 					note: values.note,
 					repeatEvent
 				}
@@ -674,6 +753,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				return
 			}
 			try {
+				cancelEventsRequestOnDemand()
 				setIsRemoving(true)
 				if (query.sidebarView === CALENDAR_EVENT_TYPE.RESERVATION) {
 					// DELETE reservation
@@ -720,6 +800,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const handleUpdateReservationState = useCallback(
 		async (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
 			try {
+				cancelEventsRequestOnDemand()
 				await patchReq(
 					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state',
 					{ calendarEventID, salonID },
@@ -760,9 +841,23 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			sidebarView: eventType
 		})
 
-		if (validCalendarView === CALENDAR_VIEW.DAY) {
-			setTimeout(updateCalendarSize.current, 0)
-		}
+		setTimeout(updateCalendarSize.current, CALENDAR_UPDATE_SIZE_DELAY)
+	}
+
+	const onReservationClick = (data?: ReservationPopoverData, position?: PopoverTriggerPosition) => {
+		setReservationPopover({
+			isOpen: true,
+			data: data || null,
+			position: position || null
+		})
+	}
+
+	const onMonthlyReservationClick = (data: EmployeeTooltipPopoverData, position?: PopoverTriggerPosition) => {
+		setEmployeeTooltipPopover({
+			isOpen: true,
+			data,
+			position: position || null
+		})
 	}
 
 	const modals = (
@@ -778,9 +873,45 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		/>
 	)
 
+	const popovers = (
+		<>
+			<CalendarEventsListPopover
+				date={eventsListPopover.date}
+				position={eventsListPopover.position}
+				isOpen={eventsListPopover.isOpen}
+				isReservationsView={eventsListPopover.isReservationsView}
+				setIsOpen={(isOpen: boolean) => setEventsListPopover((prevState) => ({ ...prevState, isOpen }))}
+				onEditEvent={onEditEvent}
+				onReservationClick={onReservationClick}
+				onMonthlyReservationClick={onMonthlyReservationClick}
+				isHidden={eventsListPopover.isHidden}
+				isLoading={isLoading}
+				isUpdatingEvent={isUpdatingEvent}
+			/>
+			<CalendarReservationPopover
+				data={reservationPopover.data}
+				position={reservationPopover.position}
+				isOpen={reservationPopover.isOpen}
+				setIsOpen={(isOpen: boolean) => setReservationPopover((prevState) => ({ ...prevState, isOpen }))}
+				handleUpdateReservationState={initUpdateReservationStateData}
+				onEditEvent={onEditEvent}
+				placement={validCalendarView === CALENDAR_VIEW.WEEK ? 'bottom' : 'left'}
+			/>
+			<CalendarEmployeeTooltipPopover
+				data={employeeTooltipPopover.data}
+				position={employeeTooltipPopover.position}
+				isOpen={employeeTooltipPopover.isOpen}
+				setIsOpen={(isOpen: boolean) => setEmployeeTooltipPopover((prevState) => ({ ...prevState, isOpen }))}
+				parentPath={parentPath}
+				query={query}
+			/>
+		</>
+	)
+
 	return (
 		<>
 			{modals}
+			{popovers}
 			<Layout className='noti-calendar-layout'>
 				<CalendarHeader
 					enabledSalonReservations={selectedSalon?.settings?.enabledReservations}
@@ -788,22 +919,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					eventsViewType={validEventsViewType}
 					calendarView={validCalendarView}
 					siderFilterCollapsed={siderFilterCollapsed}
-					setCalendarView={setCalendarView}
-					setEventsViewType={(eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => {
-						// NOTE: Ak je otvoreny CREATE / EDIT sidebar tak pri prepnuti filtra ho zrusit + zmaze virtual event
-						if (virtualEvent) {
-							dispatch(clearEvent())
-						}
-						setQuery({ ...query, eventsViewType, sidebarView: undefined, eventId: undefined })
-					}}
+					setCalendarView={setNewCalendarView}
+					setEventsViewType={setNewEventsViewType}
 					setSelectedDate={setNewSelectedDate}
 					setSiderFilterCollapsed={() => {
 						setSiderFilterCollapsed(!siderFilterCollapsed)
-						if (validCalendarView === CALENDAR_VIEW.DAY) {
-							setTimeout(updateCalendarSize.current, 0)
-						}
+						setTimeout(updateCalendarSize.current, CALENDAR_UPDATE_SIZE_DELAY)
 					}}
 					onAddEvent={handleAddEvent}
+					selectedMonth={monthlyViewFullRange.selectedMonth}
 				/>
 				<Layout hasSider className={'noti-calendar-main-section'}>
 					<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} parentPath={parentPath} eventsViewType={validEventsViewType} />
@@ -813,22 +937,27 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						ref={calendarRefs}
 						selectedDate={validSelectedDate}
 						view={validCalendarView}
+						monthlyReservations={monthlyReservations?.data || {}}
 						reservations={reservations?.data || []}
 						shiftsTimeOffs={shiftsTimeOffs?.data || []}
-						loading={isRefreshingEvents ? false : loadingData}
+						loading={isLoading}
 						eventsViewType={validEventsViewType}
 						employees={filteredEmployees() || []}
 						parentPath={parentPath}
 						query={query}
 						setQuery={setQuery}
 						onEditEvent={onEditEvent}
-						onReservationClick={(data?: ReservationPopoverData, position?: ReservationPopoverPosition) => {
-							setReservationPopover({
+						onReservationClick={onReservationClick}
+						onShowMore={(date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean) => {
+							setEventsListPopover({
+								date,
+								isHidden: false,
 								isOpen: true,
-								data: data || null,
-								position: position || null
+								position: position || null,
+								isReservationsView
 							})
 						}}
+						onMonthlyReservationClick={onMonthlyReservationClick}
 						handleSubmitReservation={initSubmitReservationData}
 						handleSubmitEvent={initSubmitEventData}
 						onAddEvent={handleAddEvent}
@@ -852,19 +981,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							changeCalendarDate={setNewSelectedDate}
 							query={query}
 							setQuery={setQuery}
+							areEmployeesLoaded={areEmployeesLoaded}
 						/>
 					)}
 				</Layout>
 			</Layout>
-			<CalendarReservationPopover
-				data={reservationPopover.data}
-				position={reservationPopover.position}
-				isOpen={reservationPopover.isOpen}
-				setIsOpen={(isOpen: boolean) => setReservationPopover((prevState) => ({ ...prevState, isOpen, position: null }))}
-				handleUpdateReservationState={initUpdateReservationStateData}
-				onEditEvent={onEditEvent}
-				placement={validCalendarView === CALENDAR_VIEW.WEEK ? 'bottom' : 'left'}
-			/>
 		</>
 	)
 }

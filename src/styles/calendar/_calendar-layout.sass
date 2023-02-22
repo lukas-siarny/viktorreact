@@ -7,7 +7,7 @@
 	100%
 		transform: translteX(0)
 
-.fc-timegrid-cols, .fc-timeline-body
+.fc-timegrid-cols, .fc-timeline-body, .fc-daygrid-body
 	&.active::after
 		display: block
 		cursor: not-allowed
@@ -71,7 +71,6 @@
 			.ant-picker
 				padding: 0
 				border: 0
-
 	// main section
 	.noti-calendar-main-section
 		height: calc(100vh - 144px)
@@ -245,11 +244,15 @@
 		&.active
 			border-color: $backgroundColor-notino-grayLighter
 			background: $backgroundColor-notino-grayLighter
-		&:hover
-			background-color: $backgroundColor-notino-grayLight
-			border-color: $backgroundColor-notino-grayLight
-		&:focus-visible
-			@include focusOutlineStyle()
+		&:not(:disabled)
+			&:hover
+				background-color: $backgroundColor-notino-grayLight
+				border-color: $backgroundColor-notino-grayLight
+			&:focus-visible
+				@include focusOutlineStyle()
+		&:disabled
+			cursor: not-allowed
+			color: $textColor-notino-gray
 
 	.nc-button-group
 		background: $backgroundColor-notino-grayLighter
@@ -268,14 +271,17 @@
 			height: 28px
 			transition: all 300ms ease-in-out
 			@include baseOutlineStyle()
-			&:not(.active)
-				&:hover
-					background-color: $backgroundColor-notino-grayLight
 			&.active
 				background: $backgroundColor-notino-white
 				box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05)
-			&:focus-visible
+			&:not(.active):not(:disabled)
+				&:focus-visible
 					@include focusOutlineStyle()
+				&:hover
+					background-color: $backgroundColor-notino-grayLight
+			&:disabled
+				cursor: not-allowed
+				color: $textColor-notino-gray
 
 	.nc-button-date
 		color: $textColor-notino-black

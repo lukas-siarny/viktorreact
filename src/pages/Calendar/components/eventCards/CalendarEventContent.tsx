@@ -3,25 +3,16 @@ import cx from 'classnames'
 import dayjs from 'dayjs'
 import { useSearchParams } from 'react-router-dom'
 
-// full calendar
-import { EventContentArg } from '@fullcalendar/core'
-
 // utils
-import { CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../utils/enums'
-import { getTimeText } from '../calendarHelpers'
+import { CALENDAR_EVENT_DISPLAY_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
+import { getTimeText } from '../../calendarHelpers'
 
 // components
 import AbsenceCard from './AbsenceCard'
 import ReservationCard from './ReservationCard'
-import { IEventExtenedProps, ReservationPopoverData, ReservationPopoverPosition } from '../../../types/interfaces'
 
-interface ICalendarEventProps {
-	calendarView: CALENDAR_VIEW
-	data: EventContentArg
-	salonID: string
-	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
-	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
-}
+// types
+import { ICalendarEventContent } from '../../../../types/interfaces'
 
 const InverseBackgroundEvent = React.memo(() => <div className={cx('nc-bg-event not-set-availability')} />)
 
@@ -34,14 +25,11 @@ const BackgroundEvent: FC<{ eventType?: CALENDAR_EVENT_TYPE }> = React.memo(({ e
 	/>
 ))
 
-const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, onEditEvent, onReservationClick }) => {
-	const { event, backgroundColor } = data || {}
-	const { start, end } = event || {}
-
-	const { eventData } = (event.extendedProps as IEventExtenedProps) || {}
+const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
+	const { start, end, eventData, eventDisplayType, calendarView, onEditEvent, onReservationClick, backgroundColor, isEventsListPopover } = props
 
 	const {
-		id,
+		id: originalEventId,
 		start: eventStart,
 		end: eventEnd,
 		startDateTime,
@@ -65,19 +53,19 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 	})
 
 	// background events
-	if (event.display === 'inverse-background') {
+	if (eventDisplayType === CALENDAR_EVENT_DISPLAY_TYPE.INVERSE_BACKGROUND) {
 		return <InverseBackgroundEvent />
 	}
 
-	if (event.display === 'background') {
+	if (eventDisplayType === CALENDAR_EVENT_DISPLAY_TYPE.BACKGROUND) {
 		return <BackgroundEvent eventType={eventType as CALENDAR_EVENT_TYPE} />
 	}
 
-	const diff = dayjs(event.end).diff(event.start, 'minutes')
-	const timeText = getTimeText(event.start, event.end)
+	const diff = dayjs(end).diff(start, 'minutes')
+	const timeText = getTimeText(start, end, calendarView === CALENDAR_VIEW.MONTH)
 	const resourceId = ''
 	const originalEventData = {
-		id,
+		id: originalEventId,
 		start: eventStart,
 		end: eventEnd,
 		startDateTime,
@@ -85,6 +73,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 	}
 
 	const isEdit = searchParams.get('eventId') === originalEventData.id
+	const color = calendarView === CALENDAR_VIEW.MONTH ? employee?.color : backgroundColor
 
 	const timeLeftToEndOfaDay = calendarView === CALENDAR_VIEW.DAY || calendarView === CALENDAR_VIEW.WEEK ? dayjs(start).endOf('day').diff(dayjs(start), 'minutes') : undefined
 	const timeLeftClassName = timeLeftToEndOfaDay && timeLeftToEndOfaDay < 14 ? `end-of-day-${14 - timeLeftToEndOfaDay}` : undefined
@@ -103,7 +92,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					start={start}
 					end={end}
 					employee={employee}
-					backgroundColor={backgroundColor}
+					backgroundColor={color}
 					isMultiDayEvent={isMultiDayEvent}
 					isFirstMultiDayEventInCurrentRange={isFirstMultiDayEventInCurrentRange}
 					isLastMultiDaylEventInCurrentRange={isLastMultiDaylEventInCurrentRange}
@@ -113,6 +102,7 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					isBulkEvent={!!calendarBulkEvent?.id}
 					isPlaceholder={isPlaceholder}
 					isEdit={isEdit}
+					isEventsListPopover={isEventsListPopover}
 					timeLeftClassName={timeLeftClassName}
 				/>
 			)
@@ -126,14 +116,13 @@ const CalendarEventContent: FC<ICalendarEventProps> = ({ calendarView, data, sal
 					end={end}
 					diff={diff}
 					timeText={timeText}
-					salonID={salonID}
 					reservationData={reservationData}
 					customer={customer}
 					service={service}
 					employee={employee}
+					backgroundColor={color}
 					note={note}
 					noteFromB2CCustomer={noteFromB2CCustomer}
-					backgroundColor={backgroundColor}
 					isMultiDayEvent={isMultiDayEvent}
 					isFirstMultiDayEventInCurrentRange={isFirstMultiDayEventInCurrentRange}
 					isLastMultiDaylEventInCurrentRange={isLastMultiDaylEventInCurrentRange}

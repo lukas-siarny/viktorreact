@@ -28,7 +28,7 @@ import { RootState } from '../../reducers'
 import { getServices } from '../../reducers/services/serviceActions'
 
 // types
-import { IBreadcrumbs, SalonSubPageProps, Columns, IEmployeesPayload } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps, Columns } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-offline.svg'

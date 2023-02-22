@@ -282,4 +282,4 @@ const IndustryPage = (props: Props) => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.PARTNER]))(IndustryPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(IndustryPage)

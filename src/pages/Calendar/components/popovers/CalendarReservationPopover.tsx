@@ -32,10 +32,10 @@ import { CalendarEvent, ICalendarReservationPopover } from '../../../../types/in
 import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, FORM, PERMISSION, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE, STRINGS } from '../../../../utils/enums'
 import { getAssignedUserLabel, getCountryPrefix, translateReservationPaymentMethod, translateReservationState } from '../../../../utils/helper'
 import { parseTimeFromMinutes, getTimeText } from '../../calendarHelpers'
+import { checkPermissions } from '../../../../utils/Permissions'
 
 // hooks
 import useKeyUp from '../../../../hooks/useKeyUp'
-import { checkPermissions } from '../../../../utils/Permissions'
 
 type PopoverNote = {
 	key: string
@@ -228,7 +228,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
-	const isNotinoUser = checkPermissions(authUser.data?.uniqPermissions)
+	const isNotinoUser = checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO])
 
 	const overlayClassName = `nc-popover-overlay_${id || ''}`
 	const itemClassName = 'p-2 font-medium min-w-0 h-9 w-full relative'

@@ -40,7 +40,6 @@ import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCount
 
 // hooks
 import useQueryParams, { ArrayParam, BooleanParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
-import TooltipEllipsis from '../../components/TooltipEllipsis'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO]
 

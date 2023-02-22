@@ -67,7 +67,7 @@ export interface IPendingInvitesPayload {
 export const processAuthorizationResult =
 	(result: Paths.PostApiB2BAdminAuthLogin.Responses.$200, redirectPath = i18next.t('paths:index')): ThunkResult<void> =>
 	async (dispatch) => {
-		let salons: Paths.GetApiB2BAdminUsersUserId.Responses.$200['user']['salons'] = []
+		let salons: any = []
 		const allowRedirectPath = includes(NOT_ALLOWED_REDIRECT_PATHS, redirectPath) ? i18next.t('paths:index') : redirectPath
 		try {
 			dispatch({ type: AUTH_USER.AUTH_USER_LOAD_START })

@@ -9,6 +9,7 @@ import { logOutUser } from '../reducers/users/userActions'
 import { getAccessToken, isLoggedIn } from './auth'
 import { CANCEL_TOKEN_MESSAGES, MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES } from './enums'
 import configureStore from './configureStore'
+import Navigator from './navigation'
 
 // types
 import { IErrorMessage } from '../types/interfaces'
@@ -56,6 +57,8 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 			}
 		]
 		showNotifications(messages, typeNotification)
+	} else if (get(error, 'response.status') === 404) {
+		Navigator.navigate('/404')
 	} else {
 		// if BE do not send message set general error message
 		messages = isEmpty(messages) ? [{ type: MSG_TYPE.ERROR, message: i18next.t('loc:Ups niečo sa pokazilo') }] : messages

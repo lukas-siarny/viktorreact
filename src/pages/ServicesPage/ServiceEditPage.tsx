@@ -240,9 +240,7 @@ const ServiceEditPage = (props: Props) => {
 	const fetchData = useCallback(async () => {
 		const { data } = await dispatch(getService(serviceID))
 		const { categoryParameterValues } = await dispatch(getCategory(data?.service?.category?.child?.child?.id))
-		if (!data?.service?.id) {
-			navigate('/404')
-		}
+
 		if (data) {
 			// union parameter values form service and category detail based on categoryParameterValueID
 			const parameterValues = unionBy(data.service?.serviceCategoryParameter?.values, categoryParameterValues as any, 'categoryParameterValueID')

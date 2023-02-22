@@ -66,9 +66,6 @@ const UserPage: FC<Props> = () => {
 	useEffect(() => {
 		const fetchUserData = async () => {
 			const { data } = await dispatch(getUserAccountDetails(userIDWrap))
-			if (!data?.user?.id) {
-				navigate('/404')
-			}
 
 			dispatch(
 				initialize(FORM.USER_ACCOUNT, {

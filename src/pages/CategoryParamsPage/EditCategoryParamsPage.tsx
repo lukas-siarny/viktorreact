@@ -41,10 +41,6 @@ const EditCategoryParamsPage = () => {
 		const fetchData = async () => {
 			const { data } = await dispatch(getCategoryParameter(parameterID as string))
 
-			if (!data?.id) {
-				navigate('/404')
-			}
-
 			if (data) {
 				dispatch(
 					initialize(FORM.CATEGORY_PARAMS, {

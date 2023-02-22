@@ -7,6 +7,7 @@ import { FormatterInput } from '@fullcalendar/core'
 
 export enum CYPRESS_CLASS_NAMES {
 	LOGOUT_BUTTON = 'noti-logout-button',
+	MY_ACCOUNT = 'noti-my-account',
 	MY_ACCOUNT_BUTTON = 'noti-my-account-button',
 	FORBIDDEN_MODAL = 'noti-forbidden-modal'
 }

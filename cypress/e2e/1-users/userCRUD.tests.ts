@@ -1,4 +1,4 @@
-import { CYPRESS_CLASS_NAMES, SUBMIT_BUTTON_ID, FORM } from '../../../src/utils/enums'
+import { SUBMIT_BUTTON_ID, FORM } from '../../../src/utils/enums'
 
 // fixtures
 import user from '../../fixtures/user.json'
@@ -26,18 +26,6 @@ const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?:
 	afterEach(() => {
 		// take snapshot of local storage with new refresh and access token
 		cy.saveLocalStorage()
-	})
-
-	it('Update my account info', () => {
-		cy.visit('/')
-		cy.get('.noti-my-account').click()
-		cy.get(`.${CYPRESS_CLASS_NAMES.MY_ACCOUNT_BUTTON}`).click()
-		cy.location('pathname').should('eq', '/my-account')
-		cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.updateMyAccount.firstName, false, true)
-		cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.updateMyAccount.lastName, false, true)
-		cy.setInputValue(FORM.USER_ACCOUNT, 'phone', user.updateMyAccount.phone, false, true)
-		cy.get('form').submit()
-		cy.checkSuccessToastMessage()
 	})
 
 	it('Create partner', () => {

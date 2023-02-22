@@ -312,7 +312,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							>
 								<div role='button' className='cursor-pointer' tabIndex={-1} onClick={(e) => e.preventDefault()} onKeyPress={(e) => e.preventDefault()}>
 									<Row className='flex items-center' justify='space-between'>
-										<Row className='noti-my-account'>
+										<Row className={CYPRESS_CLASS_NAMES.MY_ACCOUNT}>
 											<div className='truncate item-label flex items-center'>{t('loc:Moje konto')}</div>
 										</Row>
 

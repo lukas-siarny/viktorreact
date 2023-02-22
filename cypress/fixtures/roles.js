@@ -10,6 +10,10 @@ const data = [
 		},
 		tests: [
 			{
+				name: LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT,
+				actions: []
+			},
+			{
 				name: LIST_OF_TESTS_SUITS.USER_CRUD,
 				actions: [CRUD_OPERATIONS.ALL]
 			}
@@ -22,6 +26,10 @@ const data = [
 			password: 'Lopaty123.'
 		},
 		tests: [
+			{
+				name: LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT,
+				actions: []
+			},
 			{
 				name: LIST_OF_TESTS_SUITS.USER_CRUD,
 				actions: [CRUD_OPERATIONS.ALL]
@@ -36,6 +44,10 @@ const data = [
 			password: 'Lopaty123.'
 		},
 		tests: [
+			{
+				name: LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT,
+				actions: []
+			},
 			{
 				name: LIST_OF_TESTS_SUITS.USER_CRUD,
 				actions: [CRUD_OPERATIONS.READ]

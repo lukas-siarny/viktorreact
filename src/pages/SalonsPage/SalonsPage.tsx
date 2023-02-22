@@ -315,7 +315,7 @@ const SalonsPage = () => {
 				title: t('loc:ID'),
 				dataIndex: 'id',
 				key: 'id',
-				ellipsis: true,
+				ellipsis: false,
 				sorter: false,
 				render: (value) => {
 					const firstThree = value.substring(0, 3)
@@ -474,6 +474,7 @@ const SalonsPage = () => {
 				return <RejectedSalonSuggestions />
 			case TAB_KEYS.DELETED:
 				columns = [
+					tableColumns.id({ width: '8%' }),
 					tableColumns.name({ width: '20%' }),
 					tableColumns.address({ width: '16%' }),
 					tableColumns.categories({ width: '16%' }),

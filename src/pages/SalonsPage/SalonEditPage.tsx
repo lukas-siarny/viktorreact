@@ -131,7 +131,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	const breadcrumbDetailItem = {
 		name: tabKey === TAB_KEYS.SALON_DETAIL ? t('loc:Detail salónu') : t('loc:História salónu'),
-		titleName: get(salon, 'data.name')
+		titleName: `${salon.data?.name} | ID: ${salon.data?.id}`
 	}
 
 	// View

@@ -40,7 +40,6 @@ context('Auth', () => {
 			delay: 5000, // wait 5 seconds between attempts
 			log: false
 		}).then((email: string) => {
-			// cy.log(email)
 			const emailHtml = parse(email)
 			const htmlTag = emailHtml.querySelector('#activation-code')
 			if (htmlTag) {

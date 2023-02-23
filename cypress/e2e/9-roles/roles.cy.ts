@@ -15,26 +15,28 @@ describe('Dynamic tests for roles', () => {
 	data.forEach((user) => {
 		if (!user.isInActive) {
 			user.tests.forEach((test) => {
-				if (test.name === LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT) {
-					context(`MyAccountUpdate as ${user.role}`, () => updateMyAccountTestSuit(user.credentials.user, user.credentials.password))
-				}
-				if (test.name === LIST_OF_TESTS_SUITS.USER_CRUD) {
-					context(`UserCRUD as ${user.role}`, () => userCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
-				}
-				if (test.name === LIST_OF_TESTS_SUITS.SALON) {
-					context(`UserCRUD as ${user.role}`, () => salonTestSuit(test.actions, user.credentials.user, user.credentials.password))
-				}
-				if (test.name === LIST_OF_TESTS_SUITS.CATEGORY_PARAMETERS_CRUD) {
-					context(`CategoryParametersCRUD as ${user.role}`, () => categoryParameterCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
-				}
-				if (test.name === LIST_OF_TESTS_SUITS.COSMETICS_CRUD) {
-					context(`CosmeticsCRUD as ${user.role}`, () => cosmeticsCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
-				}
-				if (test.name === LIST_OF_TESTS_SUITS.SPECIALIST_CRUD) {
-					context(`SpecialistContactsCRUD as ${user.role}`, () => specialistContactsCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
-				}
-				if (test.name === LIST_OF_TESTS_SUITS.CATEGORIES_CRUD) {
-					context(`CategoriesCRUD as ${user.role}`, () => categoriesCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
+				switch (test.name) {
+					case LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT:
+						context(`MyAccountUpdate as ${user.role}`, () => updateMyAccountTestSuit(user.credentials.user, user.credentials.password))
+						break
+					case LIST_OF_TESTS_SUITS.USER_CRUD:
+						context(`UserCRUD as ${user.role}`, () => userCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
+						break
+					case LIST_OF_TESTS_SUITS.SALON:
+						context(`SalonCRUD as ${user.role}`, () => salonTestSuit(test.actions, user.credentials.user, user.credentials.password))
+						break
+					case LIST_OF_TESTS_SUITS.CATEGORY_PARAMETERS_CRUD:
+						context(`CategoryParametersCRUD as ${user.role}`, () => categoryParameterCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
+						break
+					case LIST_OF_TESTS_SUITS.COSMETICS_CRUD:
+						context(`CosmeticsCRUD as ${user.role}`, () => cosmeticsCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
+						break
+					case LIST_OF_TESTS_SUITS.SPECIALIST_CRUD:
+						context(`SpecialistContactsCRUD as ${user.role}`, () => specialistContactsCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
+						break
+					case LIST_OF_TESTS_SUITS.CATEGORIES_CRUD:
+						context(`CategoriesCRUD as ${user.role}`, () => categoriesCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
+						break
 				}
 			})
 		}

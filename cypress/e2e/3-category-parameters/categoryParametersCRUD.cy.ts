@@ -1,4 +1,4 @@
-import categoryParameterCRUDTestSuit from './categoryParametersCRUD.test'
+import categoryParameterCRUDTestSuit from './categoryParametersCRUD.tests'
 
 import { CRUD_OPERATIONS } from '../../enums'
 

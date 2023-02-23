@@ -651,10 +651,12 @@ export interface IEnumerationsCountriesPayload extends IEnumerationsPayload {
 	data: CountriesData | null
 }
 
-export type IUser = ((Paths.PostApiB2BAdminAuthLogin.Responses.$200['user'] | null) & IPermissions) 
+export interface IUserPayload {
+	data: Paths.GetApiB2BAdminUsersUserId.Responses.$200 | null
+}
 
 export interface IAuthUserPayload {
-	data: IUser | null
+	data: ((Paths.PostApiB2BAdminAuthLogin.Responses.$200['user'] | null) & IPermissions) | null
 }
 
 export interface IEmployeePayload {

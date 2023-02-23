@@ -34,8 +34,13 @@ type DeleteUrls = {
 	[Q in FilteredKeys<PathsDictionary, { delete: any }>]: PathsDictionary[Q]
 }
 
-export const showErrorNotifications = (error: AxiosError | Error | unknown, typeNotification = NOTIFICATION_TYPE.NOTIFICATION, skipRedirect = false) => {
+export const showErrorNotifications = (
+	error: AxiosError | Error | unknown,
+	typeNotification = NOTIFICATION_TYPE.NOTIFICATION,
+	config?: Pick<ICustomConfig, 'skipLoginRedirect' | 'skip404Handler'>
+) => {
 	let messages = get(error, 'response.data.messages')
+	const skip404Handler = get(config, 'skip404Handler', false)
 
 	if (get(error, 'response.status') === 401) {
 		if (isLoggedIn()) {
@@ -48,7 +53,7 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 		}
 		showNotifications(messages, typeNotification)
 		const { store } = configureStore(rootReducer)
-		logOutUser(skipRedirect)(store.dispatch, store.getState, undefined)
+		logOutUser(get(config, 'skipLoginRedirect', false))(store.dispatch, store.getState, undefined)
 	} else if (get(error, 'response.status') === 504 || get(error, 'response') === undefined || get(error, 'message') === 'Network Error') {
 		messages = [
 			{
@@ -57,7 +62,7 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 			}
 		]
 		showNotifications(messages, typeNotification)
-	} else if (get(error, 'response.status') === 404) {
+	} else if (get(error, 'response.status') === 404 && !skip404Handler) {
 		Navigator.navigate('/404')
 	} else {
 		// if BE do not send message set general error message
@@ -69,6 +74,7 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 export interface ICustomConfig extends AxiosRequestConfig {
 	messages?: IErrorMessage[]
 	skipLoginRedirect?: boolean
+	skip404Handler?: boolean
 }
 
 const buildHeaders = () => {
@@ -182,7 +188,10 @@ export const getReq = async <T extends keyof GetUrls>(
 		return res
 	} catch (e) {
 		if (!axios.isCancel(e) && typeNotification) {
-			showErrorNotifications(e, typeNotification, customConfig?.skipLoginRedirect)
+			showErrorNotifications(e, typeNotification, {
+				skipLoginRedirect: customConfig?.skipLoginRedirect,
+				skip404Handler: customConfig?.skip404Handler
+			})
 		}
 		if (hide) {
 			hide()
@@ -262,7 +271,7 @@ export const postReq = async <T extends keyof PostUrls>(
 		return res
 	} catch (e) {
 		if (!axios.isCancel(e) && typeNotification) {
-			showErrorNotifications(e, typeNotification, customConfig?.skipLoginRedirect)
+			showErrorNotifications(e, typeNotification, { skipLoginRedirect: customConfig?.skipLoginRedirect, skip404Handler: customConfig?.skip404Handler })
 		}
 		if (hide) {
 			hide()
@@ -339,7 +348,7 @@ export const patchReq = async <T extends keyof PatchUrls>(
 		return res
 	} catch (e) {
 		if (!axios.isCancel(e) && typeNotification) {
-			showErrorNotifications(e, typeNotification, customConfig?.skipLoginRedirect)
+			showErrorNotifications(e, typeNotification, { skipLoginRedirect: customConfig?.skipLoginRedirect, skip404Handler: customConfig?.skip404Handler })
 		}
 		if (hide) {
 			hide()
@@ -402,7 +411,7 @@ export const deleteReq = async <T extends keyof DeleteUrls>(
 		}
 
 		if (!axios.isCancel(e) && typeNotification) {
-			showErrorNotifications(e, typeNotification, customConfig?.skipLoginRedirect)
+			showErrorNotifications(e, typeNotification, { skipLoginRedirect: customConfig?.skipLoginRedirect, skip404Handler: customConfig?.skip404Handler })
 		}
 		return Promise.reject(e)
 	}

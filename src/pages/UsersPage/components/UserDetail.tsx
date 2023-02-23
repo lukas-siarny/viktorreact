@@ -1,50 +1,43 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Button, Row, Spin } from 'antd'
+import { Button, Spin } from 'antd'
 import { initialize, isPristine, isSubmitting, submit } from 'redux-form'
-import { get } from 'lodash'
-import cx from 'classnames'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 // components
 import UserAccountForm from './UserAccountForm'
-import EditUserRoleForm from './EditUserRoleForm'
 import DeleteButton from '../../../components/DeleteButton'
-import Breadcrumbs from '../../../components/Breadcrumbs'
-
-// enums
-import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
 
 // reducers
 import { RootState } from '../../../reducers'
-import { getCurrentUser, getUserAccountDetails, logOutUser } from '../../../reducers/users/userActions'
-import { getSystemRoles } from '../../../reducers/roles/rolesActions'
+import { getCurrentUser, getUser, logOutUser } from '../../../reducers/users/userActions'
 
 // types
-import { IBreadcrumbs, IEditUserRoleForm, IUserAccountForm, IAuthUserPayload, ILoadingAndFailure } from '../../../types/interfaces'
+import { IUserAccountForm, ILoadingAndFailure, IUserPayload } from '../../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq } from '../../../utils/request'
 import Permissions from '../../../utils/Permissions'
 import { formFieldID } from '../../../utils/helper'
-
-// hooks
-import useBackUrl from '../../../hooks/useBackUrl'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
 
 // assets
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 
 type Props = {
-	user: IAuthUserPayload & ILoadingAndFailure
 	onDeleteSuccess: () => void
+	deleteEntityName: string
+	ignoreDeletePermissions?: boolean
+	submitPermissions: PERMISSION[]
+	userID: string
+	deleteInProgress?: (progress: boolean) => void
 }
 
-const UserPage = (props: Props) => {
+const UserDetail = (props: Props) => {
 	const [t] = useTranslation()
-	const { user, onDeleteSuccess } = props
-	const userID = String(user.data?.id)
-	const navigate = useNavigate()
+	const { userID, onDeleteSuccess, deleteEntityName, ignoreDeletePermissions, submitPermissions, deleteInProgress } = props
+	const { user } = useSelector((state: RootState) => state.user)
+	const userData = user.data?.user
 	const dispatch = useDispatch()
 	const submittingAccountForm = useSelector(isSubmitting(FORM.USER_ACCOUNT))
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
@@ -54,17 +47,27 @@ const UserPage = (props: Props) => {
 	const isLoading = user.isLoading || isRemoving
 
 	useEffect(() => {
+		dispatch(getUser(userID))
+	}, [userID, dispatch])
+
+	useEffect(() => {
 		dispatch(
 			initialize(FORM.USER_ACCOUNT, {
-				...user.data,
-				avatar: user.data?.image ? [{ url: user.data?.image?.original, uid: user.data?.image?.id }] : null
+				...userData,
+				avatar: userData?.image ? [{ url: userData?.image?.original, uid: userData?.image?.id }] : null
 			})
 		)
-	}, [dispatch, user.data])
+	}, [dispatch, userData])
+
+	useEffect(() => {
+		if (deleteInProgress) {
+			deleteInProgress(isRemoving)
+		}
+	}, [isRemoving, deleteInProgress])
 
 	const handleUserAccountFormSubmit = async (data: IUserAccountForm) => {
 		try {
-			const userData: any = {
+			const body: any = {
 				firstName: data?.firstName,
 				lastName: data?.lastName,
 				phonePrefixCountryCode: data?.phonePrefixCountryCode,
@@ -73,7 +76,7 @@ const UserPage = (props: Props) => {
 				assignedCountryCode: data?.assignedCountryCode
 			}
 
-			await patchReq('/api/b2b/admin/users/{userID}', { userID }, userData)
+			await patchReq('/api/b2b/admin/users/{userID}', { userID }, body)
 			// if (!userID || authUser.data?.id === userID) dispatch(getCurrentUser())
 			dispatch(initialize(FORM.USER_ACCOUNT, data))
 		} catch (error: any) {
@@ -118,10 +121,10 @@ const UserPage = (props: Props) => {
 								className={'w-full md:w-auto md:min-w-50 xl:min-w-60'}
 								id={formFieldID(FORM.USER_ACCOUNT, DELETE_BUTTON_ID)}
 								onConfirm={deleteUser}
-								entityName={isMyAccountPath ? t('loc:účet') : t('loc:používateľa')}
+								entityName={deleteEntityName}
 								type={'default'}
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-								ignorePermissions={isMyAccountPath}
+								ignorePermissions={ignoreDeletePermissions}
 							/>
 							<Permissions
 								allowed={submitPermissions}
@@ -155,4 +158,4 @@ const UserPage = (props: Props) => {
 	)
 }
 
-export default UserPage
+export default UserDetail

@@ -29,9 +29,10 @@ import { RootState } from '../../../../reducers'
 import { CalendarEvent, ICalendarReservationPopover } from '../../../../types/interfaces'
 
 /// utils
-import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, FORM, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE, STRINGS } from '../../../../utils/enums'
+import { CALENDAR_EVENTS_KEYS, CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, FORM, PERMISSION, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE, STRINGS } from '../../../../utils/enums'
 import { getAssignedUserLabel, getCountryPrefix, translateReservationPaymentMethod, translateReservationState } from '../../../../utils/helper'
 import { parseTimeFromMinutes, getTimeText } from '../../calendarHelpers'
+import { checkPermissions } from '../../../../utils/Permissions'
 
 // hooks
 import useKeyUp from '../../../../hooks/useKeyUp'
@@ -226,6 +227,9 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
+	const authUser = useSelector((state: RootState) => state.user.authUser)
+	const isNotinoUser = checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO])
+
 	const overlayClassName = `nc-popover-overlay_${id || ''}`
 	const itemClassName = 'p-2 font-medium min-w-0 h-9 w-full relative'
 
@@ -364,11 +368,16 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 		switch (reservationData?.state) {
 			case RESERVATION_STATE.APPROVED: {
 				const { icon: headerIcon, text: headerState } = translateReservationState(RESERVATION_STATE.APPROVED)
+				let footerButtons: JSX.Element[] = []
+				if (isNotinoUser || (!isNotinoUser && dayjs(start).isSameOrBefore(dayjs()))) {
+					footerButtons = [getFooterCancelButton('cancel-button-not-realized', t('loc:Nezrealizovaná'), RESERVATION_STATE.NOT_REALIZED), getFooterCheckoutButton()]
+				}
+
 				return {
 					headerIcon,
 					headerState,
 					moreMenuItems: [headerMoreItems.cancel_by_salon],
-					footerButtons: [getFooterCancelButton('cancel-button-not-realized', t('loc:Nezrealizovaná'), RESERVATION_STATE.NOT_REALIZED), getFooterCheckoutButton()]
+					footerButtons
 				}
 			}
 			case RESERVATION_STATE.PENDING: {

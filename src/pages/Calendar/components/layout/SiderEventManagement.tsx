@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { change, initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import dayjs from 'dayjs'
-import { CalendarApi } from '@fullcalendar/core'
+import { CalendarApi } from '@fullcalendar/react'
 
 // types
 import { ICalendarEventForm, ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'

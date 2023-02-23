@@ -9,9 +9,8 @@ import { useNavigate } from 'react-router-dom'
 import { startsWith } from 'lodash'
 
 // fullcalendar
-import FullCalendar from '@fullcalendar/react'
+import FullCalendar, { EventDropArg } from '@fullcalendar/react'
 import { EventResizeDoneArg } from '@fullcalendar/interaction'
-import { EventDropArg } from '@fullcalendar/core'
 
 // enums
 import {

@@ -3,7 +3,7 @@ import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
 import { LoadScriptUrlOptions } from '@react-google-maps/api/dist/utils/make-load-script-url'
 import { AliasToken } from 'antd/es/theme/internal'
-import { FormatterInput } from '@fullcalendar/core'
+import { FormatterInput } from '@fullcalendar/react'
 
 export enum CYPRESS_CLASS_NAMES {
 	LOGOUT_BUTTON = 'noti-logout-button',
@@ -360,7 +360,11 @@ const PRAGUE_LOCATION = {
 	lat: 50.0755381,
 	lng: 14.4378005
 }
-
+export const CYPRESS = {
+	// Wait times in [ms]
+	S3_UPLOAD_WAIT_TIME: 2000,
+	ANIMATION_WAIT_TIME: 1000
+}
 export const MAP = {
 	defaultZoom: 10,
 	minLatitude: -90,
@@ -390,7 +394,7 @@ export const mapApiConfig: LoadScriptUrlOptions = {
 	// https://react-google-maps-api-docs.netlify.app/#usejsapiloader
 	libraries: ['places'],
 	// eslint-disable-next-line no-underscore-dangle
-	googleMapsApiKey: '' // window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_MAPS_API_KEY
+	googleMapsApiKey: window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_MAPS_API_KEY
 }
 
 export enum SALON_FILTER_STATES {

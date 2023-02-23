@@ -1,0 +1,11 @@
+{
+	"create": {
+		"name" : "Slovensky jazyk"
+	},
+	"update": {
+		"name" : "Cesky jazyk"
+	},
+	"filter": {
+		"search": "Slovak language"
+	}
+}

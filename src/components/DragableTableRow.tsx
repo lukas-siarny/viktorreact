@@ -1,11 +1,15 @@
 import React from 'react'
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { useSortable } from '@dnd-kit/sortable'
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { CSS } from '@dnd-kit/utilities'
+import cx from 'classnames'
 
 import { ReactComponent as DragIcon } from '../assets/icons/drag-icon.svg'
 
 interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
 	'data-row-key': string
+	disabled?: boolean
 }
 
 const DragableTableRow = ({ children, ...props }: RowProps) => {
@@ -26,7 +30,7 @@ const DragableTableRow = ({ children, ...props }: RowProps) => {
 				if ((child as React.ReactElement).key === 'sort') {
 					return React.cloneElement(child as React.ReactElement, {
 						children: (
-							<div ref={setActivatorNodeRef} {...listeners}>
+							<div className={cx({ 'pointer-events-none': props.disabled })} ref={setActivatorNodeRef} {...listeners}>
 								<DragIcon style={{ touchAction: 'none', cursor: 'move' }} className={'text-notino-pink w-4 h-4 flex'} />
 							</div>
 						)

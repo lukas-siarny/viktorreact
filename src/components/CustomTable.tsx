@@ -124,7 +124,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 					...props?.components?.body,
 					// eslint-disable-next-line react/no-unstable-nested-components
 					row(rowProps: any) {
-						return <DragableTableRow {...rowProps} />
+						return <DragableTableRow disabled={Number(props.dataSource?.length) < 2} {...rowProps} />
 					}
 				}
 			}

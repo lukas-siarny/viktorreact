@@ -3,7 +3,7 @@ import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
 import { LoadScriptUrlOptions } from '@react-google-maps/api/dist/utils/make-load-script-url'
 import { AliasToken } from 'antd/es/theme/internal'
-import { FormatterInput } from '@fullcalendar/core'
+import { FormatterInput } from '@fullcalendar/react'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'

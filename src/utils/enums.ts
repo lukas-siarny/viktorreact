@@ -353,7 +353,11 @@ const PRAGUE_LOCATION = {
 	lat: 50.0755381,
 	lng: 14.4378005
 }
-
+export const CYPRESS = {
+	// Wait times in [ms]
+	S3_UPLOAD_WAIT_TIME: 2000,
+	ANIMATION_WAIT_TIME: 1000
+}
 export const MAP = {
 	defaultZoom: 10,
 	minLatitude: -90,

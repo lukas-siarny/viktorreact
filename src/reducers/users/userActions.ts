@@ -84,7 +84,7 @@ export const processAuthorizationResult =
 				}
 			}
 
-			salons = result.user.salons
+			salons = result.user.salons as any
 
 			dispatch({
 				type: AUTH_USER.AUTH_USER_LOAD_DONE,

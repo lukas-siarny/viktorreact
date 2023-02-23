@@ -3,8 +3,7 @@ import dayjs from 'dayjs'
 import useResizeObserver from '@react-hook/resize-observer'
 
 // full calendar
-import FullCalendar from '@fullcalendar/react' // must go before plugins
-import { DateSelectArg, EventContentArg, SlotLabelContentArg } from '@fullcalendar/core'
+import FullCalendar, { DateSelectArg, EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'

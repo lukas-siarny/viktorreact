@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Field, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
+import { Field, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
 import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 
 // utils
 import { CHANGE_DEBOUNCE_TIME, FIELD_MODE, FORM } from '../../../utils/enums'
-import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize } from '../../../utils/helper'
+import { checkFiltersSize, checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
 
 // atoms
 import InputField from '../../../atoms/InputField'

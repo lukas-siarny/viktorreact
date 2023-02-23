@@ -2,7 +2,7 @@ import { IUseQueryParams } from './../hooks/useQueryParams'
 import { EventDragStartArg, EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
-import { EventDropArg, EventInput } from '@fullcalendar/core'
+import { EventDropArg, EventInput } from '@fullcalendar/react'
 
 // utils
 import {

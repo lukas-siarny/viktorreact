@@ -5,8 +5,7 @@ import dayjs from 'dayjs'
 import i18next from 'i18next'
 
 // full calendar
-import FullCalendar from '@fullcalendar/react' // must go before plugins
-import { DateSelectArg, DayCellContentArg, DayHeaderContentArg } from '@fullcalendar/core'
+import FullCalendar, { DateSelectArg, DayCellContentArg, DayHeaderContentArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import scrollGrid from '@fullcalendar/scrollgrid'

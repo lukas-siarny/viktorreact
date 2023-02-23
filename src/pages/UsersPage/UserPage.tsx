@@ -13,7 +13,7 @@ import DeleteButton from '../../components/DeleteButton'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // enums
-import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SUBMIT_BUTTON_ID } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -203,6 +203,7 @@ const UserPage: FC<Props> = () => {
 								allowed={submitPermissions}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
+										id={formFieldID(FORM.USER_ACCOUNT, SUBMIT_BUTTON_ID)}
 										type={'primary'}
 										size={'middle'}
 										className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}

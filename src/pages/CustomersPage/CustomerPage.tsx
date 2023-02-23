@@ -21,7 +21,7 @@ import { RootState } from '../../reducers'
 
 // utils
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SUBMIT_BUTTON_ID } from '../../utils/enums'
 import { deleteReq, patchReq } from '../../utils/request'
 import { Paths } from '../../types/api'
 
@@ -164,6 +164,7 @@ const CustomerPage = (props: Props) => {
 								allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_UPDATE]}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
+										id={formFieldID(FORM.CUSTOMER, SUBMIT_BUTTON_ID)}
 										type={'primary'}
 										size={'middle'}
 										className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}

@@ -45,8 +45,18 @@ describe('Support contacts', () => {
 			method: 'PATCH',
 			url: `/api/b2b/admin/enums/support-contacts/${supportContactID}`
 		}).as('updateSupportContact')
+		cy.intercept({
+			method: 'GET',
+			url: '/api/b2b/admin/enums/support-contacts/'
+		}).as('getSupportContacts')
+		cy.intercept({
+			method: 'GET',
+			url: `/api/b2b/admin/enums/support-contacts/${supportContactID}`
+		}).as('getSupportContact')
 		cy.visit('/support-contacts')
+		cy.wait('@getSupportContacts')
 		cy.get(`[data-row-key="${supportContactID}"]`).click()
+		cy.wait('@getSupportContact')
 		cy.selectOptionDropdownCustom(FORM.SUPPORT_CONTACT, 'countryCode', supportContact.update.countryCode, true)
 		cy.setInputValue(FORM.SUPPORT_CONTACT, 'emails-0-email', supportContact.update.emails[0], false, true)
 		cy.selectOptionDropdownCustom(FORM.SUPPORT_CONTACT, 'phones-0-phonePrefixCountryCode', supportContact.update.phones[0].phonePrefixCountryCode, true)
@@ -69,8 +79,18 @@ describe('Support contacts', () => {
 			method: 'DELETE',
 			url: `/api/b2b/admin/enums/support-contacts/${supportContactID}`
 		}).as('deleteSupportContact')
+		cy.intercept({
+			method: 'GET',
+			url: '/api/b2b/admin/enums/support-contacts/'
+		}).as('getSupportContacts')
+		cy.intercept({
+			method: 'GET',
+			url: `/api/b2b/admin/enums/support-contacts/${supportContactID}`
+		}).as('getSupportContact')
 		cy.visit('/support-contacts')
+		cy.wait('@getSupportContacts')
 		cy.get(`[data-row-key="${supportContactID}"]`).click()
+		cy.wait('@getSupportContact')
 		cy.clickDeleteButtonWithConfCustom(FORM.SUPPORT_CONTACT)
 		cy.wait('@deleteSupportContact').then((interception: any) => {
 			// check status code

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Divider, Form, Button } from 'antd'
 
 // utils
-import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, CREATE_BUTTON_ID, DELETE_BUTTON_ID, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, DELETE_BUTTON_ID, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { showErrorNotification, validationString, checkUploadingBeforeSubmit, formFieldID } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -42,12 +42,7 @@ const LanguagesForm: FC<Props> = (props) => {
 	const { handleSubmit, languageID, closeForm, onDelete, submitting, pristine } = props
 
 	return (
-		<Form
-			id={`${FORM.LANGUAGES}-form`}
-			layout={'vertical'}
-			className={'w-full top-0 sticky overflow-hidden pt-1 px-6 pb-6 -mx-6'}
-			onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}
-		>
+		<Form layout={'vertical'} className={'w-full top-0 sticky overflow-hidden pt-1 px-6 pb-6 -mx-6'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<div className={'h-full '}>
 				<h3 className={'mb-0 mt-3 relative pr-7'}>
 					{languageID ? t('loc:Upraviť jazyk') : t('loc:Vytvoriť jazyk')}

@@ -37,6 +37,7 @@ describe('Dynamic tests for roles', () => {
 					case LIST_OF_TESTS_SUITS.CATEGORIES_CRUD:
 						context(`CategoriesCRUD as ${user.role}`, () => categoriesCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
 						break
+					default:
 				}
 			})
 		}

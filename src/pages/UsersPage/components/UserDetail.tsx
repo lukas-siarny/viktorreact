@@ -37,31 +37,30 @@ import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 
 type Props = {
 	user: IAuthUserPayload & ILoadingAndFailure
+	onDeleteSuccess: () => void
 }
 
-const UserPage: FC<Props> = (props) => {
+const UserPage = (props: Props) => {
 	const [t] = useTranslation()
-	const authUser = useSelector((state: RootState) => state.user.authUser)
-	const { user } = props
+	const { user, onDeleteSuccess } = props
+	const userID = String(user.data?.id)
 	const navigate = useNavigate()
-	const userIDWrap = userID || get(authUser, 'data.id')
 	const dispatch = useDispatch()
 	const submittingAccountForm = useSelector(isSubmitting(FORM.USER_ACCOUNT))
-	const submittingEditRoleForm = useSelector(isSubmitting(FORM.EDIT_USER_ROLE))
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
-	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser)) as any
-
-	let submitPermissions = [PERMISSION.USER_EDIT]
-
-	const [backUrl] = useBackUrl(t('paths:users'))
-
-	if (isMyAccountPath) {
-		submitPermissions = [...submitPermissions, PERMISSION.PARTNER, PERMISSION.NOTINO]
-	}
 
 	const isFormPristine = useSelector(isPristine(FORM.USER_ACCOUNT))
 
 	const isLoading = user.isLoading || isRemoving
+
+	useEffect(() => {
+		dispatch(
+			initialize(FORM.USER_ACCOUNT, {
+				...user.data,
+				avatar: user.data?.image ? [{ url: user.data?.image?.original, uid: user.data?.image?.id }] : null
+			})
+		)
+	}, [dispatch, user.data])
 
 	const handleUserAccountFormSubmit = async (data: IUserAccountForm) => {
 		try {
@@ -74,7 +73,7 @@ const UserPage: FC<Props> = (props) => {
 				assignedCountryCode: data?.assignedCountryCode
 			}
 
-			await patchReq('/api/b2b/admin/users/{userID}', { userID: userIDWrap }, userData)
+			await patchReq('/api/b2b/admin/users/{userID}', { userID }, userData)
 			// if (!userID || authUser.data?.id === userID) dispatch(getCurrentUser())
 			dispatch(initialize(FORM.USER_ACCOUNT, data))
 		} catch (error: any) {
@@ -88,19 +87,17 @@ const UserPage: FC<Props> = (props) => {
 			return
 		}
 		try {
-			let id = userIDWrap
-			if (isMyAccountPath && authUser.data) {
-				id = authUser.data.id
-			}
 			setIsRemoving(true)
-			await deleteReq('/api/b2b/admin/users/{userID}', { userID: user.data?.id }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			await deleteReq('/api/b2b/admin/users/{userID}', { userID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			onDeleteSuccess()
+			/**
 			if (isMyAccountPath) {
 				dispatch(logOutUser())
 				// bez tohto navigate ostava user v aplikacii a moze sa snazit urobit nejake akcie, ktore generuju 401 error (az potom by bol redirect na Login)
 				navigate(t('paths:login'))
 			} else {
 				navigate(t('paths:users'))
-			}
+			} */
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -109,44 +106,8 @@ const UserPage: FC<Props> = (props) => {
 		}
 	}
 
-	const editUserRole = async (data: IEditUserRoleForm) => {
-		if (submittingEditRoleForm) {
-			return
-		}
-		try {
-			await patchReq(
-				'/api/b2b/admin/users/{userID}/role',
-				{ userID: userIDWrap },
-				{
-					roleID: data?.roleID
-				}
-			)
-			await dispatch(getUserAccountDetails(userIDWrap))
-			dispatch(initialize(FORM.EDIT_USER_ROLE, data))
-		} catch (error: any) {
-			// eslint-disable-next-line no-console
-			console.error(error.message)
-		}
-	}
-
-	const hideClass = cx({
-		hidden: !userID
-	})
-
 	return (
 		<>
-			{!isMyAccountPath && (
-				<>
-					<Row className={hideClass}>
-						<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
-					</Row>
-					<div className='content-body small mb-8'>
-						<Spin spinning={isLoading || submittingEditRoleForm}>
-							<EditUserRoleForm onSubmit={editUserRole} />
-						</Spin>
-					</div>
-				</>
-			)}
 			<div className='content-body small'>
 				<Spin spinning={isLoading || submittingAccountForm}>
 					<UserAccountForm onSubmit={handleUserAccountFormSubmit} />

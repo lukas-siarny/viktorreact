@@ -23,7 +23,6 @@ const languagesCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, passw
 		cy.saveLocalStorage()
 	})
 
-	// CREATE
 	it('Create language', () => {
 		cy.intercept({
 			method: 'POST',
@@ -44,7 +43,7 @@ const languagesCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, passw
 			cy.checkSuccessToastMessage()
 		})
 	})
-	// UPDATE
+
 	it('Update language', () => {
 		cy.intercept({
 			method: 'PATCH',
@@ -67,7 +66,7 @@ const languagesCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, passw
 			cy.checkSuccessToastMessage()
 		})
 	})
-	// DELETE
+
 	it('Delete language', () => {
 		cy.intercept({
 			method: 'DELETE',
@@ -90,7 +89,7 @@ const languagesCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, passw
 			cy.location('pathname').should('eq', '/languages-in-salons')
 		})
 	})
-	// FILTER
+
 	it('Filter language', () => {
 		cy.intercept({
 			method: 'GET',

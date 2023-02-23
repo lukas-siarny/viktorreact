@@ -9,6 +9,7 @@ import salonTestSuit from '../2-salons/salon.tests'
 import categoryParameterCRUDTestSuit from '../3-category-parameters/categoryParametersCRUD.test'
 import cosmeticsCRUDTestSuit from '../4-cosmetics/cosmeticsCRUD.tests'
 import specialistContactsCRUDTestSuit from '../5-specialist-contacts/specialistContactsCRUD.tests'
+import supportCRUDTestSuit from '../6-support/supportCRUD.tests'
 import languagesCRUDTestSuit from '../7-languages/languagesCRUD.tests'
 import categoriesCRUDTestSuit from '../8-categories/categoriesCRUD.tests'
 
@@ -34,6 +35,9 @@ describe('Dynamic tests for roles', () => {
 						break
 					case LIST_OF_TESTS_SUITS.SPECIALIST_CRUD:
 						context(`SpecialistContactsCRUD as ${user.role}`, () => specialistContactsCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
+						break
+					case LIST_OF_TESTS_SUITS.SUPPORT_CRUD:
+						context(`SupportCRUD as ${user.role}`, () => supportCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
 						break
 					case LIST_OF_TESTS_SUITS.LANGUAGES_CRUD:
 						context(`LanguagesCRUD as ${user.role}`, () => languagesCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))

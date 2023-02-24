@@ -15,10 +15,9 @@ yarn-error.log
 apidoc
 translations.csv
 public/runtime-env.js
-notino_backend
+notino_backend/
 
 src/styles/main.css
 src/styles/tailwind-variables.sass
-notino_backend
 
 cypress/videos/*

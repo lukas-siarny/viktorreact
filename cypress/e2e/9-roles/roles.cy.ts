@@ -5,13 +5,13 @@ import { LIST_OF_TESTS_SUITS } from '../../enums'
 // testSuits
 import updateMyAccountTestSuit from '../1-users/updateMyAccountInfo.tests'
 import userCRUDTestSuit from '../1-users/userCRUD.tests'
-import salonTestSuit from '../2-salons/salon.tests'
-import categoryParameterCRUDTestSuit from '../3-category-parameters/categoryParametersCRUD.tests'
-import cosmeticsCRUDTestSuit from '../4-cosmetics/cosmeticsCRUD.tests'
-import specialistContactsCRUDTestSuit from '../5-specialist-contacts/specialistContactsCRUD.tests'
-import supportCRUDTestSuit from '../6-support/supportCRUD.tests'
-import languagesCRUDTestSuit from '../7-languages/languagesCRUD.tests'
-import categoriesCRUDTestSuit from '../8-categories/categoriesCRUD.tests'
+import categoryParameterCRUDTestSuit from '../2-category-parameters/categoryParametersCRUD.tests'
+import cosmeticsCRUDTestSuit from '../3-cosmetics/cosmeticsCRUD.tests'
+import specialistContactsCRUDTestSuit from '../4-specialist-contacts/specialistContactsCRUD.tests'
+import supportCRUDTestSuit from '../5-support/supportCRUD.tests'
+import languagesCRUDTestSuit from '../6-languages/languagesCRUD.tests'
+import categoriesCRUDTestSuit from '../7-categories/categoriesCRUD.tests'
+import salonTestSuit from '../8-salons/salon.tests'
 
 describe('Dynamic tests for roles', () => {
 	data.forEach((user) => {

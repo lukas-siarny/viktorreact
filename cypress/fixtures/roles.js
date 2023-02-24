@@ -10,11 +10,38 @@ const data = [
 		},
 		tests: [
 			{
-				name: LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT,
-				actions: []
+				name: LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT
 			},
 			{
 				name: LIST_OF_TESTS_SUITS.USER_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.CATEGORY_PARAMETERS_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.COSMETICS_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SPECIALIST_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SUPPORT_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.LANGUAGES_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.CATEGORIES_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SALON,
 				actions: [CRUD_OPERATIONS.ALL]
 			}
 		]
@@ -27,11 +54,38 @@ const data = [
 		},
 		tests: [
 			{
-				name: LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT,
-				actions: []
+				name: LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT
 			},
 			{
 				name: LIST_OF_TESTS_SUITS.USER_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.CATEGORY_PARAMETERS_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.COSMETICS_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SPECIALIST_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SUPPORT_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.LANGUAGES_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.CATEGORIES_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SALON,
 				actions: [CRUD_OPERATIONS.ALL]
 			}
 		],
@@ -45,11 +99,38 @@ const data = [
 		},
 		tests: [
 			{
-				name: LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT,
-				actions: []
+				name: LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT
 			},
 			{
 				name: LIST_OF_TESTS_SUITS.USER_CRUD,
+				actions: []
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.CATEGORY_PARAMETERS_CRUD,
+				actions: []
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.COSMETICS_CRUD,
+				actions: []
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SPECIALIST_CRUD,
+				actions: []
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SUPPORT_CRUD,
+				actions: []
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.LANGUAGES_CRUD,
+				actions: []
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.CATEGORIES_CRUD,
+				actions: []
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SALON,
 				actions: []
 			}
 		]

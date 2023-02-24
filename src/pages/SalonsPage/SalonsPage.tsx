@@ -310,6 +310,20 @@ const SalonsPage = () => {
 	// define columns for both tables - active and deleted
 	const tableColumns: { [key: string]: (props?: Columns[0]) => Columns[0] } = useMemo(
 		() => ({
+			id: (props) => ({
+				title: t('loc:ID'),
+				dataIndex: 'id',
+				key: 'id',
+				ellipsis: false,
+				sorter: false,
+				render: (value) => {
+					const firstThree = value.substring(0, 3)
+					const lastThree = value.substring(value.length - 3)
+
+					return <Tooltip title={value}>{`${firstThree}...${lastThree}`}</Tooltip>
+				},
+				...props
+			}),
 			name: (props) => ({
 				title: t('loc:Názov'),
 				dataIndex: 'name',
@@ -459,6 +473,7 @@ const SalonsPage = () => {
 				return <RejectedSalonSuggestions />
 			case TAB_KEYS.DELETED:
 				columns = [
+					tableColumns.id({ width: '8%' }),
 					tableColumns.name({ width: '20%' }),
 					tableColumns.address({ width: '16%' }),
 					tableColumns.categories({ width: '16%' }),
@@ -470,6 +485,7 @@ const SalonsPage = () => {
 				break
 			default:
 				columns = [
+					tableColumns.id({ width: '8%' }),
 					tableColumns.name({ width: '15%' }),
 					tableColumns.address({ width: '15%' }),
 					tableColumns.categories({ width: '9%' }),

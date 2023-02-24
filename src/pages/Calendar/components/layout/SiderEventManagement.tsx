@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { change, initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import dayjs from 'dayjs'
-import { CalendarApi } from '@fullcalendar/core'
+import { CalendarApi } from '@fullcalendar/react'
 
 // types
 import { ICalendarEventForm, ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'
@@ -44,6 +44,7 @@ import TabsComponent from '../../../../components/TabsComponent'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
+import { IUseQueryParams } from '../../../../hooks/useQueryParams'
 
 type Props = {
 	salonID: string
@@ -58,8 +59,10 @@ type Props = {
 	calendarApi?: CalendarApi
 	changeCalendarDate: (newDate: string) => void
 	phonePrefix?: string
-	query: any
-	setQuery: any
+	loadingData?: boolean
+	query: IUseQueryParams
+	setQuery: (newValues: IUseQueryParams) => void
+	areEmployeesLoaded: boolean
 }
 
 export type SiderEventManagementRefs = {
@@ -79,14 +82,17 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 		calendarApi,
 		changeCalendarDate,
 		phonePrefix,
+		loadingData,
 		query,
-		setQuery
+		setQuery,
+		areEmployeesLoaded
 	} = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
+	const employees = useSelector((state: RootState) => state.employees.employees)
 
 	useEffect(() => {
 		// nastavuje referenciu na CalendarApi, musi sa update-ovat, ked sa meni View, aby bola aktualna vo virtalEventActions
@@ -142,6 +148,8 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 				  }
 				: {}
 
+			const employee = employees.data?.employees?.find((emp) => data?.employee.id === emp.id)
+
 			const initData: ICalendarEventForm = {
 				eventId: data.id,
 				date: data.start.date,
@@ -160,7 +168,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 						email: data.employee.email
 					}),
 					{
-						employeeData: data?.employee
+						employeeData: employee || data.employee
 					}
 				),
 				...repeatOptions
@@ -223,11 +231,11 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 
 	useEffect(() => {
 		// ak je otvoreny sidebar a mame eventID, tak znamena, ze pozerame detail existujuceho eventu
-		if (query.sidebarView && query.eventId) {
+		if (query.sidebarView && query.eventId && areEmployeesLoaded) {
 			initUpdateEventForm()
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [query.eventId, query.sidebarView])
+	}, [query.eventId, query.sidebarView, areEmployeesLoaded])
 
 	useImperativeHandle(ref, () => ({
 		initCreateEventForm
@@ -251,7 +259,12 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 						email: employee.email
 					}),
 					borderColor: employee.color,
-					thumbNail: employee.image.resizedImages.thumbnail
+					thumbNail: employee.image.resizedImages.thumbnail,
+					extra: {
+						employeeData: {
+							color: employee.color
+						}
+					}
 				}))
 				return { pagination: data.pagination, data: selectOptions }
 			} catch (e) {
@@ -266,7 +279,15 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-				return <EventForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE} />
+				return (
+					<EventForm
+						searchEmployes={searchEmployes}
+						eventId={eventId}
+						onSubmit={handleSubmitEvent}
+						sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE}
+						loadingData={loadingData}
+					/>
+				)
 			case CALENDAR_EVENT_TYPE.RESERVATION:
 			default:
 				return (
@@ -276,6 +297,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 						phonePrefix={phonePrefix}
 						searchEmployes={searchEmployes}
 						onSubmit={handleSubmitReservation}
+						loadingData={loadingData}
 						sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE}
 					/>
 				)
@@ -287,7 +309,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 	return (
 		<Sider className={cx('nc-sider-event-management', { 'without-tabs': !showTabs })} collapsed={!sidebarView} width={240} collapsedWidth={0}>
 			<div className={'nc-sider-event-management-header justify-between'}>
-				<div className={'font-semibold'}>{eventId ? STRINGS(t).edit(EVENT_NAMES(sidebarView)) : STRINGS(t).createRecord(EVENT_NAMES(sidebarView))}</div>
+				<div className={'font-semibold'}>{eventId ? STRINGS(t).edit(EVENT_NAMES(t, sidebarView)) : STRINGS(t).createRecord(EVENT_NAMES(t, sidebarView))}</div>
 				<div className={'flex-center'}>
 					{eventId && (
 						<Permissions

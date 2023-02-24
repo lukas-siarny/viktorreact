@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { CalendarApi, EventApi, EventInput } from '@fullcalendar/core'
+import { CalendarApi, EventApi, EventInput } from '@fullcalendar/react'
 import dayjs from 'dayjs'
 import { destroy } from 'redux-form'
 
@@ -39,7 +39,7 @@ export const setCalendarApi = (api?: CalendarApi) => {
 	calendarApi = api
 }
 
-export const setCalendarDateHandler = (handler: (newDate: string) => void) => {
+export const setCalendarDateHandler = (handler: (newDate: string, monthViewFullRange?: boolean) => void) => {
 	changeCalendarDate = handler
 }
 
@@ -106,7 +106,7 @@ export const addOrUpdateEvent =
 			const newDate = dayjs(date)
 
 			if (!calendarViewDate.isSame(newDate) && changeCalendarDate) {
-				changeCalendarDate(date)
+				changeCalendarDate(date, true)
 			}
 
 			const eventInput: EventInput = {

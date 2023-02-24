@@ -15,7 +15,7 @@ import { RootState } from '../../../reducers'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { CHANGE_DEBOUNCE_TIME, ENUMERATIONS_KEYS, FIELD_MODE, FORM } from '../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, CREATE_BUTTON_ID, ENUMERATIONS_KEYS, FIELD_MODE, FORM } from '../../../utils/enums'
 import { checkFiltersSize, checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
 
 // atoms
@@ -79,6 +79,7 @@ const SupportContactsFilter = (props: Props) => {
 						htmlType='button'
 						className={'noti-btn w-full mb-2'}
 						icon={<PlusIcon />}
+						id={`${CREATE_BUTTON_ID}-${FORM.SUPPORT_CONTACT}`}
 					>
 						{t('loc:Pridať podporu')}
 					</Button>

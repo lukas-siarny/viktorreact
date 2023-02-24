@@ -216,7 +216,7 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 
 	return (
 		<Spin spinning={loading}>
-			<Form id={`${FORM.EMPLOYEE}-form`} layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
+			<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 				<div className={'flex justify-between gap-1 flex-wrap'}>
 					<div className={'flex items-center gap-2'}>
 						{employee?.image ? (

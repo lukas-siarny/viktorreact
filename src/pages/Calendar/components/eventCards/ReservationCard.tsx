@@ -7,28 +7,27 @@ import { startsWith } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 // utils
-import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NEW_ID_PREFIX } from '../../../utils/enums'
-import { getAssignedUserLabel } from '../../../utils/helper'
+import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NEW_ID_PREFIX } from '../../../../utils/enums'
+import { getAssignedUserLabel } from '../../../../utils/helper'
 
 // assets
-import { ReactComponent as QuestionMarkIcon } from '../../../assets/icons/question-mark-10.svg'
-import { ReactComponent as CheckIcon } from '../../../assets/icons/check-10.svg'
-import { ReactComponent as ServiceIcon } from '../../../assets/icons/service-icon-10.svg'
-import { ReactComponent as AvatarIcon } from '../../../assets/icons/avatar-10.svg'
-import { ReactComponent as CloseIcon } from '../../../assets/icons/close-12.svg'
-import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-12.svg'
+import { ReactComponent as QuestionMarkIcon } from '../../../../assets/icons/question-mark-10.svg'
+import { ReactComponent as CheckIcon } from '../../../../assets/icons/check-10.svg'
+import { ReactComponent as ServiceIcon } from '../../../../assets/icons/service-icon-10.svg'
+import { ReactComponent as AvatarIcon } from '../../../../assets/icons/avatar-10.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-12.svg'
+import { ReactComponent as ClockIcon } from '../../../../assets/icons/clock-12.svg'
 
 // types
-import { CalendarEvent, IEventCardProps, ReservationPopoverData, ReservationPopoverPosition } from '../../../types/interfaces'
+import { CalendarEvent, IEventCardProps, ReservationPopoverData, PopoverTriggerPosition } from '../../../../types/interfaces'
 
 interface IReservationCardProps extends IEventCardProps {
-	salonID: string
 	customer?: CalendarEvent['customer']
 	service?: CalendarEvent['service']
 	reservationData?: CalendarEvent['reservationData']
 	note?: CalendarEvent['note']
 	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
-	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
+	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
 }
 
 const getIconState = ({
@@ -142,7 +141,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 
 			const clientRect = cardRef.current.getBoundingClientRect()
 
-			const position: ReservationPopoverPosition = {
+			const position: PopoverTriggerPosition = {
 				top: clientRect.top,
 				left: clientRect.left,
 				width: clientRect.width,
@@ -155,29 +154,25 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 	return (
 		<div
 			ref={cardRef}
-			className={cx(
-				'nc-event reservation',
-				{
-					'nc-day-event': calendarView === CALENDAR_VIEW.DAY,
-					'nc-week-event': calendarView === CALENDAR_VIEW.WEEK,
-					'multiday-event': isMultiDayEvent,
-					'multiday-event-first': isFirstMultiDayEventInCurrentRange,
-					'multiday-event-last': isLastMultiDaylEventInCurrentRange,
-					'min-15': Math.abs(diff) <= 15,
-					'min-30': Math.abs(diff) <= 30 && Math.abs(diff) > 15,
-					'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
-					'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
-					'is-past': isPast,
-					'is-online': isOnline,
-					'state-pending': isPending,
-					'state-approved': isApproved,
-					'state-realized': isRealized,
-					'is-autoassigned': isEmployeeAutoassigned,
-					placeholder: isPlaceholder,
-					edit: isEdit || isPlaceholder
-				},
-				timeLeftClassName
-			)}
+			className={cx('nc-event reservation', timeLeftClassName, {
+				'nc-day-event': calendarView === CALENDAR_VIEW.DAY,
+				'nc-week-event': calendarView === CALENDAR_VIEW.WEEK,
+				'is-past': isPast,
+				'is-online': isOnline,
+				'state-pending': isPending,
+				'state-approved': isApproved,
+				'state-realized': isRealized,
+				'is-autoassigned': isEmployeeAutoassigned,
+				'multiday-event': isMultiDayEvent,
+				'multiday-event-first': isFirstMultiDayEventInCurrentRange,
+				'multiday-event-last': isLastMultiDaylEventInCurrentRange,
+				'min-15': Math.abs(diff) <= 15,
+				'min-30': Math.abs(diff) <= 30 && Math.abs(diff) > 15,
+				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
+				'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
+				placeholder: isPlaceholder,
+				edit: isEdit || isPlaceholder
+			})}
 			onClick={handleReservationClick}
 			style={{
 				outlineColor: (isPending || isEdit) && !isPast ? backgroundColor : undefined
@@ -197,6 +192,16 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 			<div id={originalEventData?.id} className={'event-content'}>
 				{(() => {
 					switch (calendarView) {
+						case CALENDAR_VIEW.MONTH:
+							return (
+								<>
+									<div className={'flex gap-1 min-w-0'}>
+										<div className={'icons'}>{iconState}</div>
+										<span className={'title truncate'}>{customerName}</span>
+									</div>
+									<span className={'time'}>{timeText}</span>
+								</>
+							)
 						case CALENDAR_VIEW.WEEK: {
 							return (
 								<>

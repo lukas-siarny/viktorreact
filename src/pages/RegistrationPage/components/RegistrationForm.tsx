@@ -19,8 +19,8 @@ import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 import { IRegistrationForm } from '../../../types/interfaces'
 
 // // utils
-import { FORM } from '../../../utils/enums'
-import { showErrorNotification } from '../../../utils/helper'
+import { FORM, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { formFieldID, showErrorNotification } from '../../../utils/helper'
 
 // validate
 
@@ -116,7 +116,15 @@ const RegistrationForm: FC<Props> = (props) => {
 				}
 			/>
 			<div className='mt-2'>
-				<Button type={'primary'} block className={`noti-btn m-regular mb-1 sm:mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
+				<Button
+					id={formFieldID(FORM.REGISTRATION, SUBMIT_BUTTON_ID)}
+					type={'primary'}
+					block
+					className={`noti-btn m-regular mb-1 sm:mb-4`}
+					htmlType={'submit'}
+					disabled={submitting}
+					loading={submitting}
+				>
 					{t('loc:Registrovať')}
 				</Button>
 

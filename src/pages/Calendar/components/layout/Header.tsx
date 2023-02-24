@@ -11,7 +11,7 @@ import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
 import { CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, STRINGS, CALENDAR_DEBOUNCE_DELAY } from '../../../../utils/enums'
 
 // assets
-import { ReactComponent as ChevronDownGrayDark } from '../../../../assets/icons/chevron-down-grayDark-12.svg'
+import { ReactComponent as ChevronDownGrayDark } from '../../../../assets/icons/chevron-down-currentColor-12.svg'
 import { ReactComponent as ChevronLeft } from '../../../../assets/icons/chevron-left-16.svg'
 import { ReactComponent as NavIcon } from '../../../../assets/icons/navicon-16.svg'
 import { ReactComponent as CreateIcon } from '../../../../assets/icons/plus-icon.svg'
@@ -30,7 +30,11 @@ import { getSelectedDateForCalendar } from '../../calendarHelpers'
 // types
 import { INewCalendarEvent } from '../../../../types/interfaces'
 
-const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
+const getDateFromSelectedMonth = (selectedMonth: { year: number; month: number }) => {
+	return dayjs(new Date(selectedMonth?.year, selectedMonth.month, 1))
+}
+
+const formatHeaderDate = (date: string, view: CALENDAR_VIEW, selectedMonth?: { year: number; month: number }) => {
 	switch (view) {
 		case CALENDAR_VIEW.WEEK: {
 			const firstDayOfWeek = dayjs(date).startOf('week')
@@ -45,9 +49,12 @@ const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 
 			return `${firstDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_START)} - ${lastDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_END)}`
 		}
-		/* case CALENDAR_VIEW.MONTH: {
+		case CALENDAR_VIEW.MONTH: {
+			if (selectedMonth) {
+				return getDateFromSelectedMonth(selectedMonth).format(CALENDAR_DATE_FORMAT.HEADER_MONTH)
+			}
 			return dayjs(date).startOf('month').format(CALENDAR_DATE_FORMAT.HEADER_MONTH)
-		} */
+		}
 		case CALENDAR_VIEW.DAY:
 		default:
 			return dayjs(date).format(CALENDAR_DATE_FORMAT.HEADER_DAY)
@@ -65,6 +72,8 @@ type Props = {
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	setEventsViewType: (newViewType: CALENDAR_EVENTS_VIEW_TYPE) => void
 	enabledSalonReservations?: boolean
+	loadingData?: boolean
+	selectedMonth: { year: number; month: number }
 }
 
 const CalendarHeader: FC<Props> = (props) => {
@@ -80,10 +89,14 @@ const CalendarHeader: FC<Props> = (props) => {
 		eventsViewType,
 		setEventsViewType,
 		onAddEvent,
-		enabledSalonReservations
+		enabledSalonReservations,
+		loadingData,
+		selectedMonth
 	} = props
 
 	const [currentDate, setCurrentDate] = useState(selectedDate)
+	const [formattedDate, setFormattedDate] = useState(formatHeaderDate(currentDate, calendarView, selectedMonth))
+	const [currentSelectedMonth, setCurrentSelectedMonth] = useState(selectedMonth)
 
 	const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
@@ -94,39 +107,62 @@ const CalendarHeader: FC<Props> = (props) => {
 		setIsCalendarOpen(false)
 	})
 
+	useEffect(() => {
+		setCurrentDate(selectedDate)
+	}, [selectedDate])
+
+	useEffect(() => {
+		setCurrentSelectedMonth(selectedMonth)
+	}, [selectedMonth])
+
+	useEffect(() => {
+		setFormattedDate(formatHeaderDate(currentDate, calendarView, currentSelectedMonth))
+	}, [currentDate, calendarView, currentSelectedMonth])
 	useEffect(() => setCurrentDate(selectedDate), [selectedDate])
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const setSelectedDateDebounced = useCallback(debounce(setSelectedDate, CALENDAR_DEBOUNCE_DELAY), [setSelectedDate])
 
-	const changeSelectedDate = (newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT, debounced = false) => {
-		let newQueryDate: string | dayjs.Dayjs = newDate
+	const changeSelectedDate = useCallback(
+		(newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT, debounced = false) => {
+			let newQueryDate: string | dayjs.Dayjs = newDate
+			let newSelectedMonth = { year: currentSelectedMonth.year, month: currentSelectedMonth.month }
 
-		switch (type) {
-			case CALENDAR_SET_NEW_DATE.FIND_START_ADD:
-				newQueryDate = dayjs(newDate)
-					.startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
-					.add(1, calendarView.toLowerCase() as dayjs.ManipulateType)
-				break
-			case CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT:
-				newQueryDate = dayjs(newDate)
-					.startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
-					.subtract(1, calendarView.toLowerCase() as dayjs.ManipulateType)
-				break
-			default:
-				break
-		}
+			switch (type) {
+				case CALENDAR_SET_NEW_DATE.FIND_START_ADD:
+				case CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT: {
+					const newSelectedMonthDate = getDateFromSelectedMonth(newSelectedMonth)
+					newQueryDate = dayjs(newDate).startOf(calendarView.toLowerCase() as dayjs.OpUnitType)
 
-		const newQueryDateFormatted = dayjs(newQueryDate).format(CALENDAR_DATE_FORMAT.QUERY)
-		setCurrentDate(newQueryDateFormatted)
+					if (type === CALENDAR_SET_NEW_DATE.FIND_START_ADD) {
+						newQueryDate = (calendarView === CALENDAR_VIEW?.MONTH ? newSelectedMonthDate : newQueryDate).add(1, calendarView.toLowerCase() as dayjs.ManipulateType)
+					} else {
+						newQueryDate = (calendarView === CALENDAR_VIEW?.MONTH ? newSelectedMonthDate : newQueryDate).subtract(1, calendarView.toLowerCase() as dayjs.ManipulateType)
+					}
+					newSelectedMonth = {
+						year: dayjs(newQueryDate).year(),
+						month: dayjs(newQueryDate).month()
+					}
+					break
+				}
+				default:
+					break
+			}
 
-		if (debounced) {
-			setSelectedDateDebounced(newQueryDateFormatted)
-		} else {
-			setSelectedDate(newQueryDateFormatted)
-			setSelectedDateDebounced.cancel()
-		}
-	}
+			const newQueryDateFormatted = dayjs(newQueryDate).format(CALENDAR_DATE_FORMAT.QUERY)
+
+			setCurrentDate(newQueryDateFormatted)
+			setCurrentSelectedMonth(newSelectedMonth)
+
+			if (debounced) {
+				setSelectedDateDebounced(newQueryDateFormatted)
+			} else {
+				setSelectedDate(newQueryDateFormatted)
+				setSelectedDateDebounced.cancel()
+			}
+		},
+		[calendarView, setSelectedDate, setSelectedDateDebounced, currentSelectedMonth]
+	)
 
 	const calendarViewOptions = useMemo(
 		() => [
@@ -139,6 +175,11 @@ const CalendarHeader: FC<Props> = (props) => {
 				key: CALENDAR_VIEW.WEEK,
 				label: t('loc:Týždeň'),
 				value: CALENDAR_VIEW.WEEK
+			},
+			{
+				key: CALENDAR_VIEW.MONTH,
+				label: t('loc:Mesiac'),
+				value: CALENDAR_VIEW.MONTH
 			}
 		],
 		[t]
@@ -184,10 +225,20 @@ const CalendarHeader: FC<Props> = (props) => {
 				/>
 			</div>
 			<div className={'nav-middle'}>
-				<button type={'button'} className={'nc-button w-8 mr-2'} onClick={() => changeSelectedDate(currentDate, CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT, true)}>
+				<button
+					type={'button'}
+					className={'nc-button w-8 mr-2'}
+					onClick={() => changeSelectedDate(currentDate, CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT, true)}
+					disabled={loadingData}
+				>
 					<ChevronLeft />
 				</button>
-				<button type={'button'} className={'nc-button w-8'} onClick={() => changeSelectedDate(currentDate, CALENDAR_SET_NEW_DATE.FIND_START_ADD, true)}>
+				<button
+					type={'button'}
+					className={'nc-button w-8'}
+					onClick={() => changeSelectedDate(currentDate, CALENDAR_SET_NEW_DATE.FIND_START_ADD, true)}
+					disabled={loadingData}
+				>
 					<ChevronLeft style={{ transform: 'rotate(180deg)' }} />
 				</button>
 				<div ref={headerDatePickerRef}>
@@ -203,7 +254,7 @@ const CalendarHeader: FC<Props> = (props) => {
 						inputRender={() => {
 							return (
 								<button type={'button'} className={'nc-button-date mx-1'} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>
-									{formatHeaderDate(currentDate, calendarView)}
+									{formattedDate}
 									<ChevronDownGrayDark />
 								</button>
 							)
@@ -214,6 +265,7 @@ const CalendarHeader: FC<Props> = (props) => {
 					type={'button'}
 					className={cx('nc-button', { active: dayjs(getSelectedDateForCalendar(calendarView, selectedDate)).isToday() })}
 					onClick={() => changeSelectedDate(dayjs())}
+					disabled={loadingData}
 				>
 					{t('loc:Dnes')}
 				</button>

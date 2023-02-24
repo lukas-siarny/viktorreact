@@ -17,7 +17,7 @@ import cx from 'classnames'
 import { uploadImage } from '../utils/request'
 import { formFieldID, getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam, splitArrayByCondition } from '../utils/helper'
 import showNotifications from '../utils/tsxHelpers'
-import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, IMAGE_UPLOADING_PROP } from '../utils/enums'
+import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, IMAGE_UPLOADING_PROP, STRINGS } from '../utils/enums'
 
 // assets
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
@@ -171,7 +171,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 					<div className={'w-full flex items-center h-full'}>
 						<Popconfirm
 							placement={'top'}
-							title={t('loc:Naozaj chcete odstrániť súbor?')}
+							title={STRINGS(t).areYouSureDelete(t('loc:súbor'))}
 							okButtonProps={{
 								type: 'default',
 								className: 'noti-btn'
@@ -188,7 +188,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 							<button
 								title='Remove file'
 								type='button'
-								className='ant-btn ant-btn-text ant-btn-sm ant-btn-icon-only ant-upload-list-item-card-actions-btn flex items-center justify-center fixed top-1 right-1 z-50 p-0 border-none bg-transparent'
+								className='noti-remove-img-button ant-btn ant-btn-text ant-btn-sm ant-btn-icon-only ant-upload-list-item-card-actions-btn flex items-center justify-center fixed top-1 right-1 z-50 p-0 border-none bg-transparent'
 							>
 								<span role='img' aria-label='delete' tabIndex={-1} className='anticon anticon-delete w-full h-full'>
 									<RemoveIcon className='remove-icon-image' width={18} />

@@ -17,9 +17,9 @@ import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
 import { ReactComponent as LocationIcon } from '../../../assets/icons/location-16.svg'
 
 // utils
-import { PERMISSION, FORM } from '../../../utils/enums'
+import { PERMISSION, FORM, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
-import { showErrorNotification } from '../../../utils/helper'
+import { formFieldID, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
@@ -194,6 +194,7 @@ const BillingInfoForm = (props: Props) => {
 						<div className={'content-footer'}>
 							<Row className='justify-center w-full'>
 								<Button
+									id={formFieldID(FORM.SALON_BILLING_INFO, SUBMIT_BUTTON_ID)}
 									type={'primary'}
 									className={'noti-btn w-full md:w-auto md:min-w-50 xl:min-w-60'}
 									htmlType={'submit'}

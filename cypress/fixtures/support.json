@@ -1,0 +1,77 @@
+{
+	"create" : {
+		"phones": [
+			{
+				"phonePrefixCountryCode": "+421",
+				"phone": "906047188"
+			},
+			{
+				"phonePrefixCountryCode": "+421",
+				"phone": "906047187"
+			}
+		],
+		"emails": [
+			"user@example.com"
+		],
+		"note": "Poznámka",
+		"openingHours": [
+			{
+				"day": "MONDAY",
+				"timeRanges": [
+					{
+						"timeFrom": "07:00",
+						"timeTo": "15:00"
+					}
+				],
+				"state": "CUSTOM_ORDER"
+			}
+		],
+		"countryCode": "BG",
+		"address": {
+			"countryCode": "BG",
+			"city": "Žilina",
+			"zipCode": "010 01",
+			"street": "Framborska 58",
+			"streetNumber": "1"
+		}
+	},
+	"update" : {
+		"phones": [
+			{
+				"phonePrefixCountryCode": "+421",
+				"phone": "906047187"
+			},
+			{
+				"phonePrefixCountryCode": "+421",
+				"phone": "906047187"
+			}
+		],
+		"emails": [
+			"user2@example.com"
+		],
+		"note": "lorem",
+		"openingHours": [
+			{
+				"day": "MONDAY",
+				"timeRanges": [
+					{
+						"timeFrom": "07:00",
+						"timeTo": "15:00"
+					}
+				],
+				"state": "CUSTOM_ORDER"
+			}
+		],
+		"countryCode": "HU",
+		"address": {
+			"countryCode": "HU",
+			"city": "Budapest",
+			"zipCode": "010 01",
+			"street": "Szabadszállás 6080",
+			"streetNumber": "6080"
+		}
+	},
+	"filter": {
+		"search": "slovak"
+	}
+}

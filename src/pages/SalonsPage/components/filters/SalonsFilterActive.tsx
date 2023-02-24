@@ -1,10 +1,9 @@
 import React, { useMemo, useCallback } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
-import { Button, Col, Divider, Form, Row, Tag } from 'antd'
+import { Button, Col, Divider, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce, filter, isArray, isEmpty, isNil, size } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
-import cx from 'classnames'
 import { useNavigate } from 'react-router-dom'
 
 // components
@@ -204,7 +203,7 @@ const SalonsFilterActive = (props: Props) => {
 				className={'h-10 p-0 m-0'}
 				component={InputField}
 				size={'large'}
-				placeholder={t('loc:Hľadať podľa názvu alebo adresy')}
+				placeholder={t('loc:Hľadať podľa názvu, adresy alebo ID')}
 				name={'search'}
 				fieldMode={FIELD_MODE.FILTER}
 				search

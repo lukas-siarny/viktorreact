@@ -3,19 +3,16 @@ import dayjs from 'dayjs'
 import useResizeObserver from '@react-hook/resize-observer'
 
 // full calendar
-import FullCalendar from '@fullcalendar/react' // must go before plugins
-import { DateSelectArg, EventContentArg, SlotLabelContentArg } from '@fullcalendar/core'
+import FullCalendar, { DateSelectArg, EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
-
-// components
-import CalendarEventContent from '../CalendarEventContent'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
 import { composeWeekResources, composeWeekViewEvents, getWeekDayResourceID } from '../../calendarHelpers'
 import { getDateTime } from '../../../../utils/helper'
+import eventContent from '../../eventContent'
 
 // types
 import { ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -182,7 +179,6 @@ interface ICalendarWeekView extends ICalendarView {
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
 	const {
-		salonID,
 		selectedDate,
 		eventsViewType,
 		shiftsTimeOffs,
@@ -327,6 +323,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				stickyFooterScrollbar
 				nowIndicator
 				selectable={enabledSalonReservations}
+				resourceOrder='title'
 				// data sources
 				eventSources={[events]}
 				resources={resources}
@@ -335,10 +332,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				resourceGroupLaneContent={resourceGroupLaneContent}
 				resourceGroupLabelContent={resourceGroupLabelContent}
 				slotLabelContent={slotLabelContent}
-				resourceOrder='title'
-				eventContent={(data: EventContentArg) => (
-					<CalendarEventContent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} onReservationClick={onReservationClick} />
-				)}
+				eventContent={(data: EventContentArg) => eventContent(data, CALENDAR_VIEW.WEEK, onEditEvent, onReservationClick)}
 				nowIndicatorContent={() => <NowIndicator />}
 				// handlers
 				eventDrop={onEventChange}

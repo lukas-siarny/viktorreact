@@ -24,7 +24,7 @@ import {
 } from '../../components/OpeningHours/OpeningHoursUtils'
 
 // enums
-import { DELETE_BUTTON_ID, ENUMERATIONS_KEYS, FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS } from '../../utils/enums'
+import { DELETE_BUTTON_ID, ENUMERATIONS_KEYS, FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS, SUBMIT_BUTTON_ID } from '../../utils/enums'
 
 // types
 import { Paths } from '../../types/api'
@@ -275,6 +275,7 @@ const SupportContactPage: FC<Props> = (props) => {
 									<Button
 										type={'primary'}
 										size={'middle'}
+										id={formFieldID(FORM.SUPPORT_CONTACT, SUBMIT_BUTTON_ID)}
 										className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 										htmlType={'submit'}
 										icon={supportContactExists ? <EditIcon /> : <CreateIcon />}

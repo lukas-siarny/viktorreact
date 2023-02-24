@@ -1,4 +1,4 @@
-import { CREATE_BUTTON_ID, FORM } from '../../../src/utils/enums'
+import { CREATE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID, CYPRESS } from '../../../src/utils/enums'
 
 // fixtures
 import languages from '../../fixtures/languages.json'
@@ -23,10 +23,10 @@ describe('Languages', () => {
 
 		cy.visit('/languages-in-salons')
 		cy.clickButton(FORM.LANGUAGES, CREATE_BUTTON_ID)
-		cy.setInputValue(FORM.LANGUAGES, 'nameLocalizations-0-value', languages.create.SK)
+		cy.setInputValue(FORM.LANGUAGES, 'nameLocalizations-0-value', languages.create.name)
 		cy.uploadFile('image', '../images/test.jpg', FORM.LANGUAGES)
-		cy.wait(1000) // Cas ktory treba pockat kyms a nahra signed url obrazok
-		cy.get(`#${FORM.LANGUAGES}-form`).submit()
+		cy.wait(CYPRESS.S3_UPLOAD_WAIT_TIME) // Cas ktory treba pockat kym sa nahra signed url obrazok
+		cy.clickButton(SUBMIT_BUTTON_ID, FORM.LANGUAGES)
 		cy.wait('@createLanguage').then((interception: any) => {
 			// check status code of request
 			expect(interception.response.statusCode).to.equal(200)
@@ -41,11 +41,16 @@ describe('Languages', () => {
 			method: 'PATCH',
 			url: `/api/b2b/admin/enums/languages/${languageID}`
 		}).as('updateLanguage')
-
+		cy.intercept({
+			method: 'GET',
+			url: '/api/b2b/admin/enums/languages/'
+		}).as('getLanguages')
 		cy.visit('/languages-in-salons')
+		cy.wait('@getLanguages')
 		cy.get(`[data-row-key="${languageID}"]`).click()
-		cy.setInputValue(FORM.LANGUAGES, 'nameLocalizations-0-value', languages.update.SK, false, true)
-		cy.get(`#${FORM.LANGUAGES}-form`).submit()
+		cy.wait(CYPRESS.ANIMATION_WAIT_TIME) // detail jazyka sa riesi len na strane FE tak 1sekunda je pre istotu kvoli animaciam kym sa vyrenderuju inputy
+		cy.setInputValue(FORM.LANGUAGES, 'nameLocalizations-0-value', languages.update.name, false, true)
+		cy.clickButton(SUBMIT_BUTTON_ID, FORM.LANGUAGES)
 		cy.wait('@updateLanguage').then((interception: any) => {
 			// check status code of request
 			expect(interception.response.statusCode).to.equal(200)
@@ -59,8 +64,14 @@ describe('Languages', () => {
 			method: 'DELETE',
 			url: `/api/b2b/admin/enums/languages/${languageID}`
 		}).as('deleteLanguage')
+		cy.intercept({
+			method: 'GET',
+			url: '/api/b2b/admin/enums/languages/'
+		}).as('getLanguages')
 		cy.visit('/languages-in-salons')
+		cy.wait('@getLanguages')
 		cy.get(`[data-row-key="${languageID}"]`).click()
+		cy.wait(CYPRESS.ANIMATION_WAIT_TIME) // detail jazyka sa riesi len na strane FE tak 1sekunda je pre istotu kvoli animaciam kym sa vyrenderuju inputy
 		cy.clickDeleteButtonWithConfCustom(FORM.LANGUAGES)
 		cy.wait('@deleteLanguage').then((interception: any) => {
 			// check status code

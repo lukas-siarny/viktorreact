@@ -1,9 +1,9 @@
 {
 	"create": {
-		"SK" : "Slovensky jazyk"
+		"name" : "Slovensky jazyk"
 	},
 	"update": {
-		"SK" : "Slovensky jazyk"
+		"name" : "Cesky jazyk"
 	},
 	"filter": {
 		"search": "Slovak language"

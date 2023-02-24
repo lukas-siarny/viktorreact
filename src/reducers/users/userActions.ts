@@ -84,7 +84,7 @@ export const processAuthorizationResult =
 				}
 			}
 
-			salons = result.user.salons as any
+			salons = result.user.salons as any // TODO: zistit preco hadze chybu sa sa menilo
 
 			dispatch({
 				type: AUTH_USER.AUTH_USER_LOAD_DONE,

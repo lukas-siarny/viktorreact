@@ -106,7 +106,8 @@
     "smtp-tester": "git+https://github.com/deitch/smtp-tester.git#d50cf2691b7fb48f4930f16358c254958d397dd6",
     "symlink-dir": "5.1.1",
     "tailwindcss": "3.2.6",
-    "tailwindcss-export-config": "4.1.0"
+    "tailwindcss-export-config": "4.1.0",
+    "zod": "3.20.6"
   },
   "devDependencies": {
     "@goodrequest/antd-form-fields": "0.0.3",
@@ -145,7 +146,7 @@
     "postcss-loader": "7.0.2",
     "prettier": "2.8.4",
     "react-error-overlay": "6.0.11",
-    "typescript": "4.4.4"
+    "typescript": "4.5.5"
   },
   "browserslist": {
     "production": [

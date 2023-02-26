@@ -212,9 +212,9 @@ const useQueryParams = (queryParamsInitial?: IUseQueryParamsInitial, config: Nav
 	)
 
 	useEffect(() => {
-		// tento useEffect zabezpeci update query aj pri zmene parametrov v URL cez navigaciu v prehliadaci (v pripade, ze je { replace: false }) a kazda zmena sa uklada do historie
+		// tento useEffect zabezpeci update query aj pri zmene parametrov v URL cez navigaciu v prehliadaci (v pripade, ze je { replace: false } a kazda zmena sa uklada do historie)
 		// pri prvom inite sa to nastavi rovno v state, takze je potrebne sledovat az dalsie zmeny
-		// pri pouzit setovacej funkcie setQuery je potrebne tiez zabranit aby sa nenastavovala query duplicitne
+		// pri pouziti setovacej funkcie setQuery je potrebne tiez zabranit aby sa nenastavovala query duplicitne
 		if (init.current || onDemand.current) {
 			init.current = false
 			onDemand.current = false

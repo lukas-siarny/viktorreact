@@ -94,7 +94,10 @@ const PopoverContent: FC<ContentProps> = (props) => {
 							</button>
 							{(moreMenuItems || []).length > 0 && (
 								<Dropdown
-									overlay={<Menu className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'} items={moreMenuItems} />}
+									menu={{
+										className: 'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2',
+										items: moreMenuItems
+									}}
 									placement='bottomRight'
 									trigger={['click']}
 								>

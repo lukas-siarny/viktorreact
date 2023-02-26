@@ -1,5 +1,5 @@
 import { isArray } from 'lodash'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 export interface IUseQueryParams {
@@ -194,10 +194,10 @@ const useQueryParams = (queryParamsInitial?: IUseQueryParamsInitial, config: Nav
 	const intialValuesForSearchParams = reduceInitialParams(serializeInitialParams(queryParamsInitial))
 	const [searchParams, setSearchParams] = useSearchParams(intialValuesForSearchParams)
 
-	const getMergedQueryParamsWithURLparams = () => reduceInitialParams(mergeInitialValuesWithURLParams(queryParamsInitial, searchParams))
+	const getMergedInitialQueryParamsWithURLparams = () => reduceInitialParams(mergeInitialValuesWithURLParams(queryParamsInitial, searchParams))
 
 	// do query nastavime zjednoduseny objekt bez typov, aby sa potom pri volani setQueryParams v komponente nemusli vsade posielat informacie o type, ale len jednoduchy key:value objekt
-	const [query, setQuery] = useState<IUseQueryParams | undefined>(getMergedQueryParamsWithURLparams())
+	const [query, setQuery] = useState<IUseQueryParams | undefined>(getMergedInitialQueryParamsWithURLparams())
 
 	const init = useRef(true)
 	const onDemand = useRef(false)
@@ -212,7 +212,7 @@ const useQueryParams = (queryParamsInitial?: IUseQueryParamsInitial, config: Nav
 	)
 
 	useEffect(() => {
-		// tento useEffect zabezpeci update query aj pri zmene query parametrov v URL cez navigaciu v prehliadaci
+		// tento useEffect zabezpeci update query aj pri zmene parametrov v URL cez navigaciu v prehliadaci
 		// pri prvom inite sa to nastavi rovno v state, takze je potrebne sledovat az dalsie zmeny
 		// pri pouzit setovacej funkcie setQuery je potrebne tiez zabranit aby sa nenastavovala query duplicitne
 		if (init.current || onDemand.current) {
@@ -220,7 +220,7 @@ const useQueryParams = (queryParamsInitial?: IUseQueryParamsInitial, config: Nav
 			onDemand.current = false
 			return
 		}
-		setQuery(getMergedQueryParamsWithURLparams())
+		setQuery(getMergedInitialQueryParamsWithURLparams())
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchParams])
 

@@ -58,7 +58,6 @@ const LocalizationsArray = (props: any) => {
 				{fields.map((field: any, index: any) => {
 					const key = `${field}.${nestedFieldName}`
 					const fieldData = fields.get(index)
-					// console.log('fields', fields)
 					return (
 						<FieldArray
 							key={key}
@@ -85,8 +84,8 @@ const LocalizationsArray = (props: any) => {
 									<DeleteButton
 										className={'bg-red-100 mt-5'}
 										onConfirm={() => {
-											handleDelete(index) // BE delete
-											// fields.remove(index) // FE delete aby sa nemusel robit reload dat zbytocne
+											handleDelete(fieldData.id) // BE delete
+											fields.remove(index) // FE delete aby sa nemusel robit reload dat zbytocne
 										}}
 										onlyIcon
 										smallIcon
@@ -111,7 +110,8 @@ const CategoryParamsForm: FC<Props> = (props) => {
 	const entityName = useMemo(() => t('loc:parameter'), [t])
 	const [isRemoving, setIsRemoving] = useState(false)
 	const { parameterID } = useParams<{ parameterID?: string }>()
-	const handleDelete = async (index: any) => {
+
+	const handleDeleteValue = async (categoryParameterValueID: any) => {
 		if (isRemoving) {
 			return
 		}
@@ -120,7 +120,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 			if (parameterID) {
 				await deleteReq(
 					'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/{categoryParameterValueID}',
-					{ categoryParameterID: parameterID, categoryParameterValueID: index },
+					{ categoryParameterID: parameterID, categoryParameterValueID },
 					undefined,
 					NOTIFICATION_TYPE.NOTIFICATION,
 					true
@@ -129,6 +129,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 			}
 		} catch (e) {
 			setIsRemoving(false)
+			// eslint-disable-next-line no-console
 			console.error(e)
 		}
 	}
@@ -184,6 +185,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 						<FieldArray
 							component={InputsArrayField}
 							name={'values'}
+							handleDelete={handleDeleteValue}
 							placeholder={t('loc:Zadajte hodnotu v minútach')}
 							entityName={t('loc:hodnotu')}
 							label={t('loc:Hodnoty (min)')}
@@ -200,7 +202,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 							component={LocalizationsArray}
 							placeholder={t('loc:Zadajte hodnotu')}
 							required
-							handleDelete={handleDelete}
+							handleDelete={handleDeleteValue}
 							addBtnLabel={t('loc:Pridať hodnotu')}
 							label={t('loc:Hodnota (EN)')}
 							nestedFieldName={'valueLocalizations'}

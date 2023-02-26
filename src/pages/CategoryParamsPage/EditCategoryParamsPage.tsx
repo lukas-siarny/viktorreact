@@ -3,10 +3,11 @@ import { compose } from 'redux'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Spin } from 'antd'
-import { initialize } from 'redux-form'
+import { getFormValues, initialize, getFormInitialValues } from 'redux-form'
 import { useNavigate, useParams } from 'react-router-dom'
 
 // components
+import { forEach } from 'lodash'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CategoryParamsForm from './components/CategoryParamsForm'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../components/LanguagePicker'
@@ -36,11 +37,11 @@ const EditCategoryParamsPage = () => {
 	const parameter = useSelector((state: RootState) => state.categoryParams.parameter)
 
 	const [backUrl] = useBackUrl(t('paths:category-parameters'))
+	const initFormValues: any = useSelector((state: RootState) => getFormInitialValues(FORM.CATEGORY_PARAMS)(state))
 
 	useEffect(() => {
 		const fetchData = async () => {
 			const { data } = await dispatch(getCategoryParameter(parameterID as string))
-			console.log('data', data)
 			if (!data?.id) {
 				navigate('/404')
 			}
@@ -54,12 +55,13 @@ const EditCategoryParamsPage = () => {
 						localizedValues:
 							data.valueType === PARAMETERS_VALUE_TYPES.TIME
 								? [{ valueLocalizations: EMPTY_NAME_LOCALIZATIONS }]
-								: data.values.map((item) => ({ valueLocalizations: normalizeNameLocalizations(item.valueLocalizations || []) })),
+								: data.values.map((item) => ({ valueLocalizations: normalizeNameLocalizations(item.valueLocalizations || []), id: item.id })),
 						values:
 							data.valueType === PARAMETERS_VALUE_TYPES.ENUM
 								? [{ value: null }]
 								: data.values.map((item) => ({
-										value: item.value
+										value: item.value,
+										id: item.id
 								  }))
 					})
 				)
@@ -70,12 +72,12 @@ const EditCategoryParamsPage = () => {
 	}, [dispatch, parameterID])
 
 	const handleSubmit = async (formData: ICategoryParamForm) => {
-		let values = []
+		let values: any = []
 		let unitType = null
 
 		if (formData.valueType === PARAMETERS_VALUE_TYPES.TIME) {
 			unitType = PARAMETERS_UNIT_TYPES.MINUTES
-			values = formData.values.filter((item) => item.value).map((item: any) => ({ value: item.value.toString() }))
+			values = formData.values.filter((item) => item.value).map((item: any) => ({ value: item.value.toString(), id: item.id }))
 		} else {
 			values =
 				formData.localizedValues?.map((item: any) => ({ valueLocalizations: item.valueLocalizations.filter((valueLocalization: any) => !!valueLocalization.value) })) || []
@@ -85,12 +87,19 @@ const EditCategoryParamsPage = () => {
 			const reqBody: any = {
 				nameLocalizations: formData.nameLocalizations.filter((nameLocalization: any) => !!nameLocalization.value),
 				valueType: formData.valueType,
-				// values,
 				unitType
 			}
-			console.log('values', values)
+
+			const changedValues = values?.filter((obj1: any) => !initFormValues?.values?.some((obj2: any) => obj1.value.toString() === obj2.value.toString()))
 			await patchReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}', { categoryParameterID: parameterID as string }, reqBody)
 			// TODO: update pole parametrov osobitny endpoint pre values
+			forEach(changedValues, async (valueItem: any) => {
+				await patchReq(
+					'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/{categoryParameterValueID}',
+					{ categoryParameterID: parameterID as string, categoryParameterValueID: valueItem.id },
+					{ value: valueItem.value.toString() }
+				)
+			})
 			dispatch(getCategoryParameter(parameterID as string))
 			dispatch(initialize(FORM.CATEGORY_PARAMS, formData))
 		} catch (error: any) {

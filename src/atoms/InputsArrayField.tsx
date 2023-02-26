@@ -31,10 +31,11 @@ type Props = WrappedFieldArrayProps & {
 	placeholder?: string
 	type?: string
 	emptyValue?: any
+	handleDelete?: (id: any) => any // custom delete ak sa vyzaduje aj BE delete na onConfirm nie len odstranenie na FE cez remove index
 }
 
 const InputsArrayField = (props: Props) => {
-	const { fields, disabled, required, entityName, label, style, maxCount = 5, nestedFieldName, inputSize = 'large', placeholder, type = 'text', emptyValue } = props
+	const { fields, disabled, handleDelete, required, entityName, label, style, maxCount = 5, nestedFieldName, inputSize = 'large', placeholder, type = 'text', emptyValue } = props
 	const [t] = useTranslation()
 
 	const buttonAdd = (
@@ -54,6 +55,7 @@ const InputsArrayField = (props: Props) => {
 		<Item label={label} required={required} style={style}>
 			<div className={'flex flex-col gap-4 w-full'}>
 				{fields.map((field: any, index: any) => {
+					const fieldData = fields.get(index)
 					return (
 						<div key={index} className={'flex gap-2'}>
 							<Field
@@ -68,10 +70,21 @@ const InputsArrayField = (props: Props) => {
 
 							<DeleteButton
 								className={`bg-red-100 ${inputSize === 'large' ? 'mt-2' : 'mt-1'}`}
-								onClick={() => fields.remove(index)}
+								onClick={() => !handleDelete && fields.remove(index)}
+								onConfirm={async () => {
+									if (handleDelete) {
+										try {
+											await handleDelete(fieldData.id)
+											fields.remove(index)
+										} catch (e) {
+											// eslint-disable-next-line no-console
+											console.error(e)
+										}
+									}
+								}}
 								onlyIcon
 								smallIcon
-								noConfirm
+								noConfirm={!handleDelete}
 								size={'small'}
 								disabled={disabled || fields.length === 1}
 							/>

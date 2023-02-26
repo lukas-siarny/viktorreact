@@ -21,8 +21,8 @@ import CheckboxGroupNestedField from '../../IndustriesPage/components/CheckboxGr
 import { IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
-import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION } from '../../../utils/enums'
-import { optionRenderNotiPinkCheckbox, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
+import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { formFieldID, optionRenderNotiPinkCheckbox, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
 
@@ -283,7 +283,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	}
 
 	return (
-		<Form id={`${FORM.RESEVATION_SYSTEM_SETTINGS}-form`} layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
+		<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
 			<div className={'flex'}>
 				<h3 className={'mb-0 mt-0 flex items-center'}>
 					<GlobeIcon className={'text-notino-black mr-2'} />
@@ -466,6 +466,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Button
 								type={'primary'}
+								id={formFieldID(FORM.RESEVATION_SYSTEM_SETTINGS, SUBMIT_BUTTON_ID)}
 								className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 								htmlType={'submit'}
 								icon={<EditIcon />}

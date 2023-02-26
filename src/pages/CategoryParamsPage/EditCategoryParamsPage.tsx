@@ -40,7 +40,7 @@ const EditCategoryParamsPage = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const { data } = await dispatch(getCategoryParameter(parameterID as string))
-
+			console.log('data', data)
 			if (!data?.id) {
 				navigate('/404')
 			}
@@ -48,6 +48,7 @@ const EditCategoryParamsPage = () => {
 			if (data) {
 				dispatch(
 					initialize(FORM.CATEGORY_PARAMS, {
+						// TODO: sem treba dostat do initu aj id parametra
 						valueType: data.valueType,
 						nameLocalizations: normalizeNameLocalizations(data.nameLocalizations),
 						localizedValues:
@@ -84,10 +85,12 @@ const EditCategoryParamsPage = () => {
 			const reqBody: any = {
 				nameLocalizations: formData.nameLocalizations.filter((nameLocalization: any) => !!nameLocalization.value),
 				valueType: formData.valueType,
-				values,
+				// values,
 				unitType
 			}
+			console.log('values', values)
 			await patchReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}', { categoryParameterID: parameterID as string }, reqBody)
+			// TODO: update pole parametrov osobitny endpoint pre values
 			dispatch(getCategoryParameter(parameterID as string))
 			dispatch(initialize(FORM.CATEGORY_PARAMS, formData))
 		} catch (error: any) {

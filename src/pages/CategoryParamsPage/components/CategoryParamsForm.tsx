@@ -1,10 +1,11 @@
-import React, { FC, useMemo } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Divider, Form, Row, Space, Button } from 'antd'
 import { useSelector } from 'react-redux'
 
 // atoms
+import { useParams } from 'react-router-dom'
 import InputField from '../../../atoms/InputField'
 import SwitchField from '../../../atoms/SwitchField'
 import InputsArrayField from '../../../atoms/InputsArrayField'
@@ -15,7 +16,7 @@ import Localizations from '../../../components/Localizations'
 
 // utils
 import { formFieldID, showErrorNotification, validationString } from '../../../utils/helper'
-import { DELETE_BUTTON_ID, FORM, MAX_VALUES_PER_PARAMETER, PARAMETERS_VALUE_TYPES, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, MAX_VALUES_PER_PARAMETER, NOTIFICATION_TYPE, PARAMETERS_VALUE_TYPES, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../../components/LanguagePicker'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -31,6 +32,7 @@ import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 
 // types
 import { ICategoryParamForm } from '../../../types/interfaces'
+import { deleteReq } from '../../../utils/request'
 
 const { Item } = Form
 
@@ -43,8 +45,7 @@ type ComponentProps = {
 type Props = InjectedFormProps<ICategoryParamForm, ComponentProps> & ComponentProps
 
 const LocalizationsArray = (props: any) => {
-	const { fields, required, label, addBtnLabel, maxCount = MAX_VALUES_PER_PARAMETER, nestedFieldName, placeholder, emptyValue } = props
-
+	const { fields, required, label, addBtnLabel, maxCount = MAX_VALUES_PER_PARAMETER, nestedFieldName, placeholder, emptyValue, handleDelete } = props
 	const buttonAdd = (
 		<Button onClick={() => fields.push(emptyValue)} icon={<PlusIcon className={'text-notino-black'} />} className={'noti-btn mt-2'} type={'default'} size={'small'}>
 			{addBtnLabel}
@@ -56,7 +57,8 @@ const LocalizationsArray = (props: any) => {
 			<div className={'flex flex-col gap-4 w-full'}>
 				{fields.map((field: any, index: any) => {
 					const key = `${field}.${nestedFieldName}`
-
+					const fieldData = fields.get(index)
+					// console.log('fields', fields)
 					return (
 						<FieldArray
 							key={key}
@@ -82,10 +84,12 @@ const LocalizationsArray = (props: any) => {
 									/>
 									<DeleteButton
 										className={'bg-red-100 mt-5'}
-										onClick={() => fields.remove(index)}
+										onConfirm={() => {
+											handleDelete(index) // BE delete
+											// fields.remove(index) // FE delete aby sa nemusel robit reload dat zbytocne
+										}}
 										onlyIcon
 										smallIcon
-										noConfirm
 										size={'small'}
 										disabled={fields.length === 1}
 									/>
@@ -105,6 +109,29 @@ const CategoryParamsForm: FC<Props> = (props) => {
 	const { handleSubmit, pristine, submitting, onDelete, change } = props
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.CATEGORY_PARAMS]?.values)
 	const entityName = useMemo(() => t('loc:parameter'), [t])
+	const [isRemoving, setIsRemoving] = useState(false)
+	const { parameterID } = useParams<{ parameterID?: string }>()
+	const handleDelete = async (index: any) => {
+		if (isRemoving) {
+			return
+		}
+		try {
+			setIsRemoving(true)
+			if (parameterID) {
+				await deleteReq(
+					'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/{categoryParameterValueID}',
+					{ categoryParameterID: parameterID, categoryParameterValueID: index },
+					undefined,
+					NOTIFICATION_TYPE.NOTIFICATION,
+					true
+				)
+				setIsRemoving(false)
+			}
+		} catch (e) {
+			setIsRemoving(false)
+			console.error(e)
+		}
+	}
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -173,6 +200,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 							component={LocalizationsArray}
 							placeholder={t('loc:Zadajte hodnotu')}
 							required
+							handleDelete={handleDelete}
 							addBtnLabel={t('loc:Pridať hodnotu')}
 							label={t('loc:Hodnota (EN)')}
 							nestedFieldName={'valueLocalizations'}
@@ -199,7 +227,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 						className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 						htmlType={'submit'}
 						disabled={submitting || pristine}
-						loading={submitting}
+						loading={submitting || isRemoving}
 						icon={onDelete ? <EditIcon /> : <PlusIcon />}
 						id={formFieldID(FORM.CATEGORY_PARAMS, SUBMIT_BUTTON_ID)}
 					>

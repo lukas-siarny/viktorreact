@@ -760,6 +760,7 @@ type NameLocalizationsItem = {
  * move default language to the first position
  */
 export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsItem[]) => {
+	console.log('nameLocalizations', nameLocalizations)
 	return Object.keys(LOCALES)
 		.sort((a: string, b: string) => {
 			if (a === DEFAULT_LANGUAGE) {

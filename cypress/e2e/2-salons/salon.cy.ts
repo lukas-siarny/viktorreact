@@ -84,56 +84,6 @@ describe('Salons', () => {
 			})
 		})
 	})
-	describe('Reservations', () => {
-		// FILTER
-		it('Filter reservations', () => {
-			cy.intercept({
-				method: 'GET',
-				pathname: `/api/b2b/admin/salons/${createdSalonID}/calendar-events/paginated`
-			}).as('filterReservations')
-			cy.visit(`/salons/${createdSalonID}/reservations`)
-			cy.wait('@filterReservations')
-			cy.selectOptionDropdown(FORM.RESERVATIONS_FILTER, 'reservationStates', reservations.filter.reservationStates)
-			cy.selectOptionDropdown(FORM.RESERVATIONS_FILTER, 'reservationPaymentMethods', reservations.filter.reservationPaymentMethods)
-			cy.selectOptionDropdown(FORM.RESERVATIONS_FILTER, 'reservationCreateSourceType', reservations.filter.reservationCreateSourceType)
-			cy.wait('@filterReservations').then((interception: any) => {
-				// check status code
-				expect(interception.response.statusCode).to.equal(200)
-				cy.location('pathname').should('eq', `/salons/${createdSalonID}/reservations`)
-			})
-		})
-	})
-
-	describe('Reservations settings', () => {
-		it('update reservations settings', () => {
-			cy.intercept({
-				method: 'PATCH',
-				url: `/api/b2b/admin/salons/${createdSalonID}/settings`
-			}).as('updateReservationsSettings')
-			// cy.intercept({
-			// 	method: 'GET',
-			// 	url: `/api/b2b/admin/salons/${createdSalonID}/settings`
-			// }).as('getReservationsSettings')
-			cy.intercept({
-				method: 'GET',
-				url: `/api/b2b/admin/salons/${createdSalonID}`
-			}).as('getSalon')
-
-			cy.visit(`/salons/${createdSalonID}/reservations-settings`)
-			// cy.wait('@getSalon')
-			cy.setInputValue(FORM.RESEVATION_SYSTEM_SETTINGS, 'maxDaysB2cCreateReservation', reservations.update.maxDaysB2cCreateReservation, false, true)
-			cy.setInputValue(FORM.RESEVATION_SYSTEM_SETTINGS, 'maxHoursB2cCreateReservationBeforeStart', reservations.update.maxHoursB2cCreateReservationBeforeStart, false, true)
-			cy.setInputValue(FORM.RESEVATION_SYSTEM_SETTINGS, 'maxHoursB2cCancelReservationBeforeStart', reservations.update.maxHoursB2cCancelReservationBeforeStart, false, true)
-			cy.selectOptionDropdown(FORM.RESEVATION_SYSTEM_SETTINGS, 'minutesIntervalB2CReservations', reservations.update.minutesIntervalB2CReservations)
-
-			cy.wait('@updateReservationsSettings').then((interception: any) => {
-				// check status code
-				expect(interception.response.statusCode).to.equal(200)
-				cy.checkSuccessToastMessage()
-				cy.location('pathname').should('eq', `/salons/${createdSalonID}/reservations-settings`)
-			})
-		})
-	})
 
 	context('Billing information', () => {
 		it('Update billing information', () => {
@@ -401,6 +351,50 @@ describe('Salons', () => {
 							}
 						)
 					})
+			})
+		})
+	})
+	describe('Reservations', () => {
+		it('Filter reservations', () => {
+			cy.intercept({
+				method: 'GET',
+				pathname: `/api/b2b/admin/salons/${createdSalonID}/calendar-events/paginated`
+			}).as('filterReservations')
+			cy.visit(`/salons/${createdSalonID}/reservations`)
+			cy.wait('@filterReservations')
+			cy.selectOptionDropdown(FORM.RESERVATIONS_FILTER, 'reservationStates', reservations.filter.reservationStates)
+			cy.selectOptionDropdown(FORM.RESERVATIONS_FILTER, 'reservationPaymentMethods', reservations.filter.reservationPaymentMethods)
+			cy.selectOptionDropdown(FORM.RESERVATIONS_FILTER, 'reservationCreateSourceType', reservations.filter.reservationCreateSourceType)
+			cy.wait('@filterReservations').then((interception: any) => {
+				// check status code
+				expect(interception.response.statusCode).to.equal(200)
+				cy.location('pathname').should('eq', `/salons/${createdSalonID}/reservations`)
+			})
+		})
+	})
+
+	describe('Reservations settings', () => {
+		it('update reservations settings', () => {
+			cy.intercept({
+				method: 'PATCH',
+				url: `/api/b2b/admin/salons/${createdSalonID}/settings`
+			}).as('updateReservationsSettings')
+			cy.intercept({
+				method: 'GET',
+				url: `/api/b2b/admin/salons/${createdSalonID}`
+			}).as('getSalon')
+			cy.visit(`/salons/${createdSalonID}/reservations-settings`)
+			cy.wait('@getSalon')
+			cy.setInputValue(FORM.RESEVATION_SYSTEM_SETTINGS, 'maxDaysB2cCreateReservation', reservations.update.maxDaysB2cCreateReservation, false, true)
+			cy.setInputValue(FORM.RESEVATION_SYSTEM_SETTINGS, 'maxHoursB2cCreateReservationBeforeStart', reservations.update.maxHoursB2cCreateReservationBeforeStart, false, true)
+			cy.setInputValue(FORM.RESEVATION_SYSTEM_SETTINGS, 'maxHoursB2cCancelReservationBeforeStart', reservations.update.maxHoursB2cCancelReservationBeforeStart, false, true)
+			cy.selectOptionDropdown(FORM.RESEVATION_SYSTEM_SETTINGS, 'minutesIntervalB2CReservations', reservations.update.minutesIntervalB2CReservations)
+
+			cy.wait('@updateReservationsSettings').then((interception: any) => {
+				// check status code
+				expect(interception.response.statusCode).to.equal(200)
+				cy.checkSuccessToastMessage()
+				cy.location('pathname').should('eq', `/salons/${createdSalonID}/reservations-settings`)
 			})
 		})
 	})

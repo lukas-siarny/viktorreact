@@ -49,7 +49,7 @@ const languagesCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, passw
 	})
 
 	it('Update language', () => {
-		cy.wait('@getLanguages')
+		cy.visit('/languages-in-salons')
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
 			cy.intercept({
 				method: 'PATCH',
@@ -59,7 +59,7 @@ const languagesCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, passw
 				method: 'GET',
 				url: '/api/b2b/admin/enums/languages/'
 			}).as('getLanguages')
-			cy.visit('/languages-in-salons')
+			cy.wait('@getLanguages')
 			cy.get(`[data-row-key="${languageID}"]`).click()
 			cy.wait(CYPRESS.ANIMATION_WAIT_TIME) // detail jazyka sa riesi len na strane FE tak 1sekunda je pre istotu kvoli animaciam kym sa vyrenderuju inputy
 			cy.setInputValue(FORM.LANGUAGES, 'nameLocalizations-0-value', languages.update.name, false, true)
@@ -88,7 +88,7 @@ const languagesCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, passw
 				url: '/api/b2b/admin/enums/languages/'
 			}).as('getLanguages')
 			cy.wait('@getLanguages')
-			cy.get(`[data-row-key="${ languageID }"]`).click()
+			cy.get(`[data-row-key="${languageID}"]`).click()
 			cy.wait(CYPRESS.ANIMATION_WAIT_TIME) // detail jazyka sa riesi len na strane FE tak 1sekunda je pre istotu kvoli animaciam kym sa vyrenderuju inputy
 			cy.clickDeleteButtonWithConfCustom(FORM.LANGUAGES)
 			cy.wait('@deleteLanguage').then((interception: any) => {

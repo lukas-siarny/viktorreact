@@ -76,30 +76,22 @@ const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?:
 				})
 			})
 		} else {
-			cy.intercept({
-				method: 'GET',
-				url: '/api/b2b/admin/roles/system-user'
-			}).as('systemUser')
-			cy.wait('@systemUser').then((interception: any) => {
-				// check status code for be roles check
-				expect(interception.response.statusCode).to.equal(403)
-				// check redirect to 404 notfound page
-				cy.location('pathname').should('eq', '/404')
-			})
+			// check redirect to 404 notfound page
+			cy.location('pathname').should('eq', '/403')
 		}
 	})
 
 	it('Delete partner', () => {
-		cy.intercept({
-			method: 'GET',
-			url: `/api/b2b/admin/users/${userID}`
-		}).as('getUser')
-		cy.intercept({
-			method: 'DELETE',
-			url: `/api/b2b/admin/users/${userID}`
-		}).as('deleteUser')
 		cy.visit(`/users/${userID}`)
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+			cy.intercept({
+				method: 'GET',
+				url: `/api/b2b/admin/users/${userID}`
+			}).as('getUser')
+			cy.intercept({
+				method: 'DELETE',
+				url: `/api/b2b/admin/users/${userID}`
+			}).as('deleteUser')
 			cy.wait('@getUser').then((interceptorGetUser: any) => {
 				// check status code of login request
 				expect(interceptorGetUser.response.statusCode).to.equal(200)
@@ -116,16 +108,8 @@ const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?:
 			// TODO - remove check for forbidden modal
 			/* cy.clickButton('delete-btn', FORM.USER_ACCOUNT)
 			cy.checkForbiddenModal() */
-			cy.intercept({
-				method: 'GET',
-				url: '/api/b2b/admin/roles/system-user'
-			}).as('systemUser')
-			cy.wait('@systemUser').then((interception: any) => {
-				// check status code for be roles check
-				expect(interception.response.statusCode).to.equal(403)
-				// check redirect to 404 notfound page
-				cy.location('pathname').should('eq', '/404')
-			})
+			// check redirect to 404 notfound page
+			cy.location('pathname').should('eq', '/403')
 		}
 	})
 }

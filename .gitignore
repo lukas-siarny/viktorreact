@@ -21,3 +21,6 @@ src/styles/main.css
 src/styles/tailwind-variables.sass
 
 cypress/videos/*
+cypress/screenshots/*
+.nyc_output/
+

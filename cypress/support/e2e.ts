@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import '@cypress/code-coverage/support'
 import './commands'
 
 // eslint-disable-next-line import/prefer-default-export

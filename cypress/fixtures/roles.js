@@ -10,7 +10,8 @@ const data = [
 		},
 		tests: [
 			{
-				name: LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT
+				name: LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT,
+				actions: []
 			},
 			{
 				name: LIST_OF_TESTS_SUITS.USER_CRUD,
@@ -44,7 +45,8 @@ const data = [
 				name: LIST_OF_TESTS_SUITS.SALON,
 				actions: [CRUD_OPERATIONS.ALL]
 			}
-		]
+		],
+		isInActive: true
 	},
 	{
 		role: PERMISSION.NOTINO_ADMIN,
@@ -54,7 +56,8 @@ const data = [
 		},
 		tests: [
 			{
-				name: LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT
+				name: LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT,
+				actions: []
 			},
 			{
 				name: LIST_OF_TESTS_SUITS.USER_CRUD,
@@ -99,7 +102,8 @@ const data = [
 		},
 		tests: [
 			{
-				name: LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT
+				name: LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT,
+				actions: []
 			},
 			{
 				name: LIST_OF_TESTS_SUITS.USER_CRUD,

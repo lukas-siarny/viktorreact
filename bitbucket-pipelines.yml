@@ -120,3 +120,4 @@ pipelines:
               - cypress/videos/**
               - notino_backend/logs/**
               - docker_logs/**
+              - coverage/**

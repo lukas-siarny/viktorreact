@@ -18,11 +18,13 @@
     "copy-build": "node scripts/copyErrorBuild.js",
     "postbuild": "cross-env SKIP_PREFLIGHT_CHECK=true DISABLE_ESLINT_PLUGIN=true npm run copy-modules && npm --prefix ./error_503 run build && npm run copy-build",
     "build": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true REACT_APP_VERSION=$npm_package_version react-scripts build",
+    "build:coverage": "cross-env CYPRESS_INSTRUMENT_PRODUCTION=true NODE_ENV=production SKIP_PREFLIGHT_CHECK=true REACT_APP_VERSION=$npm_package_version react-scripts -r @cypress/instrument-cra build",
     "lint": "eslint src --color --ext .js --ext .ts --ext .jsx --ext .tsx",
     "release": "npm run build && npm run sentry",
     "sentry": "cross-env REACT_APP_VERSION=$npm_package_version node sentry.js",
     "test": "cross-env AUTH_EMAIL=test.confirmed_notinouser@goodrequest.com AUTH_PASSWORD=Lopaty123. SIGN_IN_URL=http://localhost:3000/api/b2b/admin/auth/login cypress open",
     "test:CI": "cross-env AUTH_EMAIL=test.confirmed_notinouser@goodrequest.com AUTH_PASSWORD=Lopaty123. SIGN_IN_URL=http://localhost:3000/api/b2b/admin/auth/login cypress run",
+    "test:TEST": "cross-env AUTH_EMAIL=test.confirmed_notinouser@goodrequest.com AUTH_PASSWORD=Lopaty123. SIGN_IN_URL=http://localhost:3000/api/b2b/admin/auth/login cypress run --spec 'cypress/e2e/9-roles/roles.cy.ts'",
     "eject": "react-scripts eject",
     "translate-scan": "i18next-scanner 'src/**/*.{js,jsx,ts,tsx}'",
     "translate-watch": "npm run translate-scan && gulp watch",
@@ -41,6 +43,7 @@
   },
   "dependencies": {
     "@ant-design/cssinjs": "1.5.6",
+    "@cypress/instrument-cra": "1.4.0",
     "@dnd-kit/core": "6.0.7",
     "@dnd-kit/sortable": "7.0.2",
     "@dnd-kit/utilities": "3.2.1",
@@ -109,6 +112,7 @@
     "tailwindcss-export-config": "4.1.0"
   },
   "devDependencies": {
+    "@cypress/code-coverage": "3.10.0",
     "@goodrequest/antd-form-fields": "0.0.3",
     "@goodrequest/convert-translations-i18next": "1.0.9",
     "@goodrequest/eslint-config-typescript-react": "1.2.0",
@@ -173,5 +177,9 @@
         }
       }
     ]
+  },
+  "nyc": {
+	"include": ["src/pages/*"],
+    "exclude": ["src/pages/Calendar"]
   }
 }

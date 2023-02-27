@@ -50,7 +50,7 @@ context('Auth', () => {
 					url: '/api/b2b/admin/users/activation'
 				}).as('activation')
 				cy.setValuesForPinField(FORM.ACTIVATION, 'code', htmlTag.text)
-				cy.clickButton(SUBMIT_BUTTON_ID, FORM.REGISTRATION)
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.ACTIVATION)
 				cy.wait('@activation').then((interception: any) => {
 					// check status code of registration request
 					expect(interception.response.statusCode).to.equal(200)

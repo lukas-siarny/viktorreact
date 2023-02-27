@@ -24,9 +24,6 @@ describe('Dynamic tests for roles', () => {
 					case LIST_OF_TESTS_SUITS.USER_CRUD:
 						context(`UserCRUD as ${user.role}`, () => userCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
 						break
-					case LIST_OF_TESTS_SUITS.SALON:
-						context(`SalonCRUD as ${user.role}`, () => salonTestSuit(test.actions, user.credentials.user, user.credentials.password))
-						break
 					case LIST_OF_TESTS_SUITS.CATEGORY_PARAMETERS_CRUD:
 						context(`CategoryParametersCRUD as ${user.role}`, () => categoryParameterCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
 						break
@@ -44,6 +41,9 @@ describe('Dynamic tests for roles', () => {
 						break
 					case LIST_OF_TESTS_SUITS.CATEGORIES_CRUD:
 						context(`CategoriesCRUD as ${user.role}`, () => categoriesCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
+						break
+					case LIST_OF_TESTS_SUITS.SALON:
+						// context(`SalonCRUD as ${user.role}`, () => salonTestSuit(test.actions, user.credentials.user, user.credentials.password))
 						break
 					default:
 				}

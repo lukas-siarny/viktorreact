@@ -31,6 +31,7 @@ import { ReactComponent as CalendarIcon } from '../../assets/icons/calendar-24.s
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
 import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations.svg'
 import { ReactComponent as ReviewsIcon } from '../../assets/icons/reviews-icon.svg'
+import { ReactComponent as SmsUnitPricesIcon } from '../../assets/icons/sms-unit-prices.svg'
 
 // utils
 import { PAGE, PERMISSION } from '../../utils/enums'
@@ -150,6 +151,12 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							label: t('loc:Recenzie'),
 							onClick: () => navigate(t('paths:reviews')),
 							icon: <ReviewsIcon />
+						},
+						{
+							key: PAGE.SMS_CREDITS,
+							label: t('loc:SMS kredity'),
+							onClick: () => navigate(t('paths:sms-credits')),
+							icon: <SmsUnitPricesIcon />
 						}
 					)
 				}

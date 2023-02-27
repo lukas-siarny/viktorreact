@@ -456,6 +456,16 @@ export interface ISpecialistContactFilter {
 	search: string
 }
 
+export interface ISmsUnitPricesForm {
+	validFrom: string
+	amount: number
+	countryCode: string
+}
+
+export interface ISmsUnitPricesFilter {
+	search: string
+}
+
 export interface ILanguageForm {
 	image?: string
 	nameLocalizations: NameLocalizationsItem[]

@@ -5,7 +5,7 @@ declare namespace Cypress {
 		 * @example cy.setValuesForPinField('FORM.test', 'test', '12345')
 		 */
 		setValuesForPinField(form: string, key: string, value: string): Chainable<Element>
-		clickDeleteButtonWithConfCustom(form: string, key?: string): Chainable<Element>
+		clickDeleteButtonWithConfCustom(form?: string, key?: string): Chainable<Element>
 		selectOptionDropdownCustom(form: string, key: string, value?: string, force?: boolean): Chainable<Element>
 		setSearchBoxValueAndSelectFirstOptionCustom(
 			key: string,
@@ -16,5 +16,9 @@ declare namespace Cypress {
 			clear?: boolean,
 			timeout?: number
 		): Chainable<Element>
+		clickDropdownItem(triggerId: string, dropdownItemId?: string, force?: boolean): Chainable<Element>
+		clickTab(tabKey: string, tabsKey?: string, force?: boolean): Chainable<Element>
+		updateReviewStatus(currentStatus: REVIEW_VERIFICATION_STATUS, moderateItemKey: 'hide' | 'publish' | 'accept'): Chainable<Element>
+		deleteReview(currentStatus: REVIEW_VERIFICATION_STATUS): Chainable<Element>
 	}
 }

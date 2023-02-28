@@ -15,7 +15,8 @@ RUN apt install nginx -y
 RUN npm i -g runtime-env-cra
 
 RUN npm install --legacy-peer-deps
-RUN npm prebuild && CI=false GENERATE_SOURCEMAP=false npm run build:coverage
+RUN npm prebuild
+RUN CI=false GENERATE_SOURCEMAP=false npm run build:coverage
 
 RUN mv ./build/* /usr/share/nginx/html
 

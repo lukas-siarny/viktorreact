@@ -18,11 +18,15 @@ describe('Category parameters', () => {
 
 	// TODO: zmenila sa implementacia parametrov na BE, po update FE bude treba upravit aj testy
 
-	/* it('Create category parameters', () => {
+	it('Create category parameters', () => {
 		cy.intercept({
 			method: 'POST',
 			url: '/api/b2b/admin/enums/category-parameters/'
 		}).as('createCategoryParameters')
+		cy.intercept({
+			method: 'POST',
+			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}/values`
+		}).as('createCategoryParameterValues')
 		cy.visit('/category-parameters/create')
 		cy.setInputValue(FORM.CATEGORY_PARAMS, 'nameLocalizations-0-value', category.parameter.create.title)
 		cy.setInputValue(FORM.CATEGORY_PARAMS, 'localizedValues-0-valueLocalizations-0-value', category.parameter.create.value)
@@ -33,9 +37,12 @@ describe('Category parameters', () => {
 			categoryParameterID = interception.response.body.categoryParameter.id
 			// check conf toast message
 			cy.checkSuccessToastMessage()
+			cy.wait('@createCategoryParameterValues').then((valuesInterception: any) => {
+				expect(valuesInterception.response.statusCode).to.equal(200)
+			})
 		})
 	})
-
+	/*
 	it('Update category parameters', () => {
 		cy.intercept({
 			method: 'GET',

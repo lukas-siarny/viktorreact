@@ -527,6 +527,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				clearFetchInterval()
 				message.destroy()
 			}
+			dispatch(clearEvent())
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])

@@ -16,8 +16,8 @@ import DeleteButton from '../../components/DeleteButton'
 import TabsComponent from '../../components/TabsComponent'
 
 // utils
-import { ADMIN_PERMISSIONS, FORM, PERMISSION, REVIEW_VERIFICATION_STATUS, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { formatDateByLocale, normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { ADMIN_PERMISSIONS, FORM, PERMISSION, REVIEWS_TAB_KEYS, REVIEW_VERIFICATION_STATUS, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { formatDateByLocale, formFieldID, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { deleteReq, patchReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
@@ -35,10 +35,7 @@ import { ReactComponent as EyeIcon } from '../../assets/icons/eye-icon.svg'
 // hooks
 import useQueryParams, { BooleanParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
 
-enum TAB_KEYS {
-	PUBLISHED = 'published',
-	DELETED = 'deleted'
-}
+const getRowId = (verificationStatus: string, id: string) => `${verificationStatus}_${id}`
 
 const ReviewsPage = () => {
 	const [t] = useTranslation()
@@ -57,7 +54,7 @@ const ReviewsPage = () => {
 	})
 
 	const reviews = useSelector((state: RootState) => state.reviews.reviews)
-	const tabKey = query.deleted ? TAB_KEYS.DELETED : TAB_KEYS.PUBLISHED
+	const tabKey = query.deleted ? REVIEWS_TAB_KEYS.DELETED : REVIEWS_TAB_KEYS.PUBLISHED
 
 	const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([])
 	const [isSubmitting, setIsSubmitting] = useState(false)
@@ -79,7 +76,7 @@ const ReviewsPage = () => {
 			})
 		)
 		if (data) {
-			setExpandedRowKeys(data.reviews.map((review) => review.id))
+			setExpandedRowKeys(data.reviews.map((review) => getRowId(review.verificationStatus, review.id)))
 		}
 	}, [
 		dispatch,
@@ -137,7 +134,7 @@ const ReviewsPage = () => {
 	}
 
 	const onTabChange = (selectedTabKey: string) => {
-		setQuery({ ...query, page: 1, deleted: selectedTabKey === TAB_KEYS.DELETED })
+		setQuery({ ...query, page: 1, deleted: selectedTabKey === REVIEWS_TAB_KEYS.DELETED })
 	}
 
 	const deleteReview = async (reviewID: string) => {
@@ -171,8 +168,6 @@ const ReviewsPage = () => {
 			setIsSubmitting(false)
 		}
 	}
-
-	const dropdownItemClassName = 'p-2 min-w-0 h-9 w-full whitespace-nowrap'
 
 	const getColumns = () => {
 		const columns: Columns = [
@@ -246,6 +241,7 @@ const ReviewsPage = () => {
 					const disabledShowReview = record?.verificationStatus === REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C
 					const disabledHideReview = record?.verificationStatus === REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C
 					const showReviewText = record?.verificationStatus === REVIEW_VERIFICATION_STATUS.NOT_VERIFIED ? t('loc:Akceptovať text') : t('loc:Publikovať text')
+					const dropdownItemClassName = 'p-2 min-w-0 h-9 w-full whitespace-nowrap'
 
 					return (
 						<div className={'flex justify-center items-center gap-2 p-1'}>
@@ -261,7 +257,10 @@ const ReviewsPage = () => {
 													key: 'visible_in_b2c',
 													label: showReviewText,
 													icon: <EyeIcon width={16} height={16} />,
-													className: dropdownItemClassName,
+													className: cx(dropdownItemClassName, {
+														'moderate-accept-message': record?.verificationStatus === REVIEW_VERIFICATION_STATUS.NOT_VERIFIED,
+														'moderate-publish-message': record?.verificationStatus !== REVIEW_VERIFICATION_STATUS.NOT_VERIFIED
+													}),
 													disabled: disabledShowReview,
 													onClick: (menuInfo) => {
 														if (!hasPermission) {
@@ -276,7 +275,7 @@ const ReviewsPage = () => {
 													key: 'hidden_in_b2c',
 													label: t('loc:Skryť text'),
 													icon: <EyeoffIcon width={16} height={16} />,
-													className: dropdownItemClassName,
+													className: cx(dropdownItemClassName, 'moderate-hide-message'),
 													disabled: disabledHideReview,
 													onClick: (menuInfo) => {
 														if (!hasPermission) {
@@ -298,6 +297,7 @@ const ReviewsPage = () => {
 											size={'middle'}
 											className={'noti-btn h-8 w-32 hover:shadow-none'}
 											onClick={(e) => e.preventDefault()}
+											id={formFieldID('moderate_btn', record.id)}
 										>
 											{t('loc:Moderovať')}
 										</Button>
@@ -320,6 +320,7 @@ const ReviewsPage = () => {
 										type={'default'}
 										entityName={t('loc:recenziu')}
 										onlyIcon
+										id={formFieldID('delete_btn', record.id)}
 									/>
 								)}
 							/>
@@ -342,13 +343,13 @@ const ReviewsPage = () => {
 
 	const tabContent = [
 		{
-			key: TAB_KEYS.PUBLISHED,
-			tabKey: TAB_KEYS.PUBLISHED,
+			key: REVIEWS_TAB_KEYS.PUBLISHED,
+			tabKey: REVIEWS_TAB_KEYS.PUBLISHED,
 			label: t('loc:Publikované')
 		},
 		{
-			key: TAB_KEYS.DELETED,
-			tabKey: TAB_KEYS.DELETED,
+			key: REVIEWS_TAB_KEYS.DELETED,
+			tabKey: REVIEWS_TAB_KEYS.DELETED,
 			label: t('loc:Vymazané')
 		}
 	]
@@ -369,7 +370,7 @@ const ReviewsPage = () => {
 								onChange={onChangeTable}
 								columns={getColumns()}
 								dataSource={reviews?.data?.reviews}
-								rowKey='id'
+								rowKey={(record) => getRowId(record.verificationStatus, record.id)}
 								scroll={{ x: 1000 }}
 								twoToneRows
 								onRow={(record) => ({

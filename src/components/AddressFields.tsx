@@ -170,7 +170,7 @@ const AddressFields = (props: Props) => {
 			{googleMapUrl && (
 				<>
 					<Row className={'mb-4 gap-4'} wrap={false}>
-						{mapError || !mapApiConfig.googleMapsApiKey ? (
+						{mapError || !mapApiConfig().googleMapsApiKey ? (
 							<Row className={'w-full h-full block'} justify='center'>
 								<Alert message={t('loc:Google mapa je aktuálne nedostupná.')} showIcon type={'warning'} className={'noti-alert mb-4 google-map-warning'} />
 								<Row justify={'space-between'}>

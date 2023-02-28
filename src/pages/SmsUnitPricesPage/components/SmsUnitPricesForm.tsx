@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { change, Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Divider, Form, Button } from 'antd'
+import { Divider, Form, Button, Alert } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import dayjs, { Dayjs } from 'dayjs'
 
@@ -62,6 +62,7 @@ const SmsUnitPricesForm: FC<Props> = (props) => {
 					</Button>
 				</h3>
 				<Divider className={'my-3'} />
+				{disabledForm && <Alert message={t('loc:Editovateľné sú len SMS ceny v budúcnosti')} showIcon type={'warning'} className={'noti-alert w-full mb-4'} />}
 				<Field
 					component={SelectField}
 					optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}

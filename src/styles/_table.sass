@@ -81,8 +81,10 @@
 								display: block !important
 						.ant-table-column-title
 							color: $textColor-notino-black
+					&:not(.table-col-with-sorter-right)
+						.ant-table-column-sorters
+							justify-content: flex-start
 					.ant-table-column-sorters
-						justify-content: flex-start
 						.ant-table-column-sorter
 							position: relative
 							.anticon-caret-up:not(.active), .anticon-caret-down:not(.active)
@@ -249,3 +251,9 @@
 	.table-footer-custom-pagination
 		margin-top: 0
 		margin-bottom: 0
+
+.table-col-with-sorter-right
+	.ant-table-column-sorters
+		display: flex
+		justify-content: flex-end
+		margin-right: 20px

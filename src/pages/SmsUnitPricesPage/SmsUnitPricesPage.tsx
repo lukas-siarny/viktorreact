@@ -19,6 +19,9 @@ import { PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, FORM } from '../..
 import { withPermissions } from '../../utils/Permissions'
 import { normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent, getLinkWithEncodedBackUrl } from '../../utils/helper'
 
+// assets
+import { ReactComponent as ChevronLeftIcon } from '../../assets/icons/chevron-left-16.svg'
+
 // reducers
 import { getSmsUnitPricesActual, ISmsUnitPricesActualPayload } from '../../reducers/smsUnitPrices/smsUnitPricesActions'
 
@@ -96,6 +99,7 @@ const SmsUnitPricesPage = () => {
 			title: t('loc:Krajina'),
 			dataIndex: 'country',
 			key: 'country',
+			width: '20%',
 			sortOrder: setOrder(query.order, 'country'),
 			sorter: {
 				compare: (a, b) => {
@@ -120,22 +124,49 @@ const SmsUnitPricesPage = () => {
 			dataIndex: 'actual',
 			key: 'amount',
 			ellipsis: true,
+			align: 'right',
+			width: '20%',
 			render: (_value, record) => {
-				const value = record.actual || record.next
+				const value = record.actual
 				const { currencyCode } = record.country
 				const currency = currencies.data?.find((item) => item.code === currencyCode)
 				return `${value.amount} ${currency?.symbol}`
 			}
 		},
 		{
-			title: t('loc:Platná od'),
+			title: <div style={{ marginLeft: '20%' }}>{t('loc:Platná od')}</div>,
 			dataIndex: 'actual',
 			key: 'validFrom',
 			ellipsis: true,
 			sorter: false,
+			width: '30%',
 			render: (_value, record) => {
-				const value = record.actual || record.next
-				return <>{dayjs(value.validFrom).format('D.M.YYYY')}</>
+				return <div style={{ marginLeft: '20%' }}>{dayjs(record.actual.validFrom).format('D.M.YYYY')}</div>
+			}
+		},
+		{
+			title: t('loc:Plánovaná cena SMS'),
+			dataIndex: 'actual',
+			key: 'validFrom',
+			ellipsis: true,
+			sorter: false,
+			width: '30%',
+			render: (_value, record) => {
+				const value = record.actual
+				const { currencyCode } = record.country
+				const currency = currencies.data?.find((item) => item.code === currencyCode)
+				return record.next ? `${value.amount} ${currency?.symbol} od ${dayjs(record.actual.validFrom).format('D.M.YYYY')}` : '-'
+			}
+		},
+		{
+			key: 'action',
+			width: 30,
+			render: () => {
+				return (
+					<div className={'flex items-center jusitfy-center'}>
+						<ChevronLeftIcon style={{ transform: 'rotate(180deg)' }} />
+					</div>
+				)
 			}
 		}
 	]

@@ -173,6 +173,7 @@ const SmsUnitPricesPage = () => {
 			title: t('loc:Krajina'),
 			dataIndex: 'country',
 			key: 'country',
+			width: '20%',
 			ellipsis: true,
 			render: (_value, record) => {
 				const { country } = record
@@ -189,6 +190,8 @@ const SmsUnitPricesPage = () => {
 			title: t('loc:Jednotková cena SMS'),
 			dataIndex: 'amount',
 			key: 'amount',
+			align: 'right',
+			width: '40%',
 			ellipsis: true,
 			render: (_value, record) => {
 				const value = record.amount
@@ -207,7 +210,10 @@ const SmsUnitPricesPage = () => {
 			key: 'validFrom',
 			ellipsis: true,
 			sorter: true,
+			width: '40%',
+			className: 'table-col-with-sorter-right',
 			sortOrder: setOrder(query.order, 'validFrom'),
+			align: 'right',
 			render: (_value, record) => {
 				const valueFrom = record.validFrom
 				const valueTo = record.validTo

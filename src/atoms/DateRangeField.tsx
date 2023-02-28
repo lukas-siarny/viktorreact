@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react'
+import React from 'react'
 import { DatePicker, DatePickerProps, Form } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import { map, get } from 'lodash'

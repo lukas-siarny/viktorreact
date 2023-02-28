@@ -55,12 +55,14 @@ export const getSmsUnitPricesActual = (): ThunkResult<Promise<ISmsUnitPricesActu
 }
 
 export const getSmsUnitPrices =
-	(queryParams?: IGetSmsUnitPricesQueryParams): ThunkResult<Promise<ISmsUnitPricesPayload>> =>
+	(queryParams: IGetSmsUnitPricesQueryParams): ThunkResult<Promise<ISmsUnitPricesPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISmsUnitPricesPayload
 		try {
 			dispatch({ type: SMS_UNIT_PRICES.SMS_UNIT_PRICES_START })
-			const { data } = await getReq('/api/b2b/admin/enums/sms-unit-prices/', { ...normalizeQueryParams(queryParams) } as any)
+			const { data } = await getReq('/api/b2b/admin/enums/sms-unit-prices/', {
+				...normalizeQueryParams({ ...queryParams, countryCode: queryParams.countryCode })
+			} as any)
 
 			payload = {
 				data

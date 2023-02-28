@@ -52,7 +52,7 @@ const permissions: PERMISSION[] = [PERMISSION.ENUM_EDIT]
 
 type Props = {}
 
-const SupportContactPage: FC<Props> = (props) => {
+const SupportContactPage: FC<Props> = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()

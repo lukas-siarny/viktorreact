@@ -33,6 +33,7 @@
   "services-settings/{{serviceID}}": "/services-settings/{{serviceID}}",
   "signup": "/signup",
   "sms-credits": "/sms-credits",
+  "sms-credits/{{countryCode}}": "/sms-credits/{{countryCode}}",
   "specialist-contacts": "/specialist-contacts",
   "support-contacts": "/support-contacts",
   "support-contacts/create": "/support-contacts/create",

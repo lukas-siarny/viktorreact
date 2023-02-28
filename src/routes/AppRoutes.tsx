@@ -58,6 +58,7 @@ import ReviewsPage from '../pages/ReviewsPage/ReviewsPage'
 
 // SMS Credits
 import SmsUnitPricesPage from '../pages/SmsUnitPricesPage/SmsUnitPricesPage'
+import SmsUnitPricesCountryPage from '../pages/SmsUnitPricesPage/SmsUnitPricesCountryPage'
 
 import AppInit from '../components/AppInit'
 
@@ -137,6 +138,7 @@ const AppRoutes: FC = () => {
 				</Route>
 				<Route path={t('paths:sms-credits')} element={<AuthRoute layout={MainLayout} page={PAGE.SMS_CREDITS} />}>
 					<Route index element={<SmsUnitPricesPage />} />
+					<Route path={':countryCode'} element={<SmsUnitPricesCountryPage />} />
 				</Route>
 				<Route path={'/403'} element={<AuthRoute layout={MainLayout} />}>
 					<Route index element={<ForbiddenPage />} />

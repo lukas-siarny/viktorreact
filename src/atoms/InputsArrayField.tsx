@@ -31,7 +31,8 @@ type Props = WrappedFieldArrayProps & {
 	placeholder?: string
 	type?: string
 	emptyValue?: any
-	handleDelete?: (id: any) => any // custom delete ak sa vyzaduje aj BE delete na onConfirm nie len odstranenie na FE cez remove index
+	// custom delete ak sa vyzaduje aj BE delete na onConfirm nie len odstranenie na FE cez remove index
+	handleDelete?: (id: any, removeIndex: (index: number) => void, index: number) => any
 }
 
 const InputsArrayField = (props: Props) => {
@@ -56,6 +57,12 @@ const InputsArrayField = (props: Props) => {
 			<div className={'flex flex-col gap-4 w-full'}>
 				{fields.map((field: any, index: any) => {
 					const fieldData = fields.get(index)
+					const onConfirm = async () => {
+						if (handleDelete) {
+							// fields.remove funkcia sa posiela cela hore aby tam v try-catchi sa pouzila v pripade len ak nenastane BE chyba a zamedzi tym zmazaniu itemu z array ak nastala BE chyba a item nebol zmazany na BE
+							await handleDelete(fieldData.id, fields.remove, index)
+						}
+					}
 					return (
 						<div key={index} className={'flex gap-2'}>
 							<Field
@@ -70,18 +77,8 @@ const InputsArrayField = (props: Props) => {
 
 							<DeleteButton
 								className={`bg-red-100 ${inputSize === 'large' ? 'mt-2' : 'mt-1'}`}
-								onClick={() => !handleDelete && fields.remove(index)}
-								onConfirm={async () => {
-									if (handleDelete) {
-										try {
-											await handleDelete(fieldData.id)
-											fields.remove(index)
-										} catch (e) {
-											// eslint-disable-next-line no-console
-											console.error(e)
-										}
-									}
-								}}
+								onClick={() => !handleDelete && fields.remove(index)} // FE mazanie
+								onConfirm={onConfirm} // BE + FE mazanie
 								onlyIcon
 								smallIcon
 								noConfirm={!handleDelete}

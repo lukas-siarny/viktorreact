@@ -42,7 +42,7 @@ const CreateCategoryParamsPage = () => {
 
 	const handleSubmit = async (formData: ICategoryParamForm) => {
 		let values = []
-		let unitType = null
+		let unitType: PARAMETERS_UNIT_TYPES | null = null
 
 		if (formData.valueType === PARAMETERS_VALUE_TYPES.TIME) {
 			unitType = PARAMETERS_UNIT_TYPES.MINUTES
@@ -56,10 +56,24 @@ const CreateCategoryParamsPage = () => {
 			const reqBody: any = {
 				nameLocalizations: formData.nameLocalizations.filter((nameLocalization: any) => !!nameLocalization.value),
 				valueType: formData.valueType,
-				values,
 				unitType
 			}
-			await postReq('/api/b2b/admin/enums/category-parameters/', {}, reqBody)
+
+			const { data } = await postReq('/api/b2b/admin/enums/category-parameters/', {}, reqBody)
+			const categoryParameterID = data.categoryParameter.id
+
+			const requests: any[] = values.map((valueItem: any) => {
+				if (unitType === PARAMETERS_UNIT_TYPES.MINUTES) {
+					return postReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/', { categoryParameterID }, { value: valueItem.value.toString() })
+				}
+				return postReq(
+					'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/',
+					{ categoryParameterID },
+					{ valueLocalizations: valueItem.valueLocalizations }
+				)
+			})
+			await Promise.all(requests)
+
 			navigate(t('paths:category-parameters'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console

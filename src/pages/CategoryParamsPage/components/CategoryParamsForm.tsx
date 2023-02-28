@@ -1,8 +1,8 @@
 import React, { FC, useMemo, useState } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, FieldArray, getFormValues, initialize, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Divider, Form, Row, Space, Button } from 'antd'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 // atoms
 import { useParams } from 'react-router-dom'
@@ -110,21 +110,31 @@ const CategoryParamsForm: FC<Props> = (props) => {
 	const entityName = useMemo(() => t('loc:parameter'), [t])
 	const [isRemoving, setIsRemoving] = useState(false)
 	const { parameterID } = useParams<{ parameterID?: string }>()
-
-	const handleDeleteValue = async (categoryParameterValueID: any) => {
+	console.log('formValues', formValues)
+	const dispatch = useDispatch()
+	const handleDeleteValue = async (categoryParameterValueID: string, removeIndex: (index: number) => void, index: number) => {
 		if (isRemoving) {
 			return
 		}
+		console.log('categoryParameterValueID', categoryParameterValueID)
 		try {
 			setIsRemoving(true)
 			if (parameterID) {
-				await deleteReq(
-					'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/{categoryParameterValueID}',
-					{ categoryParameterID: parameterID, categoryParameterValueID },
-					undefined,
-					NOTIFICATION_TYPE.NOTIFICATION,
-					true
-				)
+				// Ak existuje categoryParameterValueID spravi BE aj FE zmazanie ak neexistuje tak sa zmaze len na strane FE
+				if (categoryParameterValueID) {
+					await deleteReq(
+						'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/{categoryParameterValueID}',
+						{ categoryParameterID: parameterID, categoryParameterValueID },
+						undefined,
+						NOTIFICATION_TYPE.NOTIFICATION,
+						true
+					)
+					removeIndex(index)
+					dispatch(initialize(FORM.CATEGORY_PARAMS, formValues))
+				} else {
+					removeIndex(index)
+				}
+				// TODO: zavolat init formvalues aby sa zrusilo pristine
 				setIsRemoving(false)
 			}
 		} catch (e) {

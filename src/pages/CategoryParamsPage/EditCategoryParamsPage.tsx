@@ -7,7 +7,7 @@ import { getFormValues, initialize, getFormInitialValues } from 'redux-form'
 import { useNavigate, useParams } from 'react-router-dom'
 
 // components
-import { forEach } from 'lodash'
+import { difference, forEach, isEmpty } from 'lodash'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CategoryParamsForm from './components/CategoryParamsForm'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../components/LanguagePicker'
@@ -19,7 +19,7 @@ import { getCategoryParameter } from '../../reducers/categoryParams/categoryPara
 import { withPermissions } from '../../utils/Permissions'
 import { PERMISSION, FORM, PARAMETERS_VALUE_TYPES, PARAMETERS_UNIT_TYPES } from '../../utils/enums'
 import { normalizeNameLocalizations } from '../../utils/helper'
-import { patchReq, deleteReq } from '../../utils/request'
+import { patchReq, deleteReq, postReq } from '../../utils/request'
 
 // types
 import { IBreadcrumbs, ICategoryParamForm } from '../../types/interfaces'
@@ -49,7 +49,6 @@ const EditCategoryParamsPage = () => {
 			if (data) {
 				dispatch(
 					initialize(FORM.CATEGORY_PARAMS, {
-						// TODO: sem treba dostat do initu aj id parametra
 						valueType: data.valueType,
 						nameLocalizations: normalizeNameLocalizations(data.nameLocalizations),
 						localizedValues:
@@ -89,17 +88,65 @@ const EditCategoryParamsPage = () => {
 				valueType: formData.valueType,
 				unitType
 			}
+			// console.log('formData', formData)
+			// console.log('reqBody', reqBody)
+			// console.log('initFormValues', initFormValues)
+			// console.log('values', values)
+			const nonNullableInitNameLocalizations = initFormValues?.nameLocalizations.filter((nameLocalization: any) => !!nameLocalization.value)
+			const hasDiffrence = difference(nonNullableInitNameLocalizations, reqBody.nameLocalizations)
 
-			const changedValues = values?.filter((obj1: any) => !initFormValues?.values?.some((obj2: any) => obj1.value.toString() === obj2.value.toString()))
-			await patchReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}', { categoryParameterID: parameterID as string }, reqBody)
-			// TODO: update pole parametrov osobitny endpoint pre values
-			forEach(changedValues, async (valueItem: any) => {
-				await patchReq(
-					'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/{categoryParameterValueID}',
-					{ categoryParameterID: parameterID as string, categoryParameterValueID: valueItem.id },
-					{ value: valueItem.value.toString() }
-				)
-			})
+			if (unitType === PARAMETERS_UNIT_TYPES.MINUTES) {
+				const changedValues = values?.filter((obj1: any) => !initFormValues?.values?.some((obj2: any) => obj1.value.toString() === obj2.value.toString()))
+				const requests: any[] = changedValues.map((valueItem: any) => {
+					// Ak existuje ID tak sa urobi update
+					if (valueItem.id) {
+						return patchReq(
+							'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/{categoryParameterValueID}',
+							{ categoryParameterID: parameterID as string, categoryParameterValueID: valueItem.id },
+							{ value: valueItem.value.toString() }
+						)
+						// Ak sa prida novy parameter tak sa vytvori
+					}
+					return postReq(
+						'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/',
+						{ categoryParameterID: parameterID as string },
+						{ value: valueItem.value.toString() }
+					)
+				})
+
+				await Promise.all([
+					// Iba ak sa zmenili nameLocalizations tak sa zavola request nad patchom
+					!isEmpty(hasDiffrence) && patchReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}', { categoryParameterID: parameterID as string }, reqBody),
+					...requests
+				])
+			} else {
+				// TODO: pre jazykove mutacie spravit obdobnu logiku + porovnavanie poli
+				const initLocalizedValues = initFormValues.localizedValues.map((localizedValue: any) => localizedValue.valueLocalizations)
+				const formLocalizedValues = formData.localizedValues.map((localizedValue: any) => localizedValue.valueLocalizations)
+				console.log('initLocalizedValues', initLocalizedValues)
+				console.log('formLocalizedValues', formLocalizedValues)
+				const requests: any[] = formData.localizedValues.map((valueItem: any) => {
+					// Ak existuje ID tak sa urobi update
+					if (valueItem.id) {
+						return patchReq(
+							'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/{categoryParameterValueID}',
+							{ categoryParameterID: parameterID as string, categoryParameterValueID: valueItem.id },
+							{ valueLocalizations: valueItem.valueLocalizations.filter((nameLocalization: any) => !!nameLocalization.value) }
+						)
+						// Ak sa prida novy parameter tak sa vytvori
+					}
+					return postReq(
+						'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/',
+						{ categoryParameterID: parameterID as string },
+						{ valueLocalizations: valueItem.valueLocalizations.filter((nameLocalization: any) => !!nameLocalization.value) }
+					)
+				})
+				await Promise.all([
+					// Iba ak sa zmenili nameLocalizations tak sa zavola request nad patchom
+					!isEmpty(hasDiffrence) && patchReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}', { categoryParameterID: parameterID as string }, reqBody),
+					...requests
+				])
+			}
 			dispatch(getCategoryParameter(parameterID as string))
 			dispatch(initialize(FORM.CATEGORY_PARAMS, formData))
 		} catch (error: any) {

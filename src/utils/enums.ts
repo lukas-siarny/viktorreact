@@ -226,6 +226,11 @@ export enum SALONS_TAB_KEYS {
 	MISTAKES = 'mistakes'
 }
 
+export enum REVIEWS_TAB_KEYS {
+	PUBLISHED = 'published',
+	DELETED = 'deleted'
+}
+
 export enum PAGE {
 	SALONS = 'SALONS',
 	ENUMERATIONS = 'ENUMERATIONS',

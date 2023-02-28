@@ -180,6 +180,6 @@
   },
   "nyc": {
 	"include": ["src/pages/*"],
-    "exclude": ["src/pages/Calendar"]
+    "exclude": ["src/pages/Calendar/**/*"]
   }
 }

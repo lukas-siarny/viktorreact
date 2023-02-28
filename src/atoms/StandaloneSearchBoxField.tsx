@@ -21,7 +21,7 @@ const StandaloneSearchBoxField = (props: Props) => {
 	const { placeholder, label, required, type, style, className, error, disabled, form, name, onPlaceSelected } = props
 	const [loaded, setLoaded] = useState(false)
 
-	const { isLoaded, loadError } = useJsApiLoader(mapApiConfig)
+	const { isLoaded, loadError } = useJsApiLoader(mapApiConfig())
 	const autocompleteRef = useRef<any>(null)
 
 	useEffect(() => {

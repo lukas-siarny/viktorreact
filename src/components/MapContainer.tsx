@@ -19,7 +19,7 @@ const MapContainer = (props: Props) => {
 	const { lng, lat, onLocationChange, disabled, zoom, onError, options } = props
 	const [position, setPosition] = useState<google.maps.LatLng | google.maps.LatLngLiteral>(MAP.defaultLocation)
 
-	const { isLoaded, loadError } = useJsApiLoader(mapApiConfig)
+	const { isLoaded, loadError } = useJsApiLoader(mapApiConfig())
 
 	window.gm_authFailure = () => {
 		onError('Goggle Map auth error')

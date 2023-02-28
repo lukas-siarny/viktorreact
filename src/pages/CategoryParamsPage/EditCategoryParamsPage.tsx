@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { compose } from 'redux'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Spin } from 'antd'
-import { getFormValues, initialize, getFormInitialValues } from 'redux-form'
+import { initialize, getFormInitialValues } from 'redux-form'
 import { useNavigate, useParams } from 'react-router-dom'
 
 // components
-import { difference, forEach, isEmpty } from 'lodash'
+import { difference, isEmpty } from 'lodash'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CategoryParamsForm from './components/CategoryParamsForm'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../components/LanguagePicker'
@@ -17,7 +17,7 @@ import { getCategoryParameter } from '../../reducers/categoryParams/categoryPara
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { PERMISSION, FORM, PARAMETERS_VALUE_TYPES, PARAMETERS_UNIT_TYPES } from '../../utils/enums'
+import { PERMISSION, FORM, PARAMETERS_VALUE_TYPES, PARAMETERS_UNIT_TYPES, NOTIFICATION_TYPE } from '../../utils/enums'
 import { normalizeNameLocalizations } from '../../utils/helper'
 import { patchReq, deleteReq, postReq } from '../../utils/request'
 
@@ -39,34 +39,35 @@ const EditCategoryParamsPage = () => {
 	const [backUrl] = useBackUrl(t('paths:category-parameters'))
 	const initFormValues: any = useSelector((state: RootState) => getFormInitialValues(FORM.CATEGORY_PARAMS)(state))
 
-	useEffect(() => {
-		const fetchData = async () => {
-			const { data } = await dispatch(getCategoryParameter(parameterID as string))
-			if (!data?.id) {
-				navigate('/404')
-			}
+	const [isRemoving, setIsRemoving] = useState(false)
 
-			if (data) {
-				dispatch(
-					initialize(FORM.CATEGORY_PARAMS, {
-						valueType: data.valueType,
-						nameLocalizations: normalizeNameLocalizations(data.nameLocalizations),
-						localizedValues:
-							data.valueType === PARAMETERS_VALUE_TYPES.TIME
-								? [{ valueLocalizations: EMPTY_NAME_LOCALIZATIONS }]
-								: data.values.map((item) => ({ valueLocalizations: normalizeNameLocalizations(item.valueLocalizations || []), id: item.id })),
-						values:
-							data.valueType === PARAMETERS_VALUE_TYPES.ENUM
-								? [{ value: null }]
-								: data.values.map((item) => ({
-										value: item.value,
-										id: item.id
-								  }))
-					})
-				)
-			}
+	const fetchData = async () => {
+		const { data } = await dispatch(getCategoryParameter(parameterID as string))
+		if (!data?.id) {
+			navigate('/404')
 		}
 
+		if (data) {
+			dispatch(
+				initialize(FORM.CATEGORY_PARAMS, {
+					valueType: data.valueType,
+					nameLocalizations: normalizeNameLocalizations(data.nameLocalizations),
+					localizedValues:
+						data.valueType === PARAMETERS_VALUE_TYPES.TIME
+							? [{ valueLocalizations: EMPTY_NAME_LOCALIZATIONS }]
+							: data.values.map((item) => ({ valueLocalizations: normalizeNameLocalizations(item.valueLocalizations || []), id: item.id })),
+					values:
+						data.valueType === PARAMETERS_VALUE_TYPES.ENUM
+							? [{ value: null }]
+							: data.values.map((item) => ({
+									value: item.value,
+									id: item.id
+							  }))
+				})
+			)
+		}
+	}
+	useEffect(() => {
 		fetchData()
 	}, [dispatch, parameterID])
 
@@ -88,13 +89,8 @@ const EditCategoryParamsPage = () => {
 				valueType: formData.valueType,
 				unitType
 			}
-			// console.log('formData', formData)
-			// console.log('reqBody', reqBody)
-			// console.log('initFormValues', initFormValues)
-			// console.log('values', values)
-			const nonNullableInitNameLocalizations = initFormValues?.nameLocalizations.filter((nameLocalization: any) => !!nameLocalization.value)
-			const hasDiffrence = difference(nonNullableInitNameLocalizations, reqBody.nameLocalizations)
 
+			const hasDiffrenceParameter = difference(formData.nameLocalizations, initFormValues?.nameLocalizations)
 			if (unitType === PARAMETERS_UNIT_TYPES.MINUTES) {
 				const changedValues = values?.filter((obj1: any) => !initFormValues?.values?.some((obj2: any) => obj1.value.toString() === obj2.value.toString()))
 				const requests: any[] = changedValues.map((valueItem: any) => {
@@ -116,16 +112,14 @@ const EditCategoryParamsPage = () => {
 
 				await Promise.all([
 					// Iba ak sa zmenili nameLocalizations tak sa zavola request nad patchom
-					!isEmpty(hasDiffrence) && patchReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}', { categoryParameterID: parameterID as string }, reqBody),
+					!isEmpty(hasDiffrenceParameter) &&
+						patchReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}', { categoryParameterID: parameterID as string }, reqBody),
 					...requests
 				])
 			} else {
-				// TODO: pre jazykove mutacie spravit obdobnu logiku + porovnavanie poli
-				const initLocalizedValues = initFormValues.localizedValues.map((localizedValue: any) => localizedValue.valueLocalizations)
-				const formLocalizedValues = formData.localizedValues.map((localizedValue: any) => localizedValue.valueLocalizations)
-				console.log('initLocalizedValues', initLocalizedValues)
-				console.log('formLocalizedValues', formLocalizedValues)
-				const requests: any[] = formData.localizedValues.map((valueItem: any) => {
+				// Zmene hodnoty localizedValues - zamedzi sa volaniu zbytocnych requestov aj pre tych ktore sa nezmenili
+				const changedValues = difference(formData.localizedValues, initFormValues.localizedValues)
+				const requests: any[] = changedValues.map((valueItem: any) => {
 					// Ak existuje ID tak sa urobi update
 					if (valueItem.id) {
 						return patchReq(
@@ -143,15 +137,46 @@ const EditCategoryParamsPage = () => {
 				})
 				await Promise.all([
 					// Iba ak sa zmenili nameLocalizations tak sa zavola request nad patchom
-					!isEmpty(hasDiffrence) && patchReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}', { categoryParameterID: parameterID as string }, reqBody),
+					!isEmpty(hasDiffrenceParameter) &&
+						patchReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}', { categoryParameterID: parameterID as string }, reqBody),
 					...requests
 				])
 			}
-			dispatch(getCategoryParameter(parameterID as string))
-			dispatch(initialize(FORM.CATEGORY_PARAMS, formData))
+			fetchData()
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
+		}
+	}
+	const handleDeleteValue = async (categoryParameterValueID?: string) => {
+		if (isRemoving) {
+			return
+		}
+		try {
+			// UPDATE parameter
+			if (parameterID) {
+				// Ak existuje categoryParameterValueID spravi BE aj FE zmazanie ak neexistuje tak sa zmaze len na strane FE
+				if (categoryParameterValueID) {
+					setIsRemoving(true)
+					await deleteReq(
+						'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/{categoryParameterValueID}',
+						{ categoryParameterID: parameterID, categoryParameterValueID },
+						undefined,
+						NOTIFICATION_TYPE.NOTIFICATION,
+						true
+					)
+				}
+
+				setIsRemoving(false)
+				// Po delete initni formular aby sa dal zasa pristine a disabled state spravne
+				if (fetchData) {
+					await fetchData()
+				}
+			}
+		} catch (e) {
+			setIsRemoving(false)
+			// eslint-disable-next-line no-console
+			console.error(e)
 		}
 	}
 
@@ -184,7 +209,7 @@ const EditCategoryParamsPage = () => {
 			</Row>
 			<div className='content-body small'>
 				<Spin spinning={parameter.isLoading}>
-					<CategoryParamsForm onSubmit={handleSubmit} onDelete={handleDelete} />
+					<CategoryParamsForm onSubmit={handleSubmit} onDeleteValue={handleDeleteValue} onDelete={handleDelete} />
 				</Spin>
 			</div>
 		</>

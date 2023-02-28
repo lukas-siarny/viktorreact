@@ -7,6 +7,7 @@ import { initialize } from 'redux-form'
 import { useNavigate } from 'react-router-dom'
 
 // components
+import { isEmpty } from 'lodash'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CategoryParamsForm from './components/CategoryParamsForm'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../components/LanguagePicker'
@@ -40,6 +41,13 @@ const CreateCategoryParamsPage = () => {
 		)
 	}, [dispatch])
 
+	const handleDeleteValue = async (categoryParameterValueID?: string, removeIndex?: (index: number) => void, index?: number) => {
+		// NOTE: pri create stave staci zmazat len z field arrayu item nakolko ID este nie je v DB ulozene
+		if (removeIndex) {
+			removeIndex(index as number)
+		}
+	}
+
 	const handleSubmit = async (formData: ICategoryParamForm) => {
 		let values = []
 		let unitType: PARAMETERS_UNIT_TYPES | null = null
@@ -62,17 +70,22 @@ const CreateCategoryParamsPage = () => {
 			const { data } = await postReq('/api/b2b/admin/enums/category-parameters/', {}, reqBody)
 			const categoryParameterID = data.categoryParameter.id
 
-			const requests: any[] = values.map((valueItem: any) => {
-				if (unitType === PARAMETERS_UNIT_TYPES.MINUTES) {
-					return postReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/', { categoryParameterID }, { value: valueItem.value.toString() })
-				}
-				return postReq(
-					'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/',
-					{ categoryParameterID },
-					{ valueLocalizations: valueItem.valueLocalizations }
-				)
-			})
-			await Promise.all(requests)
+			await Promise.all(
+				// eslint-disable-next-line array-callback-return,consistent-return
+				values.map((valueItem: any) => {
+					// Iba nad tymi spravit request krore nemaju prazdne hodnoty valueLocalizations (prazdne pole)
+					if (!isEmpty(valueItem.valueLocalizations)) {
+						if (unitType === PARAMETERS_UNIT_TYPES.MINUTES) {
+							return postReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/', { categoryParameterID }, { value: valueItem.value.toString() })
+						}
+						return postReq(
+							'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/',
+							{ categoryParameterID },
+							{ valueLocalizations: valueItem.valueLocalizations }
+						)
+					}
+				})
+			)
 
 			navigate(t('paths:category-parameters'))
 		} catch (error: any) {
@@ -99,7 +112,7 @@ const CreateCategoryParamsPage = () => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:category-parameters')} />
 			</Row>
 			<div className='content-body small'>
-				<CategoryParamsForm onSubmit={handleSubmit} />
+				<CategoryParamsForm onDeleteValue={handleDeleteValue} onSubmit={handleSubmit} />
 			</div>
 		</>
 	)

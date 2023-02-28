@@ -1,11 +1,10 @@
-import React, { FC, useMemo, useState } from 'react'
-import { Field, FieldArray, getFormValues, initialize, InjectedFormProps, reduxForm } from 'redux-form'
+import React, { FC, useMemo } from 'react'
+import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Divider, Form, Row, Space, Button } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
+import { Button, Divider, Form, Row, Space } from 'antd'
+import { useSelector } from 'react-redux'
 
 // atoms
-import { useParams } from 'react-router-dom'
 import InputField from '../../../atoms/InputField'
 import SwitchField from '../../../atoms/SwitchField'
 import InputsArrayField from '../../../atoms/InputsArrayField'
@@ -16,7 +15,7 @@ import Localizations from '../../../components/Localizations'
 
 // utils
 import { formFieldID, showErrorNotification, validationString } from '../../../utils/helper'
-import { DELETE_BUTTON_ID, FORM, MAX_VALUES_PER_PARAMETER, NOTIFICATION_TYPE, PARAMETERS_VALUE_TYPES, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, MAX_VALUES_PER_PARAMETER, PARAMETERS_VALUE_TYPES, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../../components/LanguagePicker'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -32,7 +31,6 @@ import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 
 // types
 import { ICategoryParamForm } from '../../../types/interfaces'
-import { deleteReq } from '../../../utils/request'
 
 const { Item } = Form
 
@@ -40,6 +38,7 @@ const maxLength100 = validationString(100)
 
 type ComponentProps = {
 	onDelete?: () => void
+	onDeleteValue: (categoryParameterValueID?: string, removeIndex?: (index: number) => void, index?: number) => Promise<void>
 }
 
 type Props = InjectedFormProps<ICategoryParamForm, ComponentProps> & ComponentProps
@@ -58,6 +57,13 @@ const LocalizationsArray = (props: any) => {
 				{fields.map((field: any, index: any) => {
 					const key = `${field}.${nestedFieldName}`
 					const fieldData = fields.get(index)
+					const onConfirm = async () => {
+						if (handleDelete) {
+							// fields.remove funkcia sa posiela cela hore aby tam v try-catchi sa pouzila v pripade len ak nenastane BE chyba a zamedzi tym zmazaniu itemu z array ak nastala BE chyba a item nebol zmazany na BE
+							await handleDelete(fieldData.id, fields.remove, index)
+						}
+					}
+
 					return (
 						<FieldArray
 							key={key}
@@ -81,17 +87,7 @@ const LocalizationsArray = (props: any) => {
 										required
 										validate={maxLength100}
 									/>
-									<DeleteButton
-										className={'bg-red-100 mt-5'}
-										onConfirm={() => {
-											handleDelete(fieldData.id) // BE delete
-											fields.remove(index) // FE delete aby sa nemusel robit reload dat zbytocne
-										}}
-										onlyIcon
-										smallIcon
-										size={'small'}
-										disabled={fields.length === 1}
-									/>
+									<DeleteButton className={'bg-red-100 mt-5'} onConfirm={onConfirm} onlyIcon smallIcon size={'small'} disabled={fields.length === 1} />
 								</div>
 							}
 						/>
@@ -105,44 +101,9 @@ const LocalizationsArray = (props: any) => {
 
 const CategoryParamsForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, pristine, submitting, onDelete, change } = props
+	const { handleSubmit, pristine, submitting, onDelete, change, onDeleteValue } = props
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.CATEGORY_PARAMS]?.values)
 	const entityName = useMemo(() => t('loc:parameter'), [t])
-	const [isRemoving, setIsRemoving] = useState(false)
-	const { parameterID } = useParams<{ parameterID?: string }>()
-	console.log('formValues', formValues)
-	const dispatch = useDispatch()
-	const handleDeleteValue = async (categoryParameterValueID: string, removeIndex: (index: number) => void, index: number) => {
-		if (isRemoving) {
-			return
-		}
-		console.log('categoryParameterValueID', categoryParameterValueID)
-		try {
-			setIsRemoving(true)
-			if (parameterID) {
-				// Ak existuje categoryParameterValueID spravi BE aj FE zmazanie ak neexistuje tak sa zmaze len na strane FE
-				if (categoryParameterValueID) {
-					await deleteReq(
-						'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/{categoryParameterValueID}',
-						{ categoryParameterID: parameterID, categoryParameterValueID },
-						undefined,
-						NOTIFICATION_TYPE.NOTIFICATION,
-						true
-					)
-					removeIndex(index)
-					dispatch(initialize(FORM.CATEGORY_PARAMS, formValues))
-				} else {
-					removeIndex(index)
-				}
-				// TODO: zavolat init formvalues aby sa zrusilo pristine
-				setIsRemoving(false)
-			}
-		} catch (e) {
-			setIsRemoving(false)
-			// eslint-disable-next-line no-console
-			console.error(e)
-		}
-	}
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -195,7 +156,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 						<FieldArray
 							component={InputsArrayField}
 							name={'values'}
-							handleDelete={handleDeleteValue}
+							handleDelete={onDeleteValue}
 							placeholder={t('loc:Zadajte hodnotu v minútach')}
 							entityName={t('loc:hodnotu')}
 							label={t('loc:Hodnoty (min)')}
@@ -212,7 +173,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 							component={LocalizationsArray}
 							placeholder={t('loc:Zadajte hodnotu')}
 							required
-							handleDelete={handleDeleteValue}
+							handleDelete={onDeleteValue}
 							addBtnLabel={t('loc:Pridať hodnotu')}
 							label={t('loc:Hodnota (EN)')}
 							nestedFieldName={'valueLocalizations'}
@@ -239,7 +200,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 						className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 						htmlType={'submit'}
 						disabled={submitting || pristine}
-						loading={submitting || isRemoving}
+						loading={submitting}
 						icon={onDelete ? <EditIcon /> : <PlusIcon />}
 						id={formFieldID(FORM.CATEGORY_PARAMS, SUBMIT_BUTTON_ID)}
 					>

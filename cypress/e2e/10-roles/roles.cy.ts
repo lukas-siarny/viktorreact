@@ -43,7 +43,7 @@ describe('Dynamic tests for roles', () => {
 						context(`CategoriesCRUD as ${user.role}`, () => categoriesCRUDTestSuit(test.actions, user.credentials.user, user.credentials.password))
 						break
 					case LIST_OF_TESTS_SUITS.SALON:
-						// context(`SalonCRUD as ${user.role}`, () => salonTestSuit(test.actions, user.credentials.user, user.credentials.password))
+						context(`SalonCRUD as ${user.role}`, () => salonTestSuit(test.actions, user.credentials.user, user.credentials.password))
 						break
 					default:
 				}

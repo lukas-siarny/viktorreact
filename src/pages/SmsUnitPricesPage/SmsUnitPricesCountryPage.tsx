@@ -85,7 +85,7 @@ const SmsUnitPricesPage = () => {
 		fetchData()
 	}, [fetchData])
 
-	const changeFormVisibility = (show?: boolean, smsUnitPrice?: /* ISpecialistContact */ any) => {
+	const changeFormVisibility = (show?: boolean, smsUnitPrice?: TableDataItem) => {
 		if (!show) {
 			setVisibleForm(false)
 			dispatch(initialize(FORM.SMS_UNIT_PRICES_FORM, { countryCode }))

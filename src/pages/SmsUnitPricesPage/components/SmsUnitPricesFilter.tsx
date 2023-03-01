@@ -14,9 +14,7 @@ import InputField from '../../../atoms/InputField'
 // types
 import { ISmsUnitPricesFilter } from '../../../types/interfaces'
 
-type ComponentProps = {
-	addButton?: React.ReactNode
-}
+type ComponentProps = {}
 
 type Props = InjectedFormProps<ISmsUnitPricesFilter, ComponentProps> & ComponentProps
 

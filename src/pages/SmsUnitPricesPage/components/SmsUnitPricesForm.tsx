@@ -10,13 +10,11 @@ import { DELETE_BUTTON_ID, ENUMERATIONS_KEYS, FORM, STRINGS, SUBMIT_BUTTON_ID } 
 import { formFieldID, optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
-// atoms
+// components
 import InputNumberField from '../../../atoms/InputNumberField'
 import SelectField from '../../../atoms/SelectField'
-
-// components
-import DeleteButton from '../../../components/DeleteButton'
 import DateField from '../../../atoms/DateField'
+import DeleteButton from '../../../components/DeleteButton'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'

@@ -300,10 +300,6 @@ const EmployeePage = (props: Props) => {
 		const { data: employeesData } = await dispatch(getEmployee(employeeID as string))
 		const { options } = await dispatch(getServices({ salonID }))
 
-		if (!employeesData?.employee?.id) {
-			navigate('/404')
-		}
-
 		if (employeesData?.employee) {
 			dispatch(
 				initialize(FORM.EMPLOYEE, {
@@ -323,7 +319,7 @@ const EmployeePage = (props: Props) => {
 				})
 			)
 		}
-	}, [dispatch, employeeID, salonID, navigate])
+	}, [dispatch, employeeID, salonID])
 
 	useEffect(() => {
 		fetchEmployeeAndServicesData()

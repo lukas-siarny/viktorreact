@@ -199,7 +199,7 @@ const SmsUnitPricesPage = () => {
 				const currency = currencies.data?.find((item) => item.code === currencyCode)
 				let result = `${value} ${currency?.symbol}`
 				if (record.actualValid) {
-					result = t('loc:{{ price }} (aktuálne platná)', { price: result })
+					result = t('loc:aktuálne platná {{ price }}', { price: result })
 				}
 				return result
 			}

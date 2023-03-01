@@ -16,11 +16,22 @@ function stringConstraint<T extends true | false>(maxLength: number, required?: 
 		return base.min(1)
 	}
 
-	return z.optional(base)
+	return base.optional()
 }
 
-const customerSchema = z.object({
-	firstName: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100, true),
+const imageConstraint = z.object({
+	url: z.string().url(),
+	thumbnail: z.string().url().optional(),
+	uid: z.string().uuid()
+})
+
+export const customerSchema = z.object({
+	firstName: z.preprocess((firstName) => {
+		if (!firstName) {
+			return null
+		}
+		return firstName
+	}, stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100, true)),
 	lastName: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100, true),
 	email: z.optional(
 		z
@@ -44,10 +55,13 @@ const customerSchema = z.object({
 	street: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100),
 	city: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100),
 	zipCode: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_10),
-	streetNumber: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_10)
+	streetNumber: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_10),
+	gender: z.string().optional().nullable(),
+	galleryImageIDs: imageConstraint.array().optional(),
+	profileImageID: imageConstraint.array().max(1).optional()
 })
 
-type Customer = z.infer<typeof customerSchema>
+export type Customer = z.infer<typeof customerSchema>
 
 export default (values: Customer) => {
 	const errors: FormErrors<Customer> = {}
@@ -128,9 +142,8 @@ export default (values: Customer) => {
 	}
 
 	console.log('🚀 ~ file: validateCustomerForm.tsx:134 ~ errors:', errors)
-	console.log('🚀 ~ file: validateCustomerForm.tsx:132 ~ values:', values)
+	// console.log('🚀 ~ file: validateCustomerForm.tsx:132 ~ values:', values)
 	const result = customerSchema.safeParse(values)
-	console.log('🚀 ~ file: validateCustomerForm.tsx:130 ~ customerSchema.safeParse:', result)
 
 	if (!result.success) {
 		result.error.issues.forEach((issue) => {
@@ -139,6 +152,8 @@ export default (values: Customer) => {
 		})
 
 		console.log('🚀 ~ file: validateCustomerForm.tsx:141 ~ validationErrors:', validationErrors)
+	} else {
+		console.log('Without ZOD errors')
 	}
 
 	return errors

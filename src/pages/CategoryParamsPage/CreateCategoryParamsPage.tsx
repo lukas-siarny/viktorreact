@@ -5,9 +5,9 @@ import { useDispatch } from 'react-redux'
 import { Row } from 'antd'
 import { initialize } from 'redux-form'
 import { useNavigate } from 'react-router-dom'
+import { isEmpty } from 'lodash'
 
 // components
-import { isEmpty } from 'lodash'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CategoryParamsForm from './components/CategoryParamsForm'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../components/LanguagePicker'
@@ -71,7 +71,6 @@ const CreateCategoryParamsPage = () => {
 			const categoryParameterID = data.categoryParameter.id
 
 			await Promise.all(
-				// eslint-disable-next-line array-callback-return,consistent-return
 				values.map((valueItem: any) => {
 					// Iba nad tymi spravit request krore nemaju prazdne hodnoty valueLocalizations (prazdne pole)
 					if (!isEmpty(valueItem.valueLocalizations)) {
@@ -84,6 +83,7 @@ const CreateCategoryParamsPage = () => {
 							{ valueLocalizations: valueItem.valueLocalizations }
 						)
 					}
+					return undefined
 				})
 			)
 

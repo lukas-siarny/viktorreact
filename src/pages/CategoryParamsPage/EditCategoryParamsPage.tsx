@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Row, Spin } from 'antd'
 import { initialize, getFormInitialValues } from 'redux-form'
 import { useNavigate, useParams } from 'react-router-dom'
+import { difference, isEmpty } from 'lodash'
 
 // components
-import { difference, isEmpty } from 'lodash'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CategoryParamsForm from './components/CategoryParamsForm'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../components/LanguagePicker'
@@ -45,9 +45,7 @@ const EditCategoryParamsPage = () => {
 		const { data } = await dispatch(getCategoryParameter(parameterID as string))
 		if (!data?.id) {
 			navigate('/404')
-		}
-
-		if (data) {
+		} else {
 			dispatch(
 				initialize(FORM.CATEGORY_PARAMS, {
 					valueType: data.valueType,
@@ -155,7 +153,6 @@ const EditCategoryParamsPage = () => {
 		try {
 			// UPDATE parameter
 			if (parameterID) {
-				// Ak existuje categoryParameterValueID spravi BE aj FE zmazanie ak neexistuje tak sa zmaze len na strane FE
 				if (categoryParameterValueID) {
 					setIsRemoving(true)
 					await deleteReq(
@@ -168,7 +165,7 @@ const EditCategoryParamsPage = () => {
 				}
 
 				setIsRemoving(false)
-				// Po delete initni formular aby sa dal zasa pristine a disabled state spravne
+				// Po delete initni formular aby sa dal zasa pristine a disabled state spravne (aj po BE zmazani, aj po tom ak sa zmazal item ktory nebol ulozeny v DB)
 				if (fetchData) {
 					await fetchData()
 				}

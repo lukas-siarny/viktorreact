@@ -15,7 +15,7 @@ import Localizations from '../../../components/Localizations'
 
 // utils
 import { formFieldID, showErrorNotification, validationString } from '../../../utils/helper'
-import { DELETE_BUTTON_ID, FORM, MAX_VALUES_PER_PARAMETER, PARAMETERS_VALUE_TYPES, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { ADD_BUTTON_ID, DELETE_BUTTON_ID, FORM, MAX_VALUES_PER_PARAMETER, PARAMETERS_VALUE_TYPES, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../../components/LanguagePicker'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -46,7 +46,14 @@ type Props = InjectedFormProps<ICategoryParamForm, ComponentProps> & ComponentPr
 const LocalizationsArray = (props: any) => {
 	const { fields, required, label, addBtnLabel, maxCount = MAX_VALUES_PER_PARAMETER, nestedFieldName, placeholder, emptyValue, handleDelete } = props
 	const buttonAdd = (
-		<Button onClick={() => fields.push(emptyValue)} icon={<PlusIcon className={'text-notino-black'} />} className={'noti-btn mt-2'} type={'default'} size={'small'}>
+		<Button
+			id={formFieldID(FORM.CATEGORY_PARAMS, ADD_BUTTON_ID)}
+			onClick={() => fields.push(emptyValue)}
+			icon={<PlusIcon className={'text-notino-black'} />}
+			className={'noti-btn mt-2'}
+			type={'default'}
+			size={'small'}
+		>
 			{addBtnLabel}
 		</Button>
 	)
@@ -87,7 +94,15 @@ const LocalizationsArray = (props: any) => {
 										required
 										validate={maxLength100}
 									/>
-									<DeleteButton className={'bg-red-100 mt-5'} onConfirm={onConfirm} onlyIcon smallIcon size={'small'} disabled={fields.length === 1} />
+									<DeleteButton
+										id={formFieldID(FORM.CATEGORY_PARAMS, `${DELETE_BUTTON_ID}-${index}`)}
+										className={'bg-red-100 mt-5'}
+										onConfirm={onConfirm}
+										onlyIcon
+										smallIcon
+										size={'small'}
+										disabled={fields.length === 1}
+									/>
 								</div>
 							}
 						/>

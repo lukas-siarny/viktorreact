@@ -11,10 +11,11 @@ import InputField from './InputField'
 import InputNumberField from './InputNumberField'
 
 // helpers
-import { STRINGS } from '../utils/enums'
+import { DELETE_BUTTON_ID, FORM, STRINGS } from '../utils/enums'
 
 // assets
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon-16.svg'
+import { formFieldID } from '../utils/helper'
 
 const { Item } = Form
 
@@ -51,7 +52,6 @@ const InputsArrayField = (props: Props) => {
 			{STRINGS(t).addRecord(entityName)}
 		</Button>
 	)
-
 	return (
 		<Item label={label} required={required} style={style}>
 			<div className={'flex flex-col gap-4 w-full'}>
@@ -76,6 +76,7 @@ const InputsArrayField = (props: Props) => {
 							/>
 
 							<DeleteButton
+								id={formFieldID(props.meta.form, `${DELETE_BUTTON_ID}-${index}`)}
 								className={`bg-red-100 ${inputSize === 'large' ? 'mt-2' : 'mt-1'}`}
 								onClick={() => !handleDelete && fields.remove(index)} // FE mazanie
 								onConfirm={onConfirm} // BE + FE mazanie

@@ -17,14 +17,17 @@ import PublicLayout from '../layouts/PublicLayout'
 // utils
 import { NEW_SALON_ID, PAGE } from '../utils/enums'
 
-// User
+// Auth
 import LoginPage from '../pages/LoginPage/LoginPage'
 import CreatePasswordPage from '../pages/CreatePasswordPage/CreatePasswordPage'
 import RegistrationPage from '../pages/RegistrationPage/RegistrationPage'
 import ActivationPage from '../pages/ActivationPage/ActivationPage'
-import UserPage from '../pages/UsersPage/UserPage'
-import CreateUserPage from '../pages/UsersPage/CreateUserPage'
+
+// Users
 import UsersPage from '../pages/UsersPage/UsersPage'
+import CreateUserPage from '../pages/UsersPage/CreateUserPage'
+import EditUserPage from '../pages/UsersPage/EditUserPage'
+import MyProfilePage from '../pages/UsersPage/MyProfilePage'
 
 // Categories
 import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
@@ -90,11 +93,11 @@ const AppRoutes: FC = () => {
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:users')} element={<AuthRoute layout={MainLayout} page={PAGE.USERS} />}>
 					<Route index element={<UsersPage />} />
-					<Route path={':userID'} element={<UserPage />} />
+					<Route path={':userID'} element={<EditUserPage />} />
 					<Route path={t('paths:createEntity')} element={<CreateUserPage />} />
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:my-account')} element={<AuthRoute layout={MainLayout} page={PAGE.MY_ACCOUNT} />}>
-					<Route index element={<UserPage />} />
+					<Route index element={<MyProfilePage />} />
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:activation')} element={<AuthRoute layout={MainLayout} page={PAGE.ACTIVATION} />}>
 					<Route index element={<ActivationPage />} />

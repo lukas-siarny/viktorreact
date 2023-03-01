@@ -257,6 +257,37 @@ declare namespace Paths {
             }
         }
     }
+    namespace DeleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SmsUnitPriceID = string; // uuid
+        }
+        export interface PathParameters {
+            smsUnitPriceID: Parameters.SmsUnitPriceID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                smsUnitPrice: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace DeleteApiB2BAdminEnumsSupportContactsSupportContactId {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -830,6 +861,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: lastName, createdAt
+             * example:
+             * lastName:asc
              */
             export type Order = string;
             export type Page = number;
@@ -847,7 +880,12 @@ declare namespace Paths {
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
             Parameters.SalonID /* uuid */;
-            order?: /* Order attributes: lastName, createdAt */ Parameters.Order;
+            order?: /**
+             * Order attributes: lastName, createdAt
+             * example:
+             * lastName:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -858,10 +896,22 @@ declare namespace Paths {
                     firstName: string;
                     lastName: string;
                     email?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone: string; // ^\d+$
                     gender?: "MALE" | "FEMALE";
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -926,12 +976,24 @@ declare namespace Paths {
                     firstName: string;
                     lastName: string;
                     email?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone: string; // ^\d+$
                     gender?: "MALE" | "FEMALE";
                     note?: string;
                     label?: "NEW" | "VIP" | "LIGHT_BLACKLIST";
                     address: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -991,6 +1053,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: lastName, createdAt, status, orderIndex
+             * example:
+             * orderIndex:asc
              */
             export type Order = string;
             export type Page = number;
@@ -1019,7 +1083,12 @@ declare namespace Paths {
              */
             Parameters.ServiceID /* uuid */;
             accountState?: Parameters.AccountState;
-            order?: /* Order attributes: lastName, createdAt, status, orderIndex */ Parameters.Order;
+            order?: /**
+             * Order attributes: lastName, createdAt, status, orderIndex
+             * example:
+             * orderIndex:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -1031,7 +1100,15 @@ declare namespace Paths {
                     lastName?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -1126,7 +1203,15 @@ declare namespace Paths {
                     description?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -1177,12 +1262,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -1202,12 +1295,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -1262,7 +1363,15 @@ declare namespace Paths {
                         activateAt?: string; // date-time
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
@@ -1270,7 +1379,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         }[];
                         image?: {
@@ -1285,6 +1394,10 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        /**
+                         * example:
+                         * SK
+                         */
                         assignedCountryCode?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -1309,7 +1422,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                                 }[];
                             };
                         }[];
@@ -1319,7 +1432,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -1645,15 +1758,31 @@ declare namespace Paths {
                 contacts: {
                     id: string; // uuid
                     email?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone: string; // ^\d+$
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode: string;
                     country: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         code: string;
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
+                        /**
+                         * example:
+                         * EUR
+                         */
                         currencyCode?: string;
                         flag?: string;
                         phonePrefix: string;
@@ -1686,15 +1815,31 @@ declare namespace Paths {
                 contact: {
                     id: string; // uuid
                     email?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone: string; // ^\d+$
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode: string;
                     country: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         code: string;
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
+                        /**
+                         * example:
+                         * EUR
+                         */
                         currencyCode?: string;
                         flag?: string;
                         phonePrefix: string;
@@ -1811,12 +1956,20 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 countries: {
+                    /**
+                     * example:
+                     * SK
+                     */
                     code: string;
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
+                    /**
+                     * example:
+                     * EUR
+                     */
                     currencyCode: string | null;
                     flag?: string;
                     phonePrefix: string;
@@ -1845,6 +1998,10 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 currencies: {
+                    /**
+                     * example:
+                     * EUR
+                     */
                     code: string;
                     symbol: string;
                     createdAt: string; // date-time
@@ -1938,6 +2095,173 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2BAdminEnumsSmsUnitPrices {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            /**
+             * example:
+             * SK
+             */
+            export type CountryCode = string;
+            export type Limit = number;
+            /**
+             * Order attributes: validFrom
+             * example:
+             * validFrom:asc
+             */
+            export type Order = string;
+            export type Page = number;
+        }
+        export interface QueryParameters {
+            countryCode: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
+            order?: /**
+             * Order attributes: validFrom
+             * example:
+             * validFrom:asc
+             */
+            Parameters.Order;
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                unitPricesPerCounty: {
+                    id: string; // uuid
+                    actualValid: boolean;
+                    validFrom: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    validTo?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    amount: number; // float
+                    country: {
+                        /**
+                         * example:
+                         * SK
+                         */
+                        code: string;
+                        name?: string;
+                        flag?: string;
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currencyCode?: string;
+                    };
+                }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
+                };
+            }
+        }
+    }
+    namespace GetApiB2BAdminEnumsSmsUnitPricesActual {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        namespace Responses {
+            export interface $200 {
+                actualSmsUnitPricesPerCounty: {
+                    actual: {
+                        id: string; // uuid
+                        validFrom: string; // date-time
+                        validTo?: string; // date-time
+                        amount: number; // float
+                    };
+                    next?: {
+                        id: string; // uuid
+                        validFrom: string; // date-time
+                        validTo?: string; // date-time
+                        amount: number; // float
+                    };
+                    country: {
+                        /**
+                         * example:
+                         * SK
+                         */
+                        code: string;
+                        name?: string;
+                        flag?: string;
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currencyCode?: string;
+                    };
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SmsUnitPriceID = string; // uuid
+        }
+        export interface PathParameters {
+            smsUnitPriceID: Parameters.SmsUnitPriceID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                smsUnitPrice: {
+                    id: string; // uuid
+                    validFrom: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    validTo?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    amount: number; // float
+                    country: {
+                        /**
+                         * example:
+                         * SK
+                         */
+                        code: string;
+                        name?: string;
+                        flag?: string;
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currencyCode?: string;
+                    };
+                };
+            }
+        }
+    }
     namespace GetApiB2BAdminEnumsSupportContacts {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -1952,10 +2276,18 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            /**
+             * example:
+             * SK
+             */
             export type CountryCode = string;
         }
         export interface QueryParameters {
-            countryCode?: Parameters.CountryCode;
+            countryCode?: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
         }
         namespace Responses {
             export interface $200 {
@@ -1963,23 +2295,63 @@ declare namespace Paths {
                     id: string; // uuid
                     phones: [
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         },
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?
                     ];
@@ -2030,6 +2402,10 @@ declare namespace Paths {
                     note?: string;
                     address?: {
                         id: string; // uuid
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         city?: string;
                         zipCode?: string;
@@ -2037,12 +2413,20 @@ declare namespace Paths {
                         streetNumber?: string;
                     };
                     country: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         code: string;
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
+                        /**
+                         * example:
+                         * EUR
+                         */
                         currencyCode?: string;
                         flag?: string;
                         phonePrefix: string;
@@ -2076,23 +2460,63 @@ declare namespace Paths {
                     id: string; // uuid
                     phones: [
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         },
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?
                     ];
@@ -2142,6 +2566,10 @@ declare namespace Paths {
                         state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                     }[];
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         city?: string;
                         zipCode?: string;
@@ -2149,12 +2577,20 @@ declare namespace Paths {
                         streetNumber?: string;
                     };
                     country: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         code: string;
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
+                        /**
+                         * example:
+                         * EUR
+                         */
                         currencyCode?: string;
                         flag?: string;
                         phonePrefix: string;
@@ -2177,10 +2613,18 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            /**
+             * example:
+             * SK
+             */
             export type CountryCode = string | null;
         }
         export interface QueryParameters {
-            countryCode?: Parameters.CountryCode;
+            countryCode?: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
         }
         namespace Responses {
             export interface $200 {
@@ -2198,6 +2642,8 @@ declare namespace Paths {
                         sevenDaysAgo: number;
                     };
                     nonBasicSalonsWithoutServices: number;
+                    actualCounEnabledRsB2b: number;
+                    actualCounEnabledRsB2c: number;
                 };
             }
         }
@@ -2216,6 +2662,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            /**
+             * example:
+             * SK
+             */
             export type CountryCode = string | null;
             export type Month = null | number;
             export type Year = number;
@@ -2223,7 +2673,11 @@ declare namespace Paths {
         export interface QueryParameters {
             month?: Parameters.Month;
             year: Parameters.Year;
-            countryCode?: Parameters.CountryCode;
+            countryCode?: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
         }
         namespace Responses {
             export interface $200 {
@@ -2233,6 +2687,93 @@ declare namespace Paths {
                         newBasicSalons: number;
                         nonBasicPendingPublicationSalons: number;
                         nonBasicApprovedSalons: number;
+                    };
+                };
+            }
+        }
+    }
+    namespace GetApiB2BAdminNotinoDashboardSalonReservationsTimeStats {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            /**
+             * example:
+             * SK
+             */
+            export type CountryCode = string | null;
+            export type Month = null | number;
+            export type Year = number;
+        }
+        export interface QueryParameters {
+            month?: Parameters.Month;
+            year: Parameters.Year;
+            countryCode?: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
+        }
+        namespace Responses {
+            export interface $200 {
+                type: "MONTH" | "YEAR";
+                ranges: {
+                    [name: string]: {
+                        newReservationsB2b: number;
+                        newReservationsB2c: number;
+                        newReservationsTotal: number;
+                    };
+                };
+            }
+        }
+    }
+    namespace GetApiB2BAdminNotinoDashboardSalonRsTimeStats {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            /**
+             * example:
+             * SK
+             */
+            export type CountryCode = string | null;
+            export type Month = null | number;
+            export type Year = number;
+        }
+        export interface QueryParameters {
+            month?: Parameters.Month;
+            year: Parameters.Year;
+            countryCode?: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
+        }
+        namespace Responses {
+            export interface $200 {
+                type: "MONTH" | "YEAR";
+                ranges: {
+                    [name: string]: {
+                        countEnabledRsB2b: number;
+                        countEnabledRsB2c: number;
                     };
                 };
             }
@@ -2256,9 +2797,15 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: toxicityScore
+             * example:
+             * toxicityScore:desc
              */
             export type Order = string;
             export type Page = number;
+            /**
+             * example:
+             * SK
+             */
             export type SalonCountryCode = string;
             export type Search = string | null;
             export type ToxicityScoreFrom = number; // float
@@ -2269,10 +2816,19 @@ declare namespace Paths {
             search?: Parameters.Search;
             verificationStatus?: Parameters.VerificationStatus;
             deleted?: Parameters.Deleted;
-            salonCountryCode?: Parameters.SalonCountryCode;
+            salonCountryCode?: /**
+             * example:
+             * SK
+             */
+            Parameters.SalonCountryCode;
             toxicityScoreFrom?: Parameters.ToxicityScoreFrom /* float */;
             toxicityScoreTo?: Parameters.ToxicityScoreTo /* float */;
-            order?: /* Order attributes: toxicityScore */ Parameters.Order;
+            order?: /**
+             * Order attributes: toxicityScore
+             * example:
+             * toxicityScore:desc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -2401,7 +2957,7 @@ declare namespace Paths {
                     }[];
                     permissions: {
                         id: string; // uuid
-                        name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                        name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                     }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -2436,7 +2992,7 @@ declare namespace Paths {
                     }[];
                     permissions: {
                         id: string; // uuid
-                        name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                        name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                     }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -2461,6 +3017,10 @@ declare namespace Paths {
             export type AcceptLanguage = string;
             export type AssignedUserID = string; // uuid
             export type CategoryFirstLevelIDs = string /* uuid */[];
+            /**
+             * example:
+             * SK
+             */
             export type CountryCode = string;
             export type CreateType = "NON_BASIC" | "BASIC";
             export type HasSetOpeningHours = boolean;
@@ -2469,6 +3029,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: name, fillingProgress, createdAt
+             * example:
+             * createdAt:desc
              */
             export type Order = string;
             export type Page = number;
@@ -2482,7 +3044,11 @@ declare namespace Paths {
             search?: Parameters.Search;
             categoryFirstLevelIDs?: Parameters.CategoryFirstLevelIDs;
             statuses?: Parameters.Statuses;
-            countryCode?: Parameters.CountryCode;
+            countryCode?: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
             pendingPublication?: Parameters.PendingPublication;
             createType?: Parameters.CreateType;
             sourceType?: Parameters.SourceType;
@@ -2491,7 +3057,12 @@ declare namespace Paths {
             hasSetOpeningHours?: Parameters.HasSetOpeningHours;
             assignedUserID?: Parameters.AssignedUserID /* uuid */;
             premiumSourceUserType?: Parameters.PremiumSourceUserType;
-            order?: /* Order attributes: name, fillingProgress, createdAt */ Parameters.Order;
+            order?: /**
+             * Order attributes: name, fillingProgress, createdAt
+             * example:
+             * createdAt:desc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -2504,10 +3075,22 @@ declare namespace Paths {
                     name?: string;
                     email?: string;
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -2576,10 +3159,22 @@ declare namespace Paths {
                     email?: string; // email
                     aboutUsFirst?: string;
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -2625,10 +3220,22 @@ declare namespace Paths {
                     email?: string; // email
                     aboutUsFirst?: string;
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -2658,6 +3265,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: userLastName, userEmail, salonName, createdAt
+             * example:
+             * userLastName:asc
              */
             export type Order = string;
             export type Page = number;
@@ -2665,7 +3274,12 @@ declare namespace Paths {
         }
         export interface QueryParameters {
             search?: Parameters.Search;
-            order?: /* Order attributes: userLastName, userEmail, salonName, createdAt */ Parameters.Order;
+            order?: /**
+             * Order attributes: userLastName, userEmail, salonName, createdAt
+             * example:
+             * userLastName:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -2677,10 +3291,22 @@ declare namespace Paths {
                         name?: string;
                         email?: string; // email
                         phones: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         address?: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             countryCode?: string;
                             zipCode?: string;
                             city?: string;
@@ -2692,7 +3318,15 @@ declare namespace Paths {
                         id: string; // uuid
                         fullName?: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                     };
                 }[];
@@ -2781,6 +3415,10 @@ declare namespace Paths {
                         note: string;
                     };
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -2790,7 +3428,15 @@ declare namespace Paths {
                         longitude?: number; // float
                     };
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     email?: string;
@@ -2971,10 +3617,22 @@ declare namespace Paths {
                         email?: string;
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                     };
                     companyInvoiceAddress?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -2991,6 +3649,10 @@ declare namespace Paths {
                         name?: string;
                         aboutUsFirst?: string;
                         address?: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             countryCode?: string;
                             zipCode?: string;
                             city?: string;
@@ -3000,7 +3662,15 @@ declare namespace Paths {
                             longitude?: number; // float
                         };
                         phones: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         email?: string;
@@ -3057,11 +3727,14 @@ declare namespace Paths {
                              * example:
                              * CREATE_USER
                              */
-                            eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                            eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                             channels: ("EMAIL" | "PUSH" | "SMS")[];
                         }[];
                     };
                     premiumSourceUserType?: "NOTINO" | "PARTNER";
+                    wallet?: {
+                        id: string; // uuid
+                    };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -3096,11 +3769,23 @@ declare namespace Paths {
                     description?: string;
                     businessID?: string;
                     phones?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     email?: string;
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -3340,7 +4025,7 @@ declare namespace Paths {
                 string?,
                 string?
             ];
-            export type EventTypes = ("RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF")[];
+            export type EventTypes = ("RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF")[];
             export type ReservationCreateSourceType = "ONLINE" | "OFFLINE";
             export type ReservationPaymentMethods = ("CASH" | "CARD" | "OTHER")[];
             export type ReservationStates = ("PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED")[];
@@ -3382,7 +4067,7 @@ declare namespace Paths {
                 }[];
                 calendarEvents: {
                     id: string; // uuid
-                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    eventType: "RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
                     start: {
                         date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
@@ -3398,12 +4083,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -3416,7 +4109,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                         note?: string;
                         profileImage: {
@@ -3486,7 +4187,7 @@ declare namespace Paths {
             export interface $200 {
                 calendarEvent: {
                     id: string; // uuid
-                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    eventType: "RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
                     start: {
                         date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
@@ -3502,12 +4203,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -3520,7 +4229,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                         note?: string;
                         profileImage: {
@@ -3821,7 +4538,7 @@ declare namespace Paths {
                 string?,
                 string?
             ];
-            export type EventTypes = ("RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF")[];
+            export type EventTypes = ("RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF")[];
             export type ReservationCreateSourceType = "ONLINE" | "OFFLINE";
             export type ReservationPaymentMethods = ("CASH" | "CARD" | "OTHER")[];
             export type ReservationStates = ("PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED")[];
@@ -4090,10 +4807,12 @@ declare namespace Paths {
                 string?,
                 string?
             ];
-            export type EventTypes = ("RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF")[];
+            export type EventTypes = ("RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF")[];
             export type Limit = number;
             /**
              * Order attributes: startDate
+             * example:
+             * startDate:asc
              */
             export type Order = string;
             export type Page = number;
@@ -4113,7 +4832,12 @@ declare namespace Paths {
             reservationStates?: Parameters.ReservationStates;
             reservationCreateSourceType?: Parameters.ReservationCreateSourceType;
             reservationPaymentMethods?: Parameters.ReservationPaymentMethods;
-            order?: /* Order attributes: startDate */ Parameters.Order;
+            order?: /**
+             * Order attributes: startDate
+             * example:
+             * startDate:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -4140,7 +4864,7 @@ declare namespace Paths {
                 }[];
                 calendarEvents: {
                     id: string; // uuid
-                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    eventType: "RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
                     start: {
                         date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
@@ -4156,12 +4880,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -4174,7 +4906,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                         note?: string;
                         profileImage: {
@@ -4414,6 +5154,44 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2BAdminSalonsSalonIdWalletsWalletId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+            export type WalletID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            walletID: Parameters.WalletID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                wallet: {
+                    id: string; // uuid
+                    availableBalance: number; // float
+                    currency: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        code: string;
+                        symbol: string;
+                    };
+                };
+            }
+        }
+    }
     namespace GetApiB2BAdminServices {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -4459,12 +5237,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -4484,12 +5270,20 @@ declare namespace Paths {
                                                     durationFrom?: number;
                                                     durationTo?: number;
                                                     priceFrom?: {
+                                                        /**
+                                                         * example:
+                                                         * EUR
+                                                         */
                                                         currency: string;
                                                         currencySymbol: string;
                                                         exponent: number;
                                                         significand: number;
                                                     };
                                                     priceTo?: {
+                                                        /**
+                                                         * example:
+                                                         * EUR
+                                                         */
                                                         currency: string;
                                                         currencySymbol: string;
                                                         exponent: number;
@@ -4502,12 +5296,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -4584,12 +5386,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -4609,12 +5419,20 @@ declare namespace Paths {
                                 durationFrom?: number;
                                 durationTo?: number;
                                 priceFrom?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
                                 priceTo?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
@@ -4627,12 +5445,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -4667,12 +5493,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -4692,12 +5526,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -4710,12 +5552,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -4766,6 +5616,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: fullName, email, lastAccess, activatedAt, roleName
+             * example:
+             * fullName:asc
              */
             export type Order = string;
             export type Page = number;
@@ -4775,7 +5627,12 @@ declare namespace Paths {
         export interface QueryParameters {
             roleID?: Parameters.RoleID /* uuid */;
             search?: Parameters.Search;
-            order?: /* Order attributes: fullName, email, lastAccess, activatedAt, roleName */ Parameters.Order;
+            order?: /**
+             * Order attributes: fullName, email, lastAccess, activatedAt, roleName
+             * example:
+             * fullName:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -4788,8 +5645,20 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     roles: {
                         id: string; // uuid
@@ -4879,7 +5748,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -4887,7 +5764,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -4902,6 +5779,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -4926,7 +5807,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                         employeeIcsLink: string;
@@ -5004,7 +5885,7 @@ declare namespace Paths {
                         }[];
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -5040,6 +5921,41 @@ declare namespace Paths {
             export type $200 = any;
         }
     }
+    namespace GetApiB2BV1Config {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        namespace Responses {
+            export interface $200 {
+                assets: {
+                    onboardingImages: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                        visible: boolean;
+                    }[];
+                };
+            }
+        }
+    }
     namespace GetApiB2BV1Customers {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -5057,6 +5973,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: lastName, createdAt
+             * example:
+             * lastName:asc
              */
             export type Order = string;
             export type Page = number;
@@ -5074,7 +5992,12 @@ declare namespace Paths {
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
             Parameters.SalonID /* uuid */;
-            order?: /* Order attributes: lastName, createdAt */ Parameters.Order;
+            order?: /**
+             * Order attributes: lastName, createdAt
+             * example:
+             * lastName:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -5085,10 +6008,22 @@ declare namespace Paths {
                     firstName: string;
                     lastName: string;
                     email?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone: string; // ^\d+$
                     gender?: "MALE" | "FEMALE";
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -5153,12 +6088,24 @@ declare namespace Paths {
                     firstName: string;
                     lastName: string;
                     email?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone: string; // ^\d+$
                     gender?: "MALE" | "FEMALE";
                     note?: string;
                     label?: "NEW" | "VIP" | "LIGHT_BLACKLIST";
                     address: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -5218,6 +6165,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: lastName, createdAt, status
+             * example:
+             * createdAt:desc
              */
             export type Order = string;
             export type Page = number;
@@ -5246,7 +6195,12 @@ declare namespace Paths {
             Parameters.ServiceID /* uuid */;
             accountState?: Parameters.AccountState;
             search?: Parameters.Search;
-            order?: /* Order attributes: lastName, createdAt, status */ Parameters.Order;
+            order?: /**
+             * Order attributes: lastName, createdAt, status
+             * example:
+             * createdAt:desc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -5258,7 +6212,15 @@ declare namespace Paths {
                     lastName?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -5343,7 +6305,15 @@ declare namespace Paths {
                     description?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -5394,12 +6364,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -5419,12 +6397,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -5479,7 +6465,15 @@ declare namespace Paths {
                         activateAt?: string; // date-time
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
@@ -5487,7 +6481,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         }[];
                         image?: {
@@ -5502,6 +6496,10 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        /**
+                         * example:
+                         * SK
+                         */
                         assignedCountryCode?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -5526,7 +6524,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                                 }[];
                             };
                         }[];
@@ -5536,7 +6534,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -5776,15 +6774,31 @@ declare namespace Paths {
                 contacts: {
                     id: string; // uuid
                     email?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone: string; // ^\d+$
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode: string;
                     country: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         code: string;
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
+                        /**
+                         * example:
+                         * EUR
+                         */
                         currencyCode?: string;
                         flag?: string;
                         phonePrefix: string;
@@ -5901,12 +6915,20 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 countries: {
+                    /**
+                     * example:
+                     * SK
+                     */
                     code: string;
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
+                    /**
+                     * example:
+                     * EUR
+                     */
                     currencyCode: string | null;
                     flag?: string;
                     phonePrefix: string;
@@ -5935,6 +6957,10 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 currencies: {
+                    /**
+                     * example:
+                     * EUR
+                     */
                     code: string;
                     symbol: string;
                     createdAt: string; // date-time
@@ -6042,10 +7068,18 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            /**
+             * example:
+             * SK
+             */
             export type CountryCode = string;
         }
         export interface QueryParameters {
-            countryCode?: Parameters.CountryCode;
+            countryCode?: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
         }
         namespace Responses {
             export interface $200 {
@@ -6053,23 +7087,63 @@ declare namespace Paths {
                     id: string; // uuid
                     phones: [
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         },
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?
                     ];
@@ -6120,6 +7194,10 @@ declare namespace Paths {
                     note?: string;
                     address?: {
                         id: string; // uuid
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         city?: string;
                         zipCode?: string;
@@ -6127,12 +7205,20 @@ declare namespace Paths {
                         streetNumber?: string;
                     };
                     country: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         code: string;
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
+                        /**
+                         * example:
+                         * EUR
+                         */
                         currencyCode?: string;
                         flag?: string;
                         phonePrefix: string;
@@ -6171,7 +7257,7 @@ declare namespace Paths {
                     }[];
                     permissions: {
                         id: string; // uuid
-                        name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                        name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                     }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -6218,7 +7304,15 @@ declare namespace Paths {
                         isCover: boolean;
                     }[];
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     logo?: {
@@ -6234,6 +7328,10 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -6284,10 +7382,22 @@ declare namespace Paths {
                     email?: string; // email
                     aboutUsFirst?: string;
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -6333,10 +7443,22 @@ declare namespace Paths {
                     email?: string; // email
                     aboutUsFirst?: string;
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -6400,6 +7522,10 @@ declare namespace Paths {
                     };
                     address?: {
                         id: string; // uuid
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -6508,12 +7634,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -7027,7 +8161,15 @@ declare namespace Paths {
                     parkingNote?: string;
                     phones: {
                         id: string; // uuid
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     payByCard?: boolean;
@@ -7244,6 +8386,10 @@ declare namespace Paths {
                         aboutUsFirst?: string;
                     };
                     addressSegment?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -7255,12 +8401,24 @@ declare namespace Paths {
                         locationNote?: string;
                     };
                     currencySegment?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
                         code: string;
                         symbol: string;
                     };
                     contactInfoSegment?: {
                         phones: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         email?: string;
@@ -7280,10 +8438,22 @@ declare namespace Paths {
                         email?: string;
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                     };
                     companyInvoiceAddressSegment?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -7726,7 +8896,7 @@ declare namespace Paths {
                                  * example:
                                  * CREATE_USER
                                  */
-                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                                 channels: ("EMAIL" | "PUSH" | "SMS")[];
                             }[];
                         };
@@ -7753,6 +8923,9 @@ declare namespace Paths {
                             employeeUpdate: boolean;
                             employeeDelete: boolean;
                         };
+                    };
+                    wallet?: {
+                        id: string; // uuid
                     };
                     createdAt?: string; // date-time
                     updatedAt?: string; // date-time
@@ -7788,11 +8961,23 @@ declare namespace Paths {
                     description?: string;
                     businessID?: string;
                     phones?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     email?: string;
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -8032,7 +9217,7 @@ declare namespace Paths {
                 string?,
                 string?
             ];
-            export type EventTypes = ("RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF")[];
+            export type EventTypes = ("RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF")[];
             export type ReservationCreateSourceType = "ONLINE" | "OFFLINE";
             export type ReservationPaymentMethods = ("CASH" | "CARD" | "OTHER")[];
             export type ReservationStates = ("PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED")[];
@@ -8074,7 +9259,7 @@ declare namespace Paths {
                 }[];
                 calendarEvents: {
                     id: string; // uuid
-                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    eventType: "RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
                     start: {
                         date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
@@ -8090,12 +9275,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -8108,7 +9301,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                         note?: string;
                         profileImage: {
@@ -8178,7 +9379,7 @@ declare namespace Paths {
             export interface $200 {
                 calendarEvent: {
                     id: string; // uuid
-                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    eventType: "RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
                     start: {
                         date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
@@ -8194,12 +9395,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -8212,7 +9421,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                         note?: string;
                         profileImage: {
@@ -8512,10 +9729,12 @@ declare namespace Paths {
                 string?,
                 string?
             ];
-            export type EventTypes = ("RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF")[];
+            export type EventTypes = ("RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF")[];
             export type Limit = number;
             /**
              * Order attributes: startDate
+             * example:
+             * startDate:asc
              */
             export type Order = string;
             export type Page = number;
@@ -8535,7 +9754,12 @@ declare namespace Paths {
             reservationStates?: Parameters.ReservationStates;
             reservationCreateSourceType?: Parameters.ReservationCreateSourceType;
             reservationPaymentMethods?: Parameters.ReservationPaymentMethods;
-            order?: /* Order attributes: startDate */ Parameters.Order;
+            order?: /**
+             * Order attributes: startDate
+             * example:
+             * startDate:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -8562,7 +9786,7 @@ declare namespace Paths {
                 }[];
                 calendarEvents: {
                     id: string; // uuid
-                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    eventType: "RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
                     start: {
                         date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
@@ -8578,12 +9802,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -8596,7 +9828,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                         note?: string;
                         profileImage: {
@@ -8721,6 +9961,44 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2BV1SalonsSalonIdWalletsWalletId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+            export type WalletID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            walletID: Parameters.WalletID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                wallet: {
+                    id: string; // uuid
+                    availableBalance: number; // float
+                    currency: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        code: string;
+                        symbol: string;
+                    };
+                };
+            }
+        }
+    }
     namespace GetApiB2BV1Services {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -8766,12 +10044,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -8791,12 +10077,20 @@ declare namespace Paths {
                                                     durationFrom?: number;
                                                     durationTo?: number;
                                                     priceFrom?: {
+                                                        /**
+                                                         * example:
+                                                         * EUR
+                                                         */
                                                         currency: string;
                                                         currencySymbol: string;
                                                         exponent: number;
                                                         significand: number;
                                                     };
                                                     priceTo?: {
+                                                        /**
+                                                         * example:
+                                                         * EUR
+                                                         */
                                                         currency: string;
                                                         currencySymbol: string;
                                                         exponent: number;
@@ -8809,12 +10103,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -8891,12 +10193,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -8916,12 +10226,20 @@ declare namespace Paths {
                                 durationFrom?: number;
                                 durationTo?: number;
                                 priceFrom?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
                                 priceTo?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
@@ -8934,12 +10252,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -8974,12 +10300,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -8999,12 +10333,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -9017,12 +10359,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -9126,7 +10476,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -9134,7 +10492,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -9149,6 +10507,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -9173,7 +10535,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                         employeeIcsLink: string;
@@ -9251,7 +10613,7 @@ declare namespace Paths {
                         }[];
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -9286,7 +10648,7 @@ declare namespace Paths {
             export interface $200 {
                 reservations: {
                     id: string; // uuid
-                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    eventType: "RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
                     start: {
                         date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
@@ -9301,12 +10663,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -9319,7 +10689,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -9392,7 +10770,15 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         formattedAddress?: string;
@@ -9427,7 +10813,7 @@ declare namespace Paths {
             export interface $200 {
                 reservation: {
                     id: string; // uuid
-                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    eventType: "RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
                     start: {
                         date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
@@ -9442,12 +10828,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -9479,7 +10873,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -9559,10 +10961,22 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         address?: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             countryCode?: string;
                             zipCode?: string;
                             city?: string;
@@ -9605,7 +11019,7 @@ declare namespace Paths {
             export interface $200 {
                 reservations: {
                     id: string; // uuid
-                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    eventType: "RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
                     start: {
                         date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
@@ -9620,12 +11034,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -9638,7 +11060,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -9711,7 +11141,15 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         formattedAddress?: string;
@@ -9754,7 +11192,7 @@ declare namespace Paths {
             export interface $200 {
                 reservations: {
                     id: string; // uuid
-                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    eventType: "RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
                     start: {
                         date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
@@ -9769,12 +11207,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -9787,7 +11233,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -9860,7 +11314,15 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         formattedAddress?: string;
@@ -10263,12 +11725,20 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 countries: {
+                    /**
+                     * example:
+                     * SK
+                     */
                     code: string;
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
+                    /**
+                     * example:
+                     * EUR
+                     */
                     currencyCode: string | null;
                     flag?: string;
                     phonePrefix: string;
@@ -10380,6 +11850,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: createdAt
+             * example:
+             * createdAt:desc
              */
             export type Order = string;
             export type Page = number;
@@ -10387,13 +11859,18 @@ declare namespace Paths {
         export interface QueryParameters {
             limit?: Parameters.Limit;
             page?: Parameters.Page;
-            order?: /* Order attributes: createdAt */ Parameters.Order;
+            order?: /**
+             * Order attributes: createdAt
+             * example:
+             * createdAt:desc
+             */
+            Parameters.Order;
         }
         namespace Responses {
             export interface $200 {
                 notifications: {
                     id: string; // uuid
-                    type: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                    type: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                     title: string;
                     message: string;
                     readAt?: string; // date-time
@@ -10452,6 +11929,8 @@ declare namespace Paths {
             export type OpeningHoursStatus = "ALL" | "OPEN" | "CLOSED";
             /**
              * Order attributes: distance, rating, priceLevel
+             * example:
+             * distance:asc
              */
             export type Order = string;
             export type Page = number;
@@ -10472,7 +11951,12 @@ declare namespace Paths {
             cosmeticIDs?: Parameters.CosmeticIDs;
             liked?: Parameters.Liked;
             createType?: Parameters.CreateType;
-            order?: /* Order attributes: distance, rating, priceLevel */ Parameters.Order;
+            order?: /**
+             * Order attributes: distance, rating, priceLevel
+             * example:
+             * distance:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -10522,6 +12006,10 @@ declare namespace Paths {
                         street?: string;
                         city?: string;
                         zipCode?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                     };
                     openingHoursData?: {
@@ -10614,6 +12102,10 @@ declare namespace Paths {
                         street?: string;
                         city?: string;
                         zipCode?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                     };
                     openingHoursData?: {
@@ -10666,6 +12158,10 @@ declare namespace Paths {
                         street?: string;
                         city?: string;
                         zipCode?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                     };
                     openingHoursData?: {
@@ -10861,6 +12357,10 @@ declare namespace Paths {
                             street?: string;
                             city?: string;
                             zipCode?: string;
+                            /**
+                             * example:
+                             * SK
+                             */
                             countryCode?: string;
                         };
                         openingHoursData?: {
@@ -10928,6 +12428,10 @@ declare namespace Paths {
                     };
                     address?: {
                         id: string; // uuid
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -11036,12 +12540,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -11555,7 +13067,15 @@ declare namespace Paths {
                     parkingNote?: string;
                     phones: {
                         id: string; // uuid
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     payByCard?: boolean;
@@ -11840,12 +13360,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -11865,12 +13393,20 @@ declare namespace Paths {
                                                     durationFrom?: number;
                                                     durationTo?: number;
                                                     priceFrom?: {
+                                                        /**
+                                                         * example:
+                                                         * EUR
+                                                         */
                                                         currency: string;
                                                         currencySymbol: string;
                                                         exponent: number;
                                                         significand: number;
                                                     };
                                                     priceTo?: {
+                                                        /**
+                                                         * example:
+                                                         * EUR
+                                                         */
                                                         currency: string;
                                                         currencySymbol: string;
                                                         exponent: number;
@@ -12011,12 +13547,20 @@ declare namespace Paths {
                                 durationFrom?: number;
                                 durationTo?: number;
                                 priceFrom?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
                                 priceTo?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
@@ -12029,12 +13573,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -12077,12 +13629,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -12095,12 +13655,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -12159,7 +13727,7 @@ declare namespace Paths {
             export interface $200 {
                 reservations: {
                     id: string; // uuid
-                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    eventType: "RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
                     start: {
                         date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
@@ -12174,12 +13742,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -12192,7 +13768,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -12265,7 +13849,15 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         formattedAddress?: string;
@@ -12300,7 +13892,7 @@ declare namespace Paths {
             export interface $200 {
                 reservation: {
                     id: string; // uuid
-                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    eventType: "RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
                     start: {
                         date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
@@ -12315,12 +13907,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -12352,7 +13952,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -12432,10 +14040,22 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         address?: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             countryCode?: string;
                             zipCode?: string;
                             city?: string;
@@ -12478,7 +14098,7 @@ declare namespace Paths {
             export interface $200 {
                 reservations: {
                     id: string; // uuid
-                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    eventType: "RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
                     start: {
                         date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
@@ -12493,12 +14113,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -12511,7 +14139,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -12584,7 +14220,15 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         formattedAddress?: string;
@@ -12627,7 +14271,7 @@ declare namespace Paths {
             export interface $200 {
                 reservations: {
                     id: string; // uuid
-                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    eventType: "RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
                     start: {
                         date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
@@ -12642,12 +14286,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -12660,7 +14312,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -12733,7 +14393,15 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         formattedAddress?: string;
@@ -13095,12 +14763,20 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 countries: {
+                    /**
+                     * example:
+                     * SK
+                     */
                     code: string;
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
+                    /**
+                     * example:
+                     * EUR
+                     */
                     currencyCode: string | null;
                     flag?: string;
                     phonePrefix: string;
@@ -13223,6 +14899,8 @@ declare namespace Paths {
             export type OpeningHoursStatus = "ALL" | "OPEN" | "CLOSED";
             /**
              * Order attributes: distance, rating, priceLevel
+             * example:
+             * distance:asc
              */
             export type Order = string;
             export type Page = number;
@@ -13243,7 +14921,12 @@ declare namespace Paths {
             cosmeticIDs?: Parameters.CosmeticIDs;
             liked?: Parameters.Liked;
             createType?: Parameters.CreateType;
-            order?: /* Order attributes: distance, rating, priceLevel */ Parameters.Order;
+            order?: /**
+             * Order attributes: distance, rating, priceLevel
+             * example:
+             * distance:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -13293,6 +14976,10 @@ declare namespace Paths {
                         street?: string;
                         city?: string;
                         zipCode?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                     };
                     openingHoursData?: {
@@ -13385,6 +15072,10 @@ declare namespace Paths {
                         street?: string;
                         city?: string;
                         zipCode?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                     };
                     openingHoursData?: {
@@ -13437,6 +15128,10 @@ declare namespace Paths {
                         street?: string;
                         city?: string;
                         zipCode?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                     };
                     openingHoursData?: {
@@ -13632,6 +15327,10 @@ declare namespace Paths {
                             street?: string;
                             city?: string;
                             zipCode?: string;
+                            /**
+                             * example:
+                             * SK
+                             */
                             countryCode?: string;
                         };
                         openingHoursData?: {
@@ -13889,12 +15588,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -13914,12 +15621,20 @@ declare namespace Paths {
                                                     durationFrom?: number;
                                                     durationTo?: number;
                                                     priceFrom?: {
+                                                        /**
+                                                         * example:
+                                                         * EUR
+                                                         */
                                                         currency: string;
                                                         currencySymbol: string;
                                                         exponent: number;
                                                         significand: number;
                                                     };
                                                     priceTo?: {
+                                                        /**
+                                                         * example:
+                                                         * EUR
+                                                         */
                                                         currency: string;
                                                         currencySymbol: string;
                                                         exponent: number;
@@ -14074,6 +15789,10 @@ declare namespace Paths {
                     };
                     address?: {
                         id: string; // uuid
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -14182,12 +15901,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -14701,7 +16428,15 @@ declare namespace Paths {
                     parkingNote?: string;
                     phones: {
                         id: string; // uuid
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     payByCard?: boolean;
@@ -14782,12 +16517,20 @@ declare namespace Paths {
                                 durationFrom?: number;
                                 durationTo?: number;
                                 priceFrom?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
                                 priceTo?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
@@ -14800,12 +16543,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -14848,12 +16599,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -14866,12 +16625,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -15384,7 +17151,15 @@ declare namespace Paths {
                     description?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -15435,12 +17210,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -15460,12 +17243,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -15520,7 +17311,15 @@ declare namespace Paths {
                         activateAt?: string; // date-time
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
@@ -15528,7 +17327,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         }[];
                         image?: {
@@ -15543,6 +17342,10 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        /**
+                         * example:
+                         * SK
+                         */
                         assignedCountryCode?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -15567,7 +17370,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                                 }[];
                             };
                         }[];
@@ -15577,7 +17380,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -15669,7 +17472,15 @@ declare namespace Paths {
                     description?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -15720,12 +17531,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -15745,12 +17564,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -15805,7 +17632,15 @@ declare namespace Paths {
                         activateAt?: string; // date-time
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
@@ -15813,7 +17648,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         }[];
                         image?: {
@@ -15828,6 +17663,10 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        /**
+                         * example:
+                         * SK
+                         */
                         assignedCountryCode?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -15852,7 +17691,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                                 }[];
                             };
                         }[];
@@ -15862,7 +17701,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -20264,6 +22103,49 @@ declare namespace Paths {
             }
         }
     }
+    namespace PatchApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SmsUnitPriceID = string; // uuid
+        }
+        export interface PathParameters {
+            smsUnitPriceID: Parameters.SmsUnitPriceID /* uuid */;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 2023-02-23
+             */
+            validFrom: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            /**
+             * example:
+             * 100
+             */
+            amount: number; // float
+        }
+        namespace Responses {
+            export interface $200 {
+                smsUnitPrice: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PatchApiB2BAdminEnumsSupportContactsSupportContactId {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -20963,10 +22845,22 @@ declare namespace Paths {
                     name?: string;
                     email?: string; // email
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     address: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -21119,6 +23013,50 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 reservationCalendarEvent: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface RequestBody {
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            note?: string | null;
+        }
+        namespace Responses {
+            export interface $200 {
+                calendarEvent: {
                     id: string; // uuid
                 };
                 messages: {
@@ -21689,7 +23627,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21697,7 +23635,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21705,7 +23643,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21713,7 +23651,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21721,7 +23659,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21729,7 +23667,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21737,7 +23675,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21745,7 +23683,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21753,7 +23691,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21761,7 +23699,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21769,7 +23707,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21777,7 +23715,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21785,7 +23723,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21793,7 +23731,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21801,7 +23739,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21809,7 +23747,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21817,7 +23755,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21825,7 +23763,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21833,7 +23771,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21841,7 +23779,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21849,7 +23787,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21857,7 +23795,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21865,7 +23803,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21873,7 +23811,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21881,7 +23819,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21889,7 +23827,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21897,7 +23835,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21905,7 +23843,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21913,7 +23851,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21921,7 +23859,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21929,7 +23867,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21937,7 +23875,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21945,7 +23883,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21953,7 +23891,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21961,7 +23899,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21969,7 +23907,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21977,7 +23915,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21985,7 +23923,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -21993,7 +23931,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22001,7 +23939,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22009,7 +23947,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22017,7 +23955,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22025,7 +23963,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22033,7 +23971,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22041,7 +23979,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22049,7 +23987,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22057,7 +23995,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22065,7 +24003,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22073,7 +24011,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22081,7 +24019,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22089,7 +24027,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22097,7 +24035,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22105,7 +24043,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22113,7 +24051,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22121,7 +24059,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22129,7 +24067,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22137,7 +24075,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22145,7 +24083,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22153,7 +24091,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22161,7 +24099,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22169,7 +24107,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22177,7 +24115,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22185,7 +24123,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22193,7 +24131,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22201,7 +24139,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22209,7 +24147,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22217,7 +24155,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22225,7 +24163,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22233,7 +24171,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22241,7 +24179,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22249,7 +24187,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22257,7 +24195,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22265,7 +24203,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22273,7 +24211,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22281,7 +24219,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22289,7 +24227,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22297,7 +24235,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22305,7 +24243,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22313,7 +24251,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22321,7 +24259,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22329,7 +24267,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22337,7 +24275,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22345,7 +24283,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22353,7 +24291,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22361,7 +24299,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22369,7 +24307,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22377,7 +24315,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22385,7 +24323,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22393,7 +24331,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22401,7 +24339,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22409,7 +24347,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22417,7 +24355,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22425,7 +24363,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22433,7 +24371,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22441,7 +24379,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22449,7 +24387,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22457,7 +24395,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22465,7 +24403,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22473,7 +24411,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -22481,7 +24419,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?
                 ] | null;
@@ -30553,12 +32491,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -30578,12 +32524,20 @@ declare namespace Paths {
                                 durationFrom?: number;
                                 durationTo?: number;
                                 priceFrom?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
                                 priceTo?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
@@ -30596,12 +32550,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -30636,12 +32598,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -30661,12 +32631,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -30679,12 +32657,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -30782,7 +32768,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -30790,7 +32784,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -30805,6 +32799,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -30829,7 +32827,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -31199,7 +33197,15 @@ declare namespace Paths {
                     description?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -31250,12 +33256,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -31275,12 +33289,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -31335,7 +33357,15 @@ declare namespace Paths {
                         activateAt?: string; // date-time
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
@@ -31343,7 +33373,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         }[];
                         image?: {
@@ -31358,6 +33388,10 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        /**
+                         * example:
+                         * SK
+                         */
                         assignedCountryCode?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -31382,7 +33416,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                                 }[];
                             };
                         }[];
@@ -31392,7 +33426,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -31484,7 +33518,15 @@ declare namespace Paths {
                     description?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -31535,12 +33577,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -31560,12 +33610,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -31620,7 +33678,15 @@ declare namespace Paths {
                         activateAt?: string; // date-time
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
@@ -31628,7 +33694,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         }[];
                         image?: {
@@ -31643,6 +33709,10 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        /**
+                         * example:
+                         * SK
+                         */
                         assignedCountryCode?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -31667,7 +33737,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                                 }[];
                             };
                         }[];
@@ -31677,7 +33747,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -36260,6 +38330,10 @@ declare namespace Paths {
                         aboutUsFirst?: string;
                     };
                     addressSegment?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -36271,12 +38345,24 @@ declare namespace Paths {
                         locationNote?: string;
                     };
                     currencySegment?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
                         code: string;
                         symbol: string;
                     };
                     contactInfoSegment?: {
                         phones: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         email?: string;
@@ -36296,10 +38382,22 @@ declare namespace Paths {
                         email?: string;
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                     };
                     companyInvoiceAddressSegment?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -36742,7 +38840,7 @@ declare namespace Paths {
                                  * example:
                                  * CREATE_USER
                                  */
-                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                                 channels: ("EMAIL" | "PUSH" | "SMS")[];
                             }[];
                         };
@@ -36769,6 +38867,9 @@ declare namespace Paths {
                             employeeUpdate: boolean;
                             employeeDelete: boolean;
                         };
+                    };
+                    wallet?: {
+                        id: string; // uuid
                     };
                     createdAt?: string; // date-time
                     updatedAt?: string; // date-time
@@ -36849,10 +38950,22 @@ declare namespace Paths {
                     name?: string;
                     email?: string; // email
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     address: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -37442,6 +39555,10 @@ declare namespace Paths {
                         aboutUsFirst?: string;
                     };
                     addressSegment?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -37453,12 +39570,24 @@ declare namespace Paths {
                         locationNote?: string;
                     };
                     currencySegment?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
                         code: string;
                         symbol: string;
                     };
                     contactInfoSegment?: {
                         phones: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         email?: string;
@@ -37478,10 +39607,22 @@ declare namespace Paths {
                         email?: string;
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                     };
                     companyInvoiceAddressSegment?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -37924,7 +40065,7 @@ declare namespace Paths {
                                  * example:
                                  * CREATE_USER
                                  */
-                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                                 channels: ("EMAIL" | "PUSH" | "SMS")[];
                             }[];
                         };
@@ -37951,6 +40092,9 @@ declare namespace Paths {
                             employeeUpdate: boolean;
                             employeeDelete: boolean;
                         };
+                    };
+                    wallet?: {
+                        id: string; // uuid
                     };
                     createdAt?: string; // date-time
                     updatedAt?: string; // date-time
@@ -38167,7 +40311,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38175,7 +40319,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38183,7 +40327,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38191,7 +40335,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38199,7 +40343,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38207,7 +40351,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38215,7 +40359,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38223,7 +40367,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38231,7 +40375,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38239,7 +40383,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38247,7 +40391,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38255,7 +40399,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38263,7 +40407,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38271,7 +40415,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38279,7 +40423,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38287,7 +40431,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38295,7 +40439,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38303,7 +40447,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38311,7 +40455,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38319,7 +40463,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38327,7 +40471,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38335,7 +40479,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38343,7 +40487,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38351,7 +40495,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38359,7 +40503,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38367,7 +40511,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38375,7 +40519,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38383,7 +40527,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38391,7 +40535,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38399,7 +40543,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38407,7 +40551,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38415,7 +40559,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38423,7 +40567,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38431,7 +40575,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38439,7 +40583,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38447,7 +40591,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38455,7 +40599,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38463,7 +40607,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38471,7 +40615,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38479,7 +40623,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38487,7 +40631,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38495,7 +40639,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38503,7 +40647,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38511,7 +40655,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38519,7 +40663,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38527,7 +40671,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38535,7 +40679,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38543,7 +40687,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38551,7 +40695,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38559,7 +40703,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38567,7 +40711,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38575,7 +40719,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38583,7 +40727,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38591,7 +40735,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38599,7 +40743,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38607,7 +40751,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38615,7 +40759,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38623,7 +40767,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38631,7 +40775,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38639,7 +40783,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38647,7 +40791,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38655,7 +40799,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38663,7 +40807,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38671,7 +40815,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38679,7 +40823,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38687,7 +40831,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38695,7 +40839,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38703,7 +40847,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38711,7 +40855,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38719,7 +40863,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38727,7 +40871,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38735,7 +40879,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38743,7 +40887,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38751,7 +40895,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38759,7 +40903,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38767,7 +40911,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38775,7 +40919,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38783,7 +40927,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38791,7 +40935,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38799,7 +40943,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38807,7 +40951,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38815,7 +40959,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38823,7 +40967,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38831,7 +40975,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38839,7 +40983,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38847,7 +40991,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38855,7 +40999,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38863,7 +41007,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38871,7 +41015,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38879,7 +41023,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38887,7 +41031,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38895,7 +41039,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38903,7 +41047,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38911,7 +41055,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38919,7 +41063,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38927,7 +41071,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38935,7 +41079,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38943,7 +41087,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38951,7 +41095,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?,
                     {
@@ -38959,7 +41103,7 @@ declare namespace Paths {
                          * example:
                          * CREATE_USER
                          */
-                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                        eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                         channels: ("EMAIL" | "PUSH" | "SMS")[];
                     }?
                 ] | null;
@@ -47031,12 +49175,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -47056,12 +49208,20 @@ declare namespace Paths {
                                 durationFrom?: number;
                                 durationTo?: number;
                                 priceFrom?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
                                 priceTo?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
@@ -47074,12 +49234,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -47114,12 +49282,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -47139,12 +49315,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -47157,12 +49341,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -47255,7 +49447,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -47263,7 +49463,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -47278,6 +49478,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -47302,7 +49506,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -47392,7 +49596,7 @@ declare namespace Paths {
             export interface $200 {
                 notification?: {
                     id: string; // uuid
-                    type: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                    type: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                     title: string;
                     message: string;
                     readAt?: string; // date-time
@@ -47644,7 +49848,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -47652,7 +49864,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -47667,6 +49879,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -47691,7 +49907,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -47783,7 +49999,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -47791,7 +50015,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -47806,6 +50030,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -47830,7 +50058,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -48251,7 +50479,15 @@ declare namespace Paths {
                     description?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -48302,12 +50538,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -48327,12 +50571,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -48387,7 +50639,15 @@ declare namespace Paths {
                         activateAt?: string; // date-time
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
@@ -48395,7 +50655,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         }[];
                         image?: {
@@ -48410,6 +50670,10 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        /**
+                         * example:
+                         * SK
+                         */
                         assignedCountryCode?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -48434,7 +50698,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                                 }[];
                             };
                         }[];
@@ -48444,7 +50708,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -48871,6 +51135,50 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 language: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2BAdminEnumsSmsUnitPrices {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 2023-02-23
+             */
+            validFrom: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            /**
+             * example:
+             * 100
+             */
+            amount: number; // float
+            /**
+             * example:
+             * SK
+             */
+            countryCode: string;
+        }
+        namespace Responses {
+            export interface $200 {
+                smsUnitPrice: {
                     id: string; // uuid
                 };
                 messages: {
@@ -50817,6 +53125,82 @@ declare namespace Paths {
             }
         }
     }
+    namespace PostApiB2BAdminImportsSalonsSalonIdCalendarEvents {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2BAdminImportsSalonsSalonIdCustomers {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PostApiB2BAdminSalons {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -51262,11 +53646,13 @@ declare namespace Paths {
              */
             email: string; // email
             /**
+             * required if user type is PARTNER
              * example:
              * SK
              */
             phonePrefixCountryCode?: string | null;
             /**
+             * required if user type is PARTNER
              * example:
              * 906047188
              */
@@ -51326,7 +53712,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -51334,7 +53728,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -51349,6 +53743,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -51373,7 +53771,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -51479,7 +53877,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -51487,7 +53893,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -51502,6 +53908,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -51526,11 +53936,1055 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
                 };
+            }
+        }
+    }
+    namespace PostApiB2BAdminWalletsTransactions {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 100
+             */
+            amount: number; // float
+            /**
+             * example:
+             * Some transaction note
+             */
+            transactionNote?: string | null;
+            /**
+             * example:
+             * EUR
+             * EUR
+             */
+            currencyCode: string;
+            walletIDs: [
+                string,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
+            ];
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
             }
         }
     }
@@ -51603,7 +55057,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -51611,7 +55073,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -51626,6 +55088,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -51650,7 +55116,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -51752,7 +55218,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -51760,7 +55234,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -51775,6 +55249,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -51799,7 +55277,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -52184,7 +55662,15 @@ declare namespace Paths {
                     description?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -52235,12 +55721,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -52260,12 +55754,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -52320,7 +55822,15 @@ declare namespace Paths {
                         activateAt?: string; // date-time
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
@@ -52328,7 +55838,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         }[];
                         image?: {
@@ -52343,6 +55853,10 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        /**
+                         * example:
+                         * SK
+                         */
                         assignedCountryCode?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -52367,7 +55881,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                                 }[];
                             };
                         }[];
@@ -52377,7 +55891,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -54402,6 +57916,10 @@ declare namespace Paths {
                         aboutUsFirst?: string;
                     };
                     addressSegment?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -54413,12 +57931,24 @@ declare namespace Paths {
                         locationNote?: string;
                     };
                     currencySegment?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
                         code: string;
                         symbol: string;
                     };
                     contactInfoSegment?: {
                         phones: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         email?: string;
@@ -54438,10 +57968,22 @@ declare namespace Paths {
                         email?: string;
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                     };
                     companyInvoiceAddressSegment?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -54884,7 +58426,7 @@ declare namespace Paths {
                                  * example:
                                  * CREATE_USER
                                  */
-                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
+                                eventType?: "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER";
                                 channels: ("EMAIL" | "PUSH" | "SMS")[];
                             }[];
                         };
@@ -54911,6 +58453,9 @@ declare namespace Paths {
                             employeeUpdate: boolean;
                             employeeDelete: boolean;
                         };
+                    };
+                    wallet?: {
+                        id: string; // uuid
                     };
                     createdAt?: string; // date-time
                     updatedAt?: string; // date-time
@@ -55135,7 +58680,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -55143,7 +58696,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -55158,6 +58711,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -55182,7 +58739,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -55288,7 +58845,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -55296,7 +58861,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -55311,6 +58876,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -55335,7 +58904,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -55395,7 +58964,7 @@ declare namespace Paths {
             export interface $200 {
                 reservationCalendarEvent: {
                     id: string; // uuid
-                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    eventType: "RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
                     start: {
                         date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
@@ -55410,12 +58979,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -55447,7 +59024,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -55527,10 +59112,22 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         address?: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             countryCode?: string;
                             zipCode?: string;
                             city?: string;
@@ -55729,7 +59326,7 @@ declare namespace Paths {
             export interface $200 {
                 reservationCalendarEvent: {
                     id: string; // uuid
-                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    eventType: "RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
                     start: {
                         date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
@@ -55744,12 +59341,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -55781,7 +59386,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -55861,10 +59474,22 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         address?: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             countryCode?: string;
                             zipCode?: string;
                             city?: string;
@@ -55958,7 +59583,7 @@ declare namespace Paths {
                 };
             };
             notifications?: {
-                type: ("IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER") | ("RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER") | ("RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_REMINDER_CUSTOMER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER");
+                type: ("IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER") | ("RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER") | ("RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_REMINDER_CUSTOMER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_CUSTOMERS_FAILURE" | "IMPORT_CUSTOMERS_PARTIAL_SUCCESS" | "IMPORT_CUSTOMERS_FULL_SUCCESS" | "IMPORT_EVENTS_FAILURE" | "IMPORT_EVENTS_PARTIAL_SUCCESS" | "IMPORT_EVENTS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "EXTERNAL_SALES_REP_SALON_REGISTRATION_FORM" | "RESERVATION_AWAITING_APPROVAL_CUSTOMER" | "RESERVATION_AWAITING_APPROVAL_EMPLOYEE" | "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CONFIRMED_EMPLOYEE" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_CHANGED_EMPLOYEE" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_CANCELLED_CUSTOMER" | "RESERVATION_CANCELLED_EMPLOYEE" | "RESERVATION_REMINDER_CUSTOMER" | "RESERVATION_REVIEW_REQUEST_CUSTOMER");
                 language: string;
                 recipient: {
                     email?: any;
@@ -55973,6 +59598,64 @@ declare namespace Paths {
                     salonName: string;
                 } | {
                     token: string;
+                } | {
+                    attachments?: ({
+                        filename?: string;
+                        content?: any;
+                    } | {
+                        filename?: string;
+                        path?: string;
+                        contentType?: string;
+                    })[];
+                    globalErrors: string[];
+                } | {
+                    email: string; // email
+                    attachments?: ({
+                        filename?: string;
+                        content?: any;
+                    } | {
+                        filename?: string;
+                        path?: string;
+                        contentType?: string;
+                    })[];
+                } | {
+                    attachments?: ({
+                        filename?: string;
+                        content?: any;
+                    } | {
+                        filename?: string;
+                        path?: string;
+                        contentType?: string;
+                    })[];
+                } | {
+                    attachments?: ({
+                        filename?: string;
+                        content?: any;
+                    } | {
+                        filename?: string;
+                        path?: string;
+                        contentType?: string;
+                    })[];
+                    globalErrors: string[];
+                } | {
+                    email: string; // email
+                    attachments?: ({
+                        filename?: string;
+                        content?: any;
+                    } | {
+                        filename?: string;
+                        path?: string;
+                        contentType?: string;
+                    })[];
+                } | {
+                    attachments?: ({
+                        filename?: string;
+                        content?: any;
+                    } | {
+                        filename?: string;
+                        path?: string;
+                        contentType?: string;
+                    })[];
                 } | {
                     attachments?: ({
                         filename?: string;
@@ -56655,6 +60338,54 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200>
   /**
+   * getApiB2BAdminEnumsSmsUnitPrices - Endpoint is used for getting an array of sms unit prices for requested country., permissions: NO
+   */
+  'getApiB2BAdminEnumsSmsUnitPrices'(
+    parameters?: Parameters<Paths.GetApiB2BAdminEnumsSmsUnitPrices.QueryParameters & Paths.GetApiB2BAdminEnumsSmsUnitPrices.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminEnumsSmsUnitPrices.Responses.$200>
+  /**
+   * postApiB2BAdminEnumsSmsUnitPrices - Endpoint is used for creating sms unit price., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SMS_UNIT_PRICE_EDIT]</li><li>partner</li></ul>
+   */
+  'postApiB2BAdminEnumsSmsUnitPrices'(
+    parameters?: Parameters<Paths.PostApiB2BAdminEnumsSmsUnitPrices.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminEnumsSmsUnitPrices.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminEnumsSmsUnitPrices.Responses.$200>
+  /**
+   * getApiB2BAdminEnumsSmsUnitPricesActual - Endpoint is used for getting aa array of sms unit prices per country., permissions: NO
+   */
+  'getApiB2BAdminEnumsSmsUnitPricesActual'(
+    parameters?: Parameters<Paths.GetApiB2BAdminEnumsSmsUnitPricesActual.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminEnumsSmsUnitPricesActual.Responses.$200>
+  /**
+   * getApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId - Endpoint is used for getting a sms unit price informations., permissions: NO
+   */
+  'getApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.PathParameters & Paths.GetApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.Responses.$200>
+  /**
+   * patchApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId - Endpoint is used for updating sms unit price data., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SMS_UNIT_PRICE_EDIT]</li><li>partner</li></ul>
+   */
+  'patchApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.PathParameters & Paths.PatchApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.Responses.$200>
+  /**
+   * deleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId - Endpoint is used for removing sms unit price., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SMS_UNIT_PRICE_EDIT]</li><li>partner</li></ul>
+   */
+  'deleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.PathParameters & Paths.DeleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.Responses.$200>
+  /**
    * postApiB2BV1AuthLogin - Endpoint is used for login., permissions: NO
    */
   'postApiB2BV1AuthLogin'(
@@ -56838,6 +60569,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1CalendarSyncIcsEvents.Responses.$200>
+  /**
+   * getApiB2BV1Config - permissions: NO
+   */
+  'getApiB2BV1Config'(
+    parameters?: Parameters<Paths.GetApiB2BV1Config.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1Config.Responses.$200>
   /**
    * getApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
    */
@@ -57778,13 +61517,29 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboard.Responses.$200>
   /**
-   * getApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats - Endpoint is used for getting statistics of salons development in time., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+   * getApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats - Endpoint is used for getting statistics on development of salons in time., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
    */
   'getApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats'(
     parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.Responses.$200>
+  /**
+   * getApiB2BAdminNotinoDashboardSalonReservationsTimeStats - Endpoint is used for getting statistics on reservations of salons in time., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+   */
+  'getApiB2BAdminNotinoDashboardSalonReservationsTimeStats'(
+    parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSalonReservationsTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSalonReservationsTimeStats.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonReservationsTimeStats.Responses.$200>
+  /**
+   * getApiB2BAdminNotinoDashboardSalonRsTimeStats - Endpoint is used for getting statistics on enabled reservation systems of salons in time., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+   */
+  'getApiB2BAdminNotinoDashboardSalonRsTimeStats'(
+    parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.Responses.$200>
   /**
    * postApiB2BAdminCalendarSyncSyncToken - Endpoint is used for saving refresh tokens from third party services., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
@@ -57793,6 +61548,14 @@ export interface OperationMethods {
     data?: Paths.PostApiB2BAdminCalendarSyncSyncToken.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminCalendarSyncSyncToken.Responses.$200>
+  /**
+   * postApiB2BAdminWalletsTransactions - Endpoint is used for creating a wallet transaction for provided wallers., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+   */
+  'postApiB2BAdminWalletsTransactions'(
+    parameters?: Parameters<Paths.PostApiB2BAdminWalletsTransactions.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminWalletsTransactions.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminWalletsTransactions.Responses.$200>
   /**
    * postApiB2BV1FilesSignUrls - Endpoint is used for signing AWS urls of files., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
@@ -58179,6 +61942,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
   /**
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation - Endpoint is used for updating calendar events that has RESERVATION_FROM_IMPORT type., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_UPDATE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation.Responses.$200>
+  /**
    * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for updating a calendarBulkEvent., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_UPDATE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
    */
   'patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
@@ -58202,6 +61973,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsSendReport.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonIdWalletsWalletId - Endpoint is used for getting wallet detail., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, READ_WALLET]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonIdWalletsWalletId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.Responses.$200>
   /**
    * patchApiB2BAdminSalonsSalonIdOpenHoursNote - Endpoint is used for setting salon opening hours note., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_UPDATE]</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
    */
@@ -58315,6 +62094,22 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminImportsSalons.Responses.$200>
   /**
+   * postApiB2BAdminImportsSalonsSalonIdCustomers - Endpoint is used for importing customers from a file (.csv)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
+   */
+  'postApiB2BAdminImportsSalonsSalonIdCustomers'(
+    parameters?: Parameters<Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.PathParameters & Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.Responses.$200>
+  /**
+   * postApiB2BAdminImportsSalonsSalonIdCalendarEvents - Endpoint is used for importing calendar events from a file (.csv, .xlsx, .ics)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
+   */
+  'postApiB2BAdminImportsSalonsSalonIdCalendarEvents'(
+    parameters?: Parameters<Paths.PostApiB2BAdminImportsSalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BAdminImportsSalonsSalonIdCalendarEvents.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminImportsSalonsSalonIdCalendarEvents.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminImportsSalonsSalonIdCalendarEvents.Responses.$200>
+  /**
    * getApiB2BAdminReviews - Endpoint is used for getting an array of reviews. It is possible to use search (salonName, review.reviewMessage), filter (verificationStatus, deleted, salonCountryCode, toxicityScoreFrom, toxicityScoreTo), order (toxicityScore) and pagination., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, REVIEW_READ]</li><li>partner</li></ul>
    */
   'getApiB2BAdminReviews'(
@@ -58402,6 +62197,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+  /**
+   * getApiB2BV1SalonsSalonIdWalletsWalletId - Endpoint is used for getting wallet detail., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+   */
+  'getApiB2BV1SalonsSalonIdWalletsWalletId'(
+    parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdWalletsWalletId.PathParameters & Paths.GetApiB2BV1SalonsSalonIdWalletsWalletId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdWalletsWalletId.Responses.$200>
   /**
    * patchApiB2BV1SalonsSalonIdInvoice - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_BILLING_UPDATE]</li></ul>
    */
@@ -58905,6 +62708,60 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200>
   }
+  ['/api/b2b/admin/enums/sms-unit-prices/']: {
+    /**
+     * getApiB2BAdminEnumsSmsUnitPrices - Endpoint is used for getting an array of sms unit prices for requested country., permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminEnumsSmsUnitPrices.QueryParameters & Paths.GetApiB2BAdminEnumsSmsUnitPrices.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminEnumsSmsUnitPrices.Responses.$200>
+    /**
+     * postApiB2BAdminEnumsSmsUnitPrices - Endpoint is used for creating sms unit price., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SMS_UNIT_PRICE_EDIT]</li><li>partner</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminEnumsSmsUnitPrices.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminEnumsSmsUnitPrices.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminEnumsSmsUnitPrices.Responses.$200>
+  }
+  ['/api/b2b/admin/enums/sms-unit-prices/actual']: {
+    /**
+     * getApiB2BAdminEnumsSmsUnitPricesActual - Endpoint is used for getting aa array of sms unit prices per country., permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminEnumsSmsUnitPricesActual.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminEnumsSmsUnitPricesActual.Responses.$200>
+  }
+  ['/api/b2b/admin/enums/sms-unit-prices/{smsUnitPriceID}']: {
+    /**
+     * getApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId - Endpoint is used for getting a sms unit price informations., permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.PathParameters & Paths.GetApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.Responses.$200>
+    /**
+     * patchApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId - Endpoint is used for updating sms unit price data., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SMS_UNIT_PRICE_EDIT]</li><li>partner</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.PathParameters & Paths.PatchApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.Responses.$200>
+    /**
+     * deleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId - Endpoint is used for removing sms unit price., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SMS_UNIT_PRICE_EDIT]</li><li>partner</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.PathParameters & Paths.DeleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.Responses.$200>
+  }
   ['/api/b2b/v1/auth/login']: {
     /**
      * postApiB2BV1AuthLogin - Endpoint is used for login., permissions: NO
@@ -59134,6 +62991,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1CalendarSyncIcsEvents.Responses.$200>
+  }
+  ['/api/b2b/v1/config/']: {
+    /**
+     * getApiB2BV1Config - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1Config.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1Config.Responses.$200>
   }
   ['/api/b2c/web/salons/{salonID}/calendar-events/reservations/available']: {
     /**
@@ -60266,13 +64133,33 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/notino-dashboard/salon-development-time-stats']: {
     /**
-     * getApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats - Endpoint is used for getting statistics of salons development in time., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+     * getApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats - Endpoint is used for getting statistics on development of salons in time., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.Responses.$200>
+  }
+  ['/api/b2b/admin/notino-dashboard/salon-reservations-time-stats']: {
+    /**
+     * getApiB2BAdminNotinoDashboardSalonReservationsTimeStats - Endpoint is used for getting statistics on reservations of salons in time., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSalonReservationsTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSalonReservationsTimeStats.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonReservationsTimeStats.Responses.$200>
+  }
+  ['/api/b2b/admin/notino-dashboard/salon-rs-time-stats']: {
+    /**
+     * getApiB2BAdminNotinoDashboardSalonRsTimeStats - Endpoint is used for getting statistics on enabled reservation systems of salons in time., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.Responses.$200>
   }
   ['/api/b2b/admin/calendar-sync/sync-token']: {
     /**
@@ -60283,6 +64170,16 @@ export interface PathsDictionary {
       data?: Paths.PostApiB2BAdminCalendarSyncSyncToken.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminCalendarSyncSyncToken.Responses.$200>
+  }
+  ['/api/b2b/admin/wallets/transactions']: {
+    /**
+     * postApiB2BAdminWalletsTransactions - Endpoint is used for creating a wallet transaction for provided wallers., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminWalletsTransactions.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminWalletsTransactions.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminWalletsTransactions.Responses.$200>
   }
   ['/api/b2b/v1/files/sign-urls']: {
     /**
@@ -60731,6 +64628,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
   }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/imported-reservation']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation - Endpoint is used for updating calendar events that has RESERVATION_FROM_IMPORT type., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_UPDATE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation.Responses.$200>
+  }
   ['/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}']: {
     /**
      * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for updating a calendarBulkEvent., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, CALENDAR_EVENT_UPDATE]</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
@@ -60758,6 +64665,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsSendReport.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/wallets/{walletID}']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdWalletsWalletId - Endpoint is used for getting wallet detail., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, READ_WALLET]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/open-hours-note']: {
     /**
@@ -60899,6 +64816,26 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminImportsSalons.Responses.$200>
   }
+  ['/api/b2b/admin/imports/salons/{salonID}/customers']: {
+    /**
+     * postApiB2BAdminImportsSalonsSalonIdCustomers - Endpoint is used for importing customers from a file (.csv)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.PathParameters & Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.Responses.$200>
+  }
+  ['/api/b2b/admin/imports/salons/{salonID}/calendar-events']: {
+    /**
+     * postApiB2BAdminImportsSalonsSalonIdCalendarEvents - Endpoint is used for importing calendar events from a file (.csv, .xlsx, .ics)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminImportsSalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BAdminImportsSalonsSalonIdCalendarEvents.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminImportsSalonsSalonIdCalendarEvents.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminImportsSalonsSalonIdCalendarEvents.Responses.$200>
+  }
   ['/api/b2b/admin/reviews/']: {
     /**
      * getApiB2BAdminReviews - Endpoint is used for getting an array of reviews. It is possible to use search (salonName, review.reviewMessage), filter (verificationStatus, deleted, salonCountryCode, toxicityScoreFrom, toxicityScoreTo), order (toxicityScore) and pagination., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, REVIEW_READ]</li><li>partner</li></ul>
@@ -61002,6 +64939,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/wallets/{walletID}']: {
+    /**
+     * getApiB2BV1SalonsSalonIdWalletsWalletId - Endpoint is used for getting wallet detail., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdWalletsWalletId.PathParameters & Paths.GetApiB2BV1SalonsSalonIdWalletsWalletId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdWalletsWalletId.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}/invoice']: {
     /**

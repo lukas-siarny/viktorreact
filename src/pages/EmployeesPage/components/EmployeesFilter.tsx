@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { ACCOUNT_STATE, CHANGE_DEBOUNCE_TIME, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { ACCOUNT_STATE, CHANGE_DEBOUNCE_TIME, CREATE_EMPLOYEE_BUTTON_ID, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
 
 // atoms
@@ -61,7 +61,7 @@ const EmployeesFilter = (props: Props) => {
 	)
 
 	const customContent = (
-		<Button onClick={() => createEmployee()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
+		<Button id={CREATE_EMPLOYEE_BUTTON_ID} onClick={() => createEmployee()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
 			{t('loc:Pridať zamestnanca')}
 		</Button>
 	)

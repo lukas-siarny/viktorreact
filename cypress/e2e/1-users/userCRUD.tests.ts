@@ -105,9 +105,6 @@ const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?:
 				})
 			})
 		} else {
-			// TODO - remove check for forbidden modal
-			/* cy.clickButton('delete-btn', FORM.USER_ACCOUNT)
-			cy.checkForbiddenModal() */
 			// check redirect to 404 notfound page
 			cy.location('pathname').should('eq', '/403')
 		}

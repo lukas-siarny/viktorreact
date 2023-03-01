@@ -9,7 +9,7 @@ import service from '../../fixtures/service.json'
 import reservations from '../../fixtures/reservations.json'
 
 // enums
-import { FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
+import { CREATE_EMPLOYEE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS } from '../../enums'
 
 const salonTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
@@ -37,39 +37,44 @@ const salonTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: st
 				url: '/api/b2b/admin/salons'
 			}).as('createSalon')
 			cy.visit('/salons/create')
-			cy.setInputValue(FORM.SALON, 'name', salon.create.name)
-			cy.uploadFile('gallery', '../images/test.jpg', FORM.SALON)
-			cy.setInputValue(FORM.SALON, 'phones-0-phone', salon.create.phone)
-			cy.setInputValue(FORM.SALON, 'email', `${generateRandomString(6)}_${salon.create.emailSuffix}`)
-			cy.get('.content-body').then(($body) => {
-				// check if google map working
-				if ($body.find('.google-map-warning').length) {
-					cy.log('Google map is unavailable!')
-					cy.setInputValue(FORM.SALON, 'street', salon.create.street)
-					cy.setInputValue(FORM.SALON, 'streetNumber', salon.create.streetNumber)
-					cy.setInputValue(FORM.SALON, 'city', salon.create.city)
-					cy.setInputValue(FORM.SALON, 'zipCode', salon.create.zipCode)
-					cy.setInputValue(FORM.SALON, 'longitude', salon.create.lon)
-					cy.setInputValue(FORM.SALON, 'latitude', salon.create.lat)
-					// country is in EN -> in this point of test can fail due to language on test environment
-					cy.selectOptionDropdownCustom(FORM.SALON, 'country', salon.create.country, true)
-				} else {
-					// else google map and search box working
-					cy.setSearchBoxValueAndSelectFirstOption('address', salon.create.address, '.pac-item', FORM.SALON, true, undefined, 8000)
-				}
-			})
-			cy.setInputValue(FORM.SALON, 'otherPaymentMethods', salon.create.paymentMethods)
-			cy.clickButton('payByCard', FORM.SALON, true)
-			cy.clickButton(SUBMIT_BUTTON_ID, FORM.SALON)
-			cy.wait('@createSalon').then((interception: any) => {
-				// check status code
-				expect(interception.response.statusCode).to.equal(200)
-				createdSalonID = interception.response.body.salon.id
-				// cy.setLocalStorage('salonID', createdSalonID)
-				cy.location('pathname').should('eq', `/salons/${createdSalonID}`)
-				// check conf toast message
-				cy.checkSuccessToastMessage()
-			})
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+				cy.setInputValue(FORM.SALON, 'name', salon.create.name)
+				cy.uploadFile('gallery', '../images/test.jpg', FORM.SALON)
+				cy.setInputValue(FORM.SALON, 'phones-0-phone', salon.create.phone)
+				cy.setInputValue(FORM.SALON, 'email', `${generateRandomString(6)}_${salon.create.emailSuffix}`)
+				cy.get('.content-body').then(($body) => {
+					// check if google map working
+					if ($body.find('.google-map-warning').length) {
+						cy.log('Google map is unavailable!')
+						cy.setInputValue(FORM.SALON, 'street', salon.create.street)
+						cy.setInputValue(FORM.SALON, 'streetNumber', salon.create.streetNumber)
+						cy.setInputValue(FORM.SALON, 'city', salon.create.city)
+						cy.setInputValue(FORM.SALON, 'zipCode', salon.create.zipCode)
+						cy.setInputValue(FORM.SALON, 'longitude', salon.create.lon)
+						cy.setInputValue(FORM.SALON, 'latitude', salon.create.lat)
+						// country is in EN -> in this point of test can fail due to language on test environment
+						cy.selectOptionDropdownCustom(FORM.SALON, 'country', salon.create.country, true)
+					} else {
+						// else google map and search box working
+						cy.setSearchBoxValueAndSelectFirstOption('address', salon.create.address, '.pac-item', FORM.SALON, true, undefined, 8000)
+					}
+				})
+				cy.setInputValue(FORM.SALON, 'otherPaymentMethods', salon.create.paymentMethods)
+				cy.clickButton('payByCard', FORM.SALON, true)
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.SALON)
+				cy.wait('@createSalon').then((interception: any) => {
+					// check status code
+					expect(interception.response.statusCode).to.equal(200)
+					createdSalonID = interception.response.body.salon.id
+					// cy.setLocalStorage('salonID', createdSalonID)
+					cy.location('pathname').should('eq', `/salons/${createdSalonID}`)
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+				})
+			} else {
+				// check redirect to 404 notfound page
+				cy.location('pathname').should('eq', '/403')
+			}
 		})
 
 		it('Update created salon', () => {
@@ -78,16 +83,22 @@ const salonTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: st
 				url: `/api/b2b/admin/salons/${createdSalonID}`
 			}).as('updateSalon')
 			cy.visit(`/salons/${createdSalonID}`)
+			// change input name for both cases
 			cy.setInputValue(FORM.SALON, 'name', salon.update.name, false, true)
-			cy.setInputValue(FORM.SALON, 'socialLinkWebPage', salon.update.socialLinkWebPage)
-			cy.setInputValue(FORM.SALON, 'socialLinkFB', salon.update.socialLinkFB)
-			cy.clickButton(SUBMIT_BUTTON_ID, FORM.SALON)
-			cy.wait('@updateSalon').then((interception: any) => {
-				// check status code
-				expect(interception.response.statusCode).to.equal(200)
-				// check conf toast message
-				cy.checkSuccessToastMessage()
-			})
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+				cy.setInputValue(FORM.SALON, 'socialLinkWebPage', salon.update.socialLinkWebPage)
+				cy.setInputValue(FORM.SALON, 'socialLinkFB', salon.update.socialLinkFB)
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.SALON)
+				cy.wait('@updateSalon').then((interception: any) => {
+					// check status code
+					expect(interception.response.statusCode).to.equal(200)
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+				})
+			} else {
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.SALON)
+				cy.checkForbiddenModal()
+			}
 		})
 	})
 
@@ -98,25 +109,31 @@ const salonTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: st
 				url: `/api/b2b/admin/salons/${createdSalonID}/invoice`
 			}).as('updateBillingInfo')
 			cy.visit(`/salons/${createdSalonID}/billing-info`)
+			// change input companyName for both cases
 			cy.setInputValue(FORM.SALON_BILLING_INFO, 'companyName', salon.billingInfo.companyName)
-			cy.setInputValue(FORM.SALON_BILLING_INFO, 'businessID', salon.billingInfo.businessID)
-			cy.setInputValue(FORM.SALON_BILLING_INFO, 'vatID', salon.billingInfo.vatID)
-			cy.setInputValue(FORM.SALON_BILLING_INFO, 'taxID', salon.billingInfo.taxID)
-			cy.setInputValue(FORM.SALON_BILLING_INFO, 'firstName', salon.billingInfo.firstName)
-			cy.setInputValue(FORM.SALON_BILLING_INFO, 'lastName', salon.billingInfo.lastName)
-			cy.setInputValue(FORM.SALON_BILLING_INFO, 'email', `${generateRandomString(6)}_${salon.billingInfo.emailSuffix}`)
-			cy.setInputValue(FORM.SALON_BILLING_INFO, 'phone', salon.billingInfo.phone)
-			cy.setInputValue(FORM.SALON_BILLING_INFO, 'street', salon.billingInfo.street)
-			cy.setInputValue(FORM.SALON_BILLING_INFO, 'streetNumber', salon.billingInfo.streetNumber)
-			cy.setInputValue(FORM.SALON_BILLING_INFO, 'city', salon.billingInfo.city)
-			cy.setInputValue(FORM.SALON_BILLING_INFO, 'zipCode', salon.billingInfo.zipCode)
-			cy.clickButton(SUBMIT_BUTTON_ID, FORM.SALON_BILLING_INFO)
-			cy.wait('@updateBillingInfo').then((interception: any) => {
-				// check status code of login request
-				expect(interception.response.statusCode).to.equal(200)
-				// check conf toast message
-				cy.checkSuccessToastMessage()
-			})
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+				cy.setInputValue(FORM.SALON_BILLING_INFO, 'businessID', salon.billingInfo.businessID)
+				cy.setInputValue(FORM.SALON_BILLING_INFO, 'vatID', salon.billingInfo.vatID)
+				cy.setInputValue(FORM.SALON_BILLING_INFO, 'taxID', salon.billingInfo.taxID)
+				cy.setInputValue(FORM.SALON_BILLING_INFO, 'firstName', salon.billingInfo.firstName)
+				cy.setInputValue(FORM.SALON_BILLING_INFO, 'lastName', salon.billingInfo.lastName)
+				cy.setInputValue(FORM.SALON_BILLING_INFO, 'email', `${generateRandomString(6)}_${salon.billingInfo.emailSuffix}`)
+				cy.setInputValue(FORM.SALON_BILLING_INFO, 'phone', salon.billingInfo.phone)
+				cy.setInputValue(FORM.SALON_BILLING_INFO, 'street', salon.billingInfo.street)
+				cy.setInputValue(FORM.SALON_BILLING_INFO, 'streetNumber', salon.billingInfo.streetNumber)
+				cy.setInputValue(FORM.SALON_BILLING_INFO, 'city', salon.billingInfo.city)
+				cy.setInputValue(FORM.SALON_BILLING_INFO, 'zipCode', salon.billingInfo.zipCode)
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.SALON_BILLING_INFO)
+				cy.wait('@updateBillingInfo').then((interception: any) => {
+					// check status code of login request
+					expect(interception.response.statusCode).to.equal(200)
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+				})
+			} else {
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.SALON_BILLING_INFO)
+				cy.checkForbiddenModal()
+			}
 		})
 	})
 
@@ -129,25 +146,32 @@ const salonTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: st
 				url: '/api/b2b/admin/customers'
 			}).as('createCustomer')
 			cy.visit(`/salons/${createdSalonID}/customers/create`)
-			cy.selectOptionDropdown(FORM.CUSTOMER, 'countryCode')
-			cy.setInputValue(FORM.CUSTOMER, 'firstName', generateRandomString(6))
-			cy.setInputValue(FORM.CUSTOMER, 'lastName', generateRandomString(6))
-			cy.selectOptionDropdown(FORM.CUSTOMER, 'gender')
-			cy.setInputValue(FORM.CUSTOMER, 'email', `${generateRandomString(6)}_${customer.create.emailSuffix}`)
-			cy.setInputValue(FORM.CUSTOMER, 'phone', customer.create.phone)
-			cy.uploadFile('gallery', '../images/test.jpg', FORM.CUSTOMER)
-			cy.setInputValue(FORM.CUSTOMER, 'street', customer.create.street)
-			cy.setInputValue(FORM.CUSTOMER, 'streetNumber', customer.create.streetNumber)
-			cy.setInputValue(FORM.CUSTOMER, 'city', generateRandomString(7))
-			cy.setInputValue(FORM.CUSTOMER, 'zipCode', generateRandomInt(5).toString())
-			cy.clickButton(SUBMIT_BUTTON_ID, FORM.CUSTOMER)
-			cy.wait('@createCustomer').then((interception: any) => {
-				// check status code of login request
-				expect(interception.response.statusCode).to.equal(200)
-				customerID = interception.response.body.customer.id
-				// check conf toast message
-				cy.checkSuccessToastMessage()
-			})
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+				cy.selectOptionDropdown(FORM.CUSTOMER, 'countryCode')
+				cy.setInputValue(FORM.CUSTOMER, 'firstName', generateRandomString(6))
+				cy.setInputValue(FORM.CUSTOMER, 'lastName', generateRandomString(6))
+				cy.selectOptionDropdown(FORM.CUSTOMER, 'gender')
+				cy.setInputValue(FORM.CUSTOMER, 'email', `${generateRandomString(6)}_${customer.create.emailSuffix}`)
+				cy.setInputValue(FORM.CUSTOMER, 'phone', customer.create.phone)
+				cy.uploadFile('gallery', '../images/test.jpg', FORM.CUSTOMER)
+				cy.setInputValue(FORM.CUSTOMER, 'street', customer.create.street)
+				cy.setInputValue(FORM.CUSTOMER, 'streetNumber', customer.create.streetNumber)
+				cy.setInputValue(FORM.CUSTOMER, 'city', generateRandomString(7))
+				cy.setInputValue(FORM.CUSTOMER, 'zipCode', generateRandomInt(5).toString())
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.CUSTOMER)
+				cy.wait('@createCustomer').then((interception: any) => {
+					// check status code of login request
+					expect(interception.response.statusCode).to.equal(200)
+					customerID = interception.response.body.customer.id
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+				})
+			} else {
+				// change firstName input
+				cy.setInputValue(FORM.CUSTOMER, 'firstName', generateRandomString(6))
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.CUSTOMER)
+				cy.checkForbiddenModal()
+			}
 		})
 
 		it('Update customer', () => {
@@ -163,25 +187,28 @@ const salonTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: st
 			cy.wait('@getCustomer').then((interceptorGetCustomer: any) => {
 				// check status code of login request
 				expect(interceptorGetCustomer.response.statusCode).to.equal(200)
-
-				const firstName = generateRandomString(7)
-				cy.setInputValue(FORM.CUSTOMER, 'firstName', firstName, false, true)
-				cy.setInputValue(FORM.CUSTOMER, 'lastName', generateRandomString(10), false, true)
-				cy.clearDropdownSelection('gender')
-				cy.setInputValue(FORM.CUSTOMER, 'email', `${generateRandomString(6)}_${customer.update.emailSuffix}`, false, true)
-				cy.setInputValue(FORM.CUSTOMER, 'phone', customer.update.phone, false, true)
-				cy.setInputValue(FORM.CUSTOMER, 'street', customer.update.street, false, true)
-				cy.setInputValue(FORM.CUSTOMER, 'streetNumber', customer.update.streetNumber, false, true)
-				cy.setInputValue(FORM.CUSTOMER, 'city', generateRandomString(7), false, true)
-				cy.setInputValue(FORM.CUSTOMER, 'zipCode', generateRandomInt(5).toString(), false, true)
-
-				cy.clickButton(SUBMIT_BUTTON_ID, FORM.CUSTOMER)
-				cy.wait('@updateCustomer').then((interception: any) => {
-					// check status code of login request
-					expect(interception.response.statusCode).to.equal(200)
-					// check conf toast message
-					cy.checkSuccessToastMessage()
-				})
+				// change input firstName for both cases
+				cy.setInputValue(FORM.CUSTOMER, 'firstName', generateRandomString(7), false, true)
+				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+					cy.setInputValue(FORM.CUSTOMER, 'lastName', generateRandomString(10), false, true)
+					cy.clearDropdownSelection('gender')
+					cy.setInputValue(FORM.CUSTOMER, 'email', `${generateRandomString(6)}_${customer.update.emailSuffix}`, false, true)
+					cy.setInputValue(FORM.CUSTOMER, 'phone', customer.update.phone, false, true)
+					cy.setInputValue(FORM.CUSTOMER, 'street', customer.update.street, false, true)
+					cy.setInputValue(FORM.CUSTOMER, 'streetNumber', customer.update.streetNumber, false, true)
+					cy.setInputValue(FORM.CUSTOMER, 'city', generateRandomString(7), false, true)
+					cy.setInputValue(FORM.CUSTOMER, 'zipCode', generateRandomInt(5).toString(), false, true)
+					cy.clickButton(SUBMIT_BUTTON_ID, FORM.CUSTOMER)
+					cy.wait('@updateCustomer').then((interception: any) => {
+						// check status code of login request
+						expect(interception.response.statusCode).to.equal(200)
+						// check conf toast message
+						cy.checkSuccessToastMessage()
+					})
+				} else {
+					cy.clickButton(SUBMIT_BUTTON_ID, FORM.CUSTOMER)
+					cy.checkForbiddenModal()
+				}
 			})
 		})
 	})
@@ -195,18 +222,28 @@ const salonTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: st
 				url: '/api/b2b/admin/employees'
 			}).as('createEmployee')
 			cy.visit(`/salons/${createdSalonID}/employees/create`)
-			cy.setInputValue(FORM.EMPLOYEE, 'firstName', generateRandomString(6))
-			cy.setInputValue(FORM.EMPLOYEE, 'lastName', generateRandomString(6))
-			cy.setInputValue(FORM.EMPLOYEE, 'email', `${generateRandomString(6)}_${user.create.emailSuffix}`)
-			cy.setInputValue(FORM.EMPLOYEE, 'phone', customer.create.phone)
-			cy.clickButton(SUBMIT_BUTTON_ID, FORM.EMPLOYEE)
-			cy.wait('@createEmployee').then((interception: any) => {
-				// check status code of login request
-				expect(interception.response.statusCode).to.equal(200)
-				employeeID = interception.response.body.employee.id
-				// check conf toast message
-				cy.checkSuccessToastMessage()
-			})
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+				cy.setInputValue(FORM.EMPLOYEE, 'firstName', generateRandomString(6))
+				cy.setInputValue(FORM.EMPLOYEE, 'lastName', generateRandomString(6))
+				cy.setInputValue(FORM.EMPLOYEE, 'email', `${generateRandomString(6)}_${user.create.emailSuffix}`)
+				cy.setInputValue(FORM.EMPLOYEE, 'phone', customer.create.phone)
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.EMPLOYEE)
+				cy.wait('@createEmployee').then((interception: any) => {
+					// check status code of login request
+					expect(interception.response.statusCode).to.equal(200)
+					employeeID = interception.response.body.employee.id
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+				})
+			} else {
+				// check redirect to 404 notfound page
+				cy.location('pathname').should('eq', '/403')
+
+				// check for forbidden modal in employees page
+				cy.visit(`/salons/${createdSalonID}/employees`)
+				cy.clickButton(CREATE_EMPLOYEE_BUTTON_ID)
+				cy.checkForbiddenModal()
+			}
 		})
 
 		it('Update employee', () => {
@@ -222,17 +259,23 @@ const salonTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: st
 			cy.wait('@getEmployee').then((interceptorGetEmployee: any) => {
 				// check status code of login request
 				expect(interceptorGetEmployee.response.statusCode).to.equal(200)
+				// change input firstName for both cases
 				cy.setInputValue(FORM.EMPLOYEE, 'firstName', generateRandomString(6), false, true)
-				cy.setInputValue(FORM.EMPLOYEE, 'lastName', generateRandomString(6), false, true)
-				cy.setInputValue(FORM.EMPLOYEE, 'email', `${generateRandomString(6)}_${customer.create.emailSuffix}`, false, true)
-				cy.setInputValue(FORM.EMPLOYEE, 'phone', customer.create.phone, false, true)
-				cy.clickButton(SUBMIT_BUTTON_ID, FORM.EMPLOYEE)
-				cy.wait('@updateEmployee').then((interception: any) => {
-					// check status code of login request
-					expect(interception.response.statusCode).to.equal(200)
-					// check conf toast message
-					cy.checkSuccessToastMessage()
-				})
+				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+					cy.setInputValue(FORM.EMPLOYEE, 'lastName', generateRandomString(6), false, true)
+					cy.setInputValue(FORM.EMPLOYEE, 'email', `${generateRandomString(6)}_${customer.create.emailSuffix}`, false, true)
+					cy.setInputValue(FORM.EMPLOYEE, 'phone', customer.create.phone, false, true)
+					cy.clickButton(SUBMIT_BUTTON_ID, FORM.EMPLOYEE)
+					cy.wait('@updateEmployee').then((interception: any) => {
+						// check status code of login request
+						expect(interception.response.statusCode).to.equal(200)
+						// check conf toast message
+						cy.checkSuccessToastMessage()
+					})
+				} else {
+					cy.clickButton(SUBMIT_BUTTON_ID, FORM.EMPLOYEE)
+					cy.checkForbiddenModal()
+				}
 			})
 		})
 	})
@@ -259,26 +302,30 @@ const salonTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: st
 				cy.get('@firstIndustryLabel').find('input[type="checkbox"]').should('have.id', interception.response.body.categories[0].id)
 				cy.get('@firstIndustryLabel').find('.inner-wrapper').click({ force: true })
 				cy.clickButton(SUBMIT_BUTTON_ID, FORM.INDUSTRIES)
-				cy.wait('@patchSalonCategories').then((interceptionPatchSalonCategories: any) => {
-					// check status code
-					expect(interceptionPatchSalonCategories.response.statusCode).to.equal(200)
-					// check conf toast message
-					cy.checkSuccessToastMessage()
-					cy.get('.checkbox-group-image-wrapper > .checkbox-with-image:first > button').click()
-					cy.wait('@getCategories').then((intercepitonGetCategoriesInDetail: any) => {
+				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+					cy.wait('@patchSalonCategories').then((interceptionPatchSalonCategories: any) => {
 						// check status code
-						expect(intercepitonGetCategoriesInDetail.response.statusCode).to.equal(200)
-						// select first industry (at least one industry with at least one service must exist in order to test work properly!!)
-						cy.get('.noti-tree-node-0 > .ant-tree-node-content-wrapper').click({ force: true })
-						cy.clickButton(SUBMIT_BUTTON_ID, FORM.INDUSTRY)
-						cy.wait('@patchSalonServices').then((interceptionPatchSalonCategory: any) => {
+						expect(interceptionPatchSalonCategories.response.statusCode).to.equal(200)
+						// check conf toast message
+						cy.checkSuccessToastMessage()
+						cy.get('.checkbox-group-image-wrapper > .checkbox-with-image:first > button').click()
+						cy.wait('@getCategories').then((interceptionGetCategoriesInDetail: any) => {
 							// check status code
-							expect(interceptionPatchSalonCategory.response.statusCode).to.equal(200)
-							// check conf toast message
-							cy.checkSuccessToastMessage()
+							expect(interceptionGetCategoriesInDetail.response.statusCode).to.equal(200)
+							// select first industry (at least one industry with at least one service must exist in order to test work properly!!)
+							cy.get('.noti-tree-node-0 > .ant-tree-node-content-wrapper').click({ force: true })
+							cy.clickButton(SUBMIT_BUTTON_ID, FORM.INDUSTRY)
+							cy.wait('@patchSalonServices').then((interceptionPatchSalonCategory: any) => {
+								// check status code
+								expect(interceptionPatchSalonCategory.response.statusCode).to.equal(200)
+								// check conf toast message
+								cy.checkSuccessToastMessage()
+							})
 						})
 					})
-				})
+				} else {
+					cy.checkForbiddenModal()
+				}
 			})
 		})
 
@@ -334,26 +381,28 @@ const salonTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: st
 								expect(interceptorGetCategories.response.statusCode).to.equal(200)
 								expect(interceptorGetEmlpoyees.response.statusCode).to.equal(200)
 
-								cy.setInputValue(FORM.SERVICE_FORM, 'durationFrom', service.create.durationFrom)
-								cy.setInputValue(FORM.SERVICE_FORM, 'priceFrom', service.create.priceFrom)
-								// add employee from Select with async search (at least one employee must exit in the salon in order to test work properly!!)
-								cy.get(generateElementId('employee', FORM.SERVICE_FORM)).click()
-								cy.wait('@getEmployees').then((interceptorGetEmlpoyeesSearch: any) => {
-									expect(interceptorGetEmlpoyeesSearch.response.statusCode).to.equal(200)
-									// select first employee from the list
-									cy.get('.ant-select-dropdown :not(.ant-select-dropdown-hidden)', { timeout: 10000 })
-										.should('be.visible')
-										.find('.ant-select-item-option')
-										.first()
-										.click({ force: true })
+								if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+									cy.setInputValue(FORM.SERVICE_FORM, 'durationFrom', service.create.durationFrom)
+									cy.setInputValue(FORM.SERVICE_FORM, 'priceFrom', service.create.priceFrom)
+									// add employee from Select with async search (at least one employee must exit in the salon in order to test work properly!!)
+									cy.get(generateElementId('employee', FORM.SERVICE_FORM)).click()
+									cy.wait('@getEmployees').then((interceptorGetEmlpoyeesSearch: any) => {
+										expect(interceptorGetEmlpoyeesSearch.response.statusCode).to.equal(200)
+										// select first employee from the list
+										cy.get('.ant-select-dropdown :not(.ant-select-dropdown-hidden)', { timeout: 10000 })
+											.should('be.visible')
+											.find('.ant-select-item-option')
+											.first()
+											.click({ force: true })
 
-									cy.get(`#${FORM.SERVICE_FORM}-add-employee`).click()
-									cy.clickButton(SUBMIT_BUTTON_ID, FORM.SERVICE_FORM)
-									// TODO: test service with category parameter
-									cy.wait('@updateSalonService').then((interceptorUpdateSalonService: any) => {
-										expect(interceptorUpdateSalonService.response.statusCode).to.equal(200)
+										cy.get(`#${FORM.SERVICE_FORM}-add-employee`).click()
+										cy.clickButton(SUBMIT_BUTTON_ID, FORM.SERVICE_FORM)
+										// TODO: test service with category parameter
+										cy.wait('@updateSalonService').then((interceptorUpdateSalonService: any) => {
+											expect(interceptorUpdateSalonService.response.statusCode).to.equal(200)
+										})
 									})
-								})
+								}
 							}
 						)
 					})
@@ -391,17 +440,31 @@ const salonTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: st
 			}).as('getSalon')
 			cy.visit(`/salons/${createdSalonID}/reservations-settings`)
 			cy.wait('@getSalon')
-			cy.setInputValue(FORM.RESEVATION_SYSTEM_SETTINGS, 'maxDaysB2cCreateReservation', reservations.update.maxDaysB2cCreateReservation, false, true)
-			cy.setInputValue(FORM.RESEVATION_SYSTEM_SETTINGS, 'maxHoursB2cCreateReservationBeforeStart', reservations.update.maxHoursB2cCreateReservationBeforeStart, false, true)
-			cy.setInputValue(FORM.RESEVATION_SYSTEM_SETTINGS, 'maxHoursB2cCancelReservationBeforeStart', reservations.update.maxHoursB2cCancelReservationBeforeStart, false, true)
-			cy.selectOptionDropdown(FORM.RESEVATION_SYSTEM_SETTINGS, 'minutesIntervalB2CReservations', reservations.update.minutesIntervalB2CReservations)
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+				cy.setInputValue(FORM.RESEVATION_SYSTEM_SETTINGS, 'maxDaysB2cCreateReservation', reservations.update.maxDaysB2cCreateReservation, false, true)
+				cy.setInputValue(
+					FORM.RESEVATION_SYSTEM_SETTINGS,
+					'maxHoursB2cCreateReservationBeforeStart',
+					reservations.update.maxHoursB2cCreateReservationBeforeStart,
+					false,
+					true
+				)
+				cy.setInputValue(
+					FORM.RESEVATION_SYSTEM_SETTINGS,
+					'maxHoursB2cCancelReservationBeforeStart',
+					reservations.update.maxHoursB2cCancelReservationBeforeStart,
+					false,
+					true
+				)
+				cy.selectOptionDropdown(FORM.RESEVATION_SYSTEM_SETTINGS, 'minutesIntervalB2CReservations', reservations.update.minutesIntervalB2CReservations)
 
-			cy.wait('@updateReservationsSettings').then((interception: any) => {
-				// check status code
-				expect(interception.response.statusCode).to.equal(200)
-				cy.checkSuccessToastMessage()
-				cy.location('pathname').should('eq', `/salons/${createdSalonID}/reservations-settings`)
-			})
+				cy.wait('@updateReservationsSettings').then((interception: any) => {
+					// check status code
+					expect(interception.response.statusCode).to.equal(200)
+					cy.checkSuccessToastMessage()
+					cy.location('pathname').should('eq', `/salons/${createdSalonID}/reservations-settings`)
+				})
+			}
 		})
 	})
 
@@ -420,13 +483,17 @@ const salonTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: st
 				// check status code of login request
 				expect(interceptorGetEmployee.response.statusCode).to.equal(200)
 				cy.clickDeleteButtonWithConfCustom(FORM.EMPLOYEE)
-				cy.wait('@deleteEmployee').then((interception: any) => {
-					// check status code
-					expect(interception.response.statusCode).to.equal(200)
-					// check conf toast message
-					cy.checkSuccessToastMessage()
-					cy.location('pathname').should('eq', `/salons/${createdSalonID}/employees`)
-				})
+				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+					cy.wait('@deleteEmployee').then((interception: any) => {
+						// check status code
+						expect(interception.response.statusCode).to.equal(200)
+						// check conf toast message
+						cy.checkSuccessToastMessage()
+						cy.location('pathname').should('eq', `/salons/${createdSalonID}/employees`)
+					})
+				} else {
+					cy.checkForbiddenModal()
+				}
 			})
 		})
 
@@ -445,32 +512,40 @@ const salonTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: st
 				expect(interceptorGetCustomer.response.statusCode).to.equal(200)
 
 				cy.clickDeleteButtonWithConfCustom(FORM.CUSTOMER)
-				cy.wait('@deleteCustomer').then((interception: any) => {
-					// check status code
-					expect(interception.response.statusCode).to.equal(200)
-					// check conf toast message
-					cy.checkSuccessToastMessage()
-					cy.location('pathname').should('eq', `/salons/${createdSalonID}/customers`)
-				})
+				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+					cy.wait('@deleteCustomer').then((interception: any) => {
+						// check status code
+						expect(interception.response.statusCode).to.equal(200)
+						// check conf toast message
+						cy.checkSuccessToastMessage()
+						cy.location('pathname').should('eq', `/salons/${createdSalonID}/customers`)
+					})
+				} else {
+					cy.checkForbiddenModal()
+				}
 			})
 		})
 
 		it('Delete created salon', () => {
-			cy.intercept({
-				method: 'DELETE',
-				url: `/api/b2b/admin/salons/${createdSalonID}`
-			}).as('deleteSalon')
 			cy.visit(`/salons/${createdSalonID}`)
 			// wait due to animations and fetch data
 			cy.wait(5000)
 			cy.clickDeleteButtonWithConfCustom(FORM.SALON)
-			cy.wait('@deleteSalon').then((interception: any) => {
-				// check status code
-				expect(interception.response.statusCode).to.equal(200)
-				// check conf toast message
-				cy.checkSuccessToastMessage()
-				cy.location('pathname').should('eq', `/salons`)
-			})
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+				cy.intercept({
+					method: 'DELETE',
+					url: `/api/b2b/admin/salons/${createdSalonID}`
+				}).as('deleteSalon')
+				cy.wait('@deleteSalon').then((interception: any) => {
+					// check status code
+					expect(interception.response.statusCode).to.equal(200)
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+					cy.location('pathname').should('eq', `/salons`)
+				})
+			} else {
+				cy.checkForbiddenModal()
+			}
 		})
 	})
 }

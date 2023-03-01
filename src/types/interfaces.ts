@@ -167,11 +167,15 @@ export type OpeningHours = {
 	onDemand?: boolean
 }[]
 
+export interface AutocompleteLabelInValue {
+	key: string
+	label: string | null
+	value: string | null
+}
 export interface ISalonForm {
 	salonNameFromSelect: boolean
 	id: string | null
-	name: string | null
-	nameSelect: { key: string; label: string | null; value: string | null } | null
+	name: AutocompleteLabelInValue | string | null
 	aboutUsFirst: string | null
 	state?: SALON_STATES
 	sourceOfPremium?: string
@@ -649,6 +653,10 @@ export interface IEnumerationsPayload {
 
 export interface IEnumerationsCountriesPayload extends IEnumerationsPayload {
 	data: CountriesData | null
+}
+
+export interface IUserPayload {
+	data: Paths.GetApiB2BAdminUsersUserId.Responses.$200 | null
 }
 
 export interface IAuthUserPayload {

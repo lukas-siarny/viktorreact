@@ -360,9 +360,15 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			}}
 		>
 			<div id={'noti-sider-wrapper'} className='flex flex-col h-full'>
-				<Link className='flex justify-center pt-4 pb-6' to={`${t('paths:index')}`} style={{ height: LOGO_HEIGHT }}>
-					{collapsed ? <LogoCollapsedIcon className='h-8' /> : <LogoIcon className='h-8' />}
-				</Link>
+				{collapsed ? (
+					<Link className='flex justify-center pt-4 pb-6' to={`${t('paths:index')}`} style={{ height: LOGO_HEIGHT }}>
+						<LogoCollapsedIcon className='h-8' />
+					</Link>
+				) : (
+					<Link className='flex justify-center items-center' to={`${t('paths:index')}`} style={{ height: LOGO_HEIGHT }}>
+						<LogoIcon style={{ padding: 10 }} />
+					</Link>
+				)}
 				<Menu
 					mode='inline'
 					className='px-2 flex flex-col flex-grow noti-sider-menu'

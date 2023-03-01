@@ -109,7 +109,7 @@ export const selectSalon =
 			return payload
 		} catch (error) {
 			// eslint-disable-next-line no-console
-			console.error(error)
+			console.error('Error during load salons detail', error)
 			dispatch({ type: SELECTED_SALON.SELECTED_SALON_LOAD_FAIL })
 		}
 	}

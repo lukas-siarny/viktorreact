@@ -86,10 +86,6 @@ const SupportContactPage: FC<Props> = () => {
 		const fetchData = async () => {
 			const { data } = await dispatch(getSupportContact(supportContactID))
 
-			if (!data?.supportContact?.id) {
-				navigate('/404')
-			}
-
 			if (data) {
 				// init data for existing supportContact
 				const mappedOpeningHours = mapRawOpeningHoursToComponentOpeningHours(data?.supportContact?.openingHours)

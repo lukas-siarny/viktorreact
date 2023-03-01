@@ -146,8 +146,8 @@ const SmsUnitPricesPage = () => {
 		},
 		{
 			title: t('loc:Plánovaná cena SMS'),
-			dataIndex: 'actual',
-			key: 'validFrom',
+			dataIndex: 'next',
+			key: 'validFromNext',
 			ellipsis: true,
 			sorter: false,
 			width: '30%',

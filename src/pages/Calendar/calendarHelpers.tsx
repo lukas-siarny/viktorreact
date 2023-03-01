@@ -9,7 +9,6 @@ import Scroll from 'react-scroll'
 import {
 	CalendarEvent,
 	ICalendarEventsPayload,
-	Employees,
 	ICalendarEventCardData,
 	IEventExtenedProps,
 	IResourceEmployee,
@@ -18,7 +17,8 @@ import {
 	RawOpeningHours,
 	DisabledNotificationsArray,
 	ICalendarMonthlyReservationsPayload,
-	ICalendarMonthlyReservationsCardData
+	ICalendarMonthlyReservationsCardData,
+	CalendarEmployee
 } from '../../types/interfaces'
 
 // utils
@@ -35,7 +35,8 @@ import {
 	DAY,
 	MONTHLY_RESERVATIONS_KEY,
 	NEW_ID_PREFIX,
-	NOTIFICATION_TYPES
+	NOTIFICATION_TYPES,
+	VIRTUAL_EMPLOYEE_NAME
 } from '../../utils/enums'
 import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
 import { cancelGetTokens } from '../../utils/request'
@@ -82,6 +83,7 @@ interface IComapreAndSortDayEventsData {
 
 const CALENDAR_EVENT_TYPES_ORDER = {
 	[CALENDAR_EVENT_TYPE.RESERVATION]: 0,
+	[CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT]: 0,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: 1,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: 2,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: 3
@@ -370,15 +372,17 @@ const getBgEventEnd = (start: string, end: string) =>
 const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeOff: boolean, description?: string): IResourceEmployee => {
 	return {
 		id: employee.id,
-		name: getAssignedUserLabel({
-			id: employee.id,
-			firstName: employee.firstName,
-			lastName: employee?.lastName,
-			email: employee.email
-		}),
+		name: employee.isVirtual
+			? VIRTUAL_EMPLOYEE_NAME(i18next.t)
+			: getAssignedUserLabel({
+					id: employee.id,
+					firstName: employee.firstName,
+					lastName: employee?.lastName,
+					email: employee.email
+			  }),
 		color: employee.color,
 		image: employee.image.resizedImages.thumbnail,
-		description,
+		description: employee.isVirtual ? undefined : description,
 		isTimeOff
 	}
 }
@@ -415,7 +419,12 @@ const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string
 /**
  * Daily view helpers
  */
-const composeDayViewReservations = (selectedDate: string, reservations: ICalendarEventsPayload['data'], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees) => {
+const composeDayViewReservations = (
+	selectedDate: string,
+	reservations: ICalendarEventsPayload['data'],
+	shiftsTimeOffs: ICalendarEventsPayload['data'],
+	employees: CalendarEmployee[]
+) => {
 	const composedEvents: any[] = []
 	// resources mapa, pre trackovanie, ci zamestnanec ma zmenu alebo dovolenku v dany den
 	const resourcesMap = employees?.reduce((resources, employee) => {
@@ -505,7 +514,7 @@ export const composeDayViewEvents = (
 	eventTypeFilter: CALENDAR_EVENTS_VIEW_TYPE,
 	reservations: ICalendarEventsPayload['data'],
 	shiftsTimeOffs: ICalendarEventsPayload['data'],
-	employees: Employees
+	employees: CalendarEmployee[]
 ) => {
 	switch (eventTypeFilter) {
 		case CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF:
@@ -516,7 +525,7 @@ export const composeDayViewEvents = (
 	}
 }
 
-export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees) => {
+export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees: CalendarEmployee[]) => {
 	return employees.map((employee) => {
 		const employeeShifts: any[] = []
 		const employeeTimeOff: any[] = []
@@ -578,7 +587,7 @@ interface EmployeeWeekResource {
 	image: string
 	employeeColor?: string
 	isTimeOff: boolean
-	employee: Employees[0]
+	employee: CalendarEmployee
 }
 
 type WeekDayResource = { id: string; day: string; employee: EmployeeWeekResource }
@@ -593,7 +602,7 @@ type WeekDayResource = { id: string; day: string; employee: EmployeeWeekResource
 ]
 */
 
-export const composeWeekResources = (weekDays: string[], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees): WeekDayResource[] => {
+export const composeWeekResources = (weekDays: string[], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: CalendarEmployee[]): WeekDayResource[] => {
 	return weekDays.reduce((resources, weekDay) => {
 		const timeOffsWeekDay = shiftsTimeOffs?.filter((event) => dayjs(event.start.date).isSame(dayjs(weekDay)) && event.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF)
 
@@ -615,7 +624,7 @@ const composeWeekViewReservations = (
 	weekDays: string[],
 	reservations: ICalendarEventsPayload['data'],
 	shiftsTimeOffs: ICalendarEventsPayload['data'],
-	employees: Employees
+	employees: CalendarEmployee[]
 ) => {
 	const composedEvents: any[] = []
 
@@ -718,7 +727,7 @@ export const composeWeekViewEvents = (
 	eventTypeFilter: CALENDAR_EVENTS_VIEW_TYPE,
 	reservations: ICalendarEventsPayload['data'],
 	shiftsTimeOffs: ICalendarEventsPayload['data'],
-	employees: Employees
+	employees: CalendarEmployee[]
 ) => {
 	switch (eventTypeFilter) {
 		case CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF:

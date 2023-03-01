@@ -993,3 +993,6 @@ export enum CANCEL_TOKEN_MESSAGES {
 	CANCELED_DUE_TO_NEW_REQUEST = 'Operation canceled due to new request.',
 	CANCELED_ON_DEMAND = 'Operation canceled.'
 }
+
+export const VIRTUAL_EMPLOYEE_IDENTIFICATOR = 'VIRTUAL'
+export const VIRTUAL_EMPLOYEE_NAME = (t: TFunction) => t('loc:Importované rezervácie')

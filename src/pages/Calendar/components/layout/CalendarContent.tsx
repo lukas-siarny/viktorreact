@@ -33,7 +33,6 @@ import CalendarEmptyState from '../CalendarEmptyState'
 // types
 import {
 	EmployeeTooltipPopoverData,
-	Employees,
 	ICalendarEventForm,
 	ICalendarMonthlyReservationsPayload,
 	ICalendarReservationForm,
@@ -56,7 +55,6 @@ type Props = {
 	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
 	enabledSalonReservations?: boolean
-	employees: Employees
 	parentPath: string
 	salonID: string
 	onShowMore: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean) => void

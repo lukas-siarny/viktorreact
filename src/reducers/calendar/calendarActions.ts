@@ -39,6 +39,7 @@ import { compareAndSortDayEvents, compareMonthlyReservations, getMonthlyReservat
 
 // redux
 import { clearEvent } from '../virtualEvent/virtualEventActions'
+import { setCalendarEmployees } from '../calendarEmployees/calendarEmployeesActions'
 
 // query params types
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
@@ -268,7 +269,8 @@ export const getCalendarEvents =
 			)
 
 			// employees sa mapuju do eventov
-			const employees = normalizeDataById(getState().employees.employees?.data?.employees)
+			const { data: calendarEmployees } = await dispatch(setCalendarEmployees(getState().employees.employees, data.employees))
+			const employees = normalizeDataById(calendarEmployees || [])
 
 			const editedEvents = data.calendarEvents.reduce((newEventsArray, event) => {
 				const editedEvent: CalendarEvent = {
@@ -378,7 +380,7 @@ export const getCalendarReservations = (
 		CALENDAR_EVENTS_KEYS.RESERVATIONS,
 		{
 			...queryParams,
-			eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
+			eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT],
 			reservationStates: RESERVATION_STATES
 		},
 		splitMultidayEventsIntoOneDayEvents,
@@ -426,7 +428,7 @@ export const getCalendarMonthlyViewReservations =
 				salonID: queryParams.salonID,
 				categoryIDs: queryParams.categoryIDs,
 				employeeIDs: queryParams.employeeIDs,
-				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
+				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT],
 				dateFrom: queryParams.start,
 				dateTo: queryParams.end,
 				reservationStates: RESERVATION_STATES
@@ -444,7 +446,9 @@ export const getCalendarMonthlyViewReservations =
 				MONTHLY_RESERVATIONS_KEY
 			)
 
-			const employees = normalizeDataById(getState().employees.employees?.data?.employees)
+			// employees sa mapuju do eventov
+			const { data: calendarEmployees } = await dispatch(setCalendarEmployees(getState().employees.employees, data.employees))
+			const employees = normalizeDataById(calendarEmployees || [])
 
 			const editedData = Object.entries(data.calendarEvents).reduce((acc, [key, value]) => {
 				const formatedDay = dayjs(key).format(CALENDAR_DATE_FORMAT.QUERY)

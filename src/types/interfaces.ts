@@ -721,7 +721,7 @@ export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmplo
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]
-type CalendarEmployee = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0]
+export type CalendarEventsEmployee = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0]
 export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
 export type CalendarEvent = CalendarEvents[0] & {
 	startDateTime: string
@@ -730,18 +730,21 @@ export type CalendarEvent = CalendarEvents[0] & {
 	isFirstMultiDayEventInCurrentRange?: boolean
 	isLastMultiDaylEventInCurrentRange?: boolean
 	originalEvent?: CalendarEvent
-	employee: Employee
+	employee: CalendarEmployee
 	isPlaceholder?: boolean
 }
 
-
+export type CalendarEmployee = Pick<
+	NonNullable<IEmployeesPayload['data']>['employees'][0],
+	'id' | 'orderIndex' | 'firstName' | 'lastName' | 'email' | 'inviteEmail' | 'phone' | 'phonePrefixCountryCode' | 'color' | 'image'
+> & { isVirtual: boolean }
 export interface ICalendarEventsPayload {
 	data: CalendarEvent[] | null
 }
 
 export type ICalendarMonthlyViewEvent = Omit<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCountsAndDurations.Responses.$200['calendarEvents'][0][0], 'employeeID'> & {
 	id: string
-	employee: Employee
+	employee: CalendarEmployee
 }
 export type ICalendarMonthlyViewDay = { [key: string]: ICalendarMonthlyViewEvent[]  }
 
@@ -765,7 +768,7 @@ export interface ICalendarView {
 	disableRender?: boolean
 	view?: CALENDAR_VIEW
 	enabledSalonReservations?: boolean
-	employees: Employees
+	employees: CalendarEmployee[]
 }
 
 export interface IEventCardProps {
@@ -848,7 +851,7 @@ export interface ICalendarEmployeeTooltipPopover {
 }
 
 export type EmployeeTooltipPopoverData = {
-	employee: Employee
+	employee: CalendarEmployee
 	date: string
 }
 

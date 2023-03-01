@@ -165,7 +165,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const clearConfirmModal = () => setConfirmModalData(null)
 
-	const employees = useSelector((state: RootState) => state.employees.employees || [])
+	const employeesLoading = useSelector((state: RootState) => state.employees.employees.isLoading)
+	const calendarEmployees = useSelector((state: RootState) => state.calendarEmployees.calendarEmployees || {})
 	const services = useSelector((state: RootState) => state.service.services)
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
 	const monthlyReservations = useSelector((state: RootState) => state.calendar[MONTHLY_RESERVATIONS_KEY])
@@ -226,12 +227,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const filteredEmployees = useCallback(() => {
 		// filter employees based on employeeIDs in the url queryParams (if there are any)
 		if (!isEmpty(query.employeeIDs)) {
-			return employees?.data?.employees.filter((employee: any) => query.employeeIDs?.includes(employee.id))
+			return calendarEmployees?.data?.filter((employee: any) => query.employeeIDs?.includes(employee.id))
 		}
 
 		// null means empty filter otherwise return all employes as default value
-		return query?.employeeIDs === null ? [] : employees?.data?.employees
-	}, [employees?.data?.employees, query.employeeIDs])
+		return query?.employeeIDs === null ? [] : calendarEmployees?.data
+	}, [calendarEmployees?.data, query.employeeIDs])
 
 	/**
 	 * tzv. background load eventov - keďže nepoužívame Websockety, na pozadí sa v pravidelnom intervale obnovujú eventy v kalendári, aby bola aspoň takto zaistená ich aktuálnosť
@@ -260,7 +261,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		fetchInterval.current = interval
 	}
 
-	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || monthlyReservations?.isLoading || isUpdatingEvent
+	const loadingData = employeesLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || monthlyReservations?.isLoading || isUpdatingEvent
 	const isLoading = isRefreshingEvents ? false : loadingData
 
 	/**
@@ -365,7 +366,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const fetchEvents: any = useCallback(
 		async (clearVirtualEvent?: boolean) => {
 			// bez zamestanncov nefunguje nic v kalendari, takze ani nema zmysel dotahovat data
-			if (!employees.options?.length) {
+			if (calendarEmployees.areLoaded && !calendarEmployees.options?.length) {
 				return
 			}
 
@@ -410,9 +411,19 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				await dispatch(dispatchGetShiftsTimeOff)
 			}
 		},
-
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validEventsViewType, validCalendarView, employees.options?.length]
+		[
+			dispatch,
+			salonID,
+			currentRange.start,
+			currentRange.end,
+			query.employeeIDs,
+			query.categoryIDs,
+			validEventsViewType,
+			validCalendarView,
+			calendarEmployees.areLoaded,
+			calendarEmployees.options?.length
+		]
 	)
 
 	// scroll to time after initialization
@@ -484,10 +495,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			initialize(FORM.CALENDAR_FILTER, {
 				eventsViewType: validEventsViewType,
 				categoryIDs: query?.categoryIDs === undefined ? getCategoryIDs(services?.categoriesOptions) : getFullCategoryIdsFromUrl(query?.categoryIDs),
-				employeeIDs: query?.employeeIDs === undefined ? getEmployeeIDs(employees?.options) : query?.employeeIDs
+				employeeIDs: query?.employeeIDs === undefined ? getEmployeeIDs(calendarEmployees?.options) : query?.employeeIDs
 			})
 		)
-	}, [dispatch, employees?.options, services?.categoriesOptions, query?.categoryIDs, query?.employeeIDs, validEventsViewType])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [dispatch, calendarEmployees?.options, services?.categoriesOptions, query?.categoryIDs, query?.employeeIDs, validEventsViewType])
 
 	useEffect(() => {
 		// update calendar size when main layout sider change
@@ -546,9 +558,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		setQuery({
 			...query,
 			...values,
-			// // ak su vybrati vsetci zamestnanci alebo vsetky kategorie, tak je zbytocne posielat na BE vsetky IDcka
-			// // BE vrati rovnake zaznamy ako ked sa tam neposle nic
-			employeeIDs: values?.employeeIDs?.length === employees?.options?.length ? undefined : values.employeeIDs,
+			// ak su vybrati vsetci zamestnanci alebo vsetky kategorie, tak je zbytocne posielat na BE vsetky IDcka
+			// BE vrati rovnake zaznamy ako ked sa tam neposle nic
+			employeeIDs: values?.employeeIDs?.length === calendarEmployees?.options?.length ? undefined : values.employeeIDs,
 			categoryIDs: values?.categoryIDs?.length === services?.categoriesOptions?.length ? undefined : getShortCategoryIdsForUrl(values.categoryIDs),
 			eventId: undefined,
 			sidebarView: undefined
@@ -931,7 +943,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					selectedMonth={monthlyViewFullRange.selectedMonth}
 				/>
 				<Layout hasSider className={'noti-calendar-main-section'}>
-					<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} parentPath={parentPath} eventsViewType={validEventsViewType} />
+					<SiderFilter
+						collapsed={siderFilterCollapsed}
+						handleSubmit={handleSubmitFilter}
+						parentPath={parentPath}
+						eventsViewType={validEventsViewType}
+						employeesOptions={calendarEmployees.options}
+						employeesLoading={employeesLoading}
+					/>
 					<CalendarContent
 						salonID={salonID}
 						enabledSalonReservations={selectedSalon?.settings?.enabledReservations}
@@ -943,7 +962,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						shiftsTimeOffs={shiftsTimeOffs?.data || []}
 						loading={isLoading}
 						eventsViewType={validEventsViewType}
-						employees={filteredEmployees() || []}
+						employees={(filteredEmployees() as any) || []}
 						parentPath={parentPath}
 						query={query}
 						setQuery={setQuery}

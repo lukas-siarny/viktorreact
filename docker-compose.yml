@@ -56,7 +56,6 @@ services:
       - SMTP_HOST=$BITBUCKET_DOCKER_HOST_INTERNAL
       # mail server is running with cypress test define in cypress plugins
       - SMTP_PORT=7777
-      - SMTP_FROM_ADDRESS=e2e@goodrequest.com
     depends_on:
       - "localstack"
       - "redis"
@@ -109,5 +108,6 @@ services:
           # mail server is running with cypress test define in cypress plugins
           - SMTP_PORT=7777
           - SMTP_FROM_ADDRESS=e2e@goodrequest.com
+          - DOMAIN=http://localhost:80
       depends_on:
           - "backend"

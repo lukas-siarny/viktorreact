@@ -32,7 +32,7 @@ Cypress.Commands.add('checkForbiddenModal', () => {
 })
 
 // TODO: upravit v antd-form fields kniznici a potom to pouzit odtial
-Cypress.Commands.add('selectOptionDropdownCustom', (form: string, key: string, value?: string, force?: boolean) => {
+Cypress.Commands.add('selectOptionDropdownCustom', (form?: string, key?: string, value?: string, force?: boolean) => {
 	const elementId: string = form ? `#${form}-${key}` : `#${key}`
 	cy.get(elementId).click({ force })
 	if (value) {

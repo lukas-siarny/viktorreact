@@ -583,6 +583,14 @@ export const CREATE_BUTTON_ID = 'create-btn'
 
 export const SUBMIT_BUTTON_ID = 'submit-btn'
 
+export const FORGOT_PASSWORD_BUTTON_ID = 'forgot-password-btn'
+
+export const SIGNUP_BUTTON_ID = 'signup-btn'
+
+export const HELP_BUTTON_ID = 'help-password-btn'
+
+export const CHANGE_PASSWORD_NEW_LINK_BUTTON_ID = 'change-password-new-link-btn'
+
 export const MAX_VALUES_PER_PARAMETER = 20
 
 export enum PARAMETERS_VALUE_TYPES {

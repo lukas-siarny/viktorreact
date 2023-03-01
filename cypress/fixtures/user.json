@@ -14,7 +14,8 @@
 	"update": {
 		"firstName": "Jane",
 		"lastName": "Doe",
-		"phone": "956520901"
+		"phone": "956520901",
+		"password": "Test 123@"
 	},
 	"updateMyAccount": {
 		"firstName": "John",

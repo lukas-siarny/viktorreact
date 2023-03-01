@@ -37,7 +37,7 @@ import useBackUrl from '../../hooks/useBackUrl'
 
 type TableDataItem = NonNullable<ISmsUnitPricesPayload['data']>['unitPricesPerCounty'][0]
 
-const SmsUnitPricesPage = () => {
+const SmsUnitPricesDetailPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -58,8 +58,11 @@ const SmsUnitPricesPage = () => {
 	const smsUnitPrices = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPrices)
 	const currencies = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.CURRENCIES])
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
+	const currenices = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.CURRENCIES])
 
-	const countryName = countries.data?.find((contry) => contry.code.toLocaleLowerCase() === countryCode?.toLocaleLowerCase())?.name
+	const country = countries?.data?.find((item) => item.code === countryCode)
+	const countryName = country?.name
+	const currencySymbol = currenices.data?.find((currency) => currency.code === country?.currencyCode)?.symbol
 
 	const [backUrl] = useBackUrl(t('paths:sms-credits'))
 
@@ -175,12 +178,11 @@ const SmsUnitPricesPage = () => {
 			key: 'country',
 			width: '20%',
 			ellipsis: true,
-			render: (_value, record) => {
-				const { country } = record
-				const name = country.name || country.code
+			render: () => {
+				const name = country?.name || country?.code
 				return (
 					<div className={'flex items-center gap-2'}>
-						{country.flag && <img src={country.flag} alt={name} width={24} />}
+						{country?.flag && <img src={country?.flag} alt={name} width={24} />}
 						<span className={'truncate inline-block'}>{name}</span>
 					</div>
 				)
@@ -281,7 +283,7 @@ const SmsUnitPricesPage = () => {
 									<div className={'w-6/12 flex justify-around items-start'}>
 										<Divider className={'h-full mx-6 xl:mx-9'} type={'vertical'} />
 										<SmsUnitPricesForm
-											countryCode={countryCode}
+											currencySymbol={currencySymbol}
 											smsUnitPriceID={selectedSmsUnitPrice?.id}
 											disabledForm={selectedSmsUnitPrice?.disabled}
 											closeForm={changeFormVisibility}
@@ -299,4 +301,4 @@ const SmsUnitPricesPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(SmsUnitPricesPage)
+export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(SmsUnitPricesDetailPage)

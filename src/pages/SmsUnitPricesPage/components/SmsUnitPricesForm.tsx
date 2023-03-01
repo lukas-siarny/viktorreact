@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
-import { change, Field, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Divider, Form, Button, Alert } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import dayjs, { Dayjs } from 'dayjs'
 
 // utils
@@ -31,24 +31,19 @@ import validateSmsUnitPricesForm from './validateSmsUnitPricesForm'
 
 type ComponentProps = {
 	smsUnitPriceID?: string
-	countryCode: string
-	closeForm: () => void
+	closeForm: (show?: boolean) => void
 	onDelete: () => void
 	disabledForm?: boolean
+	currencySymbol?: string
 }
 
 type Props = InjectedFormProps<ISmsUnitPricesForm, ComponentProps> & ComponentProps
 
 const SmsUnitPricesForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, smsUnitPriceID, closeForm, onDelete, submitting, pristine, disabledForm, countryCode } = props
-
-	const dispatch = useDispatch()
+	const { handleSubmit, change, smsUnitPriceID, closeForm, onDelete, submitting, pristine, disabledForm, currencySymbol } = props
 
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
-	const currenices = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.CURRENCIES])
-	const country = countries?.data?.find((item) => item.code === countryCode)
-	const currencySymbol = currenices.data?.find((currency) => currency.code === country?.currencyCode)?.symbol
 
 	return (
 		<Form layout={'vertical'} className={'w-full top-0 sticky pt-1 px-6 pb-6 -mx-6'} onSubmitCapture={handleSubmit}>
@@ -60,7 +55,7 @@ const SmsUnitPricesForm: FC<Props> = (props) => {
 					</Button>
 				</h3>
 				<Divider className={'my-3'} />
-				{disabledForm && <Alert message={t('loc:Editovateľné sú len SMS ceny v budúcnosti')} showIcon type={'warning'} className={'noti-alert w-full mb-4'} />}
+				{disabledForm && <Alert message={t('loc:Editovateľné sú len SMS ceny s platnosťou v budúcnosti')} showIcon type={'warning'} className={'noti-alert w-full mb-4'} />}
 				<Field
 					component={SelectField}
 					optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
@@ -97,7 +92,7 @@ const SmsUnitPricesForm: FC<Props> = (props) => {
 					required
 					dateFormat={'MMM YYYY'}
 					customOnChange={(value: Dayjs | null) => {
-						dispatch(change(FORM.SMS_UNIT_PRICES_FORM, 'validFrom', value ? dayjs(value).startOf('month').format('YYYY-MM-DD') : null))
+						change('validFrom', value ? dayjs(value).startOf('month').format('YYYY-MM-DD') : null)
 					}}
 					disabledDate={(current: Dayjs) => {
 						// Can not select current month and previous months

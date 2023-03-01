@@ -58,7 +58,7 @@
   "Dátum od": "Date from",
   "Dátum vytvorenia": "Created at",
   "Dôvod zamietnutia": "Reason for rejection",
-  "Editovateľné sú len SMS ceny v budúcnosti": "Only future sms unit prices can be edited",
+  "Editovateľné sú len SMS ceny s platnosťou v budúcnosti": "Only SMS prices valid in the future are editable",
   "Email": "E-mail",
   "Email nie je k dispozícii": "No e-mail address was provided",
   "Email nie je platný": "Invalid e-mail",

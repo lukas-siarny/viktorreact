@@ -736,7 +736,7 @@ export type CalendarEvent = CalendarEvents[0] & {
 
 export type CalendarEmployee = Pick<
 	NonNullable<IEmployeesPayload['data']>['employees'][0],
-	'id' | 'orderIndex' | 'firstName' | 'lastName' | 'email' | 'inviteEmail' | 'phone' | 'phonePrefixCountryCode' | 'color' | 'image'
+	'id' | 'orderIndex' | 'firstName' | 'lastName' | 'email' | 'inviteEmail' | 'color' | 'image'
 > & { isVirtual: boolean }
 export interface ICalendarEventsPayload {
 	data: CalendarEvent[] | null

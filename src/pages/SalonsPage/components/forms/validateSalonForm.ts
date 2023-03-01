@@ -3,7 +3,7 @@ import { isEmail } from 'lodash-checkit'
 import { isEmpty } from 'lodash'
 
 // interfaces
-import { ISalonForm } from '../../../../types/interfaces'
+import { AutocompleteLabelInValue, ISalonForm } from '../../../../types/interfaces'
 
 // utils
 import { VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
@@ -14,22 +14,24 @@ export default (values: ISalonForm) => {
 	const errors: any = {}
 
 	if (!values?.salonNameFromSelect) {
-		if (!values?.name) {
+		const name = values?.name as string | null
+		if (!name) {
 			errors.name = i18next.t('loc:Toto pole je povinné')
 		}
 
-		if (values?.name && values.name?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
+		if (name && name.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
 			errors.name = i18next.t('loc:Max. počet znakov je {{max}}', {
 				max: VALIDATION_MAX_LENGTH.LENGTH_255
 			})
 		}
 	} else {
-		if (!values?.nameSelect || !values?.nameSelect.label) {
-			errors.nameSelect = i18next.t('loc:Toto pole je povinné')
+		const name = values?.name as AutocompleteLabelInValue | null
+		if (!name || !name.label) {
+			errors.name = i18next.t('loc:Toto pole je povinné')
 		}
 
-		if (values?.nameSelect?.label && values?.nameSelect?.label?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
-			errors.nameSelect = i18next.t('loc:Max. počet znakov je {{max}}', {
+		if (name?.label && name?.label?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
+			errors.name = i18next.t('loc:Max. počet znakov je {{max}}', {
 				max: VALIDATION_MAX_LENGTH.LENGTH_255
 			})
 		}

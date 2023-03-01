@@ -2,11 +2,10 @@ import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Divider, Form, Button, Alert } from 'antd'
-import { useSelector } from 'react-redux'
 import dayjs, { Dayjs } from 'dayjs'
 
 // utils
-import { DELETE_BUTTON_ID, ENUMERATIONS_KEYS, FORM, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { formFieldID, optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -23,34 +22,32 @@ import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
 
 // types
-import { ISmsUnitPricesForm } from '../../../types/interfaces'
-import { RootState } from '../../../reducers'
+import { IEnumerationsCountriesPayload, ILoadingAndFailure, ISmsUnitPricesForm } from '../../../types/interfaces'
 
 // validate
 import validateSmsUnitPricesForm from './validateSmsUnitPricesForm'
 
 type ComponentProps = {
 	smsUnitPriceID?: string
-	closeForm: (show?: boolean) => void
+	changeFormVisibility: (show?: boolean) => void
 	onDelete: () => void
 	disabledForm?: boolean
 	currencySymbol?: string
+	countries: IEnumerationsCountriesPayload & ILoadingAndFailure
 }
 
 type Props = InjectedFormProps<ISmsUnitPricesForm, ComponentProps> & ComponentProps
 
 const SmsUnitPricesForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, change, smsUnitPriceID, closeForm, onDelete, submitting, pristine, disabledForm, currencySymbol } = props
-
-	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
+	const { handleSubmit, change, smsUnitPriceID, changeFormVisibility, onDelete, submitting, pristine, disabledForm, currencySymbol, countries } = props
 
 	return (
 		<Form layout={'vertical'} className={'w-full top-0 sticky pt-1 px-6 pb-6 -mx-6'} onSubmitCapture={handleSubmit}>
 			<div className={'h-full'}>
 				<h3 className={'mb-0 mt-3 relative pr-7'}>
 					{smsUnitPriceID ? t('loc:Upraviť cenu SMS') : t('loc:Pridať novú cenu SMS')}
-					<Button className='noti-close-form-btn absolute top-1 right-0' onClick={() => closeForm()}>
+					<Button className='noti-close-form-btn absolute top-1 right-0' onClick={() => changeFormVisibility()}>
 						<CloseIcon />
 					</Button>
 				</h3>

@@ -286,7 +286,8 @@ const SmsUnitPricesDetailPage = () => {
 											currencySymbol={currencySymbol}
 											smsUnitPriceID={selectedSmsUnitPrice?.id}
 											disabledForm={selectedSmsUnitPrice?.disabled}
-											closeForm={changeFormVisibility}
+											countries={countries}
+											changeFormVisibility={changeFormVisibility}
 											onSubmit={handleSubmit}
 											onDelete={handleDelete}
 										/>

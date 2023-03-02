@@ -116,6 +116,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		}
 	}
 
+	console.log({ events, resources })
+
 	useEffect(() => {
 		// NOTE: ak neni je povoleny online booking tak sa nastavi disabled state nad kalendarom
 		if (!enabledSalonReservations) {

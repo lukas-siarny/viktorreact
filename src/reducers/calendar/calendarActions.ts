@@ -278,7 +278,8 @@ export const getCalendarEvents =
 					...event,
 					employee: employees[event.employee.id],
 					startDateTime: getDateTime(event.start.date, event.start.time),
-					endDateTime: getDateTime(event.end.date, event.end.time)
+					endDateTime: getDateTime(event.end.date, event.end.time),
+					isImported: event.eventType === CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT
 				}
 
 				/**

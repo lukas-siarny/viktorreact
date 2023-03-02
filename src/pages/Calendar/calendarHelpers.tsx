@@ -372,7 +372,7 @@ const getBgEventEnd = (start: string, end: string) =>
 const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeOff: boolean, description?: string): IResourceEmployee => {
 	return {
 		id: employee.id,
-		name: employee.isVirtual
+		name: employee.isForImportedEvents
 			? VIRTUAL_EMPLOYEE_NAME(i18next.t)
 			: getAssignedUserLabel({
 					id: employee.id,
@@ -382,7 +382,7 @@ const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeO
 			  }),
 		color: employee.color,
 		image: employee.image.resizedImages.thumbnail,
-		description: employee.isVirtual ? undefined : description,
+		description: employee.isForImportedEvents ? undefined : description,
 		isTimeOff
 	}
 }
@@ -476,6 +476,7 @@ const composeDayViewReservations = (
 				}
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 				case CALENDAR_EVENT_TYPE.RESERVATION:
+				case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 					composedEvents.push({
 						...calendarEvent
 					})
@@ -685,6 +686,7 @@ const composeWeekViewReservations = (
 				}
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 				case CALENDAR_EVENT_TYPE.RESERVATION:
+				case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 					composedEvents.push({
 						...calendarEvent
 					})

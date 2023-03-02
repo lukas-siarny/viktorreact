@@ -37,16 +37,16 @@ export const setCalendarEmployees =
 
 		const calendarEmployees: CalendarEmployee[] = (employees || [])
 			.map((employee, i) => {
-				const isVirtualEmployee = employee.firstName === VIRTUAL_EMPLOYEE_IDENTIFICATOR
+				const isForImportedEvents = employee.firstName === VIRTUAL_EMPLOYEE_IDENTIFICATOR
 				return {
 					id: employee.id,
 					firstName: employee.firstName,
 					lastName: employee.lastName,
 					email: employee.email,
-					orderIndex: isVirtualEmployee ? -1 : i, // TODO: potom z BE tahat
+					orderIndex: isForImportedEvents ? -1 : i, // TODO: potom z BE tahat
 					color: employee.color,
 					image: employee.image,
-					isVirtual: isVirtualEmployee
+					isForImportedEvents
 				}
 			})
 			.sort((a, b) => a.orderIndex - b.orderIndex)
@@ -55,7 +55,7 @@ export const setCalendarEmployees =
 			newEmployeeIDs.push(employee.id)
 			options.push({
 				// show name if exist at least last name otherwise show fallback values
-				label: employee?.isVirtual
+				label: employee?.isForImportedEvents
 					? VIRTUAL_EMPLOYEE_NAME(i18next.t)
 					: getAssignedUserLabel({ id: employee.id, firstName: employee.firstName, lastName: employee.lastName, email: employee.email }),
 				value: employee.id,

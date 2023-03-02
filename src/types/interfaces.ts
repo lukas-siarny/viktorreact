@@ -721,7 +721,7 @@ export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmplo
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]
-export type CalendarEmployee = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0] & { orderIndex: number, inviteEmail?: string, isVirtual: boolean }
+export type CalendarEmployee = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0] & { orderIndex: number, inviteEmail?: string, isForImportedEvents: boolean }
 export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
 export type CalendarEvent = CalendarEvents[0] & {
 	startDateTime: string
@@ -732,6 +732,7 @@ export type CalendarEvent = CalendarEvents[0] & {
 	originalEvent?: CalendarEvent
 	employee: CalendarEmployee
 	isPlaceholder?: boolean
+	isImported: boolean
 }
 
 export interface ICalendarEventsPayload {

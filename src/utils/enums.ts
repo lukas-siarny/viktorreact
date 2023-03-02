@@ -226,6 +226,11 @@ export enum SALONS_TAB_KEYS {
 	MISTAKES = 'mistakes'
 }
 
+export enum DASHBOARD_TASB_KEYS {
+	SALONS_STATE = 'SALONS_STATE',
+	RESERVATION_SYSTEM = 'RESERVATION_SYSTEM'
+}
+
 export enum REVIEWS_TAB_KEYS {
 	PUBLISHED = 'published',
 	DELETED = 'deleted'

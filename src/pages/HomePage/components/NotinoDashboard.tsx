@@ -30,8 +30,10 @@ import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
 // utils
-import { FILTER_PATHS, SALON_FILTER_STATES, SALONS_TIME_STATS_TYPE } from '../../../utils/enums'
+import { DASHBOARD_TASB_KEYS, FILTER_PATHS, SALON_FILTER_STATES, SALONS_TIME_STATS_TYPE, TAB_KEYS } from '../../../utils/enums'
 import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData } from './dashboardUtils'
+import SalonHistory from '../../SalonsPage/components/SalonHistory'
+import TabsComponent from '../../../components/TabsComponent'
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin)
 
@@ -176,6 +178,7 @@ const NotinoDashboard: FC = () => {
 	const { notino, salonsAnnualStats, salonsMonthStats } = useSelector((state: RootState) => state.dashboard)
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	const navigate = useNavigate()
+	const [tabKey, setTabKey] = useState<DASHBOARD_TASB_KEYS>(DASHBOARD_TASB_KEYS.SALONS_STATE)
 
 	useEffect(() => {
 		dispatch(getNotinoDashboard(selectedCountry))
@@ -327,61 +330,97 @@ const NotinoDashboard: FC = () => {
 			getPopupContainer={(node) => node.parentElement || document.body}
 		/>
 	)
+	const onTabChange = (selectedTabKey: string) => {
+		// set query for history tab
+		// const newQuery = {
+		// 	...query,
+		// 	history: selectedTabKey === TAB_KEYS.SALON_HISTORY
+		// }
+		// setQuery(newQuery)
+		setTabKey(selectedTabKey as DASHBOARD_TASB_KEYS)
+	}
 
 	// if salon is not selected, show global (Notino) dashboard content
 	return (
-		<SalonDashboard>
-			<Spin spinning={notino?.isLoading || !notino.data} wrapperClassName='dashboard-loading'>
-				<div className='content-body dashboard-content pt-20'>
-					<div className='dashboard-grid'>
-						{dashboardData.alertData.map((item: AlertData, index: number) => {
-							return <Statistics key={`statistics_item_${index}`} title={item.label} count={item.count} onActionItemClick={item.onClick} />
-						})}
-					</div>
+		<>
+			<TabsComponent
+				className={'box-tab'}
+				activeKey={tabKey}
+				onChange={onTabChange}
+				items={[
+					{
+						key: DASHBOARD_TASB_KEYS.SALONS_STATE,
+						label: <>{t('loc:Stav salónov')}</>,
+						children: (
+							<SalonDashboard>
+								test
+								<Spin spinning={notino?.isLoading || !notino.data} wrapperClassName='dashboard-loading'>
+									<div className='content-body dashboard-content pt-20'>
+										<div className='dashboard-grid'>
+											{dashboardData.alertData.map((item: AlertData, index: number) => {
+												return <Statistics key={`statistics_item_${index}`} title={item.label} count={item.count} onActionItemClick={item.onClick} />
+											})}
+										</div>
 
-					{dashboardData.graphData.noSalons ? (
-						// fallback
-						<div className='flex add-button justify-center items-center mt-16'>
-							<div className='m-auto text-center'>
-								<h1 className='text-5xl font-bold'>{t('loc:Začnite vytvorením salónu')}</h1>
-								<Button onClick={() => navigate(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'} icon={<PlusIcon />}>
-									{t('loc:Pridať salón')}
-								</Button>
-							</div>
-						</div>
-					) : (
-						<>
-							{/* dougnut graphs */}
-							<Row className='mt-12 gap-4'>
-								{doughnutContent(t('loc:Publikované salóny - Premium vs. Basic'), dashboardData.graphData.premiumVsBasic)}
-								{doughnutContent(t('loc:Stav salónov'), dashboardData.graphData.salonStates, true)}
-							</Row>
-							{/* line graphs */}
-							{lineContent(
-								t('loc:Vývoj salónov - mesačný'),
-								monthStats,
-								timeStatsFilter((date) => {
-									if (date) {
-										setMonthStatsDate(date)
-										dispatch(getSalonsMonthStats(Number(date.year()), Number(date.month() + 1)))
-									}
-								}, 'MMMM - YYYY')
-							)}
-							{lineContent(
-								t('loc:Vývoj salónov - ročný'),
-								annualStats,
-								timeStatsFilter((date, dateString) => {
-									if (date) {
-										setAnnualStatsDate(date)
-									}
-									dispatch(getSalonsAnnualStats(Number(dateString)))
-								})
-							)}
-						</>
-					)}
-				</div>
-			</Spin>
-		</SalonDashboard>
+										{dashboardData.graphData.noSalons ? (
+											// fallback
+											<div className='flex add-button justify-center items-center mt-16'>
+												<div className='m-auto text-center'>
+													<h1 className='text-5xl font-bold'>{t('loc:Začnite vytvorením salónu')}</h1>
+													<Button
+														onClick={() => navigate(t('paths:salons/create'))}
+														type='primary'
+														htmlType='button'
+														className={'noti-btn'}
+														icon={<PlusIcon />}
+													>
+														{t('loc:Pridať salón')}
+													</Button>
+												</div>
+											</div>
+										) : (
+											<>
+												{/* dougnut graphs */}
+												<Row className='mt-12 gap-4'>
+													{doughnutContent(t('loc:Publikované salóny - Premium vs. Basic'), dashboardData.graphData.premiumVsBasic)}
+													{doughnutContent(t('loc:Stav salónov'), dashboardData.graphData.salonStates, true)}
+												</Row>
+												{/* line graphs */}
+												{lineContent(
+													t('loc:Vývoj salónov - mesačný'),
+													monthStats,
+													timeStatsFilter((date) => {
+														if (date) {
+															setMonthStatsDate(date)
+															dispatch(getSalonsMonthStats(Number(date.year()), Number(date.month() + 1)))
+														}
+													}, 'MMMM - YYYY')
+												)}
+												{lineContent(
+													t('loc:Vývoj salónov - ročný'),
+													annualStats,
+													timeStatsFilter((date, dateString) => {
+														if (date) {
+															setAnnualStatsDate(date)
+														}
+														dispatch(getSalonsAnnualStats(Number(dateString)))
+													})
+												)}
+											</>
+										)}
+									</div>
+								</Spin>
+							</SalonDashboard>
+						)
+					},
+					{
+						key: DASHBOARD_TASB_KEYS.RESERVATION_SYSTEM,
+						label: <>{t('loc:Rezervačný systém')}</>,
+						children: <>rezervacie</>
+					}
+				]}
+			/>
+		</>
 	)
 }
 

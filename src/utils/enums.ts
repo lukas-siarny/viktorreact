@@ -576,6 +576,8 @@ export const CREATE_BUTTON_ID = 'create-btn'
 
 export const SUBMIT_BUTTON_ID = 'submit-btn'
 
+export const ADD_BUTTON_ID = 'add-btn'
+
 export const MAX_VALUES_PER_PARAMETER = 20
 
 export enum PARAMETERS_VALUE_TYPES {

@@ -155,7 +155,7 @@ const SmsUnitPricesPage = () => {
 				const value = record.actual
 				const { currencyCode } = record.country
 				const currency = currencies.data?.find((item) => item.code === currencyCode)
-				return record.next ? `${value.amount} ${currency?.symbol} od ${dayjs(record.actual.validFrom).format(D_M_YEAR_FORMAT)}` : '-'
+				return record.next ? `${value.amount} ${currency?.symbol} ${t('loc:od {{ timeFrom }}', { timeFrom: dayjs(record.actual.validFrom).format(D_M_YEAR_FORMAT) })}` : '-'
 			}
 		},
 		{

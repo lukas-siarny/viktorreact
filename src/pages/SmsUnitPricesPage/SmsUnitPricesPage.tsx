@@ -15,7 +15,7 @@ import CustomTable from '../../components/CustomTable'
 import SmsUnitPricesFilter from './components/SmsUnitPricesFilter'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, FORM } from '../../utils/enums'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, FORM, D_M_YEAR_FORMAT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent, getLinkWithEncodedBackUrl } from '../../utils/helper'
 
@@ -141,7 +141,7 @@ const SmsUnitPricesPage = () => {
 			sorter: false,
 			width: '30%',
 			render: (_value, record) => {
-				return <div style={{ marginLeft: '20%' }}>{dayjs(record.actual.validFrom).format('D.M.YYYY')}</div>
+				return <div style={{ marginLeft: '20%' }}>{dayjs(record.actual.validFrom).format(D_M_YEAR_FORMAT)}</div>
 			}
 		},
 		{
@@ -155,7 +155,7 @@ const SmsUnitPricesPage = () => {
 				const value = record.actual
 				const { currencyCode } = record.country
 				const currency = currencies.data?.find((item) => item.code === currencyCode)
-				return record.next ? `${value.amount} ${currency?.symbol} od ${dayjs(record.actual.validFrom).format('D.M.YYYY')}` : '-'
+				return record.next ? `${value.amount} ${currency?.symbol} od ${dayjs(record.actual.validFrom).format(D_M_YEAR_FORMAT)}` : '-'
 			}
 		},
 		{

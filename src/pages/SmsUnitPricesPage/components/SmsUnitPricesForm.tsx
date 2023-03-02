@@ -5,7 +5,7 @@ import { Divider, Form, Button, Alert } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 
 // utils
-import { DELETE_BUTTON_ID, FORM, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { DEFAULT_DATE_INIT_FORMAT, DELETE_BUTTON_ID, FORM, MONTH_NAME_YEAR_FORMANT, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { formFieldID, optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -46,7 +46,7 @@ const SmsUnitPricesForm: FC<Props> = (props) => {
 		<Form layout={'vertical'} className={'w-full top-0 sticky pt-1 px-6 pb-6 -mx-6'} onSubmitCapture={handleSubmit}>
 			<div className={'h-full'}>
 				<h3 className={'mb-0 mt-3 relative pr-7'}>
-					{smsUnitPriceID ? t('loc:Upraviť cenu SMS') : t('loc:Pridať novú cenu SMS')}
+					{smsUnitPriceID ? STRINGS(t).edit(t('loc:cenu SMS')) : STRINGS(t).addRecord(t('loc:novú cenu SMS'))}
 					<Button className='noti-close-form-btn absolute top-1 right-0' onClick={() => changeFormVisibility()}>
 						<CloseIcon />
 					</Button>
@@ -87,9 +87,9 @@ const SmsUnitPricesForm: FC<Props> = (props) => {
 					picker={'month'}
 					disabled={disabledForm}
 					required
-					dateFormat={'MMM YYYY'}
+					dateFormat={MONTH_NAME_YEAR_FORMANT}
 					customOnChange={(value: Dayjs | null) => {
-						change('validFrom', value ? dayjs(value).startOf('month').format('YYYY-MM-DD') : null)
+						change('validFrom', value ? dayjs(value).startOf('month').format(DEFAULT_DATE_INIT_FORMAT) : null)
 					}}
 					disabledDate={(current: Dayjs) => {
 						// Can not select current month and previous months

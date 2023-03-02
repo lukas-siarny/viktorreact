@@ -289,6 +289,10 @@ export const EN_DATE_WITH_TIME_FORMAT = 'MMM DD YYYY HH:mm'
 
 export const EN_DATE_WITHOUT_TIME_FORMAT = 'DD.MM.YYYY'
 
+export const MONTH_NAME_YEAR_FORMANT = 'MMM YYYY'
+
+export const D_M_YEAR_FORMAT = 'D.M.YYYY'
+
 export const DATE_TIME_PARSER_DATE_FORMAT = 'YYYY-MM-DD'
 export const DATE_TIME_PARSER_FORMAT = `${DATE_TIME_PARSER_DATE_FORMAT}:HH:mm`
 
@@ -578,6 +582,8 @@ export const DELETE_BUTTON_ID = 'delete-btn'
 export const CREATE_BUTTON_ID = 'create-btn'
 
 export const SUBMIT_BUTTON_ID = 'submit-btn'
+
+export const ADD_BUTTON_ID = 'add-btn'
 
 export const MAX_VALUES_PER_PARAMETER = 20
 

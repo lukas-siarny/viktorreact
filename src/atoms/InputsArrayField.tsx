@@ -11,10 +11,11 @@ import InputField from './InputField'
 import InputNumberField from './InputNumberField'
 
 // helpers
-import { STRINGS } from '../utils/enums'
+import { DELETE_BUTTON_ID, FORM, STRINGS } from '../utils/enums'
 
 // assets
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon-16.svg'
+import { formFieldID } from '../utils/helper'
 
 const { Item } = Form
 
@@ -31,10 +32,12 @@ type Props = WrappedFieldArrayProps & {
 	placeholder?: string
 	type?: string
 	emptyValue?: any
+	// custom delete ak sa vyzaduje aj BE delete na onConfirm nie len odstranenie na FE cez remove index
+	handleDelete?: (id: any, removeIndex: (index: number) => void, index: number) => any
 }
 
 const InputsArrayField = (props: Props) => {
-	const { fields, disabled, required, entityName, label, style, maxCount = 5, nestedFieldName, inputSize = 'large', placeholder, type = 'text', emptyValue } = props
+	const { fields, disabled, handleDelete, required, entityName, label, style, maxCount = 5, nestedFieldName, inputSize = 'large', placeholder, type = 'text', emptyValue } = props
 	const [t] = useTranslation()
 
 	const buttonAdd = (
@@ -49,11 +52,17 @@ const InputsArrayField = (props: Props) => {
 			{STRINGS(t).addRecord(entityName)}
 		</Button>
 	)
-
 	return (
 		<Item label={label} required={required} style={style}>
 			<div className={'flex flex-col gap-4 w-full'}>
 				{fields.map((field: any, index: any) => {
+					const fieldData = fields.get(index)
+					const onConfirm = async () => {
+						if (handleDelete) {
+							// fields.remove funkcia sa posiela cela hore aby tam v try-catchi sa pouzila v pripade len ak nenastane BE chyba a zamedzi tym zmazaniu itemu z array ak nastala BE chyba a item nebol zmazany na BE
+							await handleDelete(fieldData.id, fields.remove, index)
+						}
+					}
 					return (
 						<div key={index} className={'flex gap-2'}>
 							<Field
@@ -67,11 +76,13 @@ const InputsArrayField = (props: Props) => {
 							/>
 
 							<DeleteButton
+								id={formFieldID(props.meta.form, `${DELETE_BUTTON_ID}-${index}`)}
 								className={`bg-red-100 ${inputSize === 'large' ? 'mt-2' : 'mt-1'}`}
-								onClick={() => fields.remove(index)}
+								onClick={() => !handleDelete && fields.remove(index)} // FE mazanie
+								onConfirm={onConfirm} // BE + FE mazanie
 								onlyIcon
 								smallIcon
-								noConfirm
+								noConfirm={!handleDelete}
 								size={'small'}
 								disabled={disabled || fields.length === 1}
 							/>

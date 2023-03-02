@@ -242,7 +242,7 @@ export const getCalendarEvents =
 		storePreviousParams = true,
 		eventsDayLimit = 0
 	): ThunkResult<Promise<ICalendarEventsPayload>> =>
-	async (dispatch, getState) => {
+	async (dispatch) => {
 		dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
 
 		let payload = {} as ICalendarEventsPayload
@@ -269,7 +269,7 @@ export const getCalendarEvents =
 			)
 
 			// employees sa mapuju do eventov
-			const { data: calendarEmployees } = await dispatch(setCalendarEmployees(getState().employees.employees, data.employees))
+			const { data: calendarEmployees } = await dispatch(setCalendarEmployees(data.employees))
 
 			const employees = normalizeDataById(calendarEmployees || [])
 
@@ -422,7 +422,7 @@ export const clearCalendarShiftsTimeoffs = (): ThunkResult<Promise<void>> => cle
 
 export const getCalendarMonthlyViewReservations =
 	(queryParams: ICalendarMonthlyReservationsQueryParams, clearVirtualEvent?: boolean, storePreviousParams = true): ThunkResult<Promise<ICalendarMonthlyReservationsPayload>> =>
-	async (dispatch, getState) => {
+	async (dispatch) => {
 		let payload = {} as ICalendarMonthlyReservationsPayload
 		try {
 			const queryParamsEditedForRequest = {
@@ -448,7 +448,7 @@ export const getCalendarMonthlyViewReservations =
 			)
 
 			// employees sa mapuju do eventov
-			const { data: calendarEmployees } = await dispatch(setCalendarEmployees(getState().employees.employees, data.employees))
+			const { data: calendarEmployees } = await dispatch(setCalendarEmployees(data.employees))
 			const employees = normalizeDataById(calendarEmployees || [])
 
 			const editedData = Object.entries(data.calendarEvents).reduce((acc, [key, value]) => {

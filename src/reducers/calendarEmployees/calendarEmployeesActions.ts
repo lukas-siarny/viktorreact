@@ -1,14 +1,16 @@
-/* eslint-disable import/no-cycle */
 import i18next from 'i18next'
+/* eslint-disable import/no-cycle */
 import { ThunkResult } from '../index'
 import { SET_CALENDAR_EMPLOYEES } from './calendarEmployeesTypes'
 
 // utils
-import { CalendarEmployee, CalendarEventsEmployee, IEmployeesPayload, ISelectOptionItem } from '../../types/interfaces'
+import { CalendarEmployee, ISelectOptionItem } from '../../types/interfaces'
 import { VIRTUAL_EMPLOYEE_IDENTIFICATOR, VIRTUAL_EMPLOYEE_NAME } from '../../utils/enums'
+import { getAssignedUserLabel } from '../../utils/helper'
 
 // types
 import { IResetStore } from '../generalTypes'
+import { Paths } from '../../types/api'
 
 export type ICalendarEmployeesActions = IResetStore | IGetEmployees
 
@@ -24,7 +26,7 @@ interface IGetEmployees {
 }
 
 export const setCalendarEmployees =
-	(employees: IEmployeesPayload, calendarEventsEmployees: CalendarEventsEmployee[]): ThunkResult<Promise<ICalendarEmployeesPayload>> =>
+	(employees?: Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0][]): ThunkResult<Promise<ICalendarEmployeesPayload>> =>
 	async (dispatch, getState) => {
 		let payload = {
 			data: null,
@@ -32,51 +34,39 @@ export const setCalendarEmployees =
 			areLoaded: false
 		} as ICalendarEmployeesPayload
 
-		const virtualEmployee = calendarEventsEmployees.find((employee) => employee.firstName === VIRTUAL_EMPLOYEE_IDENTIFICATOR)
-		let newEmployeeIDs: string[] = []
-		let calendarEmployees: CalendarEmployee[] | undefined = []
+		const newEmployeeIDs: string[] = []
+		const options: ISelectOptionItem[] = []
 
-		employees?.data?.employees?.forEach((employee) => {
+		const calendarEmployees: CalendarEmployee[] = (employees || [])
+			.map((employee, i) => {
+				const isVirtualEmployee = employee.firstName === VIRTUAL_EMPLOYEE_IDENTIFICATOR
+				return {
+					id: employee.id,
+					firstName: employee.firstName,
+					lastName: employee.lastName,
+					email: employee.email,
+					orderIndex: isVirtualEmployee ? -1 : i, // TODO: potom z BE tahat
+					color: employee.color,
+					image: employee.image,
+					isVirtual: isVirtualEmployee
+				}
+			})
+			.sort((a, b) => a.orderIndex - b.orderIndex)
+
+		calendarEmployees.forEach((employee) => {
 			newEmployeeIDs.push(employee.id)
-			calendarEmployees?.push({
-				id: employee.id,
-				firstName: employee.firstName,
-				lastName: employee.lastName,
-				email: employee.email,
-				inviteEmail: employee.inviteEmail,
-				orderIndex: employee.orderIndex,
-				color: employee.color,
-				image: employee.image,
-				isVirtual: false
+			options.push({
+				// show name if exist at least last name otherwise show fallback values
+				label: employee?.isVirtual
+					? VIRTUAL_EMPLOYEE_NAME(i18next.t)
+					: getAssignedUserLabel({ id: employee.id, firstName: employee.firstName, lastName: employee.lastName, email: employee.email }),
+				value: employee.id,
+				key: `${employee.id}-key`,
+				extra: {
+					color: employee.color
+				}
 			})
 		})
-
-		let options = employees?.options || []
-
-		if (virtualEmployee) {
-			calendarEmployees = [
-				{
-					id: virtualEmployee.id,
-					firstName: virtualEmployee.firstName,
-					lastName: virtualEmployee.lastName,
-					color: virtualEmployee.color,
-					image: virtualEmployee.image,
-					orderIndex: -1,
-					isVirtual: true
-				},
-				...calendarEmployees
-			]
-			newEmployeeIDs = [virtualEmployee.id, ...newEmployeeIDs]
-			options = [
-				{
-					label: VIRTUAL_EMPLOYEE_NAME(i18next.t),
-					value: virtualEmployee.id,
-					key: `${virtualEmployee.id}-key`,
-					color: virtualEmployee.color
-				} as any, // TODO: pozriet color
-				...options
-			]
-		}
 
 		payload = {
 			data: calendarEmployees,
@@ -87,10 +77,9 @@ export const setCalendarEmployees =
 		// update state only when new employees are different from currently stored employees
 		const currentCalendarEmployeeIDs = getState()
 			.calendarEmployees.calendarEmployees.data?.map((employee) => employee.id)
-			.sort()
 			.join('_')
 
-		if (currentCalendarEmployeeIDs !== newEmployeeIDs.sort().join('_')) {
+		if (currentCalendarEmployeeIDs !== newEmployeeIDs.join('_')) {
 			dispatch({ type: SET_CALENDAR_EMPLOYEES, payload })
 		}
 

@@ -46,7 +46,6 @@ import {
 	refreshEvents
 } from '../../reducers/calendar/calendarActions'
 import { RootState } from '../../reducers'
-import { getEmployees } from '../../reducers/employees/employeesActions'
 import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
 import { clearEvent } from '../../reducers/virtualEvent/virtualEventActions'
 import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
@@ -165,8 +164,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const clearConfirmModal = () => setConfirmModalData(null)
 
-	const employeesLoading = useSelector((state: RootState) => state.employees.employees.isLoading)
 	const calendarEmployees = useSelector((state: RootState) => state.calendarEmployees.calendarEmployees || {})
+	const employeesLoading = useSelector((state: RootState) => state.employees.employees.isLoading)
 	const services = useSelector((state: RootState) => state.service.services)
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
 	const monthlyReservations = useSelector((state: RootState) => state.calendar[MONTHLY_RESERVATIONS_KEY])
@@ -182,8 +181,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState(false)
 	const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)
-
-	const [areEmployeesLoaded, setAreEmployeesLoaded] = useState(false)
 
 	const [reservationPopover, setReservationPopover] = useState<{ isOpen: boolean; data: ReservationPopoverData | null; position: PopoverTriggerPosition | null }>({
 		isOpen: false,
@@ -435,11 +432,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}, [validCalendarView])
 
 	useEffect(() => {
-		;(async () => {
-			dispatch(getServices({ salonID }))
-			await dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
-			setAreEmployeesLoaded(true)
-		})()
+		dispatch(getServices({ salonID }))
 	}, [dispatch, salonID])
 
 	useEffect(() => {
@@ -469,15 +462,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			 * ak uzivatel odksrtne vsetkych zamestancov alebo kategorie, zobrazi sa empty state a nie je potrebne dotahovat nove data
 			 */
 
-			if (!areEmployeesLoaded || (calendarEmployees.areLoaded && !calendarEmployees.options?.length) || query?.employeeIDs === null || query?.categoryIDs === null) {
+			if ((calendarEmployees.areLoaded && !calendarEmployees.options?.length) || query?.employeeIDs === null || query?.categoryIDs === null) {
 				return
 			}
 			// fetch new events
 			fetchEvents(false)
 		})()
-		// NOTE: nedavat do zavislosti calendarEmployees, pretoze potom sa budu robit duplicitne requesty, staci pocuvat na zmenu query.employeeIDs
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents, areEmployeesLoaded])
+	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents])
 
 	useEffect(() => {
 		dispatch(
@@ -990,7 +982,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							changeCalendarDate={setNewSelectedDate}
 							query={query}
 							setQuery={setQuery}
-							areEmployeesLoaded={areEmployeesLoaded}
+							areEmployeesLoaded={calendarEmployees.areLoaded}
 						/>
 					)}
 				</Layout>

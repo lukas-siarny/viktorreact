@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, FC } from 'react'
 import { compose } from 'redux'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Button, Col, Row, Spin } from 'antd'
+import { Button, Col, Divider, Row, Spin } from 'antd'
 import { useNavigate } from 'react-router'
 
 // redux
@@ -19,9 +19,21 @@ import { withPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 
 // types
-import { IBreadcrumbs, IBillingForm } from '../../types/interfaces'
+import { IBreadcrumbs, IBillingForm, SalonSubPageProps } from '../../types/interfaces'
+import Alert from '../../components/Dashboards/Alert'
 
-const SmsCreditPage = () => {
+// assets
+import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
+import { ReactComponent as UsageIcon } from '../../assets/icons/usage.svg'
+
+// components
+import Wallet from '../../components/Dashboards/Wallet'
+import { formatPrice } from '../../utils/helper'
+import SmsStats from '../../components/Dashboards/SmsStats'
+
+const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
+	const { salonID, parentPath } = props
+
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -67,8 +79,6 @@ const SmsCreditPage = () => {
 					}
 				}
 
-				const salonID = salon.data.id
-
 				await patchReq('/api/b2b/admin/salons/{salonID}/invoice', { salonID }, body)
 				await dispatch(selectSalon(salonID))
 			} catch (error: any) {
@@ -91,22 +101,24 @@ const SmsCreditPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<Row gutter={ROW_GUTTER_X_DEFAULT}>
-				<Col span={24}>
-					<div className='content-body small'>
-						<Spin spinning={salon?.isLoading}>
-							<div className='flex add-button justify-center items-center'>
-								<div className='m-auto text-center'>
-									<h1 className='text-5xl font-bold'>{t('loc:Nastavte si SMS notifikácie')}</h1>
-									<Button onClick={() => navigate(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'}>
-										{t('loc:Pridať salón')}
-									</Button>
-								</div>
-							</div>
-						</Spin>
-					</div>
-				</Col>
-			</Row>
+			<div className={'homepage-wrapper'}>
+				<div className='w-11/12 xl:w-5/6 2xl:w-3/4 3xl:w-2/3 mx-auto mt-10'>
+					<Spin spinning={salon?.isLoading}>
+						<Alert
+							className='mb-6'
+							title={t('loc:Nastavte si SMS notifikácie')}
+							subTitle={t('loc:Prejdite do nastavení rezervačného systému a nastavte si SMS notifikácie podľa vašich preferencií')}
+							actionLabel={t('loc:Nastaviť SMS notifikácie')}
+							icon={<SettingIcon />}
+							onActionItemClick={() => navigate(`${parentPath}${t('paths:reservations-settings')}`)}
+						/>
+						<div className={'flex gap-4'}>
+							<Wallet salonID={salonID} />
+							<SmsStats salonID={salonID} />
+						</div>
+					</Spin>
+				</div>
+			</div>
 		</>
 	)
 }

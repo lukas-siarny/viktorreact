@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
-import { ICustomerActions, ICustomersPayload } from './walletActions'
+import { IWalletActions, IWalletPayload } from './walletActions'
 import { ILoadingAndFailure } from '../../types/interfaces'
 import { WALLET } from './walletTypes'
 
@@ -9,11 +9,11 @@ export const initState = {
 		data: null,
 		isLoading: false,
 		isFailure: false
-	} as ICustomersPayload & ILoadingAndFailure
+	} as IWalletPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
-export default (state = initState, action: ICustomerActions) => {
+export default (state = initState, action: IWalletActions) => {
 	switch (action.type) {
 		// Customers
 		case WALLET.WALLET_LOAD_START:

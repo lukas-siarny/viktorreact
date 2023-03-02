@@ -1389,3 +1389,5 @@ export const normalizeDataById = <T extends { id: string }>(data?: T[]): { [key:
 	})
 	return normalizedData
 }
+
+export const formatPrice = (price: number, symbol?: string) => `${price.toFixed(2).replace('.', ',')} ${symbol || ''}`.trim()

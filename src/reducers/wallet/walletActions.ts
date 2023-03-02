@@ -8,19 +8,15 @@ import { Paths } from '../../types/api'
 // utils
 import { getReq } from '../../utils/request'
 
-export type ICustomerActions = IResetStore | IGetWallet
+export type IWalletActions = IResetStore | IGetWallet
 
 interface IGetWallet {
 	type: WALLET
-	payload: ICustomersPayload
+	payload: IWalletPayload
 }
 
-export interface ICustomerPayload {
-	data: Paths.GetApiB2BAdminCustomersCustomerId.Responses.$200 | null
-}
-
-export interface ICustomersPayload {
-	data: Paths.GetApiB2BAdminCustomers.Responses.$200 | null
+export interface IWalletPayload {
+	data: Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.Responses.$200 | null
 }
 
 export const getWallet =
@@ -29,7 +25,7 @@ export const getWallet =
 		try {
 			dispatch({ type: WALLET.WALLET_LOAD_START })
 
-			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/wallets/{walletID}' as any, { salonID, walletID })
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/wallets/{walletID}', { salonID, walletID })
 
 			const payload = {
 				data

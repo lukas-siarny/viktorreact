@@ -94,7 +94,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				key: PAGE.HOME,
 				label: t('loc:Prehľad'),
 				onClick: () => navigate(t('paths:index')),
-				icon: <HomeIcon />
+				icon: <HomeIcon />,
+				id: PAGE.HOME
 			})
 
 			if (!salonID) {
@@ -104,7 +105,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						key: PAGE.USERS,
 						label: t('loc:Používatelia'),
 						onClick: () => navigate(t('paths:users')),
-						icon: <UsersIcon />
+						icon: <UsersIcon />,
+						id: PAGE.USERS
 					})
 				}
 				if (hasPermissions([PERMISSION.ENUM_EDIT])) {
@@ -113,43 +115,50 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.CATEGORIES,
 							label: t('loc:Kategórie'),
 							onClick: () => navigate(t('paths:categories')),
-							icon: <CategoryIcon />
+							icon: <CategoryIcon />,
+							id: PAGE.CATEGORIES
 						},
 						{
 							key: PAGE.CATEGORY_PARAMETERS,
 							label: t('loc:Parametre'),
 							onClick: () => navigate(t('paths:category-parameters')),
-							icon: <ParametersIcon />
+							icon: <ParametersIcon />,
+							id: PAGE.CATEGORY_PARAMETERS
 						},
 						{
 							key: PAGE.COSMETICS,
 							label: t('loc:Kozmetika'),
 							onClick: () => navigate(t('paths:cosmetics')),
-							icon: <CosmeticIcon />
+							icon: <CosmeticIcon />,
+							id: PAGE.COSMETICS
 						},
 						{
 							key: PAGE.LANGUAGES,
 							label: t('loc:Jazyky'),
 							onClick: () => navigate(t('paths:languages-in-salons')),
-							icon: <LanguagesIcon />
+							icon: <LanguagesIcon />,
+							id: PAGE.LANGUAGES
 						},
 						{
 							key: PAGE.SUPPORT_CONTACTS,
 							label: t('loc:Podpora'),
 							onClick: () => navigate(t('paths:support-contacts')),
-							icon: <HelpIcon />
+							icon: <HelpIcon />,
+							id: PAGE.SUPPORT_CONTACTS
 						},
 						{
 							key: PAGE.SPECIALIST_CONTACTS,
 							label: t('loc:Špecialisti'),
 							onClick: () => navigate(t('paths:specialist-contacts')),
-							icon: <SpecialistIcon />
+							icon: <SpecialistIcon />,
+							id: PAGE.SPECIALIST_CONTACTS
 						},
 						{
 							key: PAGE.REVIEWS,
 							label: t('loc:Recenzie'),
 							onClick: () => navigate(t('paths:reviews')),
-							icon: <ReviewsIcon />
+							icon: <ReviewsIcon />,
+							id: PAGE.REVIEWS
 						}
 					)
 				}
@@ -158,7 +167,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						key: PAGE.SALONS,
 						label: t('loc:Salóny'),
 						onClick: () => navigate(t('paths:salons')),
-						icon: <SalonIcon />
+						icon: <SalonIcon />,
+						id: PAGE.SALONS
 					})
 				}
 			}
@@ -171,37 +181,43 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.SALONS,
 							label: t('loc:Detail salónu'),
 							onClick: () => navigate(parentPath as string),
-							icon: <SalonIcon />
+							icon: <SalonIcon />,
+							id: PAGE.SALONS
 						},
 						{
 							key: PAGE.BILLING_INFO,
 							label: t('loc:Fakturačné údaje'),
 							onClick: () => navigate(getPath(t('paths:billing-info'))),
-							icon: <InvoiceIcon />
+							icon: <InvoiceIcon />,
+							id: PAGE.BILLING_INFO
 						},
 						{
 							key: PAGE.INDUSTRIES_AND_SERVICES,
 							label: t('loc:Odvetvia a služby'),
 							onClick: () => navigate(getPath(t('paths:industries-and-services'))),
-							icon: <IndustiresIcon />
+							icon: <IndustiresIcon />,
+							id: PAGE.INDUSTRIES_AND_SERVICES
 						},
 						{
 							key: PAGE.SERVICES_SETTINGS,
 							label: t('loc:Nastavenie služieb'),
 							onClick: () => navigate(getPath(t('paths:services-settings'))),
-							icon: <ServiceIcon className={'text-black'} />
+							icon: <ServiceIcon className={'text-black'} />,
+							id: PAGE.SERVICES_SETTINGS
 						},
 						{
 							key: PAGE.CUSTOMERS,
 							label: t('loc:Zákazníci'),
 							onClick: () => navigate(getPath(t('paths:customers'))),
-							icon: <CustomerIcon className={'text-black'} />
+							icon: <CustomerIcon className={'text-black'} />,
+							id: PAGE.CUSTOMERS
 						},
 						{
 							key: PAGE.EMPLOYEES,
 							label: t('loc:Zamestnanci'),
 							onClick: () => navigate(getPath(t('paths:employees'))),
-							icon: <EmployeesIcon />
+							icon: <EmployeesIcon />,
+							id: PAGE.EMPLOYEES
 						}
 					)
 				}
@@ -213,19 +229,22 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.CALENDAR,
 							label: t('loc:Kalendár'),
 							onClick: () => navigate(getPath(t('paths:calendar'))),
-							icon: <CalendarIcon />
+							icon: <CalendarIcon />,
+							id: PAGE.CALENDAR
 						},
 						{
 							key: PAGE.SALON_SETTINGS,
 							label: t('loc:Nastavenia rezervácií'),
 							onClick: () => navigate(getPath(t('paths:reservations-settings'))),
-							icon: <SettingIcon />
+							icon: <SettingIcon />,
+							id: PAGE.SALON_SETTINGS
 						},
 						{
 							key: PAGE.RESERVATIONS,
 							label: t('loc:Rezervácie'),
 							onClick: () => navigate(getPath(t('paths:reservations'))),
-							icon: <ReservationsIcon />
+							icon: <ReservationsIcon />,
+							id: PAGE.RESERVATIONS
 						}
 					)
 				}

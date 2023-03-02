@@ -466,7 +466,16 @@ export interface ISmsUnitPricesForm {
 	countryCode: string
 }
 
+export interface IRechargeSmsCreditForm {
+	amount: number
+	transactionNote?: string
+}
+
 export interface ISmsUnitPricesFilter {
+	search: string
+}
+
+export interface ISmsHistoryFilter {
 	search: string
 }
 
@@ -499,7 +508,7 @@ export interface IQueryParams {
 	search?: string | undefined | null
 }
 
-interface IDataPagination {
+export interface IDataPagination {
 	pagination: IResponsePagination
 }
 

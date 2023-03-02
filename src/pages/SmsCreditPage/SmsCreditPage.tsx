@@ -3,33 +3,36 @@ import { compose } from 'redux'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Button, Col, Divider, Row, Spin } from 'antd'
+import { DatePicker, Row, Spin } from 'antd'
 import { useNavigate } from 'react-router'
+import dayjs, { Dayjs } from 'dayjs'
 
 // redux
 import { RootState } from '../../reducers'
-import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // utils
-import { ROW_GUTTER_X_DEFAULT, PERMISSION, FORM } from '../../utils/enums'
+import { PERMISSION, FORM, DEFAULT_DATE_INIT_FORMAT, MONTH_NAME_YEAR_FORMAT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { patchReq } from '../../utils/request'
 
 // types
-import { IBreadcrumbs, IBillingForm, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 import Alert from '../../components/Dashboards/Alert'
 
 // assets
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
-import { ReactComponent as UsageIcon } from '../../assets/icons/usage.svg'
 
 // components
 import Wallet from '../../components/Dashboards/Wallet'
-import { formatPrice } from '../../utils/helper'
 import SmsStats from '../../components/Dashboards/SmsStats'
+import { getSmsHistory } from '../../reducers/sms/smsActions'
+import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
+import SmsHistory from './components/SmsHistory'
+import SmsTimeStats from '../../components/Dashboards/SmsTimeStats'
+
+const getQueryParamDate = (date: Dayjs) => date.startOf('month').format('YYYY-MM')
 
 const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath } = props
@@ -38,60 +41,40 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
-	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
+	const smsHistory = useSelector((state: RootState) => state.sms.history)
+
+	const isLoading = smsHistory?.isLoading
+
+	const [query, setQuery] = useQueryParams({
+		search: StringParam(),
+		order: StringParam('createdAt:desc'),
+		limit: NumberParam(25),
+		page: NumberParam(1),
+		year: StringParam(getQueryParamDate(dayjs()))
+	})
 
 	useEffect(() => {
-		if (salon.data) {
-			const initData: IBillingForm = {
-				...salon.data.companyInvoiceAddress,
-				...salon.data.companyInfo,
-				...salon.data.companyContactPerson,
-				phonePrefixCountryCode: salon.data.companyContactPerson?.phonePrefixCountryCode || salon.data.address?.countryCode
-			}
+		dispatch(
+			getSmsHistory({
+				salonID,
+				page: query.page,
+				limit: query.limit,
+				search: query.search,
+				order: query.order,
+				dateFrom: dayjs(query.date).startOf('month').format(DEFAULT_DATE_INIT_FORMAT),
+				dateTo: dayjs(query.date).endOf('month').format(DEFAULT_DATE_INIT_FORMAT)
+			})
+		)
+	}, [dispatch, query.page, query.limit, query.search, query.order, query.date, salonID])
 
-			dispatch(initialize(FORM.SALON_BILLING_INFO, initData))
-		}
-	}, [dispatch, salon.data])
-
-	const handleSubmit = async (formData: IBillingForm) => {
-		if (salon.data?.id) {
-			try {
-				const body = {
-					companyInvoiceAddress: {
-						countryCode: formData.countryCode,
-						zipCode: formData.zipCode,
-						city: formData.city,
-						street: formData.street,
-						streetNumber: formData.streetNumber
-					},
-					companyContactPerson: {
-						email: formData.email,
-						firstName: formData.firstName,
-						lastName: formData.lastName,
-						phonePrefixCountryCode: formData.phonePrefixCountryCode,
-						phone: formData.phone
-					},
-					companyInfo: {
-						businessID: formData.businessID,
-						taxID: formData.taxID,
-						vatID: formData.vatID,
-						companyName: formData.companyName
-					}
-				}
-
-				await patchReq('/api/b2b/admin/salons/{salonID}/invoice', { salonID }, body)
-				await dispatch(selectSalon(salonID))
-			} catch (error: any) {
-				// eslint-disable-next-line no-console
-				console.error(error.message)
-			}
-		}
-	}
+	useEffect(() => {
+		dispatch(initialize(FORM.SMS_HISTORY_FILTER, { search: query.search }))
+	}, [query.search, dispatch])
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Fakturačné údaje')
+				name: t('loc:SMS kredit')
 			}
 		]
 	}
@@ -101,23 +84,34 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<div className={'homepage-wrapper'}>
-				<div className='w-11/12 xl:w-5/6 2xl:w-3/4 3xl:w-2/3 mx-auto mt-10'>
-					<Spin spinning={salon?.isLoading}>
-						<Alert
-							className='mb-6'
-							title={t('loc:Nastavte si SMS notifikácie')}
-							subTitle={t('loc:Prejdite do nastavení rezervačného systému a nastavte si SMS notifikácie podľa vašich preferencií')}
-							actionLabel={t('loc:Nastaviť SMS notifikácie')}
-							icon={<SettingIcon />}
-							onActionItemClick={() => navigate(`${parentPath}${t('paths:reservations-settings')}`)}
-						/>
-						<div className={'flex gap-4'}>
-							<Wallet salonID={salonID} />
-							<SmsStats salonID={salonID} />
-						</div>
-					</Spin>
+
+			<div className='w-11/12 xl:w-5/6 2xl:w-3/4 3xl:w-2/3 mx-auto mt-10'>
+				<Alert
+					className='mb-6'
+					title={t('loc:Nastavte si SMS notifikácie')}
+					subTitle={t('loc:Prejdite do nastavení rezervačného systému a nastavte si SMS notifikácie podľa vašich preferencií')}
+					actionLabel={t('loc:Nastaviť SMS notifikácie')}
+					icon={<SettingIcon />}
+					onActionItemClick={() => navigate(`${parentPath}${t('paths:reservations-settings')}`)}
+				/>
+				<div className={'flex gap-4 mb-10'}>
+					<Wallet salonID={salonID} parentPath={parentPath} />
+					<SmsStats salonID={salonID} />
 				</div>
+				<SmsTimeStats
+					onPickerChange={(date) => {
+						if (date) {
+							setQuery({
+								...query,
+								date: getQueryParamDate(date)
+							})
+						}
+					}}
+					salonID={salonID}
+					month={dayjs(query.date).month()}
+					year={dayjs(query.date).year()}
+				/>
+				<SmsHistory smsHistory={smsHistory} query={query} setQuery={setQuery} />
 			</div>
 		</>
 	)

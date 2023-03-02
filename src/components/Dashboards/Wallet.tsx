@@ -22,10 +22,11 @@ import { formatPrice } from '../../utils/helper'
 type Props = {
 	salonID: string
 	className?: string
+	parentPath?: string
 }
 
 const Wallet = (props: Props) => {
-	const { className = 'w-1/2', salonID } = props
+	const { className = 'w-1/2', salonID, parentPath } = props
 	const [t] = useTranslation()
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
@@ -41,7 +42,7 @@ const Wallet = (props: Props) => {
 	}, [dispatch, salonID, walletID])
 
 	return (
-		<div className={cx('p-4 pb-8 rounded shadow-lg bg-notino-white flex-50', className)}>
+		<div className={cx('p-4 pb-8 rounded shadow-lg bg-notino-white', className)}>
 			<Spin spinning={wallet.isLoading}>
 				<h4 className={'mb-0 flex items-center text-lg'}>
 					<MessageIcon className={'text-notino-black mr-2'} />
@@ -58,7 +59,13 @@ const Wallet = (props: Props) => {
 							</p>
 						</div>
 					)}
-					<Button onClick={() => navigate(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'} icon={<CreateIcon />}>
+					<Button
+						onClick={() => navigate(`${parentPath}${t('paths:sms-credit')}/${t('paths:recharge')}`)}
+						type='primary'
+						htmlType='button'
+						className={'noti-btn'}
+						icon={<CreateIcon />}
+					>
 						{t('loc:Dobiť kredit')}
 					</Button>
 				</div>

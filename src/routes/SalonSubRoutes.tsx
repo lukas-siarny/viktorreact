@@ -54,6 +54,7 @@ import ReservationsPage from '../pages/ReservationsPage/ReservationsPage'
 
 // SMS credit
 import SmsCreditPage from '../pages/SmsCreditPage/SmsCreditPage'
+import RechargeSmsCreditPage from '../pages/SmsCreditPage/RechargeSmsCreditPage'
 
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
@@ -168,6 +169,7 @@ const SalonSubRoutes: FC = () => {
 			</Route>
 			<Route errorElement={<ErrorBoundary />} path={t('paths:sms-credit')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.SMS_CREDIT} />}>
 				<Route index element={<SmsCreditPage parentPath={parentPath} salonID={salonID} />} />
+				<Route path={t('paths:recharge')} element={<RechargeSmsCreditPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* 404 */}
 			<Route element={<AuthRoute layout={MainLayout} />}>

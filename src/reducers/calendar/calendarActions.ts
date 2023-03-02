@@ -270,6 +270,7 @@ export const getCalendarEvents =
 
 			// employees sa mapuju do eventov
 			const { data: calendarEmployees } = await dispatch(setCalendarEmployees(getState().employees.employees, data.employees))
+
 			const employees = normalizeDataById(calendarEmployees || [])
 
 			const editedEvents = data.calendarEvents.reduce((newEventsArray, event) => {

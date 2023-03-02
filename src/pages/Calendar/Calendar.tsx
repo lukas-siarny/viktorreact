@@ -365,11 +365,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	// fetch new events
 	const fetchEvents: any = useCallback(
 		async (clearVirtualEvent?: boolean) => {
-			// bez zamestanncov nefunguje nic v kalendari, takze ani nema zmysel dotahovat data
-			if (calendarEmployees.areLoaded && !calendarEmployees.options?.length) {
-				return
-			}
-
 			// restartuje sa interval pre background load
 			restartFetchInterval()
 
@@ -412,18 +407,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			}
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[
-			dispatch,
-			salonID,
-			currentRange.start,
-			currentRange.end,
-			query.employeeIDs,
-			query.categoryIDs,
-			validEventsViewType,
-			validCalendarView,
-			calendarEmployees.areLoaded,
-			calendarEmployees.options?.length
-		]
+		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validEventsViewType, validCalendarView]
 	)
 
 	// scroll to time after initialization
@@ -479,14 +463,19 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		;(async () => {
-			// v reduxe sa do eventov sa mapuju zamestnanci, preto sa musia dotiahnut predtym nez sa dotiahnu eventy
-			// ak uzivatel odksrtne vsetkych zamestancov alebo kategorie, zobrazi sa empty state a nie je potrebne dotahovat nove data
-			if (!areEmployeesLoaded || query?.employeeIDs === null || query?.categoryIDs === null) {
+			/**
+			 * v reduxe sa do eventov sa mapuju zamestnanci, preto sa musia dotiahnut predtym nez sa dotiahnu eventy
+			 * ked uz su v reduxe prebehol mapping zamestnancov (calendarEmployees.areLoaded), avsak pole ma nulovu dlzku, je zbytocne robit dalsi request
+			 * ak uzivatel odksrtne vsetkych zamestancov alebo kategorie, zobrazi sa empty state a nie je potrebne dotahovat nove data
+			 */
+
+			if (!areEmployeesLoaded || (calendarEmployees.areLoaded && !calendarEmployees.options?.length) || query?.employeeIDs === null || query?.categoryIDs === null) {
 				return
 			}
 			// fetch new events
 			fetchEvents(false)
 		})()
+		// NOTE: nedavat do zavislosti calendarEmployees, pretoze potom sa budu robit duplicitne requesty, staci pocuvat na zmenu query.employeeIDs
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents, areEmployeesLoaded])
 

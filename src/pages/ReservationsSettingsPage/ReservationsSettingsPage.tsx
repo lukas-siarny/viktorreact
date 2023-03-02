@@ -12,7 +12,7 @@ import ReservationSystemSettingsForm from './components/ReservationSystemSetting
 import { ReactComponent as UploadIcon } from '../../assets/icons/upload-icon.svg'
 // utils
 import { ADMIN_PERMISSIONS, FORM, NOTIFICATION_TYPES, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
-import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
+import { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { patchReq, postReq } from '../../utils/request'
 
 // reducers
@@ -311,6 +311,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 			setUploadStatus('error')
 		}
 	}
+
 	const modals = (
 		<>
 			<ImportForm
@@ -324,9 +325,9 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 				setVisible={setVisibleReservationImport}
 			/>
 			<ImportForm
-				accept={'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv,.ics'}
+				accept={'.csv'}
 				title={t('loc:Importovať zákazníkov')}
-				label={t('loc:Vyberte súbor vo formáte .xlsx, .csv alebo .ics')}
+				label={t('loc:Vyberte súbor vo formáte .csv')}
 				uploadStatus={uploadStatus}
 				setUploadStatus={setUploadStatus}
 				onSubmit={handleSubmitImport}
@@ -347,48 +348,12 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 					<div className='content-body'>
 						<Spin spinning={salon.isLoading || submitting}>
 							<div className={'text-end'}>
-								<Permissions
-									// TODO: bude opravnenie na import rezervacii / zakaznikov?
-									allowed={[PERMISSION.IMPORT_SALON]}
-									render={(hasPermission, { openForbiddenModal }) => (
-										<Button
-											onClick={() => {
-												if (hasPermission) {
-													setVisibleReservationImport(true)
-												} else {
-													openForbiddenModal()
-												}
-											}}
-											type='primary'
-											htmlType='button'
-											className={'noti-btn mr-2'}
-											icon={<UploadIcon />}
-										>
-											{t('loc:Importovať rezervácie')}
-										</Button>
-									)}
-								/>
-								<Permissions
-									// TODO: bude opravnenie na import rezervacii / zakaznikov?
-									// allowed={[PERMISSION.IMPORT_SALON]}
-									render={(hasPermission, { openForbiddenModal }) => (
-										<Button
-											onClick={() => {
-												if (hasPermission) {
-													setVisibleClientImport(true)
-												} else {
-													openForbiddenModal()
-												}
-											}}
-											type='primary'
-											htmlType='button'
-											className={'noti-btn'}
-											icon={<UploadIcon />}
-										>
-											{t('loc:Importovať zákazníkov')}
-										</Button>
-									)}
-								/>
+								<Button onClick={() => setVisibleReservationImport(true)} type='primary' htmlType='button' className={'noti-btn mr-2'} icon={<UploadIcon />}>
+									{t('loc:Importovať rezervácie')}
+								</Button>
+								<Button onClick={() => setVisibleClientImport(true)} type='primary' htmlType='button' className={'noti-btn'} icon={<UploadIcon />}>
+									{t('loc:Importovať zákazníkov')}
+								</Button>
 							</div>
 							<Divider className={'my-3'} />
 							<ReservationSystemSettingsForm

@@ -11892,6 +11892,8 @@ declare namespace Paths {
                     };
                     createdAt: string; // date-time
                 }[];
+                hasUnreadNotification: boolean;
+                countUnreadNotifications: number; // float
                 pagination: {
                     limit: number;
                     page: number;
@@ -21726,7 +21728,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
             descriptionLocalizations?: ({
                 /**
@@ -21749,7 +21751,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
             /**
              * example:
@@ -21858,7 +21860,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
             /**
              * example:
@@ -21935,7 +21937,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
         }
         namespace Responses {
@@ -22083,7 +22085,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
             /**
              * example:
@@ -50805,7 +50807,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
             descriptionLocalizations?: ({
                 /**
@@ -50828,7 +50830,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
             /**
              * example:
@@ -50913,7 +50915,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
             /**
              * example:
@@ -50988,7 +50990,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
         }
         namespace Responses {
@@ -51124,7 +51126,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
             /**
              * example:

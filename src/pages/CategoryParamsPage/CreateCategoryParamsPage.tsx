@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { Row } from 'antd'
 import { initialize } from 'redux-form'
 import { useNavigate } from 'react-router-dom'
+import { isEmpty } from 'lodash'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -40,9 +41,16 @@ const CreateCategoryParamsPage = () => {
 		)
 	}, [dispatch])
 
+	const handleDeleteValue = async (categoryParameterValueID?: string, removeIndex?: (index: number) => void, index?: number) => {
+		// NOTE: pri create stave staci zmazat len z field arrayu item nakolko ID este nie je v DB ulozene
+		if (removeIndex) {
+			removeIndex(index as number)
+		}
+	}
+
 	const handleSubmit = async (formData: ICategoryParamForm) => {
 		let values = []
-		let unitType = null
+		let unitType: PARAMETERS_UNIT_TYPES | null = null
 
 		if (formData.valueType === PARAMETERS_VALUE_TYPES.TIME) {
 			unitType = PARAMETERS_UNIT_TYPES.MINUTES
@@ -56,10 +64,29 @@ const CreateCategoryParamsPage = () => {
 			const reqBody: any = {
 				nameLocalizations: formData.nameLocalizations.filter((nameLocalization: any) => !!nameLocalization.value),
 				valueType: formData.valueType,
-				values,
 				unitType
 			}
-			await postReq('/api/b2b/admin/enums/category-parameters/', {}, reqBody)
+
+			const { data } = await postReq('/api/b2b/admin/enums/category-parameters/', {}, reqBody)
+			const categoryParameterID = data.categoryParameter.id
+
+			await Promise.all(
+				values.map((valueItem: any) => {
+					// Iba nad tymi spravit request krore nemaju prazdne hodnoty valueLocalizations (prazdne pole)
+					if (!isEmpty(valueItem.valueLocalizations)) {
+						if (unitType === PARAMETERS_UNIT_TYPES.MINUTES) {
+							return postReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/', { categoryParameterID }, { value: valueItem.value.toString() })
+						}
+						return postReq(
+							'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/',
+							{ categoryParameterID },
+							{ valueLocalizations: valueItem.valueLocalizations }
+						)
+					}
+					return undefined
+				})
+			)
+
 			navigate(t('paths:category-parameters'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -85,7 +112,7 @@ const CreateCategoryParamsPage = () => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:category-parameters')} />
 			</Row>
 			<div className='content-body small'>
-				<CategoryParamsForm onSubmit={handleSubmit} />
+				<CategoryParamsForm onDeleteValue={handleDeleteValue} onSubmit={handleSubmit} />
 			</div>
 		</>
 	)

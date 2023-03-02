@@ -24,7 +24,6 @@ const UploadSuccess = (props: Props) => {
 				icon={<CheckIcon />}
 			/>
 			<p className={'mb-0'}>{t('loc:Po spracovaní vám na vašu e-mailovú adresu zašleme súhrnnú správu o importe.')}</p>
-			<p className={'mb-0'}>{t('loc:Úspešne nahraté položky sa následne zobrazia v zozname salónov.')}</p>
 			<Button onClick={onUploadAgain} type='primary' htmlType='button' className={'noti-btn'} icon={<UploadIcon />}>
 				{t('loc:Importovať ďalšie')}
 			</Button>

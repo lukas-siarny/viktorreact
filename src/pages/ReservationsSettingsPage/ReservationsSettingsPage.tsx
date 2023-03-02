@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { initialize, isSubmitting, reset } from 'redux-form'
-import { Button, Col, Modal, Row, Spin } from 'antd'
+import { initialize, isSubmitting } from 'redux-form'
+import { Button, Col, Divider, Row, Spin } from 'antd'
 import { forEach, includes, isEmpty, reduce } from 'lodash'
+import { useNavigate } from 'react-router-dom'
 
 // components
-import { useNavigate } from 'react-router-dom'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ReservationSystemSettingsForm from './components/ReservationSystemSettingsForm'
-import UploadIcon from '../../assets/icons/upload-icon.svg'
+import { ReactComponent as UploadIcon } from '../../assets/icons/upload-icon.svg'
 // utils
-import { FORM, NOTIFICATION_TYPES, PERMISSION, ADMIN_PERMISSIONS, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
-import Permissions, { withPermissions, checkPermissions } from '../../utils/Permissions'
+import { ADMIN_PERMISSIONS, FORM, NOTIFICATION_TYPES, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
+import { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { patchReq, postReq } from '../../utils/request'
 
 // reducers
@@ -30,9 +30,7 @@ import {
 	PathSettingsBody,
 	SalonSubPageProps
 } from '../../types/interfaces'
-import ReservationsImportForm from './components/ReservationsImportForm'
-import UploadSuccess from '../SalonsPage/components/UploadSuccess'
-import SalonsImportForm from '../SalonsPage/components/forms/SalonsImportForm'
+import ImportForm from '../../components/ImportForm'
 
 const EXCLUDED_NOTIFICATIONS_B2B: string[] = [RS_NOTIFICATION.RESERVATION_REJECTED, RS_NOTIFICATION.RESERVATION_REMINDER]
 
@@ -134,9 +132,8 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const groupedSettings = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 	const submitting = useSelector(isSubmitting(FORM.RESEVATION_SYSTEM_SETTINGS))
 	const [uploadStatus, setUploadStatus] = useState<'uploading' | 'success' | 'error' | undefined>(undefined)
-	const formValuesImportForm = useSelector((state: RootState) => state.form?.[FORM.RESERVATION_IMPORT_FORM]?.values)
-	const [visibleImportModal, setVisibleImportModal] = useState(false)
-
+	const [visibleReservationImport, setVisibleReservationImport] = useState(false)
+	const [visibleClientImport, setVisibleClientImport] = useState(false)
 	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
 	const authUserPermissions = currentUser?.uniqPermissions
 
@@ -293,58 +290,56 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 		}
 	}
 	const handleSubmitImport = async (values: IDataUploadForm) => {
-		console.log('values', values)
-		setUploadStatus('uploading')
-
 		const formData = new FormData()
 		formData.append('file', values?.file)
-
 		try {
-			// /api/b2b/admin/imports/salons/{salonID}/calendar-events
-			await postReq('/api/b2b/admin/imports/salons/{salonID}/calendar-events', { salonID }, formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data'
-				}
-			})
+			if (visibleReservationImport) {
+				await postReq('/api/b2b/admin/imports/salons/{salonID}/calendar-events', { salonID }, formData, {
+					headers: {
+						'Content-Type': 'multipart/form-data'
+					}
+				})
+			} else {
+				await postReq('/api/b2b/admin/imports/salons/{salonID}/customers', { salonID }, formData, {
+					headers: {
+						'Content-Type': 'multipart/form-data'
+					}
+				})
+			}
 			setUploadStatus('success')
 		} catch {
 			setUploadStatus('error')
 		}
 	}
 
-	const resetUploadForm = () => {
-		setUploadStatus(undefined)
-		reset(FORM.RESERVATION_IMPORT_FORM)
-	}
-
-	const modal = (
-		<Modal
-			className='rounded-fields'
-			title={t('loc:Importovať salóny')}
-			centered
-			open={visibleImportModal}
-			footer={null}
-			onCancel={() => {
-				resetUploadForm()
-				setVisibleImportModal(false)
-			}}
-			// closeIcon={<CloseIcon />}
-			width={394}
-			maskClosable={false}
-			keyboard={false}
-		>
-			<Spin spinning={uploadStatus === 'uploading'}>
-				{uploadStatus === 'success' ? (
-					<UploadSuccess onUploadAgain={resetUploadForm} />
-				) : (
-					<ReservationsImportForm onSubmit={handleSubmitImport} disabledForm={!formValuesImportForm?.file} />
-				)}
-			</Spin>
-		</Modal>
+	const modals = (
+		<>
+			<ImportForm
+				accept={'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv,.ics'}
+				title={t('loc:Importovať rezervácie')}
+				label={t('loc:Vyberte súbor vo formáte .xlsx, .csv alebo .ics')}
+				uploadStatus={uploadStatus}
+				setUploadStatus={setUploadStatus}
+				onSubmit={handleSubmitImport}
+				visible={visibleReservationImport}
+				setVisible={setVisibleReservationImport}
+			/>
+			<ImportForm
+				accept={'.csv'}
+				title={t('loc:Importovať zákazníkov')}
+				label={t('loc:Vyberte súbor vo formáte .csv')}
+				uploadStatus={uploadStatus}
+				setUploadStatus={setUploadStatus}
+				onSubmit={handleSubmitImport}
+				visible={visibleClientImport}
+				setVisible={setVisibleClientImport}
+			/>
+		</>
 	)
+
 	return (
 		<>
-			{modal}
+			{modals}
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
@@ -352,26 +347,15 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 				<Col span={24}>
 					<div className='content-body'>
 						<Spin spinning={salon.isLoading || submitting}>
-							<Permissions
-								allowed={[PERMISSION.IMPORT_SALON]}
-								render={(hasPermission, { openForbiddenModal }) => (
-									<Button
-										onClick={() => {
-											if (hasPermission) {
-												setVisibleImportModal(true)
-											} else {
-												openForbiddenModal()
-											}
-										}}
-										type='primary'
-										htmlType='button'
-										className={'noti-btn w-full'}
-										// icon={<UploadIcon />}
-									>
-										{t('loc:Import dát')}
-									</Button>
-								)}
-							/>
+							<div className={'text-end'}>
+								<Button onClick={() => setVisibleReservationImport(true)} type='primary' htmlType='button' className={'noti-btn mr-2'} icon={<UploadIcon />}>
+									{t('loc:Importovať rezervácie')}
+								</Button>
+								<Button onClick={() => setVisibleClientImport(true)} type='primary' htmlType='button' className={'noti-btn'} icon={<UploadIcon />}>
+									{t('loc:Importovať zákazníkov')}
+								</Button>
+							</div>
+							<Divider className={'my-3'} />
 							<ReservationSystemSettingsForm
 								onSubmit={handleSubmitSettings}
 								salonID={salonID}

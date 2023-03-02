@@ -1,12 +1,34 @@
 {
 	"parameter" : {
 		"create" : {
-			"title": "test",
-			"value": "small"
+			"title": "Hair section"
 		},
 		"update" : {
-			"title": "test 123",
-			"value": "medium"
+			"title": "Long Hair section"
+		}
+	},
+	"value": {
+		"create": {
+			"value-1": "Small",
+			"value-2": "Long",
+			"value-3": "Whole"
+		},
+		"update": {
+			"value-1": "Small hair",
+			"value-2": "Long hair",
+			"value-3": "Whole section"
+		}
+	},
+	"value-minutes": {
+		"create": {
+			"value-1": "10",
+			"value-2": "20",
+			"value-3": "60"
+		},
+		"update": {
+			"value-1": "15",
+			"value-2": "25",
+			"value-3": "45"
 		}
 	},
 	"industry": {
@@ -32,5 +54,8 @@
 		"update" : {
 			"title": "test service 123"
 		}
+	},
+	"filter": {
+		"search": "hair length"
 	}
 }

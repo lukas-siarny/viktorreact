@@ -8,7 +8,7 @@
   "category-parameters/{{parameterID}}": "/category-parameters/{{parameterID}}",
   "contact": "/contact",
   "cosmetics": "/cosmetics",
-  "createEntity": "/createEntity",
+  "createEntity": "create",
   "customers": "/customers",
   "customers/create": "/customers/create",
   "customers/{{customerID}}": "/customers/{{customerID}}",

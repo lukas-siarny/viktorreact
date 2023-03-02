@@ -7,8 +7,7 @@ import { SET_CALENDAR_EMPLOYEES } from './calendarEmployeesTypes'
 export const initState = {
 	calendarEmployees: {
 		data: null,
-		options: [],
-		areLoaded: false
+		options: []
 	} as ICalendarEmployeesPayload
 }
 

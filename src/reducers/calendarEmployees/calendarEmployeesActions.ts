@@ -17,7 +17,6 @@ export type ICalendarEmployeesActions = IResetStore | IGetEmployees
 export interface ICalendarEmployeesPayload {
 	data: CalendarEmployee[] | null
 	options: ISelectOptionItem[]
-	areLoaded: boolean
 }
 
 interface IGetEmployees {
@@ -30,8 +29,7 @@ export const setCalendarEmployees =
 	async (dispatch, getState) => {
 		let payload = {
 			data: null,
-			options: [],
-			areLoaded: false
+			options: []
 		} as ICalendarEmployeesPayload
 
 		const newEmployeeIDs: string[] = []
@@ -70,8 +68,7 @@ export const setCalendarEmployees =
 
 		payload = {
 			data: calendarEmployees,
-			options,
-			areLoaded: true
+			options
 		}
 
 		// update state only when new employees are different from currently stored employees

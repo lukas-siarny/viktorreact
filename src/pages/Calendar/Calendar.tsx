@@ -165,7 +165,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const clearConfirmModal = () => setConfirmModalData(null)
 
 	const calendarEmployees = useSelector((state: RootState) => state.calendarEmployees.calendarEmployees || {})
-	const employeesLoading = useSelector((state: RootState) => state.employees.employees.isLoading)
 	const services = useSelector((state: RootState) => state.service.services)
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
 	const monthlyReservations = useSelector((state: RootState) => state.calendar[MONTHLY_RESERVATIONS_KEY])
@@ -258,6 +257,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		fetchInterval.current = interval
 	}
 
+	const initialEmployeesLoad = useRef(true)
+
+	const employeesLoading = initialEmployeesLoad.current && (reservations?.isLoading || shiftsTimeOffs?.isLoading)
 	const loadingData = employeesLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || monthlyReservations?.isLoading || isUpdatingEvent
 	const isLoading = isRefreshingEvents ? false : loadingData
 
@@ -402,6 +404,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} else if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
 				await dispatch(dispatchGetShiftsTimeOff)
 			}
+			initialEmployeesLoad.current = false
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validEventsViewType, validCalendarView]
@@ -457,12 +460,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	useEffect(() => {
 		;(async () => {
 			/**
-			 * v reduxe sa do eventov sa mapuju zamestnanci, preto sa musia dotiahnut predtym nez sa dotiahnu eventy
-			 * ked uz su v reduxe prebehol mapping zamestnancov (calendarEmployees.areLoaded), avsak pole ma nulovu dlzku, je zbytocne robit dalsi request
 			 * ak uzivatel odksrtne vsetkych zamestancov alebo kategorie, zobrazi sa empty state a nie je potrebne dotahovat nove data
 			 */
 
-			if ((calendarEmployees.areLoaded && !calendarEmployees.options?.length) || query?.employeeIDs === null || query?.categoryIDs === null) {
+			if (query?.employeeIDs === null || query?.categoryIDs === null) {
 				return
 			}
 			// fetch new events
@@ -982,7 +983,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							changeCalendarDate={setNewSelectedDate}
 							query={query}
 							setQuery={setQuery}
-							areEmployeesLoaded={calendarEmployees.areLoaded}
+							areEmployeesLoaded={!employeesLoading}
 						/>
 					)}
 				</Layout>

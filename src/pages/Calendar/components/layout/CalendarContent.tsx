@@ -106,7 +106,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	const [t] = useTranslation()
 
-	const employeesOptions = useSelector((state: RootState) => state.employees.employees?.options)
+	const employeesOptions = useSelector((state: RootState) => state.calendarEmployees.calendarEmployees?.options)
 
 	useImperativeHandle(ref, () => ({
 		[CALENDAR_VIEW.DAY]: dayView?.current,

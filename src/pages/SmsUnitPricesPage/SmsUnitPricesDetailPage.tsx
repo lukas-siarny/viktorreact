@@ -16,7 +16,7 @@ import CustomTable from '../../components/CustomTable'
 import SmsUnitPricesForm from './components/SmsUnitPricesForm'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, CREATE_BUTTON_ID } from '../../utils/enums'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, CREATE_BUTTON_ID, D_M_YEAR_FORMAT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
@@ -42,6 +42,7 @@ const SmsUnitPricesDetailPage = () => {
 	const dispatch = useDispatch()
 
 	const [visibleForm, setVisibleForm] = useState<boolean>(false)
+	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 
 	const { countryCode: countryCodeUrlParam } = useParams<{ countryCode: string }>()
 	const countryCode = (countryCodeUrlParam as string).toUpperCase()
@@ -58,11 +59,10 @@ const SmsUnitPricesDetailPage = () => {
 	const smsUnitPrices = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPrices)
 	const currencies = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.CURRENCIES])
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
-	const currenices = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.CURRENCIES])
 
 	const country = countries?.data?.find((item) => item.code === countryCode)
 	const countryName = country?.name
-	const currencySymbol = currenices.data?.find((currency) => currency.code === country?.currencyCode)?.symbol
+	const currencySymbol = currencies.data?.find((currency) => currency.code === country?.currencyCode)?.symbol
 
 	const [backUrl] = useBackUrl(t('paths:sms-credits'))
 
@@ -154,9 +154,10 @@ const SmsUnitPricesDetailPage = () => {
 		}
 	}
 	const handleDelete = async () => {
-		if (!selectedSmsUnitPrice?.id) {
+		if (!selectedSmsUnitPrice?.id || isRemoving) {
 			return
 		}
+		setIsRemoving(true)
 		try {
 			await deleteReq('/api/b2b/admin/enums/sms-unit-prices/{smsUnitPriceID}', { smsUnitPriceID: selectedSmsUnitPrice.id })
 			fetchData()
@@ -165,6 +166,7 @@ const SmsUnitPricesDetailPage = () => {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
 		}
+		setIsRemoving(false)
 	}
 
 	const formClass = cx({
@@ -219,9 +221,9 @@ const SmsUnitPricesDetailPage = () => {
 			render: (_value, record) => {
 				const valueFrom = record.validFrom
 				const valueTo = record.validTo
-				let result = dayjs(valueFrom).format('D.M.YYYY')
+				let result = dayjs(valueFrom).format(D_M_YEAR_FORMAT)
 				if (valueTo) {
-					result = `${result} - ${dayjs(valueTo).format('D.M.YYYY')}`
+					result = `${result} - ${dayjs(valueTo).format(D_M_YEAR_FORMAT)}`
 				} else {
 					result = t('loc:od {{ timeFrom }}', { timeFrom: result })
 				}
@@ -238,7 +240,7 @@ const SmsUnitPricesDetailPage = () => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<Spin spinning={smsUnitPrices?.isLoading}>
+						<Spin spinning={smsUnitPrices?.isLoading || isRemoving}>
 							<div className={'pt-0 flex gap-4 justify-between items-center'}>
 								<h3 className={'text-base whitespace-nowrap'}>{t('loc:Ceny SMS správ')}</h3>
 								<Button

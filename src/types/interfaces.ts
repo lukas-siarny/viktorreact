@@ -167,11 +167,15 @@ export type OpeningHours = {
 	onDemand?: boolean
 }[]
 
+export interface AutocompleteLabelInValue {
+	key: string
+	label: string | null
+	value: string | null
+}
 export interface ISalonForm {
 	salonNameFromSelect: boolean
 	id: string | null
-	name: string | null
-	nameSelect: { key: string; label: string | null; value: string | null } | null
+	name: AutocompleteLabelInValue | string | null
 	aboutUsFirst: string | null
 	state?: SALON_STATES
 	sourceOfPremium?: string

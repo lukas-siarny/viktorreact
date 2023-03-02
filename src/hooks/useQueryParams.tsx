@@ -1,5 +1,5 @@
 import { isArray } from 'lodash'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 export interface IUseQueryParams {
@@ -57,9 +57,8 @@ const serializeInitialParams = (initialValues?: IUseQueryParamsInitial) =>
 		}
 	}, {} as IUseQueryParams)
 
-// z vystupom z tejto funkcie sa dalej pracuje v komponetoch
-// vystupne hodnoty budu mat typy podla typov zadefinonvaych v inicializacnom objekte
-const getInitialParams = (initialValues?: IUseQueryParamsInitial, URLSearchParams?: URLSearchParams) =>
+// merguju sa query parametre z URLcky s query parametrami zadefinovanymi v inicialnom objekte
+const mergeInitialValuesWithURLParams = (initialValues?: IUseQueryParamsInitial, URLSearchParams?: URLSearchParams) =>
 	Object.entries(initialValues || {}).reduce((acc, [key, value]) => {
 		const paramTyme = {
 			paramType: value.paramType,
@@ -116,7 +115,8 @@ const getInitialParams = (initialValues?: IUseQueryParamsInitial, URLSearchParam
 		return { ...acc, [key]: { ...paramTyme, value: URLValue } }
 	}, {} as IUseQueryParamsInitial)
 
-const mapInitialParamsToReturnParams = (initialParams?: IUseQueryParamsInitial): IUseQueryParams => {
+// vrati zjednoduseny objekt bez informacii o typoch query parametrov
+const reduceInitialParams = (initialParams?: IUseQueryParamsInitial): IUseQueryParams => {
 	return Object.entries(initialParams || {}).reduce((acc, [key, value]) => {
 		return {
 			...acc,
@@ -189,26 +189,40 @@ export const NumberParam = (value?: number | null): ParamType => {
  * { foo: undefined } => odstrani queryParam foo z URL
  * { foo: '' } || { foo: [] } || { foo: null } => &foo=
  */
-const useQueryParams = (queryParamsInitial?: IUseQueryParamsInitial): [IUseQueryParams, (newValues: IUseQueryParams) => void] => {
+const useQueryParams = (queryParamsInitial?: IUseQueryParamsInitial, config: NavigateOptions = { replace: true }): [IUseQueryParams, (newValues: IUseQueryParams) => void] => {
 	// prekonvertujeme initial objekt (ktory obsahuje informacie o type query parametru - Array x String) do jednoduchsieho objektu key:value vhodneho pre useSearchParams hook
-	const intialValuesForSearchParams = mapInitialParamsToReturnParams(serializeInitialParams(queryParamsInitial))
+	const intialValuesForSearchParams = reduceInitialParams(serializeInitialParams(queryParamsInitial))
 	const [searchParams, setSearchParams] = useSearchParams(intialValuesForSearchParams)
 
-	// tieto hodnoty uz obsahuju aj zohladene query parametre z URLcky
-	const storedInitialValues = useRef(getInitialParams(queryParamsInitial, searchParams))
+	const getMergedInitialQueryParamsWithURLparams = () => reduceInitialParams(mergeInitialValuesWithURLParams(queryParamsInitial, searchParams))
 
 	// do query nastavime zjednoduseny objekt bez typov, aby sa potom pri volani setQueryParams v komponente nemusli vsade posielat informacie o type, ale len jednoduchy key:value objekt
-	const [query, setQuery] = useState<IUseQueryParams | undefined>(mapInitialParamsToReturnParams(storedInitialValues.current))
+	const [query, setQuery] = useState<IUseQueryParams | undefined>(getMergedInitialQueryParamsWithURLparams())
 
-	// console.log({ intialValuesForSearchParams, queryParamsInitial, query })
+	const init = useRef(true)
+	const onDemand = useRef(false)
 
 	const setQueryParams = useCallback(
 		(newValues?: IUseQueryParams) => {
-			setSearchParams(serializeParams(newValues))
+			onDemand.current = true
+			setSearchParams(serializeParams(newValues), config)
 			setQuery(newValues)
 		},
-		[setSearchParams]
+		[setSearchParams, config]
 	)
+
+	useEffect(() => {
+		// tento useEffect zabezpeci update query aj pri zmene parametrov v URL cez navigaciu v prehliadaci (v pripade, ze je { replace: false } a kazda zmena sa uklada do historie)
+		// pri prvom inite sa to nastavi rovno v state, takze je potrebne sledovat az dalsie zmeny
+		// pri pouziti setovacej funkcie setQuery je potrebne tiez zabranit aby sa nenastavovala query duplicitne
+		if (init.current || onDemand.current) {
+			init.current = false
+			onDemand.current = false
+			return
+		}
+		setQuery(getMergedInitialQueryParamsWithURLparams())
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [searchParams])
 
 	return [query || {}, setQueryParams]
 }

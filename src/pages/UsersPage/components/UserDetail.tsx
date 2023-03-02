@@ -10,10 +10,10 @@ import DeleteButton from '../../../components/DeleteButton'
 
 // reducers
 import { RootState } from '../../../reducers'
-import { getCurrentUser, getUser, logOutUser } from '../../../reducers/users/userActions'
+import { getUser } from '../../../reducers/users/userActions'
 
 // types
-import { IUserAccountForm, ILoadingAndFailure, IUserPayload } from '../../../types/interfaces'
+import { IUserAccountForm } from '../../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq } from '../../../utils/request'
@@ -31,11 +31,12 @@ type Props = {
 	submitPermissions: PERMISSION[]
 	userID: string
 	deleteInProgress?: (progress: boolean) => void
+	onPatchSuccess?: () => void
 }
 
 const UserDetail = (props: Props) => {
 	const [t] = useTranslation()
-	const { userID, onDeleteSuccess, deleteEntityName, ignoreDeletePermissions, submitPermissions, deleteInProgress } = props
+	const { userID, onDeleteSuccess, deleteEntityName, ignoreDeletePermissions, submitPermissions, deleteInProgress, onPatchSuccess } = props
 	const { user } = useSelector((state: RootState) => state.user)
 	const userData = user.data?.user
 	const dispatch = useDispatch()
@@ -77,7 +78,7 @@ const UserDetail = (props: Props) => {
 			}
 
 			await patchReq('/api/b2b/admin/users/{userID}', { userID }, body)
-			// if (!userID || authUser.data?.id === userID) dispatch(getCurrentUser())
+			if (onPatchSuccess) onPatchSuccess()
 			dispatch(initialize(FORM.USER_ACCOUNT, data))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -93,14 +94,6 @@ const UserDetail = (props: Props) => {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/users/{userID}', { userID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			onDeleteSuccess()
-			/**
-			if (isMyAccountPath) {
-				dispatch(logOutUser())
-				// bez tohto navigate ostava user v aplikacii a moze sa snazit urobit nejake akcie, ktore generuju 401 error (az potom by bol redirect na Login)
-				navigate(t('paths:login'))
-			} else {
-				navigate(t('paths:users'))
-			} */
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

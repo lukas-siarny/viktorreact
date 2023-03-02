@@ -146,7 +146,7 @@ const SalonForm: FC<Props> = (props) => {
 								component={AutocompleteField}
 								label={t('loc:Názov')}
 								placeholder={t('loc:Vyhľadajte salón podľa názvu alebo zadajte vlastný')}
-								name={'nameSelect'}
+								name={'name'}
 								filterOption={false}
 								showSearch
 								onDidMountSearch

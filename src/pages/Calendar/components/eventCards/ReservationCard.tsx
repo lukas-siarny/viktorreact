@@ -17,6 +17,7 @@ import { ReactComponent as ServiceIcon } from '../../../../assets/icons/service-
 import { ReactComponent as AvatarIcon } from '../../../../assets/icons/avatar-10.svg'
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-12.svg'
 import { ReactComponent as ClockIcon } from '../../../../assets/icons/clock-12.svg'
+import { ReactComponent as DownloadIcon } from '../../../../assets/icons/download-icon-16.svg'
 
 // types
 import { CalendarEvent, IEventCardProps, ReservationPopoverData, PopoverTriggerPosition } from '../../../../types/interfaces'
@@ -37,14 +38,20 @@ const getIconState = ({
 	isRealized,
 	isApproved,
 	notRealized,
-	service
+	service,
+	isImported
 }: {
 	isPast?: boolean
 	isRealized?: boolean
 	notRealized?: boolean
 	isApproved?: boolean
 	service?: CalendarEvent['service']
+	isImported?: boolean
 }) => {
+	if (isImported) {
+		return <DownloadIcon className={'icon import'} />
+	}
+
 	if (isPast && isApproved) {
 		return <QuestionMarkIcon className={'icon question-mark'} />
 	}
@@ -108,14 +115,18 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		</div>
 	) : null
 
-	const customerName = getAssignedUserLabel({
-		id: customer?.id || '-',
-		firstName: customer?.firstName,
-		lastName: customer?.lastName,
-		email: customer?.email
-	})
+	const title = isImported
+		? t('loc:IMPOROTVANÁ REZERVÁCIA')
+		: getAssignedUserLabel({
+				id: customer?.id || '-',
+				firstName: customer?.firstName,
+				lastName: customer?.lastName,
+				email: customer?.email
+		  })
 
-	const iconState = getIconState({ isPast, isApproved, isRealized, notRealized, service })
+	const description = isImported ? note : service?.name
+
+	const iconState = getIconState({ isPast, isApproved, isRealized, notRealized, service, isImported })
 	const iconPending = isPending && <ClockIcon className={'icon clock'} style={{ color: bgColor }} />
 	const iconAutoAssigned = isEmployeeAutoassigned && <AvatarIcon className={'icon employee'} />
 
@@ -181,7 +192,8 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
 				'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
 				placeholder: isPlaceholder,
-				edit: isEdit || isPlaceholder
+				edit: isEdit || isPlaceholder,
+				'is-imported': isImported
 			})}
 			onClick={handleReservationClick}
 			style={{
@@ -202,23 +214,13 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 			<div id={originalEventData?.id} className={'event-content'}>
 				{(() => {
 					switch (calendarView) {
-						case CALENDAR_VIEW.MONTH:
-							return (
-								<>
-									<div className={'flex gap-1 min-w-0'}>
-										<div className={'icons'}>{iconState}</div>
-										<span className={'title truncate'}>{customerName}</span>
-									</div>
-									<span className={'time'}>{timeText}</span>
-								</>
-							)
 						case CALENDAR_VIEW.WEEK: {
 							return (
 								<>
 									<div className={'title-wrapper'}>
 										<div className={'title-inner-wrapper'}>
 											{iconState}
-											<span className={'title'}>{customerName}</span>
+											<span className={'title'}>{title}</span>
 											{onlineIndicatior}
 										</div>
 										<div className={'icons'}>
@@ -226,7 +228,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 											{iconAutoAssigned}
 										</div>
 									</div>
-									{service?.name && <span className={'desc'}>{service.name}</span>}
+									{description && <span className={'desc'}>{description}</span>}
 								</>
 							)
 						}
@@ -237,7 +239,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 									<div className={'title-wrapper'}>
 										<div className={'title-inner-wrapper'}>
 											{iconState}
-											<span className={'title'}>{customerName}</span>
+											<span className={'title'}>{title}</span>
 											{onlineIndicatior}
 											<span className={'time'}>{timeText}</span>
 										</div>
@@ -247,7 +249,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 										</div>
 									</div>
 									<span className={'time'}>{timeText}</span>
-									{service?.name && <span className={'desc'}>{service.name}</span>}
+									{description && <span className={'desc'}>{description}</span>}
 								</>
 							)
 						}

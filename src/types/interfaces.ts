@@ -271,6 +271,8 @@ export interface ICalendarReservationForm {
 	updateFromCalendar?: boolean
 	noteFromB2CCustomer?: string
 	reservationData?: CalendarEvent['reservationData']
+	isImported?: boolean
+	eventType: CALENDAR_EVENT_TYPE
 }
 export interface ICalendarEventForm {
 	employee: ISelectOptionItem<{
@@ -291,6 +293,7 @@ export interface ICalendarEventForm {
 	calendarBulkEventID?: string
 	revertEvent?: () => void
 	updateFromCalendar?: boolean
+	isImported?: boolean
 }
 
 export interface ICalendarImportedReservationForm {
@@ -298,9 +301,12 @@ export interface ICalendarImportedReservationForm {
 	timeFrom: string
 	timeTo: string
 	note?: string
-	eventId?: string
+	eventId: string
 	revertEvent?: () => void
 	updateFromCalendar?: boolean
+	employee: ISelectOptionItem
+	isImported?: boolean
+	eventType: CALENDAR_EVENT_TYPE
 }
 
 export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null
@@ -467,6 +473,16 @@ export interface ISpecialistContactForm {
 }
 
 export interface ISpecialistContactFilter {
+	search: string
+}
+
+export interface ISmsUnitPricesForm {
+	validFrom: string
+	amount: number
+	countryCode: string
+}
+
+export interface ISmsUnitPricesFilter {
 	search: string
 }
 
@@ -877,6 +893,7 @@ export interface IResourceEmployee {
 	isTimeOff: boolean
 	color?: string
 	description?: string
+	isForImportedEvents?: boolean
 }
 
 export interface IDayViewResourceExtenedProps {

@@ -3,7 +3,7 @@ import { FormErrors } from 'redux-form'
 import { ICalendarImportedReservationForm } from '../../../../types/interfaces'
 import { VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
 
-const validateReservationForm = (values?: ICalendarImportedReservationForm) => {
+const validateImportedReservationForm = (values?: ICalendarImportedReservationForm) => {
 	const errors: FormErrors<ICalendarImportedReservationForm> = {}
 
 	if (!values?.date) {
@@ -25,4 +25,4 @@ const validateReservationForm = (values?: ICalendarImportedReservationForm) => {
 	return errors
 }
 
-export default validateReservationForm
+export default validateImportedReservationForm

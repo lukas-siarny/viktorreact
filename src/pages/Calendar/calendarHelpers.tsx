@@ -36,6 +36,7 @@ import {
 	MONTHLY_RESERVATIONS_KEY,
 	NEW_ID_PREFIX,
 	NOTIFICATION_TYPES,
+	VIRTUAL_EMPLOYEE_IDENTIFICATOR,
 	VIRTUAL_EMPLOYEE_NAME
 } from '../../utils/enums'
 import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
@@ -382,8 +383,9 @@ const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeO
 			  }),
 		color: employee.color,
 		image: employee.image.resizedImages.thumbnail,
-		description: employee.isForImportedEvents ? undefined : description,
-		isTimeOff
+		description,
+		isTimeOff,
+		isForImportedEvents: employee.isForImportedEvents
 	}
 }
 
@@ -526,8 +528,12 @@ export const composeDayViewEvents = (
 	}
 }
 
-export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees: CalendarEmployee[]) => {
-	return employees.map((employee) => {
+export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees: CalendarEmployee[], eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => {
+	return employees.reduce((acc, employee) => {
+		/* if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF && employee.firstName === VIRTUAL_EMPLOYEE_IDENTIFICATOR) {
+			return acc
+		} */
+
 		const employeeShifts: any[] = []
 		const employeeTimeOff: any[] = []
 
@@ -541,7 +547,7 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 			}
 		})
 
-		let description = t('loc:Nenastavená zmena')
+		let description: string | undefined = t('loc:Nenastavená zmena')
 
 		if (employeeShifts.length) {
 			const employeeWorkingHours = employeeShifts.reduce((result, cv, i) => {
@@ -568,13 +574,20 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 			description = t('loc:Voľno')
 		}
 
-		return {
-			id: employee.id,
-			eventBackgroundColor: employee.color,
-			employee: createEmployeeResourceData(employee, !!employeeTimeOff.length, description),
-			title: `${employee.orderIndex}` // used for ordering
+		if (employee.isForImportedEvents) {
+			description = undefined
 		}
-	})
+
+		return [
+			...acc,
+			{
+				id: employee.id,
+				eventBackgroundColor: employee.color,
+				employee: createEmployeeResourceData(employee, !!employeeTimeOff.length, description),
+				title: `${employee.orderIndex}` // used for ordering
+			}
+		]
+	}, [] as any[])
 }
 
 /**
@@ -603,19 +616,31 @@ type WeekDayResource = { id: string; day: string; employee: EmployeeWeekResource
 ]
 */
 
-export const composeWeekResources = (weekDays: string[], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: CalendarEmployee[]): WeekDayResource[] => {
+export const composeWeekResources = (
+	weekDays: string[],
+	shiftsTimeOffs: ICalendarEventsPayload['data'],
+	employees: CalendarEmployee[],
+	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
+): WeekDayResource[] => {
 	return weekDays.reduce((resources, weekDay) => {
 		const timeOffsWeekDay = shiftsTimeOffs?.filter((event) => dayjs(event.start.date).isSame(dayjs(weekDay)) && event.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF)
 
-		const weekDayEmployees = employees.map((employee) => {
-			return {
-				id: getWeekDayResourceID(employee.id, weekDay),
-				eventBackgroundColor: employee.color,
-				day: weekDay,
-				employee: createEmployeeResourceData(employee, !!timeOffsWeekDay?.filter((timeOff) => timeOff.employee?.id === employee.id).length),
-				title: `${employee.orderIndex}` // used for ordering
-			}
-		})
+		const weekDayEmployees = employees.reduce((acc, employee) => {
+			/* if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF && employee.firstName === VIRTUAL_EMPLOYEE_IDENTIFICATOR) {
+				return acc
+			} */
+
+			return [
+				...acc,
+				{
+					id: getWeekDayResourceID(employee.id, weekDay),
+					eventBackgroundColor: employee.color,
+					day: weekDay,
+					employee: createEmployeeResourceData(employee, !!timeOffsWeekDay?.filter((timeOff) => timeOff.employee?.id === employee.id).length),
+					title: `${employee.orderIndex}` // used for ordering
+				}
+			]
+		}, [] as any[])
 		return [...resources, ...weekDayEmployees]
 	}, [] as any[])
 }

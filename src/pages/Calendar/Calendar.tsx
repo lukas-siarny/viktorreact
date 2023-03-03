@@ -632,8 +632,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	)
 
 	const handleSubmitImportedReservation = useCallback(
-		async (values: ICalendarImportedReservationForm, eventId?: string) => {
-			if (!values) {
+		async (values: ICalendarImportedReservationForm) => {
+			const eventId = values?.updateFromCalendar ? values.eventId : query.eventId
+
+			if (!values || !eventId) {
 				return
 			}
 
@@ -656,7 +658,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 				await patchReq(
 					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/imported-reservation',
-					{ salonID, calendarEventID: eventId as string },
+					{ salonID, calendarEventID: eventId },
 					reqData,
 					undefined,
 					NOTIFICATION_TYPE.NOTIFICATION,
@@ -1014,6 +1016,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						onMonthlyReservationClick={onMonthlyReservationClick}
 						handleSubmitReservation={initSubmitReservationData}
 						handleSubmitEvent={initSubmitEventData}
+						handleSubmitImportedReservation={handleSubmitImportedReservation}
 						onAddEvent={handleAddEvent}
 						clearFetchInterval={clearFetchInterval}
 						restartFetchInterval={restartFetchInterval}

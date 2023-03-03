@@ -1,28 +1,23 @@
-import React, { FC, useCallback, useState } from 'react'
+import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { change, Field, Fields, getFormValues, initialize, InjectedFormProps, reduxForm, submit } from 'redux-form'
+import { Field, Fields, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Form, Modal, Spin } from 'antd'
-import cx from 'classnames'
-import { flatten, isEmpty, isNil, map } from 'lodash'
-import dayjs from 'dayjs'
+import { Button, Form, Spin } from 'antd'
 
 // validate
 import validateImportedReservationForm from './validateImportedReservationForm'
 
 // utils
-import { formatLongQueryString, getAssignedUserLabel, getCountryPrefix, optionRenderWithAvatar, showErrorNotification, findNodeInTree } from '../../../../utils/helper'
+import { showErrorNotification } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
-import { getReq, postReq } from '../../../../utils/request'
-import { CALENDAR_EVENT_TYPE, DEFAULT_TIME_FORMAT, ENUMERATIONS_KEYS, FORM, PERMISSION, CREATE_EVENT_PERMISSIONS, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
+import { FORM, CREATE_EVENT_PERMISSIONS, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // types
-import { EmployeeService, ICalendarImportedReservationForm, ICustomerForm, ServiceType } from '../../../../types/interfaces'
+import { ICalendarImportedReservationForm } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as TimerIcon } from '../../../../assets/icons/clock-icon.svg'
 import { ReactComponent as DateSuffixIcon } from '../../../../assets/icons/date-suffix-icon.svg'
-import { ReactComponent as LoadingIcon } from '../../../../assets/icons/loading-icon.svg'
 
 // components
 import DateField from '../../../../atoms/DateField'
@@ -36,7 +31,7 @@ type ComponentProps = {
 	eventId?: string | null
 	loadingData?: boolean
 }
-const formName = FORM.CALENDAR_RESERVATION_FORM
+const formName = FORM.CALENDAR_RESERVATION_FROM_IMPORT_FORM
 
 type Props = InjectedFormProps<ICalendarImportedReservationForm, ComponentProps> & ComponentProps
 
@@ -53,6 +48,7 @@ const ImportedReservationForm: FC<Props> = (props) => {
 			<div className={'nc-sider-event-management-content'} key={eventId}>
 				<Spin spinning={eventDetail.isLoading} size='large'>
 					<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
+						<span className={'nc-tag tag-imported self-start'}>{t('loc:Importovaná rezervácia')}</span>
 						<Field
 							name={'date'}
 							label={t('loc:Dátum')}
@@ -78,7 +74,7 @@ const ImportedReservationForm: FC<Props> = (props) => {
 							suffixIcon={<TimerIcon className={'text-notino-grayDark'} />}
 							size={'large'}
 						/>
-						<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
+						<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} rows={10} />
 					</Form>
 				</Spin>
 			</div>

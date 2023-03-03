@@ -32,7 +32,6 @@ export const setCalendarEmployees =
 			options: []
 		} as ICalendarEmployeesPayload
 
-		const newEmployeeIDs: string[] = []
 		const options: ISelectOptionItem[] = []
 
 		const calendarEmployees: CalendarEmployee[] = (employees || [])
@@ -52,7 +51,6 @@ export const setCalendarEmployees =
 			.sort((a, b) => a.orderIndex - b.orderIndex)
 
 		calendarEmployees.forEach((employee) => {
-			newEmployeeIDs.push(employee.id)
 			options.push({
 				// show name if exist at least last name otherwise show fallback values
 				label: employee?.isForImportedEvents
@@ -72,11 +70,9 @@ export const setCalendarEmployees =
 		}
 
 		// update state only when new employees are different from currently stored employees
-		const currentCalendarEmployeeIDs = getState()
-			.calendarEmployees.calendarEmployees.data?.map((employee) => employee.id)
-			.join('_')
+		const currentCalendarEmployees = getState().calendarEmployees.calendarEmployees.data
 
-		if (currentCalendarEmployeeIDs !== newEmployeeIDs.join('_')) {
+		if (JSON.stringify(currentCalendarEmployees) !== JSON.stringify(calendarEmployees)) {
 			dispatch({ type: SET_CALENDAR_EMPLOYEES, payload })
 		}
 

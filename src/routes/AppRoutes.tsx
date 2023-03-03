@@ -59,6 +59,10 @@ import SpecialistContactsPage from '../pages/SpecialistContactsPage/SpecialistCo
 // Reviews
 import ReviewsPage from '../pages/ReviewsPage/ReviewsPage'
 
+// SMS Credits
+import SmsUnitPricesPage from '../pages/SmsUnitPricesPage/SmsUnitPricesPage'
+import SmsUnitPricesDetailPage from '../pages/SmsUnitPricesPage/SmsUnitPricesDetailPage'
+
 import AppInit from '../components/AppInit'
 
 // 404, 403
@@ -134,6 +138,10 @@ const AppRoutes: FC = () => {
 				</Route>
 				<Route path={t('paths:reviews')} element={<AuthRoute layout={MainLayout} page={PAGE.REVIEWS} />}>
 					<Route index element={<ReviewsPage />} />
+				</Route>
+				<Route path={t('paths:sms-credits')} element={<AuthRoute layout={MainLayout} page={PAGE.SMS_CREDITS} />}>
+					<Route index element={<SmsUnitPricesPage />} />
+					<Route path={':countryCode'} element={<SmsUnitPricesDetailPage />} />
 				</Route>
 				<Route path={'/403'} element={<AuthRoute layout={MainLayout} />}>
 					<Route index element={<ForbiddenPage />} />

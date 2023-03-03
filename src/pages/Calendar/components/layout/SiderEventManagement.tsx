@@ -212,7 +212,18 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 					)
 					break
 				case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
-					dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, {  }))
+					dispatch(
+						initialize(FORM.CALENDAR_RESERVATION_FROM_IMPORT_FORM, {
+							eventId: data.id,
+							date: data.start.date,
+							timeFrom: data.start.time,
+							timeTo: data.end.time,
+							note: data.note,
+							eventType: CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT,
+							employee: initData.employee,
+							isImported: true
+						})
+					)
 					break
 				default:
 					break
@@ -313,11 +324,12 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 	}
 
 	const showTabs = !(eventId || eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) && sidebarView
+	const sidebarTitle = sidebarView === CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT ? CALENDAR_EVENT_TYPE.RESERVATION : sidebarView
 
 	return (
 		<Sider className={cx('nc-sider-event-management', { 'without-tabs': !showTabs })} collapsed={!sidebarView} width={240} collapsedWidth={0}>
 			<div className={'nc-sider-event-management-header justify-between'}>
-				<div className={'font-semibold'}>{eventId ? STRINGS(t).edit(EVENT_NAMES(t, sidebarView)) : STRINGS(t).createRecord(EVENT_NAMES(t, sidebarView))}</div>
+				<div className={'font-semibold'}>{eventId ? STRINGS(t).edit(EVENT_NAMES(t, sidebarTitle)) : STRINGS(t).createRecord(EVENT_NAMES(t, sidebarTitle))}</div>
 				<div className={'flex-center'}>
 					{eventId && (
 						<Permissions

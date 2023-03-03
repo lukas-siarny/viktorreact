@@ -74,8 +74,7 @@ const data: ITestConfig[] = [
 					}
 				]
 			}
-		],
-		isInActive: true
+		]
 	},
 	{
 		role: PERMISSION.NOTINO_ADMIN,
@@ -203,7 +202,7 @@ const data: ITestConfig[] = [
 			password: 'Lopaty123.'
 		},
 		tests: [
-			/* {
+			{
 				name: LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT,
 				actions: []
 			},
@@ -234,7 +233,7 @@ const data: ITestConfig[] = [
 			{
 				name: LIST_OF_TESTS_SUITS.CATEGORIES_CRUD,
 				actions: []
-			}, */
+			},
 			{
 				name: LIST_OF_TESTS_SUITS.SALON,
 				actions: [CRUD_OPERATIONS.READ, CRUD_OPERATIONS.UPDATE],
@@ -265,7 +264,8 @@ const data: ITestConfig[] = [
 					}
 				]
 			}
-		]
+		],
+		isInActive: true
 	}
 ]
 

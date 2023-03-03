@@ -861,6 +861,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: lastName, createdAt
+             * example:
+             * lastName:asc
              */
             export type Order = string;
             export type Page = number;
@@ -878,7 +880,12 @@ declare namespace Paths {
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
             Parameters.SalonID /* uuid */;
-            order?: /* Order attributes: lastName, createdAt */ Parameters.Order;
+            order?: /**
+             * Order attributes: lastName, createdAt
+             * example:
+             * lastName:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -889,10 +896,22 @@ declare namespace Paths {
                     firstName: string;
                     lastName: string;
                     email?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone: string; // ^\d+$
                     gender?: "MALE" | "FEMALE";
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -957,12 +976,24 @@ declare namespace Paths {
                     firstName: string;
                     lastName: string;
                     email?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone: string; // ^\d+$
                     gender?: "MALE" | "FEMALE";
                     note?: string;
                     label?: "NEW" | "VIP" | "LIGHT_BLACKLIST";
                     address: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -1022,6 +1053,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: lastName, createdAt, status, orderIndex
+             * example:
+             * orderIndex:asc
              */
             export type Order = string;
             export type Page = number;
@@ -1050,7 +1083,12 @@ declare namespace Paths {
              */
             Parameters.ServiceID /* uuid */;
             accountState?: Parameters.AccountState;
-            order?: /* Order attributes: lastName, createdAt, status, orderIndex */ Parameters.Order;
+            order?: /**
+             * Order attributes: lastName, createdAt, status, orderIndex
+             * example:
+             * orderIndex:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -1062,7 +1100,15 @@ declare namespace Paths {
                     lastName?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -1157,7 +1203,15 @@ declare namespace Paths {
                     description?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -1208,12 +1262,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -1233,12 +1295,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -1293,7 +1363,15 @@ declare namespace Paths {
                         activateAt?: string; // date-time
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
@@ -1301,7 +1379,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         }[];
                         image?: {
@@ -1316,6 +1394,10 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        /**
+                         * example:
+                         * SK
+                         */
                         assignedCountryCode?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -1340,7 +1422,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                                 }[];
                             };
                         }[];
@@ -1350,7 +1432,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -1676,15 +1758,31 @@ declare namespace Paths {
                 contacts: {
                     id: string; // uuid
                     email?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone: string; // ^\d+$
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode: string;
                     country: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         code: string;
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
+                        /**
+                         * example:
+                         * EUR
+                         */
                         currencyCode?: string;
                         flag?: string;
                         phonePrefix: string;
@@ -1717,15 +1815,31 @@ declare namespace Paths {
                 contact: {
                     id: string; // uuid
                     email?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone: string; // ^\d+$
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode: string;
                     country: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         code: string;
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
+                        /**
+                         * example:
+                         * EUR
+                         */
                         currencyCode?: string;
                         flag?: string;
                         phonePrefix: string;
@@ -1842,12 +1956,20 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 countries: {
+                    /**
+                     * example:
+                     * SK
+                     */
                     code: string;
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
+                    /**
+                     * example:
+                     * EUR
+                     */
                     currencyCode: string | null;
                     flag?: string;
                     phonePrefix: string;
@@ -1876,6 +1998,10 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 currencies: {
+                    /**
+                     * example:
+                     * EUR
+                     */
                     code: string;
                     symbol: string;
                     createdAt: string; // date-time
@@ -1983,17 +2109,32 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            /**
+             * example:
+             * SK
+             */
             export type CountryCode = string;
             export type Limit = number;
             /**
              * Order attributes: validFrom
+             * example:
+             * validFrom:asc
              */
             export type Order = string;
             export type Page = number;
         }
         export interface QueryParameters {
-            countryCode: Parameters.CountryCode;
-            order?: /* Order attributes: validFrom */ Parameters.Order;
+            countryCode: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
+            order?: /**
+             * Order attributes: validFrom
+             * example:
+             * validFrom:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -2006,9 +2147,17 @@ declare namespace Paths {
                     validTo?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                     amount: number; // float
                     country: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         code: string;
                         name?: string;
                         flag?: string;
+                        /**
+                         * example:
+                         * EUR
+                         */
                         currencyCode?: string;
                     };
                 }[];
@@ -2052,9 +2201,17 @@ declare namespace Paths {
                         amount: number; // float
                     };
                     country: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         code: string;
                         name?: string;
                         flag?: string;
+                        /**
+                         * example:
+                         * EUR
+                         */
                         currencyCode?: string;
                     };
                 }[];
@@ -2088,9 +2245,17 @@ declare namespace Paths {
                     validTo?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                     amount: number; // float
                     country: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         code: string;
                         name?: string;
                         flag?: string;
+                        /**
+                         * example:
+                         * EUR
+                         */
                         currencyCode?: string;
                     };
                 };
@@ -2111,10 +2276,18 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            /**
+             * example:
+             * SK
+             */
             export type CountryCode = string;
         }
         export interface QueryParameters {
-            countryCode?: Parameters.CountryCode;
+            countryCode?: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
         }
         namespace Responses {
             export interface $200 {
@@ -2122,23 +2295,63 @@ declare namespace Paths {
                     id: string; // uuid
                     phones: [
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         },
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?
                     ];
@@ -2189,6 +2402,10 @@ declare namespace Paths {
                     note?: string;
                     address?: {
                         id: string; // uuid
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         city?: string;
                         zipCode?: string;
@@ -2196,12 +2413,20 @@ declare namespace Paths {
                         streetNumber?: string;
                     };
                     country: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         code: string;
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
+                        /**
+                         * example:
+                         * EUR
+                         */
                         currencyCode?: string;
                         flag?: string;
                         phonePrefix: string;
@@ -2235,23 +2460,63 @@ declare namespace Paths {
                     id: string; // uuid
                     phones: [
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         },
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?
                     ];
@@ -2301,6 +2566,10 @@ declare namespace Paths {
                         state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                     }[];
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         city?: string;
                         zipCode?: string;
@@ -2308,12 +2577,20 @@ declare namespace Paths {
                         streetNumber?: string;
                     };
                     country: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         code: string;
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
+                        /**
+                         * example:
+                         * EUR
+                         */
                         currencyCode?: string;
                         flag?: string;
                         phonePrefix: string;
@@ -2336,10 +2613,18 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            /**
+             * example:
+             * SK
+             */
             export type CountryCode = string | null;
         }
         export interface QueryParameters {
-            countryCode?: Parameters.CountryCode;
+            countryCode?: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
         }
         namespace Responses {
             export interface $200 {
@@ -2377,6 +2662,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            /**
+             * example:
+             * SK
+             */
             export type CountryCode = string | null;
             export type Month = null | number;
             export type Year = number;
@@ -2384,7 +2673,11 @@ declare namespace Paths {
         export interface QueryParameters {
             month?: Parameters.Month;
             year: Parameters.Year;
-            countryCode?: Parameters.CountryCode;
+            countryCode?: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
         }
         namespace Responses {
             export interface $200 {
@@ -2413,6 +2706,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            /**
+             * example:
+             * SK
+             */
             export type CountryCode = string | null;
             export type Month = null | number;
             export type Year = number;
@@ -2420,7 +2717,11 @@ declare namespace Paths {
         export interface QueryParameters {
             month?: Parameters.Month;
             year: Parameters.Year;
-            countryCode?: Parameters.CountryCode;
+            countryCode?: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
         }
         namespace Responses {
             export interface $200 {
@@ -2449,6 +2750,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            /**
+             * example:
+             * SK
+             */
             export type CountryCode = string | null;
             export type Month = null | number;
             export type Year = number;
@@ -2456,7 +2761,11 @@ declare namespace Paths {
         export interface QueryParameters {
             month?: Parameters.Month;
             year: Parameters.Year;
-            countryCode?: Parameters.CountryCode;
+            countryCode?: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
         }
         namespace Responses {
             export interface $200 {
@@ -2488,9 +2797,15 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: toxicityScore
+             * example:
+             * toxicityScore:desc
              */
             export type Order = string;
             export type Page = number;
+            /**
+             * example:
+             * SK
+             */
             export type SalonCountryCode = string;
             export type Search = string | null;
             export type ToxicityScoreFrom = number; // float
@@ -2501,10 +2816,19 @@ declare namespace Paths {
             search?: Parameters.Search;
             verificationStatus?: Parameters.VerificationStatus;
             deleted?: Parameters.Deleted;
-            salonCountryCode?: Parameters.SalonCountryCode;
+            salonCountryCode?: /**
+             * example:
+             * SK
+             */
+            Parameters.SalonCountryCode;
             toxicityScoreFrom?: Parameters.ToxicityScoreFrom /* float */;
             toxicityScoreTo?: Parameters.ToxicityScoreTo /* float */;
-            order?: /* Order attributes: toxicityScore */ Parameters.Order;
+            order?: /**
+             * Order attributes: toxicityScore
+             * example:
+             * toxicityScore:desc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -2633,7 +2957,7 @@ declare namespace Paths {
                     }[];
                     permissions: {
                         id: string; // uuid
-                        name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                        name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                     }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -2668,7 +2992,7 @@ declare namespace Paths {
                     }[];
                     permissions: {
                         id: string; // uuid
-                        name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                        name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                     }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -2693,6 +3017,10 @@ declare namespace Paths {
             export type AcceptLanguage = string;
             export type AssignedUserID = string; // uuid
             export type CategoryFirstLevelIDs = string /* uuid */[];
+            /**
+             * example:
+             * SK
+             */
             export type CountryCode = string;
             export type CreateType = "NON_BASIC" | "BASIC";
             export type HasSetOpeningHours = boolean;
@@ -2701,6 +3029,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: name, fillingProgress, createdAt
+             * example:
+             * createdAt:desc
              */
             export type Order = string;
             export type Page = number;
@@ -2714,7 +3044,11 @@ declare namespace Paths {
             search?: Parameters.Search;
             categoryFirstLevelIDs?: Parameters.CategoryFirstLevelIDs;
             statuses?: Parameters.Statuses;
-            countryCode?: Parameters.CountryCode;
+            countryCode?: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
             pendingPublication?: Parameters.PendingPublication;
             createType?: Parameters.CreateType;
             sourceType?: Parameters.SourceType;
@@ -2723,7 +3057,12 @@ declare namespace Paths {
             hasSetOpeningHours?: Parameters.HasSetOpeningHours;
             assignedUserID?: Parameters.AssignedUserID /* uuid */;
             premiumSourceUserType?: Parameters.PremiumSourceUserType;
-            order?: /* Order attributes: name, fillingProgress, createdAt */ Parameters.Order;
+            order?: /**
+             * Order attributes: name, fillingProgress, createdAt
+             * example:
+             * createdAt:desc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -2736,10 +3075,22 @@ declare namespace Paths {
                     name?: string;
                     email?: string;
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -2808,10 +3159,22 @@ declare namespace Paths {
                     email?: string; // email
                     aboutUsFirst?: string;
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -2857,10 +3220,22 @@ declare namespace Paths {
                     email?: string; // email
                     aboutUsFirst?: string;
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -2890,6 +3265,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: userLastName, userEmail, salonName, createdAt
+             * example:
+             * userLastName:asc
              */
             export type Order = string;
             export type Page = number;
@@ -2897,7 +3274,12 @@ declare namespace Paths {
         }
         export interface QueryParameters {
             search?: Parameters.Search;
-            order?: /* Order attributes: userLastName, userEmail, salonName, createdAt */ Parameters.Order;
+            order?: /**
+             * Order attributes: userLastName, userEmail, salonName, createdAt
+             * example:
+             * userLastName:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -2909,10 +3291,22 @@ declare namespace Paths {
                         name?: string;
                         email?: string; // email
                         phones: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         address?: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             countryCode?: string;
                             zipCode?: string;
                             city?: string;
@@ -2924,7 +3318,15 @@ declare namespace Paths {
                         id: string; // uuid
                         fullName?: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                     };
                 }[];
@@ -3013,6 +3415,10 @@ declare namespace Paths {
                         note: string;
                     };
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -3022,7 +3428,15 @@ declare namespace Paths {
                         longitude?: number; // float
                     };
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     email?: string;
@@ -3203,10 +3617,22 @@ declare namespace Paths {
                         email?: string;
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                     };
                     companyInvoiceAddress?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -3223,6 +3649,10 @@ declare namespace Paths {
                         name?: string;
                         aboutUsFirst?: string;
                         address?: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             countryCode?: string;
                             zipCode?: string;
                             city?: string;
@@ -3232,7 +3662,15 @@ declare namespace Paths {
                             longitude?: number; // float
                         };
                         phones: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         email?: string;
@@ -3294,6 +3732,9 @@ declare namespace Paths {
                         }[];
                     };
                     premiumSourceUserType?: "NOTINO" | "PARTNER";
+                    wallet?: {
+                        id: string; // uuid
+                    };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -3328,11 +3769,23 @@ declare namespace Paths {
                     description?: string;
                     businessID?: string;
                     phones?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     email?: string;
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -3630,12 +4083,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -3648,7 +4109,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                         note?: string;
                         profileImage: {
@@ -3734,12 +4203,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -3752,7 +4229,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                         note?: string;
                         profileImage: {
@@ -4326,6 +4811,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: startDate
+             * example:
+             * startDate:asc
              */
             export type Order = string;
             export type Page = number;
@@ -4345,7 +4832,12 @@ declare namespace Paths {
             reservationStates?: Parameters.ReservationStates;
             reservationCreateSourceType?: Parameters.ReservationCreateSourceType;
             reservationPaymentMethods?: Parameters.ReservationPaymentMethods;
-            order?: /* Order attributes: startDate */ Parameters.Order;
+            order?: /**
+             * Order attributes: startDate
+             * example:
+             * startDate:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -4388,12 +4880,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -4406,7 +4906,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                         note?: string;
                         profileImage: {
@@ -4590,6 +5098,80 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2BAdminSalonsSalonIdNotificationsSmsHistory {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type DateFrom = string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            export type DateTo = string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            export type Limit = number;
+            /**
+             * Order attributes: createdAt
+             * example:
+             * createdAt:desc
+             */
+            export type Order = string;
+            export type Page = number;
+            export type SalonID = string; // uuid
+            export type Search = string | null;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            search?: Parameters.Search;
+            dateFrom: Parameters.DateFrom /* ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$ */;
+            dateTo: Parameters.DateTo /* ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$ */;
+            order?: /**
+             * Order attributes: createdAt
+             * example:
+             * createdAt:desc
+             */
+            Parameters.Order;
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                smsNotificationsHistory: {
+                    id: string; // uuid
+                    status: "SUCCESS" | "FAILURE" | "IGNORED";
+                    content: {
+                        content: string;
+                    };
+                    recipient: {
+                        phone: string;
+                    };
+                    notification: {
+                        id: string; // uuid
+                        notificationEventType: "RESERVATION_CONFIRMED_CUSTOMER" | "RESERVATION_CHANGED_CUSTOMER" | "RESERVATION_REJECTED_CUSTOMER" | "RESERVATION_REMINDER_CUSTOMER";
+                    };
+                    transaction?: {
+                        id: string; // uuid
+                        formattedAmount: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
+                };
+            }
+        }
+    }
     namespace GetApiB2BAdminSalonsSalonIdNotificationsSmsSendReport {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -4646,6 +5228,116 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2BAdminSalonsSalonIdNotificationsSmsStats {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                smsNotificationsStats: {
+                    totalSentSmsCount: number;
+                    formattedTotalSpentTransactionAmount: string;
+                };
+                currentSmsUnitPrice: {
+                    id: string; // uuid
+                    formattedAmount: string;
+                };
+            }
+        }
+    }
+    namespace GetApiB2BAdminSalonsSalonIdNotificationsSmsTimeStats {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type Month = number;
+            export type SalonID = string; // uuid
+            export type Year = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            month: Parameters.Month;
+            year: Parameters.Year;
+        }
+        namespace Responses {
+            export interface $200 {
+                ranges: {
+                    [name: string]: {
+                        totalSentSmsCount: number;
+                        formattedTotalSpentTransactionAmount: string;
+                        currentSmsUnitPrice?: {
+                            id: string; // uuid
+                            formattedAmount: string;
+                        };
+                    };
+                };
+            }
+        }
+    }
+    namespace GetApiB2BAdminSalonsSalonIdWalletsWalletId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+            export type WalletID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            walletID: Parameters.WalletID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                wallet: {
+                    id: string; // uuid
+                    availableBalance: number; // float
+                    currency: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        code: string;
+                        symbol: string;
+                    };
+                };
+            }
+        }
+    }
     namespace GetApiB2BAdminServices {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -4691,12 +5383,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -4716,12 +5416,20 @@ declare namespace Paths {
                                                     durationFrom?: number;
                                                     durationTo?: number;
                                                     priceFrom?: {
+                                                        /**
+                                                         * example:
+                                                         * EUR
+                                                         */
                                                         currency: string;
                                                         currencySymbol: string;
                                                         exponent: number;
                                                         significand: number;
                                                     };
                                                     priceTo?: {
+                                                        /**
+                                                         * example:
+                                                         * EUR
+                                                         */
                                                         currency: string;
                                                         currencySymbol: string;
                                                         exponent: number;
@@ -4734,12 +5442,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -4816,12 +5532,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -4841,12 +5565,20 @@ declare namespace Paths {
                                 durationFrom?: number;
                                 durationTo?: number;
                                 priceFrom?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
                                 priceTo?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
@@ -4859,12 +5591,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -4899,12 +5639,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -4924,12 +5672,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -4942,12 +5698,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -4998,6 +5762,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: fullName, email, lastAccess, activatedAt, roleName
+             * example:
+             * fullName:asc
              */
             export type Order = string;
             export type Page = number;
@@ -5007,7 +5773,12 @@ declare namespace Paths {
         export interface QueryParameters {
             roleID?: Parameters.RoleID /* uuid */;
             search?: Parameters.Search;
-            order?: /* Order attributes: fullName, email, lastAccess, activatedAt, roleName */ Parameters.Order;
+            order?: /**
+             * Order attributes: fullName, email, lastAccess, activatedAt, roleName
+             * example:
+             * fullName:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -5020,8 +5791,20 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     roles: {
                         id: string; // uuid
@@ -5111,7 +5894,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -5119,7 +5910,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -5134,6 +5925,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -5158,7 +5953,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                         employeeIcsLink: string;
@@ -5236,7 +6031,7 @@ declare namespace Paths {
                         }[];
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -5272,6 +6067,41 @@ declare namespace Paths {
             export type $200 = any;
         }
     }
+    namespace GetApiB2BV1Config {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        namespace Responses {
+            export interface $200 {
+                assets: {
+                    onboardingImages: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                        visible: boolean;
+                    }[];
+                };
+            }
+        }
+    }
     namespace GetApiB2BV1Customers {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -5289,6 +6119,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: lastName, createdAt
+             * example:
+             * lastName:asc
              */
             export type Order = string;
             export type Page = number;
@@ -5306,7 +6138,12 @@ declare namespace Paths {
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
             Parameters.SalonID /* uuid */;
-            order?: /* Order attributes: lastName, createdAt */ Parameters.Order;
+            order?: /**
+             * Order attributes: lastName, createdAt
+             * example:
+             * lastName:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -5317,10 +6154,22 @@ declare namespace Paths {
                     firstName: string;
                     lastName: string;
                     email?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone: string; // ^\d+$
                     gender?: "MALE" | "FEMALE";
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -5385,12 +6234,24 @@ declare namespace Paths {
                     firstName: string;
                     lastName: string;
                     email?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone: string; // ^\d+$
                     gender?: "MALE" | "FEMALE";
                     note?: string;
                     label?: "NEW" | "VIP" | "LIGHT_BLACKLIST";
                     address: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -5450,6 +6311,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: lastName, createdAt, status
+             * example:
+             * createdAt:desc
              */
             export type Order = string;
             export type Page = number;
@@ -5478,7 +6341,12 @@ declare namespace Paths {
             Parameters.ServiceID /* uuid */;
             accountState?: Parameters.AccountState;
             search?: Parameters.Search;
-            order?: /* Order attributes: lastName, createdAt, status */ Parameters.Order;
+            order?: /**
+             * Order attributes: lastName, createdAt, status
+             * example:
+             * createdAt:desc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -5490,7 +6358,15 @@ declare namespace Paths {
                     lastName?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -5575,7 +6451,15 @@ declare namespace Paths {
                     description?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -5626,12 +6510,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -5651,12 +6543,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -5711,7 +6611,15 @@ declare namespace Paths {
                         activateAt?: string; // date-time
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
@@ -5719,7 +6627,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         }[];
                         image?: {
@@ -5734,6 +6642,10 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        /**
+                         * example:
+                         * SK
+                         */
                         assignedCountryCode?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -5758,7 +6670,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                                 }[];
                             };
                         }[];
@@ -5768,7 +6680,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -6008,15 +6920,31 @@ declare namespace Paths {
                 contacts: {
                     id: string; // uuid
                     email?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone: string; // ^\d+$
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode: string;
                     country: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         code: string;
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
+                        /**
+                         * example:
+                         * EUR
+                         */
                         currencyCode?: string;
                         flag?: string;
                         phonePrefix: string;
@@ -6133,12 +7061,20 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 countries: {
+                    /**
+                     * example:
+                     * SK
+                     */
                     code: string;
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
+                    /**
+                     * example:
+                     * EUR
+                     */
                     currencyCode: string | null;
                     flag?: string;
                     phonePrefix: string;
@@ -6167,6 +7103,10 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 currencies: {
+                    /**
+                     * example:
+                     * EUR
+                     */
                     code: string;
                     symbol: string;
                     createdAt: string; // date-time
@@ -6274,10 +7214,18 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            /**
+             * example:
+             * SK
+             */
             export type CountryCode = string;
         }
         export interface QueryParameters {
-            countryCode?: Parameters.CountryCode;
+            countryCode?: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
         }
         namespace Responses {
             export interface $200 {
@@ -6285,23 +7233,63 @@ declare namespace Paths {
                     id: string; // uuid
                     phones: [
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         },
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?,
                         {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }?
                     ];
@@ -6352,6 +7340,10 @@ declare namespace Paths {
                     note?: string;
                     address?: {
                         id: string; // uuid
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         city?: string;
                         zipCode?: string;
@@ -6359,12 +7351,20 @@ declare namespace Paths {
                         streetNumber?: string;
                     };
                     country: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         code: string;
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
+                        /**
+                         * example:
+                         * EUR
+                         */
                         currencyCode?: string;
                         flag?: string;
                         phonePrefix: string;
@@ -6403,7 +7403,7 @@ declare namespace Paths {
                     }[];
                     permissions: {
                         id: string; // uuid
-                        name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                        name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                     }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -6450,7 +7450,15 @@ declare namespace Paths {
                         isCover: boolean;
                     }[];
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     logo?: {
@@ -6466,6 +7474,10 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -6516,10 +7528,22 @@ declare namespace Paths {
                     email?: string; // email
                     aboutUsFirst?: string;
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -6565,10 +7589,22 @@ declare namespace Paths {
                     email?: string; // email
                     aboutUsFirst?: string;
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -6632,6 +7668,10 @@ declare namespace Paths {
                     };
                     address?: {
                         id: string; // uuid
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -6740,12 +7780,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -7259,7 +8307,15 @@ declare namespace Paths {
                     parkingNote?: string;
                     phones: {
                         id: string; // uuid
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     payByCard?: boolean;
@@ -7476,6 +8532,10 @@ declare namespace Paths {
                         aboutUsFirst?: string;
                     };
                     addressSegment?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -7487,12 +8547,24 @@ declare namespace Paths {
                         locationNote?: string;
                     };
                     currencySegment?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
                         code: string;
                         symbol: string;
                     };
                     contactInfoSegment?: {
                         phones: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         email?: string;
@@ -7512,10 +8584,22 @@ declare namespace Paths {
                         email?: string;
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                     };
                     companyInvoiceAddressSegment?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -7986,6 +9070,9 @@ declare namespace Paths {
                             employeeDelete: boolean;
                         };
                     };
+                    wallet?: {
+                        id: string; // uuid
+                    };
                     createdAt?: string; // date-time
                     updatedAt?: string; // date-time
                     deletedAt?: string; // date-time
@@ -8020,11 +9107,23 @@ declare namespace Paths {
                     description?: string;
                     businessID?: string;
                     phones?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     email?: string;
                     address?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -8322,12 +9421,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -8340,7 +9447,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                         note?: string;
                         profileImage: {
@@ -8426,12 +9541,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -8444,7 +9567,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                         note?: string;
                         profileImage: {
@@ -8748,6 +9879,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: startDate
+             * example:
+             * startDate:asc
              */
             export type Order = string;
             export type Page = number;
@@ -8767,7 +9900,12 @@ declare namespace Paths {
             reservationStates?: Parameters.ReservationStates;
             reservationCreateSourceType?: Parameters.ReservationCreateSourceType;
             reservationPaymentMethods?: Parameters.ReservationPaymentMethods;
-            order?: /* Order attributes: startDate */ Parameters.Order;
+            order?: /**
+             * Order attributes: startDate
+             * example:
+             * startDate:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -8810,12 +9948,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -8828,7 +9974,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                         note?: string;
                         profileImage: {
@@ -8953,6 +10107,44 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2BV1SalonsSalonIdWalletsWalletId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+            export type WalletID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            walletID: Parameters.WalletID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                wallet: {
+                    id: string; // uuid
+                    availableBalance: number; // float
+                    currency: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        code: string;
+                        symbol: string;
+                    };
+                };
+            }
+        }
+    }
     namespace GetApiB2BV1Services {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -8998,12 +10190,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -9023,12 +10223,20 @@ declare namespace Paths {
                                                     durationFrom?: number;
                                                     durationTo?: number;
                                                     priceFrom?: {
+                                                        /**
+                                                         * example:
+                                                         * EUR
+                                                         */
                                                         currency: string;
                                                         currencySymbol: string;
                                                         exponent: number;
                                                         significand: number;
                                                     };
                                                     priceTo?: {
+                                                        /**
+                                                         * example:
+                                                         * EUR
+                                                         */
                                                         currency: string;
                                                         currencySymbol: string;
                                                         exponent: number;
@@ -9041,12 +10249,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -9123,12 +10339,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -9148,12 +10372,20 @@ declare namespace Paths {
                                 durationFrom?: number;
                                 durationTo?: number;
                                 priceFrom?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
                                 priceTo?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
@@ -9166,12 +10398,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -9206,12 +10446,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -9231,12 +10479,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -9249,12 +10505,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -9358,7 +10622,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -9366,7 +10638,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -9381,6 +10653,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -9405,7 +10681,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                         employeeIcsLink: string;
@@ -9483,7 +10759,7 @@ declare namespace Paths {
                         }[];
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -9533,12 +10809,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -9551,7 +10835,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -9624,7 +10916,15 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         formattedAddress?: string;
@@ -9674,12 +10974,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -9711,7 +11019,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -9791,10 +11107,22 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         address?: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             countryCode?: string;
                             zipCode?: string;
                             city?: string;
@@ -9852,12 +11180,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -9870,7 +11206,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -9943,7 +11287,15 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         formattedAddress?: string;
@@ -10001,12 +11353,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -10019,7 +11379,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -10092,7 +11460,15 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         formattedAddress?: string;
@@ -10495,12 +11871,20 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 countries: {
+                    /**
+                     * example:
+                     * SK
+                     */
                     code: string;
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
+                    /**
+                     * example:
+                     * EUR
+                     */
                     currencyCode: string | null;
                     flag?: string;
                     phonePrefix: string;
@@ -10612,6 +11996,8 @@ declare namespace Paths {
             export type Limit = number;
             /**
              * Order attributes: createdAt
+             * example:
+             * createdAt:desc
              */
             export type Order = string;
             export type Page = number;
@@ -10619,7 +12005,12 @@ declare namespace Paths {
         export interface QueryParameters {
             limit?: Parameters.Limit;
             page?: Parameters.Page;
-            order?: /* Order attributes: createdAt */ Parameters.Order;
+            order?: /**
+             * Order attributes: createdAt
+             * example:
+             * createdAt:desc
+             */
+            Parameters.Order;
         }
         namespace Responses {
             export interface $200 {
@@ -10647,6 +12038,8 @@ declare namespace Paths {
                     };
                     createdAt: string; // date-time
                 }[];
+                hasUnreadNotification: boolean;
+                countUnreadNotifications: number; // float
                 pagination: {
                     limit: number;
                     page: number;
@@ -10684,6 +12077,8 @@ declare namespace Paths {
             export type OpeningHoursStatus = "ALL" | "OPEN" | "CLOSED";
             /**
              * Order attributes: distance, rating, priceLevel
+             * example:
+             * distance:asc
              */
             export type Order = string;
             export type Page = number;
@@ -10704,7 +12099,12 @@ declare namespace Paths {
             cosmeticIDs?: Parameters.CosmeticIDs;
             liked?: Parameters.Liked;
             createType?: Parameters.CreateType;
-            order?: /* Order attributes: distance, rating, priceLevel */ Parameters.Order;
+            order?: /**
+             * Order attributes: distance, rating, priceLevel
+             * example:
+             * distance:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -10754,6 +12154,10 @@ declare namespace Paths {
                         street?: string;
                         city?: string;
                         zipCode?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                     };
                     openingHoursData?: {
@@ -10846,6 +12250,10 @@ declare namespace Paths {
                         street?: string;
                         city?: string;
                         zipCode?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                     };
                     openingHoursData?: {
@@ -10898,6 +12306,10 @@ declare namespace Paths {
                         street?: string;
                         city?: string;
                         zipCode?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                     };
                     openingHoursData?: {
@@ -11093,6 +12505,10 @@ declare namespace Paths {
                             street?: string;
                             city?: string;
                             zipCode?: string;
+                            /**
+                             * example:
+                             * SK
+                             */
                             countryCode?: string;
                         };
                         openingHoursData?: {
@@ -11160,6 +12576,10 @@ declare namespace Paths {
                     };
                     address?: {
                         id: string; // uuid
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -11268,12 +12688,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -11787,7 +13215,15 @@ declare namespace Paths {
                     parkingNote?: string;
                     phones: {
                         id: string; // uuid
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     payByCard?: boolean;
@@ -12072,12 +13508,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -12097,12 +13541,20 @@ declare namespace Paths {
                                                     durationFrom?: number;
                                                     durationTo?: number;
                                                     priceFrom?: {
+                                                        /**
+                                                         * example:
+                                                         * EUR
+                                                         */
                                                         currency: string;
                                                         currencySymbol: string;
                                                         exponent: number;
                                                         significand: number;
                                                     };
                                                     priceTo?: {
+                                                        /**
+                                                         * example:
+                                                         * EUR
+                                                         */
                                                         currency: string;
                                                         currencySymbol: string;
                                                         exponent: number;
@@ -12243,12 +13695,20 @@ declare namespace Paths {
                                 durationFrom?: number;
                                 durationTo?: number;
                                 priceFrom?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
                                 priceTo?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
@@ -12261,12 +13721,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -12309,12 +13777,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -12327,12 +13803,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -12406,12 +13890,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -12424,7 +13916,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -12497,7 +13997,15 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         formattedAddress?: string;
@@ -12547,12 +14055,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -12584,7 +14100,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -12664,10 +14188,22 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         address?: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             countryCode?: string;
                             zipCode?: string;
                             city?: string;
@@ -12725,12 +14261,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -12743,7 +14287,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -12816,7 +14368,15 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         formattedAddress?: string;
@@ -12874,12 +14434,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -12892,7 +14460,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -12965,7 +14541,15 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         formattedAddress?: string;
@@ -13327,12 +14911,20 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 countries: {
+                    /**
+                     * example:
+                     * SK
+                     */
                     code: string;
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
+                    /**
+                     * example:
+                     * EUR
+                     */
                     currencyCode: string | null;
                     flag?: string;
                     phonePrefix: string;
@@ -13455,6 +15047,8 @@ declare namespace Paths {
             export type OpeningHoursStatus = "ALL" | "OPEN" | "CLOSED";
             /**
              * Order attributes: distance, rating, priceLevel
+             * example:
+             * distance:asc
              */
             export type Order = string;
             export type Page = number;
@@ -13475,7 +15069,12 @@ declare namespace Paths {
             cosmeticIDs?: Parameters.CosmeticIDs;
             liked?: Parameters.Liked;
             createType?: Parameters.CreateType;
-            order?: /* Order attributes: distance, rating, priceLevel */ Parameters.Order;
+            order?: /**
+             * Order attributes: distance, rating, priceLevel
+             * example:
+             * distance:asc
+             */
+            Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
         }
@@ -13525,6 +15124,10 @@ declare namespace Paths {
                         street?: string;
                         city?: string;
                         zipCode?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                     };
                     openingHoursData?: {
@@ -13617,6 +15220,10 @@ declare namespace Paths {
                         street?: string;
                         city?: string;
                         zipCode?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                     };
                     openingHoursData?: {
@@ -13669,6 +15276,10 @@ declare namespace Paths {
                         street?: string;
                         city?: string;
                         zipCode?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                     };
                     openingHoursData?: {
@@ -13864,6 +15475,10 @@ declare namespace Paths {
                             street?: string;
                             city?: string;
                             zipCode?: string;
+                            /**
+                             * example:
+                             * SK
+                             */
                             countryCode?: string;
                         };
                         openingHoursData?: {
@@ -14121,12 +15736,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -14146,12 +15769,20 @@ declare namespace Paths {
                                                     durationFrom?: number;
                                                     durationTo?: number;
                                                     priceFrom?: {
+                                                        /**
+                                                         * example:
+                                                         * EUR
+                                                         */
                                                         currency: string;
                                                         currencySymbol: string;
                                                         exponent: number;
                                                         significand: number;
                                                     };
                                                     priceTo?: {
+                                                        /**
+                                                         * example:
+                                                         * EUR
+                                                         */
                                                         currency: string;
                                                         currencySymbol: string;
                                                         exponent: number;
@@ -14306,6 +15937,10 @@ declare namespace Paths {
                     };
                     address?: {
                         id: string; // uuid
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -14414,12 +16049,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -14933,7 +16576,15 @@ declare namespace Paths {
                     parkingNote?: string;
                     phones: {
                         id: string; // uuid
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     payByCard?: boolean;
@@ -15014,12 +16665,20 @@ declare namespace Paths {
                                 durationFrom?: number;
                                 durationTo?: number;
                                 priceFrom?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
                                 priceTo?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
@@ -15032,12 +16691,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -15080,12 +16747,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -15098,12 +16773,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -15616,7 +17299,15 @@ declare namespace Paths {
                     description?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -15667,12 +17358,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -15692,12 +17391,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -15752,7 +17459,15 @@ declare namespace Paths {
                         activateAt?: string; // date-time
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
@@ -15760,7 +17475,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         }[];
                         image?: {
@@ -15775,6 +17490,10 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        /**
+                         * example:
+                         * SK
+                         */
                         assignedCountryCode?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -15799,7 +17518,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                                 }[];
                             };
                         }[];
@@ -15809,7 +17528,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -15901,7 +17620,15 @@ declare namespace Paths {
                     description?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -15952,12 +17679,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -15977,12 +17712,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -16037,7 +17780,15 @@ declare namespace Paths {
                         activateAt?: string; // date-time
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
@@ -16045,7 +17796,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         }[];
                         image?: {
@@ -16060,6 +17811,10 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        /**
+                         * example:
+                         * SK
+                         */
                         assignedCountryCode?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -16084,7 +17839,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                                 }[];
                             };
                         }[];
@@ -16094,7 +17849,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -20119,7 +21874,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
             descriptionLocalizations?: ({
                 /**
@@ -20142,7 +21897,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
             /**
              * example:
@@ -20251,7 +22006,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
             /**
              * example:
@@ -20328,7 +22083,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
         }
         namespace Responses {
@@ -20476,7 +22231,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
             /**
              * example:
@@ -21238,10 +22993,22 @@ declare namespace Paths {
                     name?: string;
                     email?: string; // email
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     address: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -30872,12 +32639,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -30897,12 +32672,20 @@ declare namespace Paths {
                                 durationFrom?: number;
                                 durationTo?: number;
                                 priceFrom?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
                                 priceTo?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
@@ -30915,12 +32698,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -30955,12 +32746,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -30980,12 +32779,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -30998,12 +32805,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -31101,7 +32916,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -31109,7 +32932,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -31124,6 +32947,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -31148,7 +32975,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -31518,7 +33345,15 @@ declare namespace Paths {
                     description?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -31569,12 +33404,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -31594,12 +33437,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -31654,7 +33505,15 @@ declare namespace Paths {
                         activateAt?: string; // date-time
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
@@ -31662,7 +33521,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         }[];
                         image?: {
@@ -31677,6 +33536,10 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        /**
+                         * example:
+                         * SK
+                         */
                         assignedCountryCode?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -31701,7 +33564,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                                 }[];
                             };
                         }[];
@@ -31711,7 +33574,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -31803,7 +33666,15 @@ declare namespace Paths {
                     description?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -31854,12 +33725,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -31879,12 +33758,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -31939,7 +33826,15 @@ declare namespace Paths {
                         activateAt?: string; // date-time
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
@@ -31947,7 +33842,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         }[];
                         image?: {
@@ -31962,6 +33857,10 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        /**
+                         * example:
+                         * SK
+                         */
                         assignedCountryCode?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -31986,7 +33885,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                                 }[];
                             };
                         }[];
@@ -31996,7 +33895,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -36579,6 +38478,10 @@ declare namespace Paths {
                         aboutUsFirst?: string;
                     };
                     addressSegment?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -36590,12 +38493,24 @@ declare namespace Paths {
                         locationNote?: string;
                     };
                     currencySegment?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
                         code: string;
                         symbol: string;
                     };
                     contactInfoSegment?: {
                         phones: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         email?: string;
@@ -36615,10 +38530,22 @@ declare namespace Paths {
                         email?: string;
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                     };
                     companyInvoiceAddressSegment?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -37089,6 +39016,9 @@ declare namespace Paths {
                             employeeDelete: boolean;
                         };
                     };
+                    wallet?: {
+                        id: string; // uuid
+                    };
                     createdAt?: string; // date-time
                     updatedAt?: string; // date-time
                     deletedAt?: string; // date-time
@@ -37168,10 +39098,22 @@ declare namespace Paths {
                     name?: string;
                     email?: string; // email
                     phones: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     }[];
                     address: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -37761,6 +39703,10 @@ declare namespace Paths {
                         aboutUsFirst?: string;
                     };
                     addressSegment?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -37772,12 +39718,24 @@ declare namespace Paths {
                         locationNote?: string;
                     };
                     currencySegment?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
                         code: string;
                         symbol: string;
                     };
                     contactInfoSegment?: {
                         phones: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         email?: string;
@@ -37797,10 +39755,22 @@ declare namespace Paths {
                         email?: string;
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                     };
                     companyInvoiceAddressSegment?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -38270,6 +40240,9 @@ declare namespace Paths {
                             employeeUpdate: boolean;
                             employeeDelete: boolean;
                         };
+                    };
+                    wallet?: {
+                        id: string; // uuid
                     };
                     createdAt?: string; // date-time
                     updatedAt?: string; // date-time
@@ -47350,12 +49323,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -47375,12 +49356,20 @@ declare namespace Paths {
                                 durationFrom?: number;
                                 durationTo?: number;
                                 priceFrom?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
                                 priceTo?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
                                     currency: string;
                                     currencySymbol: string;
                                     exponent: number;
@@ -47393,12 +49382,20 @@ declare namespace Paths {
                         durationFrom?: number;
                         durationTo?: number;
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -47433,12 +49430,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -47458,12 +49463,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -47476,12 +49489,20 @@ declare namespace Paths {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
                                 currency: string;
                                 currencySymbol: string;
                                 exponent: number;
@@ -47574,7 +49595,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -47582,7 +49611,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -47597,6 +49626,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -47621,7 +49654,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -47963,7 +49996,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -47971,7 +50012,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -47986,6 +50027,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -48010,7 +50055,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -48102,7 +50147,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -48110,7 +50163,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -48125,6 +50178,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -48149,7 +50206,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -48570,7 +50627,15 @@ declare namespace Paths {
                     description?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -48621,12 +50686,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -48646,12 +50719,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -48706,7 +50787,15 @@ declare namespace Paths {
                         activateAt?: string; // date-time
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
@@ -48714,7 +50803,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         }[];
                         image?: {
@@ -48729,6 +50818,10 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        /**
+                         * example:
+                         * SK
+                         */
                         assignedCountryCode?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -48753,7 +50846,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                                 }[];
                             };
                         }[];
@@ -48763,7 +50856,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -48860,7 +50953,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
             descriptionLocalizations?: ({
                 /**
@@ -48883,7 +50976,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
             /**
              * example:
@@ -48968,7 +51061,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
             /**
              * example:
@@ -49043,7 +51136,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
         }
         namespace Responses {
@@ -49179,7 +51272,7 @@ declare namespace Paths {
                  * example:
                  * Test
                  */
-                value: string | null;
+                value: string;
             })[];
             /**
              * example:
@@ -51701,11 +53794,13 @@ declare namespace Paths {
              */
             email: string; // email
             /**
+             * required if user type is PARTNER
              * example:
              * SK
              */
             phonePrefixCountryCode?: string | null;
             /**
+             * required if user type is PARTNER
              * example:
              * 906047188
              */
@@ -51765,7 +53860,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -51773,7 +53876,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -51788,6 +53891,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -51812,7 +53919,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -51918,7 +54025,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -51926,7 +54041,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -51941,6 +54056,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -51965,11 +54084,1055 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
                 };
+            }
+        }
+    }
+    namespace PostApiB2BAdminWalletsTransactions {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 100
+             */
+            amount: number; // float
+            /**
+             * example:
+             * Some transaction note
+             */
+            transactionNote?: string | null;
+            /**
+             * example:
+             * EUR
+             * EUR
+             */
+            currencyCode: string;
+            walletIDs: [
+                string,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
+            ];
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
             }
         }
     }
@@ -52042,7 +55205,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -52050,7 +55221,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -52065,6 +55236,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -52089,7 +55264,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -52191,7 +55366,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -52199,7 +55382,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -52214,6 +55397,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -52238,7 +55425,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -52623,7 +55810,15 @@ declare namespace Paths {
                     description?: string;
                     email?: string;
                     inviteEmail?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     orderIndex: number; // float
                     color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
@@ -52674,12 +55869,20 @@ declare namespace Paths {
                                     durationFrom?: number;
                                     durationTo?: number;
                                     priceFrom?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
+                                        /**
+                                         * example:
+                                         * EUR
+                                         */
                                         currency: string;
                                         currencySymbol: string;
                                         exponent: number;
@@ -52699,12 +55902,20 @@ declare namespace Paths {
                                             durationFrom?: number;
                                             durationTo?: number;
                                             priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
                                                 currency: string;
                                                 currencySymbol: string;
                                                 exponent: number;
@@ -52759,7 +55970,15 @@ declare namespace Paths {
                         activateAt?: string; // date-time
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
@@ -52767,7 +55986,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         }[];
                         image?: {
@@ -52782,6 +56001,10 @@ declare namespace Paths {
                             };
                             isAutogenerated: boolean;
                         };
+                        /**
+                         * example:
+                         * SK
+                         */
                         assignedCountryCode?: string;
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -52806,7 +56029,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                    name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                                 }[];
                             };
                         }[];
@@ -52816,7 +56039,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -54841,6 +58064,10 @@ declare namespace Paths {
                         aboutUsFirst?: string;
                     };
                     addressSegment?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -54852,12 +58079,24 @@ declare namespace Paths {
                         locationNote?: string;
                     };
                     currencySegment?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
                         code: string;
                         symbol: string;
                     };
                     contactInfoSegment?: {
                         phones: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         email?: string;
@@ -54877,10 +58116,22 @@ declare namespace Paths {
                         email?: string;
                         firstName?: string;
                         lastName?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode?: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone?: string; // ^\d+$
                     };
                     companyInvoiceAddressSegment?: {
+                        /**
+                         * example:
+                         * SK
+                         */
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -55351,6 +58602,9 @@ declare namespace Paths {
                             employeeDelete: boolean;
                         };
                     };
+                    wallet?: {
+                        id: string; // uuid
+                    };
                     createdAt?: string; // date-time
                     updatedAt?: string; // date-time
                     deletedAt?: string; // date-time
@@ -55574,7 +58828,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -55582,7 +58844,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -55597,6 +58859,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -55621,7 +58887,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -55727,7 +58993,15 @@ declare namespace Paths {
                     activateAt?: string; // date-time
                     firstName?: string;
                     lastName?: string;
+                    /**
+                     * example:
+                     * SK
+                     */
                     phonePrefixCountryCode?: string;
+                    /**
+                     * example:
+                     * 906047188
+                     */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
@@ -55735,7 +59009,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                            name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                         }[];
                     }[];
                     image?: {
@@ -55750,6 +59024,10 @@ declare namespace Paths {
                         };
                         isAutogenerated: boolean;
                     };
+                    /**
+                     * example:
+                     * SK
+                     */
                     assignedCountryCode?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -55774,7 +59052,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
+                                name: "NOTINO" | "PARTNER" | "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "SMS_UNIT_PRICE_EDIT" | "LOGIN_AS_PARTNER" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SALON_PUBLICATION_RESOLVE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "EMPLOYEE_ROLE_UPDATE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "REVIEW_READ" | "REVIEW_VERIFY" | "REVIEW_DELETE" | "IMPORT_SALON" | "READ_WALLET" | "PARTNER_ADMIN" | "CALENDAR_EVENT_ONLY_OWN";
                             }[];
                         };
                     }[];
@@ -55849,12 +59127,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -55886,7 +59172,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -55966,10 +59260,22 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         address?: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             countryCode?: string;
                             zipCode?: string;
                             city?: string;
@@ -56183,12 +59489,20 @@ declare namespace Paths {
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
                         priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
                             currency: string;
                             currencySymbol: string;
                             exponent: number;
@@ -56220,7 +59534,15 @@ declare namespace Paths {
                         firstName: string;
                         lastName: string;
                         email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
                         phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
                         phone: string; // ^\d+$
                     };
                     employee: {
@@ -56300,10 +59622,22 @@ declare namespace Paths {
                         }[];
                         phones: {
                             id: string; // uuid
+                            /**
+                             * example:
+                             * SK
+                             */
                             phonePrefixCountryCode: string;
+                            /**
+                             * example:
+                             * 906047188
+                             */
                             phone: string; // ^\d+$
                         }[];
                         address?: {
+                            /**
+                             * example:
+                             * SK
+                             */
                             countryCode?: string;
                             zipCode?: string;
                             city?: string;
@@ -57384,6 +60718,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1CalendarSyncIcsEvents.Responses.$200>
   /**
+   * getApiB2BV1Config - permissions: NO
+   */
+  'getApiB2BV1Config'(
+    parameters?: Parameters<Paths.GetApiB2BV1Config.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1Config.Responses.$200>
+  /**
    * getApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
    */
   'getApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable'(
@@ -58355,6 +61697,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminCalendarSyncSyncToken.Responses.$200>
   /**
+   * postApiB2BAdminWalletsTransactions - Endpoint is used for creating a wallet transaction for provided wallers., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+   */
+  'postApiB2BAdminWalletsTransactions'(
+    parameters?: Parameters<Paths.PostApiB2BAdminWalletsTransactions.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminWalletsTransactions.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminWalletsTransactions.Responses.$200>
+  /**
    * postApiB2BV1FilesSignUrls - Endpoint is used for signing AWS urls of files., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
   'postApiB2BV1FilesSignUrls'(
@@ -58772,6 +62122,43 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsSendReport.Responses.$200>
   /**
+   * getApiB2BAdminSalonsSalonIdNotificationsSmsStats - Endpoint is used for getting statistics of sms notifications, permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonIdNotificationsSmsStats'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsStats.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsStats.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsStats.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonIdNotificationsSmsTimeStats - Endpoint is used for getting statistics of sms notifications in time. It is possible to use filter (month, year), permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonIdNotificationsSmsTimeStats'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsTimeStats.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsTimeStats.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsTimeStats.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsTimeStats.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonIdNotificationsSmsHistory - 
+   * 	Endpoint is used for getting sms notifications history.
+   * 	It possible to use search (phone),
+   * 	filter (dateFrom, dateTo),
+   * 	order (createdAt) and pagination.
+   * , permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonIdNotificationsSmsHistory'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsHistory.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsHistory.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsHistory.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsHistory.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonIdWalletsWalletId - Endpoint is used for getting wallet detail., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, READ_WALLET]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonIdWalletsWalletId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.Responses.$200>
+  /**
    * patchApiB2BAdminSalonsSalonIdOpenHoursNote - Endpoint is used for setting salon opening hours note., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_UPDATE]</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
    */
   'patchApiB2BAdminSalonsSalonIdOpenHoursNote'(
@@ -58884,7 +62271,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminImportsSalons.Responses.$200>
   /**
-   * postApiB2BAdminImportsSalonsSalonIdCustomers - Endpoint is used for importing customers from a file., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
+   * postApiB2BAdminImportsSalonsSalonIdCustomers - Endpoint is used for importing customers from a file (.csv)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
    */
   'postApiB2BAdminImportsSalonsSalonIdCustomers'(
     parameters?: Parameters<Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.PathParameters & Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.HeaderParameters> | null,
@@ -58892,7 +62279,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.Responses.$200>
   /**
-   * postApiB2BAdminImportsSalonsSalonIdCalendarEvents - Endpoint is used for importing calendar events from a file., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
+   * postApiB2BAdminImportsSalonsSalonIdCalendarEvents - Endpoint is used for importing calendar events from a file (.csv, .xlsx, .ics)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
    */
   'postApiB2BAdminImportsSalonsSalonIdCalendarEvents'(
     parameters?: Parameters<Paths.PostApiB2BAdminImportsSalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BAdminImportsSalonsSalonIdCalendarEvents.HeaderParameters> | null,
@@ -58987,6 +62374,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+  /**
+   * getApiB2BV1SalonsSalonIdWalletsWalletId - Endpoint is used for getting wallet detail., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+   */
+  'getApiB2BV1SalonsSalonIdWalletsWalletId'(
+    parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdWalletsWalletId.PathParameters & Paths.GetApiB2BV1SalonsSalonIdWalletsWalletId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdWalletsWalletId.Responses.$200>
   /**
    * patchApiB2BV1SalonsSalonIdInvoice - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_BILLING_UPDATE]</li></ul>
    */
@@ -59773,6 +63168,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1CalendarSyncIcsEvents.Responses.$200>
+  }
+  ['/api/b2b/v1/config/']: {
+    /**
+     * getApiB2BV1Config - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1Config.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1Config.Responses.$200>
   }
   ['/api/b2c/web/salons/{salonID}/calendar-events/reservations/available']: {
     /**
@@ -60943,6 +64348,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminCalendarSyncSyncToken.Responses.$200>
   }
+  ['/api/b2b/admin/wallets/transactions']: {
+    /**
+     * postApiB2BAdminWalletsTransactions - Endpoint is used for creating a wallet transaction for provided wallers., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminWalletsTransactions.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminWalletsTransactions.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminWalletsTransactions.Responses.$200>
+  }
   ['/api/b2b/v1/files/sign-urls']: {
     /**
      * postApiB2BV1FilesSignUrls - Endpoint is used for signing AWS urls of files., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
@@ -61428,6 +64843,51 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsSendReport.Responses.$200>
   }
+  ['/api/b2b/admin/salons/{salonID}/notifications/sms/stats']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdNotificationsSmsStats - Endpoint is used for getting statistics of sms notifications, permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsStats.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsStats.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsStats.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/notifications/sms/time-stats']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdNotificationsSmsTimeStats - Endpoint is used for getting statistics of sms notifications in time. It is possible to use filter (month, year), permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsTimeStats.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsTimeStats.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsTimeStats.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsTimeStats.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/notifications/sms/history']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdNotificationsSmsHistory - 
+     * 	Endpoint is used for getting sms notifications history.
+     * 	It possible to use search (phone),
+     * 	filter (dateFrom, dateTo),
+     * 	order (createdAt) and pagination.
+     * , permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsHistory.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsHistory.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsHistory.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsHistory.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/wallets/{walletID}']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdWalletsWalletId - Endpoint is used for getting wallet detail., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, READ_WALLET]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.Responses.$200>
+  }
   ['/api/b2b/admin/salons/{salonID}/open-hours-note']: {
     /**
      * patchApiB2BAdminSalonsSalonIdOpenHoursNote - Endpoint is used for setting salon opening hours note., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, SALON_UPDATE]</li><li>partner: [PARTNER_ADMIN, SALON_UPDATE]</li></ul>
@@ -61570,7 +65030,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/imports/salons/{salonID}/customers']: {
     /**
-     * postApiB2BAdminImportsSalonsSalonIdCustomers - Endpoint is used for importing customers from a file., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
+     * postApiB2BAdminImportsSalonsSalonIdCustomers - Endpoint is used for importing customers from a file (.csv)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.PathParameters & Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.HeaderParameters> | null,
@@ -61580,7 +65040,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/imports/salons/{salonID}/calendar-events']: {
     /**
-     * postApiB2BAdminImportsSalonsSalonIdCalendarEvents - Endpoint is used for importing calendar events from a file., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
+     * postApiB2BAdminImportsSalonsSalonIdCalendarEvents - Endpoint is used for importing calendar events from a file (.csv, .xlsx, .ics)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminImportsSalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BAdminImportsSalonsSalonIdCalendarEvents.HeaderParameters> | null,
@@ -61691,6 +65151,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/wallets/{walletID}']: {
+    /**
+     * getApiB2BV1SalonsSalonIdWalletsWalletId - Endpoint is used for getting wallet detail., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdWalletsWalletId.PathParameters & Paths.GetApiB2BV1SalonsSalonIdWalletsWalletId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdWalletsWalletId.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}/invoice']: {
     /**

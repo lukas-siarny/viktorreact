@@ -2,7 +2,7 @@
 import { IResetStore } from '../generalTypes'
 
 // types
-import { NOTINO_DASHBOARD, SALONS_ANNUAL_STATS, SALONS_MONTH_STATS } from './dashboardTypes'
+import { NOTINO_DASHBOARD, RS_STATS, SALONS_ANNUAL_STATS, SALONS_MONTH_STATS } from './dashboardTypes'
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
 
@@ -10,17 +10,33 @@ import { ThunkResult } from '../index'
 import { getReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
 
-export type IDashboardActions = IResetStore | IGetNotinoDashboard | IGetSalonsAnnualStats | IGetSalonsMonthstats
+export type IDashboardActions = IResetStore | IGetNotinoDashboard | IGetSalonsAnnualStats | IGetSalonsMonthstats | IGetRsStats
 
 interface IGetNotinoDashboard {
 	type: NOTINO_DASHBOARD
 	payload: INotinoDashboardPayload
 }
 
+interface IGetRsStats {
+	type: RS_STATS
+	payload: IRsStatsPayload
+}
+
 export type INotinoDashboard = Paths.GetApiB2BAdminNotinoDashboard.Responses.$200['counts']
+export type IRsStats = Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.Responses.$200
+
+interface IGetRsStatsQueryParams {
+	month?: number
+	year: number
+	countryCode?: string
+}
 
 export interface INotinoDashboardPayload {
 	data: INotinoDashboard | null
+}
+
+export interface IRsStatsPayload {
+	data: IRsStats | null
 }
 
 interface IGetSalonsAnnualStats {
@@ -34,7 +50,7 @@ interface IGetSalonsMonthstats {
 }
 
 export type ISalonsTimeStats = Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.Responses.$200
-
+export type IRsTimeStats = Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.Responses.$200
 export interface ISalonsTimeStatsPayload {
 	data: ISalonsTimeStats | null
 }
@@ -55,6 +71,29 @@ export const getNotinoDashboard =
 			dispatch({ type: NOTINO_DASHBOARD.NOTINO_DASHBOARD_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: NOTINO_DASHBOARD.NOTINO_DASHBOARD_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}
+
+export const getRsStats =
+	(queryParams: IGetRsStatsQueryParams): ThunkResult<Promise<IRsStatsPayload>> =>
+	async (dispatch) => {
+		let payload = {} as IRsStatsPayload
+
+		try {
+			dispatch({ type: RS_STATS.RS_STATS_LOAD_START })
+
+			const { data } = await getReq('/api/b2b/admin/notino-dashboard/salon-rs-time-stats', { ...normalizeQueryParams(queryParams) } as any)
+			payload = {
+				data
+			}
+
+			dispatch({ type: RS_STATS.RS_STATS_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: RS_STATS.RS_STATS_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}

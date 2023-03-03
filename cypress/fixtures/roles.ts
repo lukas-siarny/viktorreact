@@ -45,6 +45,10 @@ const data: ITestConfig[] = [
 				actions: [CRUD_OPERATIONS.ALL]
 			},
 			{
+				name: LIST_OF_TESTS_SUITS.REVIEWS,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
 				name: LIST_OF_TESTS_SUITS.SALON,
 				actions: [CRUD_OPERATIONS.ALL],
 				/*

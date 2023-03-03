@@ -196,6 +196,7 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 			cy.location('pathname').should('eq', '/category-parameters')
 		})
 	})
+
 	// TODO: dorobit testy pre minutove zobrazenie
 	// CREATE parameter (minutes)
 	// it('Create category parameters (minutes)', () => {

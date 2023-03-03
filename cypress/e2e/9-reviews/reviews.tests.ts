@@ -86,14 +86,12 @@ const reviewsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?:
 		cy.saveLocalStorage()
 	})
 
-	context('Review', () => {
-		// NOTE: reviews with specified message types must exist in the DB in order to tests work properly!!
-		updateReviewStatus(REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C, 'hide', 'Hide published message', actions)
-		updateReviewStatus(REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C, 'publish', 'Publish hidden message', actions)
-		updateReviewStatus(REVIEW_VERIFICATION_STATUS.NOT_VERIFIED, 'accept', 'Accept not verified message', actions)
-		updateReviewStatus(REVIEW_VERIFICATION_STATUS.NOT_VERIFIED, 'hide', 'Hide not verified message', actions)
-		deleteReview(REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C, 'Delete review with published message', actions)
-	})
+	// NOTE: reviews with specified message types must exist in the DB in order to tests work properly!!
+	updateReviewStatus(REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C, 'hide', 'Hide published message', actions)
+	updateReviewStatus(REVIEW_VERIFICATION_STATUS.HIDDEN_IN_B2C, 'publish', 'Publish hidden message', actions)
+	updateReviewStatus(REVIEW_VERIFICATION_STATUS.NOT_VERIFIED, 'accept', 'Accept not verified message', actions)
+	updateReviewStatus(REVIEW_VERIFICATION_STATUS.NOT_VERIFIED, 'hide', 'Hide not verified message', actions)
+	deleteReview(REVIEW_VERIFICATION_STATUS.VISIBLE_IN_B2C, 'Delete review with published message', actions)
 }
 
 export default reviewsTestSuite

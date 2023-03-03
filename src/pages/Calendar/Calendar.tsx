@@ -71,7 +71,8 @@ import {
 	ReservationPopoverData,
 	PopoverTriggerPosition,
 	SalonSubPageProps,
-	EmployeeTooltipPopoverData
+	EmployeeTooltipPopoverData,
+	ICalendarImportedReservationForm
 } from '../../types/interfaces'
 
 // hooks
@@ -630,6 +631,57 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		[closeSiderForm, fetchEvents, salonID, query.eventId]
 	)
 
+	const handleSubmitImportedReservation = useCallback(
+		async (values: ICalendarImportedReservationForm, eventId?: string) => {
+			if (!values) {
+				return
+			}
+
+			const { revertEvent } = values
+
+			try {
+				cancelEventsRequestOnDemand()
+				setIsUpdatingEvent(true)
+				const reqData = {
+					start: {
+						date: values.date,
+						time: values.timeFrom
+					},
+					end: {
+						date: values.date,
+						time: values.timeTo
+					},
+					note: values.note
+				}
+
+				await patchReq(
+					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/imported-reservation',
+					{ salonID, calendarEventID: eventId as string },
+					reqData,
+					undefined,
+					NOTIFICATION_TYPE.NOTIFICATION,
+					true
+				)
+				fetchEvents(false) // Po PATCHi vponechat virtualny event ak bol vytvoreny
+
+				// Po UPDATE rezervacie dotiahnut eventy + zatvorit drawer, pri CREATE ostane otvoreny sider pocas updatu len
+				if (query.eventId) {
+					closeSiderForm()
+				}
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.error(e)
+				// ak neprejde request, tak sa event v kalendari vráti na pôvodne miesto
+				if (revertEvent) {
+					revertEvent()
+				}
+			} finally {
+				setIsUpdatingEvent(false)
+			}
+		},
+		[closeSiderForm, fetchEvents, salonID, query.eventId]
+	)
+
 	const handleSubmitEvent = useCallback(
 		async (values: ICalendarEventForm, calendarEventID?: string, calendarBulkEventID?: string, updateFromCalendar = false) => {
 			const { revertEvent } = values
@@ -979,6 +1031,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							onCloseSider={closeSiderForm}
 							handleSubmitReservation={initSubmitReservationData}
 							handleSubmitEvent={initSubmitEventData}
+							handleSubmitImportedReservation={handleSubmitImportedReservation}
 							calendarApi={calendarRefs?.current?.[validCalendarView]?.getApi()}
 							changeCalendarDate={setNewSelectedDate}
 							query={query}

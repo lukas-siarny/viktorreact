@@ -293,6 +293,16 @@ export interface ICalendarEventForm {
 	updateFromCalendar?: boolean
 }
 
+export interface ICalendarImportedReservationForm {
+	date: string
+	timeFrom: string
+	timeTo: string
+	note?: string
+	eventId?: string
+	revertEvent?: () => void
+	updateFromCalendar?: boolean
+}
+
 export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null
 
 export interface IEventTypeFilterForm {

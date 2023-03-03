@@ -45,7 +45,8 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 		isLastMultiDaylEventInCurrentRange,
 		isMultiDayEvent,
 		calendarBulkEvent,
-		isPlaceholder
+		isPlaceholder,
+		isImported
 	} = eventData || {}
 
 	const [searchParams] = useSearchParams({
@@ -112,6 +113,7 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 				<ReservationCard
 					calendarView={calendarView}
 					onReservationClick={onReservationClick}
+					onEditEvent={onEditEvent}
 					resourceId={resourceId}
 					start={start}
 					end={end}
@@ -131,6 +133,7 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 					isEdit={isEdit}
 					isPlaceholder={isPlaceholder}
 					timeLeftClassName={timeLeftClassName}
+					isImported={isImported}
 				/>
 			)
 		}

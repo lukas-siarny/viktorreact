@@ -10,7 +10,7 @@ import dayjs from 'dayjs'
 import { CalendarApi } from '@fullcalendar/react'
 
 // types
-import { ICalendarEventForm, ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'
+import { ICalendarEventForm, ICalendarImportedReservationForm, ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'
 import { RootState } from '../../../../reducers'
 
 // utils
@@ -45,6 +45,7 @@ import TabsComponent from '../../../../components/TabsComponent'
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 import { IUseQueryParams } from '../../../../hooks/useQueryParams'
+import ImportedReservationForm from '../forms/ImportedReservationForm'
 
 type Props = {
 	salonID: string
@@ -52,6 +53,7 @@ type Props = {
 	selectedDate: string
 	onCloseSider: () => void
 	handleSubmitReservation: (values: ICalendarReservationForm) => void
+	handleSubmitImportedReservation: (values: ICalendarImportedReservationForm) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
 	handleDeleteEvent: (calendarEventId: string, calendarEventBulkId?: string, eventType?: CALENDAR_EVENT_TYPE) => any
 	eventId?: string | null
@@ -74,6 +76,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 		onCloseSider,
 		handleSubmitReservation,
 		handleSubmitEvent,
+		handleSubmitImportedReservation,
 		salonID,
 		sidebarView,
 		handleDeleteEvent,
@@ -288,6 +291,8 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 						loadingData={loadingData}
 					/>
 				)
+			case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
+				return <ImportedReservationForm eventId={eventId} onSubmit={handleSubmitImportedReservation} loadingData={loadingData} />
 			case CALENDAR_EVENT_TYPE.RESERVATION:
 			default:
 				return (

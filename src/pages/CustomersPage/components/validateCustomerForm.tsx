@@ -1,8 +1,17 @@
 import { FormErrors } from 'redux-form'
 import i18next from 'i18next'
 import { isEmail } from 'lodash-checkit'
-import { z, ZodString, ZodOptional } from 'zod'
+import { z, ZodString, ZodOptional, ZodNullable, ZodTypeAny } from 'zod'
 import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+
+const imageConstraint = z.object({
+	url: z.string().url(),
+	thumbnail: z.string().url().nullish(),
+	uid: z.string().uuid()
+})
+
+type Image = z.infer<typeof imageConstraint>
+type NonNullableImage = MakeFieldsNonNullable<Image, 'thumbnail'>
 
 function stringConstraint<T extends true | false>(maxLength: number, required?: T): T extends true ? ZodString : ZodOptional<ZodString>
 function stringConstraint<T extends true | false>(maxLength: number, required?: T): ZodString | ZodOptional<ZodString> {
@@ -18,21 +27,34 @@ function stringConstraint<T extends true | false>(maxLength: number, required?: 
 
 	return base.optional()
 }
-
+/**
 const imageConstraint = z.object({
 	url: z.string().url(),
-	thumbnail: z.string().url().optional(),
+	thumbnail: z.string().url().nullish(),
 	uid: z.string().uuid()
 })
 
+type ImageNullableFields = z.infer<typeof imageConstraint>
+
+function makeFieldsNonNullable(originalConstraint: any, fields: string[]): any {
+	return originalConstraint.merge(z.object(Object.fromEntries(fields.map((field: string) => [field, originalConstraint.shape[field].unwrap().unwrap()]))))
+}
+
+const imageNonnullableConstraint = makeFieldsNonNullable(imageConstraint, ['thumbnail'])
+*/
+const stringSchema = (maxLength: number) =>
+	z
+		.string({ required_error: i18next.t('loc:Toto pole je povinné') })
+		.max(maxLength, {
+			message: i18next.t('loc:Max. počet znakov je {{max}}', {
+				max: maxLength
+			})
+		})
+		.nullish()
+
 export const customerSchema = z.object({
-	firstName: z.preprocess((firstName) => {
-		if (!firstName) {
-			return null
-		}
-		return firstName
-	}, stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100, true)),
-	lastName: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100, true),
+	firstName: stringSchema(VALIDATION_MAX_LENGTH.LENGTH_100),
+	lastName: stringSchema(VALIDATION_MAX_LENGTH.LENGTH_100),
 	email: z.optional(
 		z
 			.string()
@@ -50,8 +72,8 @@ export const customerSchema = z.object({
 		})
 		.min(2)
 		.max(3),
-	phone: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_20, true),
-	note: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1000),
+	phone: stringSchema(VALIDATION_MAX_LENGTH.LENGTH_20),
+	note: stringSchema(VALIDATION_MAX_LENGTH.LENGTH_1000),
 	street: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100),
 	city: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100),
 	zipCode: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_10),
@@ -61,7 +83,60 @@ export const customerSchema = z.object({
 	profileImageID: imageConstraint.array().max(1).optional()
 })
 
-export type Customer = z.infer<typeof customerSchema>
+// function makeFieldsRequired<T extends z.ZodObject<any>>(schema: ReturnType<typeof z.object>, fields: Partial<keyof T>[]): ReturnType<typeof z.object> {
+// return schema.extend(Object.fromEntries(fields.map((field: string) => [field, schema.shape[field].unwrap().unwrap()])))
+// }
+
+// export declare type output<T extends ZodType<any, any, any>> = T["_output"];
+
+function instanceOfString(shape: any): shape is ZodNullable<ZodOptional<ZodString>> {
+	return 'merge' in shape
+}
+
+// merge<Incoming extends AnyZodObject, Augmentation extends Incoming["shape"]>(merging: Incoming): ZodObject<extendShape<T, Augmentation>, Incoming["_def"]["unknownKeys"], Incoming["_def"]["catchall"]>;
+
+type aaa = InstanceType<typeof z.ZodObject>
+type Income = ReturnType<aaa['merge']>
+type Retuuurn = ReturnType<typeof z.object>
+
+// function makeFieldsRequired<T extends Retuuurn>(origSchema: T, fields: keyof z.infer<typeof origSchema>[]): Income {
+// 	return origSchema.merge(
+// 		z.object(
+// 			Object.fromEntries(
+// 				fields.map((field: string) => [
+// 					field,
+// 					instanceOfString(origSchema.shape[field]) ? (origSchema.shape[field] as ZodNullable<ZodOptional<ZodString>>).unwrap().unwrap() : origSchema.shape[field]
+// 				])
+// 			)
+// 		)
+// 	)
+// }
+
+type MakeFieldsNonNullable<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> }
+
+// function makeFieldsNonNullable<T extends object, K extends keyof T>(original: T, ...keys: K[]): MakeFieldsNonNullable<T, K> {
+
+interface Dictionary<T> {
+	[key: string]: T
+}
+
+export type Final = z.infer<typeof customerSchema>
+// const fff = makeFieldsRequired(customerSchema, ['firstName', 'lastName', 'phone'])
+// const finalScheme = makeFieldsRequired<Final>(customerSchema, ['firtsName', 'lastName', 'phone'])
+const finalScheme = customerSchema.merge(
+	z.object({
+		phone: customerSchema.shape.phone.unwrap().unwrap(),
+		firstName: customerSchema.shape.firstName.unwrap().unwrap(),
+		lastName: customerSchema.shape.lastName.unwrap().unwrap()
+	})
+)
+
+// type MakeFieldsNonNullable<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> }
+type AsRequired<T, K extends keyof T> = NonNullable<Pick<T, K>> // & Omit<T, K>
+
+export type Customer = MakeFieldsNonNullable<Final, 'firstName' | 'lastName' | 'phone'>
+
+const data: Customer = {}
 
 export default (values: Customer) => {
 	const errors: FormErrors<Customer> = {}

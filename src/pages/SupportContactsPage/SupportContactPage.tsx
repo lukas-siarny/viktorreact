@@ -52,7 +52,7 @@ const permissions: PERMISSION[] = [PERMISSION.ENUM_EDIT]
 
 type Props = {}
 
-const SupportContactPage: FC<Props> = (props) => {
+const SupportContactPage: FC<Props> = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -86,7 +86,9 @@ const SupportContactPage: FC<Props> = (props) => {
 		const fetchData = async () => {
 			const { data } = await dispatch(getSupportContact(supportContactID))
 
-			if (data) {
+			if (!data?.supportContact?.id) {
+				navigate('/404')
+			} else {
 				// init data for existing supportContact
 				const mappedOpeningHours = mapRawOpeningHoursToComponentOpeningHours(data?.supportContact?.openingHours)
 				const openOverWeekend: boolean = checkWeekend(mappedOpeningHours)

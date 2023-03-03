@@ -32,6 +32,8 @@ type Props = WrappedFieldProps &
 		validateTo?: string /** disable podla datumu ktory sa posle na validovanie */
 		pickerClassName?: string
 		showInReservationDrawer?: boolean
+		dateFormat?: string
+		customOnChange?: (value: Dayjs | null) => void
 	}
 
 const DateField = (props: Props) => {
@@ -41,7 +43,7 @@ const DateField = (props: Props) => {
 		required,
 		style,
 		meta: { form, error, touched },
-		format = DEFAULT_DATE_INPUT_FORMAT,
+		dateFormat = DEFAULT_DATE_INPUT_FORMAT,
 		placeholder,
 		disabledDate,
 		disabled,
@@ -69,7 +71,9 @@ const DateField = (props: Props) => {
 		dropdownAlign,
 		showInReservationDrawer,
 		inputReadOnly,
-		inputRender
+		inputRender,
+		picker,
+		customOnChange
 	} = props
 
 	let value
@@ -134,13 +138,15 @@ const DateField = (props: Props) => {
 				dropdownAlign={dropdownAlign || DROPDOWN_POSITION.BOTTOM_LEFT}
 				onBlur={() => {}}
 				onChange={(val) => {
-					if (val) {
+					if (customOnChange) {
+						customOnChange(val)
+					} else if (val) {
 						input.onChange(val.format(DEFAULT_DATE_INIT_FORMAT))
 					} else {
 						input.onChange(null)
 					}
 				}}
-				format={format}
+				format={dateFormat}
 				value={value}
 				defaultPickerValue={defaultPickerValue}
 				size={size}
@@ -155,6 +161,7 @@ const DateField = (props: Props) => {
 				showToday={showToday}
 				inputReadOnly={inputReadOnly}
 				mode={mode}
+				picker={picker}
 				open={open}
 				onSelect={onSelect}
 				inputRender={inputRender}

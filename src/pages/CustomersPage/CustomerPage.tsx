@@ -51,6 +51,9 @@ const CustomerPage = (props: Props) => {
 
 	const fetchCustomerData = async () => {
 		const { data } = await dispatch(getCustomer(customerID as string))
+		if (!data?.customer?.id) {
+			navigate('/404')
+		}
 
 		dispatch(
 			initialize(FORM.CUSTOMER, {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { compose } from 'redux'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
@@ -41,7 +41,7 @@ const EditCategoryParamsPage = () => {
 
 	const [isRemoving, setIsRemoving] = useState(false)
 
-	const fetchData = async () => {
+	const fetchData = useCallback(async () => {
 		const { data } = await dispatch(getCategoryParameter(parameterID as string))
 		if (!data?.id) {
 			navigate('/404')
@@ -64,10 +64,11 @@ const EditCategoryParamsPage = () => {
 				})
 			)
 		}
-	}
+	}, [dispatch, navigate, parameterID])
+
 	useEffect(() => {
 		fetchData()
-	}, [dispatch, parameterID])
+	}, [fetchData])
 
 	const handleSubmit = async (formData: ICategoryParamForm) => {
 		let values: any = []

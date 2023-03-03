@@ -298,6 +298,11 @@ const EmployeePage = (props: Props) => {
 
 	const fetchEmployeeAndServicesData = useCallback(async () => {
 		const { data: employeesData } = await dispatch(getEmployee(employeeID as string))
+
+		if (!employeesData?.employee?.id) {
+			navigate('/404')
+		}
+
 		const { options } = await dispatch(getServices({ salonID }))
 
 		if (employeesData?.employee) {
@@ -319,7 +324,7 @@ const EmployeePage = (props: Props) => {
 				})
 			)
 		}
-	}, [dispatch, employeeID, salonID])
+	}, [dispatch, employeeID, salonID, navigate])
 
 	useEffect(() => {
 		fetchEmployeeAndServicesData()

@@ -269,7 +269,6 @@ const SpecialistContactsPage = () => {
 										onRow={(record) => ({
 											onClick: () => changeFormVisibility(true, record)
 										})}
-										loading={specialistContacts.isLoading}
 									/>
 								</div>
 								{visibleForm ? (

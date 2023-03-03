@@ -115,8 +115,8 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 			// change input name for both cases
 			cy.setInputValue(FORM.SALON, 'name', salon.update.name, false, true)
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
-				cy.setInputValue(FORM.SALON, 'socialLinkWebPage', salon.update.socialLinkWebPage)
-				cy.setInputValue(FORM.SALON, 'socialLinkFB', salon.update.socialLinkFB)
+				cy.setInputValue(FORM.SALON, 'socialLinkWebPage', salon.update.socialLinkWebPage, false, true)
+				cy.setInputValue(FORM.SALON, 'socialLinkFB', salon.update.socialLinkFB, false, true)
 				cy.clickButton(SUBMIT_BUTTON_ID, FORM.SALON)
 				cy.wait('@updateSalon').then((interception: any) => {
 					// check status code

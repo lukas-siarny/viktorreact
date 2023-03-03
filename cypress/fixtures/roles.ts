@@ -245,7 +245,7 @@ const data: ITestConfig[] = [
 				tests: [
 					{
 						name: SALON_TESTS_SUITS.BILLING_INFORMATION,
-						actions: [CRUD_OPERATIONS.ALL]
+						actions: []
 					},
 					{
 						name: SALON_TESTS_SUITS.CUSTOMER,

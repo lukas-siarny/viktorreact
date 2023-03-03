@@ -3,7 +3,7 @@ import 'cypress-localstorage-commands'
 import '@goodrequest/antd-form-fields'
 import initializeCustomCommands from '@goodrequest/antd-form-fields/dist/commands/cypressCommands'
 
-import { REVIEWS_TAB_KEYS, REVIEW_VERIFICATION_STATUS, CYPRESS_CLASS_NAMES } from '../../src/utils/enums'
+import { CYPRESS_CLASS_NAMES } from '../../src/utils/enums'
 
 initializeCustomCommands()
 
@@ -91,68 +91,4 @@ Cypress.Commands.add(
 
 Cypress.Commands.add('clickTab', (tabKey: string, tabsKey = '.ant-tabs-nav-list', force?: boolean) => {
 	cy.get(tabsKey).find(`[data-node-key="${tabKey}"]`).click({ force })
-})
-
-Cypress.Commands.add('updateReviewStatus', (currentStatus: REVIEW_VERIFICATION_STATUS, moderateItemKey: 'hide' | 'publish' | 'accept') => {
-	cy.intercept({
-		method: 'GET',
-		pathname: '/api/b2b/admin/reviews/'
-	}).as('getReviews')
-	cy.visit('/reviews')
-	cy.wait('@getReviews').then((interceptorGetReviews: any) => {
-		expect(interceptorGetReviews.response.statusCode).to.equal(200)
-		cy.get(`[data-row-key*="${currentStatus}"]`)
-			.invoke('attr', 'data-row-key')
-			.then((dataRowKey) => {
-				const split = (dataRowKey || '').split('_')
-				const reviewId = split[split.length - 1]
-
-				cy.intercept({
-					method: 'PATCH',
-					pathname: `/api/b2b/admin/reviews/${reviewId}/verification`
-				}).as('updateReviewStatus')
-				const triggerId = `#moderate_btn-${reviewId}`
-				cy.clickDropdownItem(triggerId, `moderate-${moderateItemKey}-message`, true)
-				cy.wait('@updateReviewStatus').then((interceptionUpdateReview: any) => {
-					// check status code of request
-					expect(interceptionUpdateReview.response.statusCode).to.equal(200)
-					// check conf toast message
-					cy.checkSuccessToastMessage()
-				})
-			})
-	})
-})
-
-Cypress.Commands.add('deleteReview', (currentStatus: REVIEW_VERIFICATION_STATUS) => {
-	cy.intercept({
-		method: 'GET',
-		pathname: '/api/b2b/admin/reviews/'
-	}).as('getReviews')
-	cy.visit('/reviews')
-	cy.wait('@getReviews').then((interceptorGetReviews: any) => {
-		expect(interceptorGetReviews.response.statusCode).to.equal(200)
-		cy.get(`[data-row-key*="${currentStatus}"]`)
-			.invoke('attr', 'data-row-key')
-			.then((dataRowKey) => {
-				const split = (dataRowKey || '').split('_')
-				const reviewId = split[split.length - 1]
-
-				cy.intercept({
-					method: 'DELETE',
-					pathname: `/api/b2b/admin/reviews/${reviewId}`
-				}).as('deleteReview')
-				cy.clickDeleteButtonWithConfCustom('delete_btn', reviewId)
-				cy.wait('@deleteReview').then((interceptionDeleteReview: any) => {
-					// check status code of request
-					expect(interceptionDeleteReview.response.statusCode).to.equal(200)
-					// check conf toast message
-					cy.checkSuccessToastMessage()
-					cy.clickTab(REVIEWS_TAB_KEYS.DELETED)
-					cy.wait('@getReviews').then((interceptorGetDeletedReviews: any) => {
-						expect(interceptorGetDeletedReviews.response.statusCode).to.equal(200)
-						cy.get(`[data-row-key*="${reviewId}"]`).should('be.visible')
-					})
-				})
-			})
-	})
 })

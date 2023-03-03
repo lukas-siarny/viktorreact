@@ -19,7 +19,5 @@ declare namespace Cypress {
 		): Chainable<Element>
 		clickDropdownItem(triggerId: string, dropdownItemId?: string, force?: boolean): Chainable<Element>
 		clickTab(tabKey: string, tabsKey?: string, force?: boolean): Chainable<Element>
-		updateReviewStatus(currentStatus: REVIEW_VERIFICATION_STATUS, moderateItemKey: 'hide' | 'publish' | 'accept'): Chainable<Element>
-		deleteReview(currentStatus: REVIEW_VERIFICATION_STATUS): Chainable<Element>
 	}
 }

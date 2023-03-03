@@ -1,4 +1,4 @@
-import { CRUD_OPERATIONS, CUSTOMER_ID, EMPLOYEE_ID, SALON_ID } from '../../enums'
+import { CRUD_OPERATIONS, EMPLOYEE_ID, SALON_ID } from '../../enums'
 import { CREATE_EMPLOYEE_BUTTON_ID, DELETE_BUTTON_ID, FORM, PAGE, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 
 import { generateRandomString } from '../../support/helpers'

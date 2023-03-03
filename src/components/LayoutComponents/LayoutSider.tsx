@@ -31,6 +31,7 @@ import { ReactComponent as CalendarIcon } from '../../assets/icons/calendar-24.s
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
 import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations.svg'
 import { ReactComponent as ReviewsIcon } from '../../assets/icons/reviews-icon.svg'
+import { ReactComponent as SmsUnitPricesIcon } from '../../assets/icons/sms-unit-prices.svg'
 
 // utils
 import { CYPRESS_CLASS_NAMES, PAGE, PERMISSION } from '../../utils/enums'
@@ -159,6 +160,13 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							onClick: () => navigate(t('paths:reviews')),
 							icon: <ReviewsIcon />,
 							id: PAGE.REVIEWS
+						},
+						{
+							key: PAGE.SMS_CREDITS,
+							label: t('loc:SMS kredity'),
+							onClick: () => navigate(t('paths:sms-credits')),
+							icon: <SmsUnitPricesIcon />,
+							id: PAGE.SMS_CREDITS
 						}
 					)
 				}

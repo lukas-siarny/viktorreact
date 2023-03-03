@@ -27,6 +27,7 @@ import calendarReducer from './calendar/calendarReducer'
 import helperSettingsReducer from './helperSettings/helperSettingsReducer'
 import virtualEventReducer from './virtualEvent/virtualEventReducer'
 import reviewsReducer from './reviews/reviewsReducer'
+import smsUnitPricesReducer from './smsUnitPrices/smsUnitPricesReducer'
 
 export const REDUCER_KEYS = {
 	FORMS: 'FORMS',
@@ -49,7 +50,8 @@ export const REDUCER_KEYS = {
 	CALENDAR: 'CALENDAR',
 	HELPER_SETTINGS: 'HELPER_SETTINGS',
 	VIRTUAL_EVENT: 'VIRTUAL_EVENT',
-	REVIEWS: 'REVIEWS'
+	REVIEWS: 'REVIEWS',
+	SMS_UNIT_PRICES: 'SMS_UNIT_PRICES'
 }
 
 const rootReducer = combineReducers({
@@ -200,6 +202,13 @@ const rootReducer = combineReducers({
 			storage: storageSession
 		},
 		reviewsReducer
+	),
+	smsUnitPrices: persistReducer(
+		{
+			key: REDUCER_KEYS.SMS_UNIT_PRICES,
+			storage: storageSession
+		},
+		smsUnitPricesReducer
 	)
 })
 

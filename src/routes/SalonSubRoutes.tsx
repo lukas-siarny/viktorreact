@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useCallback } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
@@ -71,6 +71,15 @@ const SalonSubRoutes: FC = () => {
 
 	const parentPath = t('paths:salons/{{salonID}}', { salonID })
 
+	const fetchSalon = useCallback(async () => {
+		const salon = await dispatch(selectSalon(salonID))
+		if (!salon?.data?.id) {
+			// clear salon selection due error 404 - Not Found
+			dispatch(selectSalon())
+			navigate('/404')
+		}
+	}, [salonID, dispatch, navigate])
+
 	useEffect(() => {
 		if (currentUser.isLoading) {
 			return
@@ -85,13 +94,13 @@ const SalonSubRoutes: FC = () => {
 				)
 			) {
 				if (selectedSalon?.id !== salonID) {
-					dispatch(selectSalon(salonID))
+					fetchSalon()
 				}
 			} else {
 				navigate('/403')
 			}
 		}
-	}, [salonID, dispatch, currentUser, selectedSalon?.id])
+	}, [salonID, fetchSalon, currentUser, selectedSalon?.id, navigate])
 
 	return (
 		<Routes>

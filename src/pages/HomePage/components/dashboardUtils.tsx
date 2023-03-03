@@ -411,7 +411,7 @@ export const transformToReservationsStatsData = (source: IReservationsStats | nu
 			result.columns[0] = {
 				...result.columns[0],
 				[prop]: value.newReservationsB2b,
-				summary: result.columns[0].summary + value.newReservationsB2c
+				summary: result.columns[0].summary + value.newReservationsB2b
 			}
 			result.columns[1] = {
 				...result.columns[1],

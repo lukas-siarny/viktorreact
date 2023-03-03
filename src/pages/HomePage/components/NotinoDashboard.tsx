@@ -86,14 +86,14 @@ const reservationsColumns = (labels: string[] = [], futureBreak = 0): Columns =>
 						return (
 							<div className={'flex flex-1 items-center'}>
 								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[200], flex: '0 0 auto' }} />
-								<span className='xs-bold'>{i18next.t('loc:Zapnutý Rezervačný systém pre B2B')}</span>
+								<span className='xs-bold'>{i18next.t('loc:Rezervácie vytvorené v B2B')}</span>
 							</div>
 						)
 					case RESERVATIONS_STATS_TYPE.NEW_RS_B2C:
 						return (
 							<div className={'flex flex-1 items-center'}>
 								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[700], flex: '0 0 auto' }} />
-								<span className='xs-bold'>{i18next.t('loc:Zapnutý rezervačný systém pre B2C ')}</span>
+								<span className='xs-bold'>{i18next.t('loc:Rezervácie vytvorené v B2C ')}</span>
 							</div>
 						)
 					default:
@@ -528,7 +528,7 @@ const NotinoDashboard: FC = () => {
 								<ReservationsDashboard />
 								{/* // RS stats */}
 								{lineContent(
-									t('loc:Vývoj rezervácií - mesačný'),
+									t('loc:Vývoj salónov s rezervačným systémom - mesačný'),
 									rsMonthStats,
 									timeStatsFilter((date) => {
 										if (date) {
@@ -551,7 +551,7 @@ const NotinoDashboard: FC = () => {
 										if (date) {
 											setMonthStatsDate(date)
 											dispatch(
-												getRsStats({
+												getReservationStats({
 													year: Number(date.year()),
 													month: Number(date.month() + 1)
 												})

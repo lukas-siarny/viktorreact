@@ -1,7 +1,7 @@
-import languagesCRUDTestSuit from './languagesCRUD.tests'
+import languagesCRUDTestSuite from './languagesCRUD.tests'
 
 import { CRUD_OPERATIONS } from '../../enums'
 
 describe('Languages', () => {
-	languagesCRUDTestSuit([CRUD_OPERATIONS.ALL])
+	languagesCRUDTestSuite([CRUD_OPERATIONS.ALL])
 })

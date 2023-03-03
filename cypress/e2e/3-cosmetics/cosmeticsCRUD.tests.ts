@@ -6,7 +6,7 @@ import cosmetics from '../../fixtures/cosmetics.json'
 import { CREATE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS } from '../../enums'
 
-const cosmeticsCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
+const cosmeticsCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
 	let cosmeticsID: any
 
 	before(() => {
@@ -66,7 +66,7 @@ const cosmeticsCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, passw
 			cy.wait('@getCosmetics').then((getInterception: any) => {
 				// check status code
 				expect(getInterception.response.statusCode).to.equal(200)
-				cy.get(`[data-row-key="${ cosmeticsID }"]`).click()
+				cy.get(`[data-row-key="${cosmeticsID}"]`).click()
 				cy.setInputValue(FORM.COSMETIC, 'name', cosmetics.update.name, false, true)
 				cy.clickButton(SUBMIT_BUTTON_ID, FORM.COSMETIC)
 				cy.wait('@updateCosmetics').then((interception: any) => {
@@ -119,4 +119,4 @@ const cosmeticsCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, passw
 	})
 }
 
-export default cosmeticsCRUDTestSuit
+export default cosmeticsCRUDTestSuite

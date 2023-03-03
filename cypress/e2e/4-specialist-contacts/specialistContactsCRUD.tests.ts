@@ -6,7 +6,7 @@ import specialistContact from '../../fixtures/specialist-contact.json'
 import { CREATE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS } from '../../enums'
 
-const specialistContactsCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
+const specialistContactsCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
 	let specialistContactID: any
 
 	before(() => {
@@ -101,4 +101,4 @@ const specialistContactsCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: stri
 	})
 }
 
-export default specialistContactsCRUDTestSuit
+export default specialistContactsCRUDTestSuite

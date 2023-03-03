@@ -10,6 +10,14 @@ export enum LIST_OF_TESTS_SUITS {
 	SALON = 'salon'
 }
 
+export enum SALON_TESTS_SUITS {
+	BILLING_INFORMATION = 'billingInformation',
+	CUSTOMER = 'customer',
+	EMPLOYEE = 'employee',
+	INDUSTRIES_AND_SERVICES = 'Industries and services',
+	RESERVATIONS = 'Reservations'
+}
+
 export enum CRUD_OPERATIONS {
 	ALL = 'all',
 	READ = 'read',
@@ -17,3 +25,7 @@ export enum CRUD_OPERATIONS {
 	UPDATE = 'update',
 	DELETE = 'delete'
 }
+
+export const SALON_ID = 'salonId'
+export const CUSTOMER_ID = 'customerId'
+export const EMPLOYEE_ID = 'employeeId'

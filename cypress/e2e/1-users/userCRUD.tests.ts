@@ -8,7 +8,7 @@ import { loginViaApi } from '../../support/e2e'
 import { SUBMIT_BUTTON_ID, FORM } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS } from '../../enums'
 
-const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
+const userCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
 	// test id of user
 	let userID = ''
 
@@ -76,7 +76,7 @@ const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?:
 				})
 			})
 		} else {
-			// check redirect to 404 notfound page
+			// check redirect to 403 unauthorized page
 			cy.location('pathname').should('eq', '/403')
 		}
 	})
@@ -105,10 +105,10 @@ const userCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?:
 				})
 			})
 		} else {
-			// check redirect to 404 notfound page
+			// check redirect to 403 unauthorized page
 			cy.location('pathname').should('eq', '/403')
 		}
 	})
 }
 
-export default userCRUDTestSuit
+export default userCRUDTestSuite

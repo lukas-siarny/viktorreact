@@ -6,7 +6,7 @@ import languages from '../../fixtures/languages.json'
 import { CREATE_BUTTON_ID, CYPRESS, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS } from '../../enums'
 
-const languagesCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
+const languagesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
 	let languageID: any
 
 	before(() => {
@@ -124,4 +124,4 @@ const languagesCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, passw
 	})
 }
 
-export default languagesCRUDTestSuit
+export default languagesCRUDTestSuite

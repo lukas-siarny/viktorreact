@@ -591,7 +591,9 @@ export const HELP_BUTTON_ID = 'help-password-btn'
 
 export const CHANGE_PASSWORD_NEW_LINK_BUTTON_ID = 'change-password-new-link-btn'
 
-export const CREATE_EMPLOYEE_BUTTON_ID = 'create-employee-button-id'
+export const CREATE_EMPLOYEE_BUTTON_ID = 'create-employee-btn'
+
+export const CREATE_CUSTOMER_BUTTON_ID = 'create-customer-btn'
 
 export const MAX_VALUES_PER_PARAMETER = 20
 

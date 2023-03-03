@@ -6,7 +6,7 @@ import category from '../../fixtures/category.json'
 import { CREATE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS } from '../../enums'
 
-const categoriesCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
+const categoriesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
 	let industryID: any
 	let categoryID: any
 	let serviceID: any
@@ -308,4 +308,4 @@ const categoriesCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, pass
 	})
 }
 
-export default categoriesCRUDTestSuit
+export default categoriesCRUDTestSuite

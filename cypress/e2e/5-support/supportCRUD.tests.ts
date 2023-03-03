@@ -6,7 +6,7 @@ import supportContact from '../../fixtures/support.json'
 import { CREATE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS } from '../../enums'
 
-const supportCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
+const supportCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
 	let supportContactID: any
 
 	before(() => {
@@ -108,7 +108,7 @@ const supportCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, passwor
 				url: `/api/b2b/admin/enums/support-contacts/${supportContactID}`
 			}).as('getSupportContact')
 			cy.wait('@getSupportContacts')
-			cy.get(`[data-row-key="${ supportContactID }"]`).click()
+			cy.get(`[data-row-key="${supportContactID}"]`).click()
 			cy.wait('@getSupportContact')
 			cy.clickDeleteButtonWithConfCustom(FORM.SUPPORT_CONTACT)
 			cy.wait('@deleteSupportContact').then((interception: any) => {
@@ -144,4 +144,4 @@ const supportCRUDTestSuit = (actions: CRUD_OPERATIONS[], email?: string, passwor
 	})
 }
 
-export default supportCRUDTestSuit
+export default supportCRUDTestSuite

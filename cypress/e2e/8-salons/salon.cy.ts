@@ -1,7 +1,39 @@
-import salonTestSuit from './salon.tests'
+// eslint-disable-next-line import/no-cycle
+import salonTestSuite from './salon.tests'
 
-import { CRUD_OPERATIONS } from '../../enums'
+import { CRUD_OPERATIONS, SALON_TESTS_SUITS } from '../../enums'
+
+import { ITests } from '../10-roles/roles.cy'
+import { PERMISSION } from '../../../src/utils/enums'
+
+/*
+	!!! Do not remove or change the order of tests in this array !!! Change of order
+	can cause malfunction of tests, because individual tests are independent of each other
+*/
+const salonSubTests: ITests[] = [
+	{
+		name: SALON_TESTS_SUITS.BILLING_INFORMATION,
+		actions: [CRUD_OPERATIONS.ALL]
+	},
+	{
+		name: SALON_TESTS_SUITS.CUSTOMER,
+		actions: [CRUD_OPERATIONS.ALL]
+	},
+	{
+		name: SALON_TESTS_SUITS.EMPLOYEE,
+		actions: [CRUD_OPERATIONS.ALL]
+	},
+	{
+		name: SALON_TESTS_SUITS.INDUSTRIES_AND_SERVICES,
+		actions: [CRUD_OPERATIONS.ALL]
+	},
+	{
+		name: SALON_TESTS_SUITS.RESERVATIONS,
+		actions: [CRUD_OPERATIONS.ALL]
+	}
+]
 
 describe('Salons', () => {
-	salonTestSuit([CRUD_OPERATIONS.ALL])
+	// add PERMISSION.NOTINO_SUPER_ADMIN role because default logged user is super admin
+	salonTestSuite([CRUD_OPERATIONS.ALL], salonSubTests, PERMISSION.NOTINO_SUPER_ADMIN)
 })

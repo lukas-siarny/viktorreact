@@ -4,7 +4,7 @@ import user from '../../fixtures/user.json'
 
 import { CYPRESS_CLASS_NAMES, FORM } from '../../../src/utils/enums'
 
-const updateMyAccountTestSuit = (email?: string, password?: string): void => {
+const updateMyAccountTestSuite = (email?: string, password?: string): void => {
 	before(() => {
 		loginViaApi(email, password)
 	})
@@ -32,4 +32,4 @@ const updateMyAccountTestSuit = (email?: string, password?: string): void => {
 	})
 }
 
-export default updateMyAccountTestSuit
+export default updateMyAccountTestSuite

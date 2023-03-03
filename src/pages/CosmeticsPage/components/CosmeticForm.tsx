@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Divider, Form, Button } from 'antd'
+import cx from 'classnames'
 
 // utils
 import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, DELETE_BUTTON_ID, SUBMIT_BUTTON_ID } from '../../../utils/enums'
@@ -66,7 +67,17 @@ const CosmeticForm: FC<Props> = (props) => {
 					maxCount={1}
 				/>
 
-				<div className={'flex w-full justify-start mt-6 gap-2 flex-wrap'}>
+				<div className={cx('flex w-full mt-6 gap-2 flex-wrap', { 'justify-between': cosmeticID, 'justify-center': !cosmeticID })}>
+					{cosmeticID && (
+						<DeleteButton
+							onConfirm={onDelete}
+							entityName={''}
+							type={'default'}
+							className='w-full xl:w-auto xl:min-w-40'
+							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+							id={formFieldID(FORM.COSMETIC, DELETE_BUTTON_ID)}
+						/>
+					)}
 					<Button
 						className={'noti-btn w-full xl:w-auto xl:min-w-40'}
 						size='middle'
@@ -79,16 +90,6 @@ const CosmeticForm: FC<Props> = (props) => {
 					>
 						{cosmeticID ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:kozmetiku'))}
 					</Button>
-					{cosmeticID && (
-						<DeleteButton
-							onConfirm={onDelete}
-							entityName={''}
-							type={'default'}
-							className='w-full xl:w-auto xl:min-w-40'
-							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-							id={formFieldID(FORM.COSMETIC, DELETE_BUTTON_ID)}
-						/>
-					)}
 				</div>
 			</div>
 		</Form>

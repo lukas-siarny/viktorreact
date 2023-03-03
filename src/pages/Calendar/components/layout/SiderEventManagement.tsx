@@ -211,6 +211,9 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 						})
 					)
 					break
+				case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
+					dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, {  }))
+					break
 				default:
 					break
 			}

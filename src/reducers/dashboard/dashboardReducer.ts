@@ -1,8 +1,8 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { NOTINO_DASHBOARD, RS_STATS, SALONS_ANNUAL_STATS, SALONS_MONTH_STATS } from './dashboardTypes'
-import { IDashboardActions, INotinoDashboardPayload, IRsStatsPayload, ISalonsTimeStatsPayload } from './dashboardActions'
+import { NOTINO_DASHBOARD, RESERVATIONS_STATS, RS_STATS, SALONS_ANNUAL_STATS, SALONS_MONTH_STATS } from './dashboardTypes'
+import { IDashboardActions, INotinoDashboardPayload, IReservationStatsPayload, IRsStatsPayload, ISalonsTimeStatsPayload } from './dashboardActions'
 
 // eslint-disable-next-line import/prefer-default-export
 export const initState = {
@@ -25,7 +25,12 @@ export const initState = {
 		data: null,
 		isLoading: false,
 		isFailure: false
-	} as IRsStatsPayload & ILoadingAndFailure
+	} as IRsStatsPayload & ILoadingAndFailure,
+	reservationsStats: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as IReservationStatsPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -128,6 +133,31 @@ export default (state = initState, action: IDashboardActions) => {
 				...state,
 				rsStats: {
 					...initState.rsStats,
+					data: action.payload.data
+				}
+			}
+		// Reservations stats
+		case RESERVATIONS_STATS.RESERVATIONS_STATS_LOAD_START:
+			return {
+				...state,
+				reservationsStats: {
+					...state.reservationsStats,
+					isLoading: true
+				}
+			}
+		case RESERVATIONS_STATS.RESERVATIONS_STATS_LOAD_FAIL:
+			return {
+				...state,
+				reservationsStats: {
+					...initState.reservationsStats,
+					isFailure: true
+				}
+			}
+		case RESERVATIONS_STATS.RESERVATIONS_STATS_LOAD_DONE:
+			return {
+				...state,
+				reservationsStats: {
+					...initState.reservationsStats,
 					data: action.payload.data
 				}
 			}

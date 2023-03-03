@@ -552,6 +552,8 @@
   "Zamietnuť {{entity}}": "Reject {{entity}}",
   "Zaplatená": "Paid",
   "Zapnutím rezervačného systému sa aktivuje kalendár na spravovanie rezervácií a zmien zamestnancov vo vašom salóne.": "Turning on the reservation system activates the calendar for managing the reservations and work shifts of colleagues in your salon",
+  "Zapnutý Rezervačný systém pre B2B": "_NEPRELOZENE_",
+  "Zapnutý rezervačný systém pre B2C ": "_NEPRELOZENE_",
   "Zapína a vypína rezervačný systém, cez ktorý je možné v kalendári spravovať salónové rezervácie a smeny zamestnancov.": "It turns on and off the reservation system through which salon reservations and colleague shifts can be managed in the calendar",
   "Zatvorené": "Closed",
   "Zatvoriť": "Close",

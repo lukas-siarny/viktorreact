@@ -1,9 +1,9 @@
-import React, { useEffect, FC } from 'react'
+import React, { useEffect, FC, useMemo } from 'react'
 import { compose } from 'redux'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { DatePicker, Row, Spin } from 'antd'
+import { Row } from 'antd'
 import { useNavigate } from 'react-router'
 import dayjs, { Dayjs } from 'dayjs'
 
@@ -14,7 +14,7 @@ import { RootState } from '../../reducers'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // utils
-import { PERMISSION, FORM, DEFAULT_DATE_INIT_FORMAT, MONTH_NAME_YEAR_FORMAT } from '../../utils/enums'
+import { PERMISSION, FORM, DEFAULT_DATE_INIT_FORMAT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 
 // types
@@ -43,15 +43,15 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 
 	const smsHistory = useSelector((state: RootState) => state.sms.history)
 
-	const isLoading = smsHistory?.isLoading
-
 	const [query, setQuery] = useQueryParams({
 		search: StringParam(),
 		order: StringParam('createdAt:desc'),
 		limit: NumberParam(25),
 		page: NumberParam(1),
-		year: StringParam(getQueryParamDate(dayjs()))
+		date: StringParam(getQueryParamDate(dayjs()))
 	})
+
+	const validSelectedDate = useMemo(() => (dayjs(query.date).isValid() ? dayjs(query.date) : dayjs()), [query.date])
 
 	useEffect(() => {
 		dispatch(
@@ -61,11 +61,11 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 				limit: query.limit,
 				search: query.search,
 				order: query.order,
-				dateFrom: dayjs(query.date).startOf('month').format(DEFAULT_DATE_INIT_FORMAT),
-				dateTo: dayjs(query.date).endOf('month').format(DEFAULT_DATE_INIT_FORMAT)
+				dateFrom: validSelectedDate.startOf('month').format(DEFAULT_DATE_INIT_FORMAT),
+				dateTo: validSelectedDate.endOf('month').format(DEFAULT_DATE_INIT_FORMAT)
 			})
 		)
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.date, salonID])
+	}, [dispatch, query.page, query.limit, query.search, query.order, validSelectedDate, salonID])
 
 	useEffect(() => {
 		dispatch(initialize(FORM.SMS_HISTORY_FILTER, { search: query.search }))
@@ -108,8 +108,8 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 						}
 					}}
 					salonID={salonID}
-					month={dayjs(query.date).month()}
-					year={dayjs(query.date).year()}
+					selectedDate={validSelectedDate}
+					className={'mb-6 pb-0'}
 				/>
 				<SmsHistory smsHistory={smsHistory} query={query} setQuery={setQuery} />
 			</div>

@@ -9,7 +9,7 @@ import CustomTable from '../../../components/CustomTable'
 import SmsHistoryFilter from './SmsHistoryFilter'
 
 // utils
-import { normalizeDirectionKeys, setOrder, formatDateByLocale } from '../../../utils/helper'
+import { normalizeDirectionKeys, setOrder, formatDateByLocale, formatSmsNotificationEventType, formatSmsStatus } from '../../../utils/helper'
 
 // assets
 import { ReactComponent as MessageIcon } from '../../../assets/icons/message-icon.svg'
@@ -20,6 +20,7 @@ import { ILoadingAndFailure, ISpecialistContactFilter } from '../../../types/int
 // hooks
 import { IUseQueryParams, SetQueryParams } from '../../../hooks/useQueryParams'
 import { ISmsHistoryPayload } from '../../../reducers/sms/smsActions'
+import { SMS_NOTIFICATION_EVENT_TYPE, SMS_NOTIFICATION_STATUS } from '../../../utils/enums'
 
 type TableDataItem = NonNullable<ISmsHistoryPayload['data']>['smsNotificationsHistory'][0]
 
@@ -67,9 +68,9 @@ const SmsHistory: FC<Props> = (props) => {
 			key: 'createdAt',
 			sortOrder: setOrder(query.order, 'createdAt'),
 			sorter: true,
+			ellipsis: true,
 			render: (_value, record) => {
-				const { createdAt } = record
-				return formatDateByLocale(createdAt)
+				return formatDateByLocale(record.createdAt)
 			}
 		},
 		{
@@ -78,8 +79,7 @@ const SmsHistory: FC<Props> = (props) => {
 			key: 'recipient',
 			ellipsis: true,
 			render: (_value, record) => {
-				const { phone } = record.recipient
-				return phone
+				return record.recipient.phone
 			}
 		},
 		{
@@ -99,8 +99,7 @@ const SmsHistory: FC<Props> = (props) => {
 			ellipsis: true,
 			sorter: false,
 			render: (_value, record) => {
-				const value = record.notification.notificationEventType
-				return value
+				return formatSmsNotificationEventType(record.notification.notificationEventType as SMS_NOTIFICATION_EVENT_TYPE)
 			}
 		},
 		{
@@ -116,14 +115,14 @@ const SmsHistory: FC<Props> = (props) => {
 			dataIndex: 'status',
 			key: 'status',
 			render: (_value, record) => {
-				return record.status
+				return formatSmsStatus(record.status as SMS_NOTIFICATION_STATUS)
 			}
 		}
 	]
 
 	return (
 		<>
-			<div className='content-body'>
+			<div className='content-body mt-0'>
 				<Spin spinning={smsHistory?.isLoading}>
 					<SmsHistoryFilter
 						onSubmit={(values: ISpecialistContactFilter) => {

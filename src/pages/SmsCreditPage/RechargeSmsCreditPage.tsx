@@ -3,7 +3,9 @@ import { compose } from 'redux'
 import { useDispatch, useSelector } from 'react-redux'
 import { isSubmitting } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Row, Spin } from 'antd'
+import { Col, Divider, Row, Spin } from 'antd'
+import dayjs from 'dayjs'
+import { useNavigate } from 'react-router'
 
 // redux
 import { RootState } from '../../reducers'
@@ -13,7 +15,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import RechargeSmsCreditForm from './components/RechargeSmsCreditForm'
 
 // utils
-import { PERMISSION, FORM } from '../../utils/enums'
+import { PERMISSION, FORM, D_M_YEAR_FORMAT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { postReq } from '../../utils/request'
 
@@ -21,24 +23,37 @@ import { postReq } from '../../utils/request'
 import { IBreadcrumbs, IRechargeSmsCreditForm, SalonSubPageProps } from '../../types/interfaces'
 
 // assets
-import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
+import { ReactComponent as CoinsIcon } from '../../assets/icons/coins.svg'
 
 // redux
 import { getWallet } from '../../reducers/wallet/walletActions'
+import { getSmsUnitPrice } from '../../reducers/smsUnitPrices/smsUnitPricesActions'
+import { getSmsStats } from '../../reducers/sms/smsActions'
 
-// components
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
 
 const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath } = props
-	const walletID = useSelector((state: RootState) => state.selectedSalon.selectedSalon)?.data?.wallet?.id
-	const submitting = useSelector(isSubmitting(FORM.RECHARGE_SMS_CREDIT))
-
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
-	const isLoading = submitting
+	const submitting = useSelector(isSubmitting(FORM.RECHARGE_SMS_CREDIT))
+	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
+	const walletID = selectedSalon?.data?.wallet?.id
 
 	const wallet = useSelector((state: RootState) => state.wallet.wallet)
+
+	const smsPriceUnit = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPrice)
+	const stats = useSelector((state: RootState) => state.sms.stats)
+
+	const isLoading = submitting || wallet.isLoading || smsPriceUnit.isLoading || selectedSalon.isLoading || stats.isLoading
+
+	const validFrom = smsPriceUnit?.data?.validFrom
+	const validPriceLabel = validFrom ? t('loc:Aktuálna cena SMS platná od {{ validFrom }}', { validFrom: dayjs(validFrom).format(D_M_YEAR_FORMAT) }) : t('loc:Aktuálna cena SMS')
+
+	const [backUrl] = useBackUrl(parentPath + t('paths:sms-credit'))
 
 	useEffect(() => {
 		if (!walletID) {
@@ -46,6 +61,16 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 		}
 		dispatch(getWallet(salonID, walletID))
 	}, [dispatch, salonID, walletID])
+
+	useEffect(() => {
+		;(async () => {
+			const { data } = await dispatch(getSmsStats(salonID))
+			const priceId = data?.currentSmsUnitPrice.id
+			if (priceId) {
+				dispatch(getSmsUnitPrice(priceId))
+			}
+		})()
+	}, [dispatch, salonID])
 
 	const handleRechargeCredit = async (values: IRechargeSmsCreditForm) => {
 		if (!walletID || !wallet.data || submitting) {
@@ -62,6 +87,9 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 					walletIDs: [walletID]
 				}
 			)
+			if (backUrl) {
+				navigate(backUrl)
+			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -71,7 +99,11 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:SMS kredit')
+				name: t('loc:SMS kredit'),
+				link: backUrl
+			},
+			{
+				name: t('loc:Dobiť kredit')
 			}
 		]
 	}
@@ -81,13 +113,30 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:customers')} />
 			</Row>
-			<Spin spinning={isLoading}>
-				<div className='content-body small'>
-					<RechargeSmsCreditForm onSubmit={handleRechargeCredit} />
-				</div>
-			</Spin>
+			<div className='content-body small'>
+				<Spin spinning={isLoading}>
+					<Col className={'flex'}>
+						<Row className={'mx-9 w-full h-full block'} justify='center'>
+							<h3 className={'mb-0 mt-0 flex items-center'}>
+								<CoinsIcon className={'text-notino-black mr-2'} /> {t('loc:Dobiť kredit')}
+							</h3>
+							<Divider className={'mb-3 mt-3'} />
+							<ul className={'list-none p-0 m-0 mb-8'}>
+								<li className={'flex justify-between gap-2 mb-2'}>
+									<strong>{t('loc:Salón')}:</strong> {selectedSalon.data?.name}
+								</li>
+								<li className={'flex justify-between gap-2'}>
+									<strong>{validPriceLabel}:</strong>
+									{stats.data?.currentSmsUnitPrice.formattedAmount}
+								</li>
+							</ul>
+							<RechargeSmsCreditForm onSubmit={handleRechargeCredit} currencySymbol={wallet.data?.wallet.currency.symbol} />
+						</Row>
+					</Col>
+				</Spin>
+			</div>
 		</>
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(RechargeSmsCreditPage)
+export default compose(withPermissions([PERMISSION.NOTINO]))(RechargeSmsCreditPage)

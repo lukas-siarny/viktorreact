@@ -65,7 +65,9 @@ import {
 	RESERVATION_STATE,
 	PERMISSION,
 	RESERVATION_PAYMENT_METHOD,
-	RESERVATION_SOURCE_TYPE
+	RESERVATION_SOURCE_TYPE,
+	SMS_NOTIFICATION_EVENT_TYPE,
+	SMS_NOTIFICATION_STATUS
 } from './enums'
 
 import {
@@ -1391,3 +1393,31 @@ export const normalizeDataById = <T extends { id: string }>(data?: T[]): { [key:
 }
 
 export const formatPrice = (price: number, symbol?: string) => `${price.toFixed(2).replace('.', ',')} ${symbol || ''}`.trim()
+
+export const formatSmsNotificationEventType = (notificationType: SMS_NOTIFICATION_EVENT_TYPE) => {
+	switch (notificationType) {
+		case SMS_NOTIFICATION_EVENT_TYPE.RESERVATION_CONFIRMED_CUSTOMER:
+			return i18next.t('Potvrdenie')
+		case SMS_NOTIFICATION_EVENT_TYPE.RESERVATION_CHANGED_CUSTOMER:
+			return i18next.t('Zmena')
+		case SMS_NOTIFICATION_EVENT_TYPE.RESERVATION_REJECTED_CUSTOMER:
+			return i18next.t('Zrušenie')
+		case SMS_NOTIFICATION_EVENT_TYPE.RESERVATION_REMINDER_CUSTOMER:
+			return i18next.t('Pripomienka')
+		default:
+			return ''
+	}
+}
+
+export const formatSmsStatus = (status: SMS_NOTIFICATION_STATUS) => {
+	switch (status) {
+		case SMS_NOTIFICATION_STATUS.SUCCESS:
+			return i18next.t('Prijatá')
+		case SMS_NOTIFICATION_STATUS.FAILURE:
+			return i18next.t('Nedoručená')
+		case SMS_NOTIFICATION_STATUS.IGNORED:
+			return i18next.t('Ignorovaná')
+		default:
+			return ''
+	}
+}

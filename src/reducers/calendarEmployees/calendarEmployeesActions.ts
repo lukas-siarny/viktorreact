@@ -54,7 +54,7 @@ export const setCalendarEmployees =
 			options.push({
 				// show name if exist at least last name otherwise show fallback values
 				label: employee?.isForImportedEvents
-					? VIRTUAL_EMPLOYEE_NAME(i18next.t)
+					? VIRTUAL_EMPLOYEE_NAME(i18next.t).toUpperCase()
 					: getAssignedUserLabel({ id: employee.id, firstName: employee.firstName, lastName: employee.lastName, email: employee.email }),
 				value: employee.id,
 				key: `${employee.id}-key`,

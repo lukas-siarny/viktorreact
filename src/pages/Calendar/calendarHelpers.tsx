@@ -374,7 +374,7 @@ const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeO
 	return {
 		id: employee.id,
 		name: employee.isForImportedEvents
-			? VIRTUAL_EMPLOYEE_NAME(i18next.t)
+			? VIRTUAL_EMPLOYEE_NAME(i18next.t).toUpperCase()
 			: getAssignedUserLabel({
 					id: employee.id,
 					firstName: employee.firstName,

@@ -604,7 +604,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						NOTIFICATION_TYPE.NOTIFICATION,
 						true
 					)
-					fetchEvents(false) // Po PATCHi vponechat virtualny event ak bol vytvoreny
+					fetchEvents(false) // Po PATCHi ponechat virtualny event ak bol vytvoreny
 				} else {
 					// CREATE
 					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
@@ -664,7 +664,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					NOTIFICATION_TYPE.NOTIFICATION,
 					true
 				)
-				fetchEvents(false) // Po PATCHi vponechat virtualny event ak bol vytvoreny
+				fetchEvents(false) // Po PATCHi ponechat virtualny event ak bol vytvoreny
 
 				// Po UPDATE rezervacie dotiahnut eventy + zatvorit drawer, pri CREATE ostane otvoreny sider pocas updatu len
 				if (query.eventId) {
@@ -769,7 +769,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							true
 						)
 					}
-					fetchEvents(false) // Po PATCHi vponechat virtualny event ak bol vytvoreny
+					fetchEvents(false) // Po PATCHi ponechat virtualny event ak bol vytvoreny
 				} else {
 					// CREATE event shift
 					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
@@ -998,7 +998,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						shiftsTimeOffs={shiftsTimeOffs?.data || []}
 						loading={isLoading}
 						eventsViewType={validEventsViewType}
-						employees={(filteredEmployees() as any) || []}
+						employees={filteredEmployees() || []}
 						parentPath={parentPath}
 						query={query}
 						setQuery={setQuery}

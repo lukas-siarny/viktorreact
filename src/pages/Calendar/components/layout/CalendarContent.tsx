@@ -231,7 +231,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		if (!isImportedEvent && newEmployee?.isForImportedEvents) {
 			notification.warning({
 				message: t('loc:Upozornenie'),
-				description: t('loc:Rezerváciu nie je možné zaradiť medzi importované rezervácie')
+				description: t('loc:Rezerváciu nie je možné zaradiť medzi importované udalosti')
 			})
 			revertEvent()
 			return

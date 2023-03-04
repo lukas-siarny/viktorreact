@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Spin } from 'antd'
 import { initialize, isPristine, isSubmitting, submit } from 'redux-form'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import UserAccountForm from './UserAccountForm'
@@ -40,6 +41,7 @@ const UserDetail = (props: Props) => {
 	const { user } = useSelector((state: RootState) => state.user)
 	const userData = user.data?.user
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 	const submittingAccountForm = useSelector(isSubmitting(FORM.USER_ACCOUNT))
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 
@@ -47,9 +49,17 @@ const UserDetail = (props: Props) => {
 
 	const isLoading = user.isLoading || isRemoving
 
+	const fetchData = useCallback(async () => {
+		const { data } = await dispatch(getUser(userID))
+
+		if (!data?.user?.id) {
+			navigate('/404')
+		}
+	}, [dispatch, userID, navigate])
+
 	useEffect(() => {
-		dispatch(getUser(userID))
-	}, [userID, dispatch])
+		fetchData()
+	}, [fetchData])
 
 	useEffect(() => {
 		dispatch(

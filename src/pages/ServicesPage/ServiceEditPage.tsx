@@ -239,6 +239,11 @@ const ServiceEditPage = (props: Props) => {
 
 	const fetchData = useCallback(async () => {
 		const { data } = await dispatch(getService(serviceID))
+
+		if (!data?.service?.id) {
+			navigate('/404')
+		}
+
 		const { categoryParameterValues } = await dispatch(getCategory(data?.service?.category?.child?.child?.id))
 
 		if (data) {

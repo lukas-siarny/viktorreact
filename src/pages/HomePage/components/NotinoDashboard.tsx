@@ -460,7 +460,7 @@ const NotinoDashboard: FC = () => {
 						children: (
 							<SalonDashboard>
 								<Spin spinning={notino?.isLoading || !notino.data} wrapperClassName='dashboard-loading'>
-									<div className='content-body dashboard-content pt-20'>
+									<div className='content-body dashboard-content'>
 										<div className='dashboard-grid'>
 											{dashboardData.alertData.map((item: AlertData, index: number) => {
 												return <Statistics key={`statistics_item_${index}`} title={item.label} count={item.count} onActionItemClick={item.onClick} />

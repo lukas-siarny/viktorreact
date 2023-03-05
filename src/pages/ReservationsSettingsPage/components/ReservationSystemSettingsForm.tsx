@@ -36,6 +36,7 @@ import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 
 // redux
 import { RootState } from '../../../reducers'
+import Wallet from '../../../components/Dashboards/Wallet'
 
 type Props = InjectedFormProps<IReservationSystemSettingsForm, ComponentProps> & ComponentProps
 
@@ -54,7 +55,7 @@ type ComponentProps = {
 }
 
 const ReservationSystemSettingsForm = (props: Props) => {
-	const { handleSubmit, pristine, submitting, excludedB2BNotifications, parentPath } = props
+	const { handleSubmit, pristine, submitting, excludedB2BNotifications, parentPath, salonID } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const groupedServicesByCategory = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
@@ -396,17 +397,14 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					<div className={'flex'}>
 						<h3 className={'mb-0 mt-0 flex items-center'}>
 							<BellIcon className={'text-notino-black mr-2'} />
-							{t('loc:Notifikácie')}
+							{t('loc:SMS a notifikácie')}
 						</h3>
 					</div>
 					<Divider className={'mt-1 mb-3'} />
-					{/* NOTE: ready for future implementation when SMS will be supported */}
-					{/* <div className={'flex'}>
-						<div className='w-full s-regular flex items-center bg-notino-red bg-opacity-5 p-2'>
-							<InfoIcon className={'text-notino-red mr-2'} width={16} height={16} />
-							<span>SMS notifikácie sú spoplatnené podľa aktuálneho cenníka Notino.</span>
-						</div>
-					</div> */}
+					<p className={'text-notino-grayDark'}>
+						{t('loc:SMS notifikácie sú spoplatnené podľa aktuálneho cenníka Notino. Suma za SMS sa vám bude odrátavať z celkového SMS kreditu.')}
+					</p>
+					<Wallet salonID={salonID} parentPath={parentPath} className={'w-full mb-6 !bg-notino-grayLighter'} link />
 					<Row justify={'space-between'} className='mt-7'>
 						{/* Client's notifications */}
 						<div className={'w-9/20'}>

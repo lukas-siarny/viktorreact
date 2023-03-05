@@ -1,8 +1,7 @@
 import React, { FC } from 'react'
-import { Field, InjectedFormProps, reduxForm, submit } from 'redux-form'
+import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Form, FormProps } from 'antd'
-import { useDispatch } from 'react-redux'
 
 // utils
 import { FORM, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
@@ -30,7 +29,6 @@ const numberMin0 = validationNumberMin(0)
 const RechargeSmsCreditForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit, submitting, pristine, currencySymbol } = props
-	const dispatch = useDispatch()
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -49,7 +47,7 @@ const RechargeSmsCreditForm: FC<Props> = (props) => {
 			<Field
 				component={TextareaField}
 				label={t('loc:Poznámka')}
-				placeholder={t('loc:Dobrý deň, pretože ste skvelý Partner, posielame vám kredity zdarma. Veríme, že padnú vhod. :) ')}
+				placeholder={t('loc:Dobrý deň, pretože ste skvelý Partner, posielame vám kredity zdarma. Veríme, že padnú vhod.')}
 				maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
 				showLettersCount
 				name={'transactionNote'}
@@ -63,9 +61,6 @@ const RechargeSmsCreditForm: FC<Props> = (props) => {
 				size={'middle'}
 				className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 				htmlType={'submit'}
-				onClick={() => {
-					dispatch(submit(FORM.RECHARGE_SMS_CREDIT))
-				}}
 				disabled={submitting || pristine}
 				loading={submitting}
 			>

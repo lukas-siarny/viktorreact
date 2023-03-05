@@ -1392,7 +1392,7 @@ export const normalizeDataById = <T extends { id: string }>(data?: T[]): { [key:
 	return normalizedData
 }
 
-export const formatPrice = (price: number, symbol?: string) => `${price.toFixed(2).replace('.', ',')} ${symbol || ''}`.trim()
+export const formatPrice = (price: number, symbol?: string) => (!isNil(price) ? `${price} ${symbol || ''}`.trim() : '')
 
 export const formatSmsNotificationEventType = (notificationType: SMS_NOTIFICATION_EVENT_TYPE) => {
 	switch (notificationType) {

@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Row } from 'antd'
 import { useNavigate } from 'react-router'
 import dayjs, { Dayjs } from 'dayjs'
+import { isEmpty } from 'lodash'
 
 // redux
 import { RootState } from '../../reducers'
@@ -27,10 +28,14 @@ import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
 // components
 import Wallet from '../../components/Dashboards/Wallet'
 import SmsStats from '../../components/Dashboards/SmsStats'
-import { getSmsHistory } from '../../reducers/sms/smsActions'
-import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
 import SmsHistory from './components/SmsHistory'
 import SmsTimeStats from '../../components/Dashboards/SmsTimeStats'
+
+// redux
+import { getSmsHistory } from '../../reducers/sms/smsActions'
+
+// hooks
+import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
 
 const getQueryParamDate = (date: Dayjs) => date.startOf('month').format('YYYY-MM')
 
@@ -42,6 +47,7 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	const navigate = useNavigate()
 
 	const smsHistory = useSelector((state: RootState) => state.sms.history)
+	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam(),
@@ -86,35 +92,51 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 			</Row>
 
 			<div className='w-11/12 xl:w-5/6 2xl:w-3/4 3xl:w-2/3 mx-auto mt-10'>
-				<Alert
-					className='mb-6'
-					title={t('loc:Nastavte si SMS notifikácie')}
-					subTitle={t('loc:Prejdite do nastavení rezervačného systému a nastavte si SMS notifikácie podľa vašich preferencií')}
-					actionLabel={t('loc:Nastaviť SMS notifikácie')}
-					icon={<SettingIcon />}
-					onActionItemClick={() => navigate(`${parentPath}${t('paths:reservations-settings')}`)}
-				/>
-				<div className={'flex gap-4 mb-10'}>
-					<Wallet salonID={salonID} parentPath={parentPath} />
-					<SmsStats salonID={salonID} />
-				</div>
-				<SmsTimeStats
-					onPickerChange={(date) => {
-						if (date) {
-							setQuery({
-								...query,
-								date: getQueryParamDate(date)
-							})
-						}
-					}}
-					salonID={salonID}
-					selectedDate={validSelectedDate}
-					className={'mb-6 pb-0'}
-				/>
-				<SmsHistory smsHistory={smsHistory} query={query} setQuery={setQuery} />
+				{isEmpty(selectedSalon?.data?.address) ? (
+					<Alert
+						className='mt-6'
+						title={t('loc:Nastavte si adresu salóna')}
+						subTitle={t(
+							'loc:Aby ste mohli používať kreditný systém so všetkými jeho výhodami, najprv musíte mať vyplnenú adresu vášho salóna. Prejdite do nastavení Detailu salóna.'
+						)}
+						message={''}
+						actionLabel={t('loc:Nastaviť adresu')}
+						icon={<SettingIcon />}
+						onActionItemClick={() => navigate(parentPath as string)}
+					/>
+				) : (
+					<>
+						<Alert
+							className='mb-6'
+							title={t('loc:Nastavte si SMS notifikácie')}
+							subTitle={t('loc:Prejdite do nastavení rezervačného systému a nastavte si SMS notifikácie podľa vašich preferencií')}
+							actionLabel={t('loc:Nastaviť SMS notifikácie')}
+							icon={<SettingIcon />}
+							onActionItemClick={() => navigate(`${parentPath}${t('paths:reservations-settings')}`)}
+						/>
+						<div className={'flex gap-4 mb-10'}>
+							<Wallet salonID={salonID} parentPath={parentPath} />
+							<SmsStats salonID={salonID} />
+						</div>
+						<SmsTimeStats
+							onPickerChange={(date) => {
+								if (date) {
+									setQuery({
+										...query,
+										date: getQueryParamDate(date)
+									})
+								}
+							}}
+							salonID={salonID}
+							selectedDate={validSelectedDate}
+							className={'mb-6 pb-0'}
+						/>
+						<SmsHistory smsHistory={smsHistory} query={query} setQuery={setQuery} />
+					</>
+				)}
 			</div>
 		</>
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(SmsCreditPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET]))(SmsCreditPage)

@@ -10,17 +10,17 @@ import SmsHistoryFilter from './SmsHistoryFilter'
 
 // utils
 import { normalizeDirectionKeys, setOrder, formatDateByLocale, formatSmsNotificationEventType, formatSmsStatus } from '../../../utils/helper'
+import { SMS_NOTIFICATION_EVENT_TYPE, SMS_NOTIFICATION_STATUS } from '../../../utils/enums'
 
 // assets
 import { ReactComponent as MessageIcon } from '../../../assets/icons/message-icon.svg'
 
 // types
 import { ILoadingAndFailure, ISpecialistContactFilter } from '../../../types/interfaces'
+import { ISmsHistoryPayload } from '../../../reducers/sms/smsActions'
 
 // hooks
 import { IUseQueryParams, SetQueryParams } from '../../../hooks/useQueryParams'
-import { ISmsHistoryPayload } from '../../../reducers/sms/smsActions'
-import { SMS_NOTIFICATION_EVENT_TYPE, SMS_NOTIFICATION_STATUS } from '../../../utils/enums'
 
 type TableDataItem = NonNullable<ISmsHistoryPayload['data']>['smsNotificationsHistory'][0]
 
@@ -121,34 +121,32 @@ const SmsHistory: FC<Props> = (props) => {
 	]
 
 	return (
-		<>
-			<div className='content-body mt-0'>
-				<Spin spinning={smsHistory?.isLoading}>
-					<SmsHistoryFilter
-						onSubmit={(values: ISpecialistContactFilter) => {
-							setQuery({ ...query, search: values.search })
+		<div className='content-body mt-0'>
+			<Spin spinning={smsHistory?.isLoading}>
+				<SmsHistoryFilter
+					onSubmit={(values: ISpecialistContactFilter) => {
+						setQuery({ ...query, search: values.search })
+					}}
+				/>
+				<div className={'w-full mt-2'}>
+					<CustomTable<TableDataItem>
+						className='table-fixed'
+						columns={columns}
+						onChange={onChangeTable}
+						dataSource={smsHistory.data?.smsNotificationsHistory}
+						twoToneRows
+						useCustomPagination
+						pagination={{
+							pageSize: smsHistory.data?.pagination?.limit,
+							total: smsHistory.data?.pagination?.totalCount,
+							current: smsHistory.data?.pagination?.page,
+							disabled: smsHistory.isLoading,
+							onChange: onChangePagination
 						}}
 					/>
-					<div className={'w-full mt-2'}>
-						<CustomTable<TableDataItem>
-							className='table-fixed'
-							columns={columns}
-							onChange={onChangeTable}
-							dataSource={smsHistory.data?.smsNotificationsHistory}
-							twoToneRows
-							useCustomPagination
-							pagination={{
-								pageSize: smsHistory.data?.pagination?.limit,
-								total: smsHistory.data?.pagination?.totalCount,
-								current: smsHistory.data?.pagination?.page,
-								disabled: smsHistory.isLoading,
-								onChange: onChangePagination
-							}}
-						/>
-					</div>
-				</Spin>
-			</div>
-		</>
+				</div>
+			</Spin>
+		</div>
 	)
 }
 

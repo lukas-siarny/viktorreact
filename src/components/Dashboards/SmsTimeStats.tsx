@@ -23,10 +23,11 @@ type Props = {
 	salonID: string
 	onPickerChange: (date: Dayjs | null) => void
 	className?: string
+	title?: React.ReactNode
 }
 
 const SmsTimeStats = (props: Props) => {
-	const { onPickerChange, salonID, selectedDate, className } = props
+	const { onPickerChange, salonID, selectedDate, className, title } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const year = selectedDate.year()
@@ -96,7 +97,7 @@ const SmsTimeStats = (props: Props) => {
 	return (
 		<div className={cx('sms-staticis-wrapper', className)}>
 			<div className={'flex justify-between items-center'}>
-				<h2>{t('loc:Prehľad')}</h2>
+				{title || <h2>{t('loc:Prehľad')}</h2>}
 				<DatePicker
 					onChange={onPickerChange}
 					picker={'month'}
@@ -105,6 +106,7 @@ const SmsTimeStats = (props: Props) => {
 					allowClear={false}
 					format={MONTH_NAME_YEAR_FORMAT}
 					getPopupContainer={(node) => node.parentElement || document.body}
+					disabledDate={(date) => dayjs(date).year() < 2022}
 				/>
 			</div>
 			<div className={'flex gap-4 mb-6'}>
@@ -125,12 +127,12 @@ const SmsTimeStats = (props: Props) => {
 			</div>
 
 			<div className='stastics-box py-4 px-6 md:py-8 md:px-12'>
-				<div className='flex flex-wrap justify-between w-full'>
-					<h4>{t('loc:Vývoj odoslaných SMS')}</h4>
-				</div>
-				<div className='mt-4'>
-					<div className='h-40'>
-						<Spin spinning={smsTimeStats.isLoading}>
+				<Spin spinning={smsTimeStats.isLoading}>
+					<div className='flex flex-wrap justify-between w-full'>
+						<h4>{t('loc:Vývoj odoslaných SMS')}</h4>
+					</div>
+					<div className='mt-4'>
+						<div className='h-40'>
 							{smsTimeStats.isFailure ? (
 								<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('loc:Chyba')} />
 							) : (
@@ -142,18 +144,18 @@ const SmsTimeStats = (props: Props) => {
 									}}
 								/>
 							)}
-						</Spin>
+						</div>
+						<CustomTable
+							className='mt-8'
+							columns={columns(source.data?.labels, source?.data?.breakIndex)}
+							twoToneRows
+							pagination={false}
+							dataSource={source.data?.columns}
+							rowKey={(record) => record.type}
+							scroll={{ x: 400 }}
+						/>
 					</div>
-					<CustomTable
-						className='mt-8'
-						columns={columns(source.data?.labels, source?.data?.breakIndex)}
-						twoToneRows
-						pagination={false}
-						dataSource={source.data?.columns}
-						rowKey={(record) => record.type}
-						scroll={{ x: 400 }}
-					/>
-				</div>
+				</Spin>
 			</div>
 		</div>
 	)

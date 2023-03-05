@@ -57,10 +57,11 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		if (!walletID) {
-			return
+			navigate('/404')
+		} else {
+			dispatch(getWallet(salonID, walletID))
 		}
-		dispatch(getWallet(salonID, walletID))
-	}, [dispatch, salonID, walletID])
+	}, [dispatch, salonID, walletID, navigate])
 
 	useEffect(() => {
 		;(async () => {
@@ -73,7 +74,7 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	}, [dispatch, salonID])
 
 	const handleRechargeCredit = async (values: IRechargeSmsCreditForm) => {
-		if (!walletID || !wallet.data || submitting) {
+		if (!walletID || !wallet.data) {
 			return
 		}
 		try {

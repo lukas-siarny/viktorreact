@@ -209,14 +209,17 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							label: t('loc:Zamestnanci'),
 							onClick: () => navigate(getPath(t('paths:employees'))),
 							icon: <EmployeesIcon />
-						},
-						{
-							key: PAGE.SMS_CREDIT,
-							label: t('loc:SMS kredit'),
-							onClick: () => navigate(getPath(t('paths:sms-credit'))),
-							icon: <SmsUnitPricesIcon />
 						}
 					)
+				}
+
+				if (hasPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET])) {
+					mainGroupItems.push({
+						key: PAGE.SMS_CREDIT,
+						label: t('loc:SMS kredit'),
+						onClick: () => navigate(getPath(t('paths:sms-credit'))),
+						icon: <SmsUnitPricesIcon />
+					})
 				}
 
 				// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut

@@ -1,8 +1,10 @@
-import React, { FC, useEffect, useCallback, PropsWithChildren } from 'react'
+import React, { FC, useEffect, useCallback, PropsWithChildren, useState } from 'react'
 import { Spin } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import dayjs from 'dayjs'
+import { isEmpty } from 'lodash'
 
 // redux
 import { RootState } from '../../../reducers'
@@ -16,9 +18,12 @@ import { SALON_STATES } from '../../../utils/enums'
 // components
 import Alert from '../../../components/Dashboards/Alert'
 import Statistics from '../../../components/Dashboards/Statistics'
+import Wallet from '../../../components/Dashboards/Wallet'
+import SmsTimeStats from '../../../components/Dashboards/SmsTimeStats'
 
 // assets
 import { ReactComponent as EyeOffIcon } from '../../../assets/icons/eye-off-pink.svg'
+import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
 
 const SalonDashboard: FC<PropsWithChildren> = (props) => {
 	const [t] = useTranslation()
@@ -31,9 +36,12 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 	const { services } = useSelector((state: RootState) => state.service)
 	const { employees } = useSelector((state: RootState) => state.employees)
 	const { customers } = useSelector((state: RootState) => state.customers)
+	const salonID = selectedSalon.data?.id
 
 	const loading = selectedSalon?.isLoading || services?.isLoading || employees?.isLoading || customers?.isLoading
 	const basePath = t('paths:salons/{{salonID}}', { salonID: selectedSalon?.data?.id })
+
+	const [smsStatsDate, setSmsStatsDate] = useState(dayjs())
 
 	const getPath = useCallback((pathSuffix: string) => `${basePath}${pathSuffix}`, [basePath])
 
@@ -51,7 +59,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 		</div>
 	) : (
 		<>
-			{selectedSalon?.data ? (
+			{selectedSalon?.data && salonID ? (
 				<div>
 					{/* hidden salon */}
 					{selectedSalon.data?.state === SALON_STATES.NOT_PUBLISHED && selectedSalon.data?.publicationDeclineReason && (
@@ -95,6 +103,38 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 						/>
 						<Statistics title={t('loc:Vyplnenosť profilu')} count={`${selectedSalon.data.fillingProgressSalon}%`} onActionItemClick={() => navigate(basePath)} />
 					</div>
+					{isEmpty(selectedSalon.data.address) ? (
+						<Alert
+							className='mt-6'
+							title={t('loc:Nastavte si adresu salóna')}
+							subTitle={t(
+								'loc:Aby ste mohli používať kreditný systém so všetkými jeho výhodami, najprv musíte mať vyplnenú adresu vášho salóna. Prejdite do nastavení Detailu salóna.'
+							)}
+							message={''}
+							actionLabel={t('loc:Nastaviť adresu')}
+							icon={<SettingIcon />}
+							onActionItemClick={() => navigate(basePath)}
+						/>
+					) : (
+						<>
+							{/* wallet */}
+							<div className={'grid lg:grid-cols-2 gap-4 3xl:gap-8 mt-10'}>
+								<Wallet salonID={salonID} parentPath={basePath} className={'w-auto'} />
+							</div>
+							{/* sms monthly stats */}
+							<SmsTimeStats
+								onPickerChange={(date) => {
+									if (date) {
+										setSmsStatsDate(date)
+									}
+								}}
+								title={<h3>{t('loc:Spotreba SMS kreditu za obdobie')}</h3>}
+								salonID={salonID}
+								selectedDate={smsStatsDate}
+								className={'mb-6 mt-10 pb-0'}
+							/>
+						</>
+					)}
 				</div>
 			) : (
 				children

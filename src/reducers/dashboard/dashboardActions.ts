@@ -66,10 +66,6 @@ interface IGetSalonsMonthstats {
 	payload: ISalonsTimeStatsPayload
 }
 
-// export type ISalonsTimeStats = Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.Responses.$200
-// export type IRsTimeStats = Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.Responses.$200
-// export type IReservationsTimeStats = Paths.GetApiB2BAdminNotinoDashboardSalonReservationsTimeStats.Responses.$200
-
 export interface ISalonsTimeStatsPayload {
 	data: ISalonsTimeStats | null
 }

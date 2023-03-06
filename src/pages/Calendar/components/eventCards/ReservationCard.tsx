@@ -17,7 +17,7 @@ import { ReactComponent as ServiceIcon } from '../../../../assets/icons/service-
 import { ReactComponent as AvatarIcon } from '../../../../assets/icons/avatar-10.svg'
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-12.svg'
 import { ReactComponent as ClockIcon } from '../../../../assets/icons/clock-12.svg'
-import { ReactComponent as DownloadIcon } from '../../../../assets/icons/download-icon-16.svg'
+import { ReactComponent as UploadIcon } from '../../../../assets/icons/upload-icon.svg'
 
 // types
 import { CalendarEvent, IEventCardProps, ReservationPopoverData, PopoverTriggerPosition } from '../../../../types/interfaces'
@@ -49,7 +49,7 @@ const getIconState = ({
 	isImported?: boolean
 }) => {
 	if (isImported) {
-		return <DownloadIcon className={'icon import'} />
+		return <UploadIcon className={'icon import'} />
 	}
 
 	if (isPast && isApproved) {

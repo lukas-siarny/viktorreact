@@ -9,8 +9,9 @@ import cx from 'classnames'
 import i18next from 'i18next'
 
 // utils
-import { FORM } from '../../../utils/enums'
+import { FORM, PERMISSION } from '../../../utils/enums'
 import { renderPriceAndDurationInfo } from '../../../utils/helper'
+import Permissions from '../../../utils/Permissions'
 
 // types
 import { EmployeeServiceData } from '../../../types/interfaces'
@@ -89,39 +90,61 @@ const ServicesListField: FC<Props> = (props) => {
 		return (
 			<div className={'flex gap-1 items-center ml-2'}>
 				{!field?.useCategoryParameter && renderPriceAndDurationInfo(salonPriceAndDuration, employeePriceAndDuration, hasOverridenData, currencySymbol)}
-				<div onClick={(e) => e.stopPropagation()} className={'flex items-center'}>
-					<Tooltip title={disabledEditButton ? disabledEditButtonTooltip : null} destroyTooltipOnHide>
-						<span className={cx('w-full flex items-center md:w-auto', { 'cursor-not-allowed': disabledEditButton })}>
-							<Button
-								htmlType={'button'}
-								size={'small'}
-								icon={<EditIcon />}
-								className={cx('ant-btn noti-btn', {
-									'pointer-events-none': disabledEditButton
-								})}
-								disabled={disabledEditButton}
-								onClick={(e) => {
-									e.stopPropagation()
-									dispatch(initialize(FORM.EMPLOYEE_SERVICE_EDIT, field))
-									setVisibleServiceEditModal(true)
-								}}
-							/>
-						</span>
-					</Tooltip>
-				</div>
-				<DeleteButton
-					onConfirm={(e) => {
-						e?.stopPropagation()
-						fields.remove(index)
+				<Permissions
+					allowed={[PERMISSION.EMPLOYEE_UPDATE, PERMISSION.PARTNER_ADMIN]}
+					render={(hasPermission, { openForbiddenModal }) => {
+						return (
+							<div onClick={(e) => e.stopPropagation()} className={'flex items-center'}>
+								<Tooltip title={disabledEditButton ? disabledEditButtonTooltip : null} destroyTooltipOnHide>
+									<span className={cx('w-full flex items-center md:w-auto', { 'cursor-not-allowed': disabledEditButton })}>
+										<Button
+											htmlType={'button'}
+											size={'small'}
+											icon={<EditIcon />}
+											className={cx('ant-btn noti-btn', {
+												'pointer-events-none': disabledEditButton
+											})}
+											disabled={disabledEditButton}
+											onClick={(e) => {
+												e.stopPropagation()
+												if (hasPermission) {
+													dispatch(initialize(FORM.EMPLOYEE_SERVICE_EDIT, field))
+													setVisibleServiceEditModal(true)
+												} else {
+													openForbiddenModal()
+												}
+											}}
+										/>
+									</span>
+								</Tooltip>
+							</div>
+						)
 					}}
-					onCancel={(e) => e?.stopPropagation()}
-					smallIcon
-					onClick={(e) => e.stopPropagation()}
-					onKeyDown={(e) => e.stopPropagation()}
-					size={'small'}
-					entityName={t('loc:službu')}
-					type={'default'}
-					onlyIcon
+				/>
+				<Permissions
+					allowed={[PERMISSION.SERVICE_DELETE, PERMISSION.PARTNER_ADMIN]}
+					render={(hasPermission, { openForbiddenModal }) => {
+						return (
+							<DeleteButton
+								onConfirm={(e) => {
+									e?.stopPropagation()
+									if (hasPermission) {
+										fields.remove(index)
+									} else {
+										openForbiddenModal()
+									}
+								}}
+								onCancel={(e) => e?.stopPropagation()}
+								smallIcon
+								onClick={(e) => e.stopPropagation()}
+								onKeyDown={(e) => e.stopPropagation()}
+								size={'small'}
+								entityName={t('loc:službu')}
+								type={'default'}
+								onlyIcon
+							/>
+						)
+					}}
 				/>
 			</div>
 		)

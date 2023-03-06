@@ -524,7 +524,7 @@ export const composeDayViewEvents = (
 	}
 }
 
-export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees: CalendarEmployee[]) => {
+export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees: CalendarEmployee[], eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => {
 	return employees.reduce((acc, employee) => {
 		/* if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF && employee.firstName === VIRTUAL_EMPLOYEE_IDENTIFICATOR) {
 			return acc

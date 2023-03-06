@@ -25,6 +25,7 @@ const PartnerDashboard: FC<Props> = () => {
 
 	return (
 		<>
+			<PendingInvites />
 			{/* if salon is not selected and salon options are empty, display Create salon button */}
 			<SalonDashboard>
 				{isEmpty(salonOptions) && (
@@ -38,7 +39,6 @@ const PartnerDashboard: FC<Props> = () => {
 					</div>
 				)}
 			</SalonDashboard>
-			<PendingInvites />
 		</>
 	)
 }

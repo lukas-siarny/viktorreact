@@ -178,7 +178,7 @@ const SalonSubRoutes: FC = () => {
 			</Route>
 			<Route errorElement={<ErrorBoundary />} path={t('paths:sms-credit')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.SMS_CREDIT} />}>
 				<Route index element={<SmsCreditPage parentPath={parentPath} salonID={salonID} />} />
-				<Route path={t('paths:recharge')} element={<RechargeSmsCreditPage parentPath={parentPath} salonID={salonID} />} />
+				<Route path={t('recharge')} element={<RechargeSmsCreditPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* 404 */}
 			<Route element={<AuthRoute layout={MainLayout} />}>

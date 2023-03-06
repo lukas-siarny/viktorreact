@@ -38,8 +38,8 @@ const Wallet = (props: Props) => {
 	const walletID = useSelector((state: RootState) => state.selectedSalon.selectedSalon)?.data?.wallet?.id
 	const wallet = useSelector((state: RootState) => state.wallet.wallet)
 	const authUser = useSelector((state: RootState) => state.user.authUser)
-	// NOTE: otazka - podla swaggera si NOTINO permission nedokaze dotiahnut detail penazenky, avsak dokaze nabit kredit - dava to zmysel?
-	const hasPermission = checkPermissions(authUser?.data?.uniqPermissions, [PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET])
+	const salonPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions ?? [])
+	const hasPermission = checkPermissions([...(authUser?.data?.uniqPermissions || []), ...salonPermissions], [PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET])
 
 	useEffect(() => {
 		if (!walletID || !hasPermission) {
@@ -48,7 +48,7 @@ const Wallet = (props: Props) => {
 		dispatch(getWallet(salonID, walletID))
 	}, [dispatch, salonID, walletID, hasPermission])
 
-	return hasPermission ? (
+	return hasPermission && walletID ? (
 		<div className={cx('p-4 pb-8 rounded shadow-lg bg-notino-white', className)}>
 			<Spin spinning={wallet.isLoading || authUser.isLoading}>
 				<h4 className={'mb-0 flex items-center text-lg'}>

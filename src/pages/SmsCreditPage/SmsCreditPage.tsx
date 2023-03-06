@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import { Row } from 'antd'
 import { useNavigate } from 'react-router'
 import dayjs, { Dayjs } from 'dayjs'
-import { isEmpty } from 'lodash'
 
 // redux
 import { RootState } from '../../reducers'
@@ -92,7 +91,7 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 			</Row>
 
 			<div className='w-11/12 xl:w-5/6 2xl:w-3/4 3xl:w-2/3 mx-auto mt-10'>
-				{isEmpty(selectedSalon?.data?.address) ? (
+				{!selectedSalon?.data?.wallet?.id ? (
 					<Alert
 						className='mt-6'
 						title={t('loc:Nastavte si adresu salóna')}

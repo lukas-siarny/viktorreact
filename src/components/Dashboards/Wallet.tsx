@@ -39,16 +39,16 @@ const Wallet = (props: Props) => {
 	const wallet = useSelector((state: RootState) => state.wallet.wallet)
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const salonPermissions = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.uniqPermissions ?? [])
-	const hasPermission = checkPermissions([...(authUser?.data?.uniqPermissions || []), ...salonPermissions], [PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET])
+	const hasPermissionToSeeWallet = checkPermissions([...(authUser?.data?.uniqPermissions || []), ...salonPermissions], [PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET])
 
 	useEffect(() => {
-		if (!walletID || !hasPermission) {
+		if (!walletID || !hasPermissionToSeeWallet) {
 			return
 		}
 		dispatch(getWallet(salonID, walletID))
-	}, [dispatch, salonID, walletID, hasPermission])
+	}, [dispatch, salonID, walletID, hasPermissionToSeeWallet])
 
-	return hasPermission && walletID ? (
+	return walletID ? (
 		<div className={cx('p-4 pb-8 rounded shadow-lg bg-notino-white', className)}>
 			<Spin spinning={wallet.isLoading || authUser.isLoading}>
 				<h4 className={'mb-0 flex items-center text-lg'}>
@@ -57,13 +57,15 @@ const Wallet = (props: Props) => {
 				</h4>
 				<Divider className={'mb-8 mt-3'} />
 				<div className={'flex justify-between items-center gap-4 flex-wrap'}>
-					<div>
-						<span className={'block mb-2'}>{t('loc:Zostáva')}</span>
-						<p className={'m-0 leading-8'}>
-							<span className={'text-3xl font-bold mr-1'}>{formatPrice(wallet.data?.wallet.availableBalance || 0)}</span>
-							{wallet.data?.wallet.currency.symbol}
-						</p>
-					</div>
+					{hasPermissionToSeeWallet && (
+						<div>
+							<span className={'block mb-2'}>{t('loc:Zostáva')}</span>
+							<p className={'m-0 leading-8'}>
+								<span className={'text-3xl font-bold mr-1'}>{formatPrice(wallet.data?.wallet.availableBalance || 0)}</span>
+								{wallet.data?.wallet.currency.symbol}
+							</p>
+						</div>
+					)}
 					{link ? (
 						<Link
 							to={`${parentPath}${t('paths:sms-credit')}`}

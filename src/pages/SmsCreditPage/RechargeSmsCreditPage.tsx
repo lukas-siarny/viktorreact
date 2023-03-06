@@ -43,25 +43,17 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const walletID = selectedSalon?.data?.wallet?.id
 
-	const wallet = useSelector((state: RootState) => state.wallet.wallet)
+	// const wallet = useSelector((state: RootState) => state.wallet.wallet)
 
 	const smsPriceUnit = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPrice)
 	const stats = useSelector((state: RootState) => state.sms.stats)
 
-	const isLoading = submitting || wallet.isLoading || smsPriceUnit.isLoading || selectedSalon.isLoading || stats.isLoading
+	const isLoading = submitting || smsPriceUnit.isLoading || selectedSalon.isLoading || stats.isLoading
 
 	const validFrom = smsPriceUnit?.data?.validFrom
 	const validPriceLabel = validFrom ? t('loc:Aktuálna cena SMS platná od {{ validFrom }}', { validFrom: dayjs(validFrom).format(D_M_YEAR_FORMAT) }) : t('loc:Aktuálna cena SMS')
 
 	const [backUrl] = useBackUrl(parentPath + t('paths:sms-credit'))
-
-	useEffect(() => {
-		if (!walletID) {
-			navigate('/404')
-		} else {
-			dispatch(getWallet(salonID, walletID))
-		}
-	}, [dispatch, salonID, walletID, navigate])
 
 	useEffect(() => {
 		;(async () => {
@@ -74,7 +66,7 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	}, [dispatch, salonID])
 
 	const handleRechargeCredit = async (values: IRechargeSmsCreditForm) => {
-		if (!walletID || !wallet.data) {
+		if (!walletID || !selectedSalon.data?.currency.code) {
 			return
 		}
 		try {
@@ -83,7 +75,7 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 				{},
 				{
 					amount: values.amount,
-					currencyCode: wallet.data.wallet.currency.code,
+					currencyCode: selectedSalon.data?.currency.code,
 					transactionNote: values.transactionNote || null,
 					walletIDs: [walletID]
 				}
@@ -131,7 +123,7 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 									{stats.data?.currentSmsUnitPrice.formattedAmount}
 								</li>
 							</ul>
-							<RechargeSmsCreditForm onSubmit={handleRechargeCredit} currencySymbol={wallet.data?.wallet.currency.symbol} />
+							<RechargeSmsCreditForm onSubmit={handleRechargeCredit} currencySymbol={selectedSalon.data?.currency.symbol} />
 						</Row>
 					</Col>
 				</Spin>

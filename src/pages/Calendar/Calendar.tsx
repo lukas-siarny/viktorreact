@@ -1040,6 +1040,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							query={query}
 							setQuery={setQuery}
 							areEmployeesLoaded={!employeesLoading}
+							calendarEmployees={calendarEmployees}
 						/>
 					)}
 				</Layout>

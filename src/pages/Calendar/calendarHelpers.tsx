@@ -35,9 +35,7 @@ import {
 	DAY,
 	MONTHLY_RESERVATIONS_KEY,
 	NEW_ID_PREFIX,
-	NOTIFICATION_TYPES,
-	VIRTUAL_EMPLOYEE_IDENTIFICATOR,
-	VIRTUAL_EMPLOYEE_NAME
+	NOTIFICATION_TYPES
 } from '../../utils/enums'
 import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
 import { cancelGetTokens } from '../../utils/request'
@@ -373,14 +371,12 @@ const getBgEventEnd = (start: string, end: string) =>
 const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeOff: boolean, description?: string): IResourceEmployee => {
 	return {
 		id: employee.id,
-		name: employee.isForImportedEvents
-			? VIRTUAL_EMPLOYEE_NAME(i18next.t).toUpperCase()
-			: getAssignedUserLabel({
-					id: employee.id,
-					firstName: employee.firstName,
-					lastName: employee?.lastName,
-					email: employee.email
-			  }),
+		name: getAssignedUserLabel({
+			id: employee.id,
+			firstName: employee.firstName,
+			lastName: employee?.lastName,
+			email: employee.email
+		}),
 		color: employee.color,
 		image: employee.image.resizedImages.thumbnail,
 		description,
@@ -528,7 +524,7 @@ export const composeDayViewEvents = (
 	}
 }
 
-export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees: CalendarEmployee[], eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => {
+export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees: CalendarEmployee[]) => {
 	return employees.reduce((acc, employee) => {
 		/* if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF && employee.firstName === VIRTUAL_EMPLOYEE_IDENTIFICATOR) {
 			return acc

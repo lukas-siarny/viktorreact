@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Action, compose, Dispatch } from 'redux'
-import { Button, Modal, notification, Row, Spin } from 'antd'
+import { Button, Modal, notification, Row, Spin, Alert } from 'antd'
 import { get, forEach } from 'lodash'
 import { change, initialize, isPristine, isSubmitting, submit } from 'redux-form'
 import cx from 'classnames'
@@ -38,7 +38,7 @@ import { Paths } from '../../types/api'
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { DELETE_BUTTON_ID, FORM, PARAMETER_TYPE, PERMISSION, SUBMIT_BUTTON_ID } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, PARAMETER_TYPE, PERMISSION, SUBMIT_BUTTON_ID, VIRTUAL_EMPLOYEE_IDENTIFICATOR } from '../../utils/enums'
 import {
 	filterSalonRolesByPermission,
 	formFieldID,
@@ -291,6 +291,7 @@ const EmployeePage = (props: Props) => {
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values) as IEmployeeForm
 
 	const isEmployeeExists = !!employee?.data?.employee?.id
+	const isForImportedEvents = employee?.data?.employee?.firstName === VIRTUAL_EMPLOYEE_IDENTIFICATOR
 
 	const isLoading = submitting || employee.isLoading || services.isLoading || currentAuthUser.isLoading || isRemoving
 
@@ -476,7 +477,7 @@ const EmployeePage = (props: Props) => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:employees')} />
 			</Row>
 
-			{formValues?.hasActiveAccount && (
+			{formValues?.hasActiveAccount && !isForImportedEvents && (
 				<div className='content-body small mb-8'>
 					<Spin spinning={isLoading}>
 						<EditRoleForm
@@ -496,81 +497,84 @@ const EmployeePage = (props: Props) => {
 						isEdit
 						onSubmit={updateEmployee}
 						setVisibleServiceEditModal={setVisibleServiceEditModal}
+						isForImportedEvents={isForImportedEvents}
 					/>
-					<div className={'content-footer'}>
-						<div
-							className={cx('flex flex-col gap-2 lg:flex-row flex-wrap', {
-								'lg:justify-between': isEmployeeExists,
-								'lg:justify-center': !isEmployeeExists
-							})}
-						>
-							{isEmployeeExists ? (
-								<DeleteButton
-									permissions={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_DELETE]}
-									className={'w-full lg:w-auto lg:min-w-50 xl:min-w-60'}
-									onConfirm={deleteEmployee}
-									entityName={t('loc:zamestnanca')}
-									type={'default'}
-									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-									id={formFieldID(FORM.EMPLOYEE, DELETE_BUTTON_ID)}
-								/>
-							) : undefined}
-							<div className={'flex flex-col lg:flex-row gap-2'}>
-								{isProfileInActive && (
+					{!isForImportedEvents && (
+						<div className={'content-footer'}>
+							<div
+								className={cx('flex flex-col gap-2 lg:flex-row flex-wrap', {
+									'lg:justify-between': isEmployeeExists,
+									'lg:justify-center': !isEmployeeExists
+								})}
+							>
+								{isEmployeeExists ? (
+									<DeleteButton
+										permissions={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_DELETE]}
+										className={'w-full lg:w-auto lg:min-w-50 xl:min-w-60'}
+										onConfirm={deleteEmployee}
+										entityName={t('loc:zamestnanca')}
+										type={'default'}
+										getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+										id={formFieldID(FORM.EMPLOYEE, DELETE_BUTTON_ID)}
+									/>
+								) : undefined}
+								<div className={'flex flex-col lg:flex-row gap-2'}>
+									{isProfileInActive && (
+										<Permissions
+											allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]}
+											render={(hasPermission, { openForbiddenModal }) => (
+												<Button
+													type={'dashed'}
+													size={'middle'}
+													className={'noti-btn m-regular w-full lg:w-auto xl:min-w-40'}
+													htmlType={'button'}
+													icon={<EmployeesIcon />}
+													onClick={(e) => {
+														if (hasPermission) {
+															setVisible(true)
+															dispatch(initialize(FORM.INVITE_EMPLOYEE, { email: form?.values?.inviteEmail, roleID: form?.values?.roleID }))
+														} else {
+															e.preventDefault()
+															openForbiddenModal()
+														}
+													}}
+													disabled={isInviteFromSubmitting}
+													loading={isInviteFromSubmitting}
+												>
+													{t('loc:Pozvať do tímu')}
+												</Button>
+											)}
+										/>
+									)}
 									<Permissions
-										allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]}
+										allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_UPDATE]}
 										render={(hasPermission, { openForbiddenModal }) => (
 											<Button
-												type={'dashed'}
+												id={formFieldID(FORM.EMPLOYEE, SUBMIT_BUTTON_ID)}
+												type={'primary'}
+												icon={<EditIcon />}
 												size={'middle'}
-												className={'noti-btn m-regular w-full lg:w-auto xl:min-w-40'}
-												htmlType={'button'}
-												icon={<EmployeesIcon />}
+												className={`noti-btn m-regular w-full lg:w-auto ${isProfileInActive ? 'xl:min-w-40' : 'lg:min-w-50 xl:min-w-60'}`}
+												htmlType={'submit'}
 												onClick={(e) => {
 													if (hasPermission) {
-														setVisible(true)
-														dispatch(initialize(FORM.INVITE_EMPLOYEE, { email: form?.values?.inviteEmail, roleID: form?.values?.roleID }))
+														dispatch(submit(FORM.EMPLOYEE))
 													} else {
 														e.preventDefault()
 														openForbiddenModal()
 													}
 												}}
-												disabled={isInviteFromSubmitting}
-												loading={isInviteFromSubmitting}
+												disabled={submitting || isFormPristine}
+												loading={submitting}
 											>
-												{t('loc:Pozvať do tímu')}
+												{t('loc:Uložiť')}
 											</Button>
 										)}
 									/>
-								)}
-								<Permissions
-									allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_UPDATE]}
-									render={(hasPermission, { openForbiddenModal }) => (
-										<Button
-											id={formFieldID(FORM.EMPLOYEE, SUBMIT_BUTTON_ID)}
-											type={'primary'}
-											icon={<EditIcon />}
-											size={'middle'}
-											className={`noti-btn m-regular w-full lg:w-auto ${isProfileInActive ? 'xl:min-w-40' : 'lg:min-w-50 xl:min-w-60'}`}
-											htmlType={'submit'}
-											onClick={(e) => {
-												if (hasPermission) {
-													dispatch(submit(FORM.EMPLOYEE))
-												} else {
-													e.preventDefault()
-													openForbiddenModal()
-												}
-											}}
-											disabled={submitting || isFormPristine}
-											loading={submitting}
-										>
-											{t('loc:Uložiť')}
-										</Button>
-									)}
-								/>
+								</div>
 							</div>
 						</div>
-					</div>
+					)}
 				</Spin>
 			</div>
 			<Modal

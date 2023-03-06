@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useImperativeHandle } from 'react'
+import React, { useEffect, useImperativeHandle, useMemo } from 'react'
 import Sider from 'antd/lib/layout/Sider'
 import { compact, map } from 'lodash'
 import cx from 'classnames'
@@ -14,8 +14,7 @@ import { ICalendarEventForm, ICalendarImportedReservationForm, ICalendarReservat
 import { RootState } from '../../../../reducers'
 
 // utils
-import { getReq } from '../../../../utils/request'
-import { formatLongQueryString, getAssignedUserLabel, initializeLabelInValueSelect } from '../../../../utils/helper'
+import { getAssignedUserLabel, initializeLabelInValueSelect } from '../../../../utils/helper'
 import {
 	CALENDAR_COMMON_SETTINGS,
 	CALENDAR_EVENT_TYPE,
@@ -46,6 +45,7 @@ import TabsComponent from '../../../../components/TabsComponent'
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 import { IUseQueryParams } from '../../../../hooks/useQueryParams'
 import ImportedReservationForm from '../forms/ImportedReservationForm'
+import { ICalendarEmployeesPayload } from '../../../../reducers/calendarEmployees/calendarEmployeesActions'
 
 type Props = {
 	salonID: string
@@ -65,6 +65,7 @@ type Props = {
 	query: IUseQueryParams
 	setQuery: (newValues: IUseQueryParams) => void
 	areEmployeesLoaded: boolean
+	calendarEmployees: ICalendarEmployeesPayload
 }
 
 export type SiderEventManagementRefs = {
@@ -88,14 +89,22 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 		loadingData,
 		query,
 		setQuery,
-		areEmployeesLoaded
+		areEmployeesLoaded,
+		calendarEmployees
 	} = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
-	const employees = useSelector((state: RootState) => state.employees.employees)
+	const employeesOptions = useMemo(
+		() =>
+			calendarEmployees.options.map((option) => ({
+				...option,
+				disabled: option.extra?.isForImportedEvents
+			})),
+		[calendarEmployees.options]
+	)
 
 	useEffect(() => {
 		// nastavuje referenciu na CalendarApi, musi sa update-ovat, ked sa meni View, aby bola aktualna vo virtalEventActions
@@ -151,8 +160,6 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 				  }
 				: {}
 
-			const employee = employees.data?.employees?.find((emp) => data?.employee.id === emp.id)
-
 			const initData: ICalendarEventForm = {
 				eventId: data.id,
 				date: data.start.date,
@@ -171,7 +178,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 						email: data.employee.email
 					}),
 					{
-						employeeData: employee || data.employee
+						employeeData: data.employee
 					}
 				),
 				...repeatOptions
@@ -258,39 +265,6 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 		initCreateEventForm
 	}))
 
-	const searchEmployes = useCallback(
-		async (search: string, page: number) => {
-			try {
-				const { data } = await getReq('/api/b2b/admin/employees/', {
-					search: formatLongQueryString(search),
-					page,
-					salonID
-				})
-				const selectOptions = map(data.employees, (employee) => ({
-					value: employee.id,
-					key: employee.id,
-					label: getAssignedUserLabel({
-						id: employee.id,
-						firstName: employee.firstName,
-						lastName: employee.lastName,
-						email: employee.email
-					}),
-					borderColor: employee.color,
-					thumbNail: employee.image.resizedImages.thumbnail,
-					extra: {
-						employeeData: {
-							color: employee.color
-						}
-					}
-				}))
-				return { pagination: data.pagination, data: selectOptions }
-			} catch (e) {
-				return { pagination: null, data: [] }
-			}
-		},
-		[salonID]
-	)
-
 	const getCalendarForm = () => {
 		switch (sidebarView) {
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
@@ -298,7 +272,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 				return (
 					<EventForm
-						searchEmployes={searchEmployes}
+						employeesOptions={employeesOptions}
 						eventId={eventId}
 						onSubmit={handleSubmitEvent}
 						sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE}
@@ -314,7 +288,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 						salonID={salonID}
 						eventId={eventId}
 						phonePrefix={phonePrefix}
-						searchEmployes={searchEmployes}
+						employeesOptions={employeesOptions}
 						onSubmit={handleSubmitReservation}
 						loadingData={loadingData}
 						sidebarView={query.sidebarView as CALENDAR_EVENT_TYPE}

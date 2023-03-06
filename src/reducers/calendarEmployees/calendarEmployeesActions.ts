@@ -1,22 +1,23 @@
-import i18next from 'i18next'
 /* eslint-disable import/no-cycle */
+import i18next from 'i18next'
 import { ThunkResult } from '../index'
-import { SET_CALENDAR_EMPLOYEES } from './calendarEmployeesTypes'
 
 // utils
-import { CalendarEmployee, ISelectOptionItem } from '../../types/interfaces'
 import { VIRTUAL_EMPLOYEE_IDENTIFICATOR, VIRTUAL_EMPLOYEE_NAME } from '../../utils/enums'
 import { getAssignedUserLabel } from '../../utils/helper'
+import { SET_CALENDAR_EMPLOYEES } from './calendarEmployeesTypes'
 
 // types
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
+import { CalendarEmployee, ISelectOptionItem } from '../../types/interfaces'
 
 export type ICalendarEmployeesActions = IResetStore | IGetEmployees
 
+export type ICalendarEmployeeOptionItem = ISelectOptionItem<{ employeeData: { color: string }; thumbnail: string; color: string; isForImportedEvents: boolean }>
 export interface ICalendarEmployeesPayload {
 	data: CalendarEmployee[] | null
-	options: ISelectOptionItem[]
+	options: ICalendarEmployeeOptionItem[]
 }
 
 interface IGetEmployees {
@@ -32,34 +33,34 @@ export const setCalendarEmployees =
 			options: []
 		} as ICalendarEmployeesPayload
 
-		const options: ISelectOptionItem[] = []
+		const options: ICalendarEmployeeOptionItem[] = []
+		const calendarEmployees: CalendarEmployee[] = []
 
-		const calendarEmployees: CalendarEmployee[] = (employees || [])
-			.map((employee, i) => {
-				const isForImportedEvents = employee.firstName === VIRTUAL_EMPLOYEE_IDENTIFICATOR
-				return {
-					id: employee.id,
-					firstName: employee.firstName,
-					lastName: employee.lastName,
-					email: employee.email,
-					orderIndex: isForImportedEvents ? -1 : i, // TODO: potom z BE tahat
-					color: employee.color,
-					image: employee.image,
-					isForImportedEvents
-				}
+		employees?.forEach((employee) => {
+			const isForImportedEvents = employee.firstName === VIRTUAL_EMPLOYEE_IDENTIFICATOR
+			calendarEmployees.push({
+				id: employee.id,
+				firstName: employee.firstName,
+				lastName: employee.lastName,
+				email: employee.email,
+				orderIndex: employee.orderIndex,
+				color: employee.color,
+				image: employee.image,
+				isForImportedEvents
 			})
-			.sort((a, b) => a.orderIndex - b.orderIndex)
-
-		calendarEmployees.forEach((employee) => {
 			options.push({
 				// show name if exist at least last name otherwise show fallback values
-				label: employee?.isForImportedEvents
-					? VIRTUAL_EMPLOYEE_NAME(i18next.t).toUpperCase()
-					: getAssignedUserLabel({ id: employee.id, firstName: employee.firstName, lastName: employee.lastName, email: employee.email }),
+				label: getAssignedUserLabel({ id: employee.id, firstName: employee.firstName, lastName: employee.lastName, email: employee.email }),
 				value: employee.id,
 				key: `${employee.id}-key`,
 				extra: {
-					color: employee.color
+					// employeeData s hodnotou color je potrebne, aby sa v mesacnom view zobrazila spravne farba pri vytvarani noveho eventu
+					employeeData: {
+						color: employee.color
+					},
+					thumbnail: employee.image.resizedImages.thumbnail,
+					color: employee.color,
+					isForImportedEvents
 				}
 			})
 		})

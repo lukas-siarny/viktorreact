@@ -2,7 +2,7 @@ import React, { FC, MouseEventHandler } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Divider, Form, Space, Button } from 'antd'
+import { Divider, Form, Space, Button, Alert } from 'antd'
 import { isEmpty } from 'lodash'
 
 // utils
@@ -34,13 +34,14 @@ type ComponentProps = {
 	isEdit?: boolean
 	addService?: MouseEventHandler<HTMLElement>
 	setVisibleServiceEditModal?: (visible: boolean) => void
+	isForImportedEvents?: boolean
 }
 
 type Props = InjectedFormProps<IEmployeeForm, ComponentProps> & ComponentProps
 
 const EmployeeForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, addService, setVisibleServiceEditModal, isEdit, pristine } = props
+	const { handleSubmit, addService, setVisibleServiceEditModal, isEdit, pristine, isForImportedEvents } = props
 	const formValues: Partial<IEmployeeForm> = useSelector((state: RootState) => getFormValues(FORM.EMPLOYEE)(state))
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const services = useSelector((state: RootState) => state.service.services)
@@ -50,6 +51,14 @@ const EmployeeForm: FC<Props> = (props) => {
 			<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 				<Space className={'w-full px-9'} direction='vertical' size={36}>
 					<div>
+						{isForImportedEvents && (
+							<Alert
+								message={t('loc:Zamestnanec automaticky vytvorený pri importe rezervácií. Nie je možné ho editovať ani zmazať')}
+								showIcon
+								type={'warning'}
+								className={'noti-alert w-full mb-4'}
+							/>
+						)}
 						<h3 className={'mb-0 mt-0 flex items-center'}>
 							<InfoIcon className={'text-notino-black mr-2'} /> {t('loc:Osobné údaje')}
 						</h3>
@@ -64,23 +73,42 @@ const EmployeeForm: FC<Props> = (props) => {
 								category={UPLOAD_IMG_CATEGORIES.EMPLOYEE}
 								multiple={false}
 								maxCount={1}
+								disabled={isForImportedEvents}
 							/>
 							<div className={'flex-1'}>
-								<Field component={InputField} label={t('loc:Meno')} placeholder={t('loc:Zadajte meno')} name={'firstName'} size={'large'} required />
-								<Field component={InputField} label={t('loc:Priezvisko')} placeholder={t('loc:Zadajte priezvisko')} name={'lastName'} size={'large'} required />
+								<Field
+									component={InputField}
+									label={t('loc:Meno')}
+									placeholder={t('loc:Zadajte meno')}
+									name={'firstName'}
+									size={'large'}
+									required
+									disabled={isForImportedEvents}
+								/>
+								<Field
+									component={InputField}
+									label={t('loc:Priezvisko')}
+									placeholder={t('loc:Zadajte priezvisko')}
+									name={'lastName'}
+									size={'large'}
+									required
+									disabled={isForImportedEvents}
+								/>
 							</div>
 						</div>
-						<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
-						<PhoneWithPrefixField
-							label={'Telefón'}
-							placeholder={t('loc:Zadajte telefón')}
-							size={'large'}
-							prefixName={'phonePrefixCountryCode'}
-							phoneName={'phone'}
-							formName={FORM.EMPLOYEE}
-						/>
+						{!isForImportedEvents && <Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />}
+						{!isForImportedEvents && (
+							<PhoneWithPrefixField
+								label={'Telefón'}
+								placeholder={t('loc:Zadajte telefón')}
+								size={'large'}
+								prefixName={'phonePrefixCountryCode'}
+								phoneName={'phone'}
+								formName={FORM.EMPLOYEE}
+							/>
+						)}
 					</div>
-					{isEdit && (
+					{isEdit && !isForImportedEvents && (
 						<div>
 							<h3 className={'mb-0 mt-0 flex items-center'}>
 								<ServiceIcon className={'text-notino-black mr-2'} /> {t('loc:Priradené služby')}

@@ -42,19 +42,20 @@ import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
 // redux
 import { RootState } from '../../../../reducers'
+import { ICalendarEmployeesPayload } from '../../../../reducers/calendarEmployees/calendarEmployeesActions'
 
 type ComponentProps = {
 	eventId?: string | null
-	searchEmployes: (search: string, page: number) => Promise<any>
 	loadingData?: boolean
 	sidebarView?: CALENDAR_EVENT_TYPE
+	employeesOptions: ICalendarEmployeesPayload['options']
 }
 
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
 const formName = FORM.CALENDAR_EVENT_FORM
 
 const EventForm: FC<Props> = (props) => {
-	const { handleSubmit, eventId, searchEmployes, pristine, submitting, loadingData, sidebarView } = props
+	const { handleSubmit, eventId, pristine, submitting, loadingData, sidebarView } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const formValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(formName)(state))
@@ -148,7 +149,6 @@ const EventForm: FC<Props> = (props) => {
 							disabled={eventId} // NOTE: ak je detail tak sa neda menit zamestnanec
 							className={'pb-0'}
 							labelInValue
-							onSearch={searchEmployes}
 							hasExtra
 						/>
 						<Field

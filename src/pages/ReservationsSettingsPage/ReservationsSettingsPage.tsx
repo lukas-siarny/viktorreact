@@ -6,13 +6,12 @@ import { Col, Row, Spin } from 'antd'
 import { forEach, includes, isEmpty, reduce } from 'lodash'
 
 // components
-import { useNavigate } from 'react-router-dom'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ReservationSystemSettingsForm from './components/ReservationSystemSettingsForm'
 
 // utils
-import { FORM, NOTIFICATION_TYPES, PERMISSION, ADMIN_PERMISSIONS, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
-import { withPermissions, checkPermissions } from '../../utils/Permissions'
+import { FORM, NOTIFICATION_TYPES, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
+import { withPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 
 // reducers
@@ -123,15 +122,11 @@ const initDisabledNotifications = (notifications: DisabledNotificationsArray): I
 const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const navigate = useNavigate()
 	const { salonID } = props
 	const { parentPath } = props
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const groupedSettings = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 	const submitting = useSelector(isSubmitting(FORM.RESEVATION_SYSTEM_SETTINGS))
-
-	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
-	const authUserPermissions = currentUser?.uniqPermissions
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -143,17 +138,6 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 
 	const fetchData = async () => {
 		const salonRes = await dispatch(selectSalon(salonID))
-		// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
-		const salonPermissions = salonRes?.data?.uniqPermissions || []
-		const userPermissions = [...(authUserPermissions || []), ...salonPermissions]
-
-		const canVisitThisPage =
-			checkPermissions(userPermissions, [PERMISSION.NOTINO]) ||
-			(checkPermissions(userPermissions, [PERMISSION.PARTNER], ADMIN_PERMISSIONS) && salonRes?.data?.settings?.enabledReservations)
-		if (!canVisitThisPage) {
-			navigate('/404')
-			return
-		}
 
 		const servicesRes = await dispatch(getServices({ salonID }))
 

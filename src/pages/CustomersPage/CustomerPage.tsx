@@ -102,7 +102,7 @@ const CustomerPage = (props: Props) => {
 					city: data.city,
 					countryCode: data.countryCode,
 					firstName: data.firstName,
-					gender: data.gender,
+					gender: data.gender ?? undefined,
 					lastName: data.lastName,
 					note: data.note,
 					street: data.street,

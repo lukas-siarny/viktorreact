@@ -417,13 +417,13 @@ export interface ICustomerForm {
 	email?: string
 	phonePrefixCountryCode: string
 	phone: string
-	gender?: GENDER
-	note?: string
-	zipCode?: string
-	city?: string
-	street?: string
-	streetNumber?: string
-	countryCode?: string
+	gender: GENDER | null
+	note: string | null
+	zipCode: string | null
+	city: string | null
+	street: string | null
+	streetNumber: string | null
+	countryCode: string | null
 	salonID?: string
 	gallery?: any
 	avatar?: any

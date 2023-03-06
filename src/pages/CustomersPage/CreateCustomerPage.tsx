@@ -75,7 +75,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 				city: formData.city,
 				countryCode: formData.countryCode,
 				firstName: formData.firstName,
-				gender: formData.gender,
+				gender: formData.gender ?? undefined,
 				lastName: formData.lastName,
 				salonID,
 				street: formData.street,

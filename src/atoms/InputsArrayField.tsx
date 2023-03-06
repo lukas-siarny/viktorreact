@@ -11,7 +11,7 @@ import InputField from './InputField'
 import InputNumberField from './InputNumberField'
 
 // helpers
-import { DELETE_BUTTON_ID, FORM, STRINGS } from '../utils/enums'
+import { DELETE_BUTTON_ID, STRINGS } from '../utils/enums'
 
 // assets
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon-16.svg'

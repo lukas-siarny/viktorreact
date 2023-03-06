@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize, isSubmitting } from 'redux-form'
-import { Button, Col, Divider, Row, Spin } from 'antd'
+import { Col, Row, Spin } from 'antd'
 import { forEach, includes, isEmpty, reduce } from 'lodash'
 import { useNavigate } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ReservationSystemSettingsForm from './components/ReservationSystemSettingsForm'
-import { ReactComponent as UploadIcon } from '../../assets/icons/upload-icon.svg'
 // utils
 import { ADMIN_PERMISSIONS, FORM, NOTIFICATION_TYPES, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { patchReq, postReq } from '../../utils/request'
+import { patchReq } from '../../utils/request'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -24,13 +23,11 @@ import { getServices } from '../../reducers/services/serviceActions'
 import {
 	DisabledNotificationsArray,
 	IBreadcrumbs,
-	IDataUploadForm,
 	IReservationsSettingsNotification,
 	IReservationSystemSettingsForm,
 	PathSettingsBody,
 	SalonSubPageProps
 } from '../../types/interfaces'
-import ImportForm from '../../components/ImportForm'
 
 const EXCLUDED_NOTIFICATIONS_B2B: string[] = [RS_NOTIFICATION.RESERVATION_REJECTED, RS_NOTIFICATION.RESERVATION_REMINDER]
 
@@ -131,9 +128,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const groupedSettings = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 	const submitting = useSelector(isSubmitting(FORM.RESEVATION_SYSTEM_SETTINGS))
-	const [uploadStatus, setUploadStatus] = useState<'uploading' | 'success' | 'error' | undefined>(undefined)
-	const [visibleReservationImport, setVisibleReservationImport] = useState(false)
-	const [visibleClientImport, setVisibleClientImport] = useState(false)
+
 	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
 	const authUserPermissions = currentUser?.uniqPermissions
 
@@ -289,57 +284,9 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 			console.error(error.message)
 		}
 	}
-	const handleSubmitImport = async (values: IDataUploadForm) => {
-		const formData = new FormData()
-		formData.append('file', values?.file)
-		try {
-			if (visibleReservationImport) {
-				await postReq('/api/b2b/admin/imports/salons/{salonID}/calendar-events', { salonID }, formData, {
-					headers: {
-						'Content-Type': 'multipart/form-data'
-					}
-				})
-			} else {
-				await postReq('/api/b2b/admin/imports/salons/{salonID}/customers', { salonID }, formData, {
-					headers: {
-						'Content-Type': 'multipart/form-data'
-					}
-				})
-			}
-			setUploadStatus('success')
-		} catch {
-			setUploadStatus('error')
-		}
-	}
-
-	const modals = (
-		<>
-			<ImportForm
-				accept={'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv,.ics'}
-				title={t('loc:Importovať rezervácie')}
-				label={t('loc:Vyberte súbor vo formáte .xlsx, .csv alebo .ics')}
-				uploadStatus={uploadStatus}
-				setUploadStatus={setUploadStatus}
-				onSubmit={handleSubmitImport}
-				visible={visibleReservationImport}
-				setVisible={setVisibleReservationImport}
-			/>
-			<ImportForm
-				accept={'.csv'}
-				title={t('loc:Importovať zákazníkov')}
-				label={t('loc:Vyberte súbor vo formáte .csv')}
-				uploadStatus={uploadStatus}
-				setUploadStatus={setUploadStatus}
-				onSubmit={handleSubmitImport}
-				visible={visibleClientImport}
-				setVisible={setVisibleClientImport}
-			/>
-		</>
-	)
 
 	return (
 		<>
-			{modals}
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
@@ -347,15 +294,6 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 				<Col span={24}>
 					<div className='content-body'>
 						<Spin spinning={salon.isLoading || submitting}>
-							<div className={'text-end'}>
-								<Button onClick={() => setVisibleReservationImport(true)} type='primary' htmlType='button' className={'noti-btn mr-2'} icon={<UploadIcon />}>
-									{t('loc:Importovať rezervácie')}
-								</Button>
-								<Button onClick={() => setVisibleClientImport(true)} type='primary' htmlType='button' className={'noti-btn'} icon={<UploadIcon />}>
-									{t('loc:Importovať zákazníkov')}
-								</Button>
-							</div>
-							<Divider className={'my-3'} />
 							<ReservationSystemSettingsForm
 								onSubmit={handleSubmitSettings}
 								salonID={salonID}

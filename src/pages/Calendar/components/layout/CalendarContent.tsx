@@ -212,10 +212,11 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		 */
 		if (view !== CALENDAR_VIEW.MONTH && eventData?.eventType !== CALENDAR_EVENT_TYPE.RESERVATION && !startsWith(event.id, NEW_ID_PREFIX)) {
 			if (newEmployeeId !== currentEmployeeId) {
+				const eventType = EVENT_NAMES(t, eventData?.eventType as CALENDAR_EVENT_TYPE, true)
 				notification.warning({
 					message: t('loc:Upozornenie'),
 					description: t('loc:{{ eventType }} nie je možné preradiť na iného zamestnanca.', {
-						eventType: EVENT_NAMES(t, eventData?.eventType as CALENDAR_EVENT_TYPE, true)
+						eventType
 					})
 				})
 				revertEvent()

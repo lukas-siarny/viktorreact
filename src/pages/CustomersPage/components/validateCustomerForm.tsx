@@ -72,7 +72,8 @@ function makeFieldsRequired<T extends z.SomeZodObject, K extends keyof z.infer<T
 			Object.fromEntries(
 				fields.map((field) => {
 					const origConstrain = origSchema.shape[field as string]
-					const newConstrain = origConstrain.isNullable() && origConstrain.isOptional() ? (origConstrain as any).unwrap().unwrap() : origConstrain
+					const newConstrain =
+						origConstrain.isNullable() && origConstrain.isOptional() && (origConstrain as any).unwrap ? (origConstrain as any).unwrap().unwrap() : origConstrain
 					return [field, newConstrain]
 				})
 			)

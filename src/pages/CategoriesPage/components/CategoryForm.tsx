@@ -3,6 +3,7 @@ import { Field, InjectedFormProps, reduxForm, FieldArray, isDirty } from 'redux-
 import { useTranslation } from 'react-i18next'
 import { Button, Col, Divider, Form, Row, Spin } from 'antd'
 import { useSelector } from 'react-redux'
+import cx from 'classnames'
 
 // assets
 import { ButtonProps } from 'antd/lib/button'
@@ -221,8 +222,21 @@ const CategoryForm: FC<Props> = (props) => {
 							</Row>
 						) : undefined}
 
-						<div className={'flex justify-between flex-wrap gap-2 mt-6'}>
+						<div className={cx('flex flex-wrap gap-2 mt-6', { 'justify-center': !values?.id, 'justify-between': values?.id })}>
+							{values?.id && !values?.deletedAt && (
+								<Permissions allowed={permissions}>
+									<DeleteButton
+										onConfirm={() => deleteCategory(values?.id, false)}
+										entityName={''}
+										className={'w-full 2xl:w-auto max-w-full min-w-0'}
+										type={'default'}
+										getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+										id={formFieldID(FORM.CATEGORY, DELETE_BUTTON_ID)}
+									/>
+								</Permissions>
+							)}
 							<div className='flex gap-2 flex-wrap w-full 2xl:w-auto'>
+								{values?.id && values?.level < 2 && !values?.deletedAt ? renderCreatSubcategoryButton() : undefined}
 								{!values?.deletedAt ? (
 									<Permissions allowed={permissions}>
 										<Button
@@ -239,20 +253,7 @@ const CategoryForm: FC<Props> = (props) => {
 										</Button>
 									</Permissions>
 								) : undefined}
-								{values?.id && values?.level < 2 && !values?.deletedAt ? renderCreatSubcategoryButton() : undefined}
 							</div>
-							{values?.id && !values?.deletedAt ? (
-								<Permissions allowed={permissions}>
-									<DeleteButton
-										onConfirm={() => deleteCategory(values?.id, false)}
-										entityName={''}
-										className={'w-full 2xl:w-auto max-w-full min-w-0'}
-										type={'default'}
-										getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-										id={formFieldID(FORM.CATEGORY, DELETE_BUTTON_ID)}
-									/>
-								</Permissions>
-							) : undefined}
 						</div>
 					</Row>
 				</Col>

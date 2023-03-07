@@ -19,7 +19,6 @@ import { withPermissions } from '../../utils/Permissions'
 
 // types
 import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
-import Alert from '../../components/Dashboards/Alert'
 
 // assets
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
@@ -29,6 +28,7 @@ import Wallet from '../../components/Dashboards/Wallet'
 import SmsStats from '../../components/Dashboards/SmsStats'
 import SmsHistory from './components/SmsHistory'
 import SmsTimeStats from '../../components/Dashboards/SmsTimeStats'
+import Alert from '../../components/Dashboards/Alert'
 
 // redux
 import { getSmsHistory } from '../../reducers/sms/smsActions'

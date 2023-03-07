@@ -9,14 +9,17 @@ import { Line } from 'react-chartjs-2'
 
 // types
 import { RootState } from '../../reducers'
+import { Columns, TimeStats } from '../../types/interfaces'
 
 // utils
-import { getSmsTimeStats } from '../../reducers/sms/smsActions'
 import { MONTH_NAME_YEAR_FORMAT } from '../../utils/enums'
-import CustomTable from '../CustomTable'
 import { lineOptions, SMS_SENT_STATS_COLOR, transformSmsDataToStatsData } from '../../pages/HomePage/components/dashboardUtils'
-import { Columns, TimeStats } from '../../types/interfaces'
-import { formatPrice } from '../../utils/helper'
+
+// redux
+import { getSmsTimeStats } from '../../reducers/sms/smsActions'
+
+// components
+import CustomTable from '../CustomTable'
 
 type Props = {
 	selectedDate: Dayjs

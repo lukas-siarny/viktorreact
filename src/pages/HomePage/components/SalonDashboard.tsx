@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
-import { isEmpty } from 'lodash'
 
 // redux
 import { RootState } from '../../../reducers'
@@ -14,6 +13,7 @@ import { getCustomers } from '../../../reducers/customers/customerActions'
 
 // utils
 import { PERMISSION, SALON_STATES } from '../../../utils/enums'
+import Permissions from '../../../utils/Permissions'
 
 // components
 import Alert from '../../../components/Dashboards/Alert'
@@ -24,7 +24,6 @@ import SmsTimeStats from '../../../components/Dashboards/SmsTimeStats'
 // assets
 import { ReactComponent as EyeOffIcon } from '../../../assets/icons/eye-off-pink.svg'
 import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
-import Permissions from '../../../utils/Permissions'
 
 const SalonDashboard: FC<PropsWithChildren> = (props) => {
 	const [t] = useTranslation()

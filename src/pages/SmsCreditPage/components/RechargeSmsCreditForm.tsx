@@ -10,13 +10,13 @@ import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
 import { IRechargeSmsCreditForm } from '../../../types/interfaces'
-import InputNumberField from '../../../atoms/InputNumberField'
 
 // validate
 import validateRechargeCreditForm from './validateRechargeSmsCreditForm'
 
 // atoms
 import TextareaField from '../../../atoms/TextareaField'
+import InputNumberField from '../../../atoms/InputNumberField'
 
 type ComponentProps = FormProps & {
 	currencySymbol?: string

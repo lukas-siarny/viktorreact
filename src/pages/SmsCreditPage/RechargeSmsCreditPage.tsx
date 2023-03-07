@@ -13,6 +13,7 @@ import { RootState } from '../../reducers'
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import RechargeSmsCreditForm from './components/RechargeSmsCreditForm'
+import Alert from '../../components/Dashboards/Alert'
 
 // utils
 import { PERMISSION, FORM, D_M_YEAR_FORMAT } from '../../utils/enums'
@@ -24,9 +25,9 @@ import { IBreadcrumbs, IRechargeSmsCreditForm, SalonSubPageProps } from '../../t
 
 // assets
 import { ReactComponent as CoinsIcon } from '../../assets/icons/coins.svg'
+import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
 
 // redux
-import { getWallet } from '../../reducers/wallet/walletActions'
 import { getSmsUnitPrice } from '../../reducers/smsUnitPrices/smsUnitPricesActions'
 import { getSmsStats } from '../../reducers/sms/smsActions'
 
@@ -43,8 +44,6 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const walletID = selectedSalon?.data?.wallet?.id
 
-	// const wallet = useSelector((state: RootState) => state.wallet.wallet)
-
 	const smsPriceUnit = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPrice)
 	const stats = useSelector((state: RootState) => state.sms.stats)
 
@@ -57,13 +56,16 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		;(async () => {
+			if (!walletID) {
+				return
+			}
 			const { data } = await dispatch(getSmsStats(salonID))
 			const priceId = data?.currentSmsUnitPrice.id
 			if (priceId) {
 				dispatch(getSmsUnitPrice(priceId))
 			}
 		})()
-	}, [dispatch, salonID])
+	}, [dispatch, salonID, walletID])
 
 	const handleRechargeCredit = async (values: IRechargeSmsCreditForm) => {
 		if (!walletID || !selectedSalon.data?.currency.code) {
@@ -106,28 +108,42 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:customers')} />
 			</Row>
-			<div className='content-body small'>
-				<Spin spinning={isLoading}>
-					<Col className={'flex'}>
-						<Row className={'mx-9 w-full h-full block'} justify='center'>
-							<h3 className={'mb-0 mt-0 flex items-center'}>
-								<CoinsIcon className={'text-notino-black mr-2'} /> {t('loc:Dobiť kredit')}
-							</h3>
-							<Divider className={'mb-3 mt-3'} />
-							<ul className={'list-none p-0 m-0 mb-8'}>
-								<li className={'flex justify-between gap-2 mb-2'}>
-									<strong>{t('loc:Salón')}:</strong> {selectedSalon.data?.name}
-								</li>
-								<li className={'flex justify-between gap-2'}>
-									<strong>{validPriceLabel}:</strong>
-									{stats.data?.currentSmsUnitPrice.formattedAmount}
-								</li>
-							</ul>
-							<RechargeSmsCreditForm onSubmit={handleRechargeCredit} currencySymbol={selectedSalon.data?.currency.symbol} />
-						</Row>
-					</Col>
-				</Spin>
-			</div>
+			{!walletID ? (
+				<Alert
+					className='mt-6'
+					title={t('loc:Nastavte si adresu salóna')}
+					subTitle={t(
+						'loc:Aby ste mohli používať kreditný systém so všetkými jeho výhodami, najprv musíte mať vyplnenú adresu vášho salóna. Prejdite do nastavení Detailu salóna.'
+					)}
+					message={''}
+					actionLabel={t('loc:Nastaviť adresu')}
+					icon={<SettingIcon />}
+					onActionItemClick={() => navigate(parentPath as string)}
+				/>
+			) : (
+				<div className='content-body small'>
+					<Spin spinning={isLoading}>
+						<Col className={'flex'}>
+							<Row className={'mx-9 w-full h-full block'} justify='center'>
+								<h3 className={'mb-0 mt-0 flex items-center'}>
+									<CoinsIcon className={'text-notino-black mr-2'} /> {t('loc:Dobiť kredit')}
+								</h3>
+								<Divider className={'mb-3 mt-3'} />
+								<ul className={'list-none p-0 m-0 mb-8'}>
+									<li className={'flex justify-between gap-2 mb-2'}>
+										<strong>{t('loc:Salón')}:</strong> {selectedSalon.data?.name}
+									</li>
+									<li className={'flex justify-between gap-2'}>
+										<strong>{validPriceLabel}:</strong>
+										{stats.data?.currentSmsUnitPrice.formattedAmount}
+									</li>
+								</ul>
+								<RechargeSmsCreditForm onSubmit={handleRechargeCredit} currencySymbol={selectedSalon.data?.currency.symbol} />
+							</Row>
+						</Col>
+					</Spin>
+				</div>
+			)}
 		</>
 	)
 }

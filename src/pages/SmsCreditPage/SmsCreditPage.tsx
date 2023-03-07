@@ -47,6 +47,7 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 
 	const smsHistory = useSelector((state: RootState) => state.sms.history)
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
+	const walletID = selectedSalon?.data?.wallet?.id
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam(),
@@ -59,6 +60,9 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	const validSelectedDate = useMemo(() => (dayjs(query.date).isValid() ? dayjs(query.date) : dayjs()), [query.date])
 
 	useEffect(() => {
+		if (!walletID) {
+			return
+		}
 		dispatch(
 			getSmsHistory({
 				salonID,
@@ -70,7 +74,7 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 				dateTo: validSelectedDate.endOf('month').format(DEFAULT_DATE_INIT_FORMAT)
 			})
 		)
-	}, [dispatch, query.page, query.limit, query.search, query.order, validSelectedDate, salonID])
+	}, [dispatch, query.page, query.limit, query.search, query.order, validSelectedDate, salonID, walletID])
 
 	useEffect(() => {
 		dispatch(initialize(FORM.SMS_HISTORY_FILTER, { search: query.search }))
@@ -91,7 +95,7 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 			</Row>
 
 			<div className='w-11/12 xl:w-5/6 2xl:w-3/4 3xl:w-2/3 mx-auto mt-10'>
-				{!selectedSalon?.data?.wallet?.id ? (
+				{!walletID ? (
 					<Alert
 						className='mt-6'
 						title={t('loc:Nastavte si adresu salóna')}

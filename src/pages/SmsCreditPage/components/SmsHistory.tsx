@@ -107,7 +107,7 @@ const SmsHistory: FC<Props> = (props) => {
 			dataIndex: 'transaction',
 			key: 'transaction',
 			render: (_value, record) => {
-				return record.transaction?.formattedAmount
+				return record.transaction?.formattedAmount || '-'
 			}
 		},
 		{
@@ -133,6 +133,7 @@ const SmsHistory: FC<Props> = (props) => {
 						className='table-fixed'
 						columns={columns}
 						onChange={onChangeTable}
+						rowKey={'id'}
 						dataSource={smsHistory.data?.smsNotificationsHistory}
 						twoToneRows
 						useCustomPagination

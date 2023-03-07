@@ -39,33 +39,6 @@ const SmsTimeStats = (props: Props) => {
 		return transformSmsDataToStatsData(smsTimeStats.data, smsTimeStats.isLoading, smsTimeStats.isFailure, selectedDate)
 	}, [selectedDate, smsTimeStats.data, smsTimeStats.isLoading, smsTimeStats.isFailure])
 
-	const totalOverviewStats = useMemo(
-		() =>
-			Object.values(smsTimeStats.data?.ranges || {}).reduce(
-				(acc, cv) => {
-					const parsedSpentTransactionAmount = cv.formattedTotalSpentTransactionAmount.replace(/\D/g, '')
-					const numuberSpentTransactionAmount = Number.isNaN(parsedSpentTransactionAmount) ? 0 : Number(parsedSpentTransactionAmount)
-					const split = cv.formattedTotalSpentTransactionAmount.split(' ')
-					const lastSymbol = split[split.length - 1]
-
-					return {
-						...acc,
-						totalSentSmsCount: acc.totalSentSmsCount + cv.totalSentSmsCount,
-						totalSpentTransactionAmount: acc.totalSpentTransactionAmount + numuberSpentTransactionAmount,
-						currentSmsUnitPrice: cv?.currentSmsUnitPrice?.formattedAmount || null, // toto by malo byt pre kazdu hodnotu rovnake,
-						currencySymbol: acc.currencySymbol || (lastSymbol && Number.isNaN(lastSymbol) ? lastSymbol : '')
-					}
-				},
-				{
-					totalSentSmsCount: 0,
-					totalSpentTransactionAmount: 0,
-					currentSmsUnitPrice: null,
-					currencySymbol: ''
-				} as { totalSentSmsCount: number; totalSpentTransactionAmount: number; currentSmsUnitPrice: string | null; currencySymbol: string }
-			),
-		[smsTimeStats.data?.ranges]
-	)
-
 	useEffect(() => {
 		dispatch(getSmsTimeStats(salonID, year, month))
 	}, [dispatch, salonID, year, month])
@@ -112,17 +85,15 @@ const SmsTimeStats = (props: Props) => {
 			<div className={'flex gap-4 mb-6'}>
 				<div className={'p-4 rounded shadow-lg bg-notino-white w-1/3'}>
 					<span className={'text-notino-grayDark text-sm block mb-2'}>{t('loc:Spotreba kreditu v období')}</span>
-					<span className={'text-notino-black text-base font-bold'}>
-						{formatPrice(totalOverviewStats.totalSpentTransactionAmount, totalOverviewStats.currencySymbol)}
-					</span>
+					<span className={'text-notino-black text-base font-bold'}>{smsTimeStats.data?.formattedTotalSpentTransactionAmount || '-'}</span>
 				</div>
 				<div className={'p-4 rounded shadow-lg bg-notino-white w-1/3'}>
 					<span className={'text-notino-grayDark text-sm block mb-2'}>{t('loc:Počet odoslaných SMS v období')}</span>
-					<span className={'text-notino-black text-base font-bold'}>{totalOverviewStats.totalSentSmsCount}</span>
+					<span className={'text-notino-black text-base font-bold'}>{smsTimeStats.data?.totalSentSmsCount ?? '0'}</span>
 				</div>
 				<div className={'p-4 rounded shadow-lg bg-notino-white w-1/3'}>
 					<span className={'text-notino-grayDark text-sm block mb-2'}>{t('loc:Cena SMS v období')}</span>
-					<span className={'text-notino-black text-base font-bold'}>{totalOverviewStats.currentSmsUnitPrice || '-'}</span>
+					<span className={'text-notino-black text-base font-bold'}>{smsTimeStats.data?.currentSmsUnitPrice?.formattedAmount || '-'}</span>
 				</div>
 			</div>
 

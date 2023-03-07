@@ -511,7 +511,7 @@ const SalonsPage = () => {
 								onChange={onChangeTable}
 								columns={columns || []}
 								dataSource={salons?.data?.salons}
-								scroll={{ x: query.salonState === TAB_KEYS.ACTIVE ? 1700 : 1000 }}
+								scroll={{ x: query.salonState === TAB_KEYS.ACTIVE ? 1200 : 1000 }}
 								rowKey='id'
 								rowClassName={'clickable-row'}
 								twoToneRows

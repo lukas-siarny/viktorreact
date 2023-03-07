@@ -36,7 +36,6 @@ import { ReactComponent as BellIcon } from '../../../assets/icons/bell-24.svg'
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
-import { ReactComponent as ImportIcon } from '../../../assets/icons/download-icon.svg'
 
 // redux
 import { RootState } from '../../../reducers'
@@ -457,7 +456,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				{/* Imports */}
 				<div className={'flex'}>
 					<h3 className={'mb-0 mt-0 flex items-center'}>
-						<ImportIcon className={'text-notino-black mr-2'} />
+						<UploadIcon className={'text-notino-black mr-2'} />
 						{t('loc:Importovať dáta z externých služieb')}
 					</h3>
 				</div>

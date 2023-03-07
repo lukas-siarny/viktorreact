@@ -223,7 +223,7 @@ const CategoryForm: FC<Props> = (props) => {
 						) : undefined}
 
 						<div className={cx('flex flex-wrap gap-2 mt-6', { 'justify-center': !values?.id, 'justify-between': values?.id })}>
-							{values?.id && !values?.deletedAt ? (
+							{values?.id && !values?.deletedAt && (
 								<Permissions allowed={permissions}>
 									<DeleteButton
 										onConfirm={() => deleteCategory(values?.id, false)}
@@ -234,7 +234,7 @@ const CategoryForm: FC<Props> = (props) => {
 										id={formFieldID(FORM.CATEGORY, DELETE_BUTTON_ID)}
 									/>
 								</Permissions>
-							) : undefined}
+							)}
 							<div className='flex gap-2 flex-wrap w-full 2xl:w-auto'>
 								{values?.id && values?.level < 2 && !values?.deletedAt ? renderCreatSubcategoryButton() : undefined}
 								{!values?.deletedAt ? (

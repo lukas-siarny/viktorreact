@@ -122,9 +122,7 @@ const EmployeeForm: FC<Props> = (props) => {
 											}}
 											disabled={isEmpty(formValues?.service)}
 										>
-											{formValues?.services && formValues?.services.length > 1
-												? STRINGS(t).addRecord(t('loc:služby'))
-												: STRINGS(t).addRecord(t('loc:službu'))}
+											{STRINGS(t).addRecord(t('loc:služby'))}
 										</Button>
 									)}
 								/>

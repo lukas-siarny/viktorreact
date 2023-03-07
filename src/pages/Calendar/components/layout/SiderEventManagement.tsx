@@ -33,19 +33,18 @@ import Permissions from '../../../../utils/Permissions'
 // redux
 import { getCalendarEventDetail } from '../../../../reducers/calendar/calendarActions'
 import { clearEvent, setCalendarApi, setCalendarDateHandler } from '../../../../reducers/virtualEvent/virtualEventActions'
+import { ICalendarEmployeesPayload } from '../../../../reducers/calendarEmployees/calendarEmployeesActions'
 
 // components
 import ReservationForm from '../forms/ReservationForm'
 import EventForm from '../forms/EventForm'
-
+import ImportedReservationForm from '../forms/ImportedReservationForm'
 import DeleteButton from '../../../../components/DeleteButton'
 import TabsComponent from '../../../../components/TabsComponent'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 import { IUseQueryParams } from '../../../../hooks/useQueryParams'
-import ImportedReservationForm from '../forms/ImportedReservationForm'
-import { ICalendarEmployeesPayload } from '../../../../reducers/calendarEmployees/calendarEmployeesActions'
 
 type Props = {
 	salonID: string

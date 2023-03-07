@@ -98,7 +98,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		return virtualEvent ? [...data, virtualEvent] : data
 	}, [selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, virtualEvent])
 
-	const resources = useMemo(() => composeDayViewResources(shiftsTimeOffs, employees, eventsViewType), [shiftsTimeOffs, employees, eventsViewType])
+	const resources = useMemo(() => composeDayViewResources(shiftsTimeOffs, employees), [shiftsTimeOffs, employees])
 	/**
 	 * Spracuje input z calendara click/select a vytvori z neho init data, ktore vyuzije form v SiderEventManager
 	 */
@@ -171,7 +171,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				eventDragStop={onEventChangeStop}
 				eventResizeStop={onEventChangeStop}
 				select={handleNewEvent}
-				selectAllow={handleSelectAllow as any}
+				selectAllow={handleSelectAllow}
 			/>
 		</div>
 	)

@@ -358,12 +358,6 @@ const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, sele
 	}, [] as any[])
 }
 
-/* const isAllDayEvent = (selectedDate: string, eventStart: string, eventEnd: string) => {
-	const startOfSelectedDate = dayjs(selectedDate).startOf('day')
-	const endOfSelectedDate = dayjs(selectedDate).endOf('day')
-	return dayjs(dayjs(eventStart)).isSameOrBefore(startOfSelectedDate) && dayjs(eventEnd).isSameOrAfter(endOfSelectedDate.subtract(1, 'minutes'))
-} */
-
 // ak je dlzka bg eventu mensia ako min dielik v kalendari (u nas 15 minut), tak ho to vytvorime ako 15 minutovy, lebo to vyzera divne potom
 const getBgEventEnd = (start: string, end: string) =>
 	dayjs(end).diff(start, 'minutes') < CALENDAR_COMMON_SETTINGS.EVENT_MIN_DURATION ? dayjs(start).add(CALENDAR_COMMON_SETTINGS.EVENT_MIN_DURATION, 'minutes').toISOString() : end
@@ -524,12 +518,8 @@ export const composeDayViewEvents = (
 	}
 }
 
-export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees: CalendarEmployee[], eventsViewType: CALENDAR_EVENTS_VIEW_TYPE) => {
-	return employees.reduce((acc, employee) => {
-		/* if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF && employee.firstName === VIRTUAL_EMPLOYEE_IDENTIFICATOR) {
-			return acc
-		} */
-
+export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees: CalendarEmployee[]) => {
+	return employees.map((employee) => {
 		const employeeShifts: any[] = []
 		const employeeTimeOff: any[] = []
 
@@ -574,16 +564,13 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 			description = undefined
 		}
 
-		return [
-			...acc,
-			{
-				id: employee.id,
-				eventBackgroundColor: employee.color,
-				employee: createEmployeeResourceData(employee, !!employeeTimeOff.length, description),
-				title: `${employee.orderIndex}` // used for ordering
-			}
-		]
-	}, [] as any[])
+		return {
+			id: employee.id,
+			eventBackgroundColor: employee.color,
+			employee: createEmployeeResourceData(employee, !!employeeTimeOff.length, description),
+			title: `${employee.orderIndex}` // used for ordering
+		}
+	})
 }
 
 /**
@@ -612,31 +599,19 @@ type WeekDayResource = { id: string; day: string; employee: EmployeeWeekResource
 ]
 */
 
-export const composeWeekResources = (
-	weekDays: string[],
-	shiftsTimeOffs: ICalendarEventsPayload['data'],
-	employees: CalendarEmployee[],
-	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
-): WeekDayResource[] => {
+export const composeWeekResources = (weekDays: string[], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: CalendarEmployee[]): WeekDayResource[] => {
 	return weekDays.reduce((resources, weekDay) => {
 		const timeOffsWeekDay = shiftsTimeOffs?.filter((event) => dayjs(event.start.date).isSame(dayjs(weekDay)) && event.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF)
 
-		const weekDayEmployees = employees.reduce((acc, employee) => {
-			/* if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF && employee.firstName === VIRTUAL_EMPLOYEE_IDENTIFICATOR) {
-				return acc
-			} */
-
-			return [
-				...acc,
-				{
-					id: getWeekDayResourceID(employee.id, weekDay),
-					eventBackgroundColor: employee.color,
-					day: weekDay,
-					employee: createEmployeeResourceData(employee, !!timeOffsWeekDay?.filter((timeOff) => timeOff.employee?.id === employee.id).length),
-					title: `${employee.orderIndex}` // used for ordering
-				}
-			]
-		}, [] as any[])
+		const weekDayEmployees = employees.map((employee) => {
+			return {
+				id: getWeekDayResourceID(employee.id, weekDay),
+				eventBackgroundColor: employee.color,
+				day: weekDay,
+				employee: createEmployeeResourceData(employee, !!timeOffsWeekDay?.filter((timeOff) => timeOff.employee?.id === employee.id).length),
+				title: `${employee.orderIndex}` // used for ordering
+			}
+		})
 		return [...resources, ...weekDayEmployees]
 	}, [] as any[])
 }

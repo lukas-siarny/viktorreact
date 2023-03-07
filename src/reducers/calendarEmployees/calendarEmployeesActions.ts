@@ -45,7 +45,7 @@ export const setCalendarEmployees =
 				firstName,
 				lastName,
 				email: employee.email,
-				orderIndex: index, // NOTE: BE sice posiela orderIndex priznak, no spoliehame sa na poradie v korom zamestnanci pridu a tak s nimi aj dalej pracujeme
+				orderIndex: index,
 				color: employee.color,
 				image: employee.image,
 				isForImportedEvents

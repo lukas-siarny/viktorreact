@@ -116,7 +116,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 	) : null
 
 	const title = isImported
-		? t('loc:IMPOROTVANÁ REZERVÁCIA')
+		? t('loc:Importovaná rezervácia')
 		: getAssignedUserLabel({
 				id: customer?.id || '-',
 				firstName: customer?.firstName,

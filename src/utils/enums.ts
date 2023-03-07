@@ -1011,4 +1011,4 @@ export enum CANCEL_TOKEN_MESSAGES {
 }
 
 export const VIRTUAL_EMPLOYEE_IDENTIFICATOR = 'VIRTUAL'
-export const VIRTUAL_EMPLOYEE_NAME = (t: TFunction) => t('loc:IMPORTOVANÉ')
+export const VIRTUAL_EMPLOYEE_NAME = (t: TFunction) => t('loc:Importované')

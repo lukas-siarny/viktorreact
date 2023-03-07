@@ -36,25 +36,27 @@ export const setCalendarEmployees =
 		const options: ICalendarEmployeeOptionItem[] = []
 		const calendarEmployees: CalendarEmployee[] = []
 
-		employees?.forEach((employee) => {
+		employees?.forEach((employee, index) => {
 			const isForImportedEvents = employee.firstName === VIRTUAL_EMPLOYEE_IDENTIFICATOR
+			const firstName = isForImportedEvents ? VIRTUAL_EMPLOYEE_NAME(i18next.t) : employee.firstName
+			const lastName = isForImportedEvents ? '' : employee.lastName
 			calendarEmployees.push({
 				id: employee.id,
-				firstName: employee.firstName,
-				lastName: employee.lastName,
+				firstName,
+				lastName,
 				email: employee.email,
-				orderIndex: employee.orderIndex,
+				orderIndex: index, // NOTE: BE sice posiela orderIndex priznak, no spoliehame sa na poradie v korom zamestnanci pridu a tak s nimi aj dalej pracujeme
 				color: employee.color,
 				image: employee.image,
 				isForImportedEvents
 			})
 			options.push({
 				// show name if exist at least last name otherwise show fallback values
-				label: getAssignedUserLabel({ id: employee.id, firstName: employee.firstName, lastName: employee.lastName, email: employee.email }),
+				label: getAssignedUserLabel({ id: employee.id, firstName, lastName, email: employee.email }),
 				value: employee.id,
-				key: `${employee.id}-key`,
+				key: employee.id,
 				extra: {
-					// employeeData s hodnotou color je potrebne, aby sa v mesacnom view zobrazila spravne farba pri vytvarani noveho eventu
+					// employeeData s hodnotou color je potrebna, aby sa v mesacnom view zobrazila spravne farba pri vytvarani noveho eventu
 					employeeData: {
 						color: employee.color
 					},

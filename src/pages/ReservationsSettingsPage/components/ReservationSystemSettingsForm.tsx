@@ -247,7 +247,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						<div className={'flex items-center'}>
 							<Field
 								tooltipText={t(
-									'loc:Globálne nastavenie pre možnosť online rezervácií. Ak táto možnosť je vypnutá, nebude možné vytvoriť žiadnu online rezerváciu pre službu, bez ohľadu na to, či má služba danú možnosť povolenú v sekcii nižšie.'
+									'loc:Hlavné nastavenie pre možnosť online rezervácií. Ak táto možnosť je vypnutá, nebude možné vytvoriť žiadnu online rezerváciu pre službu, bez ohľadu na to, či má služba danú možnosť povolenú v sekcii nižšie.'
 								)}
 								name={'enabledB2cReservations'}
 								disabled={disabled}

@@ -95,6 +95,7 @@ const ServicesListField: FC<Props> = (props) => {
 					render={(hasPermission, { openForbiddenModal }) => {
 						return (
 							<div onClick={(e) => e.stopPropagation()} className={'flex items-center'}>
+								{/* // Workaround for disabled button inside tooltip: https://github.com/react-component/tooltip/issues/18 */}
 								<Tooltip title={disabledEditButton ? disabledEditButtonTooltip : null} destroyTooltipOnHide>
 									<span className={cx('w-full flex items-center md:w-auto', { 'cursor-not-allowed': disabledEditButton })}>
 										<Button

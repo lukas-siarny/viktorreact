@@ -3,6 +3,7 @@ import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Divider, Form, Button, Alert } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
+import cx from 'classnames'
 
 // utils
 import { DEFAULT_DATE_INIT_FORMAT, DELETE_BUTTON_ID, FORM, MONTH_NAME_YEAR_FORMAT, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
@@ -98,7 +99,17 @@ const SmsUnitPricesForm: FC<Props> = (props) => {
 				/>
 				<span className={'text-notino-grayDark text-xs'}>{t('loc:Platnosť sa vždy ráta od prvého dňa v mesiaci')}</span>
 				{!disabledForm && (
-					<div className={'flex w-full justify-start mt-6 gap-2 flex-wrap'}>
+					<div className={cx('flex w-full mt-6 gap-2 flex-wrap', { 'justify-between': smsUnitPriceID, 'justify-center': !smsUnitPriceID })}>
+						{smsUnitPriceID && (
+							<DeleteButton
+								onConfirm={onDelete}
+								entityName={''}
+								type={'default'}
+								className='w-full xl:w-auto xl:min-w-40'
+								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+								id={formFieldID(FORM.SPECIALIST_CONTACT, DELETE_BUTTON_ID)}
+							/>
+						)}
 						<Button
 							className={'noti-btn w-full xl:w-auto xl:min-w-40'}
 							size='middle'
@@ -111,16 +122,6 @@ const SmsUnitPricesForm: FC<Props> = (props) => {
 						>
 							{smsUnitPriceID ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:cenu'))}
 						</Button>
-						{smsUnitPriceID && (
-							<DeleteButton
-								onConfirm={onDelete}
-								entityName={''}
-								type={'default'}
-								className='w-full xl:w-auto xl:min-w-40'
-								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-								id={formFieldID(FORM.SPECIALIST_CONTACT, DELETE_BUTTON_ID)}
-							/>
-						)}
 					</div>
 				)}
 			</div>

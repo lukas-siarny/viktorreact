@@ -494,13 +494,12 @@ const SalonsPage = () => {
 					tableColumns.createType({ width: '6%' }),
 					tableColumns.premiumSourceUserType({ width: '6%' }),
 					tableColumns.assignedUser({ width: '10%' }),
-					tableColumns.fillingProgress(),
+					tableColumns.fillingProgress({ width: '16%' }),
 					tableColumns.lastUpdatedAt({ width: '8%' }),
 					tableColumns.createdAt({ width: '8%' })
 				]
 				filters = <SalonsFilterActive onSubmit={handleSubmitActive} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
 		}
-
 		return (
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
@@ -512,7 +511,7 @@ const SalonsPage = () => {
 								onChange={onChangeTable}
 								columns={columns || []}
 								dataSource={salons?.data?.salons}
-								scroll={{ x: 1000 }}
+								scroll={{ x: query.salonState === TAB_KEYS.ACTIVE ? 1200 : 1000 }}
 								rowKey='id'
 								rowClassName={'clickable-row'}
 								twoToneRows

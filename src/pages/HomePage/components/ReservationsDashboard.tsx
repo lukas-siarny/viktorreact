@@ -17,8 +17,8 @@ const ReservationsDashboard = (props: Props) => {
 	return (
 		<div>
 			<div className='dashboard-grid'>
-				<Statistics title={t('loc:Salóny so zapnutým Rezervačným systémom pre B2B')} count={notino?.data?.actualCounEnabledRsB2b} />
-				<Statistics title={t('loc:Salóny so zapnutým Rezervačným systémom pre B2C')} count={notino?.data?.actualCounEnabledRsB2c} />
+				<Statistics title={t('loc:Salóny so zapnutým rezervačným systémom pre {{ type }}', { type: 'B2B' })} count={notino?.data?.actualCounEnabledRsB2b} />
+				<Statistics title={t('loc:Salóny so zapnutým rezervačným systémom pre {{ type }}', { type: 'B2C' })} count={notino?.data?.actualCounEnabledRsB2c} />
 			</div>
 			{children}
 		</div>

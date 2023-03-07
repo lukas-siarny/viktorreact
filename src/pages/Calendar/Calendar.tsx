@@ -455,7 +455,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			const salonPermissions = salonRes?.data?.uniqPermissions || []
 			const userPermissions = [...(authUserPermissions || []), ...salonPermissions]
 
-			const canVisitThisPage = checkPermissions(userPermissions, [PERMISSION.NOTINO]) || checkPermissions(userPermissions, [PERMISSION.PARTNER], ADMIN_PERMISSIONS)
+			const canVisitThisPage =
+				checkPermissions(userPermissions, [PERMISSION.NOTINO]) ||
+				(checkPermissions(userPermissions, [PERMISSION.PARTNER], ADMIN_PERMISSIONS) && salonRes?.data?.settings?.enabledReservations)
 			if (!canVisitThisPage) {
 				navigate('/404')
 			}

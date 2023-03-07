@@ -209,7 +209,13 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							label: t('loc:Zamestnanci'),
 							onClick: () => navigate(getPath(t('paths:employees'))),
 							icon: <EmployeesIcon />
-						},
+						}
+					)
+				}
+
+				// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
+				if (hasPermissions([PERMISSION.NOTINO]) || (hasPermissions([PERMISSION.PARTNER]) && selectedSalon?.settings?.enabledReservations)) {
+					mainGroupItems.push(
 						{
 							key: PAGE.CALENDAR,
 							label: t('loc:Kalendár'),

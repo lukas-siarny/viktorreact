@@ -3,8 +3,8 @@ import { Alert, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 
 // assets
-import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
-import { ReactComponent as CheckIcon } from '../../../assets/icons/check-icon-success.svg'
+import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
+import { ReactComponent as CheckIcon } from '../assets/icons/check-icon-success.svg'
 
 type Props = {
 	onUploadAgain: () => void

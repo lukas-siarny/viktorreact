@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import React, { FC, useEffect, useCallback, useRef } from 'react'
-import { Button, Col, Divider, Dropdown, Menu, Popover, Row, Tag } from 'antd'
+import { Button, Col, Divider, Dropdown, Popover, Row, Tag } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { ItemType } from 'antd/lib/menu/hooks/useItems'
 import { useSelector } from 'react-redux'

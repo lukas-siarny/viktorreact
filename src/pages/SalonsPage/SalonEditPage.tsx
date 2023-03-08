@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Modal, Row, Spin, Tooltip } from 'antd'
 import { destroy, initialize, isPristine, reset, submit } from 'redux-form'
-import { get } from 'lodash'
 import { compose } from 'redux'
 import cx from 'classnames'
 import { useNavigate } from 'react-router-dom'
@@ -131,7 +130,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	const breadcrumbDetailItem = {
 		name: tabKey === TAB_KEYS.SALON_DETAIL ? t('loc:Detail salónu') : t('loc:História salónu'),
-		titleName: `${salon.data?.name} | ID: ${salon.data?.id}`
+		titleName: `${salon.data?.name ?? ''} | ID: ${salon.data?.id}`
 	}
 
 	// View

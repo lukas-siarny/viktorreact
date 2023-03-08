@@ -132,9 +132,14 @@ const IndustryPage = (props: Props) => {
 		;(async () => {
 			const categoriesData = await dispatch(getCategories())
 			const root = categoriesData?.data?.find((category) => category.id === industryID)
-			setDataTree(mapCategoriesForDataTree(null, root ? [root] : undefined))
+
+			if (!root) {
+				navigate('/404')
+			} else {
+				setDataTree(mapCategoriesForDataTree(null, [root]))
+			}
 		})()
-	}, [dispatch, industryID])
+	}, [dispatch, industryID, navigate])
 
 	useEffect(() => {
 		dispatch(getServices({ salonID }))

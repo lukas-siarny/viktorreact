@@ -64,7 +64,8 @@ const FileUploadField: FC<Props> = (props) => {
 		accept,
 		maxFileSize,
 		handleUploadOutside = true,
-		disabled
+		disabled,
+		className
 	} = props
 
 	const [t] = useTranslation()
@@ -153,7 +154,7 @@ const FileUploadField: FC<Props> = (props) => {
 
 	return (
 		<Item
-			className={cx('file-upload-field', { 'hide-overlay': staticMode, disabled })}
+			className={cx(className, 'file-upload-field', { 'hide-overlay': staticMode, disabled })}
 			label={label}
 			required={required}
 			style={{ width: '100%' }}

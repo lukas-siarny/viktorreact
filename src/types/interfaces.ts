@@ -612,6 +612,8 @@ export interface IReservationSystemSettingsForm {
 	minutesIntervalB2CReservations?: number | null
 	// Pomocne checky pre chekcnutie all hodnot pre BOOKING / AUTO CONFIRM
 	autoConfirmAll: boolean
+	enabledCustomerReservationNotes?: boolean
+	enabledB2cReservations?: boolean
 	onlineBookingAll: boolean
 	disabledNotifications: {
 		[key in RS_NOTIFICATION]: IReservationsSettingsNotification

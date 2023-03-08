@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { initialize, isSubmitting } from 'redux-form'
 import { Col, Row, Spin } from 'antd'
 import { forEach, includes, isEmpty, reduce } from 'lodash'
-import { useNavigate } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ReservationSystemSettingsForm from './components/ReservationSystemSettingsForm'
+
 // utils
-import { ADMIN_PERMISSIONS, FORM, NOTIFICATION_TYPES, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
-import { checkPermissions, withPermissions } from '../../utils/Permissions'
+import { FORM, NOTIFICATION_TYPES, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
+import { withPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 
 // reducers
@@ -122,15 +122,11 @@ const initDisabledNotifications = (notifications: DisabledNotificationsArray): I
 const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const navigate = useNavigate()
 	const { salonID } = props
 	const { parentPath } = props
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const groupedSettings = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 	const submitting = useSelector(isSubmitting(FORM.RESEVATION_SYSTEM_SETTINGS))
-
-	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
-	const authUserPermissions = currentUser?.uniqPermissions
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -142,17 +138,6 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 
 	const fetchData = async () => {
 		const salonRes = await dispatch(selectSalon(salonID))
-		// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
-		const salonPermissions = salonRes?.data?.uniqPermissions || []
-		const userPermissions = [...(authUserPermissions || []), ...salonPermissions]
-
-		const canVisitThisPage =
-			checkPermissions(userPermissions, [PERMISSION.NOTINO]) ||
-			(checkPermissions(userPermissions, [PERMISSION.PARTNER], ADMIN_PERMISSIONS) && salonRes?.data?.settings?.enabledReservations)
-		if (!canVisitThisPage) {
-			navigate('/404')
-			return
-		}
 
 		const servicesRes = await dispatch(getServices({ salonID }))
 
@@ -198,6 +183,8 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 			dispatch(
 				initialize(FORM.RESEVATION_SYSTEM_SETTINGS, {
 					enabledReservations: salonRes?.data?.settings?.enabledReservations,
+					enabledB2cReservations: salonRes.data.settings?.enabledB2cReservations,
+					enabledCustomerReservationNotes: salonRes?.data?.settings.enabledCustomerReservationNotes,
 					maxDaysB2cCreateReservation: salonRes?.data?.settings?.maxDaysB2cCreateReservation,
 					maxHoursB2cCreateReservationBeforeStart: salonRes?.data?.settings?.maxHoursB2cCreateReservationBeforeStart,
 					maxHoursB2cCancelReservationBeforeStart: salonRes?.data?.settings?.maxHoursB2cCancelReservationBeforeStart,
@@ -266,7 +253,9 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 
 		const reqData: PathSettingsBody = {
 			settings: {
+				enabledCustomerReservationNotes: values.enabledCustomerReservationNotes,
 				enabledReservations: values.enabledReservations,
+				enabledB2cReservations: values.enabledB2cReservations,
 				maxDaysB2cCreateReservation: values.maxDaysB2cCreateReservation,
 				maxHoursB2cCancelReservationBeforeStart: values.maxHoursB2cCancelReservationBeforeStart,
 				maxHoursB2cCreateReservationBeforeStart: values.maxHoursB2cCreateReservationBeforeStart,

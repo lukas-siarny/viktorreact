@@ -17,6 +17,7 @@ import CheckboxField from '../../../atoms/CheckboxField'
 import NotificationArrayFields from './NotificationArrayFields'
 import CheckboxGroupNestedField from '../../IndustriesPage/components/CheckboxGroupNestedField'
 import ImportForm from '../../../components/ImportForm'
+import Wallet from '../../../components/Dashboards/Wallet'
 
 // types
 import { IDataUploadForm, IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
@@ -39,7 +40,6 @@ import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.
 
 // redux
 import { RootState } from '../../../reducers'
-import Wallet from '../../../components/Dashboards/Wallet'
 
 type Props = InjectedFormProps<IReservationSystemSettingsForm, ComponentProps> & ComponentProps
 

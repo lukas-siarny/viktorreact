@@ -14,7 +14,7 @@ import { RootState } from '../../reducers'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // utils
-import { PERMISSION, FORM, DEFAULT_DATE_INIT_FORMAT } from '../../utils/enums'
+import { PERMISSION, FORM, DEFAULT_DATE_INIT_FORMAT, YEAR_M_FORMAT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 
 // types
@@ -36,7 +36,7 @@ import { getSmsHistory } from '../../reducers/sms/smsActions'
 // hooks
 import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
 
-const getQueryParamDate = (date: Dayjs) => date.startOf('month').format('YYYY-MM')
+const getQueryParamDate = (date: Dayjs) => date.startOf('month').format(YEAR_M_FORMAT)
 
 const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath } = props

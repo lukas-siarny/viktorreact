@@ -302,6 +302,8 @@ export const MONTH_NAME_YEAR_FORMAT = 'MMM YYYY'
 
 export const D_M_YEAR_FORMAT = 'D.M.YYYY'
 
+export const YEAR_M_FORMAT = 'YYYY-MM'
+
 export const DATE_TIME_PARSER_DATE_FORMAT = 'YYYY-MM-DD'
 export const DATE_TIME_PARSER_FORMAT = `${DATE_TIME_PARSER_DATE_FORMAT}:HH:mm`
 

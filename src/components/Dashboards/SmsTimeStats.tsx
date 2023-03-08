@@ -54,7 +54,7 @@ const SmsTimeStats = (props: Props) => {
 				return (
 					<div className={'flex flex-1 items-center'}>
 						<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: SMS_SENT_STATS_COLOR, flex: '0 0 auto' }} />
-						<span className='xs-bold'>{i18next.t('loc:Odoslané SMS')}</span>
+						<span className='xs-bold'>{t('loc:Odoslané SMS')}</span>
 					</div>
 				)
 			}

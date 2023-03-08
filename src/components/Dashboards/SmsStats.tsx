@@ -22,7 +22,7 @@ type Props = {
 }
 
 const SmsStats = (props: Props) => {
-	const { className = 'w-1/2', salonID } = props
+	const { className, salonID } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -43,7 +43,7 @@ const SmsStats = (props: Props) => {
 	}, [dispatch, salonID])
 
 	return (
-		<div className={cx('p-4 rounded shadow-lg bg-notino-white flex-50', className)}>
+		<div className={cx('p-4 rounded shadow-lg bg-notino-white w-full lg:w-1/2', className)}>
 			<Spin spinning={stats.isLoading || smsPriceUnit.isLoading}>
 				<h4 className={'mb-0 flex items-center'}>
 					<UsageIcon className={'text-notino-black mr-2'} />

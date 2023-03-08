@@ -120,7 +120,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 							<>
 								{/* wallet */}
 								<div className={'grid lg:grid-cols-2 gap-4 3xl:gap-8 mt-10 empty:mt-0'}>
-									<Wallet salonID={salonID} parentPath={basePath} className={'w-auto'} />
+									<Wallet salonID={salonID} parentPath={basePath} className={'!w-auto'} />
 								</div>
 								{/* sms monthly stats */}
 								<SmsTimeStats

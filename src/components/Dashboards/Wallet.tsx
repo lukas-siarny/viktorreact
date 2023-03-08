@@ -30,7 +30,7 @@ type Props = {
 }
 
 const Wallet = (props: Props) => {
-	const { className = 'w-full lg:w-1/2', salonID, parentPath, link } = props
+	const { className, salonID, parentPath, link } = props
 	const [t] = useTranslation()
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
@@ -49,7 +49,7 @@ const Wallet = (props: Props) => {
 	}, [dispatch, salonID, walletID, hasPermissionToSeeWallet])
 
 	return walletID ? (
-		<div className={cx('p-4 pb-8 rounded shadow-lg bg-notino-white', className)}>
+		<div className={cx('p-4 pb-8 rounded shadow-lg bg-notino-white w-full lg:w-1/2', className)}>
 			<Spin spinning={wallet.isLoading || authUser.isLoading}>
 				<h4 className={'mb-0 flex items-center text-lg'}>
 					<MessageIcon className={'text-notino-black mr-2'} />

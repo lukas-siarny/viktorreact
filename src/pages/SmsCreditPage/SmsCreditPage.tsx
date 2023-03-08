@@ -117,7 +117,7 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 							icon={<SettingIcon />}
 							onActionItemClick={() => navigate(`${parentPath}${t('paths:reservations-settings')}`)}
 						/>
-						<div className={'flex gap-4 mb-10'}>
+						<div className={'flex gap-4 mb-10 flex-col lg:flex-row'}>
 							<Wallet salonID={salonID} parentPath={parentPath} />
 							<SmsStats salonID={salonID} />
 						</div>

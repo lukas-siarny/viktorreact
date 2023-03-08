@@ -24,7 +24,7 @@ import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
 
 // components
-import Wallet from '../../components/Dashboards/Wallet'
+import RemainingSmsCredit from '../../components/Dashboards/RemainingSmsCredit'
 import SmsStats from '../../components/Dashboards/SmsStats'
 import SmsHistory from './components/SmsHistory'
 import SmsTimeStats from '../../components/Dashboards/SmsTimeStats'
@@ -118,7 +118,7 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 							onActionItemClick={() => navigate(`${parentPath}${t('paths:reservations-settings')}`)}
 						/>
 						<div className={'flex gap-4 mb-10 flex-col lg:flex-row'}>
-							<Wallet salonID={salonID} parentPath={parentPath} />
+							<RemainingSmsCredit salonID={salonID} parentPath={parentPath} walletID={walletID} />
 							<SmsStats salonID={salonID} />
 						</div>
 						<SmsTimeStats

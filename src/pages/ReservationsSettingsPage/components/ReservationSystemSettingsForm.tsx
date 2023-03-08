@@ -17,7 +17,7 @@ import CheckboxField from '../../../atoms/CheckboxField'
 import NotificationArrayFields from './NotificationArrayFields'
 import CheckboxGroupNestedField from '../../IndustriesPage/components/CheckboxGroupNestedField'
 import ImportForm from '../../../components/ImportForm'
-import Wallet from '../../../components/Dashboards/Wallet'
+import RemainingSmsCredit from '../../../components/Dashboards/RemainingSmsCredit'
 
 // types
 import { IDataUploadForm, IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
@@ -74,6 +74,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const dispatch = useDispatch()
 	const groupedServicesByCategory = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 	const groupedServicesByCategoryLoading = useSelector((state: RootState) => state.service.services.isLoading)
+	const walletID = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.wallet?.id)
 	const formValues: Partial<IReservationSystemSettingsForm> = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
 	const navigate = useNavigate()
 	const disabled = !formValues?.enabledReservations
@@ -545,7 +546,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					<p className={'text-notino-grayDark'}>
 						{t('loc:SMS notifikácie sú spoplatnené podľa aktuálneho cenníka Notino. Suma za SMS sa vám bude odrátavať z celkového SMS kreditu.')}
 					</p>
-					<Wallet salonID={salonID} parentPath={parentPath} className={'w-full mb-6 !bg-notino-grayLighter'} link />
+					{walletID && <RemainingSmsCredit walletID={walletID} salonID={salonID} parentPath={parentPath} className={'w-full mb-6 !bg-notino-grayLighter'} link />}
 					<Row justify={'space-between'} className='mt-7'>
 						{/* Client's notifications */}
 						<div className={'w-9/20'}>

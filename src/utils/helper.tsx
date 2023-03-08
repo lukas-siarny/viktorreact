@@ -1393,31 +1393,3 @@ export const normalizeDataById = <T extends { id: string }>(data?: T[]): { [key:
 }
 
 export const formatPrice = (price: number, symbol?: string) => (!isNil(price) ? `${price} ${symbol || ''}`.trim() : '')
-
-export const formatSmsNotificationEventType = (notificationType: SMS_NOTIFICATION_EVENT_TYPE) => {
-	switch (notificationType) {
-		case SMS_NOTIFICATION_EVENT_TYPE.RESERVATION_CONFIRMED_CUSTOMER:
-			return i18next.t('loc:Potvrdenie')
-		case SMS_NOTIFICATION_EVENT_TYPE.RESERVATION_CHANGED_CUSTOMER:
-			return i18next.t('loc:Zmena')
-		case SMS_NOTIFICATION_EVENT_TYPE.RESERVATION_REJECTED_CUSTOMER:
-			return i18next.t('loc:Zrušenie')
-		case SMS_NOTIFICATION_EVENT_TYPE.RESERVATION_REMINDER_CUSTOMER:
-			return i18next.t('loc:Pripomienka')
-		default:
-			return ''
-	}
-}
-
-export const formatSmsStatus = (status: SMS_NOTIFICATION_STATUS) => {
-	switch (status) {
-		case SMS_NOTIFICATION_STATUS.SUCCESS:
-			return i18next.t('loc:Prijatá')
-		case SMS_NOTIFICATION_STATUS.FAILURE:
-			return i18next.t('loc:Nedoručená')
-		case SMS_NOTIFICATION_STATUS.IGNORED:
-			return i18next.t('loc:Ignorovaná')
-		default:
-			return ''
-	}
-}

@@ -9,8 +9,8 @@ import CustomTable from '../../../components/CustomTable'
 import SmsHistoryFilter from './SmsHistoryFilter'
 
 // utils
-import { normalizeDirectionKeys, setOrder, formatDateByLocale, formatSmsNotificationEventType, formatSmsStatus } from '../../../utils/helper'
-import { SMS_NOTIFICATION_EVENT_TYPE, SMS_NOTIFICATION_STATUS } from '../../../utils/enums'
+import { normalizeDirectionKeys, setOrder, formatDateByLocale } from '../../../utils/helper'
+import { SMS_NOTIFICATION_EVENT_TYPE, SMS_NOTIFICATION_EVENT_TYPE_NAME, SMS_NOTIFICATION_STATUS, SMS_STATUS_NAME } from '../../../utils/enums'
 
 // assets
 import { ReactComponent as MessageIcon } from '../../../assets/icons/message-icon.svg'
@@ -99,7 +99,7 @@ const SmsHistory: FC<Props> = (props) => {
 			ellipsis: true,
 			sorter: false,
 			render: (_value, record) => {
-				return formatSmsNotificationEventType(record.notification.notificationEventType as SMS_NOTIFICATION_EVENT_TYPE)
+				return SMS_NOTIFICATION_EVENT_TYPE_NAME(record.notification.notificationEventType as SMS_NOTIFICATION_EVENT_TYPE)
 			}
 		},
 		{
@@ -115,7 +115,7 @@ const SmsHistory: FC<Props> = (props) => {
 			dataIndex: 'status',
 			key: 'status',
 			render: (_value, record) => {
-				return formatSmsStatus(record.status as SMS_NOTIFICATION_STATUS)
+				return SMS_STATUS_NAME(record.status as SMS_NOTIFICATION_STATUS)
 			}
 		}
 	]

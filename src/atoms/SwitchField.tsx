@@ -60,11 +60,17 @@ const SwitchField = (props: Props) => {
 		<Item help={touched && error} validateStatus={error && touched ? 'error' : undefined} style={style} className={cx(className, { 'pt-25px': offsetLabel })}>
 			{label || customLabel ? (
 				<div
-					className={cx('noti-switch', { 'pointer-events-none': disabled, 'bg-gray-50': disabled, 'noti-switch-disabled': disabled })}
+					className={cx('noti-switch', { 'noti-switch-disabled': disabled })}
 					onClick={() => {
+						if (disabled) {
+							return
+						}
 						onChange(!checkedState)
 					}}
 					onKeyDown={(e) => {
+						if (disabled) {
+							return
+						}
 						if (e.key === KEYBOARD_KEY.ENTER) {
 							onChange(!checkedState)
 						}
@@ -82,7 +88,7 @@ const SwitchField = (props: Props) => {
 							)}
 							{tooltipText && (
 								<Tooltip title={tooltipText} className={'cursor-pointer'}>
-									{suffixIcon || <InfoIcon width={16} height={16} className={'text-notino-black'} />}
+									{suffixIcon || <InfoIcon width={16} height={16} className={'text-notino-grayDark'} />}
 								</Tooltip>
 							)}
 						</div>

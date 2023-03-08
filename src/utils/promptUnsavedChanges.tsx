@@ -2,6 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { unstable_usePrompt } from 'react-router-dom'
+import { omitBy, isNil } from 'lodash'
 
 // reducers
 import { RootState } from '../reducers'
@@ -17,7 +18,10 @@ export const withPromptUnsavedChanges = (WrappedComponent: any): any => {
 
 		if (formState) {
 			const { values, initial } = formState
-			dirty = JSON.stringify(initial) !== JSON.stringify(values)
+			const values1 = omitBy(initial, isNil)
+			const values2 = omitBy(values, isNil)
+
+			dirty = JSON.stringify(values1) !== JSON.stringify(values2)
 		}
 
 		unstable_usePrompt({ when: dirty && !submitting, message })

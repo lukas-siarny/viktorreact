@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Button, Divider, Form, Row, Spin } from 'antd'
 import { forEach, includes, isEmpty, map } from 'lodash'
 import { DataNode } from 'antd/lib/tree'
+import { useNavigate } from 'react-router-dom'
 
 // atoms
-import { useNavigate } from 'react-router-dom'
 import SwitchField from '../../../atoms/SwitchField'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SelectField from '../../../atoms/SelectField'
@@ -16,15 +16,17 @@ import CheckboxField from '../../../atoms/CheckboxField'
 // components
 import NotificationArrayFields from './NotificationArrayFields'
 import CheckboxGroupNestedField from '../../IndustriesPage/components/CheckboxGroupNestedField'
+import ImportForm from '../../../components/ImportForm'
 
 // types
-import { IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
+import { IDataUploadForm, IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
-import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, UPLOAD_STATUS } from '../../../utils/enums'
 import { formFieldID, optionRenderNotiPinkCheckbox, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
+import { postReq } from '../../../utils/request'
 
 // assets
 import { ReactComponent as ChevronDown } from '../../../assets/icons/chevron-down.svg'
@@ -33,6 +35,7 @@ import { ReactComponent as SettingsIcon } from '../../../assets/icons/setting.sv
 import { ReactComponent as BellIcon } from '../../../assets/icons/bell-24.svg'
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
+import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
 
 // redux
 import { RootState } from '../../../reducers'
@@ -53,19 +56,36 @@ type ComponentProps = {
 	parentPath?: string
 }
 
+const UPLOAD_MODAL_INIT = {
+	visible: false,
+	uploadStatus: undefined,
+	uploadType: undefined,
+	data: {
+		accept: '',
+		title: '',
+		label: ''
+	}
+}
+
 const ReservationSystemSettingsForm = (props: Props) => {
-	const { handleSubmit, pristine, submitting, excludedB2BNotifications, parentPath } = props
+	const { pristine, submitting, excludedB2BNotifications, parentPath, salonID } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const groupedServicesByCategory = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 	const groupedServicesByCategoryLoading = useSelector((state: RootState) => state.service.services.isLoading)
 	const formValues: Partial<IReservationSystemSettingsForm> = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
 	const navigate = useNavigate()
-
 	const disabled = !formValues?.enabledReservations
+	const disabledOnlineB2cReservations = !formValues?.enabledB2cReservations
 	const defaultExpandedKeys: any = []
 	forEach(groupedServicesByCategory, (level1) => forEach(level1.category?.children, (level2) => defaultExpandedKeys.push(level2?.category?.id)))
 
+	const [uploadModal, setUploadModal] = useState<{
+		visible: boolean
+		uploadStatus: UPLOAD_STATUS | undefined
+		uploadType: 'reservation' | 'customer' | undefined
+		data: { accept: string; label: string; title: string }
+	}>(UPLOAD_MODAL_INIT)
 	// https://ant.design/components/tree/#Note - nastava problem, ze pokial nie je vygenerovany strom, tak sa vyrendruje collapsnuty, aj ked je nastavena propa defaultExpandAll
 	// preto sa strom setuje cez state az po tom, co sa vytvoria data pre strom (vid useEffect nizzsie)
 	// cize pokial je null, znamena ze strom este nebol vygenerovany a zobrazuje sa loading state
@@ -126,7 +146,6 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings.${SERVICE_TYPE.ONLINE_BOOKING}.${id}`, true))
 				}
 			}
-
 			const treeData = groupedServicesByCategory?.reduce((firstLevelNodes, level1) => {
 				if (!isEmpty(level1.category?.children)) {
 					return [
@@ -134,7 +153,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						{
 							// LEVEL 1
 							title: level1.category?.name,
-							className: `noti-tree-node-1 text-lg`,
+							className: 'noti-tree-node-1 text-lg',
 							switcherIcon: (propsLevel1: any) => {
 								return propsLevel1?.expanded ? <ChevronDown style={{ transform: 'rotate(180deg)' }} /> : <ChevronDown />
 							},
@@ -148,7 +167,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 											// LEVEL 2
 											id: level2.category?.id,
 											key: level2.category?.id as string,
-											className: `noti-tree-node-1 font-semibold ml-6`,
+											className: 'noti-tree-node-1 font-semibold ml-6',
 											title: level2.category?.name,
 											switcherIcon: (propsLevel2: any) => {
 												return propsLevel2?.expanded ? <ChevronDown style={{ transform: 'rotate(180deg)' }} /> : <ChevronDown />
@@ -158,7 +177,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 													// LEVEL 3
 													id: level3.category.id,
 													key: level3.category.id,
-													className: `noti-tree-node-2 ml-6 hover:cursor-default`,
+													className: 'noti-tree-node-2 ml-6 hover:cursor-default',
 													title: (
 														<div id={`level3-${level3.category?.id}`} className={'flex justify-between'}>
 															<div>{level3.category?.name}</div>
@@ -168,7 +187,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 																		component={CheckboxField}
 																		key={`${SERVICE_TYPE.ONLINE_BOOKING}-${level3.service.id}`}
 																		name={level3.service.id}
-																		disabled={disabled}
+																		disabled={disabled || disabledOnlineB2cReservations}
 																		hideChecker
 																		onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 																			onChangeServiceCheck(e.target.checked, SERVICE_TYPE.ONLINE_BOOKING, level3.service.id)
@@ -182,7 +201,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 																		component={CheckboxField}
 																		key={`${SERVICE_TYPE.AUTO_CONFIRM}-${level3.service.id}`}
 																		name={level3.service.id}
-																		disabled={disabled}
+																		disabled={disabled || disabledOnlineB2cReservations}
 																		hideChecker
 																		onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 																			onChangeServiceCheck(e.target.checked, SERVICE_TYPE.AUTO_CONFIRM, level3.service.id)
@@ -208,7 +227,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			}, [] as DataNode[])
 			setServicesDataTree(treeData)
 		}
-	}, [groupedServicesByCategory, groupedServicesByCategoryLoading, dispatch, disabled])
+	}, [groupedServicesByCategory, groupedServicesByCategoryLoading, dispatch, disabled, disabledOnlineB2cReservations])
 
 	const getServicesSettingsContent = () => {
 		if (isLoadingTree) {
@@ -219,24 +238,92 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			return (
 				<div className={'flex flex-col items-center mt-10'}>
 					<p className={'text-notino-grayDark mb-6 text-center'}>{t('loc:V salóne zatiaľ nemáte priradené žiadne služby')}</p>
-					<Button
-						type={'primary'}
-						htmlType={'button'}
-						className={'noti-btn'}
-						onClick={() => navigate(`${parentPath}${t('paths:industries-and-services')}`)}
-						disabled={disabled}
-					>
+					<Button type={'primary'} htmlType={'button'} className={'noti-btn'} onClick={() => navigate(`${parentPath}${t('paths:industries-and-services')}`)}>
 						{t('loc:Priradiť služby')}
 					</Button>
 				</div>
 			)
 		}
 
+		const handleSubmitImport = async (values: IDataUploadForm) => {
+			if (!uploadModal.uploadType) {
+				return
+			}
+			const headers = {
+				'Content-Type': 'multipart/form-data'
+			}
+			const formData = new FormData()
+			formData.append('file', values?.file)
+
+			try {
+				if (uploadModal.uploadType === 'reservation') {
+					await postReq('/api/b2b/admin/imports/salons/{salonID}/calendar-events', { salonID }, formData, {
+						headers
+					})
+				} else {
+					await postReq('/api/b2b/admin/imports/salons/{salonID}/customers', { salonID }, formData, {
+						headers
+					})
+				}
+
+				setUploadModal({ ...uploadModal, uploadStatus: UPLOAD_STATUS.SUCCESS })
+			} catch {
+				setUploadModal({ ...uploadModal, uploadStatus: UPLOAD_STATUS.ERROR })
+			}
+		}
+
+		const modals = (
+			<>
+				<ImportForm
+					accept={uploadModal.data.accept}
+					title={uploadModal.data.title}
+					label={uploadModal.data.label}
+					uploadStatus={uploadModal.uploadStatus}
+					setUploadStatus={(status: any) => setUploadModal({ ...uploadModal, uploadStatus: status })}
+					onSubmit={handleSubmitImport}
+					visible={uploadModal.visible}
+					setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
+				/>
+			</>
+		)
 		return (
 			<>
+				{modals}
 				<p className='x-regular text-notino-grayDark'>{t('loc:Vyberte služby, ktoré bude možné rezervovať si online a ktoré budú automaticky potvrdené.')}</p>
+				<p className='x-regular text-notino-grayDark'>{t('loc:Nastavte službám možnosť online rezervácie, automatického potvrdenia a zadávania poznámok.')}</p>
+				<Row justify={'space-between'} className='mt-7'>
+					<div className={'w-full'}>
+						<div className={'flex items-center'}>
+							<Field
+								name={'enabledCustomerReservationNotes'}
+								disabled={disabled}
+								className={'w-full pb-1'}
+								component={SwitchField}
+								label={t('loc:Klientske poznámky')}
+							/>
+						</div>
+						<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Povoliť klientom zadávať poznámky k rezerváciám.')}</p>
+					</div>
+				</Row>
+				<Row className='mt-7'>
+					<div className={'w-full'}>
+						<div className={'flex items-center'}>
+							<Field
+								tooltipText={t(
+									'loc:Hlavné nastavenie pre možnosť online rezervácií. Ak táto možnosť je vypnutá, nebude možné vytvoriť žiadnu online rezerváciu pre službu, bez ohľadu na to, či má služba danú možnosť povolenú v sekcii nižšie.'
+								)}
+								name={'enabledB2cReservations'}
+								disabled={disabled}
+								className={'w-full pb-1'}
+								component={SwitchField}
+								label={t('loc:Online rezervácie')}
+							/>
+						</div>
+						<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Povoliť online rezervácie pre služby.')}</p>
+					</div>
+				</Row>
 				<div>
-					<div className={'flex w-full justify-end mb-4'}>
+					<div className={'flex w-full justify-end mb-4 mt-7'}>
 						<div style={{ width: 140 }} className={'flex text-xs'}>
 							<div className={'mr-2 text-center'}>{t('loc:Online rezervácia')}</div>
 							<div className={'text-center'}>{t('loc:Automatické potvrdenie')}</div>
@@ -248,7 +335,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							key={'onlineBookingAll'}
 							name={'onlineBookingAll'}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeCheckAll(e.target.checked, SERVICE_TYPE.ONLINE_BOOKING)}
-							disabled={disabled}
+							disabled={disabled || disabledOnlineB2cReservations}
 							hideChecker
 							optionRender={optionRenderNotiPinkCheckbox}
 							className={'p-0 h-6 mr-8 check-all'}
@@ -259,7 +346,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeCheckAll(e.target.checked, SERVICE_TYPE.AUTO_CONFIRM)}
 							key={'autoConfirmAll'}
 							name={'autoConfirmAll'}
-							disabled={disabled}
+							disabled={disabled || disabledOnlineB2cReservations}
 							hideChecker
 							optionRender={optionRenderNotiPinkCheckbox}
 							className={'p-0 h-6'}
@@ -271,7 +358,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					<Field
 						name={'services'}
 						className={'rs-services-settings-tree'}
-						disabled={disabled}
+						disabled={disabled || disabledOnlineB2cReservations}
 						component={CheckboxGroupNestedField}
 						defaultExpandedKeys={defaultExpandedKeys}
 						dataTree={servicesDataTree}
@@ -283,7 +370,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	}
 
 	return (
-		<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
+		<Form layout='vertical' className='w-full'>
 			<div className={'flex'}>
 				<h3 className={'mb-0 mt-0 flex items-center'}>
 					<GlobeIcon className={'text-notino-black mr-2'} />
@@ -391,6 +478,60 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				</div>
 			</Row>
 			<Row justify={'space-between'} className='mt-10'>
+				{/* Imports */}
+				<div className={'flex'}>
+					<h3 className={'mb-0 mt-0 flex items-center'}>
+						<UploadIcon className={'text-notino-black mr-2'} />
+						{t('loc:Importovať dáta z externých služieb')}
+					</h3>
+				</div>
+				<Divider className={'my-3'} />
+				<Row>
+					<Button
+						onClick={() =>
+							setUploadModal({
+								...uploadModal,
+								visible: true,
+								uploadType: 'reservation',
+								data: {
+									accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv,.ics',
+									title: t('loc:Importovať rezervácie'),
+									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.xlsx, .csv, .ics' })
+								}
+							})
+						}
+						disabled={disabled}
+						type='primary'
+						htmlType='button'
+						className={'noti-btn mr-2'}
+						icon={<UploadIcon />}
+					>
+						{t('loc:Importovať rezervácie')}
+					</Button>
+					<Button
+						onClick={() =>
+							setUploadModal({
+								...uploadModal,
+								visible: true,
+								uploadType: 'reservation',
+								data: {
+									accept: '.csv',
+									title: t('loc:Importovať zákazníkov'),
+									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv' })
+								}
+							})
+						}
+						disabled={disabled}
+						type='primary'
+						htmlType='button'
+						className={'noti-btn'}
+						icon={<UploadIcon />}
+					>
+						{t('loc:Importovať zákazníkov')}
+					</Button>
+				</Row>
+			</Row>
+			<Row justify={'space-between'} className='mt-10'>
 				{/* Notifications */}
 				<div className={'w-12/25'}>
 					<div className={'flex'}>
@@ -468,7 +609,6 @@ const ReservationSystemSettingsForm = (props: Props) => {
 								type={'primary'}
 								id={formFieldID(FORM.RESEVATION_SYSTEM_SETTINGS, SUBMIT_BUTTON_ID)}
 								className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
-								htmlType={'submit'}
 								icon={<EditIcon />}
 								disabled={submitting || pristine}
 								loading={submitting}

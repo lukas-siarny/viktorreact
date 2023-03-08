@@ -6,8 +6,9 @@ import { Divider, Form, Space, Button } from 'antd'
 import { isEmpty } from 'lodash'
 
 // utils
-import { FORM, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { FORM, PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 import { showErrorNotification } from '../../../utils/helper'
+import Permissions from '../../../utils/Permissions'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
@@ -102,15 +103,29 @@ const EmployeeForm: FC<Props> = (props) => {
 									showSearch
 									loading={services.isLoading}
 								/>
-								<Button
-									type={'primary'}
-									size={'middle'}
-									className={'self-start noti-btn m-regular md:mt-5'}
-									onClick={addService}
-									disabled={isEmpty(formValues?.service)}
-								>
-									{formValues?.services && formValues?.services.length > 1 ? STRINGS(t).addRecord(t('loc:služby')) : STRINGS(t).addRecord(t('loc:službu'))}
-								</Button>
+								<Permissions
+									allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_UPDATE]}
+									render={(hasPermission, { openForbiddenModal }) => (
+										<Button
+											type={'primary'}
+											size={'middle'}
+											className={'self-start noti-btn m-regular md:mt-5'}
+											onClick={(e) => {
+												e.stopPropagation()
+												if (hasPermission) {
+													if (addService) {
+														addService(e)
+													}
+												} else {
+													openForbiddenModal()
+												}
+											}}
+											disabled={isEmpty(formValues?.service)}
+										>
+											{STRINGS(t).addRecord(t('loc:služby'))}
+										</Button>
+									)}
+								/>
 							</div>
 							<FieldArray
 								component={ServicesListField as any}

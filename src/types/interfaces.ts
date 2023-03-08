@@ -460,6 +460,16 @@ export interface ISpecialistContactFilter {
 	search: string
 }
 
+export interface ISmsUnitPricesForm {
+	validFrom: string
+	amount: number
+	countryCode: string
+}
+
+export interface ISmsUnitPricesFilter {
+	search: string
+}
+
 export interface ILanguageForm {
 	image?: string
 	nameLocalizations: NameLocalizationsItem[]
@@ -602,6 +612,8 @@ export interface IReservationSystemSettingsForm {
 	minutesIntervalB2CReservations?: number | null
 	// Pomocne checky pre chekcnutie all hodnot pre BOOKING / AUTO CONFIRM
 	autoConfirmAll: boolean
+	enabledCustomerReservationNotes?: boolean
+	enabledB2cReservations?: boolean
 	onlineBookingAll: boolean
 	disabledNotifications: {
 		[key in RS_NOTIFICATION]: IReservationsSettingsNotification
@@ -767,7 +779,6 @@ export interface ICalendarView {
 	enabledSalonReservations?: boolean
 	employees: Employees
 }
-
 export interface IEventCardProps {
 	calendarView: CALENDAR_VIEW
 	resourceId: string

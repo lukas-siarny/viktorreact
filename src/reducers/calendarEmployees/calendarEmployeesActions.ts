@@ -26,8 +26,8 @@ interface IGetEmployees {
 }
 
 export const setCalendarEmployees =
-	(employees?: Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0][]): ThunkResult<Promise<ICalendarEmployeesPayload>> =>
-	async (dispatch, getState) => {
+	(employees?: Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0][]): ThunkResult<ICalendarEmployeesPayload> =>
+	(dispatch, getState) => {
 		let payload = {
 			data: null,
 			options: []

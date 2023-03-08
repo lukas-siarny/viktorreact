@@ -23,6 +23,25 @@ const supportCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, passwo
 		cy.saveLocalStorage()
 	})
 
+	it('Filter support contact', () => {
+		cy.visit('/support-contacts')
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
+			cy.intercept({
+				method: 'GET',
+				url: '/api/b2b/admin/enums/support-contacts/'
+			}).as('filterSupportContact')
+			cy.setInputValue(FORM.SUPPORT_CONTACTS_FILTER, 'search', supportContact.filter.search)
+			cy.wait('@filterSupportContact').then((interception: any) => {
+				// check status code
+				expect(interception.response.statusCode).to.equal(200)
+				cy.location('pathname').should('eq', '/support-contacts')
+			})
+		} else {
+			// check redirect to 403 unauthorized page
+			cy.location('pathname').should('eq', '/403')
+		}
+	})
+
 	it('Create support contact', () => {
 		cy.visit('/support-contacts')
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
@@ -116,25 +135,6 @@ const supportCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, passwo
 				expect(interception.response.statusCode).to.equal(200)
 				// check conf toast message
 				cy.checkSuccessToastMessage()
-				cy.location('pathname').should('eq', '/support-contacts')
-			})
-		} else {
-			// check redirect to 403 unauthorized page
-			cy.location('pathname').should('eq', '/403')
-		}
-	})
-
-	it('Filter support contact', () => {
-		cy.visit('/support-contacts')
-		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
-			cy.intercept({
-				method: 'GET',
-				url: '/api/b2b/admin/enums/support-contacts/'
-			}).as('filterSupportContact')
-			cy.setInputValue(FORM.SUPPORT_CONTACTS_FILTER, 'search', supportContact.filter.search)
-			cy.wait('@filterSupportContact').then((interception: any) => {
-				// check status code
-				expect(interception.response.statusCode).to.equal(200)
 				cy.location('pathname').should('eq', '/support-contacts')
 			})
 		} else {

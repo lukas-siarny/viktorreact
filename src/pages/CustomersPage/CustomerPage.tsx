@@ -55,21 +55,26 @@ const CustomerPage = (props: Props) => {
 			navigate('/404')
 		}
 
-		dispatch(
-			initialize(FORM.CUSTOMER, {
-				...data?.customer,
-				zipCode: data?.customer.address.zipCode,
-				city: data?.customer.address.city,
-				street: data?.customer.address.street,
-				streetNumber: data?.customer.address.streetNumber,
-				countryCode: data?.customer.address.countryCode,
-				salonID: data?.customer.salon.id,
-				gallery: map(data?.customer?.galleryImages, (image) => ({ url: image?.original, thumbnail: image?.resizedImages?.thumbnail, uid: image?.id })),
-				avatar: data?.customer?.profileImage
-					? [{ url: data?.customer?.profileImage?.original, thumbnail: data?.customer?.profileImage?.resizedImages?.thumbnail, uid: data?.customer?.profileImage?.id }]
-					: null
-			})
-		)
+		console.log('🚀 ~ file: CustomerPage.tsx:81 ~ fetchCustomerData ~ from API:', data?.customer)
+
+		const initial = {
+			...data?.customer,
+			...data?.customer.address,
+			// zipCode: data?.customer.address.zipCode,
+			// city: data?.customer.address.city,
+			// street: data?.customer.address.street,
+			// streetNumber: data?.customer.address.streetNumber,
+			// countryCode: data?.customer.address.countryCode,
+			salonID: data?.customer.salon.id,
+			gallery: map(data?.customer?.galleryImages, (image) => ({ url: image?.original, thumbnail: image?.resizedImages?.thumbnail, uid: image?.id })),
+			avatar: data?.customer?.profileImage
+				? [{ url: data?.customer?.profileImage?.original, thumbnail: data?.customer?.profileImage?.resizedImages?.thumbnail, uid: data?.customer?.profileImage?.id }]
+				: null
+		}
+
+		console.log('🚀 ~ file: CustomerPage.tsx:59 ~ fetchCustomerData ~ initial:', initial)
+
+		dispatch(initialize(FORM.CUSTOMER, initial))
 	}
 
 	useEffect(() => {

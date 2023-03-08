@@ -3,6 +3,7 @@ import i18next from 'i18next'
 import { isEmail } from 'lodash-checkit'
 import { z, ZodString, ZodOptional, ZodNullable } from 'zod'
 import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { ICustomerForm } from '../../../types/interfaces'
 
 const imageConstraint = z.object({
 	url: z.string().url(),
@@ -88,7 +89,8 @@ type OptionalCustomer = z.infer<typeof customerOptionalScheme>
 const customerSchema = makeFieldsRequired(customerOptionalScheme, ['firstName', 'lastName', 'phone'])
 export type Customer = MakeFieldsRequired<OptionalCustomer, 'firstName' | 'lastName' | 'phone'>
 
-export default (values: Customer) => {
+export default (values: Customer | ICustomerForm) => {
+	console.log('🚀 ~ file: validateCustomerForm.tsx:92 ~ values:', values)
 	const errors: FormErrors<Customer> = {}
 	const validationErrors: FormErrors<Customer> = {}
 

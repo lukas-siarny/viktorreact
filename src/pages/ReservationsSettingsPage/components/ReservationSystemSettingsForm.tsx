@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Button, Divider, Form, Row, Spin } from 'antd'
 import { forEach, includes, isEmpty, map } from 'lodash'
 import { DataNode } from 'antd/lib/tree'
+import { useNavigate } from 'react-router-dom'
 
 // atoms
-import { useNavigate } from 'react-router-dom'
 import SwitchField from '../../../atoms/SwitchField'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SelectField from '../../../atoms/SelectField'
@@ -62,8 +62,8 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const groupedServicesByCategoryLoading = useSelector((state: RootState) => state.service.services.isLoading)
 	const formValues: Partial<IReservationSystemSettingsForm> = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
 	const navigate = useNavigate()
-
 	const disabled = !formValues?.enabledReservations
+	const disabledOnlineB2cReservations = !formValues?.enabledB2cReservations
 	const defaultExpandedKeys: any = []
 	forEach(groupedServicesByCategory, (level1) => forEach(level1.category?.children, (level2) => defaultExpandedKeys.push(level2?.category?.id)))
 
@@ -127,7 +127,6 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					dispatch(change(FORM.RESEVATION_SYSTEM_SETTINGS, `servicesSettings.${SERVICE_TYPE.ONLINE_BOOKING}.${id}`, true))
 				}
 			}
-
 			const treeData = groupedServicesByCategory?.reduce((firstLevelNodes, level1) => {
 				if (!isEmpty(level1.category?.children)) {
 					return [
@@ -135,7 +134,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						{
 							// LEVEL 1
 							title: level1.category?.name,
-							className: `noti-tree-node-1 text-lg`,
+							className: 'noti-tree-node-1 text-lg',
 							switcherIcon: (propsLevel1: any) => {
 								return propsLevel1?.expanded ? <ChevronDown style={{ transform: 'rotate(180deg)' }} /> : <ChevronDown />
 							},
@@ -149,7 +148,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 											// LEVEL 2
 											id: level2.category?.id,
 											key: level2.category?.id as string,
-											className: `noti-tree-node-1 font-semibold ml-6`,
+											className: 'noti-tree-node-1 font-semibold ml-6',
 											title: level2.category?.name,
 											switcherIcon: (propsLevel2: any) => {
 												return propsLevel2?.expanded ? <ChevronDown style={{ transform: 'rotate(180deg)' }} /> : <ChevronDown />
@@ -159,7 +158,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 													// LEVEL 3
 													id: level3.category.id,
 													key: level3.category.id,
-													className: `noti-tree-node-2 ml-6 hover:cursor-default`,
+													className: 'noti-tree-node-2 ml-6 hover:cursor-default',
 													title: (
 														<div id={`level3-${level3.category?.id}`} className={'flex justify-between'}>
 															<div>{level3.category?.name}</div>
@@ -169,7 +168,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 																		component={CheckboxField}
 																		key={`${SERVICE_TYPE.ONLINE_BOOKING}-${level3.service.id}`}
 																		name={level3.service.id}
-																		disabled={disabled}
+																		disabled={disabled || disabledOnlineB2cReservations}
 																		hideChecker
 																		onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 																			onChangeServiceCheck(e.target.checked, SERVICE_TYPE.ONLINE_BOOKING, level3.service.id)
@@ -183,7 +182,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 																		component={CheckboxField}
 																		key={`${SERVICE_TYPE.AUTO_CONFIRM}-${level3.service.id}`}
 																		name={level3.service.id}
-																		disabled={disabled}
+																		disabled={disabled || disabledOnlineB2cReservations}
 																		hideChecker
 																		onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 																			onChangeServiceCheck(e.target.checked, SERVICE_TYPE.AUTO_CONFIRM, level3.service.id)
@@ -209,7 +208,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			}, [] as DataNode[])
 			setServicesDataTree(treeData)
 		}
-	}, [groupedServicesByCategory, groupedServicesByCategoryLoading, dispatch, disabled])
+	}, [groupedServicesByCategory, groupedServicesByCategoryLoading, dispatch, disabled, disabledOnlineB2cReservations])
 
 	const getServicesSettingsContent = () => {
 		if (isLoadingTree) {
@@ -220,13 +219,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			return (
 				<div className={'flex flex-col items-center mt-10'}>
 					<p className={'text-notino-grayDark mb-6 text-center'}>{t('loc:V salóne zatiaľ nemáte priradené žiadne služby')}</p>
-					<Button
-						type={'primary'}
-						htmlType={'button'}
-						className={'noti-btn'}
-						onClick={() => navigate(`${parentPath}${t('paths:industries-and-services')}`)}
-						disabled={disabled}
-					>
+					<Button type={'primary'} htmlType={'button'} className={'noti-btn'} onClick={() => navigate(`${parentPath}${t('paths:industries-and-services')}`)}>
 						{t('loc:Priradiť služby')}
 					</Button>
 				</div>
@@ -235,9 +228,40 @@ const ReservationSystemSettingsForm = (props: Props) => {
 
 		return (
 			<>
-				<p className='x-regular text-notino-grayDark'>{t('loc:Vyberte služby, ktoré bude možné rezervovať si online a ktoré budú automaticky potvrdené.')}</p>
+				<p className='x-regular text-notino-grayDark'>{t('loc:Nastavte službám možnosť online rezervácie, automatického potvrdenia a zadávania poznámok.')}</p>
+				<Row justify={'space-between'} className='mt-7'>
+					<div className={'w-full'}>
+						<div className={'flex items-center'}>
+							<Field
+								name={'enabledCustomerReservationNotes'}
+								disabled={disabled}
+								className={'w-full pb-1'}
+								component={SwitchField}
+								label={t('loc:Klientske poznámky')}
+							/>
+						</div>
+						<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Povoliť klientom zadávať poznámky k rezerváciám.')}</p>
+					</div>
+				</Row>
+				<Row className='mt-7'>
+					<div className={'w-full'}>
+						<div className={'flex items-center'}>
+							<Field
+								tooltipText={t(
+									'loc:Hlavné nastavenie pre možnosť online rezervácií. Ak táto možnosť je vypnutá, nebude možné vytvoriť žiadnu online rezerváciu pre službu, bez ohľadu na to, či má služba danú možnosť povolenú v sekcii nižšie.'
+								)}
+								name={'enabledB2cReservations'}
+								disabled={disabled}
+								className={'w-full pb-1'}
+								component={SwitchField}
+								label={t('loc:Online rezervácie')}
+							/>
+						</div>
+						<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Povoliť online rezervácie pre služby.')}</p>
+					</div>
+				</Row>
 				<div>
-					<div className={'flex w-full justify-end mb-4'}>
+					<div className={'flex w-full justify-end mb-4 mt-7'}>
 						<div style={{ width: 140 }} className={'flex text-xs'}>
 							<div className={'mr-2 text-center'}>{t('loc:Online rezervácia')}</div>
 							<div className={'text-center'}>{t('loc:Automatické potvrdenie')}</div>
@@ -249,7 +273,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							key={'onlineBookingAll'}
 							name={'onlineBookingAll'}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeCheckAll(e.target.checked, SERVICE_TYPE.ONLINE_BOOKING)}
-							disabled={disabled}
+							disabled={disabled || disabledOnlineB2cReservations}
 							hideChecker
 							optionRender={optionRenderNotiPinkCheckbox}
 							className={'p-0 h-6 mr-8 check-all'}
@@ -260,7 +284,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeCheckAll(e.target.checked, SERVICE_TYPE.AUTO_CONFIRM)}
 							key={'autoConfirmAll'}
 							name={'autoConfirmAll'}
-							disabled={disabled}
+							disabled={disabled || disabledOnlineB2cReservations}
 							hideChecker
 							optionRender={optionRenderNotiPinkCheckbox}
 							className={'p-0 h-6'}
@@ -272,7 +296,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					<Field
 						name={'services'}
 						className={'rs-services-settings-tree'}
-						disabled={disabled}
+						disabled={disabled || disabledOnlineB2cReservations}
 						component={CheckboxGroupNestedField}
 						defaultExpandedKeys={defaultExpandedKeys}
 						dataTree={servicesDataTree}

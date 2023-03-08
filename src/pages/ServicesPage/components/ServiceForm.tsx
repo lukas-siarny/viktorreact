@@ -60,7 +60,6 @@ const ServiceForm: FC<Props> = (props) => {
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
 	const formValues = form?.values as IServiceForm
-	const employees = useSelector((state: RootState) => state.employees.employees)
 	const service = useSelector((state: RootState) => state.service.service)
 	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading)
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
@@ -96,7 +95,7 @@ const ServiceForm: FC<Props> = (props) => {
 	return (
 		<Permissions
 			allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_UPDATE]}
-			render={(hasPermission) => (
+			render={(hasPermission, { openForbiddenModal }) => (
 				<div className='content-body small'>
 					<Spin spinning={isLoading}>
 						<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
@@ -321,7 +320,14 @@ const ServiceForm: FC<Props> = (props) => {
 											type={'primary'}
 											size={'middle'}
 											className={'self-start noti-btn m-regular md:mt-5'}
-											onClick={addEmployee}
+											onClick={(e) => {
+												e.stopPropagation()
+												if (hasPermission) {
+													addEmployee(e)
+												} else {
+													openForbiddenModal()
+												}
+											}}
 											disabled={isEmpty(formValues?.employee)}
 										>
 											{formValues?.employees && formValues?.employees.length > 1 ? t('loc:Pridať zamestnancov') : t('loc:Pridať zamestnanca')}

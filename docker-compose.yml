@@ -62,6 +62,8 @@ services:
       - "database_test"
     volumes:
       - './notino_backend/logs:/home/app/logs'
+      # mount folder with e2e seeders for development purposes (editing and executing seeders in running container)
+      - './notino_backend/src/db/seeders/e2e:/home/app/src/db/seeders/e2e'
   frontend:
     environment:
       - REACT_APP_GOOGLE_MAPS_API_KEY=testGoogleAPIKey

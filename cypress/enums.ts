@@ -30,3 +30,4 @@ export enum CRUD_OPERATIONS {
 export const SALON_ID = 'salonId'
 export const CUSTOMER_ID = 'customerId'
 export const EMPLOYEE_ID = 'employeeId'
+export const COSMETICS_ID = 'cosmeticsId'

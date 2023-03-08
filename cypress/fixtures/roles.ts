@@ -8,7 +8,7 @@ const data: ITestConfig[] = [
 	{
 		role: PERMISSION.NOTINO_SUPER_ADMIN,
 		credentials: {
-			user: 'lubomir.igonda@goodrequest.com',
+			user: 'super.admin@goodrequest.com',
 			password: 'Lopaty123.'
 		},
 		tests: [
@@ -78,12 +78,13 @@ const data: ITestConfig[] = [
 					}
 				]
 			}
-		]
+		],
+		isInActive: true
 	},
 	{
 		role: PERMISSION.NOTINO_ADMIN,
 		credentials: {
-			user: 'test.confirmed_notinouser@goodrequest.com',
+			user: 'notino.admin@goodrequest.com',
 			password: 'Lopaty123.'
 		},
 		tests: [
@@ -127,10 +128,10 @@ const data: ITestConfig[] = [
 		isInActive: true
 	},
 	{
-		// also Notino Partner -> ADMIN role coverage by this role
-		role: PERMISSION.PARTNER_ADMIN,
+		// also NOTINO Partner role coverage by this tests
+		role: SALON_ROLES.ADMIN,
 		credentials: {
-			user: 'test.confirmed_partneruser@goodrequest.com',
+			user: 'employee1.admin.salon1@goodrequest.com',
 			password: 'Lopaty123.'
 		},
 		tests: [
@@ -196,13 +197,12 @@ const data: ITestConfig[] = [
 					}
 				]
 			}
-		],
-		isInActive: true
+		]
 	},
 	{
 		role: SALON_ROLES.MANAGER,
 		credentials: {
-			user: 'test.employee4.salon1@goodrequest.com',
+			user: 'employee1.manager.salon2@goodrequest.com',
 			password: 'Lopaty123.'
 		},
 		tests: [
@@ -241,10 +241,6 @@ const data: ITestConfig[] = [
 			{
 				name: LIST_OF_TESTS_SUITS.SALON,
 				actions: [CRUD_OPERATIONS.READ, CRUD_OPERATIONS.UPDATE],
-				/*
-					!!! Do not remove or change the order of tests in this array !!! Change of order
-					can cause malfunction of tests, because individual tests are independent of each other
-				*/
 				tests: [
 					{
 						name: SALON_TESTS_SUITS.BILLING_INFORMATION,
@@ -268,8 +264,7 @@ const data: ITestConfig[] = [
 					}
 				]
 			}
-		],
-		isInActive: true
+		]
 	}
 ]
 

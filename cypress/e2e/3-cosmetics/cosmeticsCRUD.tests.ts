@@ -4,11 +4,9 @@ import cosmetics from '../../fixtures/cosmetics.json'
 
 // enums
 import { CREATE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
-import { CRUD_OPERATIONS } from '../../enums'
+import { COSMETICS_ID, CRUD_OPERATIONS } from '../../enums'
 
 const cosmeticsCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
-	let cosmeticsID: any
-
 	before(() => {
 		loginViaApi(email, password)
 	})
@@ -36,7 +34,7 @@ const cosmeticsCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pass
 			cy.wait('@createCosmetics').then((interception: any) => {
 				// check status code of login request
 				expect(interception.response.statusCode).to.equal(200)
-				cosmeticsID = interception.response.body.cosmetic.id
+				Cypress.env(COSMETICS_ID, interception.response.body.cosmetic.id)
 				// check conf toast message
 				cy.checkSuccessToastMessage()
 			})
@@ -47,6 +45,8 @@ const cosmeticsCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pass
 	})
 
 	it('Update cosmetics', () => {
+		// get cosmeticsID from env
+		const cosmeticsID = Cypress.env(COSMETICS_ID)
 		cy.visit('/cosmetics')
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
 			cy.intercept({
@@ -83,6 +83,8 @@ const cosmeticsCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pass
 	})
 
 	it('Delete cosmetics', () => {
+		// get cosmeticsID from env
+		const cosmeticsID = Cypress.env(COSMETICS_ID)
 		cy.visit('/cosmetics')
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
 			cy.intercept({

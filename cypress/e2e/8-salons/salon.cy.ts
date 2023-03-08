@@ -6,10 +6,6 @@ import { CRUD_OPERATIONS, SALON_TESTS_SUITS } from '../../enums'
 import { ITests } from '../10-roles/roles.cy'
 import { PERMISSION } from '../../../src/utils/enums'
 
-/*
-	!!! Do not remove or change the order of tests in this array !!! Change of order
-	can cause malfunction of tests, because individual tests are independent of each other
-*/
 const salonSubTests: ITests[] = [
 	{
 		name: SALON_TESTS_SUITS.BILLING_INFORMATION,

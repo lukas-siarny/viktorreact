@@ -10,15 +10,9 @@ import { SET_CALENDAR_EMPLOYEES } from './calendarEmployeesTypes'
 // types
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { CalendarEmployee, ISelectOptionItem } from '../../types/interfaces'
+import { CalendarEmployee, ICalendarEmployeeOptionItem, ICalendarEmployeesPayload } from '../../types/interfaces'
 
 export type ICalendarEmployeesActions = IResetStore | IGetEmployees
-
-export type ICalendarEmployeeOptionItem = ISelectOptionItem<{ employeeData: { color: string }; thumbnail: string; color: string; isForImportedEvents: boolean }>
-export interface ICalendarEmployeesPayload {
-	data: CalendarEmployee[] | null
-	options: ICalendarEmployeeOptionItem[]
-}
 
 interface IGetEmployees {
 	type: typeof SET_CALENDAR_EMPLOYEES
@@ -40,30 +34,28 @@ export const setCalendarEmployees =
 			const isForImportedEvents = employee.firstName === VIRTUAL_EMPLOYEE_IDENTIFICATOR
 			const firstName = isForImportedEvents ? VIRTUAL_EMPLOYEE_NAME(i18next.t) : employee.firstName
 			const lastName = isForImportedEvents ? '' : employee.lastName
-			calendarEmployees.push({
+			const isDeleted = !isForImportedEvents && !!employee.deletedAt
+			const color = isDeleted ? '#808080' : employee.color // deleted: grayDark
+
+			const employeeData = {
 				id: employee.id,
 				firstName,
 				lastName,
 				email: employee.email,
+				inviteEmail: employee.inviteEmail,
 				orderIndex: index,
-				color: employee.color,
+				color,
 				image: employee.image,
-				isForImportedEvents
-			})
+				isForImportedEvents,
+				isDeleted
+			}
+
+			calendarEmployees.push(employeeData)
 			options.push({
-				// show name if exist at least last name otherwise show fallback values
-				label: getAssignedUserLabel({ id: employee.id, firstName, lastName, email: employee.email }),
+				label: getAssignedUserLabel({ id: employee.id, firstName, lastName, email: employee.email || employee.inviteEmail }),
 				value: employee.id,
 				key: employee.id,
-				extra: {
-					// employeeData s hodnotou color je potrebna, aby sa v mesacnom view zobrazila spravne farba pri vytvarani noveho eventu
-					employeeData: {
-						color: employee.color
-					},
-					thumbnail: employee.image.resizedImages.thumbnail,
-					color: employee.color,
-					isForImportedEvents
-				}
+				extra: { employeeData, thumbnail: employee.image.resizedImages.thumbnail, color, isDeleted }
 			})
 		})
 

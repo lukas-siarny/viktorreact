@@ -375,7 +375,8 @@ const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeO
 		image: employee.image.resizedImages.thumbnail,
 		description,
 		isTimeOff,
-		isForImportedEvents: employee.isForImportedEvents
+		isForImportedEvents: employee.isForImportedEvents,
+		isDeleted: employee.isDeleted
 	}
 }
 

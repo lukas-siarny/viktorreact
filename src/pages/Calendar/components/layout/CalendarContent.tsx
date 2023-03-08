@@ -40,6 +40,7 @@ import {
 	ICalendarView,
 	IDayViewResourceExtenedProps,
 	IEventExtenedProps,
+	IResourceEmployee,
 	IWeekViewResourceExtenedProps,
 	PopoverTriggerPosition
 } from '../../../../types/interfaces'
@@ -232,7 +233,22 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		if (!isImportedEvent && newEmployee?.isForImportedEvents) {
 			notification.warning({
 				message: t('loc:Upozornenie'),
-				description: t('loc:Rezerváciu nie je možné zaradiť medzi importované udalosti')
+				description: t('loc:Rezerváciu nie je možné preradiť medzi importované')
+			})
+			revertEvent()
+			return
+		}
+
+		/**
+		 * udalosť nie je možné preradiť na vymazenáho zamestnanca
+		 */
+		if (newEmployee?.isDeleted) {
+			const eventType = EVENT_NAMES(t, eventData?.eventType as CALENDAR_EVENT_TYPE, true)
+			notification.warning({
+				message: t('loc:Upozornenie'),
+				description: t('loc:{{ eventType }} nie je možné preradiť na vymazaného zamestnanca.', {
+					eventType
+				})
 			})
 			revertEvent()
 			return
@@ -324,7 +340,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	}
 
 	const handleSelectAllow = (selectInfo: DateSpanApi) => {
-		return !selectInfo?.resource?.extendedProps?.employee?.isForImportedEvents
+		const employee = selectInfo?.resource?.extendedProps?.employee as IResourceEmployee
+		return !(employee?.isForImportedEvents || employee?.isDeleted)
 	}
 
 	const getView = () => {

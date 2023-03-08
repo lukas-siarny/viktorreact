@@ -100,6 +100,9 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 		margin-left: auto
 		height: 16px
 		align-self: center
+	&.is-deleted
+		.image
+			filter: grayscale(100%)
 
 // weekly view - resrouces osa - prvy stlpcek s oznacenim dna
 .nc-week-label-day
@@ -150,6 +153,9 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 	.absence-icon
 		margin-left: auto
 		align-self: center
+	&.is-deleted
+		.image
+			filter: grayscale(100%)
 
 // weekly view - deliace medzeri medzi jednotlivymi dnami
 .nc-resource-group-label-bg,
@@ -387,7 +393,7 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 					.title-wrapper
 						.title-inner-wrapper
 							.title
-								color: $textColor-notino-pink
+								color: $textColor-notino-black
 					.desc
 						white-space: normal
 						color: $textColor-notino-grayDark
@@ -546,7 +552,7 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 					.title-wrapper
 						.title-inner-wrapper
 							.title
-								color: $textColor-notino-pink
+								color: $textColor-notino-black
 					.desc
 						color: $textColor-notino-grayDark
 		&.shift,
@@ -713,6 +719,11 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 		&.break
 			&:not(.edit)
 				outline: none
+	&.is-deleted-employee
+		.event-content
+			.event-avatar
+				img
+					filter: grayscale(100%)
 
 	// reservation state specific styles
 	&.reservation

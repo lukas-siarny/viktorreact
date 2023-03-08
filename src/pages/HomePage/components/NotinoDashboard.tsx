@@ -17,6 +17,8 @@ import { useNavigate } from 'react-router-dom'
 import SalonDashboard from './SalonDashboard'
 import Statistics from '../../../components/Dashboards/Statistics'
 import CustomTable from '../../../components/CustomTable'
+import TabsComponent from '../../../components/TabsComponent'
+import ReservationsDashboard from './ReservationsDashboard'
 
 // types
 import { Columns, AlertData, DashboardData, TimeStats } from '../../../types/interfaces'
@@ -30,10 +32,8 @@ import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
 // utils
-import { DASHBOARD_TASB_KEYS, FILTER_PATHS, RESERVATIONS_STATS_TYPE, RS_STATS_TYPE, SALON_FILTER_STATES, SALONS_TIME_STATS_TYPE, TAB_KEYS } from '../../../utils/enums'
+import { DASHBOARD_TASB_KEYS, FILTER_PATHS, RESERVATIONS_STATS_TYPE, RS_STATS_TYPE, SALON_FILTER_STATES, SALONS_TIME_STATS_TYPE } from '../../../utils/enums'
 import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData, transformToRsStatsData, transformToReservationsStatsData } from './dashboardUtils'
-import TabsComponent from '../../../components/TabsComponent'
-import ReservationsDashboard from './ReservationsDashboard'
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin)
 
@@ -193,7 +193,7 @@ const doughnutContent = (label: string, source?: any[], onlyLegend?: boolean) =>
 							/>
 						</div>
 					)}
-					<div className='flex flex-1 items-center right-side'>
+					<div className='flex flex-1 items-center'>
 						<div className='w-full flex flex-col gap-4'>
 							{source.map((item: any, index: number) => (
 								<div key={index} className='flex items-center w-full h-6 cursor-pointer' onClick={item.onClick}>
@@ -257,6 +257,9 @@ const NotinoDashboard: FC = () => {
 	const dispatch = useDispatch()
 	const [annualStatsDate, setAnnualStatsDate] = useState<Dayjs>(now)
 	const [monthStatsDate, setMonthStatsDate] = useState<Dayjs>(now)
+	const [mothRsStatsDate, setMothRsStatsDate] = useState<Dayjs>(now)
+	const [monthReservationsStatsDate, setMonthReservationsStatsDate] = useState<Dayjs>(now)
+
 	const { notino, salonsAnnualStats, salonsMonthStats, rsStats, reservationsStats } = useSelector((state: RootState) => state.dashboard)
 	const { selectedSalon } = useSelector((state: RootState) => state.selectedSalon)
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
@@ -293,12 +296,12 @@ const NotinoDashboard: FC = () => {
 	}, [salonsMonthStats, monthStatsDate])
 
 	const rsMonthStats: TimeStats = useMemo(() => {
-		return transformToRsStatsData(rsStats.data, rsStats.isLoading, rsStats.isFailure, monthStatsDate)
-	}, [rsStats.data, rsStats.isLoading, rsStats.isFailure, monthStatsDate])
+		return transformToRsStatsData(rsStats.data, rsStats.isLoading, rsStats.isFailure, mothRsStatsDate)
+	}, [rsStats.data, rsStats.isLoading, rsStats.isFailure, mothRsStatsDate])
 
 	const reservationsMonthStats: TimeStats = useMemo(() => {
-		return transformToReservationsStatsData(reservationsStats.data, reservationsStats.isLoading, reservationsStats.isFailure, monthStatsDate)
-	}, [reservationsStats.data, reservationsStats.isLoading, reservationsStats.isFailure, monthStatsDate])
+		return transformToReservationsStatsData(reservationsStats.data, reservationsStats.isLoading, reservationsStats.isFailure, monthReservationsStatsDate)
+	}, [reservationsStats.data, reservationsStats.isLoading, reservationsStats.isFailure, monthReservationsStatsDate])
 
 	const dashboardData: DashboardData = useMemo(() => {
 		const emptyGraphData = {
@@ -502,7 +505,7 @@ const NotinoDashboard: FC = () => {
 				rsMonthStats,
 				timeStatsFilter((date) => {
 					if (date) {
-						setMonthStatsDate(date)
+						setMothRsStatsDate(date)
 						dispatch(
 							getRsStats({
 								year: Number(date.year()),
@@ -519,7 +522,7 @@ const NotinoDashboard: FC = () => {
 				reservationsMonthStats,
 				timeStatsFilter((date) => {
 					if (date) {
-						setMonthStatsDate(date)
+						setMonthReservationsStatsDate(date)
 						dispatch(
 							getReservationStats({
 								year: Number(date.year()),

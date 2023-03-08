@@ -2,24 +2,21 @@ import dayjs, { Dayjs } from 'dayjs'
 import colors from 'tailwindcss/colors'
 
 // types
-import React from 'react'
-import { Empty, Spin } from 'antd'
-import i18next from 'i18next'
-import { Line } from 'react-chartjs-2'
 import { TimeStats, TimeStatsData } from '../../../types/interfaces'
 
 // utils
 import { getSalonFilterRanges } from '../../../utils/helper'
 import {
-	DEFAULT_DATE_TIME_OPTIONS,
 	DATE_TIME_RANGE,
 	DEFAULT_DATE_INIT_FORMAT,
-	SALONS_TIME_STATS_TYPE,
-	TIME_STATS_SOURCE_TYPE,
+	DEFAULT_DATE_TIME_OPTIONS,
+	RESERVATIONS_STATS_TYPE,
 	RS_STATS_TYPE,
-	RESERVATIONS_STATS_TYPE
+	SALONS_TIME_STATS_TYPE,
+	TIME_STATS_SOURCE_TYPE
 } from '../../../utils/enums'
-import CustomTable from '../../../components/CustomTable'
+
+// reducers
 import { IReservationsStats, IRsStats, ISalonsTimeStats } from '../../../reducers/dashboard/dashboardActions'
 
 export const doughnutOptions = (clickHandlers: any[]) => {

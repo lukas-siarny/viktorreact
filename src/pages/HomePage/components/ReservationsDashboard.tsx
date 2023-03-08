@@ -1,18 +1,17 @@
 import React, { PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
+
 import Statistics from '../../../components/Dashboards/Statistics'
 import { RootState } from '../../../reducers'
 
-type Props = PropsWithChildren & {
-	// data: any
-}
+type Props = PropsWithChildren & {}
 
 const ReservationsDashboard = (props: Props) => {
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
 	const { children } = props
-	const { notino, salonsAnnualStats, salonsMonthStats } = useSelector((state: RootState) => state.dashboard)
+
+	const { notino } = useSelector((state: RootState) => state.dashboard)
 
 	return (
 		<div>

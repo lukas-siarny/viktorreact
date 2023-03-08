@@ -58,7 +58,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 			<Spin spinning={true} />
 		</div>
 	) : (
-		<>
+		<div className='w-11/12 xl:w-5/6 2xl:w-3/4 3xl:w-2/3 mx-auto'>
 			{selectedSalon?.data && salonID ? (
 				<div>
 					{/* hidden salon */}
@@ -141,7 +141,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 			) : (
 				children
 			)}
-		</>
+		</div>
 	)
 }
 

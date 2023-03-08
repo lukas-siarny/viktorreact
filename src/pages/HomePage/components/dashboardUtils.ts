@@ -3,11 +3,21 @@ import colors from 'tailwindcss/colors'
 
 // types
 import { TimeStats, TimeStatsData } from '../../../types/interfaces'
-import { ISalonsTimeStats } from '../../../reducers/dashboard/dashboardActions'
 
 // utils
 import { getSalonFilterRanges } from '../../../utils/helper'
-import { DEFAULT_DATE_TIME_OPTIONS, DATE_TIME_RANGE, DEFAULT_DATE_INIT_FORMAT, SALONS_TIME_STATS_TYPE, TIME_STATS_SOURCE_TYPE } from '../../../utils/enums'
+import {
+	DATE_TIME_RANGE,
+	DEFAULT_DATE_INIT_FORMAT,
+	DEFAULT_DATE_TIME_OPTIONS,
+	RESERVATIONS_STATS_TYPE,
+	RS_STATS_TYPE,
+	SALONS_TIME_STATS_TYPE,
+	TIME_STATS_SOURCE_TYPE
+} from '../../../utils/enums'
+
+// reducers
+import { IReservationsStats, IRsStats, ISalonsTimeStats } from '../../../reducers/dashboard/dashboardActions'
 import { ISmsTimeStatsPayload } from '../../../reducers/sms/smsActions'
 
 export const doughnutOptions = (clickHandlers: any[]) => {
@@ -209,6 +219,202 @@ export const transformToStatsData = (source: ISalonsTimeStats | null, isLoading:
 				...result.columns[2],
 				[prop]: value.nonBasicApprovedSalons,
 				summary: result.columns[2].summary + value.nonBasicApprovedSalons
+			}
+		})
+	}
+
+	const now = dayjs()
+	const currYear = now.year()
+	const currMonth = now.month()
+	const currDay = now.date()
+
+	if (currYear === selectedDate.year()) {
+		if (currMonth <= selectedDate.month()) {
+			// NOTE: 0.5 is delta for displaying divider between columns
+			if (source?.type === TIME_STATS_SOURCE_TYPE.YEAR) {
+				result.breakIndex = currMonth + 0.5
+			} else if (currMonth === selectedDate.month()) {
+				result.breakIndex = currDay - 0.5
+			} else {
+				result.breakIndex = 0
+			}
+		}
+	} else if (currYear < selectedDate.year()) {
+		result.breakIndex = 0
+	}
+
+	return {
+		isFailure: false,
+		isLoading: false,
+		data: result
+	}
+}
+export const transformToRsStatsData = (source: IRsStats | null, isLoading: boolean, isFailure: boolean, selectedDate: Dayjs): TimeStats => {
+	if (isLoading) {
+		return {
+			isFailure: false,
+			isLoading: true,
+			data: null
+		}
+	}
+
+	if (isFailure) {
+		return {
+			isFailure: true,
+			isLoading: false,
+			data: null
+		}
+	}
+
+	const result: TimeStatsData = {
+		labels: [],
+		datasets: [
+			// ENABLE_RS_B2B
+			{
+				data: [],
+				backgroundColor: colors.blue[200],
+				borderColor: colors.blue[200],
+				pointRadius: 1
+			},
+			// ENABLE_RS_B2C
+			{
+				data: [],
+				backgroundColor: colors.blue[700],
+				borderColor: colors.blue[700],
+				pointRadius: 1
+			}
+		],
+		columns: [
+			{
+				type: RS_STATS_TYPE.ENABLE_RS_B2B,
+				summary: 0
+			},
+			{
+				type: RS_STATS_TYPE.ENABLE_RS_B2C,
+				summary: 0
+			}
+		],
+		breakIndex: 100
+	}
+
+	if (source && source?.ranges) {
+		const months: string[] = dayjs.monthsShort()
+
+		Object.entries(source.ranges).forEach(([key, value]) => {
+			result.datasets[0].data.push(value.countEnabledRsB2b)
+			result.datasets[1].data.push(value.countEnabledRsB2c)
+			// days and months as result from API are indexed from 1 instead of 0
+			const prop = Number(key) - 1
+			// Annual stats have labels Jan, Feb, ... and month stats have 1. 2. 3. ...
+			result.labels.push(source.type === TIME_STATS_SOURCE_TYPE.YEAR ? months[prop] : `${key}.`)
+
+			result.columns[0] = {
+				...result.columns[0],
+				[prop]: value.countEnabledRsB2b,
+				summary: result.columns[0].summary + value.countEnabledRsB2b
+			}
+			result.columns[1] = {
+				...result.columns[1],
+				[prop]: value.countEnabledRsB2c,
+				summary: result.columns[1].summary + value.countEnabledRsB2c
+			}
+		})
+	}
+
+	const now = dayjs()
+	const currYear = now.year()
+	const currMonth = now.month()
+	const currDay = now.date()
+
+	if (currYear === selectedDate.year()) {
+		if (currMonth <= selectedDate.month()) {
+			// NOTE: 0.5 is delta for displaying divider between columns
+			if (source?.type === TIME_STATS_SOURCE_TYPE.YEAR) {
+				result.breakIndex = currMonth + 0.5
+			} else if (currMonth === selectedDate.month()) {
+				result.breakIndex = currDay - 0.5
+			} else {
+				result.breakIndex = 0
+			}
+		}
+	} else if (currYear < selectedDate.year()) {
+		result.breakIndex = 0
+	}
+
+	return {
+		isFailure: false,
+		isLoading: false,
+		data: result
+	}
+}
+export const transformToReservationsStatsData = (source: IReservationsStats | null, isLoading: boolean, isFailure: boolean, selectedDate: Dayjs): TimeStats => {
+	if (isLoading) {
+		return {
+			isFailure: false,
+			isLoading: true,
+			data: null
+		}
+	}
+
+	if (isFailure) {
+		return {
+			isFailure: true,
+			isLoading: false,
+			data: null
+		}
+	}
+
+	const result: TimeStatsData = {
+		labels: [],
+		datasets: [
+			// NEW_RS_B2B
+			{
+				data: [],
+				backgroundColor: colors.blue[200],
+				borderColor: colors.blue[200],
+				pointRadius: 1
+			},
+			// NEW_RS_B2C
+			{
+				data: [],
+				backgroundColor: colors.blue[700],
+				borderColor: colors.blue[700],
+				pointRadius: 1
+			}
+		],
+		columns: [
+			{
+				type: RESERVATIONS_STATS_TYPE.NEW_RS_B2B,
+				summary: 0
+			},
+			{
+				type: RESERVATIONS_STATS_TYPE.NEW_RS_B2C,
+				summary: 0
+			}
+		],
+		breakIndex: 100
+	}
+
+	if (source && source?.ranges) {
+		const months: string[] = dayjs.monthsShort()
+
+		Object.entries(source.ranges).forEach(([key, value]) => {
+			result.datasets[0].data.push(value.newReservationsB2b)
+			result.datasets[1].data.push(value.newReservationsB2c)
+			// days and months as result from API are indexed from 1 instead of 0
+			const prop = Number(key) - 1
+			// Annual stats have labels Jan, Feb, ... and month stats have 1. 2. 3. ...
+			result.labels.push(source.type === TIME_STATS_SOURCE_TYPE.YEAR ? months[prop] : `${key}.`)
+
+			result.columns[0] = {
+				...result.columns[0],
+				[prop]: value.newReservationsB2b,
+				summary: result.columns[0].summary + value.newReservationsB2b
+			}
+			result.columns[1] = {
+				...result.columns[1],
+				[prop]: value.newReservationsB2c,
+				summary: result.columns[1].summary + value.newReservationsB2c
 			}
 		})
 	}

@@ -779,7 +779,6 @@ export interface ICalendarView {
 	enabledSalonReservations?: boolean
 	employees: Employees
 }
-
 export interface IEventCardProps {
 	calendarView: CALENDAR_VIEW
 	resourceId: string

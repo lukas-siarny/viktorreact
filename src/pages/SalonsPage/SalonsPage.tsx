@@ -2,25 +2,23 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { Col, Modal, Progress, Row, Spin, Image, Tooltip, TabsProps } from 'antd'
+import { Col, Image, Progress, Row, Spin, TabsProps, Tooltip } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
-import { initialize, isPristine, reset } from 'redux-form'
+import { initialize, isPristine } from 'redux-form'
 import { useNavigate } from 'react-router-dom'
 import { isEmpty } from 'lodash'
 
 // components
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
-import SalonsImportForm from './components/forms/SalonsImportForm'
-import UploadSuccess from './components/UploadSuccess'
 import TabsComponent from '../../components/TabsComponent'
 import SalonsFilterActive, { ISalonsFilterActive } from './components/filters/SalonsFilterActive'
 import SalonsFilterDeleted, { ISalonsFilterDeleted } from './components/filters/SalonsFilterDeleted'
 import RejectedSalonSuggestions from './components/RejectedSalonSuggestions'
 
 // utils
-import { withPermissions, checkPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { checkPermissions, withPermissions } from '../../utils/Permissions'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, UPLOAD_STATUS } from '../../utils/enums'
 import { formatDateByLocale, getAssignedUserLabel, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { postReq } from '../../utils/request'
 import { getSalonTagChanges, getSalonTagCreateType, getSalonTagPublished, getSalonTagSourceType } from './components/salonUtils'
@@ -32,14 +30,14 @@ import { getCategories } from '../../reducers/categories/categoriesActions'
 import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 
 // types
-import { IBreadcrumbs, IDataUploadForm, Columns } from '../../types/interfaces'
+import { Columns, IBreadcrumbs, IDataUploadForm } from '../../types/interfaces'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 
 // hooks
 import useQueryParams, { ArrayParam, BooleanParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
+import ImportForm from '../../components/ImportForm'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO]
 
@@ -57,10 +55,9 @@ const SalonsPage = () => {
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 
 	const [salonImportsModalVisible, setSalonImportsModalVisible] = useState(false)
-	const [uploadStatus, setUploadStatus] = useState<'uploading' | 'success' | 'error' | undefined>(undefined)
+	const [uploadStatus, setUploadStatus] = useState<UPLOAD_STATUS | undefined>(undefined)
 	const [tabKey, setTabKey] = useState<TAB_KEYS | undefined>()
 
-	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON_IMPORTS_FORM]?.values)
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	const { data } = useSelector((state: RootState) => state.categories.categories)
 	const isFormPristine = useSelector((state: RootState) => isPristine(FORM.SALONS_FILTER_ACITVE)(state))
@@ -268,7 +265,7 @@ const SalonsPage = () => {
 	}
 
 	const salonImportsSubmit = async (values: IDataUploadForm) => {
-		setUploadStatus('uploading')
+		setUploadStatus(UPLOAD_STATUS.UPLOADING)
 
 		const formData = new FormData()
 		formData.append('file', values?.file)
@@ -279,15 +276,10 @@ const SalonsPage = () => {
 					'Content-Type': 'multipart/form-data'
 				}
 			})
-			setUploadStatus('success')
+			setUploadStatus(UPLOAD_STATUS.SUCCESS)
 		} catch {
-			setUploadStatus('error')
+			setUploadStatus(UPLOAD_STATUS.ERROR)
 		}
-	}
-
-	const resetUploadForm = () => {
-		setUploadStatus(undefined)
-		reset(FORM.SALON_IMPORTS_FORM)
 	}
 
 	// View
@@ -361,7 +353,7 @@ const SalonsPage = () => {
 							}
 
 							return (
-								<Tooltip title={industry.name}>
+								<Tooltip key={category.id} title={industry.name}>
 									<Image src={industry.image} loading='lazy' width={32} height={32} className='pr-0-5 pb-0-5 rounded' alt={industry.name} preview={false} />
 								</Tooltip>
 							)
@@ -559,29 +551,16 @@ const SalonsPage = () => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
 			<TabsComponent className={'box-tab'} activeKey={tabKey} onChange={onTabChange} items={tabContent} destroyInactiveTabPane />
-			<Modal
-				className='rounded-fields'
+			<ImportForm
+				setUploadStatus={setUploadStatus}
+				uploadStatus={uploadStatus}
+				label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.xlsx' })}
+				accept={'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel'}
 				title={t('loc:Importovať salóny')}
-				centered
-				open={salonImportsModalVisible}
-				footer={null}
-				onCancel={() => {
-					resetUploadForm()
-					setSalonImportsModalVisible(false)
-				}}
-				closeIcon={<CloseIcon />}
-				width={394}
-				maskClosable={false}
-				keyboard={false}
-			>
-				<Spin spinning={uploadStatus === 'uploading'}>
-					{uploadStatus === 'success' ? (
-						<UploadSuccess onUploadAgain={resetUploadForm} />
-					) : (
-						<SalonsImportForm onSubmit={salonImportsSubmit} disabledForm={!formValues?.file} />
-					)}
-				</Spin>
-			</Modal>
+				visible={salonImportsModalVisible}
+				setVisible={setSalonImportsModalVisible}
+				onSubmit={salonImportsSubmit}
+			/>
 		</>
 	)
 }

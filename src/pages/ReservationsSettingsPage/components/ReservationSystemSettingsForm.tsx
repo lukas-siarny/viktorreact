@@ -16,15 +16,17 @@ import CheckboxField from '../../../atoms/CheckboxField'
 // components
 import NotificationArrayFields from './NotificationArrayFields'
 import CheckboxGroupNestedField from '../../IndustriesPage/components/CheckboxGroupNestedField'
+import ImportForm from '../../../components/ImportForm'
 
 // types
-import { IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
+import { IDataUploadForm, IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
-import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, UPLOAD_STATUS } from '../../../utils/enums'
 import { formFieldID, optionRenderNotiPinkCheckbox, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
+import { postReq } from '../../../utils/request'
 
 // assets
 import { ReactComponent as ChevronDown } from '../../../assets/icons/chevron-down.svg'
@@ -33,6 +35,7 @@ import { ReactComponent as SettingsIcon } from '../../../assets/icons/setting.sv
 import { ReactComponent as BellIcon } from '../../../assets/icons/bell-24.svg'
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
+import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
 
 // redux
 import { RootState } from '../../../reducers'
@@ -53,8 +56,19 @@ type ComponentProps = {
 	parentPath?: string
 }
 
+const UPLOAD_MODAL_INIT = {
+	visible: false,
+	uploadStatus: undefined,
+	uploadType: undefined,
+	data: {
+		accept: '',
+		title: '',
+		label: ''
+	}
+}
+
 const ReservationSystemSettingsForm = (props: Props) => {
-	const { handleSubmit, pristine, submitting, excludedB2BNotifications, parentPath } = props
+	const { pristine, submitting, excludedB2BNotifications, parentPath, salonID } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const groupedServicesByCategory = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
@@ -66,6 +80,12 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const defaultExpandedKeys: any = []
 	forEach(groupedServicesByCategory, (level1) => forEach(level1.category?.children, (level2) => defaultExpandedKeys.push(level2?.category?.id)))
 
+	const [uploadModal, setUploadModal] = useState<{
+		visible: boolean
+		uploadStatus: UPLOAD_STATUS | undefined
+		uploadType: 'reservation' | 'customer' | undefined
+		data: { accept: string; label: string; title: string }
+	}>(UPLOAD_MODAL_INIT)
 	// https://ant.design/components/tree/#Note - nastava problem, ze pokial nie je vygenerovany strom, tak sa vyrendruje collapsnuty, aj ked je nastavena propa defaultExpandAll
 	// preto sa strom setuje cez state az po tom, co sa vytvoria data pre strom (vid useEffect nizzsie)
 	// cize pokial je null, znamena ze strom este nebol vygenerovany a zobrazuje sa loading state
@@ -225,8 +245,51 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			)
 		}
 
+		const handleSubmitImport = async (values: IDataUploadForm) => {
+			if (!uploadModal.uploadType) {
+				return
+			}
+			const headers = {
+				'Content-Type': 'multipart/form-data'
+			}
+			const formData = new FormData()
+			formData.append('file', values?.file)
+
+			try {
+				if (uploadModal.uploadType === 'reservation') {
+					await postReq('/api/b2b/admin/imports/salons/{salonID}/calendar-events', { salonID }, formData, {
+						headers
+					})
+				} else {
+					await postReq('/api/b2b/admin/imports/salons/{salonID}/customers', { salonID }, formData, {
+						headers
+					})
+				}
+
+				setUploadModal({ ...uploadModal, uploadStatus: UPLOAD_STATUS.SUCCESS })
+			} catch {
+				setUploadModal({ ...uploadModal, uploadStatus: UPLOAD_STATUS.ERROR })
+			}
+		}
+
+		const modals = (
+			<>
+				<ImportForm
+					accept={uploadModal.data.accept}
+					title={uploadModal.data.title}
+					label={uploadModal.data.label}
+					uploadStatus={uploadModal.uploadStatus}
+					setUploadStatus={(status: any) => setUploadModal({ ...uploadModal, uploadStatus: status })}
+					onSubmit={handleSubmitImport}
+					visible={uploadModal.visible}
+					setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
+				/>
+			</>
+		)
 		return (
 			<>
+				{modals}
+				<p className='x-regular text-notino-grayDark'>{t('loc:Vyberte služby, ktoré bude možné rezervovať si online a ktoré budú automaticky potvrdené.')}</p>
 				<p className='x-regular text-notino-grayDark'>{t('loc:Nastavte službám možnosť online rezervácie, automatického potvrdenia a zadávania poznámok.')}</p>
 				<Row justify={'space-between'} className='mt-7'>
 					<div className={'w-full'}>
@@ -307,7 +370,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	}
 
 	return (
-		<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
+		<Form layout='vertical' className='w-full'>
 			<div className={'flex'}>
 				<h3 className={'mb-0 mt-0 flex items-center'}>
 					<GlobeIcon className={'text-notino-black mr-2'} />
@@ -415,6 +478,60 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				</div>
 			</Row>
 			<Row justify={'space-between'} className='mt-10'>
+				{/* Imports */}
+				<div className={'flex'}>
+					<h3 className={'mb-0 mt-0 flex items-center'}>
+						<UploadIcon className={'text-notino-black mr-2'} />
+						{t('loc:Importovať dáta z externých služieb')}
+					</h3>
+				</div>
+				<Divider className={'my-3'} />
+				<Row>
+					<Button
+						onClick={() =>
+							setUploadModal({
+								...uploadModal,
+								visible: true,
+								uploadType: 'reservation',
+								data: {
+									accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv,.ics',
+									title: t('loc:Importovať rezervácie'),
+									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.xlsx, .csv, .ics' })
+								}
+							})
+						}
+						disabled={disabled}
+						type='primary'
+						htmlType='button'
+						className={'noti-btn mr-2'}
+						icon={<UploadIcon />}
+					>
+						{t('loc:Importovať rezervácie')}
+					</Button>
+					<Button
+						onClick={() =>
+							setUploadModal({
+								...uploadModal,
+								visible: true,
+								uploadType: 'reservation',
+								data: {
+									accept: '.csv',
+									title: t('loc:Importovať zákazníkov'),
+									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv' })
+								}
+							})
+						}
+						disabled={disabled}
+						type='primary'
+						htmlType='button'
+						className={'noti-btn'}
+						icon={<UploadIcon />}
+					>
+						{t('loc:Importovať zákazníkov')}
+					</Button>
+				</Row>
+			</Row>
+			<Row justify={'space-between'} className='mt-10'>
 				{/* Notifications */}
 				<div className={'w-12/25'}>
 					<div className={'flex'}>
@@ -492,7 +609,6 @@ const ReservationSystemSettingsForm = (props: Props) => {
 								type={'primary'}
 								id={formFieldID(FORM.RESEVATION_SYSTEM_SETTINGS, SUBMIT_BUTTON_ID)}
 								className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
-								htmlType={'submit'}
 								icon={<EditIcon />}
 								disabled={submitting || pristine}
 								loading={submitting}

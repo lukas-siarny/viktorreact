@@ -917,7 +917,8 @@ export enum RS_NOTIFICATION {
 // NOTE: order definition reflect order of options in UI
 export enum RS_NOTIFICATION_TYPE {
 	EMAIL = 'EMAIL',
-	PUSH = 'PUSH'
+	PUSH = 'PUSH',
+	SMS = 'SMS'
 }
 
 export const NOTIFICATION_TYPES = Object.keys(RS_NOTIFICATION_TYPE)

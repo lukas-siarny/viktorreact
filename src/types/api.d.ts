@@ -39528,6 +39528,37 @@ declare namespace Paths {
             }
         }
     }
+    namespace PatchApiB2BV1SalonsSalonIdEmployeesReorder {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            employeeIDs: string /* uuid */[];
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PatchApiB2BV1SalonsSalonIdInvoice {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -62493,6 +62524,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdWalletsWalletId.Responses.$200>
   /**
+   * patchApiB2BV1SalonsSalonIdEmployeesReorder - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+   */
+  'patchApiB2BV1SalonsSalonIdEmployeesReorder'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdEmployeesReorder.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdEmployeesReorder.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdEmployeesReorder.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdEmployeesReorder.Responses.$200>
+  /**
    * patchApiB2BV1SalonsSalonIdInvoice - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_BILLING_UPDATE]</li></ul>
    */
   'patchApiB2BV1SalonsSalonIdInvoice'(
@@ -65281,6 +65320,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdWalletsWalletId.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/employees/reorder']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdEmployeesReorder - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdEmployeesReorder.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdEmployeesReorder.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdEmployeesReorder.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdEmployeesReorder.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}/invoice']: {
     /**

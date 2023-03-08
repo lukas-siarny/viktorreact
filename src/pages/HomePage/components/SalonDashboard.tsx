@@ -18,7 +18,7 @@ import Permissions from '../../../utils/Permissions'
 // components
 import Alert from '../../../components/Dashboards/Alert'
 import Statistics from '../../../components/Dashboards/Statistics'
-import RemainingSmsCredit from '../../../components/Dashboards/RemainingSmsCredit'
+import Wallet from '../../../components/Dashboards/RemainingSmsCredit'
 import SmsTimeStats from '../../../components/Dashboards/SmsTimeStats'
 
 // assets
@@ -121,7 +121,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 							<>
 								{/* wallet */}
 								<div className={'grid lg:grid-cols-2 gap-4 3xl:gap-8 mt-10 empty:mt-0'}>
-									<RemainingSmsCredit salonID={salonID} parentPath={basePath} className={'!w-auto'} walletID={walletID} />
+									<Wallet salonID={salonID} parentPath={basePath} className={'!w-auto'} walletID={walletID} />
 								</div>
 								{/* sms monthly stats */}
 								<SmsTimeStats

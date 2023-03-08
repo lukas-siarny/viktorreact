@@ -496,7 +496,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 								data: {
 									accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv,.ics',
 									title: t('loc:Importovať rezervácie'),
-									label: t('loc:Vyberte súbor vo formáte .xlsx, .csv alebo .ics')
+									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.xlsx, .csv, .ics' })
 								}
 							})
 						}
@@ -517,7 +517,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 								data: {
 									accept: '.csv',
 									title: t('loc:Importovať zákazníkov'),
-									label: t('loc:Vyberte súbor vo formáte .csv')
+									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv' })
 								}
 							})
 						}

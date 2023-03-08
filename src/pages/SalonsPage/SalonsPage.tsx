@@ -94,8 +94,6 @@ const SalonsPage = () => {
 		premiumSourceUserType: StringParam()
 	})
 
-	// console.log({ query })
-
 	const resetQuery = (selectedTabKey: string) => {
 		// reset query when switching between tabs
 		setQuery({

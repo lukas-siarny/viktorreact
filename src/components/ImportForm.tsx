@@ -65,6 +65,7 @@ const ImportForm: FC<Props> = (props) => {
 			title={title}
 			centered
 			open={visible}
+			destroyOnClose
 			footer={null}
 			onCancel={() => {
 				resetUploadForm()

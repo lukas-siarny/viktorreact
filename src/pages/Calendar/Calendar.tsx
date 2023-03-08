@@ -28,12 +28,11 @@ import {
 	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_STATE,
 	CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE,
-	ADMIN_PERMISSIONS,
 	CALENDAR_DAY_EVENTS_LIMIT,
 	MONTHLY_RESERVATIONS_KEY,
 	CALENDAR_UPDATE_SIZE_DELAY
 } from '../../utils/enums'
-import { checkPermissions, withPermissions } from '../../utils/Permissions'
+import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { cancelEventsRequestOnDemand, getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
 
@@ -48,7 +47,6 @@ import {
 import { RootState } from '../../reducers'
 import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
 import { clearEvent } from '../../reducers/virtualEvent/virtualEventActions'
-import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 
 // components
 import CalendarContent, { CalendarRefs } from './components/layout/CalendarContent'
@@ -174,9 +172,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
-
-	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
-	const authUserPermissions = currentUser?.uniqPermissions
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState(false)
@@ -438,25 +433,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	useEffect(() => {
 		dispatch(getServices({ salonID }))
 	}, [dispatch, salonID])
-
-	useEffect(() => {
-		// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
-		const loadSalonDetail = async () => {
-			const salonRes = await dispatch(selectSalon(salonID))
-
-			const salonPermissions = salonRes?.data?.uniqPermissions || []
-			const userPermissions = [...(authUserPermissions || []), ...salonPermissions]
-
-			const canVisitThisPage =
-				checkPermissions(userPermissions, [PERMISSION.NOTINO]) ||
-				(checkPermissions(userPermissions, [PERMISSION.PARTNER], ADMIN_PERMISSIONS) && salonRes?.data?.settings?.enabledReservations)
-			if (!canVisitThisPage) {
-				navigate('/404')
-			}
-		}
-
-		loadSalonDetail()
-	}, [authUserPermissions, dispatch, salonID])
 
 	useEffect(() => {
 		;(async () => {

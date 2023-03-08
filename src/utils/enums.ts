@@ -229,6 +229,11 @@ export enum SALONS_TAB_KEYS {
 	MISTAKES = 'mistakes'
 }
 
+export enum DASHBOARD_TASB_KEYS {
+	SALONS_STATE = 'SALONS_STATE',
+	RESERVATION_SYSTEM = 'RESERVATION_SYSTEM'
+}
+
 export enum REVIEWS_TAB_KEYS {
 	PUBLISHED = 'published',
 	DELETED = 'deleted'
@@ -666,6 +671,16 @@ export enum SALONS_TIME_STATS_TYPE {
 	PREMIUM = 'PREMIUM'
 }
 
+export enum RS_STATS_TYPE {
+	ENABLE_RS_B2B = 'ENABLE_RS_B2B',
+	ENABLE_RS_B2C = 'ENABLE_RS_B2C'
+}
+
+export enum RESERVATIONS_STATS_TYPE {
+	NEW_RS_B2B = 'NEW_RS_B2B',
+	NEW_RS_B2C = 'NEW_RS_B2C'
+}
+
 export enum TIME_STATS_SOURCE_TYPE {
 	MONTH = 'MONTH',
 	YEAR = 'YEAR'
@@ -911,7 +926,8 @@ export enum RS_NOTIFICATION {
 // NOTE: order definition reflect order of options in UI
 export enum RS_NOTIFICATION_TYPE {
 	EMAIL = 'EMAIL',
-	PUSH = 'PUSH'
+	PUSH = 'PUSH',
+	SMS = 'SMS'
 }
 
 export const NOTIFICATION_TYPES = Object.keys(RS_NOTIFICATION_TYPE)

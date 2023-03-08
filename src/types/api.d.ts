@@ -1374,6 +1374,8 @@ declare namespace Paths {
                          */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
+                        agreeGDPR: boolean;
+                        agreeMarketing: boolean;
                         roles: {
                             id: string; // uuid
                             name?: string;
@@ -5301,12 +5303,13 @@ declare namespace Paths {
                 ranges: {
                     [name: string]: {
                         totalSentSmsCount: number;
-                        formattedTotalSpentTransactionAmount: string;
-                        currentSmsUnitPrice?: {
-                            id: string; // uuid
-                            formattedAmount: string;
-                        };
                     };
+                };
+                totalSentSmsCount: number;
+                formattedTotalSpentTransactionAmount: string;
+                currentSmsUnitPrice?: {
+                    id: string; // uuid
+                    formattedAmount: string;
                 };
             }
         }
@@ -5916,6 +5919,8 @@ declare namespace Paths {
                      */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
+                    agreeGDPR: boolean;
+                    agreeMarketing: boolean;
                     roles: {
                         id: string; // uuid
                         name?: string;
@@ -6633,6 +6638,8 @@ declare namespace Paths {
                          */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
+                        agreeGDPR: boolean;
+                        agreeMarketing: boolean;
                         roles: {
                             id: string; // uuid
                             name?: string;
@@ -10650,6 +10657,8 @@ declare namespace Paths {
                      */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
+                    agreeGDPR: boolean;
+                    agreeMarketing: boolean;
                     roles: {
                         id: string; // uuid
                         name?: string;
@@ -17487,6 +17496,8 @@ declare namespace Paths {
                          */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
+                        agreeGDPR: boolean;
+                        agreeMarketing: boolean;
                         roles: {
                             id: string; // uuid
                             name?: string;
@@ -17808,6 +17819,8 @@ declare namespace Paths {
                          */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
+                        agreeGDPR: boolean;
+                        agreeMarketing: boolean;
                         roles: {
                             id: string; // uuid
                             name?: string;
@@ -32944,6 +32957,8 @@ declare namespace Paths {
                      */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
+                    agreeGDPR: boolean;
+                    agreeMarketing: boolean;
                     roles: {
                         id: string; // uuid
                         name?: string;
@@ -33533,6 +33548,8 @@ declare namespace Paths {
                          */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
+                        agreeGDPR: boolean;
+                        agreeMarketing: boolean;
                         roles: {
                             id: string; // uuid
                             name?: string;
@@ -33854,6 +33871,8 @@ declare namespace Paths {
                          */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
+                        agreeGDPR: boolean;
+                        agreeMarketing: boolean;
                         roles: {
                             id: string; // uuid
                             name?: string;
@@ -39292,6 +39311,50 @@ declare namespace Paths {
             }
         }
     }
+    namespace PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface RequestBody {
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            note?: string | null;
+        }
+        namespace Responses {
+            export interface $200 {
+                calendarEvent: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -39458,6 +39521,37 @@ declare namespace Paths {
                 salon: {
                     id: string; // uuid
                 };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1SalonsSalonIdEmployeesReorder {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            employeeIDs: string /* uuid */[];
+        }
+        namespace Responses {
+            export interface $200 {
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
@@ -49623,6 +49717,8 @@ declare namespace Paths {
                      */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
+                    agreeGDPR: boolean;
+                    agreeMarketing: boolean;
                     roles: {
                         id: string; // uuid
                         name?: string;
@@ -50024,6 +50120,8 @@ declare namespace Paths {
                      */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
+                    agreeGDPR: boolean;
+                    agreeMarketing: boolean;
                     roles: {
                         id: string; // uuid
                         name?: string;
@@ -50175,6 +50273,8 @@ declare namespace Paths {
                      */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
+                    agreeGDPR: boolean;
+                    agreeMarketing: boolean;
                     roles: {
                         id: string; // uuid
                         name?: string;
@@ -50815,6 +50915,8 @@ declare namespace Paths {
                          */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
+                        agreeGDPR: boolean;
+                        agreeMarketing: boolean;
                         roles: {
                             id: string; // uuid
                             name?: string;
@@ -53888,6 +53990,8 @@ declare namespace Paths {
                      */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
+                    agreeGDPR: boolean;
+                    agreeMarketing: boolean;
                     roles: {
                         id: string; // uuid
                         name?: string;
@@ -54053,6 +54157,8 @@ declare namespace Paths {
                      */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
+                    agreeGDPR: boolean;
+                    agreeMarketing: boolean;
                     roles: {
                         id: string; // uuid
                         name?: string;
@@ -55233,6 +55339,8 @@ declare namespace Paths {
                      */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
+                    agreeGDPR: boolean;
+                    agreeMarketing: boolean;
                     roles: {
                         id: string; // uuid
                         name?: string;
@@ -55394,6 +55502,8 @@ declare namespace Paths {
                      */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
+                    agreeGDPR: boolean;
+                    agreeMarketing: boolean;
                     roles: {
                         id: string; // uuid
                         name?: string;
@@ -55998,6 +56108,8 @@ declare namespace Paths {
                          */
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
+                        agreeGDPR: boolean;
+                        agreeMarketing: boolean;
                         roles: {
                             id: string; // uuid
                             name?: string;
@@ -58856,6 +58968,8 @@ declare namespace Paths {
                      */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
+                    agreeGDPR: boolean;
+                    agreeMarketing: boolean;
                     roles: {
                         id: string; // uuid
                         name?: string;
@@ -59021,6 +59135,8 @@ declare namespace Paths {
                      */
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
+                    agreeGDPR: boolean;
+                    agreeMarketing: boolean;
                     roles: {
                         id: string; // uuid
                         name?: string;
@@ -62376,6 +62492,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
   /**
+   * patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation - Endpoint is used for updating calendar events that has RESERVATION_FROM_IMPORT type., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+   */
+  'patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation.Responses.$200>
+  /**
    * patchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for updating a calendarBulkEvent., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
    */
   'patchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
@@ -62399,6 +62523,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdWalletsWalletId.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdEmployeesReorder - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+   */
+  'patchApiB2BV1SalonsSalonIdEmployeesReorder'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdEmployeesReorder.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdEmployeesReorder.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdEmployeesReorder.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdEmployeesReorder.Responses.$200>
   /**
    * patchApiB2BV1SalonsSalonIdInvoice - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, SALON_BILLING_UPDATE]</li></ul>
    */
@@ -65151,6 +65283,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdState.Responses.$200>
   }
+  ['/api/b2b/v1/salons/{salonID}/calendar-events/reservations/{calendarEventID}/imported-reservation']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation - Endpoint is used for updating calendar events that has RESERVATION_FROM_IMPORT type., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCalendarEventsReservationsCalendarEventIdImportedReservation.Responses.$200>
+  }
   ['/api/b2b/v1/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}']: {
     /**
      * patchApiB2BV1SalonsSalonIdCalendarEventsBulkCalendarBulkEventId - Endpoint is used for updating a calendarBulkEvent., permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, CALENDAR_EVENT_UPDATE]</li></ul>
@@ -65178,6 +65320,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdWalletsWalletId.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/employees/reorder']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdEmployeesReorder - permissions:<ul><li>notino</li><li>partner: [PARTNER_ADMIN, EMPLOYEE_UPDATE]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdEmployeesReorder.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdEmployeesReorder.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdEmployeesReorder.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdEmployeesReorder.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}/invoice']: {
     /**

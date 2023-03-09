@@ -1,18 +1,11 @@
 /* eslint-disable import/no-cycle */
 import React from 'react'
 import { forEach, isEmpty, lowerCase } from 'lodash'
-import { Button, Modal, ModalFuncProps, notification, Result } from 'antd'
-import i18next from 'i18next'
-import { ResultStatusType } from 'antd/es/result'
+import { notification } from 'antd'
 
-// types
 import { IErrorMessage } from '../types/interfaces'
-
-// utils
 import { NOTIFICATION_TYPE } from './enums'
 import { translateMessageType } from './helper'
-
-// assets
 import { ReactComponent as NotifCloseIcon } from '../assets/icons/notification-close-icon.svg'
 
 // NOTE: helpere ktore potrebuju pracovat s JSX.Element cize potrebuju aby bol importnuty react a mali priponu jsx/tsx lebo TS nedovoli aby React component bol js/ts neda sa to ignorovat
@@ -49,50 +42,6 @@ const showNotifications = (messages: IErrorMessage[], typeNotification: NOTIFICA
 			// TODO: doriesit modal notification
 		}
 	}
-}
-
-export const showNotificationModal = (
-	config: ModalFuncProps & {
-		message?: string
-		actionButtonLabel?: string
-		action?: (e: any) => void
-		notifactionType?: ResultStatusType
-	} = {}
-) => {
-	const { message, actionButtonLabel, action, notifactionType, ...modalConfig } = config
-
-	const modal = Modal.info({ open: false })
-
-	modal.update({
-		open: true,
-		className: 'noti-notification-modal',
-		closable: true,
-		footer: false,
-		maskClosable: true,
-		keyboard: true,
-		content: (
-			<Result
-				status={notifactionType || 'error'}
-				title={message}
-				extra={
-					<Button
-						className={'noti-btn'}
-						onClick={(e) => {
-							if (action) {
-								action(e)
-							}
-
-							modal.destroy()
-						}}
-						type='primary'
-					>
-						{i18next.t('loc:Nastaviť adresu')}
-					</Button>
-				}
-			/>
-		),
-		...modalConfig
-	})
 }
 
 export default showNotifications

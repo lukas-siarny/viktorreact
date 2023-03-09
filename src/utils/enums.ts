@@ -53,6 +53,10 @@ export enum MSG_TYPE {
 	SUCCESS = 'SUCCESS'
 }
 
+export enum MSG_CODE {
+	MISSING_COUNTRY_CODE = 'MISSING_COUNTRY_CODE'
+}
+
 export enum FIELD_MODE {
 	INPUT = 'INPUT',
 	FILTER = 'FILTER'

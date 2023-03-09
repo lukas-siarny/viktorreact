@@ -31,7 +31,7 @@ const OpenHoursNoteForm: FC<Props> = (props) => {
 				placeholder={STRINGS(t).enter(t('loc:poznámku'))}
 				label={t('loc:Poznámka')}
 				size={'large'}
-				maxLength={VALIDATION_MAX_LENGTH.LENGTH_100}
+				maxLength={VALIDATION_MAX_LENGTH.LENGTH_200}
 				showLettersCount
 			/>
 			<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>

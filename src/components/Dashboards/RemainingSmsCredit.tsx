@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button, Divider, Spin } from 'antd'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 import { useNavigate } from 'react-router'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 // assets
 import { Link } from 'react-router-dom'
@@ -14,10 +14,11 @@ import { ReactComponent as ChevronRightIcon } from '../../assets/icons/chevron-p
 // utils
 import { PERMISSION } from '../../utils/enums'
 import Permissions from '../../utils/Permissions'
-import AvailableBalance from './AvailableBalance'
+import { formatPrice } from '../../utils/helper'
 
-// types
+// redux
 import { RootState } from '../../reducers'
+import { getWallet } from '../../reducers/wallet/walletActions'
 
 type Props = {
 	salonID: string
@@ -31,7 +32,13 @@ const RemainingSmsCredit = (props: Props) => {
 	const { className, parentPath, link, walletID, salonID } = props
 	const [t] = useTranslation()
 	const navigate = useNavigate()
+	const dispatch = useDispatch()
+
 	const wallet = useSelector((state: RootState) => state.wallet.wallet)
+
+	useEffect(() => {
+		dispatch(getWallet(salonID, walletID))
+	}, [dispatch, salonID, walletID])
 
 	return (
 		<div className={cx('p-4 pb-8 rounded shadow-lg bg-notino-white w-full lg:w-1/2', className)}>
@@ -42,9 +49,14 @@ const RemainingSmsCredit = (props: Props) => {
 				</h4>
 				<Divider className={'mb-8 mt-3'} />
 				<div className={'flex justify-between items-center gap-4 flex-wrap'}>
-					<Permissions allowed={[PERMISSION.READ_WALLET, PERMISSION.PARTNER_ADMIN]}>
-						<AvailableBalance salonID={salonID} walletID={walletID} />
-					</Permissions>
+					<div>
+						<span className={'block mb-2'}>{t('loc:Zostáva')}</span>
+						<p className={'m-0 leading-8'}>
+							<span className={'text-3xl font-bold mr-1'}>{formatPrice(wallet.data?.wallet.availableBalance || 0)}</span>
+							{wallet.data?.wallet.currency.symbol}
+						</p>
+					</div>
+
 					{link ? (
 						<Link
 							to={`${parentPath}${t('paths:sms-credit')}`}

@@ -546,7 +546,12 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					<p className={'text-notino-grayDark'}>
 						{t('loc:SMS notifikácie sú spoplatnené podľa aktuálneho cenníka Notino. Suma za SMS sa vám bude odrátavať z celkového SMS kreditu.')}
 					</p>
-					{walletID && <RemainingSmsCredit walletID={walletID} salonID={salonID} parentPath={parentPath} className={'w-full mb-6 !bg-notino-grayLighter'} link />}
+
+					{/* wallet */}
+					<Permissions allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET]}>
+						{walletID && <RemainingSmsCredit walletID={walletID} salonID={salonID} parentPath={parentPath} className={'w-full mb-6 !bg-notino-grayLighter'} link />}
+					</Permissions>
+
 					<Row justify={'space-between'} className='mt-7'>
 						{/* Client's notifications */}
 						<div className={'w-9/20'}>

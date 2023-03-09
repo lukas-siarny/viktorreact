@@ -1,15 +1,21 @@
 /* eslint-disable import/no-cycle */
-import { map } from 'lodash'
+import { filter, map } from 'lodash'
 import { ThunkResult } from '../index'
-import { EMPLOYEE, EMPLOYEES } from './employeesTypes'
+import { DELETED_EMPLOYEES, EMPLOYEE, EMPLOYEES } from './employeesTypes'
 
 // utils
 import { getReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
 import { IResetStore } from '../generalTypes'
-import { IQueryParams, IEmployeePayload, IEmployeesPayload } from '../../types/interfaces'
+import { IQueryParams, IEmployeePayload, IEmployeesPayload, IDeletedIEmployeesPayload } from '../../types/interfaces'
+import { Paths } from '../../types/api'
 
-export type IEmployeesActions = IResetStore | IGetEmployees | IGetEmployee
+export type IEmployeesActions = IResetStore | IGetEmployees | IGetEmployee | IGetDeletedEmployees
+
+interface IGetDeletedEmployees {
+	type: DELETED_EMPLOYEES
+	payload: IDeletedIEmployeesPayload
+}
 
 interface IGetEmployees {
 	type: EMPLOYEES
@@ -59,6 +65,41 @@ export const getEmployees =
 			dispatch({ type: EMPLOYEES.EMPLOYEES_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: EMPLOYEES.EMPLOYEES_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}
+
+export const getDeletedEmployees =
+	(queryParams: IGetEmployeesQueryParams): ThunkResult<Promise<IDeletedIEmployeesPayload>> =>
+	async (dispatch) => {
+		let payload = {} as IDeletedIEmployeesPayload
+		try {
+			dispatch({ type: DELETED_EMPLOYEES.DELETED_EMPLOYEES_LOAD_START })
+
+			const { data } = await getReq('/api/b2b/admin/employees/', { ...normalizeQueryParams(queryParams) })
+			console.log('data', data)
+			// TODO: toto bude chodit z BE ked sa implementuje https://goodrequest.atlassian.net/browse/NOT-4568
+			const deletedEmployess: any = filter(data.employees, (employe) => employe.deletedAt)
+			console.log('deletedEmployess', deletedEmployess)
+			const tableData = map(deletedEmployess, (employee) => ({
+				...employee,
+				key: employee.id
+			}))
+
+			payload = {
+				data: {
+					employees: deletedEmployess,
+					pagination: data.pagination
+				},
+				tableData
+			}
+
+			dispatch({ type: DELETED_EMPLOYEES.DELETED_EMPLOYEES_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: DELETED_EMPLOYEES.DELETED_EMPLOYEES_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}

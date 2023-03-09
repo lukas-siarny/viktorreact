@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Row, Spin } from 'antd'
+import { Col, Row, Spin, Tabs, TabsProps } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
@@ -23,7 +23,7 @@ import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
-import { getEmployees, reorderEmployees } from '../../reducers/employees/employeesActions'
+import { getDeletedEmployees, getEmployees, reorderEmployees } from '../../reducers/employees/employeesActions'
 import { RootState } from '../../reducers'
 import { getServices } from '../../reducers/services/serviceActions'
 
@@ -37,6 +37,12 @@ import { patchReq } from '../../utils/request'
 
 // hooks
 import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
+import TabsComponent from '../../components/TabsComponent'
+
+enum TAB_KEYS {
+	ACTIVE = 'active',
+	DELETED = 'deleted'
+}
 
 const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
@@ -46,6 +52,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
+	const [tabKey, setTabKey] = useState<TAB_KEYS | undefined>()
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam(),
@@ -59,6 +66,17 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search, serviceID: query.serviceID, accountState: query.accountState }))
+		dispatch(
+			getDeletedEmployees({
+				page: query.page,
+				limit: 1000, // TODO: ked bude state tak dat 25
+				order: query.order,
+				search: query.search,
+				accountState: query.accountState, // TODO: tu sa bude posielat DELETED state
+				serviceID: query.serviceID,
+				salonID
+			})
+		)
 		dispatch(
 			getEmployees({
 				page: query.page,
@@ -242,58 +260,28 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		},
 		[dispatch, employees.tableData, query.accountState, query.limit, query.order, query.page, query.search, query.serviceID, salonID]
 	)
+	const onTabChange = (key: any) => {
+		setTabKey(key)
+	}
+	const tabContent: TabsProps['items'] = [
+		{
+			key: TAB_KEYS.ACTIVE,
+			label: <>{t('loc:Aktívni')}</>
+			// children: <div>prve</div>
+		},
+		{
+			key: TAB_KEYS.DELETED,
+			label: <>{t('loc:Vymazaní')}</>
+			// children: <div>druhe</div>
+		}
+	]
 
 	return (
 		<>
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<Row gutter={ROW_GUTTER_X_DEFAULT}>
-				<Col span={24}>
-					<div className='content-body'>
-						<Spin spinning={employees?.isLoading}>
-							<Permissions
-								allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]}
-								render={(hasPermission, { openForbiddenModal }) => (
-									<EmployeesFilter
-										createEmployee={() => {
-											if (hasPermission) {
-												navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/create')))
-											} else {
-												openForbiddenModal()
-											}
-										}}
-										onSubmit={handleSubmit}
-									/>
-								)}
-							/>
-							<CustomTable
-								className='table-fixed'
-								onChange={onChangeTable}
-								columns={columns}
-								dataSource={employees?.tableData}
-								rowClassName={'clickable-row'}
-								dndDrop={handleDrop}
-								twoToneRows
-								scroll={{ x: 800 }}
-								onRow={(record) => ({
-									onClick: () => {
-										navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id })))
-									}
-								})}
-								useCustomPagination
-								pagination={{
-									pageSize: employees?.data?.pagination?.limit,
-									total: employees?.data?.pagination?.totalCount,
-									current: employees?.data?.pagination?.page,
-									onChange: onChangePagination,
-									disabled: employees?.isLoading
-								}}
-							/>
-						</Spin>
-					</div>
-				</Col>
-			</Row>
+			<TabsComponent className={'box-tab'} activeKey={tabKey} onChange={onTabChange} destroyInactiveTabPane items={tabContent} />
 		</>
 	)
 }

@@ -730,6 +730,11 @@ export interface ICalendarFilter {
 export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {
 	tableData: (Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0] & { key: number })[]
 }
+
+export interface IDeletedIEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {
+	tableData: (Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0] & { key: string })[]
+}
+
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]

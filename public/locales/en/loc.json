@@ -172,7 +172,7 @@
   "Na schválenie": "For approval",
   "Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás": "You do not have permission for the page you are trying to view. If you think you should have access, please contact us.",
   "Na vašu adresu odošleme link na obnovenie hesla. Prosím zadajte svoju adresu.": "We will send you a link to reset your password by e-mail. Please enter your e-mail.",
-  "Na vykonanie požadovanej akcie musí mať salón nastavenú adresu.": "_NEPRELOZENE_",
+  "Na vykonanie požadovanej akcie je potrebné mať nastavenú adresu salónu.": "Salon address must be filled in to perform the required action.",
   "Na základe vašich kontantkých informácií sme v našej datábaze našli sálony, ktoré by mohli patriť vám": "On the basis of your contact information, we found other salons that may belong to you.",
   "Nahrajte maximálne {{maxCount}} súborov": "Upload a maximum of {{maxCount}} files",
   "Nahrať": "Upload",

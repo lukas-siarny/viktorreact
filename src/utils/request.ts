@@ -59,9 +59,9 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 		showNotifications(messages, typeNotification)
 	} else if (messages.some((msg: any) => msg.code === MSG_CODE.MISSING_COUNTRY_CODE)) {
 		const urlArray = split(get(error, 'config.url'), '/')
-		const validSalonID = urlArray[5].split('-').length === 5 ? urlArray[5] : '' // must be valid GUI ID
+		const validSalonID = urlArray[5].split('-').length === 5 ? urlArray[5] : '' // must be valid GUID
 		showNotificationModal({
-			message: i18next.t('loc:Na vykonanie požadovanej akcie musí mať salón nastavenú adresu.'),
+			message: i18next.t('loc:Na vykonanie požadovanej akcie je potrebné mať nastavenú adresu salónu.'),
 			actionButtonLabel: i18next.t('loc:Nastaviť adresu'),
 			action: validSalonID ? () => Navigator.navigate(`${i18next.t('paths:salons')}/${validSalonID}`) : undefined
 		})

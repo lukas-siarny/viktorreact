@@ -39,6 +39,7 @@ import { compareAndSortDayEvents, compareMonthlyReservations, getMonthlyReservat
 
 // redux
 import { clearEvent } from '../virtualEvent/virtualEventActions'
+import { setCalendarEmployees } from '../calendarEmployees/calendarEmployeesActions'
 
 // query params types
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
@@ -241,7 +242,7 @@ export const getCalendarEvents =
 		storePreviousParams = true,
 		eventsDayLimit = 0
 	): ThunkResult<Promise<ICalendarEventsPayload>> =>
-	async (dispatch, getState) => {
+	async (dispatch) => {
 		dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
 
 		let payload = {} as ICalendarEventsPayload
@@ -268,14 +269,17 @@ export const getCalendarEvents =
 			)
 
 			// employees sa mapuju do eventov
-			const employees = normalizeDataById(getState().employees.employees?.data?.employees)
+			const { data: calendarEmployees } = await dispatch(setCalendarEmployees(data.employees))
+
+			const employees = normalizeDataById(calendarEmployees || [])
 
 			const editedEvents = data.calendarEvents.reduce((newEventsArray, event) => {
 				const editedEvent: CalendarEvent = {
 					...event,
 					employee: employees[event.employee.id],
 					startDateTime: getDateTime(event.start.date, event.start.time),
-					endDateTime: getDateTime(event.end.date, event.end.time)
+					endDateTime: getDateTime(event.end.date, event.end.time),
+					isImported: event.eventType === CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT
 				}
 
 				/**
@@ -378,7 +382,7 @@ export const getCalendarReservations = (
 		CALENDAR_EVENTS_KEYS.RESERVATIONS,
 		{
 			...queryParams,
-			eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
+			eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT],
 			reservationStates: RESERVATION_STATES
 		},
 		splitMultidayEventsIntoOneDayEvents,
@@ -419,14 +423,14 @@ export const clearCalendarShiftsTimeoffs = (): ThunkResult<Promise<void>> => cle
 
 export const getCalendarMonthlyViewReservations =
 	(queryParams: ICalendarMonthlyReservationsQueryParams, clearVirtualEvent?: boolean, storePreviousParams = true): ThunkResult<Promise<ICalendarMonthlyReservationsPayload>> =>
-	async (dispatch, getState) => {
+	async (dispatch) => {
 		let payload = {} as ICalendarMonthlyReservationsPayload
 		try {
 			const queryParamsEditedForRequest = {
 				salonID: queryParams.salonID,
 				categoryIDs: queryParams.categoryIDs,
 				employeeIDs: queryParams.employeeIDs,
-				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
+				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT],
 				dateFrom: queryParams.start,
 				dateTo: queryParams.end,
 				reservationStates: RESERVATION_STATES
@@ -444,7 +448,9 @@ export const getCalendarMonthlyViewReservations =
 				MONTHLY_RESERVATIONS_KEY
 			)
 
-			const employees = normalizeDataById(getState().employees.employees?.data?.employees)
+			// employees sa mapuju do eventov
+			const { data: calendarEmployees } = await dispatch(setCalendarEmployees(data.employees))
+			const employees = normalizeDataById(calendarEmployees || [])
 
 			const editedData = Object.entries(data.calendarEvents).reduce((acc, [key, value]) => {
 				const formatedDay = dayjs(key).format(CALENDAR_DATE_FORMAT.QUERY)

@@ -46,7 +46,8 @@ const CheckboxGroupField = (props: Props) => {
 
 	const checkboxes = map(options, (option: any) => {
 		const isChecked = input.value?.includes(option.value)
-		const checkerStyle = useCustomColor && option.color ? ({ '--checkbox-color': option.color || '#000' } as React.CSSProperties) : undefined
+		const checkerStyle =
+			useCustomColor && (option.color || option.extra?.color) ? ({ '--checkbox-color': option.color || option.extra?.color || '#000' } as React.CSSProperties) : undefined
 
 		if (typeof option === 'string') {
 			return (

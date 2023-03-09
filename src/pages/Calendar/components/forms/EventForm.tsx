@@ -42,19 +42,20 @@ import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
 // redux
 import { RootState } from '../../../../reducers'
+import { ICalendarEmployeesPayload } from '../../../../reducers/calendarEmployees/calendarEmployeesActions'
 
 type ComponentProps = {
 	eventId?: string | null
-	searchEmployes: (search: string, page: number) => Promise<any>
 	loadingData?: boolean
 	sidebarView?: CALENDAR_EVENT_TYPE
+	employeesOptions: ICalendarEmployeesPayload['options']
 }
 
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
 const formName = FORM.CALENDAR_EVENT_FORM
 
 const EventForm: FC<Props> = (props) => {
-	const { handleSubmit, eventId, searchEmployes, pristine, submitting, loadingData, sidebarView } = props
+	const { handleSubmit, eventId, pristine, submitting, loadingData, sidebarView, employeesOptions } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const formValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(formName)(state))
@@ -134,22 +135,20 @@ const EventForm: FC<Props> = (props) => {
 						<Field
 							component={SelectField}
 							optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}
+							options={employeesOptions}
 							label={t('loc:Zamestnanec')}
 							suffixIcon={<EmployeesIcon className={'text-notino-grayDark'} />}
-							placeholder={t('loc:Vyberte zamestnanca')}
+							placeholder={t('loc:Vyber zamestnanca')}
 							name={'employee'}
-							size={'large'}
 							optionLabelProp={'label'}
+							size={'large'}
 							update={(_itemKey: number, ref: any) => ref.blur()}
-							filterOption={false}
-							allowInfinityScroll
 							showSearch
 							required
-							disabled={eventId} // NOTE: ak je detail tak sa neda menit zamestnanec
 							className={'pb-0'}
 							labelInValue
-							onSearch={searchEmployes}
 							hasExtra
+							disabled={eventId} // NOTE: ak je detail tak sa neda menit zamestnanec
 						/>
 						<Field
 							name={'date'}

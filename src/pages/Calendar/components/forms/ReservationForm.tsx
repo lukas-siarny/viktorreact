@@ -40,14 +40,15 @@ import ConfirmModal from '../../../../atoms/ConfirmModal'
 // redux
 import { RootState } from '../../../../reducers'
 import { getEmployee } from '../../../../reducers/employees/employeesActions'
+import { ICalendarEmployeesPayload } from '../../../../reducers/calendarEmployees/calendarEmployeesActions'
 
 type ComponentProps = {
 	salonID: string
-	searchEmployes: (search: string, page: number) => Promise<any>
 	eventId?: string | null
 	phonePrefix?: string
 	loadingData?: boolean
 	sidebarView?: CALENDAR_EVENT_TYPE
+	employeesOptions: ICalendarEmployeesPayload['options']
 }
 const formName = FORM.CALENDAR_RESERVATION_FORM
 
@@ -110,7 +111,7 @@ const getCategoryById = (category: any, serviceCategoryID?: string): EmployeeSer
 }
 
 const ReservationForm: FC<Props> = (props) => {
-	const { handleSubmit, salonID, searchEmployes, eventId, phonePrefix, pristine, submitting, loadingData, sidebarView } = props
+	const { handleSubmit, salonID, eventId, phonePrefix, pristine, submitting, loadingData, sidebarView, employeesOptions } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [visibleCustomerCreateModal, setVisibleCustomerCreateModal] = useState(false)
@@ -164,12 +165,14 @@ const ReservationForm: FC<Props> = (props) => {
 						value: customer.id,
 						key: customer.id,
 						label: customer.firstName && customer.lastName ? `${customer.firstName} ${customer.lastName}` : customer.email,
-						thumbNail: customer?.profileImage?.resizedImages?.thumbnail,
-						extraContent: (
-							<span className={'text-notino-grayDark text-xs'}>
-								{prefix} {customer.phone}
-							</span>
-						)
+						extra: {
+							thumbnail: customer?.profileImage?.resizedImages?.thumbnail,
+							extraContent: (
+								<span className={'text-notino-grayDark text-xs'}>
+									{prefix} {customer.phone}
+								</span>
+							)
+						}
 					}
 				})
 				return { pagination: data.pagination, data: selectOptions }
@@ -371,7 +374,6 @@ const ReservationForm: FC<Props> = (props) => {
 							size={'large'}
 							update={(_itemKey: number, ref: any) => ref.blur()}
 							options={servicesOptions}
-							allowInfinityScroll
 							className={'pb-0'}
 							required
 							labelInValue
@@ -406,6 +408,7 @@ const ReservationForm: FC<Props> = (props) => {
 						<Field
 							component={SelectField}
 							optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}
+							options={employeesOptions}
 							label={t('loc:Zamestnanec')}
 							suffixIcon={<EmployeesIcon className={'text-notino-grayDark'} />}
 							placeholder={t('loc:Vyber zamestnanca')}
@@ -413,13 +416,10 @@ const ReservationForm: FC<Props> = (props) => {
 							optionLabelProp={'label'}
 							size={'large'}
 							update={(_itemKey: number, ref: any) => ref.blur()}
-							filterOption={false}
-							allowInfinityScroll
 							showSearch
 							required
 							className={'pb-0'}
 							labelInValue
-							onSearch={searchEmployes}
 							onChange={onChangeEmployee}
 							hasExtra
 						/>

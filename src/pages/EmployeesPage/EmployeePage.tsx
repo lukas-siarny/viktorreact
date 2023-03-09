@@ -497,6 +497,7 @@ const EmployeePage = (props: Props) => {
 						onSubmit={updateEmployee}
 						setVisibleServiceEditModal={setVisibleServiceEditModal}
 					/>
+
 					<div className={'content-footer'}>
 						<div
 							className={cx('flex flex-col gap-2 lg:flex-row flex-wrap', {

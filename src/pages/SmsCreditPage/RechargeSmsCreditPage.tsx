@@ -7,9 +7,6 @@ import { Col, Divider, Row, Spin } from 'antd'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router'
 
-// redux
-import { RootState } from '../../reducers'
-
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import RechargeSmsCreditForm from './components/RechargeSmsCreditForm'
@@ -22,6 +19,7 @@ import { postReq } from '../../utils/request'
 
 // types
 import { IBreadcrumbs, IRechargeSmsCreditForm, SalonSubPageProps } from '../../types/interfaces'
+import { RootState } from '../../reducers'
 
 // assets
 import { ReactComponent as CoinsIcon } from '../../assets/icons/coins.svg'

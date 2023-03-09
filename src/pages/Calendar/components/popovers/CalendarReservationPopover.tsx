@@ -141,7 +141,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 												{prefix && customer.phone && <span className={'text-xxs text-notino-grayDark leading-3'}>{`${prefix} ${customer.phone}`}</span>}
 											</Row>
 											<Row align={'middle'} className={'gap-2 h-8'} wrap={false}>
-												{/* <Tag className={'nc-event-popover-tag tag-new'}>{t('loc:Nový klient')}</Tag> */}
+												{/* <Tag className={'nc-tag tag-new'}>{t('loc:Nový klient')}</Tag> */}
 												{customer.email && (
 													<a href={`mailto:${customer.email}`} className={'leading-3'}>
 														<MessageIcon />
@@ -196,7 +196,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 											<Col flex={'auto'}>
 												<Row className={'gap-1'} align={'top'}>
 													<Ellipsis text={note.text} className={'m-0 p-0 whitespace-pre-wrap flex-1'} />
-													{note.internal && <Tag className={'nc-event-popover-tag'}>{t('loc:Interná')}</Tag>}
+													{note.internal && <Tag className={'nc-tag'}>{t('loc:Interná')}</Tag>}
 												</Row>
 											</Col>
 										</div>

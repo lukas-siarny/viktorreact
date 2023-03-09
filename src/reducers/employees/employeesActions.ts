@@ -1,13 +1,13 @@
-/* eslint-disable import/no-cycle */
 import { map } from 'lodash'
+/* eslint-disable import/no-cycle */
 import { ThunkResult } from '../index'
 import { EMPLOYEE, EMPLOYEES } from './employeesTypes'
 
 // utils
 import { getReq } from '../../utils/request'
-import { normalizeQueryParams } from '../../utils/helper'
 import { IResetStore } from '../generalTypes'
 import { IQueryParams, IEmployeePayload, IEmployeesPayload } from '../../types/interfaces'
+import { getAssignedUserLabel, normalizeQueryParams } from '../../utils/helper'
 
 export type IEmployeesActions = IResetStore | IGetEmployees | IGetEmployee
 
@@ -37,8 +37,12 @@ export const getEmployees =
 			const { data } = await getReq('/api/b2b/admin/employees/', { ...normalizeQueryParams(queryParams) })
 			const employeesOptions = map(data.employees, (employee) => {
 				return {
-					// show name if exist at least last name otherwise show fallback values
-					label: `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.inviteEmail || employee.id,
+					label: getAssignedUserLabel({
+						firstName: employee.firstName,
+						lastName: employee.lastName,
+						email: employee.email,
+						id: employee.id
+					}),
 					value: employee.id,
 					key: `${employee.id}-key`,
 					color: employee.color

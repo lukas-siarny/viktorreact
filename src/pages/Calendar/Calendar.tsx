@@ -116,14 +116,7 @@ const CALENDAR_EVENTS_VIEW_TYPES = Object.keys(CALENDAR_EVENTS_VIEW_TYPE)
 
 const Calendar: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath = '' } = props
-	/**
-	 * referencie na jednotlivé inštancie Fullcalendar-a - pre každé view sa používa zvlášť inštancia (denné, týždenné, mesačné) - viď CalendarContent.tsx
-	 * každá inštancia má dostupné metódy render() a getCalendarApi(), napr. calendarRefs.current.DAY.getCalendarApi()
-	 * render() - umožňuje programovo vyrendrovať kalendár - https://fullcalendar.io/docs/render
-	 * getCalendarApi() - umožňuje programovo volať ďalšie FC metódy napr. calendarRefs.current.DAY.getCalendarApi().updateSize() - viď dokumentácia https://fullcalendar.io/docs
-	 * */
-	const calendarRefs = useRef<CalendarRefs>(null)
-	const siderEventManagementRefs = useRef<SiderEventManagementRefs>(null)
+
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -156,6 +149,46 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	) as CALENDAR_EVENTS_VIEW_TYPE
 
 	/**
+	 * referencie na jednotlivé inštancie Fullcalendar-a - pre každé view sa používa zvlášť inštancia (denné, týždenné, mesačné) - viď CalendarContent.tsx
+	 * každá inštancia má dostupné metódy render() a getCalendarApi(), napr. calendarRefs.current.DAY.getCalendarApi()
+	 * render() - umožňuje programovo vyrendrovať kalendár - https://fullcalendar.io/docs/render
+	 * getCalendarApi() - umožňuje programovo volať ďalšie FC metódy napr. calendarRefs.current.DAY.getCalendarApi().updateSize() - viď dokumentácia https://fullcalendar.io/docs
+	 * */
+	const calendarRefs = useRef<CalendarRefs>(null)
+
+	const siderEventManagementRefs = useRef<SiderEventManagementRefs>(null)
+	const fetchInterval = useRef<number | undefined>()
+	const initialCalendarEmployeesLoad = useRef(true)
+
+	/**
+	 * initialScroll = pomocna premenna pre tyzdenne view
+	 * v tyzdennom view sa po zmene datumu zascrolluje zobrazenie na novy datum - mozu nastat 2 situacie:
+	 * 1/ novo zvoleny datum sa nachadza v aktualnom rangi - teda mam vybraty tyzden 2 - 8.1.2023 a novy datum bude napr. 5.1.2023:
+	 * v takom pripade nepotrebujeme nacitavat nove data a v aktualnom zobrazeni sa len zaskroluje na zvoleny datum
+	 * 2/ novy datum sa nenachadza v aktualnom rangi:
+	 * v takom pripade potrebujeme pockat na nacitanie novych eventov z BE a vykreslenie Fullcalendara a az tak zascrollovat na danu poziciu (vyska tyzdenneho nie je fixna ale meni sa v zavislosti na rozlozeni eventov)
+	 * ak je intialScroll.current = true, tak vieme, ze sa jedna o druhy pripad
+	 */
+	const initialScroll = useRef(false)
+	const scrollToDateTimeout = useRef<any>(null)
+
+	/**
+	 * obcasne je potrebne programovo updatenut velkost, pretoze Fullcalednar sam nezaregistruje zmenu, ktora bola vyvolana niekde z vyssieho kontaineru
+	 * napr. ked sa zatvori bocny filter alebo sidebar na upravu eventu
+	 */
+	const updateCalendarSize = useRef(() => calendarRefs?.current?.[validCalendarView]?.getApi()?.updateSize())
+
+	const calendarEmployees = useSelector((state: RootState) => state.calendarEmployees.calendarEmployees || {})
+	const services = useSelector((state: RootState) => state.service.services)
+	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
+	const monthlyReservations = useSelector((state: RootState) => state.calendar[MONTHLY_RESERVATIONS_KEY])
+	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS])
+	const isRefreshingEvents = useSelector((state: RootState) => state.calendar.isRefreshingEvents)
+	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
+	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
+	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
+
+	/**
 	 * okrem aktuálne zvoleného dátumu (query.date resp. validSelectedDate) si udržujeme aj aktuálne zvolený range napr. currentRange = { view: DAY, start: 2023-01-22 end: 2023-01-29 }
 	 * hlavne kvoli týždennému a mesačnému, kde sa vždy na základe zvoleného dátumu (validSelectedDate) dopočíta celý range, na základe ktorého sa potom dotiahnu data z BE
 	 */
@@ -167,18 +200,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const [monthlyViewFullRange, setMonthlyViewFullRange] = useState(getSelectedDateRange(validCalendarView, validSelectedDate, true))
 
 	const [confirmModalData, setConfirmModalData] = useState<ConfirmModalData>(null)
-
-	const clearConfirmModal = () => setConfirmModalData(null)
-
-	const calendarEmployees = useSelector((state: RootState) => state.calendarEmployees.calendarEmployees || {})
-	const services = useSelector((state: RootState) => state.service.services)
-	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
-	const monthlyReservations = useSelector((state: RootState) => state.calendar[MONTHLY_RESERVATIONS_KEY])
-	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS])
-	const isRefreshingEvents = useSelector((state: RootState) => state.calendar.isRefreshingEvents)
-	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
-	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
-	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState(false)
@@ -218,7 +239,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		position: null
 	})
 
-	const fetchInterval = useRef<number | undefined>()
+	const clearConfirmModal = () => setConfirmModalData(null)
 
 	/**
 	 * pri praci s kalendarom pouzivame tuto kolekciu zamesnancov, ktora zohladnuje filtre aplikovane uzivatelom
@@ -260,23 +281,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		fetchInterval.current = interval
 	}
 
-	const initialCalendarEmployeesLoad = useRef(true)
-
 	const employeesLoading = initialCalendarEmployeesLoad.current && (reservations?.isLoading || shiftsTimeOffs?.isLoading)
 	const loadingData = employeesLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || monthlyReservations?.isLoading || isUpdatingEvent
 	const isLoading = isRefreshingEvents ? false : loadingData
-
-	/**
-	 * initialScroll = pomocna premenna pre tyzdenne view
-	 * v tyzdennom view sa po zmene datumu zascrolluje zobrazenie na novy datum - mozu nastat 2 situacie:
-	 * 1/ novo zvoleny datum sa nachadza v aktualnom rangi - teda mam vybraty tyzden 2 - 8.1.2023 a novy datum bude napr. 5.1.2023:
-	 * v takom pripade nepotrebujeme nacitavat nove data a v aktualnom zobrazeni sa len zaskroluje na zvoleny datum
-	 * 2/ novy datum sa nenachadza v aktualnom rangi:
-	 * v takom pripade potrebujeme pockat na nacitanie novych eventov z BE a vykreslenie Fullcalendara a az tak zascrollovat na danu poziciu (vyska tyzdenneho nie je fixna ale meni sa v zavislosti na rozlozeni eventov)
-	 * ak je intialScroll.current = true, tak vieme, ze sa jedna o druhy pripad
-	 */
-	const initialScroll = useRef(false)
-	const scrollToDateTimeout = useRef<any>(null)
 
 	const setRangeInformationForMonthlyView = (date: string) => {
 		setMonthlyViewFullRange(getSelectedDateRange(CALENDAR_VIEW.MONTH, date, true))
@@ -357,12 +364,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		cancelEventsRequestOnDemand()
 		setQuery({ ...query, eventsViewType: newEventsViewType, sidebarView: undefined, eventId: undefined })
 	}
-
-	/**
-	 * obcasne je potrebne programovo updatenut velkost, pretoze Fullcalednar sam nezaregistruje zmenu, ktora bola vyvolana niekde z vyssieho kontaineru
-	 * napr. ked sa zatvori bocny filter alebo sidebar na upravu eventu
-	 */
-	const updateCalendarSize = useRef(() => calendarRefs?.current?.[validCalendarView]?.getApi()?.updateSize())
 
 	// fetch new events
 	const fetchEvents: any = useCallback(

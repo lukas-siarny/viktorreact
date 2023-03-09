@@ -18,6 +18,7 @@ import {
 
 // reducers
 import { IReservationsStats, IRsStats, ISalonsTimeStats } from '../../../reducers/dashboard/dashboardActions'
+import { ISmsTimeStatsPayload } from '../../../reducers/sms/smsActions'
 
 export const doughnutOptions = (clickHandlers: any[]) => {
 	return {
@@ -429,6 +430,85 @@ export const transformToReservationsStatsData = (source: IReservationsStats | nu
 			if (source?.type === TIME_STATS_SOURCE_TYPE.YEAR) {
 				result.breakIndex = currMonth + 0.5
 			} else if (currMonth === selectedDate.month()) {
+				result.breakIndex = currDay - 0.5
+			} else {
+				result.breakIndex = 0
+			}
+		}
+	} else if (currYear < selectedDate.year()) {
+		result.breakIndex = 0
+	}
+
+	return {
+		isFailure: false,
+		isLoading: false,
+		data: result
+	}
+}
+
+export const SMS_SENT_STATS_COLOR = '#2277F3'
+
+export const transformSmsDataToStatsData = (source: ISmsTimeStatsPayload['data'], isLoading: boolean, isFailure: boolean, selectedDate: Dayjs): TimeStats => {
+	if (isLoading) {
+		return {
+			isFailure: false,
+			isLoading: true,
+			data: null
+		}
+	}
+
+	if (isFailure) {
+		return {
+			isFailure: true,
+			isLoading: false,
+			data: null
+		}
+	}
+
+	const result: TimeStatsData = {
+		labels: [],
+		datasets: [
+			{
+				data: [],
+				backgroundColor: SMS_SENT_STATS_COLOR,
+				borderColor: SMS_SENT_STATS_COLOR,
+				pointRadius: 1
+			}
+		],
+		columns: [
+			{
+				type: 'SMS_SENT',
+				summary: 0
+			}
+		],
+		breakIndex: 100
+	}
+
+	if (source && source?.ranges) {
+		Object.entries(source.ranges).forEach(([key, value]) => {
+			result.datasets[0].data.push(value.totalSentSmsCount)
+			// days and months as result from API are indexed from 1 instead of 0
+			const prop = Number(key) - 1
+			// 1. 2. 3. ...
+			result.labels.push(`${key}.`)
+
+			result.columns[0] = {
+				...result.columns[0],
+				[prop]: value.totalSentSmsCount,
+				summary: result.columns[0].summary + value.totalSentSmsCount
+			}
+		})
+	}
+
+	const now = dayjs()
+	const currYear = now.year()
+	const currMonth = now.month()
+	const currDay = now.date()
+
+	if (currYear === selectedDate.year()) {
+		if (currMonth <= selectedDate.month()) {
+			// NOTE: 0.5 is delta for displaying divider between columns
+			if (currMonth === selectedDate.month()) {
 				result.breakIndex = currDay - 0.5
 			} else {
 				result.breakIndex = 0

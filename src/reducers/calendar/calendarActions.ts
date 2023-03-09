@@ -269,9 +269,9 @@ export const getCalendarEvents =
 			)
 
 			// employees sa mapuju do eventov
-			const { data: calendarEmployees } = await dispatch(setCalendarEmployees(data.employees))
+			const { data: calendarEmployees } = dispatch(setCalendarEmployees(data.employees))
 
-			const employees = normalizeDataById(calendarEmployees || [])
+			const employees = normalizeDataById(calendarEmployees)
 
 			const editedEvents = data.calendarEvents.reduce((newEventsArray, event) => {
 				const editedEvent: CalendarEvent = {
@@ -449,8 +449,8 @@ export const getCalendarMonthlyViewReservations =
 			)
 
 			// employees sa mapuju do eventov
-			const { data: calendarEmployees } = await dispatch(setCalendarEmployees(data.employees))
-			const employees = normalizeDataById(calendarEmployees || [])
+			const { data: calendarEmployees } = dispatch(setCalendarEmployees(data.employees))
+			const employees = normalizeDataById(calendarEmployees)
 
 			const editedData = Object.entries(data.calendarEvents).reduce((acc, [key, value]) => {
 				const formatedDay = dayjs(key).format(CALENDAR_DATE_FORMAT.QUERY)

@@ -65,7 +65,9 @@ import {
 	RESERVATION_STATE,
 	PERMISSION,
 	RESERVATION_PAYMENT_METHOD,
-	RESERVATION_SOURCE_TYPE
+	RESERVATION_SOURCE_TYPE,
+	SMS_NOTIFICATION_EVENT_TYPE,
+	SMS_NOTIFICATION_STATUS
 } from './enums'
 
 import {
@@ -1384,10 +1386,12 @@ export const initializeLabelInValueSelect = (key: string | number, label: string
 	}
 }
 
-export const normalizeDataById = <T extends { id: string }>(data?: T[]): { [key: string]: T } => {
+export const normalizeDataById = <T extends { id: string }>(data?: T[] | null): { [key: string]: T } => {
 	const normalizedData: { [key: string]: T } = {}
 	data?.forEach((item) => {
 		normalizedData[item.id] = item
 	})
 	return normalizedData
 }
+
+export const formatPrice = (price: number, symbol?: string) => (!isNil(price) ? `${price} ${symbol || ''}`.trim() : '')

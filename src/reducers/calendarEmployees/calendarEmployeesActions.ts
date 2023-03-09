@@ -18,8 +18,8 @@ interface IGetEmployees {
 }
 
 export const setCalendarEmployees =
-	(employees?: Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0][]): ThunkResult<Promise<ICalendarEmployeesPayload>> =>
-	async (dispatch, getState) => {
+	(employees?: Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0][]): ThunkResult<ICalendarEmployeesPayload> =>
+	(dispatch, getState) => {
 		let payload = {
 			data: null,
 			options: []
@@ -32,11 +32,12 @@ export const setCalendarEmployees =
 			const isForImportedEvents = employee.isVirtual
 			const isDeleted = !isForImportedEvents && !!employee.deletedAt
 			const color = isDeleted ? '#808080' : employee.color // deleted: grayDark
+			const lastName = isForImportedEvents ? '' : employee.lastName
 
 			const employeeData = {
 				id: employee.id,
 				firstName: employee.firstName,
-				lastName: employee.lastName,
+				lastName,
 				email: employee.email,
 				inviteEmail: employee.inviteEmail,
 				orderIndex: index,
@@ -48,7 +49,7 @@ export const setCalendarEmployees =
 
 			calendarEmployees.push(employeeData)
 			options.push({
-				label: getAssignedUserLabel({ id: employee.id, firstName: employee.firstName, lastName: employee.lastName, email: employee.email || employee.inviteEmail }),
+				label: getAssignedUserLabel({ id: employee.id, firstName: employee.firstName, lastName, email: employee.email || employee.inviteEmail }),
 				value: employee.id,
 				key: employee.id,
 				extra: { employeeData, thumbnail: employee.image.resizedImages.thumbnail, color, isDeleted }

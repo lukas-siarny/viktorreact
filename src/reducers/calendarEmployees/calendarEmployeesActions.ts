@@ -1,9 +1,7 @@
 /* eslint-disable import/no-cycle */
-import i18next from 'i18next'
 import { ThunkResult } from '../index'
 
 // utils
-import { VIRTUAL_EMPLOYEE_IDENTIFICATOR, VIRTUAL_EMPLOYEE_NAME } from '../../utils/enums'
 import { getAssignedUserLabel } from '../../utils/helper'
 import { SET_CALENDAR_EMPLOYEES } from './calendarEmployeesTypes'
 
@@ -31,16 +29,14 @@ export const setCalendarEmployees =
 		const calendarEmployees: CalendarEmployee[] = []
 
 		employees?.forEach((employee, index) => {
-			const isForImportedEvents = employee.firstName === VIRTUAL_EMPLOYEE_IDENTIFICATOR
-			const firstName = isForImportedEvents ? VIRTUAL_EMPLOYEE_NAME(i18next.t) : employee.firstName
-			const lastName = isForImportedEvents ? '' : employee.lastName
+			const isForImportedEvents = employee.isVirtual
 			const isDeleted = !isForImportedEvents && !!employee.deletedAt
 			const color = isDeleted ? '#808080' : employee.color // deleted: grayDark
 
 			const employeeData = {
 				id: employee.id,
-				firstName,
-				lastName,
+				firstName: employee.firstName,
+				lastName: employee.lastName,
 				email: employee.email,
 				inviteEmail: employee.inviteEmail,
 				orderIndex: index,
@@ -52,7 +48,7 @@ export const setCalendarEmployees =
 
 			calendarEmployees.push(employeeData)
 			options.push({
-				label: getAssignedUserLabel({ id: employee.id, firstName, lastName, email: employee.email || employee.inviteEmail }),
+				label: getAssignedUserLabel({ id: employee.id, firstName: employee.firstName, lastName: employee.lastName, email: employee.email || employee.inviteEmail }),
 				value: employee.id,
 				key: employee.id,
 				extra: { employeeData, thumbnail: employee.image.resizedImages.thumbnail, color, isDeleted }

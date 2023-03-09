@@ -1050,6 +1050,11 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type AccountState = "UNPAIRED" | "PENDING" | "PAIRED";
+            /**
+             * example:
+             * true
+             */
+            export type Deleted = boolean;
             export type Limit = number;
             /**
              * Order attributes: lastName, createdAt, status, orderIndex
@@ -1083,6 +1088,11 @@ declare namespace Paths {
              */
             Parameters.ServiceID /* uuid */;
             accountState?: Parameters.AccountState;
+            deleted?: /**
+             * example:
+             * true
+             */
+            Parameters.Deleted;
             order?: /**
              * Order attributes: lastName, createdAt, status, orderIndex
              * example:
@@ -4068,6 +4078,7 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
+                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -4584,6 +4595,7 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
+                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -4871,6 +4883,7 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
+                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -5044,6 +5057,18 @@ declare namespace Paths {
                             THREE: number;
                             FOUR: number;
                             FIVE: number;
+                        };
+                    };
+                    wallet?: {
+                        id: string; // uuid
+                        availableBalance: number; // float
+                        currency: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            code: string;
+                            symbol: string;
                         };
                     };
                 };
@@ -6324,6 +6349,11 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type AccountState = "UNPAIRED" | "PENDING" | "PAIRED";
+            /**
+             * example:
+             * true
+             */
+            export type Deleted = boolean;
             export type Limit = number;
             /**
              * Order attributes: lastName, createdAt, status, orderIndex
@@ -6345,6 +6375,7 @@ declare namespace Paths {
             export type ServiceID = string; // uuid
         }
         export interface QueryParameters {
+            search?: Parameters.Search;
             salonID?: /**
              * example:
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
@@ -6356,7 +6387,11 @@ declare namespace Paths {
              */
             Parameters.ServiceID /* uuid */;
             accountState?: Parameters.AccountState;
-            search?: Parameters.Search;
+            deleted?: /**
+             * example:
+             * true
+             */
+            Parameters.Deleted;
             order?: /**
              * Order attributes: lastName, createdAt, status, orderIndex
              * example:
@@ -9422,6 +9457,7 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
+                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -9952,6 +9988,7 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
+                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -10125,6 +10162,18 @@ declare namespace Paths {
                             THREE: number;
                             FOUR: number;
                             FIVE: number;
+                        };
+                    };
+                    wallet?: {
+                        id: string; // uuid
+                        availableBalance: number; // float
+                        currency: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            code: string;
+                            symbol: string;
                         };
                     };
                 };
@@ -61750,7 +61799,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminCustomersCustomerId.Responses.$200>
   /**
-   * getApiB2BAdminEmployees - Endpoint is used for getting an array of employees. Employees are returned based on relevant permissions. It is possible to use search (firtName, lastName, email), filter (salonID, serviceID, accountState), order (lastName, createdAt or status) and to use pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+   * getApiB2BAdminEmployees - Endpoint is used for getting an array of employees. Employees are returned based on relevant permissions. It is possible to use search (firtName, lastName, email), filter (salonID, serviceID, accountState, deleted), order (lastName, createdAt or status) and to use pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
    */
   'getApiB2BAdminEmployees'(
     parameters?: Parameters<Paths.GetApiB2BAdminEmployees.QueryParameters & Paths.GetApiB2BAdminEmployees.HeaderParameters> | null,
@@ -62284,7 +62333,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsHistory.Responses.$200>
   /**
-   * getApiB2BAdminSalonsSalonIdWalletsWalletId - Endpoint is used for getting wallet detail., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, READ_WALLET]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+   * getApiB2BAdminSalonsSalonIdWalletsWalletId - Endpoint is used for getting wallet detail., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
    */
   'getApiB2BAdminSalonsSalonIdWalletsWalletId'(
     parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.HeaderParameters> | null,
@@ -64405,7 +64454,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/employees/']: {
     /**
-     * getApiB2BAdminEmployees - Endpoint is used for getting an array of employees. Employees are returned based on relevant permissions. It is possible to use search (firtName, lastName, email), filter (salonID, serviceID, accountState), order (lastName, createdAt or status) and to use pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
+     * getApiB2BAdminEmployees - Endpoint is used for getting an array of employees. Employees are returned based on relevant permissions. It is possible to use search (firtName, lastName, email), filter (salonID, serviceID, accountState, deleted), order (lastName, createdAt or status) and to use pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEmployees.QueryParameters & Paths.GetApiB2BAdminEmployees.HeaderParameters> | null,
@@ -65029,7 +65078,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/salons/{salonID}/wallets/{walletID}']: {
     /**
-     * getApiB2BAdminSalonsSalonIdWalletsWalletId - Endpoint is used for getting wallet detail., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, READ_WALLET]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+     * getApiB2BAdminSalonsSalonIdWalletsWalletId - Endpoint is used for getting wallet detail., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.HeaderParameters> | null,

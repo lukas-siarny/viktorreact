@@ -37,9 +37,9 @@ const stringSchema = (maxLength: number) =>
 		.nullable()
 		.default(null)
 
-export const customerOptionalScheme = z.object({
-	firstName: stringSchema(VALIDATION_MAX_LENGTH.LENGTH_100),
-	lastName: stringSchema(VALIDATION_MAX_LENGTH.LENGTH_100),
+export const customerSchema = z.object({
+	firstName: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100, true),
+	lastName: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100, true),
 	email: z
 		.string()
 		.email({ message: i18next.t('loc:Email nie je platný') })
@@ -54,10 +54,9 @@ export const customerOptionalScheme = z.object({
 		.string({
 			required_error: i18next.t('loc:Toto pole je povinné')
 		})
-		.min(2)
-		.max(3),
-	phone: stringSchema(VALIDATION_MAX_LENGTH.LENGTH_20),
-	note: stringSchema(VALIDATION_MAX_LENGTH.LENGTH_1000),
+		.length(2),
+	phone: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_20, true),
+	note: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1000),
 	street: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100),
 	city: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100),
 	zipCode: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_10),
@@ -67,27 +66,7 @@ export const customerOptionalScheme = z.object({
 	profileImageID: imageConstraint.array().max(1).optional()
 })
 
-function makeFieldsRequired<T extends z.SomeZodObject, K extends keyof z.infer<T>>(origSchema: T, fields: K[]) {
-	return origSchema.merge(
-		z.object(
-			Object.fromEntries(
-				fields.map((field) => {
-					const origConstrain = origSchema.shape[field as string]
-					const newConstrain =
-						origConstrain.isNullable() && origConstrain.isOptional() && (origConstrain as any).unwrap ? (origConstrain as any).unwrap().unwrap() : origConstrain
-					return [field, newConstrain]
-				})
-			)
-		)
-	)
-}
-
-type MakeFieldsRequired<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> }
-
-type OptionalCustomer = z.infer<typeof customerOptionalScheme>
-
-const customerSchema = makeFieldsRequired(customerOptionalScheme, ['firstName', 'lastName', 'phone'])
-export type Customer = MakeFieldsRequired<OptionalCustomer, 'firstName' | 'lastName' | 'phone'>
+export type Customer = z.infer<typeof customerSchema>
 
 export default (values: Customer | ICustomerForm) => {
 	console.log('🚀 ~ file: validateCustomerForm.tsx:92 ~ values:', values)

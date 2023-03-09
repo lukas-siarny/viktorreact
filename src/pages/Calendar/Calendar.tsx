@@ -8,7 +8,6 @@ import { compose } from 'redux'
 import { destroy, initialize } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import Scroll from 'react-scroll'
-import { useNavigate } from 'react-router-dom'
 
 // utils
 import {
@@ -45,7 +44,6 @@ import {
 	refreshEvents
 } from '../../reducers/calendar/calendarActions'
 import { RootState } from '../../reducers'
-import { getEmployees } from '../../reducers/employees/employeesActions'
 import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
 import { clearEvent } from '../../reducers/virtualEvent/virtualEventActions'
 
@@ -70,7 +68,8 @@ import {
 	ReservationPopoverData,
 	PopoverTriggerPosition,
 	SalonSubPageProps,
-	EmployeeTooltipPopoverData
+	EmployeeTooltipPopoverData,
+	ICalendarImportedReservationForm
 } from '../../types/interfaces'
 
 // hooks
@@ -107,7 +106,6 @@ const CALENDAR_EVENTS_VIEW_TYPES = Object.keys(CALENDAR_EVENTS_VIEW_TYPE)
 
 const Calendar: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath = '' } = props
-	const navigate = useNavigate()
 	/**
 	 * referencie na jednotlivé inštancie Fullcalendar-a - pre každé view sa používa zvlášť inštancia (denné, týždenné, mesačné) - viď CalendarContent.tsx
 	 * každá inštancia má dostupné metódy render() a getCalendarApi(), napr. calendarRefs.current.DAY.getCalendarApi()
@@ -163,7 +161,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const clearConfirmModal = () => setConfirmModalData(null)
 
-	const employees = useSelector((state: RootState) => state.employees.employees || [])
+	const calendarEmployees = useSelector((state: RootState) => state.calendarEmployees.calendarEmployees || {})
 	const services = useSelector((state: RootState) => state.service.services)
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
 	const monthlyReservations = useSelector((state: RootState) => state.calendar[MONTHLY_RESERVATIONS_KEY])
@@ -176,8 +174,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState(false)
 	const [isUpdatingEvent, setIsUpdatingEvent] = useState(false)
-
-	const [areEmployeesLoaded, setAreEmployeesLoaded] = useState(false)
 
 	const [reservationPopover, setReservationPopover] = useState<{ isOpen: boolean; data: ReservationPopoverData | null; position: PopoverTriggerPosition | null }>({
 		isOpen: false,
@@ -221,12 +217,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const filteredEmployees = useCallback(() => {
 		// filter employees based on employeeIDs in the url queryParams (if there are any)
 		if (!isEmpty(query.employeeIDs)) {
-			return employees?.data?.employees.filter((employee: any) => query.employeeIDs?.includes(employee.id))
+			return calendarEmployees?.data?.filter((employee: any) => query.employeeIDs?.includes(employee.id))
 		}
 
 		// null means empty filter otherwise return all employes as default value
-		return query?.employeeIDs === null ? [] : employees?.data?.employees
-	}, [employees?.data?.employees, query.employeeIDs])
+		return query?.employeeIDs === null ? [] : calendarEmployees?.data
+	}, [calendarEmployees?.data, query.employeeIDs])
 
 	/**
 	 * tzv. background load eventov - keďže nepoužívame Websockety, na pozadí sa v pravidelnom intervale obnovujú eventy v kalendári, aby bola aspoň takto zaistená ich aktuálnosť
@@ -255,7 +251,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		fetchInterval.current = interval
 	}
 
-	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || monthlyReservations?.isLoading || isUpdatingEvent
+	const initialEmployeesLoad = useRef(true)
+
+	const employeesLoading = initialEmployeesLoad.current && (reservations?.isLoading || shiftsTimeOffs?.isLoading)
+	const loadingData = employeesLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading || monthlyReservations?.isLoading || isUpdatingEvent
 	const isLoading = isRefreshingEvents ? false : loadingData
 
 	/**
@@ -359,11 +358,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	// fetch new events
 	const fetchEvents: any = useCallback(
 		async (clearVirtualEvent?: boolean) => {
-			// bez zamestanncov nefunguje nic v kalendari, takze ani nema zmysel dotahovat data
-			if (!employees.options?.length) {
-				return
-			}
-
 			// restartuje sa interval pre background load
 			restartFetchInterval()
 
@@ -404,10 +398,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} else if (validEventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
 				await dispatch(dispatchGetShiftsTimeOff)
 			}
+			initialEmployeesLoad.current = false
 		},
-
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validEventsViewType, validCalendarView, employees.options?.length]
+		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validEventsViewType, validCalendarView]
 	)
 
 	// scroll to time after initialization
@@ -435,35 +429,34 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}, [validCalendarView])
 
 	useEffect(() => {
-		;(async () => {
-			dispatch(getServices({ salonID }))
-			await dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
-			setAreEmployeesLoaded(true)
-		})()
+		dispatch(getServices({ salonID }))
 	}, [dispatch, salonID])
 
 	useEffect(() => {
 		;(async () => {
-			// v reduxe sa do eventov sa mapuju zamestnanci, preto sa musia dotiahnut predtym nez sa dotiahnu eventy
-			// ak uzivatel odksrtne vsetkych zamestancov alebo kategorie, zobrazi sa empty state a nie je potrebne dotahovat nove data
-			if (!areEmployeesLoaded || query?.employeeIDs === null || query?.categoryIDs === null) {
+			/**
+			 * ak uzivatel odksrtne vsetkych zamestancov alebo kategorie, zobrazi sa empty state a nie je potrebne dotahovat nove data
+			 */
+
+			if (query?.employeeIDs === null || query?.categoryIDs === null) {
 				return
 			}
 			// fetch new events
 			fetchEvents(false)
 		})()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents, areEmployeesLoaded])
+	}, [dispatch, query.employeeIDs, query.categoryIDs, fetchEvents])
 
 	useEffect(() => {
 		dispatch(
 			initialize(FORM.CALENDAR_FILTER, {
 				eventsViewType: validEventsViewType,
 				categoryIDs: query?.categoryIDs === undefined ? getCategoryIDs(services?.categoriesOptions) : getFullCategoryIdsFromUrl(query?.categoryIDs),
-				employeeIDs: query?.employeeIDs === undefined ? getEmployeeIDs(employees?.options) : query?.employeeIDs
+				employeeIDs: query?.employeeIDs === undefined ? getEmployeeIDs(calendarEmployees?.options) : query?.employeeIDs
 			})
 		)
-	}, [dispatch, employees?.options, services?.categoriesOptions, query?.categoryIDs, query?.employeeIDs, validEventsViewType])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [dispatch, calendarEmployees?.options, services?.categoriesOptions, query?.categoryIDs, query?.employeeIDs, validEventsViewType])
 
 	useEffect(() => {
 		// update calendar size when main layout sider change
@@ -522,9 +515,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		setQuery({
 			...query,
 			...values,
-			// // ak su vybrati vsetci zamestnanci alebo vsetky kategorie, tak je zbytocne posielat na BE vsetky IDcka
-			// // BE vrati rovnake zaznamy ako ked sa tam neposle nic
-			employeeIDs: values?.employeeIDs?.length === employees?.options?.length ? undefined : values.employeeIDs,
+			// ak su vybrati vsetci zamestnanci alebo vsetky kategorie, tak je zbytocne posielat na BE vsetky IDcka
+			// BE vrati rovnake zaznamy ako ked sa tam neposle nic
+			employeeIDs: values?.employeeIDs?.length === calendarEmployees?.options?.length ? undefined : values.employeeIDs,
 			categoryIDs: values?.categoryIDs?.length === services?.categoriesOptions?.length ? undefined : getShortCategoryIdsForUrl(values.categoryIDs),
 			eventId: undefined,
 			sidebarView: undefined
@@ -585,7 +578,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						NOTIFICATION_TYPE.NOTIFICATION,
 						true
 					)
-					fetchEvents(false) // Po PATCHi vponechat virtualny event ak bol vytvoreny
+					fetchEvents(false) // Po PATCHi ponechat virtualny event ak bol vytvoreny
 				} else {
 					// CREATE
 					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
@@ -607,6 +600,59 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} finally {
 				setIsUpdatingEvent(false)
 				clearConfirmModal()
+			}
+		},
+		[closeSiderForm, fetchEvents, salonID, query.eventId]
+	)
+
+	const handleSubmitImportedReservation = useCallback(
+		async (values: ICalendarImportedReservationForm) => {
+			const eventId = values?.updateFromCalendar ? values.eventId : query.eventId
+
+			if (!values || !eventId) {
+				return
+			}
+
+			const { revertEvent } = values
+
+			try {
+				cancelEventsRequestOnDemand()
+				setIsUpdatingEvent(true)
+				const reqData = {
+					start: {
+						date: values.date,
+						time: values.timeFrom
+					},
+					end: {
+						date: values.date,
+						time: values.timeTo
+					},
+					note: values.note
+				}
+
+				await patchReq(
+					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/imported-reservation',
+					{ salonID, calendarEventID: eventId },
+					reqData,
+					undefined,
+					NOTIFICATION_TYPE.NOTIFICATION,
+					true
+				)
+				fetchEvents(false) // Po PATCHi ponechat virtualny event ak bol vytvoreny
+
+				// Po UPDATE rezervacie dotiahnut eventy + zatvorit drawer, pri CREATE ostane otvoreny sider pocas updatu len
+				if (query.eventId) {
+					closeSiderForm()
+				}
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.error(e)
+				// ak neprejde request, tak sa event v kalendari vráti na pôvodne miesto
+				if (revertEvent) {
+					revertEvent()
+				}
+			} finally {
+				setIsUpdatingEvent(false)
 			}
 		},
 		[closeSiderForm, fetchEvents, salonID, query.eventId]
@@ -697,7 +743,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							true
 						)
 					}
-					fetchEvents(false) // Po PATCHi vponechat virtualny event ak bol vytvoreny
+					fetchEvents(false) // Po PATCHi ponechat virtualny event ak bol vytvoreny
 				} else {
 					// CREATE event shift
 					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
@@ -907,7 +953,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					selectedMonth={monthlyViewFullRange.selectedMonth}
 				/>
 				<Layout hasSider className={'noti-calendar-main-section'}>
-					<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} parentPath={parentPath} eventsViewType={validEventsViewType} />
+					<SiderFilter
+						collapsed={siderFilterCollapsed}
+						handleSubmit={handleSubmitFilter}
+						parentPath={parentPath}
+						eventsViewType={validEventsViewType}
+						employeesOptions={calendarEmployees.options}
+						employeesLoading={employeesLoading}
+					/>
 					<CalendarContent
 						salonID={salonID}
 						enabledSalonReservations={selectedSalon?.settings?.enabledReservations}
@@ -937,6 +990,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						onMonthlyReservationClick={onMonthlyReservationClick}
 						handleSubmitReservation={initSubmitReservationData}
 						handleSubmitEvent={initSubmitEventData}
+						handleSubmitImportedReservation={handleSubmitImportedReservation}
 						onAddEvent={handleAddEvent}
 						clearFetchInterval={clearFetchInterval}
 						restartFetchInterval={restartFetchInterval}
@@ -954,11 +1008,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							onCloseSider={closeSiderForm}
 							handleSubmitReservation={initSubmitReservationData}
 							handleSubmitEvent={initSubmitEventData}
+							handleSubmitImportedReservation={handleSubmitImportedReservation}
 							calendarApi={calendarRefs?.current?.[validCalendarView]?.getApi()}
 							changeCalendarDate={setNewSelectedDate}
 							query={query}
 							setQuery={setQuery}
-							areEmployeesLoaded={areEmployeesLoaded}
+							areEmployeesLoaded={!employeesLoading}
+							calendarEmployees={calendarEmployees}
 						/>
 					)}
 				</Layout>

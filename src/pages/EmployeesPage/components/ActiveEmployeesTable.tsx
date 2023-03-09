@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Col, Row, Spin } from 'antd'
@@ -8,7 +8,7 @@ import { find } from 'lodash'
 import { arrayMove } from '@dnd-kit/sortable'
 
 // utils
-import { ENUMERATIONS_KEYS, NOTIFICATION_TYPE, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { NOTIFICATION_TYPE, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../../utils/helper'
 import { patchReq } from '../../../utils/request'
@@ -30,6 +30,8 @@ import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.s
 
 // types
 import { Columns } from '../../../types/interfaces'
+
+// hooks
 import { IUseQueryParams } from '../../../hooks/useQueryParams'
 
 type Props = {
@@ -37,26 +39,16 @@ type Props = {
 	query: IUseQueryParams
 	setQuery: (newValues: IUseQueryParams) => void
 	salonID: string
+	prefixOptions: any
 }
 
 const ActiveEmployeesTable = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { parentPath, query, setQuery, salonID } = props
+	const { parentPath, query, setQuery, salonID, prefixOptions } = props
 	const navigate = useNavigate()
 	const activeEmployees = useSelector((state: RootState) => state.employees.activeEmployees)
-	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
-	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 
-	useEffect(() => {
-		const prefixes: { [key: string]: string } = {}
-
-		phonePrefixes.forEach((option) => {
-			prefixes[option.key] = option.label
-		})
-
-		setPrefixOptions(prefixes)
-	}, [phonePrefixes, dispatch])
 	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
 			...query,
@@ -66,7 +58,7 @@ const ActiveEmployeesTable = (props: Props) => {
 		setQuery(newQuery)
 	}
 
-	const handleSubmitDeleted = (values: IEmployeesFilter) => {
+	const handleSubmitActive = (values: IEmployeesFilter) => {
 		const newQuery = {
 			...query,
 			...values,
@@ -189,7 +181,7 @@ const ActiveEmployeesTable = (props: Props) => {
 				// eslint-disable-next-line no-console
 				console.error(e)
 			} finally {
-				// Data treba vzdy updatnut aj po uspesnom alebo neuspesom requeste. Aby sa pri dalsiom a dalsiom reorderi pracovalo s aktualne updatnutymi datami.
+				// Data treba vzdy updatnut aj po uspesnom alebo neuspesom requeste. Aby sa pri dalsom a dalsom reorderi pracovalo s aktualne updatnutymi datami.
 				dispatch(
 					getEmployees({
 						page: query.page,
@@ -222,7 +214,7 @@ const ActiveEmployeesTable = (props: Props) => {
 											openForbiddenModal()
 										}
 									}}
-									onSubmit={handleSubmitDeleted}
+									onSubmit={handleSubmitActive}
 								/>
 							)}
 						/>

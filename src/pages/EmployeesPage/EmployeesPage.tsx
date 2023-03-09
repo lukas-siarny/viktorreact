@@ -1,29 +1,30 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Row, TabsProps } from 'antd'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
+import TabsComponent from '../../components/TabsComponent'
+import ActiveEmployeesTable from './components/ActiveEmployeesTable'
+import DeletedEmployeesTable from './components/DeletedEmployeesTable'
 
 // utils
-import { FORM, PERMISSION } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, PERMISSION } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
 import { getActiveEmployees, getDeletedEmployees } from '../../reducers/employees/employeesActions'
 import { getServices } from '../../reducers/services/serviceActions'
+import { RootState } from '../../reducers'
 
 // types
 import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 
 // hooks
 import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
-import TabsComponent from '../../components/TabsComponent'
-import ActiveEmployeesTable from './components/ActiveEmployeesTable'
-import DeletedEmployeesTable from './components/DeletedEmployeesTable'
 
 enum TAB_KEYS {
 	ACTIVE = 'active',
@@ -43,10 +44,23 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		accountState: StringParam(),
 		serviceID: StringParam(),
 		salonID: StringParam(),
-		employeeState: StringParam(TAB_KEYS.DELETED)
+		employeeState: StringParam(TAB_KEYS.ACTIVE)
 	})
 
-	const [tabKey, setTabKey] = useState<TAB_KEYS | undefined>(query.employeeState || TAB_KEYS.DELETED)
+	const [tabKey, setTabKey] = useState<TAB_KEYS | undefined>(query.employeeState)
+
+	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
+	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
+
+	useEffect(() => {
+		const prefixes: { [key: string]: string } = {}
+
+		phonePrefixes.forEach((option) => {
+			prefixes[option.key] = option.label
+		})
+
+		setPrefixOptions(prefixes)
+	}, [phonePrefixes, dispatch])
 
 	useEffect(() => {
 		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search, serviceID: query.serviceID, accountState: query.accountState }))
@@ -89,7 +103,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		]
 	}
 	const onTabChange = (key: any) => {
-		// NOTE: ak sa zmeni tab a v jednom by ostali query params tak treba premazat kedze to nie je robotene ako osobitne page
+		// NOTE: ak sa zmeni tab a v jednom by ostali query params, tak treba premazat kedze to nie je robene ako osobitne routy
 		setQuery({
 			page: undefined,
 			limit: undefined,
@@ -105,12 +119,12 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		{
 			key: TAB_KEYS.ACTIVE,
 			label: <>{t('loc:Aktívni')}</>,
-			children: <ActiveEmployeesTable parentPath={parentPath} query={query} setQuery={setQuery} salonID={salonID} />
+			children: <ActiveEmployeesTable prefixOptions={prefixOptions} parentPath={parentPath} query={query} setQuery={setQuery} salonID={salonID} />
 		},
 		{
 			key: TAB_KEYS.DELETED,
 			label: <>{t('loc:Vymazaní')}</>,
-			children: <DeletedEmployeesTable parentPath={parentPath} query={query} setQuery={setQuery} salonID={salonID} />
+			children: <DeletedEmployeesTable prefixOptions={prefixOptions} parentPath={parentPath} query={query} setQuery={setQuery} salonID={salonID} />
 		}
 	]
 

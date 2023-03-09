@@ -48,7 +48,8 @@ export const setCalendarEmployees =
 				orderIndex: index,
 				color: employee.color,
 				image: employee.image,
-				isForImportedEvents
+				isForImportedEvents,
+				isVirtual: employee.isVirtual
 			})
 			options.push({
 				// show name if exist at least last name otherwise show fallback values

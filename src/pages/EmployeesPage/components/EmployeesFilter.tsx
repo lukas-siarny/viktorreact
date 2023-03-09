@@ -71,18 +71,20 @@ const EmployeesFilter = (props: Props) => {
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
 			<Filters customContent={customContent} search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)}>
 				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={8}>
-						<Field
-							component={SelectField}
-							name={'accountState'}
-							placeholder={t('loc:Stav konta')}
-							allowClear
-							size={'middle'}
-							filterOptions
-							onDidMountSearch
-							options={accountStateOptions}
-						/>
-					</Col>
+					{!hide && (
+						<Col span={8}>
+							<Field
+								component={SelectField}
+								name={'accountState'}
+								placeholder={t('loc:Stav konta')}
+								allowClear
+								size={'middle'}
+								filterOptions
+								onDidMountSearch
+								options={accountStateOptions}
+							/>
+						</Col>
+					)}
 					<Col span={8}>
 						<Field component={SelectField} name={'serviceID'} placeholder={t('loc:Služba')} allowClear size={'middle'} onDidMountSearch options={servicesOptions} />
 					</Col>

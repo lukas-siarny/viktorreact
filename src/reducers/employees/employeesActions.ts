@@ -1,20 +1,25 @@
 /* eslint-disable import/no-cycle */
 import { filter, map } from 'lodash'
 import { ThunkResult } from '../index'
-import { DELETED_EMPLOYEES, EMPLOYEE, EMPLOYEES } from './employeesTypes'
+import { ACTIVE_EMPLOYEES, DELETED_EMPLOYEES, EMPLOYEE, EMPLOYEES } from './employeesTypes'
 
 // utils
 import { getReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
 import { IResetStore } from '../generalTypes'
-import { IQueryParams, IEmployeePayload, IEmployeesPayload, IDeletedIEmployeesPayload } from '../../types/interfaces'
+import { IQueryParams, IEmployeePayload, IEmployeesPayload, IDeletedEmployeesPayload, IActiveEmployeesPayload } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
-export type IEmployeesActions = IResetStore | IGetEmployees | IGetEmployee | IGetDeletedEmployees
+export type IEmployeesActions = IResetStore | IGetEmployees | IGetEmployee | IGetDeletedEmployees | IGetActiveEmployees
 
 interface IGetDeletedEmployees {
 	type: DELETED_EMPLOYEES
-	payload: IDeletedIEmployeesPayload
+	payload: IDeletedEmployeesPayload
+}
+
+interface IGetActiveEmployees {
+	type: ACTIVE_EMPLOYEES
+	payload: IActiveEmployeesPayload
 }
 
 interface IGetEmployees {
@@ -73,33 +78,56 @@ export const getEmployees =
 	}
 
 export const getDeletedEmployees =
-	(queryParams: IGetEmployeesQueryParams): ThunkResult<Promise<IDeletedIEmployeesPayload>> =>
+	(queryParams: IGetEmployeesQueryParams): ThunkResult<Promise<IDeletedEmployeesPayload>> =>
 	async (dispatch) => {
-		let payload = {} as IDeletedIEmployeesPayload
+		let payload = {} as IDeletedEmployeesPayload
 		try {
 			dispatch({ type: DELETED_EMPLOYEES.DELETED_EMPLOYEES_LOAD_START })
 
-			const { data } = await getReq('/api/b2b/admin/employees/', { ...normalizeQueryParams(queryParams) })
-			console.log('data', data)
-			// TODO: toto bude chodit z BE ked sa implementuje https://goodrequest.atlassian.net/browse/NOT-4568
-			const deletedEmployess: any = filter(data.employees, (employe) => employe.deletedAt)
-			console.log('deletedEmployess', deletedEmployess)
-			const tableData = map(deletedEmployess, (employee) => ({
+			const { data } = await getReq('/api/b2b/admin/employees/', { ...normalizeQueryParams({ ...queryParams, deleted: true }) })
+
+			const tableData = map(data.employees, (employee) => ({
 				...employee,
 				key: employee.id
 			}))
 
 			payload = {
-				data: {
-					employees: deletedEmployess,
-					pagination: data.pagination
-				},
+				data,
 				tableData
 			}
 
 			dispatch({ type: DELETED_EMPLOYEES.DELETED_EMPLOYEES_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: DELETED_EMPLOYEES.DELETED_EMPLOYEES_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}
+
+export const getActiveEmployees =
+	(queryParams: IGetEmployeesQueryParams): ThunkResult<Promise<IActiveEmployeesPayload>> =>
+	async (dispatch) => {
+		let payload = {} as IActiveEmployeesPayload
+		try {
+			dispatch({ type: ACTIVE_EMPLOYEES.ACTIVE_EMPLOYEES_LOAD_START })
+
+			const { data } = await getReq('/api/b2b/admin/employees/', { ...normalizeQueryParams({ ...queryParams, deleted: false }) })
+			console.log('data', data)
+			const tableData = map(data.employees, (employee) => ({
+				...employee,
+				key: employee.orderIndex
+			}))
+
+			payload = {
+				data,
+				tableData
+			}
+
+			dispatch({ type: ACTIVE_EMPLOYEES.ACTIVE_EMPLOYEES_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: ACTIVE_EMPLOYEES.ACTIVE_EMPLOYEES_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}

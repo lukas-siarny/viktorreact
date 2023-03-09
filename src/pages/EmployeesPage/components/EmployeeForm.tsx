@@ -45,7 +45,7 @@ const EmployeeForm: FC<Props> = (props) => {
 	const formValues: Partial<IEmployeeForm> = useSelector((state: RootState) => getFormValues(FORM.EMPLOYEE)(state))
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const services = useSelector((state: RootState) => state.service.services)
-
+	const readOnly = !!formValues?.deletedAt
 	return (
 		<>
 			<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -61,18 +61,36 @@ const EmployeeForm: FC<Props> = (props) => {
 								component={ImgUploadField}
 								name={'avatar'}
 								label={t('loc:Avatar')}
+								disabled={true}
 								signUrl={URL_UPLOAD_IMAGES}
 								category={UPLOAD_IMG_CATEGORIES.EMPLOYEE}
 								multiple={false}
 								maxCount={1}
 							/>
 							<div className={'flex-1'}>
-								<Field component={InputField} label={t('loc:Meno')} placeholder={t('loc:Zadajte meno')} name={'firstName'} size={'large'} required />
-								<Field component={InputField} label={t('loc:Priezvisko')} placeholder={t('loc:Zadajte priezvisko')} name={'lastName'} size={'large'} required />
+								<Field
+									readOnly={readOnly}
+									component={InputField}
+									label={t('loc:Meno')}
+									placeholder={t('loc:Zadajte meno')}
+									name={'firstName'}
+									size={'large'}
+									required
+								/>
+								<Field
+									readOnly={readOnly}
+									component={InputField}
+									label={t('loc:Priezvisko')}
+									placeholder={t('loc:Zadajte priezvisko')}
+									name={'lastName'}
+									size={'large'}
+									required
+								/>
 							</div>
 						</div>
-						<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
+						<Field readOnly={readOnly} component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
 						<PhoneWithPrefixField
+							readOnly={readOnly}
 							label={'Telefón'}
 							placeholder={t('loc:Zadajte telefón')}
 							size={'large'}
@@ -93,6 +111,7 @@ const EmployeeForm: FC<Props> = (props) => {
 									size={'large'}
 									className={'flex-1'}
 									component={SelectField}
+									readOnly={readOnly}
 									filterOption={true}
 									allowClear
 									placeholder={t('loc:Vyberte službu')}

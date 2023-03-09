@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
-import { ILoadingAndFailure, IEmployeePayload, IEmployeesPayload, IDeletedIEmployeesPayload } from '../../types/interfaces'
-import { DELETED_EMPLOYEES, EMPLOYEE, EMPLOYEES } from './employeesTypes'
+import { ILoadingAndFailure, IEmployeePayload, IEmployeesPayload, IDeletedEmployeesPayload, IActiveEmployeesPayload } from '../../types/interfaces'
+import { ACTIVE_EMPLOYEES, DELETED_EMPLOYEES, EMPLOYEE, EMPLOYEES } from './employeesTypes'
 import { IEmployeesActions } from './employeesActions'
 
 // eslint-disable-next-line import/prefer-default-export
@@ -18,7 +18,13 @@ export const initState = {
 		tableData: [],
 		isLoading: false,
 		isFailure: false
-	} as IDeletedIEmployeesPayload & ILoadingAndFailure,
+	} as IDeletedEmployeesPayload & ILoadingAndFailure,
+	activeEmployees: {
+		data: null,
+		tableData: [],
+		isLoading: false,
+		isFailure: false
+	} as IActiveEmployeesPayload & ILoadingAndFailure,
 	employee: {
 		data: null,
 		isLoading: false,
@@ -82,11 +88,38 @@ export default (state = initState, action: IEmployeesActions) => {
 					tableData: action.payload.tableData
 				}
 			}
+		// Active Employees
+		case ACTIVE_EMPLOYEES.ACTIVE_EMPLOYEES_LOAD_START:
+			return {
+				...state,
+				activeEmployees: {
+					...state.activeEmployees,
+					isLoading: true
+				}
+			}
+		case ACTIVE_EMPLOYEES.ACTIVE_EMPLOYEES_LOAD_FAIL:
+			return {
+				...state,
+				activeEmployees: {
+					...initState.activeEmployees,
+					isFailure: true
+				}
+			}
+		case ACTIVE_EMPLOYEES.ACTIVE_EMPLOYEES_LOAD_DONE:
+			return {
+				...state,
+				activeEmployees: {
+					...initState.activeEmployees,
+					data: action.payload.data,
+					tableData: action.payload.tableData
+				}
+			}
+		// Rerder
 		case EMPLOYEES.EMPLOYEES_REORDER:
 			return {
 				...state,
-				employees: {
-					...state.employees,
+				activeEmployees: {
+					...state.activeEmployees,
 					tableData: action.payload.tableData
 				}
 			}

@@ -1,25 +1,32 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Col, Row, Spin } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
+import { find } from 'lodash'
+import { arrayMove } from '@dnd-kit/sortable'
 
 // utils
-import { ENUMERATIONS_KEYS, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, NOTIFICATION_TYPE, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../../utils/helper'
+import { patchReq } from '../../../utils/request'
 
 // components
 import EmployeesFilter, { IEmployeesFilter } from './EmployeesFilter'
 import CustomTable from '../../../components/CustomTable'
 import UserAvatar from '../../../components/AvatarComponents'
 import PopoverList from '../../../components/PopoverList'
+import TooltipEllipsis from '../../../components/TooltipEllipsis'
 
 // redux
 import { RootState } from '../../../reducers'
+import { getEmployees, reorderEmployees } from '../../../reducers/employees/employeesActions'
 
 // assets
+import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline.svg'
+import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.svg'
 
 // types
 import { Columns } from '../../../types/interfaces'
@@ -32,12 +39,12 @@ type Props = {
 	salonID: string
 }
 
-const DeletedEmployeesTable = (props: Props) => {
+const EmployeesTable = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { parentPath, query, setQuery } = props
+	const { parentPath, query, setQuery, salonID } = props
 	const navigate = useNavigate()
-	const deletedEmployees = useSelector((state: RootState) => state.employees.deletedEmployees)
+	const activeEmployees = useSelector((state: RootState) => state.employees.activeEmployees)
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 
@@ -91,12 +98,7 @@ const DeletedEmployeesTable = (props: Props) => {
 			render: (_value, record) => {
 				return (
 					<>
-						<UserAvatar
-							className='mr-2-5 w-7 h-7'
-							style={{ filter: 'grayscale(100)' }}
-							src={record?.image?.resizedImages?.thumbnail}
-							fallBackSrc={record?.image?.original}
-						/>
+						<UserAvatar className='mr-2-5 w-7 h-7' src={record?.image?.resizedImages?.thumbnail} fallBackSrc={record?.image?.original} />
 						{record?.firstName || record.lastName ? `${record?.firstName ?? ''} ${record?.lastName ?? ''}`.trim() : '-'}
 					</>
 				)
@@ -137,14 +139,78 @@ const DeletedEmployeesTable = (props: Props) => {
 			render: (value) => {
 				return value && value.length ? <PopoverList elements={value.map((service: any) => ({ name: service.category.name }))} /> : '-'
 			}
+		},
+		{
+			title: t('loc:Stav konta'),
+			dataIndex: 'hasActiveAccount',
+			key: 'status',
+			ellipsis: true,
+			sorter: true,
+			width: 90,
+			sortOrder: setOrder(query.order, 'status'),
+			render: (value, record) => (
+				<div className={'flex justify-center'}>
+					{value === false && !record?.inviteEmail ? (
+						<TooltipEllipsis title={t('loc:Nespárované')}>
+							<QuestionIcon width={20} height={20} />
+						</TooltipEllipsis>
+					) : undefined}
+					{value === false && record?.inviteEmail ? (
+						<TooltipEllipsis title={t('loc:Čakajúce')}>
+							<CloudOfflineIcon width={20} height={20} />
+						</TooltipEllipsis>
+					) : undefined}
+				</div>
+			)
 		}
 	]
+
+	const handleDrop = useCallback(
+		async (oldIndex: number, newIndex: number) => {
+			try {
+				const employee = find(activeEmployees?.tableData, { orderIndex: oldIndex })
+				// oldIndex je v tomto pripade employee.orderIndex
+				if (employee?.id && oldIndex !== newIndex) {
+					// ordering v dnd libke je od 0 .. n ale na BE je od 1 ... n
+					const reorderedData = arrayMove(activeEmployees?.tableData, employee.orderIndex - 1, newIndex - 1)
+					// Akcia na update data v reduxe
+					dispatch(reorderEmployees(reorderedData))
+					// Update na BE
+					await patchReq(
+						`/api/b2b/admin/employees/{employeeID}/reorder`,
+						{ employeeID: employee?.id },
+						{ orderIndex: newIndex },
+						undefined,
+						NOTIFICATION_TYPE.NOTIFICATION,
+						true
+					)
+				}
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.error(e)
+			} finally {
+				// Data treba vzdy updatnut aj po uspesnom alebo neuspesom requeste. Aby sa pri dalsiom a dalsiom reorderi pracovalo s aktualne updatnutymi datami.
+				dispatch(
+					getEmployees({
+						page: query.page,
+						limit: query.limit,
+						order: query.order,
+						search: query.search,
+						accountState: query.accountState,
+						serviceID: query.serviceID,
+						salonID
+					})
+				)
+			}
+		},
+		[dispatch, activeEmployees.tableData, query.accountState, query.limit, query.order, query.page, query.search, query.serviceID, salonID]
+	)
 
 	return (
 		<Row gutter={ROW_GUTTER_X_DEFAULT}>
 			<Col span={24}>
 				<div className='content-body'>
-					<Spin spinning={deletedEmployees?.isLoading}>
+					<Spin spinning={activeEmployees?.isLoading}>
 						<Permissions
 							allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
@@ -165,23 +231,23 @@ const DeletedEmployeesTable = (props: Props) => {
 							className='table-fixed'
 							onChange={onChangeTable}
 							columns={columns}
-							dataSource={deletedEmployees?.tableData}
+							dataSource={activeEmployees?.tableData}
 							rowClassName={'clickable-row'}
+							dndDrop={handleDrop}
 							twoToneRows
 							scroll={{ x: 800 }}
 							onRow={(record) => ({
-								className: 'noti-table-deleted-columns',
 								onClick: () => {
 									navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id })))
 								}
 							})}
 							useCustomPagination
 							pagination={{
-								pageSize: deletedEmployees?.data?.pagination?.limit,
-								total: deletedEmployees?.data?.pagination?.totalCount,
-								current: deletedEmployees?.data?.pagination?.page,
+								pageSize: activeEmployees?.data?.pagination?.limit,
+								total: activeEmployees?.data?.pagination?.totalCount,
+								current: activeEmployees?.data?.pagination?.page,
 								onChange: onChangePagination,
-								disabled: deletedEmployees?.isLoading
+								disabled: activeEmployees?.isLoading
 							}}
 						/>
 					</Spin>
@@ -191,4 +257,4 @@ const DeletedEmployeesTable = (props: Props) => {
 	)
 }
 
-export default DeletedEmployeesTable
+export default EmployeesTable

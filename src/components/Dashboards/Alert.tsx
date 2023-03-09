@@ -9,7 +9,7 @@ type Props = {
 	icon?: React.ReactNode
 	title: React.ReactNode
 	subTitle?: React.ReactNode
-	message: React.ReactNode
+	message?: React.ReactNode
 	actionItem?: React.ReactNode
 	actionLabel?: string
 	onActionItemClick?: () => void

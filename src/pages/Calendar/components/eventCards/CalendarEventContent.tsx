@@ -45,7 +45,8 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 		isLastMultiDaylEventInCurrentRange,
 		isMultiDayEvent,
 		calendarBulkEvent,
-		isPlaceholder
+		isPlaceholder,
+		isImported
 	} = eventData || {}
 
 	const [searchParams] = useSearchParams({
@@ -106,11 +107,13 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 					timeLeftClassName={timeLeftClassName}
 				/>
 			)
-		case CALENDAR_EVENT_TYPE.RESERVATION: {
+		case CALENDAR_EVENT_TYPE.RESERVATION:
+		case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT: {
 			return (
 				<ReservationCard
 					calendarView={calendarView}
 					onReservationClick={onReservationClick}
+					onEditEvent={onEditEvent}
 					resourceId={resourceId}
 					start={start}
 					end={end}
@@ -130,6 +133,7 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 					isEdit={isEdit}
 					isPlaceholder={isPlaceholder}
 					timeLeftClassName={timeLeftClassName}
+					isImported={isImported}
 				/>
 			)
 		}

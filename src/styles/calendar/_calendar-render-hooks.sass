@@ -256,6 +256,8 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 				color: $textColor-notino-red
 			&.not-realized
 				color: $textColor-notino-red
+			&.import
+				color: $textColor-notino-black
 	&.multiday-event
 		.time
 			display: inline-flex
@@ -380,6 +382,15 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 						display: none
 					> .time
 						display: none
+			&.is-imported
+				.event-content
+					.title-wrapper
+						.title-inner-wrapper
+							.title
+								color: $textColor-notino-pink
+					.desc
+						white-space: normal
+						color: $textColor-notino-grayDark
 		&.shift,
 		&.timeoff,
 		&.break
@@ -389,7 +400,7 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 				gap: 4px
 				.event-info
 					display: flex
-					min-width: 0
+					min-width: 0f
 					justify-content: space-between
 					gap: 4px
 					.title
@@ -530,6 +541,14 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 							.clock,
 							.employee
 								display: none
+			&.is-imported
+				.event-content
+					.title-wrapper
+						.title-inner-wrapper
+							.title
+								color: $textColor-notino-pink
+					.desc
+						color: $textColor-notino-grayDark
 		&.shift,
 		&.timeoff,
 		&.break

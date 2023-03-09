@@ -4078,6 +4078,7 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
+                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -4594,6 +4595,7 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
+                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -4881,6 +4883,7 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
+                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -9454,6 +9457,7 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
+                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -9984,6 +9988,7 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
+                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -62328,7 +62333,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsHistory.Responses.$200>
   /**
-   * getApiB2BAdminSalonsSalonIdWalletsWalletId - Endpoint is used for getting wallet detail., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, READ_WALLET]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+   * getApiB2BAdminSalonsSalonIdWalletsWalletId - Endpoint is used for getting wallet detail., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
    */
   'getApiB2BAdminSalonsSalonIdWalletsWalletId'(
     parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.HeaderParameters> | null,
@@ -65073,7 +65078,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/salons/{salonID}/wallets/{walletID}']: {
     /**
-     * getApiB2BAdminSalonsSalonIdWalletsWalletId - Endpoint is used for getting wallet detail., permissions:<ul><li>notino: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, READ_WALLET]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
+     * getApiB2BAdminSalonsSalonIdWalletsWalletId - Endpoint is used for getting wallet detail., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN, READ_WALLET]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdWalletsWalletId.HeaderParameters> | null,

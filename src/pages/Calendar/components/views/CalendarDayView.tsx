@@ -3,7 +3,7 @@ import { Element } from 'react-scroll'
 import dayjs from 'dayjs'
 
 // full calendar
-import FullCalendar, { SlotLabelContentArg, DateSelectArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { SlotLabelContentArg, DateSelectArg, DateSpanApi } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
@@ -70,7 +70,9 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 	)
 }
 
-interface ICalendarDayView extends ICalendarView {}
+interface ICalendarDayView extends ICalendarView {
+	handleSelectAllow: (selectInfo: DateSpanApi) => boolean
+}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
 	const {
@@ -86,7 +88,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		enabledSalonReservations,
 		onEventChangeStart,
 		onReservationClick,
-		onEventChangeStop
+		onEventChangeStop,
+		handleSelectAllow
 	} = props
 
 	const events = useMemo(() => {
@@ -168,6 +171,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				eventDragStop={onEventChangeStop}
 				eventResizeStop={onEventChangeStop}
 				select={handleNewEvent}
+				selectAllow={handleSelectAllow}
 			/>
 		</div>
 	)

@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { filter, map } from 'lodash'
+import { map } from 'lodash'
 import { ThunkResult } from '../index'
 import { ACTIVE_EMPLOYEES, DELETED_EMPLOYEES, EMPLOYEE, EMPLOYEES } from './employeesTypes'
 
@@ -8,7 +8,6 @@ import { getReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
 import { IResetStore } from '../generalTypes'
 import { IQueryParams, IEmployeePayload, IEmployeesPayload, IDeletedEmployeesPayload, IActiveEmployeesPayload } from '../../types/interfaces'
-import { Paths } from '../../types/api'
 
 export type IEmployeesActions = IResetStore | IGetEmployees | IGetEmployee | IGetDeletedEmployees | IGetActiveEmployees
 
@@ -114,7 +113,7 @@ export const getActiveEmployees =
 			dispatch({ type: ACTIVE_EMPLOYEES.ACTIVE_EMPLOYEES_LOAD_START })
 
 			const { data } = await getReq('/api/b2b/admin/employees/', { ...normalizeQueryParams({ ...queryParams, deleted: false }) })
-			console.log('data', data)
+
 			const tableData = map(data.employees, (employee) => ({
 				...employee,
 				key: employee.orderIndex
@@ -135,6 +134,7 @@ export const getActiveEmployees =
 		return payload
 	}
 
+// reorder aktivovanych pouzivatelov
 export const reorderEmployees =
 	(reorderedTableData: IEmployeesPayload['tableData']): ThunkResult<void> =>
 	async (dispatch) => {

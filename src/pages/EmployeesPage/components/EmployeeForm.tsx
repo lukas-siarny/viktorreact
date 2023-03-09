@@ -2,7 +2,7 @@ import React, { FC, MouseEventHandler } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Divider, Form, Space, Button } from 'antd'
+import { Divider, Form, Space, Button, Tag } from 'antd'
 import { isEmpty } from 'lodash'
 
 // utils
@@ -51,9 +51,16 @@ const EmployeeForm: FC<Props> = (props) => {
 			<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 				<Space className={'w-full px-9'} direction='vertical' size={36}>
 					<div>
-						<h3 className={'mb-0 mt-0 flex items-center'}>
-							<InfoIcon className={'text-notino-black mr-2'} /> {t('loc:Osobné údaje')}
-						</h3>
+						<div className={'flex justify-between'}>
+							<h3 className={'mb-0 mt-0 flex items-center'}>
+								<InfoIcon className={'text-notino-black mr-2'} /> {t('loc:Osobné údaje')}
+							</h3>
+							{readOnly && (
+								<Tag className={'noti-tag danger'}>
+									<span>{t('loc:Vymazaný')}</span>
+								</Tag>
+							)}
+						</div>
 						<Divider className={'mb-3 mt-3'} />
 						<div className={'flex space-between w-full'}>
 							<Field
@@ -139,7 +146,7 @@ const EmployeeForm: FC<Props> = (props) => {
 													openForbiddenModal()
 												}
 											}}
-											disabled={isEmpty(formValues?.service)}
+											disabled={isEmpty(formValues?.service) || readOnly}
 										>
 											{STRINGS(t).addRecord(t('loc:služby'))}
 										</Button>
@@ -149,6 +156,7 @@ const EmployeeForm: FC<Props> = (props) => {
 							<FieldArray
 								component={ServicesListField as any}
 								name={'services'}
+								readOnly={readOnly}
 								currencySymbol={salon.data?.currency.symbol}
 								isEmployeeDetail
 								setVisibleServiceEditModal={setVisibleServiceEditModal}

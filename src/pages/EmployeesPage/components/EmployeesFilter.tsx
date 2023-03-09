@@ -22,6 +22,7 @@ import { RootState } from '../../../reducers'
 
 type ComponentProps = {
 	createEmployee: Function
+	hide?: boolean
 }
 
 export interface IEmployeesFilter {
@@ -35,7 +36,7 @@ type Props = InjectedFormProps<IEmployeesFilter, ComponentProps> & ComponentProp
 const fixLength100 = validationString(100)
 
 const EmployeesFilter = (props: Props) => {
-	const { handleSubmit, createEmployee } = props
+	const { handleSubmit, createEmployee, hide } = props
 	const [t] = useTranslation()
 	const servicesOptions = useSelector((state: RootState) => state.service.services.options)
 
@@ -60,7 +61,7 @@ const EmployeesFilter = (props: Props) => {
 		/>
 	)
 
-	const customContent = (
+	const customContent = !hide && (
 		<Button onClick={() => createEmployee()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
 			{t('loc:Pridať zamestnanca')}
 		</Button>

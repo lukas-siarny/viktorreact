@@ -39,7 +39,7 @@ type Props = {
 	salonID: string
 }
 
-const EmployeesTable = (props: Props) => {
+const ActiveEmployeesTable = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const { parentPath, query, setQuery, salonID } = props
@@ -257,4 +257,4 @@ const EmployeesTable = (props: Props) => {
 	)
 }
 
-export default EmployeesTable
+export default ActiveEmployeesTable

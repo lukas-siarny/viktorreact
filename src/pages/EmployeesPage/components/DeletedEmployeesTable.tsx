@@ -149,6 +149,7 @@ const DeletedEmployeesTable = (props: Props) => {
 							allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<EmployeesFilter
+									hide
 									createEmployee={() => {
 										if (hasPermission) {
 											navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/create')))

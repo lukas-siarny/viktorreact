@@ -22,7 +22,7 @@ import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 // hooks
 import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
 import TabsComponent from '../../components/TabsComponent'
-import EmployeesTable from './components/EmployeesTable'
+import ActiveEmployeesTable from './components/ActiveEmployeesTable'
 import DeletedEmployeesTable from './components/DeletedEmployeesTable'
 
 enum TAB_KEYS {
@@ -35,8 +35,6 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	const dispatch = useDispatch()
 	const { salonID, parentPath } = props
 
-	const [tabKey, setTabKey] = useState<TAB_KEYS | undefined>(TAB_KEYS.DELETED)
-
 	const [query, setQuery] = useQueryParams({
 		search: StringParam(),
 		limit: NumberParam(),
@@ -44,8 +42,11 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		order: StringParam('orderIndex:asc'),
 		accountState: StringParam(),
 		serviceID: StringParam(),
-		salonID: StringParam()
+		salonID: StringParam(),
+		employeeState: StringParam(TAB_KEYS.DELETED)
 	})
+
+	const [tabKey, setTabKey] = useState<TAB_KEYS | undefined>(query.employeeState || TAB_KEYS.DELETED)
 
 	useEffect(() => {
 		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search, serviceID: query.serviceID, accountState: query.accountState }))
@@ -87,7 +88,6 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			}
 		]
 	}
-
 	const onTabChange = (key: any) => {
 		// NOTE: ak sa zmeni tab a v jednom by ostali query params tak treba premazat kedze to nie je robotene ako osobitne page
 		setQuery({
@@ -96,7 +96,8 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			order: undefined,
 			search: undefined,
 			accountState: undefined,
-			serviceID: undefined
+			serviceID: undefined,
+			employeeState: key
 		})
 		setTabKey(key)
 	}
@@ -104,7 +105,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		{
 			key: TAB_KEYS.ACTIVE,
 			label: <>{t('loc:Aktívni')}</>,
-			children: <EmployeesTable parentPath={parentPath} query={query} setQuery={setQuery} salonID={salonID} />
+			children: <ActiveEmployeesTable parentPath={parentPath} query={query} setQuery={setQuery} salonID={salonID} />
 		},
 		{
 			key: TAB_KEYS.DELETED,

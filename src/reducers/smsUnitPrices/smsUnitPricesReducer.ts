@@ -1,8 +1,8 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
-import { ISmsUnitPricesActualPayload, ISmsUnitPricesPayload, ISmsUnitPricesActions } from './smsUnitPricesActions'
+import { ISmsUnitPricesActualPayload, ISmsUnitPricesPayload, ISmsUnitPricesActions, ISmsUnitPricePayload } from './smsUnitPricesActions'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { SMS_UNIT_PRICES, SMS_UNIT_PRICES_ACTUAL } from './smsUnitPricesTypes'
+import { SMS_UNIT_PRICE, SMS_UNIT_PRICES, SMS_UNIT_PRICES_ACTUAL } from './smsUnitPricesTypes'
 
 export const initState = {
 	smsUnitPricesActual: {
@@ -14,7 +14,12 @@ export const initState = {
 		data: null,
 		isLoading: false,
 		isFailure: false
-	} as ISmsUnitPricesPayload & ILoadingAndFailure
+	} as ISmsUnitPricesPayload & ILoadingAndFailure,
+	smsUnitPrice: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as ISmsUnitPricePayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -65,6 +70,30 @@ export default (state = initState, action: ISmsUnitPricesActions) => {
 				...state,
 				smsUnitPrices: {
 					...initState.smsUnitPrices,
+					data: action.payload.data
+				}
+			}
+		case SMS_UNIT_PRICE.SMS_UNIT_PRICE_START:
+			return {
+				...state,
+				smsUnitPrice: {
+					...state.smsUnitPrice,
+					isLoading: true
+				}
+			}
+		case SMS_UNIT_PRICE.SMS_UNIT_PRICE_FAIL:
+			return {
+				...state,
+				smsUnitPrice: {
+					...initState.smsUnitPrice,
+					isFailure: true
+				}
+			}
+		case SMS_UNIT_PRICE.SMS_UNIT_PRICE_DONE:
+			return {
+				...state,
+				smsUnitPrice: {
+					...initState.smsUnitPrice,
 					data: action.payload.data
 				}
 			}

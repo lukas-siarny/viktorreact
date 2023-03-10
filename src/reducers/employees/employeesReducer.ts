@@ -22,6 +22,7 @@ export const initState = {
 	activeEmployees: {
 		data: null,
 		tableData: [],
+		options: [],
 		isLoading: false,
 		isFailure: false
 	} as IActiveEmployeesPayload & ILoadingAndFailure,
@@ -85,7 +86,8 @@ export default (state = initState, action: IEmployeesActions) => {
 				deletedEmployees: {
 					...initState.deletedEmployees,
 					data: action.payload.data,
-					tableData: action.payload.tableData
+					tableData: action.payload.tableData,
+					options: action.payload.options
 				}
 			}
 		// Active Employees

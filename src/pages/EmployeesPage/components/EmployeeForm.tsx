@@ -45,7 +45,7 @@ const EmployeeForm: FC<Props> = (props) => {
 	const formValues: Partial<IEmployeeForm> = useSelector((state: RootState) => getFormValues(FORM.EMPLOYEE)(state))
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const services = useSelector((state: RootState) => state.service.services)
-	const readOnly = !!formValues?.deletedAt
+	const disabled = !!formValues?.deletedAt
 	return (
 		<>
 			<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -55,7 +55,7 @@ const EmployeeForm: FC<Props> = (props) => {
 							<h3 className={'mb-0 mt-0 flex items-center'}>
 								<InfoIcon className={'text-notino-black mr-2'} /> {t('loc:Osobné údaje')}
 							</h3>
-							{readOnly && (
+							{disabled && (
 								<Tag className={'noti-tag danger'}>
 									<span>{t('loc:Vymazaný')}</span>
 								</Tag>
@@ -76,7 +76,7 @@ const EmployeeForm: FC<Props> = (props) => {
 							/>
 							<div className={'flex-1'}>
 								<Field
-									readOnly={readOnly}
+									disabled={disabled}
 									component={InputField}
 									label={t('loc:Meno')}
 									placeholder={t('loc:Zadajte meno')}
@@ -85,7 +85,7 @@ const EmployeeForm: FC<Props> = (props) => {
 									required
 								/>
 								<Field
-									readOnly={readOnly}
+									disabled={disabled}
 									component={InputField}
 									label={t('loc:Priezvisko')}
 									placeholder={t('loc:Zadajte priezvisko')}
@@ -96,10 +96,10 @@ const EmployeeForm: FC<Props> = (props) => {
 							</div>
 						</div>
 
-						<Field readOnly={readOnly} component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
+						<Field disabled={disabled} component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
 
 						<PhoneWithPrefixField
-							readOnly={readOnly}
+							disabled={disabled}
 							label={'Telefón'}
 							placeholder={t('loc:Zadajte telefón')}
 							size={'large'}
@@ -120,7 +120,7 @@ const EmployeeForm: FC<Props> = (props) => {
 									size={'large'}
 									className={'flex-1'}
 									component={SelectField}
-									readOnly={readOnly}
+									disabled={disabled}
 									filterOption={true}
 									allowClear
 									placeholder={t('loc:Vyberte službu')}
@@ -148,7 +148,7 @@ const EmployeeForm: FC<Props> = (props) => {
 													openForbiddenModal()
 												}
 											}}
-											disabled={isEmpty(formValues?.service) || readOnly}
+											disabled={isEmpty(formValues?.service) || disabled}
 										>
 											{STRINGS(t).addRecord(t('loc:služby'))}
 										</Button>
@@ -158,7 +158,7 @@ const EmployeeForm: FC<Props> = (props) => {
 							<FieldArray
 								component={ServicesListField as any}
 								name={'services'}
-								readOnly={readOnly}
+								disabled={disabled}
 								currencySymbol={salon.data?.currency.symbol}
 								isEmployeeDetail
 								setVisibleServiceEditModal={setVisibleServiceEditModal}

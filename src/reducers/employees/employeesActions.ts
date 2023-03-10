@@ -38,7 +38,7 @@ export interface IGetEmployeesQueryParams extends IQueryParams {
 }
 
 export const getEmployees =
-	(queryParams: IGetEmployeesQueryParams): ThunkResult<Promise<IEmployeesPayload>> =>
+	(queryParams: IGetEmployeesQueryParams, disableDeletedEmployees?: boolean): ThunkResult<Promise<IEmployeesPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IEmployeesPayload
 		try {
@@ -53,6 +53,7 @@ export const getEmployees =
 						email: employee.email,
 						id: employee.id
 					}),
+					disabled: !!(disableDeletedEmployees && employee.deletedAt),
 					value: employee.id,
 					key: `${employee.id}-key`,
 					color: employee.color
@@ -118,6 +119,20 @@ export const getActiveEmployees =
 
 			const { data } = await getReq('/api/b2b/admin/employees/', { ...normalizeQueryParams({ ...queryParams, deleted: false }) })
 
+			const employeesOptions = map(data.employees, (employee) => {
+				return {
+					label: getAssignedUserLabel({
+						firstName: employee.firstName,
+						lastName: employee.lastName,
+						email: employee.email,
+						id: employee.id
+					}),
+					value: employee.id,
+					key: `${employee.id}-key`,
+					color: employee.color
+				}
+			})
+
 			const tableData = map(data.employees, (employee) => ({
 				...employee,
 				key: employee.orderIndex
@@ -125,7 +140,8 @@ export const getActiveEmployees =
 
 			payload = {
 				data,
-				tableData
+				tableData,
+				options: employeesOptions
 			}
 
 			dispatch({ type: ACTIVE_EMPLOYEES.ACTIVE_EMPLOYEES_LOAD_DONE, payload })

@@ -9,7 +9,7 @@ import { getNotinoUsers, getUsers } from '../reducers/users/userActions'
 import { getEmployees } from '../reducers/employees/employeesActions'
 import { getCosmetics } from '../reducers/cosmetics/cosmeticsActions'
 
-const getSearchFn = (type: FILTER_ENTITY): ((params: IQueryParams) => ThunkResult<Promise<ISearchable<any> | ISearchableWithoutPagination<any>>>) => {
+const getSearchFn = (type: FILTER_ENTITY): ((params: IQueryParams, disabled?: boolean) => ThunkResult<Promise<ISearchable<any> | ISearchableWithoutPagination<any>>>) => {
 	switch (type) {
 		case FILTER_ENTITY.EMPLOYEE:
 			return getEmployees
@@ -37,11 +37,12 @@ const searchWrapper = async (
 	dispatch: Dispatch<Action>,
 	queryParams: IQueryParams,
 	entity: FILTER_ENTITY,
-	modifyOptions?: (originalOptions?: ISelectOptionItem[]) => ISelectOptionItem[]
+	modifyOptions?: (originalOptions?: ISelectOptionItem[]) => ISelectOptionItem[],
+	disabled?: boolean // NOTE: toto ide az do akcie a ked je to true tak sa spravi porovnanie podla nami zvoleneho kriteria na disabled (v getEmployees to bude ze kazdy option bude disabled ak je deletedAt)
 ) => {
 	try {
 		const searchFn = getSearchFn(entity)
-		const { data, options } = await dispatch(searchFn(queryParams))
+		const { data, options } = await dispatch(searchFn(queryParams, disabled))
 		return { pagination: data?.pagination, page: data?.pagination?.page, data: modifyOptions ? modifyOptions(options) : options }
 	} catch (error) {
 		// eslint-disable-next-line no-console

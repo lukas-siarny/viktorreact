@@ -8,7 +8,7 @@ import dayjs from 'dayjs'
 // redux
 import { RootState } from '../../../reducers'
 import { getServices } from '../../../reducers/services/serviceActions'
-import { getEmployees } from '../../../reducers/employees/employeesActions'
+import { getActiveEmployees } from '../../../reducers/employees/employeesActions'
 import { getCustomers } from '../../../reducers/customers/customerActions'
 
 // utils
@@ -50,7 +50,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 		if (selectedSalon?.data) {
 			dispatch(getServices({ salonID: selectedSalon.data.id }))
 			dispatch(getCustomers({ salonID: selectedSalon.data.id, page: 1 }))
-			dispatch(getEmployees({ salonID: selectedSalon.data.id, page: 1 }))
+			dispatch(getActiveEmployees({ salonID: selectedSalon.data.id, page: 1 }))
 		}
 	}, [dispatch, selectedSalon?.data])
 

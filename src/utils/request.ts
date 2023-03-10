@@ -59,11 +59,12 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 		showNotifications(messages, typeNotification)
 	} else if (messages.some((msg: any) => msg.code === ERROR_MSG_CODE.MISSING_COUNTRY_CODE)) {
 		const urlArray = split(get(error, 'config.url'), '/')
-		const validSalonID = urlArray[5].split('-').length === 5 ? urlArray[5] : '' // must be valid GUID
+		const salonsIndex = urlArray.indexOf(i18next.t('loc:salons'))
+		const salonId = urlArray[salonsIndex + 1]
 		showNotificationModal({
 			message: i18next.t('loc:Na vykonanie požadovanej akcie je potrebné mať nastavenú adresu salónu.'),
 			actionButtonLabel: i18next.t('loc:Nastaviť adresu'),
-			action: validSalonID ? () => Navigator.navigate(`${i18next.t('paths:salons')}/${validSalonID}`) : undefined
+			action: salonId ? () => Navigator.navigate(`${i18next.t('paths:salons')}/${salonId}`) : undefined
 		})
 	} else {
 		// if BE do not send message set general error message

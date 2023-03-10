@@ -2,7 +2,7 @@ import { FormErrors } from 'redux-form'
 import i18next from 'i18next'
 import { isEmail } from 'lodash-checkit'
 import { z, ZodString, ZodOptional, ZodNullable } from 'zod'
-import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { VALIDATION_MAX_LENGTH, GENDER } from '../../../utils/enums'
 import { ICustomerForm } from '../../../types/interfaces'
 
 const imageConstraint = z.object({
@@ -61,8 +61,8 @@ export const customerSchema = z.object({
 	city: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100),
 	zipCode: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_10),
 	streetNumber: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_10),
-	gender: z.string().nullish(),
-	galleryImageIDs: imageConstraint.array().optional(),
+	gender: z.nativeEnum(GENDER).optional(),
+	galleryImageIDs: imageConstraint.array().max(100).optional(),
 	profileImageID: imageConstraint.array().max(1).optional()
 })
 

@@ -95,7 +95,7 @@ const EmployeeForm: FC<Props> = (props) => {
 								/>
 							</div>
 						</div>
-						
+
 						<Field readOnly={readOnly} component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
 
 						<PhoneWithPrefixField

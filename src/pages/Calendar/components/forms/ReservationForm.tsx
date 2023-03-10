@@ -329,7 +329,7 @@ const ReservationForm: FC<Props> = (props) => {
 				<Spin spinning={eventDetail.isLoading || employeesLoading} size='large'>
 					<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 						<Permissions
-							allowed={[PERMISSION.CUSTOMER_CREATE]}
+							allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<div className='relative'>
 									<CalendarDetailPopover />

@@ -22,7 +22,7 @@ import TooltipEllipsis from '../../../components/TooltipEllipsis'
 
 // redux
 import { RootState } from '../../../reducers'
-import { getEmployees, reorderEmployees } from '../../../reducers/employees/employeesActions'
+import { getActiveEmployees, reorderEmployees } from '../../../reducers/employees/employeesActions'
 
 // assets
 import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline.svg'
@@ -183,7 +183,7 @@ const ActiveEmployeesTable = (props: Props) => {
 			} finally {
 				// Data treba vzdy updatnut aj po uspesnom alebo neuspesom requeste. Aby sa pri dalsom a dalsom reorderi pracovalo s aktualne updatnutymi datami.
 				dispatch(
-					getEmployees({
+					getActiveEmployees({
 						page: query.page,
 						limit: query.limit,
 						order: query.order,

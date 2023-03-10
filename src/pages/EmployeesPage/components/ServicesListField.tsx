@@ -34,6 +34,7 @@ type ComponentProps = {
 	disabledEditButtonTooltip?: string
 	// ak sa to rendruje vramci detailu zamestnanca
 	isEmployeeDetail?: boolean
+	disabled?: boolean
 }
 
 type Props = WrappedFieldArrayProps<EmployeeServiceData> & ComponentProps
@@ -78,7 +79,8 @@ const ServicesListField: FC<Props> = (props) => {
 		setVisibleServiceEditModal,
 		disabledEditButton = false,
 		disabledEditButtonTooltip = t('loc:Pred editáciou služby zamestnanca je najprv potrebné uložiť rozpracované zmeny vo formulári.'),
-		isEmployeeDetail = true
+		isEmployeeDetail = true,
+		disabled
 	} = props
 	const dispatch = useDispatch()
 
@@ -103,9 +105,9 @@ const ServicesListField: FC<Props> = (props) => {
 											size={'small'}
 											icon={<EditIcon />}
 											className={cx('ant-btn noti-btn', {
-												'pointer-events-none': disabledEditButton
+												'pointer-events-none': disabledEditButton || disabled
 											})}
-											disabled={disabledEditButton}
+											disabled={disabledEditButton || disabled}
 											onClick={(e) => {
 												e.stopPropagation()
 												if (hasPermission) {
@@ -135,6 +137,7 @@ const ServicesListField: FC<Props> = (props) => {
 										openForbiddenModal()
 									}
 								}}
+								disabled={disabled}
 								onCancel={(e) => e?.stopPropagation()}
 								smallIcon
 								onClick={(e) => e.stopPropagation()}

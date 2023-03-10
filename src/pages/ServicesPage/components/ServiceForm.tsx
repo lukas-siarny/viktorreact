@@ -88,7 +88,7 @@ const ServiceForm: FC<Props> = (props) => {
 
 	const searchEmployees = useCallback(
 		async (search: string, page: number) => {
-			return searchWrapper(dispatch, { page, search, salonID } as any, FILTER_ENTITY.EMPLOYEE)
+			return searchWrapper(dispatch, { page, search, salonID } as any, FILTER_ENTITY.EMPLOYEE, undefined, true)
 		},
 		[dispatch, salonID]
 	)

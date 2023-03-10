@@ -53,7 +53,7 @@ export enum MSG_TYPE {
 	SUCCESS = 'SUCCESS'
 }
 
-export enum MSG_CODE {
+export enum ERROR_MSG_CODE {
 	MISSING_COUNTRY_CODE = 'MISSING_COUNTRY_CODE'
 }
 

@@ -4,7 +4,7 @@ import { message as antMessage } from 'antd'
 import { get, has, isEmpty, split } from 'lodash'
 import i18next from 'i18next'
 import qs from 'qs'
-import { MSG_CODE, CANCEL_TOKEN_MESSAGES, MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES } from './enums'
+import { ERROR_MSG_CODE, CANCEL_TOKEN_MESSAGES, MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES } from './enums'
 import rootReducer from '../reducers'
 import { logOutUser } from '../reducers/users/userActions'
 import { getAccessToken, isLoggedIn } from './auth'
@@ -57,7 +57,7 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 			}
 		]
 		showNotifications(messages, typeNotification)
-	} else if (messages.some((msg: any) => msg.code === MSG_CODE.MISSING_COUNTRY_CODE)) {
+	} else if (messages.some((msg: any) => msg.code === ERROR_MSG_CODE.MISSING_COUNTRY_CODE)) {
 		const urlArray = split(get(error, 'config.url'), '/')
 		const validSalonID = urlArray[5].split('-').length === 5 ? urlArray[5] : '' // must be valid GUID
 		showNotificationModal({

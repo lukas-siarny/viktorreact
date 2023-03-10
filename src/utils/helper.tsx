@@ -1395,5 +1395,3 @@ export const normalizeDataById = <T extends { id: string }>(data?: T[] | null): 
 }
 
 export const formatPrice = (price: number, symbol?: string) => (!isNil(price) ? `${price} ${symbol || ''}`.trim() : '')
-
-export const isValidUuid = (id: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)

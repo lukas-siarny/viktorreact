@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import dayjs from 'dayjs'
 import useResizeObserver from '@react-hook/resize-observer'
+import cx from 'classnames'
 
 // full calendar
 import FullCalendar, { DateSelectArg, DateSpanApi, EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
@@ -57,7 +58,7 @@ const resourceAreaColumns = [
 			const employee = extendedProps?.employee
 
 			return (
-				<div className={'nc-week-label-resource'}>
+				<div className={cx('nc-week-label-resource', { 'is-deleted': employee?.isDeleted })}>
 					<div className={'image'} style={{ backgroundImage: `url("${employee?.image}")`, borderColor: eventBackgroundColor }} />
 					<span className={'info block text-xs font-normal min-w-0 truncate max-w-full'}>{employee?.name}</span>
 					{employee?.isTimeOff && (

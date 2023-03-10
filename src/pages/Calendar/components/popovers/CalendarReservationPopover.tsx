@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import React, { FC, useEffect, useCallback, useRef } from 'react'
-import { Button, Col, Divider, Dropdown, Popover, Row, Tag } from 'antd'
+import { Button, Col, Divider, Dropdown, Popover, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { ItemType } from 'antd/lib/menu/hooks/useItems'
 import { useSelector } from 'react-redux'
@@ -9,6 +9,7 @@ import colors from 'tailwindcss/colors'
 import i18next from 'i18next'
 import { ButtonProps } from 'antd/es/button'
 import { isPristine } from 'redux-form'
+import cx from 'classnames'
 
 // assets
 import { ReactComponent as EditIcon } from '../../../../assets/icons/edit-icon-16.svg'
@@ -141,7 +142,6 @@ const PopoverContent: FC<ContentProps> = (props) => {
 												{prefix && customer.phone && <span className={'text-xxs text-notino-grayDark leading-3'}>{`${prefix} ${customer.phone}`}</span>}
 											</Row>
 											<Row align={'middle'} className={'gap-2 h-8'} wrap={false}>
-												{/* <Tag className={'nc-tag tag-new'}>{t('loc:Nový klient')}</Tag> */}
 												{customer.email && (
 													<a href={`mailto:${customer.email}`} className={'leading-3'}>
 														<MessageIcon />
@@ -177,7 +177,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 									</div>
 									<UserAvatar
 										size={24}
-										className={'shrink-0 mt-1'}
+										className={cx('employee-avatar shrink-0 mt-1', { 'is-deleted': employee?.isDeleted })}
 										src={employee?.image?.resizedImages?.thumbnail}
 										style={{ border: `2px solid ${color || colors.neutral[200]}` }}
 									/>
@@ -196,7 +196,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 											<Col flex={'auto'}>
 												<Row className={'gap-1'} align={'top'}>
 													<Ellipsis text={note.text} className={'m-0 p-0 whitespace-pre-wrap flex-1'} />
-													{note.internal && <Tag className={'nc-tag'}>{t('loc:Interná')}</Tag>}
+													{note.internal && <span className={'nc-tag'}>{t('loc:Interná')}</span>}
 												</Row>
 											</Col>
 										</div>

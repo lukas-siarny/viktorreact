@@ -259,9 +259,7 @@ export interface ICalendarReservationForm {
 		categoryId?: string
 		serviceData?: NonNullable<ICalendarEventDetailPayload['data']>['service']
 	}>
-	employee: ISelectOptionItem<{
-		employeeData?: Employee
-	}>
+	employee: ICalendarEmployeeOptionItem
 	date: string
 	timeFrom: string
 	timeTo: string
@@ -275,9 +273,7 @@ export interface ICalendarReservationForm {
 	eventType: CALENDAR_EVENT_TYPE
 }
 export interface ICalendarEventForm {
-	employee: ISelectOptionItem<{
-		employeeData?: Employee
-	}>
+	employee: ICalendarEmployeeOptionItem
 	date: string
 	timeFrom: string
 	timeTo: string
@@ -768,7 +764,7 @@ export interface IActiveEmployeesPayload extends ISearchable<Paths.GetApiB2BAdmi
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]
-export type CalendarEmployee = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0] & { orderIndex: number, inviteEmail?: string, isForImportedEvents: boolean }
+export type CalendarEmployee = Pick<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0], 'id' | 'color' | 'firstName' | 'lastName' | 'email' | 'image' | 'inviteEmail' | 'orderIndex'> & { orderIndex: number, inviteEmail?: string, isForImportedEvents: boolean; isDeleted?: boolean }
 export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
 export type CalendarEvent = CalendarEvents[0] & {
 	startDateTime: string
@@ -781,6 +777,13 @@ export type CalendarEvent = CalendarEvents[0] & {
 	isPlaceholder?: boolean
 	isImported: boolean
 }
+
+export type ICalendarEmployeeOptionItem = ISelectOptionItem<{
+	employeeData: CalendarEmployee
+	thumbnail: string
+	color: string
+	isDeleted: boolean
+}>
 
 export interface ICalendarEventsPayload {
 	data: CalendarEvent[] | null
@@ -796,6 +799,10 @@ export interface ICalendarMonthlyReservationsPayload {
 	data: ICalendarMonthlyViewDay | null
 }
 
+export interface ICalendarEmployeesPayload {
+	data: CalendarEmployee[] | null
+	options: ICalendarEmployeeOptionItem[]
+}
 export interface ICalendarView {
 	selectedDate: string
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
@@ -914,6 +921,7 @@ export interface IResourceEmployee {
 	color?: string
 	description?: string
 	isForImportedEvents?: boolean
+	isDeleted?: boolean
 }
 
 export interface IDayViewResourceExtenedProps {

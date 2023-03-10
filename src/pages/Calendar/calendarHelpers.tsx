@@ -369,13 +369,14 @@ const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeO
 			id: employee.id,
 			firstName: employee.firstName,
 			lastName: employee?.lastName,
-			email: employee.email
+			email: employee.email || employee.inviteEmail
 		}),
 		color: employee.color,
 		image: employee.image.resizedImages.thumbnail,
 		description,
 		isTimeOff,
-		isForImportedEvents: employee.isForImportedEvents
+		isForImportedEvents: employee.isForImportedEvents,
+		isDeleted: employee.isDeleted
 	}
 }
 

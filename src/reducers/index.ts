@@ -211,7 +211,7 @@ const rootReducer = combineReducers({
 	),
 	calendarEmployees: persistReducer(
 		{
-			key: REDUCER_KEYS.REVIEWS,
+			key: REDUCER_KEYS.CALENDAR_EMPLOYEES,
 			storage: storageSession
 		},
 		calendarEmployeesReducer

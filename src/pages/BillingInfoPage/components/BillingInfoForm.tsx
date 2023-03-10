@@ -17,7 +17,7 @@ import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
 import { ReactComponent as LocationIcon } from '../../../assets/icons/location-16.svg'
 
 // utils
-import { PERMISSION, FORM, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { PERMISSION, FORM, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 import { formFieldID, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
@@ -161,6 +161,7 @@ const BillingInfoForm = (props: Props) => {
 										className={'w-1/6'}
 										component={InputField}
 										label={t('loc:Popisné číslo')}
+										maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 										placeholder={t('loc:Zadajte číslo')}
 										name={'streetNumber'}
 										size={'large'}

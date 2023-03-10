@@ -1,6 +1,7 @@
 /* eslint-disable import/no-cycle */
+import { ICalendarEmployeesPayload } from '../../types/interfaces'
 import { RESET_STORE } from '../generalTypes'
-import { ICalendarEmployeesActions, ICalendarEmployeesPayload } from './calendarEmployeesActions'
+import { ICalendarEmployeesActions } from './calendarEmployeesActions'
 import { SET_CALENDAR_EMPLOYEES } from './calendarEmployeesTypes'
 
 // eslint-disable-next-line import/prefer-default-export

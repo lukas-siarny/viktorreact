@@ -22,8 +22,7 @@ import { CALENDAR_DEBOUNCE_DELAY, CALENDAR_EVENTS_VIEW_TYPE, FORM } from '../../
 import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
 // types
-import { ICalendarFilter } from '../../../../types/interfaces'
-import { ICalendarEmployeesPayload } from '../../../../reducers/calendarEmployees/calendarEmployeesActions'
+import { ICalendarEmployeesPayload, ICalendarFilter } from '../../../../types/interfaces'
 
 type ComponentProps = {
 	parentPath: string

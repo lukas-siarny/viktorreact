@@ -17,7 +17,7 @@ import { getReq, postReq } from '../../../../utils/request'
 import { CALENDAR_EVENT_TYPE, DEFAULT_TIME_FORMAT, ENUMERATIONS_KEYS, FORM, PERMISSION, CREATE_EVENT_PERMISSIONS, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // types
-import { EmployeeService, ICalendarReservationForm, ICustomerForm, ServiceType } from '../../../../types/interfaces'
+import { EmployeeService, ICalendarEmployeesPayload, ICalendarReservationForm, ICustomerForm, ServiceType } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
@@ -40,13 +40,13 @@ import ConfirmModal from '../../../../atoms/ConfirmModal'
 // redux
 import { RootState } from '../../../../reducers'
 import { getEmployee } from '../../../../reducers/employees/employeesActions'
-import { ICalendarEmployeesPayload } from '../../../../reducers/calendarEmployees/calendarEmployeesActions'
 
 type ComponentProps = {
 	salonID: string
 	eventId?: string | null
 	phonePrefix?: string
 	loadingData?: boolean
+	employeesLoading?: boolean
 	sidebarView?: CALENDAR_EVENT_TYPE
 	employeesOptions: ICalendarEmployeesPayload['options']
 }
@@ -111,7 +111,7 @@ const getCategoryById = (category: any, serviceCategoryID?: string): EmployeeSer
 }
 
 const ReservationForm: FC<Props> = (props) => {
-	const { handleSubmit, salonID, eventId, phonePrefix, pristine, submitting, loadingData, sidebarView, employeesOptions } = props
+	const { handleSubmit, salonID, eventId, phonePrefix, pristine, submitting, loadingData, sidebarView, employeesOptions, employeesLoading } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [visibleCustomerCreateModal, setVisibleCustomerCreateModal] = useState(false)
@@ -326,7 +326,7 @@ const ReservationForm: FC<Props> = (props) => {
 		<>
 			{modals}
 			<div className={'nc-sider-event-management-content'} key={`${eventId}${sidebarView}`}>
-				<Spin spinning={eventDetail.isLoading} size='large'>
+				<Spin spinning={eventDetail.isLoading || employeesLoading} size='large'>
 					<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 						<Permissions
 							allowed={[PERMISSION.CUSTOMER_CREATE]}

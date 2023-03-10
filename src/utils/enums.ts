@@ -46,6 +46,10 @@ export enum NOTIFICATION_TYPE {
 	NOTIFICATION = 'NOTIFICATION'
 }
 
+export enum MSG_CODE {
+	MISSING_COUNTRY_CODE = 'MISSING_COUNTRY_CODE'
+}
+
 export enum MSG_TYPE {
 	INFO = 'INFO',
 	ERROR = 'ERROR',
@@ -1077,6 +1081,3 @@ export const SMS_STATUS_NAME = (status: SMS_NOTIFICATION_STATUS) => {
 			return ''
 	}
 }
-
-export const VIRTUAL_EMPLOYEE_IDENTIFICATOR = 'VIRTUAL'
-export const VIRTUAL_EMPLOYEE_NAME = (t: TFunction) => t('loc:Importované')

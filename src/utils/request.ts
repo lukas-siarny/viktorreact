@@ -59,7 +59,7 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 		showNotifications(messages, typeNotification)
 	} else if (messages.some((msg: any) => msg.code === ERROR_MSG_CODE.MISSING_COUNTRY_CODE)) {
 		const urlArray = split(get(error, 'config.url'), '/')
-		const salonsIndex = urlArray.indexOf(i18next.t('loc:salons'))
+		const salonsIndex = urlArray.indexOf(i18next.t('paths:salons'))
 		const salonId = urlArray[salonsIndex + 1]
 		showNotificationModal({
 			message: i18next.t('loc:Na vykonanie požadovanej akcie je potrebné mať nastavenú adresu salónu.'),

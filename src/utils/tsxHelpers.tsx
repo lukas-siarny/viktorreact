@@ -86,7 +86,7 @@ export const showNotificationModal = (
 						}}
 						type='primary'
 					>
-						{actionButtonLabel || i18next.t('loc:Zavrieť')}
+						{actionButtonLabel || i18next.t('loc:Zatvoriť')}
 					</Button>
 				}
 			/>

@@ -25,7 +25,7 @@ import {
 import Permissions from '../../../../utils/Permissions'
 
 // types
-import { ICalendarEventForm } from '../../../../types/interfaces'
+import { ICalendarEmployeesPayload, ICalendarEventForm } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-16-current-color.svg'
@@ -42,20 +42,20 @@ import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
 // redux
 import { RootState } from '../../../../reducers'
-import { ICalendarEmployeesPayload } from '../../../../reducers/calendarEmployees/calendarEmployeesActions'
 
 type ComponentProps = {
 	eventId?: string | null
 	loadingData?: boolean
 	sidebarView?: CALENDAR_EVENT_TYPE
 	employeesOptions: ICalendarEmployeesPayload['options']
+	employeesLoading?: boolean
 }
 
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
 const formName = FORM.CALENDAR_EVENT_FORM
 
 const EventForm: FC<Props> = (props) => {
-	const { handleSubmit, eventId, pristine, submitting, loadingData, sidebarView, employeesOptions } = props
+	const { handleSubmit, eventId, pristine, submitting, loadingData, sidebarView, employeesOptions, employeesLoading } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const formValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(formName)(state))
@@ -130,7 +130,7 @@ const EventForm: FC<Props> = (props) => {
 	return (
 		<>
 			<div className={'nc-sider-event-management-content'} key={`${eventId}${sidebarView}`}>
-				<Spin spinning={eventDetail.isLoading} size='large'>
+				<Spin spinning={eventDetail.isLoading || employeesLoading} size='large'>
 					<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 						<Field
 							component={SelectField}
@@ -147,8 +147,8 @@ const EventForm: FC<Props> = (props) => {
 							required
 							className={'pb-0'}
 							labelInValue
-							hasExtra
 							disabled={eventId} // NOTE: ak je detail tak sa neda menit zamestnanec
+							hasExtra
 						/>
 						<Field
 							name={'date'}

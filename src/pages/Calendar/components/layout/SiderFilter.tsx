@@ -2,8 +2,7 @@ import React, { FC } from 'react'
 import Sider from 'antd/lib/layout/Sider'
 
 // types
-import { ICalendarFilter } from '../../../../types/interfaces'
-import { ICalendarEmployeesPayload } from '../../../../reducers/calendarEmployees/calendarEmployeesActions'
+import { ICalendarEmployeesPayload, ICalendarFilter } from '../../../../types/interfaces'
 
 // components
 import CalendarFilter from '../forms/CalendarFilter'

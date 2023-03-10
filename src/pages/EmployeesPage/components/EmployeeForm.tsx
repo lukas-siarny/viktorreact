@@ -2,7 +2,7 @@ import React, { FC, MouseEventHandler } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Divider, Form, Space, Button } from 'antd'
+import { Divider, Form, Space, Button, Tag } from 'antd'
 import { isEmpty } from 'lodash'
 
 // utils
@@ -45,15 +45,22 @@ const EmployeeForm: FC<Props> = (props) => {
 	const formValues: Partial<IEmployeeForm> = useSelector((state: RootState) => getFormValues(FORM.EMPLOYEE)(state))
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const services = useSelector((state: RootState) => state.service.services)
-
+	const disabled = !!formValues?.deletedAt
 	return (
 		<>
 			<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 				<Space className={'w-full px-9'} direction='vertical' size={36}>
 					<div>
-						<h3 className={'mb-0 mt-0 flex items-center'}>
-							<InfoIcon className={'text-notino-black mr-2'} /> {t('loc:Osobné údaje')}
-						</h3>
+						<div className={'flex justify-between'}>
+							<h3 className={'mb-0 mt-0 flex items-center'}>
+								<InfoIcon className={'text-notino-black mr-2'} /> {t('loc:Osobné údaje')}
+							</h3>
+							{disabled && (
+								<Tag className={'noti-tag danger'}>
+									<span>{t('loc:Vymazaný')}</span>
+								</Tag>
+							)}
+						</div>
 						<Divider className={'mb-3 mt-3'} />
 						<div className={'flex space-between w-full'}>
 							<Field
@@ -61,19 +68,38 @@ const EmployeeForm: FC<Props> = (props) => {
 								component={ImgUploadField}
 								name={'avatar'}
 								label={t('loc:Avatar')}
+								disabled={true}
 								signUrl={URL_UPLOAD_IMAGES}
 								category={UPLOAD_IMG_CATEGORIES.EMPLOYEE}
 								multiple={false}
 								maxCount={1}
 							/>
 							<div className={'flex-1'}>
-								<Field component={InputField} label={t('loc:Meno')} placeholder={t('loc:Zadajte meno')} name={'firstName'} size={'large'} required />
-								<Field component={InputField} label={t('loc:Priezvisko')} placeholder={t('loc:Zadajte priezvisko')} name={'lastName'} size={'large'} required />
+								<Field
+									disabled={disabled}
+									component={InputField}
+									label={t('loc:Meno')}
+									placeholder={t('loc:Zadajte meno')}
+									name={'firstName'}
+									size={'large'}
+									required
+								/>
+								<Field
+									disabled={disabled}
+									component={InputField}
+									label={t('loc:Priezvisko')}
+									placeholder={t('loc:Zadajte priezvisko')}
+									name={'lastName'}
+									size={'large'}
+									required
+								/>
 							</div>
 						</div>
-						<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
+
+						<Field disabled={disabled} component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
 
 						<PhoneWithPrefixField
+							disabled={disabled}
 							label={'Telefón'}
 							placeholder={t('loc:Zadajte telefón')}
 							size={'large'}
@@ -94,6 +120,7 @@ const EmployeeForm: FC<Props> = (props) => {
 									size={'large'}
 									className={'flex-1'}
 									component={SelectField}
+									disabled={disabled}
 									filterOption={true}
 									allowClear
 									placeholder={t('loc:Vyberte službu')}
@@ -121,7 +148,7 @@ const EmployeeForm: FC<Props> = (props) => {
 													openForbiddenModal()
 												}
 											}}
-											disabled={isEmpty(formValues?.service)}
+											disabled={isEmpty(formValues?.service) || disabled}
 										>
 											{STRINGS(t).addRecord(t('loc:služby'))}
 										</Button>
@@ -131,6 +158,7 @@ const EmployeeForm: FC<Props> = (props) => {
 							<FieldArray
 								component={ServicesListField as any}
 								name={'services'}
+								disabled={disabled}
 								currencySymbol={salon.data?.currency.symbol}
 								isEmployeeDetail
 								setVisibleServiceEditModal={setVisibleServiceEditModal}

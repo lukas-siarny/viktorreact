@@ -947,8 +947,8 @@ export const optionRenderWithIcon = (itemData: any, fallbackIcon?: React.ReactNo
 export const optionRenderWithAvatar = (itemData: any, imageWidth = 24, imageHeight = 24) => {
 	// Thumbnail, label, extraContent (pod labelom)
 	const { label, extra } = itemData
-	const { color, thumbnail, extraContent } = extra || {}
-	const style = { width: imageWidth, height: imageHeight, border: `2px solid ${color}` }
+	const { color, thumbnail, extraContent, isDeleted } = extra || {}
+	const style = { width: imageWidth, height: imageHeight, border: `2px solid ${color}`, filter: isDeleted ? 'grayscale(100%)' : undefined }
 	return (
 		<div className='flex items-center divide-y'>
 			<img className={'rounded-full mr-2'} width={imageWidth} height={imageHeight} style={style} src={thumbnail} alt={label} />
@@ -1386,7 +1386,7 @@ export const initializeLabelInValueSelect = (key: string | number, label: string
 	}
 }
 
-export const normalizeDataById = <T extends { id: string }>(data?: T[]): { [key: string]: T } => {
+export const normalizeDataById = <T extends { id: string }>(data?: T[] | null): { [key: string]: T } => {
 	const normalizedData: { [key: string]: T } = {}
 	data?.forEach((item) => {
 		normalizedData[item.id] = item

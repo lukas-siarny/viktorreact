@@ -37,6 +37,7 @@ type Props = {
 	style?: React.CSSProperties
 	focused?: boolean
 	getPopupContainer?: Function
+	readOnly?: boolean
 }
 
 const fallbackOptions = [
@@ -97,7 +98,8 @@ const PhoneWithPrefixField = (props: Props) => {
 		style,
 		formName,
 		fallbackDefaultValue,
-		getPopupContainer
+		getPopupContainer,
+		readOnly
 	} = props
 	const prefixOptions = useSelector((state: RootState) => state?.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const dispatch = useDispatch()
@@ -124,6 +126,7 @@ const PhoneWithPrefixField = (props: Props) => {
 					loading={prefixOptions?.isLoading}
 					defaultValue={fallbackDefaultValue}
 					required={required}
+					readOnly={readOnly}
 					disabled={disabled}
 					getPopupContainer={getPopupContainer}
 					className='phone-prefix'
@@ -133,6 +136,7 @@ const PhoneWithPrefixField = (props: Props) => {
 				<Field
 					className={label ? 'hidden-label' : undefined}
 					label={label}
+					readOnly={readOnly}
 					component={InputField}
 					placeholder={placeholder}
 					name={phoneName}

@@ -53,6 +53,10 @@ export enum MSG_TYPE {
 	SUCCESS = 'SUCCESS'
 }
 
+export enum ERROR_MSG_CODE {
+	MISSING_COUNTRY_CODE = 'MISSING_COUNTRY_CODE'
+}
+
 export enum FIELD_MODE {
 	INPUT = 'INPUT',
 	FILTER = 'FILTER'
@@ -534,6 +538,7 @@ export enum VALIDATION_MAX_LENGTH {
 	LENGTH_1000 = 1000,
 	LENGTH_500 = 500,
 	LENGTH_255 = 255,
+	LENGTH_200 = 200,
 	LENGTH_100 = 100,
 	LENGTH_75 = 75,
 	LENGTH_60 = 60,
@@ -1072,6 +1077,3 @@ export const SMS_STATUS_NAME = (status: SMS_NOTIFICATION_STATUS) => {
 			return ''
 	}
 }
-
-export const VIRTUAL_EMPLOYEE_IDENTIFICATOR = 'VIRTUAL'
-export const VIRTUAL_EMPLOYEE_NAME = (t: TFunction) => t('loc:Importované')

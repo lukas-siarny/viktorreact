@@ -16,7 +16,8 @@ export enum SALON_TESTS_SUITS {
 	CUSTOMER = 'customer',
 	EMPLOYEE = 'employee',
 	INDUSTRIES_AND_SERVICES = 'Industries and services',
-	RESERVATIONS = 'Reservations'
+	RESERVATIONS = 'Reservations',
+	SMS_CREDIT = 'SMS credit'
 }
 
 export enum CRUD_OPERATIONS {

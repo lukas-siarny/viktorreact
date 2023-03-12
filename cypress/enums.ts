@@ -7,6 +7,7 @@ export enum LIST_OF_TESTS_SUITS {
 	CATEGORY_PARAMETERS_CRUD = 'categoryParameterCRUD',
 	SUPPORT_CRUD = 'supportCRUD',
 	LANGUAGES_CRUD = 'languagesCRUD',
+	SMS_UNIT_PRICES_CRUD = 'SMS_UNIT_PRICES_CRUD',
 	SALON = 'salon',
 	REVIEWS = 'reviews'
 }

@@ -92,3 +92,13 @@ Cypress.Commands.add(
 Cypress.Commands.add('clickTab', (tabKey: string, tabsKey = '.ant-tabs-nav-list', force?: boolean) => {
 	cy.get(tabsKey).find(`[data-node-key="${tabKey}"]`).click({ force })
 })
+
+Cypress.Commands.add('setDateInputValue', (form?: string, key?: string, value?: string) => {
+	const elementId: string = form ? `#${form}-${key}` : `#${key}`
+	cy.get(elementId).click({ force: true })
+	if (value) {
+		cy.get('.ant-picker-dropdown :not(.ant-picker-dropdown-hidden)', { timeout: 2000 }).should('be.visible').find(`.ant-picker-cell[title="${value}"]`).click({ force: true })
+	} else {
+		cy.get('.ant-picker-dropdown :not(.ant-picker-dropdown-hidden)', { timeout: 2000 }).should('be.visible').find('.ant-picker-cell').first().click({ force: true })
+	}
+})

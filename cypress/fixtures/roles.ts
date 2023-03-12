@@ -49,6 +49,10 @@ const data: ITestConfig[] = [
 				actions: [CRUD_OPERATIONS.ALL]
 			},
 			{
+				name: LIST_OF_TESTS_SUITS.SMS_UNIT_PRICES_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
 				name: LIST_OF_TESTS_SUITS.SALON,
 				actions: [CRUD_OPERATIONS.ALL],
 				/*
@@ -121,6 +125,10 @@ const data: ITestConfig[] = [
 				actions: [CRUD_OPERATIONS.ALL]
 			},
 			{
+				name: LIST_OF_TESTS_SUITS.SMS_UNIT_PRICES_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
 				name: LIST_OF_TESTS_SUITS.SALON,
 				actions: [CRUD_OPERATIONS.ALL]
 			}
@@ -165,6 +173,10 @@ const data: ITestConfig[] = [
 			},
 			{
 				name: LIST_OF_TESTS_SUITS.CATEGORIES_CRUD,
+				actions: []
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SMS_UNIT_PRICES_CRUD,
 				actions: []
 			},
 			{
@@ -236,6 +248,10 @@ const data: ITestConfig[] = [
 			},
 			{
 				name: LIST_OF_TESTS_SUITS.CATEGORIES_CRUD,
+				actions: []
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SMS_UNIT_PRICES_CRUD,
 				actions: []
 			},
 			{

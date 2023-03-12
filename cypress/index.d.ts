@@ -19,5 +19,6 @@ declare namespace Cypress {
 		): Chainable<Element>
 		clickDropdownItem(triggerId: string, dropdownItemId?: string, force?: boolean): Chainable<Element>
 		clickTab(tabKey: string, tabsKey?: string, force?: boolean): Chainable<Element>
+		setDateInputValue(form?: string, key?: string, value?: string): Chainable<Element>
 	}
 }

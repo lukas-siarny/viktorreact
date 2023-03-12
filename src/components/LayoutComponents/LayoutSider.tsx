@@ -160,15 +160,17 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							onClick: () => navigate(t('paths:reviews')),
 							icon: <ReviewsIcon />,
 							id: PAGE.REVIEWS
-						},
-						{
-							key: PAGE.SMS_CREDITS,
-							label: t('loc:SMS kredity'),
-							onClick: () => navigate(t('paths:sms-credits')),
-							icon: <SmsUnitPricesIcon />,
-							id: PAGE.SMS_CREDITS
 						}
 					)
+				}
+				if (hasPermissions([PERMISSION.SMS_UNIT_PRICE_EDIT])) {
+					mainGroupItems.push({
+						key: PAGE.SMS_CREDITS,
+						label: t('loc:SMS kredity'),
+						onClick: () => navigate(t('paths:sms-credits')),
+						icon: <SmsUnitPricesIcon />,
+						id: PAGE.SMS_CREDITS
+					})
 				}
 				if (hasPermissions([PERMISSION.NOTINO])) {
 					mainGroupItems.push({

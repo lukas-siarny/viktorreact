@@ -16,6 +16,7 @@ import categoriesCRUDTestSuite from '../7-categories/categoriesCRUD.tests'
 // eslint-disable-next-line import/no-cycle
 import salonTestSuite from '../8-salons/salon.tests'
 import reviewsTestSuite from '../9-reviews/reviews.tests'
+import smsUnitPricesCRUDTestSuite from '../11-sms-unit-prices/smsUnitPricesCRUD.tests'
 
 export declare interface ITests {
 	name: SALON_TESTS_SUITS | LIST_OF_TESTS_SUITS
@@ -67,6 +68,9 @@ describe('Dynamic tests for roles', () => {
 						break
 					case LIST_OF_TESTS_SUITS.REVIEWS:
 						context(`ReviewsCRUD as ${user.role}`, () => reviewsTestSuite(test.actions, user.credentials.user, user.credentials.password))
+						break
+					case LIST_OF_TESTS_SUITS.SMS_UNIT_PRICES_CRUD:
+						context(`SMSUnitPricesCRUD as ${user.role}`, () => smsUnitPricesCRUDTestSuite(test.actions, user.credentials.user, user.credentials.password))
 						break
 					default:
 				}

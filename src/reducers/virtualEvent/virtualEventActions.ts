@@ -7,7 +7,7 @@ import { destroy } from 'redux-form'
 import { IResetStore } from '../generalTypes'
 import VIRTUAL_EVENT from './virtualEventTypes'
 import { ThunkResult } from '../index'
-import { ICalendarEventForm, ICalendarReservationForm } from '../../types/interfaces'
+import { ICalendarEventForm, ICalendarImportedReservationForm, ICalendarReservationForm } from '../../types/interfaces'
 
 // utils
 import { CALENDAR_EVENT_TYPE, HANDLE_CALENDAR_ACTIONS, HANDLE_CALENDAR_FORMS, NEW_ID_PREFIX, CALENDAR_DATE_FORMAT } from '../../utils/enums'
@@ -76,7 +76,7 @@ export const addOrUpdateEvent =
 			return
 		}
 
-		let formData: Partial<ICalendarEventForm & ICalendarReservationForm> | undefined
+		let formData: Partial<ICalendarEventForm & ICalendarReservationForm & ICalendarImportedReservationForm> | undefined
 
 		try {
 			formData = getState().form[formName].values
@@ -88,7 +88,7 @@ export const addOrUpdateEvent =
 		if (!formData) {
 			return
 		}
-		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID, reservationData, note, noteFromB2CCustomer } = formData
+		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID, reservationData, note, noteFromB2CCustomer, isImported } = formData
 
 		if (date && timeFrom && employee && eventType) {
 			let { eventId } = formData
@@ -158,7 +158,8 @@ export const addOrUpdateEvent =
 						: undefined,
 					note,
 					noteFromB2CCustomer,
-					reservationData
+					reservationData,
+					isImported
 				}
 			}
 			const payload: IVirtualEventPayload = {
@@ -169,7 +170,6 @@ export const addOrUpdateEvent =
 					isNew: eventId.startsWith(NEW_ID_PREFIX)
 				}
 			}
-
 			dispatch({ type: VIRTUAL_EVENT.VIRTUAL_EVENT_CHANGE, payload })
 		}
 	}

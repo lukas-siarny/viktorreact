@@ -9,7 +9,6 @@ import Scroll from 'react-scroll'
 import {
 	CalendarEvent,
 	ICalendarEventsPayload,
-	Employees,
 	ICalendarEventCardData,
 	IEventExtenedProps,
 	IResourceEmployee,
@@ -18,7 +17,8 @@ import {
 	RawOpeningHours,
 	DisabledNotificationsArray,
 	ICalendarMonthlyReservationsPayload,
-	ICalendarMonthlyReservationsCardData
+	ICalendarMonthlyReservationsCardData,
+	CalendarEmployee
 } from '../../types/interfaces'
 
 // utils
@@ -82,6 +82,7 @@ interface IComapreAndSortDayEventsData {
 
 const CALENDAR_EVENT_TYPES_ORDER = {
 	[CALENDAR_EVENT_TYPE.RESERVATION]: 0,
+	[CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT]: 0,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: 1,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: 2,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: 3
@@ -357,12 +358,6 @@ const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, sele
 	}, [] as any[])
 }
 
-/* const isAllDayEvent = (selectedDate: string, eventStart: string, eventEnd: string) => {
-	const startOfSelectedDate = dayjs(selectedDate).startOf('day')
-	const endOfSelectedDate = dayjs(selectedDate).endOf('day')
-	return dayjs(dayjs(eventStart)).isSameOrBefore(startOfSelectedDate) && dayjs(eventEnd).isSameOrAfter(endOfSelectedDate.subtract(1, 'minutes'))
-} */
-
 // ak je dlzka bg eventu mensia ako min dielik v kalendari (u nas 15 minut), tak ho to vytvorime ako 15 minutovy, lebo to vyzera divne potom
 const getBgEventEnd = (start: string, end: string) =>
 	dayjs(end).diff(start, 'minutes') < CALENDAR_COMMON_SETTINGS.EVENT_MIN_DURATION ? dayjs(start).add(CALENDAR_COMMON_SETTINGS.EVENT_MIN_DURATION, 'minutes').toISOString() : end
@@ -374,12 +369,14 @@ const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeO
 			id: employee.id,
 			firstName: employee.firstName,
 			lastName: employee?.lastName,
-			email: employee.email
+			email: employee.email || employee.inviteEmail
 		}),
 		color: employee.color,
 		image: employee.image.resizedImages.thumbnail,
 		description,
-		isTimeOff
+		isTimeOff,
+		isForImportedEvents: employee.isForImportedEvents,
+		isDeleted: employee.isDeleted
 	}
 }
 
@@ -415,7 +412,12 @@ const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string
 /**
  * Daily view helpers
  */
-const composeDayViewReservations = (selectedDate: string, reservations: ICalendarEventsPayload['data'], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees) => {
+const composeDayViewReservations = (
+	selectedDate: string,
+	reservations: ICalendarEventsPayload['data'],
+	shiftsTimeOffs: ICalendarEventsPayload['data'],
+	employees: CalendarEmployee[]
+) => {
 	const composedEvents: any[] = []
 	// resources mapa, pre trackovanie, ci zamestnanec ma zmenu alebo dovolenku v dany den
 	const resourcesMap = employees?.reduce((resources, employee) => {
@@ -467,6 +469,7 @@ const composeDayViewReservations = (selectedDate: string, reservations: ICalenda
 				}
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 				case CALENDAR_EVENT_TYPE.RESERVATION:
+				case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 					composedEvents.push({
 						...calendarEvent
 					})
@@ -505,7 +508,7 @@ export const composeDayViewEvents = (
 	eventTypeFilter: CALENDAR_EVENTS_VIEW_TYPE,
 	reservations: ICalendarEventsPayload['data'],
 	shiftsTimeOffs: ICalendarEventsPayload['data'],
-	employees: Employees
+	employees: CalendarEmployee[]
 ) => {
 	switch (eventTypeFilter) {
 		case CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF:
@@ -516,7 +519,7 @@ export const composeDayViewEvents = (
 	}
 }
 
-export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees) => {
+export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees: CalendarEmployee[]) => {
 	return employees.map((employee) => {
 		const employeeShifts: any[] = []
 		const employeeTimeOff: any[] = []
@@ -531,7 +534,7 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 			}
 		})
 
-		let description = t('loc:Nenastavená zmena')
+		let description: string | undefined = t('loc:Nenastavená zmena')
 
 		if (employeeShifts.length) {
 			const employeeWorkingHours = employeeShifts.reduce((result, cv, i) => {
@@ -558,6 +561,10 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 			description = t('loc:Voľno')
 		}
 
+		if (employee.isForImportedEvents) {
+			description = undefined
+		}
+
 		return {
 			id: employee.id,
 			eventBackgroundColor: employee.color,
@@ -578,7 +585,7 @@ interface EmployeeWeekResource {
 	image: string
 	employeeColor?: string
 	isTimeOff: boolean
-	employee: Employees[0]
+	employee: CalendarEmployee
 }
 
 type WeekDayResource = { id: string; day: string; employee: EmployeeWeekResource }
@@ -593,7 +600,7 @@ type WeekDayResource = { id: string; day: string; employee: EmployeeWeekResource
 ]
 */
 
-export const composeWeekResources = (weekDays: string[], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees): WeekDayResource[] => {
+export const composeWeekResources = (weekDays: string[], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: CalendarEmployee[]): WeekDayResource[] => {
 	return weekDays.reduce((resources, weekDay) => {
 		const timeOffsWeekDay = shiftsTimeOffs?.filter((event) => dayjs(event.start.date).isSame(dayjs(weekDay)) && event.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF)
 
@@ -615,7 +622,7 @@ const composeWeekViewReservations = (
 	weekDays: string[],
 	reservations: ICalendarEventsPayload['data'],
 	shiftsTimeOffs: ICalendarEventsPayload['data'],
-	employees: Employees
+	employees: CalendarEmployee[]
 ) => {
 	const composedEvents: any[] = []
 
@@ -676,6 +683,7 @@ const composeWeekViewReservations = (
 				}
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 				case CALENDAR_EVENT_TYPE.RESERVATION:
+				case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 					composedEvents.push({
 						...calendarEvent
 					})
@@ -718,7 +726,7 @@ export const composeWeekViewEvents = (
 	eventTypeFilter: CALENDAR_EVENTS_VIEW_TYPE,
 	reservations: ICalendarEventsPayload['data'],
 	shiftsTimeOffs: ICalendarEventsPayload['data'],
-	employees: Employees
+	employees: CalendarEmployee[]
 ) => {
 	switch (eventTypeFilter) {
 		case CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF:

@@ -22,12 +22,14 @@ import { CALENDAR_DEBOUNCE_DELAY, CALENDAR_EVENTS_VIEW_TYPE, FORM } from '../../
 import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
 // types
-import { ICalendarFilter } from '../../../../types/interfaces'
+import { ICalendarEmployeesPayload, ICalendarFilter } from '../../../../types/interfaces'
 
 type ComponentProps = {
 	parentPath: string
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	loadingData?: boolean
+	employeesOptions: ICalendarEmployeesPayload['options']
+	employeesLoading?: boolean
 }
 
 type Props = InjectedFormProps<ICalendarFilter, ComponentProps> & ComponentProps
@@ -62,12 +64,11 @@ const FilterEmptyState: FC<IFilterEmptyState> = (props) => {
 }
 
 const CalendarFilter = (props: Props) => {
-	const { handleSubmit, parentPath, eventsViewType, loadingData } = props
+	const { handleSubmit, parentPath, eventsViewType, loadingData, employeesOptions, employeesLoading } = props
 	const [t] = useTranslation()
 	const navigate = useNavigate()
 
 	const services = useSelector((state: RootState) => state.service.services)
-	const employees = useSelector((state: RootState) => state.employees.employees)
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'p-4'}>
@@ -79,13 +80,13 @@ const CalendarFilter = (props: Props) => {
 				expandIcon={({ isActive }) => <ChevronDownIcon className={cx({ 'is-active': isActive })} />}
 			>
 				<Panel key={PANEL_KEY.EMPLOYEES} header={t('loc:Zamestnanci')} className={'nc-collapse-panel'}>
-					<Spin spinning={employees?.isLoading}>
-						{employees?.options?.length ? (
+					<Spin spinning={employeesLoading}>
+						{employeesOptions?.length ? (
 							<Field
 								className={'p-0 m-0'}
 								component={CheckboxGroupField}
 								name={'employeeIDs'}
-								options={employees?.options}
+								options={employeesOptions}
 								size={'small'}
 								rounded
 								useCustomColor

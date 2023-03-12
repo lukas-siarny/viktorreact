@@ -100,6 +100,9 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 		margin-left: auto
 		height: 16px
 		align-self: center
+	&.is-deleted
+		.image
+			filter: grayscale(100%)
 
 // weekly view - resrouces osa - prvy stlpcek s oznacenim dna
 .nc-week-label-day
@@ -150,6 +153,9 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 	.absence-icon
 		margin-left: auto
 		align-self: center
+	&.is-deleted
+		.image
+			filter: grayscale(100%)
 
 // weekly view - deliace medzeri medzi jednotlivymi dnami
 .nc-resource-group-label-bg,
@@ -256,6 +262,8 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 				color: $textColor-notino-red
 			&.not-realized
 				color: $textColor-notino-red
+			&.import
+				color: $textColor-notino-black
 	&.multiday-event
 		.time
 			display: inline-flex
@@ -380,6 +388,15 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 						display: none
 					> .time
 						display: none
+			&.is-imported
+				.event-content
+					.title-wrapper
+						.title-inner-wrapper
+							.title
+								color: $textColor-notino-black
+					.desc
+						white-space: normal
+						color: $textColor-notino-grayDark
 		&.shift,
 		&.timeoff,
 		&.break
@@ -389,7 +406,7 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 				gap: 4px
 				.event-info
 					display: flex
-					min-width: 0
+					min-width: 0f
 					justify-content: space-between
 					gap: 4px
 					.title
@@ -530,6 +547,14 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 							.clock,
 							.employee
 								display: none
+			&.is-imported
+				.event-content
+					.title-wrapper
+						.title-inner-wrapper
+							.title
+								color: $textColor-notino-black
+					.desc
+						color: $textColor-notino-grayDark
 		&.shift,
 		&.timeoff,
 		&.break
@@ -694,6 +719,11 @@ $box-shadow-selected-event: 0px 10px 10px -5px rgba(0, 0, 0, 0.04), 0px 20px 25p
 		&.break
 			&:not(.edit)
 				outline: none
+	&.is-deleted-employee
+		.event-content
+			.event-avatar
+				img
+					filter: grayscale(100%)
 
 	// reservation state specific styles
 	&.reservation

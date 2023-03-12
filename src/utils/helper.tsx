@@ -65,7 +65,9 @@ import {
 	RESERVATION_STATE,
 	PERMISSION,
 	RESERVATION_PAYMENT_METHOD,
-	RESERVATION_SOURCE_TYPE
+	RESERVATION_SOURCE_TYPE,
+	SMS_NOTIFICATION_EVENT_TYPE,
+	SMS_NOTIFICATION_STATUS
 } from './enums'
 
 import {
@@ -944,11 +946,12 @@ export const optionRenderWithIcon = (itemData: any, fallbackIcon?: React.ReactNo
 
 export const optionRenderWithAvatar = (itemData: any, imageWidth = 24, imageHeight = 24) => {
 	// Thumbnail, label, extraContent (pod labelom)
-	const { label, thumbNail, extraContent, borderColor } = itemData
-	const style = { width: imageWidth, height: imageHeight, border: `2px solid ${borderColor}` }
+	const { label, extra } = itemData
+	const { color, thumbnail, extraContent, isDeleted } = extra || {}
+	const style = { width: imageWidth, height: imageHeight, border: `2px solid ${color}`, filter: isDeleted ? 'grayscale(100%)' : undefined }
 	return (
 		<div className='flex items-center divide-y'>
-			<img className={'rounded-full mr-2'} width={imageWidth} height={imageHeight} style={style} src={thumbNail} alt={label} />
+			<img className={'rounded-full mr-2'} width={imageWidth} height={imageHeight} style={style} src={thumbnail} alt={label} />
 			<div className={'flex flex-col leading-none'}>
 				<div>{label}</div>
 				<div>{extraContent}</div>
@@ -1166,9 +1169,10 @@ export const getAssignedUserLabel = (assignedUser?: Paths.GetApiB2BAdminSalons.R
 	switch (true) {
 		case !!assignedUser.firstName && !!assignedUser.lastName:
 			return `${assignedUser.firstName} ${assignedUser.lastName}`
-
 		case !!assignedUser.email:
 			return `${assignedUser.email}`
+		case !!assignedUser.firstName:
+			return `${assignedUser.firstName}`
 		default:
 			return assignedUser.id
 	}
@@ -1382,10 +1386,12 @@ export const initializeLabelInValueSelect = (key: string | number, label: string
 	}
 }
 
-export const normalizeDataById = <T extends { id: string }>(data?: T[]): { [key: string]: T } => {
+export const normalizeDataById = <T extends { id: string }>(data?: T[] | null): { [key: string]: T } => {
 	const normalizedData: { [key: string]: T } = {}
 	data?.forEach((item) => {
 		normalizedData[item.id] = item
 	})
 	return normalizedData
 }
+
+export const formatPrice = (price: number, symbol?: string) => (!isNil(price) ? `${price} ${symbol || ''}`.trim() : '')

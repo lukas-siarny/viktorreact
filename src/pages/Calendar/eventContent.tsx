@@ -12,6 +12,7 @@ export default (
 ) => {
 	const { event, backgroundColor } = data || {}
 	const { display = CALENDAR_EVENT_DISPLAY_TYPE.REGULAR, start, end, extendedProps } = event || {}
+
 	return (
 		<CalendarEventContent
 			id={event.id}

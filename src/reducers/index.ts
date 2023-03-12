@@ -27,7 +27,10 @@ import calendarReducer from './calendar/calendarReducer'
 import helperSettingsReducer from './helperSettings/helperSettingsReducer'
 import virtualEventReducer from './virtualEvent/virtualEventReducer'
 import reviewsReducer from './reviews/reviewsReducer'
+import calendarEmployeesReducer from './calendarEmployees/calendarEmployeesReducer'
 import smsUnitPricesReducer from './smsUnitPrices/smsUnitPricesReducer'
+import walletReducer from './wallet/walletReducer'
+import smsReducer from './sms/smsReducer'
 
 export const REDUCER_KEYS = {
 	FORMS: 'FORMS',
@@ -51,7 +54,10 @@ export const REDUCER_KEYS = {
 	HELPER_SETTINGS: 'HELPER_SETTINGS',
 	VIRTUAL_EVENT: 'VIRTUAL_EVENT',
 	REVIEWS: 'REVIEWS',
-	SMS_UNIT_PRICES: 'SMS_UNIT_PRICES'
+	SMS_UNIT_PRICES: 'SMS_UNIT_PRICES',
+	WALLET: 'WALLET',
+	SMS: 'SMS',
+	CALENDAR_EMPLOYEES: 'CALENDAR_EMPLOYEES'
 }
 
 const rootReducer = combineReducers({
@@ -203,12 +209,33 @@ const rootReducer = combineReducers({
 		},
 		reviewsReducer
 	),
+	calendarEmployees: persistReducer(
+		{
+			key: REDUCER_KEYS.CALENDAR_EMPLOYEES,
+			storage: storageSession
+		},
+		calendarEmployeesReducer
+	),
 	smsUnitPrices: persistReducer(
 		{
 			key: REDUCER_KEYS.SMS_UNIT_PRICES,
 			storage: storageSession
 		},
 		smsUnitPricesReducer
+	),
+	wallet: persistReducer(
+		{
+			key: REDUCER_KEYS.WALLET,
+			storage: storageSession
+		},
+		walletReducer
+	),
+	sms: persistReducer(
+		{
+			key: REDUCER_KEYS.SMS,
+			storage: storageSession
+		},
+		smsReducer
 	)
 })
 

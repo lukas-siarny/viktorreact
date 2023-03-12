@@ -45,20 +45,6 @@
 			svg
 				width: 16px
 				height: 16px
-	.nc-event-popover-tag
-		font-size: 10px
-		line-height: 11px
-		border: none
-		padding: 4px 8px
-		border-radius: 4px
-		background-color: $backgroundColor-notino-grayLight
-		color: $textColor-notino-grayDarker
-		min-width: unset
-		margin: 0
-		&.tag-new
-			// TODO: tailwind colors
-			color: #0E7090
-			background-color: #ECFDFF
 .nc-popover-header-button
 	outline: none
 	border-radius: 4px
@@ -83,6 +69,10 @@
 	&:hover,
 	&:focus-visible
 		background-color: $backgroundColor-notino-grayLight
+
+.employee-avatar
+	&.is-deleted
+		filter: grayscale(100%)
 
 // day events popover
 .nc-events-list-popover-overlay

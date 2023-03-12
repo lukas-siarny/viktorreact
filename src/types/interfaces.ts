@@ -259,9 +259,7 @@ export interface ICalendarReservationForm {
 		categoryId?: string
 		serviceData?: NonNullable<ICalendarEventDetailPayload['data']>['service']
 	}>
-	employee: ISelectOptionItem<{
-		employeeData?: Employee
-	}>
+	employee: ICalendarEmployeeOptionItem
 	date: string
 	timeFrom: string
 	timeTo: string
@@ -271,11 +269,11 @@ export interface ICalendarReservationForm {
 	updateFromCalendar?: boolean
 	noteFromB2CCustomer?: string
 	reservationData?: CalendarEvent['reservationData']
+	isImported?: boolean
+	eventType: CALENDAR_EVENT_TYPE
 }
 export interface ICalendarEventForm {
-	employee: ISelectOptionItem<{
-		employeeData?: Employee
-	}>
+	employee: ICalendarEmployeeOptionItem
 	date: string
 	timeFrom: string
 	timeTo: string
@@ -291,6 +289,20 @@ export interface ICalendarEventForm {
 	calendarBulkEventID?: string
 	revertEvent?: () => void
 	updateFromCalendar?: boolean
+	isImported?: boolean
+}
+
+export interface ICalendarImportedReservationForm {
+	date: string
+	timeFrom: string
+	timeTo: string
+	note?: string
+	eventId: string
+	revertEvent?: () => void
+	updateFromCalendar?: boolean
+	employee: ISelectOptionItem
+	isImported?: boolean
+	eventType: CALENDAR_EVENT_TYPE
 }
 
 export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null
@@ -442,6 +454,7 @@ export interface IEmployeeForm {
 	role: number
 	hasActiveAccount?: boolean
 	orderIndex?: number
+	deletedAt?: string
 }
 
 export interface ICosmeticForm {
@@ -466,7 +479,16 @@ export interface ISmsUnitPricesForm {
 	countryCode: string
 }
 
+export interface IRechargeSmsCreditForm {
+	amount: number
+	transactionNote?: string
+}
+
 export interface ISmsUnitPricesFilter {
+	search: string
+}
+
+export interface ISmsHistoryFilter {
 	search: string
 }
 
@@ -499,7 +521,7 @@ export interface IQueryParams {
 	search?: string | undefined | null
 }
 
-interface IDataPagination {
+export interface IDataPagination {
 	pagination: IResponsePagination
 }
 
@@ -730,10 +752,19 @@ export interface ICalendarFilter {
 export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {
 	tableData: (Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0] & { key: number })[]
 }
+
+export interface IDeletedEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {
+	tableData: (Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0] & { key: string })[]
+}
+
+export interface IActiveEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {
+	tableData: (Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0] & { key: number })[]
+}
+
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]
-type CalendarEmployee = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0]
+export type CalendarEmployee = Pick<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0], 'id' | 'color' | 'firstName' | 'lastName' | 'email' | 'image' | 'inviteEmail' | 'orderIndex'> & { orderIndex: number, inviteEmail?: string, isForImportedEvents: boolean; isDeleted?: boolean }
 export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
 export type CalendarEvent = CalendarEvents[0] & {
 	startDateTime: string
@@ -742,10 +773,17 @@ export type CalendarEvent = CalendarEvents[0] & {
 	isFirstMultiDayEventInCurrentRange?: boolean
 	isLastMultiDaylEventInCurrentRange?: boolean
 	originalEvent?: CalendarEvent
-	employee: Employee
+	employee: CalendarEmployee
 	isPlaceholder?: boolean
+	isImported: boolean
 }
 
+export type ICalendarEmployeeOptionItem = ISelectOptionItem<{
+	employeeData: CalendarEmployee
+	thumbnail: string
+	color: string
+	isDeleted: boolean
+}>
 
 export interface ICalendarEventsPayload {
 	data: CalendarEvent[] | null
@@ -753,7 +791,7 @@ export interface ICalendarEventsPayload {
 
 export type ICalendarMonthlyViewEvent = Omit<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCountsAndDurations.Responses.$200['calendarEvents'][0][0], 'employeeID'> & {
 	id: string
-	employee: Employee
+	employee: CalendarEmployee
 }
 export type ICalendarMonthlyViewDay = { [key: string]: ICalendarMonthlyViewEvent[]  }
 
@@ -761,6 +799,10 @@ export interface ICalendarMonthlyReservationsPayload {
 	data: ICalendarMonthlyViewDay | null
 }
 
+export interface ICalendarEmployeesPayload {
+	data: CalendarEmployee[] | null
+	options: ICalendarEmployeeOptionItem[]
+}
 export interface ICalendarView {
 	selectedDate: string
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
@@ -777,7 +819,7 @@ export interface ICalendarView {
 	disableRender?: boolean
 	view?: CALENDAR_VIEW
 	enabledSalonReservations?: boolean
-	employees: Employees
+	employees: CalendarEmployee[]
 }
 export interface IEventCardProps {
 	calendarView: CALENDAR_VIEW
@@ -859,7 +901,7 @@ export interface ICalendarEmployeeTooltipPopover {
 }
 
 export type EmployeeTooltipPopoverData = {
-	employee: Employee
+	employee: CalendarEmployee
 	date: string
 }
 
@@ -878,6 +920,8 @@ export interface IResourceEmployee {
 	isTimeOff: boolean
 	color?: string
 	description?: string
+	isForImportedEvents?: boolean
+	isDeleted?: boolean
 }
 
 export interface IDayViewResourceExtenedProps {

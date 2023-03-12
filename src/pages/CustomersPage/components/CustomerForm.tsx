@@ -163,6 +163,7 @@ const CustomerForm: FC<Props> = (props) => {
 								className={'w-1/6'}
 								component={InputField}
 								label={t('loc:Popisné číslo')}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 								placeholder={t('loc:Zadajte číslo')}
 								name={'streetNumber'}
 								size={'large'}

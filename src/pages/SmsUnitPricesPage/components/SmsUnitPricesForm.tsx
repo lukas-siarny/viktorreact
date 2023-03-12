@@ -6,7 +6,7 @@ import dayjs, { Dayjs } from 'dayjs'
 import cx from 'classnames'
 
 // utils
-import { DEFAULT_DATE_INIT_FORMAT, DELETE_BUTTON_ID, FORM, MONTH_NAME_YEAR_FORMANT, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { DEFAULT_DATE_INIT_FORMAT, DELETE_BUTTON_ID, FORM, MONTH_NAME_YEAR_FORMAT, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { formFieldID, optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -88,7 +88,7 @@ const SmsUnitPricesForm: FC<Props> = (props) => {
 					picker={'month'}
 					disabled={disabledForm}
 					required
-					dateFormat={MONTH_NAME_YEAR_FORMANT}
+					dateFormat={MONTH_NAME_YEAR_FORMAT}
 					customOnChange={(value: Dayjs | null) => {
 						change('validFrom', value ? dayjs(value).startOf('month').format(DEFAULT_DATE_INIT_FORMAT) : null)
 					}}

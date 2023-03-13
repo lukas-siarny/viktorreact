@@ -132,15 +132,14 @@ const SmsUnitPricesDetailPage = () => {
 	const handleSubmit = async (formData: ISmsUnitPricesForm) => {
 		const body = {
 			amount: formData.amount,
-			validFrom: formData.validFrom,
-			countryCode: formData.countryCode
+			validFrom: formData.validFrom
 		}
 
 		try {
 			if (selectedSmsUnitPrice?.id) {
 				await patchReq('/api/b2b/admin/enums/sms-unit-prices/{smsUnitPriceID}', { smsUnitPriceID: selectedSmsUnitPrice.id }, body)
 			} else {
-				await postReq('/api/b2b/admin/enums/sms-unit-prices/', null, body)
+				await postReq('/api/b2b/admin/enums/sms-unit-prices/', null, { ...body, countryCode: formData.countryCode })
 			}
 			fetchData()
 			changeFormVisibility()

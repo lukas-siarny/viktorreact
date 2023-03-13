@@ -86,15 +86,14 @@ const smsUnitPricesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, 
 						}).as('getSmsUnitPrices')
 						cy.intercept({
 							method: 'PATCH',
-							pathname: `api/b2b/admin/enums/sms-unit-prices/${smsPriceUnitId}`
+							url: `api/b2b/admin/enums/sms-unit-prices/${smsPriceUnitId}`
 						}).as('updateSmsUnitPrice')
 
 						cy.get('@detailRow').click()
-						cy.get(`[data-row-key="${smsPriceUnitId}"]`).click()
-
 						cy.wait('@getSmsUnitPrices').then((interceptionGetSmsPrices: any) => {
 							// check status code of request
 							expect(interceptionGetSmsPrices.response.statusCode).to.equal(200)
+							cy.get(`[data-row-key="${smsPriceUnitId}"]`).click()
 							cy.setInputValue(FORM.SMS_UNIT_PRICES_FORM, 'amount', smsUnitPrices.update.amount, undefined, true)
 							// NOTE: SMS unit price cannot exist in DB for specified date
 							const dateValueUpdate = dayjs().add(2, 'month').format('YYYY-MM')
@@ -141,18 +140,16 @@ const smsUnitPricesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, 
 						}).as('getSmsUnitPrices')
 						cy.intercept({
 							method: 'DELETE',
-							pathname: `api/b2b/admin/enums/sms-unit-prices/${smsPriceUnitId}`
-						}).as('updateSmsUnitPrice')
+							url: `api/b2b/admin/enums/sms-unit-prices/${smsPriceUnitId}`
+						}).as('deleteSmsUnitPrice')
 
 						cy.get('@detailRow').click()
-						cy.get(`[data-row-key="${smsPriceUnitId}"]`).click()
-
 						cy.wait('@getSmsUnitPrices').then((interceptionGetSmsPrices: any) => {
 							// check status code of request
-							// check status code of request
 							expect(interceptionGetSmsPrices.response.statusCode).to.equal(200)
+							cy.get(`[data-row-key="${smsPriceUnitId}"]`).click()
 							cy.clickDeleteButtonWithConfCustom(FORM.SMS_UNIT_PRICES_FORM)
-							cy.wait('@updateSmsUnitPrice').then((interceptionCreate: any) => {
+							cy.wait('@deleteSmsUnitPrice').then((interceptionCreate: any) => {
 								// check status code of request
 								expect(interceptionCreate.response.statusCode).to.equal(200)
 								// check conf toast message

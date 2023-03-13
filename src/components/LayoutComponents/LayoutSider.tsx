@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import cx from 'classnames'
+import { sortBy } from 'lodash'
 
 // assets
-import { omit, sortBy } from 'lodash'
 import { ReactComponent as LogoIcon } from '../../assets/images/logo-simple.svg'
 import { ReactComponent as LogoCollapsedIcon } from '../../assets/icons/logoCollapsed.svg'
 import { ReactComponent as HomeIcon } from '../../assets/icons/home-24-icon.svg'

@@ -282,7 +282,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						key: PAGE.SMS_CREDIT,
 						label: t('loc:SMS kredit'),
 						onClick: () => navigate(getPath(t('paths:sms-credit'))),
-						icon: <SmsUnitPricesIcon />
+						icon: <SmsUnitPricesIcon />,
+						id: PAGE.SMS_CREDIT
 					})
 				}
 			}

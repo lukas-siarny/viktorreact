@@ -35,8 +35,8 @@ services:
       - "3000:3000"
       # NOTE: localy can be test with export BITBUCKET_DOCKER_HOST_INTERNAL=host.docker.internal (as a IP address 192.168.65.2 check by ping host.docker.internal from container)
     extra_hosts:
-      - "sample-bucket.s3.eu-central-1.localhost:$BITBUCKET_DOCKER_HOST_INTERNAL"
-      - "s3.eu-central-1.localhost:$BITBUCKET_DOCKER_HOST_INTERNAL"
+      - "sample-bucket.s3.eu-central-1.localhost:192.168.65.2"
+      - "s3.eu-central-1.localhost:192.168.65.2"
     environment:
       - REDIS_URL=redis://:PLEASE_CHANGE_ME@redis:6379
       - POSTGRESQL_URL=postgresql://postgres:root@database_test:5432/notino_test
@@ -52,8 +52,8 @@ services:
       - AWS_S3_ENDPOINT=http://s3.eu-central-1.localhost:4566
       - SERVICES_SUGGESTION_EMAILS=test@goodrequest.com
       - USE_CLOUD_WATCH=false
-      # in bitbucket pipeline do not work docker.host.internal instead of it has to be used $BITBUCKET_DOCKER_HOST_INTERNAL variable
-      - SMTP_HOST=$BITBUCKET_DOCKER_HOST_INTERNAL
+      # in bitbucket pipeline do not work docker.host.internal instead of it has to be used 192.168.65.2 variable
+      - SMTP_HOST=192.168.65.2
       # mail server is running with cypress test define in cypress plugins
       - SMTP_PORT=7777
     depends_on:
@@ -105,8 +105,8 @@ services:
           - BULLMQ_DASHBOARD_PASSWORD=Lopaty123.
           - BULLMQ_DASHBOARD_SESSION_SECRET=dnaidbapdndioabd
           - WHITELIST_EMAILS=@goodrequest.com
-          # in bitbucket pipeline do not work docker.host.internal instead of it has to be used $BITBUCKET_DOCKER_HOST_INTERNAL variable
-          - SMTP_HOST=$BITBUCKET_DOCKER_HOST_INTERNAL
+          # in bitbucket pipeline do not work docker.host.internal instead of it has to be used 192.168.65.2 variable
+          - SMTP_HOST=192.168.65.2
           # mail server is running with cypress test define in cypress plugins
           - SMTP_PORT=7777
           - SMTP_FROM_ADDRESS=e2e@goodrequest.com

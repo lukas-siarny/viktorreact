@@ -38,12 +38,12 @@ const smsUnitPricesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, 
 			cy.wait('@getSmsUnitPricesActual').then((interceptionGetSmsPricesActual: any) => {
 				// check status code of request
 				expect(interceptionGetSmsPricesActual.response.statusCode).to.equal(200)
-				// NOTE: at least one SMS unit price for all coutries should exists in DB
-				cy.get('.ant-table-row:first')
+				// NOTE: at least one SMS unit price should exists in DB
+				cy.get('.ant-table-row:first').click()
 				cy.clickButton(FORM.SMS_UNIT_PRICES_FORM, CREATE_BUTTON_ID)
 				cy.setInputValue(FORM.SMS_UNIT_PRICES_FORM, 'amount', smsUnitPrices.create.amount)
 				// NOTE: SMS unit price cannot exist in DB for specified date
-				const dateValue = dayjs().add(1, 'month').format('YYYY-DD')
+				const dateValue = dayjs().add(1, 'month').format('YYYY-MM')
 				cy.setDateInputValue(FORM.SMS_UNIT_PRICES_FORM, 'validFrom', dateValue)
 				cy.clickButton(SUBMIT_BUTTON_ID, FORM.SMS_UNIT_PRICES_FORM)
 				cy.wait('@createSmsUnitPrice').then((interceptionCreate: any) => {
@@ -70,8 +70,8 @@ const smsUnitPricesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, 
 			cy.wait('@getSmsUnitPricesActual').then((interceptionGetSmsPricesActual: any) => {
 				// check status code of request
 				expect(interceptionGetSmsPricesActual.response.statusCode).to.equal(200)
-				// NOTE: at least one SMS unit price for all coutries should exists in DB
-				cy.get(`[data-row-key^="${smsPriceUnitId}"]`)
+				// NOTE: at least one SMS unit price should exists in DB
+				cy.get('.ant-table-row:first')
 					.as('detailRow')
 					.invoke('attr', 'data-row-key')
 					.then((dataRowKey) => {
@@ -90,12 +90,14 @@ const smsUnitPricesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, 
 						}).as('updateSmsUnitPrice')
 
 						cy.get('@detailRow').click()
+						cy.get(`[data-row-key="${smsPriceUnitId}"]`).click()
+
 						cy.wait('@getSmsUnitPrices').then((interceptionGetSmsPrices: any) => {
 							// check status code of request
 							expect(interceptionGetSmsPrices.response.statusCode).to.equal(200)
-							cy.setInputValue(FORM.SMS_UNIT_PRICES_FORM, 'amount', smsUnitPrices.update.amount)
+							cy.setInputValue(FORM.SMS_UNIT_PRICES_FORM, 'amount', smsUnitPrices.update.amount, undefined, true)
 							// NOTE: SMS unit price cannot exist in DB for specified date
-							const dateValueUpdate = dayjs().add(2, 'month').format('YYYY-DD')
+							const dateValueUpdate = dayjs().add(2, 'month').format('YYYY-MM')
 							cy.setDateInputValue(FORM.SMS_UNIT_PRICES_FORM, 'validFrom', dateValueUpdate)
 							cy.clickButton(SUBMIT_BUTTON_ID, FORM.SMS_UNIT_PRICES_FORM)
 							cy.wait('@updateSmsUnitPrice').then((interceptionCreate: any) => {
@@ -123,8 +125,8 @@ const smsUnitPricesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, 
 			cy.wait('@getSmsUnitPricesActual').then((interceptionGetSmsPricesActual: any) => {
 				// check status code of request
 				expect(interceptionGetSmsPricesActual.response.statusCode).to.equal(200)
-				// NOTE: at least one SMS unit price for all coutries should exists in DB
-				cy.get(`[data-row-key^="${smsPriceUnitId}"]`)
+				// NOTE: at least one SMS unit price should exists in DB
+				cy.get('.ant-table-row:first')
 					.as('detailRow')
 					.invoke('attr', 'data-row-key')
 					.then((dataRowKey) => {
@@ -136,14 +138,17 @@ const smsUnitPricesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, 
 							query: {
 								countryCode
 							}
-						}).as('deleteSmsUnitPrices')
+						}).as('getSmsUnitPrices')
 						cy.intercept({
 							method: 'DELETE',
 							pathname: `api/b2b/admin/enums/sms-unit-prices/${smsPriceUnitId}`
 						}).as('updateSmsUnitPrice')
 
 						cy.get('@detailRow').click()
+						cy.get(`[data-row-key="${smsPriceUnitId}"]`).click()
+
 						cy.wait('@getSmsUnitPrices').then((interceptionGetSmsPrices: any) => {
+							// check status code of request
 							// check status code of request
 							expect(interceptionGetSmsPrices.response.statusCode).to.equal(200)
 							cy.clickDeleteButtonWithConfCustom(FORM.SMS_UNIT_PRICES_FORM)

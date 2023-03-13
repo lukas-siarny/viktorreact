@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import dayjs from 'dayjs'
 import useResizeObserver from '@react-hook/resize-observer'
+import cx from 'classnames'
 
 // full calendar
-import FullCalendar, { DateSelectArg, EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { DateSelectArg, DateSpanApi, EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
@@ -57,7 +58,7 @@ const resourceAreaColumns = [
 			const employee = extendedProps?.employee
 
 			return (
-				<div className={'nc-week-label-resource'}>
+				<div className={cx('nc-week-label-resource', { 'is-deleted': employee?.isDeleted })}>
 					<div className={'image'} style={{ backgroundImage: `url("${employee?.image}")`, borderColor: eventBackgroundColor }} />
 					<span className={'info block text-xs font-normal min-w-0 truncate max-w-full'}>{employee?.name}</span>
 					{employee?.isTimeOff && (
@@ -145,6 +146,7 @@ const createDayLabelElement = (resourceElemenet: HTMLElement, employeesLength: n
 interface ICalendarWeekView extends ICalendarView {
 	updateCalendarSize: () => void
 	weekDays: string[]
+	handleSelectAllow: (selectInfo: DateSpanApi) => boolean
 }
 
 /**
@@ -193,7 +195,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		virtualEvent,
 		enabledSalonReservations,
 		onEventChangeStart,
-		onEventChangeStop
+		onEventChangeStop,
+		handleSelectAllow
 	} = props
 
 	const events = useMemo(() => {
@@ -342,6 +345,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				eventDragStop={onEventChangeStop}
 				eventResizeStop={onEventChangeStop}
 				select={(selectedEvent) => handleNewEvent(selectedEvent)}
+				selectAllow={handleSelectAllow}
 				/**
 				 * po tom čo sa setnu resources a eventy je ešte potrebné updatnuť veľkost kalendára, pretože sa občas stávalo, že sa nesprávne vypočítala výška a eventy boli nastackované na sebe v jednom riadku
 				 */

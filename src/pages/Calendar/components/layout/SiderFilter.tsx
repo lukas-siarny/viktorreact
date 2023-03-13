@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import Sider from 'antd/lib/layout/Sider'
 
 // types
-import { ICalendarFilter } from '../../../../types/interfaces'
+import { ICalendarEmployeesPayload, ICalendarFilter } from '../../../../types/interfaces'
 
 // components
 import CalendarFilter from '../forms/CalendarFilter'
@@ -16,16 +16,25 @@ type Props = {
 	handleSubmit: (values: ICalendarFilter) => void
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	loadingData?: boolean
+	employeesOptions: ICalendarEmployeesPayload['options']
+	employeesLoading?: boolean
 }
 
 const SiderFilter: FC<Props> = (props) => {
-	const { collapsed, handleSubmit, parentPath, eventsViewType, loadingData } = props
+	const { collapsed, handleSubmit, parentPath, eventsViewType, loadingData, employeesOptions, employeesLoading } = props
 
 	return (
 		<Sider className='nc-sider-filter' width={230} collapsedWidth={0} collapsed={collapsed} trigger={null} collapsible>
-			<CalendarFilter onSubmit={handleSubmit} parentPath={parentPath} eventsViewType={eventsViewType} loadingData={loadingData} />
+			<CalendarFilter
+				onSubmit={handleSubmit}
+				parentPath={parentPath}
+				eventsViewType={eventsViewType}
+				loadingData={loadingData}
+				employeesOptions={employeesOptions}
+				employeesLoading={employeesLoading}
+			/>
 		</Sider>
 	)
 }
 
-export default SiderFilter
+export default React.memo(SiderFilter)

@@ -226,7 +226,21 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							onClick: () => navigate(getPath(t('paths:employees'))),
 							icon: <EmployeesIcon />,
 							id: PAGE.EMPLOYEES
-						},
+						}
+					)
+				}
+
+				if (hasPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET])) {
+					mainGroupItems.push({
+						key: PAGE.SMS_CREDIT,
+						label: t('loc:SMS kredit'),
+						onClick: () => navigate(getPath(t('paths:sms-credit'))),
+						icon: <SmsUnitPricesIcon />
+					})
+				}
+
+				if (hasPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER])) {
+					mainGroupItems.push(
 						{
 							key: PAGE.CALENDAR,
 							label: t('loc:Kalendár'),

@@ -51,7 +51,11 @@ const MonthlyReservationCard: FC<IMonthlyReservationCardProps> = (props) => {
 	}
 
 	return (
-		<div ref={cardRef} className={cx('nc-event nc-month-event reservation', { 'is-events-list-popover': isEventsListPopover })} onClick={handleReservationClick}>
+		<div
+			ref={cardRef}
+			className={cx('nc-event nc-month-event reservation', { 'is-events-list-popover': isEventsListPopover, 'is-deleted-employee': employee?.isDeleted })}
+			onClick={handleReservationClick}
+		>
 			<div
 				className={'event-accent'}
 				style={{

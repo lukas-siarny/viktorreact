@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 import MapContainer from './MapContainer'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, MAP, mapApiConfig } from '../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, MAP, mapApiConfig, VALIDATION_MAX_LENGTH } from '../utils/enums'
 import {
 	getGoogleMapUrl,
 	parseAddressComponents,
@@ -190,6 +190,7 @@ const AddressFields = (props: Props) => {
 										label={t('loc:Popisné číslo')}
 										placeholder={t('loc:Zadajte číslo')}
 										name={'streetNumber'}
+										maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 										size={'large'}
 									/>
 								</Row>
@@ -210,6 +211,7 @@ const AddressFields = (props: Props) => {
 										label={t('loc:PSČ')}
 										placeholder={t('loc:Zadajte smerovacie číslo')}
 										name={'zipCode'}
+										maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 										size={'large'}
 										validate={validationRequired}
 										required
@@ -300,6 +302,7 @@ const AddressFields = (props: Props) => {
 																label={t('loc:PSČ')}
 																placeholder={t('loc:Zadajte smerovacie číslo')}
 																name={'zipCode'}
+																maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 																size={'large'}
 																validate={validationRequired}
 																required
@@ -310,9 +313,8 @@ const AddressFields = (props: Props) => {
 																component={InputField}
 																label={t('loc:Popisné číslo')}
 																placeholder={t('loc:Zadajte číslo')}
-																required
+																maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 																name={'streetNumber'}
-																validate={validationRequired}
 																size={'large'}
 															/>
 														</Col>

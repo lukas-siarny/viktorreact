@@ -7,7 +7,7 @@ import { startsWith } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 // utils
-import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NEW_ID_PREFIX } from '../../../../utils/enums'
+import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NEW_ID_PREFIX, CALENDAR_EVENT_TYPE } from '../../../../utils/enums'
 import { getAssignedUserLabel } from '../../../../utils/helper'
 
 // assets
@@ -17,6 +17,7 @@ import { ReactComponent as ServiceIcon } from '../../../../assets/icons/service-
 import { ReactComponent as AvatarIcon } from '../../../../assets/icons/avatar-10.svg'
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-12.svg'
 import { ReactComponent as ClockIcon } from '../../../../assets/icons/clock-12.svg'
+import { ReactComponent as UploadIcon } from '../../../../assets/icons/upload-icon.svg'
 
 // types
 import { CalendarEvent, IEventCardProps, ReservationPopoverData, PopoverTriggerPosition } from '../../../../types/interfaces'
@@ -28,6 +29,8 @@ interface IReservationCardProps extends IEventCardProps {
 	note?: CalendarEvent['note']
 	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
+	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
+	isImported?: boolean
 }
 
 const getIconState = ({
@@ -35,14 +38,20 @@ const getIconState = ({
 	isRealized,
 	isApproved,
 	notRealized,
-	service
+	service,
+	isImported
 }: {
 	isPast?: boolean
 	isRealized?: boolean
 	notRealized?: boolean
 	isApproved?: boolean
 	service?: CalendarEvent['service']
+	isImported?: boolean
 }) => {
+	if (isImported) {
+		return <UploadIcon className={'icon import'} />
+	}
+
 	if (isPast && isApproved) {
 		return <QuestionMarkIcon className={'icon question-mark'} />
 	}
@@ -83,7 +92,9 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		isPlaceholder,
 		isEdit,
 		onReservationClick,
-		timeLeftClassName
+		onEditEvent,
+		timeLeftClassName,
+		isImported
 	} = props
 
 	const [t] = useTranslation()
@@ -104,20 +115,30 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		</div>
 	) : null
 
-	const customerName = getAssignedUserLabel({
-		id: customer?.id || '-',
-		firstName: customer?.firstName,
-		lastName: customer?.lastName,
-		email: customer?.email
-	})
+	const title = isImported
+		? t('loc:Importovaná rezervácia')
+		: getAssignedUserLabel({
+				id: customer?.id || '-',
+				firstName: customer?.firstName,
+				lastName: customer?.lastName,
+				email: customer?.email
+		  })
 
-	const iconState = getIconState({ isPast, isApproved, isRealized, notRealized, service })
+	const description = isImported ? note : service?.name
+
+	const iconState = getIconState({ isPast, isApproved, isRealized, notRealized, service, isImported })
 	const iconPending = isPending && <ClockIcon className={'icon clock'} style={{ color: bgColor }} />
 	const iconAutoAssigned = isEmployeeAutoassigned && <AvatarIcon className={'icon employee'} />
 
 	const cardRef = useRef<HTMLDivElement | null>(null)
 
 	const handleReservationClick = () => {
+		if (isImported && originalEventData.id) {
+			// NOTE: importovanemu eventu nezobrazujeme popover, ale rovno sa otvori sidebar
+			onEditEvent(CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT, originalEventData.id)
+			return
+		}
+
 		// NOTE: prevent proti kliknutiu na virutalny event rezervacie neotvori sa popover
 		if (startsWith(originalEventData.id, NEW_ID_PREFIX)) {
 			return
@@ -171,7 +192,8 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
 				'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
 				placeholder: isPlaceholder,
-				edit: isEdit || isPlaceholder
+				edit: isEdit || isPlaceholder,
+				'is-imported': isImported
 			})}
 			onClick={handleReservationClick}
 			style={{
@@ -192,23 +214,13 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 			<div id={originalEventData?.id} className={'event-content'}>
 				{(() => {
 					switch (calendarView) {
-						case CALENDAR_VIEW.MONTH:
-							return (
-								<>
-									<div className={'flex gap-1 min-w-0'}>
-										<div className={'icons'}>{iconState}</div>
-										<span className={'title truncate'}>{customerName}</span>
-									</div>
-									<span className={'time'}>{timeText}</span>
-								</>
-							)
 						case CALENDAR_VIEW.WEEK: {
 							return (
 								<>
 									<div className={'title-wrapper'}>
 										<div className={'title-inner-wrapper'}>
 											{iconState}
-											<span className={'title'}>{customerName}</span>
+											<span className={'title'}>{title}</span>
 											{onlineIndicatior}
 										</div>
 										<div className={'icons'}>
@@ -216,7 +228,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 											{iconAutoAssigned}
 										</div>
 									</div>
-									{service?.name && <span className={'desc'}>{service.name}</span>}
+									{description && <span className={'desc'}>{description}</span>}
 								</>
 							)
 						}
@@ -227,7 +239,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 									<div className={'title-wrapper'}>
 										<div className={'title-inner-wrapper'}>
 											{iconState}
-											<span className={'title'}>{customerName}</span>
+											<span className={'title'}>{title}</span>
 											{onlineIndicatior}
 											<span className={'time'}>{timeText}</span>
 										</div>
@@ -237,7 +249,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 										</div>
 									</div>
 									<span className={'time'}>{timeText}</span>
-									{service?.name && <span className={'desc'}>{service.name}</span>}
+									{description && <span className={'desc'}>{description}</span>}
 								</>
 							)
 						}

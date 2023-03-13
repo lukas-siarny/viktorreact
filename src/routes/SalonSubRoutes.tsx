@@ -43,14 +43,18 @@ import IndustryPage from '../pages/IndustriesPage/IndustryPage'
 // Billing info
 import BillingInfoPage from '../pages/BillingInfoPage/BillingInfoPage'
 
-// calendar
+// Calendar
 import Calendar from '../pages/Calendar/Calendar'
 
-// reservations-settings
+// Reservations-settings
 import ReservationsSettingsPage from '../pages/ReservationsSettingsPage/ReservationsSettingsPage'
 
-// reservations
+// Reservations
 import ReservationsPage from '../pages/ReservationsPage/ReservationsPage'
+
+// SMS credit
+import SmsCreditPage from '../pages/SmsCreditPage/SmsCreditPage'
+import RechargeSmsCreditPage from '../pages/SmsCreditPage/RechargeSmsCreditPage'
 
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
@@ -171,6 +175,10 @@ const SalonSubRoutes: FC = () => {
 				element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.SALON_SETTINGS} />}
 			>
 				<Route index element={<ReservationsSettingsPage parentPath={parentPath} salonID={salonID} />} />
+			</Route>
+			<Route errorElement={<ErrorBoundary />} path={t('paths:sms-credit')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.SMS_CREDIT} />}>
+				<Route index element={<SmsCreditPage parentPath={parentPath} salonID={salonID} />} />
+				<Route path={t('paths:recharge')} element={<RechargeSmsCreditPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* 404 */}
 			<Route element={<AuthRoute layout={MainLayout} />}>

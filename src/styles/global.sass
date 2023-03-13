@@ -123,6 +123,12 @@ body, .ant-layout
 		opacity: .4
 		height: 100%
 
+// Safari color fix for disabled state
+.ant-form-item
+	.ant-input-disabled, .ant-input-number-disabled, .ant-picker-disabled
+		-webkit-text-fill-color: $backgroundColor-gray-200
+		color: $backgroundColor-gray-200
+
 .loading-spinner
 	animation: rotate 1.5s linear infinite
 	position: relative
@@ -1140,7 +1146,8 @@ span.ant-tag
 .mt-2-5
 	margin-top: 10px
 
-.homepage-wrapper
+.homepage-wrapper,
+.sms-staticis-wrapper
 	width: calc(100% + 80px)
 	height: calc(100% + 32px)
 	margin: -16px -40px

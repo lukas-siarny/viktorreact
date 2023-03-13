@@ -4,15 +4,16 @@ import { message as antMessage } from 'antd'
 import { get, has, isEmpty, split } from 'lodash'
 import i18next from 'i18next'
 import qs from 'qs'
+import { ERROR_MSG_CODE, CANCEL_TOKEN_MESSAGES, MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES } from './enums'
 import rootReducer from '../reducers'
 import { logOutUser } from '../reducers/users/userActions'
 import { getAccessToken, isLoggedIn } from './auth'
-import { CANCEL_TOKEN_MESSAGES, MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES } from './enums'
 import configureStore from './configureStore'
+import Navigator from './navigation'
 
 // types
 import { IErrorMessage } from '../types/interfaces'
-import showNotifications from './tsxHelpers'
+import showNotifications, { showNotificationModal } from './tsxHelpers'
 import { PathsDictionary } from '../types/api'
 
 type FilteredKeys<T, U> = { [P in keyof T]: T[P] extends U ? P : never }[keyof T]
@@ -56,6 +57,15 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 			}
 		]
 		showNotifications(messages, typeNotification)
+	} else if (messages.some((msg: any) => msg.code === ERROR_MSG_CODE.MISSING_COUNTRY_CODE)) {
+		const urlArray = split(get(error, 'config.url'), '/')
+		const salonsIndex = urlArray.indexOf(i18next.t('paths:salons'))
+		const salonId = urlArray[salonsIndex + 1]
+		showNotificationModal({
+			message: i18next.t('loc:Na vykonanie požadovanej akcie je potrebné mať nastavenú adresu salónu.'),
+			actionButtonLabel: i18next.t('loc:Nastaviť adresu'),
+			action: salonId ? () => Navigator.navigate(`${i18next.t('paths:salons')}/${salonId}`) : undefined
+		})
 	} else {
 		// if BE do not send message set general error message
 		messages = isEmpty(messages) ? [{ type: MSG_TYPE.ERROR, message: i18next.t('loc:Ups niečo sa pokazilo') }] : messages
@@ -295,6 +305,7 @@ export const patchReq = async <T extends keyof PatchUrls>(
 	cancelTokenKey = ''
 ): Promise<ReturnType<PatchUrls[T]['patch']>> => {
 	const { fullfilURL, queryParams } = fullFillURL(url, params)
+
 	let token = {}
 	if (allowCancelToken) {
 		const cancelTokenStorageKey = cancelTokenKey || fullfilURL

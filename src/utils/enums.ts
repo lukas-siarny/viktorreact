@@ -5,6 +5,13 @@ import { LoadScriptUrlOptions } from '@react-google-maps/api/dist/utils/make-loa
 import { AliasToken } from 'antd/es/theme/internal'
 import { FormatterInput } from '@fullcalendar/react'
 
+export enum CYPRESS_CLASS_NAMES {
+	LOGOUT_BUTTON = 'noti-logout-button',
+	MY_ACCOUNT = 'noti-my-account',
+	MY_ACCOUNT_BUTTON = 'noti-my-account-button',
+	FORBIDDEN_MODAL = 'noti-forbidden-modal'
+}
+
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
 }
@@ -605,6 +612,18 @@ export const CREATE_BUTTON_ID = 'create-btn'
 export const SUBMIT_BUTTON_ID = 'submit-btn'
 
 export const ADD_BUTTON_ID = 'add-btn'
+
+export const FORGOT_PASSWORD_BUTTON_ID = 'forgot-password-btn'
+
+export const SIGNUP_BUTTON_ID = 'signup-btn'
+
+export const HELP_BUTTON_ID = 'help-password-btn'
+
+export const CHANGE_PASSWORD_NEW_LINK_BUTTON_ID = 'change-password-new-link-btn'
+
+export const CREATE_EMPLOYEE_BUTTON_ID = 'create-employee-btn'
+
+export const CREATE_CUSTOMER_BUTTON_ID = 'create-customer-btn'
 
 export const MAX_VALUES_PER_PARAMETER = 20
 

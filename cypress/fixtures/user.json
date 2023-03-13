@@ -3,8 +3,8 @@
 		"emailSuffix": "test@goodrequest.com",
 		"password": "Test 123.",
 		"phone": "956520900",
-		"firstName": "Jozko",
-		"lastName": "Mrkvicka",
+		"firstName": "Martin",
+		"lastName": "Testovic",
 		"companyName": "Test s.r.o.",
 		"businessID": "01234567",
 		"street": "Teslova 23",
@@ -14,7 +14,8 @@
 	"update": {
 		"firstName": "Jane",
 		"lastName": "Doe",
-		"phone": "956520901"
+		"phone": "956520901",
+		"password": "Test 123@"
 	},
 	"updateMyAccount": {
 		"firstName": "John",

@@ -34,7 +34,7 @@ import { ReactComponent as ReviewsIcon } from '../../assets/icons/reviews-icon.s
 import { ReactComponent as SmsUnitPricesIcon } from '../../assets/icons/sms-unit-prices.svg'
 
 // utils
-import { PAGE, PERMISSION } from '../../utils/enums'
+import { CYPRESS_CLASS_NAMES, PAGE, PERMISSION } from '../../utils/enums'
 import { checkPermissions } from '../../utils/Permissions'
 
 // redux
@@ -95,7 +95,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				key: PAGE.HOME,
 				label: t('loc:Prehľad'),
 				onClick: () => navigate(t('paths:index')),
-				icon: <HomeIcon />
+				icon: <HomeIcon />,
+				id: PAGE.HOME
 			})
 
 			if (!salonID) {
@@ -105,7 +106,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						key: PAGE.USERS,
 						label: t('loc:Používatelia'),
 						onClick: () => navigate(t('paths:users')),
-						icon: <UsersIcon />
+						icon: <UsersIcon />,
+						id: PAGE.USERS
 					})
 				}
 				if (hasPermissions([PERMISSION.ENUM_EDIT])) {
@@ -114,49 +116,57 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.CATEGORIES,
 							label: t('loc:Kategórie'),
 							onClick: () => navigate(t('paths:categories')),
-							icon: <CategoryIcon />
+							icon: <CategoryIcon />,
+							id: PAGE.CATEGORIES
 						},
 						{
 							key: PAGE.CATEGORY_PARAMETERS,
 							label: t('loc:Parametre'),
 							onClick: () => navigate(t('paths:category-parameters')),
-							icon: <ParametersIcon />
+							icon: <ParametersIcon />,
+							id: PAGE.CATEGORY_PARAMETERS
 						},
 						{
 							key: PAGE.COSMETICS,
 							label: t('loc:Kozmetika'),
 							onClick: () => navigate(t('paths:cosmetics')),
-							icon: <CosmeticIcon />
+							icon: <CosmeticIcon />,
+							id: PAGE.COSMETICS
 						},
 						{
 							key: PAGE.LANGUAGES,
 							label: t('loc:Jazyky'),
 							onClick: () => navigate(t('paths:languages-in-salons')),
-							icon: <LanguagesIcon />
+							icon: <LanguagesIcon />,
+							id: PAGE.LANGUAGES
 						},
 						{
 							key: PAGE.SUPPORT_CONTACTS,
 							label: t('loc:Podpora'),
 							onClick: () => navigate(t('paths:support-contacts')),
-							icon: <HelpIcon />
+							icon: <HelpIcon />,
+							id: PAGE.SUPPORT_CONTACTS
 						},
 						{
 							key: PAGE.SPECIALIST_CONTACTS,
 							label: t('loc:Špecialisti'),
 							onClick: () => navigate(t('paths:specialist-contacts')),
-							icon: <SpecialistIcon />
+							icon: <SpecialistIcon />,
+							id: PAGE.SPECIALIST_CONTACTS
 						},
 						{
 							key: PAGE.REVIEWS,
 							label: t('loc:Recenzie'),
 							onClick: () => navigate(t('paths:reviews')),
-							icon: <ReviewsIcon />
+							icon: <ReviewsIcon />,
+							id: PAGE.REVIEWS
 						},
 						{
 							key: PAGE.SMS_CREDITS,
 							label: t('loc:SMS kredity'),
 							onClick: () => navigate(t('paths:sms-credits')),
-							icon: <SmsUnitPricesIcon />
+							icon: <SmsUnitPricesIcon />,
+							id: PAGE.SMS_CREDITS
 						}
 					)
 				}
@@ -165,7 +175,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						key: PAGE.SALONS,
 						label: t('loc:Salóny'),
 						onClick: () => navigate(t('paths:salons')),
-						icon: <SalonIcon />
+						icon: <SalonIcon />,
+						id: PAGE.SALONS
 					})
 				}
 			}
@@ -178,37 +189,43 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.SALONS,
 							label: t('loc:Detail salónu'),
 							onClick: () => navigate(parentPath as string),
-							icon: <SalonIcon />
+							icon: <SalonIcon />,
+							id: PAGE.SALONS
 						},
 						{
 							key: PAGE.BILLING_INFO,
 							label: t('loc:Fakturačné údaje'),
 							onClick: () => navigate(getPath(t('paths:billing-info'))),
-							icon: <InvoiceIcon />
+							icon: <InvoiceIcon />,
+							id: PAGE.BILLING_INFO
 						},
 						{
 							key: PAGE.INDUSTRIES_AND_SERVICES,
 							label: t('loc:Odvetvia a služby'),
 							onClick: () => navigate(getPath(t('paths:industries-and-services'))),
-							icon: <IndustiresIcon />
+							icon: <IndustiresIcon />,
+							id: PAGE.INDUSTRIES_AND_SERVICES
 						},
 						{
 							key: PAGE.SERVICES_SETTINGS,
 							label: t('loc:Nastavenie služieb'),
 							onClick: () => navigate(getPath(t('paths:services-settings'))),
-							icon: <ServiceIcon className={'text-black'} />
+							icon: <ServiceIcon className={'text-black'} />,
+							id: PAGE.SERVICES_SETTINGS
 						},
 						{
 							key: PAGE.CUSTOMERS,
 							label: t('loc:Zákazníci'),
 							onClick: () => navigate(getPath(t('paths:customers'))),
-							icon: <CustomerIcon className={'text-black'} />
+							icon: <CustomerIcon className={'text-black'} />,
+							id: PAGE.CUSTOMERS
 						},
 						{
 							key: PAGE.EMPLOYEES,
 							label: t('loc:Zamestnanci'),
 							onClick: () => navigate(getPath(t('paths:employees'))),
-							icon: <EmployeesIcon />
+							icon: <EmployeesIcon />,
+							id: PAGE.EMPLOYEES
 						}
 					)
 				}
@@ -222,26 +239,28 @@ const LayoutSider = (props: LayoutSiderProps) => {
 					})
 				}
 
-				// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
-				if (hasPermissions([PERMISSION.NOTINO]) || (hasPermissions([PERMISSION.PARTNER]) && selectedSalon?.settings?.enabledReservations)) {
+				if (hasPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER])) {
 					mainGroupItems.push(
 						{
 							key: PAGE.CALENDAR,
 							label: t('loc:Kalendár'),
 							onClick: () => navigate(getPath(t('paths:calendar'))),
-							icon: <CalendarIcon />
+							icon: <CalendarIcon />,
+							id: PAGE.CALENDAR
 						},
 						{
 							key: PAGE.SALON_SETTINGS,
 							label: t('loc:Nastavenia rezervácií'),
 							onClick: () => navigate(getPath(t('paths:reservations-settings'))),
-							icon: <SettingIcon />
+							icon: <SettingIcon />,
+							id: PAGE.SALON_SETTINGS
 						},
 						{
 							key: PAGE.RESERVATIONS,
 							label: t('loc:Rezervácie'),
 							onClick: () => navigate(getPath(t('paths:reservations'))),
-							icon: <ReservationsIcon />
+							icon: <ReservationsIcon />,
+							id: PAGE.RESERVATIONS
 						}
 					)
 				}
@@ -252,6 +271,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 		const myAccontMenuItems: MenuProps['items'] = [
 			{
 				key: 'myProfile',
+				className: CYPRESS_CLASS_NAMES.MY_ACCOUNT_BUTTON,
 				label: t('loc:Môj profil'),
 				onClick: () => navigate(t('paths:my-account')),
 				icon: <ProfileIcon />
@@ -270,7 +290,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			getLanguagePickerAsSubmenuItem(dispatch),
 			{
 				key: 'logOut',
-				className: 'noti-logout-button',
+				className: CYPRESS_CLASS_NAMES.LOGOUT_BUTTON,
 				label: t('loc:Odhlásiť'),
 				onClick: () => dispatch(logOutUser()),
 				icon: <LogOutIcon />
@@ -327,7 +347,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							>
 								<div role='button' className='cursor-pointer' tabIndex={-1} onClick={(e) => e.preventDefault()} onKeyPress={(e) => e.preventDefault()}>
 									<Row className='flex items-center' justify='space-between'>
-										<Row className='noti-my-account'>
+										<Row className={CYPRESS_CLASS_NAMES.MY_ACCOUNT}>
 											<div className='truncate item-label flex items-center'>{t('loc:Moje konto')}</div>
 										</Row>
 

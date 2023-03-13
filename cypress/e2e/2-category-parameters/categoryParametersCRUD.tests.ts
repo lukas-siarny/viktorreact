@@ -1,11 +1,18 @@
-// utils
-import { ADD_BUTTON_ID, DELETE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
+import { loginViaApi } from '../../support/e2e'
 
-// fixtures
 import category from '../../fixtures/category.json'
 
-describe('Category parameters', () => {
+// enums
+import { ADD_BUTTON_ID, DELETE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
+import { CRUD_OPERATIONS } from '../../enums'
+
+const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
 	let categoryParameterID: any
+
+	before(() => {
+		loginViaApi(email, password)
+	})
+
 	beforeEach(() => {
 		// restore local storage with tokens and salon id from snapshot
 		cy.restoreLocalStorage()
@@ -189,6 +196,7 @@ describe('Category parameters', () => {
 			cy.location('pathname').should('eq', '/category-parameters')
 		})
 	})
+
 	// TODO: dorobit testy pre minutove zobrazenie
 	// CREATE parameter (minutes)
 	// it('Create category parameters (minutes)', () => {
@@ -247,4 +255,6 @@ describe('Category parameters', () => {
 	// 		})
 	// 	})
 	// })
-})
+}
+
+export default categoryParameterCRUDTestSuite

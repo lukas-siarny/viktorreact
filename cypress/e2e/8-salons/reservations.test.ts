@@ -1,5 +1,5 @@
 import { CRUD_OPERATIONS, SALON_ID } from '../../enums'
-import { FORM } from '../../../src/utils/enums'
+import { FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 
 import reservations from '../../fixtures/reservations.json'
 
@@ -38,6 +38,7 @@ const reservationsTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			cy.visit(`/salons/${salonID}/reservations-settings`)
 			cy.wait('@getSalon')
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+				cy.clickButton('enabledReservations', FORM.RESEVATION_SYSTEM_SETTINGS, true)
 				cy.setInputValue(FORM.RESEVATION_SYSTEM_SETTINGS, 'maxDaysB2cCreateReservation', reservations.update.maxDaysB2cCreateReservation, false, true)
 				cy.setInputValue(
 					FORM.RESEVATION_SYSTEM_SETTINGS,
@@ -53,8 +54,8 @@ const reservationsTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					false,
 					true
 				)
-				cy.selectOptionDropdown(FORM.RESEVATION_SYSTEM_SETTINGS, 'minutesIntervalB2CReservations', reservations.update.minutesIntervalB2CReservations)
-
+				cy.selectOptionDropdownCustom(FORM.RESEVATION_SYSTEM_SETTINGS, 'minutesIntervalB2CReservations', reservations.update.minutesIntervalB2CReservations, true)
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.RESEVATION_SYSTEM_SETTINGS)
 				cy.wait('@updateReservationsSettings').then((interception: any) => {
 					// check status code
 					expect(interception.response.statusCode).to.equal(200)

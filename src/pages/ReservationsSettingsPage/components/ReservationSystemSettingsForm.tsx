@@ -382,7 +382,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						className='mb-0 pb-0 ml-2'
 						component={SwitchField}
 						disabled={submitting}
-						onClick={(checked: boolean, event: Event) => event.stopPropagation()}
+						onClick={(_checked: boolean, event: Event) => event.stopPropagation()}
 						name='enabledReservations'
 						size='middle'
 					/>

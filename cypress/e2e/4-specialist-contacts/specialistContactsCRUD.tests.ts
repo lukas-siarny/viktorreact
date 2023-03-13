@@ -30,7 +30,7 @@ const specialistContactsCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: str
 				method: 'POST',
 				url: '/api/b2b/admin/enums/contacts/'
 			}).as('createSpecialistContact')
-			cy.clickButton(FORM.SPECIALIST_CONTACT, CREATE_BUTTON_ID)
+			cy.clickButton(CREATE_BUTTON_ID, FORM.SPECIALIST_CONTACT)
 			cy.selectOptionDropdown(FORM.SPECIALIST_CONTACT, 'countryCode', specialistContact.create.countryCode)
 			cy.selectOptionDropdownCustom(FORM.SPECIALIST_CONTACT, 'phonePrefixCountryCode', specialistContact.create.phonePrefixCountryCode, true)
 			cy.setInputValue(FORM.SPECIALIST_CONTACT, 'phone', specialistContact.create.phone)

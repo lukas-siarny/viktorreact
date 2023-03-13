@@ -23,25 +23,6 @@ const supportCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, passwo
 		cy.saveLocalStorage()
 	})
 
-	it('Filter support contact', () => {
-		cy.visit('/support-contacts')
-		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
-			cy.intercept({
-				method: 'GET',
-				url: '/api/b2b/admin/enums/support-contacts/'
-			}).as('filterSupportContact')
-			cy.setInputValue(FORM.SUPPORT_CONTACTS_FILTER, 'search', supportContact.filter.search)
-			cy.wait('@filterSupportContact').then((interception: any) => {
-				// check status code
-				expect(interception.response.statusCode).to.equal(200)
-				cy.location('pathname').should('eq', '/support-contacts')
-			})
-		} else {
-			// check redirect to 403 unauthorized page
-			cy.location('pathname').should('eq', '/403')
-		}
-	})
-
 	it('Create support contact', () => {
 		cy.visit('/support-contacts')
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
@@ -49,7 +30,7 @@ const supportCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, passwo
 				method: 'POST',
 				url: '/api/b2b/admin/enums/support-contacts/'
 			}).as('createSupportContact')
-			cy.clickButton(FORM.SUPPORT_CONTACT, CREATE_BUTTON_ID)
+			cy.clickButton(CREATE_BUTTON_ID, FORM.SUPPORT_CONTACT)
 			cy.selectOptionDropdownCustom(FORM.SUPPORT_CONTACT, 'countryCode', supportContact.create.countryCode, true)
 			cy.setInputValue(FORM.SUPPORT_CONTACT, 'emails-0-email', supportContact.create.emails[0])
 			cy.selectOptionDropdownCustom(FORM.SUPPORT_CONTACT, 'phones-0-phonePrefixCountryCode', supportContact.create.phones[0].phonePrefixCountryCode, true)
@@ -91,19 +72,38 @@ const supportCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, passwo
 			cy.get(`[data-row-key="${supportContactID}"]`).click()
 			cy.wait('@getSupportContact')
 			cy.selectOptionDropdownCustom(FORM.SUPPORT_CONTACT, 'countryCode', supportContact.update.countryCode, true)
-			cy.setInputValue(FORM.SUPPORT_CONTACT, 'emails-0-email', supportContact.update.emails[0], false, true)
+			cy.setInputValue(FORM.SUPPORT_CONTACT, 'emails-0-email', supportContact.update.emails[0], true, true)
 			cy.selectOptionDropdownCustom(FORM.SUPPORT_CONTACT, 'phones-0-phonePrefixCountryCode', supportContact.update.phones[0].phonePrefixCountryCode, true)
-			cy.setInputValue(FORM.SUPPORT_CONTACT, 'phones-0-phone', supportContact.update.phones[0].phone, false, true)
-			cy.setInputValue(FORM.SUPPORT_CONTACT, 'street', supportContact.update.address.street, false, true)
-			cy.setInputValue(FORM.SUPPORT_CONTACT, 'city', supportContact.update.address.city, false, true)
-			cy.setInputValue(FORM.SUPPORT_CONTACT, 'streetNumber', supportContact.update.address.streetNumber, false, true)
-			cy.setInputValue(FORM.SUPPORT_CONTACT, 'zipCode', supportContact.update.address.zipCode, false, true)
+			cy.setInputValue(FORM.SUPPORT_CONTACT, 'phones-0-phone', supportContact.update.phones[0].phone, true, true)
+			cy.setInputValue(FORM.SUPPORT_CONTACT, 'street', supportContact.update.address.street, true, true)
+			cy.setInputValue(FORM.SUPPORT_CONTACT, 'city', supportContact.update.address.city, true, true)
+			cy.setInputValue(FORM.SUPPORT_CONTACT, 'streetNumber', supportContact.update.address.streetNumber, true, true)
+			cy.setInputValue(FORM.SUPPORT_CONTACT, 'zipCode', supportContact.update.address.zipCode, true, true)
 			cy.clickButton(SUBMIT_BUTTON_ID, FORM.SUPPORT_CONTACT)
 			cy.wait('@updateSupportContact').then((interception: any) => {
 				// check status code of request
 				expect(interception.response.statusCode).to.equal(200)
 				// check conf toast message
 				cy.checkSuccessToastMessage()
+			})
+		} else {
+			// check redirect to 403 unauthorized page
+			cy.location('pathname').should('eq', '/403')
+		}
+	})
+
+	it('Filter support contact', () => {
+		cy.visit('/support-contacts')
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
+			cy.intercept({
+				method: 'GET',
+				url: '/api/b2b/admin/enums/support-contacts/'
+			}).as('filterSupportContact')
+			cy.setInputValue(FORM.SUPPORT_CONTACTS_FILTER, 'search', supportContact.filter.search)
+			cy.wait('@filterSupportContact').then((interception: any) => {
+				// check status code
+				expect(interception.response.statusCode).to.equal(200)
+				cy.location('pathname').should('eq', '/support-contacts')
 			})
 		} else {
 			// check redirect to 403 unauthorized page

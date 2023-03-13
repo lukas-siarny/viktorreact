@@ -19,7 +19,7 @@ import SmsUnitPricesForm from './components/SmsUnitPricesForm'
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, CREATE_BUTTON_ID, D_M_YEAR_FORMAT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { formFieldID, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 
 // reducers
 import { getSmsUnitPrices, ISmsUnitPricesPayload } from '../../reducers/smsUnitPrices/smsUnitPricesActions'
@@ -251,7 +251,7 @@ const SmsUnitPricesDetailPage = () => {
 									htmlType='button'
 									className={'noti-btn'}
 									icon={<PlusIcon />}
-									id={`${CREATE_BUTTON_ID}-${FORM.SMS_UNIT_PRICES_FORM}`}
+									id={formFieldID(FORM.SMS_UNIT_PRICES_FORM, CREATE_BUTTON_ID)}
 								>
 									{STRINGS(t).addRecord(t('loc:cenu'))}
 								</Button>

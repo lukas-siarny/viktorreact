@@ -40,7 +40,7 @@ const smsUnitPricesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, 
 				expect(interceptionGetSmsPricesActual.response.statusCode).to.equal(200)
 				// NOTE: at least one SMS unit price should exists in DB
 				cy.get('.ant-table-row:first').click()
-				cy.clickButton(FORM.SMS_UNIT_PRICES_FORM, CREATE_BUTTON_ID)
+				cy.clickButton(CREATE_BUTTON_ID, FORM.SMS_UNIT_PRICES_FORM)
 				cy.setInputValue(FORM.SMS_UNIT_PRICES_FORM, 'amount', smsUnitPrices.create.amount)
 				// NOTE: SMS unit price cannot exist in DB for specified date
 				const dateValue = dayjs().add(1, 'month').format('YYYY-MM')

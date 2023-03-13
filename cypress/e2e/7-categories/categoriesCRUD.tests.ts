@@ -33,7 +33,7 @@ const categoriesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pas
 					method: 'POST',
 					url: '/api/b2b/admin/enums/categories/'
 				}).as('createCategory')
-				cy.clickButton(FORM.CATEGORY, CREATE_BUTTON_ID)
+				cy.clickButton(CREATE_BUTTON_ID, FORM.CATEGORY)
 				cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.industry.create.title)
 				cy.uploadFile('image', '../images/test.jpg', FORM.CATEGORY)
 				cy.uploadFile('icon', '../images/test.jpg', FORM.CATEGORY)

@@ -209,21 +209,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							label: t('loc:Zamestnanci'),
 							onClick: () => navigate(getPath(t('paths:employees'))),
 							icon: <EmployeesIcon />
-						}
-					)
-				}
-
-				if (hasPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET])) {
-					mainGroupItems.push({
-						key: PAGE.SMS_CREDIT,
-						label: t('loc:SMS kredit'),
-						onClick: () => navigate(getPath(t('paths:sms-credit'))),
-						icon: <SmsUnitPricesIcon />
-					})
-				}
-
-				if (hasPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER])) {
-					mainGroupItems.push(
+						},
 						{
 							key: PAGE.CALENDAR,
 							label: t('loc:Kalendár'),
@@ -243,6 +229,15 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							icon: <ReservationsIcon />
 						}
 					)
+				}
+
+				if (hasPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET])) {
+					mainGroupItems.push({
+						key: PAGE.SMS_CREDIT,
+						label: t('loc:SMS kredit'),
+						onClick: () => navigate(getPath(t('paths:sms-credit'))),
+						icon: <SmsUnitPricesIcon />
+					})
 				}
 			}
 		}

@@ -17,7 +17,8 @@ import { getReq, postReq } from '../../../../utils/request'
 import { CALENDAR_EVENT_TYPE, DEFAULT_TIME_FORMAT, ENUMERATIONS_KEYS, FORM, PERMISSION, CREATE_EVENT_PERMISSIONS, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // types
-import { EmployeeService, ICalendarEmployeesPayload, ICalendarReservationForm, ICustomerForm, ServiceType } from '../../../../types/interfaces'
+import { EmployeeService, ICalendarEmployeesPayload, ICalendarReservationForm, ServiceType } from '../../../../types/interfaces'
+import { ICustomerForm } from '../../../../schemas/customerSchema'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'

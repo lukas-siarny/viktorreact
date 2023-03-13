@@ -422,7 +422,7 @@ export interface IOpenHoursNoteForm {
 export interface ISearchFilter {
 	search: string
 }
-
+/*
 export interface ICustomerForm {
 	firstName: string
 	lastName: string
@@ -436,11 +436,10 @@ export interface ICustomerForm {
 	street?: string
 	streetNumber?: string
 	countryCode?: string
-	salonID?: string
 	gallery?: any
 	avatar?: any
 }
-
+*/
 export interface IEmployeeForm {
 	firstName: string
 	lastName: string

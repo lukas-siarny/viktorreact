@@ -13,7 +13,8 @@ import DeleteButton from '../../components/DeleteButton'
 import CustomerForm from './components/CustomerForm'
 
 // types
-import { IBreadcrumbs, ICustomerForm, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
+import { ICustomerForm } from '../../schemas/customerSchema'
 
 // reducers
 import { getCustomer } from '../../reducers/customers/customerActions'
@@ -110,7 +111,7 @@ const CustomerPage = (props: Props) => {
 					city: data.city,
 					countryCode: data.countryCode,
 					firstName: data.firstName,
-					gender: data.gender ?? undefined,
+					gender: data.gender, // ?? undefined,
 					lastName: data.lastName,
 					note: data.note,
 					street: data.street,

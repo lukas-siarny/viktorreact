@@ -10,7 +10,8 @@ import { optionRenderWithImage, showErrorNotification } from '../../../utils/hel
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
-import { ICustomerForm, ISelectOptionItem } from '../../../types/interfaces'
+import { ISelectOptionItem } from '../../../types/interfaces'
+import { ICustomerForm } from '../../../schemas/customerSchema'
 
 // validate
 import validateCustomerForm from './validateCustomerForm'

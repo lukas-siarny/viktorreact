@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Spin } from 'antd'
 import { get } from 'lodash'
 import { useNavigate } from 'react-router-dom'
-
+import { z } from 'zod'
 import * as Sentry from '@sentry/react'
 
 // utils
@@ -18,6 +18,9 @@ import { refreshToken } from '../reducers/users/userActions'
 import { getCountries, getCurrencies } from '../reducers/enumerations/enumerationActions'
 import { selectSalon } from '../reducers/selectedSalon/selectedSalonActions'
 
+// schemas
+import { defaultErrorMap } from '../schemas/baseSchema'
+
 type Props = PropsWithChildren
 
 const AppInit = (props: Props) => {
@@ -29,6 +32,7 @@ const AppInit = (props: Props) => {
 
 	useEffect(() => {
 		Navigator.init(navigate)
+		z.setErrorMap(defaultErrorMap)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 

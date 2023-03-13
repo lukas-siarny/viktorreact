@@ -601,6 +601,7 @@
   "Zadajte základné informácie o salóne": "Enter basic salon information",
   "Zadajte {{entity}}": "Enter {{entity}}",
   "Zadajte číslo": "Enter the number",
+  "Zadaná hodnota nie je správna": "The entered value is not correct",
   "Zamestnanci": "Colleagues",
   "Zamestnanec": "Colleague",
   "Zamestnanec dostane notifikáciu, že jeho rezervácia bola zmenená.": "The colleague receives a notification that the reservation has been changed",

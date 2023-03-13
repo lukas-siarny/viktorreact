@@ -11,8 +11,9 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomerForm from './components/CustomerForm'
 
 // types
-import { IBreadcrumbs, ICustomerForm, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 import { Paths } from '../../types/api'
+import { ICustomerForm } from '../../schemas/customerSchema'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'

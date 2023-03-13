@@ -6,6 +6,7 @@ import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import { IEmployeeForm } from '../../../types/interfaces'
 
 export default (values: IEmployeeForm) => {
+	console.log('🚀 ~ file: validateEmployeeForm.ts:9 ~ values:', values)
 	const errors: FormErrors<IEmployeeForm> = {}
 
 	if (!values?.lastName) {

@@ -601,6 +601,7 @@
   "Zadajte základné informácie o salóne": "Въведете основната информация за салона",
   "Zadajte {{entity}}": "Въведете {{entity}}",
   "Zadajte číslo": "Въведете номер",
+  "Zadaná hodnota nie je správna": "_NEPRELOZENE_",
   "Zamestnanci": "Колеги",
   "Zamestnanec": "Колега",
   "Zamestnanec dostane notifikáciu, že jeho rezervácia bola zmenená.": "Колегата ще получи уведомление, че резервацията му е променена",

@@ -56,13 +56,14 @@ services:
       - SMTP_HOST=$BITBUCKET_DOCKER_HOST_INTERNAL
       # mail server is running with cypress test define in cypress plugins
       - SMTP_PORT=7777
-      - SMTP_FROM_ADDRESS=e2e@goodrequest.com
     depends_on:
       - "localstack"
       - "redis"
       - "database_test"
     volumes:
       - './notino_backend/logs:/home/app/logs'
+      # mount folder with e2e seeders for development purposes (editing and executing seeders in running container)
+      - './notino_backend/src/db/seeders/e2e:/home/app/src/db/seeders/e2e'
   frontend:
     environment:
       - REACT_APP_GOOGLE_MAPS_API_KEY=testGoogleAPIKey
@@ -109,5 +110,6 @@ services:
           # mail server is running with cypress test define in cypress plugins
           - SMTP_PORT=7777
           - SMTP_FROM_ADDRESS=e2e@goodrequest.com
+          - DOMAIN=http://localhost:80
       depends_on:
           - "backend"

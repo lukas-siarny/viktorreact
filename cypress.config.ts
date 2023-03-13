@@ -1,7 +1,7 @@
 import { defineConfig } from 'cypress'
 
 export default defineConfig({
-  projectId: 'hcowar',
+  projectId: 'notino-b2b-admin',
   scrollBehavior: 'center',
   viewportWidth: 1920,
   viewportHeight: 1080,
@@ -11,6 +11,7 @@ export default defineConfig({
     setupNodeEvents: (on, config) => {
 		require('cypress-localstorage-commands/plugin')(on, config)
 		require('./cypress/plugins/index.ts').default(on, config)
+		require('@cypress/code-coverage/task')(on, config)
 		return config
     },
 	env: {

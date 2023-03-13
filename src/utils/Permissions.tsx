@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 // eslint-disable-next-line import/no-cycle
 import { RootState } from '../reducers'
-import { PERMISSION, ADMIN_PERMISSIONS } from './enums'
+import { PERMISSION, ADMIN_PERMISSIONS, CYPRESS_CLASS_NAMES } from './enums'
 
 /**
  * NOTE: by default are admin permissions allowed (SUPER_ADMIN, ADMIN). In other case use `except=ADMIN_PERMISSIONS`
@@ -71,6 +71,7 @@ export const ForbiddenModal: FC<{ visible: boolean; onCancel: () => void; item?:
 		<>
 			<Modal title={t('loc:Upozornenie')} open={visible} getContainer={() => document.body} onCancel={onCancel} footer={null}>
 				<Result
+					className={CYPRESS_CLASS_NAMES.FORBIDDEN_MODAL}
 					status='warning'
 					title={t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')}
 					extra={

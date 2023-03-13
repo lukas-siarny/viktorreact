@@ -222,8 +222,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 					})
 				}
 
-				// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
-				if (hasPermissions([PERMISSION.NOTINO]) || (hasPermissions([PERMISSION.PARTNER]) && selectedSalon?.settings?.enabledReservations)) {
+				if (hasPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER])) {
 					mainGroupItems.push(
 						{
 							key: PAGE.CALENDAR,

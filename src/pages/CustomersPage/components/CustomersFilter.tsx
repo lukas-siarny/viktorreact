@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { CHANGE_DEBOUNCE_TIME, FIELD_MODE, FORM } from '../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, CREATE_CUSTOMER_BUTTON_ID, FIELD_MODE, FORM } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize } from '../../../utils/helper'
 
 // atoms
@@ -63,7 +63,7 @@ const CustomersFilter = (props: Props) => {
 	)
 
 	const addCustomerBtn = (
-		<Button onClick={() => createCustomer()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
+		<Button id={CREATE_CUSTOMER_BUTTON_ID} onClick={() => createCustomer()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
 			{t('loc:Pridať zákazníka')}
 		</Button>
 	)

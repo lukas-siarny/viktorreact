@@ -11,8 +11,8 @@ import InputPasswordField from '../../../atoms/InputPasswordField'
 import InputField from '../../../atoms/InputField'
 
 // utils
-import { FORM } from '../../../utils/enums'
-import { showErrorNotification } from '../../../utils/helper'
+import { CHANGE_PASSWORD_NEW_LINK_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { formFieldID, showErrorNotification } from '../../../utils/helper'
 
 // assets
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon-16.svg'
@@ -55,6 +55,7 @@ const CreatePasswordForm: FC<Props> = (props) => {
 			/>
 			<Row justify={'end'} className=''>
 				<Button
+					id={formFieldID(FORM.CREATE_PASSWORD, CHANGE_PASSWORD_NEW_LINK_BUTTON_ID)}
 					className={'p-0 font-medium h-auto whitespace-normal max-w-full'}
 					style={{ minHeight: 16 }}
 					type={'link'}
@@ -65,7 +66,15 @@ const CreatePasswordForm: FC<Props> = (props) => {
 				</Button>
 			</Row>
 			<div className='mt-6'>
-				<Button type={'primary'} block className={`noti-btn m-regular mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
+				<Button
+					id={formFieldID(FORM.CREATE_PASSWORD, SUBMIT_BUTTON_ID)}
+					type={'primary'}
+					block
+					className={`noti-btn m-regular mb-4`}
+					htmlType={'submit'}
+					disabled={submitting}
+					loading={submitting}
+				>
 					{t('loc:Nastaviť heslo')}
 				</Button>
 			</div>

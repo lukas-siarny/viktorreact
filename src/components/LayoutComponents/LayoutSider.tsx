@@ -63,7 +63,7 @@ const SIDER_TRIGGER_HEIGHT = 48
 const LOGO_HEIGHT = 72
 
 const MENU_ITEMS_ORDER = [
-	PAGE.HOME, // first item for Notino and Dashboard view
+	PAGE.HOME, // first item for Notino and Salon view
 	// Notino view
 	PAGE.USERS,
 	PAGE.CATEGORIES,
@@ -74,7 +74,7 @@ const MENU_ITEMS_ORDER = [
 	PAGE.SPECIALIST_CONTACTS,
 	PAGE.REVIEWS,
 	PAGE.SMS_CREDITS,
-	PAGE.SALONS, // last item for Notino view and second item for Salon view (after Dashboard)
+	PAGE.SALONS, // last item for Notino view and second item for Salon view (after homepage)
 	// Salon view
 	PAGE.BILLING_INFO,
 	PAGE.INDUSTRIES_AND_SERVICES,

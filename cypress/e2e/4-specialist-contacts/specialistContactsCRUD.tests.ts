@@ -78,6 +78,26 @@ const specialistContactsCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: str
 		}
 	})
 
+	// NOTE: must go after create test, but before delete test
+	it('Filter specialist contact', () => {
+		cy.visit('/specialist-contacts')
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
+			cy.intercept({
+				method: 'GET',
+				url: '/api/b2b/admin/enums/contacts/'
+			}).as('filterSpecialistContact')
+			cy.wait('@filterSpecialistContact').then((interception: any) => {
+				// check status code
+				expect(interception.response.statusCode).to.equal(200)
+				cy.setInputValue(FORM.SPECIALIST_CONTACT_FILTER, 'search', specialistContact.filter.search)
+				cy.location('pathname').should('eq', '/specialist-contacts')
+			})
+		} else {
+			// check redirect to 403 unauthorized page
+			cy.location('pathname').should('eq', '/403')
+		}
+	})
+
 	it('Delete specialist contact', () => {
 		cy.visit('/specialist-contacts')
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {

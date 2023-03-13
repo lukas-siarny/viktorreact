@@ -92,6 +92,7 @@ const supportCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, passwo
 		}
 	})
 
+	// NOTE: must go after create test, but before delete test
 	it('Filter support contact', () => {
 		cy.visit('/support-contacts')
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {

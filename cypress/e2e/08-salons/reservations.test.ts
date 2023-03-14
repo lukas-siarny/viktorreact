@@ -36,31 +36,34 @@ const reservationsTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 				url: `/api/b2b/admin/salons/${salonID}`
 			}).as('getSalon')
 			cy.visit(`/salons/${salonID}/reservations-settings`)
-			cy.wait('@getSalon')
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
-				cy.clickButton('enabledReservations', FORM.RESEVATION_SYSTEM_SETTINGS, true)
-				cy.setInputValue(FORM.RESEVATION_SYSTEM_SETTINGS, 'maxDaysB2cCreateReservation', reservations.update.maxDaysB2cCreateReservation, false, true)
-				cy.setInputValue(
-					FORM.RESEVATION_SYSTEM_SETTINGS,
-					'maxHoursB2cCreateReservationBeforeStart',
-					reservations.update.maxHoursB2cCreateReservationBeforeStart,
-					false,
-					true
-				)
-				cy.setInputValue(
-					FORM.RESEVATION_SYSTEM_SETTINGS,
-					'maxHoursB2cCancelReservationBeforeStart',
-					reservations.update.maxHoursB2cCancelReservationBeforeStart,
-					false,
-					true
-				)
-				cy.selectOptionDropdownCustom(FORM.RESEVATION_SYSTEM_SETTINGS, 'minutesIntervalB2CReservations', reservations.update.minutesIntervalB2CReservations, true)
-				cy.clickButton(SUBMIT_BUTTON_ID, FORM.RESEVATION_SYSTEM_SETTINGS)
-				cy.wait('@updateReservationsSettings').then((interception: any) => {
-					// check status code
-					expect(interception.response.statusCode).to.equal(200)
-					cy.checkSuccessToastMessage()
-					cy.location('pathname').should('eq', `/salons/${salonID}/reservations-settings`)
+				cy.wait('@getSalon').then(() => {
+					// wait for animations
+					cy.wait(2000)
+					cy.clickButton('enabledReservations', FORM.RESEVATION_SYSTEM_SETTINGS, true)
+					cy.setInputValue(FORM.RESEVATION_SYSTEM_SETTINGS, 'maxDaysB2cCreateReservation', reservations.update.maxDaysB2cCreateReservation, false, true)
+					cy.setInputValue(
+						FORM.RESEVATION_SYSTEM_SETTINGS,
+						'maxHoursB2cCreateReservationBeforeStart',
+						reservations.update.maxHoursB2cCreateReservationBeforeStart,
+						false,
+						true
+					)
+					cy.setInputValue(
+						FORM.RESEVATION_SYSTEM_SETTINGS,
+						'maxHoursB2cCancelReservationBeforeStart',
+						reservations.update.maxHoursB2cCancelReservationBeforeStart,
+						false,
+						true
+					)
+					cy.selectOptionDropdownCustom(FORM.RESEVATION_SYSTEM_SETTINGS, 'minutesIntervalB2CReservations', reservations.update.minutesIntervalB2CReservations, true)
+					cy.clickButton(SUBMIT_BUTTON_ID, FORM.RESEVATION_SYSTEM_SETTINGS)
+					cy.wait('@updateReservationsSettings').then((interception: any) => {
+						// check status code
+						expect(interception.response.statusCode).to.equal(200)
+						cy.checkSuccessToastMessage()
+						cy.location('pathname').should('eq', `/salons/${salonID}/reservations-settings`)
+					})
 				})
 			}
 		})

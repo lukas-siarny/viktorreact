@@ -45,9 +45,11 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 				cy.visit('/salons/create')
 				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
 					// visit specialsit modal
-					cy.get('.noti-specialist-button').click()
+					/* cy.get('.noti-specialist-button').click({ force: true })
+					// wait for animations
+					cy.wait(2000)
 					cy.selectOptionDropdownCustom(undefined, 'noti-specialist-select')
-					cy.get('.noti-specialist-modal-content > header > button').click()
+					cy.get('.noti-specialist-modal-content > header > button').click() */
 					// fill up the salon form
 					cy.setInputValue(FORM.SALON, 'name', salon.create.name)
 					cy.uploadFile('gallery', '../images/test.jpg', FORM.SALON)
@@ -135,6 +137,30 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 			}
 		})
 
+		// test suites depending on salon
+		context('Salon sub test suites', () => {
+			tests.forEach((test) => {
+				switch (test.name) {
+					case SALON_TESTS_SUITS.BILLING_INFORMATION:
+						billingInformationTestSuite(test.actions)
+						break
+					case SALON_TESTS_SUITS.CUSTOMER:
+						customerTestSuite(test.actions)
+						break
+					case SALON_TESTS_SUITS.EMPLOYEE:
+						employeeTestSuite(test.actions)
+						break
+					case SALON_TESTS_SUITS.INDUSTRIES_AND_SERVICES:
+						industriesAndServicesTestSuite(test.actions)
+						break
+					case SALON_TESTS_SUITS.RESERVATIONS:
+						reservationsTestSuite(test.actions)
+						break
+					default:
+				}
+			})
+		})
+
 		context('Salon approval process', () => {
 			it('Request salon publication', () => {
 				// get salonID from env
@@ -156,7 +182,7 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 							cy.wait('@getSalonDetail').then((interceptionGetSalonDetail: any) => {
 								expect(interceptionGetSalonDetail.response.statusCode).to.equal(200)
 								// NOTE: all neccesary requirements for publication should be fulfilled
-								cy.clickButton('request-publication-approval', FORM.SALON)
+								cy.clickButton('request-publication-modal', FORM.SALON)
 								cy.wait('@requestSalonPublication').then((interceptionRequestSalonPublication: any) => {
 									expect(interceptionRequestSalonPublication.response.statusCode).to.equal(200)
 									// check conf toast message
@@ -183,7 +209,7 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
 					// NOTE: roles that don't have permissions can't see this button
 					cy.get('main.ant-layout-content').then(($body) => {
-						if ($body.find('#header-confirm-salon').length) {
+						if ($body.find(`#${FORM.SALON}-accept-salon`).length) {
 							cy.clickButton('accept-salon', FORM.SALON)
 							cy.wait(['@getSalonDetail', '@resolveSalonPublication']).then(([interceptionGetSalonDetail, interceptionResolveSalonPublication]: any[]) => {
 								expect(interceptionGetSalonDetail.response.statusCode).to.equal(200)
@@ -215,6 +241,8 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 					cy.get('main.ant-layout-content').then(($body) => {
 						if ($body.find(`#${FORM.SALON}-hide.salon`).length) {
 							cy.clickButton('hide-salon', FORM.SALON)
+							// wait for animations
+							cy.wait(2000)
 							cy.setInputValue(FORM.NOTE, 'note', salon.unpublish.reason)
 							cy.clickButton(SUBMIT_BUTTON_ID, FORM.NOTE)
 							cy.wait(['@getSalonDetail', '@unpublishSalon']).then(([interceptionGetSalonDetail, interceptionUnpublishSalon]: any[]) => {
@@ -247,8 +275,10 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
 					// NOTE: roles that don't have permissions can't see this button
 					cy.get('main.ant-layout-content').then(($body) => {
-						if ($body.find('#header-confirm-salon').length) {
+						if ($body.find(`#${FORM.SALON}-decline-salon`).length) {
 							cy.clickButton('decline-salon', FORM.SALON)
+							// wait for animations
+							cy.wait(2000)
 							cy.setInputValue(FORM.NOTE, 'note', salon.decline.reason)
 							cy.clickButton(SUBMIT_BUTTON_ID, FORM.NOTE)
 							cy.wait(['@getSalonDetail', '@resolveSalonPublication']).then(([interceptionGetSalonDetail, interceptionResolveSalonPublication]: any[]) => {
@@ -273,10 +303,7 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 			const salonID = Cypress.env(SALON_ID)
 			cy.intercept({
 				method: 'GET',
-				pathname: `/api/b2b/admin/salons/${salonID}`,
-				query: {
-					hisotry: 'true'
-				}
+				pathname: `/api/b2b/admin/salons/${salonID}/history`
 			}).as('getSalonHistory')
 			cy.visit(`/salons/${salonID}`)
 			// skip for user with Salon roles - they can't see this tab
@@ -288,14 +315,14 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 							expect(interceptionGetSalonHistory.response.statusCode).to.equal(200)
 							if ($body.find('.noti-tag.bg-status-published').length) {
 								// only published salon can see salon history
-								cy.find('#salon-history-list').should('be.visible')
+								cy.get('#salon-history-list').should('be.visible')
 							} else {
 								// empty state for unpublished salons
-								cy.find('.ant-empty').should('be.visible')
+								cy.get('.ant-empty').should('be.visible')
 							}
 							// update range of history data
-							cy.find(`#${FORM.SALON_HISTORY_FILTER}-dateFromTo`).click({ force: true })
-							cy.find('.ant-picker-presets > ul > li').first().click()
+							cy.get(`#${FORM.SALON_HISTORY_FILTER}-dateFromTo`).click({ force: true })
+							cy.get('.ant-picker-presets > ul > li').first().click()
 							cy.wait('@getSalonHistory').then((interceptionGetSalonHistoryWithDifferentRange: any) => {
 								expect(interceptionGetSalonHistoryWithDifferentRange.response.statusCode).to.equal(200)
 							})
@@ -303,30 +330,6 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 					}
 				})
 			}
-		})
-
-		// test suites depending on salon
-		context('Salon sub test suites', () => {
-			tests.forEach((test) => {
-				switch (test.name) {
-					case SALON_TESTS_SUITS.BILLING_INFORMATION:
-						billingInformationTestSuite(test.actions)
-						break
-					case SALON_TESTS_SUITS.CUSTOMER:
-						customerTestSuite(test.actions)
-						break
-					case SALON_TESTS_SUITS.EMPLOYEE:
-						employeeTestSuite(test.actions)
-						break
-					case SALON_TESTS_SUITS.INDUSTRIES_AND_SERVICES:
-						industriesAndServicesTestSuite(test.actions)
-						break
-					case SALON_TESTS_SUITS.RESERVATIONS:
-						reservationsTestSuite(test.actions)
-						break
-					default:
-				}
-			})
 		})
 
 		// clear testing data

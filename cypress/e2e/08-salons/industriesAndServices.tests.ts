@@ -15,6 +15,13 @@ const industriesAndServicesTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 				url: '/api/b2b/admin/enums/categories/'
 			}).as('getCategories')
 			cy.intercept({
+				method: 'GET',
+				pathname: '/api/b2b/admin/services/',
+				query: {
+					salonID
+				}
+			}).as('getSalonServices')
+			cy.intercept({
 				method: 'PATCH',
 				url: `/api/b2b/admin/salons/${salonID}/categories`
 			}).as('patchSalonCategories')
@@ -23,11 +30,12 @@ const industriesAndServicesTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 				url: `/api/b2b/admin/salons/${salonID}/services`
 			}).as('patchSalonServices')
 			cy.visit(`/salons/${salonID}/industries-and-services`)
-			cy.wait('@getCategories').then((interception: any) => {
+			cy.wait(['@getCategories', '@getSalonServices']).then(([interceptionCategories, interceptionServices]: any[]) => {
 				// check status code
-				expect(interception.response.statusCode).to.equal(200)
+				expect(interceptionCategories.response.statusCode).to.equal(200)
+				expect(interceptionServices.response.statusCode).to.equal(200)
 				cy.get('.checkbox-group-image-wrapper > .checkbox-with-image:first > label').as('firstIndustryLabel')
-				cy.get('@firstIndustryLabel').find('input[type="checkbox"]').should('have.id', interception.response.body.categories[0].id)
+				cy.get('@firstIndustryLabel').find('input[type="checkbox"]').should('have.id', interceptionCategories.response.body.categories[0].id)
 				cy.get('@firstIndustryLabel').find('.inner-wrapper').click({ force: true })
 				cy.clickButton(SUBMIT_BUTTON_ID, FORM.INDUSTRIES)
 				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {

@@ -511,7 +511,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	const renderContentHeaderAdmin = () =>
 		(infoMessage || isPendingPublication) && (
-			<div id={'header-confirm-salon'} className={cx('content-header flex-col gap-2', { warning: isPendingPublication })}>
+			<div className={cx('content-header flex-col gap-2', { warning: isPendingPublication })}>
 				{isPendingPublication && (
 					<Permissions
 						allowed={[PERMISSION.SALON_PUBLICATION_RESOLVE]}

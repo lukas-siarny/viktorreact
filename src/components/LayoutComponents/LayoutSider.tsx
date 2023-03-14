@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import cx from 'classnames'
+import { sortBy } from 'lodash'
 
 // assets
 import { ReactComponent as LogoIcon } from '../../assets/images/logo-simple.svg'
@@ -60,6 +61,31 @@ export type LayoutSiderProps = {
 
 const SIDER_TRIGGER_HEIGHT = 48
 const LOGO_HEIGHT = 72
+
+const MENU_ITEMS_ORDER = [
+	PAGE.HOME, // first item for Notino and Salon view
+	// Notino view
+	PAGE.USERS,
+	PAGE.CATEGORIES,
+	PAGE.CATEGORY_PARAMETERS,
+	PAGE.COSMETICS,
+	PAGE.LANGUAGES,
+	PAGE.SUPPORT_CONTACTS,
+	PAGE.SPECIALIST_CONTACTS,
+	PAGE.REVIEWS,
+	PAGE.SMS_CREDITS,
+	PAGE.SALONS, // last item for Notino view and second item for Salon view (after homepage)
+	// Salon view
+	PAGE.BILLING_INFO,
+	PAGE.INDUSTRIES_AND_SERVICES,
+	PAGE.SERVICES_SETTINGS,
+	PAGE.CUSTOMERS,
+	PAGE.EMPLOYEES,
+	PAGE.SMS_CREDIT,
+	PAGE.CALENDAR,
+	PAGE.SALON_SETTINGS,
+	PAGE.RESERVATIONS
+]
 
 const LayoutSider = (props: LayoutSiderProps) => {
 	const { page, showNavigation = true, salonID, parentPath } = props
@@ -226,21 +252,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							onClick: () => navigate(getPath(t('paths:employees'))),
 							icon: <EmployeesIcon />,
 							id: PAGE.EMPLOYEES
-						}
-					)
-				}
-
-				if (hasPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET])) {
-					mainGroupItems.push({
-						key: PAGE.SMS_CREDIT,
-						label: t('loc:SMS kredit'),
-						onClick: () => navigate(getPath(t('paths:sms-credit'))),
-						icon: <SmsUnitPricesIcon />
-					})
-				}
-
-				if (hasPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER])) {
-					mainGroupItems.push(
+						},
 						{
 							key: PAGE.CALENDAR,
 							label: t('loc:Kalendár'),
@@ -263,6 +275,16 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							id: PAGE.RESERVATIONS
 						}
 					)
+				}
+
+				if (hasPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET])) {
+					mainGroupItems.push({
+						key: PAGE.SMS_CREDIT,
+						label: t('loc:SMS kredit'),
+						onClick: () => navigate(getPath(t('paths:sms-credit'))),
+						icon: <SmsUnitPricesIcon />,
+						id: PAGE.SMS_CREDIT
+					})
 				}
 			}
 		}
@@ -320,7 +342,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						type: 'group',
 						className: 'overflow-y-auto',
 						style: { height: `calc(100% - ${SIDER_TRIGGER_HEIGHT}px` },
-						children: mainGroupItems
+						children: sortBy(mainGroupItems, (item) => MENU_ITEMS_ORDER.indexOf(item.key))
 					},
 					{
 						key: 'user-account',

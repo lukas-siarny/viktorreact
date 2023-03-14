@@ -68,7 +68,7 @@ const EmployeeForm: FC<Props> = (props) => {
 								component={ImgUploadField}
 								name={'avatar'}
 								label={t('loc:Avatar')}
-								disabled={true}
+								disabled={disabled}
 								signUrl={URL_UPLOAD_IMAGES}
 								category={UPLOAD_IMG_CATEGORIES.EMPLOYEE}
 								multiple={false}

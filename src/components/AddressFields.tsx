@@ -181,6 +181,7 @@ const AddressFields = (props: Props) => {
 										placeholder={t('loc:Zadajte ulicu')}
 										name={'street'}
 										size={'large'}
+										disabled={disabled}
 										validate={validationRequired}
 										required
 									/>
@@ -190,6 +191,7 @@ const AddressFields = (props: Props) => {
 										label={t('loc:Popisné číslo')}
 										placeholder={t('loc:Zadajte číslo')}
 										name={'streetNumber'}
+										disabled={disabled}
 										maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 										size={'large'}
 									/>
@@ -202,6 +204,7 @@ const AddressFields = (props: Props) => {
 										placeholder={t('loc:Zadajte mesto')}
 										name={'city'}
 										size={'large'}
+										disabled={disabled}
 										validate={validationRequired}
 										required
 									/>
@@ -213,6 +216,7 @@ const AddressFields = (props: Props) => {
 										name={'zipCode'}
 										maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 										size={'large'}
+										disabled={disabled}
 										validate={validationRequired}
 										required
 									/>
@@ -227,6 +231,7 @@ const AddressFields = (props: Props) => {
 										options={countries?.enumerationsOptions || []}
 										name={'country'}
 										size={'large'}
+										disabled={disabled}
 										loading={countries?.isLoading}
 										validate={validationRequired}
 										required
@@ -240,6 +245,7 @@ const AddressFields = (props: Props) => {
 										size={'large'}
 										required
 										maxChars={10}
+										disabled={disabled}
 										validate={[validationRequiredNumber, numberMinLongitude, numberMaxLongitude]}
 									/>
 									<Field
@@ -251,6 +257,7 @@ const AddressFields = (props: Props) => {
 										size={'large'}
 										required
 										maxChars={10}
+										disabled={disabled}
 										validate={[validationRequiredNumber, numberMinLatitude, numberMaxLatitude]}
 									/>
 								</Row>
@@ -283,6 +290,7 @@ const AddressFields = (props: Props) => {
 														placeholder={t('loc:Zadajte ulicu')}
 														name={'street'}
 														size={'large'}
+														disabled={disabled}
 														validate={validationRequired}
 														required
 													/>
@@ -292,6 +300,7 @@ const AddressFields = (props: Props) => {
 														placeholder={t('loc:Zadajte mesto')}
 														name={'city'}
 														size={'large'}
+														disabled={disabled}
 														validate={validationRequired}
 														required
 													/>
@@ -304,6 +313,7 @@ const AddressFields = (props: Props) => {
 																name={'zipCode'}
 																maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 																size={'large'}
+																disabled={disabled}
 																validate={validationRequired}
 																required
 															/>
@@ -315,6 +325,7 @@ const AddressFields = (props: Props) => {
 																placeholder={t('loc:Zadajte číslo')}
 																maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 																name={'streetNumber'}
+																disabled={disabled}
 																size={'large'}
 															/>
 														</Col>
@@ -328,6 +339,7 @@ const AddressFields = (props: Props) => {
 														name={'country'}
 														size={'large'}
 														readOnly
+														disabled={disabled}
 														loading={countries?.isLoading}
 														validate={validationRequired}
 														required

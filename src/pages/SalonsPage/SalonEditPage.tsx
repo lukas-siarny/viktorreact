@@ -331,6 +331,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
 			render={(hasPermission, { openForbiddenModal }) => (
 				<Button
+					id={formFieldID(FORM.SALON, 'hide-salon')}
 					type={'dashed'}
 					size={'middle'}
 					icon={<EyeoffIcon color={'#000'} />}
@@ -368,6 +369,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			>
 				<span className={cx('w-full md:w-auto', { 'cursor-not-allowed': disabled })}>
 					<Button
+						id={formFieldID(FORM.SALON, 'request-publication')}
 						type={'dashed'}
 						size={'middle'}
 						className={cx('noti-btn m-regular w-full md:w-auto md:min-w-45 xl:min-w-60', className, {
@@ -509,13 +511,14 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	const renderContentHeaderAdmin = () =>
 		(infoMessage || isPendingPublication) && (
-			<div className={cx('content-header flex-col gap-2', { warning: isPendingPublication })}>
+			<div id={'header-confirm-salon'} className={cx('content-header flex-col gap-2', { warning: isPendingPublication })}>
 				{isPendingPublication && (
 					<Permissions
 						allowed={[PERMISSION.SALON_PUBLICATION_RESOLVE]}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Row justify={'space-between'} className={'w-full'}>
 								<Button
+									id={formFieldID(FORM.SALON, 'decline-salon')}
 									type={'primary'}
 									icon={<CloseCricleIcon />}
 									size={'middle'}
@@ -539,6 +542,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 									{t('loc:Zamietnuť')}
 								</Button>
 								<Button
+									id={formFieldID(FORM.SALON, 'accept-salon')}
 									type={'primary'}
 									icon={<CheckIcon />}
 									size={'middle'}
@@ -741,6 +745,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 							<Tooltip title={getApprovalButtonTooltipMessage()} getPopupContainer={() => document.querySelector('#noti-approval-modal-content') as HTMLElement}>
 								<span className={cx({ 'cursor-not-allowed': approvalButtonDisabled })}>
 									<Button
+										id={formFieldID(FORM.SALON, 'request-publication-modal')}
 										type={'primary'}
 										block
 										size={'large'}

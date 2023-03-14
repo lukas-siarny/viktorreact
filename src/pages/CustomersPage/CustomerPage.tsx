@@ -56,8 +56,6 @@ const CustomerPage = (props: Props) => {
 			navigate('/404')
 		}
 
-		console.log('🚀 ~ file: CustomerPage.tsx:81 ~ fetchCustomerData ~ from API:', data?.customer)
-
 		const initial = {
 			...data?.customer,
 			...data?.customer.address,
@@ -72,8 +70,6 @@ const CustomerPage = (props: Props) => {
 				? [{ url: data?.customer?.profileImage?.original, thumbnail: data?.customer?.profileImage?.resizedImages?.thumbnail, uid: data?.customer?.profileImage?.id }]
 				: null
 		}
-
-		console.log('🚀 ~ file: CustomerPage.tsx:59 ~ fetchCustomerData ~ initial:', initial)
 
 		dispatch(initialize(FORM.CUSTOMER, initial))
 	}

@@ -2,7 +2,7 @@ import { CRUD_OPERATIONS, LIST_OF_TESTS_SUITS, SALON_TESTS_SUITS } from '../enum
 import { PERMISSION, SALON_ROLES } from '../../src/utils/enums'
 
 // eslint-disable-next-line import/no-cycle
-import { ITestConfig } from '../e2e/10-roles/roles.cy'
+import { ITestConfig } from '../e2e/11-roles/roles.cy'
 
 const data: ITestConfig[] = [
 	{
@@ -260,7 +260,7 @@ const data: ITestConfig[] = [
 				tests: [
 					{
 						name: SALON_TESTS_SUITS.BILLING_INFORMATION,
-						actions: []
+						actions: [CRUD_OPERATIONS.READ]
 					},
 					{
 						name: SALON_TESTS_SUITS.CUSTOMER,

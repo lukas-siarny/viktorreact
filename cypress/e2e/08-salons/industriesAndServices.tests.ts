@@ -40,8 +40,10 @@ const industriesAndServicesTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 						cy.wait('@getCategories').then((interceptionGetCategoriesInDetail: any) => {
 							// check status code
 							expect(interceptionGetCategoriesInDetail.response.statusCode).to.equal(200)
+							// wait for select tree to be loaded
+							cy.wait(2000)
 							// select first industry (at least one industry with at least one service must exist in order to test work properly!!)
-							cy.get('.noti-tree-node-0 > .ant-tree-node-content-wrapper').click({ force: true })
+							cy.get('.noti-tree-node-0 > .ant-tree-checkbox').click({ force: true })
 							cy.clickButton(SUBMIT_BUTTON_ID, FORM.INDUSTRY)
 							cy.wait('@patchSalonServices').then((interceptionPatchSalonCategory: any) => {
 								// check status code

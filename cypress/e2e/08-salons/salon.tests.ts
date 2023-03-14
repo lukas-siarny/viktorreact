@@ -2,7 +2,7 @@ import { loginViaApi } from '../../support/e2e'
 import { generateRandomString } from '../../support/helpers'
 
 // eslint-disable-next-line import/no-cycle
-import { ITests } from '../10-roles/roles.cy'
+import { ITests } from '../11-roles/roles.cy'
 
 // fixtures
 import salon from '../../fixtures/salon.json'
@@ -180,7 +180,8 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 						expect(interception.response.statusCode).to.equal(200)
 						// check conf toast message
 						cy.checkSuccessToastMessage()
-						cy.location('pathname').should('eq', `/salons`)
+						// if user has assigend more salons, then it redirects him to the first salon from the list, otherwise it redirects him to dashboard
+						cy.location('pathname').should('include', `/salons`)
 					})
 				} else {
 					cy.clickButton(DELETE_BUTTON_ID, FORM.SALON)

@@ -404,7 +404,7 @@
   "Sem napíšte dôvod zamietnutia": "Please write here the reason for rejection",
   "Shift": "Shift",
   "Shifts": "Shifts",
-  "Skontrolujte správnosť vyplnených polí vo formulári. {{ errors }}": "Please, check the form.",
+  "Skontrolujte správnosť vyplnených polí vo formulári. {{ errors }}": "Please check the filled data. {{ errors }}",
   "Skrytie salónu": "Hiding salon",
   "Skrytý salón": "Hidden salon",
   "Skryť salón": "Hide salon",

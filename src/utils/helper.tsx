@@ -805,13 +805,11 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 			return undefined
 		}
 
-		const isErrors: boolean = errorKeys.length > 1
+		const errorsText = errorKeys.length > 1 ? i18next.t('loc:Vo formulári sa nachádzajú chyby!') : i18next.t('loc:Vo formulári sa nachádza chyba!')
 		return notification.error(
 			customMessage || {
 				message: i18next.t('loc:Chybne vyplnený formulár'),
-				description: i18next.t(
-					`loc:Skontrolujte správnosť vyplnených polí vo formulári. Vo formulári sa ${isErrors ? i18next.t('nachádzajú chyby') : i18next.t('nachádza chyba')}!`
-				)
+				description: i18next.t('loc:Skontrolujte správnosť vyplnených polí vo formulári. {{ errors }}', { errors: errorsText })
 			}
 		)
 	}

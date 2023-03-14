@@ -18,7 +18,7 @@ import { CALENDAR_EVENT_TYPE, DEFAULT_TIME_FORMAT, ENUMERATIONS_KEYS, FORM, PERM
 
 // types
 import { EmployeeService, ICalendarEmployeesPayload, ICalendarReservationForm, ServiceType } from '../../../../types/interfaces'
-import { ICustomerForm } from '../../../../schemas/customerSchema'
+import { ICustomerForm } from '../../../../schemas/customer'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'

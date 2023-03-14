@@ -9,10 +9,11 @@ import { formFieldID, showErrorNotification, validationNumberMin, validationRequ
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
-import { IRechargeSmsCreditForm } from '../../../types/interfaces'
+// import { IRechargeSmsCredit } from '../../../types/interfaces'
 
 // validate
-import validateRechargeCreditForm from './validateRechargeSmsCreditForm'
+// import validateRechargeCreditForm from './validateRechargeSmsCreditForm'
+import { validationFn as validateRechargeCreditForm, IRechargeSmsCredit } from '../../../schemas/rechargeSmsCredit'
 
 // atoms
 import TextareaField from '../../../atoms/TextareaField'
@@ -22,7 +23,7 @@ type ComponentProps = FormProps & {
 	currencySymbol?: string
 }
 
-type Props = InjectedFormProps<IRechargeSmsCreditForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<IRechargeSmsCredit, ComponentProps> & ComponentProps
 
 const numberMin0 = validationNumberMin(0)
 
@@ -71,7 +72,7 @@ const RechargeSmsCreditForm: FC<Props> = (props) => {
 	)
 }
 
-const form = reduxForm<IRechargeSmsCreditForm, ComponentProps>({
+const form = reduxForm<IRechargeSmsCredit, ComponentProps>({
 	form: FORM.RECHARGE_SMS_CREDIT,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,

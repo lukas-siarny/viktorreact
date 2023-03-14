@@ -13,7 +13,7 @@ import CustomerForm from './components/CustomerForm'
 // types
 import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 import { Paths } from '../../types/api'
-import { ICustomerForm } from '../../schemas/customerSchema'
+import { ICustomerForm } from '../../schemas/customer'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'

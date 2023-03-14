@@ -14,7 +14,7 @@ import CustomerForm from './components/CustomerForm'
 
 // types
 import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
-import { ICustomerForm } from '../../schemas/customerSchema'
+import { ICustomerForm } from '../../schemas/customer'
 
 // reducers
 import { getCustomer } from '../../reducers/customers/customerActions'

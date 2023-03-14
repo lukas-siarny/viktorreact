@@ -18,8 +18,9 @@ import { withPermissions } from '../../utils/Permissions'
 import { postReq } from '../../utils/request'
 
 // types
-import { IBreadcrumbs, IRechargeSmsCreditForm, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 import { RootState } from '../../reducers'
+import { IRechargeSmsCredit } from '../../schemas/rechargeSmsCredit'
 
 // assets
 import { ReactComponent as CoinsIcon } from '../../assets/icons/coins.svg'
@@ -65,7 +66,7 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 		})()
 	}, [dispatch, salonID, walletID])
 
-	const handleRechargeCredit = async (values: IRechargeSmsCreditForm) => {
+	const handleRechargeCredit = async (values: IRechargeSmsCredit) => {
 		if (!walletID || !selectedSalon.data?.currency.code) {
 			return
 		}

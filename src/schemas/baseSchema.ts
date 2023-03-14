@@ -1,15 +1,26 @@
 import i18next from 'i18next'
 import { FormErrors, DecoratedFormProps } from 'redux-form'
-import { z, ZodString, ZodOptional, ZodNullable, ZodDefault, ZodObject } from 'zod'
+import { z, ZodString, ZodOptional, ZodNullable, ZodObject } from 'zod'
 
-import { FORM } from '../utils/enums'
+import { FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
 
+/**
+ * Serialize args for i18next.t function
+ * @param key localization key
+ * @param params additional params, if needed
+ * @returns serialized string
+ */
 const serializeValidationMessage = (key: string, params?: object): string =>
 	JSON.stringify({
 		key,
 		params
 	})
 
+/**
+ * Deserialize ZOD message to args for i18next.t function
+ * @param message serialized args
+ * @returns object containing localization key and additional params
+ */
 const deserializeValidationMessage = (message?: string) => {
 	if (message) {
 		try {
@@ -24,6 +35,14 @@ const deserializeValidationMessage = (message?: string) => {
 	return i18next.t('loc:Zadaná hodnota nie je správna')
 }
 
+/**
+ * Output of ZOD safeParse transform into FormErrors and maps error messages to proper fields
+ * @param schema for validation
+ * @param formName enum {@link FORM} of relevant form. Prevent to usage of incorrect validation and form.
+ * @param values formData
+ * @param props additional props from Form component
+ * @returns mapped errors to FormErrors
+ */
 export const zodErrorsToFormErrors = <T, F extends FORM>(schema: ZodObject<any>, formName: F, values: T, props: DecoratedFormProps<T, any, string>): FormErrors<T, string> => {
 	if (formName !== props.form) {
 		throw new Error(`Mismatch between Form and Validation function. Use proper validation function for Form: ${props.form}`)
@@ -44,6 +63,13 @@ export const zodErrorsToFormErrors = <T, F extends FORM>(schema: ZodObject<any>,
 	return {}
 }
 
+/**
+ * {@link https://zod.dev/ERROR_HANDLING?id=global-error-map Global error messages} for ZOD. Feel free to extend this config, if needed. For specific cases will be better to use {@link https://zod.dev/ERROR_HANDLING?id=schema-bound-error-map Schema-bound}
+ * @see https://zod.dev/ERROR_HANDLING
+ * @param issue {@link https://zod.dev/ERROR_HANDLING?id=zodissue Zod issue}
+ * @param ctx context of parsing
+ * @returns default errors
+ */
 export const defaultErrorMap: z.ZodErrorMap = (issue, ctx) => {
 	if (issue.code === z.ZodIssueCode.invalid_type) {
 		if (issue.received === 'null' || issue.received === 'undefined') {
@@ -68,6 +94,10 @@ export const defaultErrorMap: z.ZodErrorMap = (issue, ctx) => {
 	return { message: ctx.defaultError }
 }
 
+/*
+#### CONSTRAINTS ####
+*/
+
 export const imageConstraint = z.object({
 	url: z.string().url(),
 	thumbUrl: z.string().nullish(),
@@ -75,13 +105,15 @@ export const imageConstraint = z.object({
 	id: z.string().uuid().nullish()
 })
 
-export function stringConstraint<T extends true | false>(maxLength: number, required?: T): T extends true ? ZodString : ZodDefault<ZodOptional<ZodNullable<ZodString>>>
-export function stringConstraint<T extends true | false>(maxLength: number, required?: T): ZodString | ZodDefault<ZodOptional<ZodNullable<ZodString>>> {
+export function stringConstraint<T extends true | false>(maxLength: number, required?: T): T extends true ? ZodString : ZodOptional<ZodNullable<ZodString>>
+export function stringConstraint<T extends true | false>(maxLength: number, required?: T): ZodString | ZodOptional<ZodNullable<ZodString>> {
 	const base = z.string().max(maxLength)
 
 	if (required) {
 		return base.min(1)
 	}
 
-	return base.nullish().default(null)
+	return base.nullish()
 }
+
+export const emailConstraint = z.string().email().trim().max(VALIDATION_MAX_LENGTH.LENGTH_255)

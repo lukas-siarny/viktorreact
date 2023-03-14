@@ -6,6 +6,12 @@ import { isNil } from 'lodash'
 import { IRechargeSmsCreditForm } from '../../../types/interfaces'
 import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
+// schema
+import { validationFn } from '../../../schemas/rechargeSmsCredit'
+
+export default validationFn
+
+/*
 export default (values: IRechargeSmsCreditForm) => {
 	const errors: FormErrors<IRechargeSmsCreditForm> = {}
 
@@ -21,3 +27,4 @@ export default (values: IRechargeSmsCreditForm) => {
 
 	return errors
 }
+*/

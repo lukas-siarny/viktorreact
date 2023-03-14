@@ -11,7 +11,7 @@ import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
 import { ISelectOptionItem } from '../../../types/interfaces'
-import { ICustomerForm } from '../../../schemas/customerSchema'
+import { ICustomerForm } from '../../../schemas/customer'
 
 // validate
 import validateCustomerForm from './validateCustomerForm'

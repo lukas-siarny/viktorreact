@@ -2,7 +2,7 @@ import { FormErrors } from 'redux-form'
 import i18next from 'i18next'
 import { isEmail } from 'lodash-checkit'
 import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
-import { validationFn } from '../../../schemas/customerSchema'
+import { validationFn } from '../../../schemas/customer'
 
 export default validationFn
 

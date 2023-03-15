@@ -148,6 +148,123 @@ const industriesAndServicesTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					})
 			})
 		})
+
+		it('Update employee service settings', () => {
+			// get salonID from env
+			const salonID = Cypress.env(SALON_ID)
+			cy.intercept({
+				method: 'GET',
+				pathname: '/api/b2b/admin/services/',
+				query: {
+					salonID
+				}
+			}).as('getSalonServices')
+			cy.visit(`/salons/${salonID}/services-settings`)
+			cy.wait('@getSalonServices').then((interceptorGetSalonServices: any) => {
+				// check status code
+				expect(interceptorGetSalonServices.response.statusCode).to.equal(200)
+				cy.get('.ant-table-row:first')
+					.as('firstRow')
+					.invoke('attr', 'data-row-key')
+					.then((dataRowKey) => {
+						const [categoryID, serviceID] = (dataRowKey || '').split('_')
+
+						cy.intercept({
+							method: 'GET',
+							url: `/api/b2b/admin/services/${serviceID}`
+						}).as('getSalonService')
+						cy.intercept({
+							method: 'GET',
+							url: `/api/b2b/admin/enums/categories/${categoryID}`
+						}).as('getCategory')
+						cy.intercept({
+							method: 'GET',
+							url: '/api/b2b/admin/enums/categories/'
+						}).as('getCategories')
+						cy.intercept({
+							method: 'GET',
+							pathname: '/api/b2b/admin/employees/',
+							query: {
+								page: '1',
+								salonID
+							}
+						}).as('getEmployees')
+
+						cy.get('@firstRow').click()
+						cy.wait(['@getSalonService', '@getCategory', '@getCategories', '@getEmployees']).then(
+							([interceptorGetSalonSerivce, interceptorGetCategory, interceptorGetCategories, interceptorGetEmlpoyees]: any[]) => {
+								// check status codes
+								expect(interceptorGetSalonSerivce.response.statusCode).to.equal(200)
+								expect(interceptorGetCategory.response.statusCode).to.equal(200)
+								expect(interceptorGetCategories.response.statusCode).to.equal(200)
+								expect(interceptorGetEmlpoyees.response.statusCode).to.equal(200)
+
+								if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+									cy.get('#service-employees-list')
+										.find('.ant-collapse-item')
+										.first()
+										.find('.ant-collapse-extra button')
+										.first()
+										.as('@employeeServiceEditBtn')
+										.invoke('attr', 'id')
+										.then((btnID) => {
+											const [, employeeID] = (btnID || '').split('_')
+
+											cy.intercept({
+												method: 'PATCH',
+												pathname: `/api/b2b/admin/employees/${employeeID}/services/${serviceID}`
+											}).as('updateEmployeeService')
+
+											cy.get('employeeServiceEditBtn').click()
+											// wait for the animation
+											cy.wait(1000)
+											cy.setInputValue(FORM.EMPLOYEE_SERVICE_EDIT, 'employeePriceAndDurationData-durationFrom', service.employeeService.durationFrom)
+											cy.setInputValue(FORM.EMPLOYEE_SERVICE_EDIT, 'employeePriceAndDurationData-priceFrom', service.employeeService.priceFrom)
+											cy.clickButton(SUBMIT_BUTTON_ID, FORM.EMPLOYEE_SERVICE_EDIT)
+											cy.wait('@updateEmployeeService').then((interceptorUpdateEmployeeService: any) => {
+												expect(interceptorUpdateEmployeeService.response.statusCode).to.equal(200)
+												// select first employee from the list
+												cy.checkSuccessToastMessage()
+											})
+										})
+								} else {
+									cy.get('#service-employees-list').find('.ant-collapse-item').first().find('.ant-collapse-extra button').first().click()
+									cy.checkForbiddenModal()
+								}
+							}
+						)
+					})
+			})
+		})
+
+		it('Filter services services', () => {
+			// get salonID from env
+			const salonID = Cypress.env(SALON_ID)
+			cy.intercept({
+				method: 'GET',
+				url: '/api/b2b/admin/enums/categories/'
+			}).as('getCategories')
+			cy.intercept({
+				method: 'GET',
+				pathname: '/api/b2b/admin/services/',
+				query: {
+					salonID
+				}
+			}).as('getSalonServices')
+			cy.visit(`/salons/${salonID}/services-settings`)
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
+				cy.wait(['@getCategories', '@getSalonServices']).then(([interceptionCategories, interceptionServices]: any[]) => {
+					// check status code
+					expect(interceptionCategories.response.statusCode).to.equal(200)
+					expect(interceptionServices.response.statusCode).to.equal(200)
+					cy.selectOptionDropdownCustom(FORM.SERVICES_FILTER, 'rootCategoryID', undefined, true)
+					cy.wait('@getSalonServices').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
+				})
+			} else {
+				// check redirect to 403 not allowed page
+				cy.location('pathname').should('eq', '/403')
+			}
+		})
 	})
 }
 

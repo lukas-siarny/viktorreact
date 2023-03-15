@@ -1,7 +1,7 @@
 import { loginViaApi } from '../../support/e2e'
 
 // enums
-import { FORM, SUBMIT_BUTTON_ID, FILTER_BUTTON_ID, IMPORT_BUTTON_ID, TABLE_ROW_BUTTON_CONFIRM } from '../../../src/utils/enums'
+import { FORM, SUBMIT_BUTTON_ID, FILTER_BUTTON_ID, IMPORT_BUTTON_ID, ROW_BUTTON_WITH_ID } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS } from '../../enums'
 
 const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
@@ -71,7 +71,7 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 					cy.wait('@getSalons').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 				})
 			} else {
-				// check redirect to 404 notfound page
+				// check redirect to 403 not allowed page
 				cy.location('pathname').should('eq', '/403')
 			}
 		})
@@ -109,7 +109,7 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 					}
 				})
 			} else {
-				// check redirect to 404 notfound page
+				// check redirect to 403 not allowed page
 				cy.location('pathname').should('eq', '/403')
 			}
 		})
@@ -152,7 +152,7 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 					cy.wait('@getSalons').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 				})
 			} else {
-				// check redirect to 404 notfound page
+				// check redirect to 403 not allowed page
 				cy.location('pathname').should('eq', '/403')
 			}
 		})
@@ -191,7 +191,7 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 					cy.wait('@getSalons').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 				})
 			} else {
-				// check redirect to 404 notfound page
+				// check redirect to 403 not allowed page
 				cy.location('pathname').should('eq', '/403')
 			}
 		})
@@ -214,7 +214,7 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 								method: 'DELETE',
 								pathname: `/api/b2b/admin/salons/${salonID}/rejected-suggestions`
 							}).as('deleteRejectedSuggestion')
-							cy.get('@firstRow').find(`#${TABLE_ROW_BUTTON_CONFIRM(salonID || '')}`)
+							cy.get('@firstRow').find(`#${ROW_BUTTON_WITH_ID(salonID || '')}`)
 							cy.wait('@deleteRejectedSuggestio').then((interceptionDeleteRejectedSuggestion: any) => {
 								// check status code
 								expect(interceptionDeleteRejectedSuggestion.response.statusCode).to.equal(200)
@@ -224,7 +224,7 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 						})
 				})
 			} else {
-				// check redirect to 404 notfound page
+				// check redirect to 403 not allowed page
 				cy.location('pathname').should('eq', '/403')
 			}
 		})

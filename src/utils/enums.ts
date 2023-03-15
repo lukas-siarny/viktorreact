@@ -630,7 +630,7 @@ export const CREATE_CUSTOMER_BUTTON_ID = 'create-customer-btn'
 
 export const IMPORT_BUTTON_ID = (suffix?: string) => `import-btn${suffix ? `-${suffix}` : ''}`
 
-export const TABLE_ROW_BUTTON_CONFIRM = (id: string) => `table-row-btn-confirm-${id}`
+export const ROW_BUTTON_WITH_ID = (id: string) => `row-btn-with-id_${id}`
 
 export const MAX_VALUES_PER_PARAMETER = 20
 

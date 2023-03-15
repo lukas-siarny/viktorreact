@@ -11,7 +11,7 @@ import CustomTable from '../../../components/CustomTable'
 import RejectedSuggestionsFilter from './filters/RejectedSuggestionsFilter'
 
 // utils
-import { FORM, ROW_GUTTER_X_DEFAULT, TABLE_ROW_BUTTON_CONFIRM } from '../../../utils/enums'
+import { FORM, ROW_GUTTER_X_DEFAULT, ROW_BUTTON_WITH_ID } from '../../../utils/enums'
 import { formFieldID, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../../utils/helper'
 import { deleteReq } from '../../../utils/request'
 
@@ -171,7 +171,7 @@ const RejectedSalonSuggestions: FC<Props> = (props) => {
 							size={'small'}
 							disabled={loading}
 							className={'noti-btn m-regular w-full hover:shadow-none focus:shadow-none'}
-							id={formFieldID(TABLE_ROW_BUTTON_CONFIRM(record.id))}
+							id={formFieldID(ROW_BUTTON_WITH_ID(record.id))}
 						>
 							{t('loc:Vybavené')}
 						</Button>

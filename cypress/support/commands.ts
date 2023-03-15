@@ -107,9 +107,9 @@ Cypress.Commands.add('sortTable', (key: string, tableKey = '.ant-table') => {
 	cy.get(tableKey).find('.ant-table-column-has-sorters').find(`#${key}`).click({ force: true })
 })
 
-Cypress.Commands.add('changePagination', (limit: 25 | 50 | 100 = 25, tableKey = '.ant-table', useCustomPagination = true) => {
+Cypress.Commands.add('changePagination', (limit: 25 | 50 | 100 = 25, tableKey = '.noti-table-wrapper', useCustomPagination = true) => {
 	if (useCustomPagination) {
-		cy.get(tableKey).find('.table-footer-custom-pagination .custom-dropdown').as('@customDropdown')
+		cy.get(tableKey).find('.table-footer-custom-pagination .custom-dropdown').as('customDropdown')
 		cy.get('@customDropdown').click({ force: true })
 		cy.get('@customDropdown').find('.custom-dropdown-menu').should('be.visible')
 		cy.get('@customDropdown').find('li').should('include.text', limit).click({ force: true })

@@ -76,7 +76,7 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			const salonID = Cypress.env(SALON_ID)
 			cy.intercept({
 				method: 'POST',
-				url: '/admin/employees/invite'
+				url: '/api/b2b/admin/employees/invite'
 			}).as('inviteEmployee')
 			cy.visit(`/salons/${salonID}/employees/create`)
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
@@ -86,7 +86,6 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 				cy.wait('@inviteEmployee').then((interception: any) => {
 					// check status code of login request
 					expect(interception.response.statusCode).to.equal(200)
-					Cypress.env(EMPLOYEE_ID, interception.response.body.employee.id)
 					// check conf toast message
 					cy.checkSuccessToastMessage()
 				})
@@ -142,7 +141,7 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			}).as('getEmployee')
 			cy.intercept({
 				method: 'POST',
-				url: '/admin/employees/invite'
+				url: '/api/b2b/admin/employees/invite'
 			}).as('inviteEmployee')
 			cy.visit(`/salons/${salonID}/employees/${employeeID}`)
 			cy.wait('@getEmployee').then((interceptorGetEmployee: any) => {
@@ -175,13 +174,13 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			const salonID = Cypress.env(SALON_ID)
 			cy.intercept({
 				method: 'GET',
-				url: `/api/b2c/web/salons/${salonID}/employees`
+				pathname: `/api/b2c/web/salons/${salonID}/employees/`
 			}).as('getEmployees')
 			cy.visit(`/salons/${salonID}/employees`)
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
-				cy.wait('@getSalons').then((interceptionGetSalons: any) => {
+				cy.wait('@getEmployees').then((interceptionGetEmployees: any) => {
 					// check status code
-					expect(interceptionGetSalons.response.statusCode).to.equal(200)
+					expect(interceptionGetEmployees.response.statusCode).to.equal(200)
 
 					// sort table
 					cy.sortTable('sortby-name')
@@ -222,13 +221,13 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			const salonID = Cypress.env(SALON_ID)
 			cy.intercept({
 				method: 'GET',
-				url: `/api/b2c/web/salons/${salonID}/employees`
+				pathname: `/api/b2c/web/salons/${salonID}/employees*`
 			}).as('getEmployees')
 			cy.visit(`/salons/${salonID}/employees`)
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
-				cy.wait('@getSalons').then((interceptionGetSalons: any) => {
+				cy.wait('@getEmployees').then((interceptionGetEmployees: any) => {
 					// check status code
-					expect(interceptionGetSalons.response.statusCode).to.equal(200)
+					expect(interceptionGetEmployees.response.statusCode).to.equal(200)
 
 					// sort table
 					cy.sortTable('sortby-name')

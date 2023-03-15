@@ -85,7 +85,7 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 				method: 'POST',
 				pathname: '/api/b2b/admin/imports/salons'
 			}).as('importSalons')
-			cy.visit('/importSalons')
+			cy.visit('/salons')
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
 				cy.wait('@getSalons').then((interceptionGetSalons: any) => {
 					// check status code

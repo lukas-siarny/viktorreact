@@ -205,17 +205,17 @@ const industriesAndServicesTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 										.first()
 										.find('.ant-collapse-extra button')
 										.first()
-										.as('@employeeServiceEditBtn')
+										.as('employeeServiceEditBtn')
 										.invoke('attr', 'id')
 										.then((btnID) => {
 											const [, employeeID] = (btnID || '').split('_')
 
 											cy.intercept({
 												method: 'PATCH',
-												pathname: `/api/b2b/admin/employees/${employeeID}/services/${serviceID}`
+												url: `/api/b2b/admin/employees/${employeeID}/services/${serviceID}`
 											}).as('updateEmployeeService')
 
-											cy.get('employeeServiceEditBtn').click()
+											cy.get('@employeeServiceEditBtn').click()
 											// wait for the animation
 											cy.wait(1000)
 											cy.setInputValue(FORM.EMPLOYEE_SERVICE_EDIT, 'employeePriceAndDurationData-durationFrom', service.employeeService.durationFrom)

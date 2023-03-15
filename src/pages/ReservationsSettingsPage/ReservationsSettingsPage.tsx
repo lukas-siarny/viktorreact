@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize, isSubmitting } from 'redux-form'
 import { Col, Row, Spin } from 'antd'
-import { forEach, includes, isEmpty, reduce } from 'lodash'
+import { compact, forEach, includes, isEmpty, reduce } from 'lodash'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -32,6 +32,8 @@ import {
 const EXCLUDED_NOTIFICATIONS_B2B: string[] = [RS_NOTIFICATION.RESERVATION_REJECTED, RS_NOTIFICATION.RESERVATION_REMINDER]
 
 const NOTIFICATIONS = Object.keys(RS_NOTIFICATION) as RS_NOTIFICATION[]
+
+const disabledSMSNotification = [RS_NOTIFICATION.RESERVATION_AWAITING_APPROVAL, RS_NOTIFICATION.RESERVATION_CANCELLED]
 
 type InitDisabledNotifications = {
 	[key in RS_NOTIFICATION]: IReservationsSettingsNotification
@@ -67,13 +69,15 @@ const getNotificationFormName = (notification?: string) => {
 
 const defualtNotification = {
 	b2cChannels: NOTIFICATION_TYPES.map((type) => ({ [type]: true })),
-	b2bChannels: NOTIFICATION_TYPES.flatMap((type) => (EXCLUDED_NOTIFICATIONS_B2B.includes(type) ? [] : [{ [type]: true }]))
+	b2bChannels: compact(
+		// NOTE: vyfiltruje SMS pre isB2BChannel + treba zabezpecit ze odstrani cez compact aj undefined hodnoty lebo switch by sa vyrenderoval a nastavil by hodnotu na false
+		NOTIFICATION_TYPES.flatMap((type) => (EXCLUDED_NOTIFICATIONS_B2B.includes(type) ? [] : [type === RS_NOTIFICATION_TYPE.SMS ? undefined : { [type]: true }]))
+	)
 }
-
+console.log('defualtNotification', defualtNotification)
 const initDisabledNotifications = (notifications: DisabledNotificationsArray): IReservationSystemSettingsForm['disabledNotifications'] => {
 	// find all relevant notifications
 	const relevantNotifications = notifications.filter((notification) => !!getNotificationFormName(notification.eventType) && !isEmpty(notification.channels))
-
 	// transform into object of type IReservationSystemSettingsForm.disabledNotifications
 	const current = relevantNotifications?.reduce((data, item) => {
 		const isB2BChannel = item.eventType?.endsWith('EMPLOYEE') // B2B internal (employee)
@@ -82,22 +86,31 @@ const initDisabledNotifications = (notifications: DisabledNotificationsArray): I
 
 		if (notificationFormName) {
 			if (isB2CChannel) {
+				const hasDisabledSMS = includes(disabledSMSNotification, notificationFormName)
 				return {
 					...data,
 					[notificationFormName]: {
 						...data[notificationFormName],
 						b2bChannels: data[notificationFormName]?.b2bChannels || defualtNotification.b2bChannels,
-						b2cChannels: NOTIFICATION_TYPES.map((type) => ({ [type]: !item.channels.includes(type as RS_NOTIFICATION_TYPE) }))
+						b2cChannels: compact(
+							NOTIFICATION_TYPES.map((type) =>
+								type === RS_NOTIFICATION_TYPE.SMS && hasDisabledSMS ? undefined : { [type]: !item.channels.includes(type as RS_NOTIFICATION_TYPE) }
+							)
+						)
 					}
 				}
 			}
+			// TODO: zmazat vsetky SMS
 			if (isB2BChannel) {
 				return {
 					...data,
 					[notificationFormName]: {
 						...data[notificationFormName],
 						b2cChannels: data[notificationFormName]?.b2cChannels || defualtNotification.b2cChannels,
-						b2bChannels: NOTIFICATION_TYPES.map((type) => ({ [type]: !item.channels.includes(type as RS_NOTIFICATION_TYPE) }))
+						b2bChannels: compact(
+							// NOTE: vyfiltruje SMS pre isB2BChannel + treba zabezpecit ze odstrani cez compact aj undefined hodnoty lebo switch by sa vyrenderoval a nastavil by hodnotu na false
+							NOTIFICATION_TYPES.map((type) => (type !== RS_NOTIFICATION_TYPE.SMS ? { [type]: !item.channels.includes(type as RS_NOTIFICATION_TYPE) } : undefined))
+						)
 					}
 				}
 			}
@@ -105,8 +118,8 @@ const initDisabledNotifications = (notifications: DisabledNotificationsArray): I
 
 		return data
 	}, {} as InitDisabledNotifications)
-
 	const result = NOTIFICATIONS.reduce((data, key) => {
+		console.log('key', key)
 		return {
 			...data,
 			[key]: current[key] || {
@@ -115,7 +128,6 @@ const initDisabledNotifications = (notifications: DisabledNotificationsArray): I
 			}
 		}
 	}, {} as InitDisabledNotifications)
-
 	return result
 }
 
@@ -179,7 +191,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 				[SERVICE_TYPE.AUTO_CONFIRM]: autoConfirmSettings,
 				[SERVICE_TYPE.ONLINE_BOOKING]: onlineBookingSettings
 			}
-
+			console.log('init data', initDisabledNotifications(salonRes?.data?.settings?.disabledNotifications))
 			dispatch(
 				initialize(FORM.RESEVATION_SYSTEM_SETTINGS, {
 					enabledReservations: salonRes?.data?.settings?.enabledReservations,

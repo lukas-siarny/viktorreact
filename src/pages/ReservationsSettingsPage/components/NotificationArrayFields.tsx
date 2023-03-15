@@ -40,12 +40,9 @@ const NotificationArrayFields = (props: Props) => {
 	return (
 		<Item className='pb-0'>
 			{getNotificationTitle(notificationType, channel)}
-			{fields.map((field: string, index: number) => {
-				const fieldData = fields.get(index)
-				// console.log('index', index)
-				// console.log('fieldData', fieldData)
-				return <Field key={index} disabled={disabled} component={SwitchField} label={TYPES[index]} name={`${field}.${TYPES[index]?.toUpperCase()}`} size={'middle'} />
-			})}
+			{fields.map((field: string, index: number) => (
+				<Field key={index} disabled={disabled} component={SwitchField} label={TYPES[index]} name={`${field}.${TYPES[index]?.toUpperCase()}`} size={'middle'} />
+			))}
 		</Item>
 	)
 }

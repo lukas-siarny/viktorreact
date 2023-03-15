@@ -45,11 +45,11 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 				cy.visit('/salons/create')
 				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
 					// visit specialsit modal
-					/* cy.get('.noti-specialist-button').click({ force: true })
+					cy.get('.noti-specialist-button').click({ force: true })
 					// wait for animations
 					cy.wait(2000)
-					cy.selectOptionDropdownCustom(undefined, 'noti-specialist-select')
-					cy.get('.noti-specialist-modal-content > header > button').click() */
+					cy.selectOptionDropdownCustom(undefined, 'noti-specialist-select', undefined, true)
+					cy.get('.noti-specialist-modal-content > header > button').click()
 					// fill up the salon form
 					cy.setInputValue(FORM.SALON, 'name', salon.create.name)
 					cy.uploadFile('gallery', '../images/test.jpg', FORM.SALON)
@@ -206,7 +206,7 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 					url: `/api/b2b/admin/salons/${salonID}/resolve-publication`
 				}).as('resolveSalonPublication')
 				cy.visit(`/salons/${salonID}`)
-				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+				if ((actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) && !(role in SALON_ROLES)) {
 					// NOTE: roles that don't have permissions can't see this button
 					cy.get('main.ant-layout-content').then(($body) => {
 						if ($body.find(`#${FORM.SALON}-accept-salon`).length) {
@@ -272,7 +272,7 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 					url: `/api/b2b/admin/salons/${salonID}/resolve-publication`
 				}).as('resolveSalonPublication')
 				cy.visit(`/salons/${salonID}`)
-				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+				if ((actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) && !(role in SALON_ROLES)) {
 					// NOTE: roles that don't have permissions can't see this button
 					cy.get('main.ant-layout-content').then(($body) => {
 						if ($body.find(`#${FORM.SALON}-decline-salon`).length) {
@@ -321,8 +321,8 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 								cy.get('.ant-empty').should('be.visible')
 							}
 							// update range of history data
-							cy.get(`#${FORM.SALON_HISTORY_FILTER}-dateFromTo`).click({ force: true })
-							cy.get('.ant-picker-presets > ul > li').first().click()
+							cy.get(`#${FORM.SALON_HISTORY_FILTER}-dateFromTo`).find('input').first().click({ force: true })
+							cy.get('.ant-picker-dropdown :not(.ant-picker-dropdown-hidden)', { timeout: 2000 }).should('be.visible').find('.ant-picker-presets > ul > li').first().click()
 							cy.wait('@getSalonHistory').then((interceptionGetSalonHistoryWithDifferentRange: any) => {
 								expect(interceptionGetSalonHistoryWithDifferentRange.response.statusCode).to.equal(200)
 							})

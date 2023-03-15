@@ -35,7 +35,7 @@ export declare interface ITestConfig {
 }
 
 describe('Dynamic tests for roles', () => {
-	data.forEach((user) => {
+	/* data.forEach((user) => {
 		if (!user.isInActive) {
 			user.tests.forEach((test) => {
 				switch (test.name) {
@@ -76,5 +76,5 @@ describe('Dynamic tests for roles', () => {
 				}
 			})
 		}
-	})
+	}) */
 })

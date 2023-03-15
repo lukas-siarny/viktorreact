@@ -397,7 +397,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		}
 
 		return (
-			<div className={'content-footer'}>
+			<div className={'content-footer'} id={'content-footer-container'}>
 				{(() => {
 					// order of cases is important to show correct buttons
 					switch (true) {
@@ -638,12 +638,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 											>
 												{STRINGS(t).edit(t('loc:notino používateľa'))}
 											</Button>
-											<DeleteButton
-												getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-												onConfirm={deleteAssignedUser}
-												entityName={t('loc:notino používateľa')}
-												disabled={isDeletedSalon}
-											/>
+											<DeleteButton onConfirm={deleteAssignedUser} entityName={t('loc:notino používateľa')} disabled={isDeletedSalon} />
 										</>
 									) : (
 										<Button
@@ -676,13 +671,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 										>
 											{STRINGS(t).edit(t('loc:poznámku'))}
 										</Button>
-										<DeleteButton
-											className={'mt-2'}
-											getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-											onConfirm={deleteOpenHoursNote}
-											entityName={t('loc:poznámku')}
-											disabled={isDeletedSalon}
-										/>
+										<DeleteButton className={'mt-2'} onConfirm={deleteOpenHoursNote} entityName={t('loc:poznámku')} disabled={isDeletedSalon} />
 									</>
 								) : (
 									<Button

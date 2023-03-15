@@ -9,6 +9,7 @@ export enum LIST_OF_TESTS_SUITS {
 	LANGUAGES_CRUD = 'languagesCRUD',
 	SMS_UNIT_PRICES_CRUD = 'SMS_UNIT_PRICES_CRUD',
 	SALON = 'salon',
+	SALONS = 'salons',
 	REVIEWS = 'reviews'
 }
 

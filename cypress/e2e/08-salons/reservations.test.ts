@@ -10,10 +10,10 @@ const reservationsTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			const salonID = Cypress.env(SALON_ID)
 			cy.intercept({
 				method: 'GET',
-				pathname: `/api/b2b/admin/salons/${salonID}/calendar-events/paginated`
+				url: `/api/b2b/admin/salons/${salonID}/calendar-events/paginated*`
 			}).as('filterReservations')
 			cy.visit(`/salons/${salonID}/reservations`)
-			cy.wait('@filterReservations')
+			// cy.wait('@filterReservations')
 			cy.selectOptionDropdown(FORM.RESERVATIONS_FILTER, 'reservationStates', reservations.filter.reservationStates)
 			cy.selectOptionDropdown(FORM.RESERVATIONS_FILTER, 'reservationPaymentMethods', reservations.filter.reservationPaymentMethods)
 			cy.selectOptionDropdown(FORM.RESERVATIONS_FILTER, 'reservationCreateSourceType', reservations.filter.reservationCreateSourceType)

@@ -5,6 +5,7 @@ import { CRUD_OPERATIONS, SALON_TESTS_SUITS } from '../../enums'
 
 import { ITests } from '../11-roles/roles.cy'
 import { PERMISSION } from '../../../src/utils/enums'
+import salonsTestSuite from './salons.tests'
 
 const salonSubTests: ITests[] = [
 	{
@@ -32,4 +33,6 @@ const salonSubTests: ITests[] = [
 describe('Salons', () => {
 	// add PERMISSION.NOTINO_SUPER_ADMIN role because default logged user is super admin
 	salonTestSuite([CRUD_OPERATIONS.ALL], salonSubTests, PERMISSION.NOTINO_SUPER_ADMIN)
+
+	salonsTestSuite([CRUD_OPERATIONS.ALL])
 })

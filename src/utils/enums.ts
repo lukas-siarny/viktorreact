@@ -614,6 +614,8 @@ export const SUBMIT_BUTTON_ID = 'submit-btn'
 
 export const ADD_BUTTON_ID = 'add-btn'
 
+export const FILTER_BUTTON_ID = 'filter-btn'
+
 export const FORGOT_PASSWORD_BUTTON_ID = 'forgot-password-btn'
 
 export const SIGNUP_BUTTON_ID = 'signup-btn'
@@ -625,6 +627,10 @@ export const CHANGE_PASSWORD_NEW_LINK_BUTTON_ID = 'change-password-new-link-btn'
 export const CREATE_EMPLOYEE_BUTTON_ID = 'create-employee-btn'
 
 export const CREATE_CUSTOMER_BUTTON_ID = 'create-customer-btn'
+
+export const IMPORT_BUTTON_ID = (suffix?: string) => `import-btn${suffix ? `-${suffix}` : ''}`
+
+export const TABLE_ROW_BUTTON_CONFIRM = (id: string) => `table-row-btn-confirm-${id}`
 
 export const MAX_VALUES_PER_PARAMETER = 20
 

@@ -81,6 +81,10 @@ const data: ITestConfig[] = [
 						actions: [CRUD_OPERATIONS.ALL]
 					}
 				]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SALONS,
+				actions: [CRUD_OPERATIONS.ALL]
 			}
 		],
 		isInActive: true
@@ -130,6 +134,10 @@ const data: ITestConfig[] = [
 			},
 			{
 				name: LIST_OF_TESTS_SUITS.SALON,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SALONS,
 				actions: [CRUD_OPERATIONS.ALL]
 			}
 		],
@@ -208,6 +216,10 @@ const data: ITestConfig[] = [
 						actions: [CRUD_OPERATIONS.ALL]
 					}
 				]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SALONS,
+				actions: []
 			}
 		]
 	},
@@ -279,6 +291,10 @@ const data: ITestConfig[] = [
 						actions: [CRUD_OPERATIONS.ALL]
 					}
 				]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SALONS,
+				actions: []
 			}
 		]
 	}

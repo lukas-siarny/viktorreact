@@ -208,12 +208,16 @@ const industriesAndServicesTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 										.as('employeeServiceEditBtn')
 										.invoke('attr', 'id')
 										.then((btnID) => {
-											const [, employeeID] = (btnID || '').split('_')
+											const split = (btnID || '').split('_')
+											const employeeID = split[split.length - 1]
 
 											cy.intercept({
 												method: 'PATCH',
 												url: `/api/b2b/admin/employees/${employeeID}/services/${serviceID}`
 											}).as('updateEmployeeService')
+
+											console.log({ url: `/api/b2b/admin/employees/${employeeID}/services/${serviceID}` })
+											cy.log(`/api/b2b/admin/employees/${employeeID}/services/${serviceID}`)
 
 											cy.get('@employeeServiceEditBtn').click()
 											// wait for the animation
@@ -237,7 +241,7 @@ const industriesAndServicesTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			})
 		})
 
-		it('Filter services services', () => {
+		it('Filter services settings', () => {
 			// get salonID from env
 			const salonID = Cypress.env(SALON_ID)
 			cy.intercept({

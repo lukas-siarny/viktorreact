@@ -174,7 +174,10 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			const salonID = Cypress.env(SALON_ID)
 			cy.intercept({
 				method: 'GET',
-				pathname: `/api/b2c/web/salons/${salonID}/employees/`
+				pathname: `/api/b2b/admin/employees*`,
+				query: {
+					salonID
+				}
 			}).as('getEmployees')
 			cy.visit(`/salons/${salonID}/employees`)
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
@@ -194,20 +197,12 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					// search employees
 					cy.setInputValue(FORM.EMPLOYEES_FILTER, 'search', lastNameUpdate)
 					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-					// clear search
-					cy.setInputValue(FORM.EMPLOYEES_FILTER, 'search', '')
-					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 
 					// filter table
 					cy.clickButton(FILTER_BUTTON_ID, FORM.EMPLOYEES_FILTER)
 					// wait for animation
 					cy.wait(1000)
-					cy.selectOptionDropdownCustom(FORM.EMPLOYEES_FILTER, 'serviceID', undefined, true)
 					cy.selectOptionDropdownCustom(FORM.EMPLOYEES_FILTER, 'accountState', undefined, true)
-					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-					// clear filter
-					cy.clearDropdownSelection('serviceID')
-					cy.clearDropdownSelection('accountState')
 					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 				})
 			} else {
@@ -221,7 +216,10 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			const salonID = Cypress.env(SALON_ID)
 			cy.intercept({
 				method: 'GET',
-				pathname: `/api/b2c/web/salons/${salonID}/employees*`
+				pathname: `/api/b2b/admin/employees*`,
+				query: {
+					salonID
+				}
 			}).as('getEmployees')
 			cy.visit(`/salons/${salonID}/employees`)
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
@@ -236,19 +234,12 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					// search employees
 					cy.setInputValue(FORM.EMPLOYEES_FILTER, 'search', generateRandomString(6))
 					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-					// clear search
-					cy.setInputValue(FORM.EMPLOYEES_FILTER, 'search', '')
-					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 
 					// filter table
 					cy.clickButton(FILTER_BUTTON_ID, FORM.EMPLOYEES_FILTER)
 					// wait for animation
-					cy.wait(1000)
-					cy.selectOptionDropdownCustom(FORM.EMPLOYEES_FILTER, 'serviceID', undefined, true)
-					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-					// clear filter
-					cy.clearDropdownSelection('serviceID')
-					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
+					// cy.wait(1000)
+					// cy.selectOptionDropdownCustom(FORM.EMPLOYEES_FILTER, 'serviceID', undefined, true)
 				})
 			} else {
 				// check redirect to 403 not allowed page

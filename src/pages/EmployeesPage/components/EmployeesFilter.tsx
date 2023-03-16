@@ -69,7 +69,7 @@ const EmployeesFilter = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters customContent={customContent} search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)}>
+			<Filters customContent={customContent} search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)} form={FORM.EMPLOYEES_FILTER}>
 				<Row gutter={ROW_GUTTER_X_DEFAULT}>
 					{!hide && (
 						<Col span={8}>

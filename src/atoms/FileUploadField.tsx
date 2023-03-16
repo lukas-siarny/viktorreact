@@ -13,6 +13,7 @@ import { MSG_TYPE, NOTIFICATION_TYPE } from '../utils/enums'
 import { getAccessToken } from '../utils/auth'
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
 import showNotifications from '../utils/tsxHelpers'
+import { formFieldID } from '../utils/helper'
 
 const { Item } = Form
 
@@ -57,7 +58,7 @@ const FileUploadField: FC<Props> = (props) => {
 		label,
 		input,
 		required,
-		meta: { error, touched },
+		meta: { error, touched, form },
 		action,
 		pathToFolder,
 		staticMode,
@@ -142,6 +143,7 @@ const FileUploadField: FC<Props> = (props) => {
 			showUploadList={showUploadList}
 			fileList={getFileList()}
 			listType='picture-card'
+			id={formFieldID(form, input.name)}
 		>
 			{!staticMode && (
 				<div>

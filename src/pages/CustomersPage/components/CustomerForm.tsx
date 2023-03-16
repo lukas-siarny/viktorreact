@@ -158,9 +158,9 @@ const CustomerForm: FC<Props> = (props) => {
 							category={UPLOAD_IMG_CATEGORIES.CUSTOMER}
 						/>
 						<Row justify={'space-between'}>
-							<Field className={'w-4/5'} component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} />
+							<Field className={'w-4/6'} component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} />
 							<Field
-								className={'w-1/6'}
+								className={'w-3/10'}
 								component={InputField}
 								label={t('loc:Popisné číslo')}
 								maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}

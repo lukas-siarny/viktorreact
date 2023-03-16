@@ -15,6 +15,7 @@ import languagesCRUDTestSuite from '../06-languages/languagesCRUD.tests'
 import categoriesCRUDTestSuite from '../07-categories/categoriesCRUD.tests'
 // eslint-disable-next-line import/no-cycle
 import salonTestSuite from '../08-salons/salon.tests'
+import salonsTestSuite from '../08-salons/salons.tests'
 import reviewsTestSuite from '../09-reviews/reviews.tests'
 import smsUnitPricesCRUDTestSuite from '../10-sms-unit-prices/smsUnitPricesCRUD.tests'
 
@@ -35,7 +36,7 @@ export declare interface ITestConfig {
 }
 
 describe('Dynamic tests for roles', () => {
-	/* data.forEach((user) => {
+	data.forEach((user) => {
 		if (!user.isInActive) {
 			user.tests.forEach((test) => {
 				switch (test.name) {
@@ -79,5 +80,5 @@ describe('Dynamic tests for roles', () => {
 				}
 			})
 		}
-	}) */
+	})
 })

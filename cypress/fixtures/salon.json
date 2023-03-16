@@ -31,5 +31,11 @@
 		"streetNumber": "2",
 		"city": "Kosice",
 		"zipCode": "04001"
+	},
+	"unpublish": {
+		"reason": "Salon is hidden for reaseon..."
+	},
+	"decline": {
+		"reason": "Salon is declined for reaseon..."
 	}
 }

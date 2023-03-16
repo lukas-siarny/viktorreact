@@ -193,6 +193,7 @@ const SmsUnitPricesPage = () => {
 									dataSource={tableData}
 									rowClassName={'clickable-row'}
 									twoToneRows
+									rowKey={(record) => `${record.actual.id}_${record.country.code}`}
 									pagination={false}
 									onRow={(record) => {
 										return {
@@ -213,4 +214,4 @@ const SmsUnitPricesPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(SmsUnitPricesPage)
+export default compose(withPermissions([PERMISSION.SMS_UNIT_PRICE_EDIT]))(SmsUnitPricesPage)

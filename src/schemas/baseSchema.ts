@@ -10,7 +10,7 @@ import { FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
  * @param params additional params, if needed
  * @returns serialized string
  */
-const serializeValidationMessage = (key: string, params?: object): string =>
+export const serializeValidationMessage = (key: string, params?: object): string =>
 	JSON.stringify({
 		key,
 		params
@@ -21,7 +21,7 @@ const serializeValidationMessage = (key: string, params?: object): string =>
  * @param message serialized args
  * @returns object containing localization key and additional params
  */
-const deserializeValidationMessage = (message?: string) => {
+export const deserializeValidationMessage = (message?: string) => {
 	if (message) {
 		try {
 			const translation = JSON.parse(message)

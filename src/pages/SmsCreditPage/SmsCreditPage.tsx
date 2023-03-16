@@ -97,6 +97,7 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 			<div className='w-11/12 xl:w-5/6 2xl:w-3/4 3xl:w-2/3 mx-auto mt-10'>
 				{!walletID ? (
 					<Alert
+						id={'sms-credit-no-wallet-id'}
 						className='mt-6'
 						title={t('loc:Nastavte si adresu salóna')}
 						subTitle={t(

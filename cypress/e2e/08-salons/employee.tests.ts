@@ -81,7 +81,9 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			cy.visit(`/salons/${salonID}/employees/create`)
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
 				cy.selectOptionDropdownCustom(FORM.INVITE_EMPLOYEE, 'roleID', undefined, true)
-				cy.setInputValue(FORM.INVITE_EMPLOYEE, 'email', employeeByInvitationEmail)
+				// wait for select dorpdown closing animation
+				cy.wait(1000)
+				cy.setInputValue(FORM.INVITE_EMPLOYEE, 'email', employeeByInvitationEmail, true)
 				cy.clickButton(SUBMIT_BUTTON_ID, FORM.INVITE_EMPLOYEE)
 				cy.wait('@inviteEmployee').then((interception: any) => {
 					// check status code of login request
@@ -151,8 +153,20 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					cy.clickButton('invite-employee-btn')
 					// wait for the animation
 					cy.wait(1000)
-					cy.selectOptionDropdownCustom(FORM.INVITE_EMPLOYEE, 'roleID', undefined, true)
-					cy.setInputValue(FORM.INVITE_EMPLOYEE, 'email', `${generateRandomString(6)}_${customer.create.emailSuffix}`)
+
+					// user can set only role that is not higher than his
+					// not a 100% working solution, but it's greater change of not failing test to select last item from the list than first
+					// TODO: find better solution
+					cy.get(`#${FORM.INVITE_EMPLOYEE}-roleID`).click({ force: true })
+					cy.get('.ant-select-dropdown :not(.ant-select-dropdown-hidden)', { timeout: 10000 })
+						.should('be.visible')
+						.find('.ant-select-item-option')
+						.last()
+						.click({ force: true })
+
+					// wait for select dorpdown closing animation
+					cy.wait(1000)
+					cy.setInputValue(FORM.INVITE_EMPLOYEE, 'email', `${generateRandomString(6)}_${customer.create.emailSuffix}`, true)
 					cy.clickButton(SUBMIT_BUTTON_ID, FORM.INVITE_EMPLOYEE)
 					cy.wait('@inviteEmployee').then((interception: any) => {
 						// check status code of login request
@@ -185,10 +199,6 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					// check status code
 					expect(interceptionGetEmployees.response.statusCode).to.equal(200)
 
-					// sort table
-					cy.sortTable('sortby-name')
-					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-
 					// NOTE: at least one employee must exists in order to pagination be seen
 					// change pagination
 					cy.changePagination(50)
@@ -203,6 +213,10 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					// wait for animation
 					cy.wait(1000)
 					cy.selectOptionDropdownCustom(FORM.EMPLOYEES_FILTER, 'accountState', undefined, true)
+					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
+
+					// sort table
+					cy.sortTable('sortby-name')
 					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 				})
 			} else {
@@ -227,12 +241,8 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					// check status code
 					expect(interceptionGetEmployees.response.statusCode).to.equal(200)
 
-					// sort table
-					cy.sortTable('sortby-name')
-					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-
 					// search employees
-					cy.setInputValue(FORM.EMPLOYEES_FILTER, 'search', generateRandomString(6))
+					cy.setInputValue(FORM.EMPLOYEES_FILTER, 'search', generateRandomString(6), true)
 					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 
 					// filter table
@@ -240,6 +250,10 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					// wait for animation
 					// cy.wait(1000)
 					// cy.selectOptionDropdownCustom(FORM.EMPLOYEES_FILTER, 'serviceID', undefined, true)
+
+					// sort table
+					cy.sortTable('sortby-name')
+					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 				})
 			} else {
 				// check redirect to 403 not allowed page

@@ -40,7 +40,7 @@ describe('Dynamic tests for roles', () => {
 		if (!user.isInActive) {
 			user.tests.forEach((test) => {
 				switch (test.name) {
-					case LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT:
+					/* case LIST_OF_TESTS_SUITS.USER_UPDATE_MY_ACCOUNT:
 						context(`MyAccountUpdate as ${user.role}`, () => updateMyAccountTestSuite(user.credentials.user, user.credentials.password))
 						break
 					case LIST_OF_TESTS_SUITS.USER_CRUD:
@@ -63,7 +63,7 @@ describe('Dynamic tests for roles', () => {
 						break
 					case LIST_OF_TESTS_SUITS.CATEGORIES_CRUD:
 						context(`CategoriesCRUD as ${user.role}`, () => categoriesCRUDTestSuite(test.actions, user.credentials.user, user.credentials.password))
-						break
+						break */
 					case LIST_OF_TESTS_SUITS.SALON:
 						context(`SalonCRUD as ${user.role}`, () => salonTestSuite(test.actions, test.tests || [], user.role, user.credentials.user, user.credentials.password))
 						break

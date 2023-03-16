@@ -17,6 +17,7 @@ import customerTestSuite, { deleteCustomer } from './customers.tests'
 import employeeTestSuite, { deleteEmployee } from './employee.tests'
 import industriesAndServicesTestSuite from './industriesAndServices.tests'
 import reservationsTestSuite from './reservations.test'
+import smsCreditTestSuite from './smsCredit.tests'
 
 const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON_ROLES | PERMISSION, email?: string, password?: string): void => {
 	before(() => {
@@ -155,6 +156,9 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 						break
 					case SALON_TESTS_SUITS.RESERVATIONS:
 						reservationsTestSuite(test.actions)
+						break
+					case SALON_TESTS_SUITS.SMS_CREDIT:
+						smsCreditTestSuite(test.actions)
 						break
 					default:
 				}

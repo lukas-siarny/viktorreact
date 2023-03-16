@@ -298,42 +298,44 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 		})
 
 		// history
-		it('Visit salon history', () => {
-			// get salonID from env
-			const salonID = Cypress.env(SALON_ID)
-			cy.intercept({
-				method: 'GET',
-				pathname: `/api/b2b/admin/salons/${salonID}/history`
-			}).as('getSalonHistory')
-			cy.visit(`/salons/${salonID}`)
-			// skip for user with Salon roles - they can't see this tab
-			if ((actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) && !(role in SALON_ROLES)) {
-				cy.get('main.ant-layout-content').then(($body) => {
-					if ($body.find(`[data-node-key="${TAB_KEYS.SALON_HISTORY}"]`).length) {
-						cy.clickTab(TAB_KEYS.SALON_HISTORY)
-						cy.wait('@getSalonHistory').then((interceptionGetSalonHistory: any) => {
-							expect(interceptionGetSalonHistory.response.statusCode).to.equal(200)
-							if ($body.find('.noti-tag.bg-status-published').length) {
-								// only published salon can see salon history
-								cy.get('#salon-history-list').should('be.visible')
-							} else {
-								// empty state for unpublished salons
-								cy.get('.ant-empty').should('be.visible')
-							}
-							// update range of history data
-							cy.get(`#${FORM.SALON_HISTORY_FILTER}-dateFromTo`).find('input').first().click({ force: true })
-							cy.get('.ant-picker-dropdown :not(.ant-picker-dropdown-hidden)', { timeout: 2000 })
-								.should('be.visible')
-								.find('.ant-picker-presets > ul > li')
-								.first()
-								.click()
-							cy.wait('@getSalonHistory').then((interceptionGetSalonHistoryWithDifferentRange: any) => {
-								expect(interceptionGetSalonHistoryWithDifferentRange.response.statusCode).to.equal(200)
+		context('Salon history', () => {
+			it('Visit salon history', () => {
+				// get salonID from env
+				const salonID = Cypress.env(SALON_ID)
+				cy.intercept({
+					method: 'GET',
+					pathname: `/api/b2b/admin/salons/${salonID}/history`
+				}).as('getSalonHistory')
+				cy.visit(`/salons/${salonID}`)
+				// skip for user with Salon roles - they can't see this tab
+				if ((actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) && !(role in SALON_ROLES)) {
+					cy.get('main.ant-layout-content').then(($body) => {
+						if ($body.find(`[data-node-key="${TAB_KEYS.SALON_HISTORY}"]`).length) {
+							cy.clickTab(TAB_KEYS.SALON_HISTORY)
+							cy.wait('@getSalonHistory').then((interceptionGetSalonHistory: any) => {
+								expect(interceptionGetSalonHistory.response.statusCode).to.equal(200)
+								if ($body.find('.noti-tag.bg-status-published').length) {
+									// only published salon can see salon history
+									cy.get('#salon-history-list').should('be.visible')
+								} else {
+									// empty state for unpublished salons
+									cy.get('.ant-empty').should('be.visible')
+								}
+								// update range of history data
+								cy.get(`#${FORM.SALON_HISTORY_FILTER}-dateFromTo`).find('input').first().click({ force: true })
+								cy.get('.ant-picker-dropdown :not(.ant-picker-dropdown-hidden)', { timeout: 2000 })
+									.should('be.visible')
+									.find('.ant-picker-presets > ul > li')
+									.first()
+									.click()
+								cy.wait('@getSalonHistory').then((interceptionGetSalonHistoryWithDifferentRange: any) => {
+									expect(interceptionGetSalonHistoryWithDifferentRange.response.statusCode).to.equal(200)
+								})
 							})
-						})
-					}
-				})
-			}
+						}
+					})
+				}
+			})
 		})
 
 		// clear testing data

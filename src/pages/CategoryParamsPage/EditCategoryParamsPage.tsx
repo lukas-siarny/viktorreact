@@ -91,7 +91,7 @@ const EditCategoryParamsPage = () => {
 
 			const hasDiffrenceParameter = difference(formData.nameLocalizations, initFormValues?.nameLocalizations)
 			if (unitType === PARAMETERS_UNIT_TYPES.MINUTES) {
-				const changedValues = values?.filter((obj1: any) => !initFormValues?.values?.some((obj2: any) => obj1.value.toString() === obj2.value.toString()))
+				const changedValues = values?.filter((obj1: any) => !initFormValues?.values?.some((obj2: any) => obj1.value === obj2.value))
 				const requests: any[] = changedValues.map((valueItem: any) => {
 					// Ak existuje ID tak sa urobi update
 					if (valueItem.id) {

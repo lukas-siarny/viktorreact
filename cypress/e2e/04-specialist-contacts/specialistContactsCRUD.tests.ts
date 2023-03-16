@@ -30,7 +30,7 @@ const specialistContactsCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: str
 				method: 'POST',
 				url: '/api/b2b/admin/enums/contacts/'
 			}).as('createSpecialistContact')
-			cy.clickButton(FORM.SPECIALIST_CONTACT, CREATE_BUTTON_ID)
+			cy.clickButton(CREATE_BUTTON_ID, FORM.SPECIALIST_CONTACT)
 			cy.selectOptionDropdown(FORM.SPECIALIST_CONTACT, 'countryCode', specialistContact.create.countryCode)
 			cy.selectOptionDropdownCustom(FORM.SPECIALIST_CONTACT, 'phonePrefixCountryCode', specialistContact.create.phonePrefixCountryCode, true)
 			cy.setInputValue(FORM.SPECIALIST_CONTACT, 'phone', specialistContact.create.phone)
@@ -71,6 +71,26 @@ const specialistContactsCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: str
 				expect(interception.response.statusCode).to.equal(200)
 				// check conf toast message
 				cy.checkSuccessToastMessage()
+			})
+		} else {
+			// check redirect to 403 unauthorized page
+			cy.location('pathname').should('eq', '/403')
+		}
+	})
+
+	// NOTE: must go after create test, but before delete test
+	it('Filter specialist contact', () => {
+		cy.visit('/specialist-contacts')
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
+			cy.intercept({
+				method: 'GET',
+				url: '/api/b2b/admin/enums/contacts/'
+			}).as('filterSpecialistContact')
+			cy.wait('@filterSpecialistContact').then((interception: any) => {
+				// check status code
+				expect(interception.response.statusCode).to.equal(200)
+				cy.setInputValue(FORM.SPECIALIST_CONTACT_FILTER, 'search', specialistContact.filter.search)
+				cy.location('pathname').should('eq', '/specialist-contacts')
 			})
 		} else {
 			// check redirect to 403 unauthorized page

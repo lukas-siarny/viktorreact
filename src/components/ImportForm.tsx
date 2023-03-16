@@ -5,8 +5,8 @@ import { Button, Form, Modal, Spin } from 'antd'
 
 // utils
 import { useDispatch } from 'react-redux'
-import { showErrorNotification, validationRequired } from '../utils/helper'
-import { FORM, UPLOAD_STATUS } from '../utils/enums'
+import { formFieldID, showErrorNotification, validationRequired } from '../utils/helper'
+import { FORM, SUBMIT_BUTTON_ID, UPLOAD_STATUS } from '../utils/enums'
 
 // types
 import { IDataUploadForm } from '../types/interfaces'
@@ -53,7 +53,16 @@ const ImportForm: FC<Props> = (props) => {
 				validate={validationRequired}
 				required
 			/>
-			<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={disabledForm || submitting || pristine} loading={submitting}>
+			<Button
+				id={formFieldID(FORM.IMPORT_FORM, SUBMIT_BUTTON_ID)}
+				className='noti-btn'
+				block
+				size='large'
+				type='primary'
+				htmlType='submit'
+				disabled={disabledForm || submitting || pristine}
+				loading={submitting}
+			>
 				{t('loc:Importovať')}
 			</Button>
 		</Form>

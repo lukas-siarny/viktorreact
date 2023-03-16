@@ -382,7 +382,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						className='mb-0 pb-0 ml-2'
 						component={SwitchField}
 						disabled={submitting}
-						onClick={(checked: boolean, event: Event) => event.stopPropagation()}
+						onClick={(_checked: boolean, event: Event) => event.stopPropagation()}
 						name='enabledReservations'
 						size='middle'
 					/>
@@ -549,7 +549,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 
 					{/* wallet */}
 					<Permissions allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET]}>
-						{walletID && <RemainingSmsCredit walletID={walletID} salonID={salonID} parentPath={parentPath} className={'w-full mb-6 !bg-notino-grayLighter'} link />}
+						{walletID && <RemainingSmsCredit walletID={walletID} salonID={salonID} parentPath={parentPath} className={'lg:w-full mb-6 !bg-notino-grayLighter'} link />}
 					</Permissions>
 
 					<Row justify={'space-between'} className='mt-7'>

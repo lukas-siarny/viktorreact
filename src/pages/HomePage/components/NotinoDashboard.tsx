@@ -55,7 +55,7 @@ const rsColumns = (labels: string[] = [], futureBreak = 0): Columns => {
 						return (
 							<div className={'flex flex-1 items-center'}>
 								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[700], flex: '0 0 auto' }} />
-								<span className='xs-bold'>{i18next.t('loc:Zapnutý rezervačný systém pre B2C ')}</span>
+								<span className='xs-bold'>{i18next.t('loc:Zapnutý rezervačný systém pre B2C')}</span>
 							</div>
 						)
 					default:
@@ -92,7 +92,7 @@ const reservationsColumns = (labels: string[] = [], futureBreak = 0): Columns =>
 						return (
 							<div className={'flex flex-1 items-center'}>
 								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[700], flex: '0 0 auto' }} />
-								<span className='xs-bold'>{i18next.t('loc:Rezervácie vytvorené v B2C ')}</span>
+								<span className='xs-bold'>{i18next.t('loc:Rezervácie vytvorené v B2C')}</span>
 							</div>
 						)
 					default:

@@ -1,6 +1,6 @@
 {
   "name": "notino_b2b_web",
-  "version": "2.1.0-rc.10",
+  "version": "2.1.0-rc.11",
   "main": "src/index.ts",
   "repository": "git@bitbucket.org:GoodRequest/notino_b2b_web.git",
   "author": "Jan Cvencek <jan.cvencek@goodrequest.com>",
@@ -179,7 +179,11 @@
     ]
   },
   "nyc": {
-	"include": ["src/pages/*"],
-    "exclude": ["src/pages/Calendar/**/*"]
+    "include": [
+      "src/pages/*"
+    ],
+    "exclude": [
+      "src/pages/Calendar/**/*"
+    ]
   }
 }

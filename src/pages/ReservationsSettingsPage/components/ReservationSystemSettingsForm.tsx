@@ -288,6 +288,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				/>
 			</>
 		)
+
 		return (
 			<>
 				{modals}

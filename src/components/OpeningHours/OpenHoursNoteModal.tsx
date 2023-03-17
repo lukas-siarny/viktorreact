@@ -15,7 +15,7 @@ import { Paths } from '../../types/api'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
 
 // interfaces
-import { IOpenHoursNoteForm } from '../../types/interfaces'
+import { IOpenHoursNoteForm } from '../../schemas/openHoursNote'
 
 type Props = {
 	visible?: boolean

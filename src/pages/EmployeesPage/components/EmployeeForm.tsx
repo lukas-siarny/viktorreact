@@ -25,7 +25,9 @@ import ServicesListField from './ServicesListField'
 // assets
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg'
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
-import { IEmployeeForm, validationFn } from '../../../schemas/employee'
+
+// validation
+import { IEmployeeForm, validationEmployeeFn } from '../../../schemas/employee'
 
 type ComponentProps = {
 	salonID: string
@@ -175,7 +177,7 @@ const form = reduxForm<IEmployeeForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validationFn
+	validate: validationEmployeeFn
 })(EmployeeForm)
 
 export default form

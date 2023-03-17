@@ -8,7 +8,8 @@ import { useSelector } from 'react-redux'
 import SalonRolesField from '../../../atoms/SalonRolesField'
 
 // interfaces
-import { IInviteEmployeeForm, ISelectOptionItem } from '../../../types/interfaces'
+import { ISelectOptionItem } from '../../../types/interfaces'
+import { IInviteEmployeeForm } from '../../../schemas/employee'
 
 // utils
 import { FORM, PERMISSION } from '../../../utils/enums'

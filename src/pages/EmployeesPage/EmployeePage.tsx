@@ -25,7 +25,6 @@ import {
 	IEditEmployeeRoleForm,
 	IEmployeePayload,
 	IEmployeeServiceEditForm,
-	IInviteEmployeeForm,
 	ISelectOptionItem,
 	SalonSubPageProps,
 	ServiceCategoryParameter,
@@ -33,7 +32,7 @@ import {
 	ServiceRootCategory
 } from '../../types/interfaces'
 import { Paths } from '../../types/api'
-import { IEmployeeForm } from '../../schemas/employee'
+import { IEmployeeForm, IInviteEmployeeForm } from '../../schemas/employee'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
@@ -411,10 +410,10 @@ const EmployeePage = (props: Props) => {
 				'/api/b2b/admin/employees/invite',
 				{},
 				{
-					inviteEmail: formData?.email,
+					inviteEmail: formData.email,
 					employeeID,
 					salonID,
-					roleID: formData?.roleID
+					roleID: formData.roleID
 				}
 			)
 			navigate(backUrl as string)

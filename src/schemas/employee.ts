@@ -24,4 +24,14 @@ export const editEmployeeSchema = z
 
 export type IEmployeeForm = z.infer<typeof editEmployeeSchema> & z.infer<typeof createEmployeeSchema> & { deletedAt?: string; hasActiveAccount?: boolean; service?: string[] }
 
-export const validationFn = (values: IEmployeeForm, props: any) => zodErrorsToFormErrors(props.isEdit ? editEmployeeSchema : createEmployeeSchema, FORM.EMPLOYEE, values, props)
+export const validationEmployeeFn = (values: IEmployeeForm, props: any) =>
+	zodErrorsToFormErrors(props.isEdit ? editEmployeeSchema : createEmployeeSchema, FORM.EMPLOYEE, values, props)
+
+export const inviteEmployeeSchema = z.object({
+	roleID: z.string(),
+	email: emailConstraint
+})
+
+export type IInviteEmployeeForm = z.infer<typeof inviteEmployeeSchema>
+
+export const validationInviteEmployeeFn = (values: IInviteEmployeeForm, props: any) => zodErrorsToFormErrors(inviteEmployeeSchema, FORM.INVITE_EMPLOYEE, values, props)

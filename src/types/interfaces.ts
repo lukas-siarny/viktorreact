@@ -68,10 +68,6 @@ export interface ILoginForm {
 	password: string
 }
 
-export interface    IInviteEmployeeForm {
-	email: string
-	roleID: string
-}
 
 export type ServiceRootCategory = Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200['employee']['categories']
 

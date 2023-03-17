@@ -58,7 +58,7 @@ const EditCategoryParamsPage = () => {
 						data.valueType === PARAMETERS_VALUE_TYPES.ENUM
 							? [{ value: null }]
 							: data.values.map((item) => ({
-									value: item.value,
+									value: Number(item.value),
 									id: item.id
 							  }))
 				})

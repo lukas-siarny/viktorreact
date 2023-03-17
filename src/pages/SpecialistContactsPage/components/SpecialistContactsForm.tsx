@@ -25,11 +25,8 @@ import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
 
 // types
-import { ISpecialistContactForm } from '../../../types/interfaces'
 import { RootState } from '../../../reducers'
-
-// validate
-import validateSpecialistContactForm from './validateSpecialistContactForm'
+import { ISpecialistContactForm, validationSpecialistContactFn } from '../../../schemas/specialist'
 
 type ComponentProps = {
 	specialistContactID?: string
@@ -126,7 +123,7 @@ const form = reduxForm<ISpecialistContactForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	validate: validateSpecialistContactForm,
+	validate: validationSpecialistContactFn,
 	onSubmitFail: showErrorNotification
 })(withPromptUnsavedChanges(SpecialistContactForm))
 

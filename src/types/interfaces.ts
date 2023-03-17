@@ -442,13 +442,6 @@ export interface ICosmeticForm {
 	image: any
 }
 
-export interface ISpecialistContactForm {
-	email?: string
-	phone: string
-	phonePrefixCountryCode: string
-	countryCode: string
-}
-
 export interface ISpecialistContactFilter {
 	search: string
 }

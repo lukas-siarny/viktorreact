@@ -10,7 +10,6 @@ export const createEmployeeSchema = z.object({
 	email: emailConstraint.optional(),
 	phonePrefixCountryCode: z.string().length(VALIDATION_MAX_LENGTH.LENGTH_2),
 	phone: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_20)
-	// TODO: description?
 })
 export const editEmployeeSchema = z
 	.object({
@@ -26,7 +25,7 @@ export type IEmployeeForm = z.infer<typeof editEmployeeSchema> & z.infer<typeof 
 
 export const validationEmployeeFn = (values: IEmployeeForm, props: any) =>
 	zodErrorsToFormErrors(props.isEdit ? editEmployeeSchema : createEmployeeSchema, FORM.EMPLOYEE, values, props)
-
+// https://notino-admin.goodrequest.dev/api/doc/#/B2b-%3Eadmin/postApiB2BAdminEmployeesInvite
 export const inviteEmployeeSchema = z.object({
 	roleID: z.string(),
 	email: emailConstraint

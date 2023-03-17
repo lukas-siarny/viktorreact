@@ -28,8 +28,9 @@ import { getSpecialistContacts } from '../../reducers/specialistContacts/special
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
-import { IBreadcrumbs, Columns, ISpecialistContact, ISpecialistContactForm, ISpecialistContactFilter } from '../../types/interfaces'
+import { IBreadcrumbs, Columns, ISpecialistContact, ISpecialistContactFilter } from '../../types/interfaces'
 import { RootState } from '../../reducers'
+import { ISpecialistContactForm } from '../../schemas/specialist'
 
 // hooks
 import useQueryParams, { StringParam } from '../../hooks/useQueryParams'

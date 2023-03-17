@@ -72,17 +72,18 @@ const CreateCategoryParamsPage = () => {
 
 			await Promise.all(
 				values.map((valueItem: any) => {
+					if (unitType === PARAMETERS_UNIT_TYPES.MINUTES) {
+						return postReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/', { categoryParameterID }, { value: valueItem.value.toString() })
+					}
 					// Iba nad tymi spravit request krore nemaju prazdne hodnoty valueLocalizations (prazdne pole)
 					if (!isEmpty(valueItem.valueLocalizations)) {
-						if (unitType === PARAMETERS_UNIT_TYPES.MINUTES) {
-							return postReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/', { categoryParameterID }, { value: valueItem.value.toString() })
-						}
 						return postReq(
 							'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/',
 							{ categoryParameterID },
 							{ valueLocalizations: valueItem.valueLocalizations }
 						)
 					}
+
 					return undefined
 				})
 			)

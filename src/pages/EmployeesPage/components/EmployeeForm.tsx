@@ -11,7 +11,6 @@ import { showErrorNotification } from '../../../utils/helper'
 import Permissions from '../../../utils/Permissions'
 
 // types
-import { IEmployeeForm } from '../../../types/interfaces'
 import { RootState } from '../../../reducers'
 
 // atoms
@@ -23,12 +22,10 @@ import SelectField from '../../../atoms/SelectField'
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 import ServicesListField from './ServicesListField'
 
-// validations
-import validateEmployeeForm from './validateEmployeeForm'
-
 // assets
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg'
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
+import { IEmployeeForm, validationFn } from '../../../schemas/employee'
 
 type ComponentProps = {
 	salonID: string
@@ -178,7 +175,7 @@ const form = reduxForm<IEmployeeForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateEmployeeForm
+	validate: validationFn
 })(EmployeeForm)
 
 export default form

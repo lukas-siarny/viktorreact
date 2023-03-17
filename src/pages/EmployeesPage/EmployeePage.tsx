@@ -23,7 +23,6 @@ import {
 	EmployeeServiceData,
 	IBreadcrumbs,
 	IEditEmployeeRoleForm,
-	IEmployeeForm,
 	IEmployeePayload,
 	IEmployeeServiceEditForm,
 	IInviteEmployeeForm,
@@ -34,6 +33,7 @@ import {
 	ServiceRootCategory
 } from '../../types/interfaces'
 import { Paths } from '../../types/api'
+import { IEmployeeForm } from '../../schemas/employee'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
@@ -282,6 +282,7 @@ const EmployeePage = (props: Props) => {
 	const isInviteFromSubmitting = useSelector(isSubmitting(FORM.INVITE_EMPLOYEE))
 	const currentAuthUser = useSelector((state: RootState) => state.user.authUser)
 	const salonRoles = useSelector((state: RootState) => state.roles.salonRoles)
+	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
 	const filteredSalonRolesByPermission = useMemo(
 		() => filterSalonRolesByPermission(salonID, currentAuthUser?.data, salonRoles?.data || undefined),
@@ -298,7 +299,6 @@ const EmployeePage = (props: Props) => {
 
 	const fetchEmployeeAndServicesData = useCallback(async () => {
 		const { data: employeesData } = await dispatch(getEmployee(employeeID as string))
-
 		if (!employeesData?.employee?.id) {
 			navigate('/404')
 		}
@@ -308,7 +308,11 @@ const EmployeePage = (props: Props) => {
 		if (employeesData?.employee) {
 			dispatch(
 				initialize(FORM.EMPLOYEE, {
-					...employeesData.employee,
+					firstName: employeesData.employee.firstName,
+					lastName: employeesData.employee.lastName,
+					email: employeesData.employee.email,
+					phonePrefixCountryCode: employeesData.employee.phonePrefixCountryCode || salon?.data?.address?.countryCode,
+					phone: employeesData.employee.phone,
 					avatar: employeesData.employee?.image
 						? [
 								{
@@ -319,13 +323,14 @@ const EmployeePage = (props: Props) => {
 						  ]
 						: [],
 					deletedAt: employeesData.employee.deletedAt,
+					hasActiveAccount: employeesData.employee.hasActiveAccount,
 					services: parseServices(employeesData, options),
 					salonID: { label: employeesData.employee?.salon?.name, value: employeesData.employee?.salon?.id },
 					roleID: employeesData.employee?.role?.id
 				})
 			)
 		}
-	}, [dispatch, employeeID, salonID, navigate])
+	}, [dispatch, employeeID, salonID, navigate, salon?.data?.address?.countryCode])
 
 	useEffect(() => {
 		fetchEmployeeAndServicesData()
@@ -348,7 +353,7 @@ const EmployeePage = (props: Props) => {
 				lastName: data?.lastName,
 				email: data?.email,
 				imageID: get(data, 'avatar[0].id') || get(data, 'avatar[0].uid'),
-				serviceIDs: data?.services?.map((service: EmployeeServiceData) => service.id)
+				serviceIDs: data?.services?.map((service) => service.id) as any // TODO: zistit preco nejde type
 			}
 
 			if (data?.phonePrefixCountryCode && data?.phone) {

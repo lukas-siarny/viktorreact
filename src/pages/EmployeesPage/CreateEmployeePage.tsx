@@ -19,7 +19,8 @@ import EmployeeForm from './components/EmployeeForm'
 import InviteForm from './components/InviteForm'
 
 // types
-import { IBreadcrumbs, IEmployeeForm, IInviteEmployeeForm, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, IInviteEmployeeForm, SalonSubPageProps } from '../../types/interfaces'
+import { IEmployeeForm } from '../../schemas/employee'
 
 // reducers
 import { getSalonRoles } from '../../reducers/roles/rolesActions'

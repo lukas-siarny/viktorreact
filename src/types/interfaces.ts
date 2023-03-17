@@ -68,7 +68,7 @@ export interface ILoginForm {
 	password: string
 }
 
-export interface IInviteEmployeeForm {
+export interface    IInviteEmployeeForm {
 	email: string
 	roleID: string
 }
@@ -440,21 +440,6 @@ export interface ICustomerForm {
 	avatar?: any
 }
 */
-export interface IEmployeeForm {
-	firstName: string
-	lastName: string
-	salonID: string
-	email?: string
-	phonePrefixCountryCode?: string
-	phone?: string
-	services?: any
-	service?: string[]
-	avatar?: any
-	role: number
-	hasActiveAccount?: boolean
-	orderIndex?: number
-	deletedAt?: string
-}
 
 export interface ICosmeticForm {
 	name: string

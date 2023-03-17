@@ -380,18 +380,14 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					<GlobeIcon className={'text-notino-black mr-2'} />
 					{t('loc:Rezervačný systém')}
 
-					<div className={'ml-2'}>
-						<Spin spinning={isEnabledLoading}>
-							<Field
-								className='mb-0 pb-0'
-								component={SwitchField}
-								disabled={submitting}
-								onClick={(_checked: boolean, event: Event) => event.stopPropagation()}
-								name='enabledReservations'
-								size='middle'
-							/>
-						</Spin>
-					</div>
+					<Field
+						className='mb-0 pb-0 ml-2'
+						component={SwitchField}
+						disabled={submitting}
+						onClick={(_checked: boolean, event: Event) => event.stopPropagation()}
+						name='enabledReservations'
+						size='middle'
+					/>
 				</h3>
 			</div>
 			<Divider className={'my-3'} />

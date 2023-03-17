@@ -241,6 +241,7 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 				}).as('unpublishSalon')
 				cy.visit(`/salons/${salonID}`)
 				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+					cy.wait(5000)
 					// NOTE: roles that don't have permissions can't see this button
 					cy.get('main.ant-layout-content').then(($body) => {
 						if ($body.find(`#${FORM.SALON}-hide.salon`).length) {

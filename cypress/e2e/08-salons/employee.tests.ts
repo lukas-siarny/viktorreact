@@ -80,7 +80,16 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			}).as('inviteEmployee')
 			cy.visit(`/salons/${salonID}/employees/create`)
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
-				cy.selectOptionDropdownCustom(FORM.INVITE_EMPLOYEE, 'roleID', undefined, true)
+				// user can set only role that is not higher than his
+				// not a 100% working solution, but it's greater change of not failing test to select last item from the list than first
+				// TODO: find better solution
+				cy.get(`#${FORM.INVITE_EMPLOYEE}-roleID`).click({ force: true })
+				cy.get('.ant-select-dropdown :not(.ant-select-dropdown-hidden)', { timeout: 10000 })
+					.should('be.visible')
+					.find('.ant-select-item-option')
+					.last()
+					.click({ force: true })
+
 				// wait for select dorpdown closing animation
 				cy.wait(1000)
 				cy.setInputValue(FORM.INVITE_EMPLOYEE, 'email', employeeByInvitationEmail, true)

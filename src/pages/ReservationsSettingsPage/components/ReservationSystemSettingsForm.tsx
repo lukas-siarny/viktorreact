@@ -55,7 +55,6 @@ type ComponentProps = {
 	salonID: string
 	excludedB2BNotifications: string[]
 	parentPath?: string
-	isEnabledLoading?: boolean
 }
 
 const UPLOAD_MODAL_INIT = {
@@ -70,7 +69,7 @@ const UPLOAD_MODAL_INIT = {
 }
 
 const ReservationSystemSettingsForm = (props: Props) => {
-	const { pristine, submitting, excludedB2BNotifications, parentPath, salonID, isEnabledLoading } = props
+	const { pristine, submitting, excludedB2BNotifications, parentPath, salonID } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const groupedServicesByCategory = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)

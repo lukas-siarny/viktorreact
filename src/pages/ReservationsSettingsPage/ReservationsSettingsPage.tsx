@@ -300,7 +300,6 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 								salonID={salonID}
 								excludedB2BNotifications={EXCLUDED_NOTIFICATIONS_B2B}
 								parentPath={parentPath}
-								isEnabledLoading={salon.isLoading || services.isLoading || submitting}
 							/>
 						</Spin>
 					</div>

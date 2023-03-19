@@ -125,9 +125,6 @@ export type EmployeeServiceData = {
 }
 
 export type IEmployeeServiceEditForm = EmployeeServiceData & {}
-export interface IEditEmployeeRoleForm {
-	roleID: string
-}
 
 export interface ICreateUserForm {
 	email: string

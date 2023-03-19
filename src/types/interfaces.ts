@@ -141,15 +141,6 @@ export interface IEditUserRoleForm {
 	roleID: string
 }
 
-export interface IUserAccountForm {
-	firstName: string
-	lastName: string
-	phonePrefixCountryCode: string
-	phone: string
-	avatar: any
-	assignedCountryCode: string
-}
-
 // type of BE opening hours data
 export type RawOpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
 

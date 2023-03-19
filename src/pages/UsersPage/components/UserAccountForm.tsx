@@ -4,12 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row } from 'antd'
 import { useSelector } from 'react-redux'
 
-// types
-import { IUserAccountForm } from '../../../types/interfaces'
-
-// validate
-import validateUserAccountForm from './validateUserAccountForm'
-
 // atoms
 import InputField from '../../../atoms/InputField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
@@ -28,6 +22,9 @@ import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 
 // reducers
 import { RootState } from '../../../reducers'
+
+// validate
+import { IUserAccountForm, validationEditUserFn } from '../../../schemas/user'
 
 type ComponentProps = {}
 
@@ -71,8 +68,8 @@ const UserAccountForm: FC<Props> = (props) => {
 						size={'large'}
 						prefixName={'phonePrefixCountryCode'}
 						phoneName={'phone'}
-						formName={FORM.USER_ACCOUNT}
 						required
+						formName={FORM.USER_ACCOUNT}
 					/>
 					<Field
 						component={SelectField}
@@ -100,7 +97,7 @@ const form = reduxForm<IUserAccountForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateUserAccountForm
+	validate: validationEditUserFn
 })(UserAccountForm)
 
 export default form

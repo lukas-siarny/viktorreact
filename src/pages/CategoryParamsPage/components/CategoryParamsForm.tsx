@@ -197,7 +197,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 					)}
 				</div>
 			</Space>
-			<div className={'content-footer'}>
+			<div className={'content-footer'} id={'content-footer-container'}>
 				<div className={`flex flex-col gap-2 md:flex-row ${onDelete ? 'md:justify-between' : 'md:justify-center'}`}>
 					{onDelete && (
 						<DeleteButton

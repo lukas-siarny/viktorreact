@@ -46,7 +46,7 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 				cy.visit('/salons/create')
 				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
 					// visit specialsit modal
-					cy.get('.noti-specialist-button').click({ force: true })
+					cy.get('.noti-specialist-button').trigger('mouseover').click({ force: true })
 					// wait for animations
 					cy.wait(2000)
 					cy.selectOptionDropdownCustom(undefined, 'noti-specialist-select', undefined, true)

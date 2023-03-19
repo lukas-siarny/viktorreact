@@ -8,7 +8,6 @@ import InputField from '../../../atoms/InputField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
-import validateBillingInfoForm from './validateBillingInfoForm'
 
 // assets
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
@@ -23,7 +22,7 @@ import { formFieldID, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
-import { IBillingForm } from '../../../types/interfaces'
+import { IBillingForm, validationBillingInfoFn } from '../../../schemas/billing'
 
 type ComponentProps = {}
 
@@ -220,7 +219,7 @@ const form = reduxForm<IBillingForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateBillingInfoForm
+	validate: validationBillingInfoFn
 })(withPromptUnsavedChanges(BillingInfoForm))
 
 export default form

@@ -129,14 +129,6 @@ export interface IEditEmployeeRoleForm {
 	roleID: string
 }
 
-export interface ICreateUserForm {
-	email: string
-	phonePrefixCountryCode: string
-	phone: string
-	roleID: string
-	assignedCountryCode: string
-}
-
 export interface IEditUserRoleForm {
 	roleID: string
 }

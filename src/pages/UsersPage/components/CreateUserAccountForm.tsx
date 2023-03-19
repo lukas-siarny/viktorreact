@@ -8,11 +8,8 @@ import { useSelector } from 'react-redux'
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
 
-// types
-import { ICreateUserForm } from '../../../types/interfaces'
-
-// validate
-import validateCreateUserAccountForm from './validateCreateUserAccountForm'
+// types, validate
+import { ICreateUserForm, validationCreateUserFn } from '../../../schemas/user'
 
 // reducers
 import { RootState } from '../../../reducers'
@@ -88,7 +85,7 @@ const form = reduxForm<ICreateUserForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateCreateUserAccountForm
+	validate: validationCreateUserFn
 })(CreateUserAccountForm)
 
 export default form

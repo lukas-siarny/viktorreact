@@ -12,7 +12,8 @@ import CreateUserAccountForm from './components/CreateUserAccountForm'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // types
-import { IBreadcrumbs, ICreateUserForm } from '../../types/interfaces'
+import { IBreadcrumbs } from '../../types/interfaces'
+import { ICreateUserForm } from '../../schemas/user'
 
 // utils
 import { FORM, PERMISSION, ENUMERATIONS_KEYS, STRINGS, SUBMIT_BUTTON_ID } from '../../utils/enums'

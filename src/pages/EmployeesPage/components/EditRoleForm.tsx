@@ -49,7 +49,6 @@ const EditRoleForm: FC<Props> = (props) => {
 					<Permissions
 						allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_ROLE_UPDATE]}
 						render={(hasPermission, { openForbiddenModal }) => {
-							console.log({ hasPermissionToEdit, hasPermission })
 							return (
 								<>
 									<SalonRolesField
@@ -59,7 +58,7 @@ const EditRoleForm: FC<Props> = (props) => {
 										size={'large'}
 										loading={roles?.isLoading}
 										className={'flex-1'}
-										disabled={!hasPermission}
+										disabled={!hasPermission || !hasPermissionToEdit}
 										tooltip={permissionTooltip}
 										required
 									/>

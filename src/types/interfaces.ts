@@ -31,6 +31,7 @@ import {
 // types
 import { Paths } from './api'
 import { TooltipPlacement } from 'antd/es/tooltip'
+import { ICalendarEventForm } from '../schemas/event'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -272,25 +273,25 @@ export interface ICalendarReservationForm {
 	isImported?: boolean
 	eventType: CALENDAR_EVENT_TYPE
 }
-export interface ICalendarEventForm {
-	employee: ICalendarEmployeeOptionItem
-	date: string
-	timeFrom: string
-	timeTo: string
-	eventType: CALENDAR_EVENT_TYPE
-	recurring?: boolean
-	repeatOn?: DAY[]
-	every?: EVERY_REPEAT
-	end?: string
-	note?: string
-	allDay?: boolean
-	// NOTE: pre akcie resize a drag and drop
-	eventId?: string | null
-	calendarBulkEventID?: string
-	revertEvent?: () => void
-	updateFromCalendar?: boolean
-	isImported?: boolean
-}
+// export interface ICalendarEventForm {
+// 	employee: ICalendarEmployeeOptionItem
+// 	date: string
+// 	timeFrom: string
+// 	timeTo: string
+// 	eventType: CALENDAR_EVENT_TYPE
+// 	recurring?: boolean
+// 	repeatOn?: DAY[]
+// 	every?: EVERY_REPEAT
+// 	end?: string
+// 	note?: string
+// 	allDay?: boolean
+// 	// NOTE: pre akcie resize a drag and drop
+// 	eventId?: string | null
+// 	calendarBulkEventID?: string
+// 	revertEvent?: () => void
+// 	updateFromCalendar?: boolean
+// 	isImported?: boolean
+// }
 
 export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null
 

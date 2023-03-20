@@ -8,8 +8,9 @@ import ConfirmModal, { IConfirmModal } from '../../../atoms/ConfirmModal'
 import ConfirmBulkForm from './forms/ConfirmBulkForm'
 
 // types
-import { IBulkConfirmForm, ICalendarEventForm, ICalendarReservationForm, ConfirmModalData } from '../../../types/interfaces'
+import { IBulkConfirmForm, ICalendarReservationForm, ConfirmModalData } from '../../../types/interfaces'
 import { RootState } from '../../../reducers'
+import { ICalendarEventForm } from '../../../schemas/event'
 
 // utils
 import {

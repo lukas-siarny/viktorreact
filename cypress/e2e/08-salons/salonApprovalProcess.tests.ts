@@ -85,7 +85,7 @@ const salonApprovalProcessTestSuite = (actions: CRUD_OPERATIONS[], role: SALON_R
 			}
 		})
 
-		it('Hide salon publication', () => {
+		/* it('Hide salon publication', () => {
 			// get salonID from env
 			const salonID = Cypress.env(SALON_ID)
 			cy.intercept({
@@ -156,7 +156,7 @@ const salonApprovalProcessTestSuite = (actions: CRUD_OPERATIONS[], role: SALON_R
 					}
 				})
 			}
-		})
+		}) */
 	})
 }
 

@@ -1021,7 +1021,7 @@ export const hasAuthUserPermissionToEditRole = (
 		return result
 	}
 
-	if (authUser.uniqPermissions?.some((permission) => [PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+	if (authUser.uniqPermissions?.some((permission) => [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
 		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
 		return {
 			hasPermission: true,

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 // atoms
 import PinField from '../../../atoms/PinField'
 
-// shcemas
+// schemas
 import { IActivationForm, validationFn as validateActivationForm } from '../../../schemas/activation'
 
 // utils

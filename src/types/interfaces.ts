@@ -292,19 +292,6 @@ export interface ICalendarEventForm {
 	isImported?: boolean
 }
 
-export interface ICalendarImportedReservationForm {
-	date: string
-	timeFrom: string
-	timeTo: string
-	note?: string
-	eventId: string
-	revertEvent?: () => void
-	updateFromCalendar?: boolean
-	employee: ISelectOptionItem
-	isImported?: boolean
-	eventType: CALENDAR_EVENT_TYPE
-}
-
 export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null
 
 export interface IEventTypeFilterForm {

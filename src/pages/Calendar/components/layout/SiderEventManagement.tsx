@@ -10,7 +10,8 @@ import dayjs from 'dayjs'
 import { CalendarApi } from '@fullcalendar/react'
 
 // types
-import { ICalendarEmployeesPayload, ICalendarEventForm, ICalendarImportedReservationForm, ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'
+import { ICalendarEmployeesPayload, ICalendarEventForm, ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'
+import { ICalendarImportedReservationForm } from '../../../../schemas/reservation'
 import { RootState } from '../../../../reducers'
 
 // utils

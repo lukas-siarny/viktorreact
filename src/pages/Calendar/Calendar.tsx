@@ -68,9 +68,9 @@ import {
 	PopoverTriggerPosition,
 	SalonSubPageProps,
 	EmployeeTooltipPopoverData,
-	ICalendarImportedReservationForm,
 	ICalendarEmployeeOptionItem
 } from '../../types/interfaces'
+import { ICalendarImportedReservationForm } from '../../schemas/reservation'
 
 // hooks
 import useQueryParams, { ArrayParam, StringParam } from '../../hooks/useQueryParams'

@@ -325,6 +325,8 @@ export const INDIVIDUAL_TRANSPORT = 0
 
 export const BACK_DATA_QUERY = 'backData'
 
+export const PIN_LENGTH = 6
+
 export enum ENUMERATIONS_KEYS {
 	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
 	COUNTRIES = 'countries',

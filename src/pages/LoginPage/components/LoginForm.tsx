@@ -8,15 +8,12 @@ import { useTranslation } from 'react-i18next'
 import InputPasswordField from '../../../atoms/InputPasswordField'
 import InputField from '../../../atoms/InputField'
 
-// interfaces
-import { ILoginForm } from '../../../types/interfaces'
+// schemas
+import { ILoginForm, validationFn as validateLoginForm } from '../../../schemas/login'
 
 // utils
 import { FORGOT_PASSWORD_BUTTON_ID, FORM, HELP_BUTTON_ID, SIGNUP_BUTTON_ID, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { formFieldID, showErrorNotification } from '../../../utils/helper'
-
-// validate
-import validateLoginForm from './validateLoginForm'
 
 type ComponentProps = {
 	showForgottenPasswordModal: () => void

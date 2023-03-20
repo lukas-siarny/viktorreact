@@ -15,16 +15,12 @@ import SwitchField from '../../../atoms/SwitchField'
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
-// // interfaces
-import { IRegistrationForm } from '../../../types/interfaces'
+// schemas
+import { IRegistrationForm, validationFn as validateRegistrationForm } from '../../../schemas/registration'
 
-// // utils
+// utils
 import { FORM, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { formFieldID, showErrorNotification } from '../../../utils/helper'
-
-// validate
-
-import validateRegistrationForm from './validateRegistrationForm'
 
 type ComponentProps = {}
 
@@ -60,7 +56,7 @@ const RegistrationForm: FC<Props> = (props) => {
 			<Field
 				className='noti-registration-switch'
 				component={SwitchField}
-				name={'gdpr'}
+				name={'agreeGDPR'}
 				customLabel={
 					<div className='text-notino-grayDark text-xs md:text-sm'>
 						<span>{`${t('loc:Prehlasujem, že som sa oboznámil s')} `}</span>

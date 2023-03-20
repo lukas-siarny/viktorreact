@@ -15,7 +15,7 @@ import { RootState } from '../../reducers'
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // interfaces
-import { IActivationForm } from '../../types/interfaces'
+import { IActivationForm } from '../../schemas/activation'
 
 const ActivationPage = () => {
 	const { t } = useTranslation()

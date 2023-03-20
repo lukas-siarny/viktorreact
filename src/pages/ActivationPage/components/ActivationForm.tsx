@@ -6,15 +6,12 @@ import { useTranslation } from 'react-i18next'
 // atoms
 import PinField from '../../../atoms/PinField'
 
-// interfaces
-import { IActivationForm } from '../../../types/interfaces'
+// shcemas
+import { IActivationForm, validationFn as validateActivationForm } from '../../../schemas/activation'
 
 // utils
-import { FORM, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { FORM, PIN_LENGTH, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { formFieldID } from '../../../utils/helper'
-
-// validate
-import validateActivationForm, { PIN_LENGTH } from './validateActivationForm'
 
 type ComponentProps = {}
 

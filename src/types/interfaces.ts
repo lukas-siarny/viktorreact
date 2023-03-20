@@ -63,11 +63,6 @@ export interface ISelectOptionItem<ExtraType = any> {
 
 export type Columns = ColumnsType<any>
 
-export interface ILoginForm {
-	email: string
-	password: string
-}
-
 export interface IInviteEmployeeForm {
 	email: string
 	roleID: string
@@ -326,24 +321,10 @@ export interface ISupportContactForm {
 	emails: { email: string }[]
 }
 
-export interface IRegistrationForm {
-	email: string
-	password: string
-	confirmPassword: string
-	phonePrefixCountryCode: string
-	phone: string
-	gdpr: boolean
-	gtc: boolean
-	marketing: boolean
-}
-
 export interface IForgotPasswordForm {
 	email: string
 }
 
-export interface IActivationForm {
-	code: string
-}
 
 export interface IBillingForm {
 	countryCode?: string

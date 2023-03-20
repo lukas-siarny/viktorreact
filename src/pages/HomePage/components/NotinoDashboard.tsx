@@ -327,32 +327,32 @@ const NotinoDashboard: FC = () => {
 				{
 					label: (
 						<span>
-							{`${t('loc:Zmeny v publikovaných salónoch za')} `}
+							{`${t('loc:Zmeny v salónoch za')} `}
 							<strong>{t('loc:24 hodín')}</strong>
 						</span>
 					),
 					count: notino.data.lastUpdated?.oneDayAgo,
-					onClick: () => navigate(FILTER_PATHS(ranges[0].from, ranges[0].to).SALONS.publishedChanges) // 24h ago
+					onClick: () => navigate(FILTER_PATHS(ranges[0].from, ranges[0].to).SALONS.changesOverPeriod) // 24h ago
 				},
 				{
 					label: (
 						<span>
-							{`${t('loc:Zmeny v publikovaných salónoch za')} `}
+							{`${t('loc:Zmeny v salónoch za')} `}
 							<strong>{t('loc:48 hodín')}</strong>
 						</span>
 					),
 					count: notino.data.lastUpdated?.twoDaysAgo,
-					onClick: () => navigate(FILTER_PATHS(ranges[1].from, ranges[1].to).SALONS.publishedChanges) // 48h ago
+					onClick: () => navigate(FILTER_PATHS(ranges[1].from, ranges[1].to).SALONS.changesOverPeriod) // 48h ago
 				},
 				{
 					label: (
 						<span>
-							{`${t('loc:Zmeny v publikovaných salónoch za')} `}
+							{`${t('loc:Zmeny v salónoch za')} `}
 							<strong>{t('loc:týždeň')}</strong>
 						</span>
 					),
 					count: notino.data.lastUpdated?.sevenDaysAgo,
-					onClick: () => navigate(FILTER_PATHS(ranges[2].from, ranges[2].to).SALONS.publishedChanges) // week ago
+					onClick: () => navigate(FILTER_PATHS(ranges[2].from, ranges[2].to).SALONS.changesOverPeriod) // week ago
 				}
 			]
 

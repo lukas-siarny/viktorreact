@@ -68,6 +68,11 @@ const UPLOAD_MODAL_INIT = {
 	}
 }
 
+enum UPLOAD_TYPE {
+	RESERVATION = 'reservation',
+	CUSTOMER = 'customer'
+}
+
 const ReservationSystemSettingsForm = (props: Props) => {
 	const { pristine, submitting, excludedB2BNotifications, parentPath, salonID } = props
 	const [t] = useTranslation()
@@ -85,7 +90,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const [uploadModal, setUploadModal] = useState<{
 		visible: boolean
 		uploadStatus: UPLOAD_STATUS | undefined
-		uploadType: 'reservation' | 'customer' | undefined
+		uploadType: UPLOAD_TYPE | undefined
 		data: { accept: string; label: string; title: string }
 	}>(UPLOAD_MODAL_INIT)
 	// https://ant.design/components/tree/#Note - nastava problem, ze pokial nie je vygenerovany strom, tak sa vyrendruje collapsnuty, aj ked je nastavena propa defaultExpandAll
@@ -258,7 +263,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			formData.append('file', values?.file)
 
 			try {
-				if (uploadModal.uploadType === 'reservation') {
+				if (uploadModal.uploadType === UPLOAD_TYPE.RESERVATION) {
 					await postReq('/api/b2b/admin/imports/salons/{salonID}/calendar-events', { salonID }, formData, {
 						headers
 					})
@@ -288,6 +293,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				/>
 			</>
 		)
+
 		return (
 			<>
 				{modals}
@@ -494,7 +500,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							setUploadModal({
 								...uploadModal,
 								visible: true,
-								uploadType: 'reservation',
+								uploadType: UPLOAD_TYPE.RESERVATION,
 								data: {
 									accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv,.ics',
 									title: t('loc:Importovať rezervácie'),
@@ -515,7 +521,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							setUploadModal({
 								...uploadModal,
 								visible: true,
-								uploadType: 'reservation',
+								uploadType: UPLOAD_TYPE.CUSTOMER,
 								data: {
 									accept: '.csv',
 									title: t('loc:Importovať zákazníkov'),

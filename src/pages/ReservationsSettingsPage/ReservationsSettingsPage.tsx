@@ -136,7 +136,8 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const { salonID } = props
 	const { parentPath } = props
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-	const groupedSettings = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
+	const services = useSelector((state: RootState) => state.service.services)
+	const groupedSettings = services?.data?.groupedServicesByCategory
 	const submitting = useSelector(isSubmitting(FORM.RESEVATION_SYSTEM_SETTINGS))
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -293,7 +294,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<Spin spinning={salon.isLoading || submitting}>
+						<Spin spinning={salon.isLoading || services.isLoading || submitting}>
 							<ReservationSystemSettingsForm
 								onSubmit={handleSubmitSettings}
 								salonID={salonID}

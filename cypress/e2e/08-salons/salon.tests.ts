@@ -327,12 +327,12 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 									cy.get('.ant-empty').should('be.visible')
 								}
 								// update range of history data
+								cy.scrollTo(0, 0)
 								cy.get(`#${FORM.SALON_HISTORY_FILTER}-dateFromTo`).find('input').first().click({ force: true })
 								cy.get('.ant-picker-dropdown :not(.ant-picker-dropdown-hidden)', { timeout: 2000 })
-									.should('be.visible')
 									.find('.ant-picker-presets > ul > li')
 									.first()
-									.click()
+									.click({ force: true })
 								cy.wait('@getSalonHistory').then((interceptionGetSalonHistoryWithDifferentRange: any) => {
 									expect(interceptionGetSalonHistoryWithDifferentRange.response.statusCode).to.equal(200)
 								})

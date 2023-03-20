@@ -33,7 +33,7 @@ const reservationsTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			}).as('updateReservationsSettings')
 			cy.intercept({
 				method: 'GET',
-				url: `/api/b2b/admin/salons/${salonID}`
+				pathname: `/api/b2b/admin/salons/${salonID}`
 			}).as('getSalon')
 			cy.visit(`/salons/${salonID}/reservations-settings`)
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {

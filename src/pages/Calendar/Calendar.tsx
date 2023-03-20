@@ -529,7 +529,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			...query,
 			...values,
 			employeeIDs: values.employeeIDs,
-			categoryIDs: getShortCategoryIdsForUrl(values.categoryIDs),
+			categoryIDs: values?.categoryIDs?.length === services?.options?.length ? undefined : getShortCategoryIdsForUrl(values.categoryIDs),
 			eventId: undefined,
 			sidebarView: undefined
 		})

@@ -59,7 +59,7 @@ const EditRoleForm: FC<Props> = (props) => {
 										size={'large'}
 										loading={roles?.isLoading}
 										className={'flex-1'}
-										disabled={!hasPermission || !hasPermissionToEdit}
+										disabled={!hasPermission}
 										tooltip={permissionTooltip}
 										required
 									/>

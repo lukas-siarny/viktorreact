@@ -204,7 +204,8 @@ export enum PERMISSION {
 	CALENDAR_EVENT_CREATE = 'CALENDAR_EVENT_CREATE',
 	CALENDAR_EVENT_UPDATE = 'CALENDAR_EVENT_UPDATE',
 	CALENDAR_EVENT_DELETE = 'CALENDAR_EVENT_DELETE',
-	READ_WALLET = 'READ_WALLET'
+	READ_WALLET = 'READ_WALLET',
+	SMS_UNIT_PRICE_EDIT = 'SMS_UNIT_PRICE_EDIT'
 }
 
 export const ADMIN_PERMISSIONS: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
@@ -613,6 +614,8 @@ export const SUBMIT_BUTTON_ID = 'submit-btn'
 
 export const ADD_BUTTON_ID = 'add-btn'
 
+export const FILTER_BUTTON_ID = 'filter-btn'
+
 export const FORGOT_PASSWORD_BUTTON_ID = 'forgot-password-btn'
 
 export const SIGNUP_BUTTON_ID = 'signup-btn'
@@ -624,6 +627,10 @@ export const CHANGE_PASSWORD_NEW_LINK_BUTTON_ID = 'change-password-new-link-btn'
 export const CREATE_EMPLOYEE_BUTTON_ID = 'create-employee-btn'
 
 export const CREATE_CUSTOMER_BUTTON_ID = 'create-customer-btn'
+
+export const IMPORT_BUTTON_ID = (suffix?: string) => `import-btn${suffix ? `-${suffix}` : ''}`
+
+export const ROW_BUTTON_WITH_ID = (id: string) => `row-btn-with-id_${id}`
 
 export const MAX_VALUES_PER_PARAMETER = 20
 
@@ -684,7 +691,7 @@ export const FILTER_PATHS = (from?: string, to?: string) => ({
 		[SALON_FILTER_STATES.DECLINED]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.DECLINED}`,
 		[SALON_FILTER_STATES.PENDING_PUBLICATION]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.PENDING_PUBLICATION}`,
 		[SALON_CREATE_TYPE.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.BASIC}`,
-		publishedChanges: `${i18next.t('paths:salons')}?salonState=active&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
+		changesOverPeriod: `${i18next.t('paths:salons')}?salonState=active&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}`,
 		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`,
 		publishedBasics: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
 		publishedPremiums: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.NON_BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`
@@ -776,7 +783,7 @@ export enum CALENDAR_DATE_FORMAT {
 	HEADER_WEEK_END = 'D MMM YY',
 	HEADER_WEEK_START_TURN_OF_THE_MONTH = 'D MMM',
 	HEADER_WEEK_END_TURN_OF_THE_MONTH = 'D MMM YY',
-	HEADER_MONTH = 'MMMM YY',
+	HEADER_MONTH = 'MMMM YYYY',
 	TIME = 'HH:mm',
 	MONTH_HEADER_DAY_NAME = 'ddd',
 	EVENTS_LIST_POPOVER = 'dddd, D MMM'

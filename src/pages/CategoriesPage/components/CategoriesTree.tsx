@@ -20,7 +20,7 @@ import { RootState } from '../../../reducers'
 import { deleteReq, patchReq, postReq } from '../../../utils/request'
 import { CREATE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
 import { checkPermissions } from '../../../utils/Permissions'
-import { normalizeNameLocalizations } from '../../../utils/helper'
+import { formFieldID, normalizeNameLocalizations } from '../../../utils/helper'
 
 // components
 import CategoryForm, { ICategoryForm } from './CategoryForm'
@@ -357,7 +357,7 @@ const CategoriesTree = () => {
 					htmlType='button'
 					className={'noti-btn'}
 					icon={<PlusIcon />}
-					id={`${CREATE_BUTTON_ID}-${FORM.CATEGORY}`}
+					id={formFieldID(FORM.CATEGORY, CREATE_BUTTON_ID)}
 				>
 					{t('loc:Pridať kategóriu')}
 				</Button>

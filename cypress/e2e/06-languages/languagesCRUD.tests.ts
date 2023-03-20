@@ -30,7 +30,7 @@ const languagesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pass
 				method: 'POST',
 				url: '/api/b2b/admin/enums/languages/'
 			}).as('createLanguage')
-			cy.clickButton(FORM.LANGUAGES, CREATE_BUTTON_ID)
+			cy.clickButton(CREATE_BUTTON_ID, FORM.LANGUAGES)
 			cy.setInputValue(FORM.LANGUAGES, 'nameLocalizations-0-value', languages.create.name)
 			cy.uploadFile('image', '../images/test.jpg', FORM.LANGUAGES)
 			cy.wait(CYPRESS.S3_UPLOAD_WAIT_TIME) // Cas ktory treba pockat kym sa nahra signed url obrazok

@@ -35,8 +35,8 @@ const billingInformationTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					cy.checkSuccessToastMessage()
 				})
 			} else {
-				cy.clickButton(SUBMIT_BUTTON_ID, FORM.SALON_BILLING_INFO)
-				cy.checkForbiddenModal()
+				// all form input fields should be disabled
+				cy.get(`#${FORM.SALON_BILLING_INFO}-companyName`).should('be.disabled')
 			}
 		})
 	})

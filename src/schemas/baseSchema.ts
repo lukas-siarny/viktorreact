@@ -1,8 +1,9 @@
 import i18next from 'i18next'
 import { FormErrors, DecoratedFormProps } from 'redux-form'
-import { z, ZodString, ZodOptional, ZodNullable, ZodObject } from 'zod'
+import { z, ZodString, ZodOptional, ZodNullable, ZodObject, ZodEffects } from 'zod'
 
 import { FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
+import passwordRegEx from '../utils/regex'
 
 /**
  * Serialize args for i18next.t function
@@ -10,7 +11,7 @@ import { FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
  * @param params additional params, if needed
  * @returns serialized string
  */
-const serializeValidationMessage = (key: string, params?: object): string =>
+export const serializeValidationMessage = (key: string, params?: object): string =>
 	JSON.stringify({
 		key,
 		params
@@ -43,7 +44,12 @@ const deserializeValidationMessage = (message?: string) => {
  * @param props additional props from Form component
  * @returns mapped errors to FormErrors
  */
-export const zodErrorsToFormErrors = <T, F extends FORM>(schema: ZodObject<any>, formName: F, values: T, props: DecoratedFormProps<T, any, string>): FormErrors<T, string> => {
+export const zodErrorsToFormErrors = <T, F extends FORM>(
+	schema: ZodEffects<ZodObject<any>> | ZodObject<any>,
+	formName: F,
+	values: T,
+	props: DecoratedFormProps<T, any, string>
+): FormErrors<T, string> => {
 	if (formName !== props.form) {
 		throw new Error(`Mismatch between Form and Validation function. Use proper validation function for Form: ${props.form}`)
 	}
@@ -117,3 +123,5 @@ export function stringConstraint<T extends true | false>(maxLength: number, requ
 }
 
 export const emailConstraint = z.string().email().trim().max(VALIDATION_MAX_LENGTH.LENGTH_255)
+
+export const passwordConstraint = z.string().regex(passwordRegEx, serializeValidationMessage('loc:Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak'))

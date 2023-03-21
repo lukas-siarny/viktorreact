@@ -14,8 +14,8 @@ import { NOTIFICATION_TYPE, FORM } from '../../utils/enums'
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
-// interfaces
-import { IForgotPasswordForm } from '../../types/interfaces'
+// schemas
+import { IForgotPasswordForm } from '../../schemas/forgotPassword'
 
 type Props = {
 	onClose: () => void

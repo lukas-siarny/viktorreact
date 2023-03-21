@@ -1,6 +1,6 @@
 import i18next from 'i18next'
 import { FormErrors, DecoratedFormProps } from 'redux-form'
-import { z, ZodString, ZodOptional, ZodNullable, ZodObject } from 'zod'
+import { z, ZodString, ZodOptional, ZodNullable, ZodObject, ZodTypeAny } from 'zod'
 import { set } from 'lodash'
 
 import { FORM, VALIDATION_MAX_LENGTH, LANGUAGE } from '../utils/enums'
@@ -44,7 +44,7 @@ export const deserializeValidationMessage = (message?: string) => {
  * @param props additional props from Form component
  * @returns mapped errors to FormErrors
  */
-export const zodErrorsToFormErrors = <T, F extends FORM>(schema: ZodObject<any>, formName: F, values: T, props: DecoratedFormProps<T, any, string>): FormErrors<T, string> => {
+export const zodErrorsToFormErrors = <T, F extends FORM>(schema: ZodTypeAny, formName: F, values: T, props: DecoratedFormProps<T, any, string>): FormErrors<T, string> => {
 	if (formName !== props.form) {
 		throw new Error(`Mismatch between Form and Validation function. Use proper validation function for Form: ${props.form}`)
 	}

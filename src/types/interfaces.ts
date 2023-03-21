@@ -601,13 +601,6 @@ interface ILocalizedValue {
 	valueLocalizations: ICategoryParameter['values']['0']['valueLocalizations']
 }
 
-export interface ICategoryParamForm {
-	nameLocalizations: ICategoryParameter['nameLocalizations']
-	valueType: ICategoryParameter['valueType']
-	localizedValues: ILocalizedValue[]
-	values: Pick<ICategoryParameter['values']['0'], 'value'>[]
-}
-
 export interface IIndustriesForm {
 	categoryIDs: string[]
 }

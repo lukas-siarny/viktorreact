@@ -9,6 +9,7 @@
 			content: ''
 			position: fixed
 			inset: 0
+			background: lime
 	.ant-popover-content
 		padding: 0
 	.ant-popover-inner
@@ -81,6 +82,7 @@
 			content: ''
 			position: fixed
 			inset: 0
+			background: rgba(0,0,0,0.5)
 		.ant-popover-content
 			padding: 0
 		.ant-popover-inner
@@ -99,9 +101,16 @@
 		.ant-popover-arrow
 			top: 28px // polovica vysky hlaviky popoveru
 
-// calendar employee tooltip popover
-.calendar-employee-tooltip-popover-link
-	span
-		display: inline
-		line-height: 20px
-		font-size: 12px
+
+#nc-reservations-popover-content-overlay,
+#nc-events-list-popover-content-overlay,
+#nc-customer-detail-content-overlay
+	position: fixed
+	top: 0
+	right: 0
+	bottom: 0
+	left: 0
+	background: transparent
+	overflow: hidden
+	z-index: 999
+	display: none

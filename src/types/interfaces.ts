@@ -871,10 +871,12 @@ export interface ICalendarEventsListPopover {
 	setIsOpen: (isOpen: boolean) => void
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
-	onMonthlyReservationClick: (data: EmployeeTooltipPopoverData, position?: PopoverTriggerPosition) => void
 	isHidden: boolean
 	isLoading?: boolean
 	isUpdatingEvent?: boolean
+	query: IUseQueryParams
+	parentPath: string
+	employeeID?: string
 }
 
 export type ReservationPopoverData = {
@@ -889,20 +891,6 @@ export type ReservationPopoverData = {
 	note?: CalendarEvent['note']
 	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
 	isEdit?: boolean
-}
-
-export interface ICalendarEmployeeTooltipPopover {
-	data: EmployeeTooltipPopoverData | null
-	position: PopoverTriggerPosition | null
-	isOpen: boolean
-	setIsOpen: (isOpen: boolean) => void
-	parentPath: string
-	query: IUseQueryParams
-}
-
-export type EmployeeTooltipPopoverData = {
-	employee: CalendarEmployee
-	date: string
 }
 
 export interface IBulkConfirmForm {

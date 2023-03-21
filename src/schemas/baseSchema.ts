@@ -1,8 +1,9 @@
 import i18next from 'i18next'
 import { FormErrors, DecoratedFormProps } from 'redux-form'
 import { z, ZodString, ZodOptional, ZodNullable, ZodObject } from 'zod'
+import { set } from 'lodash'
 
-import { FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
+import { FORM, VALIDATION_MAX_LENGTH, LANGUAGE } from '../utils/enums'
 
 /**
  * Serialize args for i18next.t function
@@ -51,13 +52,13 @@ export const zodErrorsToFormErrors = <T, F extends FORM>(schema: ZodObject<any>,
 	const result = schema.safeParse(values)
 
 	if (!result.success) {
-		const { fieldErrors } = result.error.flatten()
-		return Object.entries(fieldErrors || {}).reduce((acc, [key, value]) => {
-			return {
-				...acc,
-				[key]: deserializeValidationMessage(value ? value[0] : undefined)
-			}
-		}, {} as FormErrors<T>)
+		const errors: FormErrors<T> = {}
+
+		result.error.issues.forEach((issue) => {
+			set(errors, issue.path, deserializeValidationMessage(issue.message))
+		})
+
+		return errors
 	}
 
 	return {}
@@ -78,16 +79,64 @@ export const defaultErrorMap: z.ZodErrorMap = (issue, ctx) => {
 	}
 
 	if (issue.code === z.ZodIssueCode.too_big) {
-		return {
-			message: serializeValidationMessage('loc:Max. počet znakov je {{max}}', {
-				max: issue.maximum
-			})
+		if (issue.type === 'string') {
+			return {
+				message: serializeValidationMessage('loc:Max. počet znakov je {{max}}', {
+					max: issue.maximum
+				})
+			}
+		}
+		if (issue.type === 'number') {
+			return {
+				message: serializeValidationMessage('loc:Max. hodnota je {{max}}', {
+					max: issue.maximum
+				})
+			}
+		}
+		if (issue.type === 'array') {
+			return {
+				message: serializeValidationMessage('loc:Max. počet prvkov je {{max}}', {
+					max: issue.maximum
+				})
+			}
+		}
+	}
+
+	if (issue.code === z.ZodIssueCode.too_small) {
+		if (issue.type === 'string') {
+			return {
+				message: serializeValidationMessage('loc:Min. počet znakov je {{max}}', {
+					max: issue.minimum
+				})
+			}
+		}
+		if (issue.type === 'number') {
+			return {
+				message: serializeValidationMessage('loc:Min. hodnota je {{max}}', {
+					max: issue.minimum
+				})
+			}
+		}
+		if (issue.type === 'array') {
+			return {
+				message: serializeValidationMessage('loc:Min. počet prvkov je {{max}}', {
+					max: issue.minimum
+				})
+			}
 		}
 	}
 
 	if (issue.code === z.ZodIssueCode.invalid_string) {
 		if (issue.validation === 'email') {
 			return { message: serializeValidationMessage('loc:Email nie je platný') }
+		}
+
+		if (issue.validation === 'uuid') {
+			return { message: serializeValidationMessage('loc:Neplatný formát UUID') }
+		}
+
+		if (issue.validation === 'url') {
+			return { message: serializeValidationMessage('loc:Neplatná URL') }
 		}
 	}
 
@@ -117,3 +166,24 @@ export function stringConstraint<T extends true | false>(maxLength: number, requ
 }
 
 export const emailConstraint = z.string().email().trim().max(VALIDATION_MAX_LENGTH.LENGTH_255)
+
+/**
+ * Constraint for array fields where values can be translated into every supported language.
+ * Default and required is {@link LANGUAGE.EN EN}
+ * @param defaultValueRequired boolean
+ * @returns validation schema accepting only values with keys from LANGUAGE
+ */
+export const localizedValuesConstraint = (defaultValueRequired?: boolean) =>
+	z
+		.tuple([
+			z.object({
+				language: z.literal(LANGUAGE.EN),
+				value: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100, defaultValueRequired)
+			})
+		])
+		.rest(
+			z.object({
+				language: z.nativeEnum(LANGUAGE),
+				value: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100)
+			})
+		)

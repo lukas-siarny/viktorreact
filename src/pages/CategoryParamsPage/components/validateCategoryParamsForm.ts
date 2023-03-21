@@ -67,11 +67,9 @@ const schema = z
 	.superRefine((val, ctx) => {
 		console.log('🚀 ~ file: validateCategoryParamsForm.ts:91 ~ .superRefine ~ val:', val)
 		if (val.valueType === PARAMETERS_VALUE_TYPES.TIME) {
-			const enteredValues = val.values
+			const enteredValues = val.values.filter((item) => item.value)
 
-			const filledValues = enteredValues.filter((item) => item.value)
-
-			if (filledValues.length < 1) {
+			if (enteredValues.length < 1) {
 				ctx.addIssue({
 					code: z.ZodIssueCode.custom,
 					message: serializeValidationMessage('loc:Toto pole je povinné'),

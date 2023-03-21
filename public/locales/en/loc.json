@@ -202,6 +202,7 @@
   "Nedeľa": "Sunday",
   "Nedoručená": "Not delivered",
   "Nemá vyplnené otváracie hodiny": "Doesn't have opening hours filled in",
+  "Nemôžeš editovať rolu s rovnakými právami ako sú tvoje": "You cannot edit a role with the same permissions as yours",
   "Nemôžeš editovať svoju rolu": "You can't edit your own role",
   "Nenastavená zmena": "Work shift not set",
   "Nepublikované": "Unpublished",

@@ -152,6 +152,7 @@ const SmsUnitPricesDetailPage = () => {
 			console.error(error.message)
 		}
 	}
+
 	const handleDelete = async () => {
 		if (!selectedSmsUnitPrice?.id || isRemoving) {
 			return

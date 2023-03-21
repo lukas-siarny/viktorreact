@@ -24,6 +24,7 @@ import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.sv
 
 // types
 import { IEnumerationsCountriesPayload, ILoadingAndFailure, ISmsUnitPricesForm } from '../../../types/interfaces'
+import { ISmsUnitPricesActualPayload } from '../../../reducers/smsUnitPrices/smsUnitPricesActions'
 
 // validate
 import validateSmsUnitPricesForm from './validateSmsUnitPricesForm'
@@ -31,17 +32,27 @@ import validateSmsUnitPricesForm from './validateSmsUnitPricesForm'
 type ComponentProps = {
 	smsUnitPriceID?: string
 	changeFormVisibility: (show?: boolean) => void
-	onDelete: () => void
+	onDelete?: () => void
 	disabledForm?: boolean
 	currencySymbol?: string
 	countries: IEnumerationsCountriesPayload & ILoadingAndFailure
+	smsUnitPricesActual?: ISmsUnitPricesActualPayload['data']
+	isCreate?: boolean
 }
 
 type Props = InjectedFormProps<ISmsUnitPricesForm, ComponentProps> & ComponentProps
 
 const SmsUnitPricesForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, change, smsUnitPriceID, changeFormVisibility, onDelete, submitting, pristine, disabledForm, currencySymbol, countries } = props
+	const { handleSubmit, change, smsUnitPriceID, changeFormVisibility, onDelete, submitting, pristine, disabledForm, currencySymbol, countries, smsUnitPricesActual, isCreate } =
+		props
+
+	const countriesOptions = countries.enumerationsOptions.map((country) => {
+		return {
+			...country,
+			disabled: !!smsUnitPricesActual?.find((smsUnitPrice) => smsUnitPrice.country.code === country.value)
+		}
+	})
 
 	return (
 		<Form layout={'vertical'} className={'w-full top-0 sticky pt-1 px-6 pb-6 -mx-6'} onSubmitCapture={handleSubmit}>
@@ -64,7 +75,7 @@ const SmsUnitPricesForm: FC<Props> = (props) => {
 					size={'large'}
 					loading={countries?.isLoading}
 					required
-					disabled
+					disabled={!isCreate}
 				/>
 				<Field
 					component={InputNumberField}
@@ -100,7 +111,7 @@ const SmsUnitPricesForm: FC<Props> = (props) => {
 				<span className={'text-notino-grayDark text-xs'}>{t('loc:Platnosť sa vždy ráta od prvého dňa v mesiaci')}</span>
 				{!disabledForm && (
 					<div className={cx('flex w-full mt-6 gap-2 flex-wrap', { 'justify-between': smsUnitPriceID, 'justify-center': !smsUnitPriceID })}>
-						{smsUnitPriceID && (
+						{smsUnitPriceID && onDelete && (
 							<DeleteButton
 								onConfirm={onDelete}
 								entityName={''}

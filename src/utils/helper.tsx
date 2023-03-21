@@ -1047,7 +1047,7 @@ export const hasAuthUserPermissionToEditRole = (
 		if (employeeRoleIndex === authUserRoleIndex) {
 			return {
 				...result,
-				tooltip: i18next.t('loc:Nemôžeš editovať rolu s rovnakými právami ako sú tvoje')
+				tooltip: i18next.t('loc:Nie je možné editovať rolu s rovnakými oprávneniami, ako máte pridelené.')
 			}
 		}
 

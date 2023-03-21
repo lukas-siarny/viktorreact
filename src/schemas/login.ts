@@ -9,4 +9,4 @@ export const loginSchema = z.object({
 
 export type ILoginForm = z.infer<typeof loginSchema>
 
-export const validationFn = (values: ILoginForm, props: any) => zodErrorsToFormErrors(loginSchema, FORM.LOGIN, values, props)
+export const validationLoginFn = (values: ILoginForm, props: any) => zodErrorsToFormErrors(loginSchema, FORM.LOGIN, values, props)

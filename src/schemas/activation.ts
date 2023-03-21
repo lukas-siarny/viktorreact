@@ -10,4 +10,4 @@ export const activationSchema = z.object({
 
 export type IActivationForm = z.infer<typeof activationSchema>
 
-export const validationFn = (values: IActivationForm, props: any) => zodErrorsToFormErrors(activationSchema, FORM.ACTIVATION, values, props)
+export const validationActivationFn = (values: IActivationForm, props: any) => zodErrorsToFormErrors(activationSchema, FORM.ACTIVATION, values, props)

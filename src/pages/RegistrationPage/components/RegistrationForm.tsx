@@ -16,7 +16,7 @@ import SwitchField from '../../../atoms/SwitchField'
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
 // schemas
-import { IRegistrationForm, validationFn as validateRegistrationForm } from '../../../schemas/registration'
+import { IRegistrationForm, validationRegistrationFn } from '../../../schemas/registration'
 
 // utils
 import { FORM, SUBMIT_BUTTON_ID } from '../../../utils/enums'
@@ -143,7 +143,7 @@ const form = reduxForm<IRegistrationForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateRegistrationForm
+	validate: validationRegistrationFn
 })(RegistrationForm)
 
 export default form

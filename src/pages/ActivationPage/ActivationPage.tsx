@@ -14,7 +14,7 @@ import { postReq } from '../../utils/request'
 import { RootState } from '../../reducers'
 import { getCurrentUser } from '../../reducers/users/userActions'
 
-// interfaces
+// schemas
 import { IActivationForm } from '../../schemas/activation'
 
 const ActivationPage = () => {

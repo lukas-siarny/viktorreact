@@ -9,7 +9,7 @@ import InputPasswordField from '../../../atoms/InputPasswordField'
 import InputField from '../../../atoms/InputField'
 
 // schemas
-import { ILoginForm, validationFn as validateLoginForm } from '../../../schemas/login'
+import { ILoginForm, validationLoginFn } from '../../../schemas/login'
 
 // utils
 import { FORGOT_PASSWORD_BUTTON_ID, FORM, HELP_BUTTON_ID, SIGNUP_BUTTON_ID, SUBMIT_BUTTON_ID } from '../../../utils/enums'
@@ -81,7 +81,7 @@ const form = reduxForm<ILoginForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateLoginForm
+	validate: validationLoginFn
 })(LoginForm)
 
 export default form

@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import PinField from '../../../atoms/PinField'
 
 // schemas
-import { IActivationForm, validationFn as validateActivationForm } from '../../../schemas/activation'
+import { IActivationForm, validationActivationFn } from '../../../schemas/activation'
 
 // utils
 import { FORM, PIN_LENGTH, SUBMIT_BUTTON_ID } from '../../../utils/enums'
@@ -52,7 +52,7 @@ const form = reduxForm<IActivationForm, ComponentProps>({
 	destroyOnUnmount: true,
 	touchOnChange: false,
 	touchOnBlur: true,
-	validate: validateActivationForm
+	validate: validationActivationFn
 })(ActivationForm)
 
 export default form

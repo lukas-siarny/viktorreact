@@ -414,7 +414,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					onEventChangeStart={onEventChangeStart}
 					onEventChangeStop={onEventChangeStop}
 					onShowEventsListPopover={onShowEventsListPopover}
-					query={query}
+					query={{ categoryIDs: query.categoryIDs }} // posuvame dalej len query, ktore realne potrebujeme, aby sa zabezpecilo zbytocnym prerendrovaniam celeho kalendaru
 					parentPath={parentPath}
 				/>
 			)

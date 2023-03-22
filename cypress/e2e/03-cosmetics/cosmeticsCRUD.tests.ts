@@ -28,7 +28,7 @@ const cosmeticsCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pass
 				method: 'POST',
 				url: '/api/b2b/admin/enums/cosmetics/'
 			}).as('createCosmetics')
-			cy.clickButton(FORM.COSMETIC, CREATE_BUTTON_ID)
+			cy.clickButton(CREATE_BUTTON_ID, FORM.COSMETIC)
 			cy.setInputValue(FORM.COSMETIC, 'name', cosmetics.create.name)
 			cy.clickButton(SUBMIT_BUTTON_ID, FORM.COSMETIC)
 			cy.wait('@createCosmetics').then((interception: any) => {

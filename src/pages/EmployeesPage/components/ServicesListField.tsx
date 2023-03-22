@@ -9,8 +9,8 @@ import cx from 'classnames'
 import i18next from 'i18next'
 
 // utils
-import { FORM, PERMISSION } from '../../../utils/enums'
-import { renderPriceAndDurationInfo } from '../../../utils/helper'
+import { FORM, PERMISSION, ROW_BUTTON_WITH_ID } from '../../../utils/enums'
+import { formFieldID, renderPriceAndDurationInfo } from '../../../utils/helper'
 import Permissions from '../../../utils/Permissions'
 
 // types
@@ -101,6 +101,7 @@ const ServicesListField: FC<Props> = (props) => {
 								<Tooltip title={disabledEditButton ? disabledEditButtonTooltip : null} destroyTooltipOnHide>
 									<span className={cx('w-full flex items-center md:w-auto', { 'cursor-not-allowed': disabledEditButton })}>
 										<Button
+											id={formFieldID(FORM.SERVICE_FORM, ROW_BUTTON_WITH_ID(field.employee.id))}
 											htmlType={'button'}
 											size={'small'}
 											icon={<EditIcon />}
@@ -155,7 +156,7 @@ const ServicesListField: FC<Props> = (props) => {
 	}
 
 	return (
-		<>
+		<div id={'service-employees-list'}>
 			<Collapse className={'collapse-list'} bordered={false} accordion>
 				{fields.map((_field: any, index: number) => {
 					const fieldData = fields.get(index)
@@ -197,7 +198,7 @@ const ServicesListField: FC<Props> = (props) => {
 					)
 				})}
 			</Collapse>
-		</>
+		</div>
 	)
 }
 

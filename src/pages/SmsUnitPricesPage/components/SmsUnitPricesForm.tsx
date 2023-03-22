@@ -107,7 +107,7 @@ const SmsUnitPricesForm: FC<Props> = (props) => {
 								type={'default'}
 								className='w-full xl:w-auto xl:min-w-40'
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-								id={formFieldID(FORM.SPECIALIST_CONTACT, DELETE_BUTTON_ID)}
+								id={formFieldID(FORM.SMS_UNIT_PRICES_FORM, DELETE_BUTTON_ID)}
 							/>
 						)}
 						<Button
@@ -118,7 +118,7 @@ const SmsUnitPricesForm: FC<Props> = (props) => {
 							disabled={submitting || pristine}
 							loading={submitting}
 							icon={smsUnitPriceID ? <EditIcon /> : <CreateIcon />}
-							id={formFieldID(FORM.SPECIALIST_CONTACT, SUBMIT_BUTTON_ID)}
+							id={formFieldID(FORM.SMS_UNIT_PRICES_FORM, SUBMIT_BUTTON_ID)}
 						>
 							{smsUnitPriceID ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:cenu'))}
 						</Button>

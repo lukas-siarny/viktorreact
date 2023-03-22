@@ -1,7 +1,8 @@
 import React, { useState, ReactNode, useCallback } from 'react'
 import { Collapse, Button, Badge, Row, Col } from 'antd'
 import { ReactComponent as FilterIcon } from '../assets/icons/filter-icon.svg'
-import { ROW_GUTTER_X_DEFAULT } from '../utils/enums'
+import { FILTER_BUTTON_ID, FORM, ROW_GUTTER_X_DEFAULT } from '../utils/enums'
+import { formFieldID } from '../utils/helper'
 
 const { Panel } = Collapse
 
@@ -12,10 +13,11 @@ type Props = {
 	customContent?: ReactNode | JSX.Element
 	customSearchContent?: ReactNode
 	disableFilter?: boolean
+	form?: FORM
 }
 
 const Filters = (props: Props) => {
-	const { children, activeFilters, search, customContent, customSearchContent, disableFilter } = props
+	const { children, activeFilters, search, customContent, customSearchContent, disableFilter, form } = props
 	const [visible, setVisible] = useState<undefined | string>(undefined)
 
 	const onClick = useCallback(() => {
@@ -38,6 +40,7 @@ const Filters = (props: Props) => {
 									<Col>
 										<Badge count={activeFilters} className={'mr-1'} style={{ top: '8px', right: '10px', background: '#DC0069' }}>
 											<Button
+												id={formFieldID(form, FILTER_BUTTON_ID)}
 												onClick={onClick}
 												htmlType='button'
 												type='link'

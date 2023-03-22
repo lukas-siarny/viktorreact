@@ -805,13 +805,11 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 			return undefined
 		}
 
-		const isErrors: boolean = errorKeys.length > 1
+		const errorsText = errorKeys.length > 1 ? i18next.t('loc:Vo formulári sa nachádzajú chyby!') : i18next.t('loc:Vo formulári sa nachádza chyba!')
 		return notification.error(
 			customMessage || {
 				message: i18next.t('loc:Chybne vyplnený formulár'),
-				description: i18next.t(
-					`loc:Skontrolujte správnosť vyplnených polí vo formulári. Vo formulári sa ${isErrors ? i18next.t('nachádzajú chyby') : i18next.t('nachádza chyba')}!`
-				)
+				description: i18next.t('loc:Skontrolujte správnosť vyplnených polí vo formulári. {{ errors }}', { errors: errorsText })
 			}
 		)
 	}
@@ -1014,7 +1012,7 @@ export const hasAuthUserPermissionToEditRole = (
 	employee?: IEmployeePayload['data'],
 	salonRoles?: ISelectOptionItem[]
 ): { hasPermission: boolean; tooltip: string | null } => {
-	let result: { hasPermission: boolean; tooltip: string | null } = {
+	const result: { hasPermission: boolean; tooltip: string | null } = {
 		hasPermission: false,
 		tooltip: i18next.t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')
 	}
@@ -1023,7 +1021,7 @@ export const hasAuthUserPermissionToEditRole = (
 		return result
 	}
 
-	if (authUser.uniqPermissions?.some((permission) => [PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+	if (authUser.uniqPermissions?.some((permission) => [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
 		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
 		return {
 			hasPermission: true,
@@ -1032,16 +1030,27 @@ export const hasAuthUserPermissionToEditRole = (
 	}
 	if (authUser.id === employee?.employee?.user?.id) {
 		// salon user can't edit his own role
-		result = {
+		return {
 			...result,
 			tooltip: i18next.t('loc:Nemôžeš editovať svoju rolu')
 		}
-		return result
 	}
 
 	const authUserSalonRole = authUser.salons?.find((salon) => salon.id === salonID)?.role
 	if (authUserSalonRole) {
 		const authUserRoleIndex = salonRoles.findIndex((role) => role?.value === authUserSalonRole?.id)
+
+		const employeeRole = employee.employee?.role
+		const employeeRoleIndex = salonRoles.findIndex((role) => role?.value === employeeRole?.id)
+
+		// it's not possible to edit role with same permissions (applies to admin role as well)
+		if (employeeRoleIndex === authUserRoleIndex) {
+			return {
+				...result,
+				tooltip: i18next.t('loc:Nie je možné editovať rolu s rovnakými oprávneniami, ako máte pridelené.')
+			}
+		}
+
 		if (authUserRoleIndex === 0) {
 			// is salon admin - has all permissions
 			return {
@@ -1050,12 +1059,6 @@ export const hasAuthUserPermissionToEditRole = (
 			}
 		}
 
-		const employeeRole = employee.employee?.role
-		const employeeRoleIndex = salonRoles.findIndex((role) => role?.value === employeeRole?.id)
-		// it's not possible to edit admin role	if auth user is not admin
-		if (employeeRoleIndex === 0) {
-			return result
-		}
 		// it's possible to edit role only if you have permission to edit
 		if (authUserSalonRole?.permissions.find((permission) => permission.name === PERMISSION.EMPLOYEE_ROLE_UPDATE)) {
 			return {

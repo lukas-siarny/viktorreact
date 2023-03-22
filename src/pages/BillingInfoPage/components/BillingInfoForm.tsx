@@ -148,7 +148,7 @@ const BillingInfoForm = (props: Props) => {
 								<Divider className={'mb-3 mt-3'} />
 								<Row justify={'space-between'}>
 									<Field
-										className={'w-4/5'}
+										className={'w-4/6'}
 										component={InputField}
 										label={t('loc:Ulica')}
 										placeholder={t('loc:Zadajte ulicu')}
@@ -157,7 +157,7 @@ const BillingInfoForm = (props: Props) => {
 										disabled={!hasPermission}
 									/>
 									<Field
-										className={'w-1/6'}
+										className={'w-3/10'}
 										component={InputField}
 										label={t('loc:Popisné číslo')}
 										maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}

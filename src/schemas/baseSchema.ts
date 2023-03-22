@@ -105,22 +105,22 @@ export const defaultErrorMap: z.ZodErrorMap = (issue, ctx) => {
 	if (issue.code === z.ZodIssueCode.too_small) {
 		if (issue.type === 'string') {
 			return {
-				message: serializeValidationMessage('loc:Min. počet znakov je {{max}}', {
-					max: issue.minimum
+				message: serializeValidationMessage('loc:Min. počet znakov je {{min}}', {
+					min: issue.minimum
 				})
 			}
 		}
 		if (issue.type === 'number') {
 			return {
-				message: serializeValidationMessage('loc:Min. hodnota je {{max}}', {
-					max: issue.minimum
+				message: serializeValidationMessage('loc:Min. hodnota je {{min}}', {
+					min: issue.minimum
 				})
 			}
 		}
 		if (issue.type === 'array') {
 			return {
-				message: serializeValidationMessage('loc:Min. počet prvkov je {{max}}', {
-					max: issue.minimum
+				message: serializeValidationMessage('loc:Min. počet prvkov je {{min}}', {
+					min: issue.minimum
 				})
 			}
 		}
@@ -148,7 +148,7 @@ export const defaultErrorMap: z.ZodErrorMap = (issue, ctx) => {
 */
 
 export const imageConstraint = z.object({
-	url: z.string().url(),
+	url: z.string().url().nullish(),
 	thumbUrl: z.string().nullish(),
 	uid: z.string(),
 	id: z.string().uuid().nullish()
@@ -170,20 +170,20 @@ export const emailConstraint = z.string().email().trim().max(VALIDATION_MAX_LENG
 /**
  * Constraint for array fields where values can be translated into every supported language.
  * Default and required is {@link LANGUAGE.EN EN}
- * @param defaultValueRequired boolean
+ * @param required boolean
  * @returns validation schema accepting only values with keys from LANGUAGE
  */
-export const localizedValuesConstraint = (defaultValueRequired?: boolean) =>
+export const localizedValuesConstraint = (required?: boolean, maxLength = VALIDATION_MAX_LENGTH.LENGTH_100) =>
 	z
 		.tuple([
 			z.object({
 				language: z.literal(LANGUAGE.EN),
-				value: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100, defaultValueRequired)
+				value: stringConstraint(maxLength, required)
 			})
 		])
 		.rest(
 			z.object({
 				language: z.nativeEnum(LANGUAGE),
-				value: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100)
+				value: stringConstraint(maxLength)
 			})
 		)

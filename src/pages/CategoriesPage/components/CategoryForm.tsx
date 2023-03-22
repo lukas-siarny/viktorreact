@@ -22,9 +22,6 @@ import Localizations from '../../../components/Localizations'
 import DeleteButton from '../../../components/DeleteButton'
 import PopConfirmComponent from '../../../components/PopConfirmComponent'
 
-// validate
-import validateCategoryFrom from './validateCategoryFrom'
-
 // utils
 import { validationString, checkUploadingBeforeSubmit, formFieldID } from '../../../utils/helper'
 import { DELETE_BUTTON_ID, FORM, PERMISSION, STRINGS, SUBMIT_BUTTON_ID, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
@@ -34,26 +31,13 @@ import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 // reducers
 import { RootState } from '../../../reducers'
 
-// types
-import { NameLocalizationsItem } from '../../../types/interfaces'
+// schema
+import { validationFn, ICategoryForm } from '../../../schemas/category'
 
 type ComponentProps = {
 	deleteCategory: Function
 	createCategory: (rootParentId: string, parentId: string, parentTitle: string, childrenLength: number, level: number) => void
 	closeCategoryForm: (e?: React.MouseEvent<HTMLElement> | undefined) => void
-}
-
-export interface ICategoryForm {
-	name: string
-	id: string
-	orderIndex: number
-	parentId: string
-	rootParentId: string | undefined | null
-	childrenLength: number
-	nameLocalizations: NameLocalizationsItem[]
-	descriptionLocalizations: NameLocalizationsItem[]
-	image: any
-	categoryParameterID: string
 }
 
 const fixLength100 = validationString(VALIDATION_MAX_LENGTH.LENGTH_100)
@@ -267,7 +251,7 @@ const form = reduxForm<ICategoryForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	validate: validateCategoryFrom
+	validate: validationFn
 })(withPromptUnsavedChanges(CategoryForm))
 
 export default form

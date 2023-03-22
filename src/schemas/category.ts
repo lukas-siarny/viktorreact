@@ -11,7 +11,7 @@ export const categorySchema = z
 		icon: imageConstraint.array().max(1).nullish()
 	})
 	.superRefine((values, ctx) => {
-		// values are numbers
+		// root category requires image and icon
 		if (values.level === 0) {
 			if (!values.image) {
 				ctx.addIssue({

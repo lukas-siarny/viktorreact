@@ -18,7 +18,6 @@ const categoryParamsSchema = z
 
 					val.forEach((item, index) => {
 						if (item.value && onlyValues.indexOf(item.value) !== index) {
-							// duplicates.push(index)
 							ctx.addIssue({
 								code: z.ZodIssueCode.custom,
 								message: serializeValidationMessage('loc:Táto hodnota už je zadaná'),

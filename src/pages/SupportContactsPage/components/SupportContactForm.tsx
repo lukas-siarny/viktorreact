@@ -87,7 +87,7 @@ const SupportContactForm: FC<Props> = (props) => {
 						<FieldArray component={PhoneArrayField} name={'phones'} props={{ disabled: disabledForm, requied: true }} />
 						<Row justify={'space-between'}>
 							<Field
-								className={'w-4/5'}
+								className={'w-4/6'}
 								component={InputField}
 								label={t('loc:Ulica')}
 								placeholder={t('loc:Zadajte ulicu')}
@@ -97,7 +97,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								disabled={disabledForm}
 							/>
 							<Field
-								className={'w-1/6'}
+								className={'w-3/10'}
 								component={InputField}
 								label={t('loc:Popisné číslo')}
 								placeholder={t('loc:Zadajte číslo')}

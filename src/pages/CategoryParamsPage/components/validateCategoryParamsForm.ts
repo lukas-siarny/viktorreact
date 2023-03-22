@@ -18,11 +18,9 @@ export default (values: ICategoryParamForm) => {
 	if (!values.valueType) {
 		errors.valueType = i18next.t('loc:Toto pole je povinné')
 	} else if (values.valueType === PARAMETERS_VALUE_TYPES.TIME) {
-		const enteredValues = values.values
+		const enteredValues = values.values.filter((item) => item.value)
 
-		const filledValues = enteredValues.filter((item) => item.value)
-
-		if (filledValues.length < 1) {
+		if (enteredValues.length < 1) {
 			valuesErrors[0] = { value: i18next.t('loc:Toto pole je povinné') }
 		} else {
 			const onlyValues = enteredValues.map((item) => item.value)

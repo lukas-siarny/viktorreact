@@ -28,6 +28,8 @@ import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
 import { IBreadcrumbs, INoteModal, INotinoUserForm, ISalonForm, SalonPageProps } from '../../types/interfaces'
+
+// schema
 import { INoteForm } from '../../schemas/note'
 
 // utils

@@ -23,7 +23,7 @@ import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 // reducers
 import { RootState } from '../../../reducers'
 
-// validate
+// schema
 import { IUserAccountForm, validationEditUserFn } from '../../../schemas/user'
 
 type ComponentProps = {}

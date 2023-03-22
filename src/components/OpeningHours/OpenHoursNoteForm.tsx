@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 // utils
 import { FORM, STRINGS, VALIDATION_MAX_LENGTH } from '../../utils/enums'
 
-// validate, interfaces
+// schema
 import { IOpenHoursNoteForm, validationOpenHoursNoteFn } from '../../schemas/openHoursNote'
 
 // atoms

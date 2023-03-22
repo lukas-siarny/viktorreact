@@ -1,15 +1,15 @@
 import { z } from 'zod'
-import { emailConstraint, imageConstraint, stringConstraint, zodErrorsToFormErrors } from './baseSchema'
+import { emailConstraint, imageConstraint, stringConstraint, twoCharsConstraint, zodErrorsToFormErrors } from './baseSchema'
 import { FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
 
 // https://notino-admin.goodrequest.dev/api/doc/#/B2b-%3Eadmin/patchApiB2BAdminUsersUserId
 export const editUserSchema = z.object({
 	firstName: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100),
 	lastName: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100),
-	phonePrefixCountryCode: z.string().length(VALIDATION_MAX_LENGTH.LENGTH_2),
+	phonePrefixCountryCode: twoCharsConstraint,
 	phone: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_20, true),
 	avatar: imageConstraint.array().max(1).nullish(),
-	assignedCountryCode: z.string().length(2).nullish()
+	assignedCountryCode: twoCharsConstraint.optional()
 })
 
 export type IUserAccountForm = z.infer<typeof editUserSchema>
@@ -19,10 +19,10 @@ export const validationEditUserFn = (values: IUserAccountForm, props: any) => zo
 // https://notino-admin.goodrequest.dev/api/doc/#/B2b-%3Eadmin/postApiB2BAdminUsers
 export const createUserSchema = z.object({
 	email: emailConstraint,
-	phonePrefixCountryCode: z.string().length(VALIDATION_MAX_LENGTH.LENGTH_2),
+	phonePrefixCountryCode: twoCharsConstraint,
 	phone: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_20, true),
-	roleID: z.string(),
-	assignedCountryCode: z.string().length(2).nullish()
+	roleID: z.string().uuid(),
+	assignedCountryCode: twoCharsConstraint.optional()
 })
 export type ICreateUserForm = z.infer<typeof createUserSchema>
 

@@ -14,7 +14,7 @@ import { Paths } from '../../types/api'
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
 
-// interfaces
+// schema
 import { IOpenHoursNoteForm } from '../../schemas/openHoursNote'
 
 type Props = {

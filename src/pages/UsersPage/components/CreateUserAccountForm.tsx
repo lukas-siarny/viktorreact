@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
 
-// types, validate
+// schema
 import { ICreateUserForm, validationCreateUserFn } from '../../../schemas/user'
 
 // reducers

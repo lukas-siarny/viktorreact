@@ -10,7 +10,7 @@ import { formFieldID } from '../../../../utils/helper'
 // validate
 import TextareaField from '../../../../atoms/TextareaField'
 
-// types, validations
+// schema
 import { INoteForm, validationNoteFn } from '../../../../schemas/note'
 
 type ComponentProps = {

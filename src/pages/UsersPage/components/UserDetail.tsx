@@ -13,7 +13,7 @@ import DeleteButton from '../../../components/DeleteButton'
 import { RootState } from '../../../reducers'
 import { getUser } from '../../../reducers/users/userActions'
 
-// types
+// schema
 import { IUserAccountForm } from '../../../schemas/user'
 
 // utils

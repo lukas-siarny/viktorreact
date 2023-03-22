@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { stringConstraint, imageConstraint, emailConstraint, zodErrorsToFormErrors } from './baseSchema'
+import { stringConstraint, imageConstraint, emailConstraint, zodErrorsToFormErrors, twoCharsConstrain } from './baseSchema'
 import { VALIDATION_MAX_LENGTH, FORM } from '../utils/enums'
 
 // https://notino-admin.goodrequest.dev/api/doc/#/B2b-%3Eadmin/postApiB2BAdminEmployees
@@ -8,7 +8,7 @@ export const createEmployeeSchema = z.object({
 	firstName: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_50, true),
 	lastName: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_50, true),
 	email: emailConstraint.optional(),
-	phonePrefixCountryCode: z.string().length(VALIDATION_MAX_LENGTH.LENGTH_2),
+	phonePrefixCountryCode: twoCharsConstrain.optional(),
 	phone: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_20)
 })
 export const editEmployeeSchema = z
@@ -21,13 +21,15 @@ export const editEmployeeSchema = z
 	})
 	.merge(createEmployeeSchema)
 
-export type IEmployeeForm = z.infer<typeof editEmployeeSchema> & z.infer<typeof createEmployeeSchema> & { deletedAt?: string; hasActiveAccount?: boolean; service?: string[] }
+// editSchema + createSchema + custom types
+export type IEmployeeForm = z.infer<typeof editEmployeeSchema> & { deletedAt?: string; hasActiveAccount?: boolean; service?: string[] }
 
 export const validationEmployeeFn = (values: IEmployeeForm, props: any) =>
 	zodErrorsToFormErrors(props.isEdit ? editEmployeeSchema : createEmployeeSchema, FORM.EMPLOYEE, values, props)
+
 // https://notino-admin.goodrequest.dev/api/doc/#/B2b-%3Eadmin/postApiB2BAdminEmployeesInvite
 export const inviteEmployeeSchema = z.object({
-	roleID: z.string(),
+	roleID: z.string().uuid(),
 	email: emailConstraint
 })
 

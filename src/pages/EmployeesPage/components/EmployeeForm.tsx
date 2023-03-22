@@ -26,7 +26,7 @@ import ServicesListField from './ServicesListField'
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg'
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
 
-// validation
+// schema
 import { IEmployeeForm, validationEmployeeFn } from '../../../schemas/employee'
 
 type ComponentProps = {

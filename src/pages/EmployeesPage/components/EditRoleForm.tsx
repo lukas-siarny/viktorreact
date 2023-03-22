@@ -9,6 +9,8 @@ import SalonRolesField from '../../../atoms/SalonRolesField'
 
 // interfaces
 import { ISelectOptionItem } from '../../../types/interfaces'
+
+// schema
 import { IInviteEmployeeForm } from '../../../schemas/employee'
 
 // utils

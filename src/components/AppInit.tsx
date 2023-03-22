@@ -18,7 +18,7 @@ import { refreshToken } from '../reducers/users/userActions'
 import { getCountries, getCurrencies } from '../reducers/enumerations/enumerationActions'
 import { selectSalon } from '../reducers/selectedSalon/selectedSalonActions'
 
-// schemas
+// schema
 import { defaultErrorMap } from '../schemas/baseSchema'
 
 type Props = PropsWithChildren

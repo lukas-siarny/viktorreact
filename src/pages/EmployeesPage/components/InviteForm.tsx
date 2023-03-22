@@ -14,7 +14,7 @@ import { ISelectOptionItem } from '../../../types/interfaces'
 // utils
 import { FORM } from '../../../utils/enums'
 
-// validate
+// schema
 import { IInviteEmployeeForm, validationInviteEmployeeFn } from '../../../schemas/employee'
 
 // reducers

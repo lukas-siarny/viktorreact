@@ -117,3 +117,6 @@ export function stringConstraint<T extends true | false>(maxLength: number, requ
 }
 
 export const emailConstraint = z.string().email().trim().max(VALIDATION_MAX_LENGTH.LENGTH_255)
+
+// NOTE: by default required, for checking two characters length string (eg: counryCode, phonePrefix...)
+export const twoCharsConstrain = z.string().max(VALIDATION_MAX_LENGTH.LENGTH_2)

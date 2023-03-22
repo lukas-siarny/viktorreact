@@ -20,6 +20,8 @@ import InviteForm from './components/InviteForm'
 
 // types
 import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
+
+// schema
 import { IEmployeeForm, IInviteEmployeeForm } from '../../schemas/employee'
 
 // reducers

@@ -26,6 +26,8 @@ import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.sv
 
 // types
 import { RootState } from '../../../reducers'
+
+// schema
 import { ISpecialistContactForm, validationSpecialistContactFn } from '../../../schemas/specialist'
 
 type ComponentProps = {

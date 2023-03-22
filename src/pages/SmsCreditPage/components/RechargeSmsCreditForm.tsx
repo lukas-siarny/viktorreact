@@ -8,12 +8,8 @@ import { FORM, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../../utils/en
 import { formFieldID, showErrorNotification, validationNumberMin, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
-// types
-// import { IRechargeSmsCredit } from '../../../types/interfaces'
-
-// validate
-// import validateRechargeCreditForm from './validateRechargeSmsCreditForm'
-import { validationFn as validateRechargeCreditForm, IRechargeSmsCredit } from '../../../schemas/rechargeSmsCredit'
+// schema
+import { validationRechargeSmsCreditFn, IRechargeSmsCredit } from '../../../schemas/rechargeSmsCredit'
 
 // atoms
 import TextareaField from '../../../atoms/TextareaField'
@@ -78,7 +74,7 @@ const form = reduxForm<IRechargeSmsCredit, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateRechargeCreditForm
+	validate: validationRechargeSmsCreditFn
 })(withPromptUnsavedChanges(RechargeSmsCreditForm))
 
 export default form

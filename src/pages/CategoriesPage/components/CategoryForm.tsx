@@ -32,7 +32,7 @@ import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import { RootState } from '../../../reducers'
 
 // schema
-import { validationFn, ICategoryForm } from '../../../schemas/category'
+import { validationCategoryFn, ICategoryForm } from '../../../schemas/category'
 
 type ComponentProps = {
 	deleteCategory: Function
@@ -251,7 +251,7 @@ const form = reduxForm<ICategoryForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	validate: validationFn
+	validate: validationCategoryFn
 })(withPromptUnsavedChanges(CategoryForm))
 
 export default form

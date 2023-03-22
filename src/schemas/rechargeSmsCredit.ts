@@ -10,4 +10,4 @@ export const rechargeSmsCreditSchema = z.object({
 
 export type IRechargeSmsCredit = z.infer<typeof rechargeSmsCreditSchema>
 
-export const validationFn = (values: IRechargeSmsCredit, props: any) => zodErrorsToFormErrors(rechargeSmsCreditSchema, FORM.RECHARGE_SMS_CREDIT, values, props)
+export const validationRechargeSmsCreditFn = (values: IRechargeSmsCredit, props: any) => zodErrorsToFormErrors(rechargeSmsCreditSchema, FORM.RECHARGE_SMS_CREDIT, values, props)

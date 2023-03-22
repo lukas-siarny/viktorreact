@@ -76,4 +76,4 @@ const categoryParamsSchema = z
 
 export type ICategoryParamsForm = z.infer<typeof categoryParamsSchema>
 
-export const validationFn = (values: ICategoryParamsForm, props: any) => zodErrorsToFormErrors(categoryParamsSchema, FORM.CATEGORY_PARAMS, values, props)
+export const validationCategoryParamsFn = (values: ICategoryParamsForm, props: any) => zodErrorsToFormErrors(categoryParamsSchema, FORM.CATEGORY_PARAMS, values, props)

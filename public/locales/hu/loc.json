@@ -462,7 +462,7 @@
   "Trvanie služby": "A szolgáltatás időtartama",
   "Typ SMS": "_NEPRELOZENE_",
   "Typ salónu": "A szalon típusa",
-  "Táto hodnota už je zadaná": "_NEPRELOZENE_",
+  "Táto hodnota už je zadaná": "Ezt az értéket már megadta",
   "Táto operácia nie je povolená.": "Ez a művelet nincs engedélyezve",
   "Táto operácia nie je povolená. Hlavnú kategóriu je možné pridať cez tlačidlo \"Pridať kategóriu\".": "Ez a művelet nem engedélyezett. A főkategória hozzáadása a \"Kategória hozzáadása\" gomb segítségével végezhető el.",
   "Týždeň": "Hét",

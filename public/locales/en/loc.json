@@ -219,6 +219,7 @@
   "Nevymazaný": "Undeleted",
   "Nezrealizovaná": "Not realised",
   "Nie": "No",
+  "Nie je možné editovať rolu s rovnakými oprávneniami, ako máte pridelené.": "It is not possible to edit a role with the same permissions as you have been assigned.",
   "Nie je validná IP": "Invalid IP address",
   "Nie je validná číselná hodnota": "Not a valid numerical value",
   "Nie je vybratá služba": "Service is not selected",

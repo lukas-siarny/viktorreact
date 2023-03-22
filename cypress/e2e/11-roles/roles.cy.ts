@@ -5,17 +5,19 @@ import { CRUD_OPERATIONS, LIST_OF_TESTS_SUITS, SALON_TESTS_SUITS } from '../../e
 import { PERMISSION, SALON_ROLES } from '../../../src/utils/enums'
 
 // testSuits
-import updateMyAccountTestSuite from '../1-users/updateMyAccountInfo.tests'
-import userCRUDTestSuite from '../1-users/userCRUD.tests'
-import categoryParameterCRUDTestSuite from '../2-category-parameters/categoryParametersCRUD.tests'
-import cosmeticsCRUDTestSuite from '../3-cosmetics/cosmeticsCRUD.tests'
-import specialistContactsCRUDTestSuite from '../4-specialist-contacts/specialistContactsCRUD.tests'
-import supportCRUDTestSuite from '../5-support/supportCRUD.tests'
-import languagesCRUDTestSuite from '../6-languages/languagesCRUD.tests'
-import categoriesCRUDTestSuite from '../7-categories/categoriesCRUD.tests'
+import updateMyAccountTestSuite from '../01-users/updateMyAccountInfo.tests'
+import userCRUDTestSuite from '../01-users/userCRUD.tests'
+import categoryParameterCRUDTestSuite from '../02-category-parameters/categoryParametersCRUD.tests'
+import cosmeticsCRUDTestSuite from '../03-cosmetics/cosmeticsCRUD.tests'
+import specialistContactsCRUDTestSuite from '../04-specialist-contacts/specialistContactsCRUD.tests'
+import supportCRUDTestSuite from '../05-support/supportCRUD.tests'
+import languagesCRUDTestSuite from '../06-languages/languagesCRUD.tests'
+import categoriesCRUDTestSuite from '../07-categories/categoriesCRUD.tests'
 // eslint-disable-next-line import/no-cycle
-import salonTestSuite from '../8-salons/salon.tests'
-import reviewsTestSuite from '../9-reviews/reviews.tests'
+import salonTestSuite from '../08-salons/salon.tests'
+import salonsTestSuite from '../08-salons/salons.tests'
+import reviewsTestSuite from '../09-reviews/reviews.tests'
+import smsUnitPricesCRUDTestSuite from '../10-sms-unit-prices/smsUnitPricesCRUD.tests'
 
 export declare interface ITests {
 	name: SALON_TESTS_SUITS | LIST_OF_TESTS_SUITS
@@ -65,8 +67,14 @@ describe('Dynamic tests for roles', () => {
 					case LIST_OF_TESTS_SUITS.SALON:
 						context(`SalonCRUD as ${user.role}`, () => salonTestSuite(test.actions, test.tests || [], user.role, user.credentials.user, user.credentials.password))
 						break
+					case LIST_OF_TESTS_SUITS.SALONS:
+						context(`SalonCRUD as ${user.role}`, () => salonsTestSuite(test.actions, user.credentials.user, user.credentials.password))
+						break
 					case LIST_OF_TESTS_SUITS.REVIEWS:
 						context(`ReviewsCRUD as ${user.role}`, () => reviewsTestSuite(test.actions, user.credentials.user, user.credentials.password))
+						break
+					case LIST_OF_TESTS_SUITS.SMS_UNIT_PRICES_CRUD:
+						context(`SMSUnitPricesCRUD as ${user.role}`, () => smsUnitPricesCRUDTestSuite(test.actions, user.credentials.user, user.credentials.password))
 						break
 					default:
 				}

@@ -92,3 +92,28 @@ Cypress.Commands.add(
 Cypress.Commands.add('clickTab', (tabKey: string, tabsKey = '.ant-tabs-nav-list', force?: boolean) => {
 	cy.get(tabsKey).find(`[data-node-key="${tabKey}"]`).click({ force })
 })
+
+Cypress.Commands.add('setDateInputValue', (form?: string, key?: string, value?: string) => {
+	const elementId: string = form ? `#${form}-${key}` : `#${key}`
+	cy.get(elementId).click({ force: true })
+	if (value) {
+		cy.get('.ant-picker-dropdown :not(.ant-picker-dropdown-hidden)', { timeout: 2000 }).should('be.visible').find(`.ant-picker-cell[title="${value}"]`).click({ force: true })
+	} else {
+		cy.get('.ant-picker-dropdown :not(.ant-picker-dropdown-hidden)', { timeout: 2000 }).should('be.visible').find('.ant-picker-cell').first().click({ force: true })
+	}
+})
+
+Cypress.Commands.add('sortTable', (key: string, tableKey = '.ant-table') => {
+	cy.get(tableKey).find('.ant-table-column-has-sorters').find(`#${key}`).click({ force: true })
+})
+
+Cypress.Commands.add('changePagination', (limit: 25 | 50 | 100 = 25, tableKey = '.noti-table-wrapper', useCustomPagination = true) => {
+	if (useCustomPagination) {
+		cy.get(tableKey).find('.table-footer-custom-pagination .custom-dropdown').as('customDropdown')
+		cy.get('@customDropdown').click({ force: true })
+		cy.get('@customDropdown').find('.custom-dropdown-menu').should('be.visible')
+		cy.get('@customDropdown').find('li').should('include.text', limit).click({ force: true })
+	} else {
+		// TODO: pre antd paginaciu
+	}
+})

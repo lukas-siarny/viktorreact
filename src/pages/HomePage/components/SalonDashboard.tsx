@@ -34,12 +34,12 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 
 	const { selectedSalon } = useSelector((state: RootState) => state.selectedSalon)
 	const { services } = useSelector((state: RootState) => state.service)
-	const { employees } = useSelector((state: RootState) => state.employees)
+	const { activeEmployees } = useSelector((state: RootState) => state.employees)
 	const { customers } = useSelector((state: RootState) => state.customers)
 	const salonID = selectedSalon.data?.id
 	const walletID = selectedSalon.data?.wallet?.id
 
-	const loading = selectedSalon?.isLoading || services?.isLoading || employees?.isLoading || customers?.isLoading
+	const loading = selectedSalon?.isLoading || services?.isLoading || activeEmployees?.isLoading || customers?.isLoading
 	const basePath = t('paths:salons/{{salonID}}', { salonID: selectedSalon?.data?.id })
 
 	const [smsStatsDate, setSmsStatsDate] = useState(dayjs())
@@ -99,7 +99,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 						/>
 						<Statistics
 							title={t('loc:Počet zamestnancov')}
-							count={employees?.data?.pagination.totalCount}
+							count={activeEmployees?.data?.pagination.totalCount ?? 0}
 							onActionItemClick={() => navigate(getPath(t('paths:employees')))}
 						/>
 						<Statistics title={t('loc:Vyplnenosť profilu')} count={`${selectedSalon.data.fillingProgressSalon}%`} onActionItemClick={() => navigate(basePath)} />

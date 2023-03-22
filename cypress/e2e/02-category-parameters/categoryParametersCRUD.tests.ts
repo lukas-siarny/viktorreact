@@ -30,26 +30,31 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 			url: '/api/b2b/admin/enums/category-parameters/'
 		}).as('createCategoryParameters')
 		cy.visit('/category-parameters/create')
-		cy.setInputValue(FORM.CATEGORY_PARAMS, 'nameLocalizations-0-value', category.parameter.create.title)
-		cy.setInputValue(FORM.CATEGORY_PARAMS, 'localizedValues-0-valueLocalizations-0-value', category.value.create['value-1'])
-		cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY_PARAMS)
-		cy.wait('@createCategoryParameters').then((interception: any) => {
-			// check status code of login request
-			expect(interception.response.statusCode).to.equal(200)
-			categoryParameterID = interception.response.body.categoryParameter.id
-			// check conf toast message
-			cy.checkSuccessToastMessage()
-			// post nad params values po tom ako sa vytvori category param a existuje jeho id
-			it('Create category parameter value', () => {
-				cy.intercept({
-					method: 'POST',
-					url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}/values/`
-				}).as('createCategoryParameterValues')
-				cy.wait('@createCategoryParameterValues').then((valuesInterception: any) => {
-					expect(valuesInterception.response.statusCode).to.equal(200)
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+			cy.setInputValue(FORM.CATEGORY_PARAMS, 'nameLocalizations-0-value', category.parameter.create.title)
+			cy.setInputValue(FORM.CATEGORY_PARAMS, 'localizedValues-0-valueLocalizations-0-value', category.value.create['value-1'])
+			cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY_PARAMS)
+			cy.wait('@createCategoryParameters').then((interception: any) => {
+				// check status code of login request
+				expect(interception.response.statusCode).to.equal(200)
+				categoryParameterID = interception.response.body.categoryParameter.id
+				// check conf toast message
+				cy.checkSuccessToastMessage()
+				// post nad params values po tom ako sa vytvori category param a existuje jeho id
+				it('Create category parameter value', () => {
+					cy.intercept({
+						method: 'POST',
+						url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}/values/`
+					}).as('createCategoryParameterValues')
+					cy.wait('@createCategoryParameterValues').then((valuesInterception: any) => {
+						expect(valuesInterception.response.statusCode).to.equal(200)
+					})
 				})
 			})
-		})
+		} else {
+			// check redirect to 403 unauthorized page
+			cy.location('pathname').should('eq', '/403')
+		}
 	})
 
 	// CREATE NEW VALUE (localized)
@@ -63,21 +68,26 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}/values/`
 		}).as('createCategoryParameterValue')
 		cy.visit(`/category-parameters/${categoryParameterID}`)
-		cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
-			// check status code
-			expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
-			cy.clickButton(ADD_BUTTON_ID, FORM.CATEGORY_PARAMS)
-			cy.setInputValue(FORM.CATEGORY_PARAMS, 'localizedValues-1-valueLocalizations-0-value', category.value.create['value-2'], false, true)
-			cy.clickButton(ADD_BUTTON_ID, FORM.CATEGORY_PARAMS)
-			cy.setInputValue(FORM.CATEGORY_PARAMS, 'localizedValues-2-valueLocalizations-0-value', category.value.create['value-3'], false, true)
-			cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY_PARAMS)
-			cy.wait('@createCategoryParameterValue').then((interception: any) => {
-				// check status code of login request
-				expect(interception.response.statusCode).to.equal(200)
-				// check conf toast message
-				cy.checkSuccessToastMessage()
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+			cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
+				// check status code
+				expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
+				cy.clickButton(ADD_BUTTON_ID, FORM.CATEGORY_PARAMS)
+				cy.setInputValue(FORM.CATEGORY_PARAMS, 'localizedValues-1-valueLocalizations-0-value', category.value.create['value-2'], false, true)
+				cy.clickButton(ADD_BUTTON_ID, FORM.CATEGORY_PARAMS)
+				cy.setInputValue(FORM.CATEGORY_PARAMS, 'localizedValues-2-valueLocalizations-0-value', category.value.create['value-3'], false, true)
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY_PARAMS)
+				cy.wait('@createCategoryParameterValue').then((interception: any) => {
+					// check status code of login request
+					expect(interception.response.statusCode).to.equal(200)
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+				})
 			})
-		})
+		} else {
+			// check redirect to 403 unauthorized page
+			cy.location('pathname').should('eq', '/403')
+		}
 	})
 
 	// PATCH value (localized)
@@ -91,20 +101,26 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}/values/*`
 		}).as('updateCategoryParameterValue')
 		cy.visit(`/category-parameters/${categoryParameterID}`)
-		cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
-			// check status code
-			expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
-			cy.setInputValue(FORM.CATEGORY_PARAMS, 'localizedValues-0-valueLocalizations-0-value', category.value.update['value-1'], false, true)
-			cy.setInputValue(FORM.CATEGORY_PARAMS, 'localizedValues-1-valueLocalizations-0-value', category.value.update['value-2'], false, true)
-			cy.setInputValue(FORM.CATEGORY_PARAMS, 'localizedValues-2-valueLocalizations-0-value', category.value.update['value-3'], false, true)
-			cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY_PARAMS)
-			cy.wait('@updateCategoryParameterValue').then((interception: any) => {
-				// check status code of login request
-				expect(interception.response.statusCode).to.equal(200)
-				// check conf toast message
-				cy.checkSuccessToastMessage()
+
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+			cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
+				// check status code
+				expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
+				cy.setInputValue(FORM.CATEGORY_PARAMS, 'localizedValues-0-valueLocalizations-0-value', category.value.update['value-1'], false, true)
+				cy.setInputValue(FORM.CATEGORY_PARAMS, 'localizedValues-1-valueLocalizations-0-value', category.value.update['value-2'], false, true)
+				cy.setInputValue(FORM.CATEGORY_PARAMS, 'localizedValues-2-valueLocalizations-0-value', category.value.update['value-3'], false, true)
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY_PARAMS)
+				cy.wait('@updateCategoryParameterValue').then((interception: any) => {
+					// check status code of login request
+					expect(interception.response.statusCode).to.equal(200)
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+				})
 			})
-		})
+		} else {
+			// check redirect to 403 unauthorized page
+			cy.location('pathname').should('eq', '/403')
+		}
 	})
 
 	// DELETE value (localized)
@@ -118,17 +134,22 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}/values/*`
 		}).as('deleteCategoryParameterValue')
 		cy.visit(`/category-parameters/${categoryParameterID}`)
-		cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
-			// check status code
-			expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
-			cy.clickDeleteButtonWithConfCustom(FORM.CATEGORY_PARAMS, `${DELETE_BUTTON_ID}-${0}`)
-			cy.wait('@deleteCategoryParameterValue').then((interception: any) => {
-				// check status code of login request
-				expect(interception.response.statusCode).to.equal(200)
-				// check conf toast message
-				cy.checkSuccessToastMessage()
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+			cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
+				// check status code
+				expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
+				cy.clickDeleteButtonWithConfCustom(FORM.CATEGORY_PARAMS, `${DELETE_BUTTON_ID}-${0}`)
+				cy.wait('@deleteCategoryParameterValue').then((interception: any) => {
+					// check status code of login request
+					expect(interception.response.statusCode).to.equal(200)
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+				})
 			})
-		})
+		} else {
+			// check redirect to 403 unauthorized page
+			cy.location('pathname').should('eq', '/403')
+		}
 	})
 
 	// UPDATE paramter title
@@ -142,18 +163,23 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}`
 		}).as('updateCategoryParameters')
 		cy.visit(`/category-parameters/${categoryParameterID}`)
-		cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
-			// check status code
-			expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
-			cy.setInputValue(FORM.CATEGORY_PARAMS, 'nameLocalizations-0-value', category.parameter.update.title, false, true)
-			cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY_PARAMS)
-			cy.wait('@updateCategoryParameters').then((interception: any) => {
-				// check status code of login request
-				expect(interception.response.statusCode).to.equal(200)
-				// check conf toast message
-				cy.checkSuccessToastMessage()
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+			cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
+				// check status code
+				expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
+				cy.setInputValue(FORM.CATEGORY_PARAMS, 'nameLocalizations-0-value', category.parameter.update.title, false, true)
+				cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY_PARAMS)
+				cy.wait('@updateCategoryParameters').then((interception: any) => {
+					// check status code of login request
+					expect(interception.response.statusCode).to.equal(200)
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+				})
 			})
-		})
+		} else {
+			// check redirect to 403 unauthorized page
+			cy.location('pathname').should('eq', '/403')
+		}
 	})
 
 	// DELETE paramter
@@ -167,19 +193,24 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}`
 		}).as('deleteCategoryParameters')
 		cy.visit(`/category-parameters/${categoryParameterID}`)
-		cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
-			// check status code
-			expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
-
-			cy.clickDeleteButtonWithConfCustom(FORM.CATEGORY_PARAMS)
-			cy.wait('@deleteCategoryParameters').then((interception: any) => {
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+			cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
 				// check status code
-				expect(interception.response.statusCode).to.equal(200)
-				// check conf toast message
-				cy.checkSuccessToastMessage()
-				cy.location('pathname').should('eq', '/category-parameters')
+				expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
+
+				cy.clickDeleteButtonWithConfCustom(FORM.CATEGORY_PARAMS)
+				cy.wait('@deleteCategoryParameters').then((interception: any) => {
+					// check status code
+					expect(interception.response.statusCode).to.equal(200)
+					// check conf toast message
+					cy.checkSuccessToastMessage()
+					cy.location('pathname').should('eq', '/category-parameters')
+				})
 			})
-		})
+		} else {
+			// check redirect to 403 unauthorized page
+			cy.location('pathname').should('eq', '/403')
+		}
 	})
 
 	// FILTER
@@ -189,12 +220,17 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 			url: '/api/b2b/admin/enums/category-parameters/'
 		}).as('filterCategoryParams')
 		cy.visit('/category-parameters')
-		cy.setInputValue(FORM.CATEGORY_PARAMS_FILTER, 'search', category.filter.search)
-		cy.wait('@filterCategoryParams').then((interception: any) => {
-			// check status code
-			expect(interception.response.statusCode).to.equal(200)
-			cy.location('pathname').should('eq', '/category-parameters')
-		})
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
+			cy.setInputValue(FORM.CATEGORY_PARAMS_FILTER, 'search', category.filter.search)
+			cy.wait('@filterCategoryParams').then((interception: any) => {
+				// check status code
+				expect(interception.response.statusCode).to.equal(200)
+				cy.location('pathname').should('eq', '/category-parameters')
+			})
+		} else {
+			// check redirect to 403 unauthorized page
+			cy.location('pathname').should('eq', '/403')
+		}
 	})
 
 	// TODO: dorobit testy pre minutove zobrazenie

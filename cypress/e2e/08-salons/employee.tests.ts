@@ -81,7 +81,7 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			cy.visit(`/salons/${salonID}/employees/create`)
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
 				// user can set only role that is not higher than his
-				// not a 100% working solution, but it's greater change of not failing test to select last item from the list than first
+				// not a 100% working solution, but it's better change of not failing test to select last item from the list then first
 				// TODO: find better solution
 				cy.get(`#${FORM.INVITE_EMPLOYEE}-roleID`).click({ force: true })
 				cy.get('.ant-select-dropdown :not(.ant-select-dropdown-hidden)', { timeout: 10000 })
@@ -164,7 +164,7 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					cy.wait(1000)
 
 					// user can set only role that is not higher than his
-					// not a 100% working solution, but it's greater change of not failing test to select last item from the list than first
+					// not a 100% working solution, but it's better change of not failing test to select last item from the list then first
 					// TODO: find better solution
 					cy.get(`#${FORM.INVITE_EMPLOYEE}-roleID`).click({ force: true })
 					cy.get('.ant-select-dropdown :not(.ant-select-dropdown-hidden)', { timeout: 10000 })

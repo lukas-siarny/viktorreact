@@ -85,6 +85,7 @@ const salonApprovalProcessTestSuite = (actions: CRUD_OPERATIONS[], role: SALON_R
 			}
 		})
 
+		// temporary hidden because they often fail for unknown reason
 		/* it('Hide salon publication', () => {
 			// get salonID from env
 			const salonID = Cypress.env(SALON_ID)

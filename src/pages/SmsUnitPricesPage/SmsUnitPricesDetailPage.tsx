@@ -28,12 +28,15 @@ import { getSmsUnitPrices, ISmsUnitPricesPayload } from '../../reducers/smsUnitP
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
-import { IBreadcrumbs, ISmsUnitPricesForm } from '../../types/interfaces'
+import { IBreadcrumbs } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
 // hooks
 import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
 import useBackUrl from '../../hooks/useBackUrl'
+
+// schema
+import { ISmsUnitPricesForm } from '../../schemas/smsUnitPrices'
 
 type TableDataItem = NonNullable<ISmsUnitPricesPayload['data']>['unitPricesPerCounty'][0]
 

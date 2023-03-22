@@ -3,7 +3,7 @@ import { zodErrorsToFormErrors, stringConstraint } from './baseSchema'
 import { FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
 
 export const supportContactSchema = z.object({
-	emails: z.array(z.object({ email: z.string() })).nonempty(),
+	emails: z.array(z.object({ email: z.string() })),
 	note: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1000),
 	street: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100),
 	city: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100),

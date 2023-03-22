@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { DataNode } from 'antd/lib/tree'
 import { Button, Row, Tree, Divider, notification } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { filter, forEach, get, map, isEmpty, isNil } from 'lodash'
+import { filter, forEach, get, map, isNil } from 'lodash'
 import { initialize } from 'redux-form'
 import cx from 'classnames'
 import { Key } from 'antd/lib/table/interface'
@@ -23,8 +23,11 @@ import { checkPermissions } from '../../../utils/Permissions'
 import { formFieldID, normalizeNameLocalizations } from '../../../utils/helper'
 
 // components
-import CategoryForm, { ICategoryForm } from './CategoryForm'
+import CategoryForm from './CategoryForm'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../../components/LanguagePicker'
+
+// schema
+import { ICategoryForm } from '../../../schemas/category'
 
 type TreeCategories = {
 	title?: ReactElement
@@ -273,7 +276,7 @@ const CategoriesTree = () => {
 	const handleSubmit = async (formData: ICategoryForm) => {
 		const cat: any | null = categories?.data
 		let descriptionLocalizations: any
-		if (!isEmpty(formData.descriptionLocalizations) && formData.descriptionLocalizations.length >= 1 && formData.descriptionLocalizations[0]?.value) {
+		if (formData.descriptionLocalizations && formData.descriptionLocalizations.length > 0 && formData.descriptionLocalizations[0]?.value) {
 			descriptionLocalizations = filter(formData.descriptionLocalizations, (item) => !!item.value)
 		}
 

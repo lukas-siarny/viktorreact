@@ -1,10 +1,10 @@
 import { z } from 'zod'
-import { zodErrorsToFormErrors, localizedValuesConstraint } from './baseSchema'
+import { zodErrorsToFormErrors, localizedValuesConstraint, imageConstraint } from './baseSchema'
 import { FORM } from '../utils/enums'
 
 export const languageSchema = z.object({
-	image: z.string().uuid().nullish(),
-	nameLocalizations: localizedValuesConstraint(true)
+	nameLocalizations: localizedValuesConstraint(true),
+	image: imageConstraint.array().max(1).nullish()
 })
 
 export type ILanguageForm = z.infer<typeof languageSchema>

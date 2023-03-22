@@ -18,6 +18,7 @@ import ImportForm from '../../components/ImportForm'
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, UPLOAD_STATUS } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
+import { postReq } from '../../utils/request'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -28,7 +29,6 @@ import { IBreadcrumbs, ISearchFilter, SalonSubPageProps, Columns, IDataUploadFor
 
 // hooks
 import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
-import { postReq } from '../../utils/request'
 
 const CustomersPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
@@ -47,6 +47,14 @@ const CustomersPage = (props: SalonSubPageProps) => {
 		page: NumberParam(1),
 		order: StringParam('lastName:ASC')
 	})
+
+	const breadcrumbs: IBreadcrumbs = {
+		items: [
+			{
+				name: t('loc:Zoznam zákazníkov')
+			}
+		]
+	}
 
 	useEffect(() => {
 		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: query.search }))
@@ -138,14 +146,6 @@ const CustomersPage = (props: SalonSubPageProps) => {
 			render: (value) => formatDateByLocale(value) ?? '-'
 		}
 	]
-
-	const breadcrumbs: IBreadcrumbs = {
-		items: [
-			{
-				name: t('loc:Zoznam zákazníkov')
-			}
-		]
-	}
 
 	const clientImportsSubmit = async (values: IDataUploadForm) => {
 		setUploadStatus(UPLOAD_STATUS.UPLOADING)

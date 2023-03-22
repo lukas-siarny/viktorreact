@@ -2,10 +2,19 @@ import React, { FC, PropsWithChildren, useLayoutEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
 export const scrollToTopFn = () => {
-	window.scrollTo({
-		top: 0,
-		behavior: 'smooth'
-	})
+	try {
+		window.scrollTo({
+			top: 0,
+			behavior: 'smooth'
+		})
+	} catch {
+		try {
+			window.scrollTo(0, 0)
+		} catch {
+			// eslint-disable-next-line no-console
+			console.warn(`window.scrollTo() is not supported in your browser`)
+		}
+	}
 }
 
 const ScrollToTop: FC<PropsWithChildren> = (props) => {

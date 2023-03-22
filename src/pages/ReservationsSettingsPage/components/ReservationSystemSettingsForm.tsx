@@ -68,6 +68,11 @@ const UPLOAD_MODAL_INIT = {
 	}
 }
 
+enum UPLOAD_TYPE {
+	RESERVATION = 'reservation',
+	CUSTOMER = 'customer'
+}
+
 const ReservationSystemSettingsForm = (props: Props) => {
 	const { pristine, submitting, excludedB2BNotifications, parentPath, salonID } = props
 	const [t] = useTranslation()
@@ -85,7 +90,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const [uploadModal, setUploadModal] = useState<{
 		visible: boolean
 		uploadStatus: UPLOAD_STATUS | undefined
-		uploadType: 'reservation' | 'customer' | undefined
+		uploadType: UPLOAD_TYPE | undefined
 		data: { accept: string; label: string; title: string }
 	}>(UPLOAD_MODAL_INIT)
 	// https://ant.design/components/tree/#Note - nastava problem, ze pokial nie je vygenerovany strom, tak sa vyrendruje collapsnuty, aj ked je nastavena propa defaultExpandAll
@@ -231,6 +236,33 @@ const ReservationSystemSettingsForm = (props: Props) => {
 		}
 	}, [groupedServicesByCategory, groupedServicesByCategoryLoading, dispatch, disabled, disabledOnlineB2cReservations])
 
+	const handleSubmitImport = async (values: IDataUploadForm) => {
+		if (!uploadModal.uploadType) {
+			return
+		}
+		const headers = {
+			'Content-Type': 'multipart/form-data'
+		}
+		const formData = new FormData()
+		formData.append('file', values?.file)
+
+		try {
+			if (uploadModal.uploadType === UPLOAD_TYPE.RESERVATION) {
+				await postReq('/api/b2b/admin/imports/salons/{salonID}/calendar-events', { salonID }, formData, {
+					headers
+				})
+			} else {
+				await postReq('/api/b2b/admin/imports/salons/{salonID}/customers', { salonID }, formData, {
+					headers
+				})
+			}
+
+			setUploadModal({ ...uploadModal, uploadStatus: UPLOAD_STATUS.SUCCESS })
+		} catch {
+			setUploadModal({ ...uploadModal, uploadStatus: UPLOAD_STATUS.ERROR })
+		}
+	}
+
 	const getServicesSettingsContent = () => {
 		if (isLoadingTree) {
 			return <Spin className={'w-full m-auto mt-20'} />
@@ -247,50 +279,8 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			)
 		}
 
-		const handleSubmitImport = async (values: IDataUploadForm) => {
-			if (!uploadModal.uploadType) {
-				return
-			}
-			const headers = {
-				'Content-Type': 'multipart/form-data'
-			}
-			const formData = new FormData()
-			formData.append('file', values?.file)
-
-			try {
-				if (uploadModal.uploadType === 'reservation') {
-					await postReq('/api/b2b/admin/imports/salons/{salonID}/calendar-events', { salonID }, formData, {
-						headers
-					})
-				} else {
-					await postReq('/api/b2b/admin/imports/salons/{salonID}/customers', { salonID }, formData, {
-						headers
-					})
-				}
-
-				setUploadModal({ ...uploadModal, uploadStatus: UPLOAD_STATUS.SUCCESS })
-			} catch {
-				setUploadModal({ ...uploadModal, uploadStatus: UPLOAD_STATUS.ERROR })
-			}
-		}
-
-		const modals = (
-			<>
-				<ImportForm
-					accept={uploadModal.data.accept}
-					title={uploadModal.data.title}
-					label={uploadModal.data.label}
-					uploadStatus={uploadModal.uploadStatus}
-					setUploadStatus={(status: any) => setUploadModal({ ...uploadModal, uploadStatus: status })}
-					onSubmit={handleSubmitImport}
-					visible={uploadModal.visible}
-					setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
-				/>
-			</>
-		)
 		return (
 			<>
-				{modals}
 				<p className='x-regular text-notino-grayDark'>{t('loc:Vyberte služby, ktoré bude možné rezervovať si online a ktoré budú automaticky potvrdené.')}</p>
 				<p className='x-regular text-notino-grayDark'>{t('loc:Nastavte službám možnosť online rezervácie, automatického potvrdenia a zadávania poznámok.')}</p>
 				<Row justify={'space-between'} className='mt-7'>
@@ -382,7 +372,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						className='mb-0 pb-0 ml-2'
 						component={SwitchField}
 						disabled={submitting}
-						onClick={(checked: boolean, event: Event) => event.stopPropagation()}
+						onClick={(_checked: boolean, event: Event) => event.stopPropagation()}
 						name='enabledReservations'
 						size='middle'
 					/>
@@ -489,19 +479,29 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				</div>
 				<Divider className={'my-3'} />
 				<Row>
+					<ImportForm
+						accept={uploadModal.data.accept}
+						title={uploadModal.data.title}
+						label={uploadModal.data.label}
+						uploadStatus={uploadModal.uploadStatus}
+						setUploadStatus={(status: any) => setUploadModal({ ...uploadModal, uploadStatus: status })}
+						onSubmit={handleSubmitImport}
+						visible={uploadModal.visible}
+						setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
+					/>
 					<Button
-						onClick={() =>
+						onClick={() => {
 							setUploadModal({
 								...uploadModal,
 								visible: true,
-								uploadType: 'reservation',
+								uploadType: UPLOAD_TYPE.RESERVATION,
 								data: {
 									accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv,.ics',
 									title: t('loc:Importovať rezervácie'),
 									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.xlsx, .csv, .ics' })
 								}
 							})
-						}
+						}}
 						disabled={disabled}
 						type='primary'
 						htmlType='button'
@@ -511,18 +511,18 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						{t('loc:Importovať rezervácie')}
 					</Button>
 					<Button
-						onClick={() =>
+						onClick={() => {
 							setUploadModal({
 								...uploadModal,
 								visible: true,
-								uploadType: 'reservation',
+								uploadType: UPLOAD_TYPE.CUSTOMER,
 								data: {
 									accept: '.csv',
 									title: t('loc:Importovať zákazníkov'),
 									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv' })
 								}
 							})
-						}
+						}}
 						disabled={disabled}
 						type='primary'
 						htmlType='button'
@@ -549,7 +549,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 
 					{/* wallet */}
 					<Permissions allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET]}>
-						{walletID && <RemainingSmsCredit walletID={walletID} salonID={salonID} parentPath={parentPath} className={'w-full mb-6 !bg-notino-grayLighter'} link />}
+						{walletID && <RemainingSmsCredit walletID={walletID} salonID={salonID} parentPath={parentPath} className={'lg:w-full mb-6 !bg-notino-grayLighter'} link />}
 					</Permissions>
 
 					<Row justify={'space-between'} className='mt-7'>

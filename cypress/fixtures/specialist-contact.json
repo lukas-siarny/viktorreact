@@ -10,5 +10,8 @@
 		"phonePrefixCountryCode": "SK",
 		"phone": "956520900",
 		"countryCode": "IT"
+	},
+	"filter": {
+		"search": "Cesko"
 	}
 }

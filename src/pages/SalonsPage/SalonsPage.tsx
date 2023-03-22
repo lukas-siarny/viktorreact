@@ -56,7 +56,6 @@ const SalonsPage = () => {
 
 	const [salonImportsModalVisible, setSalonImportsModalVisible] = useState(false)
 	const [uploadStatus, setUploadStatus] = useState<UPLOAD_STATUS | undefined>(undefined)
-	const [tabKey, setTabKey] = useState<TAB_KEYS | undefined>()
 
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	const { data } = useSelector((state: RootState) => state.categories.categories)
@@ -94,7 +93,7 @@ const SalonsPage = () => {
 		premiumSourceUserType: StringParam()
 	})
 
-	const resetQuery = (selectedTabKey: string) => {
+	const resetQuery = (selectedTabKey: string, rewrite = {}) => {
 		// reset query when switching between tabs
 		setQuery({
 			search: undefined,
@@ -114,7 +113,8 @@ const SalonsPage = () => {
 			hasSetOpeningHours: undefined,
 			sourceType: undefined,
 			premiumSourceUserType: undefined,
-			assignedUserID: undefined
+			assignedUserID: undefined,
+			...rewrite
 		})
 	}
 
@@ -149,7 +149,6 @@ const SalonsPage = () => {
 
 		switch (query.salonState) {
 			case TAB_KEYS.DELETED:
-				setTabKey(TAB_KEYS.DELETED)
 				dispatch(
 					initialize(FORM.SALONS_FILTER_DELETED, {
 						search: query.search,
@@ -161,13 +160,11 @@ const SalonsPage = () => {
 				break
 
 			case TAB_KEYS.MISTAKES:
-				setTabKey(TAB_KEYS.MISTAKES)
 				dispatch(initialize(FORM.FILTER_REJECTED_SUGGESTIONS, { search: query.search }))
 				break
 
 			case TAB_KEYS.ACTIVE:
 			default:
-				setTabKey(TAB_KEYS.ACTIVE)
 				dispatch(
 					initialize(FORM.SALONS_FILTER_ACITVE, {
 						search: query.search,
@@ -293,8 +290,7 @@ const SalonsPage = () => {
 
 	const onTabChange = (selectedTabKey: string) => {
 		dispatch(emptySalons())
-		setTabKey(selectedTabKey as TAB_KEYS)
-		resetQuery(selectedTabKey)
+		resetQuery(selectedTabKey, selectedTabKey === TAB_KEYS.MISTAKES ? { countryCode: undefined } : {})
 	}
 
 	// define columns for both tables - active and deleted
@@ -315,7 +311,7 @@ const SalonsPage = () => {
 				...props
 			}),
 			name: (props) => ({
-				title: t('loc:Názov'),
+				title: <span id={'sortby-title'}>{t('loc:Názov')}</span>,
 				dataIndex: 'name',
 				key: 'name',
 				ellipsis: true,
@@ -460,7 +456,7 @@ const SalonsPage = () => {
 
 		switch (selectedTabKey) {
 			case TAB_KEYS.MISTAKES:
-				return <RejectedSalonSuggestions />
+				return <RejectedSalonSuggestions query={query} setQuery={setQuery} />
 			case TAB_KEYS.DELETED:
 				columns = [
 					tableColumns.id({ width: '8%' }),
@@ -548,7 +544,7 @@ const SalonsPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<TabsComponent className={'box-tab'} activeKey={tabKey} onChange={onTabChange} items={tabContent} destroyInactiveTabPane />
+			<TabsComponent className={'box-tab'} activeKey={query.salonState} onChange={onTabChange} items={tabContent} destroyInactiveTabPane />
 			<ImportForm
 				setUploadStatus={setUploadStatus}
 				uploadStatus={uploadStatus}

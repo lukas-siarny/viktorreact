@@ -135,28 +135,31 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 				<SalonHistoryFilter onSubmit={handleSubmit} />
 			</div>
 			<Spin spinning={salonHistory.isLoading}>
-				{salonHistory.data?.salonHistory.map((history) => (
-					<>
-						<List.Item key={history.id} className={'salon-history-list'}>
-							<div className={'w-full'}>
-								<Divider className={'mb-1 mt-1'}>
-									<div className={'flex items-center justify-center'}>
-										<h4 className={'mr-2 mb-0'}>{formatDateByLocale(history.createdAt)}</h4>
-										{setIcon(history.operation as SALON_HISTORY_OPERATIONS)}
-										<div className={'flex items-center'}>
-											<h4 className={`m-0 p-0 history-text-action ${SALON_HISTORY_OPERATIONS_COLORS?.[history.operation]}`}>{history.operation}</h4>{' '}
-											<div className={'ml-2 font-bold'}>{history.userEmail}</div>
+				{salonHistory.data?.salonHistory.length ? (
+					<ul id={'salon-history-list'} className={'p-0'}>
+						{salonHistory.data?.salonHistory.map((history) => (
+							<List.Item key={history.id} className={'list-none p-0'}>
+								<div className={'w-full'}>
+									<Divider className={'mb-1 mt-1'}>
+										<div className={'flex items-center justify-center'}>
+											<h4 className={'mr-2 mb-0'}>{formatDateByLocale(history.createdAt)}</h4>
+											{setIcon(history.operation as SALON_HISTORY_OPERATIONS)}
+											<div className={'flex items-center'}>
+												<h4 className={`m-0 p-0 history-text-action ${SALON_HISTORY_OPERATIONS_COLORS?.[history.operation]}`}>{history.operation}</h4>{' '}
+												<div className={'ml-2 font-bold'}>{history.userEmail}</div>
+											</div>
 										</div>
+									</Divider>
+									<div className={'flex items-center'}>
+										<div className={'w-full'}>{renderValues(history?.oldValue, history?.newValue)}</div>
 									</div>
-								</Divider>
-								<div className={'flex items-center'}>
-									<div className={'w-full'}>{renderValues(history?.oldValue, history?.newValue)}</div>
 								</div>
-							</div>
-						</List.Item>
-					</>
-				))}
-				{isEmpty(salonHistory.data?.salonHistory) && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+							</List.Item>
+						))}
+					</ul>
+				) : (
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+				)}
 			</Spin>
 			<div className={'content-footer mt-0'}>
 				{!salonHistory.isFailure && (

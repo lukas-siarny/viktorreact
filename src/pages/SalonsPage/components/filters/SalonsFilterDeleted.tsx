@@ -80,7 +80,7 @@ const SalonsFilterDeleted = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)}>
+			<Filters search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)} form={FORM.SALONS_FILTER_DELETED}>
 				<Row gutter={ROW_GUTTER_X_DEFAULT}>
 					<Col span={8}>
 						<Field

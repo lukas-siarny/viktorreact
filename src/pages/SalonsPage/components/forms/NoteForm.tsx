@@ -4,7 +4,8 @@ import { Form, Button, Col, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 
 // utils
-import { FORM, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
+import { FORM, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
+import { formFieldID } from '../../../../utils/helper'
 
 // validate
 import TextareaField from '../../../../atoms/TextareaField'
@@ -36,7 +37,16 @@ const NoteForm: FC<Props> = (props) => {
 					/>
 				</Col>
 			</Row>
-			<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
+			<Button
+				id={formFieldID(FORM.NOTE, SUBMIT_BUTTON_ID)}
+				className='noti-btn'
+				block
+				size='large'
+				type='primary'
+				htmlType='submit'
+				disabled={submitting}
+				loading={submitting}
+			>
 				{t('loc:Odoslať')}
 			</Button>
 		</Form>

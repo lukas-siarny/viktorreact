@@ -68,10 +68,6 @@ export interface ILoginForm {
 	password: string
 }
 
-export interface IInviteEmployeeForm {
-	email: string
-	roleID: string
-}
 
 export type ServiceRootCategory = Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200['employee']['categories']
 
@@ -418,32 +414,10 @@ export interface ICustomerForm {
 	avatar?: any
 }
 */
-export interface IEmployeeForm {
-	firstName: string
-	lastName: string
-	salonID: string
-	email?: string
-	phonePrefixCountryCode?: string
-	phone?: string
-	services?: any
-	service?: string[]
-	avatar?: any
-	role: number
-	hasActiveAccount?: boolean
-	orderIndex?: number
-	deletedAt?: string
-}
 
 export interface ICosmeticForm {
 	name: string
 	image: any
-}
-
-export interface ISpecialistContactForm {
-	email?: string
-	phone: string
-	phonePrefixCountryCode: string
-	countryCode: string
 }
 
 export interface ISpecialistContactFilter {
@@ -577,13 +551,6 @@ export type ICategoryParameter = Paths.GetApiB2BAdminEnumsCategoryParametersCate
 
 interface ILocalizedValue {
 	valueLocalizations: ICategoryParameter['values']['0']['valueLocalizations']
-}
-
-export interface ICategoryParamForm {
-	nameLocalizations: ICategoryParameter['nameLocalizations']
-	valueType: ICategoryParameter['valueType']
-	localizedValues: ILocalizedValue[]
-	values: Pick<ICategoryParameter['values']['0'], 'value'>[]
 }
 
 export interface IIndustriesForm {

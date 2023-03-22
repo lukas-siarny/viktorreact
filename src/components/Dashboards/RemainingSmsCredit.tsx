@@ -45,7 +45,7 @@ const RemainingSmsCredit = (props: Props) => {
 			<Spin spinning={wallet.isLoading}>
 				<h4 className={'mb-0 flex items-center text-lg'}>
 					<MessageIcon className={'text-notino-black mr-2'} />
-					{t('loc:Zostatok SMS kreditu ')}
+					{t('loc:Zostatok SMS kreditu')}
 				</h4>
 				<Divider className={'mb-8 mt-3'} />
 				<div className={'flex justify-between items-center gap-4 flex-wrap'}>

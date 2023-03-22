@@ -2,7 +2,7 @@ import { CRUD_OPERATIONS, LIST_OF_TESTS_SUITS, SALON_TESTS_SUITS } from '../enum
 import { PERMISSION, SALON_ROLES } from '../../src/utils/enums'
 
 // eslint-disable-next-line import/no-cycle
-import { ITestConfig } from '../e2e/10-roles/roles.cy'
+import { ITestConfig } from '../e2e/11-roles/roles.cy'
 
 const data: ITestConfig[] = [
 	{
@@ -49,6 +49,10 @@ const data: ITestConfig[] = [
 				actions: [CRUD_OPERATIONS.ALL]
 			},
 			{
+				name: LIST_OF_TESTS_SUITS.SMS_UNIT_PRICES_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
 				name: LIST_OF_TESTS_SUITS.SALON,
 				actions: [CRUD_OPERATIONS.ALL],
 				/*
@@ -77,6 +81,10 @@ const data: ITestConfig[] = [
 						actions: [CRUD_OPERATIONS.ALL]
 					}
 				]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SALONS,
+				actions: [CRUD_OPERATIONS.ALL]
 			}
 		],
 		isInActive: true
@@ -121,7 +129,15 @@ const data: ITestConfig[] = [
 				actions: [CRUD_OPERATIONS.ALL]
 			},
 			{
+				name: LIST_OF_TESTS_SUITS.SMS_UNIT_PRICES_CRUD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
 				name: LIST_OF_TESTS_SUITS.SALON,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SALONS,
 				actions: [CRUD_OPERATIONS.ALL]
 			}
 		],
@@ -168,6 +184,10 @@ const data: ITestConfig[] = [
 				actions: []
 			},
 			{
+				name: LIST_OF_TESTS_SUITS.SMS_UNIT_PRICES_CRUD,
+				actions: []
+			},
+			{
 				name: LIST_OF_TESTS_SUITS.SALON,
 				actions: [CRUD_OPERATIONS.ALL],
 				/*
@@ -196,6 +216,10 @@ const data: ITestConfig[] = [
 						actions: [CRUD_OPERATIONS.ALL]
 					}
 				]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SALONS,
+				actions: []
 			}
 		]
 	},
@@ -239,12 +263,16 @@ const data: ITestConfig[] = [
 				actions: []
 			},
 			{
+				name: LIST_OF_TESTS_SUITS.SMS_UNIT_PRICES_CRUD,
+				actions: []
+			},
+			{
 				name: LIST_OF_TESTS_SUITS.SALON,
 				actions: [CRUD_OPERATIONS.READ, CRUD_OPERATIONS.UPDATE],
 				tests: [
 					{
 						name: SALON_TESTS_SUITS.BILLING_INFORMATION,
-						actions: []
+						actions: [CRUD_OPERATIONS.READ]
 					},
 					{
 						name: SALON_TESTS_SUITS.CUSTOMER,
@@ -263,6 +291,10 @@ const data: ITestConfig[] = [
 						actions: [CRUD_OPERATIONS.ALL]
 					}
 				]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.SALONS,
+				actions: []
 			}
 		]
 	}

@@ -28,7 +28,7 @@ import { DELETE_BUTTON_ID, ENUMERATIONS_KEYS, FORM, NOTIFICATION_TYPE, PERMISSIO
 
 // types
 import { Paths } from '../../types/api'
-import { IBreadcrumbs, OpeningHours, ISupportContactForm } from '../../types/interfaces'
+import { IBreadcrumbs, OpeningHours } from '../../types/interfaces'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -45,6 +45,7 @@ import useBackUrl from '../../hooks/useBackUrl'
 // assets
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
 import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
+import { ISupportContactForm } from '../../schemas/supportContact'
 
 type SupportContactPatch = Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.RequestBody
 

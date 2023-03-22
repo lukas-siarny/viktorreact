@@ -2,17 +2,14 @@ import i18next from 'i18next'
 import { isEmail } from 'lodash-checkit'
 import { isEmpty } from 'lodash'
 
-// types
-import { ISupportContactForm } from '../../../types/interfaces'
-
 // utils
 import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import { validateOpeningHours } from '../../../components/OpeningHours/OpeningHoursUtils'
 
-export default (values: ISupportContactForm) => {
+export default () => {
 	const errors: any = {}
 
-	if (values?.emails) {
+	/* if (values?.emails) {
 		const emailErrors: { [key: number]: { email: string } } = {}
 
 		values.emails.forEach((email, index) => {
@@ -75,7 +72,7 @@ export default (values: ISupportContactForm) => {
 		if (!isEmpty(openingHoursErrors)) {
 			errors.openingHours = openingHoursErrors
 		}
-	}
+	} */
 
 	return errors
 }

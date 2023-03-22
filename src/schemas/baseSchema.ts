@@ -1,8 +1,8 @@
 import i18next from 'i18next'
 import { FormErrors, DecoratedFormProps } from 'redux-form'
-import { z, ZodString, ZodOptional, ZodNullable, ZodObject } from 'zod'
+import { z, ZodString, ZodOptional, ZodNullable, ZodTypeAny } from 'zod'
 
-import { FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
+import { FORM, LANGUAGE, VALIDATION_MAX_LENGTH } from '../utils/enums'
 
 /**
  * Serialize args for i18next.t function
@@ -10,7 +10,7 @@ import { FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
  * @param params additional params, if needed
  * @returns serialized string
  */
-const serializeValidationMessage = (key: string, params?: object): string =>
+export const serializeValidationMessage = (key: string, params?: object): string =>
 	JSON.stringify({
 		key,
 		params
@@ -43,7 +43,7 @@ const deserializeValidationMessage = (message?: string) => {
  * @param props additional props from Form component
  * @returns mapped errors to FormErrors
  */
-export const zodErrorsToFormErrors = <T, F extends FORM>(schema: ZodObject<any>, formName: F, values: T, props: DecoratedFormProps<T, any, string>): FormErrors<T, string> => {
+export const zodErrorsToFormErrors = <T, F extends FORM>(schema: ZodTypeAny, formName: F, values: T, props: DecoratedFormProps<T, any, string>): FormErrors<T, string> => {
 	if (formName !== props.form) {
 		throw new Error(`Mismatch between Form and Validation function. Use proper validation function for Form: ${props.form}`)
 	}
@@ -117,3 +117,24 @@ export function stringConstraint<T extends true | false>(maxLength: number, requ
 }
 
 export const emailConstraint = z.string().email().trim().max(VALIDATION_MAX_LENGTH.LENGTH_255)
+
+/**
+ * Constraint for array fields where values can be translated into every supported language.
+ * Default and required is {@link LANGUAGE.EN EN}
+ * @param defaultValueRequired boolean
+ * @returns validation schema accepting only values with keys from LANGUAGE
+ */
+export const localizedValuesConstraint = (defaultValueRequired?: boolean) =>
+	z
+		.tuple([
+			z.object({
+				language: z.literal(LANGUAGE.EN),
+				value: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100, defaultValueRequired)
+			})
+		])
+		.rest(
+			z.object({
+				language: z.nativeEnum(LANGUAGE),
+				value: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100)
+			})
+		)

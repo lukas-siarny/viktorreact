@@ -30,11 +30,14 @@ import { getSalonLanguages } from '../../reducers/languages/languagesActions'
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
-import { IBreadcrumbs, ILanguage, ILanguageForm } from '../../types/interfaces'
+import { IBreadcrumbs, ILanguage } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // hooks
 import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+
+// schema
+import { ILanguageForm } from '../../schemas/language'
 
 type Columns = ColumnsType<any>
 

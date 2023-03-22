@@ -311,7 +311,7 @@ export interface IEventTypeFilterForm {
 	eventType: CALENDAR_EVENT_TYPE
 }
 
-export interface ISupportContactForm {
+/* export interface ISupportContactForm {
 	id: string | null
 	note: string
 	openingHours: OpeningHours
@@ -324,7 +324,7 @@ export interface ISupportContactForm {
 	streetNumber: string
 	phones: { phonePrefixCountryCode: string; phone: string }[]
 	emails: { email: string }[]
-}
+} */
 
 export interface IRegistrationForm {
 	email: string
@@ -461,13 +461,6 @@ export interface ICosmeticForm {
 	image: any
 }
 
-export interface ISpecialistContactForm {
-	email?: string
-	phone: string
-	phonePrefixCountryCode: string
-	countryCode: string
-}
-
 export interface ISpecialistContactFilter {
 	search: string
 }
@@ -489,11 +482,6 @@ export interface ISmsUnitPricesFilter {
 
 export interface ISmsHistoryFilter {
 	search: string
-}
-
-export interface ILanguageForm {
-	image?: string
-	nameLocalizations: NameLocalizationsItem[]
 }
 
 export interface ILanguagePickerForm {

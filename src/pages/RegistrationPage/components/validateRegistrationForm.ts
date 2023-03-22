@@ -4,11 +4,11 @@ import { FormErrors } from 'redux-form'
 import i18next from 'i18next'
 
 // utils
-import passwordRegEx from '../../../utils/regex'
 import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // types
 import { IRegistrationForm } from '../../../types/interfaces'
+import { passwordRegEx } from '../../../utils/regex'
 
 export default (values: IRegistrationForm) => {
 	const errors: FormErrors<IRegistrationForm> = {}

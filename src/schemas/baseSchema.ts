@@ -1,6 +1,6 @@
 import i18next from 'i18next'
-import { FormErrors, DecoratedFormProps } from 'redux-form'
-import { z, ZodString, ZodOptional, ZodNullable, ZodObject } from 'zod'
+import { DecoratedFormProps, FormErrors } from 'redux-form'
+import { z, ZodNullable, ZodObject, ZodOptional, ZodString } from 'zod'
 
 import { FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
 
@@ -10,7 +10,7 @@ import { FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
  * @param params additional params, if needed
  * @returns serialized string
  */
-const serializeValidationMessage = (key: string, params?: object): string =>
+export const serializeValidationMessage = (key: string, params?: object): string =>
 	JSON.stringify({
 		key,
 		params

@@ -4,7 +4,7 @@ import i18next from 'i18next'
 
 // Types
 import { ICreatePasswordForm } from '../../../types/interfaces'
-import passwordRegEx from '../../../utils/regex'
+import { passwordRegEx } from '../../../utils/regex'
 
 export default (values: ICreatePasswordForm) => {
 	const errors: FormErrors<ICreatePasswordForm> = {}

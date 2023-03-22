@@ -152,10 +152,10 @@ const SmsUnitPricesPage = () => {
 			sorter: false,
 			width: '30%',
 			render: (_value, record) => {
-				const value = record.actual
+				const value = record.next
 				const { currencyCode } = record.country
 				const currency = currencies.data?.find((item) => item.code === currencyCode)
-				return record.next ? `${value.amount} ${currency?.symbol} ${t('loc:od {{ timeFrom }}', { timeFrom: dayjs(record.actual.validFrom).format(D_M_YEAR_FORMAT) })}` : '-'
+				return value ? `${value.amount} ${currency?.symbol} ${t('loc:od {{ timeFrom }}', { timeFrom: dayjs(value.validFrom).format(D_M_YEAR_FORMAT) })}` : '-'
 			}
 		},
 		{
@@ -193,6 +193,7 @@ const SmsUnitPricesPage = () => {
 									dataSource={tableData}
 									rowClassName={'clickable-row'}
 									twoToneRows
+									rowKey={(record) => `${record.actual.id}_${record.country.code}`}
 									pagination={false}
 									onRow={(record) => {
 										return {
@@ -213,4 +214,4 @@ const SmsUnitPricesPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(SmsUnitPricesPage)
+export default compose(withPermissions([PERMISSION.SMS_UNIT_PRICE_EDIT]))(SmsUnitPricesPage)

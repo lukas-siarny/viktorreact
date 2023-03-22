@@ -147,6 +147,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 							htmlType={'submit'}
 							disabled={isInviteFromSubmitting || isInviteFormPristine}
 							loading={isInviteFromSubmitting}
+							id={formFieldID(FORM.INVITE_EMPLOYEE, SUBMIT_BUTTON_ID)}
 						>
 							{t('loc:Pozvať do tímu')}
 						</Button>

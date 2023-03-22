@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { stringConstraint, imageConstraint, emailConstraint, zodErrorsToFormErrors, twoCharsConstrain } from './baseSchema'
+import { stringConstraint, imageConstraint, emailConstraint, zodErrorsToFormErrors, twoCharsConstraint } from './baseSchema'
 import { VALIDATION_MAX_LENGTH, FORM } from '../utils/enums'
 
 // https://notino-admin.goodrequest.dev/api/doc/#/B2b-%3Eadmin/postApiB2BAdminEmployees
@@ -8,14 +8,14 @@ export const createEmployeeSchema = z.object({
 	firstName: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_50, true),
 	lastName: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_50, true),
 	email: emailConstraint.optional(),
-	phonePrefixCountryCode: twoCharsConstrain.optional(),
+	phonePrefixCountryCode: twoCharsConstraint.optional(),
 	phone: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_20)
 })
 export const editEmployeeSchema = z
 	.object({
 		services: z
 			.object({
-				id: z.string()
+				id: z.string().uuid()
 			})
 			.array()
 	})

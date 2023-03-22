@@ -11,10 +11,7 @@ import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
 import { ISelectOptionItem } from '../../../types/interfaces'
-import { ICustomerForm } from '../../../schemas/customer'
-
-// validate
-import validateCustomerForm from './validateCustomerForm'
+import { ICustomerForm, validationCustomerFn } from '../../../schemas/customer'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -159,9 +156,9 @@ const CustomerForm: FC<Props> = (props) => {
 							category={UPLOAD_IMG_CATEGORIES.CUSTOMER}
 						/>
 						<Row justify={'space-between'}>
-							<Field className={'w-4/5'} component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} />
+							<Field className={'w-4/6'} component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} />
 							<Field
-								className={'w-1/6'}
+								className={'w-3/10'}
 								component={InputField}
 								label={t('loc:Popisné číslo')}
 								maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
@@ -214,7 +211,7 @@ const form = reduxForm<ICustomerForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateCustomerForm
+	validate: validationCustomerFn
 })(withPromptUnsavedChanges(CustomerForm))
 
 export default form

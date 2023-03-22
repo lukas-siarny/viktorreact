@@ -30,9 +30,10 @@ import {
 	SALON_FILTER_STATES,
 	SALON_SOURCE_TYPE,
 	FILTER_ENTITY,
-	CHANGE_DEBOUNCE_TIME
+	CHANGE_DEBOUNCE_TIME,
+	IMPORT_BUTTON_ID
 } from '../../../../utils/enums'
-import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getRangesForDatePicker, optionRenderWithTag } from '../../../../utils/helper'
+import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getRangesForDatePicker, optionRenderWithTag, formFieldID } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import searchWrapper from '../../../../utils/filters'
 
@@ -167,6 +168,7 @@ const SalonsFilterActive = (props: Props) => {
 							htmlType='button'
 							className={'noti-btn w-full'}
 							icon={<UploadIcon />}
+							id={formFieldID(FORM.SALONS_FILTER_ACITVE, IMPORT_BUTTON_ID())}
 						>
 							{t('loc:Import dát')}
 						</Button>
@@ -215,7 +217,7 @@ const SalonsFilterActive = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters customContent={customContent} search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)}>
+			<Filters customContent={customContent} search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)} form={FORM.SALONS_FILTER_ACITVE}>
 				<>
 					<Row>
 						<Col span={24}>

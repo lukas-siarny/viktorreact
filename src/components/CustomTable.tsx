@@ -179,7 +179,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 	}
 
 	const table = (
-		<div className={cx({ 'disabled-state': disabled }, wrapperClassName)}>
+		<div className={cx('noti-table-wrapper', { 'disabled-state': disabled }, wrapperClassName)}>
 			{/* // TODO: ak by trebalo tak wrappnut tabulku kvoli dnd do permissions - moze byt pouzivatel ktory ma prava na citanie ale nie na upravu? */}
 			<Table
 				{...props}

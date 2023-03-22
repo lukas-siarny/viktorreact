@@ -236,6 +236,33 @@ const ReservationSystemSettingsForm = (props: Props) => {
 		}
 	}, [groupedServicesByCategory, groupedServicesByCategoryLoading, dispatch, disabled, disabledOnlineB2cReservations])
 
+	const handleSubmitImport = async (values: IDataUploadForm) => {
+		if (!uploadModal.uploadType) {
+			return
+		}
+		const headers = {
+			'Content-Type': 'multipart/form-data'
+		}
+		const formData = new FormData()
+		formData.append('file', values?.file)
+
+		try {
+			if (uploadModal.uploadType === UPLOAD_TYPE.RESERVATION) {
+				await postReq('/api/b2b/admin/imports/salons/{salonID}/calendar-events', { salonID }, formData, {
+					headers
+				})
+			} else {
+				await postReq('/api/b2b/admin/imports/salons/{salonID}/customers', { salonID }, formData, {
+					headers
+				})
+			}
+
+			setUploadModal({ ...uploadModal, uploadStatus: UPLOAD_STATUS.SUCCESS })
+		} catch {
+			setUploadModal({ ...uploadModal, uploadStatus: UPLOAD_STATUS.ERROR })
+		}
+	}
+
 	const getServicesSettingsContent = () => {
 		if (isLoadingTree) {
 			return <Spin className={'w-full m-auto mt-20'} />
@@ -252,51 +279,8 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			)
 		}
 
-		const handleSubmitImport = async (values: IDataUploadForm) => {
-			if (!uploadModal.uploadType) {
-				return
-			}
-			const headers = {
-				'Content-Type': 'multipart/form-data'
-			}
-			const formData = new FormData()
-			formData.append('file', values?.file)
-
-			try {
-				if (uploadModal.uploadType === UPLOAD_TYPE.RESERVATION) {
-					await postReq('/api/b2b/admin/imports/salons/{salonID}/calendar-events', { salonID }, formData, {
-						headers
-					})
-				} else {
-					await postReq('/api/b2b/admin/imports/salons/{salonID}/customers', { salonID }, formData, {
-						headers
-					})
-				}
-
-				setUploadModal({ ...uploadModal, uploadStatus: UPLOAD_STATUS.SUCCESS })
-			} catch {
-				setUploadModal({ ...uploadModal, uploadStatus: UPLOAD_STATUS.ERROR })
-			}
-		}
-
-		const modals = (
-			<>
-				<ImportForm
-					accept={uploadModal.data.accept}
-					title={uploadModal.data.title}
-					label={uploadModal.data.label}
-					uploadStatus={uploadModal.uploadStatus}
-					setUploadStatus={(status: any) => setUploadModal({ ...uploadModal, uploadStatus: status })}
-					onSubmit={handleSubmitImport}
-					visible={uploadModal.visible}
-					setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
-				/>
-			</>
-		)
-
 		return (
 			<>
-				{modals}
 				<p className='x-regular text-notino-grayDark'>{t('loc:Vyberte služby, ktoré bude možné rezervovať si online a ktoré budú automaticky potvrdené.')}</p>
 				<p className='x-regular text-notino-grayDark'>{t('loc:Nastavte službám možnosť online rezervácie, automatického potvrdenia a zadávania poznámok.')}</p>
 				<Row justify={'space-between'} className='mt-7'>
@@ -495,8 +479,18 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				</div>
 				<Divider className={'my-3'} />
 				<Row>
+					<ImportForm
+						accept={uploadModal.data.accept}
+						title={uploadModal.data.title}
+						label={uploadModal.data.label}
+						uploadStatus={uploadModal.uploadStatus}
+						setUploadStatus={(status: any) => setUploadModal({ ...uploadModal, uploadStatus: status })}
+						onSubmit={handleSubmitImport}
+						visible={uploadModal.visible}
+						setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
+					/>
 					<Button
-						onClick={() =>
+						onClick={() => {
 							setUploadModal({
 								...uploadModal,
 								visible: true,
@@ -507,7 +501,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.xlsx, .csv, .ics' })
 								}
 							})
-						}
+						}}
 						disabled={disabled}
 						type='primary'
 						htmlType='button'
@@ -517,7 +511,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						{t('loc:Importovať rezervácie')}
 					</Button>
 					<Button
-						onClick={() =>
+						onClick={() => {
 							setUploadModal({
 								...uploadModal,
 								visible: true,
@@ -528,7 +522,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv' })
 								}
 							})
-						}
+						}}
 						disabled={disabled}
 						type='primary'
 						htmlType='button'

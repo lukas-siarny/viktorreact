@@ -29,7 +29,7 @@ import {
 	ROW_GUTTER_X_DEFAULT
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { getAssignedUserLabel, normalizeDirectionKeys, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
+import { formatObjToQuery, getAssignedUserLabel, normalizeDirectionKeys, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -289,9 +289,10 @@ const ReservationsPage = (props: Props) => {
 										sidebarView: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
 										eventId: record.key
 									}
+
 									navigate({
 										pathname: getPath(t('paths:calendar')),
-										search: `?view=${redirectQuery.view}&date=${redirectQuery.date}&eventsViewType=${redirectQuery.eventsViewType}&sidebarView=${redirectQuery.sidebarView}&eventId=${redirectQuery.eventId}`
+										search: formatObjToQuery(redirectQuery)
 									})
 								}
 							})}

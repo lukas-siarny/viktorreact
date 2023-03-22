@@ -129,6 +129,14 @@ export const decodeBackDataQuery = (base64?: string | null) => {
 	return decoded
 }
 
+export const formatObjToQuery = (queryObj: { [key: string]: string }) => {
+	const searchParams = new URLSearchParams()
+	Object.keys(queryObj).forEach((key) => {
+		searchParams.append(key, queryObj[key])
+	})
+	return `?${searchParams.toString()}`
+}
+
 export const getLinkWithEncodedBackUrl = (link: string) => {
 	if (!window.location.search) {
 		return link

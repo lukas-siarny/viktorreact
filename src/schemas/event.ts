@@ -1,22 +1,12 @@
 import { z } from 'zod'
 import { isEmpty } from 'lodash'
 import dayjs from 'dayjs'
-import { selectOptionItemSchema, serializeValidationMessage, stringConstraint, zodErrorsToFormErrors } from './baseSchema'
+import { serializeValidationMessage, stringConstraint, zodErrorsToFormErrors } from './baseSchema'
 import { CALENDAR_EVENT_TYPE, DAY, EVERY_REPEAT, FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
 import { dateRegex, timeRegex } from '../utils/regex'
 // eslint-disable-next-line import/no-cycle
 import { formatDate } from '../utils/helper'
-
-const selectFieldConstraint = selectOptionItemSchema.extend({
-	children: z
-		.object({
-			isDeleted: z.boolean(),
-			color: z.string(),
-			employeeData: z.any(),
-			thumbnail: z.string()
-		})
-		.optional()
-})
+import { ICalendarEmployeeOptionItem } from '../types/interfaces'
 
 // https://notino-admin.goodrequest.dev/api/doc/?urls.primaryName=v2.2.55#/B2b-%3Eadmin/postApiB2BAdminSalonsSalonIdCalendarEvents
 export const eventSchema = z
@@ -54,30 +44,21 @@ export const eventSchema = z
 	.and(
 		z.object({
 			eventType: z.nativeEnum(CALENDAR_EVENT_TYPE),
-			employee: selectFieldConstraint.transform((selectObj, ctx) => {
-				if (!selectObj.value) {
-					ctx.addIssue({
-						code: z.ZodIssueCode.custom,
-						message: serializeValidationMessage('loc:Toto pole je povinné'),
-						path: ['employee']
-					})
-					return z.NEVER
-				}
-				return {
-					...selectObj
-				}
-			}),
+			employee: z.preprocess((input: any) => input && String(input.value), z.string().uuid(), z.union([z.string(), z.number()])),
 			timeFrom: z.string().regex(timeRegex),
 			timeTo: z.string().regex(timeRegex),
 			note: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1500)
 		})
 	)
-export type ICalendarEventForm = z.infer<typeof eventSchema> & {
+
+export type ICalendarEventForm = Omit<z.infer<typeof eventSchema>, 'employee'> & {
 	eventId?: string | null
 	calendarBulkEventID?: string
 	revertEvent?: () => void
 	updateFromCalendar?: boolean
 	isImported?: boolean
+} & {
+	employee: ICalendarEmployeeOptionItem
 }
 
 export const validationEventFn = (values: ICalendarEventForm, props: any) => zodErrorsToFormErrors(eventSchema as any, FORM.CALENDAR_EVENT_FORM, values, props)

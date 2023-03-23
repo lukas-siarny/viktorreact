@@ -7,9 +7,6 @@ import cx from 'classnames'
 import { flatten, isEmpty, isNil, map } from 'lodash'
 import dayjs from 'dayjs'
 
-// validate
-import validateReservationForm from './validateReservationForm'
-
 // utils
 import { formatLongQueryString, getAssignedUserLabel, getCountryPrefix, optionRenderWithAvatar, showErrorNotification, findNodeInTree } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
@@ -17,7 +14,7 @@ import { getReq, postReq } from '../../../../utils/request'
 import { CALENDAR_EVENT_TYPE, DEFAULT_TIME_FORMAT, ENUMERATIONS_KEYS, FORM, PERMISSION, CREATE_EVENT_PERMISSIONS, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // types
-import { EmployeeService, ICalendarEmployeesPayload, ICalendarReservationForm, ServiceType } from '../../../../types/interfaces'
+import { EmployeeService, ICalendarEmployeesPayload, ServiceType } from '../../../../types/interfaces'
 import { ICustomerForm } from '../../../../schemas/customer'
 
 // assets
@@ -41,6 +38,9 @@ import ConfirmModal from '../../../../atoms/ConfirmModal'
 // redux
 import { RootState } from '../../../../reducers'
 import { getEmployee } from '../../../../reducers/employees/employeesActions'
+
+// schemas
+import { ICalendarReservationForm, validationReservationsFn } from '../../../../schemas/reservation'
 
 type ComponentProps = {
 	salonID: string
@@ -462,7 +462,7 @@ const form = reduxForm<ICalendarReservationForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateReservationForm
+	validate: validationReservationsFn
 })(ReservationForm)
 
 export default form

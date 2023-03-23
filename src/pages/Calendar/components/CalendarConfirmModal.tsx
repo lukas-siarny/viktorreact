@@ -8,7 +8,7 @@ import ConfirmModal, { IConfirmModal } from '../../../atoms/ConfirmModal'
 import ConfirmBulkForm from './forms/ConfirmBulkForm'
 
 // types
-import { IBulkConfirmForm, ICalendarReservationForm, ConfirmModalData } from '../../../types/interfaces'
+import { IBulkConfirmForm, ConfirmModalData } from '../../../types/interfaces'
 import { RootState } from '../../../reducers'
 import { ICalendarEventForm } from '../../../schemas/event'
 
@@ -28,6 +28,9 @@ import { getConfirmModalText } from '../calendarHelpers'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-2.svg'
+
+// schema
+import { ICalendarReservationForm } from '../../../schemas/reservation'
 
 type Props = {
 	data: ConfirmModalData

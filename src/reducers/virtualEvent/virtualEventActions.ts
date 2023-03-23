@@ -7,8 +7,9 @@ import { destroy } from 'redux-form'
 import { IResetStore } from '../generalTypes'
 import VIRTUAL_EVENT from './virtualEventTypes'
 import { ThunkResult } from '../index'
-import { ICalendarReservationForm } from '../../types/interfaces'
-import { ICalendarImportedReservationForm } from '../../schemas/reservation'
+
+// schema
+import { ICalendarImportedReservationForm, ICalendarReservationForm } from '../../schemas/reservation'
 import { ICalendarEventForm } from '../../schemas/event'
 
 // utils

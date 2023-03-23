@@ -31,7 +31,10 @@ import {
 // types
 import { Paths } from './api'
 import { TooltipPlacement } from 'antd/es/tooltip'
+
+// schema
 import { ICalendarEventForm } from '../schemas/event'
+import { ICalendarReservationForm } from '../schemas/reservation'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -245,49 +248,6 @@ export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvent
 export interface ICalendarEventDetailPayload {
 	data: CalendarEventDetail | null
 }
-export interface ICalendarReservationForm {
-	customer: ISelectOptionItem<{
-		customerData?: NonNullable<ICalendarEventDetailPayload['data']>['customer']
-	}>
-	service: ISelectOptionItem<{
-		priceAndDurationData?: ServiceType['priceAndDurationData'],
-		useCategoryParameter?: ServiceType['useCategoryParameter'],
-		serviceCategoryParameter?: ServiceType['serviceCategoryParameter'],
-		categoryId?: string
-		serviceData?: NonNullable<ICalendarEventDetailPayload['data']>['service']
-	}>
-	employee: ICalendarEmployeeOptionItem
-	date: string
-	timeFrom: string
-	timeTo: string
-	note?: string
-	eventId?: string
-	revertEvent?: () => void
-	updateFromCalendar?: boolean
-	noteFromB2CCustomer?: string
-	reservationData?: CalendarEvent['reservationData']
-	isImported?: boolean
-	eventType: CALENDAR_EVENT_TYPE
-}
-// export interface ICalendarEventForm {
-// 	employee: ICalendarEmployeeOptionItem
-// 	date: string
-// 	timeFrom: string
-// 	timeTo: string
-// 	eventType: CALENDAR_EVENT_TYPE
-// 	recurring?: boolean
-// 	repeatOn?: DAY[]
-// 	every?: EVERY_REPEAT
-// 	end?: string
-// 	note?: string
-// 	allDay?: boolean
-// 	// NOTE: pre akcie resize a drag and drop
-// 	eventId?: string | null
-// 	calendarBulkEventID?: string
-// 	revertEvent?: () => void
-// 	updateFromCalendar?: boolean
-// 	isImported?: boolean
-// }
 
 export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null
 

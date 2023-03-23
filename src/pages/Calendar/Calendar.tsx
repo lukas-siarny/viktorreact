@@ -61,7 +61,6 @@ import CalendarConfirmModal from './components/CalendarConfirmModal'
 import {
 	ConfirmModalData,
 	ICalendarFilter,
-	ICalendarReservationForm,
 	INewCalendarEvent,
 	ReservationPopoverData,
 	PopoverTriggerPosition,
@@ -69,10 +68,12 @@ import {
 	EmployeeTooltipPopoverData,
 	ICalendarEmployeeOptionItem
 } from '../../types/interfaces'
-import { ICalendarImportedReservationForm } from '../../schemas/reservation'
+import { ICalendarImportedReservationForm, ICalendarReservationForm } from '../../schemas/reservation'
 
 // hooks
 import useQueryParams, { ArrayParam, StringParam } from '../../hooks/useQueryParams'
+
+// schema
 import { ICalendarEventForm } from '../../schemas/event'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {

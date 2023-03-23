@@ -34,7 +34,6 @@ import CalendarEmptyState from '../CalendarEmptyState'
 import {
 	EmployeeTooltipPopoverData,
 	ICalendarMonthlyReservationsPayload,
-	ICalendarReservationForm,
 	ICalendarView,
 	IDayViewResourceExtenedProps,
 	IEventExtenedProps,
@@ -44,7 +43,9 @@ import {
 } from '../../../../types/interfaces'
 import { RootState } from '../../../../reducers'
 import { IUseQueryParams } from '../../../../hooks/useQueryParams'
-import { ICalendarImportedReservationForm } from '../../../../schemas/reservation'
+
+// schema
+import { ICalendarImportedReservationForm, ICalendarReservationForm } from '../../../../schemas/reservation'
 import { ICalendarEventForm } from '../../../../schemas/event'
 
 // utils

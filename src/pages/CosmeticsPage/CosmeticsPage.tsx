@@ -18,7 +18,7 @@ import CosmeticsFilter from './components/CosmeticsFilter'
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, CREATE_BUTTON_ID } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { normalizeDirectionKeys } from '../../utils/helper'
+import { formFieldID, normalizeDirectionKeys } from '../../utils/helper'
 
 // reducers
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
@@ -212,7 +212,7 @@ const CosmeticsPage = () => {
 										htmlType='button'
 										className={'noti-btn'}
 										icon={<PlusIcon />}
-										id={`${CREATE_BUTTON_ID}-${FORM.COSMETIC}`}
+										id={formFieldID(FORM.COSMETIC, CREATE_BUTTON_ID)}
 									>
 										{STRINGS(t).addRecord(t('loc:kozmetiku'))}
 									</Button>

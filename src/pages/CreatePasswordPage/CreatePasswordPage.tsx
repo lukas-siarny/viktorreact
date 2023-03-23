@@ -14,8 +14,8 @@ import { postReq } from '../../utils/request'
 // hooks
 import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
 
-// schemas
-import { ICreatePasswordForm } from '../../schemas/createPassword'
+// schema
+import { ICreatePasswordForm } from '../../schemas/password'
 
 const CreatePasswordPage = () => {
 	const [modalVisible, setModalVisible] = useState(false)

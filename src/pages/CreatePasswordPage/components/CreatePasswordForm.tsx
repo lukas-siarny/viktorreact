@@ -14,8 +14,8 @@ import { formFieldID, showErrorNotification } from '../../../utils/helper'
 // assets
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon-16.svg'
 
-// schemas
-import { ICreatePasswordForm, validationCreatePasswordFn } from '../../../schemas/createPassword'
+// schema
+import { ICreatePasswordForm, validationCreatePasswordFn } from '../../../schemas/password'
 
 type ComponentProps = {
 	showForgottenPasswordModal: () => void

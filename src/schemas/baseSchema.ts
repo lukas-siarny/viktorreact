@@ -1,9 +1,9 @@
 import i18next from 'i18next'
 import { FormErrors, DecoratedFormProps } from 'redux-form'
-import { z, ZodString, ZodOptional, ZodNullable, ZodObject, ZodEffects } from 'zod'
+import { z, ZodString, ZodOptional, ZodNullable, ZodTypeAny } from 'zod'
+import { set } from 'lodash'
 
-import { FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
-import passwordRegEx from '../utils/regex'
+import { FORM, VALIDATION_MAX_LENGTH, LANGUAGE } from '../utils/enums'
 
 /**
  * Serialize args for i18next.t function
@@ -22,7 +22,7 @@ export const serializeValidationMessage = (key: string, params?: object): string
  * @param message serialized args
  * @returns object containing localization key and additional params
  */
-const deserializeValidationMessage = (message?: string) => {
+export const deserializeValidationMessage = (message?: string) => {
 	if (message) {
 		try {
 			const translation = JSON.parse(message)
@@ -44,12 +44,7 @@ const deserializeValidationMessage = (message?: string) => {
  * @param props additional props from Form component
  * @returns mapped errors to FormErrors
  */
-export const zodErrorsToFormErrors = <T, F extends FORM>(
-	schema: ZodEffects<ZodObject<any>> | ZodObject<any>,
-	formName: F,
-	values: T,
-	props: DecoratedFormProps<T, any, string>
-): FormErrors<T, string> => {
+export const zodErrorsToFormErrors = <T, F extends FORM>(schema: ZodTypeAny, formName: F, values: T, props: DecoratedFormProps<T, any, string>): FormErrors<T, string> => {
 	if (formName !== props.form) {
 		throw new Error(`Mismatch between Form and Validation function. Use proper validation function for Form: ${props.form}`)
 	}
@@ -57,13 +52,13 @@ export const zodErrorsToFormErrors = <T, F extends FORM>(
 	const result = schema.safeParse(values)
 
 	if (!result.success) {
-		const { fieldErrors } = result.error.flatten()
-		return Object.entries(fieldErrors || {}).reduce((acc, [key, value]) => {
-			return {
-				...acc,
-				[key]: deserializeValidationMessage(value ? value[0] : undefined)
-			}
-		}, {} as FormErrors<T>)
+		const errors: FormErrors<T> = {}
+
+		result.error.issues.forEach((issue) => {
+			set(errors, issue.path, deserializeValidationMessage(issue.message))
+		})
+
+		return errors
 	}
 
 	return {}
@@ -84,16 +79,64 @@ export const defaultErrorMap: z.ZodErrorMap = (issue, ctx) => {
 	}
 
 	if (issue.code === z.ZodIssueCode.too_big) {
-		return {
-			message: serializeValidationMessage('loc:Max. počet znakov je {{max}}', {
-				max: issue.maximum
-			})
+		if (issue.type === 'string') {
+			return {
+				message: serializeValidationMessage('loc:Max. počet znakov je {{max}}', {
+					max: issue.maximum
+				})
+			}
+		}
+		if (issue.type === 'number') {
+			return {
+				message: serializeValidationMessage('loc:Max. hodnota je {{max}}', {
+					max: issue.maximum
+				})
+			}
+		}
+		if (issue.type === 'array') {
+			return {
+				message: serializeValidationMessage('loc:Max. počet prvkov je {{max}}', {
+					max: issue.maximum
+				})
+			}
+		}
+	}
+
+	if (issue.code === z.ZodIssueCode.too_small) {
+		if (issue.type === 'string') {
+			return {
+				message: serializeValidationMessage('loc:Min. počet znakov je {{min}}', {
+					min: issue.minimum
+				})
+			}
+		}
+		if (issue.type === 'number') {
+			return {
+				message: serializeValidationMessage('loc:Min. hodnota je {{min}}', {
+					min: issue.minimum
+				})
+			}
+		}
+		if (issue.type === 'array') {
+			return {
+				message: serializeValidationMessage('loc:Min. počet prvkov je {{min}}', {
+					min: issue.minimum
+				})
+			}
 		}
 	}
 
 	if (issue.code === z.ZodIssueCode.invalid_string) {
 		if (issue.validation === 'email') {
 			return { message: serializeValidationMessage('loc:Email nie je platný') }
+		}
+
+		if (issue.validation === 'uuid') {
+			return { message: serializeValidationMessage('loc:Neplatný formát UUID') }
+		}
+
+		if (issue.validation === 'url') {
+			return { message: serializeValidationMessage('loc:Neplatná URL') }
 		}
 	}
 
@@ -105,7 +148,7 @@ export const defaultErrorMap: z.ZodErrorMap = (issue, ctx) => {
 */
 
 export const imageConstraint = z.object({
-	url: z.string().url(),
+	url: z.string().url().nullish(),
 	thumbUrl: z.string().nullish(),
 	uid: z.string(),
 	id: z.string().uuid().nullish()
@@ -124,4 +167,29 @@ export function stringConstraint<T extends true | false>(maxLength: number, requ
 
 export const emailConstraint = z.string().email().trim().max(VALIDATION_MAX_LENGTH.LENGTH_255)
 
-export const passwordConstraint = z.string().regex(passwordRegEx, serializeValidationMessage('loc:Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak'))
+/**
+ * Constraint for checking checking two characters (min(2) & max(2)) length string (eg: counryCode, phonePrefix...
+ * DEFAULT: required
+ */
+export const twoCharsConstraint = z.string().length(VALIDATION_MAX_LENGTH.LENGTH_2)
+
+/**
+ * Constraint for array fields where values can be translated into every supported language.
+ * Default and required is {@link LANGUAGE.EN EN}
+ * @param required boolean
+ * @returns validation schema accepting only values with keys from LANGUAGE
+ */
+export const localizedValuesConstraint = (required?: boolean, maxLength = VALIDATION_MAX_LENGTH.LENGTH_100) =>
+	z
+		.tuple([
+			z.object({
+				language: z.literal(LANGUAGE.EN),
+				value: stringConstraint(maxLength, required)
+			})
+		])
+		.rest(
+			z.object({
+				language: z.nativeEnum(LANGUAGE),
+				value: stringConstraint(maxLength)
+			})
+		)

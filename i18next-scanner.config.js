@@ -6,7 +6,7 @@ module.exports = {
 	options: {
 		debug: false,
 		func: {
-			list: ['t'],
+			list: ['t', 'serializeValidationMessage'],
 			extensions: ['.js', '.jsx', '.ts', '.tsx']
 		},
 		sort: true,

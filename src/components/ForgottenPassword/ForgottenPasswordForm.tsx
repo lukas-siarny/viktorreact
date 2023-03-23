@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next'
 // atoms
 import InputField from '../../atoms/InputField'
 
-// schemas
-import { IForgotPasswordForm, validationForgotPasswordFn } from '../../schemas/forgotPassword'
+// schema
+import { IForgotPasswordForm, validationForgotPasswordFn } from '../../schemas/password'
 
 // utils
 import { FORM, SUBMIT_BUTTON_ID } from '../../utils/enums'

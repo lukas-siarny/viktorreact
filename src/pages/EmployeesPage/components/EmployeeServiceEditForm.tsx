@@ -8,8 +8,8 @@ import { isEmpty } from 'lodash'
 import i18next from 'i18next'
 
 // utils
-import { FORM, PARAMETER_TYPE, STRINGS } from '../../../utils/enums'
-import { arePriceAndDurationDataEmpty, renderPriceAndDurationInfo, showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { FORM, PARAMETER_TYPE, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { arePriceAndDurationDataEmpty, formFieldID, renderPriceAndDurationInfo, showErrorNotification, validationNumberMin } from '../../../utils/helper'
 
 // types
 import { IEmployeeServiceEditForm } from '../../../types/interfaces'
@@ -357,6 +357,7 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 						/>
 					)}
 					<Button
+						id={formFieldID(FORM.EMPLOYEE_SERVICE_EDIT, SUBMIT_BUTTON_ID)}
 						className={cx('noti-btn', { 'w-1/2': showResetButton, 'w-full': !showResetButton })}
 						size='large'
 						type='primary'

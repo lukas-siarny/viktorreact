@@ -175,7 +175,7 @@ const AddressFields = (props: Props) => {
 								<Alert message={t('loc:Google mapa je aktuálne nedostupná.')} showIcon type={'warning'} className={'noti-alert mb-4 google-map-warning'} />
 								<Row justify={'space-between'}>
 									<Field
-										className={'w-4/5'}
+										className={'w-4/6'}
 										component={InputField}
 										label={t('loc:Ulica')}
 										placeholder={t('loc:Zadajte ulicu')}
@@ -185,7 +185,7 @@ const AddressFields = (props: Props) => {
 										required
 									/>
 									<Field
-										className={'w-1/6'}
+										className={'w-3/10'}
 										component={InputField}
 										label={t('loc:Popisné číslo')}
 										placeholder={t('loc:Zadajte číslo')}
@@ -296,7 +296,7 @@ const AddressFields = (props: Props) => {
 														required
 													/>
 													<Row gutter={[8, 8]}>
-														<Col span={12}>
+														<Col span={12} sm={24} md={24} lg={12}>
 															<Field
 																component={InputField}
 																label={t('loc:PSČ')}
@@ -308,7 +308,7 @@ const AddressFields = (props: Props) => {
 																required
 															/>
 														</Col>
-														<Col span={12}>
+														<Col span={12} sm={24} md={24} lg={12}>
 															<Field
 																component={InputField}
 																label={t('loc:Popisné číslo')}

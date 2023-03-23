@@ -1,0 +1,9 @@
+{
+	"create":{
+		"amount": "100"
+
+	},
+	"update": {
+		"amount": "200"
+	}
+}

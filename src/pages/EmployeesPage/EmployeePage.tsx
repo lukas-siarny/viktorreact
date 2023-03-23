@@ -499,7 +499,7 @@ const EmployeePage = (props: Props) => {
 						setVisibleServiceEditModal={setVisibleServiceEditModal}
 					/>
 					{!formValues?.deletedAt && (
-						<div className={'content-footer'}>
+						<div className={'content-footer'} id={'content-footer-container'}>
 							<div
 								className={cx('flex flex-col gap-2 lg:flex-row flex-wrap', {
 									'lg:justify-between': isEmployeeExists,

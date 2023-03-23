@@ -1,12 +1,12 @@
 import { z } from 'zod'
 
-import { emailConstraint, stringConstraint, zodErrorsToFormErrors } from './baseSchema'
+import { emailConstraint, stringConstraint, twoCharsConstraint, zodErrorsToFormErrors } from './baseSchema'
 import { FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
 
 // https://notino-admin.goodrequest.dev/api/doc/?urls.primaryName=v2.2.9#/B2b-%3Eadmin/patchApiB2BAdminSalonsSalonIdInvoice
 export const billingSchema = z.object({
 	// companyInvoiceAddress
-	countryCode: z.string().length(2).nullish(),
+	countryCode: twoCharsConstraint.optional(),
 	zipCode: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_10),
 	city: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100),
 	street: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100),
@@ -15,7 +15,7 @@ export const billingSchema = z.object({
 	firstName: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100),
 	lastName: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100),
 	email: emailConstraint.optional(),
-	phonePrefixCountryCode: z.string().length(2).nullish(),
+	phonePrefixCountryCode: twoCharsConstraint.optional(),
 	phone: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_20),
 	// companyInfo
 	businessID: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_20),

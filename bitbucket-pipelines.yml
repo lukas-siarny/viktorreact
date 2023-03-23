@@ -112,7 +112,8 @@ pipelines:
               # run npm install for tunning tests after docker compose for saving time
               - npm install --legacy-peer-deps
               # needs to check/implement -> how to hold context of wait-for-it for DB service in backend
-              - sleep 70
+              # - sleep 70
+              - npm run health-check-waiter
               - mkdir docker_logs && docker-compose logs --no-color >& docker_logs/logs.txt
               - npm run test:CI
               # generate code coverage summary

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import InputPasswordField from '../../../atoms/InputPasswordField'
 import InputField from '../../../atoms/InputField'
 
-// schemas
+// schema
 import { ILoginForm, validationLoginFn } from '../../../schemas/login'
 
 // utils

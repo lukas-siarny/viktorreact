@@ -2,10 +2,10 @@ import { z } from 'zod'
 import { zodErrorsToFormErrors, serializeValidationMessage } from './baseSchema'
 import { FORM, PIN_LENGTH } from '../utils/enums'
 
-const errorMsg = 'loc:Zadajte celý PIN'
+const errorMsg = serializeValidationMessage('loc:Zadajte celý PIN')
 
 export const activationSchema = z.object({
-	code: z.string({ required_error: serializeValidationMessage(errorMsg) }).length(PIN_LENGTH, serializeValidationMessage(errorMsg))
+	code: z.string({ required_error: errorMsg }).length(PIN_LENGTH, errorMsg)
 })
 
 export type IActivationForm = z.infer<typeof activationSchema>

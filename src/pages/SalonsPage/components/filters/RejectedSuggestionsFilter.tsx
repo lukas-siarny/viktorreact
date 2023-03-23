@@ -58,7 +58,7 @@ const RejectedSuggestionsFilter = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)} />
+			<Filters search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)} form={FORM.FILTER_REJECTED_SUGGESTIONS} />
 		</Form>
 	)
 }

@@ -1,12 +1,11 @@
 import { z } from 'zod'
-import { stringConstraint, emailConstraint, zodErrorsToFormErrors, passwordConstraint } from './baseSchema'
+import { stringConstraint, emailConstraint, zodErrorsToFormErrors, passwordConstraint, twoCharsConstraint } from './baseSchema'
 import { VALIDATION_MAX_LENGTH, FORM } from '../utils/enums'
-import passwordRegEx from '../utils/regex'
 
 export const registrationSchema = z.object({
 	email: emailConstraint,
 	password: passwordConstraint,
-	phonePrefixCountryCode: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_2, true),
+	phonePrefixCountryCode: twoCharsConstraint,
 	phone: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_20, true),
 	agreeGDPR: z.literal<boolean>(true),
 	marketing: z.boolean().optional()

@@ -18,7 +18,10 @@ import { PERMISSION, FORM, PARAMETERS_VALUE_TYPES, PARAMETERS_UNIT_TYPES } from 
 import { postReq } from '../../utils/request'
 
 // types
-import { IBreadcrumbs, ICategoryParamForm } from '../../types/interfaces'
+import { IBreadcrumbs } from '../../types/interfaces'
+
+// schema
+import { ICategoryParamsForm } from '../../schemas/categoryParams'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
@@ -48,7 +51,7 @@ const CreateCategoryParamsPage = () => {
 		}
 	}
 
-	const handleSubmit = async (formData: ICategoryParamForm) => {
+	const handleSubmit = async (formData: ICategoryParamsForm) => {
 		let values = []
 		let unitType: PARAMETERS_UNIT_TYPES | null = null
 
@@ -72,17 +75,18 @@ const CreateCategoryParamsPage = () => {
 
 			await Promise.all(
 				values.map((valueItem: any) => {
+					if (unitType === PARAMETERS_UNIT_TYPES.MINUTES) {
+						return postReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/', { categoryParameterID }, { value: valueItem.value.toString() })
+					}
 					// Iba nad tymi spravit request krore nemaju prazdne hodnoty valueLocalizations (prazdne pole)
 					if (!isEmpty(valueItem.valueLocalizations)) {
-						if (unitType === PARAMETERS_UNIT_TYPES.MINUTES) {
-							return postReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/', { categoryParameterID }, { value: valueItem.value.toString() })
-						}
 						return postReq(
 							'/api/b2b/admin/enums/category-parameters/{categoryParameterID}/values/',
 							{ categoryParameterID },
 							{ valueLocalizations: valueItem.valueLocalizations }
 						)
 					}
+
 					return undefined
 				})
 			)

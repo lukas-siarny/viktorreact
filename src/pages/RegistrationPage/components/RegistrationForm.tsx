@@ -15,7 +15,7 @@ import SwitchField from '../../../atoms/SwitchField'
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
-// schemas
+// schema
 import { IRegistrationForm, validationRegistrationFn } from '../../../schemas/registration'
 
 // utils

@@ -38,6 +38,7 @@ type Props = {
 	focused?: boolean
 	getPopupContainer?: Function
 	readOnly?: boolean
+	allowClear?: boolean
 }
 
 const fallbackOptions = [
@@ -99,7 +100,8 @@ const PhoneWithPrefixField = (props: Props) => {
 		formName,
 		fallbackDefaultValue,
 		getPopupContainer,
-		readOnly
+		readOnly,
+		allowClear
 	} = props
 	const prefixOptions = useSelector((state: RootState) => state?.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const dispatch = useDispatch()
@@ -121,6 +123,7 @@ const PhoneWithPrefixField = (props: Props) => {
 					label={label}
 					component={PhonePrefixField}
 					name={prefixName}
+					allowClear={allowClear}
 					size={size}
 					options={options}
 					loading={prefixOptions?.isLoading}

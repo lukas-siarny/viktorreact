@@ -5,7 +5,7 @@ import { FORM } from '../utils/enums'
 
 // https://notino-admin.goodrequest.dev/api/doc/?urls.primaryName=v2.2.9#/B2b-%3Eadmin/patchApiB2BAdminEmployeesEmployeeIdRole
 export const roleSchema = z.object({
-	roleID: z.string()
+	roleID: z.string().uuid()
 })
 
 export type IEditRoleForm = z.infer<typeof roleSchema>

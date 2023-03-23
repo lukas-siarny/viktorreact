@@ -1,9 +1,6 @@
 import { z } from 'zod'
-import { emailConstraint, serializeValidationMessage, zodErrorsToFormErrors } from './baseSchema'
+import { emailConstraint, passwordConstraint, serializeValidationMessage, zodErrorsToFormErrors } from './baseSchema'
 import { FORM } from '../utils/enums'
-import passwordRegEx from '../utils/regex'
-
-export const passwordConstraint = z.string().regex(passwordRegEx, serializeValidationMessage('loc:Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak'))
 
 // create password
 export const createPasswordSchema = z

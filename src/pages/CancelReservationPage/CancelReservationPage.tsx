@@ -203,7 +203,7 @@ const CancelReservationPage = () => {
 	const calendarEventID = payload?.calendarEventID
 
 	const [isLoading, setIsLoading] = useState(false)
-	const [view, setView] = useState<'success' | 'error'>()
+	const [view, setView] = useState<'default' | 'success' | 'error'>()
 	const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
 	const [calendarEventData, setCalendarEventData] = useState<(typeof fakeData)['reservation'] | null>(null)
 
@@ -215,11 +215,11 @@ const CancelReservationPage = () => {
 			try {
 				const { data } = await getReq('/api/b2c/web/calendar-events/reservations/{calendarEventID}' as any, { calendarEventID }, REQUESTS_CONFIG)
 				setCalendarEventData(fakeData.reservation)
-				setView('success')
+				setView('default')
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
-				setView('success')
+				setView('default')
 				setCalendarEventData(fakeData.reservation)
 				// setView('error')
 			} finally {
@@ -228,15 +228,18 @@ const CancelReservationPage = () => {
 		})()
 	}, [calendarEventID])
 
-	const handleCancelReservation = () => {
+	const handleCancelReservation = async () => {
+		setIsConfirmModalOpen(false)
 		setIsLoading(true)
 		try {
-			patchReq('/api/b2c/web/calendar-events/reservations/{calendarEventID}/cancel' as any, undefined, {}, REQUESTS_CONFIG)
+			await patchReq('/api/b2c/web/calendar-events/reservations/{calendarEventID}/cancel' as any, { calendarEventID }, {}, REQUESTS_CONFIG)
+			setView('success')
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
 		} finally {
 			setIsLoading(false)
+			setView('success')
 		}
 	}
 
@@ -261,7 +264,7 @@ const CancelReservationPage = () => {
 	const employeeName = getAssignedUserLabel({ firstName: calendarEventData?.employee.firstName, lastName: calendarEventData?.employee.lastName, id: '' })
 
 	const renderContent = () => {
-		if (view === 'success') {
+		if (view === 'default') {
 			return (
 				<>
 					<h3 className={'flex items-center text-lg my-2 gap-2'}>
@@ -304,7 +307,7 @@ const CancelReservationPage = () => {
 					<div className={'w-full p-4 bg-notino-white rounded mb-8'}>
 						<h4 className={'flex items-center text-base truncate inline-block'}>{calendarEventData?.salon?.name || t('loc:Kontaktné informácie salónu')}</h4>
 						<Divider className={'mt-1 mb-4'} />
-						<div className={'flex items-start'}>
+						<div className={'flex items-start gap-2'}>
 							<div className={'flex-1'}>
 								<ul className={'noti-contact-list'}>
 									{salonPhoneNumber && (
@@ -329,7 +332,14 @@ const CancelReservationPage = () => {
 									</li>
 								</ul>
 							</div>
-							<img src={calendarEventData?.salon.logo.resizedImages.small} alt={''} width={100} height={100} className={'object-contain shtink-0'} />
+							<img
+								src={calendarEventData?.salon.logo.resizedImages.small}
+								alt={''}
+								width={80}
+								height={80}
+								className={'object-contain shrink-0'}
+								// className={'object-contain shrink-0 rounded-lg border border-solid border-notino-grayLight'}
+							/>
 						</div>
 					</div>
 
@@ -362,8 +372,25 @@ const CancelReservationPage = () => {
 			return (
 				<Result
 					status='500'
-					title={<span className={'text-notino-black'}>{t('loc:Zoznam je prázdny')}</span>}
-					subTitle={<span className={'text-gray-600'}>{t('loc:Ľutujeme, momentálne nie sú k dispozící žiadne support centrá.')}</span>}
+					subTitle={<span className={'text-gray-600 text-base'}>{t('loc:Rezervácia je už zrušená alebo platnosť odkazu na zrušenie rezervácie už vypršala')}</span>}
+				/>
+			)
+		}
+
+		if (view === 'success') {
+			return (
+				<Result
+					status='success'
+					title={t('loc:Rezervácia bola úspešne zrušená')}
+					subTitle={
+						<span className={'text-gray-600 text-base'}>
+							{`${t('loc:Rezervácia služby {{ serviceName }} v salóne {{ salonName }} naplánovana na {{ dateTime }} bola úspešne zrušená.', {
+								salonName: calendarEventData?.salon.name || '',
+								serviceName: calendarEventData?.service?.name,
+								dateTime: getEventDateTimeRange()
+							})}`}
+						</span>
+					}
 				/>
 			)
 		}

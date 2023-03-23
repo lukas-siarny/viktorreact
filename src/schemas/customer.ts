@@ -21,4 +21,4 @@ export const customerSchema = z.object({
 
 export type ICustomerForm = z.infer<typeof customerSchema>
 
-export const validationFn = (values: ICustomerForm, props: any) => zodErrorsToFormErrors(customerSchema, FORM.EMPLOYEE, values, props)
+export const validationCustomerFn = (values: ICustomerForm, props: any) => zodErrorsToFormErrors(customerSchema, FORM.CUSTOMER, values, props)

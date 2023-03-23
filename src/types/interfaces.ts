@@ -125,25 +125,8 @@ export interface IEditEmployeeRoleForm {
 	roleID: string
 }
 
-export interface ICreateUserForm {
-	email: string
-	phonePrefixCountryCode: string
-	phone: string
-	roleID: string
-	assignedCountryCode: string
-}
-
 export interface IEditUserRoleForm {
 	roleID: string
-}
-
-export interface IUserAccountForm {
-	firstName: string
-	lastName: string
-	phonePrefixCountryCode: string
-	phone: string
-	avatar: any
-	assignedCountryCode: string
 }
 
 // type of BE opening hours data
@@ -403,17 +386,12 @@ export interface IStructuredAddress {
 	houseNumber: string | null
 }
 
-export interface INoteForm {
-	note: string
-}
 
 export interface INotinoUserForm {
 	assignedUser: ISelectOptionItem
 }
 
-export interface IOpenHoursNoteForm {
-	openingHoursNote: string
-}
+
 
 export interface ISearchFilter {
 	search: string

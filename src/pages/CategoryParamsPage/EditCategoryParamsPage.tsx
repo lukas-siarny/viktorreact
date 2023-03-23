@@ -22,8 +22,11 @@ import { normalizeNameLocalizations } from '../../utils/helper'
 import { patchReq, deleteReq, postReq } from '../../utils/request'
 
 // types
-import { IBreadcrumbs, ICategoryParamForm } from '../../types/interfaces'
+import { IBreadcrumbs } from '../../types/interfaces'
 import { RootState } from '../../reducers'
+
+// schema
+import { ICategoryParamsForm } from '../../schemas/categoryParams'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
@@ -58,7 +61,7 @@ const EditCategoryParamsPage = () => {
 						data.valueType === PARAMETERS_VALUE_TYPES.ENUM
 							? [{ value: null }]
 							: data.values.map((item) => ({
-									value: item.value,
+									value: Number(item.value),
 									id: item.id
 							  }))
 				})
@@ -70,7 +73,7 @@ const EditCategoryParamsPage = () => {
 		fetchData()
 	}, [fetchData])
 
-	const handleSubmit = async (formData: ICategoryParamForm) => {
+	const handleSubmit = async (formData: ICategoryParamsForm) => {
 		let values: any = []
 		let unitType = null
 
@@ -91,7 +94,7 @@ const EditCategoryParamsPage = () => {
 
 			const hasDiffrenceParameter = difference(formData.nameLocalizations, initFormValues?.nameLocalizations)
 			if (unitType === PARAMETERS_UNIT_TYPES.MINUTES) {
-				const changedValues = values?.filter((obj1: any) => !initFormValues?.values?.some((obj2: any) => obj1.value.toString() === obj2.value.toString()))
+				const changedValues = values?.filter((obj1: any) => !initFormValues?.values?.some((obj2: any) => obj1.value === obj2.value))
 				const requests: any[] = changedValues.map((valueItem: any) => {
 					// Ak existuje ID tak sa urobi update
 					if (valueItem.id) {

@@ -18,7 +18,15 @@ import SpecialistContactFilter from './components/SpecialistContactsFilter'
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, LANGUAGE, CREATE_BUTTON_ID } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { getPrefixCountryCode, getCountryNameFromNameLocalizations, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import {
+	getPrefixCountryCode,
+	getCountryNameFromNameLocalizations,
+	normalizeDirectionKeys,
+	setOrder,
+	sortData,
+	transformToLowerCaseWithoutAccent,
+	formFieldID
+} from '../../utils/helper'
 import i18n from '../../utils/i18n'
 
 // reducers
@@ -28,8 +36,11 @@ import { getSpecialistContacts } from '../../reducers/specialistContacts/special
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
-import { IBreadcrumbs, Columns, ISpecialistContact, ISpecialistContactForm, ISpecialistContactFilter } from '../../types/interfaces'
+import { IBreadcrumbs, Columns, ISpecialistContact, ISpecialistContactFilter } from '../../types/interfaces'
 import { RootState } from '../../reducers'
+
+// schema
+import { ISpecialistContactForm } from '../../schemas/specialist'
 
 // hooks
 import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
@@ -250,7 +261,7 @@ const SpecialistContactsPage = () => {
 										htmlType='button'
 										className={'noti-btn'}
 										icon={<PlusIcon />}
-										id={`${CREATE_BUTTON_ID}-${FORM.SPECIALIST_CONTACT}`}
+										id={formFieldID(FORM.SPECIALIST_CONTACT, CREATE_BUTTON_ID)}
 									>
 										{STRINGS(t).addRecord(t('loc:špecialistu'))}
 									</Button>

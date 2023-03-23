@@ -52,4 +52,4 @@ export type IReservationsForm = z.infer<typeof reservationsSchema> & {
 	eventType: CALENDAR_EVENT_TYPE
 }
 
-export const validationReservationsFn = (values: IReservationsForm, props: any) => zodErrorsToFormErrors(importedReservationSchema, FORM.CALENDAR_RESERVATION_FORM, values, props)
+export const validationReservationsFn = (values: IReservationsForm, props: any) => zodErrorsToFormErrors(reservationsSchema, FORM.CALENDAR_RESERVATION_FORM, values, props)

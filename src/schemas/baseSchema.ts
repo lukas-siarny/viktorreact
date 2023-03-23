@@ -193,3 +193,15 @@ export const localizedValuesConstraint = (required?: boolean, maxLength = VALIDA
 				value: stringConstraint(maxLength)
 			})
 		)
+/**
+ * base select field type for validation without children
+ */
+export const selectOptionItemSchema = z.object({
+	key: z.union([z.string(), z.number()]),
+	label: z.string(),
+	value: z.union([z.string(), z.number()]),
+	disabled: z.boolean().optional(),
+	hardSelected: z.boolean().optional(),
+	className: z.string().optional(),
+	level: z.number().optional()
+})

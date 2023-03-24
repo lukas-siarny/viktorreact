@@ -5,9 +5,6 @@ import { useDispatch } from 'react-redux'
 import CreatePasswordForm from './components/CreatePasswordForm'
 import ForgottenPasswordModal from '../../components/ForgottenPassword/ForgottenPasswordModal'
 
-// inteerfaces
-import { ICreatePasswordForm } from '../../types/interfaces'
-
 // actions
 import { processAuthorizationResult } from '../../reducers/users/userActions'
 
@@ -16,6 +13,9 @@ import { postReq } from '../../utils/request'
 
 // hooks
 import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+
+// schema
+import { ICreatePasswordForm } from '../../schemas/password'
 
 const CreatePasswordPage = () => {
 	const [modalVisible, setModalVisible] = useState(false)

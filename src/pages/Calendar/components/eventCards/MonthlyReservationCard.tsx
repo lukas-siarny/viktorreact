@@ -72,6 +72,15 @@ const MonthlyReservationCard: FC<IMonthlyReservationCardProps> = (props) => {
 		}
 	}
 
+	const employeeName = employee
+		? getAssignedUserLabel({
+				firstName: employee.firstName,
+				lastName: employee.lastName,
+				email: employee.email,
+				id: employee.id
+		  })
+		: ''
+
 	return (
 		<div
 			ref={cardRef}
@@ -86,24 +95,9 @@ const MonthlyReservationCard: FC<IMonthlyReservationCardProps> = (props) => {
 			/>
 			{!isEventsListPopover && <div className={'event-background'} style={{ backgroundColor: bgColor }} />}
 			<div className={'event-content'}>
-				<div className={'event-avatar'}>
-					{avatar && (
-						<img
-							src={avatar}
-							alt={
-								employee
-									? getAssignedUserLabel({
-											firstName: employee.firstName,
-											lastName: employee.lastName,
-											email: employee.email,
-											id: employee.id
-									  })
-									: ''
-							}
-							width={16}
-							height={16}
-						/>
-					)}
+				<div className={'employee-wrapper'}>
+					<div className={'avatar'}>{avatar && <img src={avatar} alt={employeeName} width={16} height={16} />}</div>
+					<span className={'name'}>{employeeName}</span>
 				</div>
 				<div className={'events-stats'}>
 					{isEventsListPopover ? (

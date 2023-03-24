@@ -69,7 +69,7 @@ const getLinkMoreText = (eventsCount?: number) => {
 const dayHeaderContent = (arg: DayHeaderContentArg, openingHoursMap: OpeningHoursMap) => {
 	const { date } = arg || {}
 	const dayNumber = dayjs(date).day()
-	return <div className={cx('nc-month-day-header', { shaded: !openingHoursMap[dayNumber] })}>{dayjs(date).format(CALENDAR_DATE_FORMAT.MONTH_HEADER_DAY_NAME)}</div>
+	return <span className={cx('nc-month-day-header', { shaded: !openingHoursMap[dayNumber] })}>{dayjs(date).format(CALENDAR_DATE_FORMAT.MONTH_HEADER_DAY_NAME)}</span>
 }
 interface IDayCellContent {
 	date: Date
@@ -281,7 +281,7 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 				showNonCurrentDates
 				firstDay={1}
 				dayMaxEvents={5}
-				dayMinWidth={120}
+				dayMinWidth={150}
 				eventOrderStrict
 				eventOrder={isReservationsView ? (reservationOrder as any) : (eventOrder as any)}
 				selectConstraint={CALENDAR_COMMON_SETTINGS.SELECT_CONSTRAINT}

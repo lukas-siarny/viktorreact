@@ -1,5 +1,5 @@
-import React from 'react'
-import { render } from 'react-dom'
+import React, { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
 import * as Sentry from '@sentry/react'
 import { Integrations as TracingIntegrations } from '@sentry/tracing'
 
@@ -49,5 +49,10 @@ Sentry.init({
 	tracesSampleRate: 0.05
 })
 
-const app = <App />
-render(app, document.getElementById('root'))
+const root = createRoot(document.getElementById('root') as HTMLElement)
+
+root.render(
+	<StrictMode>
+		<App />
+	</StrictMode>
+)

@@ -13,8 +13,8 @@ export const customerSchema = z.object({
 	city: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100),
 	zipCode: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_10),
 	streetNumber: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_10),
-	countryCode: twoCharsConstraint.optional(),
-	gender: z.nativeEnum(GENDER).optional(),
+	countryCode: twoCharsConstraint.nullish(),
+	gender: z.nativeEnum(GENDER).nullish(),
 	gallery: imageConstraint.nullish().array().max(100).optional(),
 	avatar: imageConstraint.array().max(1).nullish()
 })

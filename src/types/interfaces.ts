@@ -313,9 +313,6 @@ export interface IRegistrationForm {
 	marketing: boolean
 }
 
-export interface IForgotPasswordForm {
-	email: string
-}
 
 export interface IActivationForm {
 	code: string
@@ -327,23 +324,12 @@ export interface IJwtPayload {
 	iat: number
 	uid: string
 }
-export interface ICreatePasswordForm {
-	password: string
-	confirmPassword: string
-}
-export interface IForgotPasswordForm {
-	email: string
-}
 
 export interface ILoadingAndFailure {
 	isLoading: boolean
 	isFailure: boolean
 }
 
-export interface IConfirmUserForm extends ICreatePasswordForm {
-	name: string
-	surname: string
-}
 
 export interface IBreadcrumbItem {
 	name: string

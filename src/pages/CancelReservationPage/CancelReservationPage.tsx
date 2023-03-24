@@ -213,7 +213,7 @@ const CancelReservationPage = () => {
 		;(async () => {
 			setIsLoading(true)
 			try {
-				const { data } = await getReq('/api/b2c/web/calendar-events/reservations/{calendarEventID}' as any, { calendarEventID }, REQUESTS_CONFIG)
+				const { data } = await getReq('/api/b2c/web/calendar-events/reservations/{calendarEventID}', { calendarEventID }, REQUESTS_CONFIG)
 				setCalendarEventData(fakeData.reservation)
 				setView('default')
 			} catch (e) {
@@ -232,7 +232,7 @@ const CancelReservationPage = () => {
 		setIsConfirmModalOpen(false)
 		setIsLoading(true)
 		try {
-			await patchReq('/api/b2c/web/calendar-events/reservations/{calendarEventID}/cancel' as any, { calendarEventID }, {}, REQUESTS_CONFIG)
+			await patchReq('/api/b2c/web/calendar-events/reservations/{calendarEventID}/cancel', { calendarEventID }, {}, REQUESTS_CONFIG)
 			setView('success')
 		} catch (e) {
 			// eslint-disable-next-line no-console
@@ -299,7 +299,7 @@ const CancelReservationPage = () => {
 						{employeeName && (
 							<div className={'flex items-start gap-2'}>
 								<EmployeeIcon width={16} height={16} />
-								{t('loc:službu vykonáva {{ employeeName }}', { employeeName })}
+								{t('loc:Obslúži vás {{ employeeName }}', { employeeName })}
 							</div>
 						)}
 					</div>
@@ -369,12 +369,8 @@ const CancelReservationPage = () => {
 		}
 
 		if (view === 'error') {
-			return (
-				<Result
-					status='500'
-					subTitle={<span className={'text-gray-600 text-base'}>{t('loc:Rezervácia je už zrušená alebo platnosť odkazu na zrušenie rezervácie už vypršala')}</span>}
-				/>
-			)
+			return <Result status='500' subTitle={<span className={'text-gray-600 text-base'}>{t('loc:Nepodarilo sa zobraziť rezerváciu')}</span>} />
+			// redirect to support page
 		}
 
 		if (view === 'success') {

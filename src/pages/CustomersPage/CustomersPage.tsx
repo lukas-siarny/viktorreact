@@ -39,7 +39,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 	const [uploadStatus, setUploadStatus] = useState<UPLOAD_STATUS | undefined>(undefined)
-	const [salonImportsModalVisible, setSalonImportsModalVisible] = useState(false)
+	const [customersImportVisible, setCustomersImportVisible] = useState(false)
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam(),
@@ -174,8 +174,8 @@ const CustomersPage = (props: SalonSubPageProps) => {
 				label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv' })}
 				accept={'.csv'}
 				title={t('loc:Importovať zákazníkov')}
-				visible={salonImportsModalVisible}
-				setVisible={setSalonImportsModalVisible}
+				visible={customersImportVisible}
+				setVisible={setCustomersImportVisible}
 				onSubmit={clientImportsSubmit}
 			/>
 			<Row>
@@ -189,7 +189,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 								allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_CREATE]}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<CustomersFilter
-										openClientImportsModal={() => setSalonImportsModalVisible(true)}
+										openClientImportsModal={() => setCustomersImportVisible(true)}
 										onSubmit={handleSubmit}
 										total={customers?.data?.pagination?.totalCount}
 										createCustomer={() => {

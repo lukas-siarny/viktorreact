@@ -24,7 +24,6 @@ import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.sv
 
 // types
 import { IEnumerationsCountriesPayload, ILoadingAndFailure, ISmsUnitPricesForm } from '../../../types/interfaces'
-import { ISmsUnitPricesActualPayload } from '../../../reducers/smsUnitPrices/smsUnitPricesActions'
 
 // validate
 import validateSmsUnitPricesForm from './validateSmsUnitPricesForm'
@@ -36,23 +35,14 @@ type ComponentProps = {
 	disabledForm?: boolean
 	currencySymbol?: string
 	countries: IEnumerationsCountriesPayload & ILoadingAndFailure
-	smsUnitPricesActual?: ISmsUnitPricesActualPayload['data']
-	isCreate?: boolean
+	isEmptyCountry?: boolean
 }
 
 type Props = InjectedFormProps<ISmsUnitPricesForm, ComponentProps> & ComponentProps
 
 const SmsUnitPricesForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, change, smsUnitPriceID, changeFormVisibility, onDelete, submitting, pristine, disabledForm, currencySymbol, countries, smsUnitPricesActual, isCreate } =
-		props
-
-	const countriesOptions = countries.enumerationsOptions.map((country) => {
-		return {
-			...country,
-			disabled: !!smsUnitPricesActual?.find((smsUnitPrice) => smsUnitPrice.country.code === country.value)
-		}
-	})
+	const { handleSubmit, change, smsUnitPriceID, changeFormVisibility, onDelete, submitting, pristine, disabledForm, currencySymbol, countries, isEmptyCountry } = props
 
 	return (
 		<Form layout={'vertical'} className={'w-full top-0 sticky pt-1 px-6 pb-6 -mx-6'} onSubmitCapture={handleSubmit}>
@@ -75,7 +65,7 @@ const SmsUnitPricesForm: FC<Props> = (props) => {
 					size={'large'}
 					loading={countries?.isLoading}
 					required
-					disabled={!isCreate}
+					disabled
 				/>
 				<Field
 					component={InputNumberField}
@@ -97,7 +87,7 @@ const SmsUnitPricesForm: FC<Props> = (props) => {
 					name={'validFrom'}
 					size={'large'}
 					picker={'month'}
-					disabled={disabledForm}
+					disabled={disabledForm || isEmptyCountry}
 					required
 					dateFormat={MONTH_NAME_YEAR_FORMAT}
 					customOnChange={(value: Dayjs | null) => {

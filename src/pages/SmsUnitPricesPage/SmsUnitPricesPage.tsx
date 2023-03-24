@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Col, Divider, Row, Spin, TablePaginationConfig } from 'antd'
+import { Col, Row, Spin, TablePaginationConfig } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { SorterResult } from 'antd/lib/table/interface'
@@ -8,7 +8,6 @@ import dayjs from 'dayjs'
 import { ColumnProps } from 'antd/es/table'
 import { useNavigate } from 'react-router'
 import { initialize } from 'redux-form'
-import cx from 'classnames'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -16,139 +15,22 @@ import CustomTable from '../../components/CustomTable'
 import SmsUnitPricesFilter from './components/SmsUnitPricesFilter'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, FORM, D_M_YEAR_FORMAT, CREATE_BUTTON_ID, STRINGS } from '../../utils/enums'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, FORM, D_M_YEAR_FORMAT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent, getLinkWithEncodedBackUrl, formFieldID } from '../../utils/helper'
+import { normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent, getLinkWithEncodedBackUrl } from '../../utils/helper'
 
 // assets
 import { ReactComponent as ChevronLeftIcon } from '../../assets/icons/chevron-left-16.svg'
-import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // reducers
 import { getSmsUnitPricesActual, ISmsUnitPricesActualPayload } from '../../reducers/smsUnitPrices/smsUnitPricesActions'
 
 // types
-import { IBreadcrumbs, ISmsUnitPricesForm, ISpecialistContactFilter } from '../../types/interfaces'
+import { IBreadcrumbs, ISpecialistContactFilter } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
 // hooks
 import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
-import SmsUnitPricesForm from './components/SmsUnitPricesForm'
-import { postReq } from '../../utils/request'
-
-const fakeData = [
-	{
-		actual: {
-			id: '7b22aad6-be64-4f7f-92a2-00f03e72164e',
-			validFrom: '2023-03-01',
-			validTo: '2023-03-31',
-			amount: 99
-		},
-		next: {
-			id: '13c18e38-700c-49c0-b694-0923c3f21868',
-			validFrom: '2023-04-01',
-			validTo: '2023-04-30',
-			amount: 30
-		},
-		country: {
-			code: 'BG',
-			name: 'Bulharsko',
-			flag: 'https://d1pfrdq2i86yn4.cloudfront.net/flags/sm/BG.png',
-			currencyCode: 'BGN'
-		}
-	},
-	{
-		actual: {
-			id: '171a68d9-4e4a-47a1-9eb6-877eeddcd6aa',
-			validFrom: '2023-02-28',
-			validTo: '2023-05-31',
-			amount: 50
-		},
-		next: {
-			id: 'a0b79b7c-5cb6-40f8-a3b1-5e688844042f',
-			validFrom: '2023-06-01',
-			amount: 30
-		},
-		country: {
-			code: 'CZ',
-			name: 'Česko',
-			flag: 'https://d1pfrdq2i86yn4.cloudfront.net/flags/sm/CZ.png',
-			currencyCode: 'CZK'
-		}
-	},
-	{
-		actual: {
-			id: '57aa6cfd-574f-464e-9840-6dabaa36832a',
-			validFrom: '2023-03-01',
-			validTo: '2023-05-31',
-			amount: 25
-		},
-		next: {
-			id: 'cdaa0a06-333a-4af6-93f2-7dd87922ff14',
-			validFrom: '2023-06-01',
-			amount: 999999999
-		},
-		country: {
-			code: 'HU',
-			name: 'Maďarsko',
-			flag: 'https://d1pfrdq2i86yn4.cloudfront.net/flags/sm/HU.png',
-			currencyCode: 'HUF'
-		}
-	},
-	/* {
-		actual: {
-			id: '44075615-2c6f-4281-92fb-f16d251a6ba8',
-			validFrom: '2023-03-05',
-			validTo: '2023-04-30',
-			amount: 50
-		},
-		next: {
-			id: 'a8e2be91-bf0e-410a-b759-c43bb0dce7a8',
-			validFrom: '2023-05-01',
-			validTo: '2023-11-30',
-			amount: 20
-		},
-		country: {
-			code: 'IT',
-			name: 'Taliansko',
-			flag: 'https://d1pfrdq2i86yn4.cloudfront.net/flags/sm/IT.png',
-			currencyCode: 'EUR'
-		}
-	}, */
-	{
-		actual: {
-			id: '00000000-0000-0000-0000-000000000004',
-			validFrom: '2023-01-01',
-			amount: 0.2
-		},
-		country: {
-			code: 'RO',
-			name: 'Rumunsko',
-			flag: 'https://d1pfrdq2i86yn4.cloudfront.net/flags/sm/RO.png',
-			currencyCode: 'RON'
-		}
-	},
-	{
-		actual: {
-			id: 'b25afaea-40b8-40f1-8bd5-42a10e2b9f21',
-			validFrom: '2023-02-28',
-			validTo: '2023-03-31',
-			amount: 50
-		},
-		next: {
-			id: '8be6efa6-a630-4ff8-bbed-fbaea10bdc7c',
-			validFrom: '2023-04-01',
-			validTo: '2023-06-30',
-			amount: 0.04
-		},
-		country: {
-			code: 'SK',
-			name: 'Slovensko',
-			flag: 'https://d1pfrdq2i86yn4.cloudfront.net/flags/sm/SK.png',
-			currencyCode: 'EUR'
-		}
-	}
-]
 
 type TableDataItem = NonNullable<ISmsUnitPricesActualPayload['data']>[0] & { key: string }
 
@@ -157,20 +39,12 @@ const SmsUnitPricesPage = () => {
 	const dispatch = useDispatch()
 
 	const smsUnitPricesActual = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPricesActual)
-	/* const smsUnitPricesActual = {
-		data: fakeData,
-		isLoading: false,
-		isFailure: false
-	} */
 	const currencies = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.CURRENCIES])
-	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam(),
 		order: StringParam('country:ASC')
 	})
-
-	const [visibleForm, setVisibleForm] = useState<boolean>(false)
 
 	const navigate = useNavigate()
 
@@ -205,7 +79,7 @@ const SmsUnitPricesPage = () => {
 		// transform to table data
 		return source?.map((item) => ({
 			...item,
-			key: item.actual.id
+			key: item.country.code
 		}))
 	}, [query.search, smsUnitPricesActual])
 
@@ -254,6 +128,11 @@ const SmsUnitPricesPage = () => {
 			width: '20%',
 			render: (_value, record) => {
 				const value = record.actual
+
+				if (!value) {
+					return '-'
+				}
+
 				const { currencyCode } = record.country
 				const currency = currencies.data?.find((item) => item.code === currencyCode)
 				return `${value.amount} ${currency?.symbol || ''}`
@@ -267,7 +146,7 @@ const SmsUnitPricesPage = () => {
 			sorter: false,
 			width: '30%',
 			render: (_value, record) => {
-				return <div style={{ marginLeft: '20%' }}>{dayjs(record.actual.validFrom).format(D_M_YEAR_FORMAT)}</div>
+				return <div style={{ marginLeft: '20%' }}>{record?.actual?.validFrom ? dayjs(record.actual.validFrom).format(D_M_YEAR_FORMAT) : ''}</div>
 			}
 		},
 		{
@@ -297,30 +176,6 @@ const SmsUnitPricesPage = () => {
 		}
 	]
 
-	const changeFormVisibility = (show?: boolean) => {
-		if (!show) {
-			setVisibleForm(false)
-			dispatch(initialize(FORM.SMS_UNIT_PRICES_FORM, {}))
-			return
-		}
-
-		setVisibleForm(true)
-	}
-
-	const handleSubmit = async (formData: ISmsUnitPricesForm) => {
-		try {
-			await postReq('/api/b2b/admin/enums/sms-unit-prices/', null, { amount: formData.amount, validFrom: formData.validFrom, countryCode: formData.countryCode })
-			navigate(`/${t('loc:sms-credits')}/${formData.countryCode.toLocaleLowerCase()}`)
-		} catch (error: any) {
-			// eslint-disable-next-line no-console
-			console.error(error.message)
-		}
-	}
-
-	const formClass = cx({
-		'w-2/3 xl:w-1/2': visibleForm
-	})
-
 	return (
 		<>
 			<Row>
@@ -334,56 +189,29 @@ const SmsUnitPricesPage = () => {
 								onSubmit={(values: ISpecialistContactFilter) => {
 									setQuery({ ...query, search: values.search })
 								}}
-								addButton={
-									<Button
-										onClick={() => {
-											dispatch(initialize(FORM.SMS_UNIT_PRICES_FORM, {}))
-											changeFormVisibility(true)
-										}}
-										type='primary'
-										htmlType='button'
-										className={'noti-btn'}
-										icon={<PlusIcon />}
-										id={formFieldID(FORM.SMS_UNIT_PRICES_FORM, CREATE_BUTTON_ID)}
-									>
-										{STRINGS(t).addRecord(t('loc:cenu'))}
-									</Button>
-								}
 							/>
 							<div className={'w-full flex'}>
-								<div className={cx(formClass, { 'mb-4': visibleForm })}>
-									<CustomTable<TableDataItem>
-										className='table-fixed'
-										columns={columns}
-										onChange={onChangeTable}
-										dataSource={tableData}
-										rowClassName={'clickable-row'}
-										twoToneRows
-										rowKey={(record) => `${record.actual.id}_${record.country.code}`}
-										pagination={false}
-										onRow={(record) => {
-											return {
-												onClick: () => {
-													navigate(
-														getLinkWithEncodedBackUrl(t('paths:sms-credits/{{countryCode}}', { countryCode: record.country.code.toLocaleLowerCase() }))
-													)
-												}
+								<CustomTable<TableDataItem>
+									className='table-fixed'
+									columns={columns}
+									onChange={onChangeTable}
+									dataSource={tableData}
+									rowClassName={'clickable-row'}
+									twoToneRows
+									// TODO: update testov
+									rowKey={(record) => (record.actual?.id ? `${record.actual.id}_${record.country.code}` : record.country.code)}
+									pagination={false}
+									onRow={(record) => {
+										return {
+											className: !record.actual && !record.next ? 'noti-table-row-warning' : undefined,
+											onClick: () => {
+												navigate(
+													getLinkWithEncodedBackUrl(t('paths:sms-credits/{{countryCode}}', { countryCode: record.country.code.toLocaleLowerCase() }))
+												)
 											}
-										}}
-									/>
-								</div>
-								{visibleForm ? (
-									<div className={'w-6/12 flex justify-around items-start'}>
-										<Divider className={'h-full mx-6 xl:mx-9'} type={'vertical'} />
-										<SmsUnitPricesForm
-											isCreate
-											countries={countries}
-											changeFormVisibility={changeFormVisibility}
-											onSubmit={handleSubmit}
-											smsUnitPricesActual={smsUnitPricesActual.data}
-										/>
-									</div>
-								) : undefined}
+										}
+									}}
+								/>
 							</div>
 						</Spin>
 					</div>

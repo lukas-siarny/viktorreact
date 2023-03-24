@@ -35,7 +35,7 @@ const SmsStats = (props: Props) => {
 	useEffect(() => {
 		;(async () => {
 			const { data } = await dispatch(getSmsStats(salonID))
-			const priceId = data?.currentSmsUnitPrice.id
+			const priceId = data?.currentSmsUnitPrice?.id
 			if (priceId) {
 				dispatch(getSmsUnitPrice(priceId))
 			}
@@ -61,7 +61,7 @@ const SmsStats = (props: Props) => {
 					</div>
 					<div className={'flex justify-between gap-2 flex-1 items-center'}>
 						{validPriceLabel}
-						<span className={'text-lg font-bold leading-5 text-right'}>{stats.data?.currentSmsUnitPrice.formattedAmount}</span>
+						<span className={'text-lg font-bold leading-5 text-right'}>{stats.data?.currentSmsUnitPrice?.formattedAmount || '-'}</span>
 					</div>
 				</div>
 				<p className={'text-right text-notino-grayDark mb-0 mt-4'}>{t('loc:Ceny sú uvedené v rámci DPH')}</p>

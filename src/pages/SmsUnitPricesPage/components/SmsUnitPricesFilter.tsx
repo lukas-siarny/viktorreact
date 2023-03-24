@@ -14,23 +14,21 @@ import InputField from '../../../atoms/InputField'
 // types
 import { ISmsUnitPricesFilter } from '../../../types/interfaces'
 
-type ComponentProps = {
-	addButton: React.ReactNode
-}
+type ComponentProps = {}
 
 type Props = InjectedFormProps<ISmsUnitPricesFilter, ComponentProps> & ComponentProps
 
 const fixLength100 = validationString(100)
 
 const SmsUnitPricesFilter = (props: Props) => {
-	const { handleSubmit, addButton } = props
+	const { handleSubmit } = props
 	const [t] = useTranslation()
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0 flex gap-4 justify-between items-center'}>
 			<h3 className={'text-base whitespace-nowrap'}>{t('loc:Ceny SMS správ')}</h3>
 			<div className='flex-1 flex justify-end'>
-				<Col span={24} lg={16} xxl={12} className={'flex items-center gap-4'}>
+				<Col span={24} lg={12} xxl={8}>
 					<Field
 						className={'h-10 p-0 m-0 w-full'}
 						component={InputField}
@@ -41,7 +39,6 @@ const SmsUnitPricesFilter = (props: Props) => {
 						search
 						validate={fixLength100}
 					/>
-					{addButton}
 				</Col>
 			</div>
 		</Form>

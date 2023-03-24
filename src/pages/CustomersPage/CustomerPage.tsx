@@ -107,7 +107,7 @@ const CustomerPage = (props: Props) => {
 					city: data.city,
 					countryCode: data.countryCode,
 					firstName: data.firstName,
-					gender: data.gender, // ?? undefined,
+					gender: data.gender as any, // NOTE: In Swagger scheme missing nullable definition, but API accepts null value
 					lastName: data.lastName,
 					note: data.note,
 					street: data.street,

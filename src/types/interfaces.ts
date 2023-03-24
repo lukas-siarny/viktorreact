@@ -120,9 +120,6 @@ export type EmployeeServiceData = {
 }
 
 export type IEmployeeServiceEditForm = EmployeeServiceData & {}
-export interface IEditEmployeeRoleForm {
-	roleID: string
-}
 
 export interface IEditUserRoleForm {
 	roleID: string
@@ -304,40 +301,11 @@ export interface ISupportContactForm {
 	emails: { email: string }[]
 }
 
-export interface IForgotPasswordForm {
-	email: string
-}
-
-
-export interface IBillingForm {
-	countryCode?: string
-	zipCode?: string
-	city?: string
-	street?: string
-	streetNumber?: string
-	email?: string
-	firstName?: string
-	lastName?: string
-	phonePrefixCountryCode?: string
-	phone?: string
-	businessID?: string
-	taxID?: string
-	vatID?: string
-	companyName?: string
-}
-
 export interface IJwtPayload {
 	aud: string
 	exp: number
 	iat: number
 	uid: string
-}
-export interface ICreatePasswordForm {
-	password: string
-	confirmPassword: string
-}
-export interface IForgotPasswordForm {
-	email: string
 }
 
 export interface ILoadingAndFailure {
@@ -345,10 +313,6 @@ export interface ILoadingAndFailure {
 	isFailure: boolean
 }
 
-export interface IConfirmUserForm extends ICreatePasswordForm {
-	name: string
-	surname: string
-}
 
 export interface IBreadcrumbItem {
 	name: string

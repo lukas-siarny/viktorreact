@@ -22,7 +22,6 @@ import {
 	EmployeeService,
 	EmployeeServiceData,
 	IBreadcrumbs,
-	IEditEmployeeRoleForm,
 	IEmployeePayload,
 	IEmployeeServiceEditForm,
 	ISelectOptionItem,
@@ -63,6 +62,7 @@ import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.sv
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+import { IEditRoleForm } from '../../schemas/role'
 
 type Props = SalonSubPageProps
 
@@ -427,14 +427,14 @@ const EmployeePage = (props: Props) => {
 		}
 	}
 
-	const editEmployeeRole = async (data: IEditEmployeeRoleForm) => {
+	const editEmployeeRole = async (data: IEditRoleForm) => {
 		try {
 			setSubmitting(true)
 			await patchReq(
 				'/api/b2b/admin/employees/{employeeID}/role',
 				{ employeeID: employeeID as string },
 				{
-					roleID: data?.roleID
+					roleID: data.roleID
 				}
 			)
 			dispatch(getEmployee(employeeID as string))

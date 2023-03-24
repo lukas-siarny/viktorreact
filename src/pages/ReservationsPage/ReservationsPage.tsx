@@ -207,7 +207,7 @@ const ReservationsPage = (props: Props) => {
 							fallBackSrc={value?.image?.original}
 						/>
 						{value.deletedAt ? (
-							<Tooltip title={t('loc:Záznam kolega je zmazaný')}>
+							<Tooltip title={t('loc:Priradený kolega je vymazaný zo salónu')}>
 								<div className={'text-trueGray-400'}>{getAssignedUserLabel(value)}</div>
 							</Tooltip>
 						) : (

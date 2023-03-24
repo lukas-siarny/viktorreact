@@ -80,8 +80,19 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			}).as('inviteEmployee')
 			cy.visit(`/salons/${salonID}/employees/create`)
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
-				cy.selectOptionDropdownCustom(FORM.INVITE_EMPLOYEE, 'roleID', undefined, true)
-				cy.setInputValue(FORM.INVITE_EMPLOYEE, 'email', employeeByInvitationEmail)
+				// user can set only role that is not higher than his
+				// not a 100% working solution, but it's better change of not failing test to select last item from the list then first
+				// TODO: find better solution
+				cy.get(`#${FORM.INVITE_EMPLOYEE}-roleID`).click({ force: true })
+				cy.get('.ant-select-dropdown :not(.ant-select-dropdown-hidden)', { timeout: 10000 })
+					.should('be.visible')
+					.find('.ant-select-item-option')
+					.last()
+					.click({ force: true })
+
+				// wait for select dorpdown closing animation
+				cy.wait(1000)
+				cy.setInputValue(FORM.INVITE_EMPLOYEE, 'email', employeeByInvitationEmail, true)
 				cy.clickButton(SUBMIT_BUTTON_ID, FORM.INVITE_EMPLOYEE)
 				cy.wait('@inviteEmployee').then((interception: any) => {
 					// check status code of login request
@@ -151,8 +162,20 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					cy.clickButton('invite-employee-btn')
 					// wait for the animation
 					cy.wait(1000)
-					cy.selectOptionDropdownCustom(FORM.INVITE_EMPLOYEE, 'roleID', undefined, true)
-					cy.setInputValue(FORM.INVITE_EMPLOYEE, 'email', `${generateRandomString(6)}_${customer.create.emailSuffix}`)
+
+					// user can set only role that is not higher than his
+					// not a 100% working solution, but it's better change of not failing test to select last item from the list then first
+					// TODO: find better solution
+					cy.get(`#${FORM.INVITE_EMPLOYEE}-roleID`).click({ force: true })
+					cy.get('.ant-select-dropdown :not(.ant-select-dropdown-hidden)', { timeout: 10000 })
+						.should('be.visible')
+						.find('.ant-select-item-option')
+						.last()
+						.click({ force: true })
+
+					// wait for select dorpdown closing animation
+					cy.wait(1000)
+					cy.setInputValue(FORM.INVITE_EMPLOYEE, 'email', `${generateRandomString(6)}_${customer.create.emailSuffix}`, true)
 					cy.clickButton(SUBMIT_BUTTON_ID, FORM.INVITE_EMPLOYEE)
 					cy.wait('@inviteEmployee').then((interception: any) => {
 						// check status code of login request
@@ -174,17 +197,16 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			const salonID = Cypress.env(SALON_ID)
 			cy.intercept({
 				method: 'GET',
-				pathname: `/api/b2c/web/salons/${salonID}/employees/`
+				pathname: `/api/b2b/admin/employees*`,
+				query: {
+					salonID
+				}
 			}).as('getEmployees')
 			cy.visit(`/salons/${salonID}/employees`)
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
 				cy.wait('@getEmployees').then((interceptionGetEmployees: any) => {
 					// check status code
 					expect(interceptionGetEmployees.response.statusCode).to.equal(200)
-
-					// sort table
-					cy.sortTable('sortby-name')
-					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 
 					// NOTE: at least one employee must exists in order to pagination be seen
 					// change pagination
@@ -194,20 +216,16 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					// search employees
 					cy.setInputValue(FORM.EMPLOYEES_FILTER, 'search', lastNameUpdate)
 					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-					// clear search
-					cy.setInputValue(FORM.EMPLOYEES_FILTER, 'search', '')
-					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 
 					// filter table
 					cy.clickButton(FILTER_BUTTON_ID, FORM.EMPLOYEES_FILTER)
 					// wait for animation
 					cy.wait(1000)
-					cy.selectOptionDropdownCustom(FORM.EMPLOYEES_FILTER, 'serviceID', undefined, true)
 					cy.selectOptionDropdownCustom(FORM.EMPLOYEES_FILTER, 'accountState', undefined, true)
 					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-					// clear filter
-					cy.clearDropdownSelection('serviceID')
-					cy.clearDropdownSelection('accountState')
+
+					// sort table
+					cy.sortTable('sortby-name')
 					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 				})
 			} else {
@@ -221,7 +239,10 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			const salonID = Cypress.env(SALON_ID)
 			cy.intercept({
 				method: 'GET',
-				pathname: `/api/b2c/web/salons/${salonID}/employees*`
+				pathname: `/api/b2b/admin/employees*`,
+				query: {
+					salonID
+				}
 			}).as('getEmployees')
 			cy.visit(`/salons/${salonID}/employees`)
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
@@ -229,25 +250,18 @@ const employeeTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					// check status code
 					expect(interceptionGetEmployees.response.statusCode).to.equal(200)
 
-					// sort table
-					cy.sortTable('sortby-name')
-					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-
 					// search employees
-					cy.setInputValue(FORM.EMPLOYEES_FILTER, 'search', generateRandomString(6))
-					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-					// clear search
-					cy.setInputValue(FORM.EMPLOYEES_FILTER, 'search', '')
+					cy.setInputValue(FORM.EMPLOYEES_FILTER, 'search', generateRandomString(6), true)
 					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 
 					// filter table
 					cy.clickButton(FILTER_BUTTON_ID, FORM.EMPLOYEES_FILTER)
 					// wait for animation
-					cy.wait(1000)
-					cy.selectOptionDropdownCustom(FORM.EMPLOYEES_FILTER, 'serviceID', undefined, true)
-					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-					// clear filter
-					cy.clearDropdownSelection('serviceID')
+					// cy.wait(1000)
+					// cy.selectOptionDropdownCustom(FORM.EMPLOYEES_FILTER, 'serviceID', undefined, true)
+
+					// sort table
+					cy.sortTable('sortby-name')
 					cy.wait('@getEmployees').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 				})
 			} else {

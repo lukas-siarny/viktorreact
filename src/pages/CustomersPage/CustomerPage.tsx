@@ -152,7 +152,7 @@ const CustomerPage = (props: Props) => {
 			<Spin spinning={isLoading}>
 				<div className='content-body small'>
 					<CustomerForm onSubmit={updateCustomer} />
-					<div className={'content-footer'}>
+					<div className={'content-footer'} id={'content-footer-container'}>
 						<div className={'flex flex-col gap-2 md:flex-row md:justify-between'}>
 							<DeleteButton
 								permissions={[PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_DELETE]}

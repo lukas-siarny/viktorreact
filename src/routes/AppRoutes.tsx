@@ -95,7 +95,7 @@ const AppRoutes: FC = () => {
 				>
 					<Route path={t('paths:contact')} element={<ContactPage />} />
 				</Route>
-				<Route element={<PublicRoute redirectLoggedInUser={false} layout={PublicLayout} className={'noti-cancel-reservation-page'} />}>
+				<Route element={<CancelReservationRoute layout={PublicLayout} className={'noti-cancel-reservation-page'} />}>
 					<Route path={t('paths:cancel-reservation')} element={<CancelReservationPage />} />
 				</Route>
 				{/* // Private Routes */}

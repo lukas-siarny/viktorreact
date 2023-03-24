@@ -56,6 +56,8 @@ services:
       - SMTP_HOST=$BITBUCKET_DOCKER_HOST_INTERNAL
       # mail server is running with cypress test define in cypress plugins
       - SMTP_PORT=7777
+      - BASIC_MAINTENANCE_USERNAME=admin
+      - BASIC_MAINTENANCE_PASSWORD=Lopaty123.
     depends_on:
       - "localstack"
       - "redis"

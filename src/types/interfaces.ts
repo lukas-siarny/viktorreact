@@ -121,9 +121,6 @@ export type EmployeeServiceData = {
 }
 
 export type IEmployeeServiceEditForm = EmployeeServiceData & {}
-export interface IEditEmployeeRoleForm {
-	roleID: string
-}
 
 export interface IEditUserRoleForm {
 	roleID: string
@@ -319,23 +316,6 @@ export interface IRegistrationForm {
 
 export interface IActivationForm {
 	code: string
-}
-
-export interface IBillingForm {
-	countryCode?: string
-	zipCode?: string
-	city?: string
-	street?: string
-	streetNumber?: string
-	email?: string
-	firstName?: string
-	lastName?: string
-	phonePrefixCountryCode?: string
-	phone?: string
-	businessID?: string
-	taxID?: string
-	vatID?: string
-	companyName?: string
 }
 
 export interface IJwtPayload {

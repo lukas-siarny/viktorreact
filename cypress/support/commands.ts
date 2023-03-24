@@ -1,3 +1,4 @@
+import { includes } from 'lodash'
 /* eslint-disable import/no-extraneous-dependencies */
 import 'cypress-localstorage-commands'
 import '@goodrequest/antd-form-fields'
@@ -110,9 +111,15 @@ Cypress.Commands.add('sortTable', (key: string, tableKey = '.ant-table') => {
 Cypress.Commands.add('changePagination', (limit: 25 | 50 | 100 = 25, tableKey = '.noti-table-wrapper', useCustomPagination = true) => {
 	if (useCustomPagination) {
 		cy.get(tableKey).find('.table-footer-custom-pagination .custom-dropdown').as('customDropdown')
-		cy.get('@customDropdown').click({ force: true })
+		cy.get('@customDropdown').find('button.selector').click({ force: true })
 		cy.get('@customDropdown').find('.custom-dropdown-menu').should('be.visible')
-		cy.get('@customDropdown').find('li').should('include.text', limit).click({ force: true })
+		cy.get('@customDropdown')
+			.find('li')
+			.each((el: any) => {
+				if (el.text().includes(limit)) {
+					cy.wrap(el).click({ force: true })
+				}
+			})
 	} else {
 		// TODO: pre antd paginaciu
 	}

@@ -27,6 +27,10 @@ const salonSubTests: ITests[] = [
 	{
 		name: SALON_TESTS_SUITS.RESERVATIONS,
 		actions: [CRUD_OPERATIONS.ALL]
+	},
+	{
+		name: SALON_TESTS_SUITS.SMS_CREDIT,
+		actions: [CRUD_OPERATIONS.ALL]
 	}
 ]
 

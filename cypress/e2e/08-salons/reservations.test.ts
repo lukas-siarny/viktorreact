@@ -13,7 +13,7 @@ const reservationsTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 				url: `/api/b2b/admin/salons/${salonID}/calendar-events/paginated*`
 			}).as('filterReservations')
 			cy.visit(`/salons/${salonID}/reservations`)
-			// cy.wait('@filterReservations')
+			cy.wait('@filterReservations')
 			cy.selectOptionDropdown(FORM.RESERVATIONS_FILTER, 'reservationStates', reservations.filter.reservationStates)
 			cy.selectOptionDropdown(FORM.RESERVATIONS_FILTER, 'reservationPaymentMethods', reservations.filter.reservationPaymentMethods)
 			cy.selectOptionDropdown(FORM.RESERVATIONS_FILTER, 'reservationCreateSourceType', reservations.filter.reservationCreateSourceType)
@@ -33,14 +33,18 @@ const reservationsTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			}).as('updateReservationsSettings')
 			cy.intercept({
 				method: 'GET',
-				url: `/api/b2b/admin/salons/${salonID}`
+				pathname: `/api/b2b/admin/salons/${salonID}`
 			}).as('getSalon')
 			cy.visit(`/salons/${salonID}/reservations-settings`)
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
 				cy.wait('@getSalon').then(() => {
 					// wait for animations
 					cy.wait(2000)
-					cy.clickButton('enabledReservations', FORM.RESEVATION_SYSTEM_SETTINGS, true)
+					cy.get(`#${FORM.RESEVATION_SYSTEM_SETTINGS}-enabledReservations > button`).then(($element) => {
+						if (!$element.hasClass('ant-switch-checked')) {
+							cy.wrap($element).click()
+						}
+					})
 					cy.setInputValue(FORM.RESEVATION_SYSTEM_SETTINGS, 'maxDaysB2cCreateReservation', reservations.update.maxDaysB2cCreateReservation, false, true)
 					cy.setInputValue(
 						FORM.RESEVATION_SYSTEM_SETTINGS,

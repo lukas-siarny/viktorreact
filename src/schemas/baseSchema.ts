@@ -3,6 +3,7 @@ import { FormErrors, DecoratedFormProps } from 'redux-form'
 import { z, ZodString, ZodOptional, ZodNullable, ZodTypeAny } from 'zod'
 import { set } from 'lodash'
 import { FORM, LANGUAGE, VALIDATION_MAX_LENGTH } from '../utils/enums'
+import passwordRegEx from '../utils/regex'
 
 /**
  * Serialize args for i18next.t function
@@ -165,6 +166,14 @@ export function stringConstraint<T extends true | false>(maxLength: number, requ
 }
 
 export const emailConstraint = z.string().email().trim().max(VALIDATION_MAX_LENGTH.LENGTH_255)
+
+export const passwordConstraint = z.string().regex(passwordRegEx, serializeValidationMessage('loc:Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak'))
+
+/**
+ * Constraint for checking checking two characters (min(2) & max(2)) length string (eg: counryCode, phonePrefix...
+ * DEFAULT: required
+ */
+export const twoCharsConstraint = z.string().length(VALIDATION_MAX_LENGTH.LENGTH_2)
 
 /**
  * Constraint for array fields where values can be translated into every supported language.

@@ -41,4 +41,4 @@ export type ICategoryForm = z.infer<typeof categorySchema> & {
 	categoryParameterID: string
 }
 
-export const validationFn = (values: ICategoryForm, props: any) => zodErrorsToFormErrors(categorySchema, FORM.CATEGORY, values, props)
+export const validationCategoryFn = (values: ICategoryForm, props: any) => zodErrorsToFormErrors(categorySchema, FORM.CATEGORY, values, props)

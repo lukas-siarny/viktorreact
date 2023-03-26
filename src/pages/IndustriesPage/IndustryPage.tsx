@@ -18,7 +18,7 @@ import { getServices } from '../../reducers/services/serviceActions'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import IndustryForm from './components/IndustryForm'
 import { NestedMultiselectDataItem } from './components/CheckboxGroupNestedField'
-import RequestNewServiceForm, { IRequestNewServiceForm } from './components/RequestNewServiceForm'
+import RequestNewServiceForm from './components/RequestNewServiceForm'
 
 // utils
 import { ROW_GUTTER_X_DEFAULT, FORM, PERMISSION, NOTIFICATION_TYPE } from '../../utils/enums'
@@ -35,11 +35,10 @@ import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-ic
 import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.svg'
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+import { IRequestNewServiceForm } from '../../schemas/service'
 
 type Props = SalonSubPageProps
 type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody
-
-type ServiceCategorySuggestPost = Paths.PostApiB2BAdminServicesCategoryServiceSuggest.RequestBody
 
 // create category keys
 //  keys with prefix level2 are service keys
@@ -168,7 +167,7 @@ const IndustryPage = (props: Props) => {
 
 	const handleSubmitRequestNewService = async (data: IRequestNewServiceForm) => {
 		try {
-			const reqData: ServiceCategorySuggestPost = {
+			const reqData = {
 				salonID,
 				rootCategoryID: data.rootCategoryID,
 				description: data.description

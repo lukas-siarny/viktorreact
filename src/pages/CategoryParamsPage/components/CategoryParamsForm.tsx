@@ -20,7 +20,7 @@ import { EMPTY_NAME_LOCALIZATIONS } from '../../../components/LanguagePicker'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // schema
-import { validationFn, ICategoryParamsForm } from '../../../schemas/categoryParams'
+import { validationCategoryParamsFn, ICategoryParamsForm } from '../../../schemas/categoryParams'
 
 // reducers
 import { RootState } from '../../../reducers'
@@ -230,7 +230,7 @@ const form = reduxForm<ICategoryParamsForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validationFn
+	validate: validationCategoryParamsFn
 })(withPromptUnsavedChanges(CategoryParamsForm))
 
 export default form

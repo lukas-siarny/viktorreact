@@ -9,13 +9,13 @@ import InputField from '../../../atoms/InputField'
 import SalonRolesField from '../../../atoms/SalonRolesField'
 
 // interfaces
-import { IInviteEmployeeForm, ISelectOptionItem } from '../../../types/interfaces'
+import { ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
 import { FORM } from '../../../utils/enums'
 
-// validate
-import validateInviteFrom from './validateInviteFrom'
+// schema
+import { IInviteEmployeeForm, validationInviteEmployeeFn } from '../../../schemas/employee'
 
 // reducers
 import { RootState } from '../../../reducers'
@@ -55,7 +55,7 @@ const form = reduxForm<IInviteEmployeeForm, ComponentProps>({
 	touchOnChange: false,
 	touchOnBlur: true,
 	destroyOnUnmount: true,
-	validate: validateInviteFrom
+	validate: validationInviteEmployeeFn
 })(InviteForm)
 
 export default form

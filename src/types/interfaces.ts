@@ -133,14 +133,14 @@ type OpeningHoursDay = NonNullable<RawOpeningHours>[0]['day']
 
 // type for OpeningHours component
 export type OpeningHoursTimeRanges = {
-	timeFrom: string
-	timeTo: string
+	timeFrom?: string | null
+	timeTo?: string | null
 }[]
 
 export type OpeningHours = {
 	day: OpeningHoursDay
 	timeRanges: OpeningHoursTimeRanges
-	onDemand?: boolean
+	onDemand?: boolean | null
 }[]
 
 export interface AutocompleteLabelInValue {

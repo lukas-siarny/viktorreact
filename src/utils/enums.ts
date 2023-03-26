@@ -927,6 +927,7 @@ export const getDayNameFromNumber = (day: number) => {
 			return null
 	}
 }
+
 /**
  * @returns localized texts for Sentry report dialog and common EN texts for result view
  */

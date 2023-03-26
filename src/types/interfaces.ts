@@ -242,6 +242,7 @@ export interface IServiceForm {
 		enabledB2cReservations: boolean
 		autoApproveReservations: boolean
 	}
+	descriptionLocalizations: NameLocalizationsItem[]
 }
 
 export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
@@ -649,7 +650,7 @@ export interface IReservationSystemSettingsForm {
 
 export type NameLocalizationsItem = {
 	language: string
-	value: string
+	value: string | null
 }
 
 export type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdCategories.RequestBody

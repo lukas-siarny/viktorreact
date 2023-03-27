@@ -1,7 +1,5 @@
 # notino_b2b_web
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
 ## Description
 
 This is the frontend for Notino B2B web application.
@@ -18,13 +16,23 @@ To install the project, run:
 ```npm install --legacy-peer-deps```
 
 ## Usage
+After the library is installed, the environment variables must be set at in ```.env``` file to run the project 
+
+* **PROXY**: This variable specifies the proxy server that will be used for requests.
+* **REACT_APP_GOOGLE_MAPS_API_KEY**: This variable contains the API key for the Google Maps API. It is used by your React application to display maps and location information.
+* **FULLCALENDAR_LICENSE_KEY**: This variable contains the license key for the FullCalendar library. FullCalendar is a popular JavaScript library for creating interactive calendars and scheduling applications.
+* **REACT_APP_SENTRY_ENV**: This variable sets the environment for Sentry, a popular error tracking service.
+* **REACT_APP_SENTRY_DSN**: This variable contains the Data Source Name (DSN) for Sentry. The DSN is a unique identifier that allows Sentry to receive and track errors from your application.
+
 
 To start the development server, run:
 
 ```npm start```
 
-To build the project, run:
+This will start the development server at http://localhost:3000/. You can view the app in the browser.
 
+
+To build the project, run:
 
 ```npm run build```
 
@@ -32,31 +40,18 @@ To run tests, run:
 
 ```npm test```
 
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
-
-### Repository workflow ###
-![Screenshot](repository_workflow.png)
+## Technologies Used
+* React
+* TypeScript
+* TailwindCSS
+* Cypress
+* FullCalendar
+* Antd design
+* React router v6
+* Sass
 
 ## Scripts
-* ```start```: starts the development server with a proxy to https://notino-admin.goodrequest.dev and runs various build processes
+* ```start```: starts the development server
 * ```start-watch```: starts the development server with hot reloading enabled
 * ```prebuild```: builds the application for production after running various build processes
 * ```copy-modules```: copies modules to the build folder
@@ -87,11 +82,8 @@ To run tests, run:
 * ```health-check-waiter```: bash shell script that waits for a health check endpoint to return a successful response before proceeding with a command. It is used to ensure that a service is healthy and ready to handle requests before running tests or deploying changes.
 * ```generate-runtime-env```: uses the "cross-env" package to set environment variables for a Create React App (CRA) application. It uses the "env-cmd" package to load environment variables from a specified file (in this case, ".env.template"), and creates a runtime environment configuration file (runtime-env.js) based on the loaded environment variables.
 
-
-
-
-
-
+### Repository workflow ###
+![Screenshot](repository_workflow.png)
 
 
 

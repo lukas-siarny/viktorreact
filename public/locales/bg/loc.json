@@ -184,7 +184,7 @@
   "Naozaj chcete vymazať nastavenia služby pre zamestnanca? Zamestnanocvi sa nastavia hodnoty podľa nastavania služby salónu.": "_NEPRELOZENE_",
   "Naozaj chcete zamietnuť rezerváciu?": "Наистина ли искате да откажете резервацията?",
   "Naozaj chcete zrušiť rezerváciu?": "Наистина ли искате да отмените резервацията?",
-  "Naozaj si prajete zrušiť rezerváciu služby {{ serviceName }} v salóne {{ salonName }} naplánovanú na {{ date }} {{ date }}?": "_NEPRELOZENE_",
+  "Naozaj si prajete zrušiť rezerváciu služby {{ serviceName }} v salóne {{ salonName }} naplánovanú na {{ date }} {{ time }}?": "_NEPRELOZENE_",
   "Nastala neočakávaná chyba": "Възникна неочаквана грешка",
   "Nastavenia": "Настройки",
   "Nastavenia rezervačného systému": "Настройки на системата за резервации",

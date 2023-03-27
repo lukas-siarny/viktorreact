@@ -131,7 +131,7 @@ const CancelReservationPage = () => {
 								okText={t('loc:Áno')}
 								cancelText={t('loc:Nie')}
 							>
-								{`${t('loc:Naozaj si prajete zrušiť rezerváciu služby {{ serviceName }} v salóne {{ salonName }} naplánovanú na {{ date }} {{ date }}?', {
+								{`${t('loc:Naozaj si prajete zrušiť rezerváciu služby {{ serviceName }} v salóne {{ salonName }} naplánovanú na {{ date }} {{ time }}?', {
 									salonName: calendarReservationData?.salon.name || '',
 									serviceName: calendarReservationData?.service?.name,
 									date: eventDate,

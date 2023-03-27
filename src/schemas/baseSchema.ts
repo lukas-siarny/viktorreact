@@ -1,8 +1,8 @@
 import i18next from 'i18next'
 import { FormErrors, DecoratedFormProps } from 'redux-form'
 import { z, ZodString, ZodOptional, ZodNullable, ZodTypeAny } from 'zod'
-import { isEmpty, set } from 'lodash'
-import { DAY, FORM, LANGUAGE, VALIDATION_MAX_LENGTH } from '../utils/enums'
+import { set } from 'lodash'
+import { FORM, LANGUAGE, VALIDATION_MAX_LENGTH } from '../utils/enums'
 import passwordRegEx from '../utils/regex'
 
 /**

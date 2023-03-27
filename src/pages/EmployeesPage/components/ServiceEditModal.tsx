@@ -11,7 +11,9 @@ import EmployeeServiceEditForm from './EmployeeServiceEditForm'
 
 // types
 import { RootState } from '../../../reducers'
-import { IEmployeeServiceEditForm } from '../../../types/interfaces'
+
+// schema
+import { IEmployeeServiceEditForm } from '../../../schemas/service'
 
 type Props = {
 	visible: boolean

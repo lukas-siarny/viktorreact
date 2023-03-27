@@ -18,9 +18,6 @@ import ServicesListField from '../../EmployeesPage/components/ServicesListField'
 import ParameterValuesList from './ParameterValuesList'
 import ServiceBreadcrumbs from './ServiceBreadcrumbs'
 
-// validate
-import validateServiceForm from './validateServiceForm'
-
 // utils
 import { formFieldID, showErrorNotification, validationNumberMin } from '../../../utils/helper'
 import { DELETE_BUTTON_ID, FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
@@ -30,7 +27,6 @@ import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
 
 // types
-import { IServiceForm } from '../../../types/interfaces'
 import { RootState } from '../../../reducers'
 
 // assets
@@ -39,6 +35,9 @@ import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as EmployeesIcon } from '../../../assets/icons/employees.svg'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
+
+// schema
+import { validationServiceFn, IServiceForm } from '../../../schemas/service'
 
 const numberMin0 = validationNumberMin(0)
 
@@ -383,7 +382,7 @@ const form = reduxForm<IServiceForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateServiceForm
+	validate: validationServiceFn
 })(withPromptUnsavedChanges(ServiceForm))
 
 export default form

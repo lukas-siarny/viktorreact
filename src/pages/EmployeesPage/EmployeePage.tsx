@@ -20,10 +20,8 @@ import ServiceEditModal from './components/ServiceEditModal'
 // types
 import {
 	EmployeeService,
-	EmployeeServiceData,
 	IBreadcrumbs,
 	IEmployeePayload,
-	IEmployeeServiceEditForm,
 	ISelectOptionItem,
 	SalonSubPageProps,
 	ServiceCategoryParameter,
@@ -64,6 +62,9 @@ import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.sv
 import useBackUrl from '../../hooks/useBackUrl'
 import { IEditRoleForm } from '../../schemas/role'
 
+// schema
+import { IEmployeeServiceEditForm } from '../../schemas/service'
+
 type Props = SalonSubPageProps
 
 type EmployeePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody
@@ -86,7 +87,7 @@ const addService = (servicesOptions: IServicesPayload['options'], employee: IEmp
 		} else if (serviceData && employeeData) {
 			const useCategoryParameter = !!categoryParameter?.values?.length
 
-			let newServiceData: EmployeeServiceData = {
+			let newServiceData: IEmployeeServiceEditForm = {
 				id: serviceData?.key as string,
 				name: serviceData?.label,
 				industry: serviceData?.extra?.firstCategory,
@@ -159,8 +160,8 @@ const getCategoryById = (category: any, serviceCategoryID: string): EmployeeServ
 	return result
 }
 
-const parseServices = (employee?: IEmployeePayload['data'], salonServices?: ISelectOptionItem[]): EmployeeServiceData[] => {
-	const result: EmployeeServiceData[] = []
+const parseServices = (employee?: IEmployeePayload['data'], salonServices?: ISelectOptionItem[]): IEmployeeServiceEditForm[] => {
+	const result: IEmployeeServiceEditForm[] = []
 	const employeeData = employee?.employee
 	const employeeCategories = employeeData?.categories
 	if (employeeCategories) {
@@ -172,7 +173,7 @@ const parseServices = (employee?: IEmployeePayload['data'], salonServices?: ISel
 					const categoryParameter = salonServiceData?.extra?.serviceCategoryParameter as ServiceCategoryParameter
 					const useCategoryParameter = salonServiceData?.extra?.useCategoryParameter
 
-					let formServiceData: EmployeeServiceData = {
+					let formServiceData: IEmployeeServiceEditForm = {
 						id: employeeService?.id,
 						name: employeeService?.category?.name,
 						industry: firstCategory?.name,

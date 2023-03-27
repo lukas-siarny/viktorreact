@@ -287,21 +287,6 @@ export interface IEventTypeFilterForm {
 	eventType: CALENDAR_EVENT_TYPE
 }
 
-/* export interface ISupportContactForm {
-	id: string | null
-	note: string
-	openingHours: OpeningHours
-	sameOpenHoursOverWeek: boolean
-	openOverWeekend: boolean
-	countryCode: string
-	zipCode: string
-	city: string
-	street: string
-	streetNumber: string
-	phones: { phonePrefixCountryCode: string; phone: string }[]
-	emails: { email: string }[]
-} */
-
 export interface IRegistrationForm {
 	email: string
 	password: string

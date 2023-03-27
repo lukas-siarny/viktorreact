@@ -15,7 +15,7 @@ Before you start, please make sure you have installed:
 
 To install the project, run:
 
-```npm install```
+```npm install --legacy-peer-deps```
 
 ## Usage
 

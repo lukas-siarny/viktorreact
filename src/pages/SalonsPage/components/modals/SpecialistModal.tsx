@@ -18,7 +18,7 @@ import { LOCALES } from '../../../../components/LanguagePicker'
 // utils
 import { DEFAULT_LANGUAGE, ENUMERATIONS_KEYS, LANGUAGE } from '../../../../utils/enums'
 import i18n from '../../../../utils/i18n'
-import { formFieldID, getCountryPrefix, optionRenderWithImage } from '../../../../utils/helper'
+import { getCountryPrefix, optionRenderWithImage } from '../../../../utils/helper'
 
 type Props = {
 	visible: boolean

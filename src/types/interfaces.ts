@@ -80,11 +80,7 @@ export type ServiceCategoryParameter = ServiceType['serviceCategoryParameter']
 
 export type ServiceDetail = Paths.GetApiB2BAdminServicesServiceId.Responses.$200['service']
 
-export interface IEditUserRoleForm {
-	roleID: string
-}
-
-// type of BE opening hours data
+// BE opening hours type
 export type RawOpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
 
 type OpeningHoursDay = NonNullable<RawOpeningHours>[0]['day']

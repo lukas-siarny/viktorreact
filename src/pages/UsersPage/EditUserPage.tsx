@@ -12,7 +12,7 @@ import { withPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 
 // types
-import { IBreadcrumbs, IEditUserRoleForm } from '../../types/interfaces'
+import { IBreadcrumbs } from '../../types/interfaces'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -26,6 +26,9 @@ import useBackUrl from '../../hooks/useBackUrl'
 import { RootState } from '../../reducers'
 import { getUser } from '../../reducers/users/userActions'
 import { getSystemRoles } from '../../reducers/roles/rolesActions'
+
+// schema
+import { IEditUserRoleForm } from '../../schemas/role'
 
 const EditUserPage = () => {
 	const [t] = useTranslation()

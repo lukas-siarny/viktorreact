@@ -21,11 +21,15 @@ const CancelReservationRoute = (props: Props) => {
 	// t je query param pre token (nie preklad)
 	const { t } = qs.parse(document.location.search, { ignoreQueryPrefix: true })
 
-	const payload = decode(t as string)
-	const aud = get(payload, 'aud')
+	try {
+		const payload = decode(t as string)
+		const aud = get(payload, 'aud')
 
-	if (t && aud === TOKEN_AUDIENCE.CANCEL_RESERVATION) {
-		return <BaseRoute {...(props as any)} />
+		if (t && aud === TOKEN_AUDIENCE.CANCEL_RESERVATION) {
+			return <BaseRoute {...(props as any)} />
+		}
+	} catch {
+		return <Navigate to={i18next.t('paths:index')} />
 	}
 
 	return <Navigate to={i18next.t('paths:index')} />

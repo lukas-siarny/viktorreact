@@ -98,12 +98,12 @@ const CancelReservationPage = () => {
 				salonPhoneNumber = `${prefix} ${phoneNumber.phone}`
 			}
 
-			let eventDateTimeRange = ''
+			let eventDate = ''
+			let eventTime = ''
 
 			if (calendarReservationData) {
-				const date = dayjs(calendarReservationData.start.date).format(D_M_YEAR_FORMAT)
-				const time = `${calendarReservationData.start.time} - ${calendarReservationData.end.time}`
-				eventDateTimeRange = `${date},  ${time}`
+				eventDate = dayjs(calendarReservationData.start.date).format(D_M_YEAR_FORMAT)
+				eventTime = `${calendarReservationData.start.time} - ${calendarReservationData.end.time}`
 			}
 
 			const employeeName = getAssignedUserLabel({ firstName: calendarReservationData?.employee.firstName, lastName: calendarReservationData?.employee.lastName, id: '' })
@@ -131,10 +131,11 @@ const CancelReservationPage = () => {
 								okText={t('loc:Áno')}
 								cancelText={t('loc:Nie')}
 							>
-								{`${t('loc:Naozaj si prajete zrušiť rezerváciu služby {{ serviceName }} v salóne {{ salonName }} naplánovanú na {{ dateTime }}?', {
+								{`${t('loc:Naozaj si prajete zrušiť rezerváciu služby {{ serviceName }} v salóne {{ salonName }} naplánovanú na {{ date }} {{ date }}?', {
 									salonName: calendarReservationData?.salon.name || '',
 									serviceName: calendarReservationData?.service?.name,
-									dateTime: eventDateTimeRange
+									date: eventDate,
+									time: eventTime
 								})}`}
 							</ConfirmModal>
 						</>
@@ -146,7 +147,9 @@ const CancelReservationPage = () => {
 			return (
 				<>
 					<section className={'w-full p-4 bg-notino-white rounded'}>
-						<h4 className={'flex items-center text-base truncate inline-block gap-2'}>{eventDateTimeRange}</h4>
+						<h4 className={'flex items-center text-base truncate inline-block gap-2'}>
+							{eventDate} {eventTime}
+						</h4>
 						<Divider className={'mt-1 mb-4'} />
 						<div className={'flex flex-col gap-2 mt-2'}>
 							{calendarReservationData?.service?.name && (
@@ -175,7 +178,7 @@ const CancelReservationPage = () => {
 								<div className={'flex items-start gap-2'}>
 									<PencilIcon width={16} height={16} />
 									<span className={'inline-flex gap-2 flex-wrap'}>
-										<span className={''}>{`vytvorená ${dayjs(calendarReservationData?.createdAt).format(`${D_M_YEAR_FORMAT}, HH:mm`)}`}</span>
+										{`${t('loc:Vytvorená')} ${dayjs(calendarReservationData?.createdAt).format(`${D_M_YEAR_FORMAT} HH:mm`)}`}
 									</span>
 								</div>
 							)}

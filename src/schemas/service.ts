@@ -78,7 +78,7 @@ const validatePriceAndDurationData = (value: z.infer<typeof priceAndDurationSche
 }
 
 // https://notino-admin.goodrequest.dev/api/doc/?urls.primaryName=v2.2.9#/B2b-%3Eadmin/postApiB2BAdminServicesCategoryServiceSuggest
-export const requestNewServiceSchema = z.object({
+const requestNewServiceSchema = z.object({
 	description: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1500, true).min(VALIDATION_MAX_LENGTH.LENGTH_5),
 	rootCategoryID: z.string()
 })
@@ -108,7 +108,6 @@ const employeeServiceSchema = z
 		const priceAndDurationData = values?.employeePriceAndDurationData
 
 		if (!values?.useCategoryParameter) {
-			// NOTE: first check is necessary because of TS
 			if (priceAndDurationData && !arePriceAndDurationDataEmpty(priceAndDurationData)) {
 				validatePriceAndDurationData(priceAndDurationData, ctx, ['employeePriceAndDurationData'])
 			}
@@ -125,7 +124,10 @@ const employeeServiceSchema = z
 							'employeePriceAndDurationData'
 						])
 
-						serviceCategoryParameterError = isPriceAndDurationDataError
+						// show error msg if there is at least one error
+						if (!serviceCategoryParameterError) {
+							serviceCategoryParameterError = isPriceAndDurationDataError
+						}
 
 						if (isPriceAndDurationDataError) {
 							ctx.addIssue({

@@ -33,7 +33,7 @@ const EditUserPage = () => {
 	const navigate = useNavigate()
 	const { userID } = useParams<{ userID?: string }>() as any
 	const userAccountDetail = useSelector((state: RootState) => state.user.user)
-	const submittingEditRoleForm = useSelector(isSubmitting(FORM.EDIT_USER_ROLE))
+	const submittingEditEmployeeRoleForm = useSelector(isSubmitting(FORM.EDIT_USER_ROLE))
 	const [backUrl] = useBackUrl(t('paths:users'))
 	const [isDeleting, setIsDeleting] = useState<boolean>(false)
 
@@ -43,7 +43,7 @@ const EditUserPage = () => {
 	}, [dispatch, userAccountDetail?.data?.user])
 
 	const editUserRole = async (data: IEditUserRoleForm) => {
-		if (submittingEditRoleForm) {
+		if (submittingEditEmployeeRoleForm) {
 			return
 		}
 		try {
@@ -88,7 +88,7 @@ const EditUserPage = () => {
 					<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 				</Row>
 				<div className='content-body small mb-8'>
-					<Spin spinning={userAccountDetail.isLoading || submittingEditRoleForm || isDeleting}>
+					<Spin spinning={userAccountDetail.isLoading || submittingEditEmployeeRoleForm || isDeleting}>
 						<EditUserRoleForm onSubmit={editUserRole} />
 					</Spin>
 				</div>

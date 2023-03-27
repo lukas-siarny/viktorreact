@@ -14,7 +14,7 @@ import EmployeeForm from './components/EmployeeForm'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import DeleteButton from '../../components/DeleteButton'
 import InviteForm from './components/InviteForm'
-import EditRoleForm from './components/EditRoleForm'
+import EditEmployeeRoleForm from './components/EditEmployeeRoleForm'
 import ServiceEditModal from './components/ServiceEditModal'
 
 // types
@@ -60,7 +60,7 @@ import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.sv
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
-import { IEditRoleForm } from '../../schemas/role'
+import { IEditEmployeeRoleForm } from '../../schemas/role'
 
 // schema
 import { IEmployeeServiceEditForm } from '../../schemas/service'
@@ -428,7 +428,7 @@ const EmployeePage = (props: Props) => {
 		}
 	}
 
-	const editEmployeeRole = async (data: IEditRoleForm) => {
+	const editEmployeeRole = async (data: IEditEmployeeRoleForm) => {
 		try {
 			setSubmitting(true)
 			await patchReq(
@@ -487,7 +487,7 @@ const EmployeePage = (props: Props) => {
 			{formValues?.hasActiveAccount && (
 				<div className='content-body small mb-8'>
 					<Spin spinning={isLoading}>
-						<EditRoleForm
+						<EditEmployeeRoleForm
 							onSubmit={editEmployeeRole}
 							salonRolesOptions={filteredSalonRolesByPermission}
 							hasPermissionToEdit={hasPermissionToEdit}

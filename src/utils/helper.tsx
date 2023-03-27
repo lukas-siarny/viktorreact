@@ -1250,12 +1250,12 @@ export const getServicePriceAndDurationData = (
 
 	if (!isNil(decodedPriceFrom)) {
 		decodedPriceTo = decodePrice(priceTo)
-		if (!isNil(decodedPriceTo) && decodedPriceTo !== decodedPriceFrom) {
+		if (!isNil(decodedPriceTo) && decodedPriceTo >= decodedPriceFrom) {
 			variablePrice = true
 		}
 	}
 
-	const variableDuration = !!(!isNil(durationFrom) && !isNil(durationTo) && durationFrom !== durationTo)
+	const variableDuration = !!(!isNil(durationFrom) && !isNil(durationTo) && durationTo >= durationFrom)
 
 	return {
 		durationFrom: durationFrom || null,

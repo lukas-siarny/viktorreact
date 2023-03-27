@@ -10,15 +10,12 @@ import SalonRolesField from '../../../atoms/SalonRolesField'
 // interfaces
 import { ISelectOptionItem } from '../../../types/interfaces'
 
-// schema
-import { IInviteEmployeeForm } from '../../../schemas/employee'
-
 // utils
 import { FORM, PERMISSION } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 
-// validate
-import { validationEditRoleFn, IEditRoleForm } from '../../../schemas/role'
+// schema
+import { validationEditEmployeeRoleFn, IEditEmployeeRoleForm } from '../../../schemas/role'
 
 // assets
 import { ReactComponent as KeyIcon } from '../../../assets/icons/key.svg'
@@ -32,9 +29,9 @@ type ComponentProps = {
 	permissionTooltip?: string | null
 }
 
-type Props = InjectedFormProps<IEditRoleForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<IEditEmployeeRoleForm, ComponentProps> & ComponentProps
 
-const EditRoleForm: FC<Props> = (props) => {
+const EditEmployeeRoleForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit, submitting, pristine, hasPermissionToEdit, salonRolesOptions, permissionTooltip } = props
 
@@ -92,13 +89,13 @@ const EditRoleForm: FC<Props> = (props) => {
 	)
 }
 
-const form = reduxForm<IEditRoleForm, ComponentProps>({
+const form = reduxForm<IEditEmployeeRoleForm, ComponentProps>({
 	form: FORM.EDIT_EMPLOYEE_ROLE,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: false,
 	touchOnBlur: true,
 	destroyOnUnmount: true,
-	validate: validationEditRoleFn
-})(EditRoleForm)
+	validate: validationEditEmployeeRoleFn
+})(EditEmployeeRoleForm)
 
 export default form

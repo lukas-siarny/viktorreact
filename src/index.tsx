@@ -46,7 +46,45 @@ Sentry.init({
 	environment: window?.__RUNTIME_CONFIG__?.REACT_APP_SENTRY_ENV ? window.__RUNTIME_CONFIG__.REACT_APP_SENTRY_ENV : process.env.REACT_APP_SENTRY_ENV,
 	// eslint-disable-next-line no-underscore-dangle
 	dsn: window?.__RUNTIME_CONFIG__?.REACT_APP_SENTRY_DSN ? window.__RUNTIME_CONFIG__.REACT_APP_SENTRY_DSN : process.env.REACT_APP_SENTRY_DSN,
-	tracesSampleRate: 0.05
+	tracesSampleRate: 0.05,
+	beforeSend: (event, hint) => {
+		const headers = event.request?.headers
+
+		let ua: string = window.navigator.userAgent
+
+		if (headers) {
+			ua = headers['User-Agent']
+			const uaRegex = /((?<info>.*?))(s|$)|(?<name>.*?)\/(?<version>.*?)(s|$)/
+		}
+
+		return event
+
+		// const browserRegex = /(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i;
+		// const match = userAgent.match(browserRegex);
+
+		// if (match && match.length >= 3) {
+		//   const browserName = match[1].toLowerCase();
+		//   const browserVersion = match[2];
+
+		//   if (event.contexts) {
+		// 	event.contexts.browser = {
+		// 	  name: browserName,
+		// 	  version: browserVersion,
+		// 	};
+		//   } else {
+		// 	event.contexts = {
+		// 	  browser: {
+		// 		name: browserName,
+		// 		version: browserVersion,
+		// 	  },
+		// 	};
+		//   }
+
+		// hint.captureContext
+		// event.contexts?.os./
+		// Sentry.getCurrentHub().getScope().
+		// console.log('🚀 ~ file: index.tsx:53 ~ beforeSend ~ event, hint:', event, hint)
+	}
 })
 
 const root = createRoot(document.getElementById('root') as HTMLElement)

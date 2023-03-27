@@ -147,8 +147,8 @@ const CancelReservationPage = () => {
 			return (
 				<>
 					<section className={'w-full p-4 bg-notino-white rounded'}>
-						<h4 className={'flex items-center text-base truncate inline-block gap-2'}>
-							{eventDate} {eventTime}
+						<h4 className={'flex items-center text-base truncate inline-block'}>
+							<span className='mr-2'>{eventDate}</span> {eventTime}
 						</h4>
 						<Divider className={'mt-1 mb-4'} />
 						<div className={'flex flex-col gap-2 mt-2'}>
@@ -178,7 +178,7 @@ const CancelReservationPage = () => {
 								<div className={'flex items-start gap-2'}>
 									<PencilIcon width={16} height={16} />
 									<span className={'inline-flex gap-2 flex-wrap'}>
-										{`${t('loc:Vytvorená')} ${dayjs(calendarReservationData?.createdAt).format(`${D_M_YEAR_FORMAT} HH:mm`)}`}
+										{`${t('loc:Vytvorená')} ${dayjs(calendarReservationData.createdAt).format(`${D_M_YEAR_FORMAT} HH:mm`)}`}
 									</span>
 								</div>
 							)}
@@ -217,13 +217,15 @@ const CancelReservationPage = () => {
 									</li>
 								</ul>
 							</div>
-							<img
-								src={calendarReservationData?.salon.logo?.resizedImages.small}
-								alt={''}
-								width={80}
-								height={80}
-								className={'object-contain shrink-0 rounded-lg border border-solid border-notino-grayLight'}
-							/>
+							{calendarReservationData?.salon.logo?.resizedImages.small && (
+								<img
+									src={calendarReservationData?.salon.logo?.resizedImages.small}
+									alt={''}
+									width={80}
+									height={80}
+									className={'object-contain shrink-0 rounded-lg border border-solid border-notino-grayLight'}
+								/>
+							)}
 						</div>
 					</section>
 

@@ -5,7 +5,6 @@ import { FORM } from '../utils/enums'
 export const industriesSchema = z.object({
 	categoryIDs: z
 		.string()
-		.uuid()
 		.array()
 		.min(1, { message: serializeValidationMessage('loc:Vyberte aspoň jedno odvetvie') })
 })

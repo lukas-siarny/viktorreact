@@ -147,7 +147,7 @@ const CancelReservationPage = () => {
 			return (
 				<>
 					<section className={'w-full p-4 bg-notino-white rounded'}>
-						<h4 className={'flex items-center text-base truncate inline-block'}>
+						<h4 className={'text-base truncate inline-block'}>
 							<span className='mr-2'>{eventDate}</span> {eventTime}
 						</h4>
 						<Divider className={'mt-1 mb-4'} />

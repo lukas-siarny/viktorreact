@@ -28,7 +28,7 @@ import { ReactComponent as PhoneIcon } from '../../../assets/icons/phone-2-icon.
 import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.svg'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 
-// schemas
+// schema
 import { ISupportContactForm, validationSupportContactFn } from '../../../schemas/supportContact'
 
 type ComponentProps = {

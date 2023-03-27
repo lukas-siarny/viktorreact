@@ -22,7 +22,7 @@ import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.sv
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
 
-// schemas
+// schema
 import { ILanguageForm, validationLanguageFn } from '../../../schemas/language'
 
 type ComponentProps = {

@@ -149,7 +149,7 @@ export const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHours
 		const result: RawOpeningHours = []
 		week.forEach((day) => {
 			result?.push({
-				day: day?.day as any, // TODO: fix any
+				day: day.day as DAY,
 				timeRanges: openingHours?.[0]?.onDemand ? undefined : ((openingHours?.[0]?.timeRanges || []) as any),
 				state: openingHours?.[0]?.onDemand ? OPENING_HOURS_STATES.CUSTOM_ORDER : undefined
 			})

@@ -515,18 +515,6 @@ export type ICategoryParameters = Paths.GetApiB2BAdminEnumsCategoryParameters.Re
 
 export type ICategoryParameter = Paths.GetApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200['categoryParameter']
 
-interface ILocalizedValue {
-	valueLocalizations: ICategoryParameter['values']['0']['valueLocalizations']
-}
-
-export interface IIndustriesForm {
-	categoryIDs: string[]
-}
-
-export interface IIndustryForm {
-	categoryIDs: string[]
-}
-
 export interface IReservationsSettingsNotification {
 	b2bChannels: {
 		[key in RS_NOTIFICATION_TYPE]?: boolean

@@ -143,6 +143,24 @@ export const defaultErrorMap: z.ZodErrorMap = (issue, ctx) => {
 	return { message: ctx.defaultError }
 }
 
+const timeRangeSchema = z
+	.object({
+		timeFrom: z.string().nullish(),
+		timeTo: z.string().nullish()
+	})
+	.array()
+
+const OpeningHourSchema = z
+	.object({
+		day: z.enum(['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY', 'MONDAY_TO_FRIDAY']),
+		timeRanges: timeRangeSchema,
+		onDemand: z.boolean().nullish()
+	})
+	.array()
+
+export type OpeningHours = z.infer<typeof OpeningHourSchema>
+export type OpeningHoursTimeRanges = z.infer<typeof timeRangeSchema>
+
 /*
 #### CONSTRAINTS ####
 */
@@ -197,7 +215,7 @@ export const localizedValuesConstraint = (required?: boolean, maxLength = VALIDA
 		)
 
 /**
- * Constraint for array fields of emails
+ * Constraint for array of email fields
  * @param requiredAtLeastOne boolean, default true
  * @param requiredAll boolean, default false
  * @param maxItems boolean, default 5
@@ -230,7 +248,7 @@ export const emailsConstraint = (requiredAtLeastOne = true, requiredAll = false,
 		})
 
 /**
- * Constraint for array fields of phone numbers
+ * Constraint for array of phone number fields
  * @param requiredAtLeastOne boolean, default true
  * @param requiredAll boolean, default false
  * @param maxItems boolean, default 5
@@ -262,24 +280,6 @@ export const phoneNumbersConstraint = (requiredAtLeastOne = true, requiredAll = 
 				})
 			}
 		})
-
-const timeRangeSchema = z
-	.object({
-		timeFrom: z.string().nullish(),
-		timeTo: z.string().nullish()
-	})
-	.array()
-
-const OpeningHourSchema = z
-	.object({
-		day: z.enum(['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY', 'MONDAY_TO_FRIDAY']),
-		timeRanges: timeRangeSchema,
-		onDemand: z.boolean().nullish()
-	})
-	.array()
-
-export type OpeningHours = z.infer<typeof OpeningHourSchema>
-export type OpeningHoursTimeRanges = z.infer<typeof timeRangeSchema>
 
 /**
  * Constraint for Opening Hours component

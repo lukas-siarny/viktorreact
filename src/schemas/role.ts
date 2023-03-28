@@ -1,15 +1,15 @@
 import { z } from 'zod'
 
-import { zodErrorsToFormErrors } from './baseSchema'
+import { uuidConstraint, zodErrorsToFormErrors } from './baseSchema'
 import { FORM } from '../utils/enums'
 
 // https://notino-admin.goodrequest.dev/api/doc/?urls.primaryName=v2.2.9#/B2b-%3Eadmin/patchApiB2BAdminEmployeesEmployeeIdRole
 export const employeeRoleSchema = z.object({
-	roleID: z.string().uuid()
+	roleID: uuidConstraint
 })
 
 export const userRoleSchema = z.object({
-	roleID: z.string()
+	roleID: uuidConstraint
 })
 
 export type IEditEmployeeRoleForm = z.infer<typeof employeeRoleSchema>

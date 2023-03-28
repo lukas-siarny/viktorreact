@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { stringConstraint, imageConstraint, emailConstraint, zodErrorsToFormErrors, twoCharsConstraint } from './baseSchema'
+import { stringConstraint, imageConstraint, emailConstraint, zodErrorsToFormErrors, twoCharsConstraint, uuidConstraint } from './baseSchema'
 import { VALIDATION_MAX_LENGTH, FORM } from '../utils/enums'
 
 // https://notino-admin.goodrequest.dev/api/doc/#/B2b-%3Eadmin/postApiB2BAdminEmployees
@@ -15,7 +15,7 @@ export const editEmployeeSchema = z
 	.object({
 		services: z
 			.object({
-				id: z.string().uuid()
+				id: uuidConstraint
 			})
 			.array()
 	})
@@ -29,7 +29,7 @@ export const validationEmployeeFn = (values: IEmployeeForm, props: any) =>
 
 // https://notino-admin.goodrequest.dev/api/doc/#/B2b-%3Eadmin/postApiB2BAdminEmployeesInvite
 export const inviteEmployeeSchema = z.object({
-	roleID: z.string().uuid(),
+	roleID: uuidConstraint,
 	email: emailConstraint
 })
 

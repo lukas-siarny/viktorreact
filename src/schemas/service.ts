@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 import { isEmpty, isNil } from 'lodash'
-import { serializeValidationMessage, stringConstraint, zodErrorsToFormErrors } from './baseSchema'
+import { serializeValidationMessage, stringConstraint, uuidConstraint, zodErrorsToFormErrors } from './baseSchema'
 import { FORM, VALIDATION_MAX_LENGTH, PARAMETER_TYPE } from '../utils/enums'
 // eslint-disable-next-line import/no-cycle
 import { arePriceAndDurationDataEmpty } from '../utils/helper'
@@ -151,7 +151,7 @@ const employeeServiceSchema = z
 	})
 
 const parameterValueSchema = priceAndDurationSchema.extend({
-	id: z.string().uuid(),
+	id: uuidConstraint,
 	name: z.string().optional(),
 	useParameter: z.boolean()
 })
@@ -159,7 +159,7 @@ const parameterValueSchema = priceAndDurationSchema.extend({
 const serviceSchema = priceAndDurationSchema
 	.extend({
 		useCategoryParameter: z.boolean(),
-		employee: z.string().uuid().array().nullish(),
+		employee: uuidConstraint.array().nullish(),
 		settings: z.object({
 			enabledB2cReservations: z.boolean(),
 			autoApproveReservations: z.boolean()

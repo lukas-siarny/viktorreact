@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import CreatePasswordForm from './components/CreatePasswordForm'
 import ForgottenPasswordModal from '../../components/ForgottenPassword/ForgottenPasswordModal'
 
-// inteerfaces
+// interfaces
 import { ICreatePasswordForm } from '../../types/interfaces'
 
 // actions

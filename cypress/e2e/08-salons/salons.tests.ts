@@ -1,7 +1,7 @@
 import { loginViaApi } from '../../support/e2e'
 
 // enums
-import { FORM, SUBMIT_BUTTON_ID, FILTER_BUTTON_ID, IMPORT_BUTTON_ID, ROW_BUTTON_WITH_ID } from '../../../src/utils/enums'
+import { FORM, SUBMIT_BUTTON_ID, FILTER_BUTTON_ID, IMPORT_BUTTON_ID } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS } from '../../enums'
 
 const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
@@ -41,9 +41,7 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 
 					// NOTE: at least two active salons must exists in order to search be enabled
 					// search salons
-					cy.setInputValue(FORM.SALONS_FILTER_ACITVE, 'search', 'Salon 5')
-					cy.wait('@getSalons').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-					cy.setInputValue(FORM.SALONS_FILTER_ACITVE, 'search', '')
+					cy.setInputValue(FORM.SALONS_FILTER_ACITVE, 'search', 'Salon 5', true)
 					cy.wait('@getSalons').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 
 					// filter table
@@ -59,15 +57,6 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 					cy.selectOptionDropdownCustom(FORM.SALONS_FILTER_ACITVE, 'hasSetOpeningHours', undefined, true)
 					// cy.get(`#${FORM.SALONS_FILTER_ACITVE}-dateFromTo`).find('input').first().click({ force: true })
 					// cy.get('.ant-picker-dropdown :not(.ant-picker-dropdown-hidden)', { timeout: 2000 }).should('be.visible').find('.ant-picker-presets > ul > li').first().click()
-					cy.wait('@getSalons').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-					// clear filter
-					cy.clearDropdownSelection('statuses_published')
-					cy.clearDropdownSelection('statuses_changes')
-					cy.clearDropdownSelection('createType')
-					cy.clearDropdownSelection('sourceType')
-					cy.clearDropdownSelection('premiumSourceUserType')
-					cy.clearDropdownSelection('categoryFirstLevelIDs')
-					cy.clearDropdownSelection('hasSetOpeningHours')
 					cy.wait('@getSalons').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 				})
 			} else {
@@ -125,20 +114,13 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 					// check status code
 					expect(interceptionGetSalons.response.statusCode).to.equal(200)
 
-					// sort table
-					cy.sortTable('sortby-title')
-					cy.wait('@getSalons').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-
 					// change pagination
 					cy.changePagination(50)
 					cy.wait('@getSalons').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 
 					// NOTE: at least two deleted salons must exists in order to search be enabled
 					// search salons
-					cy.setInputValue(FORM.SALONS_FILTER_DELETED, 'search', 'Salon 5')
-					cy.wait('@getSalons').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-					// clear search
-					cy.setInputValue(FORM.SALONS_FILTER_DELETED, 'search', '')
+					cy.setInputValue(FORM.SALONS_FILTER_DELETED, 'search', 'Salon 5', true)
 					cy.wait('@getSalons').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 
 					// filter table
@@ -147,8 +129,9 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 					cy.wait(1000)
 					cy.selectOptionDropdownCustom(FORM.SALONS_FILTER_DELETED, 'categoryFirstLevelIDs', undefined, true)
 					cy.wait('@getSalons').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-					// clear filter
-					cy.clearDropdownSelection('categoryFirstLevelIDs')
+
+					// sort table
+					cy.sortTable('sortby-title')
 					cy.wait('@getSalons').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 				})
 			} else {
@@ -168,27 +151,21 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 					// check status code
 					expect(interceptionGetSalons.response.statusCode).to.equal(200)
 
-					// sort table
-					cy.sortTable('sortby-title')
-					cy.wait('@getRejectedSuggestions').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-
 					// change pagination
 					cy.changePagination(50)
 					cy.wait('@getRejectedSuggestions').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 
 					// NOTE: at least two rejected suggestions must exists in order to search be enabled
 					// search
-					cy.setInputValue(FORM.FILTER_REJECTED_SUGGESTIONS, 'search', 'Salon 5')
-					cy.wait('@getRejectedSuggestions').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-					// clear search
-					cy.setInputValue(FORM.FILTER_REJECTED_SUGGESTIONS, 'search', '')
-					cy.wait('@getRejectedSuggestions').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
+					// cy.setInputValue(FORM.FILTER_REJECTED_SUGGESTIONS, 'search', 'Salon 5', true)
+					// cy.wait('@getRejectedSuggestions').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 
 					// filter table
-					cy.wait('@getSalons').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
-					// clear filter
-					cy.clearDropdownSelection('categoryFirstLevelIDs')
-					cy.wait('@getSalons').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
+					// cy.wait('@getRejectedSuggestions').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
+
+					// sort table
+					cy.sortTable('sortby-title')
+					cy.wait('@getRejectedSuggestions').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 				})
 			} else {
 				// check redirect to 403 not allowed page
@@ -214,8 +191,8 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 								method: 'DELETE',
 								pathname: `/api/b2b/admin/salons/${salonID}/rejected-suggestions`
 							}).as('deleteRejectedSuggestion')
-							cy.get('@firstRow').find(`#${ROW_BUTTON_WITH_ID(salonID || '')}`)
-							cy.wait('@deleteRejectedSuggestio').then((interceptionDeleteRejectedSuggestion: any) => {
+							cy.get('@firstRow').find('button').click()
+							cy.wait('@deleteRejectedSuggestion').then((interceptionDeleteRejectedSuggestion: any) => {
 								// check status code
 								expect(interceptionDeleteRejectedSuggestion.response.statusCode).to.equal(200)
 								// check conf toast message

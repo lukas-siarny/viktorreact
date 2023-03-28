@@ -91,16 +91,16 @@ const customerTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 				// check status code of login request
 				expect(interceptorGetCustomer.response.statusCode).to.equal(200)
 				// change input firstName for both cases
-				cy.setInputValue(FORM.CUSTOMER, 'firstName', generateRandomString(7), false, true)
+				cy.setInputValue(FORM.CUSTOMER, 'firstName', generateRandomString(7), true, true)
 				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
-					cy.setInputValue(FORM.CUSTOMER, 'lastName', generateRandomString(10), false, true)
+					cy.setInputValue(FORM.CUSTOMER, 'lastName', generateRandomString(10), true, true)
 					cy.clearDropdownSelection('gender')
-					cy.setInputValue(FORM.CUSTOMER, 'email', `${generateRandomString(6)}_${customer.update.emailSuffix}`, false, true)
-					cy.setInputValue(FORM.CUSTOMER, 'phone', customer.update.phone, false, true)
-					cy.setInputValue(FORM.CUSTOMER, 'street', customer.update.street, false, true)
-					cy.setInputValue(FORM.CUSTOMER, 'streetNumber', customer.update.streetNumber, false, true)
-					cy.setInputValue(FORM.CUSTOMER, 'city', generateRandomString(7), false, true)
-					cy.setInputValue(FORM.CUSTOMER, 'zipCode', generateRandomInt(5).toString(), false, true)
+					cy.setInputValue(FORM.CUSTOMER, 'email', `${generateRandomString(6)}_${customer.update.emailSuffix}`, true, true)
+					cy.setInputValue(FORM.CUSTOMER, 'phone', customer.update.phone, true, true)
+					cy.setInputValue(FORM.CUSTOMER, 'street', customer.update.street, true, true)
+					cy.setInputValue(FORM.CUSTOMER, 'streetNumber', customer.update.streetNumber, true, true)
+					cy.setInputValue(FORM.CUSTOMER, 'city', generateRandomString(7), true, true)
+					cy.setInputValue(FORM.CUSTOMER, 'zipCode', generateRandomInt(5).toString(), true, true)
 					cy.clickButton(SUBMIT_BUTTON_ID, FORM.CUSTOMER)
 					cy.wait('@updateCustomer').then((interception: any) => {
 						// check status code of login request

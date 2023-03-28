@@ -40,6 +40,7 @@ const SmsUnitPricesPage = () => {
 
 	const smsUnitPricesActual = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPricesActual)
 	const currencies = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.CURRENCIES])
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam(),
@@ -133,8 +134,10 @@ const SmsUnitPricesPage = () => {
 					return '-'
 				}
 
-				const { currencyCode } = record.country
-				const currency = currencies.data?.find((item) => item.code === currencyCode)
+				const { code } = record.country
+
+				const country = countries.data?.find((item) => item.code === code)
+				const currency = currencies.data?.find((item) => item.code === country?.currencyCode)
 				return `${value.amount} ${currency?.symbol || ''}`
 			}
 		},
@@ -158,8 +161,10 @@ const SmsUnitPricesPage = () => {
 			width: '30%',
 			render: (_value, record) => {
 				const value = record.next
-				const { currencyCode } = record.country
-				const currency = currencies.data?.find((item) => item.code === currencyCode)
+				const { code } = record.country
+
+				const country = countries.data?.find((item) => item.code === code)
+				const currency = currencies.data?.find((item) => item.code === country?.currencyCode)
 				return value ? `${value.amount} ${currency?.symbol || ''} ${t('loc:od {{ timeFrom }}', { timeFrom: dayjs(value.validFrom).format(D_M_YEAR_FORMAT) })}` : '-'
 			}
 		},

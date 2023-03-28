@@ -4,6 +4,10 @@ import { FormErrors } from 'redux-form'
 import i18next from 'i18next'
 
 // utils
+<<<<<<< HEAD
+=======
+import { passwordRegEx } from '../../../utils/regex'
+>>>>>>> NOT-4398_ZOD
 import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // types

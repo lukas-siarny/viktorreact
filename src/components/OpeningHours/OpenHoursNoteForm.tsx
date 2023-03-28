@@ -3,14 +3,11 @@ import { reduxForm, InjectedFormProps, Field } from 'redux-form'
 import { Form, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 
-// interfaces
-import { IOpenHoursNoteForm } from '../../types/interfaces'
-
 // utils
 import { FORM, STRINGS, VALIDATION_MAX_LENGTH } from '../../utils/enums'
 
-// validate
-import validateOpenHoursNoteForm from './validateOpenHoursNoteForm'
+// schema
+import { IOpenHoursNoteForm, validationOpenHoursNoteFn } from '../../schemas/openHoursNote'
 
 // atoms
 import TextareaField from '../../atoms/TextareaField'
@@ -31,6 +28,7 @@ const OpenHoursNoteForm: FC<Props> = (props) => {
 				placeholder={STRINGS(t).enter(t('loc:poznámku'))}
 				label={t('loc:Poznámka')}
 				size={'large'}
+				required
 				maxLength={VALIDATION_MAX_LENGTH.LENGTH_200}
 				showLettersCount
 			/>
@@ -46,7 +44,7 @@ const form = reduxForm<IOpenHoursNoteForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	validate: validateOpenHoursNoteForm
+	validate: validationOpenHoursNoteFn
 })(OpenHoursNoteForm)
 
 export default form

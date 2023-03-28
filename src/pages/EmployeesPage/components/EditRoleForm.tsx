@@ -18,7 +18,7 @@ import { FORM, PERMISSION } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 
 // validate
-import validateEditRoleFrom from './validateEditRoleFrom'
+import { validationEditRoleFn, IEditRoleForm } from '../../../schemas/role'
 
 // assets
 import { ReactComponent as KeyIcon } from '../../../assets/icons/key.svg'
@@ -32,7 +32,7 @@ type ComponentProps = {
 	permissionTooltip?: string | null
 }
 
-type Props = InjectedFormProps<IInviteEmployeeForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<IEditRoleForm, ComponentProps> & ComponentProps
 
 const EditRoleForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
@@ -92,13 +92,13 @@ const EditRoleForm: FC<Props> = (props) => {
 	)
 }
 
-const form = reduxForm<IInviteEmployeeForm, ComponentProps>({
+const form = reduxForm<IEditRoleForm, ComponentProps>({
 	form: FORM.EDIT_EMPLOYEE_ROLE,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: false,
 	touchOnBlur: true,
 	destroyOnUnmount: true,
-	validate: validateEditRoleFrom
+	validate: validationEditRoleFn
 })(EditRoleForm)
 
 export default form

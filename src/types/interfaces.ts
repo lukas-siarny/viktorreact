@@ -125,29 +125,9 @@ export type EmployeeServiceData = {
 }
 
 export type IEmployeeServiceEditForm = EmployeeServiceData & {}
-export interface IEditEmployeeRoleForm {
-	roleID: string
-}
-
-export interface ICreateUserForm {
-	email: string
-	phonePrefixCountryCode: string
-	phone: string
-	roleID: string
-	assignedCountryCode: string
-}
 
 export interface IEditUserRoleForm {
 	roleID: string
-}
-
-export interface IUserAccountForm {
-	firstName: string
-	lastName: string
-	phonePrefixCountryCode: string
-	phone: string
-	avatar: any
-	assignedCountryCode: string
 }
 
 // type of BE opening hours data
@@ -281,29 +261,9 @@ export interface IRegistrationForm {
 	marketing: boolean
 }
 
-export interface IForgotPasswordForm {
-	email: string
-}
 
 export interface IActivationForm {
 	code: string
-}
-
-export interface IBillingForm {
-	countryCode?: string
-	zipCode?: string
-	city?: string
-	street?: string
-	streetNumber?: string
-	email?: string
-	firstName?: string
-	lastName?: string
-	phonePrefixCountryCode?: string
-	phone?: string
-	businessID?: string
-	taxID?: string
-	vatID?: string
-	companyName?: string
 }
 
 export interface IJwtPayload {
@@ -312,23 +272,12 @@ export interface IJwtPayload {
 	iat: number
 	uid: string
 }
-export interface ICreatePasswordForm {
-	password: string
-	confirmPassword: string
-}
-export interface IForgotPasswordForm {
-	email: string
-}
 
 export interface ILoadingAndFailure {
 	isLoading: boolean
 	isFailure: boolean
 }
 
-export interface IConfirmUserForm extends ICreatePasswordForm {
-	name: string
-	surname: string
-}
 
 export interface IBreadcrumbItem {
 	name: string
@@ -351,17 +300,12 @@ export interface IStructuredAddress {
 	houseNumber: string | null
 }
 
-export interface INoteForm {
-	note: string
-}
 
 export interface INotinoUserForm {
 	assignedUser: ISelectOptionItem
 }
 
-export interface IOpenHoursNoteForm {
-	openingHoursNote: string
-}
+
 
 export interface ISearchFilter {
 	search: string

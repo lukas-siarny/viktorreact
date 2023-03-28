@@ -20,3 +20,8 @@ export const dateRegex = /^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])
 
 // validate HH:mm time format
 export const timeRegex = /^(?:[01]\d|2[0-3]):(?:[0-5]\d)$/
+
+/**
+ * @see https://ihateregex.io/expr/uuid/
+ */
+export const uuidRegex = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/

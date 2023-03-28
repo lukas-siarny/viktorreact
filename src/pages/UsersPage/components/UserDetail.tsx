@@ -13,8 +13,8 @@ import DeleteButton from '../../../components/DeleteButton'
 import { RootState } from '../../../reducers'
 import { getUser } from '../../../reducers/users/userActions'
 
-// types
-import { IUserAccountForm } from '../../../types/interfaces'
+// schema
+import { IUserAccountForm } from '../../../schemas/user'
 
 // utils
 import { deleteReq, patchReq } from '../../../utils/request'
@@ -78,7 +78,7 @@ const UserDetail = (props: Props) => {
 
 	const handleUserAccountFormSubmit = async (data: IUserAccountForm) => {
 		try {
-			const body: any = {
+			const body = {
 				firstName: data?.firstName,
 				lastName: data?.lastName,
 				phonePrefixCountryCode: data?.phonePrefixCountryCode,
@@ -117,7 +117,7 @@ const UserDetail = (props: Props) => {
 			<div className='content-body small'>
 				<Spin spinning={isLoading || submittingAccountForm}>
 					<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
-					<div className={'content-footer'}>
+					<div className={'content-footer'} id={'content-footer-container'}>
 						<div className={'flex flex-col gap-2 md:flex-row md:justify-between'}>
 							<DeleteButton
 								permissions={[PERMISSION.USER_DELETE]}

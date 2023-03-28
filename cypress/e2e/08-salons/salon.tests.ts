@@ -17,23 +17,25 @@ import customerTestSuite, { deleteCustomer } from './customers.tests'
 import employeeTestSuite, { deleteEmployee } from './employee.tests'
 import industriesAndServicesTestSuite from './industriesAndServices.tests'
 import reservationsTestSuite from './reservations.test'
+import smsCreditTestSuite from './smsCredit.tests'
+import salonApprovalProcessTestSuite from './salonApprovalProcess.tests'
 
 const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON_ROLES | PERMISSION, email?: string, password?: string): void => {
-	before(() => {
-		loginViaApi(email, password)
-	})
-
-	beforeEach(() => {
-		// restore local storage with tokens and salon id from snapshot
-		cy.restoreLocalStorage()
-	})
-
-	afterEach(() => {
-		// take snapshot of local storage with new refresh and access token
-		cy.saveLocalStorage()
-	})
-
 	context('Salon', () => {
+		before(() => {
+			loginViaApi(email, password)
+		})
+
+		beforeEach(() => {
+			// restore local storage with tokens and salon id from snapshot
+			cy.restoreLocalStorage()
+		})
+
+		afterEach(() => {
+			// take snapshot of local storage with new refresh and access token
+			cy.saveLocalStorage()
+		})
+
 		// skip salon create for user with salon role
 		if (!(role in SALON_ROLES)) {
 			it('Create salon', () => {
@@ -45,7 +47,7 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 				cy.visit('/salons/create')
 				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
 					// visit specialsit modal
-					cy.get('.noti-specialist-button').click({ force: true })
+					cy.get('.noti-specialist-button').trigger('mouseover').click({ force: true })
 					// wait for animations
 					cy.wait(2000)
 					cy.selectOptionDropdownCustom(undefined, 'noti-specialist-select', undefined, true)
@@ -139,6 +141,20 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 
 		// test suites depending on salon
 		context('Salon sub test suites', () => {
+			before(() => {
+				loginViaApi(email, password)
+			})
+
+			beforeEach(() => {
+				// restore local storage with tokens and salon id from snapshot
+				cy.restoreLocalStorage()
+			})
+
+			afterEach(() => {
+				// take snapshot of local storage with new refresh and access token
+				cy.saveLocalStorage()
+			})
+
 			tests.forEach((test) => {
 				switch (test.name) {
 					case SALON_TESTS_SUITS.BILLING_INFORMATION:
@@ -156,188 +172,88 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 					case SALON_TESTS_SUITS.RESERVATIONS:
 						reservationsTestSuite(test.actions)
 						break
+					case SALON_TESTS_SUITS.SMS_CREDIT:
+						smsCreditTestSuite(test.actions)
+						break
 					default:
 				}
 			})
 		})
 
-		context('Salon approval process', () => {
-			it('Request salon publication', () => {
+		// Salon approval process
+		salonApprovalProcessTestSuite(actions, role, email, password)
+
+		// History
+		context('Salon history', () => {
+			before(() => {
+				loginViaApi(email, password)
+			})
+
+			beforeEach(() => {
+				// restore local storage with tokens and salon id from snapshot
+				cy.restoreLocalStorage()
+			})
+
+			afterEach(() => {
+				// take snapshot of local storage with new refresh and access token
+				cy.saveLocalStorage()
+			})
+
+			it('Visit salon history', () => {
 				// get salonID from env
 				const salonID = Cypress.env(SALON_ID)
 				cy.intercept({
 					method: 'GET',
-					url: `/api/b2b/admin/salons/${salonID}`
-				}).as('getSalonDetail')
-				cy.intercept({
-					method: 'PATCH',
-					url: `/api/b2b/admin/salons/${salonID}/request-publication`
-				}).as('requestSalonPublication')
+					pathname: `/api/b2b/admin/salons/${salonID}/history`
+				}).as('getSalonHistory')
 				cy.visit(`/salons/${salonID}`)
-				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
-					// NOTE: roles that don't have permissions can't see this button
+				// skip for user with Salon roles - they can't see this tab
+				if ((actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) && !(role in SALON_ROLES)) {
 					cy.get('main.ant-layout-content').then(($body) => {
-						if ($body.find(`#${FORM.SALON}-request-publication`).length) {
-							cy.clickButton('request-publication', FORM.SALON)
-							cy.wait('@getSalonDetail').then((interceptionGetSalonDetail: any) => {
-								expect(interceptionGetSalonDetail.response.statusCode).to.equal(200)
-								// NOTE: all neccesary requirements for publication should be fulfilled
-								cy.clickButton('request-publication-modal', FORM.SALON)
-								cy.wait('@requestSalonPublication').then((interceptionRequestSalonPublication: any) => {
-									expect(interceptionRequestSalonPublication.response.statusCode).to.equal(200)
-									// check conf toast message
-									cy.checkSuccessToastMessage()
+						if ($body.find(`[data-node-key="${TAB_KEYS.SALON_HISTORY}"]`).length) {
+							cy.clickTab(TAB_KEYS.SALON_HISTORY)
+							cy.wait('@getSalonHistory').then((interceptionGetSalonHistory: any) => {
+								expect(interceptionGetSalonHistory.response.statusCode).to.equal(200)
+								if ($body.find('.noti-tag.bg-status-published').length) {
+									// only published salon can see salon history
+									cy.get('#salon-history-list').should('be.visible')
+								} else {
+									// empty state for unpublished salons
+									cy.get('.ant-empty').should('be.visible')
+								}
+								// update range of history data
+								cy.scrollTo(0, 0)
+								cy.get(`#${FORM.SALON_HISTORY_FILTER}-dateFromTo`).find('input').first().click({ force: true })
+								cy.get('.ant-picker-dropdown :not(.ant-picker-dropdown-hidden)', { timeout: 2000 })
+									.find('.ant-picker-presets > ul > li')
+									.first()
+									.click({ force: true })
+								cy.wait('@getSalonHistory').then((interceptionGetSalonHistoryWithDifferentRange: any) => {
+									expect(interceptionGetSalonHistoryWithDifferentRange.response.statusCode).to.equal(200)
 								})
 							})
 						}
 					})
 				}
 			})
-
-			it('Confirm salon publication', () => {
-				// get salonID from env
-				const salonID = Cypress.env(SALON_ID)
-				cy.intercept({
-					method: 'GET',
-					url: `/api/b2b/admin/salons/${salonID}`
-				}).as('getSalonDetail')
-				cy.intercept({
-					method: 'PATCH',
-					url: `/api/b2b/admin/salons/${salonID}/resolve-publication`
-				}).as('resolveSalonPublication')
-				cy.visit(`/salons/${salonID}`)
-				if ((actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) && !(role in SALON_ROLES)) {
-					// NOTE: roles that don't have permissions can't see this button
-					cy.get('main.ant-layout-content').then(($body) => {
-						if ($body.find(`#${FORM.SALON}-accept-salon`).length) {
-							cy.clickButton('accept-salon', FORM.SALON)
-							cy.wait(['@getSalonDetail', '@resolveSalonPublication']).then(([interceptionGetSalonDetail, interceptionResolveSalonPublication]: any[]) => {
-								expect(interceptionGetSalonDetail.response.statusCode).to.equal(200)
-								expect(interceptionResolveSalonPublication.response.statusCode).to.equal(200)
-								// published tag should be visible
-								cy.get('.noti-tag.bg-status-published').should('be.visible')
-								// check conf toast message
-								cy.checkSuccessToastMessage()
-							})
-						}
-					})
-				}
-			})
-
-			it('Hide salon publication', () => {
-				// get salonID from env
-				const salonID = Cypress.env(SALON_ID)
-				cy.intercept({
-					method: 'GET',
-					url: `/api/b2b/admin/salons/${salonID}`
-				}).as('getSalonDetail')
-				cy.intercept({
-					method: 'PATCH',
-					url: `/api/b2b/admin/salons/${salonID}/unpublish`
-				}).as('unpublishSalon')
-				cy.visit(`/salons/${salonID}`)
-				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
-					// NOTE: roles that don't have permissions can't see this button
-					cy.get('main.ant-layout-content').then(($body) => {
-						if ($body.find(`#${FORM.SALON}-hide.salon`).length) {
-							cy.clickButton('hide-salon', FORM.SALON)
-							// wait for animations
-							cy.wait(2000)
-							cy.setInputValue(FORM.NOTE, 'note', salon.unpublish.reason)
-							cy.clickButton(SUBMIT_BUTTON_ID, FORM.NOTE)
-							cy.wait(['@getSalonDetail', '@unpublishSalon']).then(([interceptionGetSalonDetail, interceptionUnpublishSalon]: any[]) => {
-								expect(interceptionGetSalonDetail.response.statusCode).to.equal(200)
-								expect(interceptionUnpublishSalon.response.statusCode).to.equal(200)
-								// not published tag should be visible
-								cy.get('.noti-tag.bg-status-notPublished').should('be.visible')
-								// alert message with hide reason should be visible
-								cy.get('.ant-alert-message > p').should('include.text', salon.unpublish.reason)
-								// check conf toast message
-								cy.checkSuccessToastMessage()
-							})
-						}
-					})
-				}
-			})
-
-			it('Decline salon publication', () => {
-				// get salonID from env
-				const salonID = Cypress.env(SALON_ID)
-				cy.intercept({
-					method: 'GET',
-					url: `/api/b2b/admin/salons/${salonID}`
-				}).as('getSalonDetail')
-				cy.intercept({
-					method: 'PATCH',
-					url: `/api/b2b/admin/salons/${salonID}/resolve-publication`
-				}).as('resolveSalonPublication')
-				cy.visit(`/salons/${salonID}`)
-				if ((actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) && !(role in SALON_ROLES)) {
-					// NOTE: roles that don't have permissions can't see this button
-					cy.get('main.ant-layout-content').then(($body) => {
-						if ($body.find(`#${FORM.SALON}-decline-salon`).length) {
-							cy.clickButton('decline-salon', FORM.SALON)
-							// wait for animations
-							cy.wait(2000)
-							cy.setInputValue(FORM.NOTE, 'note', salon.decline.reason)
-							cy.clickButton(SUBMIT_BUTTON_ID, FORM.NOTE)
-							cy.wait(['@getSalonDetail', '@resolveSalonPublication']).then(([interceptionGetSalonDetail, interceptionResolveSalonPublication]: any[]) => {
-								expect(interceptionGetSalonDetail.response.statusCode).to.equal(200)
-								expect(interceptionResolveSalonPublication.response.statusCode).to.equal(200)
-								// declined tag should be visible
-								cy.get('.noti-tag.bg-status-declined').should('be.visible')
-								// alert message with decline reason should be visible
-								cy.get('.ant-alert-message > p').should('include.text', salon.decline.reason)
-								// check conf toast message
-								cy.checkSuccessToastMessage()
-							})
-						}
-					})
-				}
-			})
-		})
-
-		// history
-		it('Visit salon history', () => {
-			// get salonID from env
-			const salonID = Cypress.env(SALON_ID)
-			cy.intercept({
-				method: 'GET',
-				pathname: `/api/b2b/admin/salons/${salonID}/history`
-			}).as('getSalonHistory')
-			cy.visit(`/salons/${salonID}`)
-			// skip for user with Salon roles - they can't see this tab
-			if ((actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) && !(role in SALON_ROLES)) {
-				cy.get('main.ant-layout-content').then(($body) => {
-					if ($body.find(`[data-node-key="${TAB_KEYS.SALON_HISTORY}"]`).length) {
-						cy.clickTab(TAB_KEYS.SALON_HISTORY)
-						cy.wait('@getSalonHistory').then((interceptionGetSalonHistory: any) => {
-							expect(interceptionGetSalonHistory.response.statusCode).to.equal(200)
-							if ($body.find('.noti-tag.bg-status-published').length) {
-								// only published salon can see salon history
-								cy.get('#salon-history-list').should('be.visible')
-							} else {
-								// empty state for unpublished salons
-								cy.get('.ant-empty').should('be.visible')
-							}
-							// update range of history data
-							cy.get(`#${FORM.SALON_HISTORY_FILTER}-dateFromTo`).find('input').first().click({ force: true })
-							cy.get('.ant-picker-dropdown :not(.ant-picker-dropdown-hidden)', { timeout: 2000 })
-								.should('be.visible')
-								.find('.ant-picker-presets > ul > li')
-								.first()
-								.click()
-							cy.wait('@getSalonHistory').then((interceptionGetSalonHistoryWithDifferentRange: any) => {
-								expect(interceptionGetSalonHistoryWithDifferentRange.response.statusCode).to.equal(200)
-							})
-						})
-					}
-				})
-			}
 		})
 
 		// clear testing data
 		context('Delete operations', () => {
+			before(() => {
+				loginViaApi(email, password)
+			})
+
+			beforeEach(() => {
+				// restore local storage with tokens and salon id from snapshot
+				cy.restoreLocalStorage()
+			})
+
+			afterEach(() => {
+				// take snapshot of local storage with new refresh and access token
+				cy.saveLocalStorage()
+			})
+
 			// check for actions in tests array for specific enumerations
 			const testForCustomer = tests.find((test) => test.name === SALON_TESTS_SUITS.CUSTOMER)
 			if (testForCustomer) deleteCustomer(testForCustomer.actions)
@@ -362,8 +278,6 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 						expect(interception.response.statusCode).to.equal(200)
 						// check conf toast message
 						cy.checkSuccessToastMessage()
-						// if user has assigend more salons, then it redirects him to the first salon from the list, otherwise it redirects him to dashboard
-						cy.location('pathname').should('include', `/salons`)
 					})
 				} else {
 					cy.clickButton(DELETE_BUTTON_ID, FORM.SALON)

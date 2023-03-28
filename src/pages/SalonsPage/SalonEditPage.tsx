@@ -27,7 +27,10 @@ import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
-import { IBreadcrumbs, INoteForm, INoteModal, INotinoUserForm, ISalonForm, SalonPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, INoteModal, INotinoUserForm, ISalonForm, SalonPageProps } from '../../types/interfaces'
+
+// schema
+import { INoteForm } from '../../schemas/note'
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'

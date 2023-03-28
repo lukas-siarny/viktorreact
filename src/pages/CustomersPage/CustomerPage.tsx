@@ -107,7 +107,7 @@ const CustomerPage = (props: Props) => {
 					city: data.city,
 					countryCode: data.countryCode,
 					firstName: data.firstName,
-					gender: data.gender, // ?? undefined,
+					gender: data.gender as any, // NOTE: In Swagger scheme missing nullable definition, but API accepts null value
 					lastName: data.lastName,
 					note: data.note,
 					street: data.street,
@@ -154,7 +154,7 @@ const CustomerPage = (props: Props) => {
 			<Spin spinning={isLoading}>
 				<div className='content-body small'>
 					<CustomerForm onSubmit={updateCustomer} />
-					<div className={'content-footer'}>
+					<div className={'content-footer'} id={'content-footer-container'}>
 						<div className={'flex flex-col gap-2 md:flex-row md:justify-between'}>
 							<DeleteButton
 								permissions={[PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_DELETE]}

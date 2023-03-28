@@ -16,7 +16,7 @@ To install the project, run:
 ```npm install --legacy-peer-deps```
 
 ## Usage
-After the library is installed, the environment variables must be set at in ```.env``` file to run the project 
+After installation, following environment variables must be set in the ```.env``` file to successfully start the application:
 
 * **PROXY**: This variable specifies the proxy server that will be used for requests.
 * **REACT_APP_GOOGLE_MAPS_API_KEY**: This variable contains the API key for the Google Maps API. It is used by your React application to display maps and location information.
@@ -24,13 +24,11 @@ After the library is installed, the environment variables must be set at in ```.
 * **REACT_APP_SENTRY_ENV**: This variable sets the environment for Sentry, a popular error tracking service.
 * **REACT_APP_SENTRY_DSN**: This variable contains the Data Source Name (DSN) for Sentry. The DSN is a unique identifier that allows Sentry to receive and track errors from your application.
 
-
 To start the development server, run:
 
 ```npm start```
 
 This will start the development server at http://localhost:3000/. You can view the app in the browser.
-
 
 To build the project, run:
 

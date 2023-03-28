@@ -1,10 +1,11 @@
 import i18next from 'i18next'
 import { FormErrors, DecoratedFormProps } from 'redux-form'
 import { z, ZodString, ZodOptional, ZodNullable, ZodTypeAny } from 'zod'
+import { errorUtil } from 'zod/lib/helpers/errorUtil'
 import { set } from 'lodash'
 
 import { FORM, VALIDATION_MAX_LENGTH, LANGUAGE } from '../utils/enums'
-import passwordRegEx from '../utils/regex'
+import { passwordRegEx, uuidRegex } from '../utils/regex'
 
 /**
  * Serialize args for i18next.t function
@@ -148,11 +149,13 @@ export const defaultErrorMap: z.ZodErrorMap = (issue, ctx) => {
 #### CONSTRAINTS ####
 */
 
+export const uuidConstraint = z.string().regex(uuidRegex, { message: serializeValidationMessage('loc:Neplatný formát UUID') })
+
 export const imageConstraint = z.object({
 	url: z.string().url().nullish(),
 	thumbUrl: z.string().nullish(),
 	uid: z.string(),
-	id: z.string().uuid().nullish()
+	id: uuidConstraint.nullish()
 })
 
 export function stringConstraint<T extends true | false>(maxLength: number, required?: T): T extends true ? ZodString : ZodOptional<ZodNullable<ZodString>>

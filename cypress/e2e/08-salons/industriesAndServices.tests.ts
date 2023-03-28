@@ -34,9 +34,20 @@ const industriesAndServicesTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 				// check status code
 				expect(interceptionCategories.response.statusCode).to.equal(200)
 				expect(interceptionServices.response.statusCode).to.equal(200)
-				cy.get('.checkbox-group-image-wrapper > .checkbox-with-image:first > label').as('firstIndustryLabel')
-				cy.get('@firstIndustryLabel').find('input[type="checkbox"]').should('have.id', interceptionCategories.response.body.categories[0].id)
-				cy.get('@firstIndustryLabel').find('.inner-wrapper').click({ force: true })
+				let industryIndex = 0
+				// NOTE: must exists at least 1 category that isn't checked
+				cy.get('.checkbox-group-image-wrapper > .checkbox-with-image').each(($element, index) => {
+					if (!$element.hasClass('checked')) {
+						industryIndex = index
+						cy.wrap($element).find('> label').as('industryLabel')
+						cy.get('@industryLabel').find('input[type="checkbox"]').should('have.id', interceptionCategories.response.body.categories[industryIndex].id)
+						cy.get('@industryLabel').find('.inner-wrapper').click({ force: true })
+
+						// end loop
+						return false
+					}
+					return true
+				})
 				cy.clickButton(SUBMIT_BUTTON_ID, FORM.INDUSTRIES)
 				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
 					cy.wait('@patchSalonCategories').then((interceptionPatchSalonCategories: any) => {
@@ -44,14 +55,27 @@ const industriesAndServicesTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 						expect(interceptionPatchSalonCategories.response.statusCode).to.equal(200)
 						// check conf toast message
 						cy.checkSuccessToastMessage()
-						cy.get('.checkbox-group-image-wrapper > .checkbox-with-image:first > button').click()
+						cy.get('.checkbox-group-image-wrapper > .checkbox-with-image').eq(industryIndex).find('> button').click()
 						cy.wait('@getCategories').then((interceptionGetCategoriesInDetail: any) => {
 							// check status code
 							expect(interceptionGetCategoriesInDetail.response.statusCode).to.equal(200)
 							// wait for select tree to be loaded
 							cy.wait(2000)
-							// select first industry (at least one industry with at least one service must exist in order to test work properly!!)
-							cy.get('.noti-tree-node-0 > .ant-tree-checkbox').click({ force: true })
+							// there must be at least two services in the industry in order to test work properly !!
+							cy.get('.ant-tree-list .ant-tree-treenode').each(($treeNode, index) => {
+								// we know that not everything is checked, so when we check this we are sure that salon would have some services selected
+								if (index === 0 && !$treeNode.hasClass('ant-tree-treenode-checkbox-checked')) {
+									cy.wrap($treeNode.find('.ant-tree-checkbox')).click({ force: true })
+									return false
+								}
+								// if everything is checked and we know that at least two services exist, we can uncheck first of them and we still have at least one service to work with, which is neccesary for other tests to work
+								// it will make changes to formular and submit button will not be disabled
+								if (index === 2) {
+									cy.wrap($treeNode.find('.ant-tree-checkbox')).click({ force: true })
+									return false
+								}
+								return true
+							})
 							cy.clickButton(SUBMIT_BUTTON_ID, FORM.INDUSTRY)
 							cy.wait('@patchSalonServices').then((interceptionPatchSalonCategory: any) => {
 								// check status code
@@ -122,24 +146,46 @@ const industriesAndServicesTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 								expect(interceptorGetEmlpoyees.response.statusCode).to.equal(200)
 
 								if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
-									cy.setInputValue(FORM.SERVICE_FORM, 'durationFrom', service.create.durationFrom)
-									cy.setInputValue(FORM.SERVICE_FORM, 'priceFrom', service.create.priceFrom)
-									// add employee from Select with async search (at least one employee must exit in the salon in order to test work properly!!)
-									cy.get(generateElementId('employee', FORM.SERVICE_FORM)).click()
-									cy.wait('@getEmployees').then((interceptorGetEmlpoyeesSearch: any) => {
-										expect(interceptorGetEmlpoyeesSearch.response.statusCode).to.equal(200)
-										// select first employee from the list
-										cy.get('.ant-select-dropdown :not(.ant-select-dropdown-hidden)', { timeout: 10000 })
-											.should('be.visible')
-											.find('.ant-select-item-option')
-											.first()
-											.click({ force: true })
+									cy.get('main.ant-layout-content').then(($body) => {
+										if ($body.find(`#${FORM.SERVICE_FORM}-useCategoryParameter`).length) {
+											cy.get(`#${FORM.SERVICE_FORM}-useCategoryParameter > button`).then(($switchButton) => {
+												if ($switchButton.hasClass('ant-switch-checked')) {
+													cy.wrap($switchButton).click()
+												}
+											})
+										}
 
-										cy.get(`#${FORM.SERVICE_FORM}-add-employee`).click()
-										cy.clickButton(SUBMIT_BUTTON_ID, FORM.SERVICE_FORM)
-										// TODO: test service with category parameter
-										cy.wait('@updateSalonService').then((interceptorUpdateSalonService: any) => {
-											expect(interceptorUpdateSalonService.response.statusCode).to.equal(200)
+										cy.get(`#${FORM.SERVICE_FORM}-variableDuration > button`).then(($switchButton) => {
+											if ($switchButton.hasClass('ant-switch-checked')) {
+												cy.wrap($switchButton).click()
+											}
+										})
+
+										cy.get(`#${FORM.SERVICE_FORM}-variablePrice > button`).then(($switchButton) => {
+											if ($switchButton.hasClass('ant-switch-checked')) {
+												cy.wrap($switchButton).click()
+											}
+										})
+
+										cy.setInputValue(FORM.SERVICE_FORM, 'durationFrom', service.create.durationFrom, true, true)
+										cy.setInputValue(FORM.SERVICE_FORM, 'priceFrom', service.create.priceFrom, true, true)
+										// add employee from Select with async search (at least one employee must exit in the salon in order to test work properly!!)
+										cy.get(generateElementId('employee', FORM.SERVICE_FORM)).click()
+										cy.wait('@getEmployees').then((interceptorGetEmlpoyeesSearch: any) => {
+											expect(interceptorGetEmlpoyeesSearch.response.statusCode).to.equal(200)
+											// select first employee from the list
+											cy.get('.ant-select-dropdown :not(.ant-select-dropdown-hidden)', { timeout: 10000 })
+												.should('be.visible')
+												.find('.ant-select-item-option')
+												.first()
+												.click({ force: true })
+
+											cy.get(`#${FORM.SERVICE_FORM}-add-employee`).click()
+											cy.clickButton(SUBMIT_BUTTON_ID, FORM.SERVICE_FORM)
+											// TODO: test service with category parameter
+											cy.wait('@updateSalonService').then((interceptorUpdateSalonService: any) => {
+												expect(interceptorUpdateSalonService.response.statusCode).to.equal(200)
+											})
 										})
 									})
 								}
@@ -208,7 +254,8 @@ const industriesAndServicesTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 										.as('employeeServiceEditBtn')
 										.invoke('attr', 'id')
 										.then((btnID) => {
-											const [, employeeID] = (btnID || '').split('_')
+											const split = (btnID || '').split('_')
+											const employeeID = split[split.length - 1]
 
 											cy.intercept({
 												method: 'PATCH',
@@ -237,7 +284,7 @@ const industriesAndServicesTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			})
 		})
 
-		it('Filter services services', () => {
+		it('Filter services settings', () => {
 			// get salonID from env
 			const salonID = Cypress.env(SALON_ID)
 			cy.intercept({

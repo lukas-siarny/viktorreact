@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Col, Row, Spin, TablePaginationConfig } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
@@ -95,91 +95,96 @@ const SmsUnitPricesPage = () => {
 		}
 	}
 
-	const formatPrice = (countryCode: string, amount: number) => {
-		const country = countries.data?.find((item) => item.code === countryCode)
-		const currency = currencies.data?.find((item) => item.code === country?.currencyCode)
-		return `${amount} ${currency?.symbol || ''}`
-	}
+	const formatPrice = useCallback(
+		(countryCode: string, amount: number) => {
+			const country = countries.data?.find((item) => item.code === countryCode)
+			const currency = currencies.data?.find((item) => item.code === country?.currencyCode)
+			return `${amount} ${currency?.symbol || ''}`
+		},
+		[currencies.data, countries.data]
+	)
 
-	const columns: ColumnProps<TableDataItem>[] = [
-		{
-			title: t('loc:Krajina'),
-			dataIndex: 'country',
-			key: 'country',
-			width: '20%',
-			sortOrder: setOrder(query.order, 'country'),
-			sorter: {
-				compare: (a, b) => {
-					const aValue = a?.country?.name
-					const bValue = b?.country?.name
-					return sortData(aValue, bValue)
+	const columns: ColumnProps<TableDataItem>[] = useMemo(() => {
+		return [
+			{
+				title: t('loc:Krajina'),
+				dataIndex: 'country',
+				key: 'country',
+				width: '20%',
+				sortOrder: setOrder(query.order, 'country'),
+				sorter: {
+					compare: (a, b) => {
+						const aValue = a?.country?.name
+						const bValue = b?.country?.name
+						return sortData(aValue, bValue)
+					}
+				},
+				render: (_value, record) => {
+					const { country } = record
+					const name = country.name || country.code
+					return (
+						<div className={'flex items-center gap-2'}>
+							{country.flag && <img src={country.flag} alt={name} width={24} />}
+							<span className={'truncate inline-block'}>{name}</span>
+						</div>
+					)
 				}
 			},
-			render: (_value, record) => {
-				const { country } = record
-				const name = country.name || country.code
-				return (
-					<div className={'flex items-center gap-2'}>
-						{country.flag && <img src={country.flag} alt={name} width={24} />}
-						<span className={'truncate inline-block'}>{name}</span>
-					</div>
-				)
-			}
-		},
-		{
-			title: t('loc:Aktuálna cena SMS'),
-			dataIndex: 'actual',
-			key: 'amount',
-			ellipsis: true,
-			align: 'right',
-			width: '20%',
-			render: (_value, record) => {
-				const value = record.actual
+			{
+				title: t('loc:Aktuálna cena SMS'),
+				dataIndex: 'actual',
+				key: 'amount',
+				ellipsis: true,
+				align: 'right',
+				width: '20%',
+				render: (_value, record) => {
+					const value = record.actual
 
-				if (!value) {
-					return '-'
+					if (!value) {
+						return '-'
+					}
+
+					const { code } = record.country
+					return `${formatPrice(code, value.amount)}`
 				}
-
-				const { code } = record.country
-				return `${formatPrice(code, value.amount)}`
+			},
+			{
+				title: <div style={{ marginLeft: '20%' }}>{t('loc:Platná od')}</div>,
+				dataIndex: 'actual',
+				key: 'validFrom',
+				ellipsis: true,
+				sorter: false,
+				width: '30%',
+				render: (_value, record) => {
+					return <div style={{ marginLeft: '20%' }}>{record?.actual?.validFrom ? dayjs(record.actual.validFrom).format(D_M_YEAR_FORMAT) : ''}</div>
+				}
+			},
+			{
+				title: t('loc:Plánovaná cena SMS'),
+				dataIndex: 'next',
+				key: 'validFromNext',
+				ellipsis: true,
+				sorter: false,
+				width: '30%',
+				render: (_value, record) => {
+					const value = record.next
+					const { code } = record.country
+					return value ? `${formatPrice(code, value.amount)} ${t('loc:od {{ timeFrom }}', { timeFrom: dayjs(value.validFrom).format(D_M_YEAR_FORMAT) })}` : '-'
+				}
+			},
+			{
+				key: 'action',
+				width: 30,
+				render: () => {
+					return (
+						<div className={'flex items-center jusitfy-center'}>
+							<ChevronLeftIcon style={{ transform: 'rotate(180deg)' }} />
+						</div>
+					)
+				}
 			}
-		},
-		{
-			title: <div style={{ marginLeft: '20%' }}>{t('loc:Platná od')}</div>,
-			dataIndex: 'actual',
-			key: 'validFrom',
-			ellipsis: true,
-			sorter: false,
-			width: '30%',
-			render: (_value, record) => {
-				return <div style={{ marginLeft: '20%' }}>{record?.actual?.validFrom ? dayjs(record.actual.validFrom).format(D_M_YEAR_FORMAT) : ''}</div>
-			}
-		},
-		{
-			title: t('loc:Plánovaná cena SMS'),
-			dataIndex: 'next',
-			key: 'validFromNext',
-			ellipsis: true,
-			sorter: false,
-			width: '30%',
-			render: (_value, record) => {
-				const value = record.next
-				const { code } = record.country
-				return value ? `${formatPrice(code, value.amount)} ${t('loc:od {{ timeFrom }}', { timeFrom: dayjs(value.validFrom).format(D_M_YEAR_FORMAT) })}` : '-'
-			}
-		},
-		{
-			key: 'action',
-			width: 30,
-			render: () => {
-				return (
-					<div className={'flex items-center jusitfy-center'}>
-						<ChevronLeftIcon style={{ transform: 'rotate(180deg)' }} />
-					</div>
-				)
-			}
-		}
-	]
+		]
+	}, [query.order, t, formatPrice])
 
 	return (
 		<>

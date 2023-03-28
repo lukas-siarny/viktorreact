@@ -3,8 +3,8 @@ import { FormErrors, DecoratedFormProps } from 'redux-form'
 import { z, ZodString, ZodOptional, ZodNullable, ZodTypeAny } from 'zod'
 import { set } from 'lodash'
 
-import passwordRegEx from '../utils/regex'
 import { FORM, VALIDATION_MAX_LENGTH, LANGUAGE } from '../utils/enums'
+import { passwordRegEx, uuidRegex } from '../utils/regex'
 
 /**
  * Serialize args for i18next.t function
@@ -148,11 +148,13 @@ export const defaultErrorMap: z.ZodErrorMap = (issue, ctx) => {
 #### CONSTRAINTS ####
 */
 
+export const uuidConstraint = z.string().regex(uuidRegex, { message: serializeValidationMessage('loc:Neplatný formát UUID') })
+
 export const imageConstraint = z.object({
 	url: z.string().url().nullish(),
 	thumbUrl: z.string().nullish(),
 	uid: z.string(),
-	id: z.string().uuid().nullish()
+	id: uuidConstraint.nullish()
 })
 
 export function stringConstraint<T extends true | false>(maxLength: number, required?: T): T extends true ? ZodString : ZodOptional<ZodNullable<ZodString>>
@@ -196,3 +198,8 @@ export const localizedValuesConstraint = (required?: boolean, maxLength = VALIDA
 				value: stringConstraint(maxLength)
 			})
 		)
+
+/**
+ * Constraint for for boolean field which is required to be true
+ */
+export const requiredTrueConstraint = z.literal<boolean>(true, { errorMap: () => ({ message: serializeValidationMessage('loc:Toto pole je povinné') }) })

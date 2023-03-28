@@ -1,6 +1,6 @@
 {
   "name": "notino_b2b_web",
-  "version": "2.1.0",
+  "version": "2.1.2",
   "main": "src/index.ts",
   "repository": "git@bitbucket.org:GoodRequest/notino_b2b_web.git",
   "author": "Jan Cvencek <jan.cvencek@goodrequest.com>",
@@ -39,6 +39,7 @@
     "translations-csv-to-json": "npx convert-csv-to-json GoodRequest/i18nextJsonToCsv",
     "translations-json-to-csv": "npx convert-json-to-csv GoodRequest/i18nextJsonToCsv",
     "wait-for-it": "./scripts/wait-for-it.sh",
+    "health-check-waiter": "./scripts/health-check-waiter.sh",
     "generate-runtime-env": "cross-env env-cmd runtime-env-cra --config-name=./public/runtime-env.js --env-file=.env.template"
   },
   "dependencies": {

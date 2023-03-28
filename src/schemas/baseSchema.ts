@@ -3,7 +3,8 @@ import { FormErrors, DecoratedFormProps } from 'redux-form'
 import { z, ZodString, ZodOptional, ZodNullable, ZodTypeAny } from 'zod'
 import { set } from 'lodash'
 import { DAY, FORM, LANGUAGE, MONDAY_TO_FRIDAY, VALIDATION_MAX_LENGTH } from '../utils/enums'
-import passwordRegEx, { timeRegex } from '../utils/regex'
+
+import { passwordRegEx, timeRegex, uuidRegex } from '../utils/regex'
 
 /**
  * Serialize args for i18next.t function
@@ -165,11 +166,13 @@ export type OpeningHoursTimeRanges = z.infer<typeof timeRangeSchema>
 #### CONSTRAINTS ####
 */
 
+export const uuidConstraint = z.string().regex(uuidRegex, { message: serializeValidationMessage('loc:Neplatný formát UUID') })
+
 export const imageConstraint = z.object({
 	url: z.string().url().nullish(),
 	thumbUrl: z.string().nullish(),
 	uid: z.string(),
-	id: z.string().uuid().nullish()
+	id: uuidConstraint.nullish()
 })
 
 export function stringConstraint<T extends true | false>(maxLength: number, required?: T): T extends true ? ZodString : ZodOptional<ZodNullable<ZodString>>

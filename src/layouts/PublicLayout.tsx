@@ -120,7 +120,7 @@ const PublicLayout = (props: Props) => {
 					</div>
 				)
 		}
-	}, [size, props.children, className, showBackButton, location?.state?.from, t])
+	}, [size, props.children, className, showBackButton, location?.state?.from, t, navigate])
 
 	return <>{content}</>
 }

@@ -260,7 +260,7 @@ const SupportContactPage: FC<Props> = () => {
 						/>
 					)}
 					<SupportContactForm onSubmit={handleSubmit} supportContactID={supportContactID} disabledForm={!supportContactExists && hasEveryCountrSupportContact} />
-					<div className={'content-footer'}>
+					<div className={'content-footer'} id={'content-footer-container'}>
 						<Row className={cx('flex flex-col gap-2 md:flex-row', { 'md:justify-between': supportContactExists, 'md:justify-center': !supportContactExists })}>
 							{supportContactExists && (
 								<DeleteButton

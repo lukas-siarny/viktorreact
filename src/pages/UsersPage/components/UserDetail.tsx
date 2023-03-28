@@ -117,7 +117,7 @@ const UserDetail = (props: Props) => {
 			<div className='content-body small'>
 				<Spin spinning={isLoading || submittingAccountForm}>
 					<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
-					<div className={'content-footer'}>
+					<div className={'content-footer'} id={'content-footer-container'}>
 						<div className={'flex flex-col gap-2 md:flex-row md:justify-between'}>
 							<DeleteButton
 								permissions={[PERMISSION.USER_DELETE]}

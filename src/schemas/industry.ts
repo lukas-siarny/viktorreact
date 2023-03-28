@@ -1,12 +1,9 @@
 import { z } from 'zod'
-import { zodErrorsToFormErrors, serializeValidationMessage } from './baseSchema'
+import { zodErrorsToFormErrors, serializeValidationMessage, uuidConstraint } from './baseSchema'
 import { FORM } from '../utils/enums'
 
 export const industriesSchema = z.object({
-	categoryIDs: z
-		.string()
-		.array()
-		.min(1, { message: serializeValidationMessage('loc:Vyberte aspoň jedno odvetvie') })
+	categoryIDs: uuidConstraint.array().min(1, { message: serializeValidationMessage('loc:Vyberte aspoň jedno odvetvie') })
 })
 
 export const industrySchema = z.object({

@@ -58,9 +58,11 @@ const CancelReservationPage = () => {
 		;(async () => {
 			setIsLoading(true)
 			try {
-				const { data } = await getReq('/api/b2c/web/calendar-events/reservations/{calendarEventID}', { calendarEventID }, REQUESTS_CONFIG)
-				setCalendarReservationData(data.reservation)
-				setView('default')
+				if (calendarEventID) {
+					const { data } = await getReq('/api/b2c/web/calendar-events/reservations/{calendarEventID}', { calendarEventID }, REQUESTS_CONFIG)
+					setCalendarReservationData(data.reservation)
+					setView('default')
+				}
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
@@ -78,8 +80,10 @@ const CancelReservationPage = () => {
 		setIsConfirmModalOpen(false)
 		setIsLoading(true)
 		try {
-			await patchReq('/api/b2c/web/calendar-events/reservations/{calendarEventID}/cancel', { calendarEventID }, {}, REQUESTS_CONFIG)
-			navigate(t('paths:index'))
+			if (calendarEventID) {
+				await patchReq('/api/b2c/web/calendar-events/reservations/{calendarEventID}/cancel', { calendarEventID }, {}, REQUESTS_CONFIG)
+				navigate(t('paths:index'))
+			}
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)

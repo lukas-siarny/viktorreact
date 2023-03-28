@@ -157,61 +157,56 @@ const MainLayout: FC<Props> = (props) => {
 	}
 
 	return (
-		<>
-			<div id={'nc-reservations-popover-content-overlay'} />
-			<div id={'nc-events-list-popover-content-overlay'} />
-			<div id={'nc-customer-detail-content-overlay'} />
-			<Layout className='min-h-screen noti-main-layout' hasSider>
-				<LayoutSider {...props} salonID={salonID} parentPath={t('paths:salons/{{salonID}}', { salonID })} />
-				<Layout>
-					<Permissions
-						allowed={[PERMISSION.PARTNER]}
-						except={[...ADMIN_PERMISSIONS]}
-						render={(hasPermission) =>
-							(hasPermission || !!salonID) && (
-								<Header className='shadow-md bg-notino-white sticky top-0 px-4 flex items-center w-full z-40' id={'noti-header'}>
-									<Row className={cx({ 'justify-end': hasPermission, 'justify-between': !hasPermission }, 'min-w-0 w-full')} wrap={false}>
-										{!hasPermission && (
-											<Button
-												onClick={() => {
-													navigate(backUrl as string)
-												}}
-												icon={<BackIcon className={'filter-invert max'} />}
-												className={'noti-btn noti-admin-back-button h-8 text-notino-white self-center bg-notino-pink mr-2'}
-												type={'default'}
-												size={'small'}
-											>
-												{t('loc:Vrátiť sa do administrácie')}
-											</Button>
-										)}
-										<Row className='w-1/7 items-center min-w-0' wrap={false}>
-											{getSelectedSalonLabel(hasPermission)}
-										</Row>
+		<Layout className='min-h-screen noti-main-layout' hasSider>
+			<LayoutSider {...props} salonID={salonID} parentPath={t('paths:salons/{{salonID}}', { salonID })} />
+			<Layout>
+				<Permissions
+					allowed={[PERMISSION.PARTNER]}
+					except={[...ADMIN_PERMISSIONS]}
+					render={(hasPermission) =>
+						(hasPermission || !!salonID) && (
+							<Header className='shadow-md bg-notino-white sticky top-0 px-4 flex items-center w-full z-40' id={'noti-header'}>
+								<Row className={cx({ 'justify-end': hasPermission, 'justify-between': !hasPermission }, 'min-w-0 w-full')} wrap={false}>
+									{!hasPermission && (
+										<Button
+											onClick={() => {
+												navigate(backUrl as string)
+											}}
+											icon={<BackIcon className={'filter-invert max'} />}
+											className={'noti-btn noti-admin-back-button h-8 text-notino-white self-center bg-notino-pink mr-2'}
+											type={'default'}
+											size={'small'}
+										>
+											{t('loc:Vrátiť sa do administrácie')}
+										</Button>
+									)}
+									<Row className='w-1/7 items-center min-w-0' wrap={false}>
+										{getSelectedSalonLabel(hasPermission)}
 									</Row>
-								</Header>
-							)
-						}
-					/>
-					<Permissions
-						allowed={[PERMISSION.NOTINO]}
-						render={(hasPermission) =>
-							hasPermission &&
-							page === PAGE.HOME &&
-							!salonID && (
-								<Header className='shadow-md bg-notino-white sticky top-0 px-4 flex items-center w-full z-40' id={'noti-header'}>
-									<Row className={'justify-end min-w-0 w-full'} wrap={false}>
-										<Row className='w-1/7 items-center min-w-0' wrap={false}>
-											<HeaderSelectCountryForm onSubmit={(data: IHeaderCountryForm) => dispatch(setSelectedCountry(data.countryCode))} />
-										</Row>
+								</Row>
+							</Header>
+						)
+					}
+				/>
+				<Permissions
+					allowed={[PERMISSION.NOTINO]}
+					render={(hasPermission) =>
+						hasPermission &&
+						page === PAGE.HOME &&
+						!salonID && (
+							<Header className='shadow-md bg-notino-white sticky top-0 px-4 flex items-center w-full z-40' id={'noti-header'}>
+								<Row className={'justify-end min-w-0 w-full'} wrap={false}>
+									<Row className='w-1/7 items-center min-w-0' wrap={false}>
+										<HeaderSelectCountryForm onSubmit={(data: IHeaderCountryForm) => dispatch(setSelectedCountry(data.countryCode))} />
 									</Row>
-								</Header>
-							)
-						}
-					/>
-					<Content className={contentClassName || undefined}>{children}</Content>
-				</Layout>
+								</Row>
+							</Header>
+						)
+					}
+				/>
+				<Content className={contentClassName || undefined}>{children}</Content>
 			</Layout>
-		</>
+		</Layout>
 	)
 }
 

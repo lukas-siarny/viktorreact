@@ -14,6 +14,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 import { CalendarEvent, ICalendarMonthlyReservationsPayload, ICalendarMonthlyViewEvent, ICalendarView, PopoverTriggerPosition } from '../../../../types/interfaces'
 import { RootState } from '../../../../reducers'
 import { IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
+import { IUseQueryParams } from '../../../../hooks/useQueryParams'
 
 // enums
 import {
@@ -42,7 +43,6 @@ import eventContent from '../../eventContent'
 
 // components
 import MonthlyReservationCard from '../eventCards/MonthlyReservationCard'
-import { IUseQueryParams } from '../../../../hooks/useQueryParams'
 
 const getCurrentDayEventsCount = (selectedDate: string, dayEvents: (CalendarEvent | ICalendarMonthlyViewEvent)[], virtualEvent?: IVirtualEventPayload['data'] | null): number => {
 	let eventsCount = dayEvents.reduce((count, event) => {

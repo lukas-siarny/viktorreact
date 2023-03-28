@@ -145,8 +145,14 @@ export const defaultErrorMap: z.ZodErrorMap = (issue, ctx) => {
 
 const timeRangeSchema = z
 	.object({
-		timeFrom: z.string().nullish(),
-		timeTo: z.string().nullish()
+		timeFrom: z
+			.string()
+			.regex(/^(?:\d|[01]\d|2[0-3]):[0-5]\d$/)
+			.nullish(),
+		timeTo: z
+			.string()
+			.regex(/^(?:\d|[01]\d|2[0-3]):[0-5]\d$/)
+			.nullish()
 	})
 	.array()
 

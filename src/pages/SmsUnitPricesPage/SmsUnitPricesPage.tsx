@@ -72,7 +72,7 @@ const SmsUnitPricesPage = () => {
 		const source = query.search
 			? smsUnitPricesActual.data.filter((smsUnitPrice) => {
 					const countryName = transformToLowerCaseWithoutAccent(smsUnitPrice.country.name)
-					const searchedValue = transformToLowerCaseWithoutAccent(query.search || undefined)
+					const searchedValue = transformToLowerCaseWithoutAccent(query.search)
 					return countryName.includes(searchedValue)
 			  })
 			: smsUnitPricesActual.data
@@ -93,6 +93,12 @@ const SmsUnitPricesPage = () => {
 			}
 			setQuery(newQuery)
 		}
+	}
+
+	const formatPrice = (countryCode: string, amount: number) => {
+		const country = countries.data?.find((item) => item.code === countryCode)
+		const currency = currencies.data?.find((item) => item.code === country?.currencyCode)
+		return `${amount} ${currency?.symbol || ''}`
 	}
 
 	const columns: ColumnProps<TableDataItem>[] = [
@@ -135,10 +141,7 @@ const SmsUnitPricesPage = () => {
 				}
 
 				const { code } = record.country
-
-				const country = countries.data?.find((item) => item.code === code)
-				const currency = currencies.data?.find((item) => item.code === country?.currencyCode)
-				return `${value.amount} ${currency?.symbol || ''}`
+				return `${formatPrice(code, value.amount)}`
 			}
 		},
 		{
@@ -162,10 +165,7 @@ const SmsUnitPricesPage = () => {
 			render: (_value, record) => {
 				const value = record.next
 				const { code } = record.country
-
-				const country = countries.data?.find((item) => item.code === code)
-				const currency = currencies.data?.find((item) => item.code === country?.currencyCode)
-				return value ? `${value.amount} ${currency?.symbol || ''} ${t('loc:od {{ timeFrom }}', { timeFrom: dayjs(value.validFrom).format(D_M_YEAR_FORMAT) })}` : '-'
+				return value ? `${formatPrice(code, value.amount)} ${t('loc:od {{ timeFrom }}', { timeFrom: dayjs(value.validFrom).format(D_M_YEAR_FORMAT) })}` : '-'
 			}
 		},
 		{

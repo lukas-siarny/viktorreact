@@ -3,7 +3,7 @@ import { FormErrors, DecoratedFormProps } from 'redux-form'
 import { z, ZodString, ZodOptional, ZodNullable, ZodTypeAny } from 'zod'
 import { set } from 'lodash'
 import { DAY, FORM, LANGUAGE, MONDAY_TO_FRIDAY, VALIDATION_MAX_LENGTH } from '../utils/enums'
-import passwordRegEx from '../utils/regex'
+import passwordRegEx, { timeRegex } from '../utils/regex'
 
 /**
  * Serialize args for i18next.t function
@@ -145,14 +145,8 @@ export const defaultErrorMap: z.ZodErrorMap = (issue, ctx) => {
 
 const timeRangeSchema = z
 	.object({
-		timeFrom: z
-			.string()
-			.regex(/^(?:\d|[01]\d|2[0-3]):[0-5]\d$/)
-			.nullish(),
-		timeTo: z
-			.string()
-			.regex(/^(?:\d|[01]\d|2[0-3]):[0-5]\d$/)
-			.nullish()
+		timeFrom: z.string().regex(timeRegex).nullish(),
+		timeTo: z.string().regex(timeRegex).nullish()
 	})
 	.array()
 

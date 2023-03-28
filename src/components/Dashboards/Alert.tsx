@@ -6,6 +6,7 @@ import { Button } from 'antd'
 import { ReactComponent as ExclamationIcon } from '../../assets/icons/exclamation-pink.svg'
 
 type Props = {
+	id?: string
 	icon?: React.ReactNode
 	title: React.ReactNode
 	subTitle?: React.ReactNode
@@ -17,10 +18,10 @@ type Props = {
 }
 
 const Alert = (props: Props) => {
-	const { title, subTitle, message, actionItem, icon, actionLabel, onActionItemClick, className = '' } = props
+	const { id, title, subTitle, message, actionItem, icon, actionLabel, onActionItemClick, className = '' } = props
 
 	return (
-		<div className={`min-w-full p-4 flex rounded shadow-lg bg-notino-white ${className}`}>
+		<div id={id} className={`min-w-full p-4 flex rounded shadow-lg bg-notino-white ${className}`}>
 			<div className='h-full w-6 mr-4 pt-0-5'>{icon || <ExclamationIcon />}</div>
 			<div className='flex justify-between w-full'>
 				<div className='flex-1'>

@@ -2,6 +2,7 @@
   "activation": "/activation",
   "billing-info": "/billing-info",
   "calendar": "/calendar",
+  "cancel-reservation": "/cancel-reservation",
   "categories": "/categories",
   "category-parameters": "/category-parameters",
   "category-parameters/create": "/category-parameters/create",

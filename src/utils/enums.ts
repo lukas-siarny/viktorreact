@@ -31,6 +31,40 @@ export enum LANGUAGE {
 	/* IT = 'it' */
 }
 
+export enum BROWSERS {
+	CHROME = 'Chrome',
+	SAFARI = 'Safari',
+	FIREFOX = 'Firefox',
+	EDGE = 'Edge',
+	OPERA = 'Opera'
+}
+
+export const MIN_SUPPORTED_BROWSER_VERSION = (browserName?: string) => {
+	switch (browserName) {
+		case BROWSERS.CHROME:
+			// Released: 2020-02-04
+			return 80
+
+		case BROWSERS.SAFARI:
+			// Released: 2020-09-16
+			return 14
+
+		case BROWSERS.FIREFOX:
+			// Released: 2020-01-07
+			return 72
+
+		case BROWSERS.EDGE:
+			// Released: 2020-01-15
+			return 79
+
+		case BROWSERS.OPERA:
+			// Released: 2020-01-28
+			return 67
+		default:
+			return -1
+	}
+}
+
 export const CHANGE_DEBOUNCE_TIME = 300 // 300ms change debounce time for forms that have onChange submit
 
 export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes

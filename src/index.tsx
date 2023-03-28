@@ -2,6 +2,7 @@ import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import * as Sentry from '@sentry/react'
 import { Integrations as TracingIntegrations } from '@sentry/tracing'
+import UAParser from 'ua-parser-js'
 
 // dayjs
 import dayjs from 'dayjs'
@@ -20,6 +21,9 @@ import App from './App'
 // load theme styles with webpack
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
+
+// utils
+import { MIN_SUPPORTED_BROWSER_VERSION } from './utils/enums'
 
 // NOTE: lebo je v gitignore a az pri starte sa vytvori prvy krat a pipelina by padla
 // eslint-disable-next-line import/no-unresolved
@@ -47,43 +51,19 @@ Sentry.init({
 	// eslint-disable-next-line no-underscore-dangle
 	dsn: window?.__RUNTIME_CONFIG__?.REACT_APP_SENTRY_DSN ? window.__RUNTIME_CONFIG__.REACT_APP_SENTRY_DSN : process.env.REACT_APP_SENTRY_DSN,
 	tracesSampleRate: 0.05,
-	beforeSend: (event, hint) => {
-		const headers = event.request?.headers
+	beforeSend: (event) => {
+		const parser = new UAParser()
 
-		let ua: string = window.navigator.userAgent
+		const browser = parser.getBrowser()
+		// get major number from version '101.4.11' -> 101, '94' -> 94
+		// eslint-disable-next-line radix
+		const majorVersion = parseInt(browser.version ? browser.version.split('.')[0] : '0')
 
-		if (headers) {
-			ua = headers['User-Agent']
-			const uaRegex = /((?<info>.*?))(s|$)|(?<name>.*?)\/(?<version>.*?)(s|$)/
+		if (MIN_SUPPORTED_BROWSER_VERSION(browser.name) < majorVersion) {
+			return event
 		}
 
-		return event
-
-		// const browserRegex = /(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i;
-		// const match = userAgent.match(browserRegex);
-
-		// if (match && match.length >= 3) {
-		//   const browserName = match[1].toLowerCase();
-		//   const browserVersion = match[2];
-
-		//   if (event.contexts) {
-		// 	event.contexts.browser = {
-		// 	  name: browserName,
-		// 	  version: browserVersion,
-		// 	};
-		//   } else {
-		// 	event.contexts = {
-		// 	  browser: {
-		// 		name: browserName,
-		// 		version: browserVersion,
-		// 	  },
-		// 	};
-		//   }
-
-		// hint.captureContext
-		// event.contexts?.os./
-		// Sentry.getCurrentHub().getScope().
-		// console.log('🚀 ~ file: index.tsx:53 ~ beforeSend ~ event, hint:', event, hint)
+		return null
 	}
 })
 

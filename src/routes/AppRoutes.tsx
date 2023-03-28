@@ -9,6 +9,7 @@ import HomePage from '../pages/HomePage/HomePage'
 import PublicRoute from './PublicRoute'
 import AuthRoute from './AuthRoute'
 import CreatePasswordRoute from './CreatePasswordRoute'
+import CancelReservationRoute from './CancelReservationRoute'
 
 // layouts
 import MainLayout from '../layouts/MainLayout'
@@ -63,6 +64,9 @@ import ReviewsPage from '../pages/ReviewsPage/ReviewsPage'
 import SmsUnitPricesPage from '../pages/SmsUnitPricesPage/SmsUnitPricesPage'
 import SmsUnitPricesDetailPage from '../pages/SmsUnitPricesPage/SmsUnitPricesDetailPage'
 
+// Cancel reservation page
+import CancelReservationPage from '../pages/CancelReservationPage/CancelReservationPage'
+
 import AppInit from '../components/AppInit'
 
 // 404, 403
@@ -90,6 +94,9 @@ const AppRoutes: FC = () => {
 					element={<PublicRoute redirectLoggedInUser={false} showBackButton layout={PublicLayout} className={'noti-support-contact-page'} />}
 				>
 					<Route path={t('paths:contact')} element={<ContactPage />} />
+				</Route>
+				<Route errorElement={<ErrorBoundary />} element={<CancelReservationRoute layout={PublicLayout} className={'noti-cancel-reservation-page'} />}>
+					<Route path={t('paths:cancel-reservation')} element={<CancelReservationPage />} />
 				</Route>
 				{/* // Private Routes */}
 				<Route errorElement={<ErrorBoundary />} element={<AuthRoute layout={MainLayout} page={PAGE.HOME} />}>

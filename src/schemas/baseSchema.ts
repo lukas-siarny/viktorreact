@@ -2,7 +2,7 @@ import i18next from 'i18next'
 import { FormErrors, DecoratedFormProps } from 'redux-form'
 import { z, ZodString, ZodOptional, ZodNullable, ZodTypeAny } from 'zod'
 import { set } from 'lodash'
-import { FORM, LANGUAGE, VALIDATION_MAX_LENGTH } from '../utils/enums'
+import { DAY, FORM, LANGUAGE, MONDAY_TO_FRIDAY, VALIDATION_MAX_LENGTH } from '../utils/enums'
 import passwordRegEx from '../utils/regex'
 
 /**
@@ -152,7 +152,7 @@ const timeRangeSchema = z
 
 const OpeningHourSchema = z
 	.object({
-		day: z.enum(['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY', 'MONDAY_TO_FRIDAY']),
+		day: z.enum([MONDAY_TO_FRIDAY, ...Object.keys(DAY)]),
 		timeRanges: timeRangeSchema,
 		onDemand: z.boolean().nullish()
 	})

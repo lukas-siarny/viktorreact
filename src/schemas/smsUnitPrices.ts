@@ -1,11 +1,11 @@
 import { z } from 'zod'
-import { zodErrorsToFormErrors } from './baseSchema'
+import { twoCharsConstraint, zodErrorsToFormErrors } from './baseSchema'
 import { FORM } from '../utils/enums'
 
 export const smsUnitPricesSchema = z.object({
 	validFrom: z.string(),
 	amount: z.number().positive().finite(),
-	countryCode: z.string().length(2)
+	countryCode: twoCharsConstraint
 })
 
 export type ISmsUnitPricesForm = z.infer<typeof smsUnitPricesSchema>

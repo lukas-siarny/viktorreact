@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { zodErrorsToFormErrors, stringConstraint, emailsConstraint, phoneNumbersConstraint, openingHoursConstraint } from './baseSchema'
+import { zodErrorsToFormErrors, stringConstraint, emailsConstraint, phoneNumbersConstraint, openingHoursConstraint, twoCharsConstraint } from './baseSchema'
 import { FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
 
 export const supportContactSchema = z.object({
@@ -9,7 +9,7 @@ export const supportContactSchema = z.object({
 	city: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_100),
 	zipCode: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_10),
 	streetNumber: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_10),
-	countryCode: z.string().length(2),
+	countryCode: twoCharsConstraint,
 	phones: phoneNumbersConstraint(),
 	openingHours: openingHoursConstraint(),
 	sameOpenHoursOverWeek: z.boolean().nullish(),

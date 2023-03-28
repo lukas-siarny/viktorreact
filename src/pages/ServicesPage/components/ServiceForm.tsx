@@ -56,7 +56,7 @@ type ComponentProps = {
 type Props = InjectedFormProps<IServiceForm, ComponentProps> & ComponentProps
 
 const ServiceForm: FC<Props> = (props) => {
-	const { salonID, serviceID, handleSubmit, pristine, addEmployee, backUrl, setVisibleServiceEditModal } = props
+	const { salonID, serviceID, handleSubmit, pristine, addEmployee, backUrl, setVisibleServiceEditModal, submitting } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -69,8 +69,7 @@ const ServiceForm: FC<Props> = (props) => {
 
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 
-	const isLoading = service.isLoading || categoriesLoading || isRemoving || salon.isLoading
-	const submitting = false
+	const isLoading = service.isLoading || categoriesLoading || isRemoving || salon.isLoading || submitting
 
 	const variableDuration = formValues?.variableDuration
 	const variablePrice = formValues?.variablePrice

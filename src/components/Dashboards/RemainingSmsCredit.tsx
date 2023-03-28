@@ -14,7 +14,7 @@ import { ReactComponent as ChevronRightIcon } from '../../assets/icons/chevron-p
 // utils
 import { PERMISSION } from '../../utils/enums'
 import Permissions from '../../utils/Permissions'
-import { formatPrice } from '../../utils/helper'
+import { formatPrice, formFieldID } from '../../utils/helper'
 
 // redux
 import { RootState } from '../../reducers'
@@ -72,6 +72,7 @@ const RemainingSmsCredit = (props: Props) => {
 								htmlType='button'
 								className={'noti-btn'}
 								icon={<CreateIcon />}
+								id={formFieldID('wallet_btn', walletID)}
 							>
 								{t('loc:Dobiť kredit')}
 							</Button>

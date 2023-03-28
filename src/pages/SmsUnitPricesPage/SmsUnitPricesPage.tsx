@@ -146,7 +146,7 @@ const SmsUnitPricesPage = () => {
 			sorter: false,
 			width: '30%',
 			render: (_value, record) => {
-				return record.actual?.validFrom ? <div style={{ marginLeft: '20%' }}>{dayjs(record.actual.validFrom).format(D_M_YEAR_FORMAT)}</div> : '-'
+				return <div style={{ marginLeft: '20%' }}>{record.actual?.validFrom ? dayjs(record.actual.validFrom).format(D_M_YEAR_FORMAT) : '-'}</div>
 			}
 		},
 		{

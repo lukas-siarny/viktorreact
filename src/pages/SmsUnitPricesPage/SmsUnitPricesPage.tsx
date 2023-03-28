@@ -79,7 +79,7 @@ const SmsUnitPricesPage = () => {
 		// transform to table data
 		return source?.map((item) => ({
 			...item,
-			key: item.actual.id
+			key: item.country.code
 		}))
 	}, [query.search, smsUnitPricesActual])
 
@@ -128,6 +128,11 @@ const SmsUnitPricesPage = () => {
 			width: '20%',
 			render: (_value, record) => {
 				const value = record.actual
+
+				if (!value) {
+					return '-'
+				}
+
 				const { currencyCode } = record.country
 				const currency = currencies.data?.find((item) => item.code === currencyCode)
 				return `${value.amount} ${currency?.symbol}`
@@ -141,7 +146,7 @@ const SmsUnitPricesPage = () => {
 			sorter: false,
 			width: '30%',
 			render: (_value, record) => {
-				return <div style={{ marginLeft: '20%' }}>{dayjs(record.actual.validFrom).format(D_M_YEAR_FORMAT)}</div>
+				return <div style={{ marginLeft: '20%' }}>{record.actual?.validFrom ? dayjs(record.actual.validFrom).format(D_M_YEAR_FORMAT) : '-'}</div>
 			}
 		},
 		{
@@ -193,7 +198,7 @@ const SmsUnitPricesPage = () => {
 									dataSource={tableData}
 									rowClassName={'clickable-row'}
 									twoToneRows
-									rowKey={(record) => `${record.actual.id}_${record.country.code}`}
+									rowKey={(record) => `${record.actual?.id}_${record.country.code}`}
 									pagination={false}
 									onRow={(record) => {
 										return {

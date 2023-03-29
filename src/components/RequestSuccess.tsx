@@ -9,7 +9,7 @@ import { ReactComponent as CheckIcon } from '../assets/icons/check-icon-success.
 type Props = {
 	onRequestAgain: () => void
 	successMessage?: string
-	description?: string | null
+	description?: string
 	buttonText?: string
 	buttonIcon?: React.ReactNode
 }
@@ -26,7 +26,7 @@ const RequestSuccess = (props: Props) => {
 	return (
 		<div className={'data-upload-success flex items-center gap-4 flex-col'}>
 			<Alert message={successMessage} type={'success'} className={'noti-alert success-request-alert'} showIcon icon={<CheckIcon />} />
-			{description && <p className={'mb-0'}>{description}</p>}
+			<p className={'mb-0'}>{description}</p>
 			<Button onClick={onRequestAgain} type='primary' htmlType='button' className={'noti-btn'} icon={buttonIcon}>
 				{buttonText}
 			</Button>

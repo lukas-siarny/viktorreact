@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { stringConstraint, emailConstraint, zodErrorsToFormErrors, passwordConstraint, twoCharsConstraint, requiredTrueConstraint } from './baseSchema'
+import { stringConstraint, emailConstraint, zodErrorsToFormErrors, passwordConstraint, twoCharsConstraint, serializeValidationMessage } from './baseSchema'
 import { VALIDATION_MAX_LENGTH, FORM } from '../utils/enums'
 
 export const registrationSchema = z.object({
@@ -7,7 +7,7 @@ export const registrationSchema = z.object({
 	password: passwordConstraint,
 	phonePrefixCountryCode: twoCharsConstraint,
 	phone: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_20, true),
-	agreeGDPR: requiredTrueConstraint,
+	agreeGDPR: z.literal<boolean>(true, { errorMap: () => ({ message: serializeValidationMessage('loc:Toto pole je povinné') }) }),
 	marketing: z.boolean().optional()
 })
 

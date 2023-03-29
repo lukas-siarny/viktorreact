@@ -1,7 +1,6 @@
 import i18next from 'i18next'
 import { FormErrors, DecoratedFormProps } from 'redux-form'
 import { z, ZodString, ZodOptional, ZodNullable, ZodTypeAny } from 'zod'
-import { errorUtil } from 'zod/lib/helpers/errorUtil'
 import { set } from 'lodash'
 
 import { FORM, VALIDATION_MAX_LENGTH, LANGUAGE } from '../utils/enums'
@@ -199,3 +198,8 @@ export const localizedValuesConstraint = (required?: boolean, maxLength = VALIDA
 				value: stringConstraint(maxLength)
 			})
 		)
+
+/**
+ * Constraint for for boolean field which is required to be true
+ */
+export const requiredTrueConstraint = z.literal<boolean>(true, { errorMap: () => ({ message: serializeValidationMessage('loc:Toto pole je povinné') }) })

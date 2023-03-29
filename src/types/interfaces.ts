@@ -63,11 +63,10 @@ export interface ISelectOptionItem<ExtraType = any> {
 
 export type Columns = ColumnsType<any>
 
-export interface ILoginForm {
+export interface IInviteEmployeeForm {
 	email: string
-	password: string
+	roleID: string
 }
-
 
 export type ServiceRootCategory = Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200['employee']['categories']
 
@@ -300,22 +299,6 @@ export interface ISupportContactForm {
 	streetNumber: string
 	phones: { phonePrefixCountryCode: string; phone: string }[]
 	emails: { email: string }[]
-}
-
-export interface IRegistrationForm {
-	email: string
-	password: string
-	confirmPassword: string
-	phonePrefixCountryCode: string
-	phone: string
-	gdpr: boolean
-	gtc: boolean
-	marketing: boolean
-}
-
-
-export interface IActivationForm {
-	code: string
 }
 
 export interface IJwtPayload {

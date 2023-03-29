@@ -1100,10 +1100,14 @@ span.ant-tag
 	align-items: flex-start
 	.anticon
 		margin-top: 4px
-	&.success-upload-alert
+	&.success-request-alert
 		border-radius: 8px
 		border: none
 		background: $backgroundColor-notino-grayLight
+	&.icon-black
+		&.ant-alert-success
+			.ant-alert-icon
+				color: black
 
 .noti-tag.ant-tag
 	border: none
@@ -1313,19 +1317,6 @@ span.ant-tag .title
 					cursor: default
 				.ant-checkbox-wrapper
 					line-height: 1
-
-.noti-show-more-button
-	&:hover,
-	&:focus-visible
-		color: $textColor-notino-pink
-		transition: 300ms ease
-
-.language-btn
-	z-index: 2
-	@media (min-width: 1195px)
-		top: -0.25rem
-		right: 0px
-		position: absolute
 
 .suggested-salons-modal
 	padding: 16px

@@ -24,7 +24,7 @@ import InputField from '../../../../atoms/InputField'
 import SelectField from '../../../../atoms/SelectField'
 
 type ComponentProps = {
-	openSalonImportsModal: () => void
+	onImportSalons: () => void
 	activeSalons?: boolean
 }
 

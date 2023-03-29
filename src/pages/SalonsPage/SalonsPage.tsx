@@ -15,12 +15,13 @@ import TabsComponent from '../../components/TabsComponent'
 import SalonsFilterActive, { ISalonsFilterActive } from './components/filters/SalonsFilterActive'
 import SalonsFilterDeleted, { ISalonsFilterDeleted } from './components/filters/SalonsFilterDeleted'
 import RejectedSalonSuggestions from './components/RejectedSalonSuggestions'
+import SalonsReportModal, { ALL_COUNTIRES_OPTION } from './components/modals/SalonsReportModal'
 
 // utils
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, UPLOAD_STATUS } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, REQUEST_STATUS } from '../../utils/enums'
 import { formatDateByLocale, getAssignedUserLabel, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
-import { postReq } from '../../utils/request'
+import { getReq, postReq } from '../../utils/request'
 import { getSalonTagChanges, getSalonTagCreateType, getSalonTagPublished, getSalonTagSourceType } from './components/salonUtils'
 
 // reducers
@@ -30,7 +31,7 @@ import { getCategories } from '../../reducers/categories/categoriesActions'
 import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 
 // types
-import { Columns, IBreadcrumbs, IDataUploadForm } from '../../types/interfaces'
+import { Columns, IBreadcrumbs, IDataUploadForm, ISalonsReportForm } from '../../types/interfaces'
 
 // assets
 import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
@@ -55,7 +56,9 @@ const SalonsPage = () => {
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 
 	const [salonImportsModalVisible, setSalonImportsModalVisible] = useState(false)
-	const [uploadStatus, setUploadStatus] = useState<UPLOAD_STATUS | undefined>(undefined)
+	const [requestStatusImport, setRequestStatusImport] = useState<REQUEST_STATUS | undefined>(undefined)
+	const [requestStatusReport, setRequestStatusReport] = useState<REQUEST_STATUS | undefined>(undefined)
+	const [salonsReportModalVisible, setSalonsReportModalVisible] = useState(false)
 
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	const { data } = useSelector((state: RootState) => state.categories.categories)
@@ -143,7 +146,7 @@ const SalonsPage = () => {
 		if (isFormPristine) {
 			salonsQueries = {
 				...salonsQueries,
-				countryCode: selectedCountry as any
+				countryCode: selectedCountry
 			}
 		}
 
@@ -184,6 +187,8 @@ const SalonsPage = () => {
 						assignedUserID: query.assignedUserID
 					})
 				)
+
+				dispatch(initialize(FORM.SALONS_REPORT, { countryCode: salonsQueries.countryCode || ALL_COUNTIRES_OPTION }))
 				dispatch(getSalons(salonsQueries))
 				break
 		}
@@ -260,20 +265,32 @@ const SalonsPage = () => {
 	}
 
 	const salonImportsSubmit = async (values: IDataUploadForm) => {
-		setUploadStatus(UPLOAD_STATUS.UPLOADING)
+		setRequestStatusImport(REQUEST_STATUS.SUBMITTING)
 
 		const formData = new FormData()
 		formData.append('file', values?.file)
 
 		try {
-			await postReq('/api/b2b/admin/imports/salons' as any, undefined, formData, {
+			await postReq('/api/b2b/admin/imports/salons', undefined, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				}
 			})
-			setUploadStatus(UPLOAD_STATUS.SUCCESS)
+			setRequestStatusImport(REQUEST_STATUS.SUCCESS)
 		} catch {
-			setUploadStatus(UPLOAD_STATUS.ERROR)
+			setRequestStatusImport(REQUEST_STATUS.ERROR)
+		}
+	}
+
+	const salonsReportSubmit = async (values: ISalonsReportForm) => {
+		setRequestStatusReport(REQUEST_STATUS.SUBMITTING)
+		try {
+			await getReq('/api/b2b/admin/reports/salons', values.countryCode === ALL_COUNTIRES_OPTION ? undefined : { countryCode: values.countryCode })
+			setRequestStatusReport(REQUEST_STATUS.SUCCESS)
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+			setRequestStatusReport(REQUEST_STATUS.ERROR)
 		}
 	}
 
@@ -484,7 +501,13 @@ const SalonsPage = () => {
 					tableColumns.lastUpdatedAt({ width: '8%' }),
 					tableColumns.createdAt({ width: '8%' })
 				]
-				filters = <SalonsFilterActive onSubmit={handleSubmitActive} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
+				filters = (
+					<SalonsFilterActive
+						onSubmit={handleSubmitActive}
+						onImportSalons={() => setSalonImportsModalVisible(true)}
+						onDownloadReport={() => setSalonsReportModalVisible(true)}
+					/>
+				)
 		}
 		return (
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
@@ -546,14 +569,21 @@ const SalonsPage = () => {
 			</Row>
 			<TabsComponent className={'box-tab'} activeKey={query.salonState} onChange={onTabChange} items={tabContent} destroyInactiveTabPane />
 			<ImportForm
-				setUploadStatus={setUploadStatus}
-				uploadStatus={uploadStatus}
+				setRequestStatus={setRequestStatusImport}
+				requestStatus={requestStatusImport}
 				label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.xlsx' })}
 				accept={'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel'}
 				title={t('loc:Importovať salóny')}
 				visible={salonImportsModalVisible}
 				setVisible={setSalonImportsModalVisible}
 				onSubmit={salonImportsSubmit}
+			/>
+			<SalonsReportModal
+				visible={salonsReportModalVisible}
+				setVisible={setSalonsReportModalVisible}
+				requestStatus={requestStatusReport}
+				setRequestStatus={setRequestStatusReport}
+				onSubmit={salonsReportSubmit}
 			/>
 		</>
 	)

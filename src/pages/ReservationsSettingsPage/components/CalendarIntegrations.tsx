@@ -12,7 +12,9 @@ const CalendarIntegrations = (props: Props) => {
 	const { i18n } = useTranslation()
 
 	const login = useGoogleLogin({
-		// flow: 'auth-code',
+		flow: 'auth-code',
+		scope: 'email profile https://www.googleapis.com/auth/calendar openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+		redirect_uri: 'postmessage',
 		onSuccess: (tokenResponse) => {
 			console.log({ tokenResponse })
 			postReq(

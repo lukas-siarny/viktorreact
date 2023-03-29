@@ -25,7 +25,7 @@ import { getBasicSalon, getSuggestedSalons } from '../../reducers/salons/salonsA
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
-import { CategoriesPatch, IBreadcrumbs, ISalonForm, SalonPageProps } from '../../types/interfaces'
+import { CategoriesPatch, IBreadcrumbs, SalonPageProps } from '../../types/interfaces'
 
 // utils
 import { patchReq, postReq } from '../../utils/request'
@@ -36,6 +36,9 @@ import { formFieldID } from '../../utils/helper'
 // assets
 import { ReactComponent as SpecialistIcon } from '../../assets/icons/specialist-24-icon.svg'
 import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
+
+// schema
+import { ISalonForm } from '../../schemas/salon'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO, PERMISSION.PARTNER]
 
@@ -86,7 +89,7 @@ const SalonCreatePage: FC<SalonPageProps> = (props) => {
 						'/api/b2b/admin/salons/{salonID}/categories',
 						{ salonID: result.data.salon.id },
 						{
-							categoryIDs: data?.categoryIDs as unknown as CategoriesPatch['categoryIDs']
+							categoryIDs: data?.categoryIDs as any
 						}
 					)
 				}

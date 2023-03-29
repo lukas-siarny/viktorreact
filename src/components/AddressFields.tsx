@@ -40,13 +40,13 @@ import { ReactComponent as GlobeIcon } from '../assets/icons/globe-24.svg'
 export type AddressInputFields = {
 	latitude: number
 	longitude: number
-	city?: string
-	street?: string
-	streetNumber?: string
-	zipCode?: string
-	country?: string
-	address?: string
-}
+	city?: string | null
+	street?: string | null
+	streetNumber?: string | null
+	zipCode?: string | null
+	country?: string | null
+	address?: string | null
+} | null
 
 type LocationSearchElements = {
 	loadingElement: ReactElement<any>
@@ -337,8 +337,8 @@ const AddressFields = (props: Props) => {
 													<MapContainer
 														onError={() => setMapError(true)}
 														onLocationChange={changeLocation}
-														lat={get(inputValues, 'latitude')}
-														lng={get(inputValues, 'longitude')}
+														lat={inputValues?.latitude}
+														lng={inputValues?.latitude}
 														zoom={get(inputValues, 'zoom')}
 														disabled={disabled}
 													/>

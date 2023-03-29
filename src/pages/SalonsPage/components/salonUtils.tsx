@@ -4,7 +4,7 @@ import { Tag } from 'antd'
 import i18next from 'i18next'
 
 // types
-import { AutocompleteLabelInValue, ISalonForm, OpeningHours } from '../../../types/interfaces'
+import { AutocompleteLabelInValue, OpeningHours } from '../../../types/interfaces'
 import { ISalonPayloadData } from '../../../reducers/selectedSalon/selectedSalonActions'
 import { IBasicSalon } from '../../../reducers/salons/salonsActions'
 import { Paths } from '../../../types/api'
@@ -22,6 +22,9 @@ import {
 	orderDaysInWeek
 } from '../../../components/OpeningHours/OpeningHoursUtils'
 
+// schema
+import { ISalonForm } from '../../../schemas/salon'
+
 const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	{
 		phonePrefixCountryCode,
@@ -38,7 +41,7 @@ export type SalonInitType = ISalonPayloadData & IBasicSalon
  * @param salonNameFromSelect - pre title salonu sa miesto input fieldu pouziva autocomplete field
  * @returns
  */
-export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCountryCode: string, salonNameFromSelect = false) => {
+export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCountryCode: string) => {
 	// stacilo by isEmpty ale aby typescript nehucal tak je aj prva podmienka
 	if (!salonData || isEmpty(salonData)) {
 		return {}
@@ -53,19 +56,19 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 	// preto maju vsetky inicializacne hodnoty, pre textFieldy a textAreaFieldy fallback || null (pozri impementaciu tychto komponentov, preco sa to tam takto uklada)
 
 	const initialData: ISalonForm = {
-		salonNameFromSelect,
 		id: salonData.id || null,
 		deletedAt: !!salonData.deletedAt,
 		state: salonData.state as SALON_STATES,
 		sourceOfPremium: salonData.premiumSourceUserType,
-		name: salonNameFromSelect
-			? {
-					key: salonData.id,
-					label: salonData.name || null,
-					value: salonData.id || null
-			  } || null
-			: salonData.name || null,
-		email: salonData.email || null,
+		name:
+			salonData.id && salonData.name
+				? {
+						key: salonData.id,
+						label: salonData.name,
+						value: salonData.id
+				  }
+				: salonData.name,
+		email: salonData.email,
 		// categoryIDs for basic salon
 		categoryIDs: (isEmpty(!salonData?.categories) ? salonData?.categories.map((category) => category.id) : null) as ISalonForm['categoryIDs'],
 		payByCard: !!salonData.payByCard,
@@ -75,8 +78,8 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 		openOverWeekend,
 		sameOpenHoursOverWeek,
 		openingHours,
-		latitude: salonData.address?.latitude ?? null,
-		longitude: salonData.address?.longitude ?? null,
+		latitude: salonData.address?.latitude as any,
+		longitude: salonData.address?.longitude,
 		city: salonData.address?.city || null,
 		street: salonData.address?.street || null,
 		zipCode: salonData.address?.zipCode || null,
@@ -104,7 +107,7 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 			: null,
 		languageIDs: map(salonData.languages, (lng) => lng?.id).filter((lng) => lng !== undefined) as string[],
 		cosmeticIDs: map(salonData.cosmetics, (cosmetic) => cosmetic?.id).filter((cosmetic) => cosmetic !== undefined) as string[],
-		address: !!salonData.address || null,
+		// address: !!salonData.address || null,
 		socialLinkWebPage: salonData.socialLinkWebPage || null,
 		socialLinkFB: salonData.socialLinkFB || null,
 		socialLinkInstagram: salonData.socialLinkInstagram || null,

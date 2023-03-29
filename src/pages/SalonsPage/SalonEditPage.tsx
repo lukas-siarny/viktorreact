@@ -27,7 +27,7 @@ import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
-import { IBreadcrumbs, INoteModal, INotinoUserForm, ISalonForm, SalonPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, INoteModal, INotinoUserForm, SalonPageProps } from '../../types/interfaces'
 
 // schema
 import { INoteForm } from '../../schemas/note'
@@ -48,6 +48,9 @@ import NotinoUserForm from './components/forms/NotinoUserForm'
 
 // hooks
 import useQueryParams, { BooleanParam } from '../../hooks/useQueryParams'
+
+// schema
+import { ISalonForm } from '../../schemas/salon'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO, PERMISSION.PARTNER]
 

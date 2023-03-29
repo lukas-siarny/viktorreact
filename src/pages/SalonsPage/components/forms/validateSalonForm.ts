@@ -3,14 +3,17 @@ import { isEmail } from 'lodash-checkit'
 import { isEmpty } from 'lodash'
 
 // interfaces
-import { AutocompleteLabelInValue, ISalonForm } from '../../../../types/interfaces'
+import { AutocompleteLabelInValue } from '../../../../types/interfaces'
 
 // utils
 import { VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
 import { socialMediaRegex } from '../../../../utils/regex'
 import { validateOpeningHours } from '../../../../components/OpeningHours/OpeningHoursUtils'
 
-export default (values: ISalonForm) => {
+// schema
+// import { ISalonForm } from '../../../../schemas/salon'
+
+export default (values: any) => {
 	const errors: any = {}
 
 	if (!values?.salonNameFromSelect) {
@@ -36,7 +39,7 @@ export default (values: ISalonForm) => {
 			})
 		}
 	}
-
+	// TODO: lukas uz spravil v https://bitbucket.org/GoodRequest/notino_b2b_web/pull-requests/484
 	const filledPhoneInputs = values?.phones?.filter((phone: any) => phone.phone)
 
 	if (!isEmpty(filledPhoneInputs)) {
@@ -95,11 +98,11 @@ export default (values: ISalonForm) => {
 	// 	}
 	// }
 
-	if (values?.aboutUsFirst && values.aboutUsFirst?.length > VALIDATION_MAX_LENGTH.LENGTH_1000) {
-		errors.aboutUsFirst = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_1000
-		})
-	}
+	// if (values?.aboutUsFirst && values.aboutUsFirst?.length > VALIDATION_MAX_LENGTH.LENGTH_1000) {
+	// 	errors.aboutUsFirst = i18next.t('loc:Max. počet znakov je {{max}}', {
+	// 		max: VALIDATION_MAX_LENGTH.LENGTH_1000
+	// 	})
+	// }
 
 	// if (values?.otherPaymentMethods && values.otherPaymentMethods?.length > VALIDATION_MAX_LENGTH.LENGTH_500) {
 	// 	errors.otherPaymentMethods = i18next.t('loc:Max. počet znakov je {{max}}', {
@@ -142,7 +145,7 @@ export default (values: ISalonForm) => {
 			url: 'https://www.notino.com/'
 		})
 	}
-
+	// TODO: lukas uz spravil v https://bitbucket.org/GoodRequest/notino_b2b_web/pull-requests/484
 	if (values.openingHours) {
 		const openingHoursErrors = validateOpeningHours(values.openingHours)
 		if (!isEmpty(openingHoursErrors)) {

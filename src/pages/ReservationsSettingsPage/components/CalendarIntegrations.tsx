@@ -16,7 +16,6 @@ const CalendarIntegrations = (props: Props) => {
 		scope: 'email profile https://www.googleapis.com/auth/calendar openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
 		redirect_uri: 'postmessage',
 		onSuccess: (tokenResponse) => {
-			console.log({ tokenResponse })
 			postReq(
 				'/api/b2b/admin/calendar-sync/sync-token',
 				null,

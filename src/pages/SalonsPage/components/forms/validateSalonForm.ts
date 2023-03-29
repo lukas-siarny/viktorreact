@@ -73,27 +73,27 @@ export default (values: ISalonForm) => {
 		)
 	}
 
-	if (values?.locationNote && values.locationNote.length > VALIDATION_MAX_LENGTH.LENGTH_1000) {
-		errors.locationNote = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_1000
-		})
-	}
+	// if (values?.locationNote && values.locationNote.length > VALIDATION_MAX_LENGTH.LENGTH_1000) {
+	// 	errors.locationNote = i18next.t('loc:Max. počet znakov je {{max}}', {
+	// 		max: VALIDATION_MAX_LENGTH.LENGTH_1000
+	// 	})
+	// }
+	//
+	// if (values?.parkingNote && values.parkingNote.length > VALIDATION_MAX_LENGTH.LENGTH_1000) {
+	// 	errors.parkingNote = i18next.t('loc:Max. počet znakov je {{max}}', {
+	// 		max: VALIDATION_MAX_LENGTH.LENGTH_1000
+	// 	})
+	// }
 
-	if (values?.parkingNote && values.parkingNote.length > VALIDATION_MAX_LENGTH.LENGTH_1000) {
-		errors.parkingNote = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_1000
-		})
-	}
-
-	if (values?.email) {
-		if (values.email?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
-			errors.email = i18next.t('loc:Max. počet znakov je {{max}}', {
-				max: VALIDATION_MAX_LENGTH.LENGTH_255
-			})
-		} else if (!isEmail(values?.email)) {
-			errors.email = i18next.t('loc:Email nie je platný')
-		}
-	}
+	// if (values?.email) {
+	// 	if (values.email?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
+	// 		errors.email = i18next.t('loc:Max. počet znakov je {{max}}', {
+	// 			max: VALIDATION_MAX_LENGTH.LENGTH_255
+	// 		})
+	// 	} else if (!isEmail(values?.email)) {
+	// 		errors.email = i18next.t('loc:Email nie je platný')
+	// 	}
+	// }
 
 	if (values?.aboutUsFirst && values.aboutUsFirst?.length > VALIDATION_MAX_LENGTH.LENGTH_1000) {
 		errors.aboutUsFirst = i18next.t('loc:Max. počet znakov je {{max}}', {
@@ -101,11 +101,11 @@ export default (values: ISalonForm) => {
 		})
 	}
 
-	if (values?.otherPaymentMethods && values.otherPaymentMethods?.length > VALIDATION_MAX_LENGTH.LENGTH_500) {
-		errors.otherPaymentMethods = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_500
-		})
-	}
+	// if (values?.otherPaymentMethods && values.otherPaymentMethods?.length > VALIDATION_MAX_LENGTH.LENGTH_500) {
+	// 	errors.otherPaymentMethods = i18next.t('loc:Max. počet znakov je {{max}}', {
+	// 		max: VALIDATION_MAX_LENGTH.LENGTH_500
+	// 	})
+	// }
 
 	if (values?.socialLinkFB && !socialMediaRegex.facebook.test(values.socialLinkFB)) {
 		errors.socialLinkFB = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {

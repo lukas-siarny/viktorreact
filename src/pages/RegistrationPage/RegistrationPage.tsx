@@ -18,7 +18,7 @@ import { FORM, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { getPrefixCountryCode } from '../../utils/helper'
 
 // interfaces
-import { IRegistrationForm } from '../../types/interfaces'
+import { IRegistrationForm } from '../../schemas/registration'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -38,7 +38,7 @@ const RegistrationPage: FC<Props> = () => {
 				password: values.password,
 				phonePrefixCountryCode: values.phonePrefixCountryCode,
 				phone: values.phone,
-				agreeGDPR: values.gdpr,
+				agreeGDPR: values.agreeGDPR,
 				agreeMarketing: !!values?.marketing
 			}
 

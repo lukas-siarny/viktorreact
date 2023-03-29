@@ -68,7 +68,7 @@ const SalonsFilterDeleted = (props: Props) => {
 				className={'h-10 p-0 m-0'}
 				component={InputField}
 				size={'large'}
-				placeholder={t('loc:Hľadať podľa názvu alebo adresy')}
+				placeholder={t('loc:Hľadať podľa názvu, adresy alebo ID')}
 				name={'search'}
 				fieldMode={FIELD_MODE.FILTER}
 				search
@@ -80,7 +80,7 @@ const SalonsFilterDeleted = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)}>
+			<Filters search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)} form={FORM.SALONS_FILTER_DELETED}>
 				<Row gutter={ROW_GUTTER_X_DEFAULT}>
 					<Col span={8}>
 						<Field

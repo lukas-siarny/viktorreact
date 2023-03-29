@@ -44,7 +44,6 @@ const SwitchField = (props: Props) => {
 	} = props
 	// NOTE: ak existuje label znamena to ze switch je pouzity ako label vo forme a vtedy sa pouzije novy layout ikona + label text + switch
 	// Ak nie je label pouzite je v tabulke alebo vo filtri a vtedy sa nerenderuje label ani ikona ale len samotny switch field
-
 	const checkedState = input.value === 'true' || input.value === true || checked
 	const onChange = useCallback(
 		(chck: boolean) => {
@@ -61,11 +60,17 @@ const SwitchField = (props: Props) => {
 		<Item help={touched && error} validateStatus={error && touched ? 'error' : undefined} style={style} className={cx(className, { 'pt-25px': offsetLabel })}>
 			{label || customLabel ? (
 				<div
-					className={cx('noti-switch', { 'pointer-events-none': disabled, 'bg-gray-50': disabled, 'noti-switch-disabled': disabled })}
+					className={cx('noti-switch', { 'noti-switch-disabled': disabled })}
 					onClick={() => {
+						if (disabled) {
+							return
+						}
 						onChange(!checkedState)
 					}}
 					onKeyDown={(e) => {
+						if (disabled) {
+							return
+						}
 						if (e.key === KEYBOARD_KEY.ENTER) {
 							onChange(!checkedState)
 						}
@@ -83,7 +88,7 @@ const SwitchField = (props: Props) => {
 							)}
 							{tooltipText && (
 								<Tooltip title={tooltipText} className={'cursor-pointer'}>
-									{suffixIcon || <InfoIcon width={16} height={16} className={'text-notino-black'} />}
+									{suffixIcon || <InfoIcon width={16} height={16} className={'text-notino-grayDark'} />}
 								</Tooltip>
 							)}
 						</div>
@@ -96,7 +101,9 @@ const SwitchField = (props: Props) => {
 					</div>
 				</div>
 			) : (
-				<Switch onChange={onChange} checked={checkedState} disabled={disabled} size={size} onClick={onClick} />
+				<span id={formFieldID(form, input.name)}>
+					<Switch onChange={onChange} checked={checkedState} disabled={disabled} size={size} onClick={onClick} />
+				</span>
 			)}
 		</Item>
 	)

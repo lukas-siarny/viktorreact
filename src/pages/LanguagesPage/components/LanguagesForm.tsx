@@ -2,10 +2,11 @@ import React, { FC } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Divider, Form, Button } from 'antd'
+import cx from 'classnames'
 
 // utils
-import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS } from '../../../utils/enums'
-import { showErrorNotification, validationString, checkUploadingBeforeSubmit } from '../../../utils/helper'
+import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, DELETE_BUTTON_ID, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { showErrorNotification, validationString, checkUploadingBeforeSubmit, formFieldID } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // atoms
@@ -76,7 +77,17 @@ const LanguagesForm: FC<Props> = (props) => {
 				/>
 				<Field component={ImgUploadField} name='image' label={t('loc:Vlajka')} maxCount={1} signUrl={URL_UPLOAD_IMAGES} category={UPLOAD_IMG_CATEGORIES.LANGUAGE_IMAGE} />
 
-				<div className={'flex w-full justify-start mt-6 gap-2 flex-wrap'}>
+				<div className={cx('flex w-full mt-6 gap-2 flex-wrap', { 'justify-between': languageID, 'justify-center': !languageID })}>
+					{languageID && (
+						<DeleteButton
+							onConfirm={onDelete}
+							entityName={''}
+							id={formFieldID(FORM.LANGUAGES, DELETE_BUTTON_ID)}
+							type={'default'}
+							className='w-full xl:w-auto xl:min-w-40'
+							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+						/>
+					)}
 					<Button
 						className={'noti-btn w-full xl:w-auto xl:min-w-40'}
 						size='middle'
@@ -84,19 +95,11 @@ const LanguagesForm: FC<Props> = (props) => {
 						htmlType='submit'
 						disabled={submitting || pristine}
 						loading={submitting}
+						id={formFieldID(FORM.LANGUAGES, SUBMIT_BUTTON_ID)}
 						icon={languageID ? <EditIcon /> : <CreateIcon />}
 					>
 						{languageID ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:jazyk'))}
 					</Button>
-					{languageID && (
-						<DeleteButton
-							onConfirm={onDelete}
-							entityName={''}
-							type={'default'}
-							className='w-full xl:w-auto xl:min-w-40'
-							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-						/>
-					)}
 				</div>
 			</div>
 		</Form>

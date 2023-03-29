@@ -14,10 +14,11 @@
 	.ant-table-thead > tr > th, .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td
 		padding: 4px
 	&.table-fixed
-		.ant-table-tbody
-			tr > td.ant-table-cell-fix-right.ant-table-cell-fix-right-first
-				&::after
-					bottom: -4px !important
+		&:not(.table-expandable)
+			.ant-table-tbody
+				tr > td.ant-table-cell-fix-right.ant-table-cell-fix-right-first
+					&::after
+						bottom: -4px !important
 		.ant-table-thead > tr > th
 			position: sticky
 			top: 0
@@ -56,8 +57,9 @@
 			border-radius: 4px 0px 0px 0px
 			transform: rotate(-180deg)
 	&.two-tone-table-style
-		.ant-table-row:nth-child(2n)
-			background: $textColor-gray-50
+		.ant-table-row:nth-child(2n):not(:hover)
+			td
+				background: $textColor-gray-50
 	table
 		border-spacing: 0 4px
 		border-collapse: initial
@@ -79,8 +81,10 @@
 								display: block !important
 						.ant-table-column-title
 							color: $textColor-notino-black
+					&:not(.table-col-with-sorter-right)
+						.ant-table-column-sorters
+							justify-content: flex-start
 					.ant-table-column-sorters
-						justify-content: flex-start
 						.ant-table-column-sorter
 							position: relative
 							.anticon-caret-up:not(.active), .anticon-caret-down:not(.active)
@@ -185,12 +189,31 @@
 					background: none
 				td
 					border: none
-				// zmazany zaznam
-				&.deleted-table-item
-					background: $backgroundColor-red-50 !important
-					color: $textColor-red-700 !important
+				// danger
+				&.noti-table-row-danger
+					td
+						background: $backgroundColor-red-50 !important
+						color: $textColor-yellow-700 !important
 					&:hover
-						color: $textColor-gray-900 !important
+						td
+							color: $textColor-gray-900 !important
+				&.noti-table-row-warning
+					td
+						background: $backgroundColor-yellow-50 !important
+						color: $textColor-yellow-700 !important
+					&:hover
+						td
+							background: $backgroundColor-yellow-100 !important
+			.ant-table-expanded-row
+				border: none
+				> td
+					background-color: transparent
+					border: none
+					&:hover
+						background-color: transparent
+			.ant-table-expanded-row-fixed
+				padding: 16px 0 !important
+
 	.ant-table-footer
 		background: $backgroundColor-white
 		margin-top: 16px
@@ -211,3 +234,26 @@
 	&:not(:empty)
 		padding: 6px 24px
 
+
+.ant-table-wrapper
+	.ant-table-thead
+		>tr>th,
+.ant-table-wrapper
+	.ant-table-thead
+		>tr>td
+			background: white
+
+.table-with-pagination-at-the-bottom
+	display: flex
+	min-height: 100%
+	flex-direction: column
+	justify-content: space-between
+	.table-footer-custom-pagination
+		margin-top: 0
+		margin-bottom: 0
+
+.table-col-with-sorter-right
+	.ant-table-column-sorters
+		display: flex
+		justify-content: flex-end
+		margin-right: 20px

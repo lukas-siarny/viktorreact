@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useMemo } from 'react'
 import { Element } from 'react-scroll'
 import dayjs from 'dayjs'
+import cx from 'classnames'
 
 // full calendar
-import FullCalendar from '@fullcalendar/react' // must go before plugins
-import { SlotLabelContentArg, DateSelectArg } from '@fullcalendar/core'
+import FullCalendar, { SlotLabelContentArg, DateSelectArg, DateSpanApi } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
@@ -12,6 +12,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
 import { composeDayViewEvents, composeDayViewResources, getTimeScrollId } from '../../calendarHelpers'
+import eventContent from '../../eventContent'
 
 // types
 import { ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -19,21 +20,19 @@ import { ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/i
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
 
-// components
-import CalendarEventContent from '../CalendarEventContent'
-
 interface IResourceLabel {
 	image?: string
 	color?: string
 	name?: string
 	description?: string
 	isTimeOff?: boolean
+	isDeleted?: boolean
 }
 
 const ResourceLabel: FC<IResourceLabel> = React.memo((props) => {
-	const { image, color, name, description, isTimeOff } = props
+	const { image, color, name, description, isTimeOff, isDeleted } = props
 	return (
-		<div className={'nc-day-resource-label'}>
+		<div className={cx('nc-day-resource-label', { 'is-deleted': isDeleted })}>
 			<div className={'image w-6 h-6 bg-notino-gray bg-cover'} style={{ backgroundImage: `url("${image}")`, borderColor: color }} />
 			<div className={'info flex flex-col justify-start text-xs font-normal min-w-0'}>
 				<span className={'name'}>{name}</span>
@@ -54,7 +53,16 @@ const resourceLabelContent = (data: any) => {
 	const { employee } = extendedProps || {}
 	const color = resource?.eventBackgroundColor
 
-	return <ResourceLabel image={employee?.image} color={color} isTimeOff={employee?.isTimeOff} name={employee?.name} description={employee?.description} />
+	return (
+		<ResourceLabel
+			image={employee?.image}
+			color={color}
+			isTimeOff={employee?.isTimeOff}
+			name={employee?.name}
+			description={employee?.description}
+			isDeleted={employee?.isDeleted}
+		/>
+	)
 }
 
 /**
@@ -73,11 +81,12 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 	)
 }
 
-interface ICalendarDayView extends ICalendarView {}
+interface ICalendarDayView extends ICalendarView {
+	handleSelectAllow: (selectInfo: DateSpanApi) => boolean
+}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
 	const {
-		salonID,
 		selectedDate,
 		eventsViewType,
 		reservations,
@@ -90,7 +99,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		enabledSalonReservations,
 		onEventChangeStart,
 		onReservationClick,
-		onEventChangeStop
+		onEventChangeStop,
+		handleSelectAllow
 	} = props
 
 	const events = useMemo(() => {
@@ -156,15 +166,13 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				allDaySlot={false}
 				stickyFooterScrollbar
 				selectable={enabledSalonReservations}
+				resourceOrder='title'
 				// data sources
 				eventSources={[events]}
 				resources={resources}
 				// render hooks
 				resourceLabelContent={resourceLabelContent}
-				resourceOrder='title'
-				eventContent={(data) => (
-					<CalendarEventContent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} onReservationClick={onReservationClick} />
-				)}
+				eventContent={(data) => eventContent(data, CALENDAR_VIEW.DAY, onEditEvent, onReservationClick)}
 				slotLabelContent={slotLabelContent}
 				// handlers
 				eventDrop={onEventChange}
@@ -174,6 +182,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				eventDragStop={onEventChangeStop}
 				eventResizeStop={onEventChangeStop}
 				select={handleNewEvent}
+				selectAllow={handleSelectAllow}
 			/>
 		</div>
 	)

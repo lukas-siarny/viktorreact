@@ -24,7 +24,7 @@ import {
 } from '../../components/OpeningHours/OpeningHoursUtils'
 
 // enums
-import { ENUMERATIONS_KEYS, FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS } from '../../utils/enums'
+import { DELETE_BUTTON_ID, ENUMERATIONS_KEYS, FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS, SUBMIT_BUTTON_ID } from '../../utils/enums'
 
 // types
 import { Paths } from '../../types/api'
@@ -37,7 +37,7 @@ import { getSupportContact, getSupportContacts } from '../../reducers/supportCon
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { getPrefixCountryCode } from '../../utils/helper'
+import { formFieldID, getPrefixCountryCode } from '../../utils/helper'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
@@ -52,7 +52,7 @@ const permissions: PERMISSION[] = [PERMISSION.ENUM_EDIT]
 
 type Props = {}
 
-const SupportContactPage: FC<Props> = (props) => {
+const SupportContactPage: FC<Props> = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -88,9 +88,7 @@ const SupportContactPage: FC<Props> = (props) => {
 
 			if (!data?.supportContact?.id) {
 				navigate('/404')
-			}
-
-			if (data) {
+			} else {
 				// init data for existing supportContact
 				const mappedOpeningHours = mapRawOpeningHoursToComponentOpeningHours(data?.supportContact?.openingHours)
 				const openOverWeekend: boolean = checkWeekend(mappedOpeningHours)
@@ -256,7 +254,7 @@ const SupportContactPage: FC<Props> = (props) => {
 						/>
 					)}
 					<SupportContactForm onSubmit={handleSubmit} supportContactID={supportContactID} disabledForm={!supportContactExists && hasEveryCountrSupportContact} />
-					<div className={'content-footer'}>
+					<div className={'content-footer'} id={'content-footer-container'}>
 						<Row className={cx('flex flex-col gap-2 md:flex-row', { 'md:justify-between': supportContactExists, 'md:justify-center': !supportContactExists })}>
 							{supportContactExists && (
 								<DeleteButton
@@ -265,6 +263,7 @@ const SupportContactPage: FC<Props> = (props) => {
 									onConfirm={deleteSupportContact}
 									entityName={t('loc:podporu')}
 									type={'default'}
+									id={formFieldID(FORM.SUPPORT_CONTACT, DELETE_BUTTON_ID)}
 									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 								/>
 							)}
@@ -274,6 +273,7 @@ const SupportContactPage: FC<Props> = (props) => {
 									<Button
 										type={'primary'}
 										size={'middle'}
+										id={formFieldID(FORM.SUPPORT_CONTACT, SUBMIT_BUTTON_ID)}
 										className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 										htmlType={'submit'}
 										icon={supportContactExists ? <EditIcon /> : <CreateIcon />}

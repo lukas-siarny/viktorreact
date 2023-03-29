@@ -9,6 +9,7 @@ import HomePage from '../pages/HomePage/HomePage'
 import PublicRoute from './PublicRoute'
 import AuthRoute from './AuthRoute'
 import CreatePasswordRoute from './CreatePasswordRoute'
+import CancelReservationRoute from './CancelReservationRoute'
 
 // layouts
 import MainLayout from '../layouts/MainLayout'
@@ -17,14 +18,17 @@ import PublicLayout from '../layouts/PublicLayout'
 // utils
 import { NEW_SALON_ID, PAGE } from '../utils/enums'
 
-// User
+// Auth
 import LoginPage from '../pages/LoginPage/LoginPage'
 import CreatePasswordPage from '../pages/CreatePasswordPage/CreatePasswordPage'
 import RegistrationPage from '../pages/RegistrationPage/RegistrationPage'
 import ActivationPage from '../pages/ActivationPage/ActivationPage'
-import UserPage from '../pages/UsersPage/UserPage'
-import CreateUserPage from '../pages/UsersPage/CreateUserPage'
+
+// Users
 import UsersPage from '../pages/UsersPage/UsersPage'
+import CreateUserPage from '../pages/UsersPage/CreateUserPage'
+import EditUserPage from '../pages/UsersPage/EditUserPage'
+import MyProfilePage from '../pages/UsersPage/MyProfilePage'
 
 // Categories
 import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
@@ -52,6 +56,16 @@ import ContactPage from '../pages/Contact/ContactPage'
 
 // Specialist contacts
 import SpecialistContactsPage from '../pages/SpecialistContactsPage/SpecialistContactsPage'
+
+// Reviews
+import ReviewsPage from '../pages/ReviewsPage/ReviewsPage'
+
+// SMS Credits
+import SmsUnitPricesPage from '../pages/SmsUnitPricesPage/SmsUnitPricesPage'
+import SmsUnitPricesDetailPage from '../pages/SmsUnitPricesPage/SmsUnitPricesDetailPage'
+
+// Cancel reservation page
+import CancelReservationPage from '../pages/CancelReservationPage/CancelReservationPage'
 
 import AppInit from '../components/AppInit'
 
@@ -81,17 +95,20 @@ const AppRoutes: FC = () => {
 				>
 					<Route path={t('paths:contact')} element={<ContactPage />} />
 				</Route>
+				<Route errorElement={<ErrorBoundary />} element={<CancelReservationRoute layout={PublicLayout} className={'noti-cancel-reservation-page'} />}>
+					<Route path={t('paths:cancel-reservation')} element={<CancelReservationPage />} />
+				</Route>
 				{/* // Private Routes */}
 				<Route errorElement={<ErrorBoundary />} element={<AuthRoute layout={MainLayout} page={PAGE.HOME} />}>
 					<Route index element={<HomePage />} />
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:users')} element={<AuthRoute layout={MainLayout} page={PAGE.USERS} />}>
 					<Route index element={<UsersPage />} />
-					<Route path={':userID'} element={<UserPage />} />
+					<Route path={':userID'} element={<EditUserPage />} />
 					<Route path={t('paths:createEntity')} element={<CreateUserPage />} />
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:my-account')} element={<AuthRoute layout={MainLayout} page={PAGE.MY_ACCOUNT} />}>
-					<Route index element={<UserPage />} />
+					<Route index element={<MyProfilePage />} />
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:activation')} element={<AuthRoute layout={MainLayout} page={PAGE.ACTIVATION} />}>
 					<Route index element={<ActivationPage />} />
@@ -125,6 +142,13 @@ const AppRoutes: FC = () => {
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:specialist-contacts')} element={<AuthRoute layout={MainLayout} page={PAGE.SPECIALIST_CONTACTS} />}>
 					<Route index element={<SpecialistContactsPage />} />
+				</Route>
+				<Route path={t('paths:reviews')} element={<AuthRoute layout={MainLayout} page={PAGE.REVIEWS} />}>
+					<Route index element={<ReviewsPage />} />
+				</Route>
+				<Route path={t('paths:sms-credits')} element={<AuthRoute layout={MainLayout} page={PAGE.SMS_CREDITS} />}>
+					<Route index element={<SmsUnitPricesPage />} />
+					<Route path={':countryCode'} element={<SmsUnitPricesDetailPage />} />
 				</Route>
 				<Route path={'/403'} element={<AuthRoute layout={MainLayout} />}>
 					<Route index element={<ForbiddenPage />} />

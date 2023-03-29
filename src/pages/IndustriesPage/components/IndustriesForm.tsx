@@ -13,9 +13,9 @@ import { getServicesCategoryKeys } from '../IndustryPage'
 import validateCategoryFrom from './validateIndustriesFrom'
 
 // utils
-import { FORM, PERMISSION } from '../../../utils/enums'
+import { FORM, PERMISSION, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
-import { showErrorNotification } from '../../../utils/helper'
+import { formFieldID, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // redux
@@ -77,6 +77,7 @@ const IndustriesForm: FC<Props> = (props) => {
 						allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Button
+								id={formFieldID(FORM.INDUSTRIES, SUBMIT_BUTTON_ID)}
 								type={'primary'}
 								size={'middle'}
 								icon={<EditIcon />}

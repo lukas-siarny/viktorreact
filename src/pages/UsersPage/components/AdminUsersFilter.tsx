@@ -73,7 +73,7 @@ const AdminUsersFilter = (props: Props) => {
 							filterOptions
 							onDidMountSearch
 							options={roles?.data}
-							loadinf={roles?.isLoading}
+							loading={roles?.isLoading}
 						/>
 					</Col>
 				</Row>

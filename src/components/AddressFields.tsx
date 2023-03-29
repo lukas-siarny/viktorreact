@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 import MapContainer from './MapContainer'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, MAP } from '../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, MAP, mapApiConfig, VALIDATION_MAX_LENGTH } from '../utils/enums'
 import {
 	getGoogleMapUrl,
 	parseAddressComponents,
@@ -170,12 +170,12 @@ const AddressFields = (props: Props) => {
 			{googleMapUrl && (
 				<>
 					<Row className={'mb-4 gap-4'} wrap={false}>
-						{mapError ? (
+						{mapError || !mapApiConfig().googleMapsApiKey ? (
 							<Row className={'w-full h-full block'} justify='center'>
 								<Alert message={t('loc:Google mapa je aktuálne nedostupná.')} showIcon type={'warning'} className={'noti-alert mb-4 google-map-warning'} />
 								<Row justify={'space-between'}>
 									<Field
-										className={'w-4/5'}
+										className={'w-4/6'}
 										component={InputField}
 										label={t('loc:Ulica')}
 										placeholder={t('loc:Zadajte ulicu')}
@@ -185,11 +185,12 @@ const AddressFields = (props: Props) => {
 										required
 									/>
 									<Field
-										className={'w-1/6'}
+										className={'w-3/10'}
 										component={InputField}
 										label={t('loc:Popisné číslo')}
 										placeholder={t('loc:Zadajte číslo')}
 										name={'streetNumber'}
+										maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 										size={'large'}
 									/>
 								</Row>
@@ -210,6 +211,7 @@ const AddressFields = (props: Props) => {
 										label={t('loc:PSČ')}
 										placeholder={t('loc:Zadajte smerovacie číslo')}
 										name={'zipCode'}
+										maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 										size={'large'}
 										validate={validationRequired}
 										required
@@ -294,25 +296,25 @@ const AddressFields = (props: Props) => {
 														required
 													/>
 													<Row gutter={[8, 8]}>
-														<Col span={12}>
+														<Col span={12} sm={24} md={24} lg={12}>
 															<Field
 																component={InputField}
 																label={t('loc:PSČ')}
 																placeholder={t('loc:Zadajte smerovacie číslo')}
 																name={'zipCode'}
+																maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 																size={'large'}
 																validate={validationRequired}
 																required
 															/>
 														</Col>
-														<Col span={12}>
+														<Col span={12} sm={24} md={24} lg={12}>
 															<Field
 																component={InputField}
 																label={t('loc:Popisné číslo')}
 																placeholder={t('loc:Zadajte číslo')}
-																required
+																maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 																name={'streetNumber'}
-																validate={validationRequired}
 																size={'large'}
 															/>
 														</Col>

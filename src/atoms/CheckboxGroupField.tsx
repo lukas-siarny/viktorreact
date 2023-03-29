@@ -16,8 +16,9 @@ type ComponentProps = {
 	size: 'small' | 'medium' | 'large'
 	rounded?: boolean
 	hideChecker?: boolean
-	optionRender?: (option: any, isChecked: boolean) => React.ReactNode
+	optionRender?: (option: any, isChecked: boolean, disabled?: boolean) => React.ReactNode
 	nullAsEmptyValue?: boolean
+	useCustomColor?: boolean
 }
 
 type Props = WrappedFieldProps & CheckboxGroupProps & FormItemProps & ComponentProps
@@ -39,22 +40,25 @@ const CheckboxGroupField = (props: Props) => {
 		hideChecker,
 		optionRender,
 		disabled,
-		nullAsEmptyValue
+		nullAsEmptyValue,
+		useCustomColor
 	} = props
 
 	const checkboxes = map(options, (option: any) => {
 		const isChecked = input.value?.includes(option.value)
+		const checkerStyle =
+			useCustomColor && (option.color || option.extra?.color) ? ({ '--checkbox-color': option.color || option.extra?.color || '#000' } as React.CSSProperties) : undefined
 
 		if (typeof option === 'string') {
 			return (
-				<Checkbox key={option} value={option} disabled={disabled} className={cx({ horizontal })}>
-					{optionRender ? optionRender(option, isChecked) : option}
+				<Checkbox key={option} value={option} disabled={disabled} className={cx({ horizontal })} style={checkerStyle}>
+					{optionRender ? optionRender(option, isChecked, disabled) : option}
 				</Checkbox>
 			)
 		}
 		return (
-			<Checkbox disabled={option.disabled || disabled} key={`${option.value}`} value={option.value} className={cx({ horizontal })}>
-				{optionRender ? optionRender(option, isChecked) : option.label}
+			<Checkbox disabled={option.disabled || disabled} key={`${option.value}`} value={option.value} className={cx({ horizontal })} style={checkerStyle}>
+				{optionRender ? optionRender(option, isChecked, disabled) : option.label}
 			</Checkbox>
 		)
 	})
@@ -67,7 +71,8 @@ const CheckboxGroupField = (props: Props) => {
 				'noti-checkbox-group-horizontal': horizontal,
 				'noti-checkbox-group-vertical': !horizontal,
 				'noti-checkbox-group-rounded': rounded,
-				'noti-checkbox-group-hidden': hideChecker
+				'noti-checkbox-group-hidden': hideChecker,
+				'noti-checkbox-group-custom-color': useCustomColor
 			})}
 			validateStatus={error && touched ? 'error' : undefined}
 			style={style}

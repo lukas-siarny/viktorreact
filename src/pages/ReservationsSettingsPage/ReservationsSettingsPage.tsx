@@ -3,16 +3,15 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize, isSubmitting } from 'redux-form'
 import { Col, Row, Spin } from 'antd'
-import { forEach, includes, isEmpty, reduce } from 'lodash'
+import { compact, forEach, includes, isEmpty, reduce } from 'lodash'
 
 // components
-import { useNavigate } from 'react-router-dom'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ReservationSystemSettingsForm from './components/ReservationSystemSettingsForm'
 
 // utils
-import { FORM, NOTIFICATION_TYPES, PERMISSION, ADMIN_PERMISSIONS, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
-import { withPermissions, checkPermissions } from '../../utils/Permissions'
+import { FORM, NOTIFICATION_TYPES, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
+import { withPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 
 // reducers
@@ -33,6 +32,8 @@ import {
 const EXCLUDED_NOTIFICATIONS_B2B: string[] = [RS_NOTIFICATION.RESERVATION_REJECTED, RS_NOTIFICATION.RESERVATION_REMINDER]
 
 const NOTIFICATIONS = Object.keys(RS_NOTIFICATION) as RS_NOTIFICATION[]
+
+const disabledSmsNotificationsForB2C = [RS_NOTIFICATION.RESERVATION_AWAITING_APPROVAL, RS_NOTIFICATION.RESERVATION_CANCELLED]
 
 type InitDisabledNotifications = {
 	[key in RS_NOTIFICATION]: IReservationsSettingsNotification
@@ -66,29 +67,38 @@ const getNotificationFormName = (notification?: string) => {
 	return undefined
 }
 
-const defualtNotification = {
-	b2cChannels: NOTIFICATION_TYPES.map((type) => ({ [type]: true })),
-	b2bChannels: NOTIFICATION_TYPES.flatMap((type) => (EXCLUDED_NOTIFICATIONS_B2B.includes(type) ? [] : [{ [type]: true }]))
+const setDefualtNotification = (rsType: RS_NOTIFICATION) => {
+	const hasDisabledSMS = includes(disabledSmsNotificationsForB2C, rsType)
+	// NOTE: vyfiltruje SMS pre B2b vsetky + B2C channel podla rsType. Treba zabezpecit ze odstrani cez compact aj undefined hodnoty lebo switch by takuto hodnotu vyrenderoval ako false
+	return {
+		b2cChannels: compact(NOTIFICATION_TYPES.map((type) => (type === RS_NOTIFICATION_TYPE.SMS && hasDisabledSMS ? undefined : { [type]: true }))),
+		b2bChannels: compact(
+			NOTIFICATION_TYPES.flatMap((type) => (EXCLUDED_NOTIFICATIONS_B2B.includes(type) ? [] : [type === RS_NOTIFICATION_TYPE.SMS ? undefined : { [type]: true }]))
+		)
+	}
 }
 
 const initDisabledNotifications = (notifications: DisabledNotificationsArray): IReservationSystemSettingsForm['disabledNotifications'] => {
 	// find all relevant notifications
 	const relevantNotifications = notifications.filter((notification) => !!getNotificationFormName(notification.eventType) && !isEmpty(notification.channels))
-
 	// transform into object of type IReservationSystemSettingsForm.disabledNotifications
 	const current = relevantNotifications?.reduce((data, item) => {
 		const isB2BChannel = item.eventType?.endsWith('EMPLOYEE') // B2B internal (employee)
 		const isB2CChannel = item.eventType?.endsWith('CUSTOMER') // B2C customer
 		const notificationFormName = getNotificationFormName(item.eventType)
-
 		if (notificationFormName) {
 			if (isB2CChannel) {
+				const hasDisabledSMS = includes(disabledSmsNotificationsForB2C, notificationFormName)
 				return {
 					...data,
 					[notificationFormName]: {
 						...data[notificationFormName],
-						b2bChannels: data[notificationFormName]?.b2bChannels || defualtNotification.b2bChannels,
-						b2cChannels: NOTIFICATION_TYPES.map((type) => ({ [type]: !item.channels.includes(type as RS_NOTIFICATION_TYPE) }))
+						b2bChannels: data[notificationFormName]?.b2bChannels || setDefualtNotification(notificationFormName).b2bChannels,
+						b2cChannels: compact(
+							NOTIFICATION_TYPES.map((type) =>
+								type === RS_NOTIFICATION_TYPE.SMS && hasDisabledSMS ? undefined : { [type]: !item.channels.includes(type as RS_NOTIFICATION_TYPE) }
+							)
+						)
 					}
 				}
 			}
@@ -97,8 +107,10 @@ const initDisabledNotifications = (notifications: DisabledNotificationsArray): I
 					...data,
 					[notificationFormName]: {
 						...data[notificationFormName],
-						b2cChannels: data[notificationFormName]?.b2cChannels || defualtNotification.b2cChannels,
-						b2bChannels: NOTIFICATION_TYPES.map((type) => ({ [type]: !item.channels.includes(type as RS_NOTIFICATION_TYPE) }))
+						b2cChannels: data[notificationFormName]?.b2cChannels || setDefualtNotification(notificationFormName).b2cChannels,
+						b2bChannels: compact(
+							NOTIFICATION_TYPES.map((type) => (type !== RS_NOTIFICATION_TYPE.SMS ? { [type]: !item.channels.includes(type as RS_NOTIFICATION_TYPE) } : undefined))
+						)
 					}
 				}
 			}
@@ -106,32 +118,27 @@ const initDisabledNotifications = (notifications: DisabledNotificationsArray): I
 
 		return data
 	}, {} as InitDisabledNotifications)
-
 	const result = NOTIFICATIONS.reduce((data, key) => {
 		return {
 			...data,
 			[key]: current[key] || {
-				b2cChannels: defualtNotification.b2cChannels,
-				b2bChannels: defualtNotification.b2bChannels
+				b2cChannels: setDefualtNotification(key).b2cChannels,
+				b2bChannels: setDefualtNotification(key).b2bChannels
 			}
 		}
 	}, {} as InitDisabledNotifications)
-
 	return result
 }
 
 const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const navigate = useNavigate()
 	const { salonID } = props
 	const { parentPath } = props
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-	const groupedSettings = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
+	const services = useSelector((state: RootState) => state.service.services)
+	const groupedSettings = services?.data?.groupedServicesByCategory
 	const submitting = useSelector(isSubmitting(FORM.RESEVATION_SYSTEM_SETTINGS))
-
-	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
-	const authUserPermissions = currentUser?.uniqPermissions
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -143,17 +150,6 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 
 	const fetchData = async () => {
 		const salonRes = await dispatch(selectSalon(salonID))
-		// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
-		const salonPermissions = salonRes?.data?.uniqPermissions || []
-		const userPermissions = [...(authUserPermissions || []), ...salonPermissions]
-
-		const canVisitThisPage =
-			checkPermissions(userPermissions, [PERMISSION.NOTINO]) ||
-			(checkPermissions(userPermissions, [PERMISSION.PARTNER], ADMIN_PERMISSIONS) && salonRes?.data?.settings?.enabledReservations)
-		if (!canVisitThisPage) {
-			navigate('/404')
-			return
-		}
 
 		const servicesRes = await dispatch(getServices({ salonID }))
 
@@ -199,6 +195,8 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 			dispatch(
 				initialize(FORM.RESEVATION_SYSTEM_SETTINGS, {
 					enabledReservations: salonRes?.data?.settings?.enabledReservations,
+					enabledB2cReservations: salonRes.data.settings?.enabledB2cReservations,
+					enabledCustomerReservationNotes: salonRes?.data?.settings.enabledCustomerReservationNotes,
 					maxDaysB2cCreateReservation: salonRes?.data?.settings?.maxDaysB2cCreateReservation,
 					maxHoursB2cCreateReservationBeforeStart: salonRes?.data?.settings?.maxHoursB2cCreateReservationBeforeStart,
 					maxHoursB2cCancelReservationBeforeStart: salonRes?.data?.settings?.maxHoursB2cCancelReservationBeforeStart,
@@ -267,7 +265,9 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 
 		const reqData: PathSettingsBody = {
 			settings: {
+				enabledCustomerReservationNotes: values.enabledCustomerReservationNotes,
 				enabledReservations: values.enabledReservations,
+				enabledB2cReservations: values.enabledB2cReservations,
 				maxDaysB2cCreateReservation: values.maxDaysB2cCreateReservation,
 				maxHoursB2cCancelReservationBeforeStart: values.maxHoursB2cCancelReservationBeforeStart,
 				maxHoursB2cCreateReservationBeforeStart: values.maxHoursB2cCreateReservationBeforeStart,
@@ -294,7 +294,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<Spin spinning={salon.isLoading || submitting}>
+						<Spin spinning={salon.isLoading || services.isLoading || submitting}>
 							<ReservationSystemSettingsForm
 								onSubmit={handleSubmitSettings}
 								salonID={salonID}

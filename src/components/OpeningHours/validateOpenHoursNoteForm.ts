@@ -14,9 +14,9 @@ export default (values: IOpenHoursNoteForm) => {
 	if (!get(values, 'openingHoursNote')) {
 		errors.openingHoursNote = i18next.t('loc:Toto pole je povinné')
 	}
-	if (get(values, 'openingHoursNote.length') > VALIDATION_MAX_LENGTH.LENGTH_100) {
+	if (get(values, 'openingHoursNote.length') > VALIDATION_MAX_LENGTH.LENGTH_200) {
 		errors.openingHoursNote = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_100
+			max: VALIDATION_MAX_LENGTH.LENGTH_200
 		})
 	}
 

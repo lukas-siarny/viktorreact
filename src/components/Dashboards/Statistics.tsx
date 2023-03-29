@@ -9,7 +9,7 @@ type Props = {
 	title: React.ReactNode
 	count: React.ReactNode
 	actionLabel?: React.ReactNode
-	onActionItemClick: () => void
+	onActionItemClick?: () => void
 	className?: string
 }
 
@@ -22,15 +22,17 @@ const Statistics = (props: Props) => {
 			<div className='w-full m-regular text-notino-grayDark mb-2'>{title}</div>
 			<div className='absolute bottom-4 left-4 right-4'>
 				<h3>{count}</h3>
-				<Button
-					className='float-right m-semibold p-0 flex h-auto hover:text-notino-pink focus:text-notino-pink'
-					type={'link'}
-					htmlType={'button'}
-					onClick={onActionItemClick}
-				>
-					{actionLabel}
-					<ChevronIcon className='ml-2' />
-				</Button>
+				{onActionItemClick && (
+					<Button
+						className='float-right m-semibold p-0 flex h-auto hover:text-notino-pink focus:text-notino-pink'
+						type={'link'}
+						htmlType={'button'}
+						onClick={onActionItemClick}
+					>
+						{actionLabel}
+						<ChevronIcon className='ml-2' />
+					</Button>
+				)}
 			</div>
 		</div>
 	)

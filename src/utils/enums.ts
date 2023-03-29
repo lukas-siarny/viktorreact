@@ -3,7 +3,14 @@ import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
 import { LoadScriptUrlOptions } from '@react-google-maps/api/dist/utils/make-load-script-url'
 import { AliasToken } from 'antd/es/theme/internal'
-import { FormatterInput } from '@fullcalendar/core'
+import { FormatterInput } from '@fullcalendar/react'
+
+export enum CYPRESS_CLASS_NAMES {
+	LOGOUT_BUTTON = 'noti-logout-button',
+	MY_ACCOUNT = 'noti-my-account',
+	MY_ACCOUNT_BUTTON = 'noti-my-account-button',
+	FORBIDDEN_MODAL = 'noti-forbidden-modal'
+}
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
@@ -51,6 +58,10 @@ export enum MSG_TYPE {
 	ERROR = 'ERROR',
 	WARNING = 'WARNING',
 	SUCCESS = 'SUCCESS'
+}
+
+export enum ERROR_MSG_CODE {
+	MISSING_COUNTRY_CODE = 'MISSING_COUNTRY_CODE'
 }
 
 export enum FIELD_MODE {
@@ -136,7 +147,7 @@ export enum FORM {
 	NOTE = 'NOTE',
 	NOTINO_USER = 'NOTINO_USER',
 	EDIT_EMPLOYEE_ROLE = 'EDIT_EMPLOYEE_ROLE',
-	SALON_IMPORTS_FORM = 'SALON_IMPORTS_FORM',
+	IMPORT_FORM = 'IMPORT_FORM',
 	SALON_HISTORY_FILTER = 'SALON_HISTORY_FILTER',
 	INDUSTRIES = 'INDUSTRIES',
 	INDUSTRY = 'INDUSTRY',
@@ -148,11 +159,17 @@ export enum FORM {
 	FILTER_REJECTED_SUGGESTIONS = 'FILTER_REJECTED_SUGGESTIONS',
 	CALENDAR_FILTER = 'CALENDAR_FILTER',
 	CALENDAR_RESERVATION_FORM = 'CALENDAR_RESERVATION_FORM',
+	CALENDAR_RESERVATION_FROM_IMPORT_FORM = 'CALENDAR_RESERVATION_FROM_IMPORT_FORM',
 	CONFIRM_BULK_FORM = 'CONFIRM_BULK_FORM',
 	RESEVATION_SYSTEM_SETTINGS = 'RESEVATION_SYSTEM_SETTINGS',
 	HEADER_COUNTRY_FORM = 'HEADER_COUNTRY_FORM',
 	EMPLOYEE_SERVICE_EDIT = 'EMPLOYEE_SERVICE_EDIT',
-	CALENDAR_EVENT_FORM = 'CALENDAR_EVENT_FORM'
+	CALENDAR_EVENT_FORM = 'CALENDAR_EVENT_FORM',
+	REVIEWS_FILTER = 'REVIEWS_FILTER',
+	SMS_UNIT_PRICES_FORM = 'SMS_UNIT_PRICES_FORM',
+	SMS_UNIT_PRICES_FILTER = 'SMS_UNIT_PRICES_FILTER',
+	SMS_HISTORY_FILTER = 'SMS_HISTORY_FILTER',
+	RECHARGE_SMS_CREDIT = 'RECHARGE_SMS_CREDIT'
 }
 
 export enum PERMISSION {
@@ -186,7 +203,9 @@ export enum PERMISSION {
 	EMPLOYEE_ROLE_UPDATE = 'EMPLOYEE_ROLE_UPDATE',
 	CALENDAR_EVENT_CREATE = 'CALENDAR_EVENT_CREATE',
 	CALENDAR_EVENT_UPDATE = 'CALENDAR_EVENT_UPDATE',
-	CALENDAR_EVENT_DELETE = 'CALENDAR_EVENT_DELETE'
+	CALENDAR_EVENT_DELETE = 'CALENDAR_EVENT_DELETE',
+	READ_WALLET = 'READ_WALLET',
+	SMS_UNIT_PRICE_EDIT = 'SMS_UNIT_PRICE_EDIT'
 }
 
 export const ADMIN_PERMISSIONS: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
@@ -211,7 +230,8 @@ export enum SUBMENU_PARENT {
 export enum TOKEN_AUDIENCE {
 	API = 'jwt-api',
 	FORGOTTEN_PASSWORD = 'FORGOTTEN_PASSWORD',
-	INVITATION = 'INVITATION'
+	INVITATION = 'INVITATION',
+	CANCEL_RESERVATION = 'CANCEL_RESERVATION'
 }
 
 export enum TAB_KEYS {
@@ -223,6 +243,16 @@ export enum SALONS_TAB_KEYS {
 	ACTIVE = 'active',
 	DELETED = 'deleted',
 	MISTAKES = 'mistakes'
+}
+
+export enum DASHBOARD_TASB_KEYS {
+	SALONS_STATE = 'SALONS_STATE',
+	RESERVATION_SYSTEM = 'RESERVATION_SYSTEM'
+}
+
+export enum REVIEWS_TAB_KEYS {
+	PUBLISHED = 'published',
+	DELETED = 'deleted'
 }
 
 export enum PAGE {
@@ -249,7 +279,10 @@ export enum PAGE {
 	BILLING_INFO = 'BILLING_INFO',
 	CALENDAR = 'CALENDAR',
 	SALON_SETTINGS = 'SALON_SETTINGS',
-	RESERVATIONS = 'RESERVATIONS'
+	RESERVATIONS = 'RESERVATIONS',
+	REVIEWS = 'REVIEWS',
+	SMS_CREDIT = 'SMS_CREDIT',
+	SMS_CREDITS = 'SMS_CREDITS'
 }
 
 export enum PARAMETER_TYPE {
@@ -278,6 +311,12 @@ export const DEFAULT_DATE_WITH_TIME_FORMAT = 'DD.MM.YYYY HH:mm'
 export const EN_DATE_WITH_TIME_FORMAT = 'MMM DD YYYY HH:mm'
 
 export const EN_DATE_WITHOUT_TIME_FORMAT = 'DD.MM.YYYY'
+
+export const MONTH_NAME_YEAR_FORMAT = 'MMM YYYY'
+
+export const D_M_YEAR_FORMAT = 'D.M.YYYY'
+
+export const YEAR_M_FORMAT = 'YYYY-MM'
 
 export const DATE_TIME_PARSER_DATE_FORMAT = 'YYYY-MM-DD'
 export const DATE_TIME_PARSER_FORMAT = `${DATE_TIME_PARSER_DATE_FORMAT}:HH:mm`
@@ -341,7 +380,11 @@ export enum FILE_FILTER_DATA_TYPE {
 	EXCEL = 'EXCEL',
 	OTHER = 'OTHER'
 }
-
+export enum UPLOAD_STATUS {
+	UPLOADING = 'UPLOADING',
+	SUCCESS = 'SUCCESS',
+	ERROR = 'ERROR'
+}
 export enum DROPPABLE_IDS {
 	FOLDER_FILES = 'FOLDER_FILES',
 	WEBPROJECTS_FILES = 'WEBPROJECTS_FILES'
@@ -351,7 +394,11 @@ const PRAGUE_LOCATION = {
 	lat: 50.0755381,
 	lng: 14.4378005
 }
-
+export const CYPRESS = {
+	// Wait times in [ms]
+	S3_UPLOAD_WAIT_TIME: 2000,
+	ANIMATION_WAIT_TIME: 1000
+}
 export const MAP = {
 	defaultZoom: 10,
 	minLatitude: -90,
@@ -377,12 +424,13 @@ export const MAP = {
 	}
 }
 
-export const mapApiConfig: LoadScriptUrlOptions = {
-	// https://react-google-maps-api-docs.netlify.app/#usejsapiloader
-	libraries: ['places'],
-	// eslint-disable-next-line no-underscore-dangle
-	googleMapsApiKey: window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_MAPS_API_KEY
-}
+export const mapApiConfig = () =>
+	({
+		// https://react-google-maps-api-docs.netlify.app/#usejsapiloader
+		libraries: ['places'],
+		// eslint-disable-next-line no-underscore-dangle
+		googleMapsApiKey: window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_MAPS_API_KEY
+	} as LoadScriptUrlOptions)
 
 export enum SALON_FILTER_STATES {
 	PUBLISHED = 'PUBLISHED',
@@ -499,6 +547,7 @@ export enum VALIDATION_MAX_LENGTH {
 	LENGTH_1000 = 1000,
 	LENGTH_500 = 500,
 	LENGTH_255 = 255,
+	LENGTH_200 = 200,
 	LENGTH_100 = 100,
 	LENGTH_75 = 75,
 	LENGTH_60 = 60,
@@ -562,6 +611,28 @@ export const DELETE_BUTTON_ID = 'delete-btn'
 
 export const CREATE_BUTTON_ID = 'create-btn'
 
+export const SUBMIT_BUTTON_ID = 'submit-btn'
+
+export const ADD_BUTTON_ID = 'add-btn'
+
+export const FILTER_BUTTON_ID = 'filter-btn'
+
+export const FORGOT_PASSWORD_BUTTON_ID = 'forgot-password-btn'
+
+export const SIGNUP_BUTTON_ID = 'signup-btn'
+
+export const HELP_BUTTON_ID = 'help-password-btn'
+
+export const CHANGE_PASSWORD_NEW_LINK_BUTTON_ID = 'change-password-new-link-btn'
+
+export const CREATE_EMPLOYEE_BUTTON_ID = 'create-employee-btn'
+
+export const CREATE_CUSTOMER_BUTTON_ID = 'create-customer-btn'
+
+export const IMPORT_BUTTON_ID = (suffix?: string) => `import-btn${suffix ? `-${suffix}` : ''}`
+
+export const ROW_BUTTON_WITH_ID = (id: string) => `row-btn-with-id_${id}`
+
 export const MAX_VALUES_PER_PARAMETER = 20
 
 export enum PARAMETERS_VALUE_TYPES {
@@ -621,7 +692,7 @@ export const FILTER_PATHS = (from?: string, to?: string) => ({
 		[SALON_FILTER_STATES.DECLINED]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.DECLINED}`,
 		[SALON_FILTER_STATES.PENDING_PUBLICATION]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.PENDING_PUBLICATION}`,
 		[SALON_CREATE_TYPE.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.BASIC}`,
-		publishedChanges: `${i18next.t('paths:salons')}?salonState=active&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
+		changesOverPeriod: `${i18next.t('paths:salons')}?salonState=active&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}`,
 		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`,
 		publishedBasics: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
 		publishedPremiums: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.NON_BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`
@@ -638,10 +709,27 @@ export enum SALONS_TIME_STATS_TYPE {
 	PREMIUM = 'PREMIUM'
 }
 
+export enum RS_STATS_TYPE {
+	ENABLE_RS_B2B = 'ENABLE_RS_B2B',
+	ENABLE_RS_B2C = 'ENABLE_RS_B2C'
+}
+
+export enum RESERVATIONS_STATS_TYPE {
+	NEW_RS_B2B = 'NEW_RS_B2B',
+	NEW_RS_B2C = 'NEW_RS_B2C'
+}
+
 export enum TIME_STATS_SOURCE_TYPE {
 	MONTH = 'MONTH',
 	YEAR = 'YEAR'
 }
+
+export enum REVIEW_VERIFICATION_STATUS {
+	NOT_VERIFIED = 'NOT_VERIFIED',
+	VISIBLE_IN_B2C = 'VISIBLE_IN_B2C',
+	HIDDEN_IN_B2C = 'HIDDEN_IN_B2C'
+}
+
 // CALENDAR ENUMS
 export const CALENDAR_COMMON_SETTINGS = {
 	// add condition for cypress E2E errors
@@ -662,21 +750,26 @@ export const CALENDAR_COMMON_SETTINGS = {
 	EVENT_CONSTRAINT: {
 		startTime: '00:00',
 		endTime: '23:59'
+	},
+	SELECT_CONSTRAINT: {
+		startTime: '00:00',
+		endTime: '24:00'
 	}
 }
 
 export enum CALENDAR_VIEW {
 	// eslint-disable-next-line @typescript-eslint/no-shadow
 	DAY = 'DAY',
-	WEEK = 'WEEK' /* ,
-	MONTH = 'MONTH' */
+	WEEK = 'WEEK',
+	MONTH = 'MONTH'
 }
 
 export enum CALENDAR_EVENT_TYPE {
 	RESERVATION = 'RESERVATION',
 	EMPLOYEE_SHIFT = 'EMPLOYEE_SHIFT',
 	EMPLOYEE_TIME_OFF = 'EMPLOYEE_TIME_OFF',
-	EMPLOYEE_BREAK = 'EMPLOYEE_BREAK'
+	EMPLOYEE_BREAK = 'EMPLOYEE_BREAK',
+	RESERVATION_FROM_IMPORT = 'RESERVATION_FROM_IMPORT'
 }
 
 export enum CALENDAR_EVENTS_VIEW_TYPE {
@@ -691,8 +784,10 @@ export enum CALENDAR_DATE_FORMAT {
 	HEADER_WEEK_END = 'D MMM YY',
 	HEADER_WEEK_START_TURN_OF_THE_MONTH = 'D MMM',
 	HEADER_WEEK_END_TURN_OF_THE_MONTH = 'D MMM YY',
-	HEADER_MONTH = 'MMMM YY',
-	TIME = 'HH:mm'
+	HEADER_MONTH = 'MMMM YYYY',
+	TIME = 'HH:mm',
+	MONTH_HEADER_DAY_NAME = 'ddd',
+	EVENTS_LIST_POPOVER = 'dddd, D MMM'
 }
 
 export enum CALENDAR_SET_NEW_DATE {
@@ -718,25 +813,28 @@ export const EVERY_REPEAT_OPTIONS = () => [
 	}
 ]
 
-export const EVENT_NAMES = (eventType?: CALENDAR_EVENT_TYPE, capitalizeFirstLetter = false) => {
-	let string = i18next.t('loc:udalosť')
+export const EVENT_NAMES = (t: TFunction, eventType?: CALENDAR_EVENT_TYPE, capitalizeFirstLetter = false) => {
+	let string = ''
 	switch (eventType) {
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-			string = i18next.t('loc:prestávku')
+			string = t('loc:prestávku')
 			break
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-			string = i18next.t('loc:shift-akuzativ')
+			string = t('loc:shift-akuzativ')
 			break
 		case CALENDAR_EVENT_TYPE.RESERVATION:
-			string = i18next.t('loc:rezerváciu')
+			string = t('loc:rezerváciu')
+			break
+		case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
+			string = t('loc:importovanú rezerváciu')
 			break
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-			string = i18next.t('loc:voľno')
+			string = t('loc:voľno')
 			break
 		default:
 			break
 	}
-	if (capitalizeFirstLetter) {
+	if (capitalizeFirstLetter && string) {
 		const firstLetterCapitalized = string.charAt(0).toUpperCase()
 		return firstLetterCapitalized + string.slice(1)
 	}
@@ -758,6 +856,8 @@ export enum CALENDAR_EVENTS_KEYS {
 	RESERVATIONS = 'reservations',
 	SHIFTS_TIME_OFFS = 'shiftsTimeOffs'
 }
+
+export const MONTHLY_RESERVATIONS_KEY = 'monthlyReservations'
 
 export enum CONFIRM_BULK {
 	BULK = 'BULK',
@@ -798,7 +898,7 @@ export enum SERVICE_TYPE {
 export const CALENDAR_DEBOUNCE_DELAY = 300 // in ms
 export const CALENDAR_INIT_TIME = 500 // in ms
 
-export const HANDLE_CALENDAR_FORMS = [FORM.CALENDAR_RESERVATION_FORM, FORM.CALENDAR_EVENT_FORM]
+export const HANDLE_CALENDAR_FORMS = [FORM.CALENDAR_RESERVATION_FORM, FORM.CALENDAR_EVENT_FORM, FORM.CALENDAR_RESERVATION_FROM_IMPORT_FORM]
 
 export enum HANDLE_CALENDAR_ACTIONS {
 	CHANGE = 'CHANGE',
@@ -864,7 +964,8 @@ export enum RS_NOTIFICATION {
 // NOTE: order definition reflect order of options in UI
 export enum RS_NOTIFICATION_TYPE {
 	EMAIL = 'EMAIL',
-	PUSH = 'PUSH'
+	PUSH = 'PUSH',
+	SMS = 'SMS'
 }
 
 export const NOTIFICATION_TYPES = Object.keys(RS_NOTIFICATION_TYPE)
@@ -943,13 +1044,63 @@ export enum CONFIRM_MODAL_DATA_TYPE {
 	UPDATE_RESERVATION_STATE = 'UPDATE_RESERVATION_STATE'
 }
 
+export enum CALENDAR_EVENT_DISPLAY_TYPE {
+	REGULAR = 'regular',
+	BACKGROUND = 'background',
+	INVERSE_BACKGROUND = 'inverse-background'
+}
+
+export const CALENDAR_DAY_EVENTS_SHOWN = 5
+export const CALENDAR_DAY_EVENTS_LIMIT = CALENDAR_DAY_EVENTS_SHOWN + 1
 export const RESERVATION_STATES = Object.keys(RESERVATION_STATE)
 export const RESERVATION_PAYMENT_METHODS = Object.keys(RESERVATION_PAYMENT_METHOD)
 export const RESERVATION_SOURCE_TYPES = Object.keys(RESERVATION_SOURCE_TYPE)
 
 export const CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE = 300 // in ms
+export const CALENDAR_UPDATE_SIZE_DELAY = 100 // in ms
 
-export enum CANEL_TOKEN_MESSAGES {
+export enum CANCEL_TOKEN_MESSAGES {
 	CANCELED_DUE_TO_NEW_REQUEST = 'Operation canceled due to new request.',
 	CANCELED_ON_DEMAND = 'Operation canceled.'
+}
+
+export enum SMS_NOTIFICATION_EVENT_TYPE {
+	RESERVATION_CONFIRMED_CUSTOMER = 'RESERVATION_CONFIRMED_CUSTOMER',
+	RESERVATION_CHANGED_CUSTOMER = 'RESERVATION_CHANGED_CUSTOMER',
+	RESERVATION_REJECTED_CUSTOMER = 'RESERVATION_REJECTED_CUSTOMER',
+	RESERVATION_REMINDER_CUSTOMER = 'RESERVATION_REMINDER_CUSTOMER'
+}
+
+export enum SMS_NOTIFICATION_STATUS {
+	SUCCESS = 'SUCCESS',
+	FAILURE = 'FAILURE',
+	IGNORED = 'IGNORED'
+}
+
+export const SMS_NOTIFICATION_EVENT_TYPE_NAME = (notificationType: SMS_NOTIFICATION_EVENT_TYPE) => {
+	switch (notificationType) {
+		case SMS_NOTIFICATION_EVENT_TYPE.RESERVATION_CONFIRMED_CUSTOMER:
+			return i18next.t('loc:Potvrdenie')
+		case SMS_NOTIFICATION_EVENT_TYPE.RESERVATION_CHANGED_CUSTOMER:
+			return i18next.t('loc:Zmena')
+		case SMS_NOTIFICATION_EVENT_TYPE.RESERVATION_REJECTED_CUSTOMER:
+			return i18next.t('loc:Zrušenie')
+		case SMS_NOTIFICATION_EVENT_TYPE.RESERVATION_REMINDER_CUSTOMER:
+			return i18next.t('loc:Pripomienka')
+		default:
+			return ''
+	}
+}
+
+export const SMS_STATUS_NAME = (status: SMS_NOTIFICATION_STATUS) => {
+	switch (status) {
+		case SMS_NOTIFICATION_STATUS.SUCCESS:
+			return i18next.t('loc:Prijatá')
+		case SMS_NOTIFICATION_STATUS.FAILURE:
+			return i18next.t('loc:Nedoručená')
+		case SMS_NOTIFICATION_STATUS.IGNORED:
+			return i18next.t('loc:Ignorovaná')
+		default:
+			return ''
+	}
 }

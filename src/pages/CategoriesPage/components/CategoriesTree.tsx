@@ -18,9 +18,9 @@ import { RootState } from '../../../reducers'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../../utils/request'
-import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
+import { CREATE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
 import { checkPermissions } from '../../../utils/Permissions'
-import { normalizeNameLocalizations } from '../../../utils/helper'
+import { formFieldID, normalizeNameLocalizations } from '../../../utils/helper'
 
 // components
 import CategoryForm, { ICategoryForm } from './CategoryForm'
@@ -139,6 +139,7 @@ const CategoriesTree = () => {
 				children: get(child, 'children') ? childrenRecursive(child.id, get(child, 'children'), level + 1, !!get(child, 'deletedAt')) : null,
 				nameLocalizations: get(child, 'nameLocalizations'),
 				categoryParameterID: get(child, 'categoryParameter'),
+				className: get(child, 'id'),
 				level,
 				index,
 				image: get(child, 'image'),
@@ -163,6 +164,7 @@ const CategoriesTree = () => {
 				children: get(category, 'children') ? childrenRecursive(get(category, 'id'), get(category, 'children') as any[], 1, !!get(category, 'deletedAt')) : null,
 				nameLocalizations: get(category, 'nameLocalizations'),
 				categoryParameterID: get(category, 'categoryParameter'),
+				className: get(category, 'id'),
 				level,
 				index,
 				image: get(category, 'image'),
@@ -355,6 +357,7 @@ const CategoriesTree = () => {
 					htmlType='button'
 					className={'noti-btn'}
 					icon={<PlusIcon />}
+					id={formFieldID(FORM.CATEGORY, CREATE_BUTTON_ID)}
 				>
 					{t('loc:Pridať kategóriu')}
 				</Button>

@@ -17,9 +17,9 @@ import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
 import { ReactComponent as LocationIcon } from '../../../assets/icons/location-16.svg'
 
 // utils
-import { PERMISSION, FORM } from '../../../utils/enums'
+import { PERMISSION, FORM, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
-import { showErrorNotification } from '../../../utils/helper'
+import { formFieldID, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
@@ -149,7 +149,7 @@ const BillingInfoForm = (props: Props) => {
 								<Divider className={'mb-3 mt-3'} />
 								<Row justify={'space-between'}>
 									<Field
-										className={'w-4/5'}
+										className={'w-4/6'}
 										component={InputField}
 										label={t('loc:Ulica')}
 										placeholder={t('loc:Zadajte ulicu')}
@@ -158,9 +158,10 @@ const BillingInfoForm = (props: Props) => {
 										disabled={!hasPermission}
 									/>
 									<Field
-										className={'w-1/6'}
+										className={'w-3/10'}
 										component={InputField}
 										label={t('loc:Popisné číslo')}
+										maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 										placeholder={t('loc:Zadajte číslo')}
 										name={'streetNumber'}
 										size={'large'}
@@ -194,6 +195,7 @@ const BillingInfoForm = (props: Props) => {
 						<div className={'content-footer'}>
 							<Row className='justify-center w-full'>
 								<Button
+									id={formFieldID(FORM.SALON_BILLING_INFO, SUBMIT_BUTTON_ID)}
 									type={'primary'}
 									className={'noti-btn w-full md:w-auto md:min-w-50 xl:min-w-60'}
 									htmlType={'submit'}

@@ -154,7 +154,7 @@ const ReservationsPage = (props: Props) => {
 				return (
 					<div className={'flex items-center'}>
 						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationState(value as RESERVATION_STATE).icon}</div>
-						<div>{translateReservationState(value as RESERVATION_STATE).text}</div>
+						<div className={'truncate'}>{translateReservationState(value as RESERVATION_STATE).text}</div>
 					</div>
 				)
 			}
@@ -169,7 +169,7 @@ const ReservationsPage = (props: Props) => {
 				return (
 					<div className={'flex items-center'}>
 						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).icon}</div>
-						<div>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).text}</div>
+						<div className={'truncate'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).text}</div>
 					</div>
 				)
 			}

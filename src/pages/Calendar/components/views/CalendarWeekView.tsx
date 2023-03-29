@@ -1,21 +1,19 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import dayjs from 'dayjs'
 import useResizeObserver from '@react-hook/resize-observer'
+import cx from 'classnames'
 
 // full calendar
-import FullCalendar from '@fullcalendar/react' // must go before plugins
-import { DateSelectArg, EventContentArg, SlotLabelContentArg } from '@fullcalendar/core'
+import FullCalendar, { DateSelectArg, DateSpanApi, EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
-
-// components
-import CalendarEventContent from '../CalendarEventContent'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
 import { composeWeekResources, composeWeekViewEvents, getWeekDayResourceID } from '../../calendarHelpers'
 import { getDateTime } from '../../../../utils/helper'
+import eventContent from '../../eventContent'
 
 // types
 import { ICalendarView, IWeekViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -60,7 +58,7 @@ const resourceAreaColumns = [
 			const employee = extendedProps?.employee
 
 			return (
-				<div className={'nc-week-label-resource'}>
+				<div className={cx('nc-week-label-resource', { 'is-deleted': employee?.isDeleted })}>
 					<div className={'image'} style={{ backgroundImage: `url("${employee?.image}")`, borderColor: eventBackgroundColor }} />
 					<span className={'info block text-xs font-normal min-w-0 truncate max-w-full'}>{employee?.name}</span>
 					{employee?.isTimeOff && (
@@ -148,6 +146,7 @@ const createDayLabelElement = (resourceElemenet: HTMLElement, employeesLength: n
 interface ICalendarWeekView extends ICalendarView {
 	updateCalendarSize: () => void
 	weekDays: string[]
+	handleSelectAllow: (selectInfo: DateSpanApi) => boolean
 }
 
 /**
@@ -182,7 +181,6 @@ interface ICalendarWeekView extends ICalendarView {
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
 	const {
-		salonID,
 		selectedDate,
 		eventsViewType,
 		shiftsTimeOffs,
@@ -197,7 +195,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		virtualEvent,
 		enabledSalonReservations,
 		onEventChangeStart,
-		onEventChangeStop
+		onEventChangeStop,
+		handleSelectAllow
 	} = props
 
 	const events = useMemo(() => {
@@ -327,6 +326,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				stickyFooterScrollbar
 				nowIndicator
 				selectable={enabledSalonReservations}
+				resourceOrder='title'
 				// data sources
 				eventSources={[events]}
 				resources={resources}
@@ -335,10 +335,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				resourceGroupLaneContent={resourceGroupLaneContent}
 				resourceGroupLabelContent={resourceGroupLabelContent}
 				slotLabelContent={slotLabelContent}
-				resourceOrder='title'
-				eventContent={(data: EventContentArg) => (
-					<CalendarEventContent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} onReservationClick={onReservationClick} />
-				)}
+				eventContent={(data: EventContentArg) => eventContent(data, CALENDAR_VIEW.WEEK, onEditEvent, onReservationClick)}
 				nowIndicatorContent={() => <NowIndicator />}
 				// handlers
 				eventDrop={onEventChange}
@@ -348,6 +345,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				eventDragStop={onEventChangeStop}
 				eventResizeStop={onEventChangeStop}
 				select={(selectedEvent) => handleNewEvent(selectedEvent)}
+				selectAllow={handleSelectAllow}
 				/**
 				 * po tom čo sa setnu resources a eventy je ešte potrebné updatnuť veľkost kalendára, pretože sa občas stávalo, že sa nesprávne vypočítala výška a eventy boli nastackované na sebe v jednom riadku
 				 */

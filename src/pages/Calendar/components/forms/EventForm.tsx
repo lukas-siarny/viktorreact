@@ -25,7 +25,7 @@ import {
 import Permissions from '../../../../utils/Permissions'
 
 // types
-import { ICalendarEventForm } from '../../../../types/interfaces'
+import { ICalendarEmployeesPayload, ICalendarEventForm } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-16-current-color.svg'
@@ -45,21 +45,23 @@ import { RootState } from '../../../../reducers'
 
 type ComponentProps = {
 	eventId?: string | null
-	searchEmployes: (search: string, page: number) => Promise<any>
+	loadingData?: boolean
 	sidebarView?: CALENDAR_EVENT_TYPE
+	employeesOptions: ICalendarEmployeesPayload['options']
+	employeesLoading?: boolean
 }
 
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
 const formName = FORM.CALENDAR_EVENT_FORM
 
 const EventForm: FC<Props> = (props) => {
-	const { handleSubmit, eventId, searchEmployes, pristine, submitting, sidebarView } = props
+	const { handleSubmit, eventId, pristine, submitting, loadingData, sidebarView, employeesOptions, employeesLoading } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const formValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(formName)(state))
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 	// NOTE: pristine pouzivat len pri UPDATE eventu a pri CREATE povlit akciu vzdy
-	const disabledSubmitButton = !!(eventId && pristine) || submitting
+	const disabledSubmitButton = !!(eventId && pristine) || submitting || loadingData
 
 	const checkboxOptionRender = (option: any, checked?: boolean) => {
 		return <div className={cx('w-5 h-5 flex-center bg-notino-grayLighter rounded', { 'bg-notino-pink': checked, 'text-notino-white': checked })}>{option?.label}</div>
@@ -128,26 +130,25 @@ const EventForm: FC<Props> = (props) => {
 	return (
 		<>
 			<div className={'nc-sider-event-management-content'} key={`${eventId}${sidebarView}`}>
-				<Spin spinning={eventDetail.isLoading} size='large'>
+				<Spin spinning={eventDetail.isLoading || employeesLoading} size='large'>
 					<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 						<Field
 							component={SelectField}
 							optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}
+							options={employeesOptions}
 							label={t('loc:Zamestnanec')}
 							suffixIcon={<EmployeesIcon className={'text-notino-grayDark'} />}
-							placeholder={t('loc:Vyberte zamestnanca')}
+							placeholder={t('loc:Vyber zamestnanca')}
 							name={'employee'}
-							size={'large'}
 							optionLabelProp={'label'}
-							update={(itemKey: number, ref: any) => ref.blur()}
-							filterOption={false}
-							allowInfinityScroll
+							size={'large'}
+							update={(_itemKey: number, ref: any) => ref.blur()}
 							showSearch
 							required
-							disabled={eventId} // NOTE: ak je detail tak sa neda menit zamestnanec
 							className={'pb-0'}
 							labelInValue
-							onSearch={searchEmployes}
+							disabled={eventId} // NOTE: ak je detail tak sa neda menit zamestnanec
+							hasExtra
 						/>
 						<Field
 							name={'date'}

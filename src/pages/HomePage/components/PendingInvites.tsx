@@ -94,7 +94,7 @@ const PendingInvites = () => {
 		<>
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
-					<div className='content-body mt-8'>
+					<div className='content-body mb-10'>
 						<CustomTable
 							columns={columns}
 							dataSource={pendingInvites?.data?.pendingEmployeeInvites}

@@ -14,7 +14,7 @@ const HomePage = () => {
 			allowed={[PERMISSION.NOTINO]}
 			render={(hasPermission) => (
 				<div className={'homepage-wrapper'}>
-					<div className='w-11/12 xl:w-5/6 2xl:w-3/4 3xl:w-2/3 mx-auto mt-10'>{hasPermission ? <NotinoDashboard /> : <PartnerDashboard />}</div>
+					<div className='w-full mx-auto'>{hasPermission ? <NotinoDashboard /> : <PartnerDashboard />}</div>
 				</div>
 			)}
 		/>

@@ -72,6 +72,7 @@ const UserAccountForm: FC<Props> = (props) => {
 						prefixName={'phonePrefixCountryCode'}
 						phoneName={'phone'}
 						formName={FORM.USER_ACCOUNT}
+						required
 					/>
 					<Field
 						component={SelectField}

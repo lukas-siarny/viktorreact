@@ -17,7 +17,7 @@ import { getReq, postReq } from '../../../../utils/request'
 import { CALENDAR_EVENT_TYPE, DEFAULT_TIME_FORMAT, ENUMERATIONS_KEYS, FORM, PERMISSION, CREATE_EVENT_PERMISSIONS, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
 
 // types
-import { EmployeeService, ICalendarReservationForm, ICustomerForm, ServiceType } from '../../../../types/interfaces'
+import { EmployeeService, ICalendarEmployeesPayload, ICalendarReservationForm, ICustomerForm, ServiceType } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
@@ -34,7 +34,7 @@ import TextareaField from '../../../../atoms/TextareaField'
 import TimeRangeField from '../../../../atoms/TimeRangeField'
 import SelectField from '../../../../atoms/SelectField'
 import CustomerForm from '../../../CustomersPage/components/CustomerForm'
-import CalendarDetailPopover from '../CustomerDetailPopover'
+import CalendarDetailPopover from '../popovers/CustomerDetailPopover'
 import ConfirmModal from '../../../../atoms/ConfirmModal'
 
 // redux
@@ -43,10 +43,12 @@ import { getEmployee } from '../../../../reducers/employees/employeesActions'
 
 type ComponentProps = {
 	salonID: string
-	searchEmployes: (search: string, page: number) => Promise<any>
 	eventId?: string | null
 	phonePrefix?: string
+	loadingData?: boolean
+	employeesLoading?: boolean
 	sidebarView?: CALENDAR_EVENT_TYPE
+	employeesOptions: ICalendarEmployeesPayload['options']
 }
 const formName = FORM.CALENDAR_RESERVATION_FORM
 
@@ -109,7 +111,7 @@ const getCategoryById = (category: any, serviceCategoryID?: string): EmployeeSer
 }
 
 const ReservationForm: FC<Props> = (props) => {
-	const { handleSubmit, salonID, searchEmployes, eventId, phonePrefix, pristine, submitting, sidebarView } = props
+	const { handleSubmit, salonID, eventId, phonePrefix, pristine, submitting, loadingData, sidebarView, employeesOptions, employeesLoading } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [visibleCustomerCreateModal, setVisibleCustomerCreateModal] = useState(false)
@@ -147,7 +149,7 @@ const ReservationForm: FC<Props> = (props) => {
 	)
 
 	// NOTE: pristine pouzivat len pri UPDATE eventu a pri CREATE povlit akciu vzdy
-	const disabledSubmitButton = !!(eventId && pristine) || submitting
+	const disabledSubmitButton = !!(eventId && pristine) || submitting || loadingData
 
 	const searchCustomers = useCallback(
 		async (search: string, page: number) => {
@@ -163,12 +165,14 @@ const ReservationForm: FC<Props> = (props) => {
 						value: customer.id,
 						key: customer.id,
 						label: customer.firstName && customer.lastName ? `${customer.firstName} ${customer.lastName}` : customer.email,
-						thumbNail: customer?.profileImage?.resizedImages?.thumbnail,
-						extraContent: (
-							<span className={'text-notino-grayDark text-xs'}>
-								{prefix} {customer.phone}
-							</span>
-						)
+						extra: {
+							thumbnail: customer?.profileImage?.resizedImages?.thumbnail,
+							extraContent: (
+								<span className={'text-notino-grayDark text-xs'}>
+									{prefix} {customer.phone}
+								</span>
+							)
+						}
 					}
 				})
 				return { pagination: data.pagination, data: selectOptions }
@@ -322,10 +326,10 @@ const ReservationForm: FC<Props> = (props) => {
 		<>
 			{modals}
 			<div className={'nc-sider-event-management-content'} key={`${eventId}${sidebarView}`}>
-				<Spin spinning={eventDetail.isLoading} size='large'>
+				<Spin spinning={eventDetail.isLoading || employeesLoading} size='large'>
 					<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 						<Permissions
-							allowed={[PERMISSION.CUSTOMER_CREATE]}
+							allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<div className='relative'>
 									<CalendarDetailPopover />
@@ -370,7 +374,6 @@ const ReservationForm: FC<Props> = (props) => {
 							size={'large'}
 							update={(_itemKey: number, ref: any) => ref.blur()}
 							options={servicesOptions}
-							allowInfinityScroll
 							className={'pb-0'}
 							required
 							labelInValue
@@ -405,6 +408,7 @@ const ReservationForm: FC<Props> = (props) => {
 						<Field
 							component={SelectField}
 							optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}
+							options={employeesOptions}
 							label={t('loc:Zamestnanec')}
 							suffixIcon={<EmployeesIcon className={'text-notino-grayDark'} />}
 							placeholder={t('loc:Vyber zamestnanca')}
@@ -412,14 +416,12 @@ const ReservationForm: FC<Props> = (props) => {
 							optionLabelProp={'label'}
 							size={'large'}
 							update={(_itemKey: number, ref: any) => ref.blur()}
-							filterOption={false}
-							allowInfinityScroll
 							showSearch
 							required
 							className={'pb-0'}
 							labelInValue
-							onSearch={searchEmployes}
 							onChange={onChangeEmployee}
+							hasExtra
 						/>
 						<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 					</Form>

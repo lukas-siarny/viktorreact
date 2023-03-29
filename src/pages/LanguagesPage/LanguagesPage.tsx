@@ -17,10 +17,10 @@ import LanguagesFilter from './components/LanguagesFilter'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../components/LanguagePicker'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, DEFAULT_LANGUAGE } from '../../utils/enums'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, DEFAULT_LANGUAGE, CREATE_BUTTON_ID } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { normalizeDirectionKeys, normalizeNameLocalizations, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import { formFieldID, normalizeDirectionKeys, normalizeNameLocalizations, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -231,6 +231,7 @@ const LanguagesPage = () => {
 										htmlType='button'
 										className={'noti-btn'}
 										icon={<PlusIcon />}
+										id={formFieldID(FORM.LANGUAGES, CREATE_BUTTON_ID)}
 									>
 										{STRINGS(t).addRecord(t('loc:jazyk'))}
 									</Button>

@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Modal, Row, Spin, Tooltip } from 'antd'
 import { destroy, initialize, isPristine, reset, submit } from 'redux-form'
-import { get } from 'lodash'
 import { compose } from 'redux'
 import cx from 'classnames'
 import { useNavigate } from 'react-router-dom'
@@ -20,7 +19,7 @@ import SalonHistory from './components/SalonHistory'
 import SalonApprovalModal from './components/modals/SalonApprovalModal'
 
 // enums
-import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_STATES, STRINGS, TAB_KEYS, SALON_CREATE_TYPE } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_STATES, STRINGS, TAB_KEYS, SALON_CREATE_TYPE, SUBMIT_BUTTON_ID } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -131,7 +130,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	const breadcrumbDetailItem = {
 		name: tabKey === TAB_KEYS.SALON_DETAIL ? t('loc:Detail salónu') : t('loc:História salónu'),
-		titleName: get(salon, 'data.name')
+		titleName: `${salon.data?.name ?? ''} | ID: ${salon.data?.id}`
 	}
 
 	// View
@@ -290,6 +289,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
 			render={(hasPermission, { openForbiddenModal }) => (
 				<Button
+					id={formFieldID(FORM.SALON, SUBMIT_BUTTON_ID)}
 					type={'primary'}
 					icon={<EditIcon />}
 					size={'middle'}
@@ -331,9 +331,10 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
 			render={(hasPermission, { openForbiddenModal }) => (
 				<Button
+					id={formFieldID(FORM.SALON, 'hide-salon')}
 					type={'dashed'}
 					size={'middle'}
-					icon={<EyeoffIcon />}
+					icon={<EyeoffIcon color={'#000'} />}
 					className={cx('noti-btn m-regular w-full md:w-auto md:min-w-45 xl:min-w-60', className)}
 					onClick={(e) => {
 						if (hasPermission) {
@@ -360,7 +361,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	const requestApprovalButton = (className = '') => {
 		const disabled = isLoading || isDeletedSalon || (!isFormPristine && !isPendingPublication && (!isPublished || isBasic))
 
-		// / Workaround for disabled button inside tooltip: https://github.com/react-component/tooltip/issues/18
+		// Workaround for disabled button inside tooltip: https://github.com/react-component/tooltip/issues/18
 		return (
 			<Tooltip
 				title={disabled ? t('loc:V sálone boli vykonané zmeny, ktoré nie sú uložené. Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.') : null}
@@ -368,6 +369,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			>
 				<span className={cx('w-full md:w-auto', { 'cursor-not-allowed': disabled })}>
 					<Button
+						id={formFieldID(FORM.SALON, 'request-publication')}
 						type={'dashed'}
 						size={'middle'}
 						className={cx('noti-btn m-regular w-full md:w-auto md:min-w-45 xl:min-w-60', className, {
@@ -395,7 +397,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		}
 
 		return (
-			<div className={'content-footer'}>
+			<div className={'content-footer'} id={'content-footer-container'}>
 				{(() => {
 					// order of cases is important to show correct buttons
 					switch (true) {
@@ -516,6 +518,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Row justify={'space-between'} className={'w-full'}>
 								<Button
+									id={formFieldID(FORM.SALON, 'decline-salon')}
 									type={'primary'}
 									icon={<CloseCricleIcon />}
 									size={'middle'}
@@ -539,6 +542,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 									{t('loc:Zamietnuť')}
 								</Button>
 								<Button
+									id={formFieldID(FORM.SALON, 'accept-salon')}
 									type={'primary'}
 									icon={<CheckIcon />}
 									size={'middle'}
@@ -634,12 +638,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 											>
 												{STRINGS(t).edit(t('loc:notino používateľa'))}
 											</Button>
-											<DeleteButton
-												getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-												onConfirm={deleteAssignedUser}
-												entityName={t('loc:notino používateľa')}
-												disabled={isDeletedSalon}
-											/>
+											<DeleteButton onConfirm={deleteAssignedUser} entityName={t('loc:notino používateľa')} disabled={isDeletedSalon} />
 										</>
 									) : (
 										<Button
@@ -672,13 +671,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 										>
 											{STRINGS(t).edit(t('loc:poznámku'))}
 										</Button>
-										<DeleteButton
-											className={'mt-2'}
-											getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-											onConfirm={deleteOpenHoursNote}
-											entityName={t('loc:poznámku')}
-											disabled={isDeletedSalon}
-										/>
+										<DeleteButton className={'mt-2'} onConfirm={deleteOpenHoursNote} entityName={t('loc:poznámku')} disabled={isDeletedSalon} />
 									</>
 								) : (
 									<Button
@@ -741,6 +734,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 							<Tooltip title={getApprovalButtonTooltipMessage()} getPopupContainer={() => document.querySelector('#noti-approval-modal-content') as HTMLElement}>
 								<span className={cx({ 'cursor-not-allowed': approvalButtonDisabled })}>
 									<Button
+										id={formFieldID(FORM.SALON, 'request-publication-modal')}
 										type={'primary'}
 										block
 										size={'large'}

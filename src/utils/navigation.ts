@@ -12,12 +12,13 @@ class Navigator {
 		}
 	}
 
-	// public static navigate(delta: number) {
-	// 	Navigator.navigation(delta)
-	// }
-
 	public static navigate(to: To, options?: NavigateOptions) {
-		Navigator.navigation(to, options)
+		if (Navigator.navigation) {
+			Navigator.navigation(to, options)
+		} else {
+			// eslint-disable-next-line no-console
+			console.warn('Navigator is not yer initialized')
+		}
 	}
 }
 

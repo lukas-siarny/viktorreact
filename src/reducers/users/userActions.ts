@@ -5,7 +5,7 @@ import { get, map, flatten, uniq, includes } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
-import { IJwtPayload, ISelectOptionItem, IQueryParams, ISearchable, IAuthUserPayload } from '../../types/interfaces'
+import { IJwtPayload, ISelectOptionItem, IQueryParams, ISearchable, IAuthUserPayload, IUserPayload } from '../../types/interfaces'
 import { AUTH_USER, USER, USERS, PENDING_INVITES, NOTINO_USERS } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
@@ -52,10 +52,6 @@ export interface IGetUsersQueryParams extends IQueryParams {
 	roleID?: string | undefined | null
 }
 
-export interface IUserPayload {
-	data: Paths.GetApiB2BAdminUsersUserId.Responses.$200 | null
-}
-
 export interface IUsersPayload extends ISearchable<Paths.GetApiB2BAdminUsers.Responses.$200> {}
 
 export interface INotinoUsersPayload extends ISearchable<Paths.GetApiB2BAdminUsersNotinoUsers.Responses.$200> {}
@@ -84,7 +80,7 @@ export const processAuthorizationResult =
 				}
 			}
 
-			salons = result.user.salons
+			salons = result.user.salons as any // TODO: zistit preco hadze chybu sa sa menilo
 
 			dispatch({
 				type: AUTH_USER.AUTH_USER_LOAD_DONE,
@@ -180,7 +176,7 @@ export const refreshToken = (): ThunkResult<Promise<void>> => async (dispatch) =
 	}
 }
 
-export const getUserAccountDetails =
+export const getUser =
 	(userID: string): ThunkResult<Promise<IUserPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IUserPayload

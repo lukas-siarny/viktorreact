@@ -31,7 +31,7 @@ import {
 	toNumber,
 	trimEnd
 } from 'lodash'
-import { notification } from 'antd'
+import { notification, Tag } from 'antd'
 import slugify from 'slugify'
 import { SubmissionError, submit } from 'redux-form'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
@@ -65,7 +65,9 @@ import {
 	RESERVATION_STATE,
 	PERMISSION,
 	RESERVATION_PAYMENT_METHOD,
-	RESERVATION_SOURCE_TYPE
+	RESERVATION_SOURCE_TYPE,
+	SMS_NOTIFICATION_EVENT_TYPE,
+	SMS_NOTIFICATION_STATUS
 } from './enums'
 
 import {
@@ -803,13 +805,11 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 			return undefined
 		}
 
-		const isErrors: boolean = errorKeys.length > 1
+		const errorsText = errorKeys.length > 1 ? i18next.t('loc:Vo formulári sa nachádzajú chyby!') : i18next.t('loc:Vo formulári sa nachádza chyba!')
 		return notification.error(
 			customMessage || {
 				message: i18next.t('loc:Chybne vyplnený formulár'),
-				description: i18next.t(
-					`loc:Skontrolujte správnosť vyplnených polí vo formulári. Vo formulári sa ${isErrors ? i18next.t('nachádzajú chyby') : i18next.t('nachádza chyba')}!`
-				)
+				description: i18next.t('loc:Skontrolujte správnosť vyplnených polí vo formulári. {{ errors }}', { errors: errorsText })
 			}
 		)
 	}
@@ -944,11 +944,12 @@ export const optionRenderWithIcon = (itemData: any, fallbackIcon?: React.ReactNo
 
 export const optionRenderWithAvatar = (itemData: any, imageWidth = 24, imageHeight = 24) => {
 	// Thumbnail, label, extraContent (pod labelom)
-	const { label, thumbNail, extraContent, borderColor } = itemData
-	const style = { width: imageWidth, height: imageHeight, border: `2px solid ${borderColor}` }
+	const { label, extra } = itemData
+	const { color, thumbnail, extraContent, isDeleted } = extra || {}
+	const style = { width: imageWidth, height: imageHeight, border: `2px solid ${color}`, filter: isDeleted ? 'grayscale(100%)' : undefined }
 	return (
 		<div className='flex items-center divide-y'>
-			<img className={'rounded-full mr-2'} width={imageWidth} height={imageHeight} style={style} src={thumbNail} alt={label} />
+			<img className={'rounded-full mr-2'} width={imageWidth} height={imageHeight} style={style} src={thumbnail} alt={label} />
 			<div className={'flex flex-col leading-none'}>
 				<div>{label}</div>
 				<div>{extraContent}</div>
@@ -970,6 +971,15 @@ export const langaugesOptionRender = (itemData: any) => {
 			)}
 			{label}
 		</div>
+	)
+}
+
+export const optionRenderWithTag = (itemData: any) => {
+	const { value, label, tagClassName } = itemData
+	return (
+		<Tag key={value} className={cx('noti-tag', tagClassName)}>
+			<span>{label}</span>
+		</Tag>
 	)
 }
 
@@ -1002,7 +1012,7 @@ export const hasAuthUserPermissionToEditRole = (
 	employee?: IEmployeePayload['data'],
 	salonRoles?: ISelectOptionItem[]
 ): { hasPermission: boolean; tooltip: string | null } => {
-	let result: { hasPermission: boolean; tooltip: string | null } = {
+	const result: { hasPermission: boolean; tooltip: string | null } = {
 		hasPermission: false,
 		tooltip: i18next.t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')
 	}
@@ -1011,7 +1021,7 @@ export const hasAuthUserPermissionToEditRole = (
 		return result
 	}
 
-	if (authUser.uniqPermissions?.some((permission) => [PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+	if (authUser.uniqPermissions?.some((permission) => [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
 		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
 		return {
 			hasPermission: true,
@@ -1020,16 +1030,27 @@ export const hasAuthUserPermissionToEditRole = (
 	}
 	if (authUser.id === employee?.employee?.user?.id) {
 		// salon user can't edit his own role
-		result = {
+		return {
 			...result,
 			tooltip: i18next.t('loc:Nemôžeš editovať svoju rolu')
 		}
-		return result
 	}
 
 	const authUserSalonRole = authUser.salons?.find((salon) => salon.id === salonID)?.role
 	if (authUserSalonRole) {
 		const authUserRoleIndex = salonRoles.findIndex((role) => role?.value === authUserSalonRole?.id)
+
+		const employeeRole = employee.employee?.role
+		const employeeRoleIndex = salonRoles.findIndex((role) => role?.value === employeeRole?.id)
+
+		// it's not possible to edit role with same permissions (applies to admin role as well)
+		if (employeeRoleIndex === authUserRoleIndex) {
+			return {
+				...result,
+				tooltip: i18next.t('loc:Nie je možné editovať rolu s rovnakými oprávneniami, ako máte pridelené.')
+			}
+		}
+
 		if (authUserRoleIndex === 0) {
 			// is salon admin - has all permissions
 			return {
@@ -1038,12 +1059,6 @@ export const hasAuthUserPermissionToEditRole = (
 			}
 		}
 
-		const employeeRole = employee.employee?.role
-		const employeeRoleIndex = salonRoles.findIndex((role) => role?.value === employeeRole?.id)
-		// it's not possible to edit admin role	if auth user is not admin
-		if (employeeRoleIndex === 0) {
-			return result
-		}
 		// it's possible to edit role only if you have permission to edit
 		if (authUserSalonRole?.permissions.find((permission) => permission.name === PERMISSION.EMPLOYEE_ROLE_UPDATE)) {
 			return {
@@ -1157,9 +1172,10 @@ export const getAssignedUserLabel = (assignedUser?: Paths.GetApiB2BAdminSalons.R
 	switch (true) {
 		case !!assignedUser.firstName && !!assignedUser.lastName:
 			return `${assignedUser.firstName} ${assignedUser.lastName}`
-
 		case !!assignedUser.email:
 			return `${assignedUser.email}`
+		case !!assignedUser.firstName:
+			return `${assignedUser.firstName}`
 		default:
 			return assignedUser.id
 	}
@@ -1372,3 +1388,13 @@ export const initializeLabelInValueSelect = (key: string | number, label: string
 		extra
 	}
 }
+
+export const normalizeDataById = <T extends { id: string }>(data?: T[] | null): { [key: string]: T } => {
+	const normalizedData: { [key: string]: T } = {}
+	data?.forEach((item) => {
+		normalizedData[item.id] = item
+	})
+	return normalizedData
+}
+
+export const formatPrice = (price: number, symbol?: string) => (!isNil(price) ? `${price} ${symbol || ''}`.trim() : '')

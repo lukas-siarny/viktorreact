@@ -113,7 +113,7 @@ const SalonForm: FC<Props> = (props) => {
 
 	const searchCosmetics = useCallback(
 		async (search: string, page: string) => {
-			return searchWrapper(dispatch, { search, limit: 100, page }, FILTER_ENTITY.COSMETICS)
+			return searchWrapper(dispatch, { search, limit: 1500, page }, FILTER_ENTITY.COSMETICS)
 		},
 		[dispatch]
 	)
@@ -146,7 +146,7 @@ const SalonForm: FC<Props> = (props) => {
 								component={AutocompleteField}
 								label={t('loc:Názov')}
 								placeholder={t('loc:Vyhľadajte salón podľa názvu alebo zadajte vlastný')}
-								name={'nameSelect'}
+								name={'name'}
 								filterOption={false}
 								showSearch
 								onDidMountSearch

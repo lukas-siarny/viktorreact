@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useCallback } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
@@ -43,14 +43,18 @@ import IndustryPage from '../pages/IndustriesPage/IndustryPage'
 // Billing info
 import BillingInfoPage from '../pages/BillingInfoPage/BillingInfoPage'
 
-// calendar
+// Calendar
 import Calendar from '../pages/Calendar/Calendar'
 
-// reservations-settings
+// Reservations-settings
 import ReservationsSettingsPage from '../pages/ReservationsSettingsPage/ReservationsSettingsPage'
 
-// reservations
+// Reservations
 import ReservationsPage from '../pages/ReservationsPage/ReservationsPage'
+
+// SMS credit
+import SmsCreditPage from '../pages/SmsCreditPage/SmsCreditPage'
+import RechargeSmsCreditPage from '../pages/SmsCreditPage/RechargeSmsCreditPage'
 
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
@@ -71,6 +75,15 @@ const SalonSubRoutes: FC = () => {
 
 	const parentPath = t('paths:salons/{{salonID}}', { salonID })
 
+	const fetchSalon = useCallback(async () => {
+		const salon = await dispatch(selectSalon(salonID))
+		if (!salon?.data?.id) {
+			// clear salon selection due error 404 - Not Found
+			dispatch(selectSalon())
+			navigate('/404')
+		}
+	}, [salonID, dispatch, navigate])
+
 	useEffect(() => {
 		if (currentUser.isLoading) {
 			return
@@ -85,13 +98,13 @@ const SalonSubRoutes: FC = () => {
 				)
 			) {
 				if (selectedSalon?.id !== salonID) {
-					dispatch(selectSalon(salonID))
+					fetchSalon()
 				}
 			} else {
 				navigate('/403')
 			}
 		}
-	}, [salonID, dispatch, currentUser, selectedSalon?.id])
+	}, [salonID, fetchSalon, currentUser, selectedSalon?.id, navigate])
 
 	return (
 		<Routes>
@@ -162,6 +175,10 @@ const SalonSubRoutes: FC = () => {
 				element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.SALON_SETTINGS} />}
 			>
 				<Route index element={<ReservationsSettingsPage parentPath={parentPath} salonID={salonID} />} />
+			</Route>
+			<Route errorElement={<ErrorBoundary />} path={t('paths:sms-credit')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.SMS_CREDIT} />}>
+				<Route index element={<SmsCreditPage parentPath={parentPath} salonID={salonID} />} />
+				<Route path={t('paths:recharge')} element={<RechargeSmsCreditPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* 404 */}
 			<Route element={<AuthRoute layout={MainLayout} />}>

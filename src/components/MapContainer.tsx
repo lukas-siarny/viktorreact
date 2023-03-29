@@ -12,14 +12,14 @@ type Props = GoogleMapProps & {
 	onError: (message: string) => void
 	disabled?: boolean
 }
-
+const config = mapApiConfig()
 // https://react-google-maps-api-docs.netlify.app/
 const MapContainer = (props: Props) => {
 	const { i18n } = useTranslation()
 	const { lng, lat, onLocationChange, disabled, zoom, onError, options } = props
 	const [position, setPosition] = useState<google.maps.LatLng | google.maps.LatLngLiteral>(MAP.defaultLocation)
 
-	const { isLoaded, loadError } = useJsApiLoader(mapApiConfig)
+	const { isLoaded, loadError } = useJsApiLoader(config)
 
 	window.gm_authFailure = () => {
 		onError('Goggle Map auth error')

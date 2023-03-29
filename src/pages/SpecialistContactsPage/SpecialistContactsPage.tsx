@@ -15,10 +15,18 @@ import SpecialistContactForm from './components/SpecialistContactsForm'
 import SpecialistContactFilter from './components/SpecialistContactsFilter'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, LANGUAGE } from '../../utils/enums'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, LANGUAGE, CREATE_BUTTON_ID } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { getPrefixCountryCode, getCountryNameFromNameLocalizations, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import {
+	getPrefixCountryCode,
+	getCountryNameFromNameLocalizations,
+	normalizeDirectionKeys,
+	setOrder,
+	sortData,
+	transformToLowerCaseWithoutAccent,
+	formFieldID
+} from '../../utils/helper'
 import i18n from '../../utils/i18n'
 
 // reducers
@@ -250,6 +258,7 @@ const SpecialistContactsPage = () => {
 										htmlType='button'
 										className={'noti-btn'}
 										icon={<PlusIcon />}
+										id={formFieldID(FORM.SPECIALIST_CONTACT, CREATE_BUTTON_ID)}
 									>
 										{STRINGS(t).addRecord(t('loc:špecialistu'))}
 									</Button>
@@ -268,7 +277,6 @@ const SpecialistContactsPage = () => {
 										onRow={(record) => ({
 											onClick: () => changeFormVisibility(true, record)
 										})}
-										loading={specialistContacts.isLoading}
 									/>
 								</div>
 								{visibleForm ? (

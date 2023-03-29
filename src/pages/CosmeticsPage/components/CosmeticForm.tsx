@@ -2,9 +2,10 @@ import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Divider, Form, Button } from 'antd'
+import cx from 'classnames'
 
 // utils
-import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, DELETE_BUTTON_ID } from '../../../utils/enums'
+import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, DELETE_BUTTON_ID, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { showErrorNotification, checkUploadingBeforeSubmit, formFieldID, validationRequired } from '../../../utils/helper'
 
 // atoms
@@ -35,12 +36,7 @@ const CosmeticForm: FC<Props> = (props) => {
 	const { handleSubmit, cosmeticID, closeForm, onDelete, submitting, pristine } = props
 
 	return (
-		<Form
-			id={`${FORM.COSMETIC}-form`}
-			layout={'vertical'}
-			className={'w-full top-0 sticky overflow-hidden pt-1 px-6 pb-6 -mx-6'}
-			onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}
-		>
+		<Form layout={'vertical'} className={'w-full top-0 sticky overflow-hidden pt-1 px-6 pb-6 -mx-6'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<div className={'h-full'}>
 				<h3 className={'mb-0 mt-3 relative pr-7'}>
 					{cosmeticID ? t('loc:Upraviť kozmetiku') : t('loc:Vytvoriť kozmetiku')}
@@ -71,18 +67,7 @@ const CosmeticForm: FC<Props> = (props) => {
 					maxCount={1}
 				/>
 
-				<div className={'flex w-full justify-start mt-6 gap-2 flex-wrap'}>
-					<Button
-						className={'noti-btn w-full xl:w-auto xl:min-w-40'}
-						size='middle'
-						type='primary'
-						htmlType='submit'
-						disabled={submitting || pristine}
-						loading={submitting}
-						icon={cosmeticID ? <EditIcon /> : <CreateIcon />}
-					>
-						{cosmeticID ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:kozmetiku'))}
-					</Button>
+				<div className={cx('flex w-full mt-6 gap-2 flex-wrap', { 'justify-between': cosmeticID, 'justify-center': !cosmeticID })}>
 					{cosmeticID && (
 						<DeleteButton
 							onConfirm={onDelete}
@@ -93,6 +78,18 @@ const CosmeticForm: FC<Props> = (props) => {
 							id={formFieldID(FORM.COSMETIC, DELETE_BUTTON_ID)}
 						/>
 					)}
+					<Button
+						className={'noti-btn w-full xl:w-auto xl:min-w-40'}
+						size='middle'
+						type='primary'
+						htmlType='submit'
+						disabled={submitting || pristine}
+						loading={submitting}
+						icon={cosmeticID ? <EditIcon /> : <CreateIcon />}
+						id={formFieldID(FORM.COSMETIC, SUBMIT_BUTTON_ID)}
+					>
+						{cosmeticID ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:kozmetiku'))}
+					</Button>
 				</div>
 			</div>
 		</Form>

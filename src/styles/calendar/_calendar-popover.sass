@@ -3,6 +3,7 @@
 
 // event popover
 .nc-popover-overlay
+	padding: 16px 0
 	&.nc-popover-overlay-fixed
 		&::before
 			content: ''
@@ -22,9 +23,13 @@
 		transform: translateY(-50%) translateX(calc(100% - 1px)) rotate(90deg)
 	&.dark-style
 		.ant-popover-inner
+			position: relative
 			background-color: $backgroundColor-notino-grayDarker
 			color: $textColor-notino-white
+			border-color: $borderColor-notino-grayDarker
+			z-index: 2
 		.ant-popover-arrow
+			z-index: 1
 			&::before
 				background: $backgroundColor-notino-grayDarker
 		.nc-popover-header-button
@@ -40,20 +45,6 @@
 			svg
 				width: 16px
 				height: 16px
-	.nc-event-popover-tag
-		font-size: 10px
-		line-height: 11px
-		border: none
-		padding: 4px 8px
-		border-radius: 4px
-		background-color: $backgroundColor-notino-grayLight
-		color: $textColor-notino-grayDarker
-		min-width: unset
-		margin: 0
-		&.tag-new
-			// TODO: tailwind colors
-			color: #0E7090
-			background-color: #ECFDFF
 .nc-popover-header-button
 	outline: none
 	border-radius: 4px
@@ -79,10 +70,13 @@
 	&:focus-visible
 		background-color: $backgroundColor-notino-grayLight
 
+.employee-avatar
+	&.is-deleted
+		filter: grayscale(100%)
+
 // day events popover
-.nc-day-events-popover-overlay
+.nc-events-list-popover-overlay
 	&:not(.is-hidden)
-		padding: 16px
 		&::before
 			content: ''
 			position: fixed
@@ -104,3 +98,10 @@
 	&.ant-popover-placement-leftTop
 		.ant-popover-arrow
 			top: 28px // polovica vysky hlaviky popoveru
+
+// calendar employee tooltip popover
+.calendar-employee-tooltip-popover-link
+	span
+		display: inline
+		line-height: 20px
+		font-size: 12px

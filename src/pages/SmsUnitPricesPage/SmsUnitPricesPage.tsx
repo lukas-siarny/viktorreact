@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Col, Row, Spin, TablePaginationConfig } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
@@ -32,7 +32,7 @@ import { RootState } from '../../reducers'
 // hooks
 import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
 
-type TableDataItem = NonNullable<ISmsUnitPricesActualPayload['data']>[0] & { key: string }
+type TableDataItem = NonNullable<ISmsUnitPricesActualPayload['data']>[0] & { key: string; currencySymbol: string }
 
 const SmsUnitPricesPage = () => {
 	const [t] = useTranslation()
@@ -78,11 +78,16 @@ const SmsUnitPricesPage = () => {
 			: smsUnitPricesActual.data
 
 		// transform to table data
-		return source?.map((item) => ({
-			...item,
-			key: item.country.code
-		}))
-	}, [query.search, smsUnitPricesActual])
+		return source?.map((item) => {
+			const country = countries.data?.find((c) => c.code === item.country.code)
+			const currency = currencies.data?.find((c) => c.code === country?.currencyCode)
+			return {
+				...item,
+				currencySymbol: currency?.symbol || '',
+				key: item.country.code
+			}
+		})
+	}, [query.search, smsUnitPricesActual, countries.data, currencies.data])
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
@@ -94,15 +99,6 @@ const SmsUnitPricesPage = () => {
 			setQuery(newQuery)
 		}
 	}
-
-	const formatPrice = useCallback(
-		(countryCode: string, amount: number) => {
-			const country = countries.data?.find((item) => item.code === countryCode)
-			const currency = currencies.data?.find((item) => item.code === country?.currencyCode)
-			return `${amount} ${currency?.symbol || ''}`
-		},
-		[currencies.data, countries.data]
-	)
 
 	const columns: ColumnProps<TableDataItem>[] = useMemo(() => {
 		return [
@@ -144,8 +140,7 @@ const SmsUnitPricesPage = () => {
 						return '-'
 					}
 
-					const { code } = record.country
-					return `${formatPrice(code, value.amount)}`
+					return `${value.amount} ${record.currencySymbol}`
 				}
 			},
 			{
@@ -168,8 +163,7 @@ const SmsUnitPricesPage = () => {
 				width: '30%',
 				render: (_value, record) => {
 					const value = record.next
-					const { code } = record.country
-					return value ? `${formatPrice(code, value.amount)} ${t('loc:od {{ timeFrom }}', { timeFrom: dayjs(value.validFrom).format(D_M_YEAR_FORMAT) })}` : '-'
+					return value ? `${value.amount} ${record.currencySymbol} ${t('loc:od {{ timeFrom }}', { timeFrom: dayjs(value.validFrom).format(D_M_YEAR_FORMAT) })}` : '-'
 				}
 			},
 			{
@@ -184,7 +178,7 @@ const SmsUnitPricesPage = () => {
 				}
 			}
 		]
-	}, [query.order, t, formatPrice])
+	}, [query.order, t])
 
 	return (
 		<>

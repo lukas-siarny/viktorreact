@@ -1,6 +1,7 @@
 import React from 'react'
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google'
 import { useTranslation } from 'react-i18next'
+import { useMsal } from '@azure/msal-react'
 
 // utils
 import { postReq } from '../../../utils/request'
@@ -8,8 +9,17 @@ import { NOTIFICATION_TYPE } from '../../../utils/enums'
 
 type Props = {}
 
+const loginRequest = {
+	scopes: ['User.Read', 'offline_access', 'Calendars.ReadWrite.Shared', 'Calendars.ReadWrite', 'Calendars.Read.Shared', 'Calendars.Read']
+}
+
+const graphConfig = {
+	graphMeEndpoint: 'Enter_the_Graph_Endpoint_Here/v1.0/me'
+}
+
 const CalendarIntegrations = (props: Props) => {
 	const { i18n } = useTranslation()
+	const { instance, accounts, inProgress } = useMsal()
 
 	const login = useGoogleLogin({
 		flow: 'auth-code',
@@ -31,6 +41,51 @@ const CalendarIntegrations = (props: Props) => {
 		onError: (errorResponse) => console.log('Error GAPI: ', errorResponse)
 	})
 
+	const handleLogin = () => {
+		instance
+			.acquireTokenPopup({
+				scopes: ['User.Read', 'offline_access', 'Calendars.ReadWrite.Shared', 'Calendars.ReadWrite', 'Calendars.Read.Shared', 'Calendars.Read'],
+				extraQueryParameters: {}
+			})
+			.then((response) => {
+				console.log('🚀 ~ file: CalendarIntegrations.tsx:61 ~ instance.acquireTokenPopup ~ response:', response)
+				// setAccessToken(response.accessToken);
+			})
+			.catch(console.error)
+		// instance.loginPopup({
+
+		// }).then(console.log)
+		// const request = {
+		// 	...loginRequest,
+		// 	account: accounts[0]
+		// }
+
+		// instance
+		// 	.acquireTokenSilent({
+		// 		scopes: ['User.Read', 'offline_access', 'Calendars.ReadWrite.Shared', 'Calendars.ReadWrite', 'Calendars.Read.Shared', 'Calendars.Read']
+		// 	})
+		// 	.then((response) => {
+		// 		console.log('🚀 ~ file: CalendarIntegrations.tsx:47 ~ instance.acquireTokenSilent ~ response:', response)
+		// 		// postReq(
+		// 		// 	'/api/b2b/admin/calendar-sync/sync-token',
+		// 		// 	null,
+		// 		// 	{
+		// 		// 		authCode: tokenResponse.code,
+		// 		// 		calendarType: 'GOOGLE'
+		// 		// 	},
+		// 		// 	undefined,
+		// 		// 	NOTIFICATION_TYPE.NOTIFICATION,
+		// 		// 	true
+		// 		// )
+		// 	})
+		// 	.catch((e) => {
+		// 		instance.acquireTokenPopup(request).then((response) => {
+		// 			console.log('🚀 ~ file: CalendarIntegrations.tsx:61 ~ instance.acquireTokenPopup ~ response:', response)
+		// 			// setAccessToken(response.accessToken);
+		// 		})
+		// 	})
+	}
+
 	return (
 		<>
 			{/* <GoogleLogin
@@ -46,6 +101,9 @@ const CalendarIntegrations = (props: Props) => {
 			/> */}
 			<button onClick={() => login()} type='button'>
 				Log in to Google
+			</button>
+			<button onClick={handleLogin} type='button'>
+				Log in to Outlook
 			</button>
 		</>
 	)

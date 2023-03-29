@@ -8,6 +8,8 @@ import { Locale } from 'antd/lib/locale-provider'
 import dayjs from 'dayjs'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom'
+import { PublicClientApplication, Configuration } from '@azure/msal-browser'
+import { MsalProvider } from '@azure/msal-react'
 
 import 'antd/dist/reset.css'
 
@@ -24,6 +26,15 @@ import { LOCALES } from './components/LanguagePicker'
 import AppRoutes from './routes/AppRoutes'
 
 const { store, persistor } = configureStore(rootReducer)
+
+const msalConfig: Configuration = {
+	auth: {
+		clientId: '5a15a7fb-6773-43a9-aaec-b8ecd91862fa',
+		redirectUri: 'http://localhost:3000/ms-oauth2'
+	}
+}
+
+const msalInstance = new PublicClientApplication(msalConfig)
 
 const App = () => {
 	const [antdLocale, setAntdLocale] = useState<Locale | undefined>(undefined)
@@ -75,17 +86,19 @@ const App = () => {
 							token: ANTD_THEME_VARIABLES_OVERRIDE
 						}}
 					>
-						<GoogleOAuthProvider
-							clientId={window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
-							onScriptLoadError={() => console.error('GoogleOAuth error')}
-							onScriptLoadSuccess={() => console.log('GoogleOAuth load success')}
-						>
-							<Provider store={store}>
-								<StyleProvider hashPriority={'low'}>
-									<RouterProvider router={router} />
-								</StyleProvider>
-							</Provider>
-						</GoogleOAuthProvider>
+						<MsalProvider instance={msalInstance}>
+							<GoogleOAuthProvider
+								clientId={window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
+								onScriptLoadError={() => console.error('GoogleOAuth error')}
+								onScriptLoadSuccess={() => console.log('GoogleOAuth load success')}
+							>
+								<Provider store={store}>
+									<StyleProvider hashPriority={'low'}>
+										<RouterProvider router={router} />
+									</StyleProvider>
+								</Provider>
+							</GoogleOAuthProvider>
+						</MsalProvider>
 					</ConfigProvider>
 				</PersistGate>
 			</I18nextProvider>

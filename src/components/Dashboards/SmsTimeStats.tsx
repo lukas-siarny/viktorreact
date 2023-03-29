@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import dayjs, { Dayjs } from 'dayjs'
 import cx from 'classnames'
-import i18next from 'i18next'
 import { Line } from 'react-chartjs-2'
 
 // types

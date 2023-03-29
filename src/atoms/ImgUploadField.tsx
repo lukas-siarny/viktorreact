@@ -301,7 +301,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 				}
 				// itemRender={renderGalleryImage}
 				fileList={input.value || []}
-				onPreview={(file) => setPreviewUrl({ url: file.url || get(imagesUrls, `current.[${file.uid}].url`), type: file.type || isFilePDF(file.url) })}
+				onPreview={(file) => setPreviewUrl({ url: file.url || get(imagesUrls, `current.[${file.uid}].url`), type: file.type || isFilePDF(file.url) } as any)}
 				maxCount={maxCount}
 				showUploadList={showUploadList}
 				beforeUpload={(file, fileList) => {

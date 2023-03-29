@@ -4,7 +4,7 @@
 //	- contains at least one uppercase letter: (?=.*[A-Z]+)
 //	- contains at least one number: (?=.*\d+)
 
-const passwordRegEx = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?([^\w\s]|[_])).{8,}$/ // 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak
+export const passwordRegEx = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?([^\w\s]|[_])).{8,}$/ // 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak
 export const positiveIntegerRegEx = /^[0-9]+$/ // allow 0 on start, prevent + / - and exponential character
 export const phoneRegEx = /^\d+$/
 export const socialMediaRegex = {
@@ -16,4 +16,9 @@ export const socialMediaRegex = {
 	website: /^http[s]?:\/\/(www\.)?[\S]{1,50}\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$/
 }
 
-export default passwordRegEx
+export const timeRegex = /^(?:\d|[01]\d|2[0-3]):[0-5]\d$/
+
+/**
+ * @see https://ihateregex.io/expr/uuid/
+ */
+export const uuidRegex = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/

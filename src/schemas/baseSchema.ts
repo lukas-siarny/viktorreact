@@ -2,9 +2,9 @@ import i18next from 'i18next'
 import { FormErrors, DecoratedFormProps } from 'redux-form'
 import { z, ZodString, ZodOptional, ZodNullable, ZodTypeAny } from 'zod'
 import { set } from 'lodash'
+import { DAY, FORM, LANGUAGE, MONDAY_TO_FRIDAY, VALIDATION_MAX_LENGTH } from '../utils/enums'
 
-import { FORM, VALIDATION_MAX_LENGTH, LANGUAGE } from '../utils/enums'
-import passwordRegEx from '../utils/regex'
+import { passwordRegEx, timeRegex, uuidRegex } from '../utils/regex'
 
 /**
  * Serialize args for i18next.t function
@@ -144,15 +144,35 @@ export const defaultErrorMap: z.ZodErrorMap = (issue, ctx) => {
 	return { message: ctx.defaultError }
 }
 
+const timeRangeSchema = z
+	.object({
+		timeFrom: z.string().regex(timeRegex).nullish(),
+		timeTo: z.string().regex(timeRegex).nullish()
+	})
+	.array()
+
+const OpeningHourSchema = z
+	.object({
+		day: z.enum([MONDAY_TO_FRIDAY, ...Object.keys(DAY)]),
+		timeRanges: timeRangeSchema,
+		onDemand: z.boolean().nullish()
+	})
+	.array()
+
+export type OpeningHours = z.infer<typeof OpeningHourSchema>
+export type OpeningHoursTimeRanges = z.infer<typeof timeRangeSchema>
+
 /*
 #### CONSTRAINTS ####
 */
+
+export const uuidConstraint = z.string().regex(uuidRegex, { message: serializeValidationMessage('loc:Neplatný formát UUID') })
 
 export const imageConstraint = z.object({
 	url: z.string().url().nullish(),
 	thumbUrl: z.string().nullish(),
 	uid: z.string(),
-	id: z.string().uuid().nullish()
+	id: uuidConstraint.nullish()
 })
 
 export function stringConstraint<T extends true | false>(maxLength: number, required?: T): T extends true ? ZodString : ZodOptional<ZodNullable<ZodString>>
@@ -196,3 +216,100 @@ export const localizedValuesConstraint = (required?: boolean, maxLength = VALIDA
 				value: stringConstraint(maxLength)
 			})
 		)
+
+/**
+ * Constraint for array of email fields
+ * @param requiredAtLeastOne boolean, default true
+ * @param requiredAll boolean, default false
+ * @param maxItems boolean, default 5
+ * @returns validation schema
+ */
+export const emailsConstraint = (requiredAtLeastOne = true, requiredAll = false, maxItems: number | null = 5) =>
+	z
+		.object({
+			email: requiredAll ? emailConstraint : emailConstraint.nullish()
+		})
+		.array()
+		.superRefine((val, ctx) => {
+			if (requiredAtLeastOne && !requiredAll) {
+				const filledEmailInputs = val.filter((email) => email.email)
+				if (filledEmailInputs.length < 1) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: serializeValidationMessage('loc:Toto pole je povinné'),
+						path: [0, 'email']
+					})
+				}
+			}
+			if (maxItems && val.length > maxItems) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: serializeValidationMessage('loc:Max. počet prvkov je {{max}}', { max: maxItems }),
+					path: [0, 'email']
+				})
+			}
+		})
+
+/**
+ * Constraint for array of phone number fields
+ * @param requiredAtLeastOne boolean, default true
+ * @param requiredAll boolean, default false
+ * @param maxItems boolean, default 5
+ * @returns validation schema
+ */
+export const phoneNumbersConstraint = (requiredAtLeastOne = true, requiredAll = false, maxItems: number | null = 5) =>
+	z
+		.object({
+			phonePrefixCountryCode: requiredAll ? twoCharsConstraint : twoCharsConstraint.nullish(),
+			phone: requiredAll ? stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_20, true) : stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_20, true).nullish()
+		})
+		.array()
+		.superRefine((val, ctx) => {
+			if (requiredAtLeastOne && !requiredAll) {
+				const filledPhoneInputs = val.filter((phone) => phone.phone && phone.phonePrefixCountryCode)
+				if (filledPhoneInputs.length < 1) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: serializeValidationMessage('loc:Toto pole je povinné'),
+						path: [0, 'phone']
+					})
+				}
+			}
+			if (maxItems && val.length > maxItems) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: serializeValidationMessage('loc:Max. počet prvkov je {{max}}', { max: maxItems }),
+					path: [0, 'phone']
+				})
+			}
+		})
+
+/**
+ * Constraint for Opening Hours component
+ * @returns validation schema
+ */
+
+export const openingHoursConstraint = () => {
+	return OpeningHourSchema.superRefine((val, ctx) => {
+		val.forEach((day, indexDay) => {
+			if (!day.onDemand && day.timeRanges) {
+				day.timeRanges.forEach((timeRange, indexRange) => {
+					if (!timeRange?.timeFrom) {
+						ctx.addIssue({
+							code: z.ZodIssueCode.custom,
+							message: serializeValidationMessage('loc:Toto pole je povinné'),
+							path: [indexDay, 'timeRanges', indexRange, 'timeFrom']
+						})
+					}
+					if (!timeRange?.timeTo) {
+						ctx.addIssue({
+							code: z.ZodIssueCode.custom,
+							message: serializeValidationMessage('loc:Toto pole je povinné'),
+							path: [indexDay, 'timeRanges', indexRange, 'timeTo']
+						})
+					}
+				})
+			}
+		})
+	})
+}

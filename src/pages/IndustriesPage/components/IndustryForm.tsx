@@ -10,17 +10,14 @@ import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 // components
 import CheckboxGroupNestedField from './CheckboxGroupNestedField'
 
-// validate
-import validateIndustryFrom from './validateIndustryFrom'
-
 // utils
 import { FORM, PERMISSION, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { formFieldID, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
 
-// types
-import { IIndustryForm } from '../../../types/interfaces'
+// schema
+import { IIndustryForm, validationIndustryFn } from '../../../schemas/industry'
 
 type ComponentProps = {
 	dataTree?: DataNode[] | null
@@ -75,7 +72,7 @@ const form = reduxForm<IIndustryForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	validate: validateIndustryFrom,
+	validate: validationIndustryFn,
 	onSubmitFail: showErrorNotification
 })(withPromptUnsavedChanges(IndustryForm))
 

@@ -5,17 +5,20 @@ import { useDispatch } from 'react-redux'
 import { change } from 'redux-form'
 
 // types
-import { OpeningHours, OpeningHoursTimeRanges, RawOpeningHours } from '../../types/interfaces'
+import { RawOpeningHours } from '../../types/interfaces'
 
 // utils
 import { DAY, MONDAY_TO_FRIDAY, OPENING_HOURS_STATES } from '../../utils/enums'
 
+// schema
+import { OpeningHoursTimeRanges, OpeningHours } from '../../schemas/baseSchema'
+
 export const week: OpeningHours = [
-	{ day: DAY.MONDAY, timeRanges: [] as never, onDemand: false },
-	{ day: DAY.TUESDAY, timeRanges: [] as never, onDemand: false },
-	{ day: DAY.WEDNESDAY, timeRanges: [] as never, onDemand: false },
-	{ day: DAY.THURSDAY, timeRanges: [] as never, onDemand: false },
-	{ day: DAY.FRIDAY, timeRanges: [] as never, onDemand: false }
+	{ day: DAY.MONDAY, timeRanges: [] as OpeningHoursTimeRanges, onDemand: false },
+	{ day: DAY.TUESDAY, timeRanges: [] as OpeningHoursTimeRanges, onDemand: false },
+	{ day: DAY.WEDNESDAY, timeRanges: [] as OpeningHoursTimeRanges, onDemand: false },
+	{ day: DAY.THURSDAY, timeRanges: [] as OpeningHoursTimeRanges, onDemand: false },
+	{ day: DAY.FRIDAY, timeRanges: [] as OpeningHoursTimeRanges, onDemand: false }
 ]
 
 export const daysOrderMap: any = {
@@ -146,7 +149,7 @@ export const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHours
 		const result: RawOpeningHours = []
 		week.forEach((day) => {
 			result?.push({
-				day: day?.day,
+				day: day.day as DAY,
 				timeRanges: openingHours?.[0]?.onDemand ? undefined : ((openingHours?.[0]?.timeRanges || []) as any),
 				state: openingHours?.[0]?.onDemand ? OPENING_HOURS_STATES.CUSTOM_ORDER : undefined
 			})
@@ -257,13 +260,13 @@ export const validateOpeningHours = (values: OpeningHours) => {
 		if (!day.onDemand && day.timeRanges) {
 			day.timeRanges.forEach((timeRange, i) => {
 				let timeRangeError: any = {}
-				if (timeRange.timeFrom === null) {
+				if (timeRange?.timeFrom === null) {
 					timeRangeError = {
 						...timeRangeError,
 						timeFrom: i18next.t('loc:Toto pole je povinné')
 					}
 				}
-				if (timeRange.timeTo === null) {
+				if (timeRange?.timeTo === null) {
 					timeRangeError = {
 						...timeRangeError,
 						timeTo: i18next.t('loc:Toto pole je povinné')

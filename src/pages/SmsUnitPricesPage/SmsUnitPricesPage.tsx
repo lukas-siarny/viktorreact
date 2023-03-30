@@ -83,7 +83,7 @@ const SmsUnitPricesPage = () => {
 			const currency = currencies.data?.find((c) => c.code === country?.currencyCode)
 			return {
 				...item,
-				currencySymbol: currency?.symbol || '',
+				currencySymbol: currency?.symbol || country?.currencyCode,
 				key: item.country.code
 			}
 		})

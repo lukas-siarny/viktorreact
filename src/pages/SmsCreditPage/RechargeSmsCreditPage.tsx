@@ -134,7 +134,7 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 									</li>
 									<li className={'flex justify-between gap-2'}>
 										<strong>{validPriceLabel}:</strong>
-										{stats.data?.currentSmsUnitPrice?.formattedAmount}
+										{stats.data?.currentSmsUnitPrice?.formattedAmount || '-'}
 									</li>
 								</ul>
 								<RechargeSmsCreditForm onSubmit={handleRechargeCredit} currencySymbol={selectedSalon.data?.currency.symbol} />

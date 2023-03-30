@@ -2,7 +2,7 @@ import React, { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { change, Field, Fields, getFormValues, initialize, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Form, Modal, Spin } from 'antd'
+import { Alert, Button, Form, Modal, Spin } from 'antd'
 import cx from 'classnames'
 import { flatten, isEmpty, isNil, map } from 'lodash'
 import dayjs from 'dayjs'
@@ -122,7 +122,7 @@ const ReservationForm: FC<Props> = (props) => {
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 	const formValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(formName)(state))
 	const services = useSelector((state: RootState) => state.service.services)
-
+	const isDeletedEmployee = !!formValues?.employee?.extra?.isDeleted
 	const servicesOptions = flatten(
 		map(services?.data?.groupedServicesByCategory, (industry) =>
 			map(industry.category?.children, (category) => {
@@ -329,6 +329,7 @@ const ReservationForm: FC<Props> = (props) => {
 			<div className={'nc-sider-event-management-content'} key={`${eventId}${sidebarView}`}>
 				<Spin spinning={eventDetail.isLoading || employeesLoading} size='large'>
 					<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
+						{isDeletedEmployee && <Alert message={t('loc:Priradený kolega je vymazaný zo salónu')} showIcon type={'warning'} className={'noti-alert w-full'} />}
 						<Permissions
 							allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (

@@ -28,7 +28,7 @@ import { DELETE_BUTTON_ID, ENUMERATIONS_KEYS, FORM, NOTIFICATION_TYPE, PERMISSIO
 
 // types
 import { Paths } from '../../types/api'
-import { IBreadcrumbs, OpeningHours, ISupportContactForm } from '../../types/interfaces'
+import { IBreadcrumbs } from '../../types/interfaces'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -45,6 +45,10 @@ import useBackUrl from '../../hooks/useBackUrl'
 // assets
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
 import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
+import { ISupportContactForm } from '../../schemas/supportContact'
+
+// schema
+import { OpeningHours } from '../../schemas/baseSchema'
 
 type SupportContactPatch = Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.RequestBody
 
@@ -143,7 +147,9 @@ const SupportContactPage: FC<Props> = () => {
 	const handleSubmit = async (data: ISupportContactForm) => {
 		try {
 			setSubmitting(true)
-			const openingHours: OpeningHours = createSameOpeningHours(data.openingHours, data.sameOpenHoursOverWeek, data.openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
+			const openingHours: OpeningHours = createSameOpeningHours(data.openingHours, !!data.sameOpenHoursOverWeek, !!data.openOverWeekend)?.sort(
+				orderDaysInWeek
+			) as OpeningHours
 			const phones = data.phones?.filter((phone) => phone?.phone)
 			const emails = data.emails?.reduce((acc, email) => (email?.email ? [...acc, email.email] : acc), [] as string[])
 

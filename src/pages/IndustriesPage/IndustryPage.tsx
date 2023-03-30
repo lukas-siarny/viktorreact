@@ -27,7 +27,7 @@ import { patchReq, postReq } from '../../utils/request'
 import { flattenTree } from '../../utils/helper'
 
 // types
-import { IBreadcrumbs, IIndustryForm, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // assets
@@ -35,6 +35,9 @@ import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-ic
 import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.svg'
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+
+// schema
+import { IIndustryForm } from '../../schemas/industry'
 import { IRequestNewServiceForm } from '../../schemas/service'
 
 type Props = SalonSubPageProps

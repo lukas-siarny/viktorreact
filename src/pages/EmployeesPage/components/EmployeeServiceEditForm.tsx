@@ -53,7 +53,7 @@ const ParameterValuesField: FC<ParameterValuesFieldType> = (props) => {
 		fields,
 		currencySymbol,
 		form,
-		meta: { invalid, error }
+		meta: { error }
 	} = props
 
 	const formValues = form?.values as IEmployeeServiceEditForm
@@ -79,7 +79,7 @@ const ParameterValuesField: FC<ParameterValuesFieldType> = (props) => {
 
 	return (
 		<>
-			{invalid && error && <Alert message={error} showIcon type={'error'} className={'noti-alert w-full mb-4'} />}
+			{error && <Alert message={error} showIcon type={'error'} className={'noti-alert w-full mb-4'} />}
 			<Collapse className={'collapse-list'} bordered={false} defaultActiveKey={defaultActiveKeys}>
 				{fields.map((field, index: number) => {
 					const fieldData = fields.get(index)

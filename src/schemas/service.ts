@@ -151,8 +151,6 @@ const employeeServiceSchema = z
 	})
 
 const parameterValueSchema = priceAndDurationSchema.extend({
-	id: uuidConstraint,
-	name: z.string().optional(),
 	useParameter: z.boolean()
 })
 
@@ -178,9 +176,9 @@ const serviceSchema = priceAndDurationSchema
 				})
 			}
 
-			val.serviceCategoryParameter.forEach((paramter, index) => {
-				if (paramter.useParameter) {
-					const isPriceAndDurationDataError = validatePriceAndDurationData(paramter, ctx, ['serviceCategoryParameter', index])
+			val.serviceCategoryParameter.forEach((parameter, index) => {
+				if (parameter.useParameter) {
+					const isPriceAndDurationDataError = validatePriceAndDurationData(parameter, ctx, ['serviceCategoryParameter', index])
 
 					if (isPriceAndDurationDataError) {
 						ctx.addIssue({
@@ -226,14 +224,18 @@ export type IEmployeeServiceEditForm = Omit<z.infer<typeof employeeServiceSchema
 	})[]
 }
 
+export type IParameterValue = Omit<z.infer<typeof parameterValueSchema>, 'serviceCategoryParameter'> & {
+	id: string
+	name?: string
+}
+
 export type IServiceForm = z.infer<typeof serviceSchema> & {
 	id: string
 	serviceCategoryParameterType?: PARAMETER_TYPE
 	serviceCategoryParameterName?: string
 	employees: IEmployeeServiceEditForm[]
+	serviceCategoryParameter?: IParameterValue[]
 }
-
-export type IParameterValue = z.infer<typeof parameterValueSchema>
 
 export const validationRequestNewServiceFn = (values: IRequestNewServiceForm, props: any) =>
 	zodErrorsToFormErrors(requestNewServiceSchema, FORM.REQUEST_NEW_SERVICE_FORM, values, props)

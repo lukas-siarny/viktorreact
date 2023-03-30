@@ -16,6 +16,8 @@ export const socialMediaRegex = {
 	website: /^http[s]?:\/\/(www\.)?[\S]{1,50}\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$/
 }
 
+export const timeRegex = /^(?:\d|[01]\d|2[0-3]):[0-5]\d$/
+
 /**
  * @see https://ihateregex.io/expr/uuid/
  */

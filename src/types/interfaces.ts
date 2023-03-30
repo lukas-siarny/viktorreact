@@ -63,11 +63,10 @@ export interface ISelectOptionItem<ExtraType = any> {
 
 export type Columns = ColumnsType<any>
 
-export interface ILoginForm {
+export interface IInviteEmployeeForm {
 	email: string
-	password: string
+	roleID: string
 }
-
 
 export type ServiceRootCategory = Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200['employee']['categories']
 
@@ -87,14 +86,14 @@ type OpeningHoursDay = NonNullable<RawOpeningHours>[0]['day']
 
 // type for OpeningHours component
 export type OpeningHoursTimeRanges = {
-	timeFrom: string
-	timeTo: string
+	timeFrom?: string | null
+	timeTo?: string | null
 }[]
 
 export type OpeningHours = {
 	day: OpeningHoursDay
 	timeRanges: OpeningHoursTimeRanges
-	onDemand?: boolean
+	onDemand?: boolean | null
 }[]
 
 export interface AutocompleteLabelInValue {
@@ -210,37 +209,6 @@ export interface IEventTypeFilterForm {
 	eventType: CALENDAR_EVENT_TYPE
 }
 
-export interface ISupportContactForm {
-	id: string | null
-	note: string
-	openingHours: OpeningHours
-	sameOpenHoursOverWeek: boolean
-	openOverWeekend: boolean
-	countryCode: string
-	zipCode: string
-	city: string
-	street: string
-	streetNumber: string
-	phones: { phonePrefixCountryCode: string; phone: string }[]
-	emails: { email: string }[]
-}
-
-export interface IRegistrationForm {
-	email: string
-	password: string
-	confirmPassword: string
-	phonePrefixCountryCode: string
-	phone: string
-	gdpr: boolean
-	gtc: boolean
-	marketing: boolean
-}
-
-
-export interface IActivationForm {
-	code: string
-}
-
 export interface IJwtPayload {
 	aud: string
 	exp: number
@@ -295,12 +263,6 @@ export interface ISpecialistContactFilter {
 	search: string
 }
 
-export interface ISmsUnitPricesForm {
-	validFrom: string
-	amount: number
-	countryCode: string
-}
-
 export interface IRechargeSmsCreditForm {
 	amount: number
 	transactionNote?: string
@@ -312,11 +274,6 @@ export interface ISmsUnitPricesFilter {
 
 export interface ISmsHistoryFilter {
 	search: string
-}
-
-export interface ILanguageForm {
-	image?: string
-	nameLocalizations: NameLocalizationsItem[]
 }
 
 export interface ILanguagePickerForm {
@@ -419,18 +376,6 @@ export interface IPagination extends PaginationProps {
 export type ICategoryParameters = Paths.GetApiB2BAdminEnumsCategoryParameters.Responses.$200['categoryParameters']
 
 export type ICategoryParameter = Paths.GetApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200['categoryParameter']
-
-interface ILocalizedValue {
-	valueLocalizations: ICategoryParameter['values']['0']['valueLocalizations']
-}
-
-export interface IIndustriesForm {
-	categoryIDs: string[]
-}
-
-export interface IIndustryForm {
-	categoryIDs: string[]
-}
 
 export interface IReservationsSettingsNotification {
 	b2bChannels: {
@@ -686,10 +631,12 @@ export interface ICalendarEventsListPopover {
 	setIsOpen: (isOpen: boolean) => void
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
-	onMonthlyReservationClick: (data: EmployeeTooltipPopoverData, position?: PopoverTriggerPosition) => void
 	isHidden: boolean
 	isLoading?: boolean
 	isUpdatingEvent?: boolean
+	query: IUseQueryParams
+	parentPath: string
+	employeeID?: string
 }
 
 export type ReservationPopoverData = {
@@ -704,20 +651,6 @@ export type ReservationPopoverData = {
 	note?: CalendarEvent['note']
 	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
 	isEdit?: boolean
-}
-
-export interface ICalendarEmployeeTooltipPopover {
-	data: EmployeeTooltipPopoverData | null
-	position: PopoverTriggerPosition | null
-	isOpen: boolean
-	setIsOpen: (isOpen: boolean) => void
-	parentPath: string
-	query: IUseQueryParams
-}
-
-export type EmployeeTooltipPopoverData = {
-	employee: CalendarEmployee
-	date: string
 }
 
 export interface IBulkConfirmForm {

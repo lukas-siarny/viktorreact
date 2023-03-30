@@ -164,7 +164,7 @@ const ReservationsFilter = (props: Props) => {
 							component={SelectField}
 							showSearch={false}
 							name={'reservationCreateSourceType'}
-							placeholder={t('loc:Vytvorená v')}
+							placeholder={t('loc:Vytvoril')}
 							allowClear
 							size={'middle'}
 							options={RESERVATION_SOURCE_TYPE_OPTIONS}

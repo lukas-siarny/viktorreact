@@ -38,7 +38,7 @@ import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
 import { ArgsProps } from 'antd/es/notification/interface'
-
+import UAParser from 'ua-parser-js'
 import cx from 'classnames'
 import showNotifications from './tsxHelpers'
 import {
@@ -65,7 +65,10 @@ import {
 	RESERVATION_STATE,
 	PERMISSION,
 	RESERVATION_PAYMENT_METHOD,
-	RESERVATION_SOURCE_TYPE
+	RESERVATION_SOURCE_TYPE,
+	MIN_SUPPORTED_BROWSER_VERSION,
+	BROWSERS,
+	BROWSER_TYPE
 } from './enums'
 
 import {
@@ -1396,3 +1399,29 @@ export const normalizeDataById = <T extends { id: string }>(data?: T[] | null): 
 }
 
 export const formatPrice = (price: number, symbol?: string) => (!isNil(price) ? `${price} ${symbol || ''}`.trim() : '')
+
+export const detectBrowserType = (): string => {
+	const parser = new UAParser()
+
+	const browser = parser.getBrowser()
+	const browserName = browser.name?.toLowerCase()
+	console.log('🚀 ~ file: helper.tsx:1408 ~ detectBrowserType ~ browserName:', browserName)
+	// get major number from version '101.4.11' -> 101, '94' -> 94
+	// eslint-disable-next-line radix
+	const majorVersion = parseInt(browser.version ? browser.version.split('.')[0] : '0')
+
+	let browserType = BROWSER_TYPE.SUPPORTED
+
+	try {
+		if (!isEnumValue(browserName, BROWSERS)) {
+			browserType = BROWSER_TYPE.UNKNOWN
+		} else if (MIN_SUPPORTED_BROWSER_VERSION(browserName) > majorVersion) {
+			browserType = BROWSER_TYPE.UNSUPPORTED
+		}
+	} catch (error) {
+		// eslint-disable-next-line no-console
+		console.error('Error during browser version detection', error)
+	}
+
+	return browserType
+}

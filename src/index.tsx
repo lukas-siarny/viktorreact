@@ -2,7 +2,6 @@ import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import * as Sentry from '@sentry/react'
 import { Integrations as TracingIntegrations } from '@sentry/tracing'
-import UAParser from 'ua-parser-js'
 
 // dayjs
 import dayjs from 'dayjs'
@@ -23,7 +22,7 @@ import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 
 // utils
-import { MIN_SUPPORTED_BROWSER_VERSION } from './utils/enums'
+import { detectBrowserType } from './utils/helper'
 
 // NOTE: lebo je v gitignore a az pri starte sa vytvori prvy krat a pipelina by padla
 // eslint-disable-next-line import/no-unresolved
@@ -50,22 +49,10 @@ Sentry.init({
 	environment: window?.__RUNTIME_CONFIG__?.REACT_APP_SENTRY_ENV ? window.__RUNTIME_CONFIG__.REACT_APP_SENTRY_ENV : process.env.REACT_APP_SENTRY_ENV,
 	// eslint-disable-next-line no-underscore-dangle
 	dsn: window?.__RUNTIME_CONFIG__?.REACT_APP_SENTRY_DSN ? window.__RUNTIME_CONFIG__.REACT_APP_SENTRY_DSN : process.env.REACT_APP_SENTRY_DSN,
-	tracesSampleRate: 0.05,
-	beforeSend: (event) => {
-		const parser = new UAParser()
-
-		const browser = parser.getBrowser()
-		// get major number from version '101.4.11' -> 101, '94' -> 94
-		// eslint-disable-next-line radix
-		const majorVersion = parseInt(browser.version ? browser.version.split('.')[0] : '0')
-
-		if (MIN_SUPPORTED_BROWSER_VERSION(browser.name) < majorVersion) {
-			return event
-		}
-
-		return null
-	}
+	tracesSampleRate: 0.05
 })
+
+Sentry.setTag('browser_type', detectBrowserType())
 
 const root = createRoot(document.getElementById('root') as HTMLElement)
 

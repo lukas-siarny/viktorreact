@@ -32,11 +32,17 @@ export enum LANGUAGE {
 }
 
 export enum BROWSERS {
-	CHROME = 'Chrome',
-	SAFARI = 'Safari',
-	FIREFOX = 'Firefox',
-	EDGE = 'Edge',
-	OPERA = 'Opera'
+	CHROME = 'chrome',
+	SAFARI = 'safari',
+	FIREFOX = 'firefox',
+	EDGE = 'edge',
+	OPERA = 'opera'
+}
+
+export enum BROWSER_TYPE {
+	UNKNOWN = 'unknown',
+	SUPPORTED = 'supported',
+	UNSUPPORTED = 'unsupported'
 }
 
 export const MIN_SUPPORTED_BROWSER_VERSION = (browserName?: string) => {

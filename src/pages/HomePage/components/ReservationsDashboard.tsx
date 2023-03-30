@@ -13,10 +13,6 @@ const ReservationsDashboard = (props: Props) => {
 
 	const { notino } = useSelector((state: RootState) => state.dashboard)
 
-	if (notino) {
-		;(notino as any).append(22)
-	}
-
 	return (
 		<div>
 			<div className='dashboard-grid'>

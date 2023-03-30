@@ -73,7 +73,7 @@ const SalonCreatePage: FC<SalonPageProps> = (props) => {
 
 	// init form on mount
 	useEffect(() => {
-		dispatch(initialize(FORM.SALON, initEmptySalonFormData(phonePrefixCountryCode, showBasicSalonsSuggestions)))
+		dispatch(initialize(FORM.SALON, initEmptySalonFormData(phonePrefixCountryCode)))
 	}, [dispatch, showBasicSalonsSuggestions, phonePrefixCountryCode])
 
 	const handleSubmit = async (data: ISalonForm) => {
@@ -120,13 +120,13 @@ const SalonCreatePage: FC<SalonPageProps> = (props) => {
 	const loadBasicSalon = useCallback(
 		async (id: string) => {
 			const { data } = await dispatch(getBasicSalon(id))
-			dispatch(initialize(FORM.SALON, initSalonFormData(data?.salon as SalonInitType, phonePrefixCountryCode, true)))
+			dispatch(initialize(FORM.SALON, initSalonFormData(data?.salon as SalonInitType, phonePrefixCountryCode)))
 		},
 		[dispatch, phonePrefixCountryCode]
 	)
 
 	const clearSalonForm = useCallback(() => {
-		dispatch(initialize(FORM.SALON, initEmptySalonFormData(phonePrefixCountryCode, true)))
+		dispatch(initialize(FORM.SALON, initEmptySalonFormData(phonePrefixCountryCode)))
 	}, [dispatch, phonePrefixCountryCode])
 
 	const breadcrumbDetailItem = {

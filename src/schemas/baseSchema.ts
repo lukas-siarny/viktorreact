@@ -78,7 +78,6 @@ export const defaultErrorMap: z.ZodErrorMap = (issue, ctx) => {
 			return { message: serializeValidationMessage('loc:Toto pole je povinné') }
 		}
 	}
-
 	if (issue.code === z.ZodIssueCode.too_big) {
 		if (issue.type === 'string') {
 			return {
@@ -138,6 +137,9 @@ export const defaultErrorMap: z.ZodErrorMap = (issue, ctx) => {
 
 		if (issue.validation === 'url') {
 			return { message: serializeValidationMessage('loc:Neplatná URL') }
+		}
+		if (issue.validation === 'regex') {
+			return { message: serializeValidationMessage('loc:Neplatný formát zadanej hodnoty') }
 		}
 	}
 

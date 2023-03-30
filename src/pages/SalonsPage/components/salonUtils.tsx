@@ -38,7 +38,6 @@ export type SalonInitType = ISalonPayloadData & IBasicSalon
  *
  * @param salonData
  * @param phonePrefixCountryCode
- * @param salonNameFromSelect - pre title salonu sa miesto input fieldu pouziva autocomplete field
  * @returns
  */
 export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCountryCode: string) => {
@@ -54,20 +53,21 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 	// pre sprave zobrazenie informacnych hlasok a disabled stavov submit buttonov je potrebne dat pozor, aby isPristine fungovalo spravne = teda pri pridavani noveho fieldu je to potrebne vzdy skontrolovat
 	// napr. ak pride z BE aboutUsFirst: undefined, potom prepisem hodnotu vo formulari a opat ju vymazem, tak do reduxu sa ta prazdna hodnota uz neulozi ako undeifned ale ako null
 	// preto maju vsetky inicializacne hodnoty, pre textFieldy a textAreaFieldy fallback || null (pozri impementaciu tychto komponentov, preco sa to tam takto uklada)
-
-	const initialData: ISalonForm = {
+	const initialData = {
 		id: salonData.id || null,
 		deletedAt: !!salonData.deletedAt,
 		state: salonData.state as SALON_STATES,
 		sourceOfPremium: salonData.premiumSourceUserType,
-		name:
-			salonData.id && salonData.name
-				? {
-						key: salonData.id,
-						label: salonData.name,
-						value: salonData.id
-				  }
-				: salonData.name,
+		// TODO: spravit case ked je to objet zo selectu
+		name: salonData.name,
+		// name:
+		// 	salonData.id && salonData.name
+		// 		? {
+		// 				key: salonData.id,
+		// 				label: salonData.name,
+		// 				value: salonData.id
+		// 		  }
+		// 		: salonData.name,
 		email: salonData.email,
 		// categoryIDs for basic salon
 		categoryIDs: (isEmpty(!salonData?.categories) ? salonData?.categories.map((category) => category.id) : null) as ISalonForm['categoryIDs'],
@@ -119,9 +119,8 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 	return initialData
 }
 
-export const initEmptySalonFormData = (phonePrefixCountryCode: string, salonNameFromSelect = false) => {
+export const initEmptySalonFormData = (phonePrefixCountryCode: string) => {
 	return {
-		salonNameFromSelect,
 		openOverWeekend: false,
 		sameOpenHoursOverWeek: true,
 		openingHours: initOpeningHours(undefined, true, false),
@@ -133,7 +132,8 @@ export const initEmptySalonFormData = (phonePrefixCountryCode: string, salonName
 
 export const getSalonDataForSubmission = (data: ISalonForm) => {
 	const openingHours: OpeningHours = createSameOpeningHours(data.openingHours, data.sameOpenHoursOverWeek, data.openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
-	const phones = data.phones?.filter((phone) => phone?.phone)
+	// TODO: zmazat any z phone ked sa definuje typ schema
+	const phones = data.phones?.filter((phone: any) => phone?.phone)
 
 	return {
 		imageIDs: (data.gallery || []).map((image: any) => ({
@@ -141,7 +141,7 @@ export const getSalonDataForSubmission = (data: ISalonForm) => {
 			isCover: image?.isCover ?? false
 		})) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
 		logoID: map(data.logo, (image) => image?.id ?? image?.uid)[0] ?? null,
-		name: data.salonNameFromSelect ? (data.name as AutocompleteLabelInValue)?.label : data.name,
+		name: data.name.id ? data.name.name : data.name,
 		openingHours: openingHours || [],
 		aboutUsFirst: data.aboutUsFirst,
 		city: data.city,

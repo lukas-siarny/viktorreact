@@ -110,48 +110,48 @@ export default (values: any) => {
 	// 	})
 	// }
 
-	if (values?.socialLinkFB && !socialMediaRegex.facebook.test(values.socialLinkFB)) {
-		errors.socialLinkFB = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
-			url: 'https://www.facebook.com/facebook'
-		})
-	}
+	// if (values?.socialLinkFB && !socialMediaRegex.facebook.test(values.socialLinkFB)) {
+	// 	errors.socialLinkFB = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
+	// 		url: 'https://www.facebook.com/facebook'
+	// 	})
+	// }
 
-	if (values?.socialLinkYoutube && !socialMediaRegex.youtube.test(values.socialLinkYoutube)) {
-		errors.socialLinkYoutube = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
-			url: 'https://www.youtube.com/youtube'
-		})
-	}
+	// if (values?.socialLinkYoutube && !socialMediaRegex.youtube.test(values.socialLinkYoutube)) {
+	// 	errors.socialLinkYoutube = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
+	// 		url: 'https://www.youtube.com/youtube'
+	// 	})
+	// }
 
-	if (values?.socialLinkInstagram && !socialMediaRegex.instagram.test(values.socialLinkInstagram)) {
-		errors.socialLinkInstagram = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
-			url: 'https://www.instagram.com/instagram'
-		})
-	}
+	// if (values?.socialLinkInstagram && !socialMediaRegex.instagram.test(values.socialLinkInstagram)) {
+	// 	errors.socialLinkInstagram = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
+	// 		url: 'https://www.instagram.com/instagram'
+	// 	})
+	// }
 
-	if (values?.socialLinkPinterest && !socialMediaRegex.pinterest.test(values.socialLinkPinterest)) {
-		errors.socialLinkPinterest = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
-			url: 'https://www.pinterest.com/pinterest'
-		})
-	}
+	// if (values?.socialLinkPinterest && !socialMediaRegex.pinterest.test(values.socialLinkPinterest)) {
+	// 	errors.socialLinkPinterest = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
+	// 		url: 'https://www.pinterest.com/pinterest'
+	// 	})
+	// }
 
-	if (values?.socialLinkTikTok && !socialMediaRegex.tiktok.test(values.socialLinkTikTok)) {
-		errors.socialLinkTikTok = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
-			url: 'https://www.tiktok.com/tiktok'
-		})
-	}
+	// if (values?.socialLinkTikTok && !socialMediaRegex.tiktok.test(values.socialLinkTikTok)) {
+	// 	errors.socialLinkTikTok = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
+	// 		url: 'https://www.tiktok.com/tiktok'
+	// 	})
+	// }
 
-	if (values?.socialLinkWebPage && !socialMediaRegex.website.test(values.socialLinkWebPage)) {
-		errors.socialLinkWebPage = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
-			url: 'https://www.notino.com/'
-		})
-	}
+	// if (values?.socialLinkWebPage && !socialMediaRegex.website.test(values.socialLinkWebPage)) {
+	// 	errors.socialLinkWebPage = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
+	// 		url: 'https://www.notino.com/'
+	// 	})
+	// }
 	// TODO: lukas uz spravil v https://bitbucket.org/GoodRequest/notino_b2b_web/pull-requests/484
-	if (values.openingHours) {
-		const openingHoursErrors = validateOpeningHours(values.openingHours)
-		if (!isEmpty(openingHoursErrors)) {
-			errors.openingHours = openingHoursErrors
-		}
-	}
+	// if (values.openingHours) {
+	// 	const openingHoursErrors = validateOpeningHours(values.openingHours)
+	// 	if (!isEmpty(openingHoursErrors)) {
+	// 		errors.openingHours = openingHoursErrors
+	// 	}
+	// }
 
 	return errors
 }

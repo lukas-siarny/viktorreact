@@ -35,7 +35,7 @@ type DeleteUrls = {
 }
 
 export const showErrorNotifications = (error: AxiosError | Error | unknown, typeNotification = NOTIFICATION_TYPE.NOTIFICATION, skipRedirect = false) => {
-	let messages = get(error, 'response.data.messages')
+	let messages: IErrorMessage[] = get(error, 'response.data.messages') as any
 
 	if (get(error, 'response.status') === 401) {
 		if (isLoggedIn()) {
@@ -340,7 +340,7 @@ export const patchReq = async <T extends keyof PatchUrls>(
 		if (typeNotification && customConfig && customConfig.messages) {
 			showNotifications(customConfig.messages, typeNotification)
 		} else if (typeNotification && has(res, 'data.messages')) {
-			showNotifications(get(res, 'data.messages'), typeNotification)
+			showNotifications(get(res, 'data.messages') as any, typeNotification)
 		}
 		if (hide) {
 			hide()
@@ -397,7 +397,7 @@ export const deleteReq = async <T extends keyof DeleteUrls>(
 		if (typeNotification && customConfig && customConfig.messages) {
 			showNotifications(customConfig.messages, typeNotification)
 		} else if (typeNotification && has(res, 'data.messages')) {
-			showNotifications(get(res, 'data.messages'), typeNotification)
+			showNotifications(get(res, 'data.messages') as any, typeNotification)
 		}
 
 		if (hide) {

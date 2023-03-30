@@ -78,8 +78,8 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 		openOverWeekend,
 		sameOpenHoursOverWeek,
 		openingHours,
-		latitude: salonData.address?.latitude as any,
-		longitude: salonData.address?.longitude,
+		latitude: salonData.address?.latitude ?? null,
+		longitude: salonData.address?.longitude ?? null,
 		city: salonData.address?.city || null,
 		street: salonData.address?.street || null,
 		zipCode: salonData.address?.zipCode || null,
@@ -94,12 +94,12 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 						phone: phone.phone || null
 				  }))
 				: getPhoneDefaultValue(phonePrefixCountryCode),
-		gallery: map(salonData.images, (image: any) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id, isCover: image?.isCover })),
+		gallery: map(salonData.images, (image) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id, isCover: image?.isCover })),
 		pricelists: map(salonData.pricelists, (file) => ({ url: file?.original, uid: file?.id, name: file?.fileName })),
 		logo: salonData.logo?.id
 			? [
 					{
-						uid: salonData.logo?.id,
+						uid: salonData.logo.id,
 						url: salonData.logo?.original,
 						thumbUrl: salonData.logo?.resizedImages?.thumbnail
 					}
@@ -107,7 +107,6 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 			: null,
 		languageIDs: map(salonData.languages, (lng) => lng?.id).filter((lng) => lng !== undefined) as string[],
 		cosmeticIDs: map(salonData.cosmetics, (cosmetic) => cosmetic?.id).filter((cosmetic) => cosmetic !== undefined) as string[],
-		// address: !!salonData.address || null,
 		socialLinkWebPage: salonData.socialLinkWebPage || null,
 		socialLinkFB: salonData.socialLinkFB || null,
 		socialLinkInstagram: salonData.socialLinkInstagram || null,
@@ -132,8 +131,7 @@ export const initEmptySalonFormData = (phonePrefixCountryCode: string) => {
 
 export const getSalonDataForSubmission = (data: ISalonForm) => {
 	const openingHours: OpeningHours = createSameOpeningHours(data.openingHours, data.sameOpenHoursOverWeek, data.openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
-	// TODO: zmazat any z phone ked sa definuje typ schema
-	const phones = data.phones?.filter((phone: any) => phone?.phone)
+	const phones = data.phones?.filter((phone) => phone?.phone)
 
 	return {
 		imageIDs: (data.gallery || []).map((image: any) => ({

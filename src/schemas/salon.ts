@@ -16,8 +16,6 @@ import { socialMediaRegex } from '../utils/regex'
 
 // https://notino-admin.goodrequest.dev/api/doc/#/B2b-%3Eadmin/patchApiB2BAdminSalonsSalonId
 export const salonSchema = z.object({
-	// TODO: toto by sa malo dat spravit bez salonNameFromSelect
-	// salonNameFromSelect
 	// TODO: dorobit aj select validaciu
 	// name: string  || { name: string, id: string, label: string }
 	// name: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_255, true),
@@ -56,12 +54,11 @@ export const salonSchema = z.object({
 	payByCard: z.boolean().optional(),
 	payByCash: z.boolean().optional(),
 	otherPaymentMethods: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_500),
-	// TODO: imageIDs + logo sa vybera ako nulty prvok
-	logo: z.any(),
-	gallery: z.any(),
+	logo: imageConstraint.array().max(1).nullish(),
+	gallery: imageConstraint.nullish().array().max(100).optional(),
 	pricelists: z.any(),
-	cosmeticIDs: z.string().array().max(20).optional(),
-	languageIDs: z.string().array().max(10).optional()
+	cosmeticIDs: z.string().array().max(VALIDATION_MAX_LENGTH.LENGTH_20).optional(),
+	languageIDs: z.string().array().max(VALIDATION_MAX_LENGTH.LENGTH_10).optional()
 })
 
 // NOTE: adresa je validovana cez inline validacie v AddressFields
@@ -74,7 +71,6 @@ export type ISalonForm = z.infer<typeof salonSchema> &
 		openOverWeekend: boolean
 		categoryIDs: [string, ...string[]] | null
 		pricelistIDs?: string[]
-		// address: boolean | null
 		deletedAt?: boolean
 	}
 

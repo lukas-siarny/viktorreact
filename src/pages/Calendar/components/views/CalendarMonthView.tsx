@@ -11,16 +11,10 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // types
-import {
-	CalendarEvent,
-	EmployeeTooltipPopoverData,
-	ICalendarMonthlyReservationsPayload,
-	ICalendarMonthlyViewEvent,
-	ICalendarView,
-	PopoverTriggerPosition
-} from '../../../../types/interfaces'
+import { CalendarEvent, ICalendarMonthlyReservationsPayload, ICalendarMonthlyViewEvent, ICalendarView, PopoverTriggerPosition } from '../../../../types/interfaces'
 import { RootState } from '../../../../reducers'
 import { IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
+import { IUseQueryParams } from '../../../../hooks/useQueryParams'
 
 // enums
 import {
@@ -75,18 +69,18 @@ const getLinkMoreText = (eventsCount?: number) => {
 const dayHeaderContent = (arg: DayHeaderContentArg, openingHoursMap: OpeningHoursMap) => {
 	const { date } = arg || {}
 	const dayNumber = dayjs(date).day()
-	return <div className={cx('nc-month-day-header', { shaded: !openingHoursMap[dayNumber] })}>{dayjs(date).format(CALENDAR_DATE_FORMAT.MONTH_HEADER_DAY_NAME)}</div>
+	return <span className={cx('nc-month-day-header', { shaded: !openingHoursMap[dayNumber] })}>{dayjs(date).format(CALENDAR_DATE_FORMAT.MONTH_HEADER_DAY_NAME)}</span>
 }
 interface IDayCellContent {
 	date: Date
 	dayNumberText: string
 	salonID: string
-	onShowMore: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean) => void
+	onShowEventsListPopover: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean, employeeID?: string) => void
 	isReservationsView: boolean
 }
 
 const DayCellContent: FC<IDayCellContent> = (props) => {
-	const { onShowMore, date, dayNumberText, isReservationsView } = props
+	const { onShowEventsListPopover, date, dayNumberText, isReservationsView } = props
 
 	const virtualEvent = useSelector((state: RootState) => state.virtualEvent.virtualEvent.data)
 	const dayEvents = useSelector((state: RootState) => state.calendar.dayEvents)
@@ -119,7 +113,7 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 						width: clientRect.width + 20,
 						height: clientRect.bottom - clientRect.top
 					}
-					onShowMore(cellDate, position, isReservationsView)
+					onShowEventsListPopover(cellDate, position, isReservationsView)
 				}
 			}
 			if (dayGridDayBottom) {
@@ -165,7 +159,7 @@ const DayCellContent: FC<IDayCellContent> = (props) => {
 				}
 			}
 		}
-	}, [eventsCount, cellDate, isReservationsView, onShowMore])
+	}, [eventsCount, cellDate, isReservationsView, onShowEventsListPopover])
 
 	return <span ref={dayNumerRef}>{dayNumberText}</span>
 }
@@ -199,9 +193,10 @@ const reservationOrder = (a: any, b: any) => {
 
 interface ICalendarMonthView extends Omit<ICalendarView, 'reservations'> {
 	salonID: string
-	onShowMore: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean) => void
+	onShowEventsListPopover: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean, employeeID?: string) => void
 	monthlyReservations: ICalendarMonthlyReservationsPayload['data']
-	onMonthlyReservationClick: (data: EmployeeTooltipPopoverData, position?: PopoverTriggerPosition) => void
+	query: IUseQueryParams
+	parentPath: string
 }
 
 const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarMonthView>((props, ref) => {
@@ -213,13 +208,14 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 		onEditEvent,
 		onReservationClick,
 		salonID,
-		onShowMore,
+		onShowEventsListPopover,
 		onEventChange,
 		onEventChangeStart,
 		virtualEvent,
 		onAddEvent,
-		onMonthlyReservationClick,
-		enabledSalonReservations
+		enabledSalonReservations,
+		query,
+		parentPath
 	} = props
 
 	const openingHours = useSelector((state: RootState) => state.selectedSalon.selectedSalon).data?.openingHours
@@ -285,7 +281,7 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 				showNonCurrentDates
 				firstDay={1}
 				dayMaxEvents={5}
-				dayMinWidth={120}
+				dayMinWidth={150}
 				eventOrderStrict
 				eventOrder={isReservationsView ? (reservationOrder as any) : (eventOrder as any)}
 				selectConstraint={CALENDAR_COMMON_SETTINGS.SELECT_CONSTRAINT}
@@ -294,7 +290,13 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 				businessHours={businessHours}
 				// render hooks
 				dayCellContent={(args: DayCellContentArg) => (
-					<DayCellContent date={args.date} dayNumberText={args.dayNumberText} salonID={salonID} isReservationsView={isReservationsView} onShowMore={onShowMore} />
+					<DayCellContent
+						date={args.date}
+						dayNumberText={args.dayNumberText}
+						salonID={salonID}
+						isReservationsView={isReservationsView}
+						onShowEventsListPopover={onShowEventsListPopover}
+					/>
 				)}
 				dayHeaderContent={(args) => dayHeaderContent(args, openingHoursMap)}
 				eventContent={(data) =>
@@ -302,7 +304,9 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 						<MonthlyReservationCard
 							date={dayjs(data.event.start).format(CALENDAR_DATE_FORMAT.QUERY)}
 							eventData={data?.event?.extendedProps?.eventData}
-							onMonthlyReservationClick={onMonthlyReservationClick}
+							onShowEventsListPopover={onShowEventsListPopover}
+							query={query}
+							parentPath={parentPath}
 						/>
 					) : (
 						eventContent(data, CALENDAR_VIEW.MONTH, onEditEvent, onReservationClick)

@@ -2791,6 +2791,54 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2BAdminNotinoDashboardSmsTimeStats {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            /**
+             * example:
+             * SK
+             */
+            export type CountryCode = string;
+            export type Month = number;
+            export type Year = number;
+        }
+        export interface QueryParameters {
+            month: Parameters.Month;
+            year: Parameters.Year;
+            countryCode: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
+        }
+        namespace Responses {
+            export interface $200 {
+                type: "MONTH";
+                ranges: {
+                    [name: string]: {
+                        totalSentSmsCount: number;
+                    };
+                };
+                totalSentSmsCount: number;
+                formattedTotalSpentTransactionAmount: string;
+                currentSmsUnitPrice?: {
+                    id: string; // uuid
+                    formattedAmount: string;
+                };
+            }
+        }
+    }
     namespace GetApiB2BAdminReportsSalons {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -3087,6 +3135,8 @@ declare namespace Paths {
             export type Search = string | null;
             export type SourceType = "IMPORT" | "NOTINO" | "PARTNER";
             export type Statuses = ("PUBLISHED" | "NOT_PUBLISHED" | "DELETED" | "NOT_DELETED" | "PENDING_PUBLICATION" | "DECLINED" | "ALL")[];
+            export type WalletAvailableBalanceFrom = number;
+            export type WalletAvailableBalanceTo = number;
         }
         export interface QueryParameters {
             search?: Parameters.Search;
@@ -3105,6 +3155,8 @@ declare namespace Paths {
             hasSetOpeningHours?: Parameters.HasSetOpeningHours;
             assignedUserID?: Parameters.AssignedUserID /* uuid */;
             premiumSourceUserType?: Parameters.PremiumSourceUserType;
+            walletAvailableBalanceFrom?: Parameters.WalletAvailableBalanceFrom;
+            walletAvailableBalanceTo?: Parameters.WalletAvailableBalanceTo;
             order?: /**
              * Order attributes: name, fillingProgress, createdAt
              * example:
@@ -3163,6 +3215,18 @@ declare namespace Paths {
                         lastName?: string;
                     };
                     premiumSourceUserType?: "NOTINO" | "PARTNER";
+                    wallet?: {
+                        id: string; // uuid
+                        availableBalance: number; // float
+                        currency: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            code: string;
+                            symbol: string;
+                        };
+                    };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -5361,6 +5425,7 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
+                type: "MONTH";
                 ranges: {
                     [name: string]: {
                         totalSentSmsCount: number;
@@ -60203,6 +60268,7 @@ declare namespace Paths {
                     calendarEventID: string; // uuid
                     salonID: string; // uuid
                     customerName: string;
+                    cancelReservationToken: string;
                 } | {
                     date: string;
                     time: string;
@@ -60216,6 +60282,7 @@ declare namespace Paths {
                     calendarEventID: string; // uuid
                     salonID: string; // uuid
                     customerName: string;
+                    cancelReservationToken: string;
                 } | {
                     date: string;
                     time: string;
@@ -60229,6 +60296,7 @@ declare namespace Paths {
                     calendarEventID: string; // uuid
                     salonID: string; // uuid
                     customerName: string;
+                    cancelReservationToken: string;
                 } | {
                     date: string;
                     time: string;
@@ -60242,6 +60310,7 @@ declare namespace Paths {
                     calendarEventID: string; // uuid
                     salonID: string; // uuid
                     customerName: string;
+                    cancelReservationToken: string;
                 } | {
                     date: string;
                     time: string;
@@ -61999,6 +62068,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.Responses.$200>
+  /**
+   * getApiB2BAdminNotinoDashboardSmsTimeStats - Endpoint is used for getting statistics of sms notifications in time. It is possible to use filter (month, year, countryCode), permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+   */
+  'getApiB2BAdminNotinoDashboardSmsTimeStats'(
+    parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSmsTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSmsTimeStats.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSmsTimeStats.Responses.$200>
   /**
    * postApiB2BAdminCalendarSyncSyncToken - Endpoint is used for saving refresh tokens from third party services., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
@@ -64672,6 +64749,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.Responses.$200>
+  }
+  ['/api/b2b/admin/notino-dashboard/sms-time-stats']: {
+    /**
+     * getApiB2BAdminNotinoDashboardSmsTimeStats - Endpoint is used for getting statistics of sms notifications in time. It is possible to use filter (month, year, countryCode), permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSmsTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSmsTimeStats.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSmsTimeStats.Responses.$200>
   }
   ['/api/b2b/admin/calendar-sync/sync-token']: {
     /**

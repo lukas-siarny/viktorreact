@@ -127,6 +127,14 @@ export const decodeBackDataQuery = (base64?: string | null) => {
 	return decoded
 }
 
+export const formatObjToQuery = (queryObj: { [key: string]: string }) => {
+	const searchParams = new URLSearchParams()
+	Object.keys(queryObj).forEach((key) => {
+		searchParams.append(key, queryObj[key])
+	})
+	return `?${searchParams.toString()}`
+}
+
 export const getLinkWithEncodedBackUrl = (link: string) => {
 	if (!window.location.search) {
 		return link
@@ -282,9 +290,9 @@ export const translateDayName = (day: DAY | typeof MONDAY_TO_FRIDAY, shortName?:
 
 export const transalteReservationSourceType = (sourceType: RESERVATION_SOURCE_TYPE) => {
 	if (sourceType === RESERVATION_SOURCE_TYPE.ONLINE) {
-		return i18next.t('loc:B2C')
+		return i18next.t('loc:Salón')
 	}
-	return i18next.t('loc:B2B')
+	return i18next.t('loc:Klient')
 }
 
 export const translateReservationState = (state?: RESERVATION_STATE) => {
@@ -495,7 +503,7 @@ export const scrollToFirstError = (errors: any, form: FORM | string) => {
 	})
 	const sortedErrors: any = orderBy(els, ['value'], ['asc'])
 	if (!isEmpty(sortedErrors)) {
-		const el = document.getElementById(get(sortedErrors, '[0].id'))
+		const el = document.getElementById(get(sortedErrors, '[0].id') as any)
 		if (el?.scrollIntoView) {
 			el.scrollIntoView({
 				behavior: 'smooth',

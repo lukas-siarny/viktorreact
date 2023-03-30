@@ -29,14 +29,14 @@ import { validationIndustriesFn, IIndustriesForm } from '../../../schemas/indust
 type ComponentProps = {
 	selectedCategoryIDs?: string[]
 	disabledForm?: boolean
-	onShowMore: (id: string) => void
+	onShowEventsListPopover: (id: string) => void
 }
 
 type Props = InjectedFormProps<IIndustriesForm, ComponentProps> & ComponentProps
 
 const IndustriesForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, submitting, pristine, onShowMore, disabledForm } = props
+	const { handleSubmit, submitting, pristine, onShowEventsListPopover, disabledForm } = props
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const services = useSelector((state: RootState) => state.service.services)
@@ -52,7 +52,7 @@ const IndustriesForm: FC<Props> = (props) => {
 			image: category.image?.resizedImages?.small,
 			disabled: disabledForm,
 			extraAction: {
-				action: () => onShowMore(category.id),
+				action: () => onShowEventsListPopover(category.id),
 				label: `${t('loc:Priradiť služby')} (${selectedServices})`,
 				popconfirm: !pristine,
 				icon: <ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />

@@ -21,21 +21,24 @@ type Props = RouteProps & {
 const CreatePasswordRoute = (props: Props) => {
 	// t je query param pre token (nie preklad)
 	const { t } = qs.parse(document.location.search, { ignoreQueryPrefix: true })
+	const indexRedirect = <Navigate to={i18next.t('paths:index')} />
 
-	// if user is already logged In or token does not exist redirect to index route
-	if (isLoggedIn() || !t) {
-		return <Navigate to={i18next.t('paths:index')} />
+	try {
+		// if user is already logged In redirect to index route
+		if (!isLoggedIn()) {
+			const payload = decode(t as string)
+			const aud = get(payload, 'aud')
+
+			if (aud === TOKEN_AUDIENCE.FORGOTTEN_PASSWORD || aud === TOKEN_AUDIENCE.INVITATION) {
+				// dokoncenie registracie , zabudnute heslo
+				return <BaseRoute {...(props as any)} token={t} />
+			}
+		}
+	} catch {
+		return indexRedirect
 	}
 
-	const payload = decode(t as string)
-	const aud = get(payload, 'aud')
-
-	if (aud === TOKEN_AUDIENCE.FORGOTTEN_PASSWORD || aud === TOKEN_AUDIENCE.INVITATION) {
-		// dokoncenie registracie , zabudnute heslo
-		return <BaseRoute {...(props as any)} token={t} />
-	}
-
-	return <Navigate to={i18next.t('paths:index')} />
+	return indexRedirect
 }
 
 export default CreatePasswordRoute

@@ -6,7 +6,7 @@ import { IResetStore } from '../generalTypes'
 import { ThunkResult } from '../index'
 import { SELECTED_SALON, SALON_OPTIONS } from './selectedSalonTypes'
 import { Paths } from '../../types/api'
-import { ISelectOptionItem, IPermissions, ICurrency, _Permissions } from '../../types/interfaces'
+import { ISelectOptionItem, IPermissions, ICurrency } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -43,7 +43,7 @@ export interface ISalonSelectionOptionsPayload {
 }
 
 export const selectSalon =
-	(salonID?: string): ThunkResult<Promise<any>> =>
+	(salonID?: string): ThunkResult<Promise<ISelectedSalonPayload | undefined>> =>
 	async (dispatch, getState) => {
 		let payload = {} as ISelectedSalonPayload
 		if (!salonID) {
@@ -82,14 +82,14 @@ export const selectSalon =
 				salonCurrency = DEFAULT_CURRENCY
 			}
 
-			let permissions: _Permissions = []
+			let permissions: PERMISSION[] = []
 
 			const currentUser = state.user.authUser.data
 
 			if (currentUser && currentUser.uniqPermissions) {
 				permissions = currentUser.uniqPermissions
-				// SUPER_ADMIN and ADMIN doesn't requires salon's permissions
-				if (!checkPermissions(permissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN])) {
+				// Notino user doesn't require salon's permissions
+				if (!checkPermissions(permissions, [PERMISSION.NOTINO])) {
 					const salon = find(currentUser.salons, (item) => item.id === salonID)
 					if (salon && salon.role) {
 						permissions = uniq(map(salon.role.permissions, 'name')) as any
@@ -109,7 +109,7 @@ export const selectSalon =
 			return payload
 		} catch (error) {
 			// eslint-disable-next-line no-console
-			console.error(error)
+			console.error('Error during load salons detail', error)
 			dispatch({ type: SELECTED_SALON.SELECTED_SALON_LOAD_FAIL })
 		}
 	}

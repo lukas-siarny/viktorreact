@@ -1,13 +1,12 @@
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 import * as Sentry from '@sentry/react'
 import { Result, Button } from 'antd'
 import i18next from 'i18next'
 
 import { ERROR_BOUNDARY_TEXTS } from '../utils/enums'
 
-class ErrorBoundary extends React.Component {
+class ErrorBoundary extends React.Component<PropsWithChildren, any> {
 	state = {
-		error: null,
 		eventId: null as any,
 		isOpen: false
 	}
@@ -17,7 +16,6 @@ class ErrorBoundary extends React.Component {
 	}
 
 	componentDidCatch(error: any, errorInfo: any) {
-		this.setState({ error })
 		Sentry.withScope((scope: any) => {
 			scope.setExtras(errorInfo)
 			const eventId = Sentry.captureException(error)
@@ -26,12 +24,12 @@ class ErrorBoundary extends React.Component {
 	}
 
 	render() {
-		if (this.state.error) {
-			const { language } = i18next
-			const texts = ERROR_BOUNDARY_TEXTS()
+		const { language } = i18next
+		const texts = ERROR_BOUNDARY_TEXTS()
 
-			return (
-				<div className={'error-page-wrapper'}>
+		return (
+			<div className={'error-page-wrapper'}>
+				<>
 					<Result
 						status='500'
 						title='500'
@@ -55,9 +53,10 @@ class ErrorBoundary extends React.Component {
 							labelSubmit: texts.reportDialog.labelSubmit,
 							lang: language
 						})}
-				</div>
-			)
-		}
+				</>
+			</div>
+		)
+
 		return this.props.children
 	}
 }

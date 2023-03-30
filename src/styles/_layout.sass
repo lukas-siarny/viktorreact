@@ -68,7 +68,8 @@ $inner-padding: 16px
 		.layout-wrapper
 			max-width: 328px
 
-.noti-support-contact-page
+.noti-support-contact-page,
+.noti-cancel-reservation-page
 	height: 100% !important
 	min-height: 100vh
 	@media (max-width: 744px)
@@ -107,6 +108,10 @@ $inner-padding: 16px
 				.ant-menu-item, .ant-menu-submenu .ant-menu-submenu-title
 					display: flex
 					align-items: center
+					margin-left: 0
+					margin-right: 0
+					width: 100%
+					border-radius: 0
 
 				.ant-menu-item:not(:last-child)
 					margin-bottom: 4px
@@ -136,6 +141,7 @@ $inner-padding: 16px
 		display: flex
 		flex-direction: column
 		padding: 0
+		transition-duration: $antd-sider-transition-duration
 		.ant-layout-sider-children
 			height: 100%
 		.noti-my-account
@@ -241,9 +247,7 @@ $inner-padding: 16px
 		.floating-content-wrapper
 			min-height: calc(100vh - 80px - 81px) // 100vh - header - breadcrumbs
 	&.dashboard-content
-		max-width: 1200px
-		margin: 0 auto
-		width: 100%
+		padding: 0 0 16px 0
 		background: transparent
 		box-shadow: none
 	@media (max-width: 1700px)
@@ -377,6 +381,12 @@ $inner-padding: 16px
 				.ant-dropdown-menu-item-group-title
 					padding: 0
 
+.ant-dropdown-menu-item-disabled,
+.ant-dropdown-menu-submenu-title-disabled
+	color: $textColor-notino-gray
+	&:hover
+		color: $textColor-notino-gray
+
 // Avatar
 .avatar
 	flex-shrink: 0
@@ -399,3 +409,6 @@ span.language-picker-icon.anticon
 	.ant-dropdown-menu-submenu-title
 		display: flex
 		align-items: center
+
+.ant-menu-light.ant-menu-root:focus-visible
+	outline: none

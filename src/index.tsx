@@ -1,5 +1,5 @@
-import React from 'react'
-import { render } from 'react-dom'
+import React, { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
 import * as Sentry from '@sentry/react'
 import { Integrations as TracingIntegrations } from '@sentry/tracing'
 
@@ -21,12 +21,13 @@ import App from './App'
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 
+// utils
+import { detectBrowserType } from './utils/helper'
+
 // NOTE: lebo je v gitignore a az pri starte sa vytvori prvy krat a pipelina by padla
 // eslint-disable-next-line import/no-unresolved
 import './styles/main.css'
 import './styles/global.sass'
-
-import ErrorBoundary from './components/ErrorBoundary'
 
 // dayjs extended plugins
 dayjs.extend(isBetween)
@@ -51,9 +52,12 @@ Sentry.init({
 	tracesSampleRate: 0.05
 })
 
-const app = (
-	<ErrorBoundary>
+Sentry.setTag('browser_type', detectBrowserType())
+
+const root = createRoot(document.getElementById('root') as HTMLElement)
+
+root.render(
+	<StrictMode>
 		<App />
-	</ErrorBoundary>
+	</StrictMode>
 )
-render(app, document.getElementById('root'))

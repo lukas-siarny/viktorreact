@@ -3,8 +3,10 @@ import { Field, InjectedFormProps, reduxForm, FieldArray, isDirty } from 'redux-
 import { useTranslation } from 'react-i18next'
 import { Button, Col, Divider, Form, Row, Spin } from 'antd'
 import { useSelector } from 'react-redux'
+import cx from 'classnames'
 
 // assets
+import { ButtonProps } from 'antd/lib/button'
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
@@ -24,8 +26,8 @@ import PopConfirmComponent from '../../../components/PopConfirmComponent'
 import validateCategoryFrom from './validateCategoryFrom'
 
 // utils
-import { validationString, checkUploadingBeforeSubmit } from '../../../utils/helper'
-import { FORM, PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { validationString, checkUploadingBeforeSubmit, formFieldID } from '../../../utils/helper'
+import { DELETE_BUTTON_ID, FORM, PERMISSION, STRINGS, SUBMIT_BUTTON_ID, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -59,7 +61,7 @@ const fixLength1500 = validationString(VALIDATION_MAX_LENGTH.LENGTH_1500)
 
 type Props = InjectedFormProps<ICategoryForm, ComponentProps> & ComponentProps
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]
+const permissions: PERMISSION[] = [PERMISSION.ENUM_EDIT]
 
 const CategoryForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
@@ -83,6 +85,14 @@ const CategoryForm: FC<Props> = (props) => {
 	const documentFooter = document.getElementById('content-footer-container') || document.body
 
 	const renderCreatSubcategoryButton = () => {
+		const btnProps: ButtonProps = {
+			id: `${FORM.CATEGORY}-create-subcategory-button`,
+			className: 'noti-btn m-regular w-full 2xl:w-auto max-w-full min-w-0',
+			size: 'middle',
+			type: 'dashed',
+			icon: <CreateIcon />,
+			children: t('loc:Vytvoriť podkategóriu')
+		}
 		if (isFormDirty) {
 			return (
 				<PopConfirmComponent
@@ -91,29 +101,15 @@ const CategoryForm: FC<Props> = (props) => {
 					onConfirm={() => createCategory(values?.parentId, values?.id, values?.name, values?.childrenLength, (values?.level ?? 0) + 1)}
 					okText={t('loc:Pokračovať')}
 					getPopupContainer={() => documentFooter}
-					allowedButton={
-						<Button className={'noti-btn m-regular w-full 2xl:w-auto max-w-full min-w-0'} icon={<CreateIcon />} type={'dashed'} size='middle'>
-							{t('loc:Vytvoriť podkategóriu')}
-						</Button>
-					}
+					allowedButton={<Button {...btnProps} />}
 				/>
 			)
 		}
-		return (
-			<Button
-				className={'noti-btn m-regular w-full 2xl:w-auto max-w-full min-w-0'}
-				type={'dashed'}
-				size='middle'
-				icon={<CreateIcon />}
-				onClick={() => createCategory(values?.parentId, values?.id, values?.name, values?.childrenLength, (values?.level ?? 0) + 1)}
-			>
-				{t('loc:Vytvoriť podkategóriu')}
-			</Button>
-		)
+		return <Button {...btnProps} onClick={() => createCategory(values?.parentId, values?.id, values?.name, values?.childrenLength, (values?.level ?? 0) + 1)} />
 	}
 
 	return (
-		<Form layout={'vertical'} className={'w-full top-0 sticky overflow-hidden'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
+		<Form layout={'vertical'} className={'w-full top-0 sticky overflow-hidden pt-1 px-6 pb-6 -mx-6'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<Spin wrapperClassName={'w-full'} spinning={category.isLoading || categoriesParameters.isLoading}>
 				<Col className={'flex'}>
 					<Row className={'w-full h-full block'} justify='center'>
@@ -127,13 +123,13 @@ const CategoryForm: FC<Props> = (props) => {
 									okText={t('loc:Pokračovať')}
 									getPopupContainer={() => documentFooter}
 									allowedButton={
-										<Button className='absolute top-1 right-0 p-0 border-none shadow-none'>
+										<Button className='noti-close-form-btn absolute top-1 right-0'>
 											<CloseIcon />
 										</Button>
 									}
 								/>
 							) : (
-								<Button className='absolute top-1 right-0 p-0 border-none shadow-none' onClick={closeCategoryForm}>
+								<Button className='noti-close-form-btn absolute top-1 right-0' onClick={closeCategoryForm}>
 									<CloseIcon />
 								</Button>
 							)}
@@ -226,8 +222,21 @@ const CategoryForm: FC<Props> = (props) => {
 							</Row>
 						) : undefined}
 
-						<div className={'flex justify-between flex-wrap gap-2 mt-6'}>
+						<div className={cx('flex flex-wrap gap-2 mt-6', { 'justify-center': !values?.id, 'justify-between': values?.id })}>
+							{values?.id && !values?.deletedAt && (
+								<Permissions allowed={permissions}>
+									<DeleteButton
+										onConfirm={() => deleteCategory(values?.id, false)}
+										entityName={''}
+										className={'w-full 2xl:w-auto max-w-full min-w-0'}
+										type={'default'}
+										getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+										id={formFieldID(FORM.CATEGORY, DELETE_BUTTON_ID)}
+									/>
+								</Permissions>
+							)}
 							<div className='flex gap-2 flex-wrap w-full 2xl:w-auto'>
+								{values?.id && values?.level < 2 && !values?.deletedAt ? renderCreatSubcategoryButton() : undefined}
 								{!values?.deletedAt ? (
 									<Permissions allowed={permissions}>
 										<Button
@@ -238,24 +247,13 @@ const CategoryForm: FC<Props> = (props) => {
 											disabled={submitting || pristine}
 											loading={submitting}
 											icon={values?.id ? <EditIcon /> : <CreateIcon />}
+											id={formFieldID(FORM.CATEGORY, SUBMIT_BUTTON_ID)}
 										>
 											{values?.id ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:kategóriu'))}
 										</Button>
 									</Permissions>
 								) : undefined}
-								{values?.id && values?.level < 2 && !values?.deletedAt ? renderCreatSubcategoryButton() : undefined}
 							</div>
-							{values?.id && !values?.deletedAt ? (
-								<Permissions allowed={permissions}>
-									<DeleteButton
-										onConfirm={() => deleteCategory(values?.id, false)}
-										entityName={''}
-										className={'w-full 2xl:w-auto max-w-full min-w-0'}
-										type={'default'}
-										getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-									/>
-								</Permissions>
-							) : undefined}
 						</div>
 					</Row>
 				</Col>

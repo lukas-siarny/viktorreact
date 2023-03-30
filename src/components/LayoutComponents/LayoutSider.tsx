@@ -1,9 +1,10 @@
 import React, { useCallback, useRef, useEffect, useState } from 'react'
-import { Layout, Menu, Dropdown, Row } from 'antd'
+import { Layout, Menu, Dropdown, Row, MenuProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import cx from 'classnames'
+import { sortBy } from 'lodash'
 
 // assets
 import { ReactComponent as LogoIcon } from '../../assets/images/logo-simple.svg'
@@ -30,11 +31,12 @@ import { ReactComponent as ChevronRightIcon } from '../../assets/icons/chevron-r
 import { ReactComponent as CalendarIcon } from '../../assets/icons/calendar-24.svg'
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
 import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations.svg'
+import { ReactComponent as ReviewsIcon } from '../../assets/icons/reviews-icon.svg'
+import { ReactComponent as SmsUnitPricesIcon } from '../../assets/icons/sms-unit-prices.svg'
 
 // utils
-import { history } from '../../utils/history'
-import { PAGE, PERMISSION, ADMIN_PERMISSIONS } from '../../utils/enums'
-import { permitted } from '../../utils/Permissions'
+import { CYPRESS_CLASS_NAMES, PAGE, PERMISSION } from '../../utils/enums'
+import { checkPermissions } from '../../utils/Permissions'
 
 // redux
 import { logOutUser } from '../../reducers/users/userActions'
@@ -46,7 +48,6 @@ import { getLanguagePickerAsSubmenuItem } from '../LanguagePicker'
 import AvatarComponents from '../AvatarComponents'
 
 // types
-import { _Permissions } from '../../types/interfaces'
 import { setIsSiderCollapsed } from '../../reducers/helperSettings/helperSettingsActions'
 
 const { Sider } = Layout
@@ -61,9 +62,33 @@ export type LayoutSiderProps = {
 const SIDER_TRIGGER_HEIGHT = 48
 const LOGO_HEIGHT = 72
 
+const MENU_ITEMS_ORDER = [
+	PAGE.HOME, // first item for Notino and Salon view
+	// Notino view
+	PAGE.USERS,
+	PAGE.CATEGORIES,
+	PAGE.CATEGORY_PARAMETERS,
+	PAGE.COSMETICS,
+	PAGE.LANGUAGES,
+	PAGE.SUPPORT_CONTACTS,
+	PAGE.SPECIALIST_CONTACTS,
+	PAGE.REVIEWS,
+	PAGE.SMS_CREDITS,
+	PAGE.SALONS, // last item for Notino view and second item for Salon view (after homepage)
+	// Salon view
+	PAGE.BILLING_INFO,
+	PAGE.INDUSTRIES_AND_SERVICES,
+	PAGE.SERVICES_SETTINGS,
+	PAGE.CUSTOMERS,
+	PAGE.EMPLOYEES,
+	PAGE.SMS_CREDIT,
+	PAGE.CALENDAR,
+	PAGE.SALON_SETTINGS,
+	PAGE.RESERVATIONS
+]
+
 const LayoutSider = (props: LayoutSiderProps) => {
 	const { page, showNavigation = true, salonID, parentPath } = props
-
 	const collapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
@@ -73,11 +98,13 @@ const LayoutSider = (props: LayoutSiderProps) => {
 
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 	const location = useLocation()
-
 	const hasPermissions = useCallback(
-		(allowed: _Permissions = [], except: _Permissions = []) => {
-			return permitted(authUserPermissions || [], selectedSalon?.uniqPermissions, allowed, except)
+		(allowed: PERMISSION[] = [], except: PERMISSION[] = []) => {
+			const rolePermissions = authUserPermissions || []
+			const salonPermission = selectedSalon?.uniqPermissions || []
+			return checkPermissions([...rolePermissions, ...salonPermission], allowed, except)
 		},
 		[authUserPermissions, selectedSalon?.uniqPermissions]
 	)
@@ -93,145 +120,184 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			mainGroupItems.push({
 				key: PAGE.HOME,
 				label: t('loc:Prehľad'),
-				onClick: () => history.push(t('paths:index')),
-				icon: <HomeIcon />
+				onClick: () => navigate(t('paths:index')),
+				icon: <HomeIcon />,
+				id: PAGE.HOME
 			})
 
 			if (!salonID) {
 				// ADMIN VIEW
-				if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.USER_BROWSING])) {
+				if (hasPermissions([PERMISSION.USER_BROWSING])) {
 					mainGroupItems.push({
 						key: PAGE.USERS,
 						label: t('loc:Používatelia'),
-						onClick: () => history.push(t('paths:users')),
-						icon: <UsersIcon />
+						onClick: () => navigate(t('paths:users')),
+						icon: <UsersIcon />,
+						id: PAGE.USERS
 					})
 				}
-				if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.ENUM_EDIT])) {
+				if (hasPermissions([PERMISSION.ENUM_EDIT])) {
 					mainGroupItems.push(
 						{
 							key: PAGE.CATEGORIES,
 							label: t('loc:Kategórie'),
-							onClick: () => history.push(t('paths:categories')),
-							icon: <CategoryIcon />
+							onClick: () => navigate(t('paths:categories')),
+							icon: <CategoryIcon />,
+							id: PAGE.CATEGORIES
 						},
 						{
 							key: PAGE.CATEGORY_PARAMETERS,
 							label: t('loc:Parametre'),
-							onClick: () => history.push(t('paths:category-parameters')),
-							icon: <ParametersIcon />
+							onClick: () => navigate(t('paths:category-parameters')),
+							icon: <ParametersIcon />,
+							id: PAGE.CATEGORY_PARAMETERS
 						},
 						{
 							key: PAGE.COSMETICS,
 							label: t('loc:Kozmetika'),
-							onClick: () => history.push(t('paths:cosmetics')),
-							icon: <CosmeticIcon />
+							onClick: () => navigate(t('paths:cosmetics')),
+							icon: <CosmeticIcon />,
+							id: PAGE.COSMETICS
 						},
 						{
 							key: PAGE.LANGUAGES,
 							label: t('loc:Jazyky'),
-							onClick: () => history.push(t('paths:languages-in-salons')),
-							icon: <LanguagesIcon />
+							onClick: () => navigate(t('paths:languages-in-salons')),
+							icon: <LanguagesIcon />,
+							id: PAGE.LANGUAGES
 						},
 						{
 							key: PAGE.SUPPORT_CONTACTS,
 							label: t('loc:Podpora'),
-							onClick: () => history.push(t('paths:support-contacts')),
-							icon: <HelpIcon />
+							onClick: () => navigate(t('paths:support-contacts')),
+							icon: <HelpIcon />,
+							id: PAGE.SUPPORT_CONTACTS
 						},
 						{
 							key: PAGE.SPECIALIST_CONTACTS,
 							label: t('loc:Špecialisti'),
-							onClick: () => history.push(t('paths:specialist-contacts')),
-							icon: <SpecialistIcon />
+							onClick: () => navigate(t('paths:specialist-contacts')),
+							icon: <SpecialistIcon />,
+							id: PAGE.SPECIALIST_CONTACTS
+						},
+						{
+							key: PAGE.REVIEWS,
+							label: t('loc:Recenzie'),
+							onClick: () => navigate(t('paths:reviews')),
+							icon: <ReviewsIcon />,
+							id: PAGE.REVIEWS
 						}
 					)
 				}
-				if (hasPermissions([...ADMIN_PERMISSIONS])) {
+				if (hasPermissions([PERMISSION.SMS_UNIT_PRICE_EDIT])) {
+					mainGroupItems.push({
+						key: PAGE.SMS_CREDITS,
+						label: t('loc:SMS kredity'),
+						onClick: () => navigate(t('paths:sms-credits')),
+						icon: <SmsUnitPricesIcon />,
+						id: PAGE.SMS_CREDITS
+					})
+				}
+				if (hasPermissions([PERMISSION.NOTINO])) {
 					mainGroupItems.push({
 						key: PAGE.SALONS,
 						label: t('loc:Salóny'),
-						onClick: () => history.push(t('paths:salons')),
-						icon: <SalonIcon />
+						onClick: () => navigate(t('paths:salons')),
+						icon: <SalonIcon />,
+						id: PAGE.SALONS
 					})
 				}
 			}
 
 			if (salonID) {
 				// SALON VIEW
-				if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.PARTNER])) {
+				if (hasPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER])) {
 					mainGroupItems.push(
 						{
 							key: PAGE.SALONS,
 							label: t('loc:Detail salónu'),
-							onClick: () => history.push(parentPath),
-							icon: <SalonIcon />
+							onClick: () => navigate(parentPath as string),
+							icon: <SalonIcon />,
+							id: PAGE.SALONS
 						},
 						{
 							key: PAGE.BILLING_INFO,
 							label: t('loc:Fakturačné údaje'),
-							onClick: () => history.push(getPath(t('paths:billing-info'))),
-							icon: <InvoiceIcon />
+							onClick: () => navigate(getPath(t('paths:billing-info'))),
+							icon: <InvoiceIcon />,
+							id: PAGE.BILLING_INFO
 						},
 						{
 							key: PAGE.INDUSTRIES_AND_SERVICES,
 							label: t('loc:Odvetvia a služby'),
-							onClick: () => history.push(getPath(t('paths:industries-and-services'))),
-							icon: <IndustiresIcon />
+							onClick: () => navigate(getPath(t('paths:industries-and-services'))),
+							icon: <IndustiresIcon />,
+							id: PAGE.INDUSTRIES_AND_SERVICES
 						},
 						{
 							key: PAGE.SERVICES_SETTINGS,
 							label: t('loc:Nastavenie služieb'),
-							onClick: () => history.push(getPath(t('paths:services-settings'))),
-							icon: <ServiceIcon className={'text-black'} />
+							onClick: () => navigate(getPath(t('paths:services-settings'))),
+							icon: <ServiceIcon className={'text-black'} />,
+							id: PAGE.SERVICES_SETTINGS
 						},
 						{
 							key: PAGE.CUSTOMERS,
 							label: t('loc:Zákazníci'),
-							onClick: () => history.push(getPath(t('paths:customers'))),
-							icon: <CustomerIcon className={'text-black'} />
+							onClick: () => navigate(getPath(t('paths:customers'))),
+							icon: <CustomerIcon className={'text-black'} />,
+							id: PAGE.CUSTOMERS
 						},
 						{
 							key: PAGE.EMPLOYEES,
 							label: t('loc:Zamestnanci'),
-							onClick: () => history.push(getPath(t('paths:employees'))),
-							icon: <EmployeesIcon />
-						}
-					)
-				}
-
-				// NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut
-				if (hasPermissions(ADMIN_PERMISSIONS) || (hasPermissions([PERMISSION.PARTNER]) && selectedSalon?.settings.enabledReservations)) {
-					mainGroupItems.push(
+							onClick: () => navigate(getPath(t('paths:employees'))),
+							icon: <EmployeesIcon />,
+							id: PAGE.EMPLOYEES
+						},
 						{
 							key: PAGE.CALENDAR,
 							label: t('loc:Kalendár'),
-							onClick: () => history.push(getPath(t('paths:calendar'))),
-							icon: <CalendarIcon />
+							onClick: () => navigate(getPath(t('paths:calendar'))),
+							icon: <CalendarIcon />,
+							id: PAGE.CALENDAR
 						},
 						{
 							key: PAGE.SALON_SETTINGS,
-							label: t('loc:Nastavenia salónu'),
-							onClick: () => history.push(getPath(t('paths:salon-settings'))),
-							icon: <SettingIcon />
+							label: t('loc:Nastavenia rezervácií'),
+							onClick: () => navigate(getPath(t('paths:reservations-settings'))),
+							icon: <SettingIcon />,
+							id: PAGE.SALON_SETTINGS
 						},
 						{
 							key: PAGE.RESERVATIONS,
 							label: t('loc:Rezervácie'),
-							onClick: () => history.push(getPath(t('paths:reservations'))),
-							icon: <ReservationsIcon />
+							onClick: () => navigate(getPath(t('paths:reservations'))),
+							icon: <ReservationsIcon />,
+							id: PAGE.RESERVATIONS
 						}
 					)
+				}
+
+				if (hasPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET])) {
+					mainGroupItems.push({
+						key: PAGE.SMS_CREDIT,
+						label: t('loc:SMS kredit'),
+						onClick: () => navigate(getPath(t('paths:sms-credit'))),
+						icon: <SmsUnitPricesIcon />,
+						id: PAGE.SMS_CREDIT
+					})
 				}
 			}
 		}
 
 		// account menu items
-		const myAccontMenuItems = [
+		const myAccontMenuItems: MenuProps['items'] = [
 			{
 				key: 'myProfile',
+				className: CYPRESS_CLASS_NAMES.MY_ACCOUNT_BUTTON,
 				label: t('loc:Môj profil'),
-				onClick: () => history.push(t('paths:my-account')),
+				onClick: () => navigate(t('paths:my-account')),
 				icon: <ProfileIcon />
 			},
 			{
@@ -241,14 +307,14 @@ const LayoutSider = (props: LayoutSiderProps) => {
 					// reset support contact data to empty in case there are some stored in redux
 					// otherwise language detection would not work correctly in t('paths:contact') page
 					dispatch(getSupportContact())
-					history.push({ pathname: t('paths:contact'), state: { from: location.pathname } })
+					navigate(t('paths:contact'), { state: { from: location.pathname } })
 				},
 				icon: <HelpIcon />
 			},
 			getLanguagePickerAsSubmenuItem(dispatch),
 			{
 				key: 'logOut',
-				id: 'logOut',
+				className: CYPRESS_CLASS_NAMES.LOGOUT_BUTTON,
 				label: t('loc:Odhlásiť'),
 				onClick: () => dispatch(logOutUser()),
 				icon: <LogOutIcon />
@@ -278,20 +344,18 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						type: 'group',
 						className: 'overflow-y-auto',
 						style: { height: `calc(100% - ${SIDER_TRIGGER_HEIGHT}px` },
-						children: mainGroupItems
+						children: sortBy(mainGroupItems, (item) => MENU_ITEMS_ORDER.indexOf(item.key))
 					},
 					{
 						key: 'user-account',
 						className: 'noti-account-menu-item',
 						label: (
 							<Dropdown
-								overlay={
-									<Menu
-										className='noti-sider-menu'
-										getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}
-										items={myAccontMenuItems}
-									/>
-								}
+								menu={{
+									className: 'noti-sider-menu',
+									getPopupContainer: () => document.querySelector('#noti-sider-wrapper') as HTMLElement,
+									items: myAccontMenuItems
+								}}
 								placement='topLeft'
 								trigger={['click']}
 								overlayStyle={{ minWidth: 214 }}
@@ -303,11 +367,11 @@ const LayoutSider = (props: LayoutSiderProps) => {
 										: undefined
 								}
 								getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}
-								onVisibleChange={setIsDropdownOpen}
+								onOpenChange={setIsDropdownOpen}
 							>
 								<div role='button' className='cursor-pointer' tabIndex={-1} onClick={(e) => e.preventDefault()} onKeyPress={(e) => e.preventDefault()}>
 									<Row className='flex items-center' justify='space-between'>
-										<Row className='noti-my-account'>
+										<Row className={CYPRESS_CLASS_NAMES.MY_ACCOUNT}>
 											<div className='truncate item-label flex items-center'>{t('loc:Moje konto')}</div>
 										</Row>
 
@@ -355,9 +419,15 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			}}
 		>
 			<div id={'noti-sider-wrapper'} className='flex flex-col h-full'>
-				<Link className='flex justify-center pt-4 pb-6' to={`${t('paths:index')}`} style={{ height: LOGO_HEIGHT }}>
-					{collapsed ? <LogoCollapsedIcon className='h-8' /> : <LogoIcon className='h-8' />}
-				</Link>
+				{collapsed ? (
+					<Link className='flex justify-center pt-4 pb-6' to={`${t('paths:index')}`} style={{ height: LOGO_HEIGHT }}>
+						<LogoCollapsedIcon className='h-8' />
+					</Link>
+				) : (
+					<Link className='flex justify-center items-center' to={`${t('paths:index')}`} style={{ height: LOGO_HEIGHT }}>
+						<LogoIcon style={{ padding: 10 }} />
+					</Link>
+				)}
 				<Menu
 					mode='inline'
 					className='px-2 flex flex-col flex-grow noti-sider-menu'

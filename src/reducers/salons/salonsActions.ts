@@ -28,9 +28,9 @@ interface IGetSalonHistory {
 export interface IGetSalonsQueryParams extends IQueryParams {
 	categoryFirstLevelIDs?: (string | null)[] | null
 	statuses_all?: boolean | null
-	statuses_published?: (string | null)[] | SALON_FILTER_STATES[] | null
+	statuses_published?: string | SALON_FILTER_STATES | null
 	salonState?: string | null
-	statuses_changes?: (string | null)[] | SALON_FILTER_STATES[] | null
+	statuses_changes?: string | SALON_FILTER_STATES | null
 	countryCode?: string | null
 	createType?: string | null
 	lastUpdatedAtFrom?: string | null
@@ -42,8 +42,8 @@ export interface IGetSalonsQueryParams extends IQueryParams {
 }
 
 export interface IGetSalonsHistoryQueryParams extends IQueryParams {
-	dateFrom: string
-	dateTo: string
+	dateFrom: string | null
+	dateTo: string | null
 	salonID: string
 }
 
@@ -112,7 +112,7 @@ interface IGetRejectedSuggestions {
 }
 
 export const getSalons =
-	(queryParams: IGetSalonsQueryParams): ThunkResult<Promise<ISalonsPayload>> =>
+	(queryParams: any): ThunkResult<Promise<ISalonsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISalonsPayload
 
@@ -128,7 +128,12 @@ export const getSalons =
 		}
 
 		if (!queryParams.statuses_all) {
-			statuses = [...statuses, ...(queryParams.statuses_published || []), ...(queryParams.statuses_changes || [])]
+			if (queryParams.statuses_published) {
+				statuses.push(queryParams.statuses_published)
+			}
+			if (queryParams.statuses_changes) {
+				statuses.push(queryParams.statuses_changes)
+			}
 		}
 
 		if (queryParams.hasSetOpeningHours === SALON_FILTER_OPENING_HOURS.SET) {
@@ -309,6 +314,7 @@ export const getRejectedSuggestions =
 				const { address } = suggestion.salon
 				const formattedAddress = `${address?.city}${address?.street ? `, ${address.street}` : ''}`
 				return {
+					id: suggestion.salon.id,
 					key: suggestion.salon.id,
 					salonID: suggestion.salon.id,
 					salonName: suggestion.salon.name ?? '-',

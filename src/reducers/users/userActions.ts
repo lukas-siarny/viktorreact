@@ -1,24 +1,25 @@
 /* eslint-disable import/no-cycle */
 import i18next from 'i18next'
 import decode from 'jwt-decode'
-import { get, map, flatten, uniq } from 'lodash'
+import { get, map, flatten, uniq, includes } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
-import { IJwtPayload, ISelectOptionItem, IQueryParams, ISearchable, IAuthUserPayload } from '../../types/interfaces'
+import { IJwtPayload, ISelectOptionItem, IQueryParams, ISearchable, IAuthUserPayload, IUserPayload } from '../../types/interfaces'
 import { AUTH_USER, USER, USERS, PENDING_INVITES, NOTINO_USERS } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
 
 // utils
 import { setAccessToken, clearAccessToken, clearRefreshToken, isLoggedIn, hasRefreshToken, getRefreshToken, setRefreshToken, getAccessToken } from '../../utils/auth'
-import { history } from '../../utils/history'
 import { getReq, postReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
+import Navigator from '../../utils/navigation'
 
 // actions
 import { setSelectionOptions } from '../selectedSalon/selectedSalonActions'
 import { setSelectedCountry } from '../selectedCountry/selectedCountryActions'
+import { NOT_ALLOWED_REDIRECT_PATHS } from '../../utils/enums'
 
 export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers | IGetPendingInvites | IGetNotinoUsers
 
@@ -51,10 +52,6 @@ export interface IGetUsersQueryParams extends IQueryParams {
 	roleID?: string | undefined | null
 }
 
-export interface IUserPayload {
-	data: Paths.GetApiB2BAdminUsersUserId.Responses.$200 | null
-}
-
 export interface IUsersPayload extends ISearchable<Paths.GetApiB2BAdminUsers.Responses.$200> {}
 
 export interface INotinoUsersPayload extends ISearchable<Paths.GetApiB2BAdminUsersNotinoUsers.Responses.$200> {}
@@ -67,6 +64,7 @@ export const processAuthorizationResult =
 	(result: Paths.PostApiB2BAdminAuthLogin.Responses.$200, redirectPath = i18next.t('paths:index')): ThunkResult<void> =>
 	async (dispatch) => {
 		let salons: Paths.GetApiB2BAdminUsersUserId.Responses.$200['user']['salons'] = []
+		const allowRedirectPath = includes(NOT_ALLOWED_REDIRECT_PATHS, redirectPath) ? i18next.t('paths:index') : redirectPath
 		try {
 			dispatch({ type: AUTH_USER.AUTH_USER_LOAD_START })
 			setAccessToken(result.accessToken)
@@ -82,7 +80,7 @@ export const processAuthorizationResult =
 				}
 			}
 
-			salons = result.user.salons
+			salons = result.user.salons as any // TODO: zistit preco hadze chybu sa sa menilo
 
 			dispatch({
 				type: AUTH_USER.AUTH_USER_LOAD_DONE,
@@ -92,10 +90,10 @@ export const processAuthorizationResult =
 			// set selected country code based on assignedCountryCode or phonePrefixCode
 			dispatch(setSelectedCountry(result.user?.assignedCountryCode || result.user?.phonePrefixCountryCode))
 
-			history.push(redirectPath)
+			Navigator.navigate(allowRedirectPath)
 		} catch (e) {
 			dispatch({ type: AUTH_USER.AUTH_USER_LOAD_FAIL })
-			history.push(i18next.t('paths:login'))
+			Navigator.navigate(i18next.t('paths:login'))
 			// eslint-disable-next-line no-console
 			console.log(e)
 		} finally {
@@ -117,7 +115,7 @@ export const getCurrentUser = (): ThunkResult<Promise<IAuthUserPayload>> => asyn
 		const { data } = await getReq('/api/b2b/admin/users/{userID}', { userID: jwtPayload.uid })
 
 		// parse permissions from role
-		const rolePermissions = flatten(map(get(data, 'user.roles'), (role) => get(role, 'permissions')))
+		const rolePermissions: any = flatten(map(get(data, 'user.roles'), (role) => get(role, 'permissions')))
 		const uniqPermissions = uniq(map([...rolePermissions], 'name'))
 
 		payload = {
@@ -158,7 +156,7 @@ export const logOutUser =
 			})
 
 			if (!skipRedirect) {
-				history.push(i18next.t('paths:login'))
+				Navigator.navigate(i18next.t('paths:login'))
 			}
 		}
 	}
@@ -178,7 +176,7 @@ export const refreshToken = (): ThunkResult<Promise<void>> => async (dispatch) =
 	}
 }
 
-export const getUserAccountDetails =
+export const getUser =
 	(userID: string): ThunkResult<Promise<IUserPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IUserPayload

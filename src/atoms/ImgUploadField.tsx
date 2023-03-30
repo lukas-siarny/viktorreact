@@ -17,7 +17,7 @@ import cx from 'classnames'
 import { uploadImage } from '../utils/request'
 import { formFieldID, getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam, splitArrayByCondition } from '../utils/helper'
 import showNotifications from '../utils/tsxHelpers'
-import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, IMAGE_UPLOADING_PROP } from '../utils/enums'
+import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, IMAGE_UPLOADING_PROP, STRINGS } from '../utils/enums'
 
 // assets
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
@@ -157,7 +157,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 	const renderGalleryImage = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: { download: any; preview: any; remove: any }) => (
 		<>
 			<div className={'ant-upload-list-item ant-upload-list-item-done ant-upload-list-item-list-type-picture-card p-0'}>
-				<div className={'ant-upload-list-item-info flex items-center justify-center'}>
+				<div className={'ant-upload-list-item-info flex items-center justify-center overflow-hidden'}>
 					{file.type === 'application/pdf' || !!isFilePDF(file.url) ? (
 						<div className={'flex items-center justify-center'}>
 							<PdfIcon />
@@ -171,7 +171,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 					<div className={'w-full flex items-center h-full'}>
 						<Popconfirm
 							placement={'top'}
-							title={t('loc:Naozaj chcete odstrániť súbor?')}
+							title={STRINGS(t).areYouSureDelete(t('loc:súbor'))}
 							okButtonProps={{
 								type: 'default',
 								className: 'noti-btn'
@@ -188,7 +188,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 							<button
 								title='Remove file'
 								type='button'
-								className='ant-btn ant-btn-text ant-btn-sm ant-btn-icon-only ant-upload-list-item-card-actions-btn flex items-center justify-center fixed top-1 right-1 z-50'
+								className='noti-remove-img-button ant-btn ant-btn-text ant-btn-sm ant-btn-icon-only ant-upload-list-item-card-actions-btn flex items-center justify-center fixed top-1 right-1 z-50 p-0 border-none bg-transparent'
 							>
 								<span role='img' aria-label='delete' tabIndex={-1} className='anticon anticon-delete w-full h-full'>
 									<RemoveIcon className='remove-icon-image' width={18} />
@@ -301,7 +301,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 				}
 				// itemRender={renderGalleryImage}
 				fileList={input.value || []}
-				onPreview={(file) => setPreviewUrl({ url: file.url || get(imagesUrls, `current.[${file.uid}].url`), type: file.type || isFilePDF(file.url) })}
+				onPreview={(file) => setPreviewUrl({ url: file.url || get(imagesUrls, `current.[${file.uid}].url`), type: file.type || isFilePDF(file.url) } as any)}
 				maxCount={maxCount}
 				showUploadList={showUploadList}
 				beforeUpload={(file, fileList) => {
@@ -340,47 +340,49 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 			validateStatus={touched && error ? 'error' : undefined}
 			tooltip={tooltip}
 		>
-			{staticMode && !input.value && '-'}
-			{uploader}
-			{!!previewUrl && (
-				<>
-					<div className={cx('download', { hidden: !previewUrl, fixed: previewUrl })}>
-						<Button
-							className={'w-full h-full m-0 p-0'}
-							href={`${images[previewImgIndex]?.url}?response-content-disposition=attachment`}
-							target='_blank'
-							rel='noopener noreferrer'
-							type={'link'}
-							htmlType={'button'}
-							title='Download file'
-							download
-						>
-							<span role='img' aria-label='download' className='w-full h-full flex items-center justify-center'>
-								<DownloadIcon width={24} />
-							</span>
-						</Button>
-					</div>
-					<div className={'hidden'}>
-						<Image.PreviewGroup
-							preview={{
-								visible: !!previewUrl && (previewUrl?.type !== 'application/pdf' || !isFilePDF(previewUrl?.url)),
-								onVisibleChange: () => setPreviewUrl(null),
-								current: images?.findIndex((image: any) => image?.url === previewUrl?.url),
-								countRender: (current: number, total: number) => {
-									// NOTE: Antd pre readable format indexuje current od 1 a nie 0
-									setPreviewImgIndex(current - 1)
-									return `${current}/${total}`
-								}
-							}}
-						>
-							{map(images, (image) => (
-								<Image key={image.url} src={image.url} fallback={image.thumbUrl} />
-							))}
-						</Image.PreviewGroup>
-					</div>
-				</>
-			)}
-			{openPdf()}
+			<>
+				{staticMode && !input.value && '-'}
+				{uploader}
+				{!!previewUrl && (
+					<>
+						<div className={cx('download', { hidden: !previewUrl, fixed: previewUrl })}>
+							<Button
+								className={'w-full h-full m-0 p-0'}
+								href={`${images[previewImgIndex]?.url}?response-content-disposition=attachment`}
+								target='_blank'
+								rel='noopener noreferrer'
+								type={'link'}
+								htmlType={'button'}
+								title='Download file'
+								download
+							>
+								<span role='img' aria-label='download' className='w-full h-full flex items-center justify-center'>
+									<DownloadIcon width={24} />
+								</span>
+							</Button>
+						</div>
+						<div className={'hidden'}>
+							<Image.PreviewGroup
+								preview={{
+									visible: !!previewUrl && (previewUrl?.type !== 'application/pdf' || !isFilePDF(previewUrl?.url)),
+									onVisibleChange: () => setPreviewUrl(null),
+									current: images?.findIndex((image: any) => image?.url === previewUrl?.url),
+									countRender: (current: number, total: number) => {
+										// NOTE: Antd pre readable format indexuje current od 1 a nie 0
+										setPreviewImgIndex(current - 1)
+										return `${current}/${total}`
+									}
+								}}
+							>
+								{map(images, (image) => (
+									<Image key={image.url} src={image.url} fallback={image.thumbUrl} />
+								))}
+							</Image.PreviewGroup>
+						</div>
+					</>
+				)}
+				{openPdf()}
+			</>
 		</Item>
 	)
 }

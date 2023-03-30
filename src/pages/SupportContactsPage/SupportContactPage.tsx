@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Row, Spin } from 'antd'
 import { initialize, isPristine, submit } from 'redux-form'
@@ -24,11 +24,11 @@ import {
 } from '../../components/OpeningHours/OpeningHoursUtils'
 
 // enums
-import { ENUMERATIONS_KEYS, FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS } from '../../utils/enums'
+import { DELETE_BUTTON_ID, ENUMERATIONS_KEYS, FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS, SUBMIT_BUTTON_ID } from '../../utils/enums'
 
 // types
 import { Paths } from '../../types/api'
-import { IBreadcrumbs, OpeningHours, ISupportContactForm, IComputedMatch } from '../../types/interfaces'
+import { IBreadcrumbs, OpeningHours, ISupportContactForm } from '../../types/interfaces'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -36,9 +36,8 @@ import { getSupportContact, getSupportContacts } from '../../reducers/supportCon
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { getPrefixCountryCode } from '../../utils/helper'
+import { formFieldID, getPrefixCountryCode } from '../../utils/helper'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
@@ -49,19 +48,16 @@ import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
 type SupportContactPatch = Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.RequestBody
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
+const permissions: PERMISSION[] = [PERMISSION.ENUM_EDIT]
 
-type Props = {
-	computedMatch: IComputedMatch<{
-		supportContactID: string
-	}>
-}
+type Props = {}
 
-const SupportContactPage: FC<Props> = (props) => {
+const SupportContactPage: FC<Props> = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
-	const { supportContactID } = props.computedMatch.params
+	const { supportContactID } = useParams<{ supportContactID: string }>()
 
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
@@ -91,10 +87,8 @@ const SupportContactPage: FC<Props> = (props) => {
 			const { data } = await dispatch(getSupportContact(supportContactID))
 
 			if (!data?.supportContact?.id) {
-				history.push('/404')
-			}
-
-			if (data) {
+				navigate('/404')
+			} else {
 				// init data for existing supportContact
 				const mappedOpeningHours = mapRawOpeningHoursToComponentOpeningHours(data?.supportContact?.openingHours)
 				const openOverWeekend: boolean = checkWeekend(mappedOpeningHours)
@@ -177,7 +171,7 @@ const SupportContactPage: FC<Props> = (props) => {
 				const result = await postReq('/api/b2b/admin/enums/support-contacts/', undefined, supportContactData as SupportContactPatch)
 				if (result?.data?.supportContact?.id) {
 					// select new supportContact
-					history.push(t('paths:support-contacts/{{supportContactID}}', { supportContactID: result.data.supportContact.id }))
+					navigate(t('paths:support-contacts/{{supportContactID}}', { supportContactID: result.data.supportContact.id }))
 				}
 			}
 			dispatch(initialize(FORM.SUPPORT_CONTACT, data))
@@ -216,10 +210,16 @@ const SupportContactPage: FC<Props> = (props) => {
 		}
 		try {
 			setIsRemoving(true)
-			await deleteReq('/api/b2b/admin/enums/support-contacts/{supportContactID}', { supportContactID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			await deleteReq(
+				'/api/b2b/admin/enums/support-contacts/{supportContactID}',
+				{ supportContactID: supportContactID as string },
+				undefined,
+				NOTIFICATION_TYPE.NOTIFICATION,
+				true
+			)
 			// clear redux
 			dispatch(getSupportContact())
-			history.push(t('paths:support-contacts'))
+			navigate(t('paths:support-contacts'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -254,7 +254,7 @@ const SupportContactPage: FC<Props> = (props) => {
 						/>
 					)}
 					<SupportContactForm onSubmit={handleSubmit} supportContactID={supportContactID} disabledForm={!supportContactExists && hasEveryCountrSupportContact} />
-					<div className={'content-footer'}>
+					<div className={'content-footer'} id={'content-footer-container'}>
 						<Row className={cx('flex flex-col gap-2 md:flex-row', { 'md:justify-between': supportContactExists, 'md:justify-center': !supportContactExists })}>
 							{supportContactExists && (
 								<DeleteButton
@@ -263,6 +263,7 @@ const SupportContactPage: FC<Props> = (props) => {
 									onConfirm={deleteSupportContact}
 									entityName={t('loc:podporu')}
 									type={'default'}
+									id={formFieldID(FORM.SUPPORT_CONTACT, DELETE_BUTTON_ID)}
 									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 								/>
 							)}
@@ -272,6 +273,7 @@ const SupportContactPage: FC<Props> = (props) => {
 									<Button
 										type={'primary'}
 										size={'middle'}
+										id={formFieldID(FORM.SUPPORT_CONTACT, SUBMIT_BUTTON_ID)}
 										className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 										htmlType={'submit'}
 										icon={supportContactExists ? <EditIcon /> : <CreateIcon />}

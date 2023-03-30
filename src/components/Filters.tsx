@@ -1,7 +1,8 @@
 import React, { useState, ReactNode, useCallback } from 'react'
 import { Collapse, Button, Badge, Row, Col } from 'antd'
 import { ReactComponent as FilterIcon } from '../assets/icons/filter-icon.svg'
-import { ROW_GUTTER_X_DEFAULT } from '../utils/enums'
+import { FILTER_BUTTON_ID, FORM, ROW_GUTTER_X_DEFAULT } from '../utils/enums'
+import { formFieldID } from '../utils/helper'
 
 const { Panel } = Collapse
 
@@ -12,10 +13,11 @@ type Props = {
 	customContent?: ReactNode | JSX.Element
 	customSearchContent?: ReactNode
 	disableFilter?: boolean
+	form?: FORM
 }
 
 const Filters = (props: Props) => {
-	const { children, activeFilters, search, customContent, customSearchContent, disableFilter } = props
+	const { children, activeFilters, search, customContent, customSearchContent, disableFilter, form } = props
 	const [visible, setVisible] = useState<undefined | string>(undefined)
 
 	const onClick = useCallback(() => {
@@ -24,7 +26,7 @@ const Filters = (props: Props) => {
 	}, [visible])
 
 	return (search || customSearchContent) && (customContent || children) ? (
-		<Collapse activeKey={visible} ghost className='ghost-filters'>
+		<Collapse collapsible={'disabled'} activeKey={visible} ghost className='ghost-filters'>
 			<Panel
 				header={
 					<Row justify={'space-between'} gutter={ROW_GUTTER_X_DEFAULT}>
@@ -36,12 +38,13 @@ const Filters = (props: Props) => {
 							<Row gutter={ROW_GUTTER_X_DEFAULT} justify={'end'} align={'middle'}>
 								{children && (
 									<Col>
-										<Badge count={activeFilters} style={{ top: '8px', right: '10px', background: '#DC0069' }}>
+										<Badge count={activeFilters} className={'mr-1'} style={{ top: '8px', right: '10px', background: '#DC0069' }}>
 											<Button
+												id={formFieldID(form, FILTER_BUTTON_ID)}
 												onClick={onClick}
 												htmlType='button'
 												type='link'
-												className={'mr-2 w-full h-full flex items-center'}
+												className={'noti-filter-button w-full h-full px-1 flex items-center'}
 												disabled={disableFilter}
 												icon={<FilterIcon className={'text-gray-600 hover:text-gray-900'} />}
 											/>

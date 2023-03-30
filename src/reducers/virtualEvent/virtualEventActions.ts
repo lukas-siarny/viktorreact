@@ -7,7 +7,7 @@ import { destroy } from 'redux-form'
 import { IResetStore } from '../generalTypes'
 import VIRTUAL_EVENT from './virtualEventTypes'
 import { ThunkResult } from '../index'
-import { ICalendarEventForm, ICalendarReservationForm } from '../../types/interfaces'
+import { ICalendarEventForm, ICalendarImportedReservationForm, ICalendarReservationForm } from '../../types/interfaces'
 
 // utils
 import { CALENDAR_EVENT_TYPE, HANDLE_CALENDAR_ACTIONS, HANDLE_CALENDAR_FORMS, NEW_ID_PREFIX, CALENDAR_DATE_FORMAT } from '../../utils/enums'
@@ -39,7 +39,7 @@ export const setCalendarApi = (api?: CalendarApi) => {
 	calendarApi = api
 }
 
-export const setCalendarDateHandler = (handler: (newDate: string) => void) => {
+export const setCalendarDateHandler = (handler: (newDate: string, monthViewFullRange?: boolean) => void) => {
 	changeCalendarDate = handler
 }
 
@@ -47,7 +47,7 @@ export const clearEvent = (): ThunkResult<void> => (dispatch, getState) => {
 	// clear store
 	dispatch({ type: VIRTUAL_EVENT.VIRTUAL_EVENT_CLEAR, payload: { data: null } })
 	// destroy calendar forms
-	Object.keys(HANDLE_CALENDAR_FORMS).forEach((key) => dispatch(destroy(key)))
+	HANDLE_CALENDAR_FORMS.forEach((form) => dispatch(destroy(form)))
 	// remove event from Calendar API
 	if (calendarApi) {
 		const eventId = getState().virtualEvent.virtualEvent.data?.id
@@ -76,7 +76,7 @@ export const addOrUpdateEvent =
 			return
 		}
 
-		let formData: Partial<ICalendarEventForm & ICalendarReservationForm> | undefined
+		let formData: Partial<ICalendarEventForm & ICalendarReservationForm & ICalendarImportedReservationForm> | undefined
 
 		try {
 			formData = getState().form[formName].values
@@ -88,7 +88,7 @@ export const addOrUpdateEvent =
 		if (!formData) {
 			return
 		}
-		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID, note, noteFromB2CCustomer, reservationData } = formData
+		const { date, timeFrom, timeTo, employee, eventType, customer, service, calendarBulkEventID, reservationData, note, noteFromB2CCustomer, isImported } = formData
 
 		if (date && timeFrom && employee && eventType) {
 			let { eventId } = formData
@@ -106,7 +106,7 @@ export const addOrUpdateEvent =
 			const newDate = dayjs(date)
 
 			if (!calendarViewDate.isSame(newDate) && changeCalendarDate) {
-				changeCalendarDate(date)
+				changeCalendarDate(date, true)
 			}
 
 			const eventInput: EventInput = {
@@ -158,10 +158,10 @@ export const addOrUpdateEvent =
 						: undefined,
 					note,
 					noteFromB2CCustomer,
-					reservationData
+					reservationData,
+					isImported
 				}
 			}
-
 			const payload: IVirtualEventPayload = {
 				data: {
 					id: eventId,
@@ -170,7 +170,6 @@ export const addOrUpdateEvent =
 					isNew: eventId.startsWith(NEW_ID_PREFIX)
 				}
 			}
-
 			dispatch({ type: VIRTUAL_EVENT.VIRTUAL_EVENT_CHANGE, payload })
 		}
 	}

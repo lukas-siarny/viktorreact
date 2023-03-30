@@ -7,6 +7,7 @@ import { isEmpty } from 'lodash'
 import cx from 'classnames'
 
 // atoms
+import { useNavigate } from 'react-router-dom'
 import SelectField from '../../../atoms/SelectField'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SwitchField from '../../../atoms/SwitchField'
@@ -21,10 +22,9 @@ import ServiceBreadcrumbs from './ServiceBreadcrumbs'
 import validateServiceForm from './validateServiceForm'
 
 // utils
-import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
-import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, SALON_PERMISSION, STRINGS } from '../../../utils/enums'
+import { formFieldID, showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { DELETE_BUTTON_ID, FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
-import { history } from '../../../utils/history'
 import searchWrapper from '../../../utils/filters'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
@@ -56,10 +56,10 @@ const ServiceForm: FC<Props> = (props) => {
 	const { salonID, serviceID, handleSubmit, pristine, addEmployee, backUrl, setVisibleServiceEditModal } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
 	const formValues = form?.values as IServiceForm
-	const employees = useSelector((state: RootState) => state.employees.employees)
 	const service = useSelector((state: RootState) => state.service.service)
 	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading)
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
@@ -80,7 +80,7 @@ const ServiceForm: FC<Props> = (props) => {
 			setIsRemoving(true)
 			await deleteReq(`/api/b2b/admin/services/{serviceID}`, { serviceID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			setIsRemoving(false)
-			history.push(backUrl)
+			navigate(backUrl as string)
 		} catch (e) {
 			setIsRemoving(false)
 		}
@@ -88,14 +88,14 @@ const ServiceForm: FC<Props> = (props) => {
 
 	const searchEmployees = useCallback(
 		async (search: string, page: number) => {
-			return searchWrapper(dispatch, { page, search, salonID } as any, FILTER_ENTITY.EMPLOYEE)
+			return searchWrapper(dispatch, { page, search, salonID } as any, FILTER_ENTITY.EMPLOYEE, undefined, true)
 		},
 		[dispatch, salonID]
 	)
 	return (
 		<Permissions
-			allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
-			render={(hasPermission) => (
+			allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_UPDATE]}
+			render={(hasPermission, { openForbiddenModal }) => (
 				<div className='content-body small'>
 					<Spin spinning={isLoading}>
 						<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
@@ -191,7 +191,14 @@ const ServiceForm: FC<Props> = (props) => {
 												</Row>
 												<Row gutter={8} align='top' justify='center'>
 													<Col className={'mt-5'} span={8}>
-														<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={'variablePrice'} size={'middle'} />
+														<Field
+															disabled={!hasPermission}
+															className={'mb-0'}
+															component={SwitchField}
+															label={t('loc:Variabilná cena')}
+															name={'variablePrice'}
+															size={'middle'}
+														/>
 													</Col>
 													<Col span={variablePrice ? 8 : 16}>
 														<Field
@@ -236,51 +243,48 @@ const ServiceForm: FC<Props> = (props) => {
 								</div>
 								<div>
 									<>
-										{/* NOT-3601: docasna implementacia, po rozhodnuti o zmene, treba prejst vsetky commenty s tymto oznacenim a revertnut */}
-										{salon.data?.settings.enabledReservations && (
-											<div>
-												<h3 className={'mb-0 mt-0 flex items-center'}>
-													<GlobeIcon className={'text-notino-black mr-2'} />
-													{t('loc:Online rezervácia')}
-												</h3>
-												<Divider className={'mb-3 mt-3'} />
-												<div className={'text-xs text-notino-grayDark mb-4'}>
-													{t('loc:Zapnutím rezervačného systému sa aktivuje kalendár na spravovanie rezervácií a zmien zamestnancov vo vašom salóne.')}
-												</div>
-												<FormSection name={'settings'}>
-													<Row gutter={[8, 8]}>
-														<Col span={12}>
-															<Field
-																disabled={!hasPermission}
-																className={'pb-0'}
-																component={SwitchField}
-																label={t('loc:Online rezervácia')}
-																name={'enabledB2cReservations'}
-																size={'middle'}
-															/>
-															<div className={'text-xs text-notino-grayDark mt-2'}>
-																{t('loc:Klienti budú mať možnosť rezervovať si vybranú službu v aplikácii.')}
-															</div>
-														</Col>
-														<Col span={12}>
-															<Field
-																disabled={!hasPermission}
-																className={'pb-0'}
-																component={SwitchField}
-																label={t('loc:Automatické potvrdenie')}
-																name={'autoApproveReservatons'}
-																size={'middle'}
-															/>
-															<div className={'text-xs text-notino-grayDark mt-2'}>
-																{t(
-																	'loc:Online rezervácia bude automaticky schválená, už ju nemusíte potvrdzovať ručne. Rezervácia sa zobrazí vo vašom kalendári ako potvrdená.'
-																)}
-															</div>
-														</Col>
-													</Row>
-												</FormSection>
+										<div>
+											<h3 className={'mb-0 mt-0 flex items-center'}>
+												<GlobeIcon className={'text-notino-black mr-2'} />
+												{t('loc:Online rezervácia')}
+											</h3>
+											<Divider className={'mb-3 mt-3'} />
+											<div className={'text-xs text-notino-grayDark mb-4'}>
+												{t('loc:Zapnutím rezervačného systému sa aktivuje kalendár na spravovanie rezervácií a zmien zamestnancov vo vašom salóne.')}
 											</div>
-										)}
+											<FormSection name={'settings'}>
+												<Row gutter={[8, 8]}>
+													<Col span={12}>
+														<Field
+															disabled={!hasPermission || !salon.data?.settings.enabledReservations}
+															className={'pb-0'}
+															component={SwitchField}
+															label={t('loc:Online rezervácia')}
+															name={'enabledB2cReservations'}
+															size={'middle'}
+														/>
+														<div className={'text-xs text-notino-grayDark mt-2'}>
+															{t('loc:Klienti budú mať možnosť rezervovať si vybranú službu v aplikácii.')}
+														</div>
+													</Col>
+													<Col span={12}>
+														<Field
+															disabled={!hasPermission || !salon.data?.settings.enabledReservations}
+															className={'pb-0'}
+															component={SwitchField}
+															label={t('loc:Automatické potvrdenie')}
+															name={'autoApproveReservations'}
+															size={'middle'}
+														/>
+														<div className={'text-xs text-notino-grayDark mt-2'}>
+															{t(
+																'loc:Online rezervácia bude automaticky schválená, už ju nemusíte potvrdzovať ručne. Rezervácia sa zobrazí vo vašom kalendári ako potvrdená.'
+															)}
+														</div>
+													</Col>
+												</Row>
+											</FormSection>
+										</div>
 									</>
 								</div>
 								<div>
@@ -300,18 +304,27 @@ const ServiceForm: FC<Props> = (props) => {
 											name={'employee'}
 											optionLabelProp={'label'}
 											onSearch={searchEmployees}
-											filterOption={true}
-											options={employees?.options}
+											filterOption={false}
 											mode={'multiple'}
 											showSearch
 											allowInfinityScroll
+											onDidMountSearch
+											disabled={!hasPermission}
+											tooltipSelect={!hasPermission ? t('loc:Pre túto akciu nemáte dostatočné oprávnenia.') : null}
 										/>
-
 										<Button
+											id={`${FORM.SERVICE_FORM}-add-employee`}
 											type={'primary'}
 											size={'middle'}
 											className={'self-start noti-btn m-regular md:mt-5'}
-											onClick={addEmployee}
+											onClick={(e) => {
+												e.stopPropagation()
+												if (hasPermission) {
+													addEmployee(e)
+												} else {
+													openForbiddenModal()
+												}
+											}}
 											disabled={isEmpty(formValues?.employee)}
 										>
 											{formValues?.employees && formValues?.employees.length > 1 ? t('loc:Pridať zamestnancov') : t('loc:Pridať zamestnanca')}
@@ -324,6 +337,7 @@ const ServiceForm: FC<Props> = (props) => {
 										isEmployeeDetail={false}
 										setVisibleServiceEditModal={setVisibleServiceEditModal}
 										disabledEditButton={!pristine}
+										disabled={!hasPermission}
 									/>
 									{hasPermission && (
 										<div className={'content-footer pt-0'} id={'content-footer-container'}>
@@ -334,7 +348,8 @@ const ServiceForm: FC<Props> = (props) => {
 														getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 														onConfirm={onConfirmDelete}
 														entityName={t('loc:službu')}
-														permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_DELETE]}
+														permissions={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_DELETE]}
+														id={formFieldID(FORM.SERVICE_FORM, DELETE_BUTTON_ID)}
 													/>
 												) : null}
 
@@ -345,6 +360,7 @@ const ServiceForm: FC<Props> = (props) => {
 													icon={serviceID ? <EditIcon /> : <CreateIcon />}
 													disabled={submitting || pristine}
 													loading={submitting}
+													id={formFieldID(FORM.SERVICE_FORM, SUBMIT_BUTTON_ID)}
 												>
 													{serviceID ? STRINGS(t).save(t('loc:službu')) : STRINGS(t).createRecord(t('loc:službu'))}
 												</Button>

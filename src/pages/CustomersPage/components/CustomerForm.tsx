@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Form, Row } from 'antd'
+import { Col, Divider, Form, FormProps, Row } from 'antd'
 import { useSelector } from 'react-redux'
 
 // utils
@@ -30,7 +30,7 @@ import ImgUploadField from '../../../atoms/ImgUploadField'
 // assets
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 
-type ComponentProps = {
+type ComponentProps = FormProps & {
 	inModal?: boolean
 }
 
@@ -38,7 +38,7 @@ type Props = InjectedFormProps<ICustomerForm, ComponentProps> & ComponentProps
 
 const CustomerForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, inModal } = props
+	const { handleSubmit, inModal, disabled } = props
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const genders: ISelectOptionItem[] = [
@@ -59,12 +59,29 @@ const CustomerForm: FC<Props> = (props) => {
 							signUrl={URL_UPLOAD_IMAGES}
 							multiple={false}
 							maxCount={1}
+							disabled={disabled}
 							category={UPLOAD_IMG_CATEGORIES.CUSTOMER}
 						/>
 
 						<div className={'flex-1'}>
-							<Field component={InputField} label={t('loc:Meno')} placeholder={t('loc:Zadajte meno')} name={'firstName'} size={'large'} required />
-							<Field component={InputField} label={t('loc:Priezvisko')} placeholder={t('loc:Zadajte priezvisko')} name={'lastName'} size={'large'} required />
+							<Field
+								component={InputField}
+								disabled={disabled}
+								label={t('loc:Meno')}
+								placeholder={t('loc:Zadajte meno')}
+								name={'firstName'}
+								size={'large'}
+								required
+							/>
+							<Field
+								component={InputField}
+								disabled={disabled}
+								label={t('loc:Priezvisko')}
+								placeholder={t('loc:Zadajte priezvisko')}
+								name={'lastName'}
+								size={'large'}
+								required
+							/>
 						</div>
 					</div>
 					<PhoneWithPrefixField
@@ -74,7 +91,18 @@ const CustomerForm: FC<Props> = (props) => {
 						prefixName={'phonePrefixCountryCode'}
 						phoneName={'phone'}
 						formName={FORM.CUSTOMER}
+						disabled={disabled}
 						required
+					/>
+					<Field
+						component={TextareaField}
+						label={t('loc:Poznámka')}
+						placeholder={t('loc:Zadajte poznámku')}
+						maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
+						showLettersCount
+						name={'note'}
+						disabled={disabled}
+						size={'large'}
 					/>
 				</Row>
 			) : (
@@ -130,11 +158,12 @@ const CustomerForm: FC<Props> = (props) => {
 							category={UPLOAD_IMG_CATEGORIES.CUSTOMER}
 						/>
 						<Row justify={'space-between'}>
-							<Field className={'w-4/5'} component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} />
+							<Field className={'w-4/6'} component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} />
 							<Field
-								className={'w-1/6'}
+								className={'w-3/10'}
 								component={InputField}
 								label={t('loc:Popisné číslo')}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 								placeholder={t('loc:Zadajte číslo')}
 								name={'streetNumber'}
 								size={'large'}

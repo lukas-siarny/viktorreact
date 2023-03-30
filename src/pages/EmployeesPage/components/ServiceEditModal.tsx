@@ -30,7 +30,7 @@ const ServiceEditModal: FC<Props> = (props) => {
 			title={t('loc:Úprava služby pre zamestnanca')}
 			className={'edit-employee-service-modal'}
 			width={600}
-			visible={visible}
+			open={visible}
 			forceRender
 			onCancel={() => setVisible(false)}
 			footer={null}

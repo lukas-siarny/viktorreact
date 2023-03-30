@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Divider, Form, Row, Space, Button } from 'antd'
+import { Button, Divider, Form, Row, Space } from 'antd'
 import { useSelector } from 'react-redux'
 
 // atoms
@@ -15,7 +15,7 @@ import Localizations from '../../../components/Localizations'
 
 // utils
 import { formFieldID, showErrorNotification, validationString } from '../../../utils/helper'
-import { DELETE_BUTTON_ID, FORM, MAX_VALUES_PER_PARAMETER, PARAMETERS_VALUE_TYPES, STRINGS } from '../../../utils/enums'
+import { ADD_BUTTON_ID, DELETE_BUTTON_ID, FORM, MAX_VALUES_PER_PARAMETER, PARAMETERS_VALUE_TYPES, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../../components/LanguagePicker'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -38,15 +38,22 @@ const maxLength100 = validationString(100)
 
 type ComponentProps = {
 	onDelete?: () => void
+	onDeleteValue: (categoryParameterValueID?: string, removeIndex?: (index: number) => void, index?: number) => Promise<void>
 }
 
 type Props = InjectedFormProps<ICategoryParamForm, ComponentProps> & ComponentProps
 
 const LocalizationsArray = (props: any) => {
-	const { fields, required, label, addBtnLabel, maxCount = MAX_VALUES_PER_PARAMETER, nestedFieldName, placeholder, emptyValue } = props
-
+	const { fields, required, label, addBtnLabel, maxCount = MAX_VALUES_PER_PARAMETER, nestedFieldName, placeholder, emptyValue, handleDelete } = props
 	const buttonAdd = (
-		<Button onClick={() => fields.push(emptyValue)} icon={<PlusIcon className={'text-notino-black'} />} className={'noti-btn mt-2'} type={'default'} size={'small'}>
+		<Button
+			id={formFieldID(FORM.CATEGORY_PARAMS, ADD_BUTTON_ID)}
+			onClick={() => fields.push(emptyValue)}
+			icon={<PlusIcon className={'text-notino-black'} />}
+			className={'noti-btn mt-2'}
+			type={'default'}
+			size={'small'}
+		>
 			{addBtnLabel}
 		</Button>
 	)
@@ -56,6 +63,13 @@ const LocalizationsArray = (props: any) => {
 			<div className={'flex flex-col gap-4 w-full'}>
 				{fields.map((field: any, index: any) => {
 					const key = `${field}.${nestedFieldName}`
+					const fieldData = fields.get(index)
+					const onConfirm = async () => {
+						if (handleDelete) {
+							// fields.remove funkcia sa posiela cela hore aby tam v try-catchi sa pouzila v pripade len ak nenastane BE chyba a zamedzi tym zmazaniu itemu z array ak nastala BE chyba a item nebol zmazany na BE
+							await handleDelete(fieldData.id, fields.remove, index)
+						}
+					}
 
 					return (
 						<FieldArray
@@ -81,11 +95,11 @@ const LocalizationsArray = (props: any) => {
 										validate={maxLength100}
 									/>
 									<DeleteButton
+										id={formFieldID(FORM.CATEGORY_PARAMS, `${DELETE_BUTTON_ID}-${index}`)}
 										className={'bg-red-100 mt-5'}
-										onClick={() => fields.remove(index)}
+										onConfirm={onConfirm}
 										onlyIcon
 										smallIcon
-										noConfirm
 										size={'small'}
 										disabled={fields.length === 1}
 									/>
@@ -102,7 +116,7 @@ const LocalizationsArray = (props: any) => {
 
 const CategoryParamsForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, pristine, submitting, onDelete, change } = props
+	const { handleSubmit, pristine, submitting, onDelete, change, onDeleteValue } = props
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.CATEGORY_PARAMS]?.values)
 	const entityName = useMemo(() => t('loc:parameter'), [t])
 
@@ -157,6 +171,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 						<FieldArray
 							component={InputsArrayField}
 							name={'values'}
+							handleDelete={onDeleteValue}
 							placeholder={t('loc:Zadajte hodnotu v minútach')}
 							entityName={t('loc:hodnotu')}
 							label={t('loc:Hodnoty (min)')}
@@ -173,6 +188,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 							component={LocalizationsArray}
 							placeholder={t('loc:Zadajte hodnotu')}
 							required
+							handleDelete={onDeleteValue}
 							addBtnLabel={t('loc:Pridať hodnotu')}
 							label={t('loc:Hodnota (EN)')}
 							nestedFieldName={'valueLocalizations'}
@@ -181,7 +197,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 					)}
 				</div>
 			</Space>
-			<div className={'content-footer'}>
+			<div className={'content-footer'} id={'content-footer-container'}>
 				<div className={`flex flex-col gap-2 md:flex-row ${onDelete ? 'md:justify-between' : 'md:justify-center'}`}>
 					{onDelete && (
 						<DeleteButton
@@ -201,6 +217,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 						disabled={submitting || pristine}
 						loading={submitting}
 						icon={onDelete ? <EditIcon /> : <PlusIcon />}
+						id={formFieldID(FORM.CATEGORY_PARAMS, SUBMIT_BUTTON_ID)}
 					>
 						{onDelete ? STRINGS(t).save(entityName) : STRINGS(t).createRecord(entityName)}
 					</Button>

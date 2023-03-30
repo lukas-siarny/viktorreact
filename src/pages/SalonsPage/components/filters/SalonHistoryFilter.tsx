@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 // utils
 import { CHANGE_DEBOUNCE_TIME, FORM } from '../../../../utils/enums'
-import { getSalonFilterRanges } from '../../../../utils/helper'
+import { getRangesForDatePicker } from '../../../../utils/helper'
 
 // atoms
 import DateRangePickerField from '../../../../atoms/DateRangePickerField'
@@ -39,8 +39,8 @@ const SalonHistoryFilter = (props: Props) => {
 					placeholder={[t('loc:Od'), t('loc:Do')]}
 					allowClear
 					name={'dateFromTo'}
-					ranges={getSalonFilterRanges()}
-					dropdownAlign={{ points: ['tr', 'br'] }}
+					presets={getRangesForDatePicker()}
+					dropdownAlign={{ points: ['tl', 'bl'] }}
 					allowEmpty={[false, false]}
 				/>
 			</div>

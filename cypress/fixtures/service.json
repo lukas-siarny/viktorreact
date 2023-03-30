@@ -1,0 +1,14 @@
+{
+	"create": {
+		"durationFrom": "50",
+		"priceFrom": "100"
+	},
+	"update": {
+		"durationFrom": "70",
+		"priceFrom": "150"
+	},
+	"employeeService": {
+		"durationFrom": "200",
+		"priceFrom": "300"
+	}
+}

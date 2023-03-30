@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row, Spin } from 'antd'
@@ -6,6 +6,7 @@ import { initialize, submit } from 'redux-form'
 import { isEmpty } from 'lodash'
 import { compose } from 'redux'
 import cx from 'classnames'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -16,7 +17,7 @@ import SpecialistModal from './components/modals/SpecialistModal'
 import { getSalonDataForSubmission, initEmptySalonFormData, initSalonFormData, SalonInitType } from './components/salonUtils'
 
 // enums
-import { FILTER_ENTITY, FORM, PERMISSION, STRINGS } from '../../utils/enums'
+import { FILTER_ENTITY, FORM, PERMISSION, STRINGS, SUBMIT_BUTTON_ID } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -28,21 +29,22 @@ import { CategoriesPatch, IBreadcrumbs, ISalonForm, SalonPageProps } from '../..
 
 // utils
 import { patchReq, postReq } from '../../utils/request'
-import { history } from '../../utils/history'
-import Permissions, { withPermissions } from '../../utils/Permissions'
+import Permissions, { withPermissions, checkPermissions } from '../../utils/Permissions'
 import searchWrapper from '../../utils/filters'
+import { formFieldID } from '../../utils/helper'
 
 // assets
 import { ReactComponent as SpecialistIcon } from '../../assets/icons/specialist-24-icon.svg'
 import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
+const permissions: PERMISSION[] = [PERMISSION.NOTINO, PERMISSION.PARTNER]
 
 const SalonCreatePage: FC<SalonPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
-	const { isAdmin, backUrl, phonePrefixCountryCode, authUser, phonePrefixes } = props
+	const { isNotinoUser, backUrl, phonePrefixCountryCode, authUser, phonePrefixes } = props
 
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [suggestionsModalVisible, setSuggestionsModalVisible] = useState(false)
@@ -52,8 +54,8 @@ const SalonCreatePage: FC<SalonPageProps> = (props) => {
 
 	const isLoading = phonePrefixes?.isLoading || authUser?.isLoading || basicSalon.isLoading
 
-	// show salons searchbox with basic salon suggestions instead of text field for name input
-	const showBasicSalonsSuggestions = !isAdmin
+	// show salons searchbox with basic salon suggestions only for Partner users
+	const showBasicSalonsSuggestions = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER], [PERMISSION.NOTINO]), [authUser])
 
 	useEffect(() => {
 		if (showBasicSalonsSuggestions) {
@@ -94,7 +96,7 @@ const SalonCreatePage: FC<SalonPageProps> = (props) => {
 				// load new salon for current user
 				await dispatch(getCurrentUser())
 				// select new salon
-				history.push(t('paths:salons/{{salonID}}', { salonID: result.data.salon.id }))
+				navigate(t('paths:salons/{{salonID}}', { salonID: result.data.salon.id }))
 			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -131,7 +133,7 @@ const SalonCreatePage: FC<SalonPageProps> = (props) => {
 
 	// View
 	const breadcrumbs: IBreadcrumbs = {
-		items: isAdmin
+		items: isNotinoUser
 			? [
 					{
 						name: t('loc:Zoznam salónov'),
@@ -162,6 +164,7 @@ const SalonCreatePage: FC<SalonPageProps> = (props) => {
 								allowed={permissions}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
+										id={formFieldID(FORM.SALON, SUBMIT_BUTTON_ID)}
 										type={'primary'}
 										size={'middle'}
 										className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}

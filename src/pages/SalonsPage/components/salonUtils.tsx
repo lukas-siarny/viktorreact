@@ -4,7 +4,7 @@ import { Tag } from 'antd'
 import i18next from 'i18next'
 
 // types
-import { ISalonForm, OpeningHours } from '../../../types/interfaces'
+import { AutocompleteLabelInValue, ISalonForm, OpeningHours } from '../../../types/interfaces'
 import { ISalonPayloadData } from '../../../reducers/selectedSalon/selectedSalonActions'
 import { IBasicSalon } from '../../../reducers/salons/salonsActions'
 import { Paths } from '../../../types/api'
@@ -31,6 +31,13 @@ const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 
 export type SalonInitType = ISalonPayloadData & IBasicSalon
 
+/**
+ *
+ * @param salonData
+ * @param phonePrefixCountryCode
+ * @param salonNameFromSelect - pre title salonu sa miesto input fieldu pouziva autocomplete field
+ * @returns
+ */
 export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCountryCode: string, salonNameFromSelect = false) => {
 	// stacilo by isEmpty ale aby typescript nehucal tak je aj prva podmienka
 	if (!salonData || isEmpty(salonData)) {
@@ -51,13 +58,13 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 		deletedAt: !!salonData.deletedAt,
 		state: salonData.state as SALON_STATES,
 		sourceOfPremium: salonData.premiumSourceUserType,
-		name: salonData.name || null,
-		nameSelect:
-			{
-				key: salonData.id,
-				label: salonData.name || null,
-				value: salonData.id || null
-			} || null,
+		name: salonNameFromSelect
+			? {
+					key: salonData.id,
+					label: salonData.name || null,
+					value: salonData.id || null
+			  } || null
+			: salonData.name || null,
 		email: salonData.email || null,
 		// categoryIDs for basic salon
 		categoryIDs: (isEmpty(!salonData?.categories) ? salonData?.categories.map((category) => category.id) : null) as ISalonForm['categoryIDs'],
@@ -140,7 +147,7 @@ export const getSalonDataForSubmission = (data: ISalonForm) => {
 			isCover: image?.isCover ?? false
 		})) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
 		logoID: map(data.logo, (image) => image?.id ?? image?.uid)[0] ?? null,
-		name: data.salonNameFromSelect ? data.nameSelect?.label : data.name,
+		name: data.salonNameFromSelect ? (data.name as AutocompleteLabelInValue)?.label : data.name,
 		openingHours: openingHours || [],
 		aboutUsFirst: data.aboutUsFirst,
 		city: data.city,

@@ -1,10 +1,10 @@
 import React, { useMemo, useCallback } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
-import { Button, Col, Divider, Form, Row, Tag } from 'antd'
+import { Button, Col, Divider, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { debounce, filter, isEmpty, isNil, size } from 'lodash'
+import { debounce, filter, isArray, isEmpty, isNil, size } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
-import cx from 'classnames'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import Filters from '../../../../components/Filters'
@@ -30,11 +30,11 @@ import {
 	SALON_FILTER_STATES,
 	SALON_SOURCE_TYPE,
 	FILTER_ENTITY,
-	CHANGE_DEBOUNCE_TIME
+	CHANGE_DEBOUNCE_TIME,
+	IMPORT_BUTTON_ID
 } from '../../../../utils/enums'
-import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getSalonFilterRanges } from '../../../../utils/helper'
+import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getRangesForDatePicker, optionRenderWithTag, formFieldID } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
-import { history } from '../../../../utils/history'
 import searchWrapper from '../../../../utils/filters'
 
 // atoms
@@ -66,20 +66,14 @@ type Props = InjectedFormProps<ISalonsFilterActive, ComponentProps> & ComponentP
 
 const fixLength100 = validationString(100)
 
-const statusOptionRender = (itemData: any) => {
-	const { value, label, tagClassName } = itemData
-	return (
-		<Tag key={value} className={cx('noti-tag', tagClassName)}>
-			<span>{label}</span>
-		</Tag>
-	)
-}
-
 export const checkSalonFiltersSize = (formValues: any) =>
 	size(
 		filter(formValues, (value, key) => {
 			if (typeof value === 'boolean') {
 				return value
+			}
+			if (isArray(value) && isEmpty(value)) {
+				return false
 			}
 			if (key === 'dateFromTo' && !value?.dateFrom && !value?.dateTo) {
 				return false
@@ -92,6 +86,7 @@ const SalonsFilterActive = (props: Props) => {
 	const { handleSubmit, openSalonImportsModal } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER_ACITVE])
 	const categories = useSelector((state: RootState) => state.categories.categories)
@@ -159,7 +154,7 @@ const SalonsFilterActive = (props: Props) => {
 		() => (
 			<div className={'flex items-center gap-2'}>
 				<Permissions
-					allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
+					allowed={[PERMISSION.IMPORT_SALON]}
 					render={(hasPermission, { openForbiddenModal }) => (
 						<Button
 							onClick={() => {
@@ -173,18 +168,19 @@ const SalonsFilterActive = (props: Props) => {
 							htmlType='button'
 							className={'noti-btn w-full'}
 							icon={<UploadIcon />}
+							id={formFieldID(FORM.SALONS_FILTER_ACITVE, IMPORT_BUTTON_ID())}
 						>
 							{t('loc:Import dát')}
 						</Button>
 					)}
 				/>
 				<Permissions
-					allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]}
+					allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER]}
 					render={(hasPermission, { openForbiddenModal }) => (
 						<Button
 							onClick={() => {
 								if (hasPermission) {
-									history.push(getLinkWithEncodedBackUrl(t('paths:salons/create')))
+									navigate(getLinkWithEncodedBackUrl(t('paths:salons/create')))
 								} else {
 									openForbiddenModal()
 								}
@@ -209,7 +205,7 @@ const SalonsFilterActive = (props: Props) => {
 				className={'h-10 p-0 m-0'}
 				component={InputField}
 				size={'large'}
-				placeholder={t('loc:Hľadať podľa názvu alebo adresy')}
+				placeholder={t('loc:Hľadať podľa názvu, adresy alebo ID')}
 				name={'search'}
 				fieldMode={FIELD_MODE.FILTER}
 				search
@@ -221,7 +217,7 @@ const SalonsFilterActive = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters customContent={customContent} search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)}>
+			<Filters customContent={customContent} search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)} form={FORM.SALONS_FILTER_ACITVE}>
 				<>
 					<Row>
 						<Col span={24}>
@@ -239,13 +235,13 @@ const SalonsFilterActive = (props: Props) => {
 									component={SelectField}
 									name={'statuses_published'}
 									placeholder={t('loc:Publikovaný')}
-									className={'statuses-filter-select'}
+									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
 									filterOptions
 									onDidMountSearch
 									options={publishedOptions}
-									optionRender={statusOptionRender}
+									optionRender={optionRenderWithTag}
 								/>
 							</Col>
 							<Col span={5}>
@@ -253,13 +249,13 @@ const SalonsFilterActive = (props: Props) => {
 									component={SelectField}
 									name={'statuses_changes'}
 									placeholder={t('loc:Zmeny')}
-									className={'statuses-filter-select'}
+									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
 									filterOptions
 									onDidMountSearch
 									options={changesOptions}
-									optionRender={statusOptionRender}
+									optionRender={optionRenderWithTag}
 								/>
 							</Col>
 							<Col span={4}>
@@ -267,13 +263,13 @@ const SalonsFilterActive = (props: Props) => {
 									component={SelectField}
 									name={'createType'}
 									placeholder={t('loc:Typ salónu')}
-									className={'statuses-filter-select'}
+									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
 									filterOptions
 									onDidMountSearch
 									options={createTypesOptions}
-									optionRender={statusOptionRender}
+									optionRender={optionRenderWithTag}
 								/>
 							</Col>
 							<Col span={5}>
@@ -281,13 +277,13 @@ const SalonsFilterActive = (props: Props) => {
 									component={SelectField}
 									name={'sourceType'}
 									placeholder={t('loc:Zdroj vytvorenia')}
-									className={'statuses-filter-select'}
+									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
 									filterOptions
 									onDidMountSearch
 									options={sourceOptions}
-									optionRender={statusOptionRender}
+									optionRender={optionRenderWithTag}
 								/>
 							</Col>
 							<Col span={5}>
@@ -295,13 +291,13 @@ const SalonsFilterActive = (props: Props) => {
 									component={SelectField}
 									name={'premiumSourceUserType'}
 									placeholder={t('loc:Zdroj PREMIUM')}
-									className={'statuses-filter-select'}
+									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
 									filterOptions
 									onDidMountSearch
 									options={premiumSourceOptions}
-									optionRender={statusOptionRender}
+									optionRender={optionRenderWithTag}
 								/>
 							</Col>
 						</Row>
@@ -350,8 +346,8 @@ const SalonsFilterActive = (props: Props) => {
 									placeholder={[t('loc:Úpravy od'), t('loc:Úpravy do')]}
 									allowClear
 									name={'dateFromTo'}
-									ranges={getSalonFilterRanges()}
-									dropdownAlign={{ points: ['tr', 'br'] }}
+									presets={getRangesForDatePicker()}
+									dropdownAlign={{ points: ['tl', 'bl'] }}
 									allowEmpty={[false, false]}
 								/>
 							</Col>

@@ -15,13 +15,16 @@
 					input[type='checkbox']
 						&:focus-visible
 							~ .ant-checkbox-inner
-								box-shadow: 0px 0px 4px 2px rgba(0,0,0,0.5)
+								// box-shadow: 0px 0px 4px 2px rgba(0,0,0,0.5)
+								box-shadow: none
+								@include focusOutlineStyle()
 					.ant-checkbox-inner
 						transition: 300ms ease-in-out
+						@include baseOutlineStyle()
 				&.ant-checkbox-wrapper-disabled
 					.ant-checkbox-disabled
 						.ant-checkbox-inner
-							border-color: $borderColor-notino-gray !important
+							border-color: $borderColor-notino-gray
 						&.ant-checkbox-checked
 							.ant-checkbox-inner
 								background-color: $borderColor-notino-gray
@@ -29,6 +32,35 @@
 									border-color: $borderColor-notino-grayLight
 						& + span
 							color: $textColor-notino-gray
+	&.noti-checkbox-group-custom-color
+		.ant-checkbox-group
+			.ant-checkbox-wrapper
+				.ant-checkbox
+					.ant-checkbox-inner
+						border-color: var(--checkbox-color)
+					input[type='checkbox']
+						&:focus-visible
+							~ .ant-checkbox-inner
+								box-shadow: none
+								@include focusOutlineStyle(var(--checkbox-color))
+					&.ant-checkbox-checked
+						.ant-checkbox-inner
+							background-color: var(--checkbox-color)
+							border-color: var(--checkbox-color)
+				&.ant-checkbox-wrapper-disabled
+					.ant-checkbox-disabled
+						background: $backgroundColor-notino-white
+						.ant-checkbox-inner
+							opacity: 0.6
+							border-color: var(--checkbox-color)
+						&.ant-checkbox-checked
+							.ant-checkbox-inner
+								opacity: 0.6
+								background-color: var(--checkbox-color)
+								border-color: var(--checkbox-color)
+					&.noti-checkbox-group-rounded
+						.ant-checkbox-disabled
+							border-radius: 50%
 	&.noti-checkbox-group-vertical
 		.ant-checkbox-group
 			display: flex
@@ -82,63 +114,105 @@
 						display: block
 						width: 100%
 
-.nc-checkbox-group-checkbox
-	display: flex
-	position: relative
-	gap: 8px
-	.checker
-		width: 12px
-		height: 12px
-		border-radius: 50%
-		border: 1px solid #d9d9d9
-		flex: 0 0 auto
-		margin-top: 3px
-		position: relative
-		background: $backgroundColor-notino-white
-		transition: all 0.3s ease-in-out
-		position: relative
-		&::after
-			position: absolute
-			border: 2px solid $borderColor-notino-white
-			display: table
-			border-top: 0
-			border-left: 0
-			opacity: 1
-			transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s
-			transform: rotate(45deg) scale(0) translate(-50%, -50%)
-			content: ' '
-			border-width: 2px
-			width: 3.5px
-			height: 7px
-			top: 50%
-			left: 21.5%
-		.checkbox-focus
-			position: absolute
-			top: -1px
-			left: -1px
-			right: -1px
-			bottom: -1px
-			border-radius: 50%
-			opacity: 0
-			transition: 0.3s ease-in-out
-			transform: scale(0)
-			transform-origin: center
-	.checkbox-input
-		position: absolute
-		width: 12px
-		height: 12px
-		top: 0
-		left: 0
+// checkboxgroup with image
+@keyframes opacityAnimation
+	0%
 		opacity: 0
-		box-shadow: 0px 0px 4px 2px #000
-		&:focus-visible
-			~ .checker
-				.checkbox-focus
-					opacity: 0.5
-					transform: scale(1)
-	&.checked
-		.checker
-			background: $backgroundColor-notino-black
-			border-color: $backgroundColor-notino-black
-			&::after
-				transform: rotate(45deg) scale(1) translate(-50%, -50%)
+	100%
+		opacity: 1
+
+.checkbox-group-image-fieldset
+	.label-error-wrapper
+		position: relative
+		padding-bottom: 24px
+		legend
+			border-bottom: none
+			color: $textColor-trueGray-700
+			margin-bottom: 0
+			&.required
+				&::before
+					display: inline-block
+					margin-right: 4px
+					color: #ff4d4f // interna antd farba ktora sa nenachadza v nasej palete
+					font-size: 14px
+					font-family: SimSun,sans-serif
+					line-height: 1
+					content: "*"
+
+		.error-msg
+			animation: opacityAnimation 200ms ease-in-out
+			bottom: 6px
+			position: absolute
+			font-size: 14px
+			font-size: 12px
+	&.required
+		.label-error-wrapper
+			.error-msg
+				margin-left: 12px
+
+
+.checkbox-group-image-wrapper
+	width: 100%
+	margin: 0 auto
+	display: grid
+	grid-template-columns: repeat(auto-fill, minmax(160px, 1fr))
+	grid-gap: 16px
+	border-radius: 12px
+	outline: 1px solid transparent
+	outline-offset: 4px
+	transition: outline-color 300ms ease-in-out
+
+	&.error
+		outline-color: $backgroundColor-notino-red
+
+
+// checkboxgroup with image
+@keyframes opacityAnimation
+	0%
+		opacity: 0
+	100%
+		opacity: 1
+
+.checkbox-group-image-fieldset
+	.label-error-wrapper
+		position: relative
+		padding-bottom: 24px
+		legend
+			border-bottom: none
+			color: $textColor-trueGray-700
+			margin-bottom: 0
+			&.required
+				&::before
+					display: inline-block
+					margin-right: 4px
+					color: #ff4d4f // interna antd farba ktora sa nenachadza v nasej palete
+					font-size: 14px
+					font-family: SimSun,sans-serif
+					line-height: 1
+					content: "*"
+
+		.error-msg
+			animation: opacityAnimation 200ms ease-in-out
+			bottom: 6px
+			position: absolute
+			font-size: 14px
+			font-size: 12px
+	&.required
+		.label-error-wrapper
+			.error-msg
+				margin-left: 12px
+
+
+.checkbox-group-image-wrapper
+	width: 100%
+	margin: 0 auto
+	display: grid
+	grid-template-columns: repeat(auto-fill, minmax(160px, 1fr))
+	grid-gap: 16px
+	border-radius: 12px
+	outline: 1px solid transparent
+	outline-offset: 4px
+	transition: outline-color 300ms ease-in-out
+
+	&.error
+		outline-color: $backgroundColor-notino-red

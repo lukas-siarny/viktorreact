@@ -126,9 +126,9 @@ const ContactPage: FC<Props> = () => {
 						id={'noti-country-select'}
 						onChange={handleCountryChange}
 						value={{ value: selectedContact?.id }}
-						className={'noti-select-input w-full'}
+						className={'noti-country-select noti-select-input w-full'}
 						size={'large'}
-						dropdownClassName={'noti-select-dropdown dropdown-match-select-width'}
+						popupClassName={'noti-select-dropdown dropdown-match-select-width'}
 						labelInValue
 					>
 						{supportContacts?.options?.map((option) => (
@@ -214,7 +214,7 @@ const ContactPage: FC<Props> = () => {
 																	<Popover
 																		overlayClassName={'w-full sm:max-w-md p-2'}
 																		ref={notePopoverRef}
-																		visible={isNoteOpen}
+																		open={isNoteOpen}
 																		content={
 																			<>
 																				<Row align={'middle'} justify={'space-between'}>
@@ -222,7 +222,10 @@ const ContactPage: FC<Props> = () => {
 																						<PencilIcon />
 																						<h4 className={'m-0'}>{t('loc:Poznámka')}</h4>
 																					</Row>
-																					<Button className={'p-0 border-none shadow-none'} onClick={() => setIsNoteOpen(false)}>
+																					<Button
+																						className={'p-0 border-none shadow-none w-6 h-6 flex items-center justify-center'}
+																						onClick={() => setIsNoteOpen(false)}
+																					>
 																						<CloseIcon style={{ width: 16, height: 16 }} />
 																					</Button>
 																				</Row>

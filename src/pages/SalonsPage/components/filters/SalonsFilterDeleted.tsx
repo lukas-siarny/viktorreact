@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { debounce, filter, isEmpty, isNil, size } from 'lodash'
+import { debounce, filter, isArray, isEmpty, isNil, size } from 'lodash'
 
 // components
 import { useSelector } from 'react-redux'
@@ -44,6 +44,9 @@ export const checkSalonFiltersSize = (formValues: any) =>
 			if (typeof value === 'boolean') {
 				return value
 			}
+			if (isArray(value) && isEmpty(value)) {
+				return false
+			}
 			if (key === 'dateFromTo' && !value?.dateFrom && !value?.dateTo) {
 				return false
 			}
@@ -65,7 +68,7 @@ const SalonsFilterDeleted = (props: Props) => {
 				className={'h-10 p-0 m-0'}
 				component={InputField}
 				size={'large'}
-				placeholder={t('loc:Hľadať podľa názvu alebo adresy')}
+				placeholder={t('loc:Hľadať podľa názvu, adresy alebo ID')}
 				name={'search'}
 				fieldMode={FIELD_MODE.FILTER}
 				search
@@ -77,7 +80,7 @@ const SalonsFilterDeleted = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)}>
+			<Filters search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)} form={FORM.SALONS_FILTER_DELETED}>
 				<Row gutter={ROW_GUTTER_X_DEFAULT}>
 					<Col span={8}>
 						<Field

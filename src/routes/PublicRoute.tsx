@@ -1,14 +1,14 @@
 import React, { FC } from 'react'
-import { RouteProps, Redirect } from 'react-router-dom'
+import { RouteProps, Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import BaseRoute from './BaseRoute'
 import { isLoggedIn } from '../utils/auth'
 
 type Props = RouteProps & {
-	layout: any
+	layout?: any
 	translatePathKey?: string
-	component: any
+	element?: any
 	redirectLoggedInUser?: boolean
 	className?: string
 	customProps?: Object
@@ -18,9 +18,8 @@ type Props = RouteProps & {
 const PublicRoute: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { redirectLoggedInUser = true } = props
-
 	if (isLoggedIn() && redirectLoggedInUser) {
-		return <Redirect to={t('paths:index')} />
+		return <Navigate to={t('paths:index')} />
 	}
 
 	return <BaseRoute {...props} />

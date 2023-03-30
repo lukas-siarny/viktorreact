@@ -50,6 +50,7 @@ import { ReactComponent as SocialTikTok } from '../../../../assets/icons/social-
 import { ReactComponent as CosmeticIcon } from '../../../../assets/icons/cosmetic-icon-24.svg'
 import { ReactComponent as LanguagesIcon } from '../../../../assets/icons/languages-24-icon.svg'
 import { ReactComponent as InfoIcon16 } from '../../../../assets/icons/info-icon-16.svg'
+import { ReactComponent as LocationIcon } from '../../../../assets/icons/location-16.svg'
 
 type ComponentProps = {
 	disabledForm?: boolean
@@ -111,8 +112,8 @@ const SalonForm: FC<Props> = (props) => {
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 
 	const searchCosmetics = useCallback(
-		async (search: string) => {
-			return searchWrapper(dispatch, { search }, FILTER_ENTITY.COSMETICS)
+		async (search: string, page: string) => {
+			return searchWrapper(dispatch, { search, limit: 1500, page }, FILTER_ENTITY.COSMETICS)
 		},
 		[dispatch]
 	)
@@ -145,7 +146,7 @@ const SalonForm: FC<Props> = (props) => {
 								component={AutocompleteField}
 								label={t('loc:Názov')}
 								placeholder={t('loc:Vyhľadajte salón podľa názvu alebo zadajte vlastný')}
-								name={'nameSelect'}
+								name={'name'}
 								filterOption={false}
 								showSearch
 								onDidMountSearch
@@ -202,7 +203,6 @@ const SalonForm: FC<Props> = (props) => {
 						/>
 						<Field
 							component={SelectField}
-							options={cosmetics.options}
 							label={t('loc:Kozmetika')}
 							placeholder={t('loc:Vyberte kozmetiku')}
 							name={'cosmeticIDs'}
@@ -215,6 +215,8 @@ const SalonForm: FC<Props> = (props) => {
 							mode={'multiple'}
 							disabled={disabledForm}
 							allowClear
+							allowInfinityScroll
+							onDidMountSearch
 						/>
 						<Field
 							component={ImgUploadField}
@@ -259,6 +261,15 @@ const SalonForm: FC<Props> = (props) => {
 							size={'large'}
 							disabled={disabledForm}
 						/>
+					</Col>
+				</Row>
+				<Row>
+					<Col span={24}>
+						<h3 className={'mb-0 flex items-center'}>
+							<LocationIcon width={20} height={20} className={'text-notino-black mr-2'} />
+							{t('loc:Adresa')}
+						</h3>
+						<Divider className={'mb-3 mt-3'} />
 						<Field
 							component={AddressFields}
 							inputValues={{

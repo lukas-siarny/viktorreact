@@ -13,9 +13,9 @@ import { getServicesCategoryKeys } from '../IndustryPage'
 import validateCategoryFrom from './validateIndustriesFrom'
 
 // utils
-import { FORM, PERMISSION, SALON_PERMISSION } from '../../../utils/enums'
+import { FORM, PERMISSION, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
-import { showErrorNotification } from '../../../utils/helper'
+import { formFieldID, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // redux
@@ -32,14 +32,14 @@ import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron
 type ComponentProps = {
 	selectedCategoryIDs?: string[]
 	disabledForm?: boolean
-	onShowMore: (id: string) => void
+	onShowEventsListPopover: (id: string) => void
 }
 
 type Props = InjectedFormProps<IIndustriesForm, ComponentProps> & ComponentProps
 
 const IndustriesForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, submitting, pristine, onShowMore, disabledForm } = props
+	const { handleSubmit, submitting, pristine, onShowEventsListPopover, disabledForm } = props
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const services = useSelector((state: RootState) => state.service.services)
@@ -55,7 +55,7 @@ const IndustriesForm: FC<Props> = (props) => {
 			image: category.image?.resizedImages?.small,
 			disabled: disabledForm,
 			extraAction: {
-				action: () => onShowMore(category.id),
+				action: () => onShowEventsListPopover(category.id),
 				label: `${t('loc:Priradiť služby')} (${selectedServices})`,
 				popconfirm: !pristine,
 				icon: <ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
@@ -64,7 +64,7 @@ const IndustriesForm: FC<Props> = (props) => {
 	})
 
 	return (
-		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form w-full'} onSubmitCapture={handleSubmit}>
 			<h3 className={'mb-0 mt-0 flex items-center space-'}>
 				<CategoryIcon className={'text-notino-black mr-2'} />
 				{t('loc:Odvetvia a služby')}
@@ -74,9 +74,10 @@ const IndustriesForm: FC<Props> = (props) => {
 			<div className={'content-footer'}>
 				<Row justify='center'>
 					<Permissions
-						allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
+						allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Button
+								id={formFieldID(FORM.INDUSTRIES, SUBMIT_BUTTON_ID)}
 								type={'primary'}
 								size={'middle'}
 								icon={<EditIcon />}

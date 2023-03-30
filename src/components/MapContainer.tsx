@@ -1,48 +1,49 @@
-import React, { useRef, memo, useState, useEffect } from 'react'
-import { withScriptjs, withGoogleMap, GoogleMap, Marker, GoogleMapProps } from 'react-google-maps'
+import React, { memo, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { MAP, LANGUAGE } from '../utils/enums'
+import { GoogleMap, Marker, GoogleMapProps, useJsApiLoader } from '@react-google-maps/api'
+import { Spin } from 'antd'
+
+import { LANGUAGE, MAP, mapApiConfig } from '../utils/enums'
 
 type Props = GoogleMapProps & {
 	lat: number
-	long: number
+	lng: number
 	onLocationChange: (e: any) => void
 	onError: (message: string) => void
-	zoomChanged?: (newZoom: number) => void
 	disabled?: boolean
 }
-
+const config = mapApiConfig()
+// https://react-google-maps-api-docs.netlify.app/
 const MapContainer = (props: Props) => {
-	const { onLocationChange, lat, long, zoom = MAP.defaultZoom, zoomChanged, disabled, onError } = props
 	const { i18n } = useTranslation()
-	const [currentZoom, setCurrentZoom] = useState<number>(zoom)
-	const [position, setPosition] = useState<{ [key: string]: number }>(MAP.defaultLocation)
+	const { lng, lat, onLocationChange, disabled, zoom, onError, options } = props
+	const [position, setPosition] = useState<google.maps.LatLng | google.maps.LatLngLiteral>(MAP.defaultLocation)
 
-	// catch google API authentication errors
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
+	const { isLoaded, loadError } = useJsApiLoader(config)
+
 	window.gm_authFailure = () => {
 		onError('Goggle Map auth error')
 	}
 
-	const mapRef: any = useRef()
+	if (loadError) {
+		onError('Goggle Map unexpected error')
+	}
 
-	const updatePosition = (newPosition: { [key: string]: number }) => {
-		setPosition({ ...newPosition })
+	const updatePosition = (newPosition: google.maps.LatLng | google.maps.LatLngLiteral) => {
+		setPosition(newPosition)
 	}
 
 	useEffect(() => {
 		const validLat = lat < MAP.maxLatitude && lat > MAP.minLatitude
-		const validLng = long < MAP.maxLongitude && long > MAP.minLongitude
+		const validLng = lng < MAP.maxLongitude && lng > MAP.minLongitude
 
 		if (validLat && validLng) {
-			updatePosition({ lat, lng: long })
-			setCurrentZoom(MAP.placeZoom)
+			updatePosition({ lat, lng })
 		} else {
 			const positionByLanguage = MAP.locations[i18n.language as LANGUAGE] ?? MAP.defaultLocation
 			updatePosition({ ...positionByLanguage })
 		}
-	}, [lat, long, i18n])
+	}, [lat, lng, i18n])
 
 	const onChange = (e: any) => {
 		if (onLocationChange) {
@@ -50,30 +51,22 @@ const MapContainer = (props: Props) => {
 		}
 	}
 
-	const handleZoomChanged = () => {
-		if (zoomChanged && mapRef.current.getZoom()) {
-			zoomChanged(mapRef.current.getZoom())
-		}
-	}
-
-	return (
+	return isLoaded ? (
 		<GoogleMap
-			defaultCenter={position}
-			center={position}
-			defaultZoom={MAP.defaultZoom}
-			zoom={currentZoom}
-			ref={mapRef}
-			onRightClick={onChange}
-			onZoomChanged={handleZoomChanged}
-			// OPTIONS: https://developers.google.com/maps/documentation/javascript/reference/map
 			options={{
-				maxZoom: MAP.maxZoom,
-				minZoom: MAP.minZoom
+				maxZoom: MAP.maxZoom || options?.maxZoom,
+				minZoom: MAP.minZoom || options?.minZoom
 			}}
+			onRightClick={onChange}
+			mapContainerClassName={'map'}
+			zoom={MAP.placeZoom || zoom}
+			center={position}
 		>
-			<Marker position={position} draggable={!disabled} onDragEnd={onChange} onRightClick={onChange} />
+			<Marker draggable={!disabled} position={position} onDragEnd={onChange} onRightClick={onChange} />
 		</GoogleMap>
+	) : (
+		<Spin className={'w-full'} />
 	)
 }
 
-export default withScriptjs(withGoogleMap(memo(MapContainer)))
+export default memo(MapContainer)

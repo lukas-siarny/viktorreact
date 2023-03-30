@@ -11,79 +11,163 @@ import { Doughnut, Line } from 'react-chartjs-2'
 import annotationPlugin from 'chartjs-plugin-annotation'
 import colors from 'tailwindcss/colors'
 import cx from 'classnames'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import SalonDashboard from './SalonDashboard'
 import Statistics from '../../../components/Dashboards/Statistics'
 import CustomTable from '../../../components/CustomTable'
+import TabsComponent from '../../../components/TabsComponent'
+import ReservationsDashboard from './ReservationsDashboard'
 
 // types
 import { Columns, AlertData, DashboardData, TimeStats } from '../../../types/interfaces'
 
 // redux
 import { RootState } from '../../../reducers'
-import { getNotinoDashboard, INotinoDashboard, getSalonsAnnualStats, getSalonsMonthStats } from '../../../reducers/dashboard/dashboardActions'
+import { getNotinoDashboard, INotinoDashboard, getSalonsAnnualStats, getSalonsMonthStats, getRsStats, getReservationStats } from '../../../reducers/dashboard/dashboardActions'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
 // utils
-import { FILTER_PATHS, SALON_FILTER_STATES, SALONS_TIME_STATS_TYPE } from '../../../utils/enums'
-import { history } from '../../../utils/history'
-import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData } from './dashboardUtils'
+import { DASHBOARD_TASB_KEYS, FILTER_PATHS, RESERVATIONS_STATS_TYPE, RS_STATS_TYPE, SALON_FILTER_STATES, SALONS_TIME_STATS_TYPE } from '../../../utils/enums'
+import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData, transformToRsStatsData, transformToReservationsStatsData } from './dashboardUtils'
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin)
 
-const columns = (labels: string[] = [], futureBreak = 0): Columns => [
-	{
-		key: 'type',
-		dataIndex: 'type',
-		render: (value) => {
-			switch (value) {
-				case SALONS_TIME_STATS_TYPE.BASIC:
-					return (
-						<div className={'flex flex-1 items-center'}>
-							<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[200], flex: '0 0 auto' }} />
-							<span className='xs-bold'>{i18next.t('loc:BASIC')}</span>
-						</div>
-					)
-				case SALONS_TIME_STATS_TYPE.PREMIUM:
-					return (
-						<div className={'flex flex-1 items-center'}>
-							<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[700], flex: '0 0 auto' }} />
-							<span className='xs-bold'>{i18next.t('loc:Schválené PREMIUM')}</span>
-						</div>
-					)
-				case SALONS_TIME_STATS_TYPE.PENDING:
-				default:
-					return (
-						<div className={'flex flex-1 items-center'}>
-							<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.yellow[400], flex: '0 0 auto' }} />
-							<span className='xs-bold'>{i18next.t('loc:Žiadosti o PREMIUM')}</span>
-						</div>
-					)
+const rsColumns = (labels: string[] = [], futureBreak = 0): Columns => {
+	return [
+		{
+			key: 'type',
+			dataIndex: 'type',
+			render: (value) => {
+				switch (value) {
+					case RS_STATS_TYPE.ENABLE_RS_B2B:
+						return (
+							<div className={'flex flex-1 items-center'}>
+								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[200], flex: '0 0 auto' }} />
+								<span className='xs-bold'>{i18next.t('loc:Zapnutý Rezervačný systém pre B2B')}</span>
+							</div>
+						)
+					case RS_STATS_TYPE.ENABLE_RS_B2C:
+						return (
+							<div className={'flex flex-1 items-center'}>
+								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[700], flex: '0 0 auto' }} />
+								<span className='xs-bold'>{i18next.t('loc:Zapnutý rezervačný systém pre B2C')}</span>
+							</div>
+						)
+					default:
+						return ''
+				}
 			}
+		},
+		...labels.map((label: string, index: number) => {
+			return {
+				key: index,
+				dataIndex: index,
+				className: cx({ 'future-divider': futureBreak - 0.5 === index }), // 0.5 is delta for display devider between columns
+				title: <span className={cx('xs-semibold', { 'text-notino-gray': futureBreak <= index })}>{label}</span>,
+				render: (value: number) => <span className={cx('xs-regular', { 'text-notino-gray': futureBreak <= index })}>{value}</span>
+			}
+		})
+	]
+}
+const reservationsColumns = (labels: string[] = [], futureBreak = 0): Columns => {
+	return [
+		{
+			key: 'type',
+			dataIndex: 'type',
+			render: (value) => {
+				switch (value) {
+					case RESERVATIONS_STATS_TYPE.NEW_RS_B2B:
+						return (
+							<div className={'flex flex-1 items-center'}>
+								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[200], flex: '0 0 auto' }} />
+								<span className='xs-bold'>{i18next.t('loc:Rezervácie vytvorené v B2B')}</span>
+							</div>
+						)
+					case RESERVATIONS_STATS_TYPE.NEW_RS_B2C:
+						return (
+							<div className={'flex flex-1 items-center'}>
+								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[700], flex: '0 0 auto' }} />
+								<span className='xs-bold'>{i18next.t('loc:Rezervácie vytvorené v B2C')}</span>
+							</div>
+						)
+					default:
+						return ''
+				}
+			}
+		},
+		...labels.map((label: string, index: number) => {
+			return {
+				key: index,
+				dataIndex: index,
+				className: cx({ 'future-divider': futureBreak - 0.5 === index }), // 0.5 is delta for display devider between columns
+				title: <span className={cx('xs-semibold', { 'text-notino-gray': futureBreak <= index })}>{label}</span>,
+				render: (value: number) => <span className={cx('xs-regular', { 'text-notino-gray': futureBreak <= index })}>{value}</span>
+			}
+		}),
+		{
+			key: 'summary',
+			dataIndex: 'summary',
+			title: () => <span className='xs-semibold'>{i18next.t('loc:Súčet')}</span>,
+			render: (value) => <span className='xs-regular'>{value}</span>,
+			align: 'center'
 		}
-	},
-	...labels.map((label: string, index: number) => {
-		return {
-			key: index,
-			dataIndex: index,
-			className: cx({ 'future-divider': futureBreak - 0.5 === index }), // 0.5 is delta for display devider between columns
-			title: <span className={cx('xs-semibold', { 'text-notino-gray': futureBreak <= index })}>{label}</span>,
-			render: (value: number) => <span className={cx('xs-regular', { 'text-notino-gray': futureBreak <= index })}>{value}</span>
+	]
+}
+const salonColumns = (labels: string[] = [], futureBreak = 0): Columns => {
+	return [
+		{
+			key: 'type',
+			dataIndex: 'type',
+			render: (value) => {
+				switch (value) {
+					case SALONS_TIME_STATS_TYPE.BASIC:
+						return (
+							<div className={'flex flex-1 items-center'}>
+								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[200], flex: '0 0 auto' }} />
+								<span className='xs-bold'>{i18next.t('loc:BASIC')}</span>
+							</div>
+						)
+					case SALONS_TIME_STATS_TYPE.PREMIUM:
+						return (
+							<div className={'flex flex-1 items-center'}>
+								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[700], flex: '0 0 auto' }} />
+								<span className='xs-bold'>{i18next.t('loc:Schválené PREMIUM')}</span>
+							</div>
+						)
+					case SALONS_TIME_STATS_TYPE.PENDING:
+					default:
+						return (
+							<div className={'flex flex-1 items-center'}>
+								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.yellow[400], flex: '0 0 auto' }} />
+								<span className='xs-bold'>{i18next.t('loc:Žiadosti o PREMIUM')}</span>
+							</div>
+						)
+				}
+			}
+		},
+		...labels.map((label: string, index: number) => {
+			return {
+				key: index,
+				dataIndex: index,
+				className: cx({ 'future-divider': futureBreak - 0.5 === index }), // 0.5 is delta for display devider between columns
+				title: <span className={cx('xs-semibold', { 'text-notino-gray': futureBreak <= index })}>{label}</span>,
+				render: (value: number) => <span className={cx('xs-regular', { 'text-notino-gray': futureBreak <= index })}>{value}</span>
+			}
+		}),
+		{
+			key: 'summary',
+			dataIndex: 'summary',
+			title: () => <span className='xs-semibold'>{i18next.t('loc:Súčet')}</span>,
+			render: (value) => <span className='xs-regular'>{value}</span>,
+			align: 'center'
 		}
-	}),
-	{
-		key: 'summary',
-		dataIndex: 'summary',
-		title: () => <span className='xs-semibold'>{i18next.t('loc:Súčet')}</span>,
-		render: (value) => <span className='xs-regular'>{value}</span>,
-		align: 'center'
-	}
-]
-
+	]
+}
 const doughnutContent = (label: string, source?: any[], onlyLegend?: boolean) => {
 	return (
 		<div className='stastics-box py-4 px-6 md:py-8 md:px-12 statistics-box-wide'>
@@ -109,7 +193,7 @@ const doughnutContent = (label: string, source?: any[], onlyLegend?: boolean) =>
 							/>
 						</div>
 					)}
-					<div className='flex flex-1 items-center right-side'>
+					<div className='flex flex-1 items-center'>
 						<div className='w-full flex flex-col gap-4'>
 							{source.map((item: any, index: number) => (
 								<div key={index} className='flex items-center w-full h-6 cursor-pointer' onClick={item.onClick}>
@@ -129,7 +213,7 @@ const doughnutContent = (label: string, source?: any[], onlyLegend?: boolean) =>
 	)
 }
 
-const lineContent = (label: string, source: TimeStats, filter: React.ReactNode | JSX.Element) => {
+const lineContent = (label: string, source: TimeStats, filter: React.ReactNode | JSX.Element, columns: any) => {
 	return (
 		<div className='stastics-box py-4 px-6 md:py-8 md:px-12 mt-12'>
 			<div className='flex flex-wrap justify-between w-full'>
@@ -154,7 +238,7 @@ const lineContent = (label: string, source: TimeStats, filter: React.ReactNode |
 				</div>
 				<CustomTable
 					className='mt-8'
-					columns={columns(source.data?.labels, source?.data?.breakIndex)}
+					columns={columns}
 					twoToneRows
 					pagination={false}
 					dataSource={source.data?.columns}
@@ -173,10 +257,30 @@ const NotinoDashboard: FC = () => {
 	const dispatch = useDispatch()
 	const [annualStatsDate, setAnnualStatsDate] = useState<Dayjs>(now)
 	const [monthStatsDate, setMonthStatsDate] = useState<Dayjs>(now)
-	const { notino, salonsAnnualStats, salonsMonthStats } = useSelector((state: RootState) => state.dashboard)
+	const [mothRsStatsDate, setMothRsStatsDate] = useState<Dayjs>(now)
+	const [monthReservationsStatsDate, setMonthReservationsStatsDate] = useState<Dayjs>(now)
+
+	const { notino, salonsAnnualStats, salonsMonthStats, rsStats, reservationsStats } = useSelector((state: RootState) => state.dashboard)
+	const { selectedSalon } = useSelector((state: RootState) => state.selectedSalon)
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
+	const navigate = useNavigate()
+	const [tabKey, setTabKey] = useState<DASHBOARD_TASB_KEYS>(DASHBOARD_TASB_KEYS.SALONS_STATE)
 
 	useEffect(() => {
+		dispatch(
+			getRsStats({
+				countryCode: selectedCountry,
+				year: now.year(),
+				month: now.month() + 1
+			})
+		)
+		dispatch(
+			getReservationStats({
+				countryCode: selectedCountry,
+				year: now.year(),
+				month: now.month() + 1
+			})
+		)
 		dispatch(getNotinoDashboard(selectedCountry))
 		// months are indexed from 0 and API has indexed months from 1
 		dispatch(getSalonsMonthStats(now.year(), now.month() + 1, selectedCountry))
@@ -191,6 +295,14 @@ const NotinoDashboard: FC = () => {
 		return transformToStatsData(salonsMonthStats.data, salonsMonthStats.isLoading, salonsMonthStats.isFailure, monthStatsDate)
 	}, [salonsMonthStats, monthStatsDate])
 
+	const rsMonthStats: TimeStats = useMemo(() => {
+		return transformToRsStatsData(rsStats.data, rsStats.isLoading, rsStats.isFailure, mothRsStatsDate)
+	}, [rsStats.data, rsStats.isLoading, rsStats.isFailure, mothRsStatsDate])
+
+	const reservationsMonthStats: TimeStats = useMemo(() => {
+		return transformToReservationsStatsData(reservationsStats.data, reservationsStats.isLoading, reservationsStats.isFailure, monthReservationsStatsDate)
+	}, [reservationsStats.data, reservationsStats.isLoading, reservationsStats.isFailure, monthReservationsStatsDate])
+
 	const dashboardData: DashboardData = useMemo(() => {
 		const emptyGraphData = {
 			premiumVsBasic: [],
@@ -203,44 +315,44 @@ const NotinoDashboard: FC = () => {
 
 			const alertData: AlertData[] = [
 				{
-					label: t('loc:Salóny čakajúce na schválenie'),
+					label: <>{t('loc:Salóny čakajúce na schválenie')}</>,
 					count: notino.data.pendingSalons,
-					onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PENDING_PUBLICATION])
+					onClick: () => navigate(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PENDING_PUBLICATION])
 				},
 				{
-					label: t('loc:BASIC salóny, systémom omylom navrhnuté na spárovanie'),
+					label: <>{t('loc:BASIC salóny, systémom omylom navrhnuté na spárovanie')}</>,
 					count: notino.data.suggestionIncidents,
-					onClick: () => history.push(FILTER_PATHS().SALONS.rejectedSuggestions)
+					onClick: () => navigate(FILTER_PATHS().SALONS.rejectedSuggestions)
 				},
 				{
 					label: (
 						<span>
-							{`${t('loc:Zmeny v publikovaných salónoch za')} `}
+							{`${t('loc:Zmeny v salónoch za')} `}
 							<strong>{t('loc:24 hodín')}</strong>
 						</span>
 					),
 					count: notino.data.lastUpdated?.oneDayAgo,
-					onClick: () => history.push(FILTER_PATHS(ranges[0].from, ranges[0].to).SALONS.publishedChanges) // 24h ago
+					onClick: () => navigate(FILTER_PATHS(ranges[0].from, ranges[0].to).SALONS.changesOverPeriod) // 24h ago
 				},
 				{
 					label: (
 						<span>
-							{`${t('loc:Zmeny v publikovaných salónoch za')} `}
+							{`${t('loc:Zmeny v salónoch za')} `}
 							<strong>{t('loc:48 hodín')}</strong>
 						</span>
 					),
 					count: notino.data.lastUpdated?.twoDaysAgo,
-					onClick: () => history.push(FILTER_PATHS(ranges[1].from, ranges[1].to).SALONS.publishedChanges) // 48h ago
+					onClick: () => navigate(FILTER_PATHS(ranges[1].from, ranges[1].to).SALONS.changesOverPeriod) // 48h ago
 				},
 				{
 					label: (
 						<span>
-							{`${t('loc:Zmeny v publikovaných salónoch za')} `}
+							{`${t('loc:Zmeny v salónoch za')} `}
 							<strong>{t('loc:týždeň')}</strong>
 						</span>
 					),
 					count: notino.data.lastUpdated?.sevenDaysAgo,
-					onClick: () => history.push(FILTER_PATHS(ranges[2].from, ranges[2].to).SALONS.publishedChanges) // week ago
+					onClick: () => navigate(FILTER_PATHS(ranges[2].from, ranges[2].to).SALONS.changesOverPeriod) // week ago
 				}
 			]
 
@@ -264,13 +376,13 @@ const NotinoDashboard: FC = () => {
 					{
 						data: notino.data.basicSalons,
 						background: colors.blue[200],
-						onClick: () => history.push(FILTER_PATHS().SALONS.publishedBasics),
+						onClick: () => navigate(FILTER_PATHS().SALONS.publishedBasics),
 						label: t('loc:BASIC salóny')
 					},
 					{
 						data: notino.data.nonBasicSalons,
 						background: colors.blue[700],
-						onClick: () => history.push(FILTER_PATHS().SALONS.publishedPremiums),
+						onClick: () => navigate(FILTER_PATHS().SALONS.publishedPremiums),
 						label: t('loc:PREMIUM salóny')
 					}
 				],
@@ -278,25 +390,25 @@ const NotinoDashboard: FC = () => {
 					{
 						data: notino.data.declinedSalons,
 						background: colors.red[200],
-						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.DECLINED]),
+						onClick: () => navigate(FILTER_PATHS().SALONS[SALON_FILTER_STATES.DECLINED]),
 						label: t('loc:Zamietnuté')
 					},
 					{
 						data: notino.data.pendingSalons,
 						background: colors.yellow[400],
-						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PENDING_PUBLICATION]),
+						onClick: () => navigate(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PENDING_PUBLICATION]),
 						label: t('loc:Na schválenie')
 					},
 					{
 						data: notino.data.unpublishedSalons,
 						background: colors.neutral[200],
-						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.NOT_PUBLISHED]),
+						onClick: () => navigate(FILTER_PATHS().SALONS[SALON_FILTER_STATES.NOT_PUBLISHED]),
 						label: t('loc:Nepublikované')
 					},
 					{
 						data: notino.data.publishedSalons,
 						background: colors.green[200],
-						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PUBLISHED]),
+						onClick: () => navigate(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PUBLISHED]),
 						label: t('loc:Všetky publikované')
 					}
 				]
@@ -323,14 +435,16 @@ const NotinoDashboard: FC = () => {
 			allowClear={false}
 			format={dateFormat}
 			disabledDate={(date) => dayjs(date).year() < 2022}
+			getPopupContainer={(node) => node.parentElement || document.body}
 		/>
 	)
-
-	// if salon is not selected, show global (Notino) dashboard content
-	return (
+	const onTabChange = (selectedTabKey: string) => {
+		setTabKey(selectedTabKey as DASHBOARD_TASB_KEYS)
+	}
+	const salonDashboard = (
 		<SalonDashboard>
 			<Spin spinning={notino?.isLoading || !notino.data} wrapperClassName='dashboard-loading'>
-				<div className='content-body dashboard-content pt-20'>
+				<div className='content-body dashboard-content'>
 					<div className='dashboard-grid'>
 						{dashboardData.alertData.map((item: AlertData, index: number) => {
 							return <Statistics key={`statistics_item_${index}`} title={item.label} count={item.count} onActionItemClick={item.onClick} />
@@ -342,7 +456,7 @@ const NotinoDashboard: FC = () => {
 						<div className='flex add-button justify-center items-center mt-16'>
 							<div className='m-auto text-center'>
 								<h1 className='text-5xl font-bold'>{t('loc:Začnite vytvorením salónu')}</h1>
-								<Button onClick={() => history.push(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'} icon={<PlusIcon />}>
+								<Button onClick={() => navigate(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'} icon={<PlusIcon />}>
 									{t('loc:Pridať salón')}
 								</Button>
 							</div>
@@ -363,7 +477,8 @@ const NotinoDashboard: FC = () => {
 										setMonthStatsDate(date)
 										dispatch(getSalonsMonthStats(Number(date.year()), Number(date.month() + 1)))
 									}
-								}, 'MMMM - YYYY')
+								}, 'MMMM - YYYY'),
+								salonColumns(monthStats.data?.labels, monthStats.data?.breakIndex)
 							)}
 							{lineContent(
 								t('loc:Vývoj salónov - ročný'),
@@ -373,13 +488,74 @@ const NotinoDashboard: FC = () => {
 										setAnnualStatsDate(date)
 									}
 									dispatch(getSalonsAnnualStats(Number(dateString)))
-								})
+								}),
+								salonColumns(annualStats.data?.labels, annualStats.data?.breakIndex)
 							)}
 						</>
 					)}
 				</div>
 			</Spin>
 		</SalonDashboard>
+	)
+	const reservationsDashboard = (
+		<ReservationsDashboard>
+			{/* // RS stats */}
+			{lineContent(
+				t('loc:Vývoj salónov s rezervačným systémom - mesačný'),
+				rsMonthStats,
+				timeStatsFilter((date) => {
+					if (date) {
+						setMothRsStatsDate(date)
+						dispatch(
+							getRsStats({
+								year: Number(date.year()),
+								month: Number(date.month() + 1)
+							})
+						)
+					}
+				}, 'MMMM - YYYY'),
+				rsColumns(rsMonthStats.data?.labels, rsMonthStats.data?.breakIndex)
+			)}
+			{/* Reservations stats */}
+			{lineContent(
+				t('loc:Vývoj rezervácií - mesačný'),
+				reservationsMonthStats,
+				timeStatsFilter((date) => {
+					if (date) {
+						setMonthReservationsStatsDate(date)
+						dispatch(
+							getReservationStats({
+								year: Number(date.year()),
+								month: Number(date.month() + 1)
+							})
+						)
+					}
+				}, 'MMMM - YYYY'),
+				reservationsColumns(reservationsMonthStats.data?.labels, reservationsMonthStats.data?.breakIndex)
+			)}
+		</ReservationsDashboard>
+	)
+	// if salon is not selected, show global (Notino) dashboard content
+	return !selectedSalon.data ? (
+		<TabsComponent
+			className={'box-tab'}
+			activeKey={tabKey}
+			onChange={onTabChange}
+			items={[
+				{
+					key: DASHBOARD_TASB_KEYS.SALONS_STATE,
+					label: t('loc:Stav salónov'),
+					children: salonDashboard
+				},
+				{
+					key: DASHBOARD_TASB_KEYS.RESERVATION_SYSTEM,
+					label: t('loc:Rezervačný systém'),
+					children: reservationsDashboard
+				}
+			]}
+		/>
+	) : (
+		<>{salonDashboard}</>
 	)
 }
 

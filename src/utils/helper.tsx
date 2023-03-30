@@ -31,17 +31,17 @@ import {
 	toNumber,
 	trimEnd
 } from 'lodash'
-import { notification } from 'antd'
+import { notification, Tag } from 'antd'
 import slugify from 'slugify'
 import { SubmissionError, submit } from 'redux-form'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
-import { ArgsProps } from 'antd/lib/notification'
+import { ArgsProps } from 'antd/es/notification/interface'
+import UAParser from 'ua-parser-js'
 import cx from 'classnames'
 import showNotifications from './tsxHelpers'
 import {
-	ADMIN_PERMISSIONS,
 	BYTE_MULTIPLIER,
 	DATE_TIME_PARSER_DATE_FORMAT,
 	DATE_TIME_PARSER_FORMAT,
@@ -63,9 +63,12 @@ import {
 	NOTIFICATION_TYPE,
 	QUERY_LIMIT,
 	RESERVATION_STATE,
-	SALON_PERMISSION,
+	PERMISSION,
 	RESERVATION_PAYMENT_METHOD,
-	RESERVATION_SOURCE_TYPE
+	RESERVATION_SOURCE_TYPE,
+	MIN_SUPPORTED_BROWSER_VERSION,
+	BROWSERS,
+	BROWSER_TYPE
 } from './enums'
 
 import {
@@ -88,6 +91,12 @@ import { Paths } from '../types/api'
 import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
 import { ReactComponent as ClockIcon } from '../assets/icons/clock-icon.svg'
 import { ReactComponent as CouponIcon } from '../assets/icons/coupon.svg'
+import { ReactComponent as NotRealizedIcon } from '../assets/icons/alert-circle.svg'
+import { ReactComponent as CheckSuccessIcon } from '../assets/icons/approwed-icon.svg'
+import { ReactComponent as CreditCardIcon } from '../assets/icons/credit-card.svg'
+import { ReactComponent as WalletIcon } from '../assets/icons/wallet.svg'
+import { ReactComponent as DollarIcon } from '../assets/icons/dollar.svg'
+import { ReactComponent as CrossedIcon } from '../assets/icons/crossed-red-16.svg'
 // eslint-disable-next-line import/no-cycle
 import { LOCALES } from '../components/LanguagePicker'
 
@@ -119,6 +128,14 @@ export const decodeBackDataQuery = (base64?: string | null) => {
 		decoded = null
 	}
 	return decoded
+}
+
+export const formatObjToQuery = (queryObj: { [key: string]: string }) => {
+	const searchParams = new URLSearchParams()
+	Object.keys(queryObj).forEach((key) => {
+		searchParams.append(key, queryObj[key])
+	})
+	return `?${searchParams.toString()}`
 }
 
 export const getLinkWithEncodedBackUrl = (link: string) => {
@@ -276,42 +293,78 @@ export const translateDayName = (day: DAY | typeof MONDAY_TO_FRIDAY, shortName?:
 
 export const transalteReservationSourceType = (sourceType: RESERVATION_SOURCE_TYPE) => {
 	if (sourceType === RESERVATION_SOURCE_TYPE.ONLINE) {
-		return i18next.t('loc:B2C')
+		return i18next.t('loc:Salón')
 	}
-	return i18next.t('loc:B2B')
+	return i18next.t('loc:Klient')
 }
 
 export const translateReservationState = (state?: RESERVATION_STATE) => {
 	switch (state) {
 		case RESERVATION_STATE.NOT_REALIZED:
-			return i18next.t('loc:Nezrealizovaná')
+			return {
+				text: i18next.t('loc:Nezrealizovaná'),
+				icon: <NotRealizedIcon />
+			}
 		case RESERVATION_STATE.PENDING:
-			return i18next.t('loc:Čakajúca')
+			return {
+				text: i18next.t('loc:Čakajúca'),
+				icon: <ClockIcon color={'#FF9500'} />
+			}
 		case RESERVATION_STATE.CANCEL_BY_SALON:
-			return i18next.t('loc:Zrušená salónom')
+			return {
+				text: i18next.t('loc:Zrušená salónom'),
+				icon: <CrossedIcon />
+			}
 		case RESERVATION_STATE.APPROVED:
-			return i18next.t('loc:Potvrdená')
+			return {
+				text: i18next.t('loc:Potvrdená'),
+				icon: <CheckSuccessIcon color={'#008700'} />
+			}
 		case RESERVATION_STATE.REALIZED:
-			return i18next.t('loc:Zrealizovaná')
+			return {
+				text: i18next.t('loc:Zaplatená'),
+				icon: <DollarIcon color={'#008700'} />
+			}
 		case RESERVATION_STATE.CANCEL_BY_CUSTOMER:
-			return i18next.t('loc:Zrušená zákaznikom')
+			return {
+				text: i18next.t('loc:Zrušená zákaznikom'),
+				icon: <CrossedIcon />
+			}
 		case RESERVATION_STATE.DECLINED:
-			return i18next.t('loc:Odmietnutá')
+			return {
+				text: i18next.t('loc:Odmietnutá'),
+				icon: <CrossedIcon />
+			}
 		default:
-			return ''
+			return {
+				text: '-',
+				icon: undefined
+			}
 	}
 }
 
-export const translateReservationPaymentMethod = (paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
+export const translateReservationPaymentMethod = (paymentMethod?: RESERVATION_PAYMENT_METHOD, className?: string) => {
 	switch (paymentMethod) {
 		case RESERVATION_PAYMENT_METHOD.CARD:
-			return i18next.t('loc:Platba kartou')
+			return {
+				text: i18next.t('loc:Platba kartou'),
+				icon: <CreditCardIcon className={className} />
+			}
 		case RESERVATION_PAYMENT_METHOD.CASH:
-			return i18next.t('loc:Platba v hotovosti')
+			return {
+				text: i18next.t('loc:Platba v hotovosti'),
+				icon: <WalletIcon className={className} />
+			}
 		case RESERVATION_PAYMENT_METHOD.OTHER:
-			return i18next.t('loc:Iné')
+			return {
+				text: i18next.t('loc:Iné spôsoby platby'),
+				icon: <DollarIcon className={className} />
+			}
 		default:
-			return ''
+			return {
+				text: '',
+				icon: undefined
+			}
 	}
 }
 
@@ -451,9 +504,9 @@ export const scrollToFirstError = (errors: any, form: FORM | string) => {
 			})
 		}
 	})
-	const sortedErrors = orderBy(els, ['value'], ['asc'])
+	const sortedErrors: any = orderBy(els, ['value'], ['asc'])
 	if (!isEmpty(sortedErrors)) {
-		const el = document.getElementById(get(sortedErrors, '[0].id'))
+		const el = document.getElementById(get(sortedErrors, '[0].id') as any)
 		if (el?.scrollIntoView) {
 			el.scrollIntoView({
 				behavior: 'smooth',
@@ -563,11 +616,9 @@ export const transformNumberFieldValue = (rawValue: number | string | undefined 
 		} else if (isNumber(min) && isNumber(max) && value >= min && value <= max) {
 			result = value
 		}
-	} else if (Number.isNaN(value)) {
-		result = NaN
 	}
 
-	if (isFinite(result) && isNumber(precision)) {
+	if (!Number.isNaN(value) && isFinite(result) && isNumber(precision)) {
 		result = round(result as number, precision)
 	}
 
@@ -763,13 +814,11 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 			return undefined
 		}
 
-		const isErrors: boolean = errorKeys.length > 1
+		const errorsText = errorKeys.length > 1 ? i18next.t('loc:Vo formulári sa nachádzajú chyby!') : i18next.t('loc:Vo formulári sa nachádza chyba!')
 		return notification.error(
 			customMessage || {
 				message: i18next.t('loc:Chybne vyplnený formulár'),
-				description: i18next.t(
-					`loc:Skontrolujte správnosť vyplnených polí vo formulári. Vo formulári sa ${isErrors ? i18next.t('nachádzajú chyby') : i18next.t('nachádza chyba')}!`
-				)
+				description: i18next.t('loc:Skontrolujte správnosť vyplnených polí vo formulári. {{ errors }}', { errors: errorsText })
 			}
 		)
 	}
@@ -800,6 +849,20 @@ export const flattenTree = (array: any[], callback?: (item: any, level: number) 
 	})
 
 	return output
+}
+
+export const findNodeInTree = (node: any, value: any, valueKey = 'id', nestingKey = 'children') => {
+	let result = null
+	if (node) {
+		if (node[valueKey] === value) {
+			return node
+		}
+		if (node[nestingKey]) {
+			// eslint-disable-next-line no-return-assign
+			node[nestingKey].some((childrenNode: any) => (result = findNodeInTree(childrenNode, value)))
+		}
+	}
+	return result
 }
 
 export const isEnumValue = <T extends { [k: string]: string }>(checkValue: any, enumObject: T): checkValue is T[keyof T] =>
@@ -844,11 +907,12 @@ export const sortData = (a?: any, b?: any) => {
 	return 0
 }
 
-export const optionRenderNotiPinkCheckbox = (text: any, checked: any) => {
+export const optionRenderNotiPinkCheckbox = (text: any, checked: boolean, disabled: boolean) => {
 	return (
 		<div
 			className={cx('custom-rounded-checkbox', {
-				checked
+				checked,
+				disabled
 			})}
 		>
 			{text}
@@ -874,13 +938,27 @@ export const optionRenderWithImage = (itemData: any, fallbackIcon?: React.ReactN
 	)
 }
 
+export const optionRenderWithIcon = (itemData: any, fallbackIcon?: React.ReactNode, imageWidth = 16, imageHeight = 16) => {
+	const { label, icon } = itemData
+	const style = { width: imageWidth, height: imageHeight }
+	return (
+		<div className='flex items-center'>
+			<div style={style} className={'mr-2 flex items-center'}>
+				{icon || fallbackIcon}
+			</div>
+			{label}
+		</div>
+	)
+}
+
 export const optionRenderWithAvatar = (itemData: any, imageWidth = 24, imageHeight = 24) => {
 	// Thumbnail, label, extraContent (pod labelom)
-	const { label, thumbNail, extraContent, borderColor } = itemData
-	const style = { width: imageWidth, height: imageHeight, border: `2px solid ${borderColor}` }
+	const { label, extra } = itemData
+	const { color, thumbnail, extraContent, isDeleted } = extra || {}
+	const style = { width: imageWidth, height: imageHeight, border: `2px solid ${color}`, filter: isDeleted ? 'grayscale(100%)' : undefined }
 	return (
 		<div className='flex items-center divide-y'>
-			<img className={'rounded-full mr-2'} width={imageWidth} height={imageHeight} style={style} src={thumbNail} alt={label} />
+			<img className={'rounded-full mr-2'} width={imageWidth} height={imageHeight} style={style} src={thumbnail} alt={label} />
 			<div className={'flex flex-col leading-none'}>
 				<div>{label}</div>
 				<div>{extraContent}</div>
@@ -902,6 +980,15 @@ export const langaugesOptionRender = (itemData: any) => {
 			)}
 			{label}
 		</div>
+	)
+}
+
+export const optionRenderWithTag = (itemData: any) => {
+	const { value, label, tagClassName } = itemData
+	return (
+		<Tag key={value} className={cx('noti-tag', tagClassName)}>
+			<span>{label}</span>
+		</Tag>
 	)
 }
 
@@ -934,7 +1021,7 @@ export const hasAuthUserPermissionToEditRole = (
 	employee?: IEmployeePayload['data'],
 	salonRoles?: ISelectOptionItem[]
 ): { hasPermission: boolean; tooltip: string | null } => {
-	let result: { hasPermission: boolean; tooltip: string | null } = {
+	const result: { hasPermission: boolean; tooltip: string | null } = {
 		hasPermission: false,
 		tooltip: i18next.t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')
 	}
@@ -943,7 +1030,7 @@ export const hasAuthUserPermissionToEditRole = (
 		return result
 	}
 
-	if (authUser.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+	if (authUser.uniqPermissions?.some((permission) => [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
 		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
 		return {
 			hasPermission: true,
@@ -952,16 +1039,27 @@ export const hasAuthUserPermissionToEditRole = (
 	}
 	if (authUser.id === employee?.employee?.user?.id) {
 		// salon user can't edit his own role
-		result = {
+		return {
 			...result,
 			tooltip: i18next.t('loc:Nemôžeš editovať svoju rolu')
 		}
-		return result
 	}
 
 	const authUserSalonRole = authUser.salons?.find((salon) => salon.id === salonID)?.role
 	if (authUserSalonRole) {
 		const authUserRoleIndex = salonRoles.findIndex((role) => role?.value === authUserSalonRole?.id)
+
+		const employeeRole = employee.employee?.role
+		const employeeRoleIndex = salonRoles.findIndex((role) => role?.value === employeeRole?.id)
+
+		// it's not possible to edit role with same permissions (applies to admin role as well)
+		if (employeeRoleIndex === authUserRoleIndex) {
+			return {
+				...result,
+				tooltip: i18next.t('loc:Nie je možné editovať rolu s rovnakými oprávneniami, ako máte pridelené.')
+			}
+		}
+
 		if (authUserRoleIndex === 0) {
 			// is salon admin - has all permissions
 			return {
@@ -970,14 +1068,8 @@ export const hasAuthUserPermissionToEditRole = (
 			}
 		}
 
-		const employeeRole = employee.employee?.role
-		const employeeRoleIndex = salonRoles.findIndex((role) => role?.value === employeeRole?.id)
-		// it's not possible to edit admin role	if auth user is not admin
-		if (employeeRoleIndex === 0) {
-			return result
-		}
 		// it's possible to edit role only if you have permission to edit
-		if (authUserSalonRole?.permissions.find((permission) => permission.name === SALON_PERMISSION.USER_ROLE_EDIT)) {
+		if (authUserSalonRole?.permissions.find((permission) => permission.name === PERMISSION.EMPLOYEE_ROLE_UPDATE)) {
 			return {
 				hasPermission: true,
 				tooltip: null
@@ -993,7 +1085,7 @@ export const filterSalonRolesByPermission = (salonID?: string, authUser?: IAuthU
 		return salonRoles
 	}
 
-	if (authUser?.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+	if (authUser?.uniqPermissions?.some((permission) => [PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
 		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
 		// they automatically see all options
 		return salonRoles
@@ -1039,6 +1131,20 @@ export const getSalonFilterRanges = (values?: IDateTimeFilterOption[]): { [key: 
 	}, {})
 }
 
+export const getRangesForDatePicker = (values?: IDateTimeFilterOption[]): { [key: string]: Dayjs[] } => {
+	const options = values ?? Object.values(DEFAULT_DATE_TIME_OPTIONS())
+	const now = dayjs()
+	return options.reduce((ranges, value) => {
+		return [
+			...ranges,
+			{
+				label: value.name,
+				value: [now.subtract(value.value, value.unit), now]
+			}
+		]
+	}, [])
+}
+
 export const getFirstDayOfWeek = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).startOf('week')
 
 export const getFirstDayOfMonth = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).startOf('month')
@@ -1075,9 +1181,10 @@ export const getAssignedUserLabel = (assignedUser?: Paths.GetApiB2BAdminSalons.R
 	switch (true) {
 		case !!assignedUser.firstName && !!assignedUser.lastName:
 			return `${assignedUser.firstName} ${assignedUser.lastName}`
-
 		case !!assignedUser.email:
 			return `${assignedUser.email}`
+		case !!assignedUser.firstName:
+			return `${assignedUser.firstName}`
 		default:
 			return assignedUser.id
 	}
@@ -1289,4 +1396,40 @@ export const initializeLabelInValueSelect = (key: string | number, label: string
 		label,
 		extra
 	}
+}
+
+export const normalizeDataById = <T extends { id: string }>(data?: T[] | null): { [key: string]: T } => {
+	const normalizedData: { [key: string]: T } = {}
+	data?.forEach((item) => {
+		normalizedData[item.id] = item
+	})
+	return normalizedData
+}
+
+export const formatPrice = (price: number, symbol?: string) => (!isNil(price) ? `${price} ${symbol || ''}`.trim() : '')
+
+export const detectBrowserType = (): string => {
+	const parser = new UAParser()
+
+	const browser = parser.getBrowser()
+	const browserName = browser.name?.toLowerCase()
+	console.log('🚀 ~ file: helper.tsx:1408 ~ detectBrowserType ~ browserName:', browserName)
+	// get major number from version '101.4.11' -> 101, '94' -> 94
+	// eslint-disable-next-line radix
+	const majorVersion = parseInt(browser.version ? browser.version.split('.')[0] : '0')
+
+	let browserType = BROWSER_TYPE.SUPPORTED
+
+	try {
+		if (!isEnumValue(browserName, BROWSERS)) {
+			browserType = BROWSER_TYPE.UNKNOWN
+		} else if (MIN_SUPPORTED_BROWSER_VERSION(browserName) > majorVersion) {
+			browserType = BROWSER_TYPE.UNSUPPORTED
+		}
+	} catch (error) {
+		// eslint-disable-next-line no-console
+		console.error('Error during browser version detection', error)
+	}
+
+	return browserType
 }

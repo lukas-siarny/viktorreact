@@ -6,7 +6,6 @@ import { compose } from 'redux'
 import { initialize } from 'redux-form'
 import { map } from 'lodash'
 import cx from 'classnames'
-import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { SorterResult } from 'antd/lib/table/interface'
 
 // components
@@ -16,10 +15,18 @@ import SpecialistContactForm from './components/SpecialistContactsForm'
 import SpecialistContactFilter from './components/SpecialistContactsFilter'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, LANGUAGE } from '../../utils/enums'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, LANGUAGE, CREATE_BUTTON_ID } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { getPrefixCountryCode, getCountryNameFromNameLocalizations, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import {
+	getPrefixCountryCode,
+	getCountryNameFromNameLocalizations,
+	normalizeDirectionKeys,
+	setOrder,
+	sortData,
+	transformToLowerCaseWithoutAccent,
+	formFieldID
+} from '../../utils/helper'
 import i18n from '../../utils/i18n'
 
 // reducers
@@ -32,6 +39,9 @@ import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 import { IBreadcrumbs, Columns, ISpecialistContact, ISpecialistContactForm, ISpecialistContactFilter } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
+// hooks
+import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+
 const SpecialistContactsPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -39,8 +49,8 @@ const SpecialistContactsPage = () => {
 	const [visibleForm, setVisibleForm] = useState<boolean>(false)
 
 	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		order: withDefault(StringParam, 'country:ASC')
+		search: StringParam(),
+		order: StringParam('country:ASC')
 	})
 
 	// undefined - represents new record
@@ -150,7 +160,7 @@ const SpecialistContactsPage = () => {
 			changeFormVisibility()
 			// reset search in case of newly created entity
 			if (!specialistContactID && query.search) {
-				setQuery({ ...query, search: null })
+				setQuery({ ...query, search: '' })
 			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -230,7 +240,9 @@ const SpecialistContactsPage = () => {
 						<Spin spinning={specialistContacts?.isLoading}>
 							<SpecialistContactFilter
 								total={specialistContacts?.data?.length}
-								onSubmit={(values: ISpecialistContactFilter) => setQuery({ ...query, search: values.search })}
+								onSubmit={(values: ISpecialistContactFilter) => {
+									setQuery({ ...query, search: values.search })
+								}}
 								specialistContactID={specialistContactID}
 								addButton={
 									<Button
@@ -246,6 +258,7 @@ const SpecialistContactsPage = () => {
 										htmlType='button'
 										className={'noti-btn'}
 										icon={<PlusIcon />}
+										id={formFieldID(FORM.SPECIALIST_CONTACT, CREATE_BUTTON_ID)}
 									>
 										{STRINGS(t).addRecord(t('loc:špecialistu'))}
 									</Button>
@@ -264,7 +277,6 @@ const SpecialistContactsPage = () => {
 										onRow={(record) => ({
 											onClick: () => changeFormVisibility(true, record)
 										})}
-										loading={specialistContacts.isLoading}
 									/>
 								</div>
 								{visibleForm ? (
@@ -283,13 +295,7 @@ const SpecialistContactsPage = () => {
 					</div>
 				</Col>
 			</Row>
-			<Modal
-				title={t('loc:Upozornenie')}
-				visible={visibleRestrictionModal}
-				getContainer={() => document.body}
-				onCancel={() => setVisibleRestrictionModal(false)}
-				footer={null}
-			>
+			<Modal title={t('loc:Upozornenie')} open={visibleRestrictionModal} getContainer={() => document.body} onCancel={() => setVisibleRestrictionModal(false)} footer={null}>
 				<Result
 					status='warning'
 					title={t('loc:Ďalšieho špecialistu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jedného.')}
@@ -304,4 +310,4 @@ const SpecialistContactsPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]))(SpecialistContactsPage)
+export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(SpecialistContactsPage)

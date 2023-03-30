@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { ACCOUNT_STATE, CHANGE_DEBOUNCE_TIME, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { ACCOUNT_STATE, CHANGE_DEBOUNCE_TIME, CREATE_EMPLOYEE_BUTTON_ID, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
 
 // atoms
@@ -22,10 +22,13 @@ import { RootState } from '../../../reducers'
 
 type ComponentProps = {
 	createEmployee: Function
+	hide?: boolean
 }
 
 export interface IEmployeesFilter {
 	search: string
+	accountState: ACCOUNT_STATE
+	serviceID: string
 }
 
 type Props = InjectedFormProps<IEmployeesFilter, ComponentProps> & ComponentProps
@@ -33,7 +36,7 @@ type Props = InjectedFormProps<IEmployeesFilter, ComponentProps> & ComponentProp
 const fixLength100 = validationString(100)
 
 const EmployeesFilter = (props: Props) => {
-	const { handleSubmit, createEmployee } = props
+	const { handleSubmit, createEmployee, hide } = props
 	const [t] = useTranslation()
 	const servicesOptions = useSelector((state: RootState) => state.service.services.options)
 
@@ -58,28 +61,30 @@ const EmployeesFilter = (props: Props) => {
 		/>
 	)
 
-	const customContent = (
-		<Button onClick={() => createEmployee()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
+	const customContent = !hide && (
+		<Button id={CREATE_EMPLOYEE_BUTTON_ID} onClick={() => createEmployee()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
 			{t('loc:Pridať zamestnanca')}
 		</Button>
 	)
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters customContent={customContent} search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)}>
+			<Filters customContent={customContent} search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)} form={FORM.EMPLOYEES_FILTER}>
 				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={8}>
-						<Field
-							component={SelectField}
-							name={'accountState'}
-							placeholder={t('loc:Stav konta')}
-							allowClear
-							size={'middle'}
-							filterOptions
-							onDidMountSearch
-							options={accountStateOptions}
-						/>
-					</Col>
+					{!hide && (
+						<Col span={8}>
+							<Field
+								component={SelectField}
+								name={'accountState'}
+								placeholder={t('loc:Stav konta')}
+								allowClear
+								size={'middle'}
+								filterOptions
+								onDidMountSearch
+								options={accountStateOptions}
+							/>
+						</Col>
+					)}
 					<Col span={8}>
 						<Field component={SelectField} name={'serviceID'} placeholder={t('loc:Služba')} allowClear size={'middle'} onDidMountSearch options={servicesOptions} />
 					</Col>

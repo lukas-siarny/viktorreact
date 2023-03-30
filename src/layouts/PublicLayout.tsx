@@ -1,12 +1,11 @@
 import React, { ReactNode, useMemo } from 'react'
 import cx from 'classnames'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 // utils
 import { Button } from 'antd'
 import { RESOLUTIONS } from '../utils/enums'
-import { history } from '../utils/history'
 
 // components
 import LanguagePicker from '../components/LanguagePicker'
@@ -31,9 +30,10 @@ const PublicLayout = (props: Props) => {
 	// breakpoints are defined in tailwind config
 	const size = useMedia(['(max-width: 744px)', '(max-width: 1280px)'], [RESOLUTIONS.SM, RESOLUTIONS.MD], RESOLUTIONS.XL)
 	const { className, showBackButton = false } = props
+	const navigate = useNavigate()
 
 	const [t] = useTranslation()
-	const location = useLocation() as any
+	const location = useLocation()
 
 	const content = useMemo(() => {
 		switch (size) {
@@ -48,7 +48,7 @@ const PublicLayout = (props: Props) => {
 									{props.children}
 									{showBackButton && (
 										<Button
-											onClick={() => history.push(location?.state?.from || t('paths:index'))}
+											onClick={() => navigate(location?.state?.from || t('paths:index'))}
 											type={'primary'}
 											size={'small'}
 											className={'noti-btn absolute bottom-0 mb-0 left-0 noti-public-back-btn'}
@@ -76,7 +76,7 @@ const PublicLayout = (props: Props) => {
 									<MdLogo className='mt-8 mb-6' />
 									{showBackButton && (
 										<Button
-											onClick={() => history.push(location?.state?.from || t('paths:index'))}
+											onClick={() => navigate(location?.state?.from || t('paths:index'))}
 											type={'primary'}
 											className={'mb-2 noti-btn absolute bottom-5 left-5 noti-public-back-btn'}
 											icon={<BackButtonIcon />}
@@ -104,7 +104,7 @@ const PublicLayout = (props: Props) => {
 									<MdLogo className='mt-8 mb-6' />
 									{showBackButton && (
 										<Button
-											onClick={() => history.push(location?.state?.from || t('paths:index'))}
+											onClick={() => navigate(location?.state?.from || t('paths:index'))}
 											type={'primary'}
 											className={'mb-2 noti-btn absolute bottom-5 left-5 noti-public-back-btn'}
 											icon={<BackButtonIcon />}
@@ -120,7 +120,7 @@ const PublicLayout = (props: Props) => {
 					</div>
 				)
 		}
-	}, [size, props.children, className, showBackButton, location?.state?.from, t])
+	}, [size, props.children, className, showBackButton, location?.state?.from, t, navigate])
 
 	return <>{content}</>
 }

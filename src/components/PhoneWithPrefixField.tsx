@@ -18,10 +18,10 @@ import { ENUMERATIONS_KEYS, FORM, LANGUAGE } from '../utils/enums'
 import { ReactComponent as SK_Flag } from '../assets/flags/SK.svg'
 import { ReactComponent as CZ_Flag } from '../assets/flags/CZ.svg'
 /* import { ReactComponent as EN_Flag } from '../assets/flags/GB.svg'
+import { ReactComponent as IT_Flag } from '../assets/flags/IT.svg' */
 import { ReactComponent as HU_Flag } from '../assets/flags/HU.svg'
 import { ReactComponent as RO_Flag } from '../assets/flags/RO.svg'
 import { ReactComponent as BG_Flag } from '../assets/flags/BG.svg'
-import { ReactComponent as IT_Flag } from '../assets/flags/IT.svg' */
 
 type Props = {
 	formName?: FORM
@@ -37,6 +37,7 @@ type Props = {
 	style?: React.CSSProperties
 	focused?: boolean
 	getPopupContainer?: Function
+	readOnly?: boolean
 }
 
 const fallbackOptions = [
@@ -51,12 +52,6 @@ const fallbackOptions = [
 		label: '+420',
 		value: LANGUAGE.CZ,
 		flag: CZ_Flag
-	} /* ,
-	{
-		key: 3,
-		label: '+44',
-		value: LANGUAGE.EN,
-		flag: EN_Flag
 	},
 	{
 		key: 4,
@@ -75,6 +70,12 @@ const fallbackOptions = [
 		label: '+359',
 		value: LANGUAGE.BG,
 		flag: BG_Flag
+	} /* ,
+	{
+		key: 3,
+		label: '+44',
+		value: LANGUAGE.EN,
+		flag: EN_Flag
 	},
 	{
 		key: 7,
@@ -97,7 +98,8 @@ const PhoneWithPrefixField = (props: Props) => {
 		style,
 		formName,
 		fallbackDefaultValue,
-		getPopupContainer
+		getPopupContainer,
+		readOnly
 	} = props
 	const prefixOptions = useSelector((state: RootState) => state?.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const dispatch = useDispatch()
@@ -124,6 +126,7 @@ const PhoneWithPrefixField = (props: Props) => {
 					loading={prefixOptions?.isLoading}
 					defaultValue={fallbackDefaultValue}
 					required={required}
+					readOnly={readOnly}
 					disabled={disabled}
 					getPopupContainer={getPopupContainer}
 					className='phone-prefix'
@@ -133,6 +136,7 @@ const PhoneWithPrefixField = (props: Props) => {
 				<Field
 					className={label ? 'hidden-label' : undefined}
 					label={label}
+					readOnly={readOnly}
 					component={InputField}
 					placeholder={placeholder}
 					name={phoneName}

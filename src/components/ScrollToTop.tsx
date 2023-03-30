@@ -1,25 +1,34 @@
-import React, { FC, useEffect } from 'react'
-import { withRouter, useHistory } from 'react-router-dom'
+import React, { FC, PropsWithChildren, useLayoutEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
 export const scrollToTopFn = () => {
-	window.scrollTo({
-		top: 0,
-		behavior: 'smooth'
-	})
+	try {
+		window.scrollTo({
+			top: 0,
+			behavior: 'smooth'
+		})
+	} catch {
+		try {
+			window.scrollTo(0, 0)
+		} catch {
+			// eslint-disable-next-line no-console
+			console.warn(`window.scrollTo() is not supported in your browser`)
+		}
+	}
 }
 
-const ScrollToTop: FC = (props) => {
-	const history = useHistory()
+const ScrollToTop: FC<PropsWithChildren> = (props) => {
+	const location = useLocation()
 
-	useEffect(() => {
-		const unlisten = history.listen(scrollToTopFn)
-
+	useLayoutEffect(() => {
+		scrollToTopFn()
 		return () => {
-			unlisten()
+			scrollToTopFn()
 		}
-	}, [history])
+		// NOTE: pocuva na zmenu location (ked sa zmeni url path)
+	}, [location])
 
 	return <>{props.children}</>
 }
 
-export default withRouter(ScrollToTop)
+export default ScrollToTop

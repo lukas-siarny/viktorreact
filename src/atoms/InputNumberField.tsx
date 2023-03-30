@@ -60,7 +60,7 @@ const InputNumberField = (props: Props) => {
 	const inputRef = useRef(null)
 
 	const onFocus = useCallback(
-		async (e) => {
+		async (e: React.FocusEvent<HTMLInputElement>) => {
 			if (input.onFocus) {
 				const val = transformNumberFieldValue(e.target.value)
 				input.onFocus(val as any)
@@ -78,7 +78,7 @@ const InputNumberField = (props: Props) => {
 	}, [onPressEnter])
 
 	const onBlur = useCallback(
-		async (e) => {
+		async (e: React.FocusEvent<HTMLInputElement>) => {
 			const val = transformNumberFieldValue(e.target.value, Number(min), Number(max), precision, notNullValue)
 			// NOTE: wait until redux-form "BLUR" action is finished
 			await input.onBlur(val)

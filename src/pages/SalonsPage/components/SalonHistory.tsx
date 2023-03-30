@@ -1,10 +1,8 @@
 import React, { FC, PropsWithChildren, ReactNode, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Divider, List, Spin, Empty } from 'antd'
-import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { initialize } from 'redux-form'
 import dayjs from 'dayjs'
-import { isEmpty } from 'lodash'
 
 // components
 import SalonHistoryFilter, { ISalonHistoryFilter } from './filters/SalonHistoryFilter'
@@ -27,6 +25,9 @@ import { ReactComponent as CheckIcon } from '../../../assets/icons/check-12.svg'
 import { ReactComponent as ResetIcon } from '../../../assets/icons/reset-icon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
+
+// hooks
+import useQueryParams, { NumberParam, StringParam } from '../../../hooks/useQueryParams'
 
 const setIcon = (operation: SALON_HISTORY_OPERATIONS): undefined | ReactNode => {
 	switch (operation) {
@@ -53,16 +54,24 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 	const now = dayjs()
 
 	const [query, setQuery] = useQueryParams({
-		limit: NumberParam,
-		page: withDefault(NumberParam, 1),
-		dateFrom: withDefault(StringParam, now.subtract(1, 'week').format(DEFAULT_DATE_INIT_FORMAT)),
-		dateTo: withDefault(StringParam, now.format(DEFAULT_DATE_INIT_FORMAT))
+		limit: NumberParam(),
+		page: NumberParam(1),
+		dateFrom: StringParam(now.subtract(1, 'week').format(DEFAULT_DATE_INIT_FORMAT)),
+		dateTo: StringParam(now.format(DEFAULT_DATE_INIT_FORMAT))
 	})
 
 	const salonHistory = useSelector((state: RootState) => state.salons.salonHistory)
 
 	const fetchData = async () => {
-		dispatch(getSalonHistory({ dateFrom: query.dateFrom, dateTo: query.dateTo, salonID, page: query.page, limit: query.limit }))
+		dispatch(
+			getSalonHistory({
+				dateFrom: query.dateFrom,
+				dateTo: query.dateTo,
+				salonID,
+				page: query.page,
+				limit: query.limit
+			})
+		)
 		dispatch(
 			initialize(FORM.SALON_HISTORY_FILTER, {
 				dateFromTo: {
@@ -125,28 +134,31 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 				<SalonHistoryFilter onSubmit={handleSubmit} />
 			</div>
 			<Spin spinning={salonHistory.isLoading}>
-				{salonHistory.data?.salonHistory.map((history) => (
-					<>
-						<List.Item key={history.id} className={'salon-history-list'}>
-							<div className={'w-full'}>
-								<Divider className={'mb-1 mt-1'}>
-									<div className={'flex items-center justify-center'}>
-										<h4 className={'mr-2 mb-0'}>{formatDateByLocale(history.createdAt)}</h4>
-										{setIcon(history.operation as SALON_HISTORY_OPERATIONS)}
-										<div className={'flex items-center'}>
-											<h4 className={`m-0 p-0 history-text-action ${SALON_HISTORY_OPERATIONS_COLORS?.[history.operation]}`}>{history.operation}</h4>{' '}
-											<div className={'ml-2 font-bold'}>{history.userEmail}</div>
+				{salonHistory.data?.salonHistory.length ? (
+					<ul id={'salon-history-list'} className={'p-0'}>
+						{salonHistory.data?.salonHistory.map((history) => (
+							<List.Item key={history.id} className={'list-none p-0'}>
+								<div className={'w-full'}>
+									<Divider className={'mb-1 mt-1'}>
+										<div className={'flex items-center justify-center'}>
+											<h4 className={'mr-2 mb-0'}>{formatDateByLocale(history.createdAt)}</h4>
+											{setIcon(history.operation as SALON_HISTORY_OPERATIONS)}
+											<div className={'flex items-center'}>
+												<h4 className={`m-0 p-0 history-text-action ${SALON_HISTORY_OPERATIONS_COLORS?.[history.operation]}`}>{history.operation}</h4>{' '}
+												<div className={'ml-2 font-bold'}>{history.userEmail}</div>
+											</div>
 										</div>
+									</Divider>
+									<div className={'flex items-center'}>
+										<div className={'w-full'}>{renderValues(history?.oldValue, history?.newValue)}</div>
 									</div>
-								</Divider>
-								<div className={'flex items-center'}>
-									<div className={'w-full'}>{renderValues(history?.oldValue, history?.newValue)}</div>
 								</div>
-							</div>
-						</List.Item>
-					</>
-				))}
-				{isEmpty(salonHistory.data?.salonHistory) && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+							</List.Item>
+						))}
+					</ul>
+				) : (
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+				)}
 			</Spin>
 			<div className={'content-footer mt-0'}>
 				{!salonHistory.isFailure && (

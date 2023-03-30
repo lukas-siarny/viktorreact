@@ -4,15 +4,16 @@ import { message as antMessage } from 'antd'
 import { get, has, isEmpty, split } from 'lodash'
 import i18next from 'i18next'
 import qs from 'qs'
+import { ERROR_MSG_CODE, CANCEL_TOKEN_MESSAGES, MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES } from './enums'
 import rootReducer from '../reducers'
 import { logOutUser } from '../reducers/users/userActions'
 import { getAccessToken, isLoggedIn } from './auth'
-import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES } from './enums'
 import configureStore from './configureStore'
+import Navigator from './navigation'
 
 // types
 import { IErrorMessage } from '../types/interfaces'
-import showNotifications from './tsxHelpers'
+import showNotifications, { showNotificationModal } from './tsxHelpers'
 import { PathsDictionary } from '../types/api'
 
 type FilteredKeys<T, U> = { [P in keyof T]: T[P] extends U ? P : never }[keyof T]
@@ -33,10 +34,8 @@ type DeleteUrls = {
 	[Q in FilteredKeys<PathsDictionary, { delete: any }>]: PathsDictionary[Q]
 }
 
-const { store } = configureStore(rootReducer)
-
 export const showErrorNotifications = (error: AxiosError | Error | unknown, typeNotification = NOTIFICATION_TYPE.NOTIFICATION, skipRedirect = false) => {
-	let messages = get(error, 'response.data.messages')
+	let messages: IErrorMessage[] = get(error, 'response.data.messages') as any
 
 	if (get(error, 'response.status') === 401) {
 		if (isLoggedIn()) {
@@ -48,6 +47,7 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 			]
 		}
 		showNotifications(messages, typeNotification)
+		const { store } = configureStore(rootReducer)
 		logOutUser(skipRedirect)(store.dispatch, store.getState, undefined)
 	} else if (get(error, 'response.status') === 504 || get(error, 'response') === undefined || get(error, 'message') === 'Network Error') {
 		messages = [
@@ -57,6 +57,15 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 			}
 		]
 		showNotifications(messages, typeNotification)
+	} else if (messages.some((msg: any) => msg.code === ERROR_MSG_CODE.MISSING_COUNTRY_CODE)) {
+		const urlArray = split(get(error, 'config.url'), '/')
+		const salonsIndex = urlArray.indexOf(i18next.t('paths:salons'))
+		const salonId = urlArray[salonsIndex + 1]
+		showNotificationModal({
+			message: i18next.t('loc:Na vykonanie požadovanej akcie je potrebné mať nastavenú adresu salónu.'),
+			actionButtonLabel: i18next.t('loc:Nastaviť adresu'),
+			action: salonId ? () => Navigator.navigate(`${i18next.t('paths:salons')}/${salonId}`) : undefined
+		})
 	} else {
 		// if BE do not send message set general error message
 		messages = isEmpty(messages) ? [{ type: MSG_TYPE.ERROR, message: i18next.t('loc:Ups niečo sa pokazilo') }] : messages
@@ -67,6 +76,7 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 export interface ICustomConfig extends AxiosRequestConfig {
 	messages?: IErrorMessage[]
 	skipLoginRedirect?: boolean
+	skip404Handler?: boolean
 }
 
 const buildHeaders = () => {
@@ -106,22 +116,23 @@ const fullFillURL = (urlTemplate: string, params: any) => {
 	}
 }
 
-const cancelGetTokens = {} as { [key: string]: CancelTokenSource }
+export const cancelGetTokens = {} as { [key: string]: CancelTokenSource }
 
 /**
  * @param url url endpoint
  * @param params Object object
  * @param customConfig overwrite defaultConfig with custom one
  * @param typeNotification Enum notification type
+ * @param showLoading
+ * @param allowCancelToken
+ * @param cancelTokenKey
  * @return Promise response
  *
  */
 export const getReq = async <T extends keyof GetUrls>(
 	url: T,
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
 	params: Parameters<GetUrls[T]['get']>[0],
-	customConfig: ICustomConfig = {},
+	customConfig?: ICustomConfig,
 	typeNotification: NOTIFICATION_TYPE | false = NOTIFICATION_TYPE.NOTIFICATION,
 	showLoading = false,
 	allowCancelToken = false,
@@ -133,7 +144,7 @@ export const getReq = async <T extends keyof GetUrls>(
 	if (allowCancelToken) {
 		const cancelTokenStorageKey = cancelTokenKey || fullfilURL
 		if (typeof cancelGetTokens[cancelTokenStorageKey] !== typeof undefined) {
-			cancelGetTokens[cancelTokenStorageKey].cancel('Operation canceled due to new request.')
+			cancelGetTokens[cancelTokenStorageKey].cancel(CANCEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST)
 		}
 		// Save the cancel token for the current request
 		cancelGetTokens[cancelTokenStorageKey] = axios.CancelToken.source()
@@ -145,14 +156,18 @@ export const getReq = async <T extends keyof GetUrls>(
 	if (showLoading) {
 		hide = antMessage.loading('Načitavajú sa dáta...', 0)
 	}
+
 	const config: AxiosRequestConfig = {
-		paramsSerializer: qs.stringify,
+		paramsSerializer: {
+			serialize: (serializeParams: Record<string, any>) => qs.stringify(serializeParams), // mimic pre 1.x behavior and send entire params object to a custom serializer func. Allows consumer to control how params are serialized.
+			indexes: false // array indexes format (null - no brackets, false (default) - empty brackets, true - brackets with indexes)
+		},
 		...customConfig,
 		...token,
 		headers: {
 			...buildHeaders(),
 			...get(customConfig, 'headers', {})
-		}
+		} as any
 	}
 
 	if (queryParams) {
@@ -165,7 +180,7 @@ export const getReq = async <T extends keyof GetUrls>(
 			if (customConfig && customConfig.messages) {
 				showNotifications(customConfig.messages, typeNotification)
 			} else if (has(res, 'data.messages')) {
-				showNotifications(get(res, 'data.messages'), typeNotification)
+				showNotifications(get(res, 'data.messages') as any, typeNotification)
 			}
 		}
 		if (hide) {
@@ -189,22 +204,20 @@ const cancelPostTokens = {} as { [key: string]: CancelTokenSource }
 /**
  * @param url url endpoint
  * @param params Object params object
- * @param data Object data object
+ * @param reqBody
  * @param customConfig overwrite defaultConfig with custom one
  * @param typeNotification Enum notification type
  * @param showLoading Boolean show loading
+ * @param allowCancelToken
+ * @param cancelTokenKey
  * @return Promise response
  * Performs post request to url and returns callback with result
  */
 export const postReq = async <T extends keyof PostUrls>(
 	url: T,
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
 	params: Parameters<PostUrls[T]['post']>[0],
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
 	reqBody: Parameters<PostUrls[T]['post']>[1],
-	customConfig: ICustomConfig = {},
+	customConfig?: ICustomConfig,
 	typeNotification: NOTIFICATION_TYPE | false = NOTIFICATION_TYPE.NOTIFICATION,
 	showLoading = false,
 	allowCancelToken = false,
@@ -215,7 +228,7 @@ export const postReq = async <T extends keyof PostUrls>(
 	if (allowCancelToken) {
 		const cancelTokenStorageKey = cancelTokenKey || fullfilURL
 		if (typeof cancelPostTokens[cancelTokenStorageKey] !== typeof undefined) {
-			cancelPostTokens[cancelTokenStorageKey].cancel('Operation canceled due to new request.')
+			cancelPostTokens[cancelTokenStorageKey].cancel(CANCEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST)
 		}
 		// Save the cancel token for the current request
 		cancelPostTokens[cancelTokenStorageKey] = axios.CancelToken.source()
@@ -271,33 +284,33 @@ const cancelPatchTokens = {} as { [key: string]: CancelTokenSource }
 /**
  * @param url url endpoint
  * @param params Object params object
- * @param data Object data object
+ * @param reqBody
  * @param customConfig overwrite defaultConfig with custom one
  * @param typeNotification Enum notification type
  *
  * Performs put request to url and returns callback with result
+ * @param showLoading
+ * @param allowCancelToken
+ * @param cancelTokenKey
  */
 
 export const patchReq = async <T extends keyof PatchUrls>(
 	url: T,
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
 	params: Parameters<PatchUrls[T]['patch']>[0],
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
 	reqBody: Parameters<PatchUrls[T]['patch']>[1],
-	customConfig: ICustomConfig = {},
+	customConfig?: ICustomConfig,
 	typeNotification: NOTIFICATION_TYPE | false = NOTIFICATION_TYPE.NOTIFICATION,
 	showLoading = false,
 	allowCancelToken = false,
 	cancelTokenKey = ''
 ): Promise<ReturnType<PatchUrls[T]['patch']>> => {
 	const { fullfilURL, queryParams } = fullFillURL(url, params)
+
 	let token = {}
 	if (allowCancelToken) {
 		const cancelTokenStorageKey = cancelTokenKey || fullfilURL
 		if (typeof cancelPatchTokens[cancelTokenStorageKey] !== typeof undefined) {
-			cancelPatchTokens[cancelTokenStorageKey].cancel('Operation canceled due to new request.')
+			cancelPatchTokens[cancelTokenStorageKey].cancel(CANCEL_TOKEN_MESSAGES.CANCELED_DUE_TO_NEW_REQUEST)
 		}
 		// Save the cancel token for the current request
 		cancelPatchTokens[cancelTokenStorageKey] = axios.CancelToken.source()
@@ -327,7 +340,7 @@ export const patchReq = async <T extends keyof PatchUrls>(
 		if (typeNotification && customConfig && customConfig.messages) {
 			showNotifications(customConfig.messages, typeNotification)
 		} else if (typeNotification && has(res, 'data.messages')) {
-			showNotifications(get(res, 'data.messages'), typeNotification)
+			showNotifications(get(res, 'data.messages') as any, typeNotification)
 		}
 		if (hide) {
 			hide()
@@ -345,8 +358,8 @@ export const patchReq = async <T extends keyof PatchUrls>(
 }
 
 /**
- * @param url url endpoint
- * @param params Object params object
+ * @param _url
+ * @param _params
  * @param customConfig overwrite defaultConfig with custom one
  * @param typeNotification Enum notification type
  * @param showLoading Boolean show loading
@@ -355,10 +368,8 @@ export const patchReq = async <T extends keyof PatchUrls>(
  */
 export const deleteReq = async <T extends keyof DeleteUrls>(
 	_url: T,
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
 	_params: Parameters<DeleteUrls[T]['delete']>[0],
-	customConfig: ICustomConfig = {},
+	customConfig?: ICustomConfig,
 	typeNotification: NOTIFICATION_TYPE | false = NOTIFICATION_TYPE.NOTIFICATION,
 	showLoading = false
 ): Promise<ReturnType<DeleteUrls[T]['delete']>> => {
@@ -386,7 +397,7 @@ export const deleteReq = async <T extends keyof DeleteUrls>(
 		if (typeNotification && customConfig && customConfig.messages) {
 			showNotifications(customConfig.messages, typeNotification)
 		} else if (typeNotification && has(res, 'data.messages')) {
-			showNotifications(get(res, 'data.messages'), typeNotification)
+			showNotifications(get(res, 'data.messages') as any, typeNotification)
 		}
 
 		if (hide) {

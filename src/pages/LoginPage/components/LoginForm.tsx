@@ -5,19 +5,18 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 // atoms
+import InputPasswordField from '../../../atoms/InputPasswordField'
 import InputField from '../../../atoms/InputField'
 
 // interfaces
 import { ILoginForm } from '../../../types/interfaces'
 
 // utils
-import { FORM } from '../../../utils/enums'
-import { showErrorNotification } from '../../../utils/helper'
+import { FORGOT_PASSWORD_BUTTON_ID, FORM, HELP_BUTTON_ID, SIGNUP_BUTTON_ID, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { formFieldID, showErrorNotification } from '../../../utils/helper'
 
 // validate
-
 import validateLoginForm from './validateLoginForm'
-import InputPasswordField from '../../../atoms/InputPasswordField'
 
 type ComponentProps = {
 	showForgottenPasswordModal: () => void
@@ -37,6 +36,7 @@ const LoginForm: FC<Props> = (props) => {
 			</Space>
 			<Row justify={'end'}>
 				<Button
+					id={formFieldID(FORM.LOGIN, FORGOT_PASSWORD_BUTTON_ID)}
 					className={'p-0 font-medium h-auto whitespace-normal max-w-full'}
 					style={{ minHeight: 16 }}
 					onClick={showForgottenPasswordModal}
@@ -47,20 +47,28 @@ const LoginForm: FC<Props> = (props) => {
 				</Button>
 			</Row>
 			<div className='mt-6'>
-				<Button type={'primary'} block className={`noti-btn m-regular mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
+				<Button
+					id={formFieldID(FORM.LOGIN, SUBMIT_BUTTON_ID)}
+					type={'primary'}
+					block
+					className={`noti-btn m-regular mb-4`}
+					htmlType={'submit'}
+					disabled={submitting}
+					loading={submitting}
+				>
 					{t('loc:Prihlásiť sa')}
 				</Button>
 				<span className='flex items-center md:justify-center text-notino-black font-medium'>
 					{t('loc:Ešte nemáte účet?')}
 					<Link to={`${t('paths:signup')}`} className='inline-block'>
-						<Button className='p-0 ml-1 font-medium' type={'link'} htmlType={'button'}>
+						<Button id={formFieldID(FORM.LOGIN, SIGNUP_BUTTON_ID)} className='p-0 ml-1 font-medium' type={'link'} htmlType={'button'}>
 							{t('loc:Registrovať sa')}
 						</Button>
 					</Link>
 				</span>
 				<span className={'flex items-center md:justify-center font-medium pb-6'}>
 					<Link to={`${t('paths:contact')}`} className='inline-block'>
-						<Button className='p-0 font-medium' type={'link'} htmlType={'button'}>
+						<Button id={formFieldID(FORM.LOGIN, HELP_BUTTON_ID)} className='p-0 font-medium' type={'link'} htmlType={'button'}>
 							{t('loc:Potrebujete pomôcť?')}
 						</Button>
 					</Link>

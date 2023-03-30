@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useMemo } from 'react'
 import { Element } from 'react-scroll'
 import dayjs from 'dayjs'
-import { useDispatch } from 'react-redux'
+import cx from 'classnames'
 
 // full calendar
-import FullCalendar, { SlotLabelContentArg, DateSelectArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { SlotLabelContentArg, DateSelectArg, DateSpanApi } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin from '@fullcalendar/interaction'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
@@ -12,6 +12,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, DEFAULT_TIME_FORMAT } from '../../../../utils/enums'
 import { composeDayViewEvents, composeDayViewResources, getTimeScrollId } from '../../calendarHelpers'
+import eventContent from '../../eventContent'
 
 // types
 import { ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/interfaces'
@@ -19,22 +20,19 @@ import { ICalendarView, IDayViewResourceExtenedProps } from '../../../../types/i
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
 
-// components
-import CalendarEventContent from '../CalendarEventContent'
-import { clearEvent } from '../../../../reducers/virtualEvent/virtualEventActions'
-
 interface IResourceLabel {
 	image?: string
 	color?: string
 	name?: string
 	description?: string
 	isTimeOff?: boolean
+	isDeleted?: boolean
 }
 
 const ResourceLabel: FC<IResourceLabel> = React.memo((props) => {
-	const { image, color, name, description, isTimeOff } = props
+	const { image, color, name, description, isTimeOff, isDeleted } = props
 	return (
-		<div className={'nc-day-resource-label'}>
+		<div className={cx('nc-day-resource-label', { 'is-deleted': isDeleted })}>
 			<div className={'image w-6 h-6 bg-notino-gray bg-cover'} style={{ backgroundImage: `url("${image}")`, borderColor: color }} />
 			<div className={'info flex flex-col justify-start text-xs font-normal min-w-0'}>
 				<span className={'name'}>{name}</span>
@@ -55,9 +53,21 @@ const resourceLabelContent = (data: any) => {
 	const { employee } = extendedProps || {}
 	const color = resource?.eventBackgroundColor
 
-	return <ResourceLabel image={employee?.image} color={color} isTimeOff={employee?.isTimeOff} name={employee?.name} description={employee?.description} />
+	return (
+		<ResourceLabel
+			image={employee?.image}
+			color={color}
+			isTimeOff={employee?.isTimeOff}
+			name={employee?.name}
+			description={employee?.description}
+			isDeleted={employee?.isDeleted}
+		/>
+	)
 }
 
+/**
+ * kvoli nastaveniu height={'auto'} vo FullCalendari nefunguje scrollToTime a tuto funkcionalitu je potrebne spravit custom logikou
+ */
 const slotLabelContent = (data: SlotLabelContentArg) => {
 	const { time } = data || {}
 
@@ -71,11 +81,12 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 	)
 }
 
-interface ICalendarDayView extends ICalendarView {}
+interface ICalendarDayView extends ICalendarView {
+	handleSelectAllow: (selectInfo: DateSpanApi) => boolean
+}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
 	const {
-		salonID,
 		selectedDate,
 		eventsViewType,
 		reservations,
@@ -86,12 +97,12 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 		onAddEvent,
 		virtualEvent,
 		enabledSalonReservations,
-		setEventManagement,
 		onEventChangeStart,
-		onReservationClick
+		onReservationClick,
+		onEventChangeStop,
+		handleSelectAllow
 	} = props
 
-	const dispatch = useDispatch()
 	const events = useMemo(() => {
 		const data = composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees)
 		// ak je virtualEvent definovany, zaradi sa do zdroja eventov pre Calendar
@@ -103,10 +114,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	 * Spracuje input z calendara click/select a vytvori z neho init data, ktore vyuzije form v SiderEventManager
 	 */
 	const handleNewEvent = (event: DateSelectArg) => {
-		// NOTE: ak by bol vytvoreny virualny event a pouzivatel vytvori dalsi tak predhadzajuci zmazat a vytvorit novy
-		dispatch(clearEvent())
-		setEventManagement(undefined)
-
 		if (event.resource) {
 			// eslint-disable-next-line no-underscore-dangle
 			const { employee } = event.resource._resource.extendedProps
@@ -158,33 +165,29 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 				nowIndicator
 				allDaySlot={false}
 				stickyFooterScrollbar
+				selectable={enabledSalonReservations}
+				resourceOrder='title'
 				// data sources
-				events={events}
+				eventSources={[events]}
 				resources={resources}
 				// render hooks
 				resourceLabelContent={resourceLabelContent}
-				eventContent={(data) => (
-					<CalendarEventContent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} onReservationClick={onReservationClick} />
-				)}
+				eventContent={(data) => eventContent(data, CALENDAR_VIEW.DAY, onEditEvent, onReservationClick)}
 				slotLabelContent={slotLabelContent}
 				// handlers
-				eventDrop={(arg) => {
-					if (onEventChange) onEventChange(CALENDAR_VIEW.DAY, arg)
-				}}
-				eventResize={(arg) => onEventChange && onEventChange(CALENDAR_VIEW.DAY, arg)}
-				// select
-				selectable={enabledSalonReservations}
-				eventDragStart={() => onEventChangeStart && onEventChangeStart()}
-				eventResizeStart={() => onEventChangeStart && onEventChangeStart()}
+				eventDrop={onEventChange}
+				eventResize={onEventChange}
+				eventDragStart={onEventChangeStart}
+				eventResizeStart={onEventChangeStart}
+				eventDragStop={onEventChangeStop}
+				eventResizeStop={onEventChangeStop}
 				select={handleNewEvent}
+				selectAllow={handleSelectAllow}
 			/>
 		</div>
 	)
 })
 
 export default React.memo(CalendarDayView, (prevProps, nextProps) => {
-	if (nextProps.disableRender) {
-		return true
-	}
 	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
 })

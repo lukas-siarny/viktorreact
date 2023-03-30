@@ -10,7 +10,6 @@ import { filter, get } from 'lodash'
 import { SorterResult } from 'antd/lib/table/interface'
 
 // components
-import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import LanguagesForm from './components/LanguagesForm'
@@ -18,10 +17,10 @@ import LanguagesFilter from './components/LanguagesFilter'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../components/LanguagePicker'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, DEFAULT_LANGUAGE } from '../../utils/enums'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, DEFAULT_LANGUAGE, CREATE_BUTTON_ID } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { normalizeDirectionKeys, normalizeNameLocalizations, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import { formFieldID, normalizeDirectionKeys, normalizeNameLocalizations, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -33,6 +32,9 @@ import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 // types
 import { IBreadcrumbs, ILanguage, ILanguageForm } from '../../types/interfaces'
 import { Paths } from '../../types/api'
+
+// hooks
+import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
 
 type Columns = ColumnsType<any>
 
@@ -49,8 +51,8 @@ const LanguagesPage = () => {
 	const languages = useSelector((state: RootState) => state.languages.languages)
 
 	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		order: withDefault(StringParam, 'name:ASC')
+		search: StringParam(),
+		order: StringParam('name:ASC')
 	})
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -139,7 +141,7 @@ const LanguagesPage = () => {
 			changeFormVisibility()
 			// reset search in case of newly created entity
 			if (!languageID && query.search) {
-				setQuery({ ...query, search: null })
+				setQuery({ ...query, search: '' })
 			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -229,6 +231,7 @@ const LanguagesPage = () => {
 										htmlType='button'
 										className={'noti-btn'}
 										icon={<PlusIcon />}
+										id={formFieldID(FORM.LANGUAGES, CREATE_BUTTON_ID)}
 									>
 										{STRINGS(t).addRecord(t('loc:jazyk'))}
 									</Button>
@@ -264,4 +267,4 @@ const LanguagesPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]))(LanguagesPage)
+export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(LanguagesPage)

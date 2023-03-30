@@ -85,12 +85,12 @@ const SupportContactForm: FC<Props> = (props) => {
 						<FieldArray
 							component={InputsArrayField}
 							name={'emails'}
-							props={{ disabled: disabledForm, entityName: t('loc:email'), label: t('loc:Emailové adresy'), required: true }}
+							props={{ disabled: disabledForm, nestedFieldName: 'email', entityName: t('loc:email'), label: t('loc:Emailové adresy'), required: true }}
 						/>
 						<FieldArray component={PhoneArrayField} name={'phones'} props={{ disabled: disabledForm, requied: true }} />
 						<Row justify={'space-between'}>
 							<Field
-								className={'w-4/5'}
+								className={'w-4/6'}
 								component={InputField}
 								label={t('loc:Ulica')}
 								placeholder={t('loc:Zadajte ulicu')}
@@ -100,7 +100,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								disabled={disabledForm}
 							/>
 							<Field
-								className={'w-1/6'}
+								className={'w-3/10'}
 								component={InputField}
 								label={t('loc:Popisné číslo')}
 								placeholder={t('loc:Zadajte číslo')}

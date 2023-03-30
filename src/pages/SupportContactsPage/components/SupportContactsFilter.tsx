@@ -15,8 +15,8 @@ import { RootState } from '../../../reducers'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { CHANGE_DEBOUNCE_TIME, ENUMERATIONS_KEYS, FIELD_MODE, FORM } from '../../../utils/enums'
-import { checkFiltersSize, checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
+import { CHANGE_DEBOUNCE_TIME, CREATE_BUTTON_ID, ENUMERATIONS_KEYS, FIELD_MODE, FORM } from '../../../utils/enums'
+import { checkFiltersSize, checkFiltersSizeWithoutSearch, formFieldID, validationString } from '../../../utils/helper'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -79,6 +79,7 @@ const SupportContactsFilter = (props: Props) => {
 						htmlType='button'
 						className={'noti-btn w-full mb-2'}
 						icon={<PlusIcon />}
+						id={formFieldID(FORM.SUPPORT_CONTACT, CREATE_BUTTON_ID)}
 					>
 						{t('loc:Pridať podporu')}
 					</Button>
@@ -102,7 +103,7 @@ const SupportContactsFilter = (props: Props) => {
 					</Col>
 				</Row>
 			</Filters> */}
-			<Modal title={t('loc:Upozornenie')} visible={visibleModal} getContainer={() => document.body} onCancel={() => setVisibleModal(false)} footer={null}>
+			<Modal title={t('loc:Upozornenie')} open={visibleModal} getContainer={() => document.body} onCancel={() => setVisibleModal(false)} footer={null}>
 				<Result
 					status='warning'
 					title={t('loc:Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu.')}

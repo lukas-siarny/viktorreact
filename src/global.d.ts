@@ -57,5 +57,20 @@ declare module 'tailwindcss/colors' {
 }
 
 interface Window {
+	gm_authFailure: any
 	__REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: any
+}
+
+declare function useSearchParams(defaultInit?: URLSearchParamsInit): [URLSearchParams, SetURLSearchParams]
+
+type ParamKeyValuePair = [string, string]
+
+type URLSearchParamsInit = string | ParamKeyValuePair[] | Record<string, string | string[]> | URLSearchParams
+
+type SetURLSearchParams = (nextInit?: URLSearchParamsInit | ((prev: URLSearchParams) => URLSearchParamsInit), navigateOpts?: NavigateOptions) => void
+
+interface NavigateOptions {
+	replace?: boolean
+	state?: any
+	preventScrollReset?: boolean
 }

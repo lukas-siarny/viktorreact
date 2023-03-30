@@ -1,13 +1,31 @@
-import { EventDragStartArg, EventResizeDoneArg, EventResizeStartArg } from '@fullcalendar/interaction'
+import { IUseQueryParams } from './../hooks/useQueryParams'
+import { EventDragStartArg, EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 import { EventDropArg, EventInput } from '@fullcalendar/react'
 
 // utils
 import {
-	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT,
-	CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, DAY,
-	RESERVATION_SOURCE_TYPE, SERVICE_TYPE, RESERVATION_STATE, RESERVATION_PAYMENT_METHOD, CONFIRM_MODAL_DATA_TYPE, PARAMETER_TYPE
+	GENDER,
+	MSG_TYPE,
+	LANGUAGE,
+	PERMISSION,
+	CALENDAR_EVENTS_VIEW_TYPE,
+	SALON_STATES,
+	EVERY_REPEAT,
+	CALENDAR_EVENT_TYPE,
+	CALENDAR_VIEW,
+	CONFIRM_BULK,
+	RS_NOTIFICATION,
+	RS_NOTIFICATION_TYPE,
+	DAY,
+	SERVICE_TYPE,
+	RESERVATION_STATE,
+	RESERVATION_PAYMENT_METHOD,
+	CONFIRM_MODAL_DATA_TYPE,
+	CALENDAR_EVENT_DISPLAY_TYPE,
+	PARAMETER_TYPE,
+	RESERVATION_SOURCE_TYPE
 } from '../utils/enums'
 
 // types
@@ -20,9 +38,9 @@ export interface IErrorMessage {
 }
 
 export interface IPaginationQuery {
-	limit?: number | null
-	page?: number | null
-	order?: string
+	limit?: number | null | string
+	page?: number | null | string
+	order?: string | null
 }
 
 export interface ILabelInValue<T = any> {
@@ -38,13 +56,13 @@ export interface IResponsePagination {
 	totalCount: number
 }
 
-export interface ISelectOptionItem {
+export interface ISelectOptionItem<ExtraType = any> {
 	key: number | string
 	label: string
 	value: number | string
 	disabled?: boolean
 	hardSelected?: boolean
-	extra?: any
+	extra?: ExtraType
 	className?: string
 	level?: number
 }
@@ -63,7 +81,7 @@ export interface IInviteEmployeeForm {
 
 export type ServiceRootCategory = Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200['employee']['categories']
 
-type ServiceType = NonNullable<
+export type ServiceType = NonNullable<
 	NonNullable<Paths.GetApiB2BV1Services.Responses.$200['groupedServicesByCategory'][0]['category']>['children'][0]['category']
 >['children'][0]['service']
 
@@ -155,14 +173,18 @@ export type OpeningHours = {
 	onDemand?: boolean
 }[]
 
+export interface AutocompleteLabelInValue {
+	key: string
+	label: string | null
+	value: string | null
+}
 export interface ISalonForm {
 	salonNameFromSelect: boolean
 	id: string | null
-	name: string | null
-	nameSelect: { key: string; label: string | null; value: string | null } | null
+	name: AutocompleteLabelInValue | string | null
 	aboutUsFirst: string | null
 	state?: SALON_STATES
-	sourceOfPremium?: string,
+	sourceOfPremium?: string
 	openingHours: OpeningHours
 	sameOpenHoursOverWeek: boolean
 	openOverWeekend: boolean
@@ -224,27 +246,40 @@ export interface IServiceForm {
 	employees: EmployeeServiceData[]
 	settings: {
 		enabledB2cReservations: boolean
-		autoApproveReservatons: boolean
+		autoApproveReservations: boolean
 	}
 }
 
+export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
+export interface ICalendarEventDetailPayload {
+	data: CalendarEventDetail | null
+}
 export interface ICalendarReservationForm {
-	customer: ISelectOptionItem
-	service: ISelectOptionItem
-	employee: ISelectOptionItem
+	customer: ISelectOptionItem<{
+		customerData?: NonNullable<ICalendarEventDetailPayload['data']>['customer']
+	}>
+	service: ISelectOptionItem<{
+		priceAndDurationData?: ServiceType['priceAndDurationData'],
+		useCategoryParameter?: ServiceType['useCategoryParameter'],
+		serviceCategoryParameter?: ServiceType['serviceCategoryParameter'],
+		categoryId?: string
+		serviceData?: NonNullable<ICalendarEventDetailPayload['data']>['service']
+	}>
+	employee: ICalendarEmployeeOptionItem
 	date: string
 	timeFrom: string
 	timeTo: string
 	note?: string
 	eventId?: string
 	revertEvent?: () => void
-	enableCalendarRender?: () => void
 	updateFromCalendar?: boolean
 	noteFromB2CCustomer?: string
 	reservationData?: CalendarEvent['reservationData']
+	isImported?: boolean
+	eventType: CALENDAR_EVENT_TYPE
 }
 export interface ICalendarEventForm {
-	employee: ISelectOptionItem
+	employee: ICalendarEmployeeOptionItem
 	date: string
 	timeFrom: string
 	timeTo: string
@@ -259,8 +294,21 @@ export interface ICalendarEventForm {
 	eventId?: string | null
 	calendarBulkEventID?: string
 	revertEvent?: () => void
-	enableCalendarRender?: () => void
 	updateFromCalendar?: boolean
+	isImported?: boolean
+}
+
+export interface ICalendarImportedReservationForm {
+	date: string
+	timeFrom: string
+	timeTo: string
+	note?: string
+	eventId: string
+	revertEvent?: () => void
+	updateFromCalendar?: boolean
+	employee: ISelectOptionItem
+	isImported?: boolean
+	eventType: CALENDAR_EVENT_TYPE
 }
 
 export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null
@@ -344,13 +392,6 @@ export interface IConfirmUserForm extends ICreatePasswordForm {
 	surname: string
 }
 
-export interface IComputedMatch<Params> {
-	isExact: boolean
-	params: Params
-	path: string
-	url: string
-}
-
 export interface IBreadcrumbItem {
 	name: string
 	link?: string
@@ -418,6 +459,8 @@ export interface IEmployeeForm {
 	avatar?: any
 	role: number
 	hasActiveAccount?: boolean
+	orderIndex?: number
+	deletedAt?: string
 }
 
 export interface ICosmeticForm {
@@ -433,6 +476,25 @@ export interface ISpecialistContactForm {
 }
 
 export interface ISpecialistContactFilter {
+	search: string
+}
+
+export interface ISmsUnitPricesForm {
+	validFrom: string
+	amount: number
+	countryCode: string
+}
+
+export interface IRechargeSmsCreditForm {
+	amount: number
+	transactionNote?: string
+}
+
+export interface ISmsUnitPricesFilter {
+	search: string
+}
+
+export interface ISmsHistoryFilter {
 	search: string
 }
 
@@ -459,13 +521,13 @@ export interface IUserAvatar {
 }
 
 export interface IQueryParams {
-	page?: number
+	page?: number | null | string
 	limit?: any | undefined
-	order?: string | undefined
+	order?: string | undefined | null
 	search?: string | undefined | null
 }
 
-interface IDataPagination {
+export interface IDataPagination {
 	pagination: IResponsePagination
 }
 
@@ -508,10 +570,8 @@ export interface SalonSubPageProps {
 	parentPath?: string
 }
 
-export type _Permissions = (PERMISSION | SALON_PERMISSION)[]
-
 export interface IPermissions {
-	uniqPermissions?: _Permissions
+	uniqPermissions?: PERMISSION[]
 }
 
 export interface ICurrency {
@@ -580,6 +640,8 @@ export interface IReservationSystemSettingsForm {
 	minutesIntervalB2CReservations?: number | null
 	// Pomocne checky pre chekcnutie all hodnot pre BOOKING / AUTO CONFIRM
 	autoConfirmAll: boolean
+	enabledCustomerReservationNotes?: boolean
+	enabledB2cReservations?: boolean
 	onlineBookingAll: boolean
 	disabledNotifications: {
 		[key in RS_NOTIFICATION]: IReservationsSettingsNotification
@@ -633,6 +695,10 @@ export interface IEnumerationsCountriesPayload extends IEnumerationsPayload {
 	data: CountriesData | null
 }
 
+export interface IUserPayload {
+	data: Paths.GetApiB2BAdminUsersUserId.Responses.$200 | null
+}
+
 export interface IAuthUserPayload {
 	data: ((Paths.PostApiB2BAdminAuthLogin.Responses.$200['user'] | null) & IPermissions) | null
 }
@@ -641,8 +707,10 @@ export interface IEmployeePayload {
 	data: Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200 | null
 }
 
+export type EmployeeService = NonNullable<IEmployeePayload['data']>['employee']['categories'][0]['children'][0]['children'][0]
+
 export interface SalonPageProps {
-	isAdmin: boolean
+	isNotinoUser: boolean
 	backUrl?: string
 	phonePrefixCountryCode: string
 	authUser: IAuthUserPayload & ILoadingAndFailure
@@ -687,11 +755,22 @@ export interface ICalendarFilter {
 	categoryIDs?: string[]
 }
 
-export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {}
+export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {
+	tableData: (Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0] & { key: number })[]
+}
+
+export interface IDeletedEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {
+	tableData: (Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0] & { key: string })[]
+}
+
+export interface IActiveEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {
+	tableData: (Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0] & { key: number })[]
+}
+
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]
-type CalendarEmployee = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0]
+export type CalendarEmployee = Pick<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0], 'id' | 'color' | 'firstName' | 'lastName' | 'email' | 'image' | 'inviteEmail' | 'orderIndex'> & { orderIndex: number, inviteEmail?: string, isForImportedEvents: boolean; isDeleted?: boolean }
 export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
 export type CalendarEvent = CalendarEvents[0] & {
 	startDateTime: string
@@ -702,33 +781,52 @@ export type CalendarEvent = CalendarEvents[0] & {
 	originalEvent?: CalendarEvent
 	employee: CalendarEmployee
 	isPlaceholder?: boolean
+	isImported: boolean
 }
+
+export type ICalendarEmployeeOptionItem = ISelectOptionItem<{
+	employeeData: CalendarEmployee
+	thumbnail: string
+	color: string
+	isDeleted: boolean
+}>
 
 export interface ICalendarEventsPayload {
 	data: CalendarEvent[] | null
 }
 
+export type ICalendarMonthlyViewEvent = Omit<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCountsAndDurations.Responses.$200['calendarEvents'][0][0], 'employeeID'> & {
+	id: string
+	employee: CalendarEmployee
+}
+export type ICalendarMonthlyViewDay = { [key: string]: ICalendarMonthlyViewEvent[]  }
+
+export interface ICalendarMonthlyReservationsPayload {
+	data: ICalendarMonthlyViewDay | null
+}
+
+export interface ICalendarEmployeesPayload {
+	data: CalendarEmployee[] | null
+	options: ICalendarEmployeeOptionItem[]
+}
 export interface ICalendarView {
 	selectedDate: string
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	reservations: ICalendarEventsPayload['data']
 	shiftsTimeOffs: ICalendarEventsPayload['data']
-	employees: Employees
-	salonID: string
 	onAddEvent: (event: INewCalendarEvent) => void
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
-	onReservationClick: (data: ReservationPopoverData, position: ReservationPopoverPosition) => void
-	onEventChange?: (calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
-	onEventChangeStart?: () => void
+	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
+	onEventChange: (arg: EventDropArg | EventResizeDoneArg, changeType?: 'drop' | 'resize') => void
+	onEventChangeStart: (arg: EventDropArg | EventResizeStartArg) => void
+	onEventChangeStop: (arg: EventDropArg | EventResizeStopArg) => void
 	loading?: boolean
 	virtualEvent?: EventInput
-	clearRestartInterval: () => void
 	disableRender?: boolean
 	view?: CALENDAR_VIEW
 	enabledSalonReservations?: boolean
-	setEventManagement: (newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string | undefined) => void
+	employees: CalendarEmployee[]
 }
-
 export interface IEventCardProps {
 	calendarView: CALENDAR_VIEW
 	resourceId: string
@@ -742,6 +840,7 @@ export interface IEventCardProps {
 	employee?: CalendarEvent['employee']
 	backgroundColor?: string
 	isPlaceholder?: boolean
+	isEventsListPopover?: boolean
 	isEdit?: boolean
 	originalEventData: {
 		id?: CalendarEvent['id']
@@ -750,11 +849,19 @@ export interface IEventCardProps {
 		startDateTime?: CalendarEvent['startDateTime']
 		endDateTime?: CalendarEvent['endDateTime']
 	}
+	timeLeftClassName?: string
+}
+
+export type PopoverTriggerPosition = {
+	top: number
+	left: number
+	width: number
+	height: number
 }
 
 export interface ICalendarReservationPopover {
 	data: ReservationPopoverData | null
-	position: ReservationPopoverPosition | null
+	position: PopoverTriggerPosition | null
 	isOpen: boolean
 	setIsOpen: (isOpen: boolean) => void
 	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => void
@@ -762,11 +869,20 @@ export interface ICalendarReservationPopover {
 	placement: TooltipPlacement
 }
 
-export type ReservationPopoverPosition = {
-	top: number
-	left: number
-	width: number
-	height: number
+export interface ICalendarEventsListPopover {
+	date: string | null
+	position: PopoverTriggerPosition | null
+	isOpen: boolean
+	isReservationsView?: boolean
+	setIsOpen: (isOpen: boolean) => void
+	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
+	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
+	isHidden: boolean
+	isLoading?: boolean
+	isUpdatingEvent?: boolean
+	query: IUseQueryParams
+	parentPath: string
+	employeeID?: string
 }
 
 export type ReservationPopoverData = {
@@ -780,6 +896,7 @@ export type ReservationPopoverData = {
 	originalEventData: IEventCardProps['originalEventData']
 	note?: CalendarEvent['note']
 	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
+	isEdit?: boolean
 }
 
 export interface IBulkConfirmForm {
@@ -797,6 +914,8 @@ export interface IResourceEmployee {
 	isTimeOff: boolean
 	color?: string
 	description?: string
+	isForImportedEvents?: boolean
+	isDeleted?: boolean
 }
 
 export interface IDayViewResourceExtenedProps {
@@ -818,6 +937,10 @@ export interface ICalendarEventCardData {
 	allDay: boolean
 	isPlaceholder?: boolean
 	eventData: CalendarEvent
+}
+
+export interface ICalendarMonthlyReservationsCardData extends Omit<ICalendarEventCardData, 'resourceId' | 'eventData'> {
+	eventData: ICalendarMonthlyViewEvent
 }
 
 export type ConfirmModalReservationData = {
@@ -847,6 +970,28 @@ export type ConfirmModalUpdateReservationData = {
 
 export type ConfirmModalData = ConfirmModalReservationData | ConfirmModalEventnData | ConfirmModalDeleteEventData | ConfirmModalUpdateReservationData | null
 
+export interface ICalendarEventContent {
+	id: string
+	// start - pre fullcalendar (moze sa lisit od realneho zaciatku eventu, napr. v tyzdennom view, pri multidnovych eventoch)
+	start: Date | null
+	// end - pre fullcalendar (moze sa lisit od realneho konca eventu, napr. v tyzdennom view, pri multidnovych eventoch)
+	end: Date | null
+	eventDisplayType: CALENDAR_EVENT_DISPLAY_TYPE
+	backgroundColor?: string
+	eventData?: CalendarEvent
+	calendarView: CALENDAR_VIEW
+	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
+	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
+	isEventsListPopover?: boolean
+}
+
+export interface ICalendarDayEvents {
+	[key: string]: CalendarEvent[]
+}
+
+export interface ICalendarDayEventsMap {
+	[key: string]: number
+}
 export interface IReservationsFilter {
 	dateFrom: string
 	employeeIDs?: string[]

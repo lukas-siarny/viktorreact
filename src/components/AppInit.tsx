@@ -57,7 +57,7 @@ const AppInit = (props: Props) => {
 		// select first salon for PARTNER
 		if (
 			currentUser.data &&
-			checkPermissions(currentUser.data.uniqPermissions, [PERMISSION.PARTNER], [PERMISSION.NOTINO_ADMIN, PERMISSION.NOTINO_SUPER_ADMIN]) &&
+			checkPermissions(currentUser.data.uniqPermissions, [PERMISSION.PARTNER], [PERMISSION.NOTINO_ADMIN, PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO]) &&
 			!selectedSalon
 		) {
 			const salonID = get(currentUser.data, 'salons[0].id')

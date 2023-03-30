@@ -1,18 +1,17 @@
 import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm, reset } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Alert, Button, Form, Modal, Spin } from 'antd'
+import { Button, Form, Modal, Spin } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
 // utils
 import { formFieldID, optionRenderWithImage, showErrorNotification } from '../../../../utils/helper'
-import { ENUMERATIONS_KEYS, FORM, SUBMIT_BUTTON_ID, REQUEST_STATUS } from '../../../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, SUBMIT_BUTTON_ID, REQUEST_STATUS, STRINGS } from '../../../../utils/enums'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.svg'
-import { ReactComponent as InfoIcon } from '../../../../assets/icons/info-icon.svg'
-import { ReactComponent as DownloadIcon } from '../../../../assets/icons/download-icon.svg'
+import { ReactComponent as FilesIcon } from '../../../../assets/icons/files-icon.svg'
 
 // components
 import SelectField from '../../../../atoms/SelectField'
@@ -32,7 +31,7 @@ type ComponentProps = {
 
 type Props = InjectedFormProps<ISalonsReportForm, ComponentProps> & ComponentProps
 
-export const ALL_COUNTIRES_OPTION = 'ALL_COUNTIRES_OPTION'
+export const ALL_COUNTRIES_OPTION = 'ALL_COUNTRIES_OPTION'
 
 const SalonsReportModal: FC<Props> = (props) => {
 	const [t] = useTranslation()
@@ -46,12 +45,12 @@ const SalonsReportModal: FC<Props> = (props) => {
 
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
-	const options = [{ key: ALL_COUNTIRES_OPTION, label: t('loc:Všetky krajiny'), value: ALL_COUNTIRES_OPTION }, ...countries.enumerationsOptions]
+	const options = [{ key: ALL_COUNTRIES_OPTION, label: t('loc:Všetky krajiny'), value: ALL_COUNTRIES_OPTION }, ...countries.enumerationsOptions]
 
 	return (
 		<Modal
 			className='rounded-fields'
-			title={t('loc:Stiahnuť report salónov')}
+			title={STRINGS(t).generate(t('loc:report salónov'))}
 			centered
 			open={visible}
 			destroyOnClose
@@ -70,11 +69,21 @@ const SalonsReportModal: FC<Props> = (props) => {
 					<RequestSuccess
 						onRequestAgain={resetUploadForm}
 						description={t('loc:Po úspešnom spracovaní vám na vašu e-mailovú adresu zašleme report salónov vo formáte .xlxs')}
-						buttonText={t('loc:Stiahnuť ďalšie')}
-						buttonIcon={<DownloadIcon />}
+						buttonText={STRINGS(t).generate(t('loc:ďalšie'))}
+						buttonIcon={<FilesIcon />}
 					/>
 				) : (
 					<Form onSubmitCapture={handleSubmit} layout={'vertical'} className={'form'}>
+						<strong>{t('loc:Report pre každý salón zahŕňa')}:</strong>
+						<ul className={'pl-5'}>
+							<li>{t('loc:základné informácie')}</li>
+							<li>{t('loc:kontaktné údaje')}</li>
+							<li>{t('loc:stav salónu')}</li>
+							<li>{t('loc:informácie ohľadom rezervačného systému')}</li>
+							<li>{t('loc:informácie o ponúkaných službách')}</li>
+							<li>{t('loc:počet kolegov a klientov')}</li>
+						</ul>
+
 						<Field
 							component={SelectField}
 							optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
@@ -97,7 +106,7 @@ const SalonsReportModal: FC<Props> = (props) => {
 							disabled={disabledForm || submitting}
 							loading={submitting}
 						>
-							{t('loc:Stiahnuť')}
+							{STRINGS(t).generate('').trim()}
 						</Button>
 					</Form>
 				)}

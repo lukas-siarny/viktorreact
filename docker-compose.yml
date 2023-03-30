@@ -149,7 +149,7 @@ services:
   scheduler:
     build:
       context: ./notino_backend/.
-      dockerfile: ./docker/CI/Dockerfile.scheduler
+      dockerfile: ./docker/CI/scheduler/Dockerfile
     ports:
       - "7000:7000"
       # NOTE: localy can be test with export BITBUCKET_DOCKER_HOST_INTERNAL=host.docker.internal (as a IP address 192.168.65.2 check by ping host.docker.internal from container)

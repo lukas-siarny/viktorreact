@@ -15,7 +15,7 @@ import TabsComponent from '../../components/TabsComponent'
 import SalonsFilterActive, { ISalonsFilterActive } from './components/filters/SalonsFilterActive'
 import SalonsFilterDeleted, { ISalonsFilterDeleted } from './components/filters/SalonsFilterDeleted'
 import RejectedSalonSuggestions from './components/RejectedSalonSuggestions'
-import SalonsReportModal, { ALL_COUNTIRES_OPTION } from './components/modals/SalonsReportModal'
+import SalonsReportModal, { ALL_COUNTRIES_OPTION } from './components/modals/SalonsReportModal'
 
 // utils
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
@@ -188,7 +188,7 @@ const SalonsPage = () => {
 					})
 				)
 
-				dispatch(initialize(FORM.SALONS_REPORT, { countryCode: salonsQueries.countryCode || ALL_COUNTIRES_OPTION }))
+				dispatch(initialize(FORM.SALONS_REPORT, { countryCode: salonsQueries.countryCode || ALL_COUNTRIES_OPTION }))
 				dispatch(getSalons(salonsQueries))
 				break
 		}
@@ -285,7 +285,7 @@ const SalonsPage = () => {
 	const salonsReportSubmit = async (values: ISalonsReportForm) => {
 		setRequestStatusReport(REQUEST_STATUS.SUBMITTING)
 		try {
-			await getReq('/api/b2b/admin/reports/salons', values.countryCode === ALL_COUNTIRES_OPTION ? undefined : { countryCode: values.countryCode })
+			await getReq('/api/b2b/admin/reports/salons', values.countryCode === ALL_COUNTRIES_OPTION ? undefined : { countryCode: values.countryCode })
 			setRequestStatusReport(REQUEST_STATUS.SUCCESS)
 		} catch (e) {
 			// eslint-disable-next-line no-console

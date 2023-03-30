@@ -1,16 +1,17 @@
 import React, { useMemo } from 'react'
 import { Field, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
-import { Button, Form } from 'antd'
+import { Button, Form, Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
 import { useSelector } from 'react-redux'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
+import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
 
 // utils
-import { CHANGE_DEBOUNCE_TIME, CREATE_CUSTOMER_BUTTON_ID, FIELD_MODE, FORM } from '../../../utils/enums'
-import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize } from '../../../utils/helper'
+import { CHANGE_DEBOUNCE_TIME, CREATE_CUSTOMER_BUTTON_ID, FIELD_MODE, FORM, IMPORT_BUTTON_ID } from '../../../utils/enums'
+import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize, formFieldID } from '../../../utils/helper'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -24,6 +25,7 @@ import { RootState } from '../../../reducers'
 type ComponentProps = {
 	createCustomer: Function
 	total: number
+	openClientImportsModal: () => void
 }
 // Search: nazov SalonSubRoutes, email salonu, meno priezvisko usera
 // Order: lastName, salonName, userEmail,
@@ -37,7 +39,7 @@ type Props = InjectedFormProps<ICustomersFilter, ComponentProps> & ComponentProp
 const fixLength100 = validationString(100)
 
 const CustomersFilter = (props: Props) => {
-	const { handleSubmit, createCustomer, total } = props
+	const { handleSubmit, createCustomer, total, openClientImportsModal } = props
 	const [t] = useTranslation()
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.CUSTOMERS_FILTER)(state))
 
@@ -62,15 +64,29 @@ const CustomersFilter = (props: Props) => {
 		/>
 	)
 
-	const addCustomerBtn = (
-		<Button id={CREATE_CUSTOMER_BUTTON_ID} onClick={() => createCustomer()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
-			{t('loc:Pridať zákazníka')}
-		</Button>
+	const customContent = (
+		<div className={'flex items-center gap-2'}>
+			<Tooltip title={t('loc:Importujte si svojich klientov z externých služieb ako Reservanto, Reservio, …')}>
+				<Button
+					onClick={openClientImportsModal}
+					type='primary'
+					htmlType='button'
+					className={'noti-btn w-full'}
+					icon={<UploadIcon />}
+					id={formFieldID(FORM.CUSTOMERS_FILTER, IMPORT_BUTTON_ID())}
+				>
+					{t('loc:Importovať zákazníkov')}
+				</Button>
+			</Tooltip>
+			<Button id={CREATE_CUSTOMER_BUTTON_ID} onClick={() => createCustomer()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
+				{t('loc:Pridať zákazníka')}
+			</Button>
+		</div>
 	)
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)} customContent={addCustomerBtn} />
+			<Filters search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)} customContent={customContent} />
 		</Form>
 	)
 }

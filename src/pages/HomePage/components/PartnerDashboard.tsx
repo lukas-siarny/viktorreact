@@ -15,6 +15,9 @@ import { RootState } from '../../../reducers'
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
+// utils
+import { STRINGS } from '../../../utils/enums'
+
 type Props = {}
 
 const PartnerDashboard: FC<Props> = () => {
@@ -35,7 +38,7 @@ const PartnerDashboard: FC<Props> = () => {
 						<div className='m-auto text-center'>
 							<h1 className='text-5xl font-bold'>{t('loc:Začnite vytvorením salónu')}</h1>
 							<Button onClick={() => navigate(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'} icon={<PlusIcon />}>
-								{t('loc:Pridať salón')}
+								{STRINGS(t).addRecord(t('loc:salón'))}
 							</Button>
 						</div>
 					</div>

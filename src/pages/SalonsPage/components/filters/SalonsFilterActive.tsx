@@ -18,7 +18,7 @@ import { ReactComponent as PlusIcon } from '../../../../assets/icons/plus-icon.s
 import { ReactComponent as UploadIcon } from '../../../../assets/icons/upload-icon.svg'
 import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.svg'
 import { ReactComponent as CategoryIcon } from '../../../../assets/icons/categories-24-icon.svg'
-import { ReactComponent as DownloadIcon } from '../../../../assets/icons/download-icon.svg'
+import { ReactComponent as FilesIcon } from '../../../../assets/icons/files-icon.svg'
 import { ReactComponent as MoreInfoIcon } from '../../../../assets/icons/more-info-horizontal-icon.svg'
 
 // utils
@@ -35,7 +35,8 @@ import {
 	FILTER_ENTITY,
 	CHANGE_DEBOUNCE_TIME,
 	IMPORT_BUTTON_ID,
-	DOWNLOAD_BUTTON_ID
+	DOWNLOAD_BUTTON_ID,
+	STRINGS
 } from '../../../../utils/enums'
 import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getRangesForDatePicker, optionRenderWithTag, formFieldID } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
@@ -176,7 +177,7 @@ const SalonsFilterActive = (props: Props) => {
 						className={'noti-btn w-full'}
 						icon={<PlusIcon />}
 					>
-						{t('loc:Pridať salón')}
+						{STRINGS(t).addRecord(t('loc:salón'))}
 					</Button>
 				)}
 			/>
@@ -199,10 +200,10 @@ const SalonsFilterActive = (props: Props) => {
 									type='primary'
 									htmlType='button'
 									className={'noti-btn w-full'}
-									icon={<DownloadIcon />}
+									icon={<FilesIcon />}
 									id={formFieldID(FORM.SALONS_FILTER_ACITVE, DOWNLOAD_BUTTON_ID)}
 								>
-									{t('loc:Stiahnuť report')}
+									{STRINGS(t).generate(t('loc:report'))}
 								</Button>
 							)}
 						/>
@@ -254,8 +255,8 @@ const SalonsFilterActive = (props: Props) => {
 															}
 														}}
 													>
-														<DownloadIcon />
-														{t('loc:Stiahnuť report')}
+														<FilesIcon />
+														{STRINGS(t).generate(t('loc:report'))}
 													</div>
 												)}
 											/>

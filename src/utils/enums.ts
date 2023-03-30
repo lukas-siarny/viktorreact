@@ -31,6 +31,46 @@ export enum LANGUAGE {
 	/* IT = 'it' */
 }
 
+export enum BROWSERS {
+	CHROME = 'chrome',
+	SAFARI = 'safari',
+	FIREFOX = 'firefox',
+	EDGE = 'edge',
+	OPERA = 'opera'
+}
+
+export enum BROWSER_TYPE {
+	UNKNOWN = 'unknown',
+	SUPPORTED = 'supported',
+	UNSUPPORTED = 'unsupported'
+}
+
+export const MIN_SUPPORTED_BROWSER_VERSION = (browserName?: string) => {
+	switch (browserName) {
+		case BROWSERS.CHROME:
+			// Released: 2020-02-04
+			return 80
+
+		case BROWSERS.SAFARI:
+			// Released: 2020-09-16
+			return 14
+
+		case BROWSERS.FIREFOX:
+			// Released: 2020-01-07
+			return 72
+
+		case BROWSERS.EDGE:
+			// Released: 2020-01-15
+			return 79
+
+		case BROWSERS.OPERA:
+			// Released: 2020-01-28
+			return 67
+		default:
+			return -1
+	}
+}
+
 export const CHANGE_DEBOUNCE_TIME = 300 // 300ms change debounce time for forms that have onChange submit
 
 export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
@@ -508,7 +548,7 @@ export const STRINGS = (t: TFunction) => ({
 	search: (entity: string) => t('loc:Vyhľadajte {{entity}}', { entity }), // searchable select field
 	searchBy: (entity: string) => t('loc:Vyhľadajte podľa {{entity}}', { entity }), // input field vyhladavaci
 	enter: (entity: string) => t('loc:Zadajte {{entity}}', { entity }), // all input fields
-
+	generate: (entity: string) => t('loc:Generovať {{entity}}', { entity }),
 	MISSING_PERMISSIONS_TEXT: t('loc:Používateľovi chýbajú oprávnenia na akciu'),
 	EMPTY_TABLE_COLUMN_PLACEHOLDER: '---'
 })

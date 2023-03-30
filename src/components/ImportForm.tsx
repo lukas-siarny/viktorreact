@@ -19,7 +19,7 @@ import { ReactComponent as CloseIcon } from '../assets/icons/close-icon.svg'
 type ComponentProps = {
 	visible: boolean
 	setVisible: React.Dispatch<React.SetStateAction<boolean>>
-	setRequestStatus: React.Dispatch<React.SetStateAction<REQUEST_STATUS | undefined>>
+	setRequestStatus: (status?: REQUEST_STATUS) => void
 	requestStatus: REQUEST_STATUS | undefined
 	title: string
 	label: string

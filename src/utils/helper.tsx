@@ -505,7 +505,7 @@ export const scrollToFirstError = (errors: any, form: FORM | string) => {
 	})
 	const sortedErrors = orderBy(els, ['value'], ['asc'])
 	if (!isEmpty(sortedErrors)) {
-		const el = document.getElementById(get(sortedErrors, '[0].id'))
+		const el = document.getElementById(get(sortedErrors, '[0].id') as any)
 		if (el?.scrollIntoView) {
 			el.scrollIntoView({
 				behavior: 'smooth',

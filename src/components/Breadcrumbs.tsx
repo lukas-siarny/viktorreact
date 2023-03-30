@@ -5,8 +5,11 @@ import cx from 'classnames'
 
 // components
 import BackButton from './BackButton'
+
+// assets
 import { ReactComponent as BreadcrumbSeparator } from '../assets/icons/breadcrumb-separator.svg'
 
+// types
 import { IBreadcrumbs } from '../types/interfaces'
 
 type Props = {

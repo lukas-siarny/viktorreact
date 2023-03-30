@@ -115,7 +115,7 @@ export const getCurrentUser = (): ThunkResult<Promise<IAuthUserPayload>> => asyn
 		const { data } = await getReq('/api/b2b/admin/users/{userID}', { userID: jwtPayload.uid })
 
 		// parse permissions from role
-		const rolePermissions = flatten(map(get(data, 'user.roles'), (role) => get(role, 'permissions')))
+		const rolePermissions: any = flatten(map(get(data, 'user.roles'), (role) => get(role, 'permissions')))
 		const uniqPermissions = uniq(map([...rolePermissions], 'name'))
 
 		payload = {

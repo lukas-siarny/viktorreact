@@ -3,24 +3,33 @@
 import React, { FC, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
+import queryString from 'query-string'
 
 // assets
 import { ReactComponent as CalendarIcon } from '../../../../assets/icons/calendar-24.svg'
 
 // types
-import { EmployeeTooltipPopoverData, ICalendarMonthlyReservationsCardData, PopoverTriggerPosition } from '../../../../types/interfaces'
+import { ICalendarMonthlyReservationsCardData, PopoverTriggerPosition } from '../../../../types/interfaces'
+
+// utils
 import { parseTimeFromMinutes } from '../../calendarHelpers'
 import { getAssignedUserLabel } from '../../../../utils/helper'
+import { CALENDAR_VIEW } from '../../../../utils/enums'
+
+// hooks
+import { IUseQueryParams, serializeParams } from '../../../../hooks/useQueryParams'
 
 interface IMonthlyReservationCardProps {
 	date: string
 	eventData?: ICalendarMonthlyReservationsCardData['eventData']
 	isEventsListPopover?: boolean
-	onMonthlyReservationClick: (data: EmployeeTooltipPopoverData, position?: PopoverTriggerPosition) => void
+	onShowEventsListPopover?: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean, employeeID?: string) => void
+	query: IUseQueryParams
+	parentPath: string
 }
 
 const MonthlyReservationCard: FC<IMonthlyReservationCardProps> = (props) => {
-	const { eventData, isEventsListPopover, onMonthlyReservationClick, date } = props
+	const { eventData, isEventsListPopover, date, onShowEventsListPopover, query, parentPath } = props
 	const { employee, eventsCount, eventsDuration } = eventData || {}
 
 	const [t] = useTranslation()
@@ -31,13 +40,22 @@ const MonthlyReservationCard: FC<IMonthlyReservationCardProps> = (props) => {
 
 	const cardRef = useRef<HTMLDivElement | null>(null)
 
+	const getEmployeeLink = () => {
+		if (!employee) {
+			return ''
+		}
+		const linkSearchParams = {
+			employeeIDs: employee.id,
+			categoryIDs: query.categoryIDs,
+			view: CALENDAR_VIEW.DAY,
+			date
+		}
+
+		return `${parentPath}${t('paths:calendar')}?${queryString.stringify(serializeParams(linkSearchParams))}`
+	}
+
 	const handleReservationClick = () => {
 		if (cardRef.current && employee) {
-			const data: EmployeeTooltipPopoverData = {
-				employee,
-				date
-			}
-
 			const clientRect = cardRef.current.getBoundingClientRect()
 
 			const position: PopoverTriggerPosition = {
@@ -46,9 +64,22 @@ const MonthlyReservationCard: FC<IMonthlyReservationCardProps> = (props) => {
 				width: clientRect.width,
 				height: clientRect.bottom - clientRect.top
 			}
-			onMonthlyReservationClick(data, position)
+			if (isEventsListPopover) {
+				window.open(getEmployeeLink(), '_blank')
+			} else if (onShowEventsListPopover) {
+				onShowEventsListPopover(date, position, true, employee.id)
+			}
 		}
 	}
+
+	const employeeName = employee
+		? getAssignedUserLabel({
+				firstName: employee.firstName,
+				lastName: employee.lastName,
+				email: employee.email,
+				id: employee.id
+		  })
+		: ''
 
 	return (
 		<div
@@ -64,24 +95,9 @@ const MonthlyReservationCard: FC<IMonthlyReservationCardProps> = (props) => {
 			/>
 			{!isEventsListPopover && <div className={'event-background'} style={{ backgroundColor: bgColor }} />}
 			<div className={'event-content'}>
-				<div className={'event-avatar'}>
-					{avatar && (
-						<img
-							src={avatar}
-							alt={
-								employee
-									? getAssignedUserLabel({
-											firstName: employee.firstName,
-											lastName: employee.lastName,
-											email: employee.email,
-											id: employee.id
-									  })
-									: ''
-							}
-							width={16}
-							height={16}
-						/>
-					)}
+				<div className={'employee-wrapper'}>
+					<div className={'avatar'}>{avatar && <img src={avatar} alt={employeeName} width={16} height={16} />}</div>
+					<span className={'name'}>{employeeName}</span>
 				</div>
 				<div className={'events-stats'}>
 					{isEventsListPopover ? (

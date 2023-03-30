@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Divider, List, Spin, Empty } from 'antd'
 import { initialize } from 'redux-form'
 import dayjs from 'dayjs'
-import { isEmpty } from 'lodash'
 
 // components
 import SalonHistoryFilter, { ISalonHistoryFilter } from './filters/SalonHistoryFilter'

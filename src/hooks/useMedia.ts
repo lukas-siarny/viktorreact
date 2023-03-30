@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
 const useMedia = (queries: string[], values: any[], defaultValue: any) => {
-	// Array containing a media query list for each query
-	const mediaQueryLists = queries.map((q) => window.matchMedia(q))
+	// Array containing a media query list for each query. Filter mediaQuery which not support onChange event
+	const mediaQueryLists = queries.map((q) => window.matchMedia(q)).filter((mediaQuery) => 'onchange' in mediaQuery && 'addEventListener' in mediaQuery)
 	// Function that gets value based on matching media query
 	const getValue = () => {
 		// Get index of first media query that matches

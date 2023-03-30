@@ -1,10 +1,12 @@
 {
   "name": "error_503",
   "version": "0.1.0",
+  "author": "Daniel Hlavaty <daniel.hlavaty@goodrequest.com>",
   "homepage": "503/",
   "private": true,
   "engines": {
-    "node": "^16.13.0"
+    "node": ">=18.15.0",
+    "npm": ">=9.5.0"
   },
   "scripts": {
     "start": "cross-env SKIP_PREFLIGHT_CHECK=true DISABLE_ESLINT_PLUGIN=true npm-run-all -p start-watch translate-watch build:tailwind",

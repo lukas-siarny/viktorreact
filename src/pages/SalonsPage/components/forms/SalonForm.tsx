@@ -113,7 +113,7 @@ const SalonForm: FC<Props> = (props) => {
 
 	const searchCosmetics = useCallback(
 		async (search: string, page: string) => {
-			return searchWrapper(dispatch, { search, limit: 1500, page }, FILTER_ENTITY.COSMETICS)
+			return searchWrapper(dispatch, { search, limit: 20, page }, FILTER_ENTITY.COSMETICS)
 		},
 		[dispatch]
 	)
@@ -207,6 +207,7 @@ const SalonForm: FC<Props> = (props) => {
 							placeholder={t('loc:Vyberte kozmetiku')}
 							name={'cosmeticIDs'}
 							optionRender={(itemData: any) => optionRenderWithImage(itemData, <CosmeticIcon />, 40)}
+							// optionLabelProp={'label'}
 							showSearch
 							onSearch={searchCosmetics}
 							filterOption={false}
@@ -217,6 +218,10 @@ const SalonForm: FC<Props> = (props) => {
 							allowClear
 							allowInfinityScroll
 							onDidMountSearch
+							tagRender={(itemData: any) => {
+								return optionRenderWithImage(itemData, <CosmeticIcon />, 40)
+							}}
+							// labelInValue
 						/>
 						<Field
 							component={ImgUploadField}

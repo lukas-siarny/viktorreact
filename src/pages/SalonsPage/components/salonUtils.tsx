@@ -109,7 +109,14 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 		cosmeticIDs: map(salonData.cosmetics, (cosmetic) => cosmetic?.id).filter((cosmetic) => cosmetic !== undefined), */
 		cosmeticIDs: salonData.cosmetics
 			?.filter((lng) => lng !== undefined)
-			.map((cosmetic) => ({ label: cosmetic?.name, value: (cosmetic as any).id, extra: { image: 'ss' }, key: `Cosmetic_${(cosmetic as any).id}` })),
+			.map((cosmetic) => {
+				return {
+					label: cosmetic?.name,
+					value: (cosmetic as any).id,
+					extra: { image: 'ss' },
+					key: `Cosmetic_${(cosmetic as any).id}`
+				}
+			}),
 		languageIDs: salonData.languages
 			?.filter((lng) => lng !== undefined)
 			.map((lng) => ({ label: lng?.name, value: (lng as any).id, extra: { image: 'ss' }, key: `language_${(lng as any).id}` })),

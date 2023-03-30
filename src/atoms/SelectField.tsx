@@ -557,6 +557,11 @@ const SelectField = (props: Props) => {
 	if (emptyText || selectState.emptyText) {
 		notFound = <Empty className={'m-4'} image={Empty.PRESENTED_IMAGE_SIMPLE} description={selectState.emptyText || emptyText} />
 	}
+
+	const renderValue = () => {
+		return value
+	}
+
 	const select = (
 		<Select
 			bordered={bordered}

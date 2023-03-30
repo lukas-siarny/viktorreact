@@ -180,7 +180,7 @@ export const getReq = async <T extends keyof GetUrls>(
 			if (customConfig && customConfig.messages) {
 				showNotifications(customConfig.messages, typeNotification)
 			} else if (has(res, 'data.messages')) {
-				showNotifications(get(res, 'data.messages'), typeNotification)
+				showNotifications(get(res, 'data.messages') as any, typeNotification)
 			}
 		}
 		if (hide) {

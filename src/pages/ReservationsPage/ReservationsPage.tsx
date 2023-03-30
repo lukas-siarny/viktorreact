@@ -44,8 +44,6 @@ import useQueryParams, { ArrayParam, NumberParam, StringParam } from '../../hook
 
 type Props = SalonSubPageProps
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
-
 const ReservationsPage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -314,4 +312,4 @@ const ReservationsPage = (props: Props) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(ReservationsPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(ReservationsPage)

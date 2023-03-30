@@ -143,10 +143,10 @@ const AppRoutes: FC = () => {
 				<Route errorElement={<ErrorBoundary />} path={t('paths:specialist-contacts')} element={<AuthRoute layout={MainLayout} page={PAGE.SPECIALIST_CONTACTS} />}>
 					<Route index element={<SpecialistContactsPage />} />
 				</Route>
-				<Route path={t('paths:reviews')} element={<AuthRoute layout={MainLayout} page={PAGE.REVIEWS} />}>
+				<Route errorElement={<ErrorBoundary />} path={t('paths:reviews')} element={<AuthRoute layout={MainLayout} page={PAGE.REVIEWS} />}>
 					<Route index element={<ReviewsPage />} />
 				</Route>
-				<Route path={t('paths:sms-credits')} element={<AuthRoute layout={MainLayout} page={PAGE.SMS_CREDITS} />}>
+				<Route errorElement={<ErrorBoundary />} path={t('paths:sms-credits')} element={<AuthRoute layout={MainLayout} page={PAGE.SMS_CREDITS} />}>
 					<Route index element={<SmsUnitPricesPage />} />
 					<Route path={':countryCode'} element={<SmsUnitPricesDetailPage />} />
 				</Route>

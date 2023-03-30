@@ -348,3 +348,51 @@ a.ant-btn.noti-btn // ak ma btn href atributu tak ho zmeni na anchor -> treba vy
 	&:focus-visible,
 	&.is-active
 		width: 350px
+.sync-button
+	height: 40px
+	background: #fff
+	border: none
+	border-radius: 2px
+	box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.08), 0px 1px 2px rgba(0, 0, 0, 0.25)
+	font-size: 14px
+	color: $textColor-notino-grayDarker
+	position: relative
+	&:hover
+		cursor: pointer
+	&.google
+		font-size: 15px
+		color: rgba(0, 0, 0, 0.54)
+		padding-left: 52px
+		&:after
+			content: ''
+			background: url('../assets/icons/google.svg') left no-repeat
+			position: absolute
+			top: 0
+			bottom: 0
+			left: 12px
+			right: 0
+	&.microsoft
+		font-size: 15px
+		color: #5E5E5E
+		padding-left: 45px
+		border-radius: 0
+		border: 1px solid #8C8C8C
+		box-shadow: none
+		&:after
+			content: ''
+			background: url('../assets/icons/microsoft.svg') left no-repeat
+			position: absolute
+			top: 0
+			bottom: 0
+			left: 12px
+			right: 0
+	&.apple
+		padding-left: 40px
+		&:after
+			content: ''
+			background: url('../assets/icons/download-icon.svg') left no-repeat
+			position: absolute
+			top: 0
+			bottom: 0
+			left: 12px
+			right: 0

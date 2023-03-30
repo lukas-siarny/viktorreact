@@ -18,7 +18,7 @@ const graphConfig = {
 }
 
 const CalendarIntegrations = (props: Props) => {
-	const { i18n } = useTranslation()
+	const { t } = useTranslation()
 	const { instance, accounts, inProgress } = useMsal()
 
 	const login = useGoogleLogin({
@@ -87,7 +87,7 @@ const CalendarIntegrations = (props: Props) => {
 	}
 
 	return (
-		<>
+		<div>
 			{/* <GoogleLogin
 				onSuccess={(credentialResponse) => {
 					console.log(credentialResponse)
@@ -99,13 +99,16 @@ const CalendarIntegrations = (props: Props) => {
 				type='icon'
 				theme='filled_black'
 			/> */}
-			<button onClick={() => login()} type='button'>
-				Log in to Google
+			<button className={'sync-button google mr-2'} onClick={() => login()} type='button'>
+				{t('loc:Google')}
 			</button>
-			<button onClick={handleLogin} type='button'>
-				Log in to Outlook
+			<button className={'sync-button microsoft mr-2'} onClick={handleLogin} type='button'>
+				{t('loc:Sign in')}
 			</button>
-		</>
+			<button className={'sync-button apple'} onClick={handleLogin} type='button'>
+				{t('loc:Import pomocou .ics súboru')}
+			</button>
+		</div>
 	)
 }
 

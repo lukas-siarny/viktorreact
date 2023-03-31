@@ -128,7 +128,7 @@ const CalendarDetailPopover: FC<ICustomerDetailPopoverProps> = () => {
 	}
 
 	useEffect(() => {
-		const contentOverlay = document.querySelector('#nc-content-overlay') as HTMLElement
+		const contentOverlay = document.querySelector('#nc-customer-detail-content-overlay') as HTMLElement
 
 		const listener = (e: Event) => {
 			const overlayElement = document.querySelector(`.${overlayClassName}`)

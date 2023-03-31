@@ -20,12 +20,6 @@ import { optionRenderWithImage, showErrorNotification } from '../../../utils/hel
 import { ENUMERATIONS_KEYS, FORM, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
-// types
-import { ISupportContactForm } from '../../../types/interfaces'
-
-// validate
-import validateSupportContactForm from './validateSupportContactForm'
-
 // reducers
 import { RootState } from '../../../reducers'
 
@@ -33,6 +27,9 @@ import { RootState } from '../../../reducers'
 import { ReactComponent as PhoneIcon } from '../../../assets/icons/phone-2-icon.svg'
 import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.svg'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+
+// schema
+import { ISupportContactForm, validationSupportContactFn } from '../../../schemas/supportContact'
 
 type ComponentProps = {
 	disabledForm: boolean
@@ -173,7 +170,7 @@ const form = reduxForm<ISupportContactForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateSupportContactForm
+	validate: validationSupportContactFn
 })(withPromptUnsavedChanges(SupportContactForm))
 
 export default form

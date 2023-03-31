@@ -124,7 +124,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 }
 
 const CalendarEventsListPopover: FC<ICalendarEventsListPopover> = (props) => {
-	const { position, setIsOpen, isOpen, date, onEditEvent, onReservationClick, isHidden, isLoading, isUpdatingEvent, isReservationsView, onMonthlyReservationClick } = props
+	const { position, setIsOpen, isOpen, date, onEditEvent, onReservationClick, isHidden, isLoading, isUpdatingEvent, isReservationsView, query, parentPath, employeeID } = props
 
 	const overlayClassName = `nc-event-popover-overlay_${date || ''}`
 
@@ -136,7 +136,7 @@ const CalendarEventsListPopover: FC<ICalendarEventsListPopover> = (props) => {
 	const handleClosePopover = useCallback(() => setIsOpen(false), [setIsOpen])
 
 	useEffect(() => {
-		const contentOverlay = document.querySelector('#nc-content-overlay') as HTMLElement
+		const contentOverlay = document.querySelector('#nc-events-list-popover-content-overlay') as HTMLElement
 
 		const listener = (e: Event) => {
 			const overlayElement = document.querySelector(`.${overlayClassName}`)
@@ -146,7 +146,7 @@ const CalendarEventsListPopover: FC<ICalendarEventsListPopover> = (props) => {
 		}
 
 		if (contentOverlay) {
-			if (isOpen) {
+			if (isOpen && !isHidden) {
 				document.addEventListener('mousedown', listener)
 				document.addEventListener('touchstart', listener)
 				contentOverlay.style.display = 'block'
@@ -159,7 +159,7 @@ const CalendarEventsListPopover: FC<ICalendarEventsListPopover> = (props) => {
 			document.removeEventListener('mousedown', listener)
 			document.removeEventListener('touchstart', listener)
 		}
-	}, [isOpen, overlayClassName, handleClosePopover])
+	}, [isOpen, overlayClassName, handleClosePopover, isHidden])
 
 	useKeyUp('Escape', isOpen ? handleClosePopover : undefined)
 
@@ -168,18 +168,27 @@ const CalendarEventsListPopover: FC<ICalendarEventsListPopover> = (props) => {
 			return []
 		}
 		if (isReservationsView) {
-			const cellDateEvents = (monthlyReservations?.data || {})[date]
+			let cellDateEvents = (monthlyReservations?.data || {})[date]
+
+			if (employeeID) {
+				cellDateEvents = cellDateEvents.filter((event) => event.employee.id === employeeID)
+			}
 
 			return cellDateEvents?.map((dayEmployee) => {
 				return (
 					<React.Fragment key={dayEmployee.employee.id}>
-						<MonthlyReservationCard date={date} eventData={dayEmployee} onMonthlyReservationClick={onMonthlyReservationClick} isEventsListPopover />
+						<MonthlyReservationCard parentPath={parentPath} date={date} eventData={dayEmployee} query={query} isEventsListPopover />
 					</React.Fragment>
 				)
 			})
 		}
 
-		const cellDateEvents = dayEvents[date]
+		let cellDateEvents = dayEvents[date]
+
+		if (employeeID) {
+			cellDateEvents = cellDateEvents.filter((event) => event.employee.id === employeeID)
+		}
+
 		const eventsForPopover = getEventsForPopover(date, cellDateEvents, virtualEvent, onEditEvent, onReservationClick)
 		return eventsForPopover?.map((event, i) => {
 			return (
@@ -207,7 +216,6 @@ const CalendarEventsListPopover: FC<ICalendarEventsListPopover> = (props) => {
 			destroyTooltipOnHide={{ keepParent: true }}
 			trigger={'click'}
 			placement={'right'}
-			// overlayClassName={`${overlayClassName} nc-popover-overlay nc-events-list-popover-overlay ${isHidden ? 'is-hidden' : ''}`}
 			overlayClassName={cx(overlayClassName, 'nc-popover-overlay nc-events-list-popover-overlay', { 'is-hidden': isHidden })}
 			content={
 				!isHidden && (

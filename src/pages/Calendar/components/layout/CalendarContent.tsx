@@ -32,7 +32,6 @@ import CalendarEmptyState from '../CalendarEmptyState'
 
 // types
 import {
-	EmployeeTooltipPopoverData,
 	ICalendarMonthlyReservationsPayload,
 	ICalendarView,
 	IDayViewResourceExtenedProps,
@@ -61,13 +60,12 @@ type Props = {
 	enabledSalonReservations?: boolean
 	parentPath: string
 	salonID: string
-	onShowMore: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean) => void
+	onShowEventsListPopover: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean, employeeID?: string) => void
 	clearFetchInterval: () => void
 	restartFetchInterval: () => void
 	query: IUseQueryParams
 	setQuery: (newValues: IUseQueryParams) => void
 	monthlyReservations: ICalendarMonthlyReservationsPayload['data']
-	onMonthlyReservationClick: (data: EmployeeTooltipPopoverData, position?: PopoverTriggerPosition) => void
 } & Omit<ICalendarView, 'onEventChange' | 'onEventChangeStart' | 'onEventChangeStop'>
 
 export type CalendarRefs = {
@@ -98,11 +96,10 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		onReservationClick,
 		clearFetchInterval,
 		restartFetchInterval,
-		onShowMore,
+		onShowEventsListPopover,
 		parentPath,
 		query,
-		setQuery,
-		onMonthlyReservationClick
+		setQuery
 	} = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -417,8 +414,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					onEventChange={onEventChange}
 					onEventChangeStart={onEventChangeStart}
 					onEventChangeStop={onEventChangeStop}
-					onShowMore={onShowMore}
-					onMonthlyReservationClick={onMonthlyReservationClick}
+					onShowEventsListPopover={onShowEventsListPopover}
+					query={{ categoryIDs: query.categoryIDs }} // posuvame dalej len query, ktore realne potrebujeme, aby sa zabezpecilo zbytocnym prerendrovaniam celeho kalendaru
+					parentPath={parentPath}
 				/>
 			)
 		}
@@ -470,10 +468,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 	return (
 		<Content className={'nc-content'}>
-			<Spin spinning={loading}>
-				<div id={'nc-content-overlay'} />
-				{getView()}
-			</Spin>
+			<Spin spinning={loading}>{getView()}</Spin>
 			<ForbiddenModal visible={visibleForbiddenModal} onCancel={() => setVisibleForbiddenModal(false)} />
 		</Content>
 	)

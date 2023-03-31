@@ -1413,7 +1413,6 @@ export const detectBrowserType = (): string => {
 
 	const browser = parser.getBrowser()
 	const browserName = browser.name?.toLowerCase()
-	console.log('🚀 ~ file: helper.tsx:1408 ~ detectBrowserType ~ browserName:', browserName)
 	// get major number from version '101.4.11' -> 101, '94' -> 94
 	// eslint-disable-next-line radix
 	const majorVersion = parseInt(browser.version ? browser.version.split('.')[0] : '0')

@@ -18,7 +18,7 @@ import { setSelectedCountry } from '../reducers/selectedCountry/selectedCountryA
 
 // utils
 import Permissions from '../utils/Permissions'
-import { ADMIN_PERMISSIONS, FORM, PAGE, PERMISSION } from '../utils/enums'
+import { ADMIN_PERMISSIONS, FORM, PAGE, PERMISSION, STRINGS } from '../utils/enums'
 
 // assets
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon.svg'
@@ -95,7 +95,7 @@ const MainLayout: FC<Props> = (props) => {
 						className: 'font-medium button-add',
 						icon: <AddPurple />,
 						onClick: () => navigate(t('paths:salons/create')),
-						label: t('loc:Pridať salón')
+						label: STRINGS(t).addRecord(t('loc:salón'))
 					}
 				]
 			}
@@ -125,7 +125,7 @@ const MainLayout: FC<Props> = (props) => {
 			if (salonOptions.length === 0) {
 				return (
 					<Button onClick={() => navigate(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'} icon={<PlusIcon />}>
-						{t('loc:Pridať salón')}
+						{STRINGS(t).addRecord(t('loc:salón'))}
 					</Button>
 				)
 			}

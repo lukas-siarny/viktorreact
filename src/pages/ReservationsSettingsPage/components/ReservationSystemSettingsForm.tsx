@@ -88,6 +88,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const disabledOnlineB2cReservations = !formValues?.enabledB2cReservations
 	const defaultExpandedKeys: any = []
 	forEach(groupedServicesByCategory, (level1) => forEach(level1.category?.children, (level2) => defaultExpandedKeys.push(level2?.category?.id)))
+	const salonName = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.name)
 
 	const [uploadModal, setUploadModal] = useState<{
 		visible: boolean
@@ -482,7 +483,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			<p className='x-regular text-notino-grayDark mb-4'>
 				{t(
 					'loc:Informácie o vašich rezerváciach sa budú automaticky synchronizovať z Notino Partner App do vybraných kalendárov. Platí len pre rezervácie salóna {{ salonName }}.',
-					{ salonName: 'Salon name' }
+					{ salonName }
 				)}
 			</p>
 			<CalendarIntegrations />

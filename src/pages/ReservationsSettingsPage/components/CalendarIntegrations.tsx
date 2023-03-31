@@ -29,7 +29,6 @@ const CalendarIntegrations = (props: Props) => {
 
 	const user = useSelector((state: RootState) => state.user.user)
 	const authUser = useSelector((state: RootState) => state.user.authUser)
-
 	const icalUrl = find(user.data?.user?.salons, { id: salonID })?.employeeIcsLink
 	const isPartner = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser.data?.uniqPermissions])
 
@@ -112,7 +111,7 @@ const CalendarIntegrations = (props: Props) => {
 				theme='filled_black'
 			/> */}
 			<button className={'sync-button google mr-2'} onClick={() => login()} type='button'>
-				{t('loc:Google')}
+				{'Google'}
 			</button>
 			<button className={'sync-button microsoft mr-2'} onClick={handleLogin} type='button'>
 				{t('loc:Sign in')}

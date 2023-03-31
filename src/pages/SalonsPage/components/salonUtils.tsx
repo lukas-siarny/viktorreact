@@ -4,7 +4,7 @@ import { Tag } from 'antd'
 import i18next from 'i18next'
 
 // types
-import { AutocompleteLabelInValue, OpeningHours } from '../../../types/interfaces'
+import { OpeningHours } from '../../../types/interfaces'
 import { ISalonPayloadData } from '../../../reducers/selectedSalon/selectedSalonActions'
 import { IBasicSalon } from '../../../reducers/salons/salonsActions'
 import { Paths } from '../../../types/api'

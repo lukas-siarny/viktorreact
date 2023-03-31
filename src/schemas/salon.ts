@@ -19,6 +19,15 @@ export const salonSchema = z.object({
 	// TODO: dorobit aj select validaciu
 	// name: string  || { name: string, id: string, label: string }
 	// name: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_255, true),
+	// name: z.union([
+	// 	z.string(),
+	// 	// stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_255, true),
+	// 	z.object({
+	// 		key: z.string(),
+	// 		label: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_255, true),
+	// 		value: z.string().nullish()
+	// 	})
+	// ]),
 	name: z.any(),
 	aboutUsFirst: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1000),
 	openingHours: openingHoursConstraint(),
@@ -73,5 +82,6 @@ export type ISalonForm = z.infer<typeof salonSchema> &
 		pricelistIDs?: string[]
 		deletedAt?: boolean
 	}
+// const test: ISalonForm
 
 export const validationSalonFn = (values: ISalonForm, props: any) => zodErrorsToFormErrors(salonSchema, FORM.SALON, values, props)

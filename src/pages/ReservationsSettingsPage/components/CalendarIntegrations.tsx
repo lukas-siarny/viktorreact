@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google'
 import { useTranslation } from 'react-i18next'
 import { useMsal } from '@azure/msal-react'
 
 // utils
+import { useSelector } from 'react-redux'
+import { Params, useParams } from 'react-router'
+import { find } from 'lodash'
 import { postReq } from '../../../utils/request'
-import { NOTIFICATION_TYPE } from '../../../utils/enums'
+import { NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
+import { RootState } from '../../../reducers'
+import { checkPermissions } from '../../../utils/Permissions'
 
 type Props = {}
 
@@ -19,7 +24,14 @@ const graphConfig = {
 
 const CalendarIntegrations = (props: Props) => {
 	const { t } = useTranslation()
+	const { salonID }: any = useParams()
 	const { instance, accounts, inProgress } = useMsal()
+
+	const user = useSelector((state: RootState) => state.user.user)
+	const authUser = useSelector((state: RootState) => state.user.authUser)
+
+	const icalUrl = find(user.data?.user?.salons, { id: salonID })?.employeeIcsLink
+	const isPartner = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser.data?.uniqPermissions])
 
 	const login = useGoogleLogin({
 		flow: 'auth-code',
@@ -105,9 +117,15 @@ const CalendarIntegrations = (props: Props) => {
 			<button className={'sync-button microsoft mr-2'} onClick={handleLogin} type='button'>
 				{t('loc:Sign in')}
 			</button>
-			<button className={'sync-button apple'} onClick={handleLogin} type='button'>
-				{t('loc:Import pomocou .ics súboru')}
-			</button>
+			{isPartner && (
+				<a
+					// TODO: ked sa implemntuje NOT-4876 tak dat disabled stav pre tych ktore budu mat v url empty=true
+					href={icalUrl}
+					className={'sync-button apple'}
+				>
+					{t('loc:Import pomocou .ics súboru')}
+				</a>
+			)}
 		</div>
 	)
 }

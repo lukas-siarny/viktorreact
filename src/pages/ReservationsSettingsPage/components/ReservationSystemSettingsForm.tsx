@@ -38,6 +38,7 @@ import { ReactComponent as BellIcon } from '../../../assets/icons/bell-24.svg'
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
+import { ReactComponent as CalendarSyncIcon } from '../../../assets/icons/sync-calendar.svg'
 
 // redux
 import { RootState } from '../../../reducers'
@@ -383,15 +384,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			<p className='x-regular text-notino-grayDark mb-0'>
 				{t('loc:Zapína a vypína rezervačný systém, cez ktorý je možné v kalendári spravovať salónové rezervácie a smeny zamestnancov.')}
 			</p>
-			{/* Integrate RS calendar to: Google, Outlook, iCal */}
-			<div className={'flex mt-10'}>
-				<h3 className={'mb-0 mt-0 flex items-center'}>
-					<SettingsIcon className={'text-notino-black mr-2'} />
-					{t('loc:Integrácie')}
-				</h3>
-			</div>
-			<CalendarIntegrations />
-			<Divider className={'my-3'} />
+			{/* Time limits */}
 			<div className={'flex mt-10'}>
 				<h3 className={'mb-0 mt-0 flex items-center'}>
 					<SettingsIcon className={'text-notino-black mr-2'} />
@@ -399,7 +392,6 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				</h3>
 			</div>
 			<Divider className={'my-3'} />
-			{/* Time limits */}
 			<Row justify={'space-between'}>
 				<div className={'w-12/25'}>
 					<div className={'flex items-center'}>
@@ -479,6 +471,21 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Časové intervaly medzi rezerváciami.')}</p>
 				</div>
 			</Row>
+			{/* Integrate RS calendar to: Google, Outlook, iCal */}
+			<div className={'flex mt-10'}>
+				<h3 className={'mb-0 mt-0 flex items-center'}>
+					<CalendarSyncIcon className={'text-notino-black mr-2'} />
+					{t('loc:Synchronizácia kalendára')}
+				</h3>
+			</div>
+			<Divider className={'my-3'} />
+			<p className='x-regular text-notino-grayDark mb-4'>
+				{t(
+					'loc:Informácie o vašich rezerváciach sa budú automaticky synchronizovať z Notino Partner App do vybraných kalendárov. Platí len pre rezervácie salóna {{ salonName }}.',
+					{ salonName: 'Salon name' }
+				)}
+			</p>
+			<CalendarIntegrations />
 			<Row justify={'space-between'} className='mt-10'>
 				{/* Imports */}
 				<div className={'flex'}>

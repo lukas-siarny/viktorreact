@@ -18,6 +18,7 @@ import { patchReq } from '../../utils/request'
 import { RootState } from '../../reducers'
 import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getServices } from '../../reducers/services/serviceActions'
+import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
 import {
@@ -149,6 +150,8 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	}
 
 	const fetchData = async () => {
+		await dispatch(getCurrentUser())
+		await dispatch(getCurrentUser())
 		const salonRes = await dispatch(selectSalon(salonID))
 
 		const servicesRes = await dispatch(getServices({ salonID }))

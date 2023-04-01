@@ -6,7 +6,7 @@ import { useMsal } from '@azure/msal-react'
 // utils
 import { useSelector } from 'react-redux'
 import { Params, useParams } from 'react-router'
-import { find } from 'lodash'
+import { find, get } from 'lodash'
 import { postReq } from '../../../utils/request'
 import { NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
 import { RootState } from '../../../reducers'
@@ -27,9 +27,8 @@ const CalendarIntegrations = (props: Props) => {
 	const { salonID }: any = useParams()
 	const { instance, accounts, inProgress } = useMsal()
 
-	const user = useSelector((state: RootState) => state.user.user)
 	const authUser = useSelector((state: RootState) => state.user.authUser)
-	const icalUrl = find(user.data?.user?.salons, { id: salonID })?.employeeIcsLink
+	const icalUrl = get(find(authUser.data?.salons, { id: salonID }), 'employeeIcsLink')
 	const isPartner = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser.data?.uniqPermissions])
 
 	const login = useGoogleLogin({
@@ -96,7 +95,6 @@ const CalendarIntegrations = (props: Props) => {
 		// 		})
 		// 	})
 	}
-
 	return (
 		<div>
 			{/* <GoogleLogin

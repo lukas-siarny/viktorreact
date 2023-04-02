@@ -129,6 +129,13 @@ body, .ant-layout
 		-webkit-text-fill-color: $backgroundColor-gray-200
 		color: $backgroundColor-gray-200
 
+// NOTE: pre fix ak je icona rozmazana v safari (poradil chatGPT). Prejavuje sa asi len v modali
+.safari-icon-blur-fix
+	image-rendering: optimizeQuality
+	-webkit-font-smoothing: antialiased
+	will-change: transform
+
+
 .loading-spinner
 	animation: rotate 1.5s linear infinite
 	position: relative

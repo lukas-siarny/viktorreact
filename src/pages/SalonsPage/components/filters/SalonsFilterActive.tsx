@@ -1,6 +1,7 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useMemo, useCallback } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
-import { Button, Col, Divider, Form, Row } from 'antd'
+import { Button, Col, Divider, Dropdown, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce, filter, isArray, isEmpty, isNil, size } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
@@ -17,6 +18,8 @@ import { ReactComponent as PlusIcon } from '../../../../assets/icons/plus-icon.s
 import { ReactComponent as UploadIcon } from '../../../../assets/icons/upload-icon.svg'
 import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.svg'
 import { ReactComponent as CategoryIcon } from '../../../../assets/icons/categories-24-icon.svg'
+import { ReactComponent as FilesIcon } from '../../../../assets/icons/files-icon.svg'
+import { ReactComponent as MoreInfoIcon } from '../../../../assets/icons/more-info-horizontal-icon.svg'
 
 // utils
 import {
@@ -31,7 +34,9 @@ import {
 	SALON_SOURCE_TYPE,
 	FILTER_ENTITY,
 	CHANGE_DEBOUNCE_TIME,
-	IMPORT_BUTTON_ID
+	IMPORT_BUTTON_ID,
+	DOWNLOAD_BUTTON_ID,
+	STRINGS
 } from '../../../../utils/enums'
 import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getRangesForDatePicker, optionRenderWithTag, formFieldID } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
@@ -42,9 +47,11 @@ import InputField from '../../../../atoms/InputField'
 import SelectField from '../../../../atoms/SelectField'
 import DateRangePickerField from '../../../../atoms/DateRangePickerField'
 import SwitchField from '../../../../atoms/SwitchField'
+import useMedia from '../../../../hooks/useMedia'
 
 type ComponentProps = {
-	openSalonImportsModal: () => void
+	onImportSalons: () => void
+	onDownloadReport: () => void
 }
 
 export interface ISalonsFilterActive {
@@ -83,7 +90,7 @@ export const checkSalonFiltersSize = (formValues: any) =>
 	)
 
 const SalonsFilterActive = (props: Props) => {
-	const { handleSubmit, openSalonImportsModal } = props
+	const { handleSubmit, onImportSalons, onDownloadReport } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -150,54 +157,152 @@ const SalonsFilterActive = (props: Props) => {
 		[t]
 	)
 
-	const customContent = useMemo(
-		() => (
+	const isLargerScreen = useMedia(['(max-width: 1280px)'], [true], false)
+
+	const customContent = useMemo(() => {
+		const addNewButton = (
+			<Permissions
+				allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER]}
+				render={(hasPermission, { openForbiddenModal }) => (
+					<Button
+						onClick={() => {
+							if (hasPermission) {
+								navigate(getLinkWithEncodedBackUrl(t('paths:salons/create')))
+							} else {
+								openForbiddenModal()
+							}
+						}}
+						type='primary'
+						htmlType='button'
+						className={'noti-btn w-full'}
+						icon={<PlusIcon />}
+					>
+						{STRINGS(t).addRecord(t('loc:salón'))}
+					</Button>
+				)}
+			/>
+		)
+
+		return (
 			<div className={'flex items-center gap-2'}>
-				<Permissions
-					allowed={[PERMISSION.IMPORT_SALON]}
-					render={(hasPermission, { openForbiddenModal }) => (
-						<Button
-							onClick={() => {
-								if (hasPermission) {
-									openSalonImportsModal()
-								} else {
-									openForbiddenModal()
-								}
+				{!isLargerScreen ? (
+					<>
+						<Permissions
+							render={(hasPermission, { openForbiddenModal }) => (
+								<Button
+									onClick={() => {
+										if (hasPermission) {
+											onDownloadReport()
+										} else {
+											openForbiddenModal()
+										}
+									}}
+									type='primary'
+									htmlType='button'
+									className={'noti-btn w-full'}
+									icon={<FilesIcon />}
+									id={formFieldID(FORM.SALONS_FILTER_ACITVE, DOWNLOAD_BUTTON_ID)}
+								>
+									{STRINGS(t).generate(t('loc:report'))}
+								</Button>
+							)}
+						/>
+						<Permissions
+							allowed={[PERMISSION.IMPORT_SALON]}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<Button
+									onClick={() => {
+										if (hasPermission) {
+											onImportSalons()
+										} else {
+											openForbiddenModal()
+										}
+									}}
+									type='primary'
+									htmlType='button'
+									className={'noti-btn w-full'}
+									icon={<UploadIcon />}
+									id={formFieldID(FORM.SALONS_FILTER_ACITVE, IMPORT_BUTTON_ID())}
+								>
+									{t('loc:Import dát')}
+								</Button>
+							)}
+						/>
+						{addNewButton}
+					</>
+				) : (
+					<>
+						{addNewButton}
+						<Dropdown
+							menu={{
+								className: 'shadow-md max-w-xs min-w-0 mt-5 noti-dropdown-header',
+								items: [
+									{
+										key: 'download-report',
+										className: 'p-0',
+										label: (
+											<Permissions
+												render={(hasPermission, { openForbiddenModal }) => (
+													<div
+														role='menuitem'
+														tabIndex={-1}
+														className={'py-2-5 px-2 mb-2 font-medium min-w-0 flex items-center gap-2'}
+														onClick={() => {
+															if (hasPermission) {
+																onDownloadReport()
+															} else {
+																openForbiddenModal()
+															}
+														}}
+													>
+														<FilesIcon />
+														{STRINGS(t).generate(t('loc:report'))}
+													</div>
+												)}
+											/>
+										)
+									},
+									{
+										key: 'import-salons',
+										className: 'p-0',
+										label: (
+											<Permissions
+												allowed={[PERMISSION.IMPORT_SALON]}
+												render={(hasPermission, { openForbiddenModal }) => (
+													<div
+														role='menuitem'
+														tabIndex={-1}
+														className={'py-2-5 px-2 mb-2 font-medium min-w-0 flex items-center gap-2'}
+														onClick={() => {
+															if (hasPermission) {
+																onImportSalons()
+															} else {
+																openForbiddenModal()
+															}
+														}}
+													>
+														<UploadIcon />
+														{t('loc:Import dát')}
+													</div>
+												)}
+											/>
+										)
+									}
+								]
 							}}
-							type='primary'
-							htmlType='button'
-							className={'noti-btn w-full'}
-							icon={<UploadIcon />}
-							id={formFieldID(FORM.SALONS_FILTER_ACITVE, IMPORT_BUTTON_ID())}
+							placement='bottomRight'
+							trigger={['click']}
+							overlayStyle={{ minWidth: 226 }}
 						>
-							{t('loc:Import dát')}
-						</Button>
-					)}
-				/>
-				<Permissions
-					allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER]}
-					render={(hasPermission, { openForbiddenModal }) => (
-						<Button
-							onClick={() => {
-								if (hasPermission) {
-									navigate(getLinkWithEncodedBackUrl(t('paths:salons/create')))
-								} else {
-									openForbiddenModal()
-								}
-							}}
-							type='primary'
-							htmlType='button'
-							className={'noti-btn w-full'}
-							icon={<PlusIcon />}
-						>
-							{t('loc:Pridať salón')}
-						</Button>
-					)}
-				/>
+							<button type={'button'} className={'noti-more-info-btn'} onClick={(e) => e.preventDefault()}>
+								<MoreInfoIcon style={{ transform: 'rotate(90deg)' }} color={'#fff'} />
+							</button>
+						</Dropdown>
+					</>
+				)}
 			</div>
-		),
-		[t, openSalonImportsModal]
-	)
+		)
+	}, [t, onImportSalons, navigate, onDownloadReport, isLargerScreen])
 
 	const searchInput = useMemo(
 		() => (

@@ -234,7 +234,7 @@ const ContactPage: FC<Props> = () => {
 																			</>
 																		}
 																		trigger='click'
-																		arrowPointAtCenter
+																		arrow={{ arrowPointAtCenter: true }}
 																		overlayInnerStyle={{ borderRadius: 10 }}
 																	>
 																		<button

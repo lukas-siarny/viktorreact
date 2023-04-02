@@ -613,6 +613,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 						// edit mode is turned off if salon is in approval process and user is not admin or is deleted 'read mode' only
 						disabledForm={isDeletedSalon || (isPendingPublication && !isNotinoUser)}
 						deletedSalon={isDeletedSalon}
+						salonData={salon?.data}
 						notinoUserModalControlButtons={
 							isNotinoUser && (
 								<Row className={'flex justify-start w-full gap-2 pb-4'}>

@@ -43,11 +43,11 @@ export interface IPaginationQuery {
 	order?: string | null
 }
 
-export interface ILabelInValue<T = any> {
+export interface ILabelInValue<T = any, ExtraType = any> {
 	label?: string
 	value: T
 	key: string
-	extra?: any
+	extra?: ExtraType
 }
 export interface IResponsePagination {
 	limit: number
@@ -213,9 +213,8 @@ export interface ISalonForm {
 	pricelistIDs?: string[]
 	pricelists?: any
 	locationNote: string | null
-	cosmeticIDs: ILabelInValue<string>[]
-	languageIDs: ILabelInValue<string>[]
-	address: boolean | null
+	cosmeticIDs: string[]
+	languageIDs: string[]
 	deletedAt?: boolean
 }
 

@@ -51,6 +51,7 @@ import { ReactComponent as CosmeticIcon } from '../../../../assets/icons/cosmeti
 import { ReactComponent as LanguagesIcon } from '../../../../assets/icons/languages-24-icon.svg'
 import { ReactComponent as InfoIcon16 } from '../../../../assets/icons/info-icon-16.svg'
 import { ReactComponent as LocationIcon } from '../../../../assets/icons/location-16.svg'
+import { ISelectedSalonPayload } from '../../../../reducers/selectedSalon/selectedSalonActions'
 
 type ComponentProps = {
 	disabledForm?: boolean
@@ -61,6 +62,7 @@ type ComponentProps = {
 	clearSalonForm?: () => void
 	searchSalons?: (search: string, page: number) => void
 	showBasicSalonsSuggestions?: boolean
+	salonData?: ISelectedSalonPayload['data']
 }
 
 type Props = InjectedFormProps<ISalonForm, ComponentProps> & ComponentProps
@@ -104,12 +106,43 @@ const SalonForm: FC<Props> = (props) => {
 		searchSalons,
 		showBasicSalonsSuggestions,
 		deletedSalon,
-		notinoUserModalControlButtons
+		notinoUserModalControlButtons,
+		salonData
 	} = props
 	const dispatch = useDispatch()
 	const languages = useSelector((state: RootState) => state.languages.languages)
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
+
+	const cosmeticsInitOptions = salonData?.cosmetics?.reduce((acc, cosmetic) => {
+		if (cosmetic !== undefined) {
+			return [
+				...acc,
+				{
+					label: cosmetic?.name || '',
+					value: (cosmetic as any).id,
+					extra: { image: 'ss' },
+					key: `Cosmetic_${(cosmetic as any).id}`
+				}
+			]
+		}
+		return acc
+	}, [] as any[])
+
+	const languagesInitOptions = salonData?.languages?.reduce((acc, lng) => {
+		if (lng !== undefined) {
+			return [
+				...acc,
+				{
+					label: lng?.name || '',
+					value: (lng as any).id,
+					extra: { image: 'ss' },
+					key: `language_${(lng as any).id}`
+				}
+			]
+		}
+		return acc
+	}, [] as any[])
 
 	const searchCosmetics = useCallback(
 		async (search: string, page: string) => {
@@ -189,6 +222,7 @@ const SalonForm: FC<Props> = (props) => {
 						<Field
 							component={SelectField}
 							options={languages.enumerationsOptions}
+							initialOptions={languagesInitOptions}
 							label={t('loc:Jazyky, ktorými sa dá v salóne dohovoriť')}
 							placeholder={t('loc:Vyberte jazyk')}
 							name={'languageIDs'}
@@ -203,11 +237,11 @@ const SalonForm: FC<Props> = (props) => {
 						/>
 						<Field
 							component={SelectField}
+							initialOptions={cosmeticsInitOptions}
 							label={t('loc:Kozmetika')}
 							placeholder={t('loc:Vyberte kozmetiku')}
 							name={'cosmeticIDs'}
 							optionRender={(itemData: any) => optionRenderWithImage(itemData, <CosmeticIcon />, 40)}
-							// optionLabelProp={'label'}
 							showSearch
 							onSearch={searchCosmetics}
 							filterOption={false}
@@ -218,10 +252,6 @@ const SalonForm: FC<Props> = (props) => {
 							allowClear
 							allowInfinityScroll
 							onDidMountSearch
-							tagRender={(itemData: any) => {
-								return optionRenderWithImage(itemData, <CosmeticIcon />, 40)
-							}}
-							// labelInValue
 						/>
 						<Field
 							component={ImgUploadField}

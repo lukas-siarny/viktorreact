@@ -7,8 +7,8 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": ">=18.15.0",
-    "npm": ">=9.5.0"
+    "node": ">=18.14.0",
+    "npm": ">=9.1.0"
   },
   "scripts": {
     "start": "cross-env PROXY=https://notino-admin.goodrequest.dev npm-run-all -p generate-runtime-env start-watch translate-watch build:tailwind",

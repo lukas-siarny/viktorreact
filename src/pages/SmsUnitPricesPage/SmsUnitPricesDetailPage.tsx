@@ -9,6 +9,7 @@ import cx from 'classnames'
 import { SorterResult } from 'antd/lib/table/interface'
 import dayjs from 'dayjs'
 import { useParams } from 'react-router-dom'
+import { isEmpty } from 'lodash'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -16,7 +17,7 @@ import CustomTable from '../../components/CustomTable'
 import SmsUnitPricesForm from './components/SmsUnitPricesForm'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, CREATE_BUTTON_ID, D_M_YEAR_FORMAT } from '../../utils/enums'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, CREATE_BUTTON_ID, D_M_YEAR_FORMAT, DEFAULT_DATE_INIT_FORMAT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { formFieldID, normalizeDirectionKeys, setOrder } from '../../utils/helper'
@@ -155,6 +156,7 @@ const SmsUnitPricesDetailPage = () => {
 			console.error(error.message)
 		}
 	}
+
 	const handleDelete = async () => {
 		if (!selectedSmsUnitPrice?.id || isRemoving) {
 			return
@@ -234,6 +236,8 @@ const SmsUnitPricesDetailPage = () => {
 		}
 	]
 
+	const isEmptyCountry = isEmpty(smsUnitPrices.data?.unitPricesPerCounty)
+
 	return (
 		<>
 			<Row>
@@ -241,13 +245,18 @@ const SmsUnitPricesDetailPage = () => {
 			</Row>
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
-					<div className='content-body'>
+					<div className={cx('content-body', { 'pb-0': !visibleForm })}>
 						<Spin spinning={smsUnitPrices?.isLoading || isRemoving}>
 							<div className={'pt-0 flex gap-4 justify-between items-center'}>
 								<h3 className={'text-base whitespace-nowrap'}>{t('loc:Ceny SMS správ')}</h3>
 								<Button
 									onClick={() => {
-										dispatch(initialize(FORM.SMS_UNIT_PRICES_FORM, { countryCode: countryCode?.toLocaleUpperCase() }))
+										dispatch(
+											initialize(FORM.SMS_UNIT_PRICES_FORM, {
+												countryCode: countryCode?.toLocaleUpperCase(),
+												validFrom: isEmptyCountry ? dayjs().startOf('month').format(DEFAULT_DATE_INIT_FORMAT) : undefined
+											})
+										)
 										changeFormVisibility(true)
 									}}
 									type='primary'
@@ -294,6 +303,7 @@ const SmsUnitPricesDetailPage = () => {
 											changeFormVisibility={changeFormVisibility}
 											onSubmit={handleSubmit}
 											onDelete={handleDelete}
+											isEmptyCountry={isEmptyCountry}
 										/>
 									</div>
 								) : undefined}

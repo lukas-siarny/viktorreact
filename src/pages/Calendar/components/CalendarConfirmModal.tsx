@@ -10,6 +10,8 @@ import ConfirmBulkForm from './forms/ConfirmBulkForm'
 // types
 import { IBulkConfirmForm, ConfirmModalData } from '../../../types/interfaces'
 import { RootState } from '../../../reducers'
+
+// schema
 import { ICalendarEventForm } from '../../../schemas/event'
 
 // utils

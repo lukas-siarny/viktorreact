@@ -57,7 +57,6 @@ export type ICalendarEventForm = Omit<z.infer<typeof eventSchema>, 'employee'> &
 	revertEvent?: () => void
 	updateFromCalendar?: boolean
 	isImported?: boolean
-} & {
 	employee: ICalendarEmployeeOptionItem
 }
 

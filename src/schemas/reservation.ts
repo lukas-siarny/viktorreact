@@ -42,7 +42,6 @@ export type ICalendarReservationForm = Omit<z.infer<typeof reservationsSchema>, 
 	reservationData?: CalendarEvent['reservationData']
 	isImported?: boolean
 	eventType: CALENDAR_EVENT_TYPE
-} & {
 	employee: ICalendarEmployeeOptionItem
 	customer: ISelectOptionItem<{
 		customerData?: NonNullable<ICalendarEventDetailPayload['data']>['customer']

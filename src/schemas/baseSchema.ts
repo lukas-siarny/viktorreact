@@ -175,6 +175,8 @@ export const imageConstraint = z.object({
 	id: uuidConstraint.nullish()
 })
 
+export const selectObjConstraint = z.preprocess((input: any) => input && String(input.value), z.string().uuid(), z.union([z.string(), z.number()]))
+
 export function stringConstraint<T extends true | false>(maxLength: number, required?: T): T extends true ? ZodString : ZodOptional<ZodNullable<ZodString>>
 export function stringConstraint<T extends true | false>(maxLength: number, required?: T): ZodString | ZodOptional<ZodNullable<ZodString>> {
 	const base = z.string().max(maxLength)

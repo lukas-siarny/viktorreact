@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { isEmpty } from 'lodash'
 import dayjs from 'dayjs'
-import { serializeValidationMessage, stringConstraint, zodErrorsToFormErrors } from './baseSchema'
+import { selectObjConstraint, serializeValidationMessage, stringConstraint, zodErrorsToFormErrors } from './baseSchema'
 import { CALENDAR_EVENT_TYPE, DAY, EVERY_REPEAT, FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
 import { dateRegex, timeRegex } from '../utils/regex'
 // eslint-disable-next-line import/no-cycle
@@ -44,7 +44,7 @@ export const eventSchema = z
 	.and(
 		z.object({
 			eventType: z.nativeEnum(CALENDAR_EVENT_TYPE),
-			employee: z.preprocess((input: any) => input && String(input.value), z.string().uuid(), z.union([z.string(), z.number()])),
+			employee: selectObjConstraint,
 			timeFrom: z.string().regex(timeRegex),
 			timeTo: z.string().regex(timeRegex),
 			note: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1500)

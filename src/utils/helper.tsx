@@ -293,9 +293,9 @@ export const translateDayName = (day: DAY | typeof MONDAY_TO_FRIDAY, shortName?:
 
 export const transalteReservationSourceType = (sourceType: RESERVATION_SOURCE_TYPE) => {
 	if (sourceType === RESERVATION_SOURCE_TYPE.ONLINE) {
-		return i18next.t('loc:Salón')
+		return i18next.t('loc:Klient')
 	}
-	return i18next.t('loc:Klient')
+	return i18next.t('loc:Salón')
 }
 
 export const translateReservationState = (state?: RESERVATION_STATE) => {

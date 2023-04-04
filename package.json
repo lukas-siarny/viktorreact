@@ -1,14 +1,14 @@
 {
   "name": "notino_b2b_web",
-  "version": "2.1.2",
+  "version": "2.2.0-rc.0",
   "main": "src/index.ts",
   "repository": "git@bitbucket.org:GoodRequest/notino_b2b_web.git",
   "author": "Jan Cvencek <jan.cvencek@goodrequest.com>",
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": ">=18.15.0",
-    "npm": ">=9.5.0"
+    "node": ">=18.14.0",
+    "npm": ">=9.1.0"
   },
   "scripts": {
     "start": "cross-env PROXY=https://notino-admin.goodrequest.dev npm-run-all -p generate-runtime-env start-watch translate-watch build:tailwind",
@@ -115,7 +115,8 @@
     "smtp-tester": "git+https://github.com/deitch/smtp-tester.git#d50cf2691b7fb48f4930f16358c254958d397dd6",
     "symlink-dir": "5.1.1",
     "tailwindcss": "3.2.7",
-    "tailwindcss-export-config": "4.1.0"
+    "tailwindcss-export-config": "4.1.0",
+    "ua-parser-js": "1.0.34"
   },
   "devDependencies": {
     "@cypress/code-coverage": "3.10.0",
@@ -137,6 +138,7 @@
     "@types/react-scroll": "1.8.6",
     "@types/redux-form": "8.3.5",
     "@types/redux-logger": "3.0.9",
+    "@types/ua-parser-js": "0.7.36",
     "cross-env": "7.0.3",
     "cypress": "12.3.0",
     "cypress-file-upload": "5.0.8",

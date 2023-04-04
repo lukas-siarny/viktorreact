@@ -72,7 +72,7 @@ const SalonRolesField: FC<Props> = (props) => {
 				centered
 				footer={null}
 				onCancel={() => setVisible(false)}
-				closeIcon={<CloseIcon />}
+				closeIcon={<CloseIcon className={'safari-icon-blur-fix'} />}
 			>
 				<Spin spinning={loading}>
 					<p className={'text-notino-grayDark max-w-md'}>

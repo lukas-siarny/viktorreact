@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Row } from 'antd'
+import { Col, Row, Tooltip } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { initialize } from 'redux-form'
 import dayjs from 'dayjs'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
+import { useNavigate } from 'react-router-dom'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -14,9 +15,21 @@ import UserAvatar from '../../components/AvatarComponents'
 import ReservationsFilter from './components/ReservationsFilter'
 
 // utils
-import { DEFAULT_DATE_INIT_FORMAT, FORM, PERMISSION, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import {
+	CALENDAR_DATE_FORMAT,
+	CALENDAR_EVENT_TYPE,
+	CALENDAR_EVENTS_VIEW_TYPE,
+	CALENDAR_VIEW,
+	DEFAULT_DATE_INIT_FORMAT,
+	DEFAULT_DATE_INPUT_FORMAT,
+	FORM,
+	PERMISSION,
+	RESERVATION_PAYMENT_METHOD,
+	RESERVATION_STATE,
+	ROW_GUTTER_X_DEFAULT
+} from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { getAssignedUserLabel, normalizeDirectionKeys, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
+import { formatObjToQuery, getAssignedUserLabel, normalizeDirectionKeys, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -31,13 +44,13 @@ import useQueryParams, { ArrayParam, NumberParam, StringParam } from '../../hook
 
 type Props = SalonSubPageProps
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
-
 const ReservationsPage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { salonID } = props
+	const { salonID, parentPath } = props
 	const reservations = useSelector((state: RootState) => state.calendar.paginatedReservations)
+	const navigate = useNavigate()
+	const getPath = useCallback((pathSuffix: string) => `${parentPath}${pathSuffix}`, [parentPath])
 
 	const [query, setQuery] = useQueryParams({
 		dateFrom: StringParam(dayjs().format(DEFAULT_DATE_INIT_FORMAT)),
@@ -128,28 +141,28 @@ const ReservationsPage = (props: Props) => {
 			dataIndex: 'startDate',
 			key: 'startDate',
 			ellipsis: true,
-			width: '20%'
+			width: '10%'
 		},
 		{
 			title: t('loc:Trvanie'),
 			dataIndex: 'time',
 			key: 'time',
 			ellipsis: true,
-			width: '20%'
+			width: '15%'
 		},
 		{
-			title: t('loc:Vytvorená v'),
+			title: t('loc:Vytvoril'),
 			dataIndex: 'createSourceType',
 			key: 'createSourceType',
 			ellipsis: true,
-			width: '20%'
+			width: '10%'
 		},
 		{
 			title: t('loc:Stav'),
 			dataIndex: 'state',
 			key: 'state',
 			ellipsis: true,
-			width: '20%',
+			width: '15%',
 			render: (value) => {
 				return (
 					<div className={'flex items-center'}>
@@ -164,13 +177,15 @@ const ReservationsPage = (props: Props) => {
 			dataIndex: 'paymentMethod',
 			key: 'paymentMethod',
 			ellipsis: true,
-			width: '20%',
+			width: '10%',
 			render: (value) => {
-				return (
+				return value ? (
 					<div className={'flex items-center'}>
 						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).icon}</div>
 						<div className={'truncate'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).text}</div>
 					</div>
+				) : (
+					'-'
 				)
 			}
 		},
@@ -179,13 +194,24 @@ const ReservationsPage = (props: Props) => {
 			dataIndex: 'employee',
 			key: 'employee',
 			ellipsis: true,
-			width: '20%',
+			width: '25%',
 			render: (value) => {
 				return (
-					<>
-						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.image?.resizedImages?.thumbnail} fallBackSrc={value?.image?.original} />
-						{getAssignedUserLabel(value)}
-					</>
+					<div className={'flex items-center'}>
+						<UserAvatar
+							style={value.deletedAt && { filter: 'grayscale(100)' }}
+							className='mr-2-5 w-7 h-7'
+							src={value?.image?.resizedImages?.thumbnail}
+							fallBackSrc={value?.image?.original}
+						/>
+						{value.deletedAt ? (
+							<Tooltip title={t('loc:Priradený kolega je vymazaný zo salónu')}>
+								<div className={'text-trueGray-400'}>{getAssignedUserLabel(value)}</div>
+							</Tooltip>
+						) : (
+							getAssignedUserLabel(value)
+						)}
+					</div>
 				)
 			}
 		},
@@ -194,7 +220,7 @@ const ReservationsPage = (props: Props) => {
 			dataIndex: 'customer',
 			key: 'customer',
 			ellipsis: true,
-			width: '20%',
+			width: '25%',
 			render: (value) => {
 				return (
 					<>
@@ -209,7 +235,7 @@ const ReservationsPage = (props: Props) => {
 			dataIndex: 'service',
 			key: 'service',
 			ellipsis: true,
-			width: '20%',
+			width: '25%',
 			render: (value) => {
 				return (
 					<>
@@ -251,7 +277,25 @@ const ReservationsPage = (props: Props) => {
 							onChange={onChangeTable}
 							loading={reservations?.isLoading}
 							dataSource={reservations?.tableData}
+							rowClassName={'clickable-row'}
+							onRow={(record) => ({
+								onClick: () => {
+									const redirectQuery = {
+										view: CALENDAR_VIEW.DAY,
+										date: dayjs(record.startDate, DEFAULT_DATE_INPUT_FORMAT).format(CALENDAR_DATE_FORMAT.QUERY),
+										eventsViewType: CALENDAR_EVENT_TYPE.RESERVATION,
+										sidebarView: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
+										eventId: record.key
+									}
+
+									navigate({
+										pathname: getPath(t('paths:calendar')),
+										search: formatObjToQuery(redirectQuery)
+									})
+								}
+							})}
 							twoToneRows
+							scroll={{ x: 1200 }}
 							useCustomPagination
 							pagination={{
 								pageSize: reservations.data?.pagination.limit,
@@ -268,4 +312,4 @@ const ReservationsPage = (props: Props) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(ReservationsPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER]))(ReservationsPage)

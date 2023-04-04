@@ -12,18 +12,20 @@ import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomersFilter from './components/CustomersFilter'
 import UserAvatar from '../../components/AvatarComponents'
+import ImportForm from '../../components/ImportForm'
 
 // utils
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, REQUEST_STATUS } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
+import { postReq } from '../../utils/request'
 
 // reducers
 import { RootState } from '../../reducers'
 import { getCustomers } from '../../reducers/customers/customerActions'
 
 // types
-import { IBreadcrumbs, ISearchFilter, SalonSubPageProps, Columns } from '../../types/interfaces'
+import { IBreadcrumbs, ISearchFilter, SalonSubPageProps, Columns, IDataUploadForm } from '../../types/interfaces'
 
 // hooks
 import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
@@ -36,6 +38,8 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const customers = useSelector((state: RootState) => state.customers.customers)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
+	const [uploadStatus, setRequestStatus] = useState<REQUEST_STATUS | undefined>(undefined)
+	const [customersImportVisible, setCustomersImportVisible] = useState(false)
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam(),
@@ -43,6 +47,14 @@ const CustomersPage = (props: SalonSubPageProps) => {
 		page: NumberParam(1),
 		order: StringParam('lastName:ASC')
 	})
+
+	const breadcrumbs: IBreadcrumbs = {
+		items: [
+			{
+				name: t('loc:Zoznam zákazníkov')
+			}
+		]
+	}
 
 	useEffect(() => {
 		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: query.search }))
@@ -135,16 +147,37 @@ const CustomersPage = (props: SalonSubPageProps) => {
 		}
 	]
 
-	const breadcrumbs: IBreadcrumbs = {
-		items: [
-			{
-				name: t('loc:Zoznam zákazníkov')
-			}
-		]
+	const clientImportsSubmit = async (values: IDataUploadForm) => {
+		setRequestStatus(REQUEST_STATUS.SUBMITTING)
+
+		const formData = new FormData()
+		formData.append('file', values?.file)
+
+		try {
+			await postReq('/api/b2b/admin/imports/salons/{salonID}/customers', { salonID }, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			})
+
+			setRequestStatus(REQUEST_STATUS.SUCCESS)
+		} catch {
+			setRequestStatus(REQUEST_STATUS.ERROR)
+		}
 	}
 
 	return (
 		<>
+			<ImportForm
+				setRequestStatus={setRequestStatus}
+				requestStatus={uploadStatus}
+				label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv' })}
+				accept={'.csv'}
+				title={t('loc:Importovať zákazníkov')}
+				visible={customersImportVisible}
+				setVisible={setCustomersImportVisible}
+				onSubmit={clientImportsSubmit}
+			/>
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
@@ -156,6 +189,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 								allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_CREATE]}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<CustomersFilter
+										openClientImportsModal={() => setCustomersImportVisible(true)}
 										onSubmit={handleSubmit}
 										total={customers?.data?.pagination?.totalCount}
 										createCustomer={() => {
@@ -168,6 +202,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 									/>
 								)}
 							/>
+
 							<CustomTable
 								className='table-fixed'
 								onChange={onChangeTable}

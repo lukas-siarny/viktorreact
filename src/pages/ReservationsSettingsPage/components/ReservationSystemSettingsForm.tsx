@@ -24,7 +24,7 @@ import RemainingSmsCredit from '../../../components/Dashboards/RemainingSmsCredi
 import { IDataUploadForm, IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
-import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, UPLOAD_STATUS } from '../../../utils/enums'
+import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, REQUEST_STATUS } from '../../../utils/enums'
 import { formFieldID, optionRenderNotiPinkCheckbox, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
@@ -61,7 +61,7 @@ type ComponentProps = {
 
 const UPLOAD_MODAL_INIT = {
 	visible: false,
-	uploadStatus: undefined,
+	requestStatus: undefined,
 	uploadType: undefined,
 	data: {
 		accept: '',
@@ -92,7 +92,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 
 	const [uploadModal, setUploadModal] = useState<{
 		visible: boolean
-		uploadStatus: UPLOAD_STATUS | undefined
+		requestStatus: REQUEST_STATUS | undefined
 		uploadType: UPLOAD_TYPE | undefined
 		data: { accept: string; label: string; title: string }
 	}>(UPLOAD_MODAL_INIT)
@@ -260,9 +260,9 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				})
 			}
 
-			setUploadModal({ ...uploadModal, uploadStatus: UPLOAD_STATUS.SUCCESS })
+			setUploadModal({ ...uploadModal, requestStatus: REQUEST_STATUS.SUCCESS })
 		} catch {
-			setUploadModal({ ...uploadModal, uploadStatus: UPLOAD_STATUS.ERROR })
+			setUploadModal({ ...uploadModal, requestStatus: REQUEST_STATUS.ERROR })
 		}
 	}
 
@@ -496,60 +496,63 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					</h3>
 				</div>
 				<Divider className={'my-3'} />
-				<Row>
-					<ImportForm
-						accept={uploadModal.data.accept}
-						title={uploadModal.data.title}
-						label={uploadModal.data.label}
-						uploadStatus={uploadModal.uploadStatus}
-						setUploadStatus={(status: any) => setUploadModal({ ...uploadModal, uploadStatus: status })}
-						onSubmit={handleSubmitImport}
-						visible={uploadModal.visible}
-						setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
-					/>
-					<Button
-						onClick={() => {
-							setUploadModal({
-								...uploadModal,
-								visible: true,
-								uploadType: UPLOAD_TYPE.RESERVATION,
-								data: {
-									accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv,.ics',
-									title: t('loc:Importovať rezervácie'),
-									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.xlsx, .csv, .ics' })
-								}
-							})
-						}}
-						disabled={disabled}
-						type='primary'
-						htmlType='button'
-						className={'noti-btn mr-2'}
-						icon={<UploadIcon />}
-					>
-						{t('loc:Importovať rezervácie')}
-					</Button>
-					<Button
-						onClick={() => {
-							setUploadModal({
-								...uploadModal,
-								visible: true,
-								uploadType: UPLOAD_TYPE.CUSTOMER,
-								data: {
-									accept: '.csv',
-									title: t('loc:Importovať zákazníkov'),
-									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv' })
-								}
-							})
-						}}
-						disabled={disabled}
-						type='primary'
-						htmlType='button'
-						className={'noti-btn'}
-						icon={<UploadIcon />}
-					>
-						{t('loc:Importovať zákazníkov')}
-					</Button>
-				</Row>
+				<div>
+					<p className={'text-notino-grayDark'}>{t('loc:Importujte si dáta z externých služieb ako Reservanto, Reservio, …')}</p>
+					<Row>
+						<ImportForm
+							accept={uploadModal.data.accept}
+							title={uploadModal.data.title}
+							label={uploadModal.data.label}
+							requestStatus={uploadModal.requestStatus}
+							setRequestStatus={(status?: REQUEST_STATUS) => setUploadModal({ ...uploadModal, requestStatus: status })}
+							onSubmit={handleSubmitImport}
+							visible={uploadModal.visible}
+							setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
+						/>
+						<Button
+							onClick={() => {
+								setUploadModal({
+									...uploadModal,
+									visible: true,
+									uploadType: UPLOAD_TYPE.RESERVATION,
+									data: {
+										accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv,.ics',
+										title: t('loc:Importovať rezervácie'),
+										label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.xlsx, .csv, .ics' })
+									}
+								})
+							}}
+							disabled={disabled}
+							type='primary'
+							htmlType='button'
+							className={'noti-btn mr-2'}
+							icon={<UploadIcon />}
+						>
+							{t('loc:Importovať rezervácie')}
+						</Button>
+						<Button
+							onClick={() => {
+								setUploadModal({
+									...uploadModal,
+									visible: true,
+									uploadType: UPLOAD_TYPE.CUSTOMER,
+									data: {
+										accept: '.csv',
+										title: t('loc:Importovať zákazníkov'),
+										label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv' })
+									}
+								})
+							}}
+							disabled={disabled}
+							type='primary'
+							htmlType='button'
+							className={'noti-btn'}
+							icon={<UploadIcon />}
+						>
+							{t('loc:Importovať zákazníkov')}
+						</Button>
+					</Row>
+				</div>
 			</Row>
 			<Row justify={'space-between'} className='mt-10'>
 				{/* Notifications */}

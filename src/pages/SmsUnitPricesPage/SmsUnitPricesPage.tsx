@@ -32,13 +32,14 @@ import { RootState } from '../../reducers'
 // hooks
 import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
 
-type TableDataItem = NonNullable<ISmsUnitPricesActualPayload['data']>[0] & { key: string }
+type TableDataItem = NonNullable<ISmsUnitPricesActualPayload['data']>[0] & { key: string; currencySymbol: string }
 
 const SmsUnitPricesPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
 	const smsUnitPricesActual = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPricesActual)
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 	const currencies = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.CURRENCIES])
 
 	const [query, setQuery] = useQueryParams({
@@ -65,23 +66,28 @@ const SmsUnitPricesPage = () => {
 	}, [query.search, dispatch])
 
 	const tableData = useMemo(() => {
-		if (!smsUnitPricesActual || !smsUnitPricesActual.data) {
+		if (!smsUnitPricesActual.data) {
 			return []
 		}
 		const source = query.search
 			? smsUnitPricesActual.data.filter((smsUnitPrice) => {
 					const countryName = transformToLowerCaseWithoutAccent(smsUnitPrice.country.name)
-					const searchedValue = transformToLowerCaseWithoutAccent(query.search || undefined)
+					const searchedValue = transformToLowerCaseWithoutAccent(query.search)
 					return countryName.includes(searchedValue)
 			  })
 			: smsUnitPricesActual.data
 
 		// transform to table data
-		return source?.map((item) => ({
-			...item,
-			key: item.country.code
-		}))
-	}, [query.search, smsUnitPricesActual])
+		return source?.map((item) => {
+			const country = countries.data?.find((c) => c.code === item.country.code)
+			const currency = currencies.data?.find((c) => c.code === country?.currencyCode)
+			return {
+				...item,
+				currencySymbol: currency?.symbol || '',
+				key: item.country.code
+			}
+		})
+	}, [query.search, smsUnitPricesActual, currencies.data, countries.data])
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
@@ -94,87 +100,85 @@ const SmsUnitPricesPage = () => {
 		}
 	}
 
-	const columns: ColumnProps<TableDataItem>[] = [
-		{
-			title: t('loc:Krajina'),
-			dataIndex: 'country',
-			key: 'country',
-			width: '20%',
-			sortOrder: setOrder(query.order, 'country'),
-			sorter: {
-				compare: (a, b) => {
-					const aValue = a?.country?.name
-					const bValue = b?.country?.name
-					return sortData(aValue, bValue)
+	const columns: ColumnProps<TableDataItem>[] = useMemo(() => {
+		return [
+			{
+				title: t('loc:Krajina'),
+				dataIndex: 'country',
+				key: 'country',
+				width: '20%',
+				sortOrder: setOrder(query.order, 'country'),
+				sorter: {
+					compare: (a, b) => {
+						const aValue = a?.country?.name
+						const bValue = b?.country?.name
+						return sortData(aValue, bValue)
+					}
+				},
+				render: (_value, record) => {
+					const { country } = record
+					const name = country.name || country.code
+					return (
+						<div className={'flex items-center gap-2'}>
+							{country.flag && <img src={country.flag} alt={name} width={24} />}
+							<span className={'truncate inline-block'}>{name}</span>
+						</div>
+					)
 				}
 			},
-			render: (_value, record) => {
-				const { country } = record
-				const name = country.name || country.code
-				return (
-					<div className={'flex items-center gap-2'}>
-						{country.flag && <img src={country.flag} alt={name} width={24} />}
-						<span className={'truncate inline-block'}>{name}</span>
-					</div>
-				)
-			}
-		},
-		{
-			title: t('loc:Aktuálna cena SMS'),
-			dataIndex: 'actual',
-			key: 'amount',
-			ellipsis: true,
-			align: 'right',
-			width: '20%',
-			render: (_value, record) => {
-				const value = record.actual
+			{
+				title: t('loc:Aktuálna cena SMS'),
+				dataIndex: 'actual',
+				key: 'amount',
+				ellipsis: true,
+				align: 'right',
+				width: '20%',
+				render: (_value, record) => {
+					const value = record.actual
 
-				if (!value) {
-					return '-'
+					if (!value) {
+						return '-'
+					}
+
+					return `${value.amount} ${record.currencySymbol}`
 				}
-
-				const { currencyCode } = record.country
-				const currency = currencies.data?.find((item) => item.code === currencyCode)
-				return `${value.amount} ${currency?.symbol}`
+			},
+			{
+				title: <div style={{ marginLeft: '20%' }}>{t('loc:Platná od')}</div>,
+				dataIndex: 'actual',
+				key: 'validFrom',
+				ellipsis: true,
+				sorter: false,
+				width: '30%',
+				render: (_value, record) => {
+					return <div style={{ marginLeft: '20%' }}>{record?.actual?.validFrom ? dayjs(record.actual.validFrom).format(D_M_YEAR_FORMAT) : ''}</div>
+				}
+			},
+			{
+				title: t('loc:Plánovaná cena SMS'),
+				dataIndex: 'next',
+				key: 'validFromNext',
+				ellipsis: true,
+				sorter: false,
+				width: '30%',
+				render: (_value, record) => {
+					const value = record.next
+					return value ? `${value.amount} ${record.currencySymbol} ${t('loc:od {{ timeFrom }}', { timeFrom: dayjs(value.validFrom).format(D_M_YEAR_FORMAT) })}` : '-'
+				}
+			},
+			{
+				key: 'action',
+				width: 30,
+				render: () => {
+					return (
+						<div className={'flex items-center jusitfy-center'}>
+							<ChevronLeftIcon style={{ transform: 'rotate(180deg)' }} />
+						</div>
+					)
+				}
 			}
-		},
-		{
-			title: <div style={{ marginLeft: '20%' }}>{t('loc:Platná od')}</div>,
-			dataIndex: 'actual',
-			key: 'validFrom',
-			ellipsis: true,
-			sorter: false,
-			width: '30%',
-			render: (_value, record) => {
-				return <div style={{ marginLeft: '20%' }}>{record.actual?.validFrom ? dayjs(record.actual.validFrom).format(D_M_YEAR_FORMAT) : '-'}</div>
-			}
-		},
-		{
-			title: t('loc:Plánovaná cena SMS'),
-			dataIndex: 'next',
-			key: 'validFromNext',
-			ellipsis: true,
-			sorter: false,
-			width: '30%',
-			render: (_value, record) => {
-				const value = record.next
-				const { currencyCode } = record.country
-				const currency = currencies.data?.find((item) => item.code === currencyCode)
-				return value ? `${value.amount} ${currency?.symbol} ${t('loc:od {{ timeFrom }}', { timeFrom: dayjs(value.validFrom).format(D_M_YEAR_FORMAT) })}` : '-'
-			}
-		},
-		{
-			key: 'action',
-			width: 30,
-			render: () => {
-				return (
-					<div className={'flex items-center jusitfy-center'}>
-						<ChevronLeftIcon style={{ transform: 'rotate(180deg)' }} />
-					</div>
-				)
-			}
-		}
-	]
+		]
+	}, [query.order, t])
 
 	return (
 		<>
@@ -198,10 +202,12 @@ const SmsUnitPricesPage = () => {
 									dataSource={tableData}
 									rowClassName={'clickable-row'}
 									twoToneRows
-									rowKey={(record) => `${record.actual?.id}_${record.country.code}`}
+									// TODO: update testov
+									rowKey={(record) => (record.actual?.id ? `${record.actual.id}_${record.country.code}` : record.country.code)}
 									pagination={false}
 									onRow={(record) => {
 										return {
+											className: !record.actual && !record.next ? 'noti-table-row-warning' : undefined,
 											onClick: () => {
 												navigate(
 													getLinkWithEncodedBackUrl(t('paths:sms-credits/{{countryCode}}', { countryCode: record.country.code.toLocaleLowerCase() }))

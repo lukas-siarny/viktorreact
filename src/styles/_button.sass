@@ -414,3 +414,35 @@ a.ant-btn.noti-btn // ak ma btn href atributu tak ho zmeni na anchor -> treba vy
 		background: $backgroundColor-notino-grayLight
 		&:hover
 			border: 1px solid $borderColor-notino-grayLight
+.language-btn
+	z-index: 2
+	@media (min-width: 1195px)
+		top: -0.25rem
+		right: 0px
+		position: absolute
+
+.noti-more-info-btn
+	width: 40px
+	height: 40px
+	flex: 0 0 auto
+	display: flex
+	align-items: center
+	justify-content: center
+	box-shadow: none
+	padding: 0
+	cursor: pointer
+	background: $backgroundColor-notino-black
+	border: none
+	border-radius: 4px
+	position: relative
+	transition: 300ms ease
+	z-index: 1
+	@include baseOutlineStyle()
+	&:hover
+		z-index: $z-index-box-shadow
+		box-shadow: $btn-shadow-hover-default
+	&:focus-visible
+		@include focusOutlineStyle()
+	&.secondary
+		background: $backgroundColor-notino-white
+		border: 1px solid $backgroundColor-notino-black

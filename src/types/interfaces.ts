@@ -585,6 +585,10 @@ export interface IDataUploadForm {
 	file: string | Blob
 }
 
+export interface ISalonsReportForm {
+	countryCode: string
+}
+
 export type ICosmetic = Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosmetics'][0]
 
 export type ILanguage = Paths.GetApiB2BAdminEnumsLanguages.Responses.$200['languages'][0]

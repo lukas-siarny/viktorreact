@@ -15,7 +15,7 @@ import UserAvatar from '../../components/AvatarComponents'
 import ImportForm from '../../components/ImportForm'
 
 // utils
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, UPLOAD_STATUS } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, REQUEST_STATUS } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { postReq } from '../../utils/request'
@@ -38,7 +38,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const customers = useSelector((state: RootState) => state.customers.customers)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
-	const [uploadStatus, setUploadStatus] = useState<UPLOAD_STATUS | undefined>(undefined)
+	const [uploadStatus, setRequestStatus] = useState<REQUEST_STATUS | undefined>(undefined)
 	const [customersImportVisible, setCustomersImportVisible] = useState(false)
 
 	const [query, setQuery] = useQueryParams({
@@ -148,7 +148,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	]
 
 	const clientImportsSubmit = async (values: IDataUploadForm) => {
-		setUploadStatus(UPLOAD_STATUS.UPLOADING)
+		setRequestStatus(REQUEST_STATUS.SUBMITTING)
 
 		const formData = new FormData()
 		formData.append('file', values?.file)
@@ -160,17 +160,17 @@ const CustomersPage = (props: SalonSubPageProps) => {
 				}
 			})
 
-			setUploadStatus(UPLOAD_STATUS.SUCCESS)
+			setRequestStatus(REQUEST_STATUS.SUCCESS)
 		} catch {
-			setUploadStatus(UPLOAD_STATUS.ERROR)
+			setRequestStatus(REQUEST_STATUS.ERROR)
 		}
 	}
 
 	return (
 		<>
 			<ImportForm
-				setUploadStatus={setUploadStatus}
-				uploadStatus={uploadStatus}
+				setRequestStatus={setRequestStatus}
+				requestStatus={uploadStatus}
 				label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv' })}
 				accept={'.csv'}
 				title={t('loc:Importovať zákazníkov')}

@@ -294,9 +294,9 @@ export const translateDayName = (day: DAY | typeof MONDAY_TO_FRIDAY, shortName?:
 
 export const transalteReservationSourceType = (sourceType: RESERVATION_SOURCE_TYPE) => {
 	if (sourceType === RESERVATION_SOURCE_TYPE.ONLINE) {
-		return i18next.t('loc:Salón')
+		return i18next.t('loc:Klient')
 	}
-	return i18next.t('loc:Klient')
+	return i18next.t('loc:Salón')
 }
 
 export const translateReservationState = (state?: RESERVATION_STATE) => {
@@ -1409,7 +1409,6 @@ export const detectBrowserType = (): string => {
 
 	const browser = parser.getBrowser()
 	const browserName = browser.name?.toLowerCase()
-	console.log('🚀 ~ file: helper.tsx:1408 ~ detectBrowserType ~ browserName:', browserName)
 	// get major number from version '101.4.11' -> 101, '94' -> 94
 	// eslint-disable-next-line radix
 	const majorVersion = parseInt(browser.version ? browser.version.split('.')[0] : '0')

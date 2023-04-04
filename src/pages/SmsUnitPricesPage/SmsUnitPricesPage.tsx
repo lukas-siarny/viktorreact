@@ -39,6 +39,7 @@ const SmsUnitPricesPage = () => {
 	const dispatch = useDispatch()
 
 	const smsUnitPricesActual = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPricesActual)
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 	const currencies = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.CURRENCIES])
 
 	const [query, setQuery] = useQueryParams({
@@ -78,14 +79,15 @@ const SmsUnitPricesPage = () => {
 
 		// transform to table data
 		return source?.map((item) => {
-			const currency = currencies.data?.find((c) => c.code === item.country?.currencyCode)
+			const country = countries.data?.find((c) => c.code === item.country.code)
+			const currency = currencies.data?.find((c) => c.code === country?.currencyCode)
 			return {
 				...item,
-				currencySymbol: currency?.symbol || item.country.currencyCode || '',
+				currencySymbol: currency?.symbol || '',
 				key: item.country.code
 			}
 		})
-	}, [query.search, smsUnitPricesActual, currencies.data])
+	}, [query.search, smsUnitPricesActual, currencies.data, countries.data])
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {

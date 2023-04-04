@@ -256,7 +256,7 @@ const ServiceForm: FC<Props> = (props) => {
 												<Field
 													className='mb-0 pb-0'
 													component={TextareaField}
-													label={`(${salon.data?.address?.countryCode || ''})`}
+													label={`${salon.data?.address?.countryCode || ''}`}
 													placeholder={t('loc:Zadajte popis služby')}
 													key='descriptionLocalizations[0].value'
 													name='descriptionLocalizations[0].value'

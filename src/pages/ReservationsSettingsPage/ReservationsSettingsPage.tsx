@@ -18,6 +18,7 @@ import { patchReq } from '../../utils/request'
 import { RootState } from '../../reducers'
 import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getServices } from '../../reducers/services/serviceActions'
+import { getCurrentUser, getUser } from '../../reducers/users/userActions'
 
 // types
 import {
@@ -133,8 +134,7 @@ const initDisabledNotifications = (notifications: DisabledNotificationsArray): I
 const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { salonID } = props
-	const { parentPath } = props
+	const { parentPath, salonID } = props
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const services = useSelector((state: RootState) => state.service.services)
 	const groupedSettings = services?.data?.groupedServicesByCategory
@@ -149,6 +149,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	}
 
 	const fetchData = async () => {
+		await dispatch(getCurrentUser())
 		const salonRes = await dispatch(selectSalon(salonID))
 
 		const servicesRes = await dispatch(getServices({ salonID }))

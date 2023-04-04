@@ -11,9 +11,6 @@ import ConfirmBulkForm from './forms/ConfirmBulkForm'
 import { IBulkConfirmForm, ConfirmModalData } from '../../../types/interfaces'
 import { RootState } from '../../../reducers'
 
-// schema
-import { ICalendarEventForm } from '../../../schemas/event'
-
 // utils
 import {
 	CALENDAR_DISABLED_NOTIFICATION_TYPE,
@@ -33,6 +30,7 @@ import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-2.
 
 // schema
 import { ICalendarReservationForm } from '../../../schemas/reservation'
+import { ICalendarEventForm } from '../../../schemas/event'
 
 type Props = {
 	data: ConfirmModalData

@@ -67,14 +67,12 @@ import {
 	ICalendarEmployeeOptionItem
 } from '../../types/interfaces'
 
-// schema
-import { ICalendarImportedReservationForm, ICalendarReservationForm } from '../../schemas/reservation'
-
 // hooks
 import useQueryParams, { ArrayParam, StringParam } from '../../hooks/useQueryParams'
 
 // schema
 import { ICalendarEventForm } from '../../schemas/event'
+import { ICalendarImportedReservationForm, ICalendarReservationForm } from '../../schemas/reservation'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]

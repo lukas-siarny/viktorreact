@@ -23,7 +23,6 @@ export const salonSchema = z.object({
 			name: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_255, true)
 		})
 	]),
-	// name: z.any(),
 	aboutUsFirst: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1000),
 	openingHours: openingHoursConstraint(),
 	countryCode: twoCharsConstraint,

@@ -252,7 +252,6 @@ const SalonForm: FC<Props> = (props) => {
 							allowClear
 							allowInfinityScroll
 							onDidMountSearch
-							labelInValue
 						/>
 						<Field
 							component={ImgUploadField}

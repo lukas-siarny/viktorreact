@@ -10,8 +10,12 @@ import dayjs from 'dayjs'
 import { CalendarApi } from '@fullcalendar/react'
 
 // types
-import { ICalendarEmployeesPayload, ICalendarEventForm, ICalendarImportedReservationForm, ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'
+import { ICalendarEmployeesPayload, INewCalendarEvent } from '../../../../types/interfaces'
 import { RootState } from '../../../../reducers'
+
+// schema
+import { ICalendarImportedReservationForm, ICalendarReservationForm } from '../../../../schemas/reservation'
+import { ICalendarEventForm } from '../../../../schemas/event'
 
 // utils
 import { getAssignedUserLabel, initializeLabelInValueSelect } from '../../../../utils/helper'
@@ -151,7 +155,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 				return
 			}
 
-			const repeatOptions: Pick<ICalendarEventForm, 'recurring' | 'repeatOn' | 'every' | 'end'> = data.calendarBulkEvent?.repeatOptions
+			const repeatOptions: Pick<ICalendarEventForm, 'recurring' | 'repeatOn' | 'every' | 'end'> | {} = data.calendarBulkEvent?.repeatOptions
 				? {
 						recurring: true,
 						repeatOn: compact(map(data.calendarBulkEvent.repeatOptions?.days as any, (item, index) => (item ? index : undefined))) as DAY[],

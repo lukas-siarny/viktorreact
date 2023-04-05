@@ -32,10 +32,7 @@ import CalendarEmptyState from '../CalendarEmptyState'
 
 // types
 import {
-	ICalendarEventForm,
-	ICalendarImportedReservationForm,
 	ICalendarMonthlyReservationsPayload,
-	ICalendarReservationForm,
 	ICalendarView,
 	IDayViewResourceExtenedProps,
 	IEventExtenedProps,
@@ -45,6 +42,10 @@ import {
 } from '../../../../types/interfaces'
 import { RootState } from '../../../../reducers'
 import { IUseQueryParams } from '../../../../hooks/useQueryParams'
+
+// schema
+import { ICalendarImportedReservationForm, ICalendarReservationForm } from '../../../../schemas/reservation'
+import { ICalendarEventForm } from '../../../../schemas/event'
 
 // utils
 import { ForbiddenModal, checkPermissions } from '../../../../utils/Permissions'

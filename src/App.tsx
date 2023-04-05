@@ -10,6 +10,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom'
 import { PublicClientApplication, Configuration } from '@azure/msal-browser'
 import { MsalProvider } from '@azure/msal-react'
+import { AuthProvider } from 'react-oidc-context'
 
 import 'antd/dist/reset.css'
 
@@ -87,17 +88,25 @@ const App = () => {
 						}}
 					>
 						<MsalProvider instance={msalInstance}>
-							<GoogleOAuthProvider
-								clientId={window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
-								onScriptLoadError={() => console.error('GoogleOAuth error')}
-								onScriptLoadSuccess={() => console.log('GoogleOAuth load success')}
+							<AuthProvider
+								client_id='5a15a7fb-6773-43a9-aaec-b8ecd91862fa'
+								authority='https://login.microsoftonline.com/'
+								redirect_uri='http://localhost:3000/ms-oauth2'
+								response_type='code'
+								scope={'User.Read, offline_access, Calendars.ReadWrite.Shared, Calendars.ReadWrite, Calendars.Read.Shared, Calendars.Read'}
 							>
-								<Provider store={store}>
-									<StyleProvider hashPriority={'low'}>
-										<RouterProvider router={router} />
-									</StyleProvider>
-								</Provider>
-							</GoogleOAuthProvider>
+								<GoogleOAuthProvider
+									clientId={window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
+									onScriptLoadError={() => console.error('GoogleOAuth error')}
+									onScriptLoadSuccess={() => console.log('GoogleOAuth load success')}
+								>
+									<Provider store={store}>
+										<StyleProvider hashPriority={'low'}>
+											<RouterProvider router={router} />
+										</StyleProvider>
+									</Provider>
+								</GoogleOAuthProvider>
+							</AuthProvider>
 						</MsalProvider>
 					</ConfigProvider>
 				</PersistGate>

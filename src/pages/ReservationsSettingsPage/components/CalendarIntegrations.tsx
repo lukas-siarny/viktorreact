@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google'
 import { useTranslation } from 'react-i18next'
 import { useMsal } from '@azure/msal-react'
+import { useAuth } from 'react-oidc-context'
 
 // utils
 import { useSelector } from 'react-redux'
@@ -26,6 +27,19 @@ const CalendarIntegrations = (props: Props) => {
 	const { t } = useTranslation()
 	const { salonID }: any = useParams()
 	const { instance, accounts, inProgress } = useMsal()
+
+	useEffect(() => {
+		if (instance) {
+			instance.handleRedirectPromise().then((authResult) => {
+				if (authResult) {
+					// Use the authResult.authorizationCode to exchange for an access token
+					console.log('Authorization result:', authResult)
+				}
+			})
+		}
+	}, [instance])
+
+	const auth = useAuth()
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const icalUrl = get(find(authUser.data?.salons, { id: salonID }), 'employeeIcsLink')
@@ -52,16 +66,27 @@ const CalendarIntegrations = (props: Props) => {
 	})
 
 	const handleLogin = () => {
+		// auth.signinRedirect().then(console.log)
+
 		instance
-			.acquireTokenPopup({
-				scopes: ['User.Read', 'offline_access', 'Calendars.ReadWrite.Shared', 'Calendars.ReadWrite', 'Calendars.Read.Shared', 'Calendars.Read'],
-				extraQueryParameters: {}
-			})
+			.loginPopup(loginRequest)
 			.then((response) => {
 				console.log('🚀 ~ file: CalendarIntegrations.tsx:61 ~ instance.acquireTokenPopup ~ response:', response)
 				// setAccessToken(response.accessToken);
 			})
 			.catch(console.error)
+
+		// instance
+		// 	.acquireTokenPopup({
+		// 		scopes: ['User.Read', 'offline_access', 'Calendars.ReadWrite.Shared', 'Calendars.ReadWrite', 'Calendars.Read.Shared', 'Calendars.Read'],
+		// 		extraQueryParameters: {}
+		// 	})
+		// 	.then((response) => {
+		// 		console.log('🚀 ~ file: CalendarIntegrations.tsx:61 ~ instance.acquireTokenPopup ~ response:', response)
+		// 		// setAccessToken(response.accessToken);
+		// 	})
+		// 	.catch(console.error)
+
 		// instance.loginPopup({
 
 		// }).then(console.log)

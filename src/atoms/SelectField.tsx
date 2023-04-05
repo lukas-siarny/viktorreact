@@ -222,7 +222,7 @@ const handleChange = async (data: any) => {
 		val = map(val, (valInput) => {
 			if (typeof valInput === 'object') {
 				const andtOption = find(antdOptions, (item) => item.value === (valInput as any)?.value)
-				return initLabelInValueSelect({ key: valInput.key, value: valInput.value, label: andtOption ? andtOption.label : valInput.label, extra: andtOption?.extra })
+				return initLabelInValueSelect({ key: valInput.key, value: valInput.value, label: valInput.label, extra: andtOption?.extra })
 			}
 			return valInput
 		})
@@ -238,7 +238,7 @@ const handleChange = async (data: any) => {
 			extra = nodeFromOptions?.extra
 		}
 
-		val = initLabelInValueSelect({ key: val.key, value: val.value, label: andtOption ? andtOption.label : val.label, extra })
+		val = initLabelInValueSelect({ key: val.key, value: val.value, label: val.label, extra })
 	}
 	if (maxTagsLimit && val?.length > maxTagsLimit) {
 		val = take(val, maxTagsLimit)

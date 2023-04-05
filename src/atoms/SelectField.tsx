@@ -80,8 +80,9 @@ export type Props = {
 	tooltipSelect?: string | null
 	/**
 	 * niekedy moze nastat situacia, ze vyinicializovane hodnoty v selecte neexistuju v options (napr. pri asynchronnom vyhladavani)
-	 * jedna moznost ako riesit tento scenar je pouzit labelInValue, kedy sa vyinicializuju hodnoty ako objekty a pre spravne zobrazenie nie je potrebne parovanie z options (v tomto pripade musi byt splnena podmienka, ze pozname okrem ID hodnoty aj jeho label)
-	 * problem vsak moze nastat ak pouzivame 'optionRender', kedy vytvarame custom styly pre options. Vtedy je potrebne, aby sa vyinicializovane hodnoty posielali ako IDcka a existovali k tomu aj options, s ktorymi sa potom sparuju
+	 * jedna moznost ako riesit tento scenar je pouzit labelInValue, kedy sa vyinicializuju hodnoty ako objekty a pre spravne zobrazenie nie je potrebne parovanie z options
+	 * problem vsak moze nastat ak pouzivame 'optionRender', kedy vytvarame custom styly pre options. Ak chceme, aby sa custom styly pouzivane pre options aplikovali aj na vyinicializovane hodnoty, vtedy je potrebne, aby sa vyinicializovane hodnoty posielali ako IDcka a existovali k tomu aj options, s ktorymi sa potom sparuju
+	 * options vytvorene pre inicializacne hodnoty mozeme poslat cez propu initialOptions - tie sa mergnu s ostatnymi options tak, aby nedoslo k duplicitam
 	 */
 	initialOptions?: any[]
 } & WrappedFieldProps &

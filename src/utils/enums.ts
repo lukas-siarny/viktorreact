@@ -209,7 +209,8 @@ export enum FORM {
 	SMS_UNIT_PRICES_FORM = 'SMS_UNIT_PRICES_FORM',
 	SMS_UNIT_PRICES_FILTER = 'SMS_UNIT_PRICES_FILTER',
 	SMS_HISTORY_FILTER = 'SMS_HISTORY_FILTER',
-	RECHARGE_SMS_CREDIT = 'RECHARGE_SMS_CREDIT'
+	RECHARGE_SMS_CREDIT = 'RECHARGE_SMS_CREDIT',
+	SALONS_REPORT = 'SALONS_REPORT'
 }
 
 export enum PERMISSION {
@@ -422,8 +423,8 @@ export enum FILE_FILTER_DATA_TYPE {
 	EXCEL = 'EXCEL',
 	OTHER = 'OTHER'
 }
-export enum UPLOAD_STATUS {
-	UPLOADING = 'UPLOADING',
+export enum REQUEST_STATUS {
+	SUBMITTING = 'SUBMITTING',
 	SUCCESS = 'SUCCESS',
 	ERROR = 'ERROR'
 }
@@ -549,7 +550,7 @@ export const STRINGS = (t: TFunction) => ({
 	search: (entity: string) => t('loc:Vyhľadajte {{entity}}', { entity }), // searchable select field
 	searchBy: (entity: string) => t('loc:Vyhľadajte podľa {{entity}}', { entity }), // input field vyhladavaci
 	enter: (entity: string) => t('loc:Zadajte {{entity}}', { entity }), // all input fields
-
+	generate: (entity: string) => t('loc:Generovať {{entity}}', { entity }),
 	MISSING_PERMISSIONS_TEXT: t('loc:Používateľovi chýbajú oprávnenia na akciu'),
 	EMPTY_TABLE_COLUMN_PLACEHOLDER: '---'
 })
@@ -672,6 +673,8 @@ export const CREATE_EMPLOYEE_BUTTON_ID = 'create-employee-btn'
 export const CREATE_CUSTOMER_BUTTON_ID = 'create-customer-btn'
 
 export const IMPORT_BUTTON_ID = (suffix?: string) => `import-btn${suffix ? `-${suffix}` : ''}`
+
+export const DOWNLOAD_BUTTON_ID = 'download-btn'
 
 export const ROW_BUTTON_WITH_ID = (id: string) => `row-btn-with-id_${id}`
 

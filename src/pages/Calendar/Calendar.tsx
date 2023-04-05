@@ -59,19 +59,20 @@ import CalendarConfirmModal from './components/CalendarConfirmModal'
 // types
 import {
 	ConfirmModalData,
-	ICalendarEventForm,
 	ICalendarFilter,
-	ICalendarReservationForm,
 	INewCalendarEvent,
 	ReservationPopoverData,
 	PopoverTriggerPosition,
 	SalonSubPageProps,
-	ICalendarImportedReservationForm,
 	ICalendarEmployeeOptionItem
 } from '../../types/interfaces'
 
 // hooks
 import useQueryParams, { ArrayParam, StringParam } from '../../hooks/useQueryParams'
+
+// schema
+import { ICalendarEventForm } from '../../schemas/event'
+import { ICalendarImportedReservationForm, ICalendarReservationForm } from '../../schemas/reservation'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -661,7 +662,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const handleSubmitEvent = useCallback(
 		async (values: ICalendarEventForm, calendarEventID?: string, calendarBulkEventID?: string, updateFromCalendar = false) => {
 			const { revertEvent } = values
-
 			const repeatEvent = values.recurring
 				? {
 						untilDate: values.end as string,

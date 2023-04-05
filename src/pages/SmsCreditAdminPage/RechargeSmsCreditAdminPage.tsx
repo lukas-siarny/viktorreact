@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
-import RechargeSmsCreditForm from './components/RechargeSmsCreditForm'
 import Alert from '../../components/Dashboards/Alert'
 
 // utils
@@ -31,9 +30,9 @@ import { getSmsStats } from '../../reducers/sms/smsActions'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+import RechargeSmsCredit from '../../components/RechargeSmsCredit/RechargeSmsCredit'
 
-const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
-	const { salonID, parentPath } = props
+const RechargeSmsCreditPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -50,9 +49,9 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	const validFrom = smsPriceUnit?.data?.validFrom
 	const validPriceLabel = validFrom ? t('loc:Aktuálna cena SMS platná od {{ validFrom }}', { validFrom: dayjs(validFrom).format(D_M_YEAR_FORMAT) }) : t('loc:Aktuálna cena SMS')
 
-	const [backUrl] = useBackUrl(parentPath + t('paths:sms-credit'))
+	const [backUrl] = useBackUrl(t('paths:sms-credits'))
 
-	useEffect(() => {
+	/* useEffect(() => {
 		;(async () => {
 			if (!walletID) {
 				return
@@ -63,7 +62,7 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 				dispatch(getSmsUnitPrice(priceId))
 			}
 		})()
-	}, [dispatch, salonID, walletID])
+	}, [dispatch, salonID, walletID]) */
 
 	const handleRechargeCredit = async (values: IRechargeSmsCreditForm) => {
 		if (!walletID || !selectedSalon.data?.currency.code) {
@@ -92,56 +91,27 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:SMS kredit'),
+				name: t('loc:SMS kredity'),
 				link: backUrl
 			},
 			{
-				name: t('loc:Dobiť kredit')
+				name: t('loc:loc:Dobiť kredity salónom'),
+				link: backUrl
+			},
+			{
+				name: t('loc:Kontrola')
 			}
 		]
 	}
 
+	const currencySymbol = ''
+
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:customers')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={backUrl} />
 			</Row>
-			{!walletID ? (
-				<Alert
-					className='mt-6'
-					title={t('loc:Nastavte si adresu salóna')}
-					subTitle={t(
-						'loc:Aby ste mohli používať kreditný systém so všetkými jeho výhodami, najprv musíte mať vyplnenú adresu vášho salóna. Prejdite do nastavení Detailu salóna.'
-					)}
-					message={''}
-					actionLabel={t('loc:Nastaviť adresu')}
-					icon={<SettingIcon />}
-					onActionItemClick={() => navigate(parentPath as string)}
-				/>
-			) : (
-				<div className='content-body small'>
-					<Spin spinning={isLoading}>
-						<Col className={'flex'}>
-							<Row className={'mx-9 w-full h-full block'} justify='center'>
-								<h3 className={'mb-0 mt-0 flex items-center'}>
-									<CoinsIcon className={'text-notino-black mr-2'} /> {t('loc:Dobiť kredit')}
-								</h3>
-								<Divider className={'mb-3 mt-3'} />
-								<ul className={'list-none p-0 m-0 mb-8'}>
-									<li className={'flex justify-between gap-2 mb-2'}>
-										<strong>{t('loc:Salón')}:</strong> {selectedSalon.data?.name}
-									</li>
-									<li className={'flex justify-between gap-2'}>
-										<strong>{validPriceLabel}:</strong>
-										{stats.data?.currentSmsUnitPrice?.formattedAmount || '-'}
-									</li>
-								</ul>
-								<RechargeSmsCreditForm onSubmit={handleRechargeCredit} currencySymbol={selectedSalon.data?.currency.symbol} />
-							</Row>
-						</Col>
-					</Spin>
-				</div>
-			)}
+			<RechargeSmsCredit handleRechargeCredit={handleRechargeCredit} currencySymbol={currencySymbol} />
 		</>
 	)
 }

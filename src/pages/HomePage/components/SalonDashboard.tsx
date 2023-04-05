@@ -10,6 +10,7 @@ import { RootState } from '../../../reducers'
 import { getServices } from '../../../reducers/services/serviceActions'
 import { getActiveEmployees } from '../../../reducers/employees/employeesActions'
 import { getCustomers } from '../../../reducers/customers/customerActions'
+import { getSmsTimeStatsForSalon } from '../../../reducers/sms/smsActions'
 
 // utils
 import { PERMISSION, SALON_STATES } from '../../../utils/enums'
@@ -36,6 +37,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 	const { services } = useSelector((state: RootState) => state.service)
 	const { activeEmployees } = useSelector((state: RootState) => state.employees)
 	const { customers } = useSelector((state: RootState) => state.customers)
+	const smsTimeStats = useSelector((state: RootState) => state.sms.timeStats)
 	const salonID = selectedSalon.data?.id
 	const walletID = selectedSalon.data?.wallet?.id
 
@@ -53,6 +55,12 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 			dispatch(getActiveEmployees({ salonID: selectedSalon.data.id, page: 1 }))
 		}
 	}, [dispatch, selectedSalon?.data])
+
+	useEffect(() => {
+		if (salonID) {
+			dispatch(getSmsTimeStatsForSalon(salonID, smsStatsDate.year(), smsStatsDate.month() + 1))
+		}
+	}, [dispatch, salonID, smsStatsDate])
 
 	return loading ? (
 		<div className='w-full text-center'>
@@ -131,9 +139,9 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 										}
 									}}
 									title={<h3>{t('loc:Spotreba SMS kreditu za obdobie')}</h3>}
-									salonID={salonID}
 									selectedDate={smsStatsDate}
 									className={'mb-6 mt-10 pb-0'}
+									smsTimeStats={smsTimeStats}
 								/>
 							</>
 						)}

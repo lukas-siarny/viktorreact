@@ -61,6 +61,7 @@ import SpecialistContactsPage from '../pages/SpecialistContactsPage/SpecialistCo
 import ReviewsPage from '../pages/ReviewsPage/ReviewsPage'
 
 // SMS Credits
+import SmsCreditAdminPage from '../pages/SmsCreditAdminPage/SmsCreditAdminPage'
 import SmsUnitPricesPage from '../pages/SmsUnitPricesPage/SmsUnitPricesPage'
 import SmsUnitPricesDetailPage from '../pages/SmsUnitPricesPage/SmsUnitPricesDetailPage'
 
@@ -147,7 +148,7 @@ const AppRoutes: FC = () => {
 					<Route index element={<ReviewsPage />} />
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:sms-credits')} element={<AuthRoute layout={MainLayout} page={PAGE.SMS_CREDITS} />}>
-					<Route index element={<SmsUnitPricesPage />} />
+					<Route index element={<SmsCreditAdminPage />} />
 					<Route path={':countryCode'} element={<SmsUnitPricesDetailPage />} />
 				</Route>
 				<Route path={'/403'} element={<AuthRoute layout={MainLayout} />}>

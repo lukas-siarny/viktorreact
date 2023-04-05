@@ -15,7 +15,6 @@ import Ellipsis from '../../../../atoms/Ellipsis'
 
 // types
 import { RootState } from '../../../../reducers'
-import { ICalendarReservationForm } from '../../../../types/interfaces'
 
 /// utils
 import { ENUMERATIONS_KEYS, FORM } from '../../../../utils/enums'
@@ -23,6 +22,9 @@ import { getAssignedUserLabel, getCountryPrefix } from '../../../../utils/helper
 
 // reducers
 import { getCustomer, ICustomerPayload } from '../../../../reducers/customers/customerActions'
+
+// schema
+import { ICalendarReservationForm } from '../../../../schemas/reservation'
 
 type ContentProps = {
 	onClose: () => void

@@ -32,7 +32,7 @@ import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
 // utils
-import { DASHBOARD_TASB_KEYS, FILTER_PATHS, RESERVATIONS_STATS_TYPE, RS_STATS_TYPE, SALON_FILTER_STATES, SALONS_TIME_STATS_TYPE } from '../../../utils/enums'
+import { DASHBOARD_TASB_KEYS, FILTER_PATHS, RESERVATIONS_STATS_TYPE, RS_STATS_TYPE, SALON_FILTER_STATES, SALONS_TIME_STATS_TYPE, STRINGS } from '../../../utils/enums'
 import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData, transformToRsStatsData, transformToReservationsStatsData } from './dashboardUtils'
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin)
@@ -457,7 +457,7 @@ const NotinoDashboard: FC = () => {
 							<div className='m-auto text-center'>
 								<h1 className='text-5xl font-bold'>{t('loc:Začnite vytvorením salónu')}</h1>
 								<Button onClick={() => navigate(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'} icon={<PlusIcon />}>
-									{t('loc:Pridať salón')}
+									{STRINGS(t).addRecord(t('loc:salón'))}
 								</Button>
 							</div>
 						</div>

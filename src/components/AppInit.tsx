@@ -58,14 +58,14 @@ const AppInit = (props: Props) => {
 	}, [dispatch])
 
 	useEffect(() => {
-		if (currentUser.data) {
-			if (checkPermissions(currentUser.data.uniqPermissions, [PERMISSION.PARTNER])) {
-				// select first salon for PARTNER
-				if (!selectedSalon) {
-					const salonID = get(currentUser.data, 'salons[0].id')
-					dispatch(selectSalon(salonID))
-				}
-			}
+		// select first salon for PARTNER
+		if (
+			currentUser.data &&
+			checkPermissions(currentUser.data.uniqPermissions, [PERMISSION.PARTNER], [PERMISSION.NOTINO_ADMIN, PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO]) &&
+			!selectedSalon
+		) {
+			const salonID = get(currentUser.data, 'salons[0].id')
+			dispatch(selectSalon(salonID))
 		}
 	}, [currentUser, dispatch, selectedSalon])
 

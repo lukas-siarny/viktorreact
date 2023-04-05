@@ -34,6 +34,7 @@ import validateSalonForm from './validateSalonForm'
 
 // reducers
 import { RootState } from '../../../../reducers'
+import { ISelectedSalonPayload } from '../../../../reducers/selectedSalon/selectedSalonActions'
 
 // assets
 import { ReactComponent as InstagramIcon } from '../../../../assets/icons/social-instagram-icon.svg'
@@ -51,7 +52,6 @@ import { ReactComponent as CosmeticIcon } from '../../../../assets/icons/cosmeti
 import { ReactComponent as LanguagesIcon } from '../../../../assets/icons/languages-24-icon.svg'
 import { ReactComponent as InfoIcon16 } from '../../../../assets/icons/info-icon-16.svg'
 import { ReactComponent as LocationIcon } from '../../../../assets/icons/location-16.svg'
-import { ISelectedSalonPayload } from '../../../../reducers/selectedSalon/selectedSalonActions'
 
 type ComponentProps = {
 	disabledForm?: boolean
@@ -121,7 +121,7 @@ const SalonForm: FC<Props> = (props) => {
 				{
 					label: cosmetic?.name || '',
 					value: (cosmetic as any).id,
-					extra: { image: 'ss' },
+					extra: { image: cosmetic.image?.resizedImages.thumbnail },
 					key: `Cosmetic_${(cosmetic as any).id}`
 				}
 			]
@@ -136,7 +136,7 @@ const SalonForm: FC<Props> = (props) => {
 				{
 					label: lng?.name || '',
 					value: (lng as any).id,
-					extra: { image: 'ss' },
+					extra: { image: lng.image?.resizedImages.thumbnail },
 					key: `language_${(lng as any).id}`
 				}
 			]
@@ -252,6 +252,7 @@ const SalonForm: FC<Props> = (props) => {
 							allowClear
 							allowInfinityScroll
 							onDidMountSearch
+							labelInValue
 						/>
 						<Field
 							component={ImgUploadField}

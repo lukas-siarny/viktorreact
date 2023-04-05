@@ -79,8 +79,9 @@ export type Props = {
 	confirmModalExtraTitle?: string
 	tooltipSelect?: string | null
 	/**
-	 * v pripade asynchronneho vyhladavania moze nastat situacia, ze vyinicializovane hodnoty v selecte neexistuju v options, pretoze bud uzivatel vobec este nerozklikol dropdown, alebo sa nachadzaju az niekde na piatej starnke, ku ktorej sa este uzivatel nedostal
-	 * v takom pripade ich tam mozeme poslat rovno cez tuto propu a budu sa mergovat s asynchronne dotiahnutymi
+	 * niekedy moze nastat situacia, ze vyinicializovane hodnoty v selecte neexistuju v options (napr. pri asynchronnom vyhladavani)
+	 * jedna moznost ako riesit tento scenar je pouzit labelInValue, kedy sa vyinicializuju hodnoty ako objekty a pre spravne zobrazenie nie je potrebne parovanie z options (v tomto pripade musi byt splnena podmienka, ze pozname okrem ID hodnoty aj jeho label)
+	 * problem vsak moze nastat ak pouzivame 'optionRender', kedy vytvarame custom styly pre options. Vtedy je potrebne, aby sa vyinicializovane hodnoty posielali ako IDcka a existovali k tomu aj options, s ktorymi sa potom sparuju
 	 */
 	initialOptions?: any[]
 } & WrappedFieldProps &
@@ -139,8 +140,6 @@ const getOptions = (optionRender: any, options?: any, initialOptions?: any) => {
 		}
 		return true
 	})
-
-	// console.log({ options, initialOptions, missingAdditionalOptions })
 
 	return map([...(missingAdditionalOptions || []), ...(options || [])], (option) => {
 		// NOTE: ak existuje v optione children pole tak to zneman ze ma vnorene optiony a bude sa pouzivat OptGroup a druha uroven ako Option
@@ -371,6 +370,15 @@ const SelectField = (props: Props) => {
 		tooltipSelect,
 		initialOptions
 	} = props
+	const warningShown = useRef(false)
+
+	if (optionRender && labelInValue && optionLabelProp !== 'label' && !warningShown.current) {
+		warningShown.current = true
+		// eslint-disable-next-line no-console
+		console.warn(
+			`SelectField[${input.name}]: Using 'labelInValue' in combination with 'optionRender' and 'optionLabelProp=children' can cause a malfunction of the component. To fix this issue, you can either set an 'optionLabelProp=label' or remove 'labelInValue' prop and use 'initialOptions' prop and pass initial values as options there.`
+		)
+	}
 
 	const dispatch = useDispatch()
 	const localItemRef = useRef()

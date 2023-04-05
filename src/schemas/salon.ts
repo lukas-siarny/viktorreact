@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import i18next from 'i18next'
+
 import {
 	emailConstraint,
 	imageConstraint,
@@ -16,19 +16,14 @@ import { socialMediaRegex } from '../utils/regex'
 
 // https://notino-admin.goodrequest.dev/api/doc/#/B2b-%3Eadmin/patchApiB2BAdminSalonsSalonId
 export const salonSchema = z.object({
-	// TODO: dorobit aj select validaciu
-	// name: string  || { name: string, id: string, label: string }
-	// name: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_255, true),
-	// name: z.union([
-	// 	z.string(),
-	// 	// stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_255, true),
-	// 	z.object({
-	// 		key: z.string(),
-	// 		label: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_255, true),
-	// 		value: z.string().nullish()
-	// 	})
-	// ]),
-	name: z.any(),
+	name: z.union([
+		stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_255, true),
+		z.object({
+			id: z.string(),
+			name: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_255, true)
+		})
+	]),
+	// name: z.any(),
 	aboutUsFirst: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1000),
 	openingHours: openingHoursConstraint(),
 	countryCode: twoCharsConstraint,

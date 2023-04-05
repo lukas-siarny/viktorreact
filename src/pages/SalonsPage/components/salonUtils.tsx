@@ -1,5 +1,5 @@
 import React from 'react'
-import { isEmpty, map } from 'lodash'
+import { isEmpty, map, get } from 'lodash'
 import { Tag } from 'antd'
 import i18next from 'i18next'
 
@@ -58,16 +58,14 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 		deletedAt: !!salonData.deletedAt,
 		state: salonData.state as SALON_STATES,
 		sourceOfPremium: salonData.premiumSourceUserType,
-		// TODO: spravit case ked je to objet zo selectu
-		name: salonData.name,
-		// name:
-		// 	salonData.id && salonData.name
-		// 		? {
-		// 				key: salonData.id,
-		// 				label: salonData.name,
-		// 				value: salonData.id
-		// 		  }
-		// 		: salonData.name,
+		name:
+			salonData.id && salonData.name
+				? {
+						key: salonData.id,
+						label: salonData.name,
+						value: salonData.id
+				  }
+				: salonData.name,
 		email: salonData.email,
 		// categoryIDs for basic salon
 		categoryIDs: (isEmpty(!salonData?.categories) ? salonData?.categories.map((category) => category.id) : null) as ISalonForm['categoryIDs'],
@@ -139,7 +137,7 @@ export const getSalonDataForSubmission = (data: ISalonForm) => {
 			isCover: image?.isCover ?? false
 		})) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
 		logoID: map(data.logo, (image) => image?.id ?? image?.uid)[0] ?? null,
-		name: data.name.id ? data.name.name : data.name,
+		name: get(data, 'name.id') ? get(data, 'name.name') : data.name,
 		openingHours: openingHours || [],
 		aboutUsFirst: data.aboutUsFirst,
 		city: data.city,

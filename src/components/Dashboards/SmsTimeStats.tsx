@@ -21,13 +21,14 @@ import CustomTable from '../CustomTable'
 type Props = {
 	selectedDate: Dayjs
 	onPickerChange: (date: Dayjs | null) => void
+	countryPicker?: React.ReactNode
 	className?: string
 	title?: React.ReactNode
 	smsTimeStats: ISmsTimeStatsPayload & ILoadingAndFailure
 }
 
 const SmsTimeStats = (props: Props) => {
-	const { onPickerChange, selectedDate, className, title, smsTimeStats } = props
+	const { onPickerChange, selectedDate, className, title, smsTimeStats, countryPicker } = props
 	const [t] = useTranslation()
 
 	const source: TimeStats = useMemo(() => {
@@ -60,18 +61,20 @@ const SmsTimeStats = (props: Props) => {
 
 	return (
 		<div className={cx('sms-staticis-wrapper', className)}>
-			<div className={'flex justify-between items-center'}>
-				{title || <h2>{t('loc:Prehľad')}</h2>}
-				<DatePicker
-					onChange={onPickerChange}
-					picker={'month'}
-					size='small'
-					defaultValue={dayjs()}
-					allowClear={false}
-					format={MONTH_NAME_YEAR_FORMAT}
-					getPopupContainer={(node) => node.parentElement || document.body}
-					disabledDate={(date) => dayjs(date).year() < 2022}
-				/>
+			<div className={'flex justify-between items-center mb-6'}>
+				{title || <h2 className={'mb-0'}>{t('loc:Prehľad')}</h2>}
+				<div className={'flex items-center gap-4'}>
+					{countryPicker}
+					<DatePicker
+						onChange={onPickerChange}
+						picker={'month'}
+						size={countryPicker ? 'middle' : 'small'} // TODO: zvacsit na vsekych statistikach na middle
+						defaultValue={dayjs()}
+						allowClear={false}
+						format={MONTH_NAME_YEAR_FORMAT}
+						disabledDate={(date) => dayjs(date).year() < 2022}
+					/>
+				</div>
 			</div>
 			<div className={'flex gap-4 mb-6'}>
 				<div className={'p-4 rounded shadow-lg bg-notino-white w-1/3'}>

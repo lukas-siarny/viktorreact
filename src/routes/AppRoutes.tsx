@@ -62,8 +62,7 @@ import ReviewsPage from '../pages/ReviewsPage/ReviewsPage'
 
 // SMS Credits
 import SmsCreditAdminPage from '../pages/SmsCreditAdminPage/SmsCreditAdminPage'
-import SmsUnitPricesPage from '../pages/SmsUnitPricesPage/SmsUnitPricesPage'
-import SmsUnitPricesDetailPage from '../pages/SmsUnitPricesPage/SmsUnitPricesDetailPage'
+import SmsUnitPricesDetailPage from '../pages/SmsCreditAdminPage/SmsUnitPricesDetailPage'
 
 // Cancel reservation page
 import CancelReservationPage from '../pages/CancelReservationPage/CancelReservationPage'
@@ -74,6 +73,7 @@ import AppInit from '../components/AppInit'
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 import ErrorBoundary from '../components/ErrorBoundary'
+import RechargeSmsCreditSalonsAdminPage from '../pages/SmsCreditAdminPage/RechargeSmsCreditSalonsAdminPage'
 
 const AppRoutes: FC = () => {
 	const [t] = useTranslation()
@@ -150,6 +150,7 @@ const AppRoutes: FC = () => {
 				<Route errorElement={<ErrorBoundary />} path={t('paths:sms-credits')} element={<AuthRoute layout={MainLayout} page={PAGE.SMS_CREDITS} />}>
 					<Route index element={<SmsCreditAdminPage />} />
 					<Route path={':countryCode'} element={<SmsUnitPricesDetailPage />} />
+					<Route path={t('paths:recharge-salons')} element={<RechargeSmsCreditSalonsAdminPage />} />
 				</Route>
 				<Route path={'/403'} element={<AuthRoute layout={MainLayout} />}>
 					<Route index element={<ForbiddenPage />} />

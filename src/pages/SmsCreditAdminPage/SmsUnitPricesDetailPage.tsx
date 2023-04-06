@@ -12,33 +12,33 @@ import { useParams } from 'react-router-dom'
 import { isEmpty } from 'lodash'
 
 // components
-import Breadcrumbs from '../../../components/Breadcrumbs'
-import CustomTable from '../../../components/CustomTable'
-import SmsUnitPricesForm from './SmsUnitPricesForm'
+import Breadcrumbs from '../../components/Breadcrumbs'
+import CustomTable from '../../components/CustomTable'
+import SmsUnitPricesForm from './components/SmsUnitPricesForm'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, CREATE_BUTTON_ID, D_M_YEAR_FORMAT, DEFAULT_DATE_INIT_FORMAT } from '../../../utils/enums'
-import { withPermissions } from '../../../utils/Permissions'
-import { deleteReq, patchReq, postReq } from '../../../utils/request'
-import { formFieldID, normalizeDirectionKeys, setOrder } from '../../../utils/helper'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, CREATE_BUTTON_ID, D_M_YEAR_FORMAT, DEFAULT_DATE_INIT_FORMAT } from '../../utils/enums'
+import { withPermissions } from '../../utils/Permissions'
+import { deleteReq, patchReq, postReq } from '../../utils/request'
+import { formFieldID, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 
 // reducers
-import { getSmsUnitPrices, ISmsUnitPricesPayload } from '../../../reducers/smsUnitPrices/smsUnitPricesActions'
+import { getSmsUnitPrices, ISmsUnitPricesPayload } from '../../reducers/smsUnitPrices/smsUnitPricesActions'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
-import { IBreadcrumbs, ISmsUnitPricesForm } from '../../../types/interfaces'
-import { RootState } from '../../../reducers'
+import { IBreadcrumbs, ISmsUnitPricesForm } from '../../types/interfaces'
+import { RootState } from '../../reducers'
 
 // hooks
-import useQueryParams, { NumberParam, StringParam } from '../../../hooks/useQueryParams'
-import useBackUrl from '../../../hooks/useBackUrl'
+import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
+import useBackUrl from '../../hooks/useBackUrl'
 
 type TableDataItem = NonNullable<ISmsUnitPricesPayload['data']>['unitPricesPerCounty'][0]
 
-const SmsUnitPricesTableDetail = () => {
+const SmsUnitPricesDetailPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -313,4 +313,4 @@ const SmsUnitPricesTableDetail = () => {
 	)
 }
 
-export default SmsUnitPricesTableDetail
+export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(SmsUnitPricesDetailPage)

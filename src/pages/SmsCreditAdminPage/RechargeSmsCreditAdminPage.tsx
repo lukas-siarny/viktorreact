@@ -166,7 +166,7 @@ const RechargeSmsCreditAdminPage = () => {
 
 	useEffect(() => {
 		dispatch(
-			initialize(FORM.RECHARGE_SMS_CREDIT_SALONS_FILTER, {
+			initialize(FORM.RECHARGE_SMS_CREDIT_FILTER, {
 				search: query.search,
 				countryCode: query.countryCode,
 				sourceType: query.sourceType,

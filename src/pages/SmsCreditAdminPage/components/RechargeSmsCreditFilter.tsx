@@ -59,7 +59,7 @@ const RechargeSmsCreditFilter = (props: Props) => {
 		setVisible(activeKey)
 	}, [visible])
 
-	const formValues = useSelector((state: RootState) => state.form?.[FORM.RECHARGE_SMS_CREDIT_SALONS_FILTER])?.values
+	const formValues = useSelector((state: RootState) => state.form?.[FORM.RECHARGE_SMS_CREDIT_FILTER])?.values
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0 mb-4 noti-sms-credits-filter'}>
@@ -168,7 +168,7 @@ const RechargeSmsCreditFilter = (props: Props) => {
 								</Col>
 								<Col>
 									<Button
-										id={formFieldID(FORM.RECHARGE_SMS_CREDIT_SALONS_FILTER, RESET_BUTTON_ID)}
+										id={formFieldID(FORM.RECHARGE_SMS_CREDIT_FILTER, RESET_BUTTON_ID)}
 										type={'dashed'}
 										size={'middle'}
 										className={'noti-btn'}
@@ -189,7 +189,7 @@ const RechargeSmsCreditFilter = (props: Props) => {
 }
 
 const form = reduxForm({
-	form: FORM.RECHARGE_SMS_CREDIT_SALONS_FILTER,
+	form: FORM.RECHARGE_SMS_CREDIT_FILTER,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	onChange: debounce((_values, _dispatch, { submit, anyTouched }) => {

@@ -174,7 +174,9 @@ export const getSalons =
 			hasSetOpeningHours,
 			sourceType: queryParams.sourceType,
 			premiumSourceUserType: queryParams.premiumSourceUserType,
-			assignedUserID: queryParams.assignedUserID
+			assignedUserID: queryParams.assignedUserID,
+			walletAvailableBalanceFrom: queryParams.walletAvailableBalanceFrom,
+			walletAvailableBalanceTo: queryParams.walletAvailableBalanceTo
 		}
 
 		try {

@@ -24,7 +24,6 @@
   "login": "/login",
   "my-account": "/my-account",
   "recharge": "recharge",
-  "recharge-salons": "recharge-salons",
   "reservations": "/reservations",
   "reservations-settings": "/reservations-settings",
   "reset-password": "/reset-password",

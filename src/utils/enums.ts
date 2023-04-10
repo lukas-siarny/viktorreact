@@ -210,6 +210,7 @@ export enum FORM {
 	SMS_UNIT_PRICES_FILTER = 'SMS_UNIT_PRICES_FILTER',
 	SMS_HISTORY_FILTER = 'SMS_HISTORY_FILTER',
 	RECHARGE_SMS_CREDIT = 'RECHARGE_SMS_CREDIT',
+	RECHARGE_SMS_CREDIT_SALONS_FILTER = 'RECHARGE_SMS_CREDIT_SALONS_FILTER',
 	SALONS_REPORT = 'SALONS_REPORT'
 }
 
@@ -653,6 +654,8 @@ export const DELETE_BUTTON_ID = 'delete-btn'
 export const CREATE_BUTTON_ID = 'create-btn'
 
 export const SUBMIT_BUTTON_ID = 'submit-btn'
+
+export const RESET_BUTTON_ID = 'reset-btn'
 
 export const ADD_BUTTON_ID = 'add-btn'
 

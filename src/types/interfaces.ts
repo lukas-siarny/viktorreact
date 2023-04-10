@@ -488,6 +488,15 @@ export interface ISmsUnitPricesFilter {
 	search: string
 }
 
+export interface IRechargeSmsCreditFilter {
+	search?: string
+	countryCode: string
+	sourceType?: string
+	walletAvailableBalanceFrom?: number
+	walletAvailableBalanceTo?: number
+}
+
+
 export interface ISmsHistoryFilter {
 	search: string
 }

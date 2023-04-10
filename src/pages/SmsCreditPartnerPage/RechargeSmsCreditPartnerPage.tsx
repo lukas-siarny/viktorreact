@@ -29,7 +29,7 @@ import { getSmsStats } from '../../reducers/sms/smsActions'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
-import RechargeSmsCredit from '../../components/RechargeSmsCredit/RechargeSmsCredit'
+import RechargeSmsCredit from '../../components/RechargeSmsCredit/RechargeSmsCreditForm'
 
 const RechargeSmsCreditPartnerPage: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath } = props
@@ -119,7 +119,7 @@ const RechargeSmsCreditPartnerPage: FC<SalonSubPageProps> = (props) => {
 				/>
 			) : (
 				<RechargeSmsCredit
-					handleRechargeCredit={handleRechargeCredit}
+					onSubmit={handleRechargeCredit}
 					currencySymbol={selectedSalon.data?.currency.symbol || ''}
 					loading={isLoading}
 					description={

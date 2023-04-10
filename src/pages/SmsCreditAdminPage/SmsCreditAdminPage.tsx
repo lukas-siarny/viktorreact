@@ -198,7 +198,6 @@ const SmsCreditAdiminPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			{/* <div className='w-11/12 xl:w-5/6 2xl:w-3/4 3xl:w-2/3 mx-auto mt-10'> */}
 			<div className='content-body dashboard-content'>
 				<div className={'w-full flex justify-end'}>
 					<Permissions
@@ -207,7 +206,7 @@ const SmsCreditAdiminPage = () => {
 							<Button
 								onClick={() => {
 									if (hasPermission) {
-										navigate(`${t('paths:sms-credits')}/${t('paths:recharge-salons')}`)
+										navigate(`${t('paths:sms-credits')}/${t('paths:recharge')}`)
 									} else {
 										openForbiddenModal()
 									}

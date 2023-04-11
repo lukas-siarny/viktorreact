@@ -19,10 +19,6 @@ const PreventShowDeletedSalon: FC<Props> = (props) => {
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const [t] = useTranslation()
 
-	if (isEmpty(selectedSalon?.data)) {
-		return null
-	}
-
 	if (isNil(selectedSalon?.data?.deletedAt)) {
 		return children as ReactElement
 	}

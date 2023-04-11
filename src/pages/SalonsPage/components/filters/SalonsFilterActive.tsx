@@ -171,7 +171,7 @@ const SalonsFilterActive = (props: Props) => {
 	const rsOptions = useMemo(
 		() => [
 			{ label: t('loc:Zapnutý rezervačný systém'), value: SALON_FILTER_RS.ENABLED, key: SALON_FILTER_RS.ENABLED, icon: getCheckerIcon(true) },
-			{ label: t('loc:Vypnitý rezervačný systém'), value: SALON_FILTER_RS.NOT_ENABLED, key: SALON_FILTER_RS.NOT_ENABLED, icon: getCheckerIcon(false) }
+			{ label: t('loc:Vypnutý rezervačný systém'), value: SALON_FILTER_RS.NOT_ENABLED, key: SALON_FILTER_RS.NOT_ENABLED, icon: getCheckerIcon(false) }
 		],
 		[t]
 	)

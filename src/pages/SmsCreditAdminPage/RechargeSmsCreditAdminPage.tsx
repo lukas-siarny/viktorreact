@@ -9,21 +9,20 @@ import { initialize } from 'redux-form'
 import { isEmpty } from 'lodash'
 import queryString from 'query-string'
 import { useNavigate } from 'react-router'
+import i18next from 'i18next'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import RechargeSmsCreditCheck from './components/RechargeSmsCreditCheck'
 import RechargeSmsCreditFilter from './components/RechargeSmsCreditFilter'
-import Alert from '../../components/Dashboards/Alert'
 
 // assets
 import { ReactComponent as ChevronRightIcon } from '../../assets/icons/chevron-right.svg'
 import { ReactComponent as CoinsIcon } from '../../assets/icons/coins.svg'
-import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_CREATE_TYPE, SALON_FILTER_STATES } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, LANGUAGE, PERMISSION, SALON_CREATE_TYPE, SALON_FILTER_STATES } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { normalizeDirectionKeys } from '../../utils/helper'
 import { getSalonTagSourceType } from '../SalonsPage/components/salonUtils'
@@ -39,12 +38,13 @@ import { getSmsUnitPricesActual } from '../../reducers/smsUnitPrices/smsUnitPric
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
 import useQueryParams, { BooleanParam, NumberParam, serializeParams, StringParam } from '../../hooks/useQueryParams'
+import { LOCALES } from '../../components/LanguagePicker'
 
 type TableDataItem = NonNullable<ISalonsPayload['data']>['salons'][0]
 type SelectedRow = { id: React.Key; wallet: TableDataItem['wallet'] }
 type SelectedRows = { [key: number]: SelectedRow[] }
 
-const SELECTION_LIMIT = 30
+const SELECTION_LIMIT = 100
 
 const getWalletIDs = (selectedRows: SelectedRows) =>
 	Object.values(selectedRows).reduce((acc, cv) => {
@@ -70,10 +70,10 @@ const RechargeSmsCreditAdminPage = () => {
 	const defaultSelectedCountryCode = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 
 	const [query, setQuery] = useQueryParams({
-		limit: NumberParam(25),
+		limit: NumberParam(50),
 		page: NumberParam(1),
 		search: StringParam(),
-		countryCode: StringParam(defaultSelectedCountryCode),
+		countryCode: StringParam(defaultSelectedCountryCode || LOCALES[i18next.language as LANGUAGE]?.countryCode),
 		sourceType: StringParam(),
 		walletAvailableBalanceFrom: NumberParam(),
 		walletAvailableBalanceTo: NumberParam(),
@@ -83,8 +83,6 @@ const RechargeSmsCreditAdminPage = () => {
 	const selectedCountry = countries.data?.find((country) => country.code === query.countryCode)
 	const smsPriceUnityForSelectedCountry = smsUnitPricesActual?.data?.find((priceUnit) => priceUnit.country.code === query.countryCode)
 	const currency = currencies.data?.find((c) => c.code === selectedCountry?.currencyCode)
-
-	const missingSMSPriceUnit = smsPriceUnityForSelectedCountry?.country && isEmpty(smsPriceUnityForSelectedCountry?.actual)
 
 	const [selectedRows, setSelectedRows] = useState<SelectedRows>({})
 
@@ -135,10 +133,6 @@ const RechargeSmsCreditAdminPage = () => {
 	}
 
 	useEffect(() => {
-		if (missingSMSPriceUnit) {
-			return
-		}
-
 		dispatch(
 			getSalons({
 				statuses_published: SALON_FILTER_STATES.PUBLISHED,
@@ -152,17 +146,7 @@ const RechargeSmsCreditAdminPage = () => {
 				walletAvailableBalanceTo: query.walletAvailableBalanceTo
 			})
 		)
-	}, [
-		dispatch,
-		query.limit,
-		query.page,
-		query.search,
-		query.countryCode,
-		query.sourceType,
-		query.walletAvailableBalanceFrom,
-		query.walletAvailableBalanceTo,
-		missingSMSPriceUnit
-	])
+	}, [dispatch, query.limit, query.page, query.search, query.countryCode, query.sourceType, query.walletAvailableBalanceFrom, query.walletAvailableBalanceTo])
 
 	useEffect(() => {
 		dispatch(
@@ -280,9 +264,9 @@ const RechargeSmsCreditAdminPage = () => {
 
 			{query.showForm ? (
 				<RechargeSmsCreditCheck
-					smsUnitPricesActual={smsUnitPricesActual}
 					currency={currency}
 					country={selectedCountry}
+					smsPriceUnityForSelectedCountry={smsPriceUnityForSelectedCountry}
 					selectedSalonsCount={selectedRowKeys.length}
 					walletIDs={getWalletIDs(selectedRows)}
 					onSuccess={() => {
@@ -306,64 +290,54 @@ const RechargeSmsCreditAdminPage = () => {
 							}
 							countries={countries}
 							currency={currency}
-							disabledFilter={missingSMSPriceUnit}
+							loading={smsUnitPricesActual?.isLoading}
 						/>
-						{missingSMSPriceUnit ? (
-							<Alert
-								className='mb-6'
-								title={t('loc:Krajina nemá nastavenú cenu SMS')}
-								subTitle={t('loc:Prejdite do nastavení cien SMS správ a nastavte cenu pre krajinu')}
-								actionLabel={t('loc:Nastaviť cenu SMS')}
-								icon={<SettingIcon />}
-								onActionItemClick={() => navigate(`${t('paths:sms-credits')}/${query.countryCode.toLowerCase()}`)}
+
+						<div className={'w-full flex'}>
+							<CustomTable<TableDataItem>
+								className='table-fixed'
+								columns={columns}
+								onChange={onChangeTable}
+								dataSource={salons.data?.salons}
+								rowSelection={{
+									selectedRowKeys,
+									onChange: onSelectChange,
+									getCheckboxProps: (record) => ({
+										disabled: (!selectedRowKeys.includes(record.id) && selectedRowKeys.length >= SELECTION_LIMIT) || !record.wallet?.id
+									})
+								}}
+								twoToneRows
+								rowKey={'id'}
+								useCustomPagination
+								pagination={{
+									pageSize: salons?.data?.pagination?.limit,
+									total: salons?.data?.pagination?.totalCount,
+									current: salons?.data?.pagination?.page,
+									onChange: onChangePagination,
+									disabled: salons?.isLoading
+								}}
+								customFooterContent={
+									<div className={'flex w-full items-center gap-4 my-4'}>
+										<span className={'mr-auto text-sm text-grayDarker'}>{`${selectedRowKeys.length}/${SELECTION_LIMIT} ${t('loc:označených')}`}</span>
+										<p className={'m-0 text-xxs text-grayDarker max-w-60 text-right'}>
+											{t('loc:Pre pokračovanie označte salóny, ktorým chcete dobiť kredit. Môžete označiť najviac {{ maxCount }} salónov.', {
+												maxCount: SELECTION_LIMIT
+											})}
+										</p>
+										<Button
+											type={'primary'}
+											className={'noti-btn'}
+											htmlType={'button'}
+											onClick={() => handleShowForm(true)}
+											icon={<ChevronRightIcon width={16} height={16} />}
+											disabled={loading || !selectedRowKeys.length}
+										>
+											{t('loc:Pokračovať')}
+										</Button>
+									</div>
+								}
 							/>
-						) : (
-							<div className={'w-full flex'}>
-								<CustomTable<TableDataItem>
-									className='table-fixed'
-									columns={columns}
-									onChange={onChangeTable}
-									dataSource={salons.data?.salons}
-									rowSelection={{
-										selectedRowKeys,
-										onChange: onSelectChange,
-										getCheckboxProps: (record) => ({
-											disabled: (!selectedRowKeys.includes(record.id) && selectedRowKeys.length >= SELECTION_LIMIT) || !record.wallet?.id
-										})
-									}}
-									twoToneRows
-									rowKey={'id'}
-									useCustomPagination
-									pagination={{
-										pageSize: salons?.data?.pagination?.limit,
-										total: salons?.data?.pagination?.totalCount,
-										current: salons?.data?.pagination?.page,
-										onChange: onChangePagination,
-										disabled: salons?.isLoading
-									}}
-									customFooterContent={
-										<div className={'flex w-full items-center gap-4 my-4'}>
-											<span className={'mr-auto text-sm text-grayDarker'}>{`${selectedRowKeys.length}/${SELECTION_LIMIT} ${t('loc:označených')}`}</span>
-											<p className={'m-0 text-xxs text-grayDarker max-w-60 text-right'}>
-												{t('loc:Pre pokračovanie označte salóny, ktorým chcete dobiť kredit. Môžete označiť najviac {{ maxCount }} salónov.', {
-													maxCount: SELECTION_LIMIT
-												})}
-											</p>
-											<Button
-												type={'primary'}
-												className={'noti-btn'}
-												htmlType={'button'}
-												onClick={() => handleShowForm(true)}
-												icon={<ChevronRightIcon width={16} height={16} />}
-												disabled={loading || !selectedRowKeys.length}
-											>
-												{t('loc:Pokračovať')}
-											</Button>
-										</div>
-									}
-								/>
-							</div>
-						)}
+						</div>
 					</Spin>
 				</div>
 			)}

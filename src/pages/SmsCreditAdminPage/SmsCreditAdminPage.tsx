@@ -8,6 +8,7 @@ import { ColumnProps } from 'antd/es/table'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router'
 import { initialize } from 'redux-form'
+import i18next from 'i18next'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -49,7 +50,7 @@ const SmsCreditAdiminPage = () => {
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 
 	const [smsStatsDate, setSmsStatsDate] = useState(dayjs())
-	const [smsStatsCountryCode, setSmsStatsCountryCode] = useState(selectedCountry || LOCALES[LANGUAGE.SK].countryCode)
+	const [smsStatsCountryCode, setSmsStatsCountryCode] = useState(selectedCountry || LOCALES[i18next.language as LANGUAGE]?.countryCode)
 
 	const [query, setQuery] = useState({
 		search: '',

@@ -21,16 +21,15 @@ type Props = {
 	country?: NonNullable<IEnumerationsCountriesPayload['data']>[0]
 	walletIDs: string[]
 	selectedSalonsCount: number
-	smsUnitPricesActual?: ISmsUnitPricesActualPayload & ILoadingAndFailure
+	smsPriceUnityForSelectedCountry?: NonNullable<ISmsUnitPricesActualPayload['data']>[0]
 	onSuccess: () => void
+	loading?: boolean
 }
 
 const RechargeSmsCreditCheck: FC<Props> = (props) => {
 	const [t] = useTranslation()
 
-	const { currency, walletIDs, country, selectedSalonsCount, smsUnitPricesActual, onSuccess } = props
-
-	const smsPriceUnityForSelectedCountry = smsUnitPricesActual?.data?.find((priceUnit) => priceUnit.country.code === country?.code)
+	const { currency, walletIDs, country, selectedSalonsCount, smsPriceUnityForSelectedCountry, onSuccess, loading } = props
 
 	const validFrom = smsPriceUnityForSelectedCountry?.actual?.validFrom
 	const amount = smsPriceUnityForSelectedCountry?.actual?.amount
@@ -62,6 +61,7 @@ const RechargeSmsCreditCheck: FC<Props> = (props) => {
 		<RechargeSmsCredit
 			onSubmit={handleRechargeCredit}
 			currencySymbol={currency?.symbol || ''}
+			loading={loading}
 			description={
 				<ul className={'list-none p-0 m-0 mb-8'}>
 					<li className={'flex justify-between gap-2 mb-2'}>

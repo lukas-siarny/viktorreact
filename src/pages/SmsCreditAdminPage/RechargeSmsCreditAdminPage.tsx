@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import { compose } from 'redux'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -91,6 +91,8 @@ const RechargeSmsCreditAdminPage = () => {
 	const [parentBackUrl] = useBackUrl(t('paths:sms-credits'))
 	const backUrl = `${t('paths:sms-credits')}/${t('paths:recharge')}?${queryString.stringify(serializeParams({ ...query, showForm: false }))}`
 
+	// console.log({ query, backUrl })
+
 	const loading = salons?.isLoading || smsUnitPricesActual?.isLoading
 
 	const breadcrumbs = (): IBreadcrumbs => {
@@ -132,7 +134,7 @@ const RechargeSmsCreditAdminPage = () => {
 		return bc
 	}
 
-	useEffect(() => {
+	const fetchSalons = useCallback(async () => {
 		dispatch(
 			getSalons({
 				statuses_published: SALON_FILTER_STATES.PUBLISHED,
@@ -149,6 +151,14 @@ const RechargeSmsCreditAdminPage = () => {
 	}, [dispatch, query.limit, query.page, query.search, query.countryCode, query.sourceType, query.walletAvailableBalanceFrom, query.walletAvailableBalanceTo])
 
 	useEffect(() => {
+		fetchSalons()
+	}, [fetchSalons])
+
+	useEffect(() => {
+		if (query.showForm) {
+			return
+		}
+
 		dispatch(
 			initialize(FORM.RECHARGE_SMS_CREDIT_FILTER, {
 				search: query.search,
@@ -158,7 +168,7 @@ const RechargeSmsCreditAdminPage = () => {
 				walletAvailableBalanceTo: query.walletAvailableBalanceTo
 			})
 		)
-	}, [query.search, query.sourceType, query.walletAvailableBalanceFrom, query.walletAvailableBalanceTo, query.countryCode, dispatch])
+	}, [query.search, query.sourceType, query.walletAvailableBalanceFrom, query.walletAvailableBalanceTo, query.countryCode, query.showForm, dispatch])
 
 	useEffect(() => {
 		dispatch(getSmsUnitPricesActual())
@@ -272,6 +282,7 @@ const RechargeSmsCreditAdminPage = () => {
 					onSuccess={() => {
 						setSelectedRows({})
 						navigate(backUrl)
+						fetchSalons()
 					}}
 				/>
 			) : (

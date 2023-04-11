@@ -68,7 +68,7 @@ const SmsTimeStats = (props: Props) => {
 					<DatePicker
 						onChange={onPickerChange}
 						picker={'month'}
-						size={countryPicker ? 'middle' : 'small'} // TODO: zvacsit na vsekych statistikach na middle
+						size={countryPicker ? 'middle' : 'small'}
 						defaultValue={dayjs()}
 						allowClear={false}
 						format={MONTH_NAME_YEAR_FORMAT}

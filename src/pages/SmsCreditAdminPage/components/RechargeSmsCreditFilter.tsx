@@ -12,6 +12,7 @@ import { checkFiltersSizeWithoutSearch, formFieldID, optionRenderWithImage, opti
 // components
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
+import InputNumberField from '../../../atoms/InputNumberField'
 
 // types
 import { IEnumerationsCountriesPayload, ILoadingAndFailure, IRechargeSmsCreditFilter } from '../../../types/interfaces'
@@ -20,8 +21,6 @@ import { RootState } from '../../../reducers'
 // assets
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as FilterIcon } from '../../../assets/icons/filter.svg'
-
-import InputNumberField from '../../../atoms/InputNumberField'
 
 // redux
 import { IEnumerationsCurrenciesPayload } from '../../../reducers/enumerations/enumerationActions'
@@ -107,7 +106,7 @@ const RechargeSmsCreditFilter = (props: Props) => {
 										size={'middle'}
 										className={'noti-btn w-full h-full p-0 flex items-center justify-center'}
 									>
-										<FilterIcon className={'relative top-0 left-0 text-gray-600 hover:text-gray-900'} style={{ transform: 'translate(0,0)' }} />
+										<FilterIcon className={'relative top-0 left-0 text-black'} style={{ transform: 'translate(0,0)' }} />
 									</Button>
 									<Badge
 										count={checkFiltersSizeWithoutSearch(formValues)}

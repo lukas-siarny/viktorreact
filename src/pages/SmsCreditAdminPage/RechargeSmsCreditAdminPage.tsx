@@ -26,6 +26,7 @@ import { ENUMERATIONS_KEYS, FORM, LANGUAGE, PERMISSION, SALON_CREATE_TYPE, SALON
 import { withPermissions } from '../../utils/Permissions'
 import { normalizeDirectionKeys } from '../../utils/helper'
 import { getSalonTagSourceType } from '../SalonsPage/components/salonUtils'
+import { LOCALES } from '../../components/LanguagePicker'
 
 // types
 import { IBreadcrumbs, IRechargeSmsCreditFilter } from '../../types/interfaces'
@@ -38,7 +39,6 @@ import { getSmsUnitPricesActual } from '../../reducers/smsUnitPrices/smsUnitPric
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
 import useQueryParams, { BooleanParam, NumberParam, serializeParams, StringParam } from '../../hooks/useQueryParams'
-import { LOCALES } from '../../components/LanguagePicker'
 
 type TableDataItem = NonNullable<ISalonsPayload['data']>['salons'][0]
 type SelectedRow = { id: React.Key; wallet: TableDataItem['wallet'] }

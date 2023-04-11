@@ -46,6 +46,9 @@ type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents
 
 interface IGetSalonReservationsQueryParams extends IPaginationQuery {
 	dateFrom?: string | null
+	dateTo?: string | null
+	createdAtFrom?: string | null
+	createdAtTo?: string | null
 	employeeIDs?: (string | null)[] | null
 	categoryIDs?: (string | null)[] | null
 	reservationStates?: (string | null)[] | null
@@ -595,7 +598,7 @@ export const getPaginatedReservations =
 					key: event.id,
 					startDate: formatDateByLocale(event.start.date, true) as string,
 					time: `${event.start.time} - ${event.end.time}`,
-					createdAt: formatDateByLocale(event.createdAt) as string,
+					createdAt: formatDateByLocale(event.createdAt, true) as string,
 					createSourceType: transalteReservationSourceType(event.reservationData?.createSourceType as RESERVATION_SOURCE_TYPE),
 					state: event.reservationData?.state as RESERVATION_STATE,
 					employee,

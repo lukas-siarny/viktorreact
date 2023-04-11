@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Field, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, Fields, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
 import { Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce, map } from 'lodash'
@@ -29,7 +29,7 @@ import {
 
 // atoms
 import SelectField from '../../../atoms/SelectField'
-import DateField from '../../../atoms/DateField'
+import DateRangeField from '../../../atoms/DateRangeField'
 
 // components
 import Filters from '../../../components/Filters'
@@ -95,33 +95,41 @@ const ReservationsFilter = (props: Props) => {
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
 			<Filters activeFilters={checkFiltersSizeWithoutSearch(formValues)}>
-				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={6}>
-						<Field
-							name={'dateFrom'}
-							placeholder={t('loc:Dátum od')}
-							className={'pb-0'}
-							pickerClassName={'w-full'}
-							component={DateField}
-							dropdownAlign={{ points: ['tr', 'br'] }}
-							required
-						/>
-					</Col>
-					<Col span={6}>
-						<Field
-							component={SelectField}
-							name={'categoryIDs'}
-							mode={'multiple'}
-							placeholder={t('loc:Kategórie')}
-							allowClear
-							showArrow
-							size={'middle'}
-							showSearch={false}
-							onDidMountSearch
-							options={categoriesOptions}
-						/>
-					</Col>
-					{state === RESERVATIONS_STATE.ALL && (
+				<>
+					<Row gutter={ROW_GUTTER_X_DEFAULT}>
+						<Col span={6}>
+							<Fields
+								label={t('loc:Dátum vytvorenia rezervácie')}
+								names={['dateFrom', 'dateTo']}
+								placeholders={[t('loc:od'), t('loc:do')]}
+								component={DateRangeField}
+								size={'large'}
+							/>
+						</Col>
+						<Col span={6}>
+							<Fields
+								label={t('loc:Dátum plánovanej rezervácie')}
+								names={['createdAtFrom', 'createdAtTo']}
+								placeholders={[t('loc:od'), t('loc:do')]}
+								component={DateRangeField}
+								size={'large'}
+							/>
+						</Col>
+						<Col span={6}>
+							<Field
+								component={SelectField}
+								name={'categoryIDs'}
+								mode={'multiple'}
+								placeholder={t('loc:Kategórie')}
+								allowClear
+								showArrow
+								className={'pb-0 mt-4'}
+								size={'large'}
+								showSearch={false}
+								onDidMountSearch
+								options={categoriesOptions}
+							/>
+						</Col>
 						<Col span={6}>
 							<Field
 								component={SelectField}
@@ -132,50 +140,54 @@ const ReservationsFilter = (props: Props) => {
 								allowClear
 								showSearch={false}
 								showArrow
-								size={'middle'}
+								className={'pb-0 mt-4'}
+								disabled={state === RESERVATIONS_STATE.PENDING}
+								size={'large'}
 								options={RESERVATION_STATE_OPTIONS}
 							/>
 						</Col>
-					)}
-					<Col span={6}>
-						<Field
-							component={SelectField}
-							mode={'multiple'}
-							name={'reservationPaymentMethods'}
-							placeholder={t('loc:Spôsob úhrady')}
-							optionRender={(itemData: any) => optionRenderWithIcon(itemData)}
-							allowClear
-							showSearch={false}
-							showArrow
-							size={'middle'}
-							options={RESERVATION_PAYMENT_METHOD_OPTIONS}
-						/>
-					</Col>
-					<Col span={6}>
-						<Field
-							component={SelectField}
-							mode={'multiple'}
-							showSearch={false}
-							showArrow
-							name={'employeeIDs'}
-							placeholder={t('loc:Zamestnanci')}
-							allowClear
-							size={'middle'}
-							options={employeeIDsOptions(reservations.data?.employees as ReservationsEmployees)}
-						/>
-					</Col>
-					<Col span={6}>
-						<Field
-							component={SelectField}
-							showSearch={false}
-							name={'reservationCreateSourceType'}
-							placeholder={t('loc:Vytvoril')}
-							allowClear
-							size={'middle'}
-							options={RESERVATION_SOURCE_TYPE_OPTIONS}
-						/>
-					</Col>
-				</Row>
+					</Row>
+					<Row gutter={ROW_GUTTER_X_DEFAULT}>
+						<Col span={8}>
+							<Field
+								component={SelectField}
+								mode={'multiple'}
+								name={'reservationPaymentMethods'}
+								placeholder={t('loc:Spôsob úhrady')}
+								optionRender={(itemData: any) => optionRenderWithIcon(itemData)}
+								allowClear
+								showSearch={false}
+								showArrow
+								size={'large'}
+								options={RESERVATION_PAYMENT_METHOD_OPTIONS}
+							/>
+						</Col>
+						<Col span={8}>
+							<Field
+								component={SelectField}
+								mode={'multiple'}
+								showSearch={false}
+								showArrow
+								name={'employeeIDs'}
+								placeholder={t('loc:Zamestnanci')}
+								allowClear
+								size={'large'}
+								options={employeeIDsOptions(reservations.data?.employees as ReservationsEmployees)}
+							/>
+						</Col>
+						<Col span={8}>
+							<Field
+								component={SelectField}
+								showSearch={false}
+								name={'reservationCreateSourceType'}
+								placeholder={t('loc:Vytvoril')}
+								allowClear
+								size={'large'}
+								options={RESERVATION_SOURCE_TYPE_OPTIONS}
+							/>
+						</Col>
+					</Row>
+				</>
 			</Filters>
 		</Form>
 	)

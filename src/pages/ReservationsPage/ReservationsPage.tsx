@@ -56,12 +56,15 @@ const ReservationsPage = (props: Props) => {
 	const getPath = useCallback((pathSuffix: string) => `${parentPath}${pathSuffix}`, [parentPath])
 
 	const [query, setQuery] = useQueryParams({
-		dateFrom: StringParam(dayjs().format(DEFAULT_DATE_INIT_FORMAT)),
+		dateFrom: StringParam(),
+		dateTo: StringParam(),
+		createdAtFrom: StringParam(),
+		createdAtTo: StringParam(),
 		employeeIDs: ArrayParam(),
 		categoryIDs: ArrayParam(),
-		reservationStates: ArrayParam([RESERVATION_STATE.PENDING]),
+		reservationStates: ArrayParam(),
 		reservationCreateSourceType: StringParam(),
-		state: StringParam(RESERVATIONS_STATE.PENDING),
+		state: StringParam(RESERVATIONS_STATE.ALL),
 		reservationPaymentMethods: ArrayParam(),
 		limit: NumberParam(),
 		page: NumberParam(1)
@@ -76,6 +79,9 @@ const ReservationsPage = (props: Props) => {
 				reservationPaymentMethods: query.reservationPaymentMethods,
 				reservationCreateSourceType: query.reservationCreateSourceType,
 				dateFrom: query.dateFrom,
+				dateTo: query.dateTo,
+				createdAtFrom: query.createdAtFrom,
+				createdAtTo: query.createdAtTo,
 				categoryIDs: query.categoryIDs
 			})
 		)
@@ -83,20 +89,25 @@ const ReservationsPage = (props: Props) => {
 			getPaginatedReservations({
 				salonID,
 				dateFrom: query.dateFrom,
+				dateTo: query.dateTo,
+				createdAtFrom: query.createdAtFrom,
+				createdAtTo: query.createdAtTo,
 				reservationStates: query.reservationStates,
 				employeeIDs: query.employeeIDs,
 				reservationPaymentMethods: query.reservationPaymentMethods,
 				reservationCreateSourceType: query.reservationCreateSourceType,
 				categoryIDs: query.categoryIDs,
 				page: query.page,
-				order: 'startDate:ASC',
 				limit: query.limit
 			})
 		)
 	}, [
 		dispatch,
 		query.categoryIDs,
+		query.createdAtFrom,
+		query.createdAtTo,
 		query.dateFrom,
+		query.dateTo,
 		query.employeeIDs,
 		query.limit,
 		query.page,
@@ -141,18 +152,81 @@ const ReservationsPage = (props: Props) => {
 
 	const columns: Columns = [
 		{
-			title: t('loc:Dátum'),
+			title: t('loc:Dátum vytvorenia'),
+			dataIndex: 'createdAt',
+			key: 'createdAt',
+			ellipsis: true,
+			width: '15%'
+		},
+		{
+			title: t('loc:Dátum rezervácie'),
 			dataIndex: 'startDate',
 			key: 'startDate',
 			ellipsis: true,
-			width: '10%'
+			width: '15%'
 		},
 		{
-			title: t('loc:Trvanie'),
+			title: t('loc:Čas rezervácie'),
 			dataIndex: 'time',
 			key: 'time',
 			ellipsis: true,
 			width: '15%'
+		},
+		{
+			title: t('loc:Klient'),
+			dataIndex: 'customer',
+			key: 'customer',
+			ellipsis: true,
+			width: '25%',
+			render: (value) => {
+				return (
+					<>
+						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.profileImage?.resizedImages?.thumbnail} fallBackSrc={value?.profileImage?.original} />
+						{getAssignedUserLabel(value)}
+					</>
+				)
+			}
+		},
+		{
+			title: t('loc:Služba'),
+			dataIndex: 'service',
+			key: 'service',
+			ellipsis: true,
+			width: '25%',
+			render: (value) => {
+				return (
+					<>
+						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.icon?.resizedImages?.thumbnail} fallBackSrc={value?.icon?.original} />
+						{value?.name}
+					</>
+				)
+			}
+		},
+		{
+			title: t('loc:Kolega'),
+			dataIndex: 'employee',
+			key: 'employee',
+			ellipsis: true,
+			width: '25%',
+			render: (value) => {
+				return (
+					<div className={'flex items-center'}>
+						<UserAvatar
+							style={value.deletedAt && { filter: 'grayscale(100)' }}
+							className='mr-2-5 w-7 h-7'
+							src={value?.image?.resizedImages?.thumbnail}
+							fallBackSrc={value?.image?.original}
+						/>
+						{value.deletedAt ? (
+							<Tooltip title={t('loc:Priradený kolega je vymazaný zo salónu')}>
+								<div className={'text-trueGray-400'}>{getAssignedUserLabel(value)}</div>
+							</Tooltip>
+						) : (
+							getAssignedUserLabel(value)
+						)}
+					</div>
+				)
+			}
 		},
 		{
 			title: t('loc:Vytvoril'),
@@ -192,69 +266,6 @@ const ReservationsPage = (props: Props) => {
 					'-'
 				)
 			}
-		},
-		{
-			title: t('loc:Zamestnanec'),
-			dataIndex: 'employee',
-			key: 'employee',
-			ellipsis: true,
-			width: '25%',
-			render: (value) => {
-				return (
-					<div className={'flex items-center'}>
-						<UserAvatar
-							style={value.deletedAt && { filter: 'grayscale(100)' }}
-							className='mr-2-5 w-7 h-7'
-							src={value?.image?.resizedImages?.thumbnail}
-							fallBackSrc={value?.image?.original}
-						/>
-						{value.deletedAt ? (
-							<Tooltip title={t('loc:Priradený kolega je vymazaný zo salónu')}>
-								<div className={'text-trueGray-400'}>{getAssignedUserLabel(value)}</div>
-							</Tooltip>
-						) : (
-							getAssignedUserLabel(value)
-						)}
-					</div>
-				)
-			}
-		},
-		{
-			title: t('loc:Zákazník'),
-			dataIndex: 'customer',
-			key: 'customer',
-			ellipsis: true,
-			width: '25%',
-			render: (value) => {
-				return (
-					<>
-						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.profileImage?.resizedImages?.thumbnail} fallBackSrc={value?.profileImage?.original} />
-						{getAssignedUserLabel(value)}
-					</>
-				)
-			}
-		},
-		{
-			title: t('loc:Služba'),
-			dataIndex: 'service',
-			key: 'service',
-			ellipsis: true,
-			width: '25%',
-			render: (value) => {
-				return (
-					<>
-						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.icon?.resizedImages?.thumbnail} fallBackSrc={value?.icon?.original} />
-						{value?.name}
-					</>
-				)
-			}
-		},
-		{
-			title: t('loc:Dátum vytvorenia'),
-			dataIndex: 'createdAt',
-			key: 'createdAt',
-			ellipsis: true,
-			width: '20%'
 		}
 	]
 
@@ -266,23 +277,20 @@ const ReservationsPage = (props: Props) => {
 		]
 	}
 	const onTabChange = (value: any) => {
-		// NOTE: ak su vsetky tak premaz filter reservationStates ktory je by default na RESERVATION_STATE.PENDING
+		// NOTE: ak su vsetky tak premaz filter reservationStates ktory je by default na RESERVATION_STATE.PENDING + zmaze aktualne query (nerobi sa ...query!!!)
 		if (value === RESERVATIONS_STATE.ALL) {
 			setQuery({
-				...query,
 				state: value,
 				reservationStates: []
 			})
 		} else {
 			setQuery({
-				...query,
 				state: value,
 				reservationStates: [RESERVATION_STATE.PENDING]
 			})
 		}
 	}
 
-	const pendingCount = 16
 	const table = (
 		<Row gutter={ROW_GUTTER_X_DEFAULT}>
 			<Col span={24}>
@@ -325,7 +333,8 @@ const ReservationsPage = (props: Props) => {
 			</Col>
 		</Row>
 	)
-	const count: any = `(${15})`
+	const pendingCount = 6 // TODO: z BE tahat
+	const count = pendingCount > 0 ? `(${pendingCount})` : undefined
 	return (
 		<>
 			<Row>
@@ -333,12 +342,12 @@ const ReservationsPage = (props: Props) => {
 			</Row>
 			<TabsComponent
 				className={'box-tab'}
-				activeKey={query.state || RESERVATIONS_STATE.PENDING}
+				activeKey={query.state || RESERVATIONS_STATE.ALL}
 				onChange={onTabChange}
 				items={[
 					{
 						key: RESERVATIONS_STATE.PENDING,
-						label: t('loc:Čakajúce na schválenie {{ count }}', { count }),
+						label: t('loc:Čakajúce na schválenie {{ pendingReservationsCount }}', { pendingReservationsCount: count }),
 						children: table
 					},
 					{

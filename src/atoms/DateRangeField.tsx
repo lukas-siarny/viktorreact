@@ -35,6 +35,8 @@ const DateRangeField = (props: Props) => {
 		disablePast,
 		suffixIcon,
 		clearIcon,
+		label,
+		size,
 		allowClear,
 		getPopupContainer
 	} = props
@@ -66,61 +68,65 @@ const DateRangeField = (props: Props) => {
 	}
 
 	return (
-		<div className={'flex'}>
-			{map(names, (name, index: number) => {
-				const input = get(props, `[${name}].input`) as any
-				const { touched, error } = get(props, `[${name}].meta`)
-				let value
-				const format = get(formats, `[${index}]`) || DEFAULT_DATE_INPUT_FORMAT
-				if (input.value && dayjs(input.value).isValid()) {
-					value = dayjs(input.value)
-				}
+		<div>
+			<div className={'text-notino-black font-semibold text-xs'}>{label}</div>
+			<div className={'flex'}>
+				{map(names, (name, index: number) => {
+					const input = get(props, `[${name}].input`) as any
+					const { touched, error } = get(props, `[${name}].meta`)
+					let value
+					const format = get(formats, `[${index}]`) || DEFAULT_DATE_INPUT_FORMAT
+					if (input.value && dayjs(input.value).isValid()) {
+						value = dayjs(input.value)
+					}
 
-				const allowClearWrap = !required
-				let disabledDate
-				if (index === 0) {
-					disabledDate = disabledStartDate
-				} else {
-					disabledDate = disabledEndDate
-				}
-				return (
-					<Item
-						label={labels ? labels[index] : (undefined as any)}
-						required={required}
-						help={touched && (error as any)}
-						validateStatus={error && touched ? 'error' : (undefined as any)}
-						key={index}
-						className={'w-1/2'}
-					>
-						<DatePicker
-							{...input}
-							className={cx('w-full noti-date-input', { 'allow-clear': allowClearWrap })}
-							onBlur={() => {}}
-							place
-							onChange={(val) => {
-								if (val) {
-									input.onChange(val.format(DEFAULT_DATE_INIT_FORMAT))
-								} else {
-									input.onChange(null)
-								}
-							}}
-							arrow={false}
-							getCalendarContainer={getCalendarContainer}
-							format={format}
-							suffixIcon={suffixIcon || <DateSuffixIcon className={'TreeCategories'} />}
-							clearIcon={clearIcon || <RemoveIcon className={'TreeCategories'} />}
-							allowClear={allowClearWrap || allowClear}
-							value={value}
-							placeholder={get(placeholders, `[${index}]`)}
-							disabledDate={disabledDate}
-							disabled={disabled}
-							renderExtraFooter={renderExtraFooter}
-							showToday={!(index === 1 && disableStartDayEnd === true)}
-							getPopupContainer={getPopupContainer || ((node) => node)}
-						/>
-					</Item>
-				)
-			})}
+					const allowClearWrap = !required
+					let disabledDate
+					if (index === 0) {
+						disabledDate = disabledStartDate
+					} else {
+						disabledDate = disabledEndDate
+					}
+					return (
+						<Item
+							label={labels ? labels[index] : (undefined as any)}
+							required={required}
+							help={touched && (error as any)}
+							validateStatus={error && touched ? 'error' : (undefined as any)}
+							key={index}
+							className={'w-1/2 mr-1'}
+						>
+							<DatePicker
+								{...input}
+								className={cx('w-full noti-date-input', { 'allow-clear': allowClearWrap })}
+								onBlur={() => {}}
+								place
+								onChange={(val) => {
+									if (val) {
+										input.onChange(val.format(DEFAULT_DATE_INIT_FORMAT))
+									} else {
+										input.onChange(null)
+									}
+								}}
+								size={size}
+								arrow={false}
+								getCalendarContainer={getCalendarContainer}
+								format={format}
+								suffixIcon={suffixIcon || <DateSuffixIcon className={'TreeCategories'} />}
+								clearIcon={clearIcon || <RemoveIcon className={'TreeCategories'} />}
+								allowClear={allowClearWrap || allowClear}
+								value={value}
+								placeholder={get(placeholders, `[${index}]`)}
+								disabledDate={disabledDate}
+								disabled={disabled}
+								renderExtraFooter={renderExtraFooter}
+								showToday={!(index === 1 && disableStartDayEnd === true)}
+								getPopupContainer={getPopupContainer || ((node) => node)}
+							/>
+						</Item>
+					)
+				})}
+			</div>
 		</div>
 	)
 }

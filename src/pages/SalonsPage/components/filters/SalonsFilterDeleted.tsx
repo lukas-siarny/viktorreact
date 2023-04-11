@@ -89,7 +89,7 @@ const SalonsFilterDeleted = (props: Props) => {
 							mode={'multiple'}
 							placeholder={t('loc:Odvetvie')}
 							allowClear
-							size={'middle'}
+							size={'large'}
 							filterOptions
 							onDidMountSearch
 							optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
@@ -105,7 +105,7 @@ const SalonsFilterDeleted = (props: Props) => {
 							name={'countryCode'}
 							placeholder={t('loc:Krajina')}
 							allowClear
-							size={'middle'}
+							size={'large'}
 							filterOptions
 							onDidMountSearch
 							options={countries?.enumerationsOptions}

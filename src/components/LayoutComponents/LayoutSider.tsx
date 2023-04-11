@@ -271,7 +271,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						},
 						{
 							key: PAGE.RESERVATIONS,
-							label: t('loc:Rezervácie'),
+							label: t('loc:Prehľad rezervácií'),
 							onClick: () => navigate(getPath(t('paths:reservations'))),
 							icon: <ReservationsIcon />,
 							id: PAGE.RESERVATIONS

@@ -15,6 +15,7 @@ import {
 	RESERVATION_SOURCE_TYPES,
 	RESERVATION_STATE,
 	RESERVATION_STATES,
+	RESERVATIONS_STATE,
 	ROW_GUTTER_X_DEFAULT
 } from '../../../utils/enums'
 import {
@@ -37,7 +38,9 @@ import Filters from '../../../components/Filters'
 import { RootState } from '../../../reducers'
 import { IReservationsFilter, ReservationsEmployees } from '../../../types/interfaces'
 
-type ComponentProps = {}
+type ComponentProps = {
+	state: RESERVATIONS_STATE
+}
 
 type Props = InjectedFormProps<IReservationsFilter, ComponentProps> & ComponentProps
 
@@ -83,7 +86,7 @@ const ReservationsFilter = (props: Props) => {
 		[]
 	)
 
-	const { handleSubmit } = props
+	const { handleSubmit, state } = props
 	const [t] = useTranslation()
 	const reservations = useSelector((state: RootState) => state.calendar.paginatedReservations)
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.RESERVATIONS_FILTER)(state))
@@ -118,20 +121,22 @@ const ReservationsFilter = (props: Props) => {
 							options={categoriesOptions}
 						/>
 					</Col>
-					<Col span={6}>
-						<Field
-							component={SelectField}
-							optionRender={(itemData: any) => optionRenderWithIcon(itemData)}
-							mode={'multiple'}
-							name={'reservationStates'}
-							placeholder={t('loc:Stav')}
-							allowClear
-							showSearch={false}
-							showArrow
-							size={'middle'}
-							options={RESERVATION_STATE_OPTIONS}
-						/>
-					</Col>
+					{state === RESERVATIONS_STATE.ALL && (
+						<Col span={6}>
+							<Field
+								component={SelectField}
+								optionRender={(itemData: any) => optionRenderWithIcon(itemData)}
+								mode={'multiple'}
+								name={'reservationStates'}
+								placeholder={t('loc:Stav')}
+								allowClear
+								showSearch={false}
+								showArrow
+								size={'middle'}
+								options={RESERVATION_STATE_OPTIONS}
+							/>
+						</Col>
+					)}
 					<Col span={6}>
 						<Field
 							component={SelectField}

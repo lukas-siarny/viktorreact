@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Col, Row, Tooltip } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,12 +20,14 @@ import {
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_VIEW,
+	DASHBOARD_TASB_KEYS,
 	DEFAULT_DATE_INIT_FORMAT,
 	DEFAULT_DATE_INPUT_FORMAT,
 	FORM,
 	PERMISSION,
 	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_STATE,
+	RESERVATIONS_STATE,
 	ROW_GUTTER_X_DEFAULT
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
@@ -41,6 +43,7 @@ import { getPaginatedReservations } from '../../reducers/calendar/calendarAction
 
 // hooks
 import useQueryParams, { ArrayParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
+import TabsComponent from '../../components/TabsComponent'
 
 type Props = SalonSubPageProps
 
@@ -56,8 +59,9 @@ const ReservationsPage = (props: Props) => {
 		dateFrom: StringParam(dayjs().format(DEFAULT_DATE_INIT_FORMAT)),
 		employeeIDs: ArrayParam(),
 		categoryIDs: ArrayParam(),
-		reservationStates: ArrayParam(),
+		reservationStates: ArrayParam([RESERVATION_STATE.PENDING]),
 		reservationCreateSourceType: StringParam(),
+		state: StringParam(RESERVATIONS_STATE.PENDING),
 		reservationPaymentMethods: ArrayParam(),
 		limit: NumberParam(),
 		page: NumberParam(1)
@@ -261,53 +265,89 @@ const ReservationsPage = (props: Props) => {
 			}
 		]
 	}
+	const onTabChange = (value: any) => {
+		// NOTE: ak su vsetky tak premaz filter reservationStates ktory je by default na RESERVATION_STATE.PENDING
+		if (value === RESERVATIONS_STATE.ALL) {
+			setQuery({
+				...query,
+				state: value,
+				reservationStates: []
+			})
+		} else {
+			setQuery({
+				...query,
+				state: value,
+				reservationStates: [RESERVATION_STATE.PENDING]
+			})
+		}
+	}
 
+	const pendingCount = 16
+	const table = (
+		<Row gutter={ROW_GUTTER_X_DEFAULT}>
+			<Col span={24}>
+				<div className='content-body'>
+					<ReservationsFilter state={query.state} onSubmit={handleSubmit} />
+					<CustomTable
+						className='table-fixed'
+						columns={columns}
+						onChange={onChangeTable}
+						loading={reservations?.isLoading}
+						dataSource={reservations?.tableData}
+						rowClassName={'clickable-row'}
+						onRow={(record) => ({
+							onClick: () => {
+								const redirectQuery = {
+									view: CALENDAR_VIEW.DAY,
+									date: dayjs(record.startDate, DEFAULT_DATE_INPUT_FORMAT).format(CALENDAR_DATE_FORMAT.QUERY),
+									eventsViewType: CALENDAR_EVENT_TYPE.RESERVATION,
+									sidebarView: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
+									eventId: record.key
+								}
+								navigate({
+									pathname: getPath(t('paths:calendar')),
+									search: formatObjToQuery(redirectQuery)
+								})
+							}
+						})}
+						twoToneRows
+						scroll={{ x: 1200 }}
+						useCustomPagination
+						pagination={{
+							pageSize: reservations.data?.pagination.limit,
+							total: reservations.data?.pagination.totalCount,
+							current: reservations.data?.pagination.page,
+							onChange: onChangePagination,
+							disabled: reservations.isLoading
+						}}
+					/>
+				</div>
+			</Col>
+		</Row>
+	)
+	const count: any = `(${15})`
 	return (
 		<>
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<Row gutter={ROW_GUTTER_X_DEFAULT}>
-				<Col span={24}>
-					<div className='content-body'>
-						<ReservationsFilter onSubmit={handleSubmit} />
-						<CustomTable
-							className='table-fixed'
-							columns={columns}
-							onChange={onChangeTable}
-							loading={reservations?.isLoading}
-							dataSource={reservations?.tableData}
-							rowClassName={'clickable-row'}
-							onRow={(record) => ({
-								onClick: () => {
-									const redirectQuery = {
-										view: CALENDAR_VIEW.DAY,
-										date: dayjs(record.startDate, DEFAULT_DATE_INPUT_FORMAT).format(CALENDAR_DATE_FORMAT.QUERY),
-										eventsViewType: CALENDAR_EVENT_TYPE.RESERVATION,
-										sidebarView: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
-										eventId: record.key
-									}
-
-									navigate({
-										pathname: getPath(t('paths:calendar')),
-										search: formatObjToQuery(redirectQuery)
-									})
-								}
-							})}
-							twoToneRows
-							scroll={{ x: 1200 }}
-							useCustomPagination
-							pagination={{
-								pageSize: reservations.data?.pagination.limit,
-								total: reservations.data?.pagination.totalCount,
-								current: reservations.data?.pagination.page,
-								onChange: onChangePagination,
-								disabled: reservations.isLoading
-							}}
-						/>
-					</div>
-				</Col>
-			</Row>
+			<TabsComponent
+				className={'box-tab'}
+				activeKey={query.state || RESERVATIONS_STATE.PENDING}
+				onChange={onTabChange}
+				items={[
+					{
+						key: RESERVATIONS_STATE.PENDING,
+						label: t('loc:Čakajúce na schválenie {{ count }}', { count }),
+						children: table
+					},
+					{
+						key: RESERVATIONS_STATE.ALL,
+						label: t('loc:Všetky'),
+						children: table
+					}
+				]}
+			/>
 		</>
 	)
 }

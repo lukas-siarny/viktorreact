@@ -256,7 +256,7 @@ const ServiceForm: FC<Props> = (props) => {
 												<Field
 													className='mb-0 pb-0'
 													component={TextareaField}
-													label={`${salon.data?.address?.countryCode || ''}`}
+													label={`${t('loc:Popis služby')} ${salon.data?.address?.countryCode ? `(${salon.data.address.countryCode})` : ''}`.trim()}
 													placeholder={t('loc:Zadajte popis služby')}
 													key='descriptionLocalizations[0].value'
 													name='descriptionLocalizations[0].value'
@@ -274,9 +274,6 @@ const ServiceForm: FC<Props> = (props) => {
 										{t('loc:Online rezervácia')}
 									</h3>
 									<Divider className={'mb-3 mt-3'} />
-									<div className={'text-xs text-notino-grayDark mb-4'}>
-										{t('loc:Zapnutím rezervačného systému sa aktivuje kalendár na spravovanie rezervácií a zmien zamestnancov vo vašom salóne.')}
-									</div>
 									<FormSection name={'settings'}>
 										<Row gutter={[8, 8]}>
 											<Col span={12}>

@@ -56,8 +56,4 @@ Sentry.setTag('browser_type', detectBrowserType())
 
 const root = createRoot(document.getElementById('root') as HTMLElement)
 
-root.render(
-	<StrictMode>
-		<App />
-	</StrictMode>
-)
+root.render(<App />)

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useMemo, useCallback } from 'react'
+import React, { useMemo, useCallback, useRef, useEffect } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Col, Divider, Dropdown, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -51,18 +51,22 @@ import {
 } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import searchWrapper from '../../../../utils/filters'
+import { getCheckerIcon } from '../salonUtils'
 
 // atoms
 import InputField from '../../../../atoms/InputField'
 import SelectField from '../../../../atoms/SelectField'
 import DateRangePickerField from '../../../../atoms/DateRangePickerField'
 import SwitchField from '../../../../atoms/SwitchField'
+
+// hooks
 import useMedia from '../../../../hooks/useMedia'
-import { getCheckerIcon } from '../salonUtils'
+import { IUseQueryParams } from '../../../../hooks/useQueryParams'
 
 type ComponentProps = {
 	onImportSalons: () => void
 	onDownloadReport: () => void
+	query: IUseQueryParams
 }
 
 export interface ISalonsFilterActive {
@@ -101,10 +105,16 @@ export const checkSalonFiltersSize = (formValues: any) =>
 	)
 
 const SalonsFilterActive = (props: Props) => {
-	const { handleSubmit, onImportSalons, onDownloadReport } = props
+	const { handleSubmit, onImportSalons, onDownloadReport, query } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
+
+	const firstRender = useRef(true)
+
+	useEffect(() => {
+		firstRender.current = false
+	}, [])
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER_ACITVE])
 	const categories = useSelector((state: RootState) => state.categories.categories)
@@ -113,15 +123,15 @@ const SalonsFilterActive = (props: Props) => {
 
 	const searchNotinoUsers = useCallback(
 		async (search: string, page: number) => {
-			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.NOTINO_USER)
+			return searchWrapper(dispatch, { page, search, limit: 100 }, FILTER_ENTITY.NOTINO_USER)
 		},
 		[dispatch]
 	)
 
 	const publishedOptions = useMemo(
 		() => [
-			{ label: t('loc:Publikovaný'), value: SALON_FILTER_STATES.PUBLISHED, key: SALON_FILTER_STATES.PUBLISHED, icon: getCheckerIcon(true) },
-			{ label: t('loc:Nepublikovaný'), value: SALON_FILTER_STATES.NOT_PUBLISHED, key: SALON_FILTER_STATES.NOT_PUBLISHED, icon: getCheckerIcon(false) }
+			{ label: t('loc:Publikovaný'), value: SALON_FILTER_STATES.PUBLISHED, key: SALON_FILTER_STATES.PUBLISHED, tagClassName: 'bg-status-published' },
+			{ label: t('loc:Nepublikovaný'), value: SALON_FILTER_STATES.NOT_PUBLISHED, key: SALON_FILTER_STATES.NOT_PUBLISHED, tagClassName: 'bg-status-notPublished' }
 		],
 		[t]
 	)
@@ -359,7 +369,7 @@ const SalonsFilterActive = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters customContent={customContent} search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)} form={FORM.SALONS_FILTER_ACITVE}>
+			<Filters customContent={customContent} search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)} form={FORM.SALONS_FILTER_ACITVE} forceRender>
 				<>
 					<Row>
 						<Col span={24}>
@@ -382,7 +392,7 @@ const SalonsFilterActive = (props: Props) => {
 									filterOptions
 									onDidMountSearch
 									options={publishedOptions}
-									optionRender={(option: any) => optionRenderWithIcon(option, undefined, 24, 24)}
+									optionRender={optionRenderWithTag}
 								/>
 							</Col>
 							<Col span={8}>
@@ -545,7 +555,7 @@ const SalonsFilterActive = (props: Props) => {
 								allowInfinityScroll
 								allowClear
 								filterOption={false}
-								onDidMountSearch
+								onDidMountSearch={firstRender.current && !!query?.assignedUserID}
 							/>
 						</Col>
 					</Row>

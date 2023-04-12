@@ -491,10 +491,8 @@ const SalonsPage = () => {
 					tableColumns.name({ width: '20%' }),
 					tableColumns.address({ width: '16%' }),
 					tableColumns.categories({ width: '16%' }),
-					tableColumns.enabledRS({ width: '8%' }),
-					tableColumns.availableReservationSystem({ width: '8%' }),
 					tableColumns.deletedAt({ width: '16%' }),
-					tableColumns.fillingProgress({ width: '8%' }),
+					tableColumns.fillingProgress({ width: '16%' }),
 					tableColumns.createdAt({ width: '20%' })
 				]
 				filters = <SalonsFilterDeleted onSubmit={handleSubmitDeleted} />
@@ -521,6 +519,7 @@ const SalonsPage = () => {
 						onSubmit={handleSubmitActive}
 						onImportSalons={() => setSalonImportsModalVisible(true)}
 						onDownloadReport={() => setSalonsReportModalVisible(true)}
+						query={query}
 					/>
 				)
 		}

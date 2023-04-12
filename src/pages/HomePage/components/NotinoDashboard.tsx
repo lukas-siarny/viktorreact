@@ -32,20 +32,7 @@ import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
 // utils
-import {
-	CALENDAR_DATE_FORMAT,
-	CALENDAR_EVENT_TYPE,
-	CALENDAR_EVENTS_VIEW_TYPE,
-	CALENDAR_VIEW,
-	DASHBOARD_TASB_KEYS,
-	DEFAULT_DATE_INPUT_FORMAT,
-	FILTER_PATHS,
-	SALON_CREATE_TYPE,
-	SALON_FILTER_STATES,
-	SALONS_TAB_KEYS,
-	SALONS_TIME_STATS_TYPE,
-	STRINGS
-} from '../../../utils/enums'
+import { DASHBOARD_TASB_KEYS, FILTER_PATHS, SALON_CREATE_TYPE, SALON_FILTER_STATES, SALONS_TAB_KEYS, SALONS_TIME_STATS_TYPE, STRINGS } from '../../../utils/enums'
 import { doughnutOptions, getFilterRanges, lineOptions, transformToStatsData } from './dashboardUtils'
 import { formatObjToQuery } from '../../../utils/helper'
 
@@ -298,6 +285,11 @@ const NotinoDashboard: FC = () => {
 	const [tabKey, setTabKey] = useState<DASHBOARD_TASB_KEYS>(DASHBOARD_TASB_KEYS.RESERVATION_SYSTEM)
 
 	const publishedPremiumSalonsData = useMemo(() => {
+		const query = {
+			salonState: SALONS_TAB_KEYS.ACTIVE,
+			statuses_published: SALON_FILTER_STATES.PUBLISHED,
+			createType: SALON_CREATE_TYPE.NON_BASIC
+		}
 		return {
 			title: t('loc:Publikované Premium salóny'),
 			data: {
@@ -307,8 +299,8 @@ const NotinoDashboard: FC = () => {
 						label: t('loc:Počet'),
 						data: [
 							notino.data?.publishedPremiumSalons.premiumDisabledRs,
-							notino.data?.publishedPremiumSalons.premiumEnabledRsB2c,
-							notino.data?.publishedPremiumSalons.premiumEnabledRsB2b
+							notino.data?.publishedPremiumSalons.premiumEnabledRsB2b,
+							notino.data?.publishedPremiumSalons.premiumEnabledRsB2c
 						],
 						backgroundColor: ['#144896', '#2277F3', '#BBD6FE'],
 						borderRadius: 4
@@ -322,24 +314,28 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery({
-								salonState: SALONS_TAB_KEYS.ACTIVE,
-								statuses_published: SALON_FILTER_STATES.PUBLISHED,
-								createType: SALON_CREATE_TYPE.NON_BASIC
-							})
+							search: formatObjToQuery(query)
 						}),
 					backgroundColor: '#144896'
 				},
 				{
 					label: t('loc:Premium s RS'),
 					data: notino.data?.publishedPremiumSalons.premiumEnabledRsB2c,
-					onClick: undefined, // TODO:
+					onClick: () =>
+						navigate({
+							pathname: t('paths:salons'),
+							search: formatObjToQuery(query)
+						}),
 					backgroundColor: '#2277F3'
 				},
 				{
 					label: t('loc:Premium RS online'),
 					data: notino.data?.publishedPremiumSalons.premiumEnabledRsB2b,
-					onClick: undefined, // TODO:
+					onClick: () =>
+						navigate({
+							pathname: t('paths:salons'),
+							search: formatObjToQuery(query)
+						}),
 					backgroundColor: '#BBD6FE'
 				}
 			],
@@ -354,6 +350,11 @@ const NotinoDashboard: FC = () => {
 	])
 
 	const unpublishedPremiumSalonsData = useMemo(() => {
+		const query = {
+			salonState: SALONS_TAB_KEYS.ACTIVE,
+			statuses_published: SALON_FILTER_STATES.NOT_PUBLISHED,
+			createType: SALON_CREATE_TYPE.NON_BASIC
+		}
 		return {
 			title: t('loc:Nepublikované Premium salóny'),
 			data: {
@@ -363,8 +364,8 @@ const NotinoDashboard: FC = () => {
 						label: t('loc:Počet'),
 						data: [
 							notino.data?.unpublishedPremiumSalons.premiumDisabledRs,
-							notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2c,
-							notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2b
+							notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2b,
+							notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2c
 						],
 						backgroundColor: ['#144896', '#2277F3', '#BBD6FE'],
 						borderRadius: 4
@@ -375,25 +376,38 @@ const NotinoDashboard: FC = () => {
 				{
 					label: t('loc:Premium bez RS'),
 					data: notino.data?.unpublishedPremiumSalons.premiumDisabledRs,
-					onClick: undefined, // TODO:
+					onClick: () =>
+						navigate({
+							pathname: t('paths:salons'),
+							search: formatObjToQuery(query)
+						}),
 					backgroundColor: '#144896'
 				},
 				{
 					label: t('loc:Premium s RS'),
 					data: notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2c,
-					onClick: undefined, // TODO:
+					onClick: () =>
+						navigate({
+							pathname: t('paths:salons'),
+							search: formatObjToQuery(query)
+						}),
 					backgroundColor: '#2277F3'
 				},
 				{
 					label: t('loc:Premium RS online'),
 					data: notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2b,
-					onClick: undefined, // TODO:
+					onClick: () =>
+						navigate({
+							pathname: t('paths:salons'),
+							search: formatObjToQuery(query)
+						}),
 					backgroundColor: '#BBD6FE'
 				}
 			],
 			options: optionsForPremiumSalonBar
 		}
 	}, [
+		navigate,
 		notino.data?.unpublishedPremiumSalons.premiumDisabledRs,
 		notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2b,
 		notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2c,
@@ -622,7 +636,7 @@ const NotinoDashboard: FC = () => {
 	const reservationsDashboard = (
 		<ReservationsDashboard>
 			{/* // RS stats */}
-			<Row className={'mt-12 gap-4'}>
+			<Row className={'gap-4'}>
 				{barContent(publishedPremiumSalonsData)}
 				{barContent(unpublishedPremiumSalonsData)}
 			</Row>

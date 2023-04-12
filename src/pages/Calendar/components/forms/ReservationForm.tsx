@@ -189,6 +189,7 @@ const ReservationForm: FC<Props> = (props) => {
 				firstName: values.firstName,
 				lastName: values.lastName,
 				salonID,
+				email: values.email,
 				phone: values.phone,
 				phonePrefixCountryCode: values.phonePrefixCountryCode,
 				profileImageID: (values?.avatar?.[0]?.id ?? values?.avatar?.[0]?.uid) || null
@@ -417,7 +418,6 @@ const ReservationForm: FC<Props> = (props) => {
 							optionLabelProp={'label'}
 							size={'large'}
 							update={(_itemKey: number, ref: any) => ref.blur()}
-							showSearch
 							required
 							className={'pb-0'}
 							labelInValue

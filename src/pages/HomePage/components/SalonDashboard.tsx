@@ -130,7 +130,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 											setSmsStatsDate(date)
 										}
 									}}
-									title={<h3>{t('loc:Spotreba SMS kreditu za obdobie')}</h3>}
+									title={<h3 className={'mb-0'}>{t('loc:Spotreba SMS kreditu za obdobie')}</h3>}
 									salonID={salonID}
 									selectedDate={smsStatsDate}
 									className={'mb-6 mt-10 pb-0'}

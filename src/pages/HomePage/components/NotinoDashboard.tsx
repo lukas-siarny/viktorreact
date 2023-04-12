@@ -1,13 +1,13 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { FC, useMemo, useEffect, useState } from 'react'
+import React, { FC, useMemo, useEffect, useState, useRef } from 'react'
 import { Spin, Row, Button, DatePicker, Empty } from 'antd'
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { useSelector, useDispatch } from 'react-redux'
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title } from 'chart.js'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title, BarElement } from 'chart.js'
 import dayjs, { Dayjs } from 'dayjs'
-import { Doughnut, Line } from 'react-chartjs-2'
+import { Doughnut, Line, Bar } from 'react-chartjs-2'
 import annotationPlugin from 'chartjs-plugin-annotation'
 import colors from 'tailwindcss/colors'
 import cx from 'classnames'
@@ -25,7 +25,7 @@ import { Columns, AlertData, DashboardData, TimeStats } from '../../../types/int
 
 // redux
 import { RootState } from '../../../reducers'
-import { getNotinoDashboard, INotinoDashboard, getSalonsAnnualStats, getSalonsMonthStats, getRsStats, getReservationStats } from '../../../reducers/dashboard/dashboardActions'
+import { getNotinoDashboard, INotinoDashboard, getSalonsAnnualStats, getSalonsMonthStats, getReservationStats } from '../../../reducers/dashboard/dashboardActions'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
@@ -33,9 +33,9 @@ import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron
 
 // utils
 import { DASHBOARD_TASB_KEYS, FILTER_PATHS, RESERVATIONS_STATS_TYPE, RS_STATS_TYPE, SALON_FILTER_STATES, SALONS_TIME_STATS_TYPE, STRINGS } from '../../../utils/enums'
-import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData, transformToRsStatsData, transformToReservationsStatsData } from './dashboardUtils'
+import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData, transformToReservationsStatsData } from './dashboardUtils'
 
-ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin)
+ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin, BarElement)
 
 const rsColumns = (labels: string[] = [], futureBreak = 0): Columns => {
 	return [
@@ -168,6 +168,18 @@ const salonColumns = (labels: string[] = [], futureBreak = 0): Columns => {
 		}
 	]
 }
+
+const barContent = (label: string, source: any, options: any) => {
+	return (
+		<div className='stastics-box py-4 px-6 md:py-8 md:px-12 statistics-box-wide'>
+			<div className='flex flex-wrap justify-between w-full'>
+				<h4>{label}</h4>
+				<Bar data={source} options={options} />
+			</div>
+		</div>
+	)
+}
+
 const doughnutContent = (label: string, source?: any[], onlyLegend?: boolean) => {
 	return (
 		<div className='stastics-box py-4 px-6 md:py-8 md:px-12 statistics-box-wide'>
@@ -260,20 +272,55 @@ const NotinoDashboard: FC = () => {
 	const [mothRsStatsDate, setMothRsStatsDate] = useState<Dayjs>(now)
 	const [monthReservationsStatsDate, setMonthReservationsStatsDate] = useState<Dayjs>(now)
 
-	const { notino, salonsAnnualStats, salonsMonthStats, rsStats, reservationsStats } = useSelector((state: RootState) => state.dashboard)
+	const { notino, salonsAnnualStats, salonsMonthStats, reservationsStats } = useSelector((state: RootState) => state.dashboard)
 	const { selectedSalon } = useSelector((state: RootState) => state.selectedSalon)
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	const navigate = useNavigate()
 	const [tabKey, setTabKey] = useState<DASHBOARD_TASB_KEYS>(DASHBOARD_TASB_KEYS.SALONS_STATE)
+	const data = {
+		labels: ['Prvy', 'Druhy', 'Treti'],
+		datasets: [
+			{
+				label: '369',
+				data: [902, 600, 223],
+				backgroundColor: ['#144896', '#2277F3', '#BBD6FE'],
+				borderRadius: 30
+			}
+		]
+	}
+	const options = {
+		title: {
+			display: true,
+			text: 'Bar Chart'
+		},
+
+		// The legend configuration
+		// legend: {
+		// 	display: true,
+		// 	position: 'top', // 'top', 'bottom', 'left', or 'right'
+		// 	align: 'center', // 'start', 'center', or 'end'
+		// 	labels: {
+		// 		fontColor: 'black',
+		// 		fontSize: 12
+		// 	}
+		// },
+		scales: {
+			x: {
+				display: false // hide the X axis
+			},
+			y: {
+				grid: {
+					color: '#E6E6E6' // set the color of the X axis grid lines
+				},
+				ticks: {
+					stepSize: 200 // set the X axis step size to 200
+				}
+				// Y axis options go here
+			}
+		}
+	}
 
 	useEffect(() => {
-		dispatch(
-			getRsStats({
-				countryCode: selectedCountry,
-				year: now.year(),
-				month: now.month() + 1
-			})
-		)
 		dispatch(
 			getReservationStats({
 				countryCode: selectedCountry,
@@ -294,10 +341,6 @@ const NotinoDashboard: FC = () => {
 	const monthStats: TimeStats = useMemo(() => {
 		return transformToStatsData(salonsMonthStats.data, salonsMonthStats.isLoading, salonsMonthStats.isFailure, monthStatsDate)
 	}, [salonsMonthStats, monthStatsDate])
-
-	const rsMonthStats: TimeStats = useMemo(() => {
-		return transformToRsStatsData(rsStats.data, rsStats.isLoading, rsStats.isFailure, mothRsStatsDate)
-	}, [rsStats.data, rsStats.isLoading, rsStats.isFailure, mothRsStatsDate])
 
 	const reservationsMonthStats: TimeStats = useMemo(() => {
 		return transformToReservationsStatsData(reservationsStats.data, reservationsStats.isLoading, reservationsStats.isFailure, monthReservationsStatsDate)
@@ -500,39 +543,40 @@ const NotinoDashboard: FC = () => {
 	const reservationsDashboard = (
 		<ReservationsDashboard>
 			{/* // RS stats */}
-			{lineContent(
-				t('loc:Vývoj salónov s rezervačným systémom - mesačný'),
-				rsMonthStats,
-				timeStatsFilter((date) => {
-					if (date) {
-						setMothRsStatsDate(date)
-						dispatch(
-							getRsStats({
-								year: Number(date.year()),
-								month: Number(date.month() + 1)
-							})
-						)
-					}
-				}, 'MMMM - YYYY'),
-				rsColumns(rsMonthStats.data?.labels, rsMonthStats.data?.breakIndex)
-			)}
-			{/* Reservations stats */}
-			{lineContent(
-				t('loc:Vývoj rezervácií - mesačný'),
-				reservationsMonthStats,
-				timeStatsFilter((date) => {
-					if (date) {
-						setMonthReservationsStatsDate(date)
-						dispatch(
-							getReservationStats({
-								year: Number(date.year()),
-								month: Number(date.month() + 1)
-							})
-						)
-					}
-				}, 'MMMM - YYYY'),
-				reservationsColumns(reservationsMonthStats.data?.labels, reservationsMonthStats.data?.breakIndex)
-			)}
+			<Row className={'mt-12'}>{barContent(t('loc:Publikované Premium salóny'), data, options)}</Row>
+			{/* {lineContent( */}
+			{/*	t('loc:Vývoj salónov s rezervačným systémom - mesačný'), */}
+			{/*	rsMonthStats, */}
+			{/*	timeStatsFilter((date) => { */}
+			{/*		if (date) { */}
+			{/*			setMothRsStatsDate(date) */}
+			{/*			dispatch( */}
+			{/*				getRsStats({ */}
+			{/*					year: Number(date.year()), */}
+			{/*					month: Number(date.month() + 1) */}
+			{/*				}) */}
+			{/*			) */}
+			{/*		} */}
+			{/*	}, 'MMMM - YYYY'), */}
+			{/*	rsColumns(rsMonthStats.data?.labels, rsMonthStats.data?.breakIndex) */}
+			{/* )} */}
+			{/* /!* Reservations stats *!/ */}
+			{/* {lineContent( */}
+			{/*	t('loc:Vývoj rezervácií - mesačný'), */}
+			{/*	reservationsMonthStats, */}
+			{/*	timeStatsFilter((date) => { */}
+			{/*		if (date) { */}
+			{/*			setMonthReservationsStatsDate(date) */}
+			{/*			dispatch( */}
+			{/*				getReservationStats({ */}
+			{/*					year: Number(date.year()), */}
+			{/*					month: Number(date.month() + 1) */}
+			{/*				}) */}
+			{/*			) */}
+			{/*		} */}
+			{/*	}, 'MMMM - YYYY'), */}
+			{/*	reservationsColumns(reservationsMonthStats.data?.labels, reservationsMonthStats.data?.breakIndex) */}
+			{/* )} */}
 		</ReservationsDashboard>
 	)
 	// if salon is not selected, show global (Notino) dashboard content

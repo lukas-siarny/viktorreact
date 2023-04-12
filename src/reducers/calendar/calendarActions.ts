@@ -18,7 +18,7 @@ import {
 } from '../../types/interfaces'
 
 // enums
-import { EVENTS, EVENT_DETAIL, MONTHLY_RESERVATIONS, SET_DAY_EVENTS, RESERVATIONS, SET_IS_REFRESHING_EVENTS } from './calendarTypes'
+import { EVENTS, EVENT_DETAIL, MONTHLY_RESERVATIONS, SET_DAY_EVENTS, RESERVATIONS, SET_IS_REFRESHING_EVENTS, PENDING_RESERVATIONS_COUNT } from './calendarTypes'
 import {
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_EVENTS_KEYS,
@@ -101,9 +101,19 @@ export type ICalendarActions =
 	| ISetIsRefreshingEvents
 	| ISetDayEvents
 	| IGetSalonReservations
+	| IGetPendingReservationsCount
 
 export interface ISalonReservationsPayload extends ISearchable<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200> {
 	tableData: ISalonReservationsTableData[]
+}
+
+export interface IPendingReservationsCount {
+	count: number
+}
+
+interface IGetPendingReservationsCount {
+	type: PENDING_RESERVATIONS_COUNT
+	payload: IPendingReservationsCount
 }
 
 interface IGetCalendarEvents {
@@ -614,6 +624,33 @@ export const getPaginatedReservations =
 			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}
+
+export const getPendingReservationsCount =
+	(salonID: string): ThunkResult<Promise<IPendingReservationsCount>> =>
+	async (dispatch) => {
+		let payload = {} as IPendingReservationsCount
+		try {
+			dispatch({ type: PENDING_RESERVATIONS_COUNT.PENDING_RESERVATIONS_COUNT_LOAD_START })
+
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/paginated', {
+				salonID,
+				limit: 1,
+				page: 1,
+				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
+				reservationStates: [RESERVATION_STATE.PENDING]
+			})
+			payload = {
+				count: data.pagination.totalCount
+			}
+			dispatch({ type: PENDING_RESERVATIONS_COUNT.PENDING_RESERVATIONS_COUNT_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: PENDING_RESERVATIONS_COUNT.PENDING_RESERVATIONS_COUNT_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}

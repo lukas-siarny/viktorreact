@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Col, Row, Tooltip } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,8 +20,6 @@ import {
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_VIEW,
-	DASHBOARD_TASB_KEYS,
-	DEFAULT_DATE_INIT_FORMAT,
 	DEFAULT_DATE_INPUT_FORMAT,
 	FORM,
 	PERMISSION,
@@ -39,7 +37,7 @@ import { getServices } from '../../reducers/services/serviceActions'
 
 // types
 import { Columns, IBreadcrumbs, IReservationsFilter, SalonSubPageProps } from '../../types/interfaces'
-import { getPaginatedReservations } from '../../reducers/calendar/calendarActions'
+import { getPaginatedReservations, getPendingReservationsCount } from '../../reducers/calendar/calendarActions'
 
 // hooks
 import useQueryParams, { ArrayParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
@@ -52,8 +50,10 @@ const ReservationsPage = (props: Props) => {
 	const dispatch = useDispatch()
 	const { salonID, parentPath } = props
 	const reservations = useSelector((state: RootState) => state.calendar.paginatedReservations)
+	const pendingReservationsCount = useSelector((state: RootState) => state.calendar.pendingReservationsCount.count)
 	const navigate = useNavigate()
 	const getPath = useCallback((pathSuffix: string) => `${parentPath}${pathSuffix}`, [parentPath])
+	const count = pendingReservationsCount > 0 ? `(${pendingReservationsCount})` : undefined
 
 	const [query, setQuery] = useQueryParams({
 		dateFrom: StringParam(),
@@ -118,6 +118,7 @@ const ReservationsPage = (props: Props) => {
 	])
 
 	useEffect(() => {
+		dispatch(getPendingReservationsCount(salonID))
 		dispatch(getServices({ salonID }))
 	}, [salonID, dispatch])
 
@@ -333,8 +334,7 @@ const ReservationsPage = (props: Props) => {
 			</Col>
 		</Row>
 	)
-	const pendingCount = 6 // TODO: z BE tahat
-	const count = pendingCount > 0 ? `(${pendingCount})` : undefined
+
 	return (
 		<>
 			<Row>

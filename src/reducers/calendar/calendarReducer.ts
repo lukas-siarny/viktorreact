@@ -1,8 +1,8 @@
 /* eslint-disable import/no-cycle */
 import { MONTHLY_RESERVATIONS_KEY, CALENDAR_EVENTS_KEYS } from '../../utils/enums'
-import { MONTHLY_RESERVATIONS, SET_DAY_EVENTS, EVENTS, EVENT_DETAIL, SET_IS_REFRESHING_EVENTS, RESERVATIONS } from './calendarTypes'
+import { MONTHLY_RESERVATIONS, SET_DAY_EVENTS, EVENTS, EVENT_DETAIL, SET_IS_REFRESHING_EVENTS, RESERVATIONS, PENDING_RESERVATIONS_COUNT } from './calendarTypes'
 import { RESET_STORE } from '../generalTypes'
-import { ICalendarActions, ISalonReservationsPayload } from './calendarActions'
+import { ICalendarActions, IPendingReservationsCount, ISalonReservationsPayload } from './calendarActions'
 import { ICalendarEventsPayload, ILoadingAndFailure, ICalendarEventDetailPayload, ICalendarDayEvents, ICalendarMonthlyReservationsPayload } from '../../types/interfaces'
 
 export const initState = {
@@ -38,7 +38,12 @@ export const initState = {
 		tableData: [],
 		isLoading: false,
 		isFailure: false
-	} as ISalonReservationsPayload & ILoadingAndFailure
+	} as ISalonReservationsPayload & ILoadingAndFailure,
+	pendingReservationsCount: {
+		count: 0,
+		isLoading: false,
+		isFailure: false
+	} as IPendingReservationsCount & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -174,6 +179,31 @@ export default (state = initState, action: ICalendarActions) => {
 					...initState.paginatedReservations,
 					data: action.payload.data,
 					tableData: action.payload.tableData
+				}
+			}
+		// Pending Reservations count
+		case PENDING_RESERVATIONS_COUNT.PENDING_RESERVATIONS_COUNT_LOAD_START:
+			return {
+				...state,
+				pendingReservationsCount: {
+					...state.pendingReservationsCount,
+					isLoading: true
+				}
+			}
+		case PENDING_RESERVATIONS_COUNT.PENDING_RESERVATIONS_COUNT_LOAD_FAIL:
+			return {
+				...state,
+				pendingReservationsCount: {
+					...initState.pendingReservationsCount,
+					isFailure: true
+				}
+			}
+		case PENDING_RESERVATIONS_COUNT.PENDING_RESERVATIONS_COUNT_LOAD_DONE:
+			return {
+				...state,
+				pendingReservationsCount: {
+					...initState.pendingReservationsCount,
+					count: action.payload.count
 				}
 			}
 		case RESET_STORE:

@@ -102,9 +102,18 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 					}
 			  ]
 			: null,
-		languageIDs: map(salonData.languages, (lng) => lng?.id).filter((lng) => lng !== undefined) as string[],
-		cosmeticIDs: map(salonData.cosmetics, (cosmetic) => cosmetic?.id).filter((cosmetic) => cosmetic !== undefined) as string[],
-		address: !!salonData.address || null,
+		cosmeticIDs: salonData.cosmetics?.reduce((acc, cosmetic) => {
+			if (cosmetic) {
+				return [...acc, cosmetic.id]
+			}
+			return acc
+		}, [] as string[]),
+		languageIDs: salonData.languages?.reduce((acc, lng) => {
+			if (lng) {
+				return [...acc, lng.id]
+			}
+			return acc
+		}, [] as string[]),
 		socialLinkWebPage: salonData.socialLinkWebPage || null,
 		socialLinkFB: salonData.socialLinkFB || null,
 		socialLinkInstagram: salonData.socialLinkInstagram || null,

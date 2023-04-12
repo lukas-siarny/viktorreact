@@ -43,6 +43,12 @@ export interface IPaginationQuery {
 	order?: string | null
 }
 
+export interface ILabelInValue<T = any, ExtraType = any> {
+	label?: string
+	value: T
+	key: string
+	extra?: ExtraType
+}
 export interface IResponsePagination {
 	limit: number
 	page: number
@@ -209,7 +215,6 @@ export interface ISalonForm {
 	locationNote: string | null
 	cosmeticIDs: string[]
 	languageIDs: string[]
-	address: boolean | null
 	deletedAt?: boolean
 }
 

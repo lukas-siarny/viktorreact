@@ -35,7 +35,7 @@ import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import { RootState } from '../../../reducers'
 
 // types
-import { NameLocalizationsItem } from '../../../types/interfaces'
+import { ILabelInValue, NameLocalizationsItem } from '../../../types/interfaces'
 
 type ComponentProps = {
 	deleteCategory: Function
@@ -53,7 +53,7 @@ export interface ICategoryForm {
 	nameLocalizations: NameLocalizationsItem[]
 	descriptionLocalizations: NameLocalizationsItem[]
 	image: any
-	categoryParameterID: string
+	categoryParameterID?: ILabelInValue
 }
 
 const fixLength100 = validationString(VALIDATION_MAX_LENGTH.LENGTH_100)
@@ -170,6 +170,7 @@ const CategoryForm: FC<Props> = (props) => {
 										name={'categoryParameterID'}
 										loading={categoriesParameters.isLoading}
 										allowClear
+										labelInValue
 									/>
 									<FieldArray
 										key='descriptionLocalizations'

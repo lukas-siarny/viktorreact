@@ -1382,18 +1382,6 @@ export const getEmployeeServiceDataForPatch = (values: IEmployeeServiceEditForm,
 	return employeePatchServiceData
 }
 
-// NOTE: treba dodrziat tento shape aby spravne fungoval isPristine selector pre selecty typu labelInValue (maju BE vyhladavanie)
-export const initializeLabelInValueSelect = (key: string | number, label: string, extra?: any, disabled?: boolean, title?: boolean) => {
-	return {
-		disabled,
-		title,
-		key,
-		value: key,
-		label,
-		extra
-	}
-}
-
 export const normalizeDataById = <T extends { id: string }>(data?: T[] | null): { [key: string]: T } => {
 	const normalizedData: { [key: string]: T } = {}
 	data?.forEach((item) => {

@@ -84,6 +84,7 @@ const CustomerForm: FC<Props> = (props) => {
 							/>
 						</div>
 					</div>
+					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
 					<PhoneWithPrefixField
 						label={'Telefón'}
 						placeholder={t('loc:Zadajte telefón')}

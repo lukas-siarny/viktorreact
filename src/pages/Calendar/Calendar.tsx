@@ -352,6 +352,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		 */
 		cancelEventsRequestOnDemand()
 		setQuery({ ...query, eventsViewType: newEventsViewType, sidebarView: undefined, eventId: undefined })
+		setTimeout(updateCalendarSize.current, CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE)
 	}
 
 	// fetch new events

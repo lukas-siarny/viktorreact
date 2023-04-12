@@ -61,8 +61,8 @@ import SpecialistContactsPage from '../pages/SpecialistContactsPage/SpecialistCo
 import ReviewsPage from '../pages/ReviewsPage/ReviewsPage'
 
 // SMS Credits
-import SmsUnitPricesPage from '../pages/SmsUnitPricesPage/SmsUnitPricesPage'
-import SmsUnitPricesDetailPage from '../pages/SmsUnitPricesPage/SmsUnitPricesDetailPage'
+import SmsCreditAdminPage from '../pages/SmsCreditAdminPage/SmsCreditAdminPage'
+import SmsUnitPricesDetailPage from '../pages/SmsCreditAdminPage/SmsUnitPricesDetailPage'
 
 // Cancel reservation page
 import CancelReservationPage from '../pages/CancelReservationPage/CancelReservationPage'
@@ -73,6 +73,7 @@ import AppInit from '../components/AppInit'
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 import ErrorBoundary from '../components/ErrorBoundary'
+import RechargeSmsCreditAdminPage from '../pages/SmsCreditAdminPage/RechargeSmsCreditAdminPage'
 
 const AppRoutes: FC = () => {
 	const [t] = useTranslation()
@@ -147,8 +148,9 @@ const AppRoutes: FC = () => {
 					<Route index element={<ReviewsPage />} />
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:sms-credits')} element={<AuthRoute layout={MainLayout} page={PAGE.SMS_CREDITS} />}>
-					<Route index element={<SmsUnitPricesPage />} />
+					<Route index element={<SmsCreditAdminPage />} />
 					<Route path={':countryCode'} element={<SmsUnitPricesDetailPage />} />
+					<Route path={t('paths:recharge')} element={<RechargeSmsCreditAdminPage />} />
 				</Route>
 				<Route path={'/403'} element={<AuthRoute layout={MainLayout} />}>
 					<Route index element={<ForbiddenPage />} />

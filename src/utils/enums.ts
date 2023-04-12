@@ -210,6 +210,7 @@ export enum FORM {
 	SMS_UNIT_PRICES_FILTER = 'SMS_UNIT_PRICES_FILTER',
 	SMS_HISTORY_FILTER = 'SMS_HISTORY_FILTER',
 	RECHARGE_SMS_CREDIT = 'RECHARGE_SMS_CREDIT',
+	RECHARGE_SMS_CREDIT_FILTER = 'RECHARGE_SMS_CREDIT_FILTER',
 	SALONS_REPORT = 'SALONS_REPORT'
 }
 
@@ -654,6 +655,8 @@ export const CREATE_BUTTON_ID = 'create-btn'
 
 export const SUBMIT_BUTTON_ID = 'submit-btn'
 
+export const RESET_BUTTON_ID = 'reset-btn'
+
 export const ADD_BUTTON_ID = 'add-btn'
 
 export const FILTER_BUTTON_ID = 'filter-btn'
@@ -971,6 +974,7 @@ export const getDayNameFromNumber = (day: number) => {
 			return null
 	}
 }
+
 /**
  * @returns localized texts for Sentry report dialog and common EN texts for result view
  */

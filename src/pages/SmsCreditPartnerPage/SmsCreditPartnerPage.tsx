@@ -31,7 +31,7 @@ import SmsTimeStats from '../../components/Dashboards/SmsTimeStats'
 import Alert from '../../components/Dashboards/Alert'
 
 // redux
-import { getSmsHistory } from '../../reducers/sms/smsActions'
+import { getSmsHistory, getSmsTimeStatsForSalon } from '../../reducers/sms/smsActions'
 
 // hooks
 import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
@@ -45,6 +45,7 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
+	const smsTimeStats = useSelector((state: RootState) => state.sms.timeStats)
 	const smsHistory = useSelector((state: RootState) => state.sms.history)
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const walletID = selectedSalon?.data?.wallet?.id
@@ -79,6 +80,12 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	useEffect(() => {
 		dispatch(initialize(FORM.SMS_HISTORY_FILTER, { search: query.search }))
 	}, [query.search, dispatch])
+
+	useEffect(() => {
+		if (salonID) {
+			dispatch(getSmsTimeStatsForSalon(salonID, validSelectedDate.year(), validSelectedDate.month() + 1))
+		}
+	}, [dispatch, salonID, validSelectedDate])
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -131,9 +138,9 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 									})
 								}
 							}}
-							salonID={salonID}
 							selectedDate={validSelectedDate}
 							className={'mb-6 pb-0'}
+							smsTimeStats={smsTimeStats}
 						/>
 						<SmsHistory smsHistory={smsHistory} query={query} setQuery={setQuery} />
 					</>

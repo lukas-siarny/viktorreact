@@ -147,7 +147,6 @@ const EventForm: FC<Props> = (props) => {
 							className={'pb-0'}
 							labelInValue
 							disabled={eventId} // NOTE: ak je detail tak sa neda menit zamestnanec
-							hasExtra
 						/>
 						<Field
 							name={'date'}

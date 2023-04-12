@@ -10,7 +10,15 @@ import { IQueryParams, ISearchable } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { SALON_FILTER_OPENING_HOURS, SALON_FILTER_RS, SALON_FILTER_RS_AVAILABLE_ONLINE, SALON_FILTER_STATES, SALONS_TAB_KEYS } from '../../utils/enums'
+import {
+	SALON_CREATE_TYPE,
+	SALON_FILTER_OPENING_HOURS,
+	SALON_FILTER_STATES,
+	SALON_FILTER_RS,
+	SALON_FILTER_RS_AVAILABLE_ONLINE,
+	SALON_SOURCE_TYPE,
+	SALONS_TAB_KEYS
+} from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
 export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGetBasictSalon | IGetBasicSalons | IGetSalonHistory | IGetRejectedSuggestions
@@ -111,8 +119,28 @@ interface IGetRejectedSuggestions {
 	payload: IRejectedSuggestionsPayload
 }
 
+interface GetSalonsQueryParams extends IQueryParams {
+	categoryFirstLevelIDs?: string[]
+	statuses_all?: boolean
+	statuses_published?: SALON_FILTER_STATES.PUBLISHED | SALON_FILTER_STATES.NOT_PUBLISHED
+	statuses_changes?: SALON_FILTER_STATES.PENDING_PUBLICATION | SALON_FILTER_STATES.DECLINED
+	salonState?: SALONS_TAB_KEYS.DELETED | SALONS_TAB_KEYS.ACTIVE
+	countryCode?: string
+	createType?: SALON_CREATE_TYPE
+	lastUpdatedAtFrom?: string
+	lastUpdatedAtTo?: string
+	hasSetOpeningHours?: SALON_FILTER_OPENING_HOURS
+	sourceType?: SALON_SOURCE_TYPE
+	premiumSourceUserType?: SALON_SOURCE_TYPE
+	assignedUserID?: string
+	walletAvailableBalanceFrom?: number
+	walletAvailableBalanceTo?: number
+	hasAvailableReservationSystem?: SALON_FILTER_RS_AVAILABLE_ONLINE
+	enabledReservationsSetting?: SALON_FILTER_RS
+}
+
 export const getSalons =
-	(queryParams: any): ThunkResult<Promise<ISalonsPayload>> =>
+	(queryParams: GetSalonsQueryParams): ThunkResult<Promise<ISalonsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISalonsPayload
 
@@ -172,7 +200,9 @@ export const getSalons =
 			premiumSourceUserType: queryParams.premiumSourceUserType,
 			assignedUserID: queryParams.assignedUserID,
 			enabledReservationsSetting,
-			hasAvailableReservationSystem
+			hasAvailableReservationSystem,
+			walletAvailableBalanceFrom: queryParams.walletAvailableBalanceFrom,
+			walletAvailableBalanceTo: queryParams.walletAvailableBalanceTo
 		}
 
 		try {

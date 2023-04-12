@@ -65,7 +65,7 @@ export const getSmsStats =
 		return payload
 	}
 
-export const getSmsTimeStats =
+export const getSmsTimeStatsForSalon =
 	(salonID: string, year: number, month: number): ThunkResult<Promise<ISmsTimeStatsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISmsTimeStatsPayload
@@ -73,6 +73,28 @@ export const getSmsTimeStats =
 			dispatch({ type: SMS_TIME_STATS.SMS_TIME_STATS_LOAD_START })
 
 			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/notifications/sms/time-stats', { salonID, year, month })
+
+			payload = {
+				data
+			}
+
+			dispatch({ type: SMS_TIME_STATS.SMS_TIME_STATS_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: SMS_TIME_STATS.SMS_TIME_STATS_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+		return payload
+	}
+
+export const getSmsTimeStatsForCountry =
+	(countryCode: string, year: number, month: number): ThunkResult<Promise<ISmsTimeStatsPayload>> =>
+	async (dispatch) => {
+		let payload = {} as ISmsTimeStatsPayload
+		try {
+			dispatch({ type: SMS_TIME_STATS.SMS_TIME_STATS_LOAD_START })
+
+			const { data } = await getReq('/api/b2b/admin/notino-dashboard/sms-time-stats', { countryCode, year, month })
 
 			payload = {
 				data

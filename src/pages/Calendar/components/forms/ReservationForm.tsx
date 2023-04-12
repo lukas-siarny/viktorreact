@@ -380,7 +380,6 @@ const ReservationForm: FC<Props> = (props) => {
 							required
 							labelInValue
 							onChange={onChangeService}
-							hasExtra
 						/>
 						<Field
 							name={'date'}
@@ -422,7 +421,6 @@ const ReservationForm: FC<Props> = (props) => {
 							className={'pb-0'}
 							labelInValue
 							onChange={onChangeEmployee}
-							hasExtra
 						/>
 						<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 					</Form>

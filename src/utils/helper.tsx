@@ -81,6 +81,7 @@ import {
 	IPrice,
 	ISelectOptionItem,
 	IStructuredAddress,
+	NameLocalizationsItem,
 	ServicePatchBody,
 	ServicePriceAndDurationData
 } from '../types/interfaces'
@@ -760,23 +761,18 @@ export const checkFiltersSizeWithoutSearch = (formValues: any) => size(filter(fo
 
 export const checkFiltersSize = (formValues: any) => size(filter(formValues, (value) => !isNil(value) || !isEmpty(value)))
 
-type NameLocalizationsItem = {
-	language: string
-	value?: string | null
-}
-
 /**
  * add default language to the first position
  * or
  * move default language to the first position
  */
-export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsItem[]) => {
-	return Object.keys(LOCALES)
-		.sort((a: string, b: string) => {
-			if (a === DEFAULT_LANGUAGE) {
+export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsItem[], languages: string[] = Object.keys(LOCALES), defaultLanguage: string = DEFAULT_LANGUAGE) => {
+	return languages
+		.sort((a, b) => {
+			if (a === defaultLanguage) {
 				return -1
 			}
-			return b === DEFAULT_LANGUAGE ? 1 : 0
+			return b === defaultLanguage ? 1 : 0
 		})
 		.map((language) => {
 			const value = nameLocalizations.find((localization) => localization.language === language)

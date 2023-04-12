@@ -100,7 +100,7 @@ const AppRoutes: FC = () => {
 					<Route path={t('paths:cancel-reservation')} element={<CancelReservationPage />} />
 				</Route>
 				{/* // Private Routes */}
-				<Route errorElement={<ErrorBoundary />} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.HOME} />}>
+				<Route errorElement={<ErrorBoundary />} element={<AuthRoute layout={MainLayout} page={PAGE.HOME} />}>
 					<Route index element={<HomePage />} />
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:users')} element={<AuthRoute layout={MainLayout} page={PAGE.USERS} />}>

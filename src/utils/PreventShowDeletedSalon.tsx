@@ -2,7 +2,7 @@ import React, { FC, PropsWithChildren, ReactElement } from 'react'
 import { useSelector } from 'react-redux'
 import { Button, Result } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { isEmpty, isNil } from 'lodash'
+import { isNil } from 'lodash'
 import { useNavigate } from 'react-router-dom'
 
 // types

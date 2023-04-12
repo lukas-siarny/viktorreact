@@ -68,10 +68,11 @@ const SmsTimeStats = (props: Props) => {
 					<DatePicker
 						onChange={onPickerChange}
 						picker={'month'}
-						size={countryPicker ? 'middle' : 'small'}
+						size={'middle'}
 						defaultValue={dayjs()}
 						allowClear={false}
 						format={MONTH_NAME_YEAR_FORMAT}
+						dropdownAlign={{ points: ['tr', 'br'] }}
 						disabledDate={(date) => dayjs(date).year() < 2022}
 					/>
 				</div>

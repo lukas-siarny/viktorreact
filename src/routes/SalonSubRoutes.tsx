@@ -53,8 +53,8 @@ import ReservationsSettingsPage from '../pages/ReservationsSettingsPage/Reservat
 import ReservationsPage from '../pages/ReservationsPage/ReservationsPage'
 
 // SMS credit
-import SmsCreditPage from '../pages/SmsCreditPage/SmsCreditPage'
-import RechargeSmsCreditPage from '../pages/SmsCreditPage/RechargeSmsCreditPage'
+import SmsCreditPartnerPage from '../pages/SmsCreditPartnerPage/SmsCreditPartnerPage'
+import RechargeSmsCreditPage from '../pages/SmsCreditPartnerPage/RechargeSmsCreditPartnerPage'
 
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
@@ -177,7 +177,7 @@ const SalonSubRoutes: FC = () => {
 				<Route index element={<ReservationsSettingsPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			<Route errorElement={<ErrorBoundary />} path={t('paths:sms-credit')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.SMS_CREDIT} />}>
-				<Route index element={<SmsCreditPage parentPath={parentPath} salonID={salonID} />} />
+				<Route index element={<SmsCreditPartnerPage parentPath={parentPath} salonID={salonID} />} />
 				<Route path={t('paths:recharge')} element={<RechargeSmsCreditPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* 404 */}

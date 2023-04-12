@@ -43,6 +43,12 @@ export interface IPaginationQuery {
 	order?: string | null
 }
 
+export interface ILabelInValue<T = any, ExtraType = any> {
+	label?: string
+	value: T
+	key: string
+	extra?: ExtraType
+}
 export interface IResponsePagination {
 	limit: number
 	page: number
@@ -209,7 +215,6 @@ export interface ISalonForm {
 	locationNote: string | null
 	cosmeticIDs: string[]
 	languageIDs: string[]
-	address: boolean | null
 	deletedAt?: boolean
 }
 
@@ -242,6 +247,7 @@ export interface IServiceForm {
 		enabledB2cReservations: boolean
 		autoApproveReservations: boolean
 	}
+	descriptionLocalizations: NameLocalizationsItem[]
 }
 
 export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
@@ -488,6 +494,15 @@ export interface ISmsUnitPricesFilter {
 	search: string
 }
 
+export interface IRechargeSmsCreditFilter {
+	search?: string
+	countryCode: string
+	sourceType?: string
+	walletAvailableBalanceFrom?: number
+	walletAvailableBalanceTo?: number
+}
+
+
 export interface ISmsHistoryFilter {
 	search: string
 }
@@ -653,7 +668,7 @@ export interface IReservationSystemSettingsForm {
 
 export type NameLocalizationsItem = {
 	language: string
-	value: string
+	value: string | null
 }
 
 export type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdCategories.RequestBody

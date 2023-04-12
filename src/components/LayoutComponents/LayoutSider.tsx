@@ -410,7 +410,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			breakpoint='md'
 			collapsedWidth={56}
 			width={230}
-			trigger={<ChevronRightIcon style={{ transform: !collapsed ? 'rotate(180deg)' : undefined, width: 12, height: 12 }} />}
+			trigger={<ChevronRightIcon style={{ transform: !collapsed ? 'rotate(180deg)' : undefined, width: 12, height: 12, color: '#000' }} />}
 			collapsible
 			collapsed={collapsed}
 			onCollapse={(isCollapsed, type) => {

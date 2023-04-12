@@ -216,7 +216,7 @@ const doughnutContent = (label: string, source?: any[], onlyLegend?: boolean) =>
 const lineContent = (label: string, source: TimeStats, filter: React.ReactNode | JSX.Element, columns: any) => {
 	return (
 		<div className='stastics-box py-4 px-6 md:py-8 md:px-12 mt-12'>
-			<div className='flex flex-wrap justify-between w-full'>
+			<div className='flex justify-between w-full items-center gap-2'>
 				<h4>{label}</h4>
 				{filter}
 			</div>
@@ -424,17 +424,18 @@ const NotinoDashboard: FC = () => {
 			alertData: [],
 			graphData: emptyGraphData
 		} as DashboardData
-	}, [notino, t])
+	}, [notino, t, navigate])
 
 	const timeStatsFilter = (handleChange: (date: Dayjs | null, dateString: string) => void, dateFormat?: string) => (
 		<DatePicker
 			onChange={(date, dateString) => handleChange(date, dateString)}
 			picker={dateFormat ? 'month' : 'year'}
-			size='small'
+			size={'middle'}
 			defaultValue={now}
 			allowClear={false}
 			format={dateFormat}
 			disabledDate={(date) => dayjs(date).year() < 2022}
+			dropdownAlign={{ points: ['tr', 'br'] }}
 			getPopupContainer={(node) => node.parentElement || document.body}
 		/>
 	)

@@ -189,7 +189,10 @@ export const NumberParam = (value?: number | null): ParamType => {
  * { foo: undefined } => odstrani queryParam foo z URL
  * { foo: '' } || { foo: [] } || { foo: null } => &foo=
  */
-const useQueryParams = (queryParamsInitial?: IUseQueryParamsInitial, config: NavigateOptions = { replace: true }): [IUseQueryParams, (newValues: IUseQueryParams) => void] => {
+const useQueryParams = (
+	queryParamsInitial?: IUseQueryParamsInitial,
+	globalConfig: NavigateOptions = { replace: true }
+): [IUseQueryParams, (newValues: IUseQueryParams, config?: NavigateOptions) => void] => {
 	// prekonvertujeme initial objekt (ktory obsahuje informacie o type query parametru - Array x String) do jednoduchsieho objektu key:value vhodneho pre useSearchParams hook
 	const intialValuesForSearchParams = reduceInitialParams(serializeInitialParams(queryParamsInitial))
 	const [searchParams, setSearchParams] = useSearchParams(intialValuesForSearchParams)
@@ -203,12 +206,12 @@ const useQueryParams = (queryParamsInitial?: IUseQueryParamsInitial, config: Nav
 	const onDemand = useRef(false)
 
 	const setQueryParams = useCallback(
-		(newValues?: IUseQueryParams) => {
+		(newValues?: IUseQueryParams, config?: NavigateOptions) => {
 			onDemand.current = true
-			setSearchParams(serializeParams(newValues), config)
+			setSearchParams(serializeParams(newValues), config || globalConfig)
 			setQuery(newValues)
 		},
-		[setSearchParams, config]
+		[setSearchParams, globalConfig]
 	)
 
 	useEffect(() => {

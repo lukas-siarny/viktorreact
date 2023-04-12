@@ -47,7 +47,9 @@ const InputNumberField = (props: Props) => {
 		notNullValue = false,
 		onPressEnter,
 		readOnly,
-		stringMode
+		stringMode,
+		prefix,
+		formatter
 	} = props
 
 	const maxCharsParser = (displayValue: string | undefined): string => {
@@ -119,6 +121,8 @@ const InputNumberField = (props: Props) => {
 				onPressEnter={onPressEnterWrap}
 				onChange={input.onChange}
 				stringMode={stringMode}
+				prefix={prefix}
+				formatter={formatter}
 			/>
 		</Item>
 	)

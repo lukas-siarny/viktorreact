@@ -3,8 +3,8 @@ import i18next from 'i18next'
 import { isNil } from 'lodash'
 
 // types
-import { IRechargeSmsCreditForm } from '../../../types/interfaces'
-import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { IRechargeSmsCreditForm } from '../../types/interfaces'
+import { VALIDATION_MAX_LENGTH } from '../../utils/enums'
 
 export default (values: IRechargeSmsCreditForm) => {
 	const errors: FormErrors<IRechargeSmsCreditForm> = {}

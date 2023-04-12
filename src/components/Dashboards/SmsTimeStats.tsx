@@ -71,16 +71,17 @@ const SmsTimeStats = (props: Props) => {
 
 	return (
 		<div className={cx('sms-staticis-wrapper', className)}>
-			<div className={'flex justify-between items-center'}>
-				{title || <h2>{t('loc:Prehľad')}</h2>}
+			<div className={'flex justify-between items-center mb-4'}>
+				{title || <h2 className={'mb-0'}>{t('loc:Prehľad')}</h2>}
 				<DatePicker
 					onChange={onPickerChange}
 					picker={'month'}
-					size='small'
+					size={'middle'}
 					defaultValue={dayjs()}
 					allowClear={false}
 					format={MONTH_NAME_YEAR_FORMAT}
 					getPopupContainer={(node) => node.parentElement || document.body}
+					dropdownAlign={{ points: ['tr', 'br'] }}
 					disabledDate={(date) => dayjs(date).year() < 2022}
 				/>
 			</div>

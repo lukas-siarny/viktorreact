@@ -407,6 +407,7 @@
   "Salón bol skrytý z dôvodu": "A szalon el van rejtve, mert",
   "Salón bol vymazaný": "A szalon törölve lett",
   "Salón bol zamietnutý z dôvodu": "A szalon vissza lett utasítva, mert",
+  "Salón nemá zprístupnený kreditný systém": "_NEPRELOZENE_",
   "Salón čaká na schválenie zmien. Údaje salónu, po túto dobu nie je možné editovať.": "A szalon jóváhagyásra vár, jelenleg nem szerkesztheti.",
   "Salóny": "Szalonok",
   "Salóny so zapnutým rezervačným systémom pre {{ type }}": "_NEPRELOZENE_",

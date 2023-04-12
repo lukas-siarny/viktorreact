@@ -50,7 +50,7 @@ const SmsCreditAdiminPage = () => {
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 
 	const [smsStatsDate, setSmsStatsDate] = useState(dayjs())
-	const [smsStatsCountryCode, setSmsStatsCountryCode] = useState(selectedCountry || LOCALES[i18next.language as LANGUAGE]?.countryCode)
+	const [smsStatsCountryCode, setSmsStatsCountryCode] = useState(selectedCountry || LOCALES[LANGUAGE.CZ].countryCode)
 
 	const [query, setQuery] = useState({
 		search: '',

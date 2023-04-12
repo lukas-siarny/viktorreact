@@ -2,14 +2,13 @@ import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import { compose } from 'redux'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Button, Divider, Row, Spin, TablePaginationConfig } from 'antd'
+import { Button, Divider, Row, RowProps, Spin, TablePaginationConfig, Tooltip } from 'antd'
 import { SorterResult } from 'antd/es/table/interface'
 import { ColumnProps } from 'antd/es/table'
 import { initialize } from 'redux-form'
 import { isEmpty } from 'lodash'
 import queryString from 'query-string'
 import { useNavigate } from 'react-router'
-import i18next from 'i18next'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -73,7 +72,7 @@ const RechargeSmsCreditAdminPage = () => {
 		limit: NumberParam(50),
 		page: NumberParam(1),
 		search: StringParam(),
-		countryCode: StringParam(defaultSelectedCountryCode || LOCALES[i18next.language as LANGUAGE]?.countryCode),
+		countryCode: StringParam(defaultSelectedCountryCode || LOCALES[LANGUAGE.CZ].countryCode),
 		sourceType: StringParam(),
 		walletAvailableBalanceFrom: NumberParam(),
 		walletAvailableBalanceTo: NumberParam(),
@@ -89,9 +88,7 @@ const RechargeSmsCreditAdminPage = () => {
 	const selectedRowKeys: React.Key[] = useMemo(() => getSelectedKeys(selectedRows), [selectedRows])
 
 	const [parentBackUrl] = useBackUrl(t('paths:sms-credits'))
-	const backUrl = `${t('paths:sms-credits')}/${t('paths:recharge')}?${queryString.stringify(serializeParams({ ...query, showForm: false }))}`
-
-	// console.log({ query, backUrl })
+	const backUrl = `${t('paths:sms-credits')}/${t('paths:recharge')}?${queryString.stringify(serializeParams({ ...query, showForm: false, page: 1 }))}`
 
 	const loading = salons?.isLoading || smsUnitPricesActual?.isLoading
 
@@ -221,6 +218,7 @@ const RechargeSmsCreditAdminPage = () => {
 		} else {
 			newRows = newSelectedRows.map((row) => ({ id: row.id, wallet: row.wallet }))
 		}
+
 		setSelectedRows({ ...selectedRows, [query.page]: newRows })
 	}
 
@@ -294,11 +292,13 @@ const RechargeSmsCreditAdminPage = () => {
 						<Divider className={'my-4'} />
 						<RechargeSmsCreditFilter
 							onSubmit={(values: IRechargeSmsCreditFilter) => {
+								setSelectedRows({})
 								setQuery({ ...query, ...values })
 							}}
-							onResetFilter={() =>
+							onResetFilter={() => {
+								setSelectedRows({})
 								setQuery({ ...query, search: undefined, sourceType: undefined, walletAvailableBalanceFrom: undefined, walletAvailableBalanceTo: undefined })
-							}
+							}}
 							countries={countries}
 							currency={currency}
 							loading={smsUnitPricesActual?.isLoading}
@@ -315,7 +315,13 @@ const RechargeSmsCreditAdminPage = () => {
 									onChange: onSelectChange,
 									getCheckboxProps: (record) => ({
 										disabled: (!selectedRowKeys.includes(record.id) && selectedRowKeys.length >= SELECTION_LIMIT) || !record.wallet?.id
-									})
+									}),
+									renderCell: (_value: boolean, record: TableDataItem, _index: number, originNode: React.ReactNode) => {
+										if (record.wallet?.id) {
+											return originNode
+										}
+										return <Tooltip title={t('loc:Salón nemá zprístupnený kreditný systém')}>{originNode}</Tooltip>
+									}
 								}}
 								twoToneRows
 								rowKey={'id'}

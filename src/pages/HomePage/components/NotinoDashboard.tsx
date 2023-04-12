@@ -1,13 +1,13 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { FC, useMemo, useEffect, useState, useRef } from 'react'
-import { Spin, Row, Button, DatePicker, Empty } from 'antd'
+import React, { FC, useEffect, useMemo, useState } from 'react'
+import { Button, DatePicker, Empty, Row, Spin } from 'antd'
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
-import { useSelector, useDispatch } from 'react-redux'
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title, BarElement } from 'chart.js'
+import { useDispatch, useSelector } from 'react-redux'
+import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js'
 import dayjs, { Dayjs } from 'dayjs'
-import { Doughnut, Line, Bar } from 'react-chartjs-2'
+import { Bar, Doughnut, Line } from 'react-chartjs-2'
 import annotationPlugin from 'chartjs-plugin-annotation'
 import colors from 'tailwindcss/colors'
 import cx from 'classnames'
@@ -21,103 +21,82 @@ import TabsComponent from '../../../components/TabsComponent'
 import ReservationsDashboard from './ReservationsDashboard'
 
 // types
-import { Columns, AlertData, DashboardData, TimeStats } from '../../../types/interfaces'
+import { AlertData, Columns, DashboardData, TimeStats } from '../../../types/interfaces'
 
 // redux
 import { RootState } from '../../../reducers'
-import { getNotinoDashboard, INotinoDashboard, getSalonsAnnualStats, getSalonsMonthStats, getReservationStats } from '../../../reducers/dashboard/dashboardActions'
+import { getNotinoDashboard, getReservationStats, getSalonsAnnualStats, getSalonsMonthStats, INotinoDashboard } from '../../../reducers/dashboard/dashboardActions'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
 // utils
-import { DASHBOARD_TASB_KEYS, FILTER_PATHS, RESERVATIONS_STATS_TYPE, RS_STATS_TYPE, SALON_FILTER_STATES, SALONS_TIME_STATS_TYPE, STRINGS } from '../../../utils/enums'
-import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData, transformToReservationsStatsData } from './dashboardUtils'
+import {
+	CALENDAR_DATE_FORMAT,
+	CALENDAR_EVENT_TYPE,
+	CALENDAR_EVENTS_VIEW_TYPE,
+	CALENDAR_VIEW,
+	DASHBOARD_TASB_KEYS,
+	DEFAULT_DATE_INPUT_FORMAT,
+	FILTER_PATHS,
+	SALON_CREATE_TYPE,
+	SALON_FILTER_STATES,
+	SALONS_TAB_KEYS,
+	SALONS_TIME_STATS_TYPE,
+	STRINGS
+} from '../../../utils/enums'
+import { doughnutOptions, getFilterRanges, lineOptions, transformToStatsData } from './dashboardUtils'
+import { formatObjToQuery } from '../../../utils/helper'
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin, BarElement)
 
-const rsColumns = (labels: string[] = [], futureBreak = 0): Columns => {
-	return [
-		{
-			key: 'type',
-			dataIndex: 'type',
-			render: (value) => {
-				switch (value) {
-					case RS_STATS_TYPE.ENABLE_RS_B2B:
-						return (
-							<div className={'flex flex-1 items-center'}>
-								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[200], flex: '0 0 auto' }} />
-								<span className='xs-bold'>{i18next.t('loc:Zapnutý Rezervačný systém pre B2B')}</span>
-							</div>
-						)
-					case RS_STATS_TYPE.ENABLE_RS_B2C:
-						return (
-							<div className={'flex flex-1 items-center'}>
-								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[700], flex: '0 0 auto' }} />
-								<span className='xs-bold'>{i18next.t('loc:Zapnutý rezervačný systém pre B2C')}</span>
-							</div>
-						)
-					default:
-						return ''
-				}
-			}
-		},
-		...labels.map((label: string, index: number) => {
-			return {
-				key: index,
-				dataIndex: index,
-				className: cx({ 'future-divider': futureBreak - 0.5 === index }), // 0.5 is delta for display devider between columns
-				title: <span className={cx('xs-semibold', { 'text-notino-gray': futureBreak <= index })}>{label}</span>,
-				render: (value: number) => <span className={cx('xs-regular', { 'text-notino-gray': futureBreak <= index })}>{value}</span>
-			}
-		})
-	]
-}
-const reservationsColumns = (labels: string[] = [], futureBreak = 0): Columns => {
-	return [
-		{
-			key: 'type',
-			dataIndex: 'type',
-			render: (value) => {
-				switch (value) {
-					case RESERVATIONS_STATS_TYPE.NEW_RS_B2B:
-						return (
-							<div className={'flex flex-1 items-center'}>
-								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[200], flex: '0 0 auto' }} />
-								<span className='xs-bold'>{i18next.t('loc:Rezervácie vytvorené v B2B')}</span>
-							</div>
-						)
-					case RESERVATIONS_STATS_TYPE.NEW_RS_B2C:
-						return (
-							<div className={'flex flex-1 items-center'}>
-								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[700], flex: '0 0 auto' }} />
-								<span className='xs-bold'>{i18next.t('loc:Rezervácie vytvorené v B2C')}</span>
-							</div>
-						)
-					default:
-						return ''
-				}
-			}
-		},
-		...labels.map((label: string, index: number) => {
-			return {
-				key: index,
-				dataIndex: index,
-				className: cx({ 'future-divider': futureBreak - 0.5 === index }), // 0.5 is delta for display devider between columns
-				title: <span className={cx('xs-semibold', { 'text-notino-gray': futureBreak <= index })}>{label}</span>,
-				render: (value: number) => <span className={cx('xs-regular', { 'text-notino-gray': futureBreak <= index })}>{value}</span>
-			}
-		}),
-		{
-			key: 'summary',
-			dataIndex: 'summary',
-			title: () => <span className='xs-semibold'>{i18next.t('loc:Súčet')}</span>,
-			render: (value) => <span className='xs-regular'>{value}</span>,
-			align: 'center'
-		}
-	]
-}
+// NOTE:  necham zakomentovane este nejaky cas ak by sa rozhodli ho vratit kedze ten PO sa vyjadril ze nech sa da prec a ak by niekomu chybal tak sa vrati
+// const reservationsColumns = (labels: string[] = [], futureBreak = 0): Columns => {
+// 	return [
+// 		{
+// 			key: 'type',
+// 			dataIndex: 'type',
+// 			render: (value) => {
+// 				switch (value) {
+// 					case RESERVATIONS_STATS_TYPE.NEW_RS_B2B:
+// 						return (
+// 							<div className={'flex flex-1 items-center'}>
+// 								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[200], flex: '0 0 auto' }} />
+// 								<span className='xs-bold'>{i18next.t('loc:Rezervácie vytvorené v B2B')}</span>
+// 							</div>
+// 						)
+// 					case RESERVATIONS_STATS_TYPE.NEW_RS_B2C:
+// 						return (
+// 							<div className={'flex flex-1 items-center'}>
+// 								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[700], flex: '0 0 auto' }} />
+// 								<span className='xs-bold'>{i18next.t('loc:Rezervácie vytvorené v B2C')}</span>
+// 							</div>
+// 						)
+// 					default:
+// 						return ''
+// 				}
+// 			}
+// 		},
+// 		...labels.map((label: string, index: number) => {
+// 			return {
+// 				key: index,
+// 				dataIndex: index,
+// 				className: cx({ 'future-divider': futureBreak - 0.5 === index }), // 0.5 is delta for display devider between columns
+// 				title: <span className={cx('xs-semibold', { 'text-notino-gray': futureBreak <= index })}>{label}</span>,
+// 				render: (value: number) => <span className={cx('xs-regular', { 'text-notino-gray': futureBreak <= index })}>{value}</span>
+// 			}
+// 		}),
+// 		{
+// 			key: 'summary',
+// 			dataIndex: 'summary',
+// 			title: () => <span className='xs-semibold'>{i18next.t('loc:Súčet')}</span>,
+// 			render: (value) => <span className='xs-regular'>{value}</span>,
+// 			align: 'center'
+// 		}
+// 	]
+// }
+
 const salonColumns = (labels: string[] = [], futureBreak = 0): Columns => {
 	return [
 		{
@@ -169,12 +148,30 @@ const salonColumns = (labels: string[] = [], futureBreak = 0): Columns => {
 	]
 }
 
-const barContent = (label: string, source: any, options: any) => {
+const barContent = (data: any) => {
 	return (
 		<div className='stastics-box py-4 px-6 md:py-8 md:px-12 statistics-box-wide'>
 			<div className='flex flex-wrap justify-between w-full'>
-				<h4>{label}</h4>
-				<Bar data={source} options={options} />
+				<h4>{data.title}</h4>
+			</div>
+			<div className='flex flex-wrap justify-between w-full mt-4'>
+				<div className='w-2/5 mr-4 3xl:w-12/25 flex items-center'>
+					<Bar height={200} data={data.data} options={data.options} />
+				</div>
+				<div className='flex flex-1 items-center'>
+					<div className='w-full flex flex-col gap-4'>
+						{data.legend.map((item: any, index: number) => (
+							<div key={index} className='flex items-center w-full h-6 cursor-pointer' onClick={item.onClick}>
+								<div className={'flex flex-1 items-center legend-row'}>
+									<div className='h-6 w-6 rounded-full mr-4 stats-circle' style={{ backgroundColor: item.backgroundColor }} />
+									<span className='base-semibold mr-3 leading-4'>{item.data}</span>
+									<span className='text-sm'>{item.label}</span>
+								</div>
+								<ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
+							</div>
+						))}
+					</div>
+				</div>
 			</div>
 		</div>
 	)
@@ -261,6 +258,30 @@ const lineContent = (label: string, source: TimeStats, filter: React.ReactNode |
 		</div>
 	)
 }
+const optionsForPremiumSalonBar = {
+	plugins: {
+		tooltip: {
+			backgroundColor: '#FFFFFF',
+			titleColor: '#111827',
+			bodyColor: '#404040',
+			cornerRadius: 4
+		}
+	},
+	scales: {
+		x: {
+			display: false // hide the X axis
+		},
+		y: {
+			grid: {
+				color: '#E6E6E6' // set the color of the X axis grid lines
+			},
+			ticks: {
+				stepSize: 10 // set the X axis step size to 200
+			}
+		}
+	},
+	responsive: true
+}
 
 const now = dayjs()
 
@@ -269,56 +290,115 @@ const NotinoDashboard: FC = () => {
 	const dispatch = useDispatch()
 	const [annualStatsDate, setAnnualStatsDate] = useState<Dayjs>(now)
 	const [monthStatsDate, setMonthStatsDate] = useState<Dayjs>(now)
-	const [mothRsStatsDate, setMothRsStatsDate] = useState<Dayjs>(now)
-	const [monthReservationsStatsDate, setMonthReservationsStatsDate] = useState<Dayjs>(now)
-
-	const { notino, salonsAnnualStats, salonsMonthStats, reservationsStats } = useSelector((state: RootState) => state.dashboard)
+	// const [monthReservationsStatsDate, setMonthReservationsStatsDate] = useState<Dayjs>(now)
+	const { notino, salonsAnnualStats, salonsMonthStats } = useSelector((state: RootState) => state.dashboard)
 	const { selectedSalon } = useSelector((state: RootState) => state.selectedSalon)
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	const navigate = useNavigate()
-	const [tabKey, setTabKey] = useState<DASHBOARD_TASB_KEYS>(DASHBOARD_TASB_KEYS.SALONS_STATE)
-	const data = {
-		labels: ['Prvy', 'Druhy', 'Treti'],
-		datasets: [
-			{
-				label: '369',
-				data: [902, 600, 223],
-				backgroundColor: ['#144896', '#2277F3', '#BBD6FE'],
-				borderRadius: 30
-			}
-		]
-	}
-	const options = {
-		title: {
-			display: true,
-			text: 'Bar Chart'
-		},
+	const [tabKey, setTabKey] = useState<DASHBOARD_TASB_KEYS>(DASHBOARD_TASB_KEYS.RESERVATION_SYSTEM)
 
-		// The legend configuration
-		// legend: {
-		// 	display: true,
-		// 	position: 'top', // 'top', 'bottom', 'left', or 'right'
-		// 	align: 'center', // 'start', 'center', or 'end'
-		// 	labels: {
-		// 		fontColor: 'black',
-		// 		fontSize: 12
-		// 	}
-		// },
-		scales: {
-			x: {
-				display: false // hide the X axis
+	const publishedPremiumSalonsData = useMemo(() => {
+		return {
+			title: t('loc:Publikované Premium salóny'),
+			data: {
+				labels: [t('loc:Premium bez RS'), t('loc:Premium s RS'), t('loc:Premium RS online')],
+				datasets: [
+					{
+						label: t('loc:Počet'),
+						data: [
+							notino.data?.publishedPremiumSalons.premiumDisabledRs,
+							notino.data?.publishedPremiumSalons.premiumEnabledRsB2c,
+							notino.data?.publishedPremiumSalons.premiumEnabledRsB2b
+						],
+						backgroundColor: ['#144896', '#2277F3', '#BBD6FE'],
+						borderRadius: 4
+					}
+				]
 			},
-			y: {
-				grid: {
-					color: '#E6E6E6' // set the color of the X axis grid lines
+			legend: [
+				{
+					label: t('loc:Premium bez RS'),
+					data: notino.data?.publishedPremiumSalons.premiumDisabledRs,
+					onClick: () =>
+						navigate({
+							pathname: t('paths:salons'),
+							search: formatObjToQuery({
+								salonState: SALONS_TAB_KEYS.ACTIVE,
+								statuses_published: SALON_FILTER_STATES.PUBLISHED,
+								createType: SALON_CREATE_TYPE.NON_BASIC
+							})
+						}),
+					backgroundColor: '#144896'
 				},
-				ticks: {
-					stepSize: 200 // set the X axis step size to 200
+				{
+					label: t('loc:Premium s RS'),
+					data: notino.data?.publishedPremiumSalons.premiumEnabledRsB2c,
+					onClick: undefined, // TODO:
+					backgroundColor: '#2277F3'
+				},
+				{
+					label: t('loc:Premium RS online'),
+					data: notino.data?.publishedPremiumSalons.premiumEnabledRsB2b,
+					onClick: undefined, // TODO:
+					backgroundColor: '#BBD6FE'
 				}
-				// Y axis options go here
-			}
+			],
+			options: optionsForPremiumSalonBar
 		}
-	}
+	}, [
+		navigate,
+		notino.data?.publishedPremiumSalons.premiumDisabledRs,
+		notino.data?.publishedPremiumSalons.premiumEnabledRsB2b,
+		notino.data?.publishedPremiumSalons.premiumEnabledRsB2c,
+		t
+	])
+
+	const unpublishedPremiumSalonsData = useMemo(() => {
+		return {
+			title: t('loc:Nepublikované Premium salóny'),
+			data: {
+				labels: [t('loc:Premium bez RS'), t('loc:Premium s RS'), t('loc:Premium RS online')],
+				datasets: [
+					{
+						label: t('loc:Počet'),
+						data: [
+							notino.data?.unpublishedPremiumSalons.premiumDisabledRs,
+							notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2c,
+							notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2b
+						],
+						backgroundColor: ['#144896', '#2277F3', '#BBD6FE'],
+						borderRadius: 4
+					}
+				]
+			},
+			legend: [
+				{
+					label: t('loc:Premium bez RS'),
+					data: notino.data?.unpublishedPremiumSalons.premiumDisabledRs,
+					onClick: undefined, // TODO:
+					backgroundColor: '#144896'
+				},
+				{
+					label: t('loc:Premium s RS'),
+					data: notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2c,
+					onClick: undefined, // TODO:
+					backgroundColor: '#2277F3'
+				},
+				{
+					label: t('loc:Premium RS online'),
+					data: notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2b,
+					onClick: undefined, // TODO:
+					backgroundColor: '#BBD6FE'
+				}
+			],
+			options: optionsForPremiumSalonBar
+		}
+	}, [
+		notino.data?.unpublishedPremiumSalons.premiumDisabledRs,
+		notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2b,
+		notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2c,
+		t
+	])
 
 	useEffect(() => {
 		dispatch(
@@ -333,7 +413,6 @@ const NotinoDashboard: FC = () => {
 		dispatch(getSalonsMonthStats(now.year(), now.month() + 1, selectedCountry))
 		dispatch(getSalonsAnnualStats(now.year(), selectedCountry))
 	}, [dispatch, selectedCountry])
-
 	const annualStats: TimeStats = useMemo(() => {
 		return transformToStatsData(salonsAnnualStats.data, salonsAnnualStats.isLoading, salonsAnnualStats.isFailure, annualStatsDate)
 	}, [salonsAnnualStats, annualStatsDate])
@@ -342,9 +421,9 @@ const NotinoDashboard: FC = () => {
 		return transformToStatsData(salonsMonthStats.data, salonsMonthStats.isLoading, salonsMonthStats.isFailure, monthStatsDate)
 	}, [salonsMonthStats, monthStatsDate])
 
-	const reservationsMonthStats: TimeStats = useMemo(() => {
-		return transformToReservationsStatsData(reservationsStats.data, reservationsStats.isLoading, reservationsStats.isFailure, monthReservationsStatsDate)
-	}, [reservationsStats.data, reservationsStats.isLoading, reservationsStats.isFailure, monthReservationsStatsDate])
+	// const reservationsMonthStats: TimeStats = useMemo(() => {
+	// 	return transformToReservationsStatsData(reservationsStats.data, reservationsStats.isLoading, reservationsStats.isFailure, monthReservationsStatsDate)
+	// }, [reservationsStats.data, reservationsStats.isLoading, reservationsStats.isFailure, monthReservationsStatsDate])
 
 	const dashboardData: DashboardData = useMemo(() => {
 		const emptyGraphData = {
@@ -543,24 +622,12 @@ const NotinoDashboard: FC = () => {
 	const reservationsDashboard = (
 		<ReservationsDashboard>
 			{/* // RS stats */}
-			<Row className={'mt-12'}>{barContent(t('loc:Publikované Premium salóny'), data, options)}</Row>
-			{/* {lineContent( */}
-			{/*	t('loc:Vývoj salónov s rezervačným systémom - mesačný'), */}
-			{/*	rsMonthStats, */}
-			{/*	timeStatsFilter((date) => { */}
-			{/*		if (date) { */}
-			{/*			setMothRsStatsDate(date) */}
-			{/*			dispatch( */}
-			{/*				getRsStats({ */}
-			{/*					year: Number(date.year()), */}
-			{/*					month: Number(date.month() + 1) */}
-			{/*				}) */}
-			{/*			) */}
-			{/*		} */}
-			{/*	}, 'MMMM - YYYY'), */}
-			{/*	rsColumns(rsMonthStats.data?.labels, rsMonthStats.data?.breakIndex) */}
-			{/* )} */}
-			{/* /!* Reservations stats *!/ */}
+			<Row className={'mt-12 gap-4'}>
+				{barContent(publishedPremiumSalonsData)}
+				{barContent(unpublishedPremiumSalonsData)}
+			</Row>
+			{/* // NOTE:  necham zakomentovane este nejaky cas ak by sa rozhodli ho vratit kedze ten PO sa vyjadril ze nech sa da prec a ak by niekomu chybal tak sa vrati */}
+			{/* Reservations stats */}
 			{/* {lineContent( */}
 			{/*	t('loc:Vývoj rezervácií - mesačný'), */}
 			{/*	reservationsMonthStats, */}

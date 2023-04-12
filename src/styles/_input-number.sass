@@ -25,6 +25,23 @@
 		&.ant-input-number-disabled
 			.ant-input-number-input
 				color: #9CA3AF
+	.ant-input-number-affix-wrapper
+		&:focus,
+		&.ant-input-number-affix-wrapper-focused
+			border: 1px solid $borderColor-notino-black
+			box-shadow: $field-shadow-focus-default
+			.ant-input-number-focused
+				border: none !important
+		.ant-input-number
+			&:hover
+				border: none !important
+		.ant-input-number-prefix
+			color: $textColor-notino-grayDarker !important
+		&.ant-input-number-affix-wrapper-disabled
+			.ant-input-number-disabled
+				background: transparent
+			.ant-input-number-prefix
+				color: $textColor-notino-gray !important
 
 .ant-form-item
 	// Error state
@@ -33,3 +50,13 @@
 			&.ant-input-number-focused
 				border: 1px solid $borderColor-red-600
 				box-shadow: $field-shadow-focus-error
+		.ant-input-number-affix-wrapper
+			&:focus,
+			&.ant-input-number-affix-wrapper-focused
+				.ant-input-number-focused
+					border: none !important
+			.ant-input-number,
+			.ant-input-number:hover
+					border: none !important
+			.ant-input-number-prefix
+				color: $textColor-notino-grayDarker !important

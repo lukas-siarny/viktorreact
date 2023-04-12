@@ -32,7 +32,7 @@ import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
 // utils
-import { DASHBOARD_TASB_KEYS, FILTER_PATHS, RESERVATIONS_STATS_TYPE, RS_STATS_TYPE, SALON_FILTER_STATES, SALONS_TIME_STATS_TYPE } from '../../../utils/enums'
+import { DASHBOARD_TASB_KEYS, FILTER_PATHS, RESERVATIONS_STATS_TYPE, RS_STATS_TYPE, SALON_FILTER_STATES, SALONS_TIME_STATS_TYPE, STRINGS } from '../../../utils/enums'
 import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData, transformToRsStatsData, transformToReservationsStatsData } from './dashboardUtils'
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin)
@@ -216,7 +216,7 @@ const doughnutContent = (label: string, source?: any[], onlyLegend?: boolean) =>
 const lineContent = (label: string, source: TimeStats, filter: React.ReactNode | JSX.Element, columns: any) => {
 	return (
 		<div className='stastics-box py-4 px-6 md:py-8 md:px-12 mt-12'>
-			<div className='flex flex-wrap justify-between w-full'>
+			<div className='flex justify-between w-full items-center gap-2'>
 				<h4>{label}</h4>
 				{filter}
 			</div>
@@ -424,17 +424,18 @@ const NotinoDashboard: FC = () => {
 			alertData: [],
 			graphData: emptyGraphData
 		} as DashboardData
-	}, [notino, t])
+	}, [notino, t, navigate])
 
 	const timeStatsFilter = (handleChange: (date: Dayjs | null, dateString: string) => void, dateFormat?: string) => (
 		<DatePicker
 			onChange={(date, dateString) => handleChange(date, dateString)}
 			picker={dateFormat ? 'month' : 'year'}
-			size='small'
+			size={'middle'}
 			defaultValue={now}
 			allowClear={false}
 			format={dateFormat}
 			disabledDate={(date) => dayjs(date).year() < 2022}
+			dropdownAlign={{ points: ['tr', 'br'] }}
 			getPopupContainer={(node) => node.parentElement || document.body}
 		/>
 	)
@@ -457,7 +458,7 @@ const NotinoDashboard: FC = () => {
 							<div className='m-auto text-center'>
 								<h1 className='text-5xl font-bold'>{t('loc:Začnite vytvorením salónu')}</h1>
 								<Button onClick={() => navigate(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'} icon={<PlusIcon />}>
-									{t('loc:Pridať salón')}
+									{STRINGS(t).addRecord(t('loc:salón'))}
 								</Button>
 							</div>
 						</div>

@@ -17,13 +17,22 @@ import { getService } from '../../reducers/services/serviceActions'
 import { getCategory, ICategoryParameterValue } from '../../reducers/categories/categoriesActions'
 
 // types
-import { IServiceForm, SalonSubPageProps, EmployeeServiceData, Employees, ServiceDetail, IEmployeeServiceEditForm, IParameterValue } from '../../types/interfaces'
+import {
+	IServiceForm,
+	SalonSubPageProps,
+	EmployeeServiceData,
+	Employees,
+	ServiceDetail,
+	IEmployeeServiceEditForm,
+	IParameterValue,
+	NameLocalizationsItem
+} from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
 import { patchReq } from '../../utils/request'
 import { FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION } from '../../utils/enums'
-import { decodePrice, encodePrice, getAssignedUserLabel, getEmployeeServiceDataForPatch, getServicePriceAndDurationData } from '../../utils/helper'
+import { decodePrice, encodePrice, getAssignedUserLabel, getEmployeeServiceDataForPatch, getServicePriceAndDurationData, normalizeNameLocalizations } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 type Props = SalonSubPageProps & {
@@ -33,6 +42,11 @@ type Props = SalonSubPageProps & {
 type ServiceParameterValues = NonNullable<Paths.GetApiB2BAdminServicesServiceId.Responses.$200['service']['serviceCategoryParameter']>['values']
 type ServicePatch = Paths.PatchApiB2BAdminServicesServiceId.RequestBody
 type ServiceParameterValuesPatch = ServicePatch['categoryParameterValues']
+
+enum SERVICE_DESCRIPTION_LNG {
+	DEFAULT = 'DEFAULT',
+	EN = 'en'
+}
 
 export const parseEmployeeCreateAndUpdate = (employees: IServiceForm['employees']): any => {
 	return employees?.map((employeeService) => employeeService?.employee?.id)
@@ -262,9 +276,17 @@ const ServiceEditPage = (props: Props) => {
 				variablePrice: !!data.service.priceAndDurationData.priceTo,
 				employees: parseEmployeesInit(data?.service),
 				useCategoryParameter: data.service.useCategoryParameter,
-				settings: data.service.settings
+				settings: data.service.settings,
+				descriptionLocalizations: normalizeNameLocalizations(data.service.descriptionLocalizations, Object.values(SERVICE_DESCRIPTION_LNG), SERVICE_DESCRIPTION_LNG.DEFAULT)
 			}
-			dispatch(initialize(FORM.SERVICE_FORM, initData || {}))
+			dispatch(
+				initialize(
+					FORM.SERVICE_FORM,
+					initData || {
+						descriptionLocalizations: normalizeNameLocalizations([], Object.keys(SERVICE_DESCRIPTION_LNG), SERVICE_DESCRIPTION_LNG.DEFAULT)
+					}
+				)
+			)
 		}
 	}, [dispatch, serviceID, navigate])
 
@@ -296,7 +318,7 @@ const ServiceEditPage = (props: Props) => {
 	const handleSubmit = async (values: IServiceForm) => {
 		dispatch(startSubmit(FORM.SERVICE_FORM))
 		try {
-			const reqData: ServicePatch = {
+			let reqData: ServicePatch = {
 				useCategoryParameter: values.useCategoryParameter,
 				noteForPriceAndDuration: undefined,
 				// set null if useCategoryParameter is true
@@ -312,6 +334,14 @@ const ServiceEditPage = (props: Props) => {
 				employeeIDs: parseEmployeeCreateAndUpdate(values.employees),
 				settings: values.settings
 			}
+
+			const descriptionLocalizations = values.descriptionLocalizations.filter((localization) => localization.value)
+
+			reqData = {
+				...reqData,
+				descriptionLocalizations: descriptionLocalizations.length ? (descriptionLocalizations as any) : null
+			}
+
 			await patchReq('/api/b2b/admin/services/{serviceID}', { serviceID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			fetchData()
 		} catch (e) {

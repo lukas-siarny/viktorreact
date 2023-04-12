@@ -18,7 +18,7 @@ import { ICalendarImportedReservationForm, ICalendarReservationForm } from '../.
 import { ICalendarEventForm } from '../../../../schemas/event'
 
 // utils
-import { getAssignedUserLabel, initializeLabelInValueSelect } from '../../../../utils/helper'
+import { getAssignedUserLabel } from '../../../../utils/helper'
 import {
 	CALENDAR_COMMON_SETTINGS,
 	CALENDAR_EVENT_TYPE,
@@ -48,6 +48,7 @@ import TabsComponent from '../../../../components/TabsComponent'
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 import { IUseQueryParams } from '../../../../hooks/useQueryParams'
+import { initLabelInValueSelect } from '../../../../atoms/SelectField'
 
 type Props = {
 	salonID: string
@@ -191,21 +192,31 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 					dispatch(
 						initialize(FORM.CALENDAR_RESERVATION_FORM, {
 							...initData,
-							service: initializeLabelInValueSelect(data?.service?.id as string, data?.service?.name as string, {
-								serviceData: data?.service
-							}),
-							customer: initializeLabelInValueSelect(
-								data?.customer?.id as string,
-								getAssignedUserLabel({
-									id: data?.customer?.id as string,
-									firstName: data?.customer?.firstName,
-									lastName: data?.customer?.lastName,
-									email: data?.customer?.email
-								}),
-								{
-									customerData: data?.customer
-								}
-							),
+							service: data?.service
+								? initLabelInValueSelect({
+										key: data.service.id,
+										value: data.service.id,
+										label: data.service.name || data.service.id,
+										extra: {
+											serviceData: data?.service
+										}
+								  })
+								: undefined,
+							customer: data?.customer
+								? initLabelInValueSelect({
+										key: data.customer.id,
+										value: data.customer.id,
+										label: getAssignedUserLabel({
+											id: data.customer.id,
+											firstName: data.customer.firstName,
+											lastName: data.customer.lastName,
+											email: data?.customer?.email
+										}),
+										extra: {
+											serviceData: data.customer
+										}
+								  })
+								: undefined,
 							noteFromB2CCustomer: data?.noteFromB2CCustomer,
 							reservationData: data?.reservationData
 						})

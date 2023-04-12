@@ -418,7 +418,6 @@ const ReservationForm: FC<Props> = (props) => {
 							optionLabelProp={'label'}
 							size={'large'}
 							update={(_itemKey: number, ref: any) => ref.blur()}
-							showSearch
 							required
 							className={'pb-0'}
 							labelInValue

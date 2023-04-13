@@ -2,7 +2,7 @@ import React, { FC, useEffect, useCallback } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { includes } from 'lodash'
+import { includes, isNil } from 'lodash'
 import { useParams } from 'react-router'
 
 // Auth
@@ -104,7 +104,7 @@ const SalonSubRoutes: FC = () => {
 				navigate('/403')
 			}
 		}
-	}, [salonID, fetchSalon, currentUser, selectedSalon?.id, navigate])
+	}, [salonID, fetchSalon, currentUser, selectedSalon?.id, selectedSalon?.deletedAt, navigate])
 
 	return (
 		<Routes>

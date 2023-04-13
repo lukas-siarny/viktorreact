@@ -184,7 +184,6 @@ export interface ISalonForm {
 	name: AutocompleteLabelInValue | string | null
 	aboutUsFirst: string | null
 	state?: SALON_STATES
-	sourceOfPremium?: string
 	openingHours: OpeningHours
 	sameOpenHoursOverWeek: boolean
 	openOverWeekend: boolean
@@ -215,7 +214,6 @@ export interface ISalonForm {
 	locationNote: string | null
 	cosmeticIDs: string[]
 	languageIDs: string[]
-	deletedAt?: boolean
 }
 
 export interface IParameterValue {

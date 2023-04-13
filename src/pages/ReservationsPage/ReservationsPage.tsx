@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Row, Tooltip } from 'antd'
+import { Button, Col, Row, Tooltip } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { initialize } from 'redux-form'
@@ -22,6 +22,7 @@ import {
 	CALENDAR_VIEW,
 	DEFAULT_DATE_INPUT_FORMAT,
 	FORM,
+	NOTIFICATION_TYPE,
 	PERMISSION,
 	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_STATE,
@@ -29,7 +30,7 @@ import {
 	ROW_GUTTER_X_DEFAULT
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { formatObjToQuery, getAssignedUserLabel, normalizeDirectionKeys, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
+import { formatObjToQuery, formFieldID, getAssignedUserLabel, normalizeDirectionKeys, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -42,6 +43,7 @@ import { getPaginatedReservations, getPendingReservationsCount } from '../../red
 // hooks
 import useQueryParams, { ArrayParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
 import TabsComponent from '../../components/TabsComponent'
+import { patchReq } from '../../utils/request'
 
 type Props = SalonSubPageProps
 
@@ -69,22 +71,7 @@ const ReservationsPage = (props: Props) => {
 		limit: NumberParam(),
 		page: NumberParam(1)
 	})
-
-	useEffect(() => {
-		// NOTE: viac ako 3 mesiace
-		dispatch(
-			initialize(FORM.RESERVATIONS_FILTER, {
-				reservationStates: query.reservationStates,
-				employeeIDs: query.employeeIDs,
-				reservationPaymentMethods: query.reservationPaymentMethods,
-				reservationCreateSourceType: query.reservationCreateSourceType,
-				dateFrom: query.dateFrom,
-				dateTo: query.dateTo,
-				createdAtFrom: query.createdAtFrom,
-				createdAtTo: query.createdAtTo,
-				categoryIDs: query.categoryIDs
-			})
-		)
+	const fetchData = useCallback(() => {
 		dispatch(
 			getPaginatedReservations({
 				salonID,
@@ -103,6 +90,39 @@ const ReservationsPage = (props: Props) => {
 		)
 	}, [
 		dispatch,
+		query.categoryIDs,
+		query.createdAtFrom,
+		query.createdAtTo,
+		query.dateFrom,
+		query.dateTo,
+		query.employeeIDs,
+		query.limit,
+		query.page,
+		query.reservationCreateSourceType,
+		query.reservationPaymentMethods,
+		query.reservationStates,
+		salonID
+	])
+
+	useEffect(() => {
+		// NOTE: viac ako 3 mesiace
+		dispatch(
+			initialize(FORM.RESERVATIONS_FILTER, {
+				reservationStates: query.reservationStates,
+				employeeIDs: query.employeeIDs,
+				reservationPaymentMethods: query.reservationPaymentMethods,
+				reservationCreateSourceType: query.reservationCreateSourceType,
+				dateFrom: query.dateFrom,
+				dateTo: query.dateTo,
+				createdAtFrom: query.createdAtFrom,
+				createdAtTo: query.createdAtTo,
+				categoryIDs: query.categoryIDs
+			})
+		)
+		fetchData()
+	}, [
+		dispatch,
+		fetchData,
 		query.categoryIDs,
 		query.createdAtFrom,
 		query.createdAtTo,
@@ -150,7 +170,23 @@ const ReservationsPage = (props: Props) => {
 		}
 		setQuery(newQuery)
 	}
-
+	const onAcceptReservation = async (calendarEventID: string) => {
+		try {
+			await patchReq(
+				'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state',
+				{ calendarEventID, salonID },
+				{ state: RESERVATION_STATE.APPROVED },
+				undefined,
+				NOTIFICATION_TYPE.NOTIFICATION,
+				true
+			)
+			fetchData()
+			dispatch(getPendingReservationsCount(salonID))
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		}
+	}
 	const columns: Columns = [
 		{
 			title: t('loc:Dátum vytvorenia'),
@@ -235,41 +271,72 @@ const ReservationsPage = (props: Props) => {
 			key: 'createSourceType',
 			ellipsis: true,
 			width: '10%'
-		},
-		{
-			title: t('loc:Stav'),
-			dataIndex: 'state',
-			key: 'state',
-			ellipsis: true,
-			width: '15%',
-			render: (value) => {
-				return (
-					<div className={'flex items-center'}>
-						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationState(value as RESERVATION_STATE).icon}</div>
-						<div className={'truncate'}>{translateReservationState(value as RESERVATION_STATE).text}</div>
-					</div>
-				)
-			}
-		},
-		{
-			title: t('loc:Spôsob úhrady'),
-			dataIndex: 'paymentMethod',
-			key: 'paymentMethod',
-			ellipsis: true,
-			width: '10%',
-			render: (value) => {
-				return value ? (
-					<div className={'flex items-center'}>
-						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).icon}</div>
-						<div className={'truncate'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).text}</div>
-					</div>
-				) : (
-					'-'
-				)
-			}
 		}
 	]
 
+	if (query.state === RESERVATIONS_STATE.ALL) {
+		columns.push(
+			{
+				title: t('loc:Stav'),
+				dataIndex: 'state',
+				key: 'state',
+				ellipsis: true,
+				width: '15%',
+				render: (value) => {
+					return (
+						<div className={'flex items-center'}>
+							<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationState(value as RESERVATION_STATE).icon}</div>
+							<div className={'truncate'}>{translateReservationState(value as RESERVATION_STATE).text}</div>
+						</div>
+					)
+				}
+			},
+			{
+				title: t('loc:Spôsob úhrady'),
+				dataIndex: 'paymentMethod',
+				key: 'paymentMethod',
+				ellipsis: true,
+				width: '10%',
+				render: (value) => {
+					return value ? (
+						<div className={'flex items-center'}>
+							<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).icon}</div>
+							<div className={'truncate'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).text}</div>
+						</div>
+					) : (
+						'-'
+					)
+				}
+			}
+		)
+	}
+
+	if (query.state === RESERVATIONS_STATE.PENDING) {
+		columns.push({
+			key: 'actions',
+			ellipsis: true,
+			fixed: 'right',
+			className: 'text-right',
+			width: 150,
+			render: (value, record) => {
+				return (
+					<Button
+						type={'primary'}
+						htmlType={'button'}
+						size={'middle'}
+						className={'noti-btn h-8 w-32 hover:shadow-none'}
+						onClick={(e) => {
+							e.stopPropagation()
+							onAcceptReservation(record.id)
+						}}
+						id={formFieldID('accept_btn', record.id)}
+					>
+						{t('loc:Schváliť')}
+					</Button>
+				)
+			}
+		})
+	}
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{

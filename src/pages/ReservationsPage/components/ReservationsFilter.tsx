@@ -100,7 +100,7 @@ const ReservationsFilter = (props: Props) => {
 						<Col span={6}>
 							<Fields
 								label={t('loc:Dátum vytvorenia rezervácie')}
-								names={['dateFrom', 'dateTo']}
+								names={['createdAtFrom', 'createdAtTo']}
 								placeholders={[t('loc:od'), t('loc:do')]}
 								component={DateRangeField}
 								size={'large'}
@@ -109,7 +109,7 @@ const ReservationsFilter = (props: Props) => {
 						<Col span={6}>
 							<Fields
 								label={t('loc:Dátum plánovanej rezervácie')}
-								names={['createdAtFrom', 'createdAtTo']}
+								names={['dateFrom', 'dateTo']}
 								placeholders={[t('loc:od'), t('loc:do')]}
 								component={DateRangeField}
 								size={'large'}

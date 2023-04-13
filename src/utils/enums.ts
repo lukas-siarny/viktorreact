@@ -293,7 +293,7 @@ export enum DASHBOARD_TASB_KEYS {
 }
 
 export enum RESERVATIONS_STATE {
-	PENDING = 'PENGIN',
+	PENDING = 'PENDING',
 	ALL = 'ALL'
 }
 

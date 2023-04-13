@@ -585,6 +585,9 @@ export const getPaginatedReservations =
 			const queryParamsEditedForRequest = {
 				salonID: queryParams.salonID,
 				dateFrom: queryParams.dateFrom,
+				dateTo: queryParams.dateTo,
+				createdAtFrom: queryParams.createdAtFrom,
+				createdAtTo: queryParams.createdAtTo,
 				reservationStates: queryParams.reservationStates,
 				employeeIDs: queryParams.employeeIDs,
 				reservationPaymentMethods: queryParams.reservationPaymentMethods,
@@ -605,6 +608,7 @@ export const getPaginatedReservations =
 			const tableData: ISalonReservationsTableData[] = map(data.calendarEvents, (event) => {
 				const employee = find(data.employees, { id: event.employee.id })
 				return {
+					id: event.id,
 					key: event.id,
 					startDate: formatDateByLocale(event.start.date, true) as string,
 					time: `${event.start.time} - ${event.end.time}`,

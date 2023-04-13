@@ -606,7 +606,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		[closeSiderForm, fetchEvents, salonID, query.eventId]
 	)
 
-	const handleSubmitImportedReservation = useCallback(
+	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+	/* const handleSubmitImportedReservation = useCallback(
 		async (values: ICalendarImportedReservationForm) => {
 			const eventId = values?.updateFromCalendar ? values.eventId : query.eventId
 
@@ -657,7 +658,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			}
 		},
 		[closeSiderForm, fetchEvents, salonID, query.eventId]
-	)
+	) */
 
 	const handleSubmitEvent = useCallback(
 		async (values: ICalendarEventForm, calendarEventID?: string, calendarBulkEventID?: string, updateFromCalendar = false) => {
@@ -977,7 +978,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						}}
 						handleSubmitReservation={initSubmitReservationData}
 						handleSubmitEvent={initSubmitEventData}
-						handleSubmitImportedReservation={handleSubmitImportedReservation}
+						// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+						// handleSubmitImportedReservation={handleSubmitImportedReservation}
 						onAddEvent={handleAddEvent}
 						clearFetchInterval={clearFetchInterval}
 						restartFetchInterval={restartFetchInterval}
@@ -995,7 +997,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							onCloseSider={closeSiderForm}
 							handleSubmitReservation={initSubmitReservationData}
 							handleSubmitEvent={initSubmitEventData}
-							handleSubmitImportedReservation={handleSubmitImportedReservation}
+							// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+							// handleSubmitImportedReservation={handleSubmitImportedReservation}
 							calendarApi={calendarRefs?.current?.[validCalendarView]?.getApi()}
 							changeCalendarDate={setNewSelectedDate}
 							query={query}

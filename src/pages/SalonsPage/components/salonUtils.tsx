@@ -22,6 +22,10 @@ import {
 	orderDaysInWeek
 } from '../../../components/OpeningHours/OpeningHoursUtils'
 
+// assets
+import { ReactComponent as CheckerIcon } from '../../../assets/icons/check-icon-success.svg'
+import { ReactComponent as CrossIcon } from '../../../assets/icons/cross.svg'
+
 const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	{
 		phonePrefixCountryCode,
@@ -293,3 +297,5 @@ export const getSalonTagSourceType = (sourceType?: string | SALON_SOURCE_TYPE) =
 			return null
 	}
 }
+
+export const getCheckerIcon = (valid?: boolean) => (valid ? <CheckerIcon /> : <CrossIcon width={24} height={24} color={'#BFBFBF'} />)

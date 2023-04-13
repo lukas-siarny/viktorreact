@@ -54,6 +54,7 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 	const now = dayjs()
 
 	const [query, setQuery] = useQueryParams({
+		view: StringParam(TAB_KEYS.SALON_HISTORY),
 		limit: NumberParam(),
 		page: NumberParam(1),
 		dateFrom: StringParam(now.subtract(1, 'week').format(DEFAULT_DATE_INIT_FORMAT)),

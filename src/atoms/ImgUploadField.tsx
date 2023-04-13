@@ -198,7 +198,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 						<Button
 							type={'link'}
 							htmlType={'button'}
-							className={cx('flex items-center justify-center m-0 p-0 w-full h-full', { 'cursor-move': draggable })}
+							className={cx('flex items-center justify-center m-0 p-0 w-full h-full', { 'cursor-move': draggable && !disabled, 'cursor-pointer': disabled })}
 							onClick={() => actions.preview()}
 							target='_blank'
 							rel='noopener noreferrer'
@@ -221,7 +221,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 		</>
 	)
 
-	const DragableUploadListItem = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: any, moveRow: any, disabledDrag: boolean) => {
+	const DragableUploadListItem = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: any, moveRow: any, disabledDnD: boolean) => {
 		const type = 'DragableUploadList'
 		const ref = useRef(null)
 		const index = fileList.indexOf(file)
@@ -239,7 +239,8 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 			},
 			drop: (item: any) => {
 				moveRow(item?.index, index)
-			}
+			},
+			canDrop: () => !disabledDnD
 		})
 		const [, drag] = useDrag({
 			type,
@@ -247,7 +248,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 			collect: (monitor) => ({
 				isDragging: monitor.isDragging()
 			}),
-			canDrag: () => disabledDrag
+			canDrag: () => !disabledDnD
 		})
 		drop(drag(ref))
 		return (

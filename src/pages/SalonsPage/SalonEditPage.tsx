@@ -44,11 +44,13 @@ import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circ
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
 
 // hooks
-import useQueryParams, { BooleanParam } from '../../hooks/useQueryParams'
+import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO, PERMISSION.PARTNER]
 
 const pendingStates: string[] = [SALON_STATES.NOT_PUBLISHED_PENDING, SALON_STATES.PUBLISHED_PENDING]
+
+const tabKeys = Object.values(TAB_KEYS)
 
 interface SalonEditPageProps extends SalonPageProps {
 	salonID: string
@@ -69,8 +71,6 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	const [approvalModalVisible, setApprovalModalVisible] = useState(false)
 	const [visibleNotinoUserModal, setVisibleNotinoUserModal] = useState(false)
 
-	const [tabKey, setTabKey] = useState<TAB_KEYS>(TAB_KEYS.SALON_DETAIL)
-
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const isFormPristine = useSelector(isPristine(FORM.SALON))
 
@@ -88,23 +88,31 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	const assignedUserLabel = getAssignedUserLabel(salon.data?.assignedUser)
 
 	const [query, setQuery] = useQueryParams({
-		history: BooleanParam(false)
+		view: StringParam(TAB_KEYS.SALON_DETAIL)
 	})
+
+	const validView = tabKeys.includes(query.view) ? query.view : TAB_KEYS.SALON_DETAIL
 
 	const dontUpdateFormData = useRef(false)
 
 	// load salon data
+	/* useEffect(() => {
+		;(async () => {
+			if (validView === TAB_KEYS.SALON_DETAIL) {
+				const salonData = await dispatch(selectSalon(salonID))
+				if (!dontUpdateFormData.current && validView === TAB_KEYS.SALON_DETAIL) {
+					dispatch(initialize(FORM.SALON, initSalonFormData(salonData?.data || null, phonePrefixCountryCode)))
+					dontUpdateFormData.current = false
+				}
+			}
+		})()
+	}, [dispatch, salonID, validView, phonePrefixCountryCode]) */
+
 	useEffect(() => {
 		dispatch(selectSalon(salonID))
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch])
-
-	// change tab based on query
-	useEffect(() => {
-		if (query.history) {
-			setTabKey(TAB_KEYS.SALON_HISTORY)
-		}
-	}, [query.history])
 
 	// init form
 	useEffect(() => {
@@ -112,7 +120,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			dispatch(initialize(FORM.SALON, initSalonFormData(salon.data, phonePrefixCountryCode)))
 			dontUpdateFormData.current = false
 		}
-	}, [salon.data, dispatch, phonePrefixCountryCode])
+	}, [salon.data, dispatch, phonePrefixCountryCode, validView])
 
 	const handleSubmit = async (data: ISalonForm) => {
 		try {
@@ -129,7 +137,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	}
 
 	const breadcrumbDetailItem = {
-		name: tabKey === TAB_KEYS.SALON_DETAIL ? t('loc:Detail salónu') : t('loc:História salónu'),
+		name: validView === TAB_KEYS.SALON_HISTORY ? t('loc:História salónu') : t('loc:Detail salónu'),
 		titleName: `${salon.data?.name ?? ''} | ID: ${salon.data?.id}`
 	}
 
@@ -569,13 +577,13 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		)
 
 	const onTabChange = (selectedTabKey: string) => {
-		// set query for history tab
-		const newQuery = {
+		setQuery({
 			...query,
-			history: selectedTabKey === TAB_KEYS.SALON_HISTORY
-		}
-		setQuery(newQuery)
-		setTabKey(selectedTabKey as TAB_KEYS)
+			view: selectedTabKey
+		})
+		/* if (selectedTabKey === TAB_KEYS.SALON_HISTORY) {
+			dispatch(destroy(FORM.SALON))
+		} */
 	}
 
 	const approvalButtonDisabled = !salon?.data?.hasAllRequiredSalonApprovalData || isDeletedSalon || isSubmittingData || salon?.isLoading || isPendingPublication
@@ -771,7 +779,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			{isNotinoUser && !isDeletedSalon ? (
 				<TabsComponent
 					className={'box-tab'}
-					activeKey={tabKey}
+					activeKey={validView}
 					onChange={onTabChange}
 					items={[
 						{
@@ -784,7 +792,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 							label: <>{t('loc:História salónu')}</>,
 							children: (
 								<div className='content-body'>
-									<SalonHistory salonID={salonID} tabKey={tabKey} />
+									<SalonHistory salonID={salonID} tabKey={validView} />
 								</div>
 							)
 						}

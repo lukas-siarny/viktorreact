@@ -16,7 +16,7 @@ import {
 	RESERVATION_STATE,
 	RESERVATION_STATES,
 	RESERVATIONS_STATE,
-	ROW_GUTTER_X_DEFAULT
+	ROW_GUTTER_X_M
 } from '../../../utils/enums'
 import {
 	checkFiltersSizeWithoutSearch,
@@ -96,7 +96,7 @@ const ReservationsFilter = (props: Props) => {
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
 			<Filters activeFilters={checkFiltersSizeWithoutSearch(formValues)}>
 				<>
-					<Row gutter={ROW_GUTTER_X_DEFAULT}>
+					<Row gutter={ROW_GUTTER_X_M}>
 						<Col span={6}>
 							<Fields
 								label={t('loc:Dátum vytvorenia rezervácie')}
@@ -147,7 +147,7 @@ const ReservationsFilter = (props: Props) => {
 							/>
 						</Col>
 					</Row>
-					<Row gutter={ROW_GUTTER_X_DEFAULT}>
+					<Row gutter={ROW_GUTTER_X_M}>
 						<Col span={8}>
 							<Field
 								component={SelectField}

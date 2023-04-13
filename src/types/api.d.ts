@@ -4662,7 +4662,6 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
-                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -5182,7 +5181,6 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
-                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -5476,7 +5474,6 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
-                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -5654,7 +5651,7 @@ declare namespace Paths {
                     };
                     wallet?: {
                         id: string; // uuid
-                        availableBalance: number; // float
+                        availableBalance: string;
                         currency: {
                             /**
                              * example:
@@ -10056,7 +10053,6 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
-                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -10590,7 +10586,6 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
-                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -10768,7 +10763,7 @@ declare namespace Paths {
                     };
                     wallet?: {
                         id: string; // uuid
-                        availableBalance: number; // float
+                        availableBalance: string;
                         currency: {
                             /**
                              * example:

@@ -10,7 +10,7 @@ import dayjs from 'dayjs'
 import { CalendarApi } from '@fullcalendar/react'
 
 // types
-import { ICalendarEmployeesPayload, ICalendarEventForm, ICalendarImportedReservationForm, ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'
+import { ICalendarEmployeesPayload, ICalendarEventForm, /* ICalendarImportedReservationForm, */ ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'
 import { RootState } from '../../../../reducers'
 
 // utils
@@ -37,7 +37,7 @@ import { clearEvent, setCalendarApi, setCalendarDateHandler } from '../../../../
 // components
 import ReservationForm from '../forms/ReservationForm'
 import EventForm from '../forms/EventForm'
-import ImportedReservationForm from '../forms/ImportedReservationForm'
+// import ImportedReservationForm from '../forms/ImportedReservationForm'
 import DeleteButton from '../../../../components/DeleteButton'
 import TabsComponent from '../../../../components/TabsComponent'
 
@@ -52,7 +52,8 @@ type Props = {
 	selectedDate: string
 	onCloseSider: () => void
 	handleSubmitReservation: (values: ICalendarReservationForm) => void
-	handleSubmitImportedReservation: (values: ICalendarImportedReservationForm) => void
+	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+	// handleSubmitImportedReservation: (values: ICalendarImportedReservationForm) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
 	handleDeleteEvent: (calendarEventId: string, calendarEventBulkId?: string, eventType?: CALENDAR_EVENT_TYPE) => any
 	eventId?: string | null
@@ -76,7 +77,8 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 		onCloseSider,
 		handleSubmitReservation,
 		handleSubmitEvent,
-		handleSubmitImportedReservation,
+		// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+		// handleSubmitImportedReservation,
 		salonID,
 		sidebarView,
 		handleDeleteEvent,
@@ -100,7 +102,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 		() =>
 			calendarEmployees.options.map((option) => ({
 				...option,
-				disabled: option.extra?.employeeData.isForImportedEvents || option.extra?.employeeData.isDeleted
+				disabled: option.extra?.employeeData.isDeleted
 			})),
 		[calendarEmployees.options]
 	)
@@ -218,7 +220,8 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 						})
 					)
 					break
-				case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
+				// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+				/* case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 					dispatch(
 						initialize(FORM.CALENDAR_RESERVATION_FROM_IMPORT_FORM, {
 							eventId: data.id,
@@ -231,7 +234,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 							isImported: true
 						})
 					)
-					break
+					break */
 				default:
 					break
 			}
@@ -280,8 +283,9 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 						employeesLoading={employeesLoading}
 					/>
 				)
-			case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
-				return <ImportedReservationForm eventId={eventId} onSubmit={handleSubmitImportedReservation} loadingData={loadingData} />
+			// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+			/* case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
+				return <ImportedReservationForm eventId={eventId} onSubmit={handleSubmitImportedReservation} loadingData={loadingData} /> */
 			case CALENDAR_EVENT_TYPE.RESERVATION:
 			default:
 				return (
@@ -300,7 +304,9 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 	}
 
 	const showTabs = !(eventId || eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) && sidebarView
-	const sidebarTitle = sidebarView === CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT ? CALENDAR_EVENT_TYPE.RESERVATION : sidebarView
+	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+	// const sidebarTitle = sidebarView === CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT ? CALENDAR_EVENT_TYPE.RESERVATION : sidebarView
+	const sidebarTitle = sidebarView
 
 	return (
 		<Sider className={cx('nc-sider-event-management', { 'without-tabs': !showTabs })} collapsed={!sidebarView} width={240} collapsedWidth={0}>

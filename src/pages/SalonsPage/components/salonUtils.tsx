@@ -59,9 +59,7 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 	const initialData: ISalonForm = {
 		salonNameFromSelect,
 		id: salonData.id || null,
-		deletedAt: !!salonData.deletedAt,
 		state: salonData.state as SALON_STATES,
-		sourceOfPremium: salonData.premiumSourceUserType,
 		name: salonNameFromSelect
 			? {
 					key: salonData.id,

@@ -2805,8 +2805,16 @@ declare namespace Paths {
                         sevenDaysAgo: number;
                     };
                     nonBasicSalonsWithoutServices: number;
-                    actualCounEnabledRsB2b: number;
-                    actualCounEnabledRsB2c: number;
+                    unpublishedPremiumSalons: {
+                        premiumDisabledRs: number;
+                        premiumEnabledRsB2b: number;
+                        premiumEnabledRsB2c: number;
+                    };
+                    publishedPremiumSalons: {
+                        premiumDisabledRs: number;
+                        premiumEnabledRsB2b: number;
+                        premiumEnabledRsB2c: number;
+                    };
                 };
             }
         }
@@ -2894,49 +2902,6 @@ declare namespace Paths {
                         newReservationsB2b: number;
                         newReservationsB2c: number;
                         newReservationsTotal: number;
-                    };
-                };
-            }
-        }
-    }
-    namespace GetApiB2BAdminNotinoDashboardSalonRsTimeStats {
-        export interface HeaderParameters {
-            "accept-language"?: /**
-             * example:
-             * sk
-             */
-            Parameters.AcceptLanguage;
-        }
-        namespace Parameters {
-            /**
-             * example:
-             * sk
-             */
-            export type AcceptLanguage = string;
-            /**
-             * example:
-             * SK
-             */
-            export type CountryCode = string | null;
-            export type Month = null | number;
-            export type Year = number;
-        }
-        export interface QueryParameters {
-            month?: Parameters.Month;
-            year: Parameters.Year;
-            countryCode?: /**
-             * example:
-             * SK
-             */
-            Parameters.CountryCode;
-        }
-        namespace Responses {
-            export interface $200 {
-                type: "MONTH" | "YEAR";
-                ranges: {
-                    [name: string]: {
-                        countEnabledRsB2b: number;
-                        countEnabledRsB2c: number;
                     };
                 };
             }
@@ -4697,7 +4662,6 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
-                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -5217,7 +5181,6 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
-                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -5511,7 +5474,6 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
-                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -5689,7 +5651,7 @@ declare namespace Paths {
                     };
                     wallet?: {
                         id: string; // uuid
-                        availableBalance: number; // float
+                        availableBalance: string;
                         currency: {
                             /**
                              * example:
@@ -10091,7 +10053,6 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
-                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -10625,7 +10586,6 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
-                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -10803,7 +10763,7 @@ declare namespace Paths {
                     };
                     wallet?: {
                         id: string; // uuid
-                        availableBalance: number; // float
+                        availableBalance: string;
                         currency: {
                             /**
                              * example:
@@ -62600,14 +62560,6 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonReservationsTimeStats.Responses.$200>
   /**
-   * getApiB2BAdminNotinoDashboardSalonRsTimeStats - Endpoint is used for getting statistics on enabled reservation systems of salons in time., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
-   */
-  'getApiB2BAdminNotinoDashboardSalonRsTimeStats'(
-    parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.Responses.$200>
-  /**
    * getApiB2BAdminNotinoDashboardSmsTimeStats - Endpoint is used for getting statistics of sms notifications in time. It is possible to use filter (month, year, countryCode), permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
    */
   'getApiB2BAdminNotinoDashboardSmsTimeStats'(
@@ -65286,16 +65238,6 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonReservationsTimeStats.Responses.$200>
-  }
-  ['/api/b2b/admin/notino-dashboard/salon-rs-time-stats']: {
-    /**
-     * getApiB2BAdminNotinoDashboardSalonRsTimeStats - Endpoint is used for getting statistics on enabled reservation systems of salons in time., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.Responses.$200>
   }
   ['/api/b2b/admin/notino-dashboard/sms-time-stats']: {
     /**

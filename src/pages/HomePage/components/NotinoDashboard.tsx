@@ -32,7 +32,17 @@ import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
 // utils
-import { DASHBOARD_TASB_KEYS, FILTER_PATHS, SALON_CREATE_TYPE, SALON_FILTER_STATES, SALONS_TAB_KEYS, SALONS_TIME_STATS_TYPE, STRINGS } from '../../../utils/enums'
+import {
+	DASHBOARD_TASB_KEYS,
+	FILTER_PATHS,
+	SALON_CREATE_TYPE,
+	SALON_FILTER_RS,
+	SALON_FILTER_RS_AVAILABLE_ONLINE,
+	SALON_FILTER_STATES,
+	SALONS_TAB_KEYS,
+	SALONS_TIME_STATS_TYPE,
+	STRINGS
+} from '../../../utils/enums'
 import { doughnutOptions, getFilterRanges, lineOptions, transformToStatsData } from './dashboardUtils'
 import { formatObjToQuery } from '../../../utils/helper'
 
@@ -324,7 +334,7 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery(query)
+							search: formatObjToQuery({ ...query, enabledReservationsSetting: SALON_FILTER_RS.ENABLED })
 						}),
 					backgroundColor: '#2277F3'
 				},
@@ -334,7 +344,11 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery(query)
+							search: formatObjToQuery({
+								...query,
+								enabledReservationsSetting: SALON_FILTER_RS.ENABLED,
+								hasAvailableReservationSystem: SALON_FILTER_RS_AVAILABLE_ONLINE.AVAILABLE
+							})
 						}),
 					backgroundColor: '#BBD6FE'
 				}
@@ -389,7 +403,7 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery(query)
+							search: formatObjToQuery({ ...query, enabledReservationsSetting: SALON_FILTER_RS.ENABLED })
 						}),
 					backgroundColor: '#2277F3'
 				},
@@ -399,7 +413,11 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery(query)
+							search: formatObjToQuery({
+								...query,
+								enabledReservationsSetting: SALON_FILTER_RS.ENABLED,
+								hasAvailableReservationSystem: SALON_FILTER_RS_AVAILABLE_ONLINE.AVAILABLE
+							})
 						}),
 					backgroundColor: '#BBD6FE'
 				}

@@ -210,6 +210,7 @@ export enum FORM {
 	SMS_UNIT_PRICES_FILTER = 'SMS_UNIT_PRICES_FILTER',
 	SMS_HISTORY_FILTER = 'SMS_HISTORY_FILTER',
 	RECHARGE_SMS_CREDIT = 'RECHARGE_SMS_CREDIT',
+	RECHARGE_SMS_CREDIT_FILTER = 'RECHARGE_SMS_CREDIT_FILTER',
 	SALONS_REPORT = 'SALONS_REPORT'
 }
 
@@ -508,6 +509,16 @@ export enum SALON_FILTER_OPENING_HOURS {
 	NOT_SET = 'NOT_SET'
 }
 
+export enum SALON_FILTER_RS {
+	ENABLED = 'ENABLED',
+	NOT_ENABLED = 'NOT_ENABLED'
+}
+
+export enum SALON_FILTER_RS_AVAILABLE_ONLINE {
+	AVAILABLE = 'AVAILABLE',
+	NOT_AVAILABLE = 'NOT_AVAILABLE'
+}
+
 export enum PAGE_VIEW {
 	TABLE = 'TABLE',
 	TREE = 'TREE'
@@ -653,6 +664,8 @@ export const DELETE_BUTTON_ID = 'delete-btn'
 export const CREATE_BUTTON_ID = 'create-btn'
 
 export const SUBMIT_BUTTON_ID = 'submit-btn'
+
+export const RESET_BUTTON_ID = 'reset-btn'
 
 export const ADD_BUTTON_ID = 'add-btn'
 
@@ -971,6 +984,7 @@ export const getDayNameFromNumber = (day: number) => {
 			return null
 	}
 }
+
 /**
  * @returns localized texts for Sentry report dialog and common EN texts for result view
  */

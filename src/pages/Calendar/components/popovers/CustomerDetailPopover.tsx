@@ -158,7 +158,7 @@ const CalendarDetailPopover: FC<ICustomerDetailPopoverProps> = () => {
 	return (
 		<Popover
 			open={isOpen}
-			destroyTooltipOnHide={{ keepParent: true }}
+			destroyTooltipOnHide={false}
 			placement={'leftTop'}
 			overlayClassName={`${overlayClassName} nc-popover-overlay nc-popover-overlay-fixed`}
 			content={customer.data && <PopoverContent customer={customer.data.customer} onClose={() => setIsOpen(false)} />}

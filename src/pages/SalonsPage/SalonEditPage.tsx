@@ -17,6 +17,7 @@ import NoteForm from './components/forms/NoteForm'
 import TabsComponent from '../../components/TabsComponent'
 import SalonHistory from './components/SalonHistory'
 import SalonApprovalModal from './components/modals/SalonApprovalModal'
+import NotinoUserForm from './components/forms/NotinoUserForm'
 
 // enums
 import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_STATES, STRINGS, TAB_KEYS, SALON_CREATE_TYPE, SUBMIT_BUTTON_ID } from '../../utils/enums'
@@ -41,7 +42,6 @@ import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
-import NotinoUserForm from './components/forms/NotinoUserForm'
 
 // hooks
 import useQueryParams, { BooleanParam } from '../../hooks/useQueryParams'
@@ -613,6 +613,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 						// edit mode is turned off if salon is in approval process and user is not admin or is deleted 'read mode' only
 						disabledForm={isDeletedSalon || (isPendingPublication && !isNotinoUser)}
 						deletedSalon={isDeletedSalon}
+						salonData={salon?.data}
 						notinoUserModalControlButtons={
 							isNotinoUser && (
 								<Row className={'flex justify-start w-full gap-2 pb-4'}>

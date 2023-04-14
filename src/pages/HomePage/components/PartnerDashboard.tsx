@@ -1,9 +1,9 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { isEmpty } from 'lodash'
-import { useNavigate } from 'react-router-dom'
+import { includes, isEmpty } from 'lodash'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 // components
 import SalonDashboard from './SalonDashboard'
@@ -16,7 +16,8 @@ import { RootState } from '../../../reducers'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { STRINGS } from '../../../utils/enums'
+import { PERMISSION, STRINGS } from '../../../utils/enums'
+import { checkPermissions } from '../../../utils/Permissions'
 
 type Props = {}
 

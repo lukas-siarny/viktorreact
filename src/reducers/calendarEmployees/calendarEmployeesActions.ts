@@ -29,27 +29,24 @@ export const setCalendarEmployees =
 		const calendarEmployees: CalendarEmployee[] = []
 
 		employees?.forEach((employee, index) => {
-			const isForImportedEvents = employee.isVirtual
-			const isDeleted = !isForImportedEvents && !!employee.deletedAt
+			const isDeleted = !!employee.deletedAt
 			const color = isDeleted ? '#808080' : employee.color // deleted: grayDark
-			const lastName = isForImportedEvents ? '' : employee.lastName
 
 			const employeeData = {
 				id: employee.id,
 				firstName: employee.firstName,
-				lastName,
+				lastName: employee.lastName,
 				email: employee.email,
 				inviteEmail: employee.inviteEmail,
 				orderIndex: index,
 				color,
 				image: employee.image,
-				isForImportedEvents,
 				isDeleted
 			}
 
 			calendarEmployees.push(employeeData)
 			options.push({
-				label: getAssignedUserLabel({ id: employee.id, firstName: employee.firstName, lastName, email: employee.email || employee.inviteEmail }),
+				label: getAssignedUserLabel({ id: employee.id, firstName: employee.firstName, lastName: employee.lastName, email: employee.email || employee.inviteEmail }),
 				value: employee.id,
 				key: employee.id,
 				extra: { employeeData, thumbnail: employee.image.resizedImages.thumbnail, color, isDeleted }

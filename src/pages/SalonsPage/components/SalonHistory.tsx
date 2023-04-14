@@ -17,7 +17,7 @@ import { getSalonHistory } from '../../../reducers/salons/salonsActions'
 import { RootState } from '../../../reducers'
 
 // utils
-import { FORM, SALON_HISTORY_OPERATIONS, SALON_HISTORY_OPERATIONS_COLORS, TAB_KEYS, DEFAULT_DATE_INIT_FORMAT } from '../../../utils/enums'
+import { FORM, SALON_HISTORY_OPERATIONS, SALON_HISTORY_OPERATIONS_COLORS, DEFAULT_DATE_INIT_FORMAT } from '../../../utils/enums'
 import { formatDateByLocale } from '../../../utils/helper'
 
 // assets
@@ -44,17 +44,14 @@ const setIcon = (operation: SALON_HISTORY_OPERATIONS): undefined | ReactNode => 
 	}
 }
 
-type ComponentProps = {
-	tabKey: TAB_KEYS
-} & PropsWithChildren<SalonSubPageProps>
+type ComponentProps = {} & PropsWithChildren<SalonSubPageProps>
 
 const SalonHistory: FC<ComponentProps> = (props) => {
 	const dispatch = useDispatch()
-	const { salonID, tabKey } = props
+	const { salonID } = props
 	const now = dayjs()
 
 	const [query, setQuery] = useQueryParams({
-		view: StringParam(TAB_KEYS.SALON_HISTORY),
 		limit: NumberParam(),
 		page: NumberParam(1),
 		dateFrom: StringParam(now.subtract(1, 'week').format(DEFAULT_DATE_INIT_FORMAT)),
@@ -63,33 +60,30 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 
 	const salonHistory = useSelector((state: RootState) => state.salons.salonHistory)
 
-	const fetchData = async () => {
-		dispatch(
-			getSalonHistory({
-				dateFrom: query.dateFrom,
-				dateTo: query.dateTo,
-				salonID,
-				page: query.page,
-				limit: query.limit
-			})
-		)
-		dispatch(
-			initialize(FORM.SALON_HISTORY_FILTER, {
-				dateFromTo: {
-					dateFrom: query.dateFrom,
-					dateTo: query.dateTo
-				}
-			})
-		)
-	}
-
 	useEffect(() => {
-		//  fetch data when click on history tab
-		if (tabKey === TAB_KEYS.SALON_HISTORY) {
-			fetchData()
+		const fetchData = async () => {
+			dispatch(
+				getSalonHistory({
+					dateFrom: query.dateFrom,
+					dateTo: query.dateTo,
+					salonID,
+					page: query.page,
+					limit: query.limit
+				})
+			)
+			dispatch(
+				initialize(FORM.SALON_HISTORY_FILTER, {
+					dateFromTo: {
+						dateFrom: query.dateFrom,
+						dateTo: query.dateTo
+					}
+				})
+			)
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, query.page, query.limit, query.dateFrom, query.dateTo, tabKey])
+
+		//  fetch data when click on history tab
+		fetchData()
+	}, [dispatch, query.page, query.limit, query.dateFrom, query.dateTo, salonID])
 
 	const renderValues = (oldValues: any, newValues: any) => {
 		let values: any = {}
@@ -130,7 +124,7 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 	}
 
 	return (
-		<>
+		<div className='content-body'>
 			<div className={'content-header block'}>
 				<SalonHistoryFilter onSubmit={handleSubmit} />
 			</div>
@@ -175,7 +169,7 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 					/>
 				)}
 			</div>
-		</>
+		</div>
 	)
 }
 

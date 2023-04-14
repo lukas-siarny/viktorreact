@@ -111,6 +111,7 @@ const SalonSubRoutes: FC = () => {
 			{/* SALON DETAIL */}
 			<Route errorElement={<ErrorBoundary />} element={<AuthRoute layout={MainLayout} page={PAGE.SALONS} />}>
 				<Route index element={<SalonPage salonID={salonID as string} />} />
+				<Route path={t('paths:history')} element={<SalonPage salonID={salonID as string} />} />
 			</Route>
 			{/* CUSTOMERS */}
 			<Route errorElement={<ErrorBoundary />} path={t('paths:customers')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.CUSTOMERS} />}>

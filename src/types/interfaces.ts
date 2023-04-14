@@ -730,6 +730,10 @@ export interface SalonPageProps {
 	phonePrefixes: IEnumerationsCountriesPayload & ILoadingAndFailure
 }
 
+export interface SalonEditPageProps extends SalonPageProps {
+	salonID: string
+}
+
 export interface AlertData {
 	label: React.ReactElement
 	count: number

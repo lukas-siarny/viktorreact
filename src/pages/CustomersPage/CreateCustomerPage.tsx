@@ -104,8 +104,9 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:customers')} />
 			</Row>
-			<Spin spinning={isLoading}>
-				<div className='content-body small'>
+
+			<div className='content-body small'>
+				<Spin spinning={isLoading}>
 					<CustomerForm onSubmit={createCustomer} />
 					<div className={'content-footer'}>
 						<Row justify='center'>
@@ -126,8 +127,8 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 							</Button>
 						</Row>
 					</div>
-				</div>
-			</Spin>
+				</Spin>
+			</div>
 		</>
 	)
 }

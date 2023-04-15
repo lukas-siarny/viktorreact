@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { Col, Image, Progress, Row, Spin, TabsProps, Tooltip } from 'antd'
+import { Col, Image, Row, Spin, TabsProps, Tooltip } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize, isPristine } from 'redux-form'
 import { useNavigate } from 'react-router-dom'
@@ -16,29 +16,27 @@ import SalonsFilterActive, { ISalonsFilterActive } from './components/filters/Sa
 import SalonsFilterDeleted, { ISalonsFilterDeleted } from './components/filters/SalonsFilterDeleted'
 import RejectedSalonSuggestions from './components/RejectedSalonSuggestions'
 import SalonsReportModal, { ALL_COUNTRIES_OPTION } from './components/modals/SalonsReportModal'
+import ImportForm from '../../components/ImportForm'
 
 // utils
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, REQUEST_STATUS } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, REQUEST_STATUS, SALON_STATES } from '../../utils/enums'
 import { formatDateByLocale, getAssignedUserLabel, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { getReq, postReq } from '../../utils/request'
-import { getSalonTagChanges, getSalonTagCreateType, getSalonTagPublished, getSalonTagSourceType } from './components/salonUtils'
+import { getCheckerIcon, getSalonTagChanges, getSalonTagCreateType, getSalonTagSourceType } from './components/salonUtils'
 
 // reducers
 import { emptySalons, getSalons } from '../../reducers/salons/salonsActions'
 import { RootState } from '../../reducers'
 import { getCategories } from '../../reducers/categories/categoriesActions'
 import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
+import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 
 // types
 import { Columns, IBreadcrumbs, IDataUploadForm, ISalonsReportForm } from '../../types/interfaces'
 
-// assets
-import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
-
 // hooks
 import useQueryParams, { ArrayParam, BooleanParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
-import ImportForm from '../../components/ImportForm'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO]
 
@@ -93,7 +91,9 @@ const SalonsPage = () => {
 		hasSetOpeningHours: StringParam(),
 		sourceType: StringParam(),
 		assignedUserID: StringParam(),
-		premiumSourceUserType: StringParam()
+		premiumSourceUserType: StringParam(),
+		hasAvailableReservationSystem: StringParam(),
+		enabledReservationsSetting: StringParam()
 	})
 
 	const resetQuery = (selectedTabKey: string, rewrite = {}) => {
@@ -117,29 +117,15 @@ const SalonsPage = () => {
 			sourceType: undefined,
 			premiumSourceUserType: undefined,
 			assignedUserID: undefined,
+			hasAvailableReservationSystem: undefined,
+			enabledReservationsSetting: undefined,
 			...rewrite
 		})
 	}
 
 	useEffect(() => {
 		let salonsQueries = {
-			page: query.page,
-			limit: query.limit,
-			order: query.order,
-			search: query.search,
-			categoryFirstLevelIDs: query.categoryFirstLevelIDs,
-			statuses_all: query.statuses_all,
-			statuses_published: query.statuses_published,
-			statuses_changes: query.statuses_changes,
-			salonState: query.salonState,
-			countryCode: query.countryCode,
-			createType: query.createType,
-			lastUpdatedAtFrom: query.lastUpdatedAtFrom,
-			lastUpdatedAtTo: query.lastUpdatedAtTo,
-			hasSetOpeningHours: query.hasSetOpeningHours,
-			sourceType: query.sourceType,
-			premiumSourceUserType: query.premiumSourceUserType,
-			assignedUserID: query.assignedUserID
+			...query
 		}
 
 		// on init SalonFilterActive data get selected country from redux store
@@ -156,7 +142,9 @@ const SalonsPage = () => {
 					initialize(FORM.SALONS_FILTER_DELETED, {
 						search: query.search,
 						categoryFirstLevelIDs: query.categoryFirstLevelIDs,
-						countryCode: salonsQueries.countryCode
+						countryCode: salonsQueries.countryCode,
+						enabledReservationsSetting: query.enabledReservationsSetting,
+						hasAvailableReservationSystem: query.hasAvailableReservationSystem
 					})
 				)
 				dispatch(getSalons(salonsQueries))
@@ -184,7 +172,9 @@ const SalonsPage = () => {
 						hasSetOpeningHours: query.hasSetOpeningHours,
 						sourceType: query.sourceType,
 						premiumSourceUserType: query.premiumSourceUserType,
-						assignedUserID: query.assignedUserID
+						assignedUserID: query.assignedUserID,
+						enabledReservationsSetting: query.enabledReservationsSetting,
+						hasAvailableReservationSystem: query.hasAvailableReservationSystem
 					})
 				)
 
@@ -212,6 +202,8 @@ const SalonsPage = () => {
 		query.sourceType,
 		query.premiumSourceUserType,
 		query.assignedUserID,
+		query.hasAvailableReservationSystem,
+		query.enabledReservationsSetting,
 		selectedCountry
 	])
 
@@ -381,7 +373,6 @@ const SalonsPage = () => {
 				title: t('loc:Typ salónu'),
 				dataIndex: 'createType',
 				key: 'createType',
-				ellipsis: true,
 				sorter: false,
 				render: (_value, record) => getSalonTagCreateType(record.state, record.createType),
 				...props
@@ -419,7 +410,19 @@ const SalonsPage = () => {
 				key: 'isPublished',
 				ellipsis: true,
 				sorter: false,
-				render: (_value, record) => getSalonTagPublished(record.state),
+				render: (_value, record: any) => {
+					let checked = false
+					switch (record.state) {
+						case SALON_STATES.PUBLISHED:
+						case SALON_STATES.PUBLISHED_PENDING:
+						case SALON_STATES.PUBLISHED_DECLINED:
+							checked = true
+							break
+						default:
+							break
+					}
+					return <div className={'flex items-center'}>{getCheckerIcon(checked)}</div>
+				},
 				...props
 			}),
 			changes: (props) => ({
@@ -434,24 +437,17 @@ const SalonsPage = () => {
 				title: t('loc:Vyplnenie profilu'),
 				dataIndex: 'fillingProgressSalon',
 				key: 'fillingProgress',
-				ellipsis: true,
 				sorter: true,
 				sortOrder: setOrder(query.order, 'fillingProgress'),
-				render: (value: number | undefined) => (
-					<Row className={'gap-2'} wrap={false}>
-						<span className={'w-9 flex-shrink-0'}>{value ? `${value}%` : ''}</span>
-						<Progress className='w-4/5' percent={value} showInfo={false} strokeColor={'#000'} />
-					</Row>
-				),
+				render: (value: number | undefined) => <span className={'w-9 flex-shrink-0'}>{value ? `${value}%` : ''}</span>,
 				...props
 			}),
 			assignedUser: (props) => ({
 				title: t('loc:Notino používateľ'),
 				dataIndex: 'assignedUser',
 				key: 'assignedUser',
-				ellipsis: true,
 				sorter: false,
-				render: (value: any) => getAssignedUserLabel(value),
+				render: (value: any) => <span className={'inline-block truncate w-full'}>{getAssignedUserLabel(value)}</span>,
 				...props
 			}),
 			premiumSourceUserType: (props) => ({
@@ -459,8 +455,23 @@ const SalonsPage = () => {
 				dataIndex: 'premiumSourceUserType',
 				key: 'premiumSourceUserType',
 				sorter: false,
-				ellipsis: true,
 				render: (value: string) => getSalonTagSourceType(value),
+				...props
+			}),
+			enabledRS: (props) => ({
+				title: t('loc:Rezervačný systém'),
+				dataIndex: 'settings',
+				key: 'settings',
+				sorter: false,
+				render: (value: any) => getCheckerIcon(value?.enabledReservations),
+				...props
+			}),
+			availableReservationSystem: (props) => ({
+				title: t('loc:Dostupné pre online rezervácie'),
+				dataIndex: 'availableReservationSystem',
+				key: 'availableReservationSystem',
+				sorter: false,
+				render: (value: boolean) => getCheckerIcon(value),
 				...props
 			})
 		}),
@@ -493,11 +504,13 @@ const SalonsPage = () => {
 					tableColumns.address({ width: '15%' }),
 					tableColumns.categories({ width: '9%' }),
 					tableColumns.isPublished({ width: '8%' }),
-					tableColumns.changes({ width: '8%' }),
-					tableColumns.createType({ width: '6%' }),
+					tableColumns.changes({ width: '10%' }),
+					tableColumns.createType({ width: '10%' }),
+					tableColumns.enabledRS({ width: '8%' }),
+					tableColumns.availableReservationSystem({ width: '8%' }),
 					tableColumns.premiumSourceUserType({ width: '6%' }),
 					tableColumns.assignedUser({ width: '10%' }),
-					tableColumns.fillingProgress({ width: '16%' }),
+					tableColumns.fillingProgress({ width: '8%' }),
 					tableColumns.lastUpdatedAt({ width: '8%' }),
 					tableColumns.createdAt({ width: '8%' })
 				]
@@ -506,6 +519,7 @@ const SalonsPage = () => {
 						onSubmit={handleSubmitActive}
 						onImportSalons={() => setSalonImportsModalVisible(true)}
 						onDownloadReport={() => setSalonsReportModalVisible(true)}
+						query={query}
 					/>
 				)
 		}

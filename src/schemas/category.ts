@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { localizedValuesConstraint, imageConstraint, zodErrorsToFormErrors, serializeValidationMessage } from './baseSchema'
 import { FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
+import { ILabelInValue } from '../types/interfaces'
 
 export const categorySchema = z
 	.object({
@@ -38,7 +39,7 @@ export type ICategoryForm = z.infer<typeof categorySchema> & {
 	parentId: string
 	rootParentId: string | undefined | null
 	childrenLength: number
-	categoryParameterID: string
+	categoryParameterID: ILabelInValue
 }
 
 export const validationCategoryFn = (values: ICategoryForm, props: any) => zodErrorsToFormErrors(categorySchema, FORM.CATEGORY, values, props)

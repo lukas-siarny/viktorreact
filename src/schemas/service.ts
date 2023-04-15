@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { isEmpty, isNil } from 'lodash'
 import { serializeValidationMessage, stringConstraint, uuidConstraint, zodErrorsToFormErrors } from './baseSchema'
-import { FORM, VALIDATION_MAX_LENGTH, PARAMETER_TYPE } from '../utils/enums'
+import { FORM, VALIDATION_MAX_LENGTH, PARAMETER_TYPE, SERVICE_DESCRIPTION_LNG } from '../utils/enums'
 // eslint-disable-next-line import/no-cycle
 import { arePriceAndDurationDataEmpty } from '../utils/helper'
 
@@ -162,7 +162,17 @@ const serviceSchema = priceAndDurationSchema
 			enabledB2cReservations: z.boolean(),
 			autoApproveReservations: z.boolean()
 		}),
-		serviceCategoryParameter: parameterValueSchema.array()
+		serviceCategoryParameter: parameterValueSchema.array(),
+		descriptionLocalizations: z.tuple([
+			z.object({
+				language: z.literal(SERVICE_DESCRIPTION_LNG.DEFAULT),
+				value: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1500, false).nullish()
+			}),
+			z.object({
+				language: z.literal(SERVICE_DESCRIPTION_LNG.EN),
+				value: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1500, false).nullish()
+			})
+		])
 	})
 	.superRefine((val, ctx) => {
 		if (!val.useCategoryParameter) {
@@ -173,6 +183,14 @@ const serviceSchema = priceAndDurationSchema
 					code: z.ZodIssueCode.custom,
 					message: serializeValidationMessage('loc:Musíte zvoliť a nastaviť aspoň jednu hodnotu parametra!'),
 					path: ['serviceCategoryParameter', '_error']
+				})
+			}
+
+			if (val?.descriptionLocalizations && !val?.descriptionLocalizations[0].value && val?.descriptionLocalizations.some((value, index) => index !== 0 && value.value)) {
+				ctx.addIssue({
+					code: z.ZodIssueCode.custom,
+					message: serializeValidationMessage('loc:Toto pole je povinné'),
+					path: ['descriptionLocalizations', 0, 'value']
 				})
 			}
 

@@ -29,7 +29,7 @@ interface IGetReservationsStats {
 
 export type INotinoDashboard = Paths.GetApiB2BAdminNotinoDashboard.Responses.$200['counts']
 export type ISalonsTimeStats = Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.Responses.$200
-export type IRsStats = Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.Responses.$200
+export type IRsStats = any // Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.Responses.$200
 export type IReservationsStats = Paths.GetApiB2BAdminNotinoDashboardSalonReservationsTimeStats.Responses.$200
 
 interface IGetRsStatsQueryParams {
@@ -101,9 +101,9 @@ export const getRsStats =
 		try {
 			dispatch({ type: RS_STATS.RS_STATS_LOAD_START })
 
-			const { data } = await getReq('/api/b2b/admin/notino-dashboard/salon-rs-time-stats', { ...normalizeQueryParams(queryParams) } as any)
+			// const { data } = await getReq('/api/b2b/admin/notino-dashboard/salon-rs-time-stats', { ...normalizeQueryParams(queryParams) } as any)
 			payload = {
-				data
+				data: {}
 			}
 
 			dispatch({ type: RS_STATS.RS_STATS_LOAD_DONE, payload })

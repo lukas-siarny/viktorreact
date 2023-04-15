@@ -2,7 +2,7 @@ import React, { FC, useEffect, useCallback } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { includes } from 'lodash'
+import { includes, isNil } from 'lodash'
 import { useParams } from 'react-router'
 
 // Auth
@@ -53,8 +53,8 @@ import ReservationsSettingsPage from '../pages/ReservationsSettingsPage/Reservat
 import ReservationsPage from '../pages/ReservationsPage/ReservationsPage'
 
 // SMS credit
-import SmsCreditPage from '../pages/SmsCreditPage/SmsCreditPage'
-import RechargeSmsCreditPage from '../pages/SmsCreditPage/RechargeSmsCreditPage'
+import SmsCreditPartnerPage from '../pages/SmsCreditPartnerPage/SmsCreditPartnerPage'
+import RechargeSmsCreditPage from '../pages/SmsCreditPartnerPage/RechargeSmsCreditPartnerPage'
 
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
@@ -104,7 +104,7 @@ const SalonSubRoutes: FC = () => {
 				navigate('/403')
 			}
 		}
-	}, [salonID, fetchSalon, currentUser, selectedSalon?.id, navigate])
+	}, [salonID, fetchSalon, currentUser, selectedSalon?.id, selectedSalon?.deletedAt, navigate])
 
 	return (
 		<Routes>
@@ -177,7 +177,7 @@ const SalonSubRoutes: FC = () => {
 				<Route index element={<ReservationsSettingsPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			<Route errorElement={<ErrorBoundary />} path={t('paths:sms-credit')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.SMS_CREDIT} />}>
-				<Route index element={<SmsCreditPage parentPath={parentPath} salonID={salonID} />} />
+				<Route index element={<SmsCreditPartnerPage parentPath={parentPath} salonID={salonID} />} />
 				<Route path={t('paths:recharge')} element={<RechargeSmsCreditPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* 404 */}

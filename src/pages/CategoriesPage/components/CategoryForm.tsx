@@ -154,6 +154,7 @@ const CategoryForm: FC<Props> = (props) => {
 										name={'categoryParameterID'}
 										loading={categoriesParameters.isLoading}
 										allowClear
+										labelInValue
 									/>
 									<FieldArray
 										key='descriptionLocalizations'

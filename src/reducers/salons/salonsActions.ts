@@ -120,23 +120,24 @@ interface IGetRejectedSuggestions {
 }
 
 interface GetSalonsQueryParams extends IQueryParams {
-	categoryFirstLevelIDs?: string[]
-	statuses_all?: boolean
-	statuses_published?: SALON_FILTER_STATES.PUBLISHED | SALON_FILTER_STATES.NOT_PUBLISHED
-	statuses_changes?: SALON_FILTER_STATES.PENDING_PUBLICATION | SALON_FILTER_STATES.DECLINED
-	salonState?: SALONS_TAB_KEYS.DELETED | SALONS_TAB_KEYS.ACTIVE
-	countryCode?: string
-	createType?: SALON_CREATE_TYPE
-	lastUpdatedAtFrom?: string
-	lastUpdatedAtTo?: string
-	hasSetOpeningHours?: SALON_FILTER_OPENING_HOURS
-	sourceType?: SALON_SOURCE_TYPE
-	premiumSourceUserType?: SALON_SOURCE_TYPE
-	assignedUserID?: string
-	walletAvailableBalanceFrom?: number
-	walletAvailableBalanceTo?: number
-	hasAvailableReservationSystem?: SALON_FILTER_RS_AVAILABLE_ONLINE
-	enabledReservationsSetting?: SALON_FILTER_RS
+	categoryFirstLevelIDs?: string[] | null
+	statuses_all?: boolean | null
+	statuses_published?: SALON_FILTER_STATES.PUBLISHED | SALON_FILTER_STATES.NOT_PUBLISHED | null
+	statuses_changes?: SALON_FILTER_STATES.PENDING_PUBLICATION | SALON_FILTER_STATES.DECLINED | null
+	// salonState?: SALONS_TAB_KEYS.DELETED | SALONS_TAB_KEYS.ACTIVE | null
+	salonState?: SALONS_TAB_KEYS | null
+	countryCode?: string | null
+	createType?: SALON_CREATE_TYPE | null
+	lastUpdatedAtFrom?: string | null
+	lastUpdatedAtTo?: string | null
+	hasSetOpeningHours?: SALON_FILTER_OPENING_HOURS | null
+	sourceType?: SALON_SOURCE_TYPE | null
+	premiumSourceUserType?: SALON_SOURCE_TYPE | null
+	assignedUserID?: string | null
+	walletAvailableBalanceFrom?: number | null
+	walletAvailableBalanceTo?: number | null
+	hasAvailableReservationSystem?: SALON_FILTER_RS_AVAILABLE_ONLINE | null
+	enabledReservationsSetting?: SALON_FILTER_RS | null
 }
 
 export const getSalons =

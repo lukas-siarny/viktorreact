@@ -62,6 +62,7 @@ import SwitchField from '../../../../atoms/SwitchField'
 // hooks
 import useMedia from '../../../../hooks/useMedia'
 import { IUseQueryParams } from '../../../../hooks/useQueryParams'
+import { ISalonURLQueryParams } from '../../../../schemas/queryParams'
 
 type ComponentProps = {
 	onImportSalons: () => void
@@ -69,19 +70,14 @@ type ComponentProps = {
 	query: IUseQueryParams
 }
 
-export interface ISalonsFilterActive {
-	search: string
+export type ISalonsFilterActive = Pick<
+	ISalonURLQueryParams,
+	'search' | 'statuses_all' | 'statuses_published' | 'statuses_changes' | 'hasSetOpeningHours' | 'categoryFirstLevelIDs' | 'countryCode' | 'createType'
+> & {
 	dateFromTo: {
 		dateFrom: string
 		dateTo: string
 	}
-	statuses_all: boolean
-	statuses_published: string[]
-	statuses_changes: string[]
-	categoryFirstLevelIDs: string[]
-	countryCode: string
-	createType: string
-	hasSetOpeningHours: string
 }
 
 type Props = InjectedFormProps<ISalonsFilterActive, ComponentProps> & ComponentProps

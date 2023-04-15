@@ -3,13 +3,12 @@ import { compose } from 'redux'
 import { useDispatch, useSelector } from 'react-redux'
 import { isSubmitting } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Row, Spin } from 'antd'
+import { Row } from 'antd'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
-import RechargeSmsCreditForm from './components/RechargeSmsCreditForm'
 import Alert from '../../components/Dashboards/Alert'
 
 // utils
@@ -23,7 +22,6 @@ import { RootState } from '../../reducers'
 import { IRechargeSmsCredit } from '../../schemas/rechargeSmsCredit'
 
 // assets
-import { ReactComponent as CoinsIcon } from '../../assets/icons/coins.svg'
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
 
 // redux
@@ -32,8 +30,9 @@ import { getSmsStats } from '../../reducers/sms/smsActions'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+import RechargeSmsCredit from '../../components/RechargeSmsCredit/RechargeSmsCreditForm'
 
-const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
+const RechargeSmsCreditPartnerPage: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -120,31 +119,25 @@ const RechargeSmsCreditPage: FC<SalonSubPageProps> = (props) => {
 					onActionItemClick={() => navigate(parentPath as string)}
 				/>
 			) : (
-				<div className='content-body small'>
-					<Spin spinning={isLoading}>
-						<Col className={'flex'}>
-							<Row className={'mx-9 w-full h-full block'} justify='center'>
-								<h3 className={'mb-0 mt-0 flex items-center'}>
-									<CoinsIcon className={'text-notino-black mr-2'} /> {t('loc:Dobiť kredit')}
-								</h3>
-								<Divider className={'mb-3 mt-3'} />
-								<ul className={'list-none p-0 m-0 mb-8'}>
-									<li className={'flex justify-between gap-2 mb-2'}>
-										<strong>{t('loc:Salón')}:</strong> {selectedSalon.data?.name}
-									</li>
-									<li className={'flex justify-between gap-2'}>
-										<strong>{validPriceLabel}:</strong>
-										{stats.data?.currentSmsUnitPrice?.formattedAmount || '-'}
-									</li>
-								</ul>
-								<RechargeSmsCreditForm onSubmit={handleRechargeCredit} currencySymbol={selectedSalon.data?.currency.symbol} />
-							</Row>
-						</Col>
-					</Spin>
-				</div>
+				<RechargeSmsCredit
+					onSubmit={handleRechargeCredit}
+					currencySymbol={selectedSalon.data?.currency.symbol || ''}
+					loading={isLoading}
+					description={
+						<ul className={'list-none p-0 m-0 mb-8'}>
+							<li className={'flex justify-between gap-2 mb-2'}>
+								<strong>{t('loc:Salón')}:</strong> {selectedSalon.data?.name}
+							</li>
+							<li className={'flex justify-between gap-2'}>
+								<strong>{validPriceLabel}:</strong>
+								{stats.data?.currentSmsUnitPrice?.formattedAmount || '-'}
+							</li>
+						</ul>
+					}
+				/>
 			)}
 		</>
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO]))(RechargeSmsCreditPage)
+export default compose(withPermissions([PERMISSION.NOTINO]))(RechargeSmsCreditPartnerPage)

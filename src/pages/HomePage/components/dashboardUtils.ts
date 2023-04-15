@@ -298,7 +298,7 @@ export const transformToRsStatsData = (source: IRsStats | null, isLoading: boole
 	}
 
 	if (source && source?.ranges) {
-		const months: string[] = dayjs.monthsShort()
+		/* const months: string[] = dayjs.monthsShort()
 
 		Object.entries(source.ranges).forEach(([key, value]) => {
 			result.datasets[0].data.push(value.countEnabledRsB2b)
@@ -318,7 +318,7 @@ export const transformToRsStatsData = (source: IRsStats | null, isLoading: boole
 				[prop]: value.countEnabledRsB2c,
 				summary: result.columns[1].summary + value.countEnabledRsB2c
 			}
-		})
+		}) */
 	}
 
 	const now = dayjs()

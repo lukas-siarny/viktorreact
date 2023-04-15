@@ -256,3 +256,10 @@
 		display: flex
 		justify-content: flex-end
 		margin-right: 20px
+
+.ant-table-selection-column
+	.ant-checkbox
+		.ant-checkbox-input
+			@include baseOutlineStyle()
+			&:not(:disabled):focus-visible + .ant-checkbox-inner
+				@include focusOutlineStyle()

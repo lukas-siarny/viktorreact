@@ -210,6 +210,7 @@ export enum FORM {
 	SMS_UNIT_PRICES_FILTER = 'SMS_UNIT_PRICES_FILTER',
 	SMS_HISTORY_FILTER = 'SMS_HISTORY_FILTER',
 	RECHARGE_SMS_CREDIT = 'RECHARGE_SMS_CREDIT',
+	RECHARGE_SMS_CREDIT_FILTER = 'RECHARGE_SMS_CREDIT_FILTER',
 	SALONS_REPORT = 'SALONS_REPORT'
 }
 
@@ -510,6 +511,16 @@ export enum SALON_FILTER_OPENING_HOURS {
 	NOT_SET = 'NOT_SET'
 }
 
+export enum SALON_FILTER_RS {
+	ENABLED = 'ENABLED',
+	NOT_ENABLED = 'NOT_ENABLED'
+}
+
+export enum SALON_FILTER_RS_AVAILABLE_ONLINE {
+	AVAILABLE = 'AVAILABLE',
+	NOT_AVAILABLE = 'NOT_AVAILABLE'
+}
+
 export enum PAGE_VIEW {
 	TABLE = 'TABLE',
 	TREE = 'TREE'
@@ -655,6 +666,8 @@ export const DELETE_BUTTON_ID = 'delete-btn'
 export const CREATE_BUTTON_ID = 'create-btn'
 
 export const SUBMIT_BUTTON_ID = 'submit-btn'
+
+export const RESET_BUTTON_ID = 'reset-btn'
 
 export const ADD_BUTTON_ID = 'add-btn'
 
@@ -813,8 +826,9 @@ export enum CALENDAR_EVENT_TYPE {
 	RESERVATION = 'RESERVATION',
 	EMPLOYEE_SHIFT = 'EMPLOYEE_SHIFT',
 	EMPLOYEE_TIME_OFF = 'EMPLOYEE_TIME_OFF',
-	EMPLOYEE_BREAK = 'EMPLOYEE_BREAK',
-	RESERVATION_FROM_IMPORT = 'RESERVATION_FROM_IMPORT'
+	EMPLOYEE_BREAK = 'EMPLOYEE_BREAK'
+	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+	// RESERVATION_FROM_IMPORT = 'RESERVATION_FROM_IMPORT'
 }
 
 export enum CALENDAR_EVENTS_VIEW_TYPE {
@@ -870,9 +884,10 @@ export const EVENT_NAMES = (t: TFunction, eventType?: CALENDAR_EVENT_TYPE, capit
 		case CALENDAR_EVENT_TYPE.RESERVATION:
 			string = t('loc:rezerváciu')
 			break
-		case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
+		// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+		/* case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 			string = t('loc:importovanú rezerváciu')
-			break
+			break */
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
 			string = t('loc:voľno')
 			break
@@ -973,6 +988,7 @@ export const getDayNameFromNumber = (day: number) => {
 			return null
 	}
 }
+
 /**
  * @returns localized texts for Sentry report dialog and common EN texts for result view
  */

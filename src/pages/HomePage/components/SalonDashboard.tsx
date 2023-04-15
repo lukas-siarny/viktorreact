@@ -10,10 +10,11 @@ import { RootState } from '../../../reducers'
 import { getServices } from '../../../reducers/services/serviceActions'
 import { getActiveEmployees } from '../../../reducers/employees/employeesActions'
 import { getCustomers } from '../../../reducers/customers/customerActions'
+import { getSmsTimeStatsForSalon } from '../../../reducers/sms/smsActions'
 
 // utils
 import { PERMISSION, SALON_STATES } from '../../../utils/enums'
-import Permissions from '../../../utils/Permissions'
+import Permissions, { checkPermissions } from '../../../utils/Permissions'
 
 // components
 import Alert from '../../../components/Dashboards/Alert'
@@ -24,6 +25,8 @@ import SmsTimeStats from '../../../components/Dashboards/SmsTimeStats'
 // assets
 import { ReactComponent as EyeOffIcon } from '../../../assets/icons/eye-off-pink.svg'
 import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
+
+const SMS_TIME_STATS_PERMISSIONS = [PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET]
 
 const SalonDashboard: FC<PropsWithChildren> = (props) => {
 	const [t] = useTranslation()
@@ -36,6 +39,9 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 	const { services } = useSelector((state: RootState) => state.service)
 	const { activeEmployees } = useSelector((state: RootState) => state.employees)
 	const { customers } = useSelector((state: RootState) => state.customers)
+	const smsTimeStats = useSelector((state: RootState) => state.sms.timeStats)
+	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
+	const salonPermission = selectedSalon?.data?.uniqPermissions
 	const salonID = selectedSalon.data?.id
 	const walletID = selectedSalon.data?.wallet?.id
 
@@ -53,6 +59,12 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 			dispatch(getActiveEmployees({ salonID: selectedSalon.data.id, page: 1 }))
 		}
 	}, [dispatch, selectedSalon?.data])
+
+	useEffect(() => {
+		if (salonID && checkPermissions([...authUserPermissions, ...(salonPermission || [])], SMS_TIME_STATS_PERMISSIONS)) {
+			dispatch(getSmsTimeStatsForSalon(salonID, smsStatsDate.year(), smsStatsDate.month() + 1))
+		}
+	}, [dispatch, salonID, smsStatsDate, authUserPermissions, salonPermission])
 
 	return loading ? (
 		<div className='w-full text-center'>
@@ -104,7 +116,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 						/>
 						<Statistics title={t('loc:Vyplnenosť profilu')} count={`${selectedSalon.data.fillingProgressSalon}%`} onActionItemClick={() => navigate(basePath)} />
 					</div>
-					<Permissions allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET]}>
+					<Permissions allowed={SMS_TIME_STATS_PERMISSIONS}>
 						{!walletID ? (
 							<Alert
 								className='mt-6'
@@ -130,10 +142,10 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 											setSmsStatsDate(date)
 										}
 									}}
-									title={<h3>{t('loc:Spotreba SMS kreditu za obdobie')}</h3>}
-									salonID={salonID}
+									title={<h3 className={'mb-0'}>{t('loc:Spotreba SMS kreditu za obdobie')}</h3>}
 									selectedDate={smsStatsDate}
 									className={'mb-6 mt-10 pb-0'}
+									smsTimeStats={smsTimeStats}
 								/>
 							</>
 						)}

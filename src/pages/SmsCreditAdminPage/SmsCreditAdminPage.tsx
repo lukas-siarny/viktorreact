@@ -8,7 +8,7 @@ import { ColumnProps } from 'antd/es/table'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router'
 import { initialize } from 'redux-form'
-import i18next from 'i18next'
+import cx from 'classnames'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -23,7 +23,7 @@ import { ReactComponent as GlobeIcon } from '../../assets/icons/globe-24.svg'
 import { ReactComponent as ChevronLeftIcon } from '../../assets/icons/chevron-left-16.svg'
 
 // utils
-import { D_M_YEAR_FORMAT, ENUMERATIONS_KEYS, FORM, LANGUAGE, PERMISSION } from '../../utils/enums'
+import { D_M_YEAR_FORMAT, ENUMERATIONS_KEYS, FORM, LANGUAGE, PERMISSION, SMS_UNIT_PRICES_TABLE_ID } from '../../utils/enums'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, optionRenderWithImage, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 import { LOCALES } from '../../components/LanguagePicker'
@@ -260,14 +260,14 @@ const SmsCreditAdiminPage = () => {
 						/>
 						<div className={'w-full flex'}>
 							<CustomTable<TableDataItem>
-								className='table-fixed'
+								id={SMS_UNIT_PRICES_TABLE_ID}
+								className={cx('table-fixed', SMS_UNIT_PRICES_TABLE_ID)}
 								columns={columns}
 								onChange={onChangeTable}
 								dataSource={tableData}
 								rowClassName={'clickable-row'}
 								twoToneRows
-								// TODO: update testov
-								rowKey={(record) => (record.actual?.id ? `${record.actual.id}_${record.country.code}` : record.country.code)}
+								rowKey={(record) => record.country.code}
 								pagination={false}
 								onRow={(record) => {
 									return {

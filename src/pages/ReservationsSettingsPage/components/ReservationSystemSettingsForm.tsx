@@ -23,7 +23,7 @@ import RemainingSmsCredit from '../../../components/Dashboards/RemainingSmsCredi
 import { IDataUploadForm, IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
-import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, REQUEST_STATUS } from '../../../utils/enums'
+import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, REQUEST_STATUS, DOWNLOAD_BUTTON_ID } from '../../../utils/enums'
 import { formFieldID, optionRenderNotiPinkCheckbox, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
@@ -85,7 +85,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const disabled = !formValues?.enabledReservations
 	const defaultExpandedKeys: any = []
 	forEach(groupedServicesByCategory, (level1) => forEach(level1.category?.children, (level2) => defaultExpandedKeys.push(level2?.category?.id)))
-
+	const templates = ['public/templates/import_of_clients_template.csv', 'public/templates/import_of_clients_template.xlsx']
 	const [uploadModal, setUploadModal] = useState<{
 		visible: boolean
 		requestStatus: REQUEST_STATUS | undefined
@@ -266,7 +266,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			setUploadModal({ ...uploadModal, requestStatus: REQUEST_STATUS.ERROR })
 		}
 	}
-
+	const submitDownloadTemplate = () => {}
 	const getServicesSettingsContent = () => {
 		if (isLoadingTree) {
 			return <Spin className={'w-full m-auto mt-20'} />
@@ -475,6 +475,25 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							setRequestStatus={(status?: REQUEST_STATUS) => setUploadModal({ ...uploadModal, requestStatus: status })}
 							onSubmit={handleSubmitImport}
 							visible={uploadModal.visible}
+							extraBtn={
+								<a href={'#'} download={templates}>
+									<button type={'button'} className='download-button'>
+										Download All
+									</button>
+								</a>
+								// <Button
+								// 	id={formFieldID(FORM.IMPORT_FORM, DOWNLOAD_BUTTON_ID)}
+								// 	className='noti-btn mt-2'
+								// 	block
+								// 	size='large'
+								// 	type='primary'
+								// 	onClick={submitDownloadTemplate}
+								// 	disabled={submitting}
+								// 	loading={submitting}
+								// >
+								// 	{t('loc:Stiahnuť šablóny')}
+								// </Button>
+							}
 							setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
 						/>
 						{/* // NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov */}
@@ -506,9 +525,9 @@ const ReservationSystemSettingsForm = (props: Props) => {
 									visible: true,
 									uploadType: UPLOAD_TYPE.CUSTOMER,
 									data: {
-										accept: '.csv',
+										accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel .csv',
 										title: t('loc:Importovať zákazníkov'),
-										label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv' })
+										label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })
 									}
 								})
 							}}

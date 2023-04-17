@@ -48,52 +48,6 @@ import { formatObjToQuery } from '../../../utils/helper'
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin, BarElement)
 
-// NOTE:  necham zakomentovane este nejaky cas ak by sa rozhodli ho vratit kedze ten PO sa vyjadril ze nech sa da prec a ak by niekomu chybal tak sa vrati
-// const reservationsColumns = (labels: string[] = [], futureBreak = 0): Columns => {
-// 	return [
-// 		{
-// 			key: 'type',
-// 			dataIndex: 'type',
-// 			render: (value) => {
-// 				switch (value) {
-// 					case RESERVATIONS_STATS_TYPE.NEW_RS_B2B:
-// 						return (
-// 							<div className={'flex flex-1 items-center'}>
-// 								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[200], flex: '0 0 auto' }} />
-// 								<span className='xs-bold'>{i18next.t('loc:Rezervácie vytvorené v B2B')}</span>
-// 							</div>
-// 						)
-// 					case RESERVATIONS_STATS_TYPE.NEW_RS_B2C:
-// 						return (
-// 							<div className={'flex flex-1 items-center'}>
-// 								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[700], flex: '0 0 auto' }} />
-// 								<span className='xs-bold'>{i18next.t('loc:Rezervácie vytvorené v B2C')}</span>
-// 							</div>
-// 						)
-// 					default:
-// 						return ''
-// 				}
-// 			}
-// 		},
-// 		...labels.map((label: string, index: number) => {
-// 			return {
-// 				key: index,
-// 				dataIndex: index,
-// 				className: cx({ 'future-divider': futureBreak - 0.5 === index }), // 0.5 is delta for display devider between columns
-// 				title: <span className={cx('xs-semibold', { 'text-notino-gray': futureBreak <= index })}>{label}</span>,
-// 				render: (value: number) => <span className={cx('xs-regular', { 'text-notino-gray': futureBreak <= index })}>{value}</span>
-// 			}
-// 		}),
-// 		{
-// 			key: 'summary',
-// 			dataIndex: 'summary',
-// 			title: () => <span className='xs-semibold'>{i18next.t('loc:Súčet')}</span>,
-// 			render: (value) => <span className='xs-regular'>{value}</span>,
-// 			align: 'center'
-// 		}
-// 	]
-// }
-
 const salonColumns = (labels: string[] = [], futureBreak = 0): Columns => {
 	return [
 		{
@@ -324,7 +278,7 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery(query)
+							search: formatObjToQuery({ ...query, enabledReservationsSetting: SALON_FILTER_RS.NOT_ENABLED })
 						}),
 					backgroundColor: '#144896'
 				},
@@ -393,7 +347,7 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery(query)
+							search: formatObjToQuery({ ...query, enabledReservationsSetting: SALON_FILTER_RS.NOT_ENABLED })
 						}),
 					backgroundColor: '#144896'
 				},
@@ -659,24 +613,6 @@ const NotinoDashboard: FC = () => {
 				{barContent(publishedPremiumSalonsData)}
 				{barContent(unpublishedPremiumSalonsData)}
 			</Row>
-			{/* // NOTE:  necham zakomentovane este nejaky cas ak by sa rozhodli ho vratit kedze ten PO sa vyjadril ze nech sa da prec a ak by niekomu chybal tak sa vrati */}
-			{/* Reservations stats */}
-			{/* {lineContent( */}
-			{/*	t('loc:Vývoj rezervácií - mesačný'), */}
-			{/*	reservationsMonthStats, */}
-			{/*	timeStatsFilter((date) => { */}
-			{/*		if (date) { */}
-			{/*			setMonthReservationsStatsDate(date) */}
-			{/*			dispatch( */}
-			{/*				getReservationStats({ */}
-			{/*					year: Number(date.year()), */}
-			{/*					month: Number(date.month() + 1) */}
-			{/*				}) */}
-			{/*			) */}
-			{/*		} */}
-			{/*	}, 'MMMM - YYYY'), */}
-			{/*	reservationsColumns(reservationsMonthStats.data?.labels, reservationsMonthStats.data?.breakIndex) */}
-			{/* )} */}
 		</ReservationsDashboard>
 	)
 	// if salon is not selected, show global (Notino) dashboard content

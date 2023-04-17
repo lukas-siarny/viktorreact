@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux'
 // utils
 import {
 	CHANGE_DEBOUNCE_TIME,
+	FIELD_MODE,
 	FORM,
 	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_PAYMENT_METHODS,
@@ -36,6 +37,7 @@ import Filters from '../../../components/Filters'
 // reducers
 import { RootState } from '../../../reducers'
 import { IReservationsFilter, ReservationsEmployees } from '../../../types/interfaces'
+import InputField from '../../../atoms/InputField'
 
 type ComponentProps = {}
 
@@ -54,7 +56,7 @@ const employeeIDsOptions = (employees: ReservationsEmployees) =>
 		}
 	})
 
-const ReservationsFilter = (props: Props) => {
+const NotinoReservationsFilter = (props: Props) => {
 	const RESERVATION_PAYMENT_METHOD_OPTIONS = useMemo(
 		() =>
 			map(RESERVATION_PAYMENT_METHODS, (item) => ({
@@ -88,10 +90,21 @@ const ReservationsFilter = (props: Props) => {
 	const reservations = useSelector((state: RootState) => state.calendar.paginatedReservations)
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.RESERVATIONS_FILTER)(state))
 	const categoriesOptions = useSelector((state: RootState) => state.service.services.categoriesOptions)
-
+	const search = (
+		<Field
+			className={'h-10 p-0 m-0'}
+			component={InputField}
+			size={'large'}
+			placeholder={t('loc:Hľadať podľa názvu, adresy alebo ID')}
+			name={'search'}
+			fieldMode={FIELD_MODE.FILTER}
+			search
+			// validate={fixLength100}
+		/>
+	)
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters activeFilters={checkFiltersSizeWithoutSearch(formValues)}>
+			<Filters search={search} activeFilters={checkFiltersSizeWithoutSearch(formValues)}>
 				<Row gutter={ROW_GUTTER_X_DEFAULT}>
 					<Col span={6}>
 						<Field
@@ -177,7 +190,7 @@ const ReservationsFilter = (props: Props) => {
 }
 
 const form = reduxForm<IReservationsFilter, ComponentProps>({
-	form: FORM.RESERVATIONS_FILTER,
+	form: FORM.NOTINO_RESERVATIONS_FILTER,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	onChange: debounce((_values, _dispatch, { submit, anyTouched }) => {
@@ -186,6 +199,6 @@ const form = reduxForm<IReservationsFilter, ComponentProps>({
 		}
 	}, CHANGE_DEBOUNCE_TIME),
 	destroyOnUnmount: true
-})(ReservationsFilter)
+})(NotinoReservationsFilter)
 
 export default form

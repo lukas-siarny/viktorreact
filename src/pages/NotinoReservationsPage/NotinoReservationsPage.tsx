@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import UserAvatar from '../../components/AvatarComponents'
-import ReservationsFilter from './components/ReservationsFilter'
+import NotinoReservationsFilter from './components/NotinoReservationsFilter'
 
 // utils
 import {
@@ -33,11 +33,10 @@ import { formatObjToQuery, getAssignedUserLabel, normalizeDirectionKeys, transla
 
 // reducers
 import { RootState } from '../../reducers'
-import { getServices } from '../../reducers/services/serviceActions'
 
 // types
 import { Columns, IBreadcrumbs, IReservationsFilter, SalonSubPageProps } from '../../types/interfaces'
-import { getNotinoReservations, getPaginatedReservations } from '../../reducers/calendar/calendarActions'
+import { getNotinoReservations } from '../../reducers/calendar/calendarActions'
 
 // hooks
 import useQueryParams, { ArrayParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
@@ -47,12 +46,10 @@ type Props = SalonSubPageProps
 const NotinoReservationsPage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { salonID, parentPath } = props
-	const reservations = useSelector((state: RootState) => state.calendar.notinoReservations)
-	console.log('reservations', reservations)
+	const notinoReservations = useSelector((state: RootState) => state.calendar.notinoReservations)
 	const navigate = useNavigate()
-	const getPath = useCallback((pathSuffix: string) => `${parentPath}${pathSuffix}`, [parentPath])
-
+	// TODO: redirect inak spravit a pouzit id salona ktore chodi v tabulke
+	//  TODO: /salons/aec9dcaf-3163-4dba-8d8b-f86382598f7f/calendar
 	const [query, setQuery] = useQueryParams({
 		dateFrom: StringParam(dayjs().format(DEFAULT_DATE_INIT_FORMAT)),
 		employeeIDs: ArrayParam(),
@@ -60,6 +57,7 @@ const NotinoReservationsPage = (props: Props) => {
 		reservationStates: ArrayParam(),
 		reservationCreateSourceType: StringParam(),
 		reservationPaymentMethods: ArrayParam(),
+		search: StringParam(),
 		limit: NumberParam(),
 		page: NumberParam(1)
 	})
@@ -67,12 +65,13 @@ const NotinoReservationsPage = (props: Props) => {
 	useEffect(() => {
 		// NOTE: viac ako 3 mesiace
 		dispatch(
-			initialize(FORM.RESERVATIONS_FILTER, {
+			initialize(FORM.NOTINO_RESERVATIONS_FILTER, {
 				reservationStates: query.reservationStates,
 				employeeIDs: query.employeeIDs,
 				reservationPaymentMethods: query.reservationPaymentMethods,
 				reservationCreateSourceType: query.reservationCreateSourceType,
 				dateFrom: query.dateFrom,
+				search: query.search,
 				categoryIDs: query.categoryIDs
 			})
 		)
@@ -86,7 +85,8 @@ const NotinoReservationsPage = (props: Props) => {
 				categoryIDs: query.categoryIDs,
 				page: query.page,
 				order: 'startDate:ASC',
-				limit: query.limit
+				limit: query.limit,
+				search: query.search
 			})
 		)
 	}, [
@@ -99,7 +99,7 @@ const NotinoReservationsPage = (props: Props) => {
 		query.reservationCreateSourceType,
 		query.reservationPaymentMethods,
 		query.reservationStates,
-		salonID
+		query.search
 	])
 
 	const handleSubmit = (values: IReservationsFilter) => {
@@ -147,7 +147,7 @@ const NotinoReservationsPage = (props: Props) => {
 		},
 		{
 			title: t('loc:Názov salónu'),
-			dataIndex: 'salonName',
+			dataIndex: ['salon', 'name'],
 			key: 'salonName',
 			ellipsis: true,
 			width: '20%'
@@ -201,7 +201,7 @@ const NotinoReservationsPage = (props: Props) => {
 				return (
 					<>
 						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.icon?.resizedImages?.thumbnail} fallBackSrc={value?.icon?.original} />
-						{value?.name}
+						<div className={'truncate'}>{value?.name}</div>
 					</>
 				)
 			}
@@ -211,7 +211,7 @@ const NotinoReservationsPage = (props: Props) => {
 			dataIndex: 'employee',
 			key: 'employee',
 			ellipsis: true,
-			width: '45%',
+			width: '25%',
 			render: (value) => {
 				return (
 					<div className={'flex items-center'}>
@@ -226,7 +226,7 @@ const NotinoReservationsPage = (props: Props) => {
 								<div className={'text-trueGray-400'}>{getAssignedUserLabel(value)}</div>
 							</Tooltip>
 						) : (
-							getAssignedUserLabel(value)
+							<div className={'truncate'}>{getAssignedUserLabel(value)}</div>
 						)}
 					</div>
 				)
@@ -261,6 +261,7 @@ const NotinoReservationsPage = (props: Props) => {
 			ellipsis: true,
 			width: '10%',
 			render: (value) => {
+				// TODO: nechod z BE metoda
 				return value ? (
 					<div className={'flex items-center'}>
 						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).icon}</div>
@@ -289,13 +290,13 @@ const NotinoReservationsPage = (props: Props) => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<ReservationsFilter onSubmit={handleSubmit} />
+						<NotinoReservationsFilter onSubmit={handleSubmit} />
 						<CustomTable
 							className='table-fixed'
 							columns={columns}
 							onChange={onChangeTable}
-							loading={reservations?.isLoading}
-							dataSource={reservations?.tableData}
+							loading={notinoReservations?.isLoading}
+							dataSource={notinoReservations?.tableData}
 							rowClassName={'clickable-row'}
 							onRow={(record) => ({
 								onClick: () => {
@@ -308,7 +309,8 @@ const NotinoReservationsPage = (props: Props) => {
 									}
 
 									navigate({
-										pathname: getPath(t('paths:calendar')),
+										//  TODO: skontrolovat redirect
+										pathname: t('paths:salons/{{salonID}}/calendar', { salonID: record.salon.id }),
 										search: formatObjToQuery(redirectQuery)
 									})
 								}
@@ -317,11 +319,11 @@ const NotinoReservationsPage = (props: Props) => {
 							scroll={{ x: 1200 }}
 							useCustomPagination
 							pagination={{
-								pageSize: reservations.data?.pagination.limit,
-								total: reservations.data?.pagination.totalCount,
-								current: reservations.data?.pagination.page,
+								pageSize: notinoReservations.data?.pagination.limit,
+								total: notinoReservations.data?.pagination.totalCount,
+								current: notinoReservations.data?.pagination.page,
 								onChange: onChangePagination,
-								disabled: reservations.isLoading
+								disabled: notinoReservations.isLoading
 							}}
 						/>
 					</div>

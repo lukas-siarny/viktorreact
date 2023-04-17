@@ -53,7 +53,9 @@ interface IGetSalonReservationsQueryParams extends IPaginationQuery {
 	reservationPaymentMethods?: (string | null)[] | null
 	salonID: string
 }
-interface IGetNotinoReservationsQueryParams extends Omit<IGetSalonReservationsQueryParams, 'salonID'> {}
+interface IGetNotinoReservationsQueryParams extends Omit<IGetSalonReservationsQueryParams, 'salonID'> {
+	search?: string
+}
 
 interface ICalendarEventsQueryParams {
 	salonID: string
@@ -151,6 +153,23 @@ interface ISalonReservationsTableData {
 	service: any
 	paymentMethod: RESERVATION_PAYMENT_METHOD
 }
+
+interface INotinoReservationsTableData {
+	id: string
+	salon: {
+		name?: string
+		id?: string
+	}
+	createdAt: string
+	startDate: string
+	time: string
+	customer: any
+	service: any
+	createSourceType: string
+	state: string
+	paymentMethod: string
+}
+
 export interface IGetSalonReservations {
 	type: RESERVATIONS
 	payload: ISalonReservationsPayload
@@ -631,25 +650,13 @@ export const getPaginatedReservations =
 		return payload
 	}
 
-interface INotinoReservationsTableData {
-	id: string
-	salonName?: string
-	createdAt: string
-	startDate: string
-	time: string
-	customer: any
-	service: any
-	createSourceType: string
-	state: string
-	paymentMethod: string
-}
-
 export const getNotinoReservations =
 	(queryParams: IGetNotinoReservationsQueryParams): ThunkResult<Promise<INotinoReservationsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as INotinoReservationsPayload
 		try {
 			const queryParamsEditedForRequest = {
+				search: queryParams.search,
 				dateFrom: queryParams.dateFrom,
 				reservationStates: queryParams.reservationStates,
 				employeeIDs: queryParams.employeeIDs,
@@ -671,7 +678,7 @@ export const getNotinoReservations =
 				return {
 					key: reservation.id,
 					id: reservation.id,
-					salonName: reservation.salon.name,
+					salon: reservation.salon,
 					createdAt: formatDateByLocale(reservation.createdAt) as string,
 					startDate: formatDateByLocale(reservation.start.date, true) as string,
 					time: `${reservation.start.time} - ${reservation.end.time}`,
@@ -683,7 +690,6 @@ export const getNotinoReservations =
 					paymentMethod: reservation.reservationData?.paymentMethod as RESERVATION_PAYMENT_METHOD // TODO: paymentMethod nechodi z BE
 				}
 			})
-			console.log('tabledata', tableData)
 			payload = {
 				data,
 				tableData

@@ -54,6 +54,7 @@ const ImportForm: FC<Props> = (props) => {
 				validate={validationRequired}
 				required
 			/>
+			{extraContent}
 			<Button
 				id={formFieldID(FORM.IMPORT_FORM, SUBMIT_BUTTON_ID)}
 				className='noti-btn'
@@ -66,7 +67,6 @@ const ImportForm: FC<Props> = (props) => {
 			>
 				{t('loc:Importovať')}
 			</Button>
-			{extraContent}
 		</Form>
 	)
 
@@ -78,6 +78,7 @@ const ImportForm: FC<Props> = (props) => {
 			open={visible}
 			destroyOnClose
 			footer={null}
+			getContainer={document.body}
 			onCancel={() => {
 				resetUploadForm()
 				setVisible(false)

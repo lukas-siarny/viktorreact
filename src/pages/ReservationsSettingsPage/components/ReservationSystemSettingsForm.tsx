@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { change, Field, FieldArray, FormSection, InjectedFormProps, reduxForm, getFormValues, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Divider, Form, Row, Spin } from 'antd'
+import { Button, Divider, Form, Row, Select, Spin } from 'antd'
 import { forEach, includes, isEmpty, map } from 'lodash'
 import { DataNode } from 'antd/lib/tree'
 import { useNavigate } from 'react-router-dom'
@@ -23,7 +23,7 @@ import RemainingSmsCredit from '../../../components/Dashboards/RemainingSmsCredi
 import { IDataUploadForm, IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
-import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, REQUEST_STATUS, DOWNLOAD_BUTTON_ID } from '../../../utils/enums'
+import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, REQUEST_STATUS } from '../../../utils/enums'
 import { formFieldID, optionRenderNotiPinkCheckbox, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
@@ -73,6 +73,8 @@ enum UPLOAD_TYPE {
 	CUSTOMER = 'customer'
 }
 
+const { Option } = Select
+
 const ReservationSystemSettingsForm = (props: Props) => {
 	const { pristine, submitting, excludedB2BNotifications, parentPath, salonID } = props
 	const [t] = useTranslation()
@@ -82,6 +84,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const walletID = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.wallet?.id)
 	const formValues: Partial<IReservationSystemSettingsForm> = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
 	const navigate = useNavigate()
+	const [templateValue, setTemplateValue] = useState(null)
 	const disabled = !formValues?.enabledReservations
 	const defaultExpandedKeys: any = []
 	forEach(groupedServicesByCategory, (level1) => forEach(level1.category?.children, (level2) => defaultExpandedKeys.push(level2?.category?.id)))
@@ -235,6 +238,24 @@ const ReservationSystemSettingsForm = (props: Props) => {
 		}
 	}, [groupedServicesByCategory, groupedServicesByCategoryLoading, dispatch, disabled])
 
+	const templatesOptions = useMemo(
+		() => [
+			{
+				id: 1,
+				value: '.csv',
+				label: t('loc:Stiahnuť šablónu {{ template }}', { template: '.csv' }),
+				fileName: 'import_of_clients_template.csv'
+			},
+			{
+				id: 2,
+				value: '.xlsx',
+				label: t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' }),
+				fileName: 'import_of_clients_template.xlsx'
+			}
+		],
+		[t]
+	)
+
 	const handleSubmitImport = async (values: IDataUploadForm) => {
 		if (!uploadModal.uploadType) {
 			return
@@ -266,6 +287,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			setUploadModal({ ...uploadModal, requestStatus: REQUEST_STATUS.ERROR })
 		}
 	}
+
 	const submitDownloadTemplate = () => {}
 	const getServicesSettingsContent = () => {
 		if (isLoadingTree) {
@@ -477,34 +499,25 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							visible={uploadModal.visible}
 							extraContent={
 								<>
-									<a href={`${process.env.PUBLIC_URL}/templates/import_of_clients_template.csv`} download='import_of_clients_template.csv'>
-										<Button
-											id={formFieldID(FORM.IMPORT_FORM, `${DOWNLOAD_BUTTON_ID}-csv`)}
-											className='noti-btn mt-2'
-											block
-											size='middle'
-											type='dashed'
-											onClick={submitDownloadTemplate}
-											disabled={submitting}
-											loading={submitting}
-										>
-											{t('loc:Stiahnuť šablónu {{ template }}', { template: '.csv' })}
-										</Button>
-									</a>
-									<a href={`${process.env.PUBLIC_URL}/templates/import_of_clients_template.xlsx`} download='import_of_clients_template.xlsx'>
-										<Button
-											id={formFieldID(FORM.IMPORT_FORM, `${DOWNLOAD_BUTTON_ID}-xlsx`)}
-											className='noti-btn mt-2'
-											block
-											size='middle'
-											type='dashed'
-											onClick={submitDownloadTemplate}
-											disabled={submitting}
-											loading={submitting}
-										>
-											{t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' })}
-										</Button>
-									</a>
+									<Divider className={'mt-1 mb-3'} />
+									<p className={'text-notino-grayDark'}>{t('loc:Vzorové šablóny súborov')}</p>
+									<Select
+										style={{ zIndex: 999 }}
+										className={'noti-select-input w-full mb-4'}
+										size={'large'}
+										onChange={() => setTemplateValue(null)}
+										value={templateValue}
+										placeholder={t('loc:Vyberte šablónu na stiahnutie')}
+										getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+									>
+										{templatesOptions?.map((option) => (
+											<Option value={option.value} key={option.id}>
+												<a className={'block'} href={`${process.env.PUBLIC_URL}/templates/${option.fileName}`} download={option.fileName}>
+													{option.label}
+												</a>
+											</Option>
+										))}
+									</Select>
 								</>
 							}
 							setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}

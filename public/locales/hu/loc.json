@@ -446,7 +446,7 @@
   "Stav salónov": "Szalonok állapota",
   "Stavy": "Állapotok",
   "Ste majiteľom alebo prevádzkovateľom tohoto salónu?": "Ön a szalon tulajdonosa vagy üzemeltetője?",
-  "Stiahnuť šablóny": "_NEPRELOZENE_",
+  "Stiahnuť šablónu {{ template }}": "_NEPRELOZENE_",
   "Streda": "Szerda",
   "Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás": "Az oldal, amelyet meg akart tekinteni, nem létezik. Térjen vissza a kezdőlapra. Ha úgy gondolja, hogy hiba van az alkalmazásban, kérjük, lépjen kapcsolatba velünk.",
   "Stále však môžete editovať existujúce": "Azonban a meglévőket továbbra is szerkesztheti",

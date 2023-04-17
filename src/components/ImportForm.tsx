@@ -22,7 +22,7 @@ type ComponentProps = {
 	setRequestStatus: (status?: REQUEST_STATUS) => void
 	requestStatus: REQUEST_STATUS | undefined
 	title: string
-	extraBtn?: any
+	extraContent?: JSX.Element
 	label: string
 	accept: string
 	disabledForm?: boolean
@@ -34,7 +34,7 @@ type Props = InjectedFormProps<IDataUploadForm, ComponentProps> & ComponentProps
 const ImportForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { handleSubmit, submitting, disabledForm, pristine, inModal = true, visible, setVisible, setRequestStatus, requestStatus, title, label, accept, extraBtn } = props
+	const { handleSubmit, submitting, disabledForm, pristine, inModal = true, visible, setVisible, setRequestStatus, requestStatus, title, label, accept, extraContent } = props
 	const resetUploadForm = () => {
 		setRequestStatus(undefined)
 		dispatch(reset(FORM.IMPORT_FORM))
@@ -66,7 +66,7 @@ const ImportForm: FC<Props> = (props) => {
 			>
 				{t('loc:Importovať')}
 			</Button>
-			{extraBtn}
+			{extraContent}
 		</Form>
 	)
 

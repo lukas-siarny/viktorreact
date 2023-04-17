@@ -85,7 +85,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const disabled = !formValues?.enabledReservations
 	const defaultExpandedKeys: any = []
 	forEach(groupedServicesByCategory, (level1) => forEach(level1.category?.children, (level2) => defaultExpandedKeys.push(level2?.category?.id)))
-	const templates = ['public/templates/import_of_clients_template.csv', 'public/templates/import_of_clients_template.xlsx']
+
 	const [uploadModal, setUploadModal] = useState<{
 		visible: boolean
 		requestStatus: REQUEST_STATUS | undefined
@@ -475,24 +475,37 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							setRequestStatus={(status?: REQUEST_STATUS) => setUploadModal({ ...uploadModal, requestStatus: status })}
 							onSubmit={handleSubmitImport}
 							visible={uploadModal.visible}
-							extraBtn={
-								<a href={'#'} download={templates}>
-									<button type={'button'} className='download-button'>
-										Download All
-									</button>
-								</a>
-								// <Button
-								// 	id={formFieldID(FORM.IMPORT_FORM, DOWNLOAD_BUTTON_ID)}
-								// 	className='noti-btn mt-2'
-								// 	block
-								// 	size='large'
-								// 	type='primary'
-								// 	onClick={submitDownloadTemplate}
-								// 	disabled={submitting}
-								// 	loading={submitting}
-								// >
-								// 	{t('loc:Stiahnuť šablóny')}
-								// </Button>
+							extraContent={
+								<>
+									<a href={`${process.env.PUBLIC_URL}/templates/import_of_clients_template.csv`} download='import_of_clients_template.csv'>
+										<Button
+											id={formFieldID(FORM.IMPORT_FORM, `${DOWNLOAD_BUTTON_ID}-csv`)}
+											className='noti-btn mt-2'
+											block
+											size='middle'
+											type='dashed'
+											onClick={submitDownloadTemplate}
+											disabled={submitting}
+											loading={submitting}
+										>
+											{t('loc:Stiahnuť šablónu {{ template }}', { template: '.csv' })}
+										</Button>
+									</a>
+									<a href={`${process.env.PUBLIC_URL}/templates/import_of_clients_template.xlsx`} download='import_of_clients_template.xlsx'>
+										<Button
+											id={formFieldID(FORM.IMPORT_FORM, `${DOWNLOAD_BUTTON_ID}-xlsx`)}
+											className='noti-btn mt-2'
+											block
+											size='middle'
+											type='dashed'
+											onClick={submitDownloadTemplate}
+											disabled={submitting}
+											loading={submitting}
+										>
+											{t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' })}
+										</Button>
+									</a>
+								</>
 							}
 							setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
 						/>
@@ -525,7 +538,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 									visible: true,
 									uploadType: UPLOAD_TYPE.CUSTOMER,
 									data: {
-										accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel .csv',
+										accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv',
 										title: t('loc:Importovať zákazníkov'),
 										label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })
 									}

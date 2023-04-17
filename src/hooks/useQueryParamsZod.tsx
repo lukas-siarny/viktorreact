@@ -120,13 +120,13 @@ export const serializeParams = <T extends object>(params?: T): T => {
 		}
 
 		if (value === null) {
-			// nastavi od URLcky prazdnu hodnotu, napr. &foo=, resp. &foo
+			// nastavi do URLcky prazdnu hodnotu, napr. &foo=, resp. &foo
 			return { ...acc, [key]: '' }
 		}
 
 		if (isArray(value)) {
 			if (!value.length) {
-				// nastavi od URLcky prazdnu hodnotu, napr. &foo=, resp. &foo
+				// nastavi do URLcky prazdnu hodnotu, napr. &foo=, resp. &foo
 				return { ...acc, [key]: '' }
 			}
 

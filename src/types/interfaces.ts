@@ -184,7 +184,6 @@ export interface ISalonForm {
 	name: AutocompleteLabelInValue | string | null
 	aboutUsFirst: string | null
 	state?: SALON_STATES
-	sourceOfPremium?: string
 	openingHours: OpeningHours
 	sameOpenHoursOverWeek: boolean
 	openOverWeekend: boolean
@@ -215,7 +214,6 @@ export interface ISalonForm {
 	locationNote: string | null
 	cosmeticIDs: string[]
 	languageIDs: string[]
-	deletedAt?: boolean
 }
 
 export interface IParameterValue {
@@ -783,7 +781,7 @@ export interface IActiveEmployeesPayload extends ISearchable<Paths.GetApiB2BAdmi
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]
-export type CalendarEmployee = Pick<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0], 'id' | 'color' | 'firstName' | 'lastName' | 'email' | 'image' | 'inviteEmail' | 'orderIndex'> & { orderIndex: number, inviteEmail?: string, isForImportedEvents: boolean; isDeleted?: boolean }
+export type CalendarEmployee = Pick<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0], 'id' | 'color' | 'firstName' | 'lastName' | 'email' | 'image' | 'inviteEmail' | 'orderIndex'> & { orderIndex: number, inviteEmail?: string, isDeleted?: boolean }
 export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
 export type CalendarEvent = CalendarEvents[0] & {
 	startDateTime: string
@@ -927,7 +925,6 @@ export interface IResourceEmployee {
 	isTimeOff: boolean
 	color?: string
 	description?: string
-	isForImportedEvents?: boolean
 	isDeleted?: boolean
 }
 

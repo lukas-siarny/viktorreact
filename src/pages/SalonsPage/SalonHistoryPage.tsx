@@ -5,29 +5,29 @@ import { initialize } from 'redux-form'
 import dayjs from 'dayjs'
 
 // components
-import SalonHistoryFilter, { ISalonHistoryFilter } from './filters/SalonHistoryFilter'
-import CompareComponent from '../../../components/CompareComponent'
-import CustomPagination from '../../../components/CustomPagination'
+import SalonHistoryFilter, { ISalonHistoryFilter } from './components/filters/SalonHistoryFilter'
+import CompareComponent from '../../components/CompareComponent'
+import CustomPagination from '../../components/CustomPagination'
 
 // types
-import { SalonSubPageProps } from '../../../types/interfaces'
+import { SalonSubPageProps } from '../../types/interfaces'
 
 // reducers
-import { getSalonHistory } from '../../../reducers/salons/salonsActions'
-import { RootState } from '../../../reducers'
+import { getSalonHistory } from '../../reducers/salons/salonsActions'
+import { RootState } from '../../reducers'
 
 // utils
-import { FORM, SALON_HISTORY_OPERATIONS, SALON_HISTORY_OPERATIONS_COLORS, DEFAULT_DATE_INIT_FORMAT } from '../../../utils/enums'
-import { formatDateByLocale } from '../../../utils/helper'
+import { FORM, SALON_HISTORY_OPERATIONS, SALON_HISTORY_OPERATIONS_COLORS, DEFAULT_DATE_INIT_FORMAT } from '../../utils/enums'
+import { formatDateByLocale } from '../../utils/helper'
 
 // assets
-import { ReactComponent as CheckIcon } from '../../../assets/icons/check-12.svg'
-import { ReactComponent as ResetIcon } from '../../../assets/icons/reset-icon.svg'
-import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
-import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
+import { ReactComponent as CheckIcon } from '../../assets/icons/check-12.svg'
+import { ReactComponent as ResetIcon } from '../../assets/icons/reset-icon.svg'
+import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 // hooks
-import useQueryParams, { NumberParam, StringParam } from '../../../hooks/useQueryParams'
+import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
 
 const setIcon = (operation: SALON_HISTORY_OPERATIONS): undefined | ReactNode => {
 	switch (operation) {
@@ -46,7 +46,7 @@ const setIcon = (operation: SALON_HISTORY_OPERATIONS): undefined | ReactNode => 
 
 type ComponentProps = {} & PropsWithChildren<SalonSubPageProps>
 
-const SalonHistory: FC<ComponentProps> = (props) => {
+const SalonHistoryPage: FC<ComponentProps> = (props) => {
 	const dispatch = useDispatch()
 	const { salonID } = props
 	const now = dayjs()
@@ -173,4 +173,4 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 	)
 }
 
-export default SalonHistory
+export default SalonHistoryPage

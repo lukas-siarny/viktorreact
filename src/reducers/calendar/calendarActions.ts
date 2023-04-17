@@ -18,7 +18,7 @@ import {
 } from '../../types/interfaces'
 
 // enums
-import { EVENTS, EVENT_DETAIL, MONTHLY_RESERVATIONS, SET_DAY_EVENTS, RESERVATIONS, SET_IS_REFRESHING_EVENTS } from './calendarTypes'
+import { EVENTS, EVENT_DETAIL, MONTHLY_RESERVATIONS, SET_DAY_EVENTS, RESERVATIONS, SET_IS_REFRESHING_EVENTS, NOTINO_RESERVATIONS } from './calendarTypes'
 import {
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_EVENTS_KEYS,
@@ -53,6 +53,7 @@ interface IGetSalonReservationsQueryParams extends IPaginationQuery {
 	reservationPaymentMethods?: (string | null)[] | null
 	salonID: string
 }
+interface IGetNotinoReservationsQueryParams extends Omit<IGetSalonReservationsQueryParams, 'salonID'> {}
 
 interface ICalendarEventsQueryParams {
 	salonID: string
@@ -98,9 +99,19 @@ export type ICalendarActions =
 	| ISetIsRefreshingEvents
 	| ISetDayEvents
 	| IGetSalonReservations
+	| IGetNotinoReservations
 
 export interface ISalonReservationsPayload extends ISearchable<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200> {
 	tableData: ISalonReservationsTableData[]
+}
+
+export interface INotinoReservationsPayload extends ISearchable<Paths.GetApiB2BAdminCalendarEventsReservations.Responses.$200> {
+	tableData: any[] // TODO: type
+}
+
+interface IGetNotinoReservations {
+	type: NOTINO_RESERVATIONS
+	payload: INotinoReservationsPayload
 }
 
 interface IGetCalendarEvents {
@@ -140,7 +151,6 @@ interface ISalonReservationsTableData {
 	service: any
 	paymentMethod: RESERVATION_PAYMENT_METHOD
 }
-
 export interface IGetSalonReservations {
 	type: RESERVATIONS
 	payload: ISalonReservationsPayload
@@ -614,6 +624,73 @@ export const getPaginatedReservations =
 			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}
+
+interface INotinoReservationsTableData {
+	id: string
+	salonName?: string
+	createdAt: string
+	startDate: string
+	time: string
+	customer: any
+	service: any
+	createSourceType: string
+	state: string
+	paymentMethod: string
+}
+
+export const getNotinoReservations =
+	(queryParams: IGetNotinoReservationsQueryParams): ThunkResult<Promise<INotinoReservationsPayload>> =>
+	async (dispatch) => {
+		let payload = {} as INotinoReservationsPayload
+		try {
+			const queryParamsEditedForRequest = {
+				dateFrom: queryParams.dateFrom,
+				reservationStates: queryParams.reservationStates,
+				employeeIDs: queryParams.employeeIDs,
+				reservationPaymentMethods: queryParams.reservationPaymentMethods,
+				reservationCreateSourceType: queryParams.reservationCreateSourceType,
+				categoryIDs: queryParams.categoryIDs,
+				limit: queryParams.limit,
+				page: queryParams.page,
+				order: queryParams.order
+			}
+
+			dispatch({ type: NOTINO_RESERVATIONS.NOTINO_RESERVATIONS_LOAD_START })
+
+			const { data } = await getReq('/api/b2b/admin/calendar-events/reservations', {
+				...(normalizeQueryParams(queryParamsEditedForRequest) as any)
+			})
+			console.log('data', data)
+			const tableData: INotinoReservationsTableData[] = map(data.reservations, (reservation) => {
+				return {
+					key: reservation.id,
+					id: reservation.id,
+					salonName: reservation.salon.name,
+					createdAt: formatDateByLocale(reservation.createdAt) as string,
+					startDate: formatDateByLocale(reservation.start.date, true) as string,
+					time: `${reservation.start.time} - ${reservation.end.time}`,
+					customer: reservation.customer, // TODO: neposila sa avatar
+					service: reservation.service, // TODO: posiela sa len ID
+					employee: reservation.employee,
+					createSourceType: transalteReservationSourceType(reservation.reservationData?.createSourceType as RESERVATION_SOURCE_TYPE),
+					state: reservation.reservationData?.state as RESERVATION_STATE,
+					paymentMethod: reservation.reservationData?.paymentMethod as RESERVATION_PAYMENT_METHOD // TODO: paymentMethod nechodi z BE
+				}
+			})
+			console.log('tabledata', tableData)
+			payload = {
+				data,
+				tableData
+			}
+			dispatch({ type: NOTINO_RESERVATIONS.NOTINO_RESERVATIONS_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: NOTINO_RESERVATIONS.NOTINO_RESERVATIONS_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}

@@ -1,8 +1,8 @@
 /* eslint-disable import/no-cycle */
 import { MONTHLY_RESERVATIONS_KEY, CALENDAR_EVENTS_KEYS } from '../../utils/enums'
-import { MONTHLY_RESERVATIONS, SET_DAY_EVENTS, EVENTS, EVENT_DETAIL, SET_IS_REFRESHING_EVENTS, RESERVATIONS } from './calendarTypes'
+import { MONTHLY_RESERVATIONS, SET_DAY_EVENTS, EVENTS, EVENT_DETAIL, SET_IS_REFRESHING_EVENTS, RESERVATIONS, NOTINO_RESERVATIONS } from './calendarTypes'
 import { RESET_STORE } from '../generalTypes'
-import { ICalendarActions, ISalonReservationsPayload } from './calendarActions'
+import { ICalendarActions, INotinoReservationsPayload, ISalonReservationsPayload } from './calendarActions'
 import { ICalendarEventsPayload, ILoadingAndFailure, ICalendarEventDetailPayload, ICalendarDayEvents, ICalendarMonthlyReservationsPayload } from '../../types/interfaces'
 
 export const initState = {
@@ -38,7 +38,13 @@ export const initState = {
 		tableData: [],
 		isLoading: false,
 		isFailure: false
-	} as ISalonReservationsPayload & ILoadingAndFailure
+	} as ISalonReservationsPayload & ILoadingAndFailure,
+	notinoReservations: {
+		data: null,
+		tableData: [],
+		isLoading: false,
+		isFailure: false
+	} as INotinoReservationsPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -150,7 +156,7 @@ export default (state = initState, action: ICalendarActions) => {
 				...state,
 				isRefreshingEvents: action.payload
 			}
-		// Reservations
+		// Salon Reservations
 		case RESERVATIONS.RESERVATIONS_LOAD_START:
 			return {
 				...state,
@@ -172,6 +178,32 @@ export default (state = initState, action: ICalendarActions) => {
 				...state,
 				paginatedReservations: {
 					...initState.paginatedReservations,
+					data: action.payload.data,
+					tableData: action.payload.tableData
+				}
+			}
+		// Notino Reservations
+		case NOTINO_RESERVATIONS.NOTINO_RESERVATIONS_LOAD_START:
+			return {
+				...state,
+				notinoReservations: {
+					...state.notinoReservations,
+					isLoading: true
+				}
+			}
+		case NOTINO_RESERVATIONS.NOTINO_RESERVATIONS_LOAD_FAIL:
+			return {
+				...state,
+				notinoReservations: {
+					...initState.notinoReservations,
+					isFailure: true
+				}
+			}
+		case NOTINO_RESERVATIONS.NOTINO_RESERVATIONS_LOAD_DONE:
+			return {
+				...state,
+				notinoReservations: {
+					...initState.notinoReservations,
 					data: action.payload.data,
 					tableData: action.payload.tableData
 				}

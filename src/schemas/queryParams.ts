@@ -32,5 +32,3 @@ export const salonsURLParamsSchema = z.object({
 })
 
 export type ISalonURLQueryParams = z.infer<typeof salonsURLParamsSchema>
-
-// export const validationActivationFn = (values: IActivationForm, props: any) => zodErrorsToFormErrors(activationSchema, FORM.ACTIVATION, values, props)

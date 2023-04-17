@@ -36,8 +36,9 @@ import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCount
 import { Columns, IBreadcrumbs, IDataUploadForm, ISalonsReportForm } from '../../types/interfaces'
 
 // hooks
-import useQueryParams from '../../hooks/useQueryParamsZod'
+import useQueryParams from '../../hooks/useQueryParamsZod2'
 import { ISalonURLQueryParams, salonsURLParamsSchema } from '../../schemas/queryParams'
+import { ArrayParam, BooleanParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO]
 
@@ -69,7 +70,7 @@ const SalonsPage = () => {
 		dispatch(selectSalon())
 	}, [dispatch])
 
-	const [query, setQuery] = useQueryParams<ISalonURLQueryParams>(salonsURLParamsSchema, {
+	/* const [query, setQuery] = useQueryParams<ISalonURLQueryParams>(salonsURLParamsSchema, {
 		search: undefined,
 		categoryFirstLevelIDs: undefined,
 		statuses_all: false,
@@ -89,6 +90,28 @@ const SalonsPage = () => {
 		premiumSourceUserType: undefined,
 		hasAvailableReservationSystem: undefined,
 		enabledReservationsSetting: undefined
+	}) */
+
+	const [query, setQuery] = useQueryParams<ISalonURLQueryParams>(salonsURLParamsSchema, {
+		search: StringParam(),
+		categoryFirstLevelIDs: ArrayParam(),
+		statuses_all: BooleanParam(false),
+		statuses_published: StringParam(),
+		salonState: StringParam(SALONS_TAB_KEYS.ACTIVE),
+		statuses_changes: StringParam(),
+		limit: NumberParam(),
+		page: NumberParam(1),
+		order: StringParam('createdAt:DESC'),
+		countryCode: StringParam(),
+		createType: StringParam(),
+		lastUpdatedAtFrom: StringParam(),
+		lastUpdatedAtTo: StringParam(),
+		hasSetOpeningHours: StringParam(),
+		sourceType: StringParam(),
+		assignedUserID: StringParam(),
+		premiumSourceUserType: StringParam(),
+		hasAvailableReservationSystem: StringParam(),
+		enabledReservationsSetting: StringParam()
 	})
 
 	const resetQuery = (selectedTabKey: string, rewrite = {}) => {

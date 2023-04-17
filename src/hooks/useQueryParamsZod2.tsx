@@ -1,7 +1,7 @@
 import { isArray } from 'lodash'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { z, ZodTypeAny } from 'zod'
+import { ZodTypeAny } from 'zod'
 
 export interface IUseQueryParams {
 	[key: string]: any
@@ -27,13 +27,8 @@ type ParamType<ValueType = any> = {
 
 // vystup z tejto funkcie ide do useSearchParams hooku
 // do neho potrebujeme prekonvertovat hodnoty na stringy a v pripade undefined ich uplne odstranit
-const serializeInitialParams = <T extends object>(schema: ZodTypeAny, initialValues?: T): T | undefined => {
-	const result = schema.parse(initialValues)
-	type ResultType = z.infer<typeof schema>
-	console.log({ result, schema })
-	return initialValues
-
-	/* return Object.entries(initialValues || {}).reduce((acc, [key, value]) => {
+const serializeInitialParams = <T extends {}>(initialValues?: IUseQueryParamsInitial) =>
+	Object.entries(initialValues || {}).reduce((acc, [key, value]) => {
 		if (value.value === undefined) {
 			// odstrani query parameter zo searchParams
 			return { ...acc }
@@ -61,8 +56,7 @@ const serializeInitialParams = <T extends object>(schema: ZodTypeAny, initialVal
 			...acc,
 			[key]: value
 		}
-	}, {} as T) */
-}
+	}, {} as T)
 
 // merguju sa query parametre z URLcky s query parametrami zadefinovanymi v inicialnom objekte
 const mergeInitialValuesWithURLParams = (initialValues?: IUseQueryParamsInitial, URLSearchParams?: URLSearchParams) =>
@@ -123,18 +117,18 @@ const mergeInitialValuesWithURLParams = (initialValues?: IUseQueryParamsInitial,
 	}, {} as IUseQueryParamsInitial)
 
 // vrati zjednoduseny objekt bez informacii o typoch query parametrov
-const reduceInitialParams = (initialParams?: IUseQueryParamsInitial): IUseQueryParams => {
+const reduceInitialParams = <T extends {}>(initialParams?: IUseQueryParamsInitial): T => {
 	return Object.entries(initialParams || {}).reduce((acc, [key, value]) => {
 		return {
 			...acc,
 			[key]: value.value
 		}
-	}, {} as IUseQueryParams)
+	}, {} as T)
 }
 
 // vystup z tejto funkcie ide do useSearchParams hooku
 // do neho potrebujeme prekonvertovat hodnoty na stringy a v pripade undefined ich uplne odstranit
-export const serializeParams = (params?: IUseQueryParams) =>
+export const serializeParams = <T extends {}>(params?: T) =>
 	Object.entries(params || {}).reduce((acc, [key, value]) => {
 		if (value === undefined) {
 			// odstrani query parameter zo searchParams
@@ -159,7 +153,7 @@ export const serializeParams = (params?: IUseQueryParams) =>
 		}
 	}, {} as IUseQueryParams)
 
-/* export const ArrayParam = (value?: string[] | null): ParamType => {
+export const ArrayParam = (value?: string[] | null): ParamType => {
 	return {
 		paramType: PARAM_TYPE.ARRAY,
 		value
@@ -185,7 +179,7 @@ export const NumberParam = (value?: number | null): ParamType => {
 		paramType: PARAM_TYPE.NUMBER,
 		value
 	}
-} */
+}
 
 /**
  * v inicializacnom objekte je vzdy potrebne zadefinovat typ query parametra (zatial mame len StringParam(initValue) a ArrayParam(initValue))
@@ -198,18 +192,17 @@ export const NumberParam = (value?: number | null): ParamType => {
  */
 const useQueryParams = <T extends {}>(
 	schema: ZodTypeAny,
-	queryParamsInitial?: T,
+	queryParamsInitial?: IUseQueryParamsInitial,
 	globalConfig: NavigateOptions = { replace: true }
 ): [T, (newValues: T, config?: NavigateOptions) => void] => {
 	// prekonvertujeme initial objekt (ktory obsahuje informacie o type query parametru - Array x String) do jednoduchsieho objektu key:value vhodneho pre useSearchParams hook
-	// const intialValuesForSearchParams = reduceInitialParams(serializeInitialParams<T>(schema, queryParamsInitial))
-	const intialValuesForSearchParams = serializeInitialParams<T>(schema, queryParamsInitial)
+	const intialValuesForSearchParams = reduceInitialParams<T>(serializeInitialParams<T>(queryParamsInitial))
 	const [searchParams, setSearchParams] = useSearchParams(intialValuesForSearchParams)
 
-	// const getMergedInitialQueryParamsWithURLparams = () => reduceInitialParams(mergeInitialValuesWithURLParams(queryParamsInitial, searchParams))
+	const getMergedInitialQueryParamsWithURLparams = () => reduceInitialParams<T>(mergeInitialValuesWithURLParams(queryParamsInitial, searchParams))
 
 	// do query nastavime zjednoduseny objekt bez typov, aby sa potom pri volani setQueryParams v komponente nemusli vsade posielat informacie o type, ale len jednoduchy key:value objekt
-	const [query, setQuery] = useState<T | undefined>(/* getMergedInitialQueryParamsWithURLparams() */)
+	const [query, setQuery] = useState<T | undefined>(getMergedInitialQueryParamsWithURLparams())
 
 	const init = useRef(true)
 	const onDemand = useRef(false)
@@ -230,13 +223,13 @@ const useQueryParams = <T extends {}>(
 		if (init.current || onDemand.current) {
 			init.current = false
 			onDemand.current = false
-			// return
+			return
 		}
-		// setQuery(getMergedInitialQueryParamsWithURLparams())
+		setQuery(getMergedInitialQueryParamsWithURLparams())
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchParams])
 
-	return [/* query || {} */ (query || {}) as any, setQueryParams]
+	return [query || ({} as T), setQueryParams]
 }
 
 export default useQueryParams

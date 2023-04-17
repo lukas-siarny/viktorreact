@@ -78,7 +78,6 @@ const ImportForm: FC<Props> = (props) => {
 			open={visible}
 			destroyOnClose
 			footer={null}
-			getContainer={document.body}
 			onCancel={() => {
 				resetUploadForm()
 				setVisible(false)

@@ -288,7 +288,6 @@ const ReservationSystemSettingsForm = (props: Props) => {
 		}
 	}
 
-	const submitDownloadTemplate = () => {}
 	const getServicesSettingsContent = () => {
 		if (isLoadingTree) {
 			return <Spin className={'w-full m-auto mt-20'} />

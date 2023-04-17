@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { map } from 'lodash'
 
 // components
-import SalonCreatePage from './SalonCreatePage'
-import SalonEditPage from './SalonEditPage'
+import CreateSalonPage from './CreateSalonPage'
+import EditSalonPage from './EditSalonPage'
 
 // utils
 import { getPrefixCountryCode } from '../../utils/helper'
@@ -61,7 +61,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		phonePrefixes
 	}
 
-	return isNewSalon ? <SalonCreatePage {...commonProps} /> : <SalonEditPage salonID={props.salonID} {...commonProps} />
+	return isNewSalon ? <CreateSalonPage {...commonProps} /> : <EditSalonPage salonID={props.salonID} {...commonProps} />
 }
 
 export default SalonPage

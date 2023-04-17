@@ -39,7 +39,7 @@ import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO, PERMISSION.PARTNER]
 
-const SalonCreatePage: FC<SalonPageProps> = (props) => {
+const CreateSalonPage: FC<SalonPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -199,4 +199,4 @@ const SalonCreatePage: FC<SalonPageProps> = (props) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(SalonCreatePage)
+export default compose(withPermissions(permissions))(CreateSalonPage)

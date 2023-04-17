@@ -59,7 +59,7 @@ const getTabBreadcrumbName = (selectedTabKey: TAB_KEYS) => {
 	}
 }
 
-const SalonEditPage: FC<SalonEditPageProps> = (props) => {
+const EditSalonPage: FC<SalonEditPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const { salonID, isNotinoUser, backUrl } = props
@@ -113,12 +113,12 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 					items={[
 						{
 							key: TAB_KEYS.SALON_DETAIL,
-							label: <>{t('loc:Detail salónu')}</>,
+							label: t('loc:Detail salónu'),
 							children: salonDetail
 						},
 						{
 							key: TAB_KEYS.SALON_HISTORY,
-							label: <>{t('loc:História salónu')}</>,
+							label: t('loc:História salónu'),
 							children: <SalonHistory salonID={salonID} />
 						}
 					]}
@@ -130,4 +130,4 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(SalonEditPage)
+export default compose(withPermissions(permissions))(EditSalonPage)

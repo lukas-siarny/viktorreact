@@ -61,17 +61,16 @@ import SwitchField from '../../../../atoms/SwitchField'
 
 // hooks
 import useMedia from '../../../../hooks/useMedia'
-import { IUseQueryParams } from '../../../../hooks/useQueryParams'
-import { ISalonURLQueryParams } from '../../../../schemas/queryParams'
+import { ISalonsPageURLQueryParams } from '../../../../schemas/queryParams'
 
 type ComponentProps = {
 	onImportSalons: () => void
 	onDownloadReport: () => void
-	query: IUseQueryParams
+	query: ISalonsPageURLQueryParams
 }
 
 export type ISalonsFilterActive = Pick<
-	ISalonURLQueryParams,
+	ISalonsPageURLQueryParams,
 	'search' | 'statuses_all' | 'statuses_published' | 'statuses_changes' | 'hasSetOpeningHours' | 'categoryFirstLevelIDs' | 'countryCode' | 'createType'
 > & {
 	dateFromTo: {

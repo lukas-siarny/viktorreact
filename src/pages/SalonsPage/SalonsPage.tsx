@@ -37,7 +37,7 @@ import { Columns, IBreadcrumbs, IDataUploadForm, ISalonsReportForm } from '../..
 
 // hooks
 import useQueryParams from '../../hooks/useQueryParamsZod'
-import { ISalonURLQueryParams, salonsURLParamsSchema } from '../../schemas/queryParams'
+import { ISalonsPageURLQueryParams, salonsPageURLQueryParamsSchema } from '../../schemas/queryParams'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO]
 
@@ -69,7 +69,7 @@ const SalonsPage = () => {
 		dispatch(selectSalon())
 	}, [dispatch])
 
-	const [query, setQuery] = useQueryParams<ISalonURLQueryParams>(salonsURLParamsSchema, {
+	const [query, setQuery] = useQueryParams<ISalonsPageURLQueryParams>(salonsPageURLQueryParamsSchema, {
 		search: undefined,
 		categoryFirstLevelIDs: undefined,
 		statuses_all: true,
@@ -91,7 +91,7 @@ const SalonsPage = () => {
 		enabledReservationsSetting: undefined
 	})
 
-	const resetQuery = (selectedTabKey: string, rewrite = {}) => {
+	const resetQuery = (selectedTabKey: string, rewrite: ISalonsPageURLQueryParams = {}) => {
 		// reset query when switching between tabs
 		setQuery({
 			search: undefined,

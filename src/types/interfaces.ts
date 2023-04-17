@@ -25,7 +25,8 @@ import {
 	CONFIRM_MODAL_DATA_TYPE,
 	CALENDAR_EVENT_DISPLAY_TYPE,
 	PARAMETER_TYPE,
-	RESERVATION_SOURCE_TYPE
+	RESERVATION_SOURCE_TYPE,
+	SALON_SOURCE_TYPE
 } from '../utils/enums'
 
 // types
@@ -322,7 +323,7 @@ export interface ISmsUnitPricesFilter {
 export interface IRechargeSmsCreditFilter {
 	search?: string
 	countryCode: string
-	sourceType?: string
+	sourceType?: SALON_SOURCE_TYPE
 	walletAvailableBalanceFrom?: number
 	walletAvailableBalanceTo?: number
 }
@@ -350,7 +351,7 @@ export interface IUserAvatar {
 }
 
 export interface IQueryParams {
-	page?: number | null | string
+	page?: number | null
 	limit?: any | undefined
 	order?: string | undefined | null
 	search?: string | undefined | null

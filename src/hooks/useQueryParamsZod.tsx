@@ -34,17 +34,46 @@ const mergeParamsWithUrlParams = <T extends {}>(schema: any, params?: T, URLSear
 			if (!hasURLParam) {
 				return { ...acc, [key]: value }
 			}
-			/**
-			 * v pripade, ze volame metodu getAll(), tak to vzdy vrati pole
-			 * ak je v URLcke query parameter foo=, tak URLValue = ['']
-			 * ak je hodnota prazdny string, initnme ako null
-			 */
-			if (URLValueArray && URLValueArray[0] === '') {
-				return { ...acc, [key]: null }
+
+			let editedArr: (string | number | boolean)[] | undefined | null = URLValueArray
+
+			if (URLValueArray && URLValueArray.length) {
+				/**
+				 * v pripade, ze volame metodu getAll(), tak to vzdy vrati pole
+				 * ak je v URLcke query parameter foo=, tak URLValue = ['']
+				 * ak je hodnota prazdny string, initnme ako null
+				 */
+				if (URLValueArray.length === 1 && URLValueArray[0] === '') {
+					editedArr = null
+				}
+
+				// ak je shema zadefinovana ako pole ciselnych hodnot, tak vratime len validne hodnoty
+				if (innerSchema.element instanceof z.ZodNumber) {
+					editedArr = URLValueArray.reduce((arr, cv) => {
+						if (cv) {
+							return !Number.isNaN(cv) ? [...arr, Number(cv)] : arr
+						}
+						return arr
+					}, [] as number[])
+				}
+
+				// ak je shema zadefinovana ako pole boolean hodnot, tak vratime len validne hodnoty
+				if (innerSchema.element instanceof z.ZodBoolean) {
+					editedArr = URLValueArray.reduce((arr, cv) => {
+						let arrValue
+						if (cv === 'true') {
+							arrValue = true
+						}
+						if (cv === 'false') {
+							arrValue = false
+						}
+						return arrValue ? [...arr, arrValue] : arr
+					}, [] as boolean[])
+				}
 			}
-			// TODO: este pozriet ze ocakvam number, boolean v poli
-			// inak initneme co sa nachadza v URL
-			return { ...acc, [key]: URLValueArray }
+
+			// zvysne hodnoty sa nekontroluju a vracia sa co je v URL
+			return { ...acc, [key]: editedArr }
 		}
 
 		// ak sa pri inite v URL nenachadza hodnota, initneme default
@@ -73,7 +102,7 @@ const mergeParamsWithUrlParams = <T extends {}>(schema: any, params?: T, URLSear
 				URLValue = false
 			}
 		}
-		// inak initneme co sa nachadza v URL
+		// zvysne hodnoty sa nekontroluju a vracia sa co je v URL
 		return { ...acc, [key]: URLValue }
 	}, {} as T)
 }
@@ -83,7 +112,7 @@ const mergeParamsWithUrlParams = <T extends {}>(schema: any, params?: T, URLSear
  * @returns editované hodnoty vhodné pre useSearchParams hook
  * do neho potrebujeme prekonvertovat hodnoty na 'string' | string[], v pripade 'undefined' ich uplne odstranit a v pripade 'null' upravit na ''
  */
-const serializeParams = <T extends object>(params?: T): T | undefined => {
+export const serializeParams = <T extends object>(params?: T): T => {
 	return Object.entries(params || {}).reduce((acc, [key, value]) => {
 		if (value === undefined) {
 			// odstrani query parameter zo searchParams
@@ -102,22 +131,24 @@ const serializeParams = <T extends object>(params?: T): T | undefined => {
 			}
 
 			// upravy hodnoty v poli na stringy
-			value.reduce((arr, cv) => {
+			const stringArr = value.reduce((arr, cv) => {
 				if (cv === undefined || cv === null) {
 					return arr
 				}
 				return [...arr, z.coerce.string().parse(cv)]
-			}, [])
+			}, [] as string[])
+
+			return { ...acc, [key]: stringArr }
 		}
 
 		// upravy zvysne hodnoty na stringy
-		return { ...acc, value: z.coerce.string().parse(value) }
+		return { ...acc, [key]: z.coerce.string().parse(value) }
 	}, {} as T)
 }
 
 /**
  * wrapper nad useSearchParams hookom z react-routera, ktory umoznuje pracovat s hodnotami parametrov roznych typov (string, string[], number, number[] boolean, boolean[], undefined, null)
- * (useSearchParams hook pracuje so string, string[])
+ * (useSearchParams hook pracuje len so string, string[] a undefined)
  * @param schema ZOD schema
  * @param initialValues inicializacny objekt, ktory by mal byt validny podla ZOD schemy
  * @param globalConfig NavigateOptions
@@ -132,9 +163,10 @@ const useQueryParams = <T extends {}>(
 	globalConfig: NavigateOptions = { replace: true }
 ): [T, (newValues: T, config?: NavigateOptions) => void] => {
 	// upravime nase inicializacne hodnoty do tvaru vhodneho pre useSearchParams hook a upravene hodnoty vyincializujeme
-	const [searchParams, setSearchParams] = useSearchParams(serializeParams<T>(initialParams))
+	type SchemaType = z.infer<typeof schema>
+	const [searchParams, setSearchParams] = useSearchParams(serializeParams<SchemaType>(initialParams))
 
-	const getParamsMergedWithURLParams = () => mergeParamsWithUrlParams(schema, initialParams, searchParams)
+	const getParamsMergedWithURLParams = () => mergeParamsWithUrlParams<SchemaType>(schema, initialParams, searchParams)
 
 	// do query, ktoru vracia nas hook ulozime mergnute hodnoty z nasho inicialneho objektu s hodnotami z URLcky, ktore vratil useSearchParams hook
 	const [query, setQuery] = useState<T | undefined>(getParamsMergedWithURLParams())
@@ -145,7 +177,7 @@ const useQueryParams = <T extends {}>(
 	const setQueryParams = useCallback(
 		(newValues?: T, config?: NavigateOptions) => {
 			onDemand.current = true
-			setSearchParams(serializeParams(newValues), config || globalConfig)
+			setSearchParams(serializeParams<SchemaType>(newValues), config || globalConfig)
 			setQuery(newValues)
 		},
 		[setSearchParams, globalConfig]
@@ -166,7 +198,7 @@ const useQueryParams = <T extends {}>(
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchParams])
 
-	return [(query || {}) as any, setQueryParams]
+	return [(query || {}) as T, setQueryParams]
 }
 
 export default useQueryParams

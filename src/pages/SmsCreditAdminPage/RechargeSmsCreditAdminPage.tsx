@@ -37,7 +37,8 @@ import { getSmsUnitPricesActual } from '../../reducers/smsUnitPrices/smsUnitPric
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
-import useQueryParams, { BooleanParam, NumberParam, serializeParams, StringParam } from '../../hooks/useQueryParams'
+import useQueryParams, { serializeParams } from '../../hooks/useQueryParamsZod'
+import { IRechargeSmsCreditAdminPageURLQueryParams, rechargeSmsCreditAdminPageSchema } from '../../schemas/queryParams'
 
 type TableDataItem = NonNullable<ISalonsPayload['data']>['salons'][0]
 type SelectedRow = { id: React.Key; wallet: TableDataItem['wallet'] }
@@ -68,15 +69,15 @@ const RechargeSmsCreditAdminPage = () => {
 	const smsUnitPricesActual = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPricesActual)
 	const defaultSelectedCountryCode = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 
-	const [query, setQuery] = useQueryParams({
-		limit: NumberParam(50),
-		page: NumberParam(1),
-		search: StringParam(),
-		countryCode: StringParam(defaultSelectedCountryCode || LOCALES[LANGUAGE.CZ].countryCode),
-		sourceType: StringParam(),
-		walletAvailableBalanceFrom: NumberParam(),
-		walletAvailableBalanceTo: NumberParam(),
-		showForm: BooleanParam(false)
+	const [query, setQuery] = useQueryParams<IRechargeSmsCreditAdminPageURLQueryParams>(rechargeSmsCreditAdminPageSchema, {
+		limit: 50,
+		page: 1,
+		search: undefined,
+		countryCode: defaultSelectedCountryCode || LOCALES[LANGUAGE.CZ].countryCode,
+		sourceType: undefined,
+		walletAvailableBalanceFrom: undefined,
+		walletAvailableBalanceTo: undefined,
+		showForm: false
 	})
 
 	const selectedCountry = countries.data?.find((country) => country.code === query.countryCode)
@@ -196,6 +197,9 @@ const RechargeSmsCreditAdminPage = () => {
 	}
 
 	const onSelectChange = (_newSelectedRowKeys: React.Key[], newSelectedRows: TableDataItem[]) => {
+		if (!query.page) {
+			return
+		}
 		const isSubstraction = selectedRows[query.page] && newSelectedRows.length < selectedRows[query.page].length
 
 		let newRows: SelectedRow[] = []

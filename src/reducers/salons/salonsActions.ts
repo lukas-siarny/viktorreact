@@ -20,6 +20,7 @@ import {
 	SALONS_TAB_KEYS
 } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
+import { IGetSalonsQueryParams } from '../../schemas/queryParams'
 
 export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGetBasictSalon | IGetBasicSalons | IGetSalonHistory | IGetRejectedSuggestions
 
@@ -31,22 +32,6 @@ interface IGetSalons {
 interface IGetSalonHistory {
 	type: SALON_HISTORY
 	payload: ISalonHistoryPayload
-}
-
-export interface IGetSalonsQueryParams extends IQueryParams {
-	categoryFirstLevelIDs?: (string | null)[] | null
-	statuses_all?: boolean | null
-	statuses_published?: string | SALON_FILTER_STATES | null
-	salonState?: string | null
-	statuses_changes?: string | SALON_FILTER_STATES | null
-	countryCode?: string | null
-	createType?: string | null
-	lastUpdatedAtFrom?: string | null
-	lastUpdatedAtTo?: string | null
-	hasSetOpeningHours?: string | null
-	sourceType?: string | null
-	premiumSourceUserType?: string | null
-	assignedUserID?: string | null
 }
 
 export interface IGetSalonsHistoryQueryParams extends IQueryParams {
@@ -119,29 +104,8 @@ interface IGetRejectedSuggestions {
 	payload: IRejectedSuggestionsPayload
 }
 
-interface GetSalonsQueryParams extends IQueryParams {
-	categoryFirstLevelIDs?: string[] | null
-	statuses_all?: boolean | null
-	statuses_published?: SALON_FILTER_STATES.PUBLISHED | SALON_FILTER_STATES.NOT_PUBLISHED | null
-	statuses_changes?: SALON_FILTER_STATES.PENDING_PUBLICATION | SALON_FILTER_STATES.DECLINED | null
-	// salonState?: SALONS_TAB_KEYS.DELETED | SALONS_TAB_KEYS.ACTIVE | null
-	salonState?: SALONS_TAB_KEYS | null
-	countryCode?: string | null
-	createType?: SALON_CREATE_TYPE | null
-	lastUpdatedAtFrom?: string | null
-	lastUpdatedAtTo?: string | null
-	hasSetOpeningHours?: SALON_FILTER_OPENING_HOURS | null
-	sourceType?: SALON_SOURCE_TYPE | null
-	premiumSourceUserType?: SALON_SOURCE_TYPE | null
-	assignedUserID?: string | null
-	walletAvailableBalanceFrom?: number | null
-	walletAvailableBalanceTo?: number | null
-	hasAvailableReservationSystem?: SALON_FILTER_RS_AVAILABLE_ONLINE | null
-	enabledReservationsSetting?: SALON_FILTER_RS | null
-}
-
 export const getSalons =
-	(queryParams: GetSalonsQueryParams): ThunkResult<Promise<ISalonsPayload>> =>
+	(queryParams: IGetSalonsQueryParams): ThunkResult<Promise<ISalonsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISalonsPayload
 

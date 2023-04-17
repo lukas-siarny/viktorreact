@@ -39,7 +39,7 @@ import { RootState } from '../../../reducers'
 import { IReservationsFilter, ReservationsEmployees } from '../../../types/interfaces'
 
 type ComponentProps = {
-	state: RESERVATIONS_STATE
+	reservationState: RESERVATIONS_STATE
 }
 
 type Props = InjectedFormProps<IReservationsFilter, ComponentProps> & ComponentProps
@@ -86,7 +86,7 @@ const ReservationsFilter = (props: Props) => {
 		[]
 	)
 
-	const { handleSubmit, state } = props
+	const { handleSubmit, reservationState } = props
 	const [t] = useTranslation()
 	const reservations = useSelector((state: RootState) => state.calendar.paginatedReservations)
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.RESERVATIONS_FILTER)(state))
@@ -141,7 +141,7 @@ const ReservationsFilter = (props: Props) => {
 								showSearch={false}
 								showArrow
 								className={'pb-0 mt-4'}
-								disabled={state === RESERVATIONS_STATE.PENDING}
+								disabled={reservationState === RESERVATIONS_STATE.PENDING}
 								size={'large'}
 								options={RESERVATION_STATE_OPTIONS}
 							/>

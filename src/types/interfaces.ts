@@ -728,7 +728,7 @@ export interface SalonPageProps {
 	phonePrefixes: IEnumerationsCountriesPayload & ILoadingAndFailure
 }
 
-export interface SalonEditPageProps extends SalonPageProps {
+export interface EditSalonPageProps extends SalonPageProps {
 	salonID: string
 }
 

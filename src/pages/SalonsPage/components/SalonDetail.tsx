@@ -24,7 +24,7 @@ import { ISelectedSalonPayload, selectSalon } from '../../../reducers/selectedSa
 import { getCurrentUser } from '../../../reducers/users/userActions'
 
 // types
-import { ILoadingAndFailure, INoteForm, INoteModal, INotinoUserForm, ISalonForm, SalonEditPageProps } from '../../../types/interfaces'
+import { ILoadingAndFailure, INoteForm, INoteModal, INotinoUserForm, ISalonForm, EditSalonPageProps } from '../../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq } from '../../../utils/request'
@@ -43,7 +43,7 @@ const permissions: PERMISSION[] = [PERMISSION.NOTINO, PERMISSION.PARTNER]
 
 const pendingStates: string[] = [SALON_STATES.NOT_PUBLISHED_PENDING, SALON_STATES.PUBLISHED_PENDING]
 
-interface SalonDetailProps extends SalonEditPageProps {
+interface SalonDetailProps extends EditSalonPageProps {
 	salon: ISelectedSalonPayload & ILoadingAndFailure
 	isDeletedSalon?: boolean
 }

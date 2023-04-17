@@ -19,7 +19,7 @@ import { PERMISSION, TAB_KEYS } from '../../utils/enums'
 import { RootState } from '../../reducers'
 
 // types
-import { IBreadcrumbs, SalonEditPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, EditSalonPageProps } from '../../types/interfaces'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
@@ -59,7 +59,7 @@ const getTabBreadcrumbName = (selectedTabKey: TAB_KEYS) => {
 	}
 }
 
-const EditSalonPage: FC<SalonEditPageProps> = (props) => {
+const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const { salonID, isNotinoUser, backUrl } = props

@@ -829,8 +829,9 @@ export enum CALENDAR_EVENT_TYPE {
 	RESERVATION = 'RESERVATION',
 	EMPLOYEE_SHIFT = 'EMPLOYEE_SHIFT',
 	EMPLOYEE_TIME_OFF = 'EMPLOYEE_TIME_OFF',
-	EMPLOYEE_BREAK = 'EMPLOYEE_BREAK',
-	RESERVATION_FROM_IMPORT = 'RESERVATION_FROM_IMPORT'
+	EMPLOYEE_BREAK = 'EMPLOYEE_BREAK'
+	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+	// RESERVATION_FROM_IMPORT = 'RESERVATION_FROM_IMPORT'
 }
 
 export enum CALENDAR_EVENTS_VIEW_TYPE {
@@ -886,9 +887,10 @@ export const EVENT_NAMES = (t: TFunction, eventType?: CALENDAR_EVENT_TYPE, capit
 		case CALENDAR_EVENT_TYPE.RESERVATION:
 			string = t('loc:rezerváciu')
 			break
-		case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
+		// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+		/* case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 			string = t('loc:importovanú rezerváciu')
-			break
+			break */
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
 			string = t('loc:voľno')
 			break

@@ -37,43 +37,6 @@ import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData, tr
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin)
 
-const rsColumns = (labels: string[] = [], futureBreak = 0): Columns => {
-	return [
-		{
-			key: 'type',
-			dataIndex: 'type',
-			render: (value) => {
-				switch (value) {
-					case RS_STATS_TYPE.ENABLE_RS_B2B:
-						return (
-							<div className={'flex flex-1 items-center'}>
-								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[200], flex: '0 0 auto' }} />
-								<span className='xs-bold'>{i18next.t('loc:Zapnutý Rezervačný systém pre B2B')}</span>
-							</div>
-						)
-					case RS_STATS_TYPE.ENABLE_RS_B2C:
-						return (
-							<div className={'flex flex-1 items-center'}>
-								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[700], flex: '0 0 auto' }} />
-								<span className='xs-bold'>{i18next.t('loc:Zapnutý rezervačný systém pre B2C')}</span>
-							</div>
-						)
-					default:
-						return ''
-				}
-			}
-		},
-		...labels.map((label: string, index: number) => {
-			return {
-				key: index,
-				dataIndex: index,
-				className: cx({ 'future-divider': futureBreak - 0.5 === index }), // 0.5 is delta for display devider between columns
-				title: <span className={cx('xs-semibold', { 'text-notino-gray': futureBreak <= index })}>{label}</span>,
-				render: (value: number) => <span className={cx('xs-regular', { 'text-notino-gray': futureBreak <= index })}>{value}</span>
-			}
-		})
-	]
-}
 const reservationsColumns = (labels: string[] = [], futureBreak = 0): Columns => {
 	return [
 		{
@@ -257,7 +220,6 @@ const NotinoDashboard: FC = () => {
 	const dispatch = useDispatch()
 	const [annualStatsDate, setAnnualStatsDate] = useState<Dayjs>(now)
 	const [monthStatsDate, setMonthStatsDate] = useState<Dayjs>(now)
-	const [mothRsStatsDate, setMothRsStatsDate] = useState<Dayjs>(now)
 	const [monthReservationsStatsDate, setMonthReservationsStatsDate] = useState<Dayjs>(now)
 
 	const { notino, salonsAnnualStats, salonsMonthStats, reservationsStats } = useSelector((state: RootState) => state.dashboard)

@@ -246,7 +246,8 @@ const ReservationSystemSettingsForm = (props: Props) => {
 		formData.append('file', values?.file)
 
 		try {
-			if (uploadModal.uploadType === UPLOAD_TYPE.RESERVATION) {
+			// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+			/* if (uploadModal.uploadType === UPLOAD_TYPE.RESERVATION) {
 				await postReq('/api/b2b/admin/imports/salons/{salonID}/calendar-events', { salonID }, formData, {
 					headers
 				})
@@ -254,7 +255,11 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				await postReq('/api/b2b/admin/imports/salons/{salonID}/customers', { salonID }, formData, {
 					headers
 				})
-			}
+			} */
+
+			await postReq('/api/b2b/admin/imports/salons/{salonID}/customers', { salonID }, formData, {
+				headers
+			})
 
 			setUploadModal({ ...uploadModal, requestStatus: REQUEST_STATUS.SUCCESS })
 		} catch {
@@ -472,7 +477,8 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							visible={uploadModal.visible}
 							setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
 						/>
-						<Button
+						{/* // NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov */}
+						{/* <Button
 							onClick={() => {
 								setUploadModal({
 									...uploadModal,
@@ -492,7 +498,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							icon={<UploadIcon />}
 						>
 							{t('loc:Importovať rezervácie')}
-						</Button>
+						</Button> */}
 						<Button
 							onClick={() => {
 								setUploadModal({

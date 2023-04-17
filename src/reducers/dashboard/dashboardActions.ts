@@ -24,7 +24,6 @@ interface IGetReservationsStats {
 
 export type INotinoDashboard = Paths.GetApiB2BAdminNotinoDashboard.Responses.$200['counts']
 export type ISalonsTimeStats = Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.Responses.$200
-// export type IRsStats = Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.Responses.$200
 export type IReservationsStats = Paths.GetApiB2BAdminNotinoDashboardSalonReservationsTimeStats.Responses.$200
 
 interface IGetReservationsStatsQueryParams {

@@ -368,7 +368,7 @@ const ReservationsPage = (props: Props) => {
 		<Row gutter={ROW_GUTTER_X_DEFAULT}>
 			<Col span={24}>
 				<div className='content-body'>
-					<ReservationsFilter state={query.state} onSubmit={handleSubmit} />
+					<ReservationsFilter reservationState={query.state} onSubmit={handleSubmit} />
 					<CustomTable
 						className='table-fixed'
 						columns={columns}

@@ -52,7 +52,7 @@ const mergeParamsWithUrlParams = <Schema extends z.ZodObject<any>>(schema: Schem
 					editedArr = null
 				}
 
-				// ak je shema zadefinovana ako pole ciselnych hodnot, tak vratime len validne hodnoty
+				// ak je shema zadefinovana ako pole ciselnych hodnot, tak validne hodnoty prekonvertujeme na cisla
 				if (innerSchema.element instanceof z.ZodNumber) {
 					editedArr = URLValueArray.reduce((arr, cv) => {
 						if (cv) {
@@ -62,7 +62,7 @@ const mergeParamsWithUrlParams = <Schema extends z.ZodObject<any>>(schema: Schem
 					}, [] as number[])
 				}
 
-				// ak je shema zadefinovana ako pole boolean hodnot, tak vratime len validne hodnoty
+				// ak je shema zadefinovana ako pole boolean hodnot, tak validne hodnoty prekonvertujeme na boolean
 				if (innerSchema.element instanceof z.ZodBoolean) {
 					editedArr = URLValueArray.reduce((arr, cv) => {
 						let arrValue
@@ -77,7 +77,7 @@ const mergeParamsWithUrlParams = <Schema extends z.ZodObject<any>>(schema: Schem
 				}
 			}
 
-			// zvysne hodnoty sa nekontroluju a vracia sa co je v URL
+			// inak vrati hodnoty ktore su v URL
 			return { ...acc, [key]: editedArr }
 		}
 
@@ -93,12 +93,14 @@ const mergeParamsWithUrlParams = <Schema extends z.ZodObject<any>>(schema: Schem
 			return { ...acc, [key]: null }
 		}
 
+		// ak je shema zadefinovana ako cislena hodnota, tak validnu hodnotu prekonvertujeme na cislo
 		if (innerSchema instanceof z.ZodNumber) {
 			if (!Number.isNaN(URLValue)) {
 				URLValue = Number(URLValue)
 			}
 		}
 
+		// ak je shema zadefinovana ako boolean hodnota, tak validnu hodnotu prekonvertujeme na boolean
 		if (innerSchema instanceof z.ZodBoolean) {
 			if (URLValue === 'true') {
 				URLValue = true
@@ -111,7 +113,7 @@ const mergeParamsWithUrlParams = <Schema extends z.ZodObject<any>>(schema: Schem
 		return { ...acc, [key]: URLValue }
 	}, {} as z.infer<Schema>)
 
-	// vrati len hodnoty validne podla shemy
+	// vrati len hodnoty validne podla schemy
 	return partialSafeParse(schema, mergedAndConvertedParams).validData
 }
 

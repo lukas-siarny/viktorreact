@@ -1,7 +1,9 @@
 import { isArray } from 'lodash'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { z, ZodTypeAny } from 'zod'
+import { z } from 'zod'
+
+import { partialSafeParse } from '../utils/zodUtils'
 
 /**
  * @param schema ZOD schema
@@ -19,20 +21,23 @@ const getInnerSchema = (schema: any): z.ZodTypeAny => {
  * @param schema ZOD schema
  * @param params objekt, ktory by mal byt validny podla ZOD schemy
  * @param URLSearchParams hodnoty, ktore vratil useSearchParams hook po vyiinicalizovani s nasimi upravenymi inicialnymi hodnotami cez serializeParams() funkciu
- * @returns mergnu sa hodnoty, ktore su zadefiovane v URLcke s hodnotami z nasho inicialneho objektu
+ * @returns mergnu sa hodnoty, ktore su zadefiovane v URLcke s hodnotami z nasho objektu
+ * mergnute hodnoty sa prekontroluju a vratia len validne podla schemy
  */
-const mergeParamsWithUrlParams = <T extends {}>(schema: any, params?: T, URLSearchParams?: URLSearchParams): T => {
-	return Object.entries(params || {}).reduce((acc, [key, value]) => {
+const mergeParamsWithUrlParams = <Schema extends z.ZodObject<any>>(schema: Schema, params: z.infer<Schema> = {}, URLSearchParams?: URLSearchParams): z.infer<Schema> => {
+	const mergedAndConvertedParams = Object.keys(schema.shape || {}).reduce((acc, key) => {
 		const hasURLParam = URLSearchParams?.has(key)
-		const propertySchema = schema.shape[key as keyof T]
+		const propertySchema = schema.shape[key]
 		const innerSchema = getInnerSchema(propertySchema)
+		const value = params[key]
+		const hasKeyInParams = key in params
 
 		// v pripade pola je potrebne pouzit getAll() metodu, aby sme ziskali vsetky hodnoty
 		if (innerSchema instanceof z.ZodArray) {
 			const URLValueArray = URLSearchParams?.getAll(key)
-			// ak sa pri inite v URL nenachadza hodnota, initneme default
+			// ak sa pri inite v URL nenachadza hodnota, initneme default (v pripade, ze sa taky key nachadzal v nasom objekte, inak vratime nezmeny objekt)
 			if (!hasURLParam) {
-				return { ...acc, [key]: value }
+				return hasKeyInParams ? { ...acc, [key]: value } : acc
 			}
 
 			let editedArr: (string | number | boolean)[] | undefined | null = URLValueArray
@@ -76,9 +81,9 @@ const mergeParamsWithUrlParams = <T extends {}>(schema: any, params?: T, URLSear
 			return { ...acc, [key]: editedArr }
 		}
 
-		// ak sa pri inite v URL nenachadza hodnota, initneme default
+		// ak sa pri inite v URL nenachadza hodnota, initneme default (v pripade, ze sa taky key nachadzal v nasom objekte, inak vratime nezmeny objekt)
 		if (!hasURLParam) {
-			return { ...acc, [key]: value }
+			return hasKeyInParams ? { ...acc, [key]: value } : acc
 		}
 
 		let URLValue: string | number | boolean | undefined | null = URLSearchParams?.get(key)
@@ -102,9 +107,12 @@ const mergeParamsWithUrlParams = <T extends {}>(schema: any, params?: T, URLSear
 				URLValue = false
 			}
 		}
-		// zvysne hodnoty sa nekontroluju a vracia sa co je v URL
+		// inak vrati hodnoty ktore su v URL
 		return { ...acc, [key]: URLValue }
-	}, {} as T)
+	}, {} as z.infer<Schema>)
+
+	// vrati len hodnoty validne podla shemy
+	return partialSafeParse(schema, mergedAndConvertedParams).validData
 }
 
 /**
@@ -152,32 +160,30 @@ export const serializeParams = <T extends object>(params?: T): T => {
  * @param schema ZOD schema
  * @param initialValues inicializacny objekt, ktory by mal byt validny podla ZOD schemy
  * @param globalConfig NavigateOptions
- * @returns query objekt generickeho typu T, ktory by mal byt validny podla ZOD schemy (teda mal by byt vytvoreny ako z.infer<typeof ZODschema>)
+ * @returns query objekt generickeho typu T, ktory by mal byt validny podla ZOD schemy
  * v pripade, ze sa pri inicializacii v URLcke nachadzaju nejake hodnoty, tak vrati nase inicializacne hodnoty mergnute s tymito hodnotami
- * POZOR! atributy, ktore sa nenachadzaju v inicializacnom objekte budu pri mergovani odignorovane
- * teda aj v pripade, ze nechceme parametru nastavit hodnotu, je potrebne ho vyinicializovat => { parameter: undefined }
  */
-const useQueryParams = <T extends {}>(
-	schema: ZodTypeAny,
-	initialParams?: T,
+const useQueryParams = <Schema extends z.ZodObject<any>>(
+	schema: Schema,
+	initialParams?: z.infer<Schema>,
 	globalConfig: NavigateOptions = { replace: true }
-): [T, (newValues: T, config?: NavigateOptions) => void] => {
+): [z.infer<Schema>, (newValues: z.infer<Schema>, config?: NavigateOptions) => void] => {
 	// upravime nase inicializacne hodnoty do tvaru vhodneho pre useSearchParams hook a upravene hodnoty vyincializujeme
-	type SchemaType = z.infer<typeof schema>
-	const [searchParams, setSearchParams] = useSearchParams(serializeParams<SchemaType>(initialParams))
+	type SchemaInferedType = z.infer<Schema>
+	const [searchParams, setSearchParams] = useSearchParams(serializeParams<SchemaInferedType>(initialParams))
 
-	const getParamsMergedWithURLParams = () => mergeParamsWithUrlParams<SchemaType>(schema, initialParams, searchParams)
+	const getParamsMergedWithURLParams = () => mergeParamsWithUrlParams<Schema>(schema, initialParams, searchParams)
 
 	// do query, ktoru vracia nas hook ulozime mergnute hodnoty z nasho inicialneho objektu s hodnotami z URLcky, ktore vratil useSearchParams hook
-	const [query, setQuery] = useState<T | undefined>(getParamsMergedWithURLParams())
+	const [query, setQuery] = useState<SchemaInferedType>(getParamsMergedWithURLParams())
 
 	const init = useRef(true)
 	const onDemand = useRef(false)
 
 	const setQueryParams = useCallback(
-		(newValues?: T, config?: NavigateOptions) => {
+		(newValues: SchemaInferedType, config?: NavigateOptions) => {
 			onDemand.current = true
-			setSearchParams(serializeParams<SchemaType>(newValues), config || globalConfig)
+			setSearchParams(serializeParams<SchemaInferedType>(newValues), config || globalConfig)
 			setQuery(newValues)
 		},
 		[setSearchParams, globalConfig]
@@ -198,7 +204,7 @@ const useQueryParams = <T extends {}>(
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchParams])
 
-	return [(query || {}) as T, setQueryParams]
+	return [query || {}, setQueryParams]
 }
 
 export default useQueryParams

@@ -69,7 +69,7 @@ const SalonsPage = () => {
 		dispatch(selectSalon())
 	}, [dispatch])
 
-	const [query, setQuery] = useQueryParams<ISalonsPageURLQueryParams>(salonsPageURLQueryParamsSchema, {
+	const [query, setQuery] = useQueryParams(salonsPageURLQueryParamsSchema, {
 		search: undefined,
 		categoryFirstLevelIDs: undefined,
 		statuses_all: true,

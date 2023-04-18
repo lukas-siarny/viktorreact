@@ -38,7 +38,7 @@ import { getSmsUnitPricesActual } from '../../reducers/smsUnitPrices/smsUnitPric
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
 import useQueryParams, { serializeParams } from '../../hooks/useQueryParamsZod'
-import { IRechargeSmsCreditAdminPageURLQueryParams, rechargeSmsCreditAdminPageSchema } from '../../schemas/queryParams'
+import { rechargeSmsCreditAdminPageSchema } from '../../schemas/queryParams'
 
 type TableDataItem = NonNullable<ISalonsPayload['data']>['salons'][0]
 type SelectedRow = { id: React.Key; wallet: TableDataItem['wallet'] }
@@ -69,7 +69,7 @@ const RechargeSmsCreditAdminPage = () => {
 	const smsUnitPricesActual = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPricesActual)
 	const defaultSelectedCountryCode = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 
-	const [query, setQuery] = useQueryParams<IRechargeSmsCreditAdminPageURLQueryParams>(rechargeSmsCreditAdminPageSchema, {
+	const [query, setQuery] = useQueryParams(rechargeSmsCreditAdminPageSchema, {
 		limit: 50,
 		page: 1,
 		search: undefined,

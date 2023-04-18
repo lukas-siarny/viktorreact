@@ -18,7 +18,7 @@ import {
 } from '../../types/interfaces'
 
 // enums
-import { EVENTS, EVENT_DETAIL, MONTHLY_RESERVATIONS, SET_DAY_EVENTS, RESERVATIONS, SET_IS_REFRESHING_EVENTS } from './calendarTypes'
+import { EVENTS, EVENT_DETAIL, MONTHLY_RESERVATIONS, SET_DAY_EVENTS, RESERVATIONS, SET_IS_REFRESHING_EVENTS, PENDING_RESERVATIONS_COUNT } from './calendarTypes'
 import {
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_EVENTS_KEYS,
@@ -46,6 +46,9 @@ type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents
 
 interface IGetSalonReservationsQueryParams extends IPaginationQuery {
 	dateFrom?: string | null
+	dateTo?: string | null
+	createdAtFrom?: string | null
+	createdAtTo?: string | null
 	employeeIDs?: (string | null)[] | null
 	categoryIDs?: (string | null)[] | null
 	reservationStates?: (string | null)[] | null
@@ -98,9 +101,19 @@ export type ICalendarActions =
 	| ISetIsRefreshingEvents
 	| ISetDayEvents
 	| IGetSalonReservations
+	| IGetPendingReservationsCount
 
 export interface ISalonReservationsPayload extends ISearchable<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200> {
 	tableData: ISalonReservationsTableData[]
+}
+
+export interface IPendingReservationsCount {
+	count: number
+}
+
+interface IGetPendingReservationsCount {
+	type: PENDING_RESERVATIONS_COUNT
+	payload: IPendingReservationsCount
 }
 
 interface IGetCalendarEvents {
@@ -575,6 +588,9 @@ export const getPaginatedReservations =
 			const queryParamsEditedForRequest = {
 				salonID: queryParams.salonID,
 				dateFrom: queryParams.dateFrom,
+				dateTo: queryParams.dateTo,
+				createdAtFrom: queryParams.createdAtFrom,
+				createdAtTo: queryParams.createdAtTo,
 				reservationStates: queryParams.reservationStates,
 				employeeIDs: queryParams.employeeIDs,
 				reservationPaymentMethods: queryParams.reservationPaymentMethods,
@@ -595,10 +611,11 @@ export const getPaginatedReservations =
 			const tableData: ISalonReservationsTableData[] = map(data.calendarEvents, (event) => {
 				const employee = find(data.employees, { id: event.employee.id })
 				return {
+					id: event.id,
 					key: event.id,
 					startDate: formatDateByLocale(event.start.date, true) as string,
 					time: `${event.start.time} - ${event.end.time}`,
-					createdAt: formatDateByLocale(event.createdAt) as string,
+					createdAt: formatDateByLocale(event.createdAt, true) as string,
 					createSourceType: transalteReservationSourceType(event.reservationData?.createSourceType as RESERVATION_SOURCE_TYPE),
 					state: event.reservationData?.state as RESERVATION_STATE,
 					employee,
@@ -614,6 +631,33 @@ export const getPaginatedReservations =
 			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}
+
+export const getPendingReservationsCount =
+	(salonID: string): ThunkResult<Promise<IPendingReservationsCount>> =>
+	async (dispatch) => {
+		let payload = {} as IPendingReservationsCount
+		try {
+			dispatch({ type: PENDING_RESERVATIONS_COUNT.PENDING_RESERVATIONS_COUNT_LOAD_START })
+
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/paginated', {
+				salonID,
+				limit: 1,
+				page: 1,
+				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
+				reservationStates: [RESERVATION_STATE.PENDING]
+			})
+			payload = {
+				count: data.pagination.totalCount
+			}
+			dispatch({ type: PENDING_RESERVATIONS_COUNT.PENDING_RESERVATIONS_COUNT_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: PENDING_RESERVATIONS_COUNT.PENDING_RESERVATIONS_COUNT_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}

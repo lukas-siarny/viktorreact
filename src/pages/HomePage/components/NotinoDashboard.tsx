@@ -25,7 +25,7 @@ import { Columns, AlertData, DashboardData, TimeStats } from '../../../types/int
 
 // redux
 import { RootState } from '../../../reducers'
-import { getNotinoDashboard, INotinoDashboard, getSalonsAnnualStats, getSalonsMonthStats, getRsStats, getReservationStats } from '../../../reducers/dashboard/dashboardActions'
+import { getNotinoDashboard, INotinoDashboard, getSalonsAnnualStats, getSalonsMonthStats, getReservationStats } from '../../../reducers/dashboard/dashboardActions'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
@@ -33,47 +33,10 @@ import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron
 
 // utils
 import { DASHBOARD_TASB_KEYS, FILTER_PATHS, RESERVATIONS_STATS_TYPE, RS_STATS_TYPE, SALON_FILTER_STATES, SALONS_TIME_STATS_TYPE, STRINGS } from '../../../utils/enums'
-import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData, transformToRsStatsData, transformToReservationsStatsData } from './dashboardUtils'
+import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData, transformToReservationsStatsData } from './dashboardUtils'
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin)
 
-const rsColumns = (labels: string[] = [], futureBreak = 0): Columns => {
-	return [
-		{
-			key: 'type',
-			dataIndex: 'type',
-			render: (value) => {
-				switch (value) {
-					case RS_STATS_TYPE.ENABLE_RS_B2B:
-						return (
-							<div className={'flex flex-1 items-center'}>
-								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[200], flex: '0 0 auto' }} />
-								<span className='xs-bold'>{i18next.t('loc:Zapnutý Rezervačný systém pre B2B')}</span>
-							</div>
-						)
-					case RS_STATS_TYPE.ENABLE_RS_B2C:
-						return (
-							<div className={'flex flex-1 items-center'}>
-								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[700], flex: '0 0 auto' }} />
-								<span className='xs-bold'>{i18next.t('loc:Zapnutý rezervačný systém pre B2C')}</span>
-							</div>
-						)
-					default:
-						return ''
-				}
-			}
-		},
-		...labels.map((label: string, index: number) => {
-			return {
-				key: index,
-				dataIndex: index,
-				className: cx({ 'future-divider': futureBreak - 0.5 === index }), // 0.5 is delta for display devider between columns
-				title: <span className={cx('xs-semibold', { 'text-notino-gray': futureBreak <= index })}>{label}</span>,
-				render: (value: number) => <span className={cx('xs-regular', { 'text-notino-gray': futureBreak <= index })}>{value}</span>
-			}
-		})
-	]
-}
 const reservationsColumns = (labels: string[] = [], futureBreak = 0): Columns => {
 	return [
 		{
@@ -257,23 +220,15 @@ const NotinoDashboard: FC = () => {
 	const dispatch = useDispatch()
 	const [annualStatsDate, setAnnualStatsDate] = useState<Dayjs>(now)
 	const [monthStatsDate, setMonthStatsDate] = useState<Dayjs>(now)
-	const [mothRsStatsDate, setMothRsStatsDate] = useState<Dayjs>(now)
 	const [monthReservationsStatsDate, setMonthReservationsStatsDate] = useState<Dayjs>(now)
 
-	const { notino, salonsAnnualStats, salonsMonthStats, rsStats, reservationsStats } = useSelector((state: RootState) => state.dashboard)
+	const { notino, salonsAnnualStats, salonsMonthStats, reservationsStats } = useSelector((state: RootState) => state.dashboard)
 	const { selectedSalon } = useSelector((state: RootState) => state.selectedSalon)
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	const navigate = useNavigate()
 	const [tabKey, setTabKey] = useState<DASHBOARD_TASB_KEYS>(DASHBOARD_TASB_KEYS.SALONS_STATE)
 
 	useEffect(() => {
-		dispatch(
-			getRsStats({
-				countryCode: selectedCountry,
-				year: now.year(),
-				month: now.month() + 1
-			})
-		)
 		dispatch(
 			getReservationStats({
 				countryCode: selectedCountry,
@@ -294,10 +249,6 @@ const NotinoDashboard: FC = () => {
 	const monthStats: TimeStats = useMemo(() => {
 		return transformToStatsData(salonsMonthStats.data, salonsMonthStats.isLoading, salonsMonthStats.isFailure, monthStatsDate)
 	}, [salonsMonthStats, monthStatsDate])
-
-	const rsMonthStats: TimeStats = useMemo(() => {
-		return transformToRsStatsData(rsStats.data, rsStats.isLoading, rsStats.isFailure, mothRsStatsDate)
-	}, [rsStats.data, rsStats.isLoading, rsStats.isFailure, mothRsStatsDate])
 
 	const reservationsMonthStats: TimeStats = useMemo(() => {
 		return transformToReservationsStatsData(reservationsStats.data, reservationsStats.isLoading, reservationsStats.isFailure, monthReservationsStatsDate)
@@ -500,23 +451,6 @@ const NotinoDashboard: FC = () => {
 	)
 	const reservationsDashboard = (
 		<ReservationsDashboard>
-			{/* // RS stats */}
-			{lineContent(
-				t('loc:Vývoj salónov s rezervačným systémom - mesačný'),
-				rsMonthStats,
-				timeStatsFilter((date) => {
-					if (date) {
-						setMothRsStatsDate(date)
-						dispatch(
-							getRsStats({
-								year: Number(date.year()),
-								month: Number(date.month() + 1)
-							})
-						)
-					}
-				}, 'MMMM - YYYY'),
-				rsColumns(rsMonthStats.data?.labels, rsMonthStats.data?.breakIndex)
-			)}
 			{/* Reservations stats */}
 			{lineContent(
 				t('loc:Vývoj rezervácií - mesačný'),

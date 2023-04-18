@@ -24,6 +24,7 @@ import { ENUMERATIONS_KEYS, FORM, NEW_SALON_ID, PERMISSION, TAB_KEYS } from '../
 // reducers
 import { getSalonLanguages } from '../../reducers/languages/languagesActions'
 import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
+import { getPendingReservationsCount } from '../../reducers/calendar/calendarActions'
 
 // types
 import { IBreadcrumbs, SalonPageProps, SalonSubPageProps } from '../../types/interfaces'
@@ -101,8 +102,9 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	}, [dispatch, salonID, isNewSalon])
 
 	useEffect(() => {
+		dispatch(getPendingReservationsCount(salonID))
 		dispatch(getSalonLanguages())
-	}, [dispatch])
+	}, [dispatch, salonID])
 
 	const commonProps: SalonPageProps = {
 		phonePrefixCountryCode,

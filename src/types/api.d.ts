@@ -63158,7 +63158,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminImportsSalons.Responses.$200>
   /**
-   * postApiB2BAdminImportsSalonsSalonIdCustomers - Endpoint is used for importing customers from a file (.csv)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
+   * postApiB2BAdminImportsSalonsSalonIdCustomers - Endpoint is used for importing customers from a file (.csv, .xlsx)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
    */
   'postApiB2BAdminImportsSalonsSalonIdCustomers'(
     parameters?: Parameters<Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.PathParameters & Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.HeaderParameters> | null,
@@ -65951,7 +65951,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/imports/salons/{salonID}/customers']: {
     /**
-     * postApiB2BAdminImportsSalonsSalonIdCustomers - Endpoint is used for importing customers from a file (.csv)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
+     * postApiB2BAdminImportsSalonsSalonIdCustomers - Endpoint is used for importing customers from a file (.csv, .xlsx)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.PathParameters & Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.HeaderParameters> | null,

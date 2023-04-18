@@ -59,7 +59,7 @@ const ReservationsPage = (props: Props) => {
 	const navigate = useNavigate()
 	const getPath = useCallback((pathSuffix: string) => `${parentPath}${pathSuffix}`, [parentPath])
 	const count = pendingReservationsCount > 0 ? `(${pendingReservationsCount})` : undefined
-	const [acceptingReservation, setAcceptingReservation] = useState(false)
+	const [approvingReservation, setApprovingReservation] = useState(false)
 
 	const [query, setQuery] = useQueryParams({
 		dateFrom: StringParam(),
@@ -176,7 +176,7 @@ const ReservationsPage = (props: Props) => {
 	}
 	const onApproveReservation = async (calendarEventID: string) => {
 		try {
-			setAcceptingReservation(true)
+			setApprovingReservation(true)
 			await patchReq(
 				'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state',
 				{ calendarEventID, salonID },
@@ -187,12 +187,11 @@ const ReservationsPage = (props: Props) => {
 			)
 			fetchData()
 			dispatch(getPendingReservationsCount(salonID))
-			setAcceptingReservation(false)
 		} catch (e) {
-			setAcceptingReservation(false)
 			// eslint-disable-next-line no-console
 			console.error(e)
 		}
+		setApprovingReservation(false)
 	}
 	const columns: Columns = [
 		{
@@ -335,7 +334,7 @@ const ReservationsPage = (props: Props) => {
 								htmlType={'button'}
 								size={'middle'}
 								className={'noti-btn h-8 w-32 hover:shadow-none'}
-								disabled={acceptingReservation}
+								disabled={approvingReservation}
 								onClick={(e) => {
 									if (!hasPermission) {
 										openForbiddenModal()

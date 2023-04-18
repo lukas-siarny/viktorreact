@@ -32,6 +32,7 @@ import { formatObjToQuery, getAssignedUserLabel, normalizeDirectionKeys, transla
 
 // reducers
 import { RootState } from '../../reducers'
+import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 
 // types
 import { Columns, IBreadcrumbs, IReservationsFilter } from '../../types/interfaces'
@@ -45,6 +46,7 @@ const NotinoReservationsPage = () => {
 	const dispatch = useDispatch()
 	const notinoReservations = useSelector((state: RootState) => state.calendar.notinoReservations)
 	const navigate = useNavigate()
+	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 
 	const [query, setQuery] = useQueryParams({
 		dateFrom: StringParam(),
@@ -55,6 +57,7 @@ const NotinoReservationsPage = () => {
 		reservationStates: ArrayParam(),
 		reservationCreateSourceType: StringParam(),
 		reservationPaymentMethods: ArrayParam(),
+		countryCode: StringParam(),
 		search: StringParam(),
 		limit: NumberParam(),
 		page: NumberParam(1)
@@ -72,7 +75,8 @@ const NotinoReservationsPage = () => {
 				reservationPaymentMethods: query.reservationPaymentMethods,
 				reservationCreateSourceType: query.reservationCreateSourceType,
 				search: query.search,
-				categoryFirstLevelIDs: query.categoryFirstLevelIDs
+				categoryFirstLevelIDs: query.categoryFirstLevelIDs,
+				countryCode: query.countryCode || selectedCountry
 			})
 		)
 		dispatch(
@@ -85,6 +89,7 @@ const NotinoReservationsPage = () => {
 				reservationPaymentMethods: query.reservationPaymentMethods,
 				reservationCreateSourceType: query.reservationCreateSourceType,
 				categoryFirstLevelIDs: query.categoryFirstLevelIDs,
+				countryCode: query.countryCode || selectedCountry,
 				page: query.page,
 				order: 'startDate:ASC',
 				limit: query.limit,
@@ -94,6 +99,7 @@ const NotinoReservationsPage = () => {
 	}, [
 		dispatch,
 		query.categoryFirstLevelIDs,
+		query.countryCode,
 		query.createdAtFrom,
 		query.createdAtTo,
 		query.dateFrom,
@@ -103,7 +109,8 @@ const NotinoReservationsPage = () => {
 		query.reservationCreateSourceType,
 		query.reservationPaymentMethods,
 		query.reservationStates,
-		query.search
+		query.search,
+		selectedCountry
 	])
 
 	const handleSubmit = (values: IReservationsFilter) => {
@@ -111,8 +118,11 @@ const NotinoReservationsPage = () => {
 			...query,
 			...values
 		}
+		// update selected country globally based on filter
+		dispatch(setSelectedCountry(values?.countryCode || undefined))
 		setQuery(newQuery)
 	}
+
 	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
 			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`

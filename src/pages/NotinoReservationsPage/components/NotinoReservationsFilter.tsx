@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux'
 // utils
 import {
 	CHANGE_DEBOUNCE_TIME,
+	ENUMERATIONS_KEYS,
 	FIELD_MODE,
 	FORM,
 	RESERVATION_PAYMENT_METHOD,
@@ -21,6 +22,7 @@ import {
 import {
 	checkFiltersSizeWithoutSearch,
 	optionRenderWithIcon,
+	optionRenderWithImage,
 	transalteReservationSourceType,
 	translateReservationPaymentMethod,
 	translateReservationState,
@@ -39,6 +41,9 @@ import Filters from '../../../components/Filters'
 import { RootState } from '../../../reducers'
 import { IReservationsFilter } from '../../../types/interfaces'
 
+// assets
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+
 type ComponentProps = {}
 
 type Props = InjectedFormProps<IReservationsFilter, ComponentProps> & ComponentProps
@@ -46,6 +51,8 @@ type Props = InjectedFormProps<IReservationsFilter, ComponentProps> & ComponentP
 const fixLength100 = validationString(100)
 
 const NotinoReservationsFilter = (props: Props) => {
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
+
 	const RESERVATION_PAYMENT_METHOD_OPTIONS = useMemo(
 		() =>
 			map(RESERVATION_PAYMENT_METHODS, (item) => ({
@@ -76,7 +83,7 @@ const NotinoReservationsFilter = (props: Props) => {
 
 	const { handleSubmit } = props
 	const [t] = useTranslation()
-	const formValues = useSelector((state: RootState) => getFormValues(FORM.RESERVATIONS_FILTER)(state))
+	const formValues = useSelector((state: RootState) => getFormValues(FORM.NOTINO_RESERVATIONS_FILTER)(state))
 	const categoriesOptions = useSelector((state: RootState) => state.service.services.categoriesOptions)
 
 	const search = (
@@ -84,7 +91,7 @@ const NotinoReservationsFilter = (props: Props) => {
 			className={'h-10 p-0 m-0'}
 			component={InputField}
 			size={'large'}
-			placeholder={t('loc:Hľadať podľa názvu, adresy alebo ID')}
+			placeholder={t('loc:Hľadať podľa názvu alebo ID')}
 			name={'search'}
 			fieldMode={FIELD_MODE.FILTER}
 			search
@@ -96,7 +103,7 @@ const NotinoReservationsFilter = (props: Props) => {
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
 			<Filters search={search} activeFilters={checkFiltersSizeWithoutSearch(formValues)}>
 				<Row gutter={ROW_GUTTER_X_M}>
-					<Col span={6}>
+					<Col span={8}>
 						<Fields
 							label={t('loc:Dátum vytvorenia rezervácie')}
 							names={['createdAtFrom', 'createdAtTo']}
@@ -105,7 +112,7 @@ const NotinoReservationsFilter = (props: Props) => {
 							size={'large'}
 						/>
 					</Col>
-					<Col span={6}>
+					<Col span={8}>
 						<Fields
 							label={t('loc:Dátum plánovanej rezervácie')}
 							names={['dateFrom', 'dateTo']}
@@ -114,12 +121,27 @@ const NotinoReservationsFilter = (props: Props) => {
 							size={'large'}
 						/>
 					</Col>
+					<Col span={8}>
+						<Field
+							component={SelectField}
+							optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
+							name={'countryCode'}
+							placeholder={t('loc:Krajina')}
+							className={'pb-0 mt-4'}
+							allowClear
+							size={'large'}
+							filterOptions
+							onDidMountSearch
+							options={countries?.enumerationsOptions}
+							loading={countries?.isLoading}
+							disabled={countries?.isLoading}
+						/>
+					</Col>
 					<Col span={6}>
 						<Field
 							component={SelectField}
 							name={'categoryFirstLevelIDs'}
 							mode={'multiple'}
-							className={'pb-0 mt-4'}
 							placeholder={t('loc:Kategórie')}
 							allowClear
 							showArrow
@@ -135,7 +157,6 @@ const NotinoReservationsFilter = (props: Props) => {
 							optionRender={(itemData: any) => optionRenderWithIcon(itemData)}
 							mode={'multiple'}
 							name={'reservationStates'}
-							className={'pb-0 mt-4'}
 							placeholder={t('loc:Stav')}
 							allowClear
 							showSearch={false}

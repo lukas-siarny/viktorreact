@@ -68,6 +68,7 @@ interface IGetSalonReservationsQueryParams extends IPaginationQuery {
 interface IGetNotinoReservationsQueryParams extends Omit<IGetSalonReservationsQueryParams, 'salonID' | 'categoryIDs' | 'employeeIDs'> {
 	search?: string
 	categoryFirstLevelIDs?: (string | null)[] | null
+	countryCode?: string
 }
 
 interface ICalendarEventsQueryParams {
@@ -685,6 +686,7 @@ export const getNotinoReservations =
 				search: queryParams.search,
 				dateFrom: queryParams.dateFrom,
 				dateTo: queryParams.dateTo,
+				countryCode: queryParams.countryCode,
 				createdAtFrom: queryParams.createdAtFrom,
 				createdAtTo: queryParams.createdAtTo,
 				reservationStates: queryParams.reservationStates,

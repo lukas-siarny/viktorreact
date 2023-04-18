@@ -2,7 +2,7 @@ import React, { FC, useEffect, useCallback } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { includes, isNil } from 'lodash'
+import { includes } from 'lodash'
 import { useParams } from 'react-router'
 
 // Auth

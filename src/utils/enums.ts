@@ -292,6 +292,11 @@ export enum DASHBOARD_TASB_KEYS {
 	RESERVATION_SYSTEM = 'RESERVATION_SYSTEM'
 }
 
+export enum RESERVATIONS_STATE {
+	PENDING = 'PENDING',
+	ALL = 'ALL'
+}
+
 export enum REVIEWS_TAB_KEYS {
 	PUBLISHED = 'published',
 	DELETED = 'deleted'

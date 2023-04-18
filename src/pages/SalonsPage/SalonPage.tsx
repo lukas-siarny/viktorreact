@@ -24,6 +24,7 @@ import { checkPermissions } from '../../utils/Permissions'
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
 import { useChangeOpeningHoursFormFields } from '../../components/OpeningHours/OpeningHoursUtils'
+import { getPendingReservationsCount } from '../../reducers/calendar/calendarActions'
 
 const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
@@ -50,8 +51,9 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	useChangeOpeningHoursFormFields(FORM.SALON, formValues?.openingHours, sameOpenHoursOverWeekFormValue, openOverWeekendFormValue)
 
 	useEffect(() => {
+		dispatch(getPendingReservationsCount(salonID))
 		dispatch(getSalonLanguages())
-	}, [dispatch])
+	}, [dispatch, salonID])
 
 	const commonProps: SalonPageProps = {
 		isNotinoUser,

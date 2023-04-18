@@ -33,10 +33,10 @@ import { formatObjToQuery, getAssignedUserLabel, normalizeDirectionKeys, transla
 // reducers
 import { RootState } from '../../reducers'
 import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
+import { getNotinoReservations } from '../../reducers/calendar/calendarActions'
 
 // types
 import { Columns, IBreadcrumbs, IReservationsFilter } from '../../types/interfaces'
-import { getNotinoReservations } from '../../reducers/calendar/calendarActions'
 
 // hooks
 import useQueryParams, { ArrayParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
@@ -64,7 +64,6 @@ const NotinoReservationsPage = () => {
 	})
 
 	useEffect(() => {
-		// NOTE: viac ako 3 mesiace
 		dispatch(
 			initialize(FORM.NOTINO_RESERVATIONS_FILTER, {
 				dateFrom: query.dateFrom,
@@ -320,14 +319,13 @@ const NotinoReservationsPage = () => {
 									}
 
 									navigate({
-										//  TODO: skontrolovat redirect
 										pathname: t('paths:salons/{{salonID}}/calendar', { salonID: record.salon.id }),
 										search: formatObjToQuery(redirectQuery)
 									})
 								}
 							})}
 							twoToneRows
-							scroll={{ x: 1200 }}
+							scroll={{ x: 1400 }}
 							useCustomPagination
 							pagination={{
 								pageSize: notinoReservations.data?.pagination.limit,

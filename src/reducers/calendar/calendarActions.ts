@@ -123,7 +123,7 @@ export interface ISalonReservationsPayload extends ISearchable<Paths.GetApiB2BAd
 }
 
 export interface INotinoReservationsPayload extends ISearchable<Paths.GetApiB2BAdminCalendarEventsReservations.Responses.$200> {
-	tableData: any[] // TODO: type
+	tableData: INotinoReservationsTableData[]
 }
 
 interface IGetNotinoReservations {

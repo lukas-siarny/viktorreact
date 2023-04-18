@@ -127,15 +127,6 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				icon: <HomeIcon />,
 				id: PAGE.HOME
 			})
-			if (hasPermissions([PERMISSION.NOTINO])) {
-				mainGroupItems.push({
-					key: PAGE.NOTINO_RESERVATIONS,
-					label: t('loc:Prehľad rezervacií'),
-					onClick: () => navigate(t('paths:reservations')),
-					icon: <ReservationsIcon />,
-					id: PAGE.NOTINO_RESERVATIONS
-				})
-			}
 
 			if (!salonID) {
 				// ADMIN VIEW
@@ -208,6 +199,15 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						onClick: () => navigate(t('paths:sms-credits')),
 						icon: <SmsUnitPricesIcon />,
 						id: PAGE.SMS_CREDITS
+					})
+				}
+				if (hasPermissions([PERMISSION.NOTINO])) {
+					mainGroupItems.push({
+						key: PAGE.NOTINO_RESERVATIONS,
+						label: t('loc:Prehľad rezervacií'),
+						onClick: () => navigate(t('paths:reservations')),
+						icon: <ReservationsIcon />,
+						id: PAGE.NOTINO_RESERVATIONS
 					})
 				}
 				if (hasPermissions([PERMISSION.NOTINO])) {

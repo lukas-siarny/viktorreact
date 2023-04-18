@@ -96,6 +96,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
 	const authUserPermissions = currentUser?.uniqPermissions
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
+	const pendingReservationsCount = useSelector((state: RootState) => state.calendar.pendingReservationsCount.count)
+	const count = pendingReservationsCount > 0 ? `(${pendingReservationsCount})` : ''
 
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
@@ -281,7 +283,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						},
 						{
 							key: PAGE.RESERVATIONS,
-							label: t('loc:Rezervácie'),
+							label: t('loc:Prehľad rezervácií {{ reservationsCount }}', { reservationsCount: count }),
 							onClick: () => navigate(getPath(t('paths:reservations'))),
 							icon: <ReservationsIcon />,
 							id: PAGE.RESERVATIONS

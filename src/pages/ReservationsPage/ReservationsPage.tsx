@@ -16,6 +16,7 @@ import ReservationsFilter from './components/ReservationsFilter'
 
 // utils
 import {
+	ADMIN_PERMISSIONS,
 	CALENDAR_DATE_FORMAT,
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_VIEW_TYPE,
@@ -29,8 +30,9 @@ import {
 	RESERVATIONS_STATE,
 	ROW_GUTTER_X_DEFAULT
 } from '../../utils/enums'
-import { withPermissions } from '../../utils/Permissions'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 import { formatObjToQuery, formFieldID, getAssignedUserLabel, normalizeDirectionKeys, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
+import { patchReq } from '../../utils/request'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -43,7 +45,8 @@ import { getPaginatedReservations, getPendingReservationsCount } from '../../red
 // hooks
 import useQueryParams, { ArrayParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
 import TabsComponent from '../../components/TabsComponent'
-import { patchReq } from '../../utils/request'
+
+const APPROVE_RESERVATION_PERMISSIONS = [PERMISSION.CALENDAR_EVENT_UPDATE, PERMISSION.PARTNER_ADMIN]
 
 type Props = SalonSubPageProps
 
@@ -171,7 +174,7 @@ const ReservationsPage = (props: Props) => {
 		}
 		setQuery(newQuery)
 	}
-	const onAcceptReservation = async (calendarEventID: string) => {
+	const onApproveReservation = async (calendarEventID: string) => {
 		try {
 			setAcceptingReservation(true)
 			await patchReq(
@@ -244,7 +247,7 @@ const ReservationsPage = (props: Props) => {
 			}
 		},
 		{
-			title: t('loc:Kolega'),
+			title: t('loc:Zamestnanec'),
 			dataIndex: 'employee',
 			key: 'employee',
 			ellipsis: true,
@@ -324,20 +327,29 @@ const ReservationsPage = (props: Props) => {
 			width: 150,
 			render: (value, record) => {
 				return (
-					<Button
-						type={'primary'}
-						htmlType={'button'}
-						size={'middle'}
-						className={'noti-btn h-8 w-32 hover:shadow-none'}
-						disabled={acceptingReservation}
-						onClick={(e) => {
-							e.stopPropagation()
-							onAcceptReservation(record.id)
-						}}
-						id={formFieldID('accept_btn', record.id)}
-					>
-						{t('loc:Schváliť')}
-					</Button>
+					<Permissions
+						allowed={[...ADMIN_PERMISSIONS, ...APPROVE_RESERVATION_PERMISSIONS]}
+						render={(hasPermission, { openForbiddenModal }) => (
+							<Button
+								type={'primary'}
+								htmlType={'button'}
+								size={'middle'}
+								className={'noti-btn h-8 w-32 hover:shadow-none'}
+								disabled={acceptingReservation}
+								onClick={(e) => {
+									if (!hasPermission) {
+										openForbiddenModal()
+									} else {
+										e.stopPropagation()
+										onApproveReservation(record.id)
+									}
+								}}
+								id={formFieldID('accept_btn', record.id)}
+							>
+								{t('loc:Potvrdiť')}
+							</Button>
+						)}
+					/>
 				)
 			}
 		})

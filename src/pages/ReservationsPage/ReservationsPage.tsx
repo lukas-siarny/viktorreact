@@ -58,7 +58,7 @@ const ReservationsPage = (props: Props) => {
 	const pendingReservationsCount = useSelector((state: RootState) => state.calendar.pendingReservationsCount.count)
 	const navigate = useNavigate()
 	const getPath = useCallback((pathSuffix: string) => `${parentPath}${pathSuffix}`, [parentPath])
-	const count = pendingReservationsCount > 0 ? `(${pendingReservationsCount})` : undefined
+	const count = pendingReservationsCount > 0 ? `(${pendingReservationsCount})` : ''
 	const [approvingReservation, setApprovingReservation] = useState(false)
 
 	const [query, setQuery] = useQueryParams({

@@ -96,7 +96,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 	const authUserPermissions = currentUser?.uniqPermissions
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 	const pendingReservationsCount = useSelector((state: RootState) => state.calendar.pendingReservationsCount.count)
-	const count = pendingReservationsCount > 0 ? `(${pendingReservationsCount})` : undefined
+	const count = pendingReservationsCount > 0 ? `(${pendingReservationsCount})` : ''
 
 	const { t } = useTranslation()
 	const dispatch = useDispatch()

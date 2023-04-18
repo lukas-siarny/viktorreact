@@ -37,6 +37,8 @@ import { Columns, IBreadcrumbs, IDataUploadForm, ISalonsReportForm } from '../..
 
 // hooks
 import useQueryParams from '../../hooks/useQueryParamsZod'
+
+// schema
 import { ISalonsPageURLQueryParams, salonsPageURLQueryParamsSchema } from '../../schemas/queryParams'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO]
@@ -70,25 +72,10 @@ const SalonsPage = () => {
 	}, [dispatch])
 
 	const [query, setQuery] = useQueryParams(salonsPageURLQueryParamsSchema, {
-		search: undefined,
-		categoryFirstLevelIDs: undefined,
 		statuses_all: true,
-		statuses_published: undefined,
 		salonState: SALONS_TAB_KEYS.ACTIVE,
-		statuses_changes: undefined,
-		limit: undefined,
 		page: 1,
-		order: 'createdAt:DESC',
-		countryCode: undefined,
-		createType: undefined,
-		lastUpdatedAtFrom: undefined,
-		lastUpdatedAtTo: undefined,
-		hasSetOpeningHours: undefined,
-		sourceType: undefined,
-		assignedUserID: undefined,
-		premiumSourceUserType: undefined,
-		hasAvailableReservationSystem: undefined,
-		enabledReservationsSetting: undefined
+		order: 'createdAt:DESC'
 	})
 
 	const resetQuery = (selectedTabKey: string, rewrite: ISalonsPageURLQueryParams = {}) => {

@@ -23,16 +23,15 @@ import { optionRenderWithImage, validationString } from '../../../../utils/helpe
 import InputField from '../../../../atoms/InputField'
 import SelectField from '../../../../atoms/SelectField'
 
+// schema
+import { ISalonsPageURLQueryParams } from '../../../../schemas/queryParams'
+
 type ComponentProps = {
 	onImportSalons: () => void
 	activeSalons?: boolean
 }
 
-export interface ISalonsFilterDeleted {
-	search: string
-	countryCode: string
-	categoryFirstLevelIDs: string[]
-}
+export type ISalonsFilterDeleted = Pick<ISalonsPageURLQueryParams, 'search' | 'categoryFirstLevelIDs' | 'countryCode'>
 
 type Props = InjectedFormProps<ISalonsFilterDeleted, ComponentProps> & ComponentProps
 

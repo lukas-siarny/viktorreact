@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import { compose } from 'redux'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Button, Divider, Row, RowProps, Spin, TablePaginationConfig, Tooltip } from 'antd'
+import { Button, Divider, Row, Spin, TablePaginationConfig, Tooltip } from 'antd'
 import { SorterResult } from 'antd/es/table/interface'
 import { ColumnProps } from 'antd/es/table'
 import { initialize } from 'redux-form'
@@ -38,6 +38,8 @@ import { getSmsUnitPricesActual } from '../../reducers/smsUnitPrices/smsUnitPric
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
 import useQueryParams, { serializeParams } from '../../hooks/useQueryParamsZod'
+
+// schema
 import { rechargeSmsCreditAdminPageSchema } from '../../schemas/queryParams'
 
 type TableDataItem = NonNullable<ISalonsPayload['data']>['salons'][0]
@@ -72,11 +74,7 @@ const RechargeSmsCreditAdminPage = () => {
 	const [query, setQuery] = useQueryParams(rechargeSmsCreditAdminPageSchema, {
 		limit: 50,
 		page: 1,
-		search: undefined,
 		countryCode: defaultSelectedCountryCode || LOCALES[LANGUAGE.CZ].countryCode,
-		sourceType: undefined,
-		walletAvailableBalanceFrom: undefined,
-		walletAvailableBalanceTo: undefined,
 		showForm: false
 	})
 

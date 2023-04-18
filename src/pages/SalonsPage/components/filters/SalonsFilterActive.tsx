@@ -61,6 +61,8 @@ import SwitchField from '../../../../atoms/SwitchField'
 
 // hooks
 import useMedia from '../../../../hooks/useMedia'
+
+// schema
 import { ISalonsPageURLQueryParams } from '../../../../schemas/queryParams'
 
 type ComponentProps = {
@@ -382,6 +384,7 @@ const SalonsFilterActive = (props: Props) => {
 									component={SelectField}
 									name={'statuses_published'}
 									placeholder={t('loc:Publikovaný')}
+									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
 									filterOptions

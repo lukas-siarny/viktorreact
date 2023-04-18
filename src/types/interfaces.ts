@@ -36,6 +36,7 @@ import { TooltipPlacement } from 'antd/es/tooltip'
 // schema
 import { ICalendarEventForm } from '../schemas/event'
 import { ICalendarReservationForm } from '../schemas/reservation'
+import { IRechargeSmsCreditAdminPageURLQueryParams } from '../schemas/queryParams'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -320,14 +321,10 @@ export interface ISmsUnitPricesFilter {
 	search: string
 }
 
-export interface IRechargeSmsCreditFilter {
-	search?: string
-	countryCode: string
-	sourceType?: SALON_SOURCE_TYPE
-	walletAvailableBalanceFrom?: number
-	walletAvailableBalanceTo?: number
-}
-
+export type IRechargeSmsCreditFilter = Pick<
+IRechargeSmsCreditAdminPageURLQueryParams,
+'search' | 'sourceType' | 'countryCode' | 'walletAvailableBalanceFrom' | 'walletAvailableBalanceTo'
+>
 
 export interface ISmsHistoryFilter {
 	search: string

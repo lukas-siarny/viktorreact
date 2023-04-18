@@ -72,7 +72,7 @@ const mergeParamsWithUrlParams = <Schema extends z.ZodObject<any>>(schema: Schem
 						if (cv === 'false') {
 							arrValue = false
 						}
-						return arrValue ? [...arr, arrValue] : arr
+						return arrValue !== undefined ? [...arr, arrValue] : arr
 					}, [] as boolean[])
 				}
 			}
@@ -122,22 +122,25 @@ const mergeParamsWithUrlParams = <Schema extends z.ZodObject<any>>(schema: Schem
  * @returns editované hodnoty vhodné pre useSearchParams hook
  * do neho potrebujeme prekonvertovat hodnoty na 'string' | string[], v pripade 'undefined' ich uplne odstranit a v pripade 'null' upravit na ''
  */
-export const serializeParams = <T extends object>(params?: T): T => {
-	return Object.entries(params || {}).reduce((acc, [key, value]) => {
+export const serializeParams = <T extends object>(params?: T): URLSearchParams => {
+	const searchParams = new URLSearchParams()
+	Object.entries(params || {}).forEach(([key, value]) => {
 		if (value === undefined) {
 			// odstrani query parameter zo searchParams
-			return acc
+			return
 		}
 
 		if (value === null) {
 			// nastavi do URLcky prazdnu hodnotu, napr. &foo=, resp. &foo
-			return { ...acc, [key]: '' }
+			searchParams.append(key, '')
+			return
 		}
 
 		if (isArray(value)) {
 			if (!value.length) {
 				// nastavi do URLcky prazdnu hodnotu, napr. &foo=, resp. &foo
-				return { ...acc, [key]: '' }
+				searchParams.append(key, '')
+				return
 			}
 
 			// upravy hodnoty v poli na stringy
@@ -148,13 +151,17 @@ export const serializeParams = <T extends object>(params?: T): T => {
 				return [...arr, z.coerce.string().parse(cv)]
 			}, [] as string[])
 
-			return { ...acc, [key]: stringArr }
+			searchParams.append(key, stringArr)
+			return
 		}
 
 		// upravy zvysne hodnoty na stringy
-		return { ...acc, [key]: z.coerce.string().parse(value) }
-	}, {} as T)
+		searchParams.append(key, z.coerce.string().parse(value))
+	})
+	return searchParams
 }
+
+export const formatObjToQuery = <T extends object>(queryObj: T): string => `?${serializeParams(queryObj).toString()}`
 
 /**
  * wrapper nad useSearchParams hookom z react-routera, ktory umoznuje pracovat s hodnotami parametrov roznych typov (string, string[], number, number[] boolean, boolean[], undefined, null)

@@ -7,20 +7,12 @@ import { BASIC_SALON, BASIC_SALONS, REJECTED_SUGGESTIONS, SALON, SALON_HISTORY, 
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
 import { IQueryParams, ISearchable } from '../../types/interfaces'
+import { IGetSalonsQueryParams } from '../../schemas/queryParams'
 
 // utils
 import { getReq } from '../../utils/request'
-import {
-	SALON_CREATE_TYPE,
-	SALON_FILTER_OPENING_HOURS,
-	SALON_FILTER_STATES,
-	SALON_FILTER_RS,
-	SALON_FILTER_RS_AVAILABLE_ONLINE,
-	SALON_SOURCE_TYPE,
-	SALONS_TAB_KEYS
-} from '../../utils/enums'
+import { SALON_FILTER_OPENING_HOURS, SALON_FILTER_STATES, SALON_FILTER_RS, SALON_FILTER_RS_AVAILABLE_ONLINE, SALONS_TAB_KEYS } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
-import { IGetSalonsQueryParams } from '../../schemas/queryParams'
 
 export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGetBasictSalon | IGetBasicSalons | IGetSalonHistory | IGetRejectedSuggestions
 

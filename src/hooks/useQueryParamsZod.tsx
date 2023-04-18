@@ -144,14 +144,12 @@ export const serializeParams = <T extends object>(params?: T): URLSearchParams =
 			}
 
 			// upravy hodnoty v poli na stringy
-			const stringArr = value.reduce((arr, cv) => {
-				if (cv === undefined || cv === null) {
-					return arr
+			value.forEach((v) => {
+				if (v === undefined || v === null) {
+					return
 				}
-				return [...arr, z.coerce.string().parse(cv)]
-			}, [] as string[])
-
-			searchParams.append(key, stringArr)
+				searchParams.append(key, z.coerce.string().parse(v))
+			})
 			return
 		}
 

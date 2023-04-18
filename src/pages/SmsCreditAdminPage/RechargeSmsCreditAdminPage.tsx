@@ -7,7 +7,6 @@ import { SorterResult } from 'antd/es/table/interface'
 import { ColumnProps } from 'antd/es/table'
 import { initialize } from 'redux-form'
 import { isEmpty } from 'lodash'
-import queryString from 'query-string'
 import { useNavigate } from 'react-router'
 
 // components
@@ -37,7 +36,7 @@ import { getSmsUnitPricesActual } from '../../reducers/smsUnitPrices/smsUnitPric
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
-import useQueryParams, { serializeParams } from '../../hooks/useQueryParamsZod'
+import useQueryParams, { formatObjToQuery, serializeParams } from '../../hooks/useQueryParamsZod'
 
 // schema
 import { rechargeSmsCreditAdminPageSchema } from '../../schemas/queryParams'
@@ -87,7 +86,7 @@ const RechargeSmsCreditAdminPage = () => {
 	const selectedRowKeys: React.Key[] = useMemo(() => getSelectedKeys(selectedRows), [selectedRows])
 
 	const [parentBackUrl] = useBackUrl(t('paths:sms-credits'))
-	const backUrl = `${t('paths:sms-credits')}/${t('paths:recharge')}?${queryString.stringify(serializeParams({ ...query, showForm: false, page: 1 }))}`
+	const backUrl = `${t('paths:sms-credits')}/${t('paths:recharge')}${formatObjToQuery({ ...query, showForm: false, page: 1 })}`
 
 	const loading = salons?.isLoading || smsUnitPricesActual?.isLoading
 

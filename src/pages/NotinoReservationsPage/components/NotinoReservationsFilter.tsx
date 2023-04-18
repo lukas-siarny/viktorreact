@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Field, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, Fields, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
 import { Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce, map } from 'lodash'
@@ -16,45 +16,34 @@ import {
 	RESERVATION_SOURCE_TYPES,
 	RESERVATION_STATE,
 	RESERVATION_STATES,
-	ROW_GUTTER_X_DEFAULT
+	ROW_GUTTER_X_M
 } from '../../../utils/enums'
 import {
 	checkFiltersSizeWithoutSearch,
-	getAssignedUserLabel,
 	optionRenderWithIcon,
 	transalteReservationSourceType,
 	translateReservationPaymentMethod,
-	translateReservationState
+	translateReservationState,
+	validationString
 } from '../../../utils/helper'
 
 // atoms
 import SelectField from '../../../atoms/SelectField'
-import DateField from '../../../atoms/DateField'
+import InputField from '../../../atoms/InputField'
+import DateRangeField from '../../../atoms/DateRangeField'
 
 // components
 import Filters from '../../../components/Filters'
 
 // reducers
 import { RootState } from '../../../reducers'
-import { IReservationsFilter, ReservationsEmployees } from '../../../types/interfaces'
-import InputField from '../../../atoms/InputField'
+import { IReservationsFilter } from '../../../types/interfaces'
 
 type ComponentProps = {}
 
 type Props = InjectedFormProps<IReservationsFilter, ComponentProps> & ComponentProps
 
-const employeeIDsOptions = (employees: ReservationsEmployees) =>
-	map(employees, (employee) => {
-		return {
-			key: employee.id,
-			label: getAssignedUserLabel({
-				id: employee.id,
-				firstName: employee.firstName,
-				lastName: employee.lastName,
-				email: employee.email
-			})
-		}
-	})
+const fixLength100 = validationString(100)
 
 const NotinoReservationsFilter = (props: Props) => {
 	const RESERVATION_PAYMENT_METHOD_OPTIONS = useMemo(
@@ -87,9 +76,9 @@ const NotinoReservationsFilter = (props: Props) => {
 
 	const { handleSubmit } = props
 	const [t] = useTranslation()
-	const reservations = useSelector((state: RootState) => state.calendar.paginatedReservations)
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.RESERVATIONS_FILTER)(state))
 	const categoriesOptions = useSelector((state: RootState) => state.service.services.categoriesOptions)
+
 	const search = (
 		<Field
 			className={'h-10 p-0 m-0'}
@@ -99,33 +88,42 @@ const NotinoReservationsFilter = (props: Props) => {
 			name={'search'}
 			fieldMode={FIELD_MODE.FILTER}
 			search
-			// validate={fixLength100}
+			validate={fixLength100}
 		/>
 	)
+
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
 			<Filters search={search} activeFilters={checkFiltersSizeWithoutSearch(formValues)}>
-				<Row gutter={ROW_GUTTER_X_DEFAULT}>
+				<Row gutter={ROW_GUTTER_X_M}>
 					<Col span={6}>
-						<Field
-							name={'dateFrom'}
-							placeholder={t('loc:Dátum od')}
-							className={'pb-0'}
-							pickerClassName={'w-full'}
-							component={DateField}
-							dropdownAlign={{ points: ['tr', 'br'] }}
-							required
+						<Fields
+							label={t('loc:Dátum vytvorenia rezervácie')}
+							names={['createdAtFrom', 'createdAtTo']}
+							placeholders={[t('loc:od'), t('loc:do')]}
+							component={DateRangeField}
+							size={'large'}
+						/>
+					</Col>
+					<Col span={6}>
+						<Fields
+							label={t('loc:Dátum plánovanej rezervácie')}
+							names={['dateFrom', 'dateTo']}
+							placeholders={[t('loc:od'), t('loc:do')]}
+							component={DateRangeField}
+							size={'large'}
 						/>
 					</Col>
 					<Col span={6}>
 						<Field
 							component={SelectField}
-							name={'categoryIDs'}
+							name={'categoryFirstLevelIDs'}
 							mode={'multiple'}
+							className={'pb-0 mt-4'}
 							placeholder={t('loc:Kategórie')}
 							allowClear
 							showArrow
-							size={'middle'}
+							size={'large'}
 							showSearch={false}
 							onDidMountSearch
 							options={categoriesOptions}
@@ -137,11 +135,12 @@ const NotinoReservationsFilter = (props: Props) => {
 							optionRender={(itemData: any) => optionRenderWithIcon(itemData)}
 							mode={'multiple'}
 							name={'reservationStates'}
+							className={'pb-0 mt-4'}
 							placeholder={t('loc:Stav')}
 							allowClear
 							showSearch={false}
 							showArrow
-							size={'middle'}
+							size={'large'}
 							options={RESERVATION_STATE_OPTIONS}
 						/>
 					</Col>
@@ -155,21 +154,8 @@ const NotinoReservationsFilter = (props: Props) => {
 							allowClear
 							showSearch={false}
 							showArrow
-							size={'middle'}
+							size={'large'}
 							options={RESERVATION_PAYMENT_METHOD_OPTIONS}
-						/>
-					</Col>
-					<Col span={6}>
-						<Field
-							component={SelectField}
-							mode={'multiple'}
-							showSearch={false}
-							showArrow
-							name={'employeeIDs'}
-							placeholder={t('loc:Zamestnanci')}
-							allowClear
-							size={'middle'}
-							options={employeeIDsOptions(reservations.data?.employees as ReservationsEmployees)}
 						/>
 					</Col>
 					<Col span={6}>
@@ -179,7 +165,7 @@ const NotinoReservationsFilter = (props: Props) => {
 							name={'reservationCreateSourceType'}
 							placeholder={t('loc:Vytvoril')}
 							allowClear
-							size={'middle'}
+							size={'large'}
 							options={RESERVATION_SOURCE_TYPE_OPTIONS}
 						/>
 					</Col>

@@ -20,7 +20,6 @@ import {
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_VIEW,
-	DEFAULT_DATE_INIT_FORMAT,
 	DEFAULT_DATE_INPUT_FORMAT,
 	FORM,
 	PERMISSION,
@@ -48,10 +47,11 @@ const NotinoReservationsPage = () => {
 	const navigate = useNavigate()
 
 	const [query, setQuery] = useQueryParams({
-		// TODO: filtre pre datumy ked doplni BE
-		dateFrom: StringParam(dayjs().format(DEFAULT_DATE_INIT_FORMAT)),
-		employeeIDs: ArrayParam(),
-		categoryIDs: ArrayParam(),
+		dateFrom: StringParam(),
+		dateTo: StringParam(),
+		createdAtFrom: StringParam(),
+		createdAtTo: StringParam(),
+		categoryFirstLevelIDs: ArrayParam(),
 		reservationStates: ArrayParam(),
 		reservationCreateSourceType: StringParam(),
 		reservationPaymentMethods: ArrayParam(),
@@ -64,23 +64,27 @@ const NotinoReservationsPage = () => {
 		// NOTE: viac ako 3 mesiace
 		dispatch(
 			initialize(FORM.NOTINO_RESERVATIONS_FILTER, {
+				dateFrom: query.dateFrom,
+				dateTo: query.dateTo,
+				createdAtFrom: query.createdAtFrom,
+				createdAtTo: query.createdAtTo,
 				reservationStates: query.reservationStates,
-				employeeIDs: query.employeeIDs,
 				reservationPaymentMethods: query.reservationPaymentMethods,
 				reservationCreateSourceType: query.reservationCreateSourceType,
-				dateFrom: query.dateFrom,
 				search: query.search,
-				categoryIDs: query.categoryIDs
+				categoryFirstLevelIDs: query.categoryFirstLevelIDs
 			})
 		)
 		dispatch(
 			getNotinoReservations({
 				dateFrom: query.dateFrom,
+				dateTo: query.dateTo,
+				createdAtFrom: query.createdAtFrom,
+				createdAtTo: query.createdAtTo,
 				reservationStates: query.reservationStates,
-				employeeIDs: query.employeeIDs,
 				reservationPaymentMethods: query.reservationPaymentMethods,
 				reservationCreateSourceType: query.reservationCreateSourceType,
-				categoryIDs: query.categoryIDs,
+				categoryFirstLevelIDs: query.categoryFirstLevelIDs,
 				page: query.page,
 				order: 'startDate:ASC',
 				limit: query.limit,
@@ -89,9 +93,11 @@ const NotinoReservationsPage = () => {
 		)
 	}, [
 		dispatch,
-		query.categoryIDs,
+		query.categoryFirstLevelIDs,
+		query.createdAtFrom,
+		query.createdAtTo,
 		query.dateFrom,
-		query.employeeIDs,
+		query.dateTo,
 		query.limit,
 		query.page,
 		query.reservationCreateSourceType,

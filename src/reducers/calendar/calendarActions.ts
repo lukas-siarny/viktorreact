@@ -65,8 +65,9 @@ interface IGetSalonReservationsQueryParams extends IPaginationQuery {
 	reservationPaymentMethods?: (string | null)[] | null
 	salonID: string
 }
-interface IGetNotinoReservationsQueryParams extends Omit<IGetSalonReservationsQueryParams, 'salonID'> {
+interface IGetNotinoReservationsQueryParams extends Omit<IGetSalonReservationsQueryParams, 'salonID' | 'categoryIDs' | 'employeeIDs'> {
 	search?: string
+	categoryFirstLevelIDs?: (string | null)[] | null
 }
 
 interface ICalendarEventsQueryParams {
@@ -676,18 +677,20 @@ export const getPaginatedReservations =
 	}
 
 export const getNotinoReservations =
-	(queryParams: IGetNotinoReservationsQueryParams): ThunkResult<Promise<INotinoReservationsPayload>> =>
+	(queryParams: IGetNotinoReservationsQueryParams): ThunkResult<Promise<any>> =>
 	async (dispatch) => {
 		let payload = {} as INotinoReservationsPayload
 		try {
 			const queryParamsEditedForRequest = {
 				search: queryParams.search,
 				dateFrom: queryParams.dateFrom,
+				dateTo: queryParams.dateTo,
+				createdAtFrom: queryParams.createdAtFrom,
+				createdAtTo: queryParams.createdAtTo,
 				reservationStates: queryParams.reservationStates,
-				employeeIDs: queryParams.employeeIDs,
 				reservationPaymentMethods: queryParams.reservationPaymentMethods,
 				reservationCreateSourceType: queryParams.reservationCreateSourceType,
-				categoryIDs: queryParams.categoryIDs,
+				categoryFirstLevelIDs: queryParams.categoryFirstLevelIDs,
 				limit: queryParams.limit,
 				page: queryParams.page,
 				order: queryParams.order
@@ -711,7 +714,7 @@ export const getNotinoReservations =
 					employee: reservation.employee,
 					createSourceType: transalteReservationSourceType(reservation.reservationData?.createSourceType as RESERVATION_SOURCE_TYPE),
 					state: reservation.reservationData?.state as RESERVATION_STATE,
-					paymentMethod: reservation.reservationData?.paymentMethod as RESERVATION_PAYMENT_METHOD // TODO: paymentMethod nechodi z BE
+					paymentMethod: reservation.reservationData?.paymentMethod as RESERVATION_PAYMENT_METHOD
 				}
 			})
 			payload = {

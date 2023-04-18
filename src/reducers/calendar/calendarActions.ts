@@ -673,7 +673,6 @@ export const getNotinoReservations =
 			const { data } = await getReq('/api/b2b/admin/calendar-events/reservations', {
 				...(normalizeQueryParams(queryParamsEditedForRequest) as any)
 			})
-			console.log('data', data)
 			const tableData: INotinoReservationsTableData[] = map(data.reservations, (reservation) => {
 				return {
 					key: reservation.id,
@@ -682,8 +681,8 @@ export const getNotinoReservations =
 					createdAt: formatDateByLocale(reservation.createdAt) as string,
 					startDate: formatDateByLocale(reservation.start.date, true) as string,
 					time: `${reservation.start.time} - ${reservation.end.time}`,
-					customer: reservation.customer, // TODO: neposila sa avatar
-					service: reservation.service, // TODO: posiela sa len ID
+					customer: reservation.customer,
+					service: reservation.service,
 					employee: reservation.employee,
 					createSourceType: transalteReservationSourceType(reservation.reservationData?.createSourceType as RESERVATION_SOURCE_TYPE),
 					state: reservation.reservationData?.state as RESERVATION_STATE,

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Col, Row, Tooltip } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
@@ -35,22 +35,20 @@ import { formatObjToQuery, getAssignedUserLabel, normalizeDirectionKeys, transla
 import { RootState } from '../../reducers'
 
 // types
-import { Columns, IBreadcrumbs, IReservationsFilter, SalonSubPageProps } from '../../types/interfaces'
+import { Columns, IBreadcrumbs, IReservationsFilter } from '../../types/interfaces'
 import { getNotinoReservations } from '../../reducers/calendar/calendarActions'
 
 // hooks
 import useQueryParams, { ArrayParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
 
-type Props = SalonSubPageProps
-
-const NotinoReservationsPage = (props: Props) => {
+const NotinoReservationsPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const notinoReservations = useSelector((state: RootState) => state.calendar.notinoReservations)
 	const navigate = useNavigate()
-	// TODO: redirect inak spravit a pouzit id salona ktore chodi v tabulke
-	//  TODO: /salons/aec9dcaf-3163-4dba-8d8b-f86382598f7f/calendar
+
 	const [query, setQuery] = useQueryParams({
+		// TODO: filtre pre datumy ked doplni BE
 		dateFrom: StringParam(dayjs().format(DEFAULT_DATE_INIT_FORMAT)),
 		employeeIDs: ArrayParam(),
 		categoryIDs: ArrayParam(),
@@ -181,10 +179,9 @@ const NotinoReservationsPage = (props: Props) => {
 			ellipsis: true,
 			width: '25%',
 			render: (value) => {
-				// TODO: BE neposiela avatar
 				return (
 					<>
-						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.image?.resizedImages?.thumbnail} fallBackSrc={value?.image?.original} />
+						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.profileImage?.resizedImages?.thumbnail} fallBackSrc={value?.profileImage?.original} />
 						{getAssignedUserLabel(value)}
 					</>
 				)
@@ -197,7 +194,6 @@ const NotinoReservationsPage = (props: Props) => {
 			ellipsis: true,
 			width: '25%',
 			render: (value) => {
-				// TODO: neposiela sa shape
 				return (
 					<>
 						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.icon?.resizedImages?.thumbnail} fallBackSrc={value?.icon?.original} />
@@ -261,7 +257,6 @@ const NotinoReservationsPage = (props: Props) => {
 			ellipsis: true,
 			width: '10%',
 			render: (value) => {
-				// TODO: nechod z BE metoda
 				return value ? (
 					<div className={'flex items-center'}>
 						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).icon}</div>

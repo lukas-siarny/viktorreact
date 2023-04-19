@@ -17,7 +17,8 @@ import {
 	RESERVATION_SOURCE_TYPES,
 	RESERVATION_STATE,
 	RESERVATION_STATES,
-	ROW_GUTTER_X_M
+	ROW_GUTTER_X_M,
+	VALIDATION_MAX_LENGTH
 } from '../../../utils/enums'
 import {
 	checkFiltersSizeWithoutSearch,
@@ -48,7 +49,7 @@ type ComponentProps = {}
 
 type Props = InjectedFormProps<IReservationsFilter, ComponentProps> & ComponentProps
 
-const fixLength100 = validationString(100)
+const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
 const NotinoReservationsFilter = (props: Props) => {
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
@@ -88,14 +89,14 @@ const NotinoReservationsFilter = (props: Props) => {
 
 	const search = (
 		<Field
-			className={'h-10 p-0 m-0'}
+			className={'h-10'}
 			component={InputField}
 			size={'large'}
 			placeholder={t('loc:Hľadať podľa názvu alebo ID')}
 			name={'search'}
 			fieldMode={FIELD_MODE.FILTER}
 			search
-			validate={fixLength100}
+			validate={fixLength255}
 		/>
 	)
 

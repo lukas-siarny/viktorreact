@@ -195,10 +195,10 @@ const NotinoReservationsPage = () => {
 			width: '25%',
 			render: (value) => {
 				return (
-					<>
+					<div className={'flex items-center'}>
 						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.profileImage?.resizedImages?.thumbnail} fallBackSrc={value?.profileImage?.original} />
-						{getAssignedUserLabel(value)}
-					</>
+						<div className={'truncate'}>{getAssignedUserLabel(value)}</div>
+					</div>
 				)
 			}
 		},
@@ -210,10 +210,10 @@ const NotinoReservationsPage = () => {
 			width: '25%',
 			render: (value) => {
 				return (
-					<>
+					<div className={'flex items-center'}>
 						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.icon?.resizedImages?.thumbnail} fallBackSrc={value?.icon?.original} />
 						<div className={'truncate'}>{value?.name}</div>
-					</>
+					</div>
 				)
 			}
 		},

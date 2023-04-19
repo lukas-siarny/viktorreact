@@ -109,7 +109,6 @@ const ReservationsPage = (props: Props) => {
 	])
 
 	useEffect(() => {
-		// NOTE: viac ako 3 mesiace
 		dispatch(
 			initialize(FORM.RESERVATIONS_FILTER, {
 				reservationStates: query.reservationStates,

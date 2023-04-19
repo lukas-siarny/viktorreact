@@ -1,6 +1,4 @@
 import { defineConfig } from 'cypress'
-import _ from 'lodash'
-import del from 'del'
 
 export default defineConfig({
   projectId: 'notino-b2b-admin',
@@ -21,19 +19,7 @@ export default defineConfig({
     setupNodeEvents: (on, config) => {
 		require('cypress-localstorage-commands/plugin')(on, config)
 		require('./cypress/plugins/index.ts').default(on, config)
-		require('@cypress/code-coverage/task')(on, config),
-		on('after:spec', (spec, results) => {
-			if (results && results.video) {
-			  // Do we have failures for any retry attempts?
-			  const failures = _.some(results.tests, (test) => {
-				return _.some(test.attempts, { state: 'failed' })
-			  })
-			  if (!failures) {
-				// delete the video if the spec passed and no tests retried
-				return del(results.video)
-			  }
-			}
-		  })
+		require('@cypress/code-coverage/task')(on, config)
 		return config
     },
 	env: {

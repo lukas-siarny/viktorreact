@@ -115,14 +115,12 @@ const calendarEventsQueryParamsSchema = z.object({
 	reservationStates: z.nativeEnum(RESERVATION_STATE).array().nullish()
 })
 
-export type ICalendarEventsQueryParams = z.infer<typeof calendarEventsQueryParamsSchema>
-
 export const calendarReservationsQueryParamsSchema = calendarEventsQueryParamsSchema.omit({ reservationStates: true })
-
-export type ICalendarReservationsQueryParams = z.infer<typeof calendarReservationsQueryParamsSchema>
 
 export const calendarShiftsTimeOffQueryParamsSchema = calendarEventsQueryParamsSchema.pick({ salonID: true, start: true, end: true, employeeIDs: true })
 
+export type ICalendarEventsQueryParams = z.infer<typeof calendarEventsQueryParamsSchema>
+export type ICalendarReservationsQueryParams = z.infer<typeof calendarReservationsQueryParamsSchema>
 export type ICalendarShiftsTimeOffQueryParams = z.infer<typeof calendarShiftsTimeOffQueryParamsSchema>
 
 // url query params
@@ -220,3 +218,18 @@ export type IGetCustomersQueryParams = z.infer<typeof customersQueryParamsSchema
 export const customersPagePageURLQueryParams = customersQueryParamsSchema.omit({ salonID: true })
 
 export type ICustomersPageURLQueryParam = z.infer<typeof customersPagePageURLQueryParams>
+
+/**
+ * Salon services
+ */
+const servicesQueryParamsSchema = z.object({
+	salonID: uuidConstraint,
+	rootCategoryID: uuidConstraint.optional()
+})
+
+export type IGetServicesQueryParams = z.infer<typeof servicesQueryParamsSchema>
+
+// url query params
+export const servicesPagePageURLQueryParams = servicesQueryParamsSchema.omit({ salonID: true })
+
+export type IServicesPageURLQueryParam = z.infer<typeof servicesPagePageURLQueryParams>

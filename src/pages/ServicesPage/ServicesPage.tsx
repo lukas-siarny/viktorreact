@@ -29,7 +29,10 @@ import { Columns, IBreadcrumbs, IUserAvatar, SalonSubPageProps } from '../../typ
 import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
 
 // hooks
-import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
+
+// schema
+import { servicesPagePageURLQueryParams } from '../../schemas/queryParams'
 
 interface IAdminUsersFilter {
 	rootCategoryID: string
@@ -45,19 +48,16 @@ const ServicesPage = (props: SalonSubPageProps) => {
 
 	useEffect(() => {
 		dispatch(getCategories())
-		// test()
 	}, [dispatch])
 
-	const [query, setQuery] = useQueryParams({
-		rootCategoryID: StringParam()
-	})
+	const [query, setQuery] = useQueryParams(servicesPagePageURLQueryParams)
 
 	useEffect(() => {
 		dispatch(initialize(FORM.SERVICES_FILTER, { rootCategoryID: query.rootCategoryID }))
 		dispatch(
 			getServices({
 				salonID,
-				rootCategoryID: query.rootCategoryID || undefined
+				rootCategoryID: query.rootCategoryID
 			})
 		)
 	}, [dispatch, salonID, query.rootCategoryID])

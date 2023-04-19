@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { isEmpty, get } from 'lodash'
-import { localizedValuesConstraint, zodErrorsToFormErrors, serializeValidationMessage } from './baseSchema'
+import { localizedValuesConstraint, zodErrorsToFormErrors, serializeValidationMessage, uuidConstraint } from './baseSchema'
 import { FORM, PARAMETERS_VALUE_TYPES } from '../utils/enums'
 
 const categoryParamsSchema = z
@@ -9,7 +9,7 @@ const categoryParamsSchema = z
 		values: z
 			.object({
 				value: z.number().positive().finite().nullish(),
-				id: z.string().uuid().nullish()
+				id: uuidConstraint.nullish()
 			})
 			.array()
 			.superRefine((val, ctx) => {

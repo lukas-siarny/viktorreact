@@ -16,6 +16,7 @@ import {
 	ICalendarDayEvents,
 	ICalendarMonthlyReservationsPayload
 } from '../../types/interfaces'
+import { ICalendarEventsQueryParams, ICalendarReservationsQueryParams, ICalendarShiftsTimeOffQueryParams } from '../../schemas/queryParams'
 
 // enums
 import {
@@ -69,41 +70,6 @@ interface IGetNotinoReservationsQueryParams extends Omit<IGetSalonReservationsQu
 	search?: string
 	categoryFirstLevelIDs?: (string | null)[] | null
 	countryCode?: string
-}
-
-interface ICalendarEventsQueryParams {
-	salonID: string
-	start: string
-	end: string
-	employeeIDs?: (string | null)[] | null
-	categoryIDs?: (string | null)[] | null
-	eventTypes?: (string | null)[] | null
-	reservationStates?: (string | null)[] | null
-}
-
-interface ICalendarMonthlyReservationsQueryParams {
-	salonID: string
-	start: string
-	end: string
-	employeeIDs?: (string | null)[] | null
-	categoryIDs?: (string | null)[] | null
-	reservationStates?: (string | null)[] | null
-}
-
-interface ICalendarReservationsQueryParams {
-	salonID: string
-	start: string
-	end: string
-	employeeIDs?: (string | null)[] | null
-	categoryIDs?: (string | null)[] | null
-	reservationStates?: (string | null)[] | null
-}
-
-interface ICalendarShiftsTimeOffQueryParams {
-	salonID: string
-	start: string
-	end: string
-	employeeIDs?: (string | null)[] | null
 }
 
 // action types
@@ -476,7 +442,7 @@ export const clearCalendarMonthlyReservations = (): ThunkResult<Promise<void>> =
 export const clearCalendarShiftsTimeoffs = (): ThunkResult<Promise<void>> => clearCalendarEvents(CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS)
 
 export const getCalendarMonthlyViewReservations =
-	(queryParams: ICalendarMonthlyReservationsQueryParams, clearVirtualEvent?: boolean, storePreviousParams = true): ThunkResult<Promise<ICalendarMonthlyReservationsPayload>> =>
+	(queryParams: ICalendarReservationsQueryParams, clearVirtualEvent?: boolean, storePreviousParams = true): ThunkResult<Promise<ICalendarMonthlyReservationsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ICalendarMonthlyReservationsPayload
 		try {

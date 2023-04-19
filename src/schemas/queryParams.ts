@@ -1,13 +1,20 @@
 import { z } from 'zod'
+import dayjs from 'dayjs'
 import {
+	CALENDAR_EVENTS_VIEW_TYPE,
+	CALENDAR_EVENT_TYPE,
+	RESERVATION_STATE,
 	SALONS_TAB_KEYS,
 	SALON_CREATE_TYPE,
 	SALON_FILTER_OPENING_HOURS,
 	SALON_FILTER_RS,
 	SALON_FILTER_RS_AVAILABLE_ONLINE,
 	SALON_FILTER_STATES,
-	SALON_SOURCE_TYPE
+	SALON_SOURCE_TYPE,
+	CALENDAR_VIEW,
+	CALENDAR_DATE_FORMAT
 } from '../utils/enums'
+import { dateConstraint, uuidConstraint } from './baseSchema'
 
 export const searchableSchema = z.object({
 	page: z.number().nullish(),
@@ -16,6 +23,9 @@ export const searchableSchema = z.object({
 	search: z.string().nullish()
 })
 
+/**
+ * Salons
+ */
 export const salonsQueryParamsSchema = searchableSchema.extend({
 	categoryFirstLevelIDs: z.string().array().nullish(),
 	statuses_all: z.boolean().nullish(),
@@ -78,3 +88,38 @@ export const rechargeSmsCreditAdminPageSchema = salonsQueryParamsSchema
 	})
 
 export type IRechargeSmsCreditAdminPageURLQueryParams = z.infer<typeof rechargeSmsCreditAdminPageSchema>
+
+/**
+ * Calendar
+ */
+export const calendarEventsQueryParamsSchema = z.object({
+	salonID: uuidConstraint,
+	start: dateConstraint,
+	end: dateConstraint,
+	employeeIDs: z.string().array().nullish(),
+	categoryIDs: z.string().array().nullish(),
+	eventTypes: z.nativeEnum(CALENDAR_EVENT_TYPE).array().nullish(),
+	reservationStates: z.nativeEnum(RESERVATION_STATE).array().nullish()
+})
+
+export type ICalendarEventsQueryParams = z.infer<typeof calendarEventsQueryParamsSchema>
+
+export const calendarReservationsQueryParamsSchema = calendarEventsQueryParamsSchema.omit({ reservationStates: true })
+
+export type ICalendarReservationsQueryParams = z.infer<typeof calendarReservationsQueryParamsSchema>
+
+export const calendarShiftsTimeOffQueryParamsSchema = calendarEventsQueryParamsSchema.pick({ salonID: true, start: true, end: true, employeeIDs: true })
+
+export type ICalendarShiftsTimeOffQueryParams = z.infer<typeof calendarShiftsTimeOffQueryParamsSchema>
+
+export const calendarPageURLQueryParams = z.object({
+	view: z.nativeEnum(CALENDAR_VIEW).catch(CALENDAR_VIEW.DAY),
+	date: dateConstraint.catch(dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
+	eventsViewType: z.nativeEnum(CALENDAR_EVENTS_VIEW_TYPE).catch(CALENDAR_EVENTS_VIEW_TYPE.RESERVATION),
+	employeeIDs: uuidConstraint.array().nullish(),
+	categoryIDs: z.string().array().nullish(),
+	sidebarView: z.nativeEnum(CALENDAR_EVENT_TYPE).optional(),
+	eventId: uuidConstraint.optional()
+})
+
+export type ICalendarPageURLQueryParams = z.infer<typeof calendarPageURLQueryParams>

@@ -23,7 +23,7 @@ import { getServices } from '../../reducers/services/serviceActions'
 import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
-import { Columns, IBreadcrumbs, IUserAvatar, SalonSubPageProps } from '../../types/interfaces'
+import { Columns, IBreadcrumbs, IServicesFilter, IUserAvatar, SalonSubPageProps } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
@@ -33,10 +33,6 @@ import useQueryParams from '../../hooks/useQueryParamsZod'
 
 // schema
 import { servicesPagePageURLQueryParams } from '../../schemas/queryParams'
-
-interface IAdminUsersFilter {
-	rootCategoryID: string
-}
 
 const ServicesPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
@@ -62,7 +58,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 		)
 	}, [dispatch, salonID, query.rootCategoryID])
 
-	const handleSubmit = (values: IAdminUsersFilter) => {
+	const handleSubmit = (values: IServicesFilter) => {
 		const newQuery = {
 			...query,
 			rootCategoryID: values.rootCategoryID

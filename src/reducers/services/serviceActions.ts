@@ -11,7 +11,7 @@ import { IGetServicesQueryParams } from '../../schemas/queryParams'
 
 // utils
 import { getReq } from '../../utils/request'
-import { getAssignedUserLabel, decodePrice, getServiceRange } from '../../utils/helper'
+import { getAssignedUserLabel, decodePrice, getServiceRange, normalizeQueryParams } from '../../utils/helper'
 
 export type IServiceActions = IResetStore | IGetServices | IGetService
 
@@ -55,7 +55,7 @@ export const getServices =
 		const state = getState()
 		try {
 			dispatch({ type: SERVICES.SERVICES_LOAD_START })
-			const { data } = await getReq('/api/b2b/admin/services/', queryParams)
+			const { data } = await getReq('/api/b2b/admin/services/', { ...normalizeQueryParams(queryParams) } as any)
 			const categories = data.groupedServicesByCategory
 			const tableData: ServicesTableData[] = []
 			categories?.forEach((parentCategory) => {

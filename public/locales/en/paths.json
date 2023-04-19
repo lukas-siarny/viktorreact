@@ -33,6 +33,7 @@
   "salons/create": "/salons/create",
   "salons/{{salonID}}": "/salons/{{salonID}}",
   "salons/{{salonID}}/calendar": "/salons/{{salonID}}/calendar",
+  "salons/{{salonID}}/history": "/salons/{{salonID}}/history",
   "services-settings": "/services-settings",
   "services-settings/{{serviceID}}": "/services-settings/{{serviceID}}",
   "signup": "/signup",

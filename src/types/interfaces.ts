@@ -1,5 +1,5 @@
 import { IUseQueryParams } from './../hooks/useQueryParams'
-import { EventDragStartArg, EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
+import { EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 import { EventDropArg, EventInput } from '@fullcalendar/react'
@@ -25,7 +25,8 @@ import {
 	CONFIRM_MODAL_DATA_TYPE,
 	CALENDAR_EVENT_DISPLAY_TYPE,
 	PARAMETER_TYPE,
-	RESERVATION_SOURCE_TYPE
+	RESERVATION_SOURCE_TYPE,
+	SALON_TABS_KEYS
 } from '../utils/enums'
 
 // types
@@ -575,6 +576,7 @@ export interface ISearchableWithoutPagination<T> {
 export interface SalonSubPageProps {
 	salonID: string
 	parentPath?: string
+	tabKey?: SALON_TABS_KEYS
 }
 
 export interface IPermissions {

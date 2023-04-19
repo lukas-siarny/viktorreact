@@ -95,11 +95,11 @@ const SalonHistoryPage: FC<ComponentProps> = (props) => {
 
 		return (
 			<>
-				{Object.keys(values)?.map((key: string) => {
+				{Object.keys(values)?.map((key: string, index) => {
 					if (typeof values?.[key] === 'object' && key !== 'fileID') {
-						return <CompareComponent valueKey={key} oldValue={JSON.stringify(oldValues?.[key])} newValue={JSON.stringify(newValues?.[key])} />
+						return <CompareComponent key={index} valueKey={key} oldValue={JSON.stringify(oldValues?.[key])} newValue={JSON.stringify(newValues?.[key])} />
 					}
-					return <CompareComponent valueKey={key} oldValue={oldValues?.[key]} newValue={newValues?.[key]} />
+					return <CompareComponent key={index} valueKey={key} oldValue={oldValues?.[key]} newValue={newValues?.[key]} />
 				})}
 			</>
 		)

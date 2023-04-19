@@ -285,7 +285,7 @@ const NotinoDashboard: FC = () => {
 				},
 				{
 					label: t('loc:Premium s RS'),
-					data: notino.data?.publishedPremiumSalons.premiumEnabledRsB2c,
+					data: notino.data?.publishedPremiumSalons.premiumEnabledRsB2b,
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
@@ -295,7 +295,7 @@ const NotinoDashboard: FC = () => {
 				},
 				{
 					label: t('loc:Premium RS online'),
-					data: notino.data?.publishedPremiumSalons.premiumEnabledRsB2b,
+					data: notino.data?.publishedPremiumSalons.premiumEnabledRsB2c,
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
@@ -354,7 +354,7 @@ const NotinoDashboard: FC = () => {
 				},
 				{
 					label: t('loc:Premium s RS'),
-					data: notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2c,
+					data: notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2b,
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
@@ -364,7 +364,7 @@ const NotinoDashboard: FC = () => {
 				},
 				{
 					label: t('loc:Premium RS online'),
-					data: notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2b,
+					data: notino.data?.unpublishedPremiumSalons.premiumEnabledRsB2c,
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),

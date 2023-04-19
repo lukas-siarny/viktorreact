@@ -522,8 +522,6 @@ export interface IEmployeePayload {
 export type EmployeeService = NonNullable<IEmployeePayload['data']>['employee']['categories'][0]['children'][0]['children'][0]
 
 export interface SalonPageProps {
-	isNotinoUser: boolean
-	backUrl?: string
 	phonePrefixCountryCode: string
 	authUser: IAuthUserPayload & ILoadingAndFailure
 	phonePrefixes: IEnumerationsCountriesPayload & ILoadingAndFailure
@@ -805,6 +803,7 @@ export interface ICalendarDayEventsMap {
 }
 export interface IReservationsFilter {
 	dateFrom: string
+	countryCode?: string
 	employeeIDs?: string[]
 	categoryIDs?: string[]
 	reservationStates?: RESERVATION_STATE[]

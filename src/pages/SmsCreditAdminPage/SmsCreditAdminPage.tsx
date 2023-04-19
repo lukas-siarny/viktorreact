@@ -8,7 +8,6 @@ import { ColumnProps } from 'antd/es/table'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router'
 import { initialize } from 'redux-form'
-import i18next from 'i18next'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'

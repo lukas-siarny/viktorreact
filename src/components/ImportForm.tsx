@@ -22,6 +22,7 @@ type ComponentProps = {
 	setRequestStatus: (status?: REQUEST_STATUS) => void
 	requestStatus: REQUEST_STATUS | undefined
 	title: string
+	extraContent?: JSX.Element
 	label: string
 	accept: string
 	disabledForm?: boolean
@@ -33,7 +34,7 @@ type Props = InjectedFormProps<IDataUploadForm, ComponentProps> & ComponentProps
 const ImportForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { handleSubmit, submitting, disabledForm, pristine, inModal = true, visible, setVisible, setRequestStatus, requestStatus, title, label, accept } = props
+	const { handleSubmit, submitting, disabledForm, pristine, inModal = true, visible, setVisible, setRequestStatus, requestStatus, title, label, accept, extraContent } = props
 	const resetUploadForm = () => {
 		setRequestStatus(undefined)
 		dispatch(reset(FORM.IMPORT_FORM))
@@ -53,6 +54,7 @@ const ImportForm: FC<Props> = (props) => {
 				validate={validationRequired}
 				required
 			/>
+			{extraContent}
 			<Button
 				id={formFieldID(FORM.IMPORT_FORM, SUBMIT_BUTTON_ID)}
 				className='noti-btn'

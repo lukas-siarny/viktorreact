@@ -17,16 +17,7 @@ import { getService } from '../../reducers/services/serviceActions'
 import { getCategory, ICategoryParameterValue } from '../../reducers/categories/categoriesActions'
 
 // types
-import {
-	IServiceForm,
-	SalonSubPageProps,
-	EmployeeServiceData,
-	Employees,
-	ServiceDetail,
-	IEmployeeServiceEditForm,
-	IParameterValue,
-	NameLocalizationsItem
-} from '../../types/interfaces'
+import { IServiceForm, SalonSubPageProps, EmployeeServiceData, Employees, ServiceDetail, IEmployeeServiceEditForm, IParameterValue } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils

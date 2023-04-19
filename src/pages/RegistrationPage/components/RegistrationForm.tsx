@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
-import { Field, reduxForm, InjectedFormProps } from 'redux-form'
-import { Form, Button } from 'antd'
+import { Field, InjectedFormProps, reduxForm } from 'redux-form'
+import { Button, Form } from 'antd'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -23,7 +23,6 @@ import { FORM, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { formFieldID, showErrorNotification } from '../../../utils/helper'
 
 // validate
-
 import validateRegistrationForm from './validateRegistrationForm'
 
 type ComponentProps = {}

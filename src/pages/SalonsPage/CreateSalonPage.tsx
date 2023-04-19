@@ -4,12 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { Button, Row, Spin } from 'antd'
 import { initialize, submit } from 'redux-form'
 import { isEmpty } from 'lodash'
-import { compose } from 'redux'
 import cx from 'classnames'
 import { useNavigate } from 'react-router-dom'
 
 // components
-import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonForm from './components/forms/SalonForm'
 import { scrollToTopFn } from '../../components/ScrollToTop'
 import SalonSuggestionsModal from './components/modals/SalonSuggestionsModal'
@@ -25,11 +23,11 @@ import { getBasicSalon, getSuggestedSalons } from '../../reducers/salons/salonsA
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
-import { CategoriesPatch, IBreadcrumbs, ISalonForm, SalonPageProps } from '../../types/interfaces'
+import { CategoriesPatch, ISalonForm, SalonPageProps } from '../../types/interfaces'
 
 // utils
 import { patchReq, postReq } from '../../utils/request'
-import Permissions, { withPermissions, checkPermissions } from '../../utils/Permissions'
+import Permissions, { checkPermissions } from '../../utils/Permissions'
 import searchWrapper from '../../utils/filters'
 import { formFieldID } from '../../utils/helper'
 
@@ -39,12 +37,12 @@ import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO, PERMISSION.PARTNER]
 
-const SalonCreatePage: FC<SalonPageProps> = (props) => {
+const CreateSalonPage: FC<SalonPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
-	const { isNotinoUser, backUrl, phonePrefixCountryCode, authUser, phonePrefixes } = props
+	const { phonePrefixCountryCode, authUser, phonePrefixes } = props
 
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [suggestionsModalVisible, setSuggestionsModalVisible] = useState(false)
@@ -126,29 +124,8 @@ const SalonCreatePage: FC<SalonPageProps> = (props) => {
 		dispatch(initialize(FORM.SALON, initEmptySalonFormData(phonePrefixCountryCode, true)))
 	}, [dispatch, phonePrefixCountryCode])
 
-	const breadcrumbDetailItem = {
-		name: t('loc:Vytvoriť salón'),
-		link: t('paths:salons/create')
-	}
-
-	// View
-	const breadcrumbs: IBreadcrumbs = {
-		items: isNotinoUser
-			? [
-					{
-						name: t('loc:Zoznam salónov'),
-						link: backUrl
-					},
-					breadcrumbDetailItem
-			  ]
-			: [breadcrumbDetailItem]
-	}
-
 	return (
 		<>
-			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
-			</Row>
 			<div className='content-body'>
 				<Spin spinning={isLoading}>
 					<SalonForm
@@ -199,4 +176,4 @@ const SalonCreatePage: FC<SalonPageProps> = (props) => {
 	)
 }
 
-export default compose(withPermissions(permissions))(SalonCreatePage)
+export default CreateSalonPage

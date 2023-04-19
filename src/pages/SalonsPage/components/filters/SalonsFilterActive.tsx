@@ -391,6 +391,7 @@ const SalonsFilterActive = (props: Props) => {
 									size={'large'}
 									filterOptions
 									onDidMountSearch
+									className={'select-with-tag-options'}
 									options={publishedOptions}
 									optionRender={optionRenderWithTag}
 								/>

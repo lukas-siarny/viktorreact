@@ -43,8 +43,8 @@ import {
 	SALONS_TIME_STATS_TYPE,
 	STRINGS
 } from '../../../utils/enums'
-import { doughnutOptions, getFilterRanges, lineOptions, transformToStatsData } from './dashboardUtils'
 import { formatObjToQuery } from '../../../utils/helper'
+import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData } from './dashboardUtils'
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin, BarElement)
 
@@ -243,6 +243,7 @@ const NotinoDashboard: FC = () => {
 	const [monthStatsDate, setMonthStatsDate] = useState<Dayjs>(now)
 	// const [monthReservationsStatsDate, setMonthReservationsStatsDate] = useState<Dayjs>(now)
 	const { notino, salonsAnnualStats, salonsMonthStats } = useSelector((state: RootState) => state.dashboard)
+
 	const { selectedSalon } = useSelector((state: RootState) => state.selectedSalon)
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	const navigate = useNavigate()
@@ -406,10 +407,6 @@ const NotinoDashboard: FC = () => {
 	const monthStats: TimeStats = useMemo(() => {
 		return transformToStatsData(salonsMonthStats.data, salonsMonthStats.isLoading, salonsMonthStats.isFailure, monthStatsDate)
 	}, [salonsMonthStats, monthStatsDate])
-
-	// const reservationsMonthStats: TimeStats = useMemo(() => {
-	// 	return transformToReservationsStatsData(reservationsStats.data, reservationsStats.isLoading, reservationsStats.isFailure, monthReservationsStatsDate)
-	// }, [reservationsStats.data, reservationsStats.isLoading, reservationsStats.isFailure, monthReservationsStatsDate])
 
 	const dashboardData: DashboardData = useMemo(() => {
 		const emptyGraphData = {

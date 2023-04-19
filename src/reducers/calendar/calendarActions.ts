@@ -18,7 +18,16 @@ import {
 } from '../../types/interfaces'
 
 // enums
-import { EVENTS, EVENT_DETAIL, MONTHLY_RESERVATIONS, SET_DAY_EVENTS, RESERVATIONS, SET_IS_REFRESHING_EVENTS, PENDING_RESERVATIONS_COUNT } from './calendarTypes'
+import {
+	EVENTS,
+	EVENT_DETAIL,
+	MONTHLY_RESERVATIONS,
+	SET_DAY_EVENTS,
+	RESERVATIONS,
+	SET_IS_REFRESHING_EVENTS,
+	NOTINO_RESERVATIONS,
+	PENDING_RESERVATIONS_COUNT
+} from './calendarTypes'
 import {
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_EVENTS_KEYS,
@@ -55,6 +64,11 @@ interface IGetSalonReservationsQueryParams extends IPaginationQuery {
 	reservationCreateSourceType?: string | null
 	reservationPaymentMethods?: (string | null)[] | null
 	salonID: string
+}
+interface IGetNotinoReservationsQueryParams extends Omit<IGetSalonReservationsQueryParams, 'salonID' | 'categoryIDs' | 'employeeIDs'> {
+	search?: string
+	categoryFirstLevelIDs?: (string | null)[] | null
+	countryCode?: string
 }
 
 interface ICalendarEventsQueryParams {
@@ -101,12 +115,21 @@ export type ICalendarActions =
 	| ISetIsRefreshingEvents
 	| ISetDayEvents
 	| IGetSalonReservations
+	| IGetNotinoReservations
 	| IGetPendingReservationsCount
 
 export interface ISalonReservationsPayload extends ISearchable<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200> {
 	tableData: ISalonReservationsTableData[]
 }
 
+export interface INotinoReservationsPayload extends ISearchable<Paths.GetApiB2BAdminCalendarEventsReservations.Responses.$200> {
+	tableData: INotinoReservationsTableData[]
+}
+
+interface IGetNotinoReservations {
+	type: NOTINO_RESERVATIONS
+	payload: INotinoReservationsPayload
+}
 export interface IPendingReservationsCount {
 	count: number
 }
@@ -152,6 +175,22 @@ interface ISalonReservationsTableData {
 	customer: any
 	service: any
 	paymentMethod: RESERVATION_PAYMENT_METHOD
+}
+
+interface INotinoReservationsTableData {
+	id: string
+	salon: {
+		name?: string
+		id?: string
+	}
+	createdAt: string
+	startDate: string
+	time: string
+	customer: any
+	service: any
+	createSourceType: string
+	state: string
+	paymentMethod: string
 }
 
 export interface IGetSalonReservations {
@@ -636,6 +675,58 @@ export const getPaginatedReservations =
 		}
 
 		return payload
+	}
+
+export const getNotinoReservations =
+	(queryParams: IGetNotinoReservationsQueryParams): ThunkResult<Promise<any>> =>
+	async (dispatch) => {
+		let payload = {} as INotinoReservationsPayload
+		try {
+			const queryParamsEditedForRequest = {
+				search: queryParams.search,
+				dateFrom: queryParams.dateFrom,
+				dateTo: queryParams.dateTo,
+				countryCode: queryParams.countryCode,
+				createdAtFrom: queryParams.createdAtFrom,
+				createdAtTo: queryParams.createdAtTo,
+				reservationStates: queryParams.reservationStates,
+				reservationPaymentMethods: queryParams.reservationPaymentMethods,
+				reservationCreateSourceType: queryParams.reservationCreateSourceType,
+				categoryFirstLevelIDs: queryParams.categoryFirstLevelIDs,
+				limit: queryParams.limit,
+				page: queryParams.page,
+				order: queryParams.order
+			}
+
+			dispatch({ type: NOTINO_RESERVATIONS.NOTINO_RESERVATIONS_LOAD_START })
+
+			const { data } = await getReq('/api/b2b/admin/calendar-events/reservations', {
+				...(normalizeQueryParams(queryParamsEditedForRequest) as any)
+			})
+			const tableData: INotinoReservationsTableData[] = map(data.reservations, (reservation) => {
+				return {
+					key: reservation.id,
+					id: reservation.id,
+					salon: reservation.salon,
+					createdAt: formatDateByLocale(reservation.createdAt) as string,
+					startDate: formatDateByLocale(reservation.start.date, true) as string,
+					time: `${reservation.start.time} - ${reservation.end.time}`,
+					customer: reservation.customer,
+					service: reservation.service,
+					employee: reservation.employee,
+					createSourceType: transalteReservationSourceType(reservation.reservationData?.createSourceType as RESERVATION_SOURCE_TYPE),
+					state: reservation.reservationData?.state as RESERVATION_STATE,
+					paymentMethod: reservation.reservationData?.paymentMethod as RESERVATION_PAYMENT_METHOD
+				}
+			})
+			payload = {
+				data,
+				tableData
+			}
+			dispatch({ type: NOTINO_RESERVATIONS.NOTINO_RESERVATIONS_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: NOTINO_RESERVATIONS.NOTINO_RESERVATIONS_LOAD_FAIL })
+		}
 	}
 
 export const getPendingReservationsCount =

@@ -59,6 +59,7 @@ import RechargeSmsCreditPage from '../pages/SmsCreditPartnerPage/RechargeSmsCred
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 import ErrorBoundary from '../components/ErrorBoundary'
+import { getPendingReservationsCount } from '../reducers/calendar/calendarActions'
 
 const SalonSubRoutes: FC = () => {
 	const navigate = useNavigate()
@@ -81,6 +82,8 @@ const SalonSubRoutes: FC = () => {
 			// clear salon selection due error 404 - Not Found
 			dispatch(selectSalon())
 			navigate('/404')
+		} else {
+			dispatch(getPendingReservationsCount(salonID as string))
 		}
 	}, [salonID, dispatch, navigate])
 

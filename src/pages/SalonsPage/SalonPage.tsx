@@ -24,7 +24,6 @@ import { ENUMERATIONS_KEYS, FORM, NEW_SALON_ID, PERMISSION, TAB_KEYS } from '../
 // reducers
 import { getSalonLanguages } from '../../reducers/languages/languagesActions'
 import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
-import { getPendingReservationsCount } from '../../reducers/calendar/calendarActions'
 
 // types
 import { IBreadcrumbs, SalonPageProps, SalonSubPageProps } from '../../types/interfaces'
@@ -102,9 +101,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	}, [dispatch, salonID, isNewSalon])
 
 	useEffect(() => {
-		dispatch(getPendingReservationsCount(salonID))
 		dispatch(getSalonLanguages())
-	}, [dispatch, salonID])
+	}, [dispatch])
 
 	const commonProps: SalonPageProps = {
 		phonePrefixCountryCode,
@@ -114,7 +112,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const onTabChange = (selectedTabKey: string) => navigate(getTabUrl(selectedTabKey as TAB_KEYS, salonID))
 
-	const salonDetail = <EditSalonPage {...commonProps} salonID={salonID} isNotinoUser={isNotinoUser} isDeletedSalon={isDeletedSalon} backUrl={backUrl} />
+	const salonDetail = <EditSalonPage {...commonProps} salonID={salonID} salon={salon} isNotinoUser={isNotinoUser} isDeletedSalon={isDeletedSalon} backUrl={backUrl} />
 
 	const getBreadcrumbs = () => {
 		let breadcrumbDetailItem

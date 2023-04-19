@@ -19,11 +19,11 @@ import NotinoUserForm from './components/forms/NotinoUserForm'
 import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_STATES, STRINGS, SALON_CREATE_TYPE, SUBMIT_BUTTON_ID } from '../../utils/enums'
 
 // reducers
-import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
+import { ISelectedSalonPayload, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
-import { INoteForm, INoteModal, INotinoUserForm, ISalonForm, SalonPageProps } from '../../types/interfaces'
+import { ILoadingAndFailure, INoteForm, INoteModal, INotinoUserForm, ISalonForm, SalonPageProps } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
@@ -37,13 +37,13 @@ import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
-import { RootState } from '../../reducers'
 
 interface EditSalonPageProps extends SalonPageProps {
 	isNotinoUser: boolean
 	salonID: string
 	isDeletedSalon: boolean
 	backUrl?: string
+	salon: ISelectedSalonPayload & ILoadingAndFailure
 }
 
 const pendingStates: string[] = [SALON_STATES.NOT_PUBLISHED_PENDING, SALON_STATES.PUBLISHED_PENDING]
@@ -53,8 +53,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-	const { salonID, isNotinoUser, backUrl, phonePrefixes, authUser, phonePrefixCountryCode, isDeletedSalon } = props
+	const { salonID, isNotinoUser, backUrl, phonePrefixes, authUser, phonePrefixCountryCode, isDeletedSalon, salon } = props
 
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isSendingConfRequest, setIsSendingConfRequest] = useState<boolean>(false)

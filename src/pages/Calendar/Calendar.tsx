@@ -66,7 +66,6 @@ import {
 	ReservationPopoverData,
 	PopoverTriggerPosition,
 	SalonSubPageProps,
-	ICalendarImportedReservationForm,
 	ICalendarEmployeeOptionItem
 } from '../../types/interfaces'
 

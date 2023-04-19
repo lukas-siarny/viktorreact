@@ -1002,6 +1002,7 @@ export interface ICalendarDayEventsMap {
 }
 export interface IReservationsFilter {
 	dateFrom: string
+	countryCode?: string
 	employeeIDs?: string[]
 	categoryIDs?: string[]
 	reservationStates?: RESERVATION_STATE[]

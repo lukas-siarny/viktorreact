@@ -35,7 +35,7 @@ export interface IReviewsFilter {
 
 type Props = InjectedFormProps<IReviewsFilter, ComponentProps> & ComponentProps
 
-const fixLength255 = validationString(255)
+const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
 const ReviewsFilter = (props: Props) => {
 	const { handleSubmit } = props
@@ -54,7 +54,6 @@ const ReviewsFilter = (props: Props) => {
 			fieldMode={FIELD_MODE.FILTER}
 			search
 			validate={fixLength255}
-			maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
 		/>
 	)
 

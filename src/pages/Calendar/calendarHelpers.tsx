@@ -82,7 +82,8 @@ interface IComapreAndSortDayEventsData {
 
 const CALENDAR_EVENT_TYPES_ORDER = {
 	[CALENDAR_EVENT_TYPE.RESERVATION]: 0,
-	[CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT]: 0,
+	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+	// [CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT]: 0,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: 1,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: 2,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: 3
@@ -375,7 +376,6 @@ const createEmployeeResourceData = (employee: CalendarEvent['employee'], isTimeO
 		image: employee.image.resizedImages.thumbnail,
 		description,
 		isTimeOff,
-		isForImportedEvents: employee.isForImportedEvents,
 		isDeleted: employee.isDeleted
 	}
 }
@@ -469,7 +469,8 @@ const composeDayViewReservations = (
 				}
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 				case CALENDAR_EVENT_TYPE.RESERVATION:
-				case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
+					// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+					// case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 					composedEvents.push({
 						...calendarEvent
 					})
@@ -559,10 +560,6 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 			description = `${dayjs(employeeWorkingHours.start).format(CALENDAR_DATE_FORMAT.TIME)}-${dayjs(employeeWorkingHours.end).format(CALENDAR_DATE_FORMAT.TIME)}`
 		} else if (employeeTimeOff.length && !employeeShifts.length) {
 			description = t('loc:Voľno')
-		}
-
-		if (employee.isForImportedEvents) {
-			description = undefined
 		}
 
 		return {
@@ -683,7 +680,8 @@ const composeWeekViewReservations = (
 				}
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 				case CALENDAR_EVENT_TYPE.RESERVATION:
-				case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
+					// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+					// case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 					composedEvents.push({
 						...calendarEvent
 					})

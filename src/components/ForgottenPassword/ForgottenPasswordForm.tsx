@@ -10,10 +10,11 @@ import InputField from '../../atoms/InputField'
 import { IForgotPasswordForm } from '../../types/interfaces'
 
 // utils
-import { FORM } from '../../utils/enums'
+import { FORM, SUBMIT_BUTTON_ID } from '../../utils/enums'
 
 // validate
 import validateForgotPasswordForm from './validateForgotPasswordForm'
+import { formFieldID } from '../../utils/helper'
 
 type ComponentProps = {}
 
@@ -27,7 +28,16 @@ const ForgottenPasswordForm: FC<Props> = (props) => {
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>
 			<p className={'base-regular mb-7'}>{t('loc:Na vašu adresu odošleme link na obnovenie hesla. Prosím zadajte svoju adresu.')}</p>
 			<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} focused />
-			<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
+			<Button
+				id={formFieldID(FORM.FORGOT_PASSWORD, SUBMIT_BUTTON_ID)}
+				className='noti-btn'
+				block
+				size='large'
+				type='primary'
+				htmlType='submit'
+				disabled={submitting}
+				loading={submitting}
+			>
 				{t('loc:Odoslať email')}
 			</Button>
 		</Form>

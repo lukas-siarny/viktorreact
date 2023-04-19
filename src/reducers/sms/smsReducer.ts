@@ -48,7 +48,8 @@ export default (state = initState, action: ISmsActions) => {
 				stats: {
 					...state.stats,
 					data: action.payload.data,
-					isLoading: false
+					isLoading: false,
+					isFailure: false
 				}
 			}
 		// Time Stats
@@ -74,7 +75,8 @@ export default (state = initState, action: ISmsActions) => {
 				timeStats: {
 					...state.timeStats,
 					data: action.payload.data,
-					isLoading: false
+					isLoading: false,
+					isFailure: false
 				}
 			}
 		// History
@@ -100,7 +102,8 @@ export default (state = initState, action: ISmsActions) => {
 				history: {
 					...state.history,
 					data: action.payload.data,
-					isLoading: false
+					isLoading: false,
+					isFailure: false
 				}
 			}
 		case RESET_STORE:

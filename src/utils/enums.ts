@@ -5,6 +5,13 @@ import { LoadScriptUrlOptions } from '@react-google-maps/api/dist/utils/make-loa
 import { AliasToken } from 'antd/es/theme/internal'
 import { FormatterInput } from '@fullcalendar/react'
 
+export enum CYPRESS_CLASS_NAMES {
+	LOGOUT_BUTTON = 'noti-logout-button',
+	MY_ACCOUNT = 'noti-my-account',
+	MY_ACCOUNT_BUTTON = 'noti-my-account-button',
+	FORBIDDEN_MODAL = 'noti-forbidden-modal'
+}
+
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
 }
@@ -22,6 +29,46 @@ export enum LANGUAGE {
 	RO = 'ro',
 	BG = 'bg'
 	/* IT = 'it' */
+}
+
+export enum BROWSERS {
+	CHROME = 'chrome',
+	SAFARI = 'safari',
+	FIREFOX = 'firefox',
+	EDGE = 'edge',
+	OPERA = 'opera'
+}
+
+export enum BROWSER_TYPE {
+	UNKNOWN = 'unknown',
+	SUPPORTED = 'supported',
+	UNSUPPORTED = 'unsupported'
+}
+
+export const MIN_SUPPORTED_BROWSER_VERSION = (browserName?: string) => {
+	switch (browserName) {
+		case BROWSERS.CHROME:
+			// Released: 2020-02-04
+			return 80
+
+		case BROWSERS.SAFARI:
+			// Released: 2020-09-16
+			return 14
+
+		case BROWSERS.FIREFOX:
+			// Released: 2020-01-07
+			return 72
+
+		case BROWSERS.EDGE:
+			// Released: 2020-01-15
+			return 79
+
+		case BROWSERS.OPERA:
+			// Released: 2020-01-28
+			return 67
+		default:
+			return -1
+	}
 }
 
 export const CHANGE_DEBOUNCE_TIME = 300 // 300ms change debounce time for forms that have onChange submit
@@ -123,6 +170,7 @@ export enum FORM {
 	ADMIN_USERS_FILTER = 'ADMIN_USERS_FILTER',
 	EMPLOYEES_FILTER = 'EMPLOYEES_FILTER',
 	RESERVATIONS_FILTER = 'RESERVATIONS_FILTER',
+	NOTINO_RESERVATIONS_FILTER = 'NOTINO_RESERVATIONS_FILTER',
 	CREATE_SALON_FROM = 'CREATE_SALON_FROM',
 	ROLE_FORM = 'ROLE_FORM',
 	ADMIN_CREATE_USER = 'ADMIN_CREATE_USER',
@@ -162,7 +210,9 @@ export enum FORM {
 	SMS_UNIT_PRICES_FORM = 'SMS_UNIT_PRICES_FORM',
 	SMS_UNIT_PRICES_FILTER = 'SMS_UNIT_PRICES_FILTER',
 	SMS_HISTORY_FILTER = 'SMS_HISTORY_FILTER',
-	RECHARGE_SMS_CREDIT = 'RECHARGE_SMS_CREDIT'
+	RECHARGE_SMS_CREDIT = 'RECHARGE_SMS_CREDIT',
+	RECHARGE_SMS_CREDIT_FILTER = 'RECHARGE_SMS_CREDIT_FILTER',
+	SALONS_REPORT = 'SALONS_REPORT'
 }
 
 export enum PERMISSION {
@@ -197,7 +247,8 @@ export enum PERMISSION {
 	CALENDAR_EVENT_CREATE = 'CALENDAR_EVENT_CREATE',
 	CALENDAR_EVENT_UPDATE = 'CALENDAR_EVENT_UPDATE',
 	CALENDAR_EVENT_DELETE = 'CALENDAR_EVENT_DELETE',
-	READ_WALLET = 'READ_WALLET'
+	READ_WALLET = 'READ_WALLET',
+	SMS_UNIT_PRICE_EDIT = 'SMS_UNIT_PRICE_EDIT'
 }
 
 export const ADMIN_PERMISSIONS: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
@@ -222,7 +273,8 @@ export enum SUBMENU_PARENT {
 export enum TOKEN_AUDIENCE {
 	API = 'jwt-api',
 	FORGOTTEN_PASSWORD = 'FORGOTTEN_PASSWORD',
-	INVITATION = 'INVITATION'
+	INVITATION = 'INVITATION',
+	CANCEL_RESERVATION = 'CANCEL_RESERVATION'
 }
 
 export enum TAB_KEYS {
@@ -239,6 +291,11 @@ export enum SALONS_TAB_KEYS {
 export enum DASHBOARD_TASB_KEYS {
 	SALONS_STATE = 'SALONS_STATE',
 	RESERVATION_SYSTEM = 'RESERVATION_SYSTEM'
+}
+
+export enum RESERVATIONS_STATE {
+	PENDING = 'PENDING',
+	ALL = 'ALL'
 }
 
 export enum REVIEWS_TAB_KEYS {
@@ -271,6 +328,7 @@ export enum PAGE {
 	CALENDAR = 'CALENDAR',
 	SALON_SETTINGS = 'SALON_SETTINGS',
 	RESERVATIONS = 'RESERVATIONS',
+	NOTINO_RESERVATIONS = 'NOTINO_RESERVATIONS',
 	REVIEWS = 'REVIEWS',
 	SMS_CREDIT = 'SMS_CREDIT',
 	SMS_CREDITS = 'SMS_CREDITS'
@@ -371,8 +429,8 @@ export enum FILE_FILTER_DATA_TYPE {
 	EXCEL = 'EXCEL',
 	OTHER = 'OTHER'
 }
-export enum UPLOAD_STATUS {
-	UPLOADING = 'UPLOADING',
+export enum REQUEST_STATUS {
+	SUBMITTING = 'SUBMITTING',
 	SUCCESS = 'SUCCESS',
 	ERROR = 'ERROR'
 }
@@ -458,6 +516,16 @@ export enum SALON_FILTER_OPENING_HOURS {
 	NOT_SET = 'NOT_SET'
 }
 
+export enum SALON_FILTER_RS {
+	ENABLED = 'ENABLED',
+	NOT_ENABLED = 'NOT_ENABLED'
+}
+
+export enum SALON_FILTER_RS_AVAILABLE_ONLINE {
+	AVAILABLE = 'AVAILABLE',
+	NOT_AVAILABLE = 'NOT_AVAILABLE'
+}
+
 export enum PAGE_VIEW {
 	TABLE = 'TABLE',
 	TREE = 'TREE'
@@ -498,7 +566,7 @@ export const STRINGS = (t: TFunction) => ({
 	search: (entity: string) => t('loc:Vyhľadajte {{entity}}', { entity }), // searchable select field
 	searchBy: (entity: string) => t('loc:Vyhľadajte podľa {{entity}}', { entity }), // input field vyhladavaci
 	enter: (entity: string) => t('loc:Zadajte {{entity}}', { entity }), // all input fields
-
+	generate: (entity: string) => t('loc:Generovať {{entity}}', { entity }),
 	MISSING_PERMISSIONS_TEXT: t('loc:Používateľovi chýbajú oprávnenia na akciu'),
 	EMPTY_TABLE_COLUMN_PLACEHOLDER: '---'
 })
@@ -604,7 +672,29 @@ export const CREATE_BUTTON_ID = 'create-btn'
 
 export const SUBMIT_BUTTON_ID = 'submit-btn'
 
+export const RESET_BUTTON_ID = 'reset-btn'
+
 export const ADD_BUTTON_ID = 'add-btn'
+
+export const FILTER_BUTTON_ID = 'filter-btn'
+
+export const FORGOT_PASSWORD_BUTTON_ID = 'forgot-password-btn'
+
+export const SIGNUP_BUTTON_ID = 'signup-btn'
+
+export const HELP_BUTTON_ID = 'help-password-btn'
+
+export const CHANGE_PASSWORD_NEW_LINK_BUTTON_ID = 'change-password-new-link-btn'
+
+export const CREATE_EMPLOYEE_BUTTON_ID = 'create-employee-btn'
+
+export const CREATE_CUSTOMER_BUTTON_ID = 'create-customer-btn'
+
+export const IMPORT_BUTTON_ID = (suffix?: string) => `import-btn${suffix ? `-${suffix}` : ''}`
+
+export const DOWNLOAD_BUTTON_ID = 'download-btn'
+
+export const ROW_BUTTON_WITH_ID = (id: string) => `row-btn-with-id_${id}`
 
 export const MAX_VALUES_PER_PARAMETER = 20
 
@@ -665,7 +755,7 @@ export const FILTER_PATHS = (from?: string, to?: string) => ({
 		[SALON_FILTER_STATES.DECLINED]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.DECLINED}`,
 		[SALON_FILTER_STATES.PENDING_PUBLICATION]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.PENDING_PUBLICATION}`,
 		[SALON_CREATE_TYPE.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.BASIC}`,
-		publishedChanges: `${i18next.t('paths:salons')}?salonState=active&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
+		changesOverPeriod: `${i18next.t('paths:salons')}?salonState=active&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}`,
 		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`,
 		publishedBasics: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
 		publishedPremiums: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.NON_BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`
@@ -680,11 +770,6 @@ export enum SALONS_TIME_STATS_TYPE {
 	BASIC = 'BASIC',
 	PENDING = 'PENDING',
 	PREMIUM = 'PREMIUM'
-}
-
-export enum RS_STATS_TYPE {
-	ENABLE_RS_B2B = 'ENABLE_RS_B2B',
-	ENABLE_RS_B2C = 'ENABLE_RS_B2C'
 }
 
 export enum RESERVATIONS_STATS_TYPE {
@@ -741,8 +826,9 @@ export enum CALENDAR_EVENT_TYPE {
 	RESERVATION = 'RESERVATION',
 	EMPLOYEE_SHIFT = 'EMPLOYEE_SHIFT',
 	EMPLOYEE_TIME_OFF = 'EMPLOYEE_TIME_OFF',
-	EMPLOYEE_BREAK = 'EMPLOYEE_BREAK',
-	RESERVATION_FROM_IMPORT = 'RESERVATION_FROM_IMPORT'
+	EMPLOYEE_BREAK = 'EMPLOYEE_BREAK'
+	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+	// RESERVATION_FROM_IMPORT = 'RESERVATION_FROM_IMPORT'
 }
 
 export enum CALENDAR_EVENTS_VIEW_TYPE {
@@ -757,7 +843,7 @@ export enum CALENDAR_DATE_FORMAT {
 	HEADER_WEEK_END = 'D MMM YY',
 	HEADER_WEEK_START_TURN_OF_THE_MONTH = 'D MMM',
 	HEADER_WEEK_END_TURN_OF_THE_MONTH = 'D MMM YY',
-	HEADER_MONTH = 'MMMM YY',
+	HEADER_MONTH = 'MMMM YYYY',
 	TIME = 'HH:mm',
 	MONTH_HEADER_DAY_NAME = 'ddd',
 	EVENTS_LIST_POPOVER = 'dddd, D MMM'
@@ -798,9 +884,10 @@ export const EVENT_NAMES = (t: TFunction, eventType?: CALENDAR_EVENT_TYPE, capit
 		case CALENDAR_EVENT_TYPE.RESERVATION:
 			string = t('loc:rezerváciu')
 			break
-		case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
+		// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+		/* case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 			string = t('loc:importovanú rezerváciu')
-			break
+			break */
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
 			string = t('loc:voľno')
 			break
@@ -901,6 +988,7 @@ export const getDayNameFromNumber = (day: number) => {
 			return null
 	}
 }
+
 /**
  * @returns localized texts for Sentry report dialog and common EN texts for result view
  */

@@ -80,7 +80,7 @@ const ActiveEmployeesTable = (props: Props) => {
 
 	const columns: Columns = [
 		{
-			title: t('loc:Meno'),
+			title: <span id={'sortby-name'}>{t('loc:Meno')}</span>,
 			dataIndex: 'fullName',
 			key: 'lastName',
 			ellipsis: true,

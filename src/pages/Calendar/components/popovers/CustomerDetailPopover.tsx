@@ -126,7 +126,7 @@ const CalendarDetailPopover: FC<ICustomerDetailPopoverProps> = () => {
 	}
 
 	useEffect(() => {
-		const contentOverlay = document.querySelector('#nc-content-overlay') as HTMLElement
+		const contentOverlay = document.querySelector('#nc-customer-detail-content-overlay') as HTMLElement
 
 		const listener = (e: Event) => {
 			const overlayElement = document.querySelector(`.${overlayClassName}`)
@@ -158,7 +158,7 @@ const CalendarDetailPopover: FC<ICustomerDetailPopoverProps> = () => {
 	return (
 		<Popover
 			open={isOpen}
-			destroyTooltipOnHide={{ keepParent: true }}
+			destroyTooltipOnHide={false}
 			placement={'leftTop'}
 			overlayClassName={`${overlayClassName} nc-popover-overlay nc-popover-overlay-fixed`}
 			content={customer.data && <PopoverContent customer={customer.data.customer} onClose={() => setIsOpen(false)} />}

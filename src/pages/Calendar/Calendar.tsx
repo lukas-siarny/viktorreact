@@ -53,7 +53,6 @@ import CalendarHeader from './components/layout/Header'
 import SiderEventManagement, { SiderEventManagementRefs } from './components/layout/SiderEventManagement'
 import SiderFilter from './components/layout/SiderFilter'
 import CalendarEventsListPopover from './components/popovers/CalendarEventsListPopover'
-import CalendarEmployeeTooltipPopover from './components/popovers/CalendarEmployeeTooltipPopover'
 import CalendarReservationPopover from './components/popovers/CalendarReservationPopover'
 import CalendarConfirmModal from './components/CalendarConfirmModal'
 
@@ -67,8 +66,6 @@ import {
 	ReservationPopoverData,
 	PopoverTriggerPosition,
 	SalonSubPageProps,
-	EmployeeTooltipPopoverData,
-	ICalendarImportedReservationForm,
 	ICalendarEmployeeOptionItem
 } from '../../types/interfaces'
 
@@ -221,22 +218,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		date: string | null
 		position: PopoverTriggerPosition | null
 		isReservationsView?: boolean
+		employeeID?: string
 	}>({
 		isOpen: true,
 		isHidden: true,
 		date: null,
 		position: null,
 		isReservationsView: false
-	})
-
-	const [employeeTooltipPopover, setEmployeeTooltipPopover] = useState<{
-		isOpen: boolean
-		data: EmployeeTooltipPopoverData | null
-		position: PopoverTriggerPosition | null
-	}>({
-		isOpen: false,
-		data: null,
-		position: null
 	})
 
 	const clearConfirmModal = () => setConfirmModalData(null)
@@ -363,6 +351,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		 */
 		cancelEventsRequestOnDemand()
 		setQuery({ ...query, eventsViewType: newEventsViewType, sidebarView: undefined, eventId: undefined })
+		setTimeout(updateCalendarSize.current, CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE)
 	}
 
 	// fetch new events
@@ -529,7 +518,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			...query,
 			...values,
 			employeeIDs: values.employeeIDs,
-			categoryIDs: getShortCategoryIdsForUrl(values.categoryIDs),
+			categoryIDs: values?.categoryIDs?.length === services?.categoriesOptions?.length ? undefined : getShortCategoryIdsForUrl(values.categoryIDs),
 			eventId: undefined,
 			sidebarView: undefined
 		})
@@ -616,7 +605,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		[closeSiderForm, fetchEvents, salonID, query.eventId]
 	)
 
-	const handleSubmitImportedReservation = useCallback(
+	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+	/* const handleSubmitImportedReservation = useCallback(
 		async (values: ICalendarImportedReservationForm) => {
 			const eventId = values?.updateFromCalendar ? values.eventId : query.eventId
 
@@ -667,7 +657,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			}
 		},
 		[closeSiderForm, fetchEvents, salonID, query.eventId]
-	)
+	) */
 
 	const handleSubmitEvent = useCallback(
 		async (values: ICalendarEventForm, calendarEventID?: string, calendarBulkEventID?: string, updateFromCalendar = false) => {
@@ -886,14 +876,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		})
 	}
 
-	const onMonthlyReservationClick = (data: EmployeeTooltipPopoverData, position?: PopoverTriggerPosition) => {
-		setEmployeeTooltipPopover({
-			isOpen: true,
-			data,
-			position: position || null
-		})
-	}
-
 	const modals = (
 		<CalendarConfirmModal
 			data={confirmModalData}
@@ -914,13 +896,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				position={eventsListPopover.position}
 				isOpen={eventsListPopover.isOpen}
 				isReservationsView={eventsListPopover.isReservationsView}
+				employeeID={eventsListPopover.employeeID}
 				setIsOpen={(isOpen: boolean) => setEventsListPopover((prevState) => ({ ...prevState, isOpen }))}
 				onEditEvent={onEditEvent}
 				onReservationClick={onReservationClick}
-				onMonthlyReservationClick={onMonthlyReservationClick}
 				isHidden={eventsListPopover.isHidden}
 				isLoading={isLoading}
 				isUpdatingEvent={isUpdatingEvent}
+				query={query}
+				parentPath={parentPath}
 			/>
 			<CalendarReservationPopover
 				data={reservationPopover.data}
@@ -930,14 +914,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				handleUpdateReservationState={initUpdateReservationStateData}
 				onEditEvent={onEditEvent}
 				placement={validCalendarView === CALENDAR_VIEW.WEEK ? 'bottom' : 'left'}
-			/>
-			<CalendarEmployeeTooltipPopover
-				data={employeeTooltipPopover.data}
-				position={employeeTooltipPopover.position}
-				isOpen={employeeTooltipPopover.isOpen}
-				setIsOpen={(isOpen: boolean) => setEmployeeTooltipPopover((prevState) => ({ ...prevState, isOpen }))}
-				parentPath={parentPath}
-				query={query}
 			/>
 		</>
 	)
@@ -989,19 +965,20 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						setQuery={setQuery}
 						onEditEvent={onEditEvent}
 						onReservationClick={onReservationClick}
-						onShowMore={(date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean) => {
+						onShowEventsListPopover={(date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean, employeeID?: string) => {
 							setEventsListPopover({
 								date,
 								isHidden: false,
 								isOpen: true,
 								position: position || null,
-								isReservationsView
+								isReservationsView,
+								employeeID
 							})
 						}}
-						onMonthlyReservationClick={onMonthlyReservationClick}
 						handleSubmitReservation={initSubmitReservationData}
 						handleSubmitEvent={initSubmitEventData}
-						handleSubmitImportedReservation={handleSubmitImportedReservation}
+						// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+						// handleSubmitImportedReservation={handleSubmitImportedReservation}
 						onAddEvent={handleAddEvent}
 						clearFetchInterval={clearFetchInterval}
 						restartFetchInterval={restartFetchInterval}
@@ -1019,7 +996,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							onCloseSider={closeSiderForm}
 							handleSubmitReservation={initSubmitReservationData}
 							handleSubmitEvent={initSubmitEventData}
-							handleSubmitImportedReservation={handleSubmitImportedReservation}
+							// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+							// handleSubmitImportedReservation={handleSubmitImportedReservation}
 							calendarApi={calendarRefs?.current?.[validCalendarView]?.getApi()}
 							changeCalendarDate={setNewSelectedDate}
 							query={query}

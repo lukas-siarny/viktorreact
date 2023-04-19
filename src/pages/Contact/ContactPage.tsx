@@ -126,7 +126,7 @@ const ContactPage: FC<Props> = () => {
 						id={'noti-country-select'}
 						onChange={handleCountryChange}
 						value={{ value: selectedContact?.id }}
-						className={'noti-select-input w-full'}
+						className={'noti-country-select noti-select-input w-full'}
 						size={'large'}
 						popupClassName={'noti-select-dropdown dropdown-match-select-width'}
 						labelInValue
@@ -234,7 +234,7 @@ const ContactPage: FC<Props> = () => {
 																			</>
 																		}
 																		trigger='click'
-																		arrowPointAtCenter
+																		arrow={{ arrowPointAtCenter: true }}
 																		overlayInnerStyle={{ borderRadius: 10 }}
 																	>
 																		<button

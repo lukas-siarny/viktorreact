@@ -20,7 +20,7 @@ import { IUserAccountForm } from '../../../types/interfaces'
 import { deleteReq, patchReq } from '../../../utils/request'
 import Permissions from '../../../utils/Permissions'
 import { formFieldID } from '../../../utils/helper'
-import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 
 // assets
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
@@ -117,7 +117,7 @@ const UserDetail = (props: Props) => {
 			<div className='content-body small'>
 				<Spin spinning={isLoading || submittingAccountForm}>
 					<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
-					<div className={'content-footer'}>
+					<div className={'content-footer'} id={'content-footer-container'}>
 						<div className={'flex flex-col gap-2 md:flex-row md:justify-between'}>
 							<DeleteButton
 								permissions={[PERMISSION.USER_DELETE]}
@@ -133,6 +133,7 @@ const UserDetail = (props: Props) => {
 								allowed={submitPermissions}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
+										id={formFieldID(FORM.USER_ACCOUNT, SUBMIT_BUTTON_ID)}
 										type={'primary'}
 										size={'middle'}
 										className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}

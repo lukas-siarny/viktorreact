@@ -9,6 +9,7 @@ import HomePage from '../pages/HomePage/HomePage'
 import PublicRoute from './PublicRoute'
 import AuthRoute from './AuthRoute'
 import CreatePasswordRoute from './CreatePasswordRoute'
+import CancelReservationRoute from './CancelReservationRoute'
 
 // layouts
 import MainLayout from '../layouts/MainLayout'
@@ -60,8 +61,11 @@ import SpecialistContactsPage from '../pages/SpecialistContactsPage/SpecialistCo
 import ReviewsPage from '../pages/ReviewsPage/ReviewsPage'
 
 // SMS Credits
-import SmsUnitPricesPage from '../pages/SmsUnitPricesPage/SmsUnitPricesPage'
-import SmsUnitPricesDetailPage from '../pages/SmsUnitPricesPage/SmsUnitPricesDetailPage'
+import SmsCreditAdminPage from '../pages/SmsCreditAdminPage/SmsCreditAdminPage'
+import SmsUnitPricesDetailPage from '../pages/SmsCreditAdminPage/SmsUnitPricesDetailPage'
+
+// Cancel reservation page
+import CancelReservationPage from '../pages/CancelReservationPage/CancelReservationPage'
 
 import AppInit from '../components/AppInit'
 
@@ -69,6 +73,8 @@ import AppInit from '../components/AppInit'
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 import ErrorBoundary from '../components/ErrorBoundary'
+import RechargeSmsCreditAdminPage from '../pages/SmsCreditAdminPage/RechargeSmsCreditAdminPage'
+import NotinoReservationsPage from '../pages/NotinoReservationsPage/NotinoReservationsPage'
 
 const AppRoutes: FC = () => {
 	const [t] = useTranslation()
@@ -90,6 +96,9 @@ const AppRoutes: FC = () => {
 					element={<PublicRoute redirectLoggedInUser={false} showBackButton layout={PublicLayout} className={'noti-support-contact-page'} />}
 				>
 					<Route path={t('paths:contact')} element={<ContactPage />} />
+				</Route>
+				<Route errorElement={<ErrorBoundary />} element={<CancelReservationRoute layout={PublicLayout} className={'noti-cancel-reservation-page'} />}>
+					<Route path={t('paths:cancel-reservation')} element={<CancelReservationPage />} />
 				</Route>
 				{/* // Private Routes */}
 				<Route errorElement={<ErrorBoundary />} element={<AuthRoute layout={MainLayout} page={PAGE.HOME} />}>
@@ -136,12 +145,16 @@ const AppRoutes: FC = () => {
 				<Route errorElement={<ErrorBoundary />} path={t('paths:specialist-contacts')} element={<AuthRoute layout={MainLayout} page={PAGE.SPECIALIST_CONTACTS} />}>
 					<Route index element={<SpecialistContactsPage />} />
 				</Route>
-				<Route path={t('paths:reviews')} element={<AuthRoute layout={MainLayout} page={PAGE.REVIEWS} />}>
+				<Route errorElement={<ErrorBoundary />} path={t('paths:reviews')} element={<AuthRoute layout={MainLayout} page={PAGE.REVIEWS} />}>
 					<Route index element={<ReviewsPage />} />
 				</Route>
-				<Route path={t('paths:sms-credits')} element={<AuthRoute layout={MainLayout} page={PAGE.SMS_CREDITS} />}>
-					<Route index element={<SmsUnitPricesPage />} />
+				<Route errorElement={<ErrorBoundary />} path={t('paths:reservations')} element={<AuthRoute layout={MainLayout} page={PAGE.NOTINO_RESERVATIONS} />}>
+					<Route index element={<NotinoReservationsPage />} />
+				</Route>
+				<Route errorElement={<ErrorBoundary />} path={t('paths:sms-credits')} element={<AuthRoute layout={MainLayout} page={PAGE.SMS_CREDITS} />}>
+					<Route index element={<SmsCreditAdminPage />} />
 					<Route path={':countryCode'} element={<SmsUnitPricesDetailPage />} />
+					<Route path={t('paths:recharge')} element={<RechargeSmsCreditAdminPage />} />
 				</Route>
 				<Route path={'/403'} element={<AuthRoute layout={MainLayout} />}>
 					<Route index element={<ForbiddenPage />} />

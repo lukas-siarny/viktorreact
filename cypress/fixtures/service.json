@@ -6,5 +6,9 @@
 	"update": {
 		"durationFrom": "70",
 		"priceFrom": "150"
+	},
+	"employeeService": {
+		"durationFrom": "200",
+		"priceFrom": "300"
 	}
 }

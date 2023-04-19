@@ -129,6 +129,13 @@ body, .ant-layout
 		-webkit-text-fill-color: $backgroundColor-gray-200
 		color: $backgroundColor-gray-200
 
+// NOTE: pre fix ak je icona rozmazana v safari (poradil chatGPT). Prejavuje sa asi len v modali
+.safari-icon-blur-fix
+	image-rendering: optimizeQuality
+	-webkit-font-smoothing: antialiased
+	will-change: transform
+
+
 .loading-spinner
 	animation: rotate 1.5s linear infinite
 	position: relative
@@ -999,13 +1006,10 @@ span.ant-tag
 		margin: 0
 		padding-bottom: 0
 
-.noti-support-contact-wrapper
+.noti-support-contact-wrapper,
+.noti-cancel-reservation-wrapper
 	max-width: 640px
 	padding: 0 56px
-	.contact-row
-		display: flex
-		.contact-col
-			width: 49%
 	.ant-spin-nested-loading > div > .ant-spin
 		max-height: 100%
 	@media (max-width: 1280px)
@@ -1014,6 +1018,13 @@ span.ant-tag
 	@media (max-width: 744px)
 		max-width: 100%
 		padding: 0 0 64px 0
+
+.noti-support-contact-wrapper
+.contact-row
+	display: flex
+	.contact-col
+		width: 49%
+	@media (max-width: 744px)
 		.contact-row
 			flex-direction: column
 			.contact-col
@@ -1096,7 +1107,7 @@ span.ant-tag
 	align-items: flex-start
 	.anticon
 		margin-top: 4px
-	&.success-upload-alert
+	&.success-request-alert
 		border-radius: 8px
 		border: none
 		background: $backgroundColor-notino-grayLight
@@ -1309,19 +1320,6 @@ span.ant-tag .title
 					cursor: default
 				.ant-checkbox-wrapper
 					line-height: 1
-
-.noti-show-more-button
-	&:hover,
-	&:focus-visible
-		color: $textColor-notino-pink
-		transition: 300ms ease
-
-.language-btn
-	z-index: 2
-	@media (min-width: 1195px)
-		top: -0.25rem
-		right: 0px
-		position: absolute
 
 .suggested-salons-modal
 	padding: 16px

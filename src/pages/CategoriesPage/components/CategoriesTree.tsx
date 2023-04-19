@@ -20,11 +20,12 @@ import { RootState } from '../../../reducers'
 import { deleteReq, patchReq, postReq } from '../../../utils/request'
 import { CREATE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
 import { checkPermissions } from '../../../utils/Permissions'
-import { normalizeNameLocalizations } from '../../../utils/helper'
+import { formFieldID, normalizeNameLocalizations } from '../../../utils/helper'
 
 // components
 import CategoryForm, { ICategoryForm } from './CategoryForm'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../../components/LanguagePicker'
+import { initLabelInValueSelect } from '../../../atoms/SelectField'
 
 type TreeCategories = {
 	title?: ReactElement
@@ -76,7 +77,7 @@ const CategoriesTree = () => {
 
 	const openCategoryUpdateDetail = async (id: string, levelArg?: number, deletedAt?: string, isParentDeleted?: boolean) => {
 		setShowForm(true)
-		const { data }: any = await dispatch(getCategory(id))
+		const { data } = await dispatch(getCategory(id))
 		let formData = {}
 		const level = levelArg ?? lastOpenedNode.level
 		if (data) {
@@ -91,9 +92,20 @@ const CategoriesTree = () => {
 				deletedAt,
 				isParentDeleted,
 				icon: data?.icon?.original ? [{ url: data?.icon?.original, uid: data?.icon?.id }] : undefined,
-				categoryParameterID: data?.categoryParameter?.id,
+				// categoryParameterID: data?.categoryParameter?.id,
 				descriptionLocalizations: level === 2 ? normalizeNameLocalizations(data?.descriptionLocalizations) : undefined,
 				childrenLength: data?.children && data.children.length
+			}
+
+			if (data.categoryParameter) {
+				formData = {
+					...formData,
+					categoryParameterID: initLabelInValueSelect({
+						key: data.categoryParameter.id,
+						value: data.categoryParameter.id,
+						label: data.categoryParameter.name || data.categoryParameter.id
+					})
+				}
 			}
 		}
 		dispatch(initialize(FORM.CATEGORY, formData))
@@ -294,7 +306,7 @@ const CategoriesTree = () => {
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
 				imageID: (get(formData, 'image[0].id') || get(formData, 'image[0].uid')) ?? undefined,
 				iconID: (get(formData, 'icon[0].id') || get(formData, 'icon[0].uid')) ?? undefined,
-				categoryParameterID: formData.categoryParameterID ?? undefined,
+				categoryParameterID: formData.categoryParameterID?.value ?? undefined,
 				descriptionLocalizations
 			}
 
@@ -357,7 +369,7 @@ const CategoriesTree = () => {
 					htmlType='button'
 					className={'noti-btn'}
 					icon={<PlusIcon />}
-					id={`${CREATE_BUTTON_ID}-${FORM.CATEGORY}`}
+					id={formFieldID(FORM.CATEGORY, CREATE_BUTTON_ID)}
 				>
 					{t('loc:Pridať kategóriu')}
 				</Button>

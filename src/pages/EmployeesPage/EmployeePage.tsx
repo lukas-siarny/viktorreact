@@ -499,7 +499,7 @@ const EmployeePage = (props: Props) => {
 						setVisibleServiceEditModal={setVisibleServiceEditModal}
 					/>
 					{!formValues?.deletedAt && (
-						<div className={'content-footer'}>
+						<div className={'content-footer'} id={'content-footer-container'}>
 							<div
 								className={cx('flex flex-col gap-2 lg:flex-row flex-wrap', {
 									'lg:justify-between': isEmployeeExists,
@@ -523,6 +523,7 @@ const EmployeePage = (props: Props) => {
 											allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]}
 											render={(hasPermission, { openForbiddenModal }) => (
 												<Button
+													id={'invite-employee-btn'}
 													type={'dashed'}
 													size={'middle'}
 													className={'noti-btn m-regular w-full lg:w-auto xl:min-w-40'}
@@ -593,6 +594,7 @@ const EmployeePage = (props: Props) => {
 			>
 				<InviteForm onSubmit={inviteEmployee} salonRolesOptions={filteredSalonRolesByPermission} />
 				<Button
+					id={formFieldID(FORM.INVITE_EMPLOYEE, SUBMIT_BUTTON_ID)}
 					className='noti-btn'
 					onClick={() => {
 						dispatch(submit(FORM.INVITE_EMPLOYEE))

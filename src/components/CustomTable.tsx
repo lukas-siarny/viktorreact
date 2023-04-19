@@ -41,10 +41,11 @@ type ComponentProps<RecordType> = TableProps<RecordType> & {
 	pagination?: IPagination | false
 	wrapperClassName?: string
 	dndDrop?: (oldIndex: number, newIndex: number) => any
+	customFooterContent?: React.ReactNode
 }
 
 const CustomTable = <RecordType extends object = any>(props: ComponentProps<RecordType>) => {
-	const { disabled = false, className, useCustomPagination, pagination, dndDrop, wrapperClassName } = props
+	const { disabled = false, className, useCustomPagination, pagination, dndDrop, wrapperClassName, customFooterContent } = props
 	const [isProcessingDrop, setIsProcessingDrop] = useState(false)
 
 	const onClickOptionSizeChanger = useCallback(
@@ -179,7 +180,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 	}
 
 	const table = (
-		<div className={cx({ 'disabled-state': disabled }, wrapperClassName)}>
+		<div className={cx('noti-table-wrapper', { 'disabled-state': disabled }, wrapperClassName)}>
 			{/* // TODO: ak by trebalo tak wrappnut tabulku kvoli dnd do permissions - moze byt pouzivatel ktory ma prava na citanie ale nie na upravu? */}
 			<Table
 				{...props}
@@ -201,9 +202,9 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 				locale={emptyLocale}
 				bordered={props.bordered || false}
 			/>
-
 			{useCustomPagination && pagination && (
 				<div className='table-footer-custom-pagination'>
+					{customFooterContent}
 					<CustomPagination {...pagination} />
 				</div>
 			)}

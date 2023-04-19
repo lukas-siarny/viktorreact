@@ -43,6 +43,12 @@ export interface IPaginationQuery {
 	order?: string | null
 }
 
+export interface ILabelInValue<T = any, ExtraType = any> {
+	label?: string
+	value: T
+	key: string
+	extra?: ExtraType
+}
 export interface IResponsePagination {
 	limit: number
 	page: number
@@ -178,7 +184,6 @@ export interface ISalonForm {
 	name: AutocompleteLabelInValue | string | null
 	aboutUsFirst: string | null
 	state?: SALON_STATES
-	sourceOfPremium?: string
 	openingHours: OpeningHours
 	sameOpenHoursOverWeek: boolean
 	openOverWeekend: boolean
@@ -209,8 +214,6 @@ export interface ISalonForm {
 	locationNote: string | null
 	cosmeticIDs: string[]
 	languageIDs: string[]
-	address: boolean | null
-	deletedAt?: boolean
 }
 
 export interface IParameterValue {
@@ -242,6 +245,7 @@ export interface IServiceForm {
 		enabledB2cReservations: boolean
 		autoApproveReservations: boolean
 	}
+	descriptionLocalizations: NameLocalizationsItem[]
 }
 
 export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
@@ -488,6 +492,15 @@ export interface ISmsUnitPricesFilter {
 	search: string
 }
 
+export interface IRechargeSmsCreditFilter {
+	search?: string
+	countryCode: string
+	sourceType?: string
+	walletAvailableBalanceFrom?: number
+	walletAvailableBalanceTo?: number
+}
+
+
 export interface ISmsHistoryFilter {
 	search: string
 }
@@ -584,6 +597,10 @@ export interface IDataUploadForm {
 	file: string | Blob
 }
 
+export interface ISalonsReportForm {
+	countryCode: string
+}
+
 export type ICosmetic = Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosmetics'][0]
 
 export type ILanguage = Paths.GetApiB2BAdminEnumsLanguages.Responses.$200['languages'][0]
@@ -649,7 +666,7 @@ export interface IReservationSystemSettingsForm {
 
 export type NameLocalizationsItem = {
 	language: string
-	value: string
+	value: string | null
 }
 
 export type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdCategories.RequestBody
@@ -704,8 +721,6 @@ export interface IEmployeePayload {
 export type EmployeeService = NonNullable<IEmployeePayload['data']>['employee']['categories'][0]['children'][0]['children'][0]
 
 export interface SalonPageProps {
-	isNotinoUser: boolean
-	backUrl?: string
 	phonePrefixCountryCode: string
 	authUser: IAuthUserPayload & ILoadingAndFailure
 	phonePrefixes: IEnumerationsCountriesPayload & ILoadingAndFailure
@@ -764,7 +779,7 @@ export interface IActiveEmployeesPayload extends ISearchable<Paths.GetApiB2BAdmi
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]
-export type CalendarEmployee = Pick<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0], 'id' | 'color' | 'firstName' | 'lastName' | 'email' | 'image' | 'inviteEmail' | 'orderIndex'> & { orderIndex: number, inviteEmail?: string, isForImportedEvents: boolean; isDeleted?: boolean }
+export type CalendarEmployee = Pick<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0], 'id' | 'color' | 'firstName' | 'lastName' | 'email' | 'image' | 'inviteEmail' | 'orderIndex'> & { orderIndex: number, inviteEmail?: string, isDeleted?: boolean }
 export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
 export type CalendarEvent = CalendarEvents[0] & {
 	startDateTime: string
@@ -871,10 +886,12 @@ export interface ICalendarEventsListPopover {
 	setIsOpen: (isOpen: boolean) => void
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
-	onMonthlyReservationClick: (data: EmployeeTooltipPopoverData, position?: PopoverTriggerPosition) => void
 	isHidden: boolean
 	isLoading?: boolean
 	isUpdatingEvent?: boolean
+	query: IUseQueryParams
+	parentPath: string
+	employeeID?: string
 }
 
 export type ReservationPopoverData = {
@@ -889,20 +906,6 @@ export type ReservationPopoverData = {
 	note?: CalendarEvent['note']
 	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
 	isEdit?: boolean
-}
-
-export interface ICalendarEmployeeTooltipPopover {
-	data: EmployeeTooltipPopoverData | null
-	position: PopoverTriggerPosition | null
-	isOpen: boolean
-	setIsOpen: (isOpen: boolean) => void
-	parentPath: string
-	query: IUseQueryParams
-}
-
-export type EmployeeTooltipPopoverData = {
-	employee: CalendarEmployee
-	date: string
 }
 
 export interface IBulkConfirmForm {
@@ -920,7 +923,6 @@ export interface IResourceEmployee {
 	isTimeOff: boolean
 	color?: string
 	description?: string
-	isForImportedEvents?: boolean
 	isDeleted?: boolean
 }
 
@@ -1000,6 +1002,7 @@ export interface ICalendarDayEventsMap {
 }
 export interface IReservationsFilter {
 	dateFrom: string
+	countryCode?: string
 	employeeIDs?: string[]
 	categoryIDs?: string[]
 	reservationStates?: RESERVATION_STATE[]

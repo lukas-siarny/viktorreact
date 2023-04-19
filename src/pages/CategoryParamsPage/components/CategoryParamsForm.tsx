@@ -83,7 +83,7 @@ const LocalizationsArray = (props: any) => {
 							ignoreFieldIndex={0}
 							customValidate={maxLength100}
 							mainField={
-								<div key={index} className={'flex gap-2 items-center'}>
+								<div key={index}>
 									<Field
 										className='pb-0 flex-1'
 										component={InputField}
@@ -92,11 +92,12 @@ const LocalizationsArray = (props: any) => {
 										key={`${key}[0].value`}
 										name={`${key}[0].value`}
 										required
+										style={{ width: 'calc(100% - 24px - 8px)' }} // 100% - icon width - padding between icon and input
 										validate={maxLength100}
 									/>
 									<DeleteButton
 										id={formFieldID(FORM.CATEGORY_PARAMS, `${DELETE_BUTTON_ID}-${index}`)}
-										className={'bg-red-100 mt-5'}
+										className={'bg-red-100 absolute h-8 right-0 top-[21px]'}
 										onConfirm={onConfirm}
 										onlyIcon
 										smallIcon
@@ -197,7 +198,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 					)}
 				</div>
 			</Space>
-			<div className={'content-footer'}>
+			<div className={'content-footer'} id={'content-footer-container'}>
 				<div className={`flex flex-col gap-2 md:flex-row ${onDelete ? 'md:justify-between' : 'md:justify-center'}`}>
 					{onDelete && (
 						<DeleteButton

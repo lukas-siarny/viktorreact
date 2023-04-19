@@ -38,7 +38,7 @@ import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
 import { ArgsProps } from 'antd/es/notification/interface'
-
+import UAParser from 'ua-parser-js'
 import cx from 'classnames'
 import showNotifications from './tsxHelpers'
 import {
@@ -66,8 +66,9 @@ import {
 	PERMISSION,
 	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_SOURCE_TYPE,
-	SMS_NOTIFICATION_EVENT_TYPE,
-	SMS_NOTIFICATION_STATUS
+	MIN_SUPPORTED_BROWSER_VERSION,
+	BROWSERS,
+	BROWSER_TYPE
 } from './enums'
 
 import {
@@ -80,6 +81,7 @@ import {
 	IPrice,
 	ISelectOptionItem,
 	IStructuredAddress,
+	NameLocalizationsItem,
 	ServicePatchBody,
 	ServicePriceAndDurationData
 } from '../types/interfaces'
@@ -127,6 +129,14 @@ export const decodeBackDataQuery = (base64?: string | null) => {
 		decoded = null
 	}
 	return decoded
+}
+
+export const formatObjToQuery = (queryObj: { [key: string]: string }) => {
+	const searchParams = new URLSearchParams()
+	Object.keys(queryObj).forEach((key) => {
+		searchParams.append(key, queryObj[key])
+	})
+	return `?${searchParams.toString()}`
 }
 
 export const getLinkWithEncodedBackUrl = (link: string) => {
@@ -284,9 +294,9 @@ export const translateDayName = (day: DAY | typeof MONDAY_TO_FRIDAY, shortName?:
 
 export const transalteReservationSourceType = (sourceType: RESERVATION_SOURCE_TYPE) => {
 	if (sourceType === RESERVATION_SOURCE_TYPE.ONLINE) {
-		return i18next.t('loc:B2C')
+		return i18next.t('loc:Klient')
 	}
-	return i18next.t('loc:B2B')
+	return i18next.t('loc:Salón')
 }
 
 export const translateReservationState = (state?: RESERVATION_STATE) => {
@@ -495,9 +505,9 @@ export const scrollToFirstError = (errors: any, form: FORM | string) => {
 			})
 		}
 	})
-	const sortedErrors = orderBy(els, ['value'], ['asc'])
+	const sortedErrors: any = orderBy(els, ['value'], ['asc'])
 	if (!isEmpty(sortedErrors)) {
-		const el = document.getElementById(get(sortedErrors, '[0].id'))
+		const el = document.getElementById(get(sortedErrors, '[0].id') as any)
 		if (el?.scrollIntoView) {
 			el.scrollIntoView({
 				behavior: 'smooth',
@@ -751,23 +761,18 @@ export const checkFiltersSizeWithoutSearch = (formValues: any) => size(filter(fo
 
 export const checkFiltersSize = (formValues: any) => size(filter(formValues, (value) => !isNil(value) || !isEmpty(value)))
 
-type NameLocalizationsItem = {
-	language: string
-	value?: string | null
-}
-
 /**
  * add default language to the first position
  * or
  * move default language to the first position
  */
-export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsItem[]) => {
-	return Object.keys(LOCALES)
-		.sort((a: string, b: string) => {
-			if (a === DEFAULT_LANGUAGE) {
+export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsItem[], languages: string[] = Object.keys(LOCALES), defaultLanguage: string = DEFAULT_LANGUAGE) => {
+	return languages
+		.sort((a, b) => {
+			if (a === defaultLanguage) {
 				return -1
 			}
-			return b === DEFAULT_LANGUAGE ? 1 : 0
+			return b === defaultLanguage ? 1 : 0
 		})
 		.map((language) => {
 			const value = nameLocalizations.find((localization) => localization.language === language)
@@ -805,13 +810,11 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 			return undefined
 		}
 
-		const isErrors: boolean = errorKeys.length > 1
+		const errorsText = errorKeys.length > 1 ? i18next.t('loc:Vo formulári sa nachádzajú chyby!') : i18next.t('loc:Vo formulári sa nachádza chyba!')
 		return notification.error(
 			customMessage || {
 				message: i18next.t('loc:Chybne vyplnený formulár'),
-				description: i18next.t(
-					`loc:Skontrolujte správnosť vyplnených polí vo formulári. Vo formulári sa ${isErrors ? i18next.t('nachádzajú chyby') : i18next.t('nachádza chyba')}!`
-				)
+				description: i18next.t('loc:Skontrolujte správnosť vyplnených polí vo formulári. {{ errors }}', { errors: errorsText })
 			}
 		)
 	}
@@ -939,7 +942,7 @@ export const optionRenderWithIcon = (itemData: any, fallbackIcon?: React.ReactNo
 			<div style={style} className={'mr-2 flex items-center'}>
 				{icon || fallbackIcon}
 			</div>
-			{label}
+			<span className='truncate inline-block'>{label}</span>
 		</div>
 	)
 }
@@ -1014,7 +1017,7 @@ export const hasAuthUserPermissionToEditRole = (
 	employee?: IEmployeePayload['data'],
 	salonRoles?: ISelectOptionItem[]
 ): { hasPermission: boolean; tooltip: string | null } => {
-	let result: { hasPermission: boolean; tooltip: string | null } = {
+	const result: { hasPermission: boolean; tooltip: string | null } = {
 		hasPermission: false,
 		tooltip: i18next.t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')
 	}
@@ -1023,7 +1026,7 @@ export const hasAuthUserPermissionToEditRole = (
 		return result
 	}
 
-	if (authUser.uniqPermissions?.some((permission) => [PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+	if (authUser.uniqPermissions?.some((permission) => [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
 		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
 		return {
 			hasPermission: true,
@@ -1032,16 +1035,27 @@ export const hasAuthUserPermissionToEditRole = (
 	}
 	if (authUser.id === employee?.employee?.user?.id) {
 		// salon user can't edit his own role
-		result = {
+		return {
 			...result,
 			tooltip: i18next.t('loc:Nemôžeš editovať svoju rolu')
 		}
-		return result
 	}
 
 	const authUserSalonRole = authUser.salons?.find((salon) => salon.id === salonID)?.role
 	if (authUserSalonRole) {
 		const authUserRoleIndex = salonRoles.findIndex((role) => role?.value === authUserSalonRole?.id)
+
+		const employeeRole = employee.employee?.role
+		const employeeRoleIndex = salonRoles.findIndex((role) => role?.value === employeeRole?.id)
+
+		// it's not possible to edit role with same permissions (applies to admin role as well)
+		if (employeeRoleIndex === authUserRoleIndex) {
+			return {
+				...result,
+				tooltip: i18next.t('loc:Nie je možné editovať rolu s rovnakými oprávneniami, ako máte pridelené.')
+			}
+		}
+
 		if (authUserRoleIndex === 0) {
 			// is salon admin - has all permissions
 			return {
@@ -1050,12 +1064,6 @@ export const hasAuthUserPermissionToEditRole = (
 			}
 		}
 
-		const employeeRole = employee.employee?.role
-		const employeeRoleIndex = salonRoles.findIndex((role) => role?.value === employeeRole?.id)
-		// it's not possible to edit admin role	if auth user is not admin
-		if (employeeRoleIndex === 0) {
-			return result
-		}
 		// it's possible to edit role only if you have permission to edit
 		if (authUserSalonRole?.permissions.find((permission) => permission.name === PERMISSION.EMPLOYEE_ROLE_UPDATE)) {
 			return {
@@ -1374,18 +1382,6 @@ export const getEmployeeServiceDataForPatch = (values: IEmployeeServiceEditForm,
 	return employeePatchServiceData
 }
 
-// NOTE: treba dodrziat tento shape aby spravne fungoval isPristine selector pre selecty typu labelInValue (maju BE vyhladavanie)
-export const initializeLabelInValueSelect = (key: string | number, label: string, extra?: any, disabled?: boolean, title?: boolean) => {
-	return {
-		disabled,
-		title,
-		key,
-		value: key,
-		label,
-		extra
-	}
-}
-
 export const normalizeDataById = <T extends { id: string }>(data?: T[] | null): { [key: string]: T } => {
 	const normalizedData: { [key: string]: T } = {}
 	data?.forEach((item) => {
@@ -1395,3 +1391,28 @@ export const normalizeDataById = <T extends { id: string }>(data?: T[] | null): 
 }
 
 export const formatPrice = (price: number, symbol?: string) => (!isNil(price) ? `${price} ${symbol || ''}`.trim() : '')
+
+export const detectBrowserType = (): string => {
+	const parser = new UAParser()
+
+	const browser = parser.getBrowser()
+	const browserName = browser.name?.toLowerCase()
+	// get major number from version '101.4.11' -> 101, '94' -> 94
+	// eslint-disable-next-line radix
+	const majorVersion = parseInt(browser.version ? browser.version.split('.')[0] : '0')
+
+	let browserType = BROWSER_TYPE.SUPPORTED
+
+	try {
+		if (!isEnumValue(browserName, BROWSERS)) {
+			browserType = BROWSER_TYPE.UNKNOWN
+		} else if (MIN_SUPPORTED_BROWSER_VERSION(browserName) > majorVersion) {
+			browserType = BROWSER_TYPE.UNSUPPORTED
+		}
+	} catch (error) {
+		// eslint-disable-next-line no-console
+		console.error('Error during browser version detection', error)
+	}
+
+	return browserType
+}

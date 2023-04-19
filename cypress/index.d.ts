@@ -6,7 +6,8 @@ declare namespace Cypress {
 		 */
 		setValuesForPinField(form: string, key: string, value: string): Chainable<Element>
 		clickDeleteButtonWithConfCustom(form?: string, key?: string): Chainable<Element>
-		selectOptionDropdownCustom(form: string, key: string, value?: string, force?: boolean): Chainable<Element>
+		checkForbiddenModal(): Chainable<Element>
+		selectOptionDropdownCustom(form?: string, key?: string, value?: string, force?: boolean): Chainable<Element>
 		setSearchBoxValueAndSelectFirstOptionCustom(
 			key: string,
 			value: string,
@@ -18,7 +19,8 @@ declare namespace Cypress {
 		): Chainable<Element>
 		clickDropdownItem(triggerId: string, dropdownItemId?: string, force?: boolean): Chainable<Element>
 		clickTab(tabKey: string, tabsKey?: string, force?: boolean): Chainable<Element>
-		updateReviewStatus(currentStatus: REVIEW_VERIFICATION_STATUS, moderateItemKey: 'hide' | 'publish' | 'accept'): Chainable<Element>
-		deleteReview(currentStatus: REVIEW_VERIFICATION_STATUS): Chainable<Element>
+		setDateInputValue(form?: string, key?: string, value?: string): Chainable<Element>
+		sortTable(key: string, tableKey?: string): Chainable<Element>
+		changePagination(limit: 25 | 50 | 100 = 25, tableKey?: string, useCustomPagination?: boolean)
 	}
 }

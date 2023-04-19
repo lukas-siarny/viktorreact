@@ -1,50 +1,39 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { DatePicker, Empty, Spin } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
 import dayjs, { Dayjs } from 'dayjs'
 import cx from 'classnames'
-import i18next from 'i18next'
 import { Line } from 'react-chartjs-2'
 
 // types
-import { RootState } from '../../reducers'
-import { Columns, TimeStats } from '../../types/interfaces'
+import { Columns, ILoadingAndFailure, TimeStats } from '../../types/interfaces'
 
 // utils
 import { MONTH_NAME_YEAR_FORMAT } from '../../utils/enums'
 import { lineOptions, SMS_SENT_STATS_COLOR, transformSmsDataToStatsData } from '../../pages/HomePage/components/dashboardUtils'
 
 // redux
-import { getSmsTimeStats } from '../../reducers/sms/smsActions'
+import { ISmsTimeStatsPayload } from '../../reducers/sms/smsActions'
 
 // components
 import CustomTable from '../CustomTable'
 
 type Props = {
 	selectedDate: Dayjs
-	salonID: string
 	onPickerChange: (date: Dayjs | null) => void
+	countryPicker?: React.ReactNode
 	className?: string
 	title?: React.ReactNode
+	smsTimeStats: ISmsTimeStatsPayload & ILoadingAndFailure
 }
 
 const SmsTimeStats = (props: Props) => {
-	const { onPickerChange, salonID, selectedDate, className, title } = props
+	const { onPickerChange, selectedDate, className, title, smsTimeStats, countryPicker } = props
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
-	const year = selectedDate.year()
-	const month = selectedDate.month() + 1
-
-	const smsTimeStats = useSelector((state: RootState) => state.sms.timeStats)
 
 	const source: TimeStats = useMemo(() => {
 		return transformSmsDataToStatsData(smsTimeStats.data, smsTimeStats.isLoading, smsTimeStats.isFailure, selectedDate)
 	}, [selectedDate, smsTimeStats.data, smsTimeStats.isLoading, smsTimeStats.isFailure])
-
-	useEffect(() => {
-		dispatch(getSmsTimeStats(salonID, year, month))
-	}, [dispatch, salonID, year, month])
 
 	const columns = (labels: string[] = [], futureBreak = 0): Columns => [
 		{
@@ -72,18 +61,21 @@ const SmsTimeStats = (props: Props) => {
 
 	return (
 		<div className={cx('sms-staticis-wrapper', className)}>
-			<div className={'flex justify-between items-center'}>
-				{title || <h2>{t('loc:Prehľad')}</h2>}
-				<DatePicker
-					onChange={onPickerChange}
-					picker={'month'}
-					size='small'
-					defaultValue={dayjs()}
-					allowClear={false}
-					format={MONTH_NAME_YEAR_FORMAT}
-					getPopupContainer={(node) => node.parentElement || document.body}
-					disabledDate={(date) => dayjs(date).year() < 2022}
-				/>
+			<div className={'flex justify-between items-center mb-6'}>
+				{title || <h2 className={'mb-0'}>{t('loc:Prehľad')}</h2>}
+				<div className={'flex items-center gap-4'}>
+					{countryPicker}
+					<DatePicker
+						onChange={onPickerChange}
+						picker={'month'}
+						size={'middle'}
+						defaultValue={dayjs()}
+						allowClear={false}
+						format={MONTH_NAME_YEAR_FORMAT}
+						dropdownAlign={{ points: ['tr', 'br'] }}
+						disabledDate={(date) => dayjs(date).year() < 2022}
+					/>
+				</div>
 			</div>
 			<div className={'flex gap-4 mb-6'}>
 				<div className={'p-4 rounded shadow-lg bg-notino-white w-1/3'}>

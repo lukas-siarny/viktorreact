@@ -68,7 +68,8 @@ $inner-padding: 16px
 		.layout-wrapper
 			max-width: 328px
 
-.noti-support-contact-page
+.noti-support-contact-page,
+.noti-cancel-reservation-page
 	height: 100% !important
 	min-height: 100vh
 	@media (max-width: 744px)
@@ -249,6 +250,10 @@ $inner-padding: 16px
 		padding: 0 0 16px 0
 		background: transparent
 		box-shadow: none
+	> .ant-spin-nested-loading
+		margin: -24px
+		> .ant-spin-container
+			padding: 24px
 	@media (max-width: 1700px)
 		&.small
 			width: 75%

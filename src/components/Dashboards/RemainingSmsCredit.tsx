@@ -14,7 +14,7 @@ import { ReactComponent as ChevronRightIcon } from '../../assets/icons/chevron-p
 // utils
 import { PERMISSION } from '../../utils/enums'
 import Permissions from '../../utils/Permissions'
-import { formatPrice } from '../../utils/helper'
+import { formatPrice, formFieldID } from '../../utils/helper'
 
 // redux
 import { RootState } from '../../reducers'
@@ -45,7 +45,7 @@ const RemainingSmsCredit = (props: Props) => {
 			<Spin spinning={wallet.isLoading}>
 				<h4 className={'mb-0 flex items-center text-lg'}>
 					<MessageIcon className={'text-notino-black mr-2'} />
-					{t('loc:Zostatok SMS kreditu ')}
+					{t('loc:Zostatok SMS kreditu')}
 				</h4>
 				<Divider className={'mb-8 mt-3'} />
 				<div className={'flex justify-between items-center gap-4 flex-wrap'}>
@@ -72,6 +72,7 @@ const RemainingSmsCredit = (props: Props) => {
 								htmlType='button'
 								className={'noti-btn'}
 								icon={<CreateIcon />}
+								id={formFieldID('wallet_btn', walletID)}
 							>
 								{t('loc:Dobiť kredit')}
 							</Button>

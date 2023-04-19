@@ -245,7 +245,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 		// TODO: toto by este potom chcelo trochu prerobit, teraz to je cez dva overlay spravene
 		// jeden zaistuje ze sa po kliku na neho zavrie popoover (cez &::before na popover elemente)
 		// druhy je pomocny kvoli tomu, ze kvoli uvodnej animacii chvilku trva, kym prvy overlay nabehne a vtedy sa da scrollovat, aj ked by sa nemalo
-		const contentOverlay = document.querySelector('#nc-content-overlay') as HTMLElement
+		const contentOverlay = document.querySelector('#nc-reservations-popover-content-overlay') as HTMLElement
 
 		const listener = (e: Event) => {
 			const overlayElement = document.querySelector(`.${overlayClassName}`)
@@ -447,7 +447,7 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 	return (
 		<Popover
 			open={isOpen}
-			destroyTooltipOnHide={{ keepParent: true }}
+			destroyTooltipOnHide={false}
 			trigger={'click'}
 			placement={placement}
 			overlayClassName={`${overlayClassName} ${showUnsavedChangesMessage ? 'dark-style' : ''} nc-popover-overlay nc-popover-overlay-fixed`}

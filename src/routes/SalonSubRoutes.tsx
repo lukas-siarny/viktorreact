@@ -53,12 +53,13 @@ import ReservationsSettingsPage from '../pages/ReservationsSettingsPage/Reservat
 import ReservationsPage from '../pages/ReservationsPage/ReservationsPage'
 
 // SMS credit
-import SmsCreditPage from '../pages/SmsCreditPage/SmsCreditPage'
-import RechargeSmsCreditPage from '../pages/SmsCreditPage/RechargeSmsCreditPage'
+import SmsCreditPartnerPage from '../pages/SmsCreditPartnerPage/SmsCreditPartnerPage'
+import RechargeSmsCreditPage from '../pages/SmsCreditPartnerPage/RechargeSmsCreditPartnerPage'
 
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 import ErrorBoundary from '../components/ErrorBoundary'
+import { getPendingReservationsCount } from '../reducers/calendar/calendarActions'
 
 const SalonSubRoutes: FC = () => {
 	const navigate = useNavigate()
@@ -81,6 +82,8 @@ const SalonSubRoutes: FC = () => {
 			// clear salon selection due error 404 - Not Found
 			dispatch(selectSalon())
 			navigate('/404')
+		} else {
+			dispatch(getPendingReservationsCount(salonID as string))
 		}
 	}, [salonID, dispatch, navigate])
 
@@ -104,13 +107,14 @@ const SalonSubRoutes: FC = () => {
 				navigate('/403')
 			}
 		}
-	}, [salonID, fetchSalon, currentUser, selectedSalon?.id, navigate])
+	}, [salonID, fetchSalon, currentUser, selectedSalon?.id, selectedSalon?.deletedAt, navigate])
 
 	return (
 		<Routes>
 			{/* SALON DETAIL */}
 			<Route errorElement={<ErrorBoundary />} element={<AuthRoute layout={MainLayout} page={PAGE.SALONS} />}>
 				<Route index element={<SalonPage salonID={salonID as string} />} />
+				<Route path={t('paths:history')} element={<SalonPage salonID={salonID as string} />} />
 			</Route>
 			{/* CUSTOMERS */}
 			<Route errorElement={<ErrorBoundary />} path={t('paths:customers')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.CUSTOMERS} />}>
@@ -177,7 +181,7 @@ const SalonSubRoutes: FC = () => {
 				<Route index element={<ReservationsSettingsPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			<Route errorElement={<ErrorBoundary />} path={t('paths:sms-credit')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.SMS_CREDIT} />}>
-				<Route index element={<SmsCreditPage parentPath={parentPath} salonID={salonID} />} />
+				<Route index element={<SmsCreditPartnerPage parentPath={parentPath} salonID={salonID} />} />
 				<Route path={t('paths:recharge')} element={<RechargeSmsCreditPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* 404 */}

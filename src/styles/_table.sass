@@ -249,7 +249,6 @@
 	flex-direction: column
 	justify-content: space-between
 	.table-footer-custom-pagination
-		margin-top: 0
 		margin-bottom: 0
 
 .table-col-with-sorter-right
@@ -257,3 +256,10 @@
 		display: flex
 		justify-content: flex-end
 		margin-right: 20px
+
+.ant-table-selection-column
+	.ant-checkbox
+		.ant-checkbox-input
+			@include baseOutlineStyle()
+			&:not(:disabled):focus-visible + .ant-checkbox-inner
+				@include focusOutlineStyle()

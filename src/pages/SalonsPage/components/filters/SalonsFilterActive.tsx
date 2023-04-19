@@ -1,6 +1,7 @@
-import React, { useMemo, useCallback } from 'react'
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import React, { useMemo, useCallback, useRef, useEffect } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
-import { Button, Col, Divider, Form, Row } from 'antd'
+import { Button, Col, Divider, Dropdown, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce, filter, isArray, isEmpty, isNil, size } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
@@ -17,6 +18,8 @@ import { ReactComponent as PlusIcon } from '../../../../assets/icons/plus-icon.s
 import { ReactComponent as UploadIcon } from '../../../../assets/icons/upload-icon.svg'
 import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.svg'
 import { ReactComponent as CategoryIcon } from '../../../../assets/icons/categories-24-icon.svg'
+import { ReactComponent as FilesIcon } from '../../../../assets/icons/files-icon.svg'
+import { ReactComponent as MoreInfoIcon } from '../../../../assets/icons/more-info-horizontal-icon.svg'
 
 // utils
 import {
@@ -24,17 +27,31 @@ import {
 	FIELD_MODE,
 	FORM,
 	PERMISSION,
-	ROW_GUTTER_X_DEFAULT,
+	ROW_GUTTER_X_M,
 	SALON_CREATE_TYPE,
 	SALON_FILTER_OPENING_HOURS,
 	SALON_FILTER_STATES,
 	SALON_SOURCE_TYPE,
 	FILTER_ENTITY,
-	CHANGE_DEBOUNCE_TIME
+	CHANGE_DEBOUNCE_TIME,
+	IMPORT_BUTTON_ID,
+	DOWNLOAD_BUTTON_ID,
+	STRINGS,
+	SALON_FILTER_RS,
+	SALON_FILTER_RS_AVAILABLE_ONLINE
 } from '../../../../utils/enums'
-import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getRangesForDatePicker, optionRenderWithTag } from '../../../../utils/helper'
+import {
+	getLinkWithEncodedBackUrl,
+	optionRenderWithImage,
+	validationString,
+	getRangesForDatePicker,
+	optionRenderWithTag,
+	formFieldID,
+	optionRenderWithIcon
+} from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import searchWrapper from '../../../../utils/filters'
+import { getCheckerIcon } from '../salonUtils'
 
 // atoms
 import InputField from '../../../../atoms/InputField'
@@ -42,8 +59,14 @@ import SelectField from '../../../../atoms/SelectField'
 import DateRangePickerField from '../../../../atoms/DateRangePickerField'
 import SwitchField from '../../../../atoms/SwitchField'
 
+// hooks
+import useMedia from '../../../../hooks/useMedia'
+import { IUseQueryParams } from '../../../../hooks/useQueryParams'
+
 type ComponentProps = {
-	openSalonImportsModal: () => void
+	onImportSalons: () => void
+	onDownloadReport: () => void
+	query: IUseQueryParams
 }
 
 export interface ISalonsFilterActive {
@@ -82,10 +105,16 @@ export const checkSalonFiltersSize = (formValues: any) =>
 	)
 
 const SalonsFilterActive = (props: Props) => {
-	const { handleSubmit, openSalonImportsModal } = props
+	const { handleSubmit, onImportSalons, onDownloadReport, query } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
+
+	const firstRender = useRef(true)
+
+	useEffect(() => {
+		firstRender.current = false
+	}, [])
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER_ACITVE])
 	const categories = useSelector((state: RootState) => state.categories.categories)
@@ -94,7 +123,7 @@ const SalonsFilterActive = (props: Props) => {
 
 	const searchNotinoUsers = useCallback(
 		async (search: string, page: number) => {
-			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.NOTINO_USER)
+			return searchWrapper(dispatch, { page, search, limit: 100 }, FILTER_ENTITY.NOTINO_USER)
 		},
 		[dispatch]
 	)
@@ -149,53 +178,178 @@ const SalonsFilterActive = (props: Props) => {
 		[t]
 	)
 
-	const customContent = useMemo(
-		() => (
-			<div className={'flex items-center gap-2'}>
-				<Permissions
-					allowed={[PERMISSION.IMPORT_SALON]}
-					render={(hasPermission, { openForbiddenModal }) => (
-						<Button
-							onClick={() => {
-								if (hasPermission) {
-									openSalonImportsModal()
-								} else {
-									openForbiddenModal()
-								}
-							}}
-							type='primary'
-							htmlType='button'
-							className={'noti-btn w-full'}
-							icon={<UploadIcon />}
-						>
-							{t('loc:Import dát')}
-						</Button>
-					)}
-				/>
-				<Permissions
-					allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER]}
-					render={(hasPermission, { openForbiddenModal }) => (
-						<Button
-							onClick={() => {
-								if (hasPermission) {
-									navigate(getLinkWithEncodedBackUrl(t('paths:salons/create')))
-								} else {
-									openForbiddenModal()
-								}
-							}}
-							type='primary'
-							htmlType='button'
-							className={'noti-btn w-full'}
-							icon={<PlusIcon />}
-						>
-							{t('loc:Pridať salón')}
-						</Button>
-					)}
-				/>
-			</div>
-		),
-		[t, openSalonImportsModal]
+	const rsOptions = useMemo(
+		() => [
+			{ label: t('loc:Zapnutý rezervačný systém'), value: SALON_FILTER_RS.ENABLED, key: SALON_FILTER_RS.ENABLED, icon: getCheckerIcon(true) },
+			{ label: t('loc:Vypnutý rezervačný systém'), value: SALON_FILTER_RS.NOT_ENABLED, key: SALON_FILTER_RS.NOT_ENABLED, icon: getCheckerIcon(false) }
+		],
+		[t]
 	)
+
+	const rsAvailableOnlineOptions = useMemo(
+		() => [
+			{
+				label: t('loc:Dostupné pre online rezervácie'),
+				value: SALON_FILTER_RS_AVAILABLE_ONLINE.AVAILABLE,
+				key: SALON_FILTER_RS_AVAILABLE_ONLINE.AVAILABLE,
+				icon: getCheckerIcon(true)
+			},
+			{
+				label: t('loc:Nedostupné pre online rezervácie'),
+				value: SALON_FILTER_RS_AVAILABLE_ONLINE.NOT_AVAILABLE,
+				key: SALON_FILTER_RS_AVAILABLE_ONLINE.NOT_AVAILABLE,
+				icon: getCheckerIcon(false)
+			}
+		],
+		[t]
+	)
+
+	const isLargerScreen = useMedia(['(max-width: 1280px)'], [true], false)
+
+	const customContent = useMemo(() => {
+		const addNewButton = (
+			<Permissions
+				allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER]}
+				render={(hasPermission, { openForbiddenModal }) => (
+					<Button
+						onClick={() => {
+							if (hasPermission) {
+								navigate(getLinkWithEncodedBackUrl(t('paths:salons/create')))
+							} else {
+								openForbiddenModal()
+							}
+						}}
+						type='primary'
+						htmlType='button'
+						className={'noti-btn w-full'}
+						icon={<PlusIcon />}
+					>
+						{STRINGS(t).addRecord(t('loc:salón'))}
+					</Button>
+				)}
+			/>
+		)
+
+		return (
+			<div className={'flex items-center gap-2'}>
+				{!isLargerScreen ? (
+					<>
+						<Permissions
+							render={(hasPermission, { openForbiddenModal }) => (
+								<Button
+									onClick={() => {
+										if (hasPermission) {
+											onDownloadReport()
+										} else {
+											openForbiddenModal()
+										}
+									}}
+									type='primary'
+									htmlType='button'
+									className={'noti-btn w-full'}
+									icon={<FilesIcon />}
+									id={formFieldID(FORM.SALONS_FILTER_ACITVE, DOWNLOAD_BUTTON_ID)}
+								>
+									{STRINGS(t).generate(t('loc:report'))}
+								</Button>
+							)}
+						/>
+						<Permissions
+							allowed={[PERMISSION.IMPORT_SALON]}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<Button
+									onClick={() => {
+										if (hasPermission) {
+											onImportSalons()
+										} else {
+											openForbiddenModal()
+										}
+									}}
+									type='primary'
+									htmlType='button'
+									className={'noti-btn w-full'}
+									icon={<UploadIcon />}
+									id={formFieldID(FORM.SALONS_FILTER_ACITVE, IMPORT_BUTTON_ID())}
+								>
+									{t('loc:Import dát')}
+								</Button>
+							)}
+						/>
+						{addNewButton}
+					</>
+				) : (
+					<>
+						{addNewButton}
+						<Dropdown
+							menu={{
+								className: 'shadow-md max-w-xs min-w-0 mt-5 noti-dropdown-header',
+								items: [
+									{
+										key: 'download-report',
+										className: 'p-0',
+										label: (
+											<Permissions
+												render={(hasPermission, { openForbiddenModal }) => (
+													<div
+														role='menuitem'
+														tabIndex={-1}
+														className={'py-2-5 px-2 mb-2 font-medium min-w-0 flex items-center gap-2'}
+														onClick={() => {
+															if (hasPermission) {
+																onDownloadReport()
+															} else {
+																openForbiddenModal()
+															}
+														}}
+													>
+														<FilesIcon />
+														{STRINGS(t).generate(t('loc:report'))}
+													</div>
+												)}
+											/>
+										)
+									},
+									{
+										key: 'import-salons',
+										className: 'p-0',
+										label: (
+											<Permissions
+												allowed={[PERMISSION.IMPORT_SALON]}
+												render={(hasPermission, { openForbiddenModal }) => (
+													<div
+														role='menuitem'
+														tabIndex={-1}
+														className={'py-2-5 px-2 mb-2 font-medium min-w-0 flex items-center gap-2'}
+														onClick={() => {
+															if (hasPermission) {
+																onImportSalons()
+															} else {
+																openForbiddenModal()
+															}
+														}}
+													>
+														<UploadIcon />
+														{t('loc:Import dát')}
+													</div>
+												)}
+											/>
+										)
+									}
+								]
+							}}
+							placement='bottomRight'
+							trigger={['click']}
+							overlayStyle={{ minWidth: 226 }}
+						>
+							<button type={'button'} className={'noti-more-info-btn'} onClick={(e) => e.preventDefault()}>
+								<MoreInfoIcon style={{ transform: 'rotate(90deg)' }} color={'#fff'} />
+							</button>
+						</Dropdown>
+					</>
+				)}
+			</div>
+		)
+	}, [t, onImportSalons, navigate, onDownloadReport, isLargerScreen])
 
 	const searchInput = useMemo(
 		() => (
@@ -215,7 +369,7 @@ const SalonsFilterActive = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters customContent={customContent} search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)}>
+			<Filters customContent={customContent} search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)} form={FORM.SALONS_FILTER_ACITVE} forceRender>
 				<>
 					<Row>
 						<Col span={24}>
@@ -223,26 +377,26 @@ const SalonsFilterActive = (props: Props) => {
 						</Col>
 					</Row>
 
-					<Row gutter={ROW_GUTTER_X_DEFAULT} wrap={false}>
+					<Row gutter={ROW_GUTTER_X_M} wrap={false}>
 						<Col span={3} className={'statuses-filter-all-col'}>
-							<Field component={SwitchField} name={'statuses_all'} size={'middle'} label={t('loc:Všetky')} />
+							<Field component={SwitchField} name={'statuses_all'} size={'large'} label={t('loc:Všetky')} />
 						</Col>
-						<Row className={'flex-1'} gutter={ROW_GUTTER_X_DEFAULT}>
-							<Col span={5}>
+						<Row className={'flex-1'} gutter={ROW_GUTTER_X_M}>
+							<Col span={8}>
 								<Field
 									component={SelectField}
 									name={'statuses_published'}
 									placeholder={t('loc:Publikovaný')}
-									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
 									filterOptions
 									onDidMountSearch
+									className={'select-with-tag-options'}
 									options={publishedOptions}
 									optionRender={optionRenderWithTag}
 								/>
 							</Col>
-							<Col span={5}>
+							<Col span={8}>
 								<Field
 									component={SelectField}
 									name={'statuses_changes'}
@@ -256,7 +410,7 @@ const SalonsFilterActive = (props: Props) => {
 									optionRender={optionRenderWithTag}
 								/>
 							</Col>
-							<Col span={4}>
+							<Col span={8}>
 								<Field
 									component={SelectField}
 									name={'createType'}
@@ -270,113 +424,141 @@ const SalonsFilterActive = (props: Props) => {
 									optionRender={optionRenderWithTag}
 								/>
 							</Col>
-							<Col span={5}>
-								<Field
-									component={SelectField}
-									name={'sourceType'}
-									placeholder={t('loc:Zdroj vytvorenia')}
-									className={'select-with-tag-options'}
-									allowClear
-									size={'large'}
-									filterOptions
-									onDidMountSearch
-									options={sourceOptions}
-									optionRender={optionRenderWithTag}
-								/>
-							</Col>
-							<Col span={5}>
-								<Field
-									component={SelectField}
-									name={'premiumSourceUserType'}
-									placeholder={t('loc:Zdroj PREMIUM')}
-									className={'select-with-tag-options'}
-									allowClear
-									size={'large'}
-									filterOptions
-									onDidMountSearch
-									options={premiumSourceOptions}
-									optionRender={optionRenderWithTag}
-								/>
-							</Col>
 						</Row>
 					</Row>
+
 					<Divider className={'mt-0 mb-4'} />
 
-					<Row gutter={ROW_GUTTER_X_DEFAULT}>
-						<Row className={'flex-1 items-center'} gutter={ROW_GUTTER_X_DEFAULT}>
-							<Col span={5}>
-								<Field
-									component={SelectField}
-									name={'categoryFirstLevelIDs'}
-									mode={'multiple'}
-									placeholder={t('loc:Odvetvie')}
-									allowClear
-									size={'middle'}
-									filterOptions
-									onDidMountSearch
-									optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
-									options={categories?.enumerationsOptions}
-									loading={categories?.isLoading}
-									disabled={categories?.isLoading}
-								/>
-							</Col>
-							<Col span={4}>
-								<Field
-									component={SelectField}
-									optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
-									name={'countryCode'}
-									placeholder={t('loc:Krajina')}
-									allowClear
-									size={'middle'}
-									filterOptions
-									onDidMountSearch
-									options={countries?.enumerationsOptions}
-									loading={countries?.isLoading}
-									disabled={countries?.isLoading}
-								/>
-							</Col>
-							<Col span={5}>
-								<Field
-									className={'w-full'}
-									rangePickerClassName={'w-full'}
-									component={DateRangePickerField}
-									disableFuture
-									placeholder={[t('loc:Úpravy od'), t('loc:Úpravy do')]}
-									allowClear
-									name={'dateFromTo'}
-									presets={getRangesForDatePicker()}
-									dropdownAlign={{ points: ['tl', 'bl'] }}
-									allowEmpty={[false, false]}
-								/>
-							</Col>
-							<Col span={5}>
-								<Field
-									component={SelectField}
-									name={'hasSetOpeningHours'}
-									placeholder={t('loc:Otváracie hodiny')}
-									allowClear
-									size={'middle'}
-									filterOptions
-									onDidMountSearch
-									options={openingHoursOptions}
-								/>
-							</Col>
-							<Col span={5}>
-								<Field
-									component={SelectField}
-									placeholder={t('loc:Priradený Notino používateľ')}
-									name={'assignedUserID'}
-									size={'middle'}
-									showSearch
-									onSearch={searchNotinoUsers}
-									loading={notinoUsers.isLoading}
-									allowInfinityScroll
-									allowClear
-									filterOption={false}
-									onDidMountSearch
-								/>
-							</Col>
-						</Row>
+					<Row className={'items-center'} gutter={ROW_GUTTER_X_M}>
+						<Col span={4}>
+							<Field
+								component={SelectField}
+								optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
+								name={'countryCode'}
+								placeholder={t('loc:Krajina')}
+								allowClear
+								size={'large'}
+								filterOptions
+								onDidMountSearch
+								options={countries?.enumerationsOptions}
+								loading={countries?.isLoading}
+								disabled={countries?.isLoading}
+							/>
+						</Col>
+						<Col span={5}>
+							<Field
+								component={SelectField}
+								name={'categoryFirstLevelIDs'}
+								mode={'multiple'}
+								placeholder={t('loc:Odvetvie')}
+								allowClear
+								size={'large'}
+								filterOptions
+								onDidMountSearch
+								optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
+								options={categories?.enumerationsOptions}
+								loading={categories?.isLoading}
+								disabled={categories?.isLoading}
+							/>
+						</Col>
+						<Col span={5}>
+							<Field
+								component={SelectField}
+								name={'sourceType'}
+								placeholder={t('loc:Zdroj vytvorenia')}
+								className={'select-with-tag-options'}
+								allowClear
+								size={'large'}
+								filterOptions
+								onDidMountSearch
+								options={sourceOptions}
+								optionRender={optionRenderWithTag}
+							/>
+						</Col>
+						<Col span={5}>
+							<Field
+								component={SelectField}
+								name={'premiumSourceUserType'}
+								placeholder={t('loc:Zdroj PREMIUM')}
+								className={'select-with-tag-options'}
+								allowClear
+								size={'large'}
+								filterOptions
+								onDidMountSearch
+								options={premiumSourceOptions}
+								optionRender={optionRenderWithTag}
+							/>
+						</Col>
+						<Col span={5}>
+							<Field
+								className={'w-full'}
+								rangePickerClassName={'w-full'}
+								component={DateRangePickerField}
+								disableFuture
+								placeholder={[t('loc:Úpravy od'), t('loc:Úpravy do')]}
+								allowClear
+								name={'dateFromTo'}
+								presets={getRangesForDatePicker()}
+								dropdownAlign={{ points: ['tr', 'br'] }}
+								allowEmpty={[false, false]}
+								size={'large'}
+							/>
+						</Col>
+					</Row>
+					<Row className={'flex-1 items-center'} gutter={ROW_GUTTER_X_M}>
+						<Col span={6}>
+							<Field
+								component={SelectField}
+								name={'enabledReservationsSetting'}
+								placeholder={t('loc:Rezervačný systém')}
+								allowClear
+								size={'large'}
+								filterOptions
+								onDidMountSearch
+								options={rsOptions}
+								optionRender={(option: any) => optionRenderWithIcon(option, undefined, 24, 24)}
+							/>
+						</Col>
+						<Col span={6}>
+							<Field
+								component={SelectField}
+								name={'hasAvailableReservationSystem'}
+								placeholder={t('loc:Dostupné pre online rezervácie')}
+								allowClear
+								size={'large'}
+								filterOptions
+								onDidMountSearch
+								options={rsAvailableOnlineOptions}
+								optionRender={(option: any) => optionRenderWithIcon(option, undefined, 24, 24)}
+							/>
+						</Col>
+						<Col span={6}>
+							<Field
+								component={SelectField}
+								name={'hasSetOpeningHours'}
+								placeholder={t('loc:Otváracie hodiny')}
+								allowClear
+								size={'large'}
+								filterOptions
+								onDidMountSearch
+								options={openingHoursOptions}
+							/>
+						</Col>
+						<Col span={6}>
+							<Field
+								component={SelectField}
+								placeholder={t('loc:Priradený Notino používateľ')}
+								name={'assignedUserID'}
+								size={'large'}
+								showSearch
+								onSearch={searchNotinoUsers}
+								loading={notinoUsers.isLoading}
+								allowInfinityScroll
+								allowClear
+								filterOption={false}
+								onDidMountSearch={firstRender.current && !!query?.assignedUserID}
+							/>
+						</Col>
 					</Row>
 				</>
 			</Filters>

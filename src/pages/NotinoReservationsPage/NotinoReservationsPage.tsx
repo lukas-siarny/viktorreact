@@ -195,7 +195,7 @@ const NotinoReservationsPage = () => {
 			width: '25%',
 			render: (value) => {
 				return (
-					<div className={'flex items-center'}>
+					<div title={getAssignedUserLabel(value)} className={'flex items-center'}>
 						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.profileImage?.resizedImages?.thumbnail} fallBackSrc={value?.profileImage?.original} />
 						<div className={'truncate'}>{getAssignedUserLabel(value)}</div>
 					</div>
@@ -210,7 +210,7 @@ const NotinoReservationsPage = () => {
 			width: '25%',
 			render: (value) => {
 				return (
-					<div className={'flex items-center'}>
+					<div title={value?.name} className={'flex items-center'}>
 						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.icon?.resizedImages?.thumbnail} fallBackSrc={value?.icon?.original} />
 						<div className={'truncate'}>{value?.name}</div>
 					</div>
@@ -225,7 +225,7 @@ const NotinoReservationsPage = () => {
 			width: '25%',
 			render: (value) => {
 				return (
-					<div className={'flex items-center'}>
+					<div title={getAssignedUserLabel(value)} className={'flex items-center'}>
 						<UserAvatar
 							style={value?.deletedAt && { filter: 'grayscale(100)' }}
 							className='mr-2-5 w-7 h-7'
@@ -258,7 +258,7 @@ const NotinoReservationsPage = () => {
 			width: '15%',
 			render: (value) => {
 				return (
-					<div className={'flex items-center'}>
+					<div title={translateReservationState(value as RESERVATION_STATE).text} className={'flex items-center'}>
 						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationState(value as RESERVATION_STATE).icon}</div>
 						<div className={'truncate'}>{translateReservationState(value as RESERVATION_STATE).text}</div>
 					</div>
@@ -273,7 +273,7 @@ const NotinoReservationsPage = () => {
 			width: '10%',
 			render: (value) => {
 				return value ? (
-					<div className={'flex items-center'}>
+					<div title={translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).text} className={'flex items-center'}>
 						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).icon}</div>
 						<div className={'truncate'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).text}</div>
 					</div>

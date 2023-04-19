@@ -23,7 +23,7 @@ import { ISelectedSalonPayload, selectSalon } from '../../reducers/selectedSalon
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
-import { ILoadingAndFailure, INoteModal, INotinoUserForm, ISalonForm, SalonPageProps } from '../../types/interfaces'
+import { INoteModal, INotinoUserForm, ISalonForm, SalonPageProps, ILoadingAndFailure } from '../../types/interfaces'
 
 // schema
 import { INoteForm } from '../../schemas/note'

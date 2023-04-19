@@ -170,9 +170,9 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 					case SALON_TESTS_SUITS.INDUSTRIES_AND_SERVICES:
 						industriesAndServicesTestSuite(test.actions)
 						break
-					/* case SALON_TESTS_SUITS.RESERVATIONS:
+					case SALON_TESTS_SUITS.RESERVATIONS:
 						reservationsTestSuite(test.actions)
-						break */
+						break
 					case SALON_TESTS_SUITS.SMS_CREDIT:
 						smsCreditTestSuite(test.actions)
 						break

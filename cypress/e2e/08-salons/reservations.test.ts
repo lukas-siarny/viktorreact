@@ -1,5 +1,5 @@
 import { CRUD_OPERATIONS, SALON_ID } from '../../enums'
-import { FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
+import { FILTER_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 
 import reservations from '../../fixtures/reservations.json'
 
@@ -10,13 +10,16 @@ const reservationsTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			const salonID = Cypress.env(SALON_ID)
 			cy.intercept({
 				method: 'GET',
-				url: `/api/b2b/admin/salons/${salonID}/calendar-events/paginated*`
+				pathname: `/api/b2b/admin/salons/${salonID}/calendar-events/paginated*`
 			}).as('filterReservations')
 			cy.visit(`/salons/${salonID}/reservations`)
 			cy.wait('@filterReservations')
-			cy.selectOptionDropdown(FORM.RESERVATIONS_FILTER, 'reservationStates', reservations.filter.reservationStates)
-			cy.selectOptionDropdown(FORM.RESERVATIONS_FILTER, 'reservationPaymentMethods', reservations.filter.reservationPaymentMethods)
-			cy.selectOptionDropdown(FORM.RESERVATIONS_FILTER, 'reservationCreateSourceType', reservations.filter.reservationCreateSourceType)
+			cy.clickButton(FILTER_BUTTON_ID, FORM.RESERVATIONS_FILTER)
+			// wait for animation
+			cy.wait(1000)
+			cy.selectOptionDropdownCustom(FORM.RESERVATIONS_FILTER, 'reservationStates', reservations.filter.reservationStates, true)
+			cy.selectOptionDropdownCustom(FORM.RESERVATIONS_FILTER, 'reservationPaymentMethods', reservations.filter.reservationPaymentMethods, true)
+			cy.selectOptionDropdownCustom(FORM.RESERVATIONS_FILTER, 'reservationCreateSourceType', reservations.filter.reservationCreateSourceType, true)
 			cy.wait('@filterReservations').then((interception: any) => {
 				// check status code
 				expect(interception.response.statusCode).to.equal(200)

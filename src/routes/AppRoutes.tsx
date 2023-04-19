@@ -74,6 +74,7 @@ import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 import ErrorBoundary from '../components/ErrorBoundary'
 import RechargeSmsCreditAdminPage from '../pages/SmsCreditAdminPage/RechargeSmsCreditAdminPage'
+import NotinoReservationsPage from '../pages/NotinoReservationsPage/NotinoReservationsPage'
 
 const AppRoutes: FC = () => {
 	const [t] = useTranslation()
@@ -146,6 +147,9 @@ const AppRoutes: FC = () => {
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:reviews')} element={<AuthRoute layout={MainLayout} page={PAGE.REVIEWS} />}>
 					<Route index element={<ReviewsPage />} />
+				</Route>
+				<Route errorElement={<ErrorBoundary />} path={t('paths:reservations')} element={<AuthRoute layout={MainLayout} page={PAGE.NOTINO_RESERVATIONS} />}>
+					<Route index element={<NotinoReservationsPage />} />
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:sms-credits')} element={<AuthRoute layout={MainLayout} page={PAGE.SMS_CREDITS} />}>
 					<Route index element={<SmsCreditAdminPage />} />

@@ -21,7 +21,7 @@
 		input
 			color: $textColor-gray-900
 			background-color: $backgroundColor-notino-grayLighter
-			font-size: 0.875rem
+			font-size: $input-font-size
 			padding-left: 8px
 			&::placeholder
 				color: $borderColor-notino-gray
@@ -55,6 +55,7 @@
 	// Normal state
 	.ant-input.noti-input
 		border: 1px solid $borderColor-notino-grayLight
+		font-size: $input-font-size
 		&:not(:disabled)
 			&:hover
 				border: 1px solid $borderColor-notino-grayDark
@@ -101,4 +102,4 @@ span.ant-input-suffix svg circle
 	.noti-input-masked
 		&--large
 			padding: 6.5px 11px
-			font-size: 16px
+			font-size: $input-font-size

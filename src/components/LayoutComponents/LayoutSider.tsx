@@ -74,6 +74,7 @@ const MENU_ITEMS_ORDER = [
 	PAGE.SPECIALIST_CONTACTS,
 	PAGE.REVIEWS,
 	PAGE.SMS_CREDITS,
+	PAGE.NOTINO_RESERVATIONS,
 	PAGE.SALONS, // last item for Notino view and second item for Salon view (after homepage)
 	// Salon view
 	PAGE.BILLING_INFO,
@@ -200,14 +201,24 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						id: PAGE.SMS_CREDITS
 					})
 				}
+
 				if (hasPermissions([PERMISSION.NOTINO])) {
-					mainGroupItems.push({
-						key: PAGE.SALONS,
-						label: t('loc:Salóny'),
-						onClick: () => navigate(t('paths:salons')),
-						icon: <SalonIcon />,
-						id: PAGE.SALONS
-					})
+					mainGroupItems.push(
+						{
+							key: PAGE.NOTINO_RESERVATIONS,
+							label: t('loc:Prehľad rezervacií'),
+							onClick: () => navigate(t('paths:reservations')),
+							icon: <ReservationsIcon />,
+							id: PAGE.NOTINO_RESERVATIONS
+						},
+						{
+							key: PAGE.SALONS,
+							label: t('loc:Salóny'),
+							onClick: () => navigate(t('paths:salons')),
+							icon: <SalonIcon />,
+							id: PAGE.SALONS
+						}
+					)
 				}
 			}
 

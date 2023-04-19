@@ -33,7 +33,6 @@ import CalendarEmptyState from '../CalendarEmptyState'
 // types
 import {
 	ICalendarEventForm,
-	ICalendarImportedReservationForm,
 	ICalendarMonthlyReservationsPayload,
 	ICalendarReservationForm,
 	ICalendarView,

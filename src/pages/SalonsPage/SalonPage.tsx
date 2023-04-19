@@ -9,22 +9,21 @@ import SalonEditPage from './SalonEditPage'
 
 // utils
 import { getPrefixCountryCode } from '../../utils/helper'
+import { checkPermissions } from '../../utils/Permissions'
 
 // enums
 import { ENUMERATIONS_KEYS, FORM, NEW_SALON_ID, PERMISSION } from '../../utils/enums'
 
 // reducers
 import { getSalonLanguages } from '../../reducers/languages/languagesActions'
+import { RootState } from '../../reducers'
 
 // types
 import { SalonPageProps, SalonSubPageProps } from '../../types/interfaces'
-import { RootState } from '../../reducers'
-import { checkPermissions } from '../../utils/Permissions'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
 import { useChangeOpeningHoursFormFields } from '../../components/OpeningHours/OpeningHoursUtils'
-import { getPendingReservationsCount } from '../../reducers/calendar/calendarActions'
 
 const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
@@ -51,9 +50,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	useChangeOpeningHoursFormFields(FORM.SALON, formValues?.openingHours, sameOpenHoursOverWeekFormValue, openOverWeekendFormValue)
 
 	useEffect(() => {
-		dispatch(getPendingReservationsCount(salonID))
 		dispatch(getSalonLanguages())
-	}, [dispatch, salonID])
+	}, [dispatch])
 
 	const commonProps: SalonPageProps = {
 		isNotinoUser,

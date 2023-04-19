@@ -12,21 +12,32 @@ import {
 	SALON_FILTER_STATES,
 	SALON_SOURCE_TYPE,
 	CALENDAR_VIEW,
-	CALENDAR_DATE_FORMAT
+	CALENDAR_DATE_FORMAT,
+	RESERVATION_PAYMENT_METHOD,
+	RESERVATION_SOURCE_TYPE,
+	RESERVATIONS_STATE,
+	ACCOUNT_STATE,
+	EMPLOYEES_TAB_KEYS
 } from '../utils/enums'
-import { dateConstraint, uuidConstraint } from './baseSchema'
+import { dateConstraint, twoCharsConstraint, uuidConstraint } from './baseSchema'
 
-export const searchableSchema = z.object({
+const paginationSchema = z.object({
 	page: z.number().nullish(),
 	limit: z.number().nullish(),
-	order: z.string().nullish(),
+	order: z.string().nullish()
+})
+
+const searchableSchema = paginationSchema.extend({
 	search: z.string().nullish()
 })
+
+export type ISearchableParams = z.infer<typeof searchableSchema>
 
 /**
  * Salons
  */
-export const salonsQueryParamsSchema = searchableSchema.extend({
+// actions query params
+const salonsQueryParamsSchema = searchableSchema.extend({
 	categoryFirstLevelIDs: z.string().array().nullish(),
 	statuses_all: z.boolean().nullish(),
 	statuses_published: z.enum([SALON_FILTER_STATES.PUBLISHED, SALON_FILTER_STATES.NOT_PUBLISHED]).nullish(),
@@ -48,6 +59,7 @@ export const salonsQueryParamsSchema = searchableSchema.extend({
 
 export type IGetSalonsQueryParams = z.infer<typeof salonsQueryParamsSchema>
 
+// url query params
 export const salonsPageURLQueryParamsSchema = salonsQueryParamsSchema.pick({
 	page: true,
 	limit: true,
@@ -92,7 +104,8 @@ export type IRechargeSmsCreditAdminPageURLQueryParams = z.infer<typeof rechargeS
 /**
  * Calendar
  */
-export const calendarEventsQueryParamsSchema = z.object({
+// actions query params
+const calendarEventsQueryParamsSchema = z.object({
 	salonID: uuidConstraint,
 	start: dateConstraint,
 	end: dateConstraint,
@@ -112,6 +125,7 @@ export const calendarShiftsTimeOffQueryParamsSchema = calendarEventsQueryParamsS
 
 export type ICalendarShiftsTimeOffQueryParams = z.infer<typeof calendarShiftsTimeOffQueryParamsSchema>
 
+// url query params
 export const calendarPageURLQueryParams = z.object({
 	view: z.nativeEnum(CALENDAR_VIEW).catch(CALENDAR_VIEW.DAY),
 	date: dateConstraint.catch(dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
@@ -123,3 +137,86 @@ export const calendarPageURLQueryParams = z.object({
 })
 
 export type ICalendarPageURLQueryParams = z.infer<typeof calendarPageURLQueryParams>
+
+/**
+ * List of reservations salon
+ */
+// actions query params
+const salonReservationsQueryParamsSchema = paginationSchema.extend({
+	dateFrom: dateConstraint.nullish(),
+	dateTo: dateConstraint.nullish(),
+	createdAtFrom: dateConstraint.nullish(),
+	createdAtTo: dateConstraint.nullish(),
+	employeeIDs: uuidConstraint.array().nullish(),
+	categoryIDs: uuidConstraint.array().nullish(),
+	reservationStates: z.nativeEnum(RESERVATION_STATE).array().nullish(),
+	reservationCreateSourceType: z.nativeEnum(RESERVATION_SOURCE_TYPE).nullish(),
+	reservationPaymentMethods: z.nativeEnum(RESERVATION_PAYMENT_METHOD).array().nullish(),
+	salonID: uuidConstraint
+})
+
+export type IGetSalonReservationsQueryParams = z.infer<typeof salonReservationsQueryParamsSchema>
+
+// url query params
+export const salonReservationsPageURLQueryParams = salonReservationsQueryParamsSchema.omit({ salonID: true }).extend({
+	state: z.nativeEnum(RESERVATIONS_STATE).catch(RESERVATIONS_STATE.ALL)
+})
+
+export type ISalonReservationsPageURLQueryParams = z.infer<typeof salonReservationsPageURLQueryParams>
+
+/**
+ * List of reservations notino
+ */
+// actions query params
+export const notinoReservationsQueryParamsSchema = searchableSchema.extend({
+	dateFrom: dateConstraint.nullish(),
+	dateTo: dateConstraint.nullish(),
+	createdAtFrom: dateConstraint.nullish(),
+	createdAtTo: dateConstraint.nullish(),
+	reservationStates: z.nativeEnum(RESERVATION_STATE).array().nullish(),
+	reservationCreateSourceType: z.nativeEnum(RESERVATION_SOURCE_TYPE).nullish(),
+	reservationPaymentMethods: z.nativeEnum(RESERVATION_PAYMENT_METHOD).array().nullish(),
+	categoryFirstLevelIDs: uuidConstraint.array().nullish(),
+	countryCode: twoCharsConstraint.nullish()
+})
+
+export type IGetNotinoReservationsQueryParams = z.infer<typeof notinoReservationsQueryParamsSchema>
+
+// url query params
+export const notinoReservationsPageURLQueryParams = notinoReservationsQueryParamsSchema.omit({ order: true })
+
+export type INotinoReservationsPageURLQueryParams = z.infer<typeof notinoReservationsPageURLQueryParams>
+
+/**
+ * Employees
+ */
+// actions query params
+const employeesQueryParamsSchema = searchableSchema.extend({
+	salonID: uuidConstraint.nullish(),
+	serviceID: uuidConstraint.nullish(),
+	accountState: z.nativeEnum(ACCOUNT_STATE).nullish()
+})
+
+export type IGetEmployeesQueryParams = z.infer<typeof employeesQueryParamsSchema>
+
+// url query params
+export const employeesPagePageURLQueryParams = employeesQueryParamsSchema.omit({ salonID: true }).extend({
+	employeeState: z.nativeEnum(EMPLOYEES_TAB_KEYS).catch(EMPLOYEES_TAB_KEYS.ACTIVE)
+})
+
+export type IEmployeesPageURLQueryParam = z.infer<typeof employeesPagePageURLQueryParams>
+
+/**
+ * Customers
+ */
+// actions query params
+const customersQueryParamsSchema = searchableSchema.extend({
+	salonID: uuidConstraint.nullish()
+})
+
+export type IGetCustomersQueryParams = z.infer<typeof customersQueryParamsSchema>
+
+// url query params
+export const customersPagePageURLQueryParams = customersQueryParamsSchema.omit({ salonID: true })
+
+export type ICustomersPageURLQueryParam = z.infer<typeof customersPagePageURLQueryParams>

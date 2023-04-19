@@ -73,7 +73,7 @@ import useQueryParams from '../../hooks/useQueryParamsZod'
 // schema
 import { ICalendarEventForm } from '../../schemas/event'
 import { /* ICalendarImportedReservationForm, */ ICalendarReservationForm } from '../../schemas/reservation'
-import { calendarPageURLQueryParams } from '../../schemas/queryParams'
+import { calendarPageURLQueryParams, ICalendarPageURLQueryParams } from '../../schemas/queryParams'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -454,7 +454,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}, [isMainLayoutSiderCollapsed])
 
 	const setEventManagement = useCallback(
-		(newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string) => {
+		(newView: ICalendarPageURLQueryParams['sidebarView'], eventId?: ICalendarPageURLQueryParams['eventId']) => {
 			// NOTE: ak je collapsed (newView je undefined) tak nastavit sidebarView na COLLAPSED a vynulovat eventId
 			if (!newView) {
 				setQuery({

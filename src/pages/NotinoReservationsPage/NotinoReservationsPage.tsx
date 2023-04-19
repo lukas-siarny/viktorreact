@@ -36,11 +36,13 @@ import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCount
 import { getNotinoReservations } from '../../reducers/calendar/calendarActions'
 
 // types
-import { Columns, IBreadcrumbs, IReservationsFilter } from '../../types/interfaces'
+import { Columns, IBreadcrumbs, INotinoReservationsFilter } from '../../types/interfaces'
 
 // hooks
-import useQueryParams, { ArrayParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
-import { formatObjToQuery } from '../../hooks/useQueryParamsZod'
+import useQueryParams, { formatObjToQuery } from '../../hooks/useQueryParamsZod'
+
+// schema
+import { notinoReservationsQueryParamsSchema } from '../../schemas/queryParams'
 
 const NotinoReservationsPage = () => {
 	const [t] = useTranslation()
@@ -49,19 +51,8 @@ const NotinoReservationsPage = () => {
 	const navigate = useNavigate()
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 
-	const [query, setQuery] = useQueryParams({
-		dateFrom: StringParam(),
-		dateTo: StringParam(),
-		createdAtFrom: StringParam(),
-		createdAtTo: StringParam(),
-		categoryFirstLevelIDs: ArrayParam(),
-		reservationStates: ArrayParam(),
-		reservationCreateSourceType: StringParam(),
-		reservationPaymentMethods: ArrayParam(),
-		countryCode: StringParam(),
-		search: StringParam(),
-		limit: NumberParam(),
-		page: NumberParam(1)
+	const [query, setQuery] = useQueryParams(notinoReservationsQueryParamsSchema, {
+		page: 1
 	})
 
 	useEffect(() => {
@@ -113,7 +104,7 @@ const NotinoReservationsPage = () => {
 		selectedCountry
 	])
 
-	const handleSubmit = (values: IReservationsFilter) => {
+	const handleSubmit = (values: INotinoReservationsFilter) => {
 		const newQuery = {
 			...query,
 			...values

@@ -7,16 +7,14 @@ import { find, map } from 'lodash'
 import { ThunkResult } from '../index'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
+import { CalendarEvent, ICalendarEventsPayload, ISearchable, ICalendarEventDetailPayload, ICalendarDayEvents, ICalendarMonthlyReservationsPayload } from '../../types/interfaces'
 import {
-	CalendarEvent,
-	ICalendarEventsPayload,
-	IPaginationQuery,
-	ISearchable,
-	ICalendarEventDetailPayload,
-	ICalendarDayEvents,
-	ICalendarMonthlyReservationsPayload
-} from '../../types/interfaces'
-import { ICalendarEventsQueryParams, ICalendarReservationsQueryParams, ICalendarShiftsTimeOffQueryParams } from '../../schemas/queryParams'
+	ICalendarEventsQueryParams,
+	ICalendarReservationsQueryParams,
+	ICalendarShiftsTimeOffQueryParams,
+	IGetNotinoReservationsQueryParams,
+	IGetSalonReservationsQueryParams
+} from '../../schemas/queryParams'
 
 // enums
 import {
@@ -53,24 +51,6 @@ import { setCalendarEmployees } from '../calendarEmployees/calendarEmployeesActi
 
 // query params types
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
-
-interface IGetSalonReservationsQueryParams extends IPaginationQuery {
-	dateFrom?: string | null
-	dateTo?: string | null
-	createdAtFrom?: string | null
-	createdAtTo?: string | null
-	employeeIDs?: (string | null)[] | null
-	categoryIDs?: (string | null)[] | null
-	reservationStates?: (string | null)[] | null
-	reservationCreateSourceType?: string | null
-	reservationPaymentMethods?: (string | null)[] | null
-	salonID: string
-}
-interface IGetNotinoReservationsQueryParams extends Omit<IGetSalonReservationsQueryParams, 'salonID' | 'categoryIDs' | 'employeeIDs'> {
-	search?: string
-	categoryFirstLevelIDs?: (string | null)[] | null
-	countryCode?: string
-}
 
 // action types
 export type ICalendarActions =

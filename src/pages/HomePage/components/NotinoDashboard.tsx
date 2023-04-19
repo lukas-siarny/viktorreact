@@ -32,7 +32,7 @@ import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
 // utils
-import { DASHBOARD_TASB_KEYS, FILTER_PATHS, RESERVATIONS_STATS_TYPE, SALON_FILTER_STATES, SALONS_TIME_STATS_TYPE, STRINGS } from '../../../utils/enums'
+import { DASHBOARD_TAB_KEYS, FILTER_PATHS, RESERVATIONS_STATS_TYPE, SALON_FILTER_STATES, SALONS_TIME_STATS_TYPE, STRINGS } from '../../../utils/enums'
 import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData, transformToReservationsStatsData } from './dashboardUtils'
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin)
@@ -226,7 +226,7 @@ const NotinoDashboard: FC = () => {
 	const { selectedSalon } = useSelector((state: RootState) => state.selectedSalon)
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	const navigate = useNavigate()
-	const [tabKey, setTabKey] = useState<DASHBOARD_TASB_KEYS>(DASHBOARD_TASB_KEYS.SALONS_STATE)
+	const [tabKey, setTabKey] = useState<DASHBOARD_TAB_KEYS>(DASHBOARD_TAB_KEYS.SALONS_STATE)
 
 	useEffect(() => {
 		dispatch(
@@ -391,7 +391,7 @@ const NotinoDashboard: FC = () => {
 		/>
 	)
 	const onTabChange = (selectedTabKey: string) => {
-		setTabKey(selectedTabKey as DASHBOARD_TASB_KEYS)
+		setTabKey(selectedTabKey as DASHBOARD_TAB_KEYS)
 	}
 	const salonDashboard = (
 		<SalonDashboard>
@@ -478,12 +478,12 @@ const NotinoDashboard: FC = () => {
 			onChange={onTabChange}
 			items={[
 				{
-					key: DASHBOARD_TASB_KEYS.SALONS_STATE,
+					key: DASHBOARD_TAB_KEYS.SALONS_STATE,
 					label: t('loc:Stav salónov'),
 					children: salonDashboard
 				},
 				{
-					key: DASHBOARD_TASB_KEYS.RESERVATION_SYSTEM,
+					key: DASHBOARD_TAB_KEYS.RESERVATION_SYSTEM,
 					label: t('loc:Rezervačný systém'),
 					children: reservationsDashboard
 				}

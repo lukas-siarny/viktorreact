@@ -5,9 +5,12 @@ import { ACTIVE_EMPLOYEES, DELETED_EMPLOYEES, EMPLOYEE, EMPLOYEES } from './empl
 
 // utils
 import { getReq } from '../../utils/request'
-import { IResetStore } from '../generalTypes'
-import { IQueryParams, IEmployeePayload, IEmployeesPayload, IDeletedEmployeesPayload, IActiveEmployeesPayload } from '../../types/interfaces'
 import { getAssignedUserLabel, normalizeQueryParams } from '../../utils/helper'
+
+// types
+import { IResetStore } from '../generalTypes'
+import { IEmployeePayload, IEmployeesPayload, IDeletedEmployeesPayload, IActiveEmployeesPayload } from '../../types/interfaces'
+import { IGetEmployeesQueryParams } from '../../schemas/queryParams'
 
 export type IEmployeesActions = IResetStore | IGetEmployees | IGetEmployee | IGetDeletedEmployees | IGetActiveEmployees
 
@@ -29,12 +32,6 @@ interface IGetEmployees {
 interface IGetEmployee {
 	type: EMPLOYEE
 	payload: IEmployeePayload
-}
-
-export interface IGetEmployeesQueryParams extends IQueryParams {
-	salonID?: string | undefined | null
-	serviceID?: string | undefined | null
-	accountState?: string | undefined | null
 }
 
 export const getEmployees =

@@ -7,7 +7,7 @@ import { BASIC_SALON, BASIC_SALONS, REJECTED_SUGGESTIONS, SALON, SALON_HISTORY, 
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
 import { IQueryParams, ISearchable } from '../../types/interfaces'
-import { IGetSalonsQueryParams } from '../../schemas/queryParams'
+import { IGetSalonsHistoryQueryParams, IGetSalonsQueryParams } from '../../schemas/queryParams'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -24,12 +24,6 @@ interface IGetSalons {
 interface IGetSalonHistory {
 	type: SALON_HISTORY
 	payload: ISalonHistoryPayload
-}
-
-export interface IGetSalonsHistoryQueryParams extends IQueryParams {
-	dateFrom: string | null
-	dateTo: string | null
-	salonID: string
 }
 
 export interface IGetSalon {
@@ -291,7 +285,7 @@ export const getSalonHistory =
 		let payload = {} as ISalonHistoryPayload
 		try {
 			dispatch({ type: SALON_HISTORY.SALON_HISTORY_LOAD_START })
-			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/history', { ...normalizeQueryParams(queryParams) } as any)
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/history', queryParams)
 			payload = {
 				data
 			}

@@ -19,7 +19,8 @@ import {
 	ACCOUNT_STATE,
 	EMPLOYEES_TAB_KEYS,
 	REVIEW_VERIFICATION_STATUS,
-	REVIEWS_TAB_KEYS
+	REVIEWS_TAB_KEYS,
+	DEFAULT_DATE_INIT_FORMAT
 } from '../utils/enums'
 import { dateConstraint, twoCharsConstraint, uuidConstraint } from './baseSchema'
 
@@ -59,6 +60,13 @@ const salonsQueryParamsSchema = searchableSchema.extend({
 	salonState: z.nativeEnum(SALONS_TAB_KEYS).nullish()
 })
 
+const salonHistoryQueryParamsSchema = paginationSchema.omit({ order: true }).extend({
+	dateFrom: dateConstraint.catch(dayjs().subtract(1, 'week').format(DEFAULT_DATE_INIT_FORMAT)),
+	dateTo: dateConstraint.catch(dayjs().format(DEFAULT_DATE_INIT_FORMAT)),
+	salonID: uuidConstraint
+})
+
+export type IGetSalonsHistoryQueryParams = z.infer<typeof salonHistoryQueryParamsSchema>
 export type IGetSalonsQueryParams = z.infer<typeof salonsQueryParamsSchema>
 
 // url query params
@@ -84,8 +92,6 @@ export const salonsPageURLQueryParamsSchema = salonsQueryParamsSchema.pick({
 	salonState: true
 })
 
-export type ISalonsPageURLQueryParams = z.infer<typeof salonsPageURLQueryParamsSchema>
-
 export const rechargeSmsCreditAdminPageSchema = salonsQueryParamsSchema
 	.pick({
 		page: true,
@@ -101,7 +107,11 @@ export const rechargeSmsCreditAdminPageSchema = salonsQueryParamsSchema
 		showForm: z.boolean().nullish()
 	})
 
+export const salonHistoryPageURLQueryParamsSchema = salonHistoryQueryParamsSchema.omit({ salonID: true })
+
+export type ISalonsPageURLQueryParams = z.infer<typeof salonsPageURLQueryParamsSchema>
 export type IRechargeSmsCreditAdminPageURLQueryParams = z.infer<typeof rechargeSmsCreditAdminPageSchema>
+export type ISalonHistoryPageURLQueryParams = z.infer<typeof salonHistoryPageURLQueryParamsSchema>
 
 /**
  * Calendar

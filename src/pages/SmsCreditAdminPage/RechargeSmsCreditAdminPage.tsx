@@ -36,7 +36,7 @@ import { getSmsUnitPricesActual } from '../../reducers/smsUnitPrices/smsUnitPric
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
-import useQueryParams, { formatObjToQuery, serializeParams } from '../../hooks/useQueryParamsZod'
+import useQueryParams, { formatObjToQuery } from '../../hooks/useQueryParamsZod'
 
 // schema
 import { rechargeSmsCreditAdminPageSchema } from '../../schemas/queryParams'

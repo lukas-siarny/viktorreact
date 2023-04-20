@@ -7,8 +7,11 @@ import { Paths } from '../../types/api'
 
 // utils
 import { getReq } from '../../utils/request'
-import { IQueryParams, ISearchable } from '../../types/interfaces'
 import { normalizeQueryParams } from '../../utils/helper'
+
+// types
+import { IGetSmsHistoryQueryParams } from '../../schemas/queryParams'
+import { ISearchable } from '../../types/interfaces'
 
 export type ISmsActions = IResetStore | IGetSmsStats | IGetSmsTimeStats | IGetSmsHistory
 
@@ -36,12 +39,6 @@ export interface ISmsTimeStatsPayload {
 }
 
 export interface ISmsHistoryPayload extends ISearchable<Paths.GetApiB2BAdminSalonsSalonIdNotificationsSmsHistory.Responses.$200> {}
-
-export interface IGetSmsHistoryQueryParams extends IQueryParams {
-	salonID: string
-	dateFrom: string
-	dateTo: string
-}
 
 export const getSmsStats =
 	(salonID: string): ThunkResult<Promise<ISmsStatsPayload>> =>

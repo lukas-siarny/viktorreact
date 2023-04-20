@@ -288,14 +288,11 @@ export enum SALONS_TAB_KEYS {
 	MISTAKES = 'mistakes'
 }
 
-<<<<<<< HEAD
 export enum EMPLOYEES_TAB_KEYS {
 	ACTIVE = 'active',
 	DELETED = 'deleted'
 }
 
-=======
->>>>>>> fd41bb2ab6efb2d20889a53b029dad507464c25a
 export enum DASHBOARD_TAB_KEYS {
 	SALONS_STATE = 'SALONS_STATE',
 	RESERVATION_SYSTEM = 'RESERVATION_SYSTEM'

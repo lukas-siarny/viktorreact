@@ -22,16 +22,11 @@ import { RootState } from '../../../reducers'
 
 // assets
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { IReviewsPageURLQueryParam } from '../../../schemas/queryParams'
 
 type ComponentProps = {}
 
-export interface IReviewsFilter {
-	search?: string
-	verificationStatus?: REVIEW_VERIFICATION_STATUS
-	salonCountryCode?: string
-	toxicityScoreFrom?: number
-	toxicityScoreTo?: number
-}
+export type IReviewsFilter = Pick<IReviewsPageURLQueryParam, 'search' | 'verificationStatus' | 'salonCountryCode' | 'toxicityScoreFrom' | 'toxicityScoreTo'>
 
 type Props = InjectedFormProps<IReviewsFilter, ComponentProps> & ComponentProps
 

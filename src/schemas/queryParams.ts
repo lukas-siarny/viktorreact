@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import dayjs from 'dayjs'
+import dayjs, { type Dayjs } from 'dayjs'
 import {
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_EVENT_TYPE,
@@ -17,14 +17,16 @@ import {
 	RESERVATION_SOURCE_TYPE,
 	RESERVATIONS_STATE,
 	ACCOUNT_STATE,
-	EMPLOYEES_TAB_KEYS
+	EMPLOYEES_TAB_KEYS,
+	REVIEW_VERIFICATION_STATUS,
+	REVIEWS_TAB_KEYS
 } from '../utils/enums'
 import { dateConstraint, twoCharsConstraint, uuidConstraint } from './baseSchema'
 
 const paginationSchema = z.object({
-	page: z.number().nullish(),
-	limit: z.number().nullish(),
-	order: z.string().nullish()
+	page: z.number().optional(),
+	limit: z.number().optional(),
+	order: z.string().optional()
 })
 
 const searchableSchema = paginationSchema.extend({
@@ -217,11 +219,12 @@ export type IGetCustomersQueryParams = z.infer<typeof customersQueryParamsSchema
 // url query params
 export const customersPagePageURLQueryParams = customersQueryParamsSchema.omit({ salonID: true })
 
-export type ICustomersPageURLQueryParam = z.infer<typeof customersPagePageURLQueryParams>
+export type ICustomersPageURLQueryParams = z.infer<typeof customersPagePageURLQueryParams>
 
 /**
  * Salon services
  */
+// actions query params
 const servicesQueryParamsSchema = z.object({
 	salonID: uuidConstraint,
 	rootCategoryID: uuidConstraint.optional()
@@ -233,3 +236,53 @@ export type IGetServicesQueryParams = z.infer<typeof servicesQueryParamsSchema>
 export const servicesPagePageURLQueryParams = servicesQueryParamsSchema.omit({ salonID: true })
 
 export type IServicesPageURLQueryParam = z.infer<typeof servicesPagePageURLQueryParams>
+
+/**
+ * Sms credits
+ */
+// actions query params
+const smsHistoryQueryParamsSchema = searchableSchema.extend({
+	salonID: uuidConstraint,
+	dateFrom: dateConstraint.nullish(),
+	dateTo: dateConstraint.nullish()
+})
+
+export type IGetSmsHistoryQueryParams = z.infer<typeof smsHistoryQueryParamsSchema>
+
+// page query params
+export const smsCreditPartnerPageQueryParams = smsHistoryQueryParamsSchema.omit({ salonID: true, dateFrom: true, dateTo: true }).extend({
+	date: z.instanceof(dayjs as unknown as typeof Dayjs)
+})
+
+export type ISmsCreditPartnerPageQueryParams = z.infer<typeof smsCreditPartnerPageQueryParams>
+
+/**
+ * Reviews
+ */
+// actions query params
+const reviewsQueryParamsSchema = searchableSchema.extend({
+	verificationStatus: z.nativeEnum(REVIEW_VERIFICATION_STATUS).optional(),
+	deleted: z.boolean().optional(),
+	salonCountryCode: twoCharsConstraint.optional(),
+	toxicityScoreFrom: z.number().optional(),
+	toxicityScoreTo: z.number().optional()
+})
+
+export type IGetReviewsQueryParams = z.infer<typeof reviewsQueryParamsSchema>
+
+// url query params
+export const reviewsPagePageURLQueryParams = reviewsQueryParamsSchema.omit({ deleted: true }).extend({
+	reviewState: z.nativeEnum(REVIEWS_TAB_KEYS).catch(REVIEWS_TAB_KEYS.PUBLISHED)
+})
+
+export type IReviewsPageURLQueryParam = z.infer<typeof reviewsPagePageURLQueryParams>
+
+/**
+ * Specalist contacts
+ */
+export const specialistContactsPagePageURLQueryParams = z.object({
+	search: z.string().nullish(),
+	order: z.string().nullish()
+})
+
+export type ISpecialistContactsPageURLQueryParam = z.infer<typeof specialistContactsPagePageURLQueryParams>

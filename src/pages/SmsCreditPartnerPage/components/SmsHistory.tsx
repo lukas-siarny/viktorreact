@@ -18,15 +18,13 @@ import { ReactComponent as MessageIcon } from '../../../assets/icons/message-ico
 // types
 import { ILoadingAndFailure, ISpecialistContactFilter } from '../../../types/interfaces'
 import { ISmsHistoryPayload } from '../../../reducers/sms/smsActions'
-
-// hooks
-import { IUseQueryParams, SetQueryParams } from '../../../hooks/useQueryParams'
+import { ISmsCreditPartnerPageQueryParams } from '../../../schemas/queryParams'
 
 type TableDataItem = NonNullable<ISmsHistoryPayload['data']>['smsNotificationsHistory'][0]
 
 type Props = {
-	query: IUseQueryParams
-	setQuery: SetQueryParams
+	query: ISmsCreditPartnerPageQueryParams
+	setQuery: (newValues: ISmsCreditPartnerPageQueryParams) => void
 	smsHistory: ISmsHistoryPayload & ILoadingAndFailure
 }
 

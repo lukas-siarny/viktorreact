@@ -38,12 +38,13 @@ import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 // types
 import { IBreadcrumbs, Columns, ISpecialistContact, ISpecialistContactFilter } from '../../types/interfaces'
 import { RootState } from '../../reducers'
+import { specialistContactsPagePageURLQueryParams } from '../../schemas/queryParams'
 
 // schema
 import { ISpecialistContactForm } from '../../schemas/specialist'
 
 // hooks
-import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
 
 const SpecialistContactsPage = () => {
 	const [t] = useTranslation()
@@ -51,9 +52,8 @@ const SpecialistContactsPage = () => {
 
 	const [visibleForm, setVisibleForm] = useState<boolean>(false)
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		order: StringParam('country:ASC')
+	const [query, setQuery] = useQueryParams(specialistContactsPagePageURLQueryParams, {
+		order: 'country:ASC'
 	})
 
 	// undefined - represents new record

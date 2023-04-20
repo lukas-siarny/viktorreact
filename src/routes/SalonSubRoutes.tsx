@@ -82,9 +82,9 @@ const SalonSubRoutes: FC = () => {
 			// clear salon selection due error 404 - Not Found
 			dispatch(selectSalon())
 			navigate('/404')
-		} else if (!salon.data.deletedAt) {
+		} else {
 			// NOTE: EP for count of pending reservations which is displayed in Menu item   Prehľad rezervácií (count)
-			dispatch(getPendingReservationsCount(salonID as string))
+			dispatch(getPendingReservationsCount(salon.data.deletedAt ? undefined : salonID))
 		}
 	}, [salonID, dispatch, navigate])
 

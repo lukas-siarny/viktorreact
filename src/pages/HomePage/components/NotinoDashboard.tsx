@@ -250,7 +250,7 @@ const NotinoDashboard: FC = () => {
 	const { selectedSalon } = useSelector((state: RootState) => state.selectedSalon)
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	const navigate = useNavigate()
-	const [tabKey, setTabKey] = useState<DASHBOARD_TAB_KEYS>(DASHBOARD_TAB_KEYS.RESERVATION_SYSTEM)
+	const [tabKey, setTabKey] = useState<DASHBOARD_TAB_KEYS>(DASHBOARD_TAB_KEYS.SALONS_STATE)
 
 	const publishedPremiumSalonsData = useMemo(() => {
 		const query: ISalonsPageURLQueryParams = {

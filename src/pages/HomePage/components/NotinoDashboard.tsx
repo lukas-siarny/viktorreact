@@ -33,7 +33,7 @@ import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron
 
 // utils
 import {
-	DASHBOARD_TASB_KEYS,
+	DASHBOARD_TAB_KEYS,
 	FILTER_PATHS,
 	SALON_CREATE_TYPE,
 	SALON_FILTER_RS,
@@ -247,7 +247,7 @@ const NotinoDashboard: FC = () => {
 	const { selectedSalon } = useSelector((state: RootState) => state.selectedSalon)
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	const navigate = useNavigate()
-	const [tabKey, setTabKey] = useState<DASHBOARD_TASB_KEYS>(DASHBOARD_TASB_KEYS.RESERVATION_SYSTEM)
+	const [tabKey, setTabKey] = useState<DASHBOARD_TAB_KEYS>(DASHBOARD_TAB_KEYS.SALONS_STATE)
 
 	const publishedPremiumSalonsData = useMemo(() => {
 		const query = {
@@ -545,7 +545,7 @@ const NotinoDashboard: FC = () => {
 		/>
 	)
 	const onTabChange = (selectedTabKey: string) => {
-		setTabKey(selectedTabKey as DASHBOARD_TASB_KEYS)
+		setTabKey(selectedTabKey as DASHBOARD_TAB_KEYS)
 	}
 	const salonDashboard = (
 		<SalonDashboard>
@@ -620,12 +620,12 @@ const NotinoDashboard: FC = () => {
 			onChange={onTabChange}
 			items={[
 				{
-					key: DASHBOARD_TASB_KEYS.SALONS_STATE,
+					key: DASHBOARD_TAB_KEYS.SALONS_STATE,
 					label: t('loc:Stav salónov'),
 					children: salonDashboard
 				},
 				{
-					key: DASHBOARD_TASB_KEYS.RESERVATION_SYSTEM,
+					key: DASHBOARD_TAB_KEYS.RESERVATION_SYSTEM,
 					label: t('loc:Rezervačný systém'),
 					children: reservationsDashboard
 				}

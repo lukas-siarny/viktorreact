@@ -41,6 +41,7 @@ const SalonHistoryFilter = (props: Props) => {
 					presets={getRangesForDatePicker()}
 					dropdownAlign={{ points: ['tl', 'bl'] }}
 					allowEmpty={[false, false]}
+					allowClear={false}
 				/>
 			</div>
 		</Form>

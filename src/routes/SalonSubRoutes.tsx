@@ -83,7 +83,8 @@ const SalonSubRoutes: FC = () => {
 			dispatch(selectSalon())
 			navigate('/404')
 		} else {
-			dispatch(getPendingReservationsCount(salonID as string))
+			// NOTE: EP for count of pending reservations which is displayed in Menu item   Prehľad rezervácií (count)
+			dispatch(getPendingReservationsCount(salon.data.deletedAt ? undefined : salonID))
 		}
 	}, [salonID, dispatch, navigate])
 

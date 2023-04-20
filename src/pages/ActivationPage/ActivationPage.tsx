@@ -28,7 +28,7 @@ const ActivationPage = () => {
 		if (currentUser?.activateAt) {
 			navigate(t('paths:index'))
 		}
-	}, [t, currentUser])
+	}, [t, currentUser, navigate])
 
 	const handleSubmit = async (values: IActivationForm) => {
 		setSubmitting(true)

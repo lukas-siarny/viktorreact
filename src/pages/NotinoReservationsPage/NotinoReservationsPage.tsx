@@ -44,6 +44,9 @@ import useQueryParams, { formatObjToQuery } from '../../hooks/useQueryParamsZod'
 // schema
 import { notinoReservationsQueryParamsSchema } from '../../schemas/queryParams'
 
+// schema
+import { formatObjToQuery } from '../../hooks/useQueryParamsZod'
+
 const NotinoReservationsPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()

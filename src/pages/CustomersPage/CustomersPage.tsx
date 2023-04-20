@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Row, Spin } from 'antd'
+import { Col, Divider, Row, Select, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
@@ -15,7 +15,7 @@ import UserAvatar from '../../components/AvatarComponents'
 import ImportForm from '../../components/ImportForm'
 
 // utils
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, REQUEST_STATUS } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, REQUEST_STATUS, TEMPLATE_OPTIONS } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { postReq } from '../../utils/request'
@@ -30,6 +30,8 @@ import { IBreadcrumbs, ISearchFilter, SalonSubPageProps, Columns, IDataUploadFor
 // hooks
 import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
 
+const { Option } = Select
+
 const CustomersPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const navigate = useNavigate()
@@ -40,6 +42,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 	const [uploadStatus, setRequestStatus] = useState<REQUEST_STATUS | undefined>(undefined)
 	const [customersImportVisible, setCustomersImportVisible] = useState(false)
+	const [templateValue, setTemplateValue] = useState(null)
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam(),
@@ -177,6 +180,29 @@ const CustomersPage = (props: SalonSubPageProps) => {
 				visible={customersImportVisible}
 				setVisible={setCustomersImportVisible}
 				onSubmit={clientImportsSubmit}
+				extraContent={
+					<>
+						<Divider className={'mt-1 mb-3'} />
+						<p className={'text-notino-grayDark'}>{t('loc:Vzorové šablóny súborov')}</p>
+						<Select
+							style={{ zIndex: 999 }}
+							className={'noti-select-input w-full mb-4'}
+							size={'large'}
+							onChange={() => setTemplateValue(null)}
+							value={templateValue}
+							placeholder={t('loc:Vyberte šablónu na stiahnutie')}
+							getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+						>
+							{TEMPLATE_OPTIONS().map((option) => (
+								<Option value={option.value} key={option.value}>
+									<a className={'block'} href={`${process.env.PUBLIC_URL}/templates/${option.fileName}`} download={option.fileName}>
+										{option.label}
+									</a>
+								</Option>
+							))}
+						</Select>
+					</>
+				}
 			/>
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />

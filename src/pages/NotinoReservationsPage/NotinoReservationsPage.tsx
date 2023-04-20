@@ -115,7 +115,8 @@ const NotinoReservationsPage = () => {
 	const handleSubmit = (values: IReservationsFilter) => {
 		const newQuery = {
 			...query,
-			...values
+			...values,
+			page: 1
 		}
 		// update selected country globally based on filter
 		dispatch(setSelectedCountry(values?.countryCode || undefined))

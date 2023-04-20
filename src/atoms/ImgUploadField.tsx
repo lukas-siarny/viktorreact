@@ -325,8 +325,8 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 			>
 				{!staticMode && input.value.length < maxCount && (
 					<div>
-						<UploadIcon className={`text-xl ${touched && error ? 'text-red-600' : 'text-gray-600'}`} />
-						<div className={`text-sm ${touched && error ? 'text-red-600' : 'text-gray-600'}`}>{t('loc:Nahrať')}</div>
+						<UploadIcon className={`text-xl upload-icon ${touched && error ? 'text-red-600' : 'text-gray-600'}`} />
+						<div className={`upload-input text-sm ${touched && error ? 'text-red-600' : 'text-gray-600'}`}>{t('loc:Nahrať')}</div>
 					</div>
 				)}
 			</Upload>

@@ -730,21 +730,27 @@ export const getNotinoReservations =
 	}
 
 export const getPendingReservationsCount =
-	(salonID: string): ThunkResult<Promise<IPendingReservationsCount>> =>
+	(salonID?: string): ThunkResult<Promise<IPendingReservationsCount>> =>
 	async (dispatch) => {
 		let payload = {} as IPendingReservationsCount
 		try {
 			dispatch({ type: PENDING_RESERVATIONS_COUNT.PENDING_RESERVATIONS_COUNT_LOAD_START })
+			if (salonID) {
+				const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/paginated', {
+					salonID,
+					limit: 1,
+					page: 1,
+					eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
+					reservationStates: [RESERVATION_STATE.PENDING]
+				})
 
-			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/paginated', {
-				salonID,
-				limit: 1,
-				page: 1,
-				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
-				reservationStates: [RESERVATION_STATE.PENDING]
-			})
-			payload = {
-				count: data.pagination.totalCount
+				payload = {
+					count: data.pagination.totalCount
+				}
+			} else {
+				payload = {
+					count: 0
+				}
 			}
 			dispatch({ type: PENDING_RESERVATIONS_COUNT.PENDING_RESERVATIONS_COUNT_LOAD_DONE, payload })
 		} catch (err) {

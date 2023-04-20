@@ -181,9 +181,9 @@ const AddressFields = (props: Props) => {
 										placeholder={t('loc:Zadajte ulicu')}
 										name={'street'}
 										size={'large'}
+										disabled={disabled}
 										validate={validationRequired}
 										required
-										disabled={disabled}
 									/>
 									<Field
 										className={'w-3/10'}
@@ -191,9 +191,9 @@ const AddressFields = (props: Props) => {
 										label={t('loc:Popisné číslo')}
 										placeholder={t('loc:Zadajte číslo')}
 										name={'streetNumber'}
+										disabled={disabled}
 										maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 										size={'large'}
-										disabled={disabled}
 									/>
 								</Row>
 								<Row justify={'space-between'}>
@@ -204,9 +204,9 @@ const AddressFields = (props: Props) => {
 										placeholder={t('loc:Zadajte mesto')}
 										name={'city'}
 										size={'large'}
+										disabled={disabled}
 										validate={validationRequired}
 										required
-										disabled={disabled}
 									/>
 									<Field
 										className={'w-12/25'}
@@ -216,9 +216,9 @@ const AddressFields = (props: Props) => {
 										name={'zipCode'}
 										maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 										size={'large'}
+										disabled={disabled}
 										validate={validationRequired}
 										required
-										disabled={disabled}
 									/>
 								</Row>
 								<Row justify={'space-between'}>
@@ -231,10 +231,10 @@ const AddressFields = (props: Props) => {
 										options={countries?.enumerationsOptions || []}
 										name={'country'}
 										size={'large'}
+										disabled={disabled}
 										loading={countries?.isLoading}
 										validate={validationRequired}
 										required
-										disabled={disabled}
 									/>
 									<Field
 										className={'w-1/3'}
@@ -245,8 +245,8 @@ const AddressFields = (props: Props) => {
 										size={'large'}
 										required
 										maxChars={10}
-										validate={[validationRequiredNumber, numberMinLongitude, numberMaxLongitude]}
 										disabled={disabled}
+										validate={[validationRequiredNumber, numberMinLongitude, numberMaxLongitude]}
 									/>
 									<Field
 										className={'w-1/3'}
@@ -257,8 +257,8 @@ const AddressFields = (props: Props) => {
 										size={'large'}
 										required
 										maxChars={10}
-										validate={[validationRequiredNumber, numberMinLatitude, numberMaxLatitude]}
 										disabled={disabled}
+										validate={[validationRequiredNumber, numberMinLatitude, numberMaxLatitude]}
 									/>
 								</Row>
 							</Row>
@@ -290,9 +290,9 @@ const AddressFields = (props: Props) => {
 														placeholder={t('loc:Zadajte ulicu')}
 														name={'street'}
 														size={'large'}
+														disabled={disabled}
 														validate={validationRequired}
 														required
-														disabled={disabled}
 													/>
 													<Field
 														component={InputField}
@@ -300,9 +300,9 @@ const AddressFields = (props: Props) => {
 														placeholder={t('loc:Zadajte mesto')}
 														name={'city'}
 														size={'large'}
+														disabled={disabled}
 														validate={validationRequired}
 														required
-														disabled={disabled}
 													/>
 													<Row gutter={[8, 8]}>
 														<Col span={12} sm={24} md={24} lg={12}>
@@ -313,9 +313,9 @@ const AddressFields = (props: Props) => {
 																name={'zipCode'}
 																maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 																size={'large'}
+																disabled={disabled}
 																validate={validationRequired}
 																required
-																disabled={disabled}
 															/>
 														</Col>
 														<Col span={12} sm={24} md={24} lg={12}>
@@ -325,8 +325,8 @@ const AddressFields = (props: Props) => {
 																placeholder={t('loc:Zadajte číslo')}
 																maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 																name={'streetNumber'}
-																size={'large'}
 																disabled={disabled}
+																size={'large'}
 															/>
 														</Col>
 													</Row>
@@ -339,10 +339,10 @@ const AddressFields = (props: Props) => {
 														name={'country'}
 														size={'large'}
 														readOnly
+														disabled={disabled}
 														loading={countries?.isLoading}
 														validate={validationRequired}
 														required
-														disabled={disabled}
 													/>
 												</Col>
 												<Col span={16}>

@@ -147,8 +147,8 @@ const FileUploadField: FC<Props> = (props) => {
 		>
 			{!staticMode && (
 				<div>
-					<UploadIcon className={`text-xl ${touched && error ? 'text-red-600' : 'text-gray-600'}`} />
-					<div className={`text-sm ${touched && error ? 'text-red-600' : 'text-gray-600'}`}>{handleUploadOutside ? t('loc:Vybrať') : t('loc:Nahrať')}</div>
+					<UploadIcon className={`text-xl  ${touched && error ? 'text-red-600' : 'text-gray-600'}`} />
+					<div className={`text-sm upload-input ${touched && error ? 'text-red-600' : 'text-gray-600'}`}>{handleUploadOutside ? t('loc:Vybrať') : t('loc:Nahrať')}</div>
 				</div>
 			)}
 		</Upload>

@@ -20,13 +20,13 @@ import ImportForm from '../../components/ImportForm'
 
 // utils
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, REQUEST_STATUS, SALON_STATES, SALON_TABS_KEYS, SALONS_TAB_KEYS } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, REQUEST_STATUS, SALON_STATES, SALONS_TAB_KEYS } from '../../utils/enums'
 import { formatDateByLocale, getAssignedUserLabel, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { getReq, postReq } from '../../utils/request'
 import { getCheckerIcon, getSalonTagChanges, getSalonTagCreateType, getSalonTagSourceType } from './components/salonUtils'
 
 // reducers
-import { emptySalons, getSalons } from '../../reducers/salons/salonsActions'
+import { getSalons } from '../../reducers/salons/salonsActions'
 import { RootState } from '../../reducers'
 import { getCategories } from '../../reducers/categories/categoriesActions'
 import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
@@ -92,32 +92,6 @@ const SalonsPage = (props: Props) => {
 		hasAvailableReservationSystem: StringParam(),
 		enabledReservationsSetting: StringParam()
 	})
-
-	const resetQuery = (selectedTabKey: string, rewrite = {}) => {
-		// reset query when switching between tabs
-		setQuery({
-			search: undefined,
-			categoryFirstLevelIDs: undefined,
-			statuses_all: undefined,
-			statuses_published: undefined,
-			statuses_changes: undefined,
-			limit: undefined,
-			page: 1,
-			order: 'createdAt:DESC',
-			// get default selected country form redux store
-			countryCode: selectedCountry,
-			createType: undefined,
-			lastUpdatedAtFrom: undefined,
-			lastUpdatedAtTo: undefined,
-			hasSetOpeningHours: undefined,
-			sourceType: undefined,
-			premiumSourceUserType: undefined,
-			assignedUserID: undefined,
-			hasAvailableReservationSystem: undefined,
-			enabledReservationsSetting: undefined,
-			...rewrite
-		})
-	}
 
 	useEffect(() => {
 		let salonsQueries = {
@@ -305,11 +279,6 @@ const SalonsPage = (props: Props) => {
 		}
 	}
 
-	// const onTabChange = (selectedTabKey: string) => {
-	// 	dispatch(emptySalons())
-	// 	resetQuery(selectedTabKey, selectedTabKey === TAB_KEYS.MISTAKES ? { countryCode: undefined } : {})
-	// }
-
 	// define columns for both tables - active and deleted
 	const tableColumns: { [key: string]: (props?: Columns[0]) => Columns[0] } = useMemo(
 		() => ({
@@ -492,7 +461,7 @@ const SalonsPage = (props: Props) => {
 
 		switch (selectedTabKey) {
 			case SALONS_TAB_KEYS.MISTAKES:
-				return <RejectedSalonSuggestions query={query} setQuery={setQuery} />
+				return <RejectedSalonSuggestions />
 			case SALONS_TAB_KEYS.DELETED:
 				columns = [
 					tableColumns.id({ width: '8%' }),

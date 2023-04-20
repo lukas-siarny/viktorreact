@@ -24,6 +24,7 @@ import Permissions, { withPermissions } from '../../utils/Permissions'
 // reducers
 import { RootState } from '../../reducers'
 import { getReviews } from '../../reducers/reviews/reviewsActions'
+import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 
 // types
 import { IBreadcrumbs, Columns } from '../../types/interfaces'
@@ -34,7 +35,6 @@ import { ReactComponent as EyeIcon } from '../../assets/icons/eye-icon.svg'
 
 // hooks
 import useQueryParams, { BooleanParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
-import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 
 const getRowId = (verificationStatus: string, id: string) => `${verificationStatus}_${id}`
 

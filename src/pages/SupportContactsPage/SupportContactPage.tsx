@@ -136,7 +136,7 @@ const SupportContactPage: FC<Props> = () => {
 				})
 			)
 		}
-	}, [dispatch, phonePrefixes.data, supportContactID])
+	}, [dispatch, phonePrefixes.data, supportContactID, navigate])
 
 	useEffect(() => {
 		dispatch(getSupportContacts())

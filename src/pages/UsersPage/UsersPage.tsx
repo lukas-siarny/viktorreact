@@ -26,7 +26,10 @@ import { RootState } from '../../reducers'
 import { IBreadcrumbs, Columns } from '../../types/interfaces'
 
 // hooks
-import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
+
+// schema
+import { usersPagePageURLQueryParams } from '../../schemas/queryParams'
 
 const UsersPage = () => {
 	const [t] = useTranslation()
@@ -37,12 +40,9 @@ const UsersPage = () => {
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 	const navigate = useNavigate()
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		limit: NumberParam(),
-		page: NumberParam(1),
-		order: StringParam('fullName:ASC'),
-		roleID: StringParam()
+	const [query, setQuery] = useQueryParams(usersPagePageURLQueryParams, {
+		page: 1,
+		order: 'fullName:ASC'
 	})
 
 	useEffect(() => {

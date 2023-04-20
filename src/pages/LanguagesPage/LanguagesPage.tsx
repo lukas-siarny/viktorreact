@@ -34,10 +34,11 @@ import { IBreadcrumbs, ILanguage } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // hooks
-import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
 
 // schema
 import { ILanguageForm } from '../../schemas/language'
+import { languagesPagePageURLQueryParams } from '../../schemas/queryParams'
 
 type Columns = ColumnsType<any>
 
@@ -53,9 +54,8 @@ const LanguagesPage = () => {
 
 	const languages = useSelector((state: RootState) => state.languages.languages)
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		order: StringParam('name:ASC')
+	const [query, setQuery] = useQueryParams(languagesPagePageURLQueryParams, {
+		order: 'name:ASC'
 	})
 
 	const breadcrumbs: IBreadcrumbs = {

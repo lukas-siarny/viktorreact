@@ -12,17 +12,16 @@ import { processAuthorizationResult } from '../../reducers/users/userActions'
 import { postReq } from '../../utils/request'
 
 // hooks
-import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
 
 // schema
 import { ICreatePasswordForm } from '../../schemas/password'
+import { createPasswordPageURLQueryParamsSchema } from '../../schemas/queryParams'
 
 const CreatePasswordPage = () => {
 	const [modalVisible, setModalVisible] = useState(false)
 	const dispatch = useDispatch()
-	const [query] = useQueryParams({
-		t: StringParam()
-	})
+	const [query] = useQueryParams(createPasswordPageURLQueryParamsSchema)
 
 	const handleSubmit = async (values: ICreatePasswordForm) => {
 		try {

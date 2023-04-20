@@ -22,9 +22,9 @@ import {
 import { dateConstraint, twoCharsConstraint, uuidConstraint } from './baseSchema'
 
 const paginationSchema = z.object({
-	page: z.number().nullish(),
-	limit: z.number().nullish(),
-	order: z.string().nullish()
+	page: z.number().optional(),
+	limit: z.number().optional(),
+	order: z.string().optional()
 })
 
 const searchableSchema = paginationSchema.extend({
@@ -233,3 +233,81 @@ export type IGetServicesQueryParams = z.infer<typeof servicesQueryParamsSchema>
 export const servicesPagePageURLQueryParams = servicesQueryParamsSchema.omit({ salonID: true })
 
 export type IServicesPageURLQueryParam = z.infer<typeof servicesPagePageURLQueryParams>
+
+/**
+ * Support contacts
+ */
+// actions query params
+const supportContactsQueryParamsSchema = z.object({
+	countryCode: twoCharsConstraint.nullish()
+})
+
+export type IGetSupportContactsQueryParams = z.infer<typeof supportContactsQueryParamsSchema>
+
+// url query params
+export const supportContactsPagePageURLQueryParams = z.object({
+	search: z.string().nullish(),
+	order: z.string().nullish()
+})
+
+export type ISupportContactsPageURLQueryParam = z.infer<typeof supportContactsPagePageURLQueryParams>
+
+/**
+ * Languages
+ */
+// url query params
+export const languagesPagePageURLQueryParams = z.object({
+	search: z.string().nullish(),
+	order: z.string().nullish()
+})
+
+export type ILanguagesPageURLQueryParam = z.infer<typeof languagesPagePageURLQueryParams>
+
+/**
+ * Cosmetics
+ */
+// actions query params
+const cosmeticsQueryParamsSchema = searchableSchema.omit({ order: true })
+
+export type IGetCosmeticsQueryParams = z.infer<typeof cosmeticsQueryParamsSchema>
+
+// url query params
+export const cosmeticsPagePageURLQueryParams = cosmeticsQueryParamsSchema
+
+export type ICosmeticsPageURLQueryParam = z.infer<typeof cosmeticsPagePageURLQueryParams>
+
+/**
+ * Category params
+ */
+// url query params
+export const categoryParamsPagePageURLQueryParams = z.object({
+	search: z.string().nullish(),
+	order: z.string().nullish()
+})
+
+export type ICategoryParamsPageURLQueryParam = z.infer<typeof categoryParamsPagePageURLQueryParams>
+
+/**
+ * Users
+ */
+// actions query params
+const usersQueryParamsSchema = searchableSchema.extend({
+	roleID: uuidConstraint.nullish()
+})
+
+export type IGetUsersQueryParams = z.infer<typeof usersQueryParamsSchema>
+
+// url query params
+export const usersPagePageURLQueryParams = usersQueryParamsSchema
+
+export type IUsersPageURLQueryParam = z.infer<typeof usersPagePageURLQueryParams>
+
+/**
+ * Create password route
+ */
+// url query params
+export const createPasswordPageURLQueryParamsSchema = z.object({
+	t: z.string().nullish()
+})
+
+export type ICreatePasswordPageURLQueryParam = z.infer<typeof createPasswordPageURLQueryParamsSchema>

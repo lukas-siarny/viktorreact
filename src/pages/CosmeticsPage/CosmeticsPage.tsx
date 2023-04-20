@@ -29,9 +29,10 @@ import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
 import { IBreadcrumbs, ICosmetic, ICosmeticForm, Columns, ISearchFilter } from '../../types/interfaces'
+import { cosmeticsPagePageURLQueryParams } from '../../schemas/queryParams'
 
 // hooks
-import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
 
 const CosmeticsPage = () => {
 	const [t] = useTranslation()
@@ -43,10 +44,9 @@ const CosmeticsPage = () => {
 
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		limit: NumberParam(25),
-		page: NumberParam(1)
+	const [query, setQuery] = useQueryParams(cosmeticsPagePageURLQueryParams, {
+		limit: 25,
+		page: 1
 	})
 
 	const breadcrumbs: IBreadcrumbs = {

@@ -172,7 +172,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 
 	/**
-	 * okrem aktuálne zvoleného dátumu (query.date resp. query.date) si udržujeme aj aktuálne zvolený range napr. currentRange = { view: DAY, start: 2023-01-22 end: 2023-01-29 }
+	 * okrem aktuálne zvoleného dátumu (query.date) si udržujeme aj aktuálne zvolený range napr. currentRange = { view: DAY, start: 2023-01-22 end: 2023-01-29 }
 	 * hlavne kvoli týždennému a mesačnému, kde sa vždy na základe zvoleného dátumu (query.date) dopočíta celý range, na základe ktorého sa potom dotiahnu data z BE
 	 */
 	const [currentRange, setCurrentRange] = useState(getSelectedDateRange(query.view, query.date))

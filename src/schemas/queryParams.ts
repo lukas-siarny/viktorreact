@@ -257,14 +257,21 @@ const smsHistoryQueryParamsSchema = searchableSchema.extend({
 	dateTo: dateConstraint.nullish()
 })
 
+const smsUnitPricesParamsSchema = searchableSchema.omit({ search: true }).extend({
+	countryCode: twoCharsConstraint
+})
+
 export type IGetSmsHistoryQueryParams = z.infer<typeof smsHistoryQueryParamsSchema>
+export type IGetSmsUnitPricesQueryParams = z.infer<typeof smsUnitPricesParamsSchema>
 
 // page query params
 export const smsCreditPartnerPageQueryParams = smsHistoryQueryParamsSchema.omit({ salonID: true, dateFrom: true, dateTo: true }).extend({
 	date: z.instanceof(dayjs as unknown as typeof Dayjs)
 })
 
-export type ISmsCreditPartnerPageQueryParams = z.infer<typeof smsCreditPartnerPageQueryParams>
+export const smsUnitPricesDetailPageQueryParams = searchableSchema.omit({ search: true })
+
+export type ISmsUnitPricesDetailPageQueryParams = z.infer<typeof smsUnitPricesDetailPageQueryParams>
 
 /**
  * Reviews

@@ -271,6 +271,7 @@ export const smsCreditPartnerPageQueryParams = smsHistoryQueryParamsSchema.omit(
 
 export const smsUnitPricesDetailPageQueryParams = searchableSchema.omit({ search: true })
 
+export type ISmsCreditPartnerPageQueryParams = z.infer<typeof smsCreditPartnerPageQueryParams>
 export type ISmsUnitPricesDetailPageQueryParams = z.infer<typeof smsUnitPricesDetailPageQueryParams>
 
 /**

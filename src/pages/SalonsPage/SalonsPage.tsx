@@ -72,7 +72,6 @@ const SalonsPage = () => {
 	}, [dispatch])
 
 	const [query, setQuery] = useQueryParams(salonsPageURLQueryParamsSchema, {
-		statuses_all: true,
 		salonState: SALONS_TAB_KEYS.ACTIVE,
 		page: 1,
 		order: 'createdAt:DESC'

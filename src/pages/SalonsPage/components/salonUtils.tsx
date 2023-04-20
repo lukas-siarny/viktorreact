@@ -5,7 +5,7 @@ import i18next from 'i18next'
 
 // types
 import { AutocompleteLabelInValue, ISalonForm, OpeningHours } from '../../../types/interfaces'
-import { ISalonPayloadData, ISelectedSalonPayload } from '../../../reducers/selectedSalon/selectedSalonActions'
+import { ISelectedSalonPayload } from '../../../reducers/selectedSalon/selectedSalonActions'
 import { IBasicSalon } from '../../../reducers/salons/salonsActions'
 import { Paths } from '../../../types/api'
 

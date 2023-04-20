@@ -10,14 +10,11 @@ import SalonRolesField from '../../../atoms/SalonRolesField'
 // interfaces
 import { ISelectOptionItem } from '../../../types/interfaces'
 
-// schema
-import { IInviteEmployeeForm } from '../../../schemas/employee'
-
 // utils
 import { FORM, PERMISSION } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 
-// validate
+// schema
 import { validationEditRoleFn, IEditRoleForm } from '../../../schemas/role'
 
 // assets

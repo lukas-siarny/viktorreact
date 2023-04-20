@@ -31,6 +31,8 @@
   "reviews": "/reviews",
   "salons": "/salons",
   "salons/create": "/salons/create",
+  "salons/deleted": "/salons/deleted",
+  "salons/rejected": "/salons/rejected",
   "salons/{{salonID}}": "/salons/{{salonID}}",
   "salons/{{salonID}}/calendar": "/salons/{{salonID}}/calendar",
   "salons/{{salonID}}/history": "/salons/{{salonID}}/history",

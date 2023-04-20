@@ -283,9 +283,9 @@ export enum SALON_TABS_KEYS {
 }
 
 export enum SALONS_TAB_KEYS {
-	ACTIVE = 'active',
-	DELETED = 'deleted',
-	MISTAKES = 'mistakes'
+	ACTIVE = 'ACTIVE',
+	DELETED = 'DELETED',
+	MISTAKES = 'MISTAKES'
 }
 
 export enum DASHBOARD_TAB_KEYS {

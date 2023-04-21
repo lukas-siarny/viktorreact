@@ -243,17 +243,15 @@ const RechargeSmsCreditAdminPage = () => {
 					if (isEmpty(value) || !value) {
 						return '-'
 					}
-					let { street } = value
-					const { city, zipCode, streetNumber } = value
+					let { street, city } = value
+					const { zipCode, streetNumber } = value
 
 					if ((city || zipCode) && street) {
-						let result
 						if (zipCode) {
-							result = city ? `${city}, ${zipCode}` : zipCode
+							city = city ? `${city}, ${zipCode}` : zipCode
 						}
 						street = streetNumber ? `${street} ${streetNumber}` : street
-						result = `${street}, ${result}`
-						return result
+						return `${street}, ${city}`
 					}
 
 					return '-'

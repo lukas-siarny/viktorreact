@@ -1390,7 +1390,7 @@ export const normalizeDataById = <T extends { id: string }>(data?: T[] | null): 
 	return normalizedData
 }
 
-export const formatPrice = (price: number, symbol?: string) => (!isNil(price) ? `${price} ${symbol || ''}`.trim() : '')
+export const formatPrice = (price: number, symbol?: string) => (!isNil(price) ? `${price.toFixed(2).replace('.', ',')} ${symbol || ''}`.trim() : '')
 
 export const detectBrowserType = (): string => {
 	const parser = new UAParser()

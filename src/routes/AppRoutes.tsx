@@ -117,8 +117,8 @@ const AppRoutes: FC = () => {
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:salons')} element={<AuthRoute layout={MainLayout} page={PAGE.SALONS} />}>
 					<Route index element={<SalonsPage tabKey={SALONS_TAB_KEYS.ACTIVE} />} />
-					<Route path={'deleted'} element={<SalonsPage tabKey={SALONS_TAB_KEYS.DELETED} />} />
-					<Route path={'rejected'} element={<SalonsPage tabKey={SALONS_TAB_KEYS.MISTAKES} />} />
+					<Route path={t('paths:deleted')} element={<SalonsPage tabKey={SALONS_TAB_KEYS.DELETED} />} />
+					<Route path={t('paths:rejected')} element={<SalonsPage tabKey={SALONS_TAB_KEYS.MISTAKES} />} />
 					<Route path={t('paths:createEntity')} element={<SalonPage salonID={NEW_SALON_ID} />} />
 				</Route>
 				{/* // Salon view */}

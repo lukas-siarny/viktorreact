@@ -180,7 +180,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	/**
 	 * ak je false, tak sa po otvoreni detailu eventu nascrolluje kalendar tak, aby bol dany event viditelny
 	 * vyuziva sa, ked sa zaobrazuje detial eventu po skopirovani URLcky
-	 * pri programovom otvoreni sidebaru by to malo byt vzdy true, abo zbytocne neposkakovalo view
+	 * pri programovom otvoreni sidebaru by to malo byt vzdy true, aby zbytocne neposkakovalo view
 	 * teda vsade, kde sa nastavuje sidebarView na nieco ine ako undefined (query = { ...query, sidebarView: view }), tak by sa mala aj tato premenna nastavit na true
 	 */
 	const scrollToTimeAndResourceOnDeman = useRef(false)

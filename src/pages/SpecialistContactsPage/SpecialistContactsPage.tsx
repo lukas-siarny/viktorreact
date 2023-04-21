@@ -34,6 +34,7 @@ import { getSpecialistContacts } from '../../reducers/specialistContacts/special
 
 // assets
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
 
 // types
 import { IBreadcrumbs, Columns, ISpecialistContact, ISpecialistContactForm, ISpecialistContactFilter } from '../../types/interfaces'
@@ -295,7 +296,14 @@ const SpecialistContactsPage = () => {
 					</div>
 				</Col>
 			</Row>
-			<Modal title={t('loc:Upozornenie')} open={visibleRestrictionModal} getContainer={() => document.body} onCancel={() => setVisibleRestrictionModal(false)} footer={null}>
+			<Modal
+				title={t('loc:Upozornenie')}
+				open={visibleRestrictionModal}
+				getContainer={() => document.body}
+				onCancel={() => setVisibleRestrictionModal(false)}
+				footer={null}
+				closeIcon={<CloseIcon />}
+			>
 				<Result
 					status='warning'
 					title={t('loc:Ďalšieho špecialistu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jedného.')}

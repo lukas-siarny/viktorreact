@@ -96,9 +96,6 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 		employeesLoading,
 		calendarEmployees,
 		scrollToTime,
-		// ak je true, tak sa po otvoreni detailu eventu nascrolluje kalendar tak, aby bol dany event viditelny
-		// vyuziva sa, ked sa zaobrazuje detial eventu po skopirovani URLcky
-		// pri programovom otvoreni sidebaru by to malo byt vzdy false, abo zbytocne neposkakovalo view
 		initOnDemand
 	} = props
 	const [t] = useTranslation()

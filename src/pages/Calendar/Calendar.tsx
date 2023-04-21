@@ -177,6 +177,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	 */
 	const updateCalendarSize = useRef(() => calendarRefs?.current?.[validCalendarView]?.getApi()?.updateSize())
 
+	/**
+	 * ak je false, tak sa po otvoreni detailu eventu nascrolluje kalendar tak, aby bol dany event viditelny
+	 * vyuziva sa, ked sa zaobrazuje detial eventu po skopirovani URLcky
+	 * pri programovom otvoreni sidebaru by to malo byt vzdy true, abo zbytocne neposkakovalo view
+	 * teda vsade, kde sa nastavuje sidebarView na nieco ine ako undefined (query = { ...query, sidebarView: view }), tak by sa mala aj tato premenna nastavit na true
+	 */
+	const scrollToTimeAndResourceOnDeman = useRef(false)
+
 	const calendarEmployees = useSelector((state: RootState) => state.calendarEmployees.calendarEmployees || {})
 	const services = useSelector((state: RootState) => state.service.services)
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
@@ -473,8 +481,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		return () => clearTimeout(timeout)
 	}, [isMainLayoutSiderCollapsed])
 
-	const initSiderEventManagementOnDemand = useRef(false)
-
 	const setEventManagement = useCallback(
 		(newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string) => {
 			// NOTE: ak je collapsed (newView je undefined) tak nastavit sidebarView na COLLAPSED a vynulovat eventId
@@ -486,7 +492,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				})
 			} else {
 				const newEventType = newView === CALENDAR_EVENT_TYPE.RESERVATION ? CALENDAR_EVENTS_VIEW_TYPE.RESERVATION : CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF
-				initSiderEventManagementOnDemand.current = true
+				scrollToTimeAndResourceOnDeman.current = true
 				setQuery({
 					...query,
 					eventId,
@@ -868,7 +874,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		setConfirmModalData({ key: CONFIRM_MODAL_DATA_TYPE.UPDATE_RESERVATION_STATE, calendarEventID, state, reason, paymentMethod })
 
 	const onEditEvent = (eventType: CALENDAR_EVENT_TYPE, eventId: string) => {
-		initSiderEventManagementOnDemand.current = true
+		scrollToTimeAndResourceOnDeman.current = true
 		setQuery({
 			...query,
 			eventId,
@@ -879,7 +885,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const onReservationClick = (data?: ReservationPopoverData, position?: PopoverTriggerPosition) => {
-		initSiderEventManagementOnDemand.current = true
+		scrollToTimeAndResourceOnDeman.current = true
 		setReservationPopover({
 			isOpen: true,
 			data: data || null,
@@ -1016,7 +1022,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							employeesLoading={employeesLoading}
 							calendarEmployees={calendarEmployees}
 							scrollToTime={scrollToTime}
-							initOnDemand={initSiderEventManagementOnDemand.current}
+							initOnDemand={scrollToTimeAndResourceOnDeman.current}
 						/>
 					)}
 				</Layout>

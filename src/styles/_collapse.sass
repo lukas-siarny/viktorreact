@@ -57,3 +57,45 @@
 			width: 100%
 		@media (max-width: 744px)
 			max-width: 100%
+
+.services-collapse-wrapper
+	width: 100%
+	.ant-collapse
+		background: transparent
+	.panel
+		.ant-collapse-header
+			background-color: $backgroundColor-notino-grayLighter
+			display: flex
+			align-items: center
+			h3, h4
+				margin-bottom: 0
+				color: $textColor-notino-black
+				font-weight: 700
+			h3
+				font-size: 18px
+			h4
+				font-size: 16px
+		&.panel-industry
+			box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.06), 0px 4px 6px -1px rgba(0, 0, 0, 0.1)
+			background-color: $backgroundColor-notino-white
+			margin-bottom: 24px
+			> .ant-collapse-header
+				height: 72px
+				padding-left: 24px
+				padding-right: 24px
+				box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.06), 0px 4px 6px -1px rgba(0, 0, 0, 0.1)
+			> .ant-collapse-content
+				background-color: none
+				.ant-collapse-content-box
+					padding: 16px
+		&.panel-category
+			margin-bottom: 24px
+			> .ant-collapse-header
+				height: 67px
+				padding-left: 16px
+				padding-right: 16px
+				box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)
+			> .ant-collapse-content
+				background-color: none
+				.ant-collapse-content-box
+					padding: 0

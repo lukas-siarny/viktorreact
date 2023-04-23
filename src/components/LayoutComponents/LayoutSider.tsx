@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useEffect, useState } from 'react'
-import { Layout, Menu, Dropdown, Row, MenuProps } from 'antd'
+import { Layout, Menu, Dropdown, Row, MenuProps, Divider } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -241,25 +241,11 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							id: PAGE.BILLING_INFO
 						},
 						{
-							key: PAGE.INDUSTRIES_AND_SERVICES,
-							label: t('loc:Odvetvia a služby'),
-							onClick: () => navigate(getPath(t('paths:industries-and-services'))),
-							icon: <IndustiresIcon />,
-							id: PAGE.INDUSTRIES_AND_SERVICES
-						},
-						{
 							key: PAGE.SERVICES_SETTINGS,
 							label: t('loc:Nastavenie služieb'),
 							onClick: () => navigate(getPath(t('paths:services-settings'))),
 							icon: <ServiceIcon className={'text-black'} />,
 							id: PAGE.SERVICES_SETTINGS
-						},
-						{
-							key: PAGE.CUSTOMERS,
-							label: t('loc:Zákazníci'),
-							onClick: () => navigate(getPath(t('paths:customers'))),
-							icon: <CustomerIcon className={'text-black'} />,
-							id: PAGE.CUSTOMERS
 						},
 						{
 							key: PAGE.EMPLOYEES,
@@ -269,18 +255,32 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							id: PAGE.EMPLOYEES
 						},
 						{
-							key: PAGE.CALENDAR,
-							label: t('loc:Kalendár'),
-							onClick: () => navigate(getPath(t('paths:calendar'))),
-							icon: <CalendarIcon />,
-							id: PAGE.CALENDAR
-						},
-						{
 							key: PAGE.SALON_SETTINGS,
 							label: t('loc:Nastavenia rezervácií'),
 							onClick: () => navigate(getPath(t('paths:reservations-settings'))),
 							icon: <SettingIcon />,
 							id: PAGE.SALON_SETTINGS
+						},
+						{
+							key: PAGE.INDUSTRIES_AND_SERVICES,
+							label: t('loc:Odvetvia a služby'),
+							onClick: () => navigate(getPath(t('paths:industries-and-services'))),
+							icon: <IndustiresIcon />,
+							id: PAGE.INDUSTRIES_AND_SERVICES
+						},
+						{
+							key: PAGE.CUSTOMERS,
+							label: t('loc:Zákazníci'),
+							onClick: () => navigate(getPath(t('paths:customers'))),
+							icon: <CustomerIcon className={'text-black'} />,
+							id: PAGE.CUSTOMERS
+						},
+						{
+							key: PAGE.CALENDAR,
+							label: t('loc:Kalendár'),
+							onClick: () => navigate(getPath(t('paths:calendar'))),
+							icon: <CalendarIcon />,
+							id: PAGE.CALENDAR
 						},
 						{
 							key: PAGE.RESERVATIONS,
@@ -446,8 +446,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 					className='px-2 flex flex-col flex-grow noti-sider-menu'
 					style={{ height: `calc(100% - ${LOGO_HEIGHT}px` }}
 					inlineIndent={8}
-					selectedKeys={[page as string]}
 					items={getMenuItems()}
+					selectedKeys={[page as string]}
 					getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}
 				/>
 			</div>

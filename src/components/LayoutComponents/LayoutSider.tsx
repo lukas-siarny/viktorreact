@@ -425,7 +425,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 	useEffect(() => {
 		wasSiderRendered.current = true
 	}, [])
-	console.log('getMenuItems()', getMenuItems())
+
 	return (
 		<Sider
 			className={cx('bg-white shadow-md z-50 main-layout-sider', { 'account-dropdown-opened': isDropdownOpen })}

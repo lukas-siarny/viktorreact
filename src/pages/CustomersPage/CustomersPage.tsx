@@ -174,8 +174,8 @@ const CustomersPage = (props: SalonSubPageProps) => {
 			<ImportForm
 				setRequestStatus={setRequestStatus}
 				requestStatus={uploadStatus}
-				label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv' })}
-				accept={'.csv'}
+				label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })}
+				accept={'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv'}
 				title={t('loc:Importovať zákazníkov')}
 				visible={customersImportVisible}
 				setVisible={setCustomersImportVisible}

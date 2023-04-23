@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useEffect, useState } from 'react'
-import { Layout, Menu, Dropdown, Row, MenuProps, Divider } from 'antd'
+import { Layout, Menu, Dropdown, Row, MenuProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -64,6 +64,7 @@ const LOGO_HEIGHT = 72
 
 const MENU_ITEMS_ORDER = [
 	PAGE.HOME, // first item for Notino and Salon view
+	'divider-1',
 	// Notino view
 	PAGE.USERS,
 	PAGE.CATEGORIES,
@@ -80,12 +81,13 @@ const MENU_ITEMS_ORDER = [
 	PAGE.BILLING_INFO,
 	PAGE.INDUSTRIES_AND_SERVICES,
 	PAGE.SERVICES_SETTINGS,
-	PAGE.CUSTOMERS,
 	PAGE.EMPLOYEES,
-	PAGE.SMS_CREDIT,
-	PAGE.CALENDAR,
 	PAGE.SALON_SETTINGS,
-	PAGE.RESERVATIONS
+	PAGE.SMS_CREDIT,
+	'divider-2',
+	PAGE.CUSTOMERS,
+	PAGE.RESERVATIONS,
+	PAGE.CALENDAR
 ]
 
 const LayoutSider = (props: LayoutSiderProps) => {
@@ -234,6 +236,11 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							id: PAGE.SALONS
 						},
 						{
+							type: 'divider',
+							key: 'divider-1',
+							className: 'my-1 border-gray-200'
+						},
+						{
 							key: PAGE.BILLING_INFO,
 							label: t('loc:Fakturačné údaje'),
 							onClick: () => navigate(getPath(t('paths:billing-info'))),
@@ -269,6 +276,11 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							id: PAGE.INDUSTRIES_AND_SERVICES
 						},
 						{
+							type: 'divider',
+							key: 'divider-2',
+							className: 'my-1 border-gray-200'
+						},
+						{
 							key: PAGE.CUSTOMERS,
 							label: t('loc:Zákazníci'),
 							onClick: () => navigate(getPath(t('paths:customers'))),
@@ -276,18 +288,18 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							id: PAGE.CUSTOMERS
 						},
 						{
-							key: PAGE.CALENDAR,
-							label: t('loc:Kalendár'),
-							onClick: () => navigate(getPath(t('paths:calendar'))),
-							icon: <CalendarIcon />,
-							id: PAGE.CALENDAR
-						},
-						{
 							key: PAGE.RESERVATIONS,
 							label: t('loc:Prehľad rezervácií {{ reservationsCount }}', { reservationsCount: count }),
 							onClick: () => navigate(getPath(t('paths:reservations'))),
 							icon: <ReservationsIcon />,
 							id: PAGE.RESERVATIONS
+						},
+						{
+							key: PAGE.CALENDAR,
+							label: t('loc:Plánovací kalendár'),
+							onClick: () => navigate(getPath(t('paths:calendar'))),
+							icon: <CalendarIcon />,
+							id: PAGE.CALENDAR
 						}
 					)
 				}
@@ -335,7 +347,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			{
 				type: 'divider',
 				key: 'divider1',
-				className: 'my-1'
+				className: 'my-1 border-gray-200'
 			},
 			{
 				key: 'version',
@@ -413,7 +425,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 	useEffect(() => {
 		wasSiderRendered.current = true
 	}, [])
-
+	console.log('getMenuItems()', getMenuItems())
 	return (
 		<Sider
 			className={cx('bg-white shadow-md z-50 main-layout-sider', { 'account-dropdown-opened': isDropdownOpen })}

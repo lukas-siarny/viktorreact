@@ -5,14 +5,7 @@ export default defineConfig({
   scrollBehavior: 'center',
   viewportWidth: 1920,
   viewportHeight: 1080,
-  retries: {
-    // Configure retry attempts for `cypress run`
-    // Default is 0
-    runMode: 2,
-    // Configure retry attempts for `cypress open`
-    // Default is 0
-    openMode: 2
-  },
+  retries: 2,
   e2e: {
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
@@ -29,6 +22,6 @@ export default defineConfig({
 	},
 	experimentalRunAllSpecs: true,
 	baseUrl: 'http://localhost:80',
-	defaultCommandTimeout: 4000
+	defaultCommandTimeout: 6000
   },
 })

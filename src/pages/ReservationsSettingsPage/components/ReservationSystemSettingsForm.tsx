@@ -23,7 +23,7 @@ import RemainingSmsCredit from '../../../components/Dashboards/RemainingSmsCredi
 import { IDataUploadForm, IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
-import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, REQUEST_STATUS } from '../../../utils/enums'
+import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, REQUEST_STATUS, TEMPLATE_OPTIONS } from '../../../utils/enums'
 import { formFieldID, optionRenderNotiPinkCheckbox, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
@@ -237,24 +237,6 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			setServicesDataTree(treeData)
 		}
 	}, [groupedServicesByCategory, groupedServicesByCategoryLoading, dispatch, disabled])
-
-	const templatesOptions = useMemo(
-		() => [
-			{
-				id: 1,
-				value: '.csv',
-				label: t('loc:Stiahnuť šablónu {{ template }}', { template: '.csv' }),
-				fileName: 'import_of_clients_template.csv'
-			},
-			{
-				id: 2,
-				value: '.xlsx',
-				label: t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' }),
-				fileName: 'import_of_clients_template.xlsx'
-			}
-		],
-		[t]
-	)
 
 	const handleSubmitImport = async (values: IDataUploadForm) => {
 		if (!uploadModal.uploadType) {
@@ -509,8 +491,8 @@ const ReservationSystemSettingsForm = (props: Props) => {
 										placeholder={t('loc:Vyberte šablónu na stiahnutie')}
 										getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
 									>
-										{templatesOptions?.map((option) => (
-											<Option value={option.value} key={option.id}>
+										{TEMPLATE_OPTIONS().map((option) => (
+											<Option value={option.value} key={option.value}>
 												<a className={'block'} href={`${process.env.PUBLIC_URL}/templates/${option.fileName}`} download={option.fileName}>
 													{option.label}
 												</a>

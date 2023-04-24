@@ -15,7 +15,7 @@ import { RootState } from '../../../reducers'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { CHANGE_DEBOUNCE_TIME, CREATE_BUTTON_ID, ENUMERATIONS_KEYS, FIELD_MODE, FORM } from '../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, CREATE_BUTTON_ID, ENUMERATIONS_KEYS, FIELD_MODE, FORM, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import { checkFiltersSize, checkFiltersSizeWithoutSearch, formFieldID, validationString } from '../../../utils/helper'
 
 // atoms
@@ -32,7 +32,7 @@ export interface ISupportContactsFilter {
 
 type Props = InjectedFormProps<ISupportContactsFilter, ComponentProps> & ComponentProps
 
-const fixLength100 = validationString(100)
+const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
 // NOTE: it is possible to filter contacts by countryCode but since we can have only one concat per country it dosen't make sense
 const SupportContactsFilter = (props: Props) => {
@@ -62,7 +62,7 @@ const SupportContactsFilter = (props: Props) => {
 			name='search'
 			fieldMode={FIELD_MODE.FILTER}
 			search
-			validate={fixLength100}
+			validate={fixLength255}
 			disabled={isFilterDisabled}
 		/>
 	)

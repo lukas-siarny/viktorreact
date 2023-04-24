@@ -757,9 +757,9 @@ export const isValidDateRange = (from: string, to: string) => {
 	return dateTo.diff(dateFrom) > 0 // 'from' must be smaller than 'to'
 }
 
-export const checkFiltersSizeWithoutSearch = (formValues: any) => size(filter(formValues, (value, key) => (!isNil(value) || !isEmpty(value)) && key !== 'search'))
+export const checkFiltersSizeWithoutSearch = (formValues: any) => size(filter(formValues, (value, key) => !isNil(value) && !isEmpty(value) && key !== 'search'))
 
-export const checkFiltersSize = (formValues: any) => size(filter(formValues, (value) => !isNil(value) || !isEmpty(value)))
+export const checkFiltersSize = (formValues: any) => size(filter(formValues, (value) => !isNil(value) && !isEmpty(value)))
 
 /**
  * add default language to the first position

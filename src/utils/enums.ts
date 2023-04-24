@@ -288,7 +288,7 @@ export enum SALONS_TAB_KEYS {
 	MISTAKES = 'mistakes'
 }
 
-export enum DASHBOARD_TASB_KEYS {
+export enum DASHBOARD_TAB_KEYS {
 	SALONS_STATE = 'SALONS_STATE',
 	RESERVATION_SYSTEM = 'RESERVATION_SYSTEM'
 }
@@ -871,6 +871,19 @@ export const EVERY_REPEAT_OPTIONS = () => [
 	{
 		key: EVERY_REPEAT.TWO_WEEKS,
 		label: i18next.t('loc:Druhý týždeň')
+	}
+]
+
+export const TEMPLATE_OPTIONS = () => [
+	{
+		value: '.csv',
+		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.csv' }),
+		fileName: 'import_of_clients_template.csv'
+	},
+	{
+		value: '.xlsx',
+		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' }),
+		fileName: 'import_of_clients_template.xlsx'
 	}
 ]
 

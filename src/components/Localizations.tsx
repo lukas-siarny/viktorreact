@@ -10,13 +10,13 @@ import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16
 
 // utils
 import { validationString } from '../utils/helper'
-import { LOCALIZATIONS, LANGUAGE } from '../utils/enums'
+import { LOCALIZATIONS, LANGUAGE, VALIDATION_MAX_LENGTH } from '../utils/enums'
 import { LOCALES } from './LanguagePicker'
 
 // atoms
 import InputField from '../atoms/InputField'
 
-const fixLength255 = validationString(255)
+const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 const horizontalLabelStyle = { minWidth: 25 }
 const inputFieldStyle = { paddingBottom: 4 }
 

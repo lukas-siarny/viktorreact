@@ -20,7 +20,7 @@ import { CALENDAR_EVENT_TYPE, DEFAULT_TIME_FORMAT, ENUMERATIONS_KEYS, FORM, PERM
 import { EmployeeService, ICalendarEmployeesPayload, ICalendarReservationForm, ICustomerForm, ServiceType } from '../../../../types/interfaces'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon-modal.svg'
 import { ReactComponent as ServiceIcon } from '../../../../assets/icons/services-24-icon.svg'
 import { ReactComponent as CustomerIcon } from '../../../../assets/icons/customer-24-icon.svg'
 import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-16-current-color.svg'

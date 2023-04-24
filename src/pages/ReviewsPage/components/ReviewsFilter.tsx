@@ -23,15 +23,13 @@ import { RootState } from '../../../reducers'
 // assets
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 
-type ComponentProps = {}
+// validate
+import validateReviewsFilterForm from './validateReviewsFilterForm'
 
-export interface IReviewsFilter {
-	search?: string
-	verificationStatus?: REVIEW_VERIFICATION_STATUS
-	salonCountryCode?: string
-	toxicityScoreFrom?: number
-	toxicityScoreTo?: number
-}
+// types
+import { IReviewsFilter } from '../../../types/interfaces'
+
+type ComponentProps = {}
 
 type Props = InjectedFormProps<IReviewsFilter, ComponentProps> & ComponentProps
 
@@ -120,7 +118,7 @@ const ReviewsFilter = (props: Props) => {
 	)
 }
 
-const form = reduxForm({
+const form = reduxForm<IReviewsFilter, ComponentProps>({
 	form: FORM.REVIEWS_FILTER,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
@@ -129,7 +127,8 @@ const form = reduxForm({
 			submit()
 		}
 	}, CHANGE_DEBOUNCE_TIME),
-	destroyOnUnmount: true
+	destroyOnUnmount: true,
+	validate: validateReviewsFilterForm
 })(ReviewsFilter)
 
 export default form

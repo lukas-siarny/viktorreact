@@ -105,10 +105,18 @@ const ReviewsFilter = (props: Props) => {
 					<Col span={8}>
 						<Row gutter={ROW_GUTTER_X_DEFAULT}>
 							<Col span={12}>
-								<Field component={InputNumberField} name={'toxicityScoreFrom'} placeholder={t('loc:Toxicita od')} size={'large'} min={1} max={100} />
+								<Field
+									component={InputNumberField}
+									name={'toxicityScoreFrom'}
+									placeholder={t('loc:Toxicita od')}
+									size={'large'}
+									min={0}
+									max={100}
+									className={'reviews-toxicity-score-input'}
+								/>
 							</Col>
 							<Col span={12}>
-								<Field component={InputNumberField} name={'toxicityScoreTo'} placeholder={t('loc:Toxicita do')} size={'large'} min={1} max={100} />
+								<Field component={InputNumberField} name={'toxicityScoreTo'} placeholder={t('loc:Toxicita do')} size={'large'} min={0} max={100} />
 							</Col>
 						</Row>
 					</Col>

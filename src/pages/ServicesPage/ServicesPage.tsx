@@ -181,7 +181,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			<div className={'flex gap-4 mb-12'}>
 				<div className={'p-6 rounded shadow-lg bg-notino-white w-1/3'}>
 					<h3 className={'text-notino-black mb-0 text-3xl block font-bold mb-1'}>{'47'}</h3>
-					<div className={'text-notino-black text-2xl font-normal min-h-16 max-w-76'}>{t('loc:služieb')}</div>
+					<div className={'text-notino-black text-2xl font-normal min-h-16 max-w-64'}>{t('loc:služieb')}</div>
 					<Divider className={'my-4'} />
 					<div className={'flex gap-2'}>
 						<InfoNotinoIcon className={'text-notino-pink w-5 h-5 shrink-0'} />
@@ -193,7 +193,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 						{'28'}
 						<span className={'text-notino-grayMedium'}>/{'47'}</span>
 					</h3>
-					<div className={'text-notino-black text-2xl font-normal min-h-16 max-w-76'}>{t('loc:služieb viditeľných v cenníku')}</div>
+					<div className={'text-notino-black text-2xl font-normal min-h-16 max-w-64'}>{t('loc:služieb viditeľných v cenníku')}</div>
 					<Divider className={'my-4'} />
 					<div className={'flex gap-2'}>
 						<InfoNotinoIcon className={'text-notino-pink w-5 h-5 shrink-0'} />
@@ -219,7 +219,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 						{'28'}
 						<span className={'text-notino-grayMedium'}>/{'47'}</span>
 					</h3>
-					<div className={'text-notino-black text-2xl font-normal min-h-16 max-w-76'}>{t('loc:služieb dostupných na online rezervácie')}</div>
+					<div className={'text-notino-black text-2xl font-normal min-h-16 max-w-64'}>{t('loc:služieb dostupných na online rezervácie')}</div>
 					<Divider className={'my-4'} />
 					<div className={'flex gap-2'}>
 						<InfoNotinoIcon className={'text-notino-pink w-5 h-5 shrink-0'} />

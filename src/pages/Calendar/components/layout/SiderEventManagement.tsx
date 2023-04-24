@@ -172,9 +172,9 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 
 					if (employeeOffset) {
 						const table = document.querySelector('.fc-timegrid > .fc-scrollgrid')
-						const theadScrollers = table?.querySelectorAll('thead .fc-scroller')
-						const tbodyScrollers = table?.querySelectorAll('tbody .fc-scroller')
-						const tfootScrollers = table?.querySelectorAll('tfoot .fc-scroller')
+						const theadScrollers = table?.querySelectorAll('.fc-scrollgrid-section-header .fc-scroller')
+						const tbodyScrollers = table?.querySelectorAll('.fc-scrollgrid-section-body .fc-scroller')
+						const tfootScrollers = table?.querySelectorAll('.fc-scrollgrid-section-footer .fc-scroller')
 
 						if (theadScrollers?.length && tbodyScrollers?.length && tfootScrollers?.length) {
 							const headerSroller = theadScrollers[theadScrollers.length - 1]

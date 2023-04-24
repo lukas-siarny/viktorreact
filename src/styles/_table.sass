@@ -219,6 +219,27 @@
 		margin-top: 16px
 		padding: 0
 
+	&.noti-services-settings-table
+		.ant-table
+			table
+				border-collapse: collapse
+				tbody
+					tr.ant-table-row
+						height: 36px
+						td:first-child
+							border-radius: none
+			.ant-table-thead > tr > th
+				height: 40px
+				padding: 12px
+				font-size: 14px
+				font-weight: 700
+				color: $textColor-notino-black
+				background: $backgroundColor-notino-white !important
+				&.noti-light-pink-col
+					background-color: rgba($backgroundColor-notino-pink, 0.03) !important
+				&.noti-medium-pink-col
+					background-color: rgba($backgroundColor-notino-pink, 0.08) !important
+
 .ant-table-wrapper .ant-table:not(.ant-table-bordered) .ant-table-tbody >tr:last-child>td
 	border: none
 

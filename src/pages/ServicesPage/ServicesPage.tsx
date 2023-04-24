@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Row, Spin, Button, Tooltip, Collapse } from 'antd'
+import { Row, Spin, Button, Tooltip, Collapse, Divider } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { compose } from 'redux'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 // components
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import { AvatarGroup } from '../../components/AvatarComponents'
+import Alert from '../../components/Dashboards/Alert'
 
 // utils
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, STRINGS } from '../../utils/enums'
@@ -25,13 +26,13 @@ import { getCategories } from '../../reducers/categories/categoriesActions'
 import { Columns, IBreadcrumbs, IUserAvatar, SalonSubPageProps } from '../../types/interfaces'
 
 // assets
-import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
 import { ReactComponent as InfoIcon16 } from '../../assets/icons/info-icon-16.svg'
 import { ReactComponent as DragIcon } from '../../assets/icons/drag-icon.svg'
 import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.svg'
+import { ReactComponent as ChevronPink } from '../../assets/icons/chevron-pink.svg'
+import { ReactComponent as InfoNotinoIcon } from '../../assets/icons/info-notino-icon.svg'
 
-// hooks
-import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+import SwitchField from '../../atoms/SwitchField'
 
 const { Panel } = Collapse
 
@@ -60,10 +61,10 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	const [activeKeys, setActiveKeys] = useState<ActiveKeys>({ industries: [], categories: [] })
 
 	const servicesCount = services?.tableData?.length || 0
+	const enabledRS = true
 
 	useEffect(() => {
 		dispatch(getCategories())
-		// test()
 	}, [dispatch])
 
 	useEffect(() => {
@@ -76,26 +77,16 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			)
 
 			if (data) {
-				const panelKeys: ActiveKeys = data.groupedServicesByCategory.reduce(
-					(keys, industry) => {
-						if (industry.category) {
-							return {
-								industries: [...keys.industries, industry.category.id],
-								categories: [
-									...keys.categories,
-									...industry.category.children.reduce((categoriesKeys, category) => {
-										if (category.category) {
-											return [...categoriesKeys, category.category.id]
-										}
-										return categoriesKeys
-									}, [] as string[])
-								]
-							}
+				const panelKeys: ActiveKeys = { industries: [], categories: [] }
+				const firstIndustry = data.groupedServicesByCategory[0].category
+				if (firstIndustry) {
+					panelKeys.industries.push(firstIndustry.id)
+					firstIndustry?.children.forEach((category) => {
+						if (category.category) {
+							panelKeys.categories.push(category.category.id)
 						}
-						return keys
-					},
-					{ industries: [], categories: [] } as ActiveKeys
-				)
+					})
+				}
 				setActiveKeys(panelKeys)
 			}
 		})()
@@ -113,6 +104,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			dataIndex: ['service', 'rangePriceAndDurationData'],
 			key: 'duration',
 			ellipsis: true,
+			className: 'noti-light-pink-col',
 			render: (value) => {
 				return getServiceRange(value?.durationFrom, value?.durationTo, t('loc:min')) || '-'
 			}
@@ -122,6 +114,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			dataIndex: ['service', 'rangePriceAndDurationData'],
 			key: 'price',
 			ellipsis: true,
+			className: 'noti-light-pink-col',
 			render: (value) => {
 				const symbol = '' // TODO: symbol
 				return getServiceRange(decodePrice(value?.priceFrom), decodePrice(value?.priceTo), symbol) || '-'
@@ -131,6 +124,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			title: t('loc:Zamestnanec'),
 			dataIndex: ['service', 'employees'],
 			key: 'employees',
+			className: 'noti-medium-pink-col',
 			render: (value: IUserAvatar[]) =>
 				value ? (
 					<div className={'w-full h-full flex items-center'}>
@@ -142,6 +136,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			title: t('loc:Online rezervácie'),
 			dataIndex: 'createdAt',
 			key: 'createdAt',
+			className: 'noti-medium-pink-col',
 			ellipsis: true,
 			render: () => '-'
 		},
@@ -167,6 +162,85 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
+			<Alert
+				className='mb-8'
+				title={
+					<span className={'mb-2 text-notino-grayDarker block text-base'}>
+						{t('loc:Rezervačný systém je')} <strong className={'text-notino-black'}>{enabledRS ? t('loc:zapnutý') : t('loc:vypnut=y')}</strong>
+					</span>
+				}
+				subTitle={
+					<Link to={'s'} className={'inline-flex gap-1 items-center text-notino-pink text-sm'}>
+						{t('loc:Viac info  o rezervačnom systéme')} <ChevronPink className={'text-notino-pink'} />
+					</Link>
+				}
+				message={''}
+				icon={<InfoNotinoIcon className={'text-notino-pink'} />}
+				actionItem={<SwitchField input={{ value: true, onChange: (checked: boolean) => console.log(checked) } as any} meta={{} as any} />}
+			/>
+			<div className={'flex gap-4 mb-12'}>
+				<div className={'p-6 rounded shadow-lg bg-notino-white w-1/3'}>
+					<h3 className={'text-notino-black mb-0 text-3xl block font-bold mb-1'}>{'47'}</h3>
+					<div className={'text-notino-black text-2xl font-normal min-h-16 max-w-76'}>{t('loc:služieb')}</div>
+					<Divider className={'my-4'} />
+					<div className={'flex gap-2'}>
+						<InfoNotinoIcon className={'text-notino-pink w-5 h-5 shrink-0'} />
+						<p className={'m-0 text-sm text-normal text-notino-grayDarker'}>{t('loc:Celkový počet služieb, ktoré ponúkate')}</p>
+					</div>
+				</div>
+				<div className={'p-6 rounded shadow-lg w-1/3'} style={{ background: 'linear-gradient(0deg, rgba(220, 0, 105, 0.03), rgba(220, 0, 105, 0.03)), #FFFFFF' }}>
+					<h3 className={'text-notino-black mb-0 text-3xl block font-bold mb-1'}>
+						{'28'}
+						<span className={'text-notino-grayMedium'}>/{'47'}</span>
+					</h3>
+					<div className={'text-notino-black text-2xl font-normal min-h-16 max-w-76'}>{t('loc:služieb viditeľných v cenníku')}</div>
+					<Divider className={'my-4'} />
+					<div className={'flex gap-2'}>
+						<InfoNotinoIcon className={'text-notino-pink w-5 h-5 shrink-0'} />
+						<div className={'flex-1'}>
+							<p className={'mb-2 text-sm text-normal text-notino-grayDarker'}>{t('loc:Pre pridanie služby do cenníka')}:</p>
+							<ul className={'pl-4 text-notino-pink mb-0'}>
+								<li className={'mb-2'}>
+									<span className={'text-notino-grayDarker inline-flex gap-1 flex-wrap'}>
+										{t('loc:Vyplňte')} <strong>{t('loc:dĺžku trvania')}</strong>
+									</span>
+								</li>
+								<li>
+									<span className={'text-notino-grayDarker inline-flex gap-1 flex-wrap'}>
+										{t('loc:Vyplňte')} <strong>{t('loc:cenu služby')}</strong>
+									</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div className={'p-6 rounded shadow-lg w-1/3'} style={{ background: 'linear-gradient(0deg, rgba(220, 0, 105, 0.08), rgba(220, 0, 105, 0.08)), #FFFFFF' }}>
+					<h3 className={'text-notino-black mb-0 text-3xl block font-bold mb-1'}>
+						{'28'}
+						<span className={'text-notino-grayMedium'}>/{'47'}</span>
+					</h3>
+					<div className={'text-notino-black text-2xl font-normal min-h-16 max-w-76'}>{t('loc:služieb dostupných na online rezervácie')}</div>
+					<Divider className={'my-4'} />
+					<div className={'flex gap-2'}>
+						<InfoNotinoIcon className={'text-notino-pink w-5 h-5 shrink-0'} />
+						<div className={'flex-1'}>
+							<p className={'mb-2 text-sm text-normal text-notino-grayDarker'}>{t('loc:Pre rezerváciu online')}:</p>
+							<ul className={'pl-4 text-notino-pink mb-0'}>
+								<li className={'mb-2'}>
+									<span className={'text-notino-grayDarker inline-flex gap-1 flex-wrap'}>
+										<strong>{t('loc:Priraďte')}</strong> {t('loc:službe aspoň')} <strong>{t('loc:1 kolegu')}</strong>
+									</span>
+								</li>
+								<li>
+									<span className={'text-notino-grayDarker inline-flex gap-1 flex-wrap'}>
+										<strong>{t('loc:Zapnite si')}</strong> {t('loc:online rezerváciu')}
+									</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div className={'flex items-center justify-between gap-4 mb-4'}>
 				<h2 className={'text-2xl mb-0'}>{`${t('loc:Zoznam služieb')} (${servicesCount})`}</h2>
 				{reorderView ? (
@@ -220,7 +294,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 											return category ? (
 												<Panel key={category.id} className={'panel panel-category'} header={<h4>{category.name}</h4>} forceRender>
 													<CustomTable
-														className='table-fixed'
+														className='table-fixed noti-services-settings-table'
 														columns={columns}
 														dataSource={category.children}
 														scroll={{ x: 800 }}

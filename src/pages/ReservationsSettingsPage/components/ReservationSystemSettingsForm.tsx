@@ -481,24 +481,29 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							extraContent={
 								<>
 									<Divider className={'mt-1 mb-3'} />
-									<p className={'text-notino-grayDark'}>{t('loc:Vzorové šablóny súborov')}</p>
-									<Select
-										style={{ zIndex: 999 }}
-										className={'noti-select-input w-full mb-4'}
-										size={'large'}
-										onChange={() => setTemplateValue(null)}
-										value={templateValue}
-										placeholder={t('loc:Vyberte šablónu na stiahnutie')}
-										getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
-									>
-										{TEMPLATE_OPTIONS().map((option) => (
-											<Option value={option.value} key={option.value}>
-												<a className={'block'} href={`${process.env.PUBLIC_URL}/templates/${option.fileName}`} download={option.fileName}>
-													{option.label}
-												</a>
-											</Option>
-										))}
-									</Select>
+									<div className={'ant-form-item'}>
+										<label htmlFor={'noti-customer-template-select'} className={'block mb-2'}>
+											{t('loc:Vzorové šablóny súborov')}
+										</label>
+										<Select
+											id={'noti-customer-template-select'}
+											style={{ zIndex: 999 }}
+											className={'noti-select-input w-full mb-4'}
+											size={'large'}
+											onChange={() => setTemplateValue(null)}
+											value={templateValue}
+											placeholder={t('loc:Vyberte šablónu na stiahnutie')}
+											getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+										>
+											{TEMPLATE_OPTIONS().map((option) => (
+												<Option value={option.value} key={option.value}>
+													<a className={'block'} href={`${process.env.PUBLIC_URL}/templates/${option.fileName}`} download={option.fileName}>
+														{option.label}
+													</a>
+												</Option>
+											))}
+										</Select>
+									</div>
 								</>
 							}
 							setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}

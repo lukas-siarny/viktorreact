@@ -79,7 +79,7 @@ const SalonsReportModal: FC<Props> = (props) => {
 							<li>{t('loc:základné informácie')}</li>
 							<li>{t('loc:kontaktné údaje')}</li>
 							<li>{t('loc:stav salónu')}</li>
-							<li>{t('loc:informácie ohľadom rezervačného systému')}</li>
+							<li>{t('loc:informácie o rezervačnom systéme')}</li>
 							<li>{t('loc:informácie o ponúkaných službách')}</li>
 							<li>{t('loc:počet kolegov a klientov')}</li>
 						</ul>

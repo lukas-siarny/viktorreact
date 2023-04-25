@@ -203,7 +203,7 @@ const ReviewsPage = () => {
 				}
 			},
 			{
-				title: t('loc:Recenzovaný pracovník'),
+				title: t('loc:Recenzovaný kolega'),
 				dataIndex: 'calendarEvent',
 				key: 'calendarEvent',
 				ellipsis: true,

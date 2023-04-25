@@ -25,6 +25,9 @@ import { ReactComponent as FilterIcon } from '../../../assets/icons/filter.svg'
 // redux
 import { IEnumerationsCurrenciesPayload } from '../../../reducers/enumerations/enumerationActions'
 
+// validate
+import validateRechargeSmsCreditFilterForm from './validateRechargeSmsCreditFilterForm'
+
 const { Panel } = Collapse
 
 type ComponentProps = {
@@ -150,6 +153,7 @@ const RechargeSmsCreditFilter = (props: Props) => {
 												size={'large'}
 												min={0}
 												disabled={disabledFilter}
+												className={'input-auto-height'}
 											/>
 										</Col>
 										<Col span={12}>
@@ -196,7 +200,8 @@ const form = reduxForm({
 			submit()
 		}
 	}, CHANGE_DEBOUNCE_TIME),
-	destroyOnUnmount: true
+	destroyOnUnmount: true,
+	validate: validateRechargeSmsCreditFilterForm
 })(RechargeSmsCreditFilter)
 
 export default form

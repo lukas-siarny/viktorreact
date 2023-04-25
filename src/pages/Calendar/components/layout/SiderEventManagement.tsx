@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useMemo } from 'react'
+import React, { useEffect, useImperativeHandle, useMemo, useRef } from 'react'
 import Sider from 'antd/lib/layout/Sider'
 import { compact, map } from 'lodash'
 import cx from 'classnames'
@@ -14,7 +14,7 @@ import { ICalendarEmployeesPayload, ICalendarEventForm, /* ICalendarImportedRese
 import { RootState } from '../../../../reducers'
 
 // utils
-import { getAssignedUserLabel } from '../../../../utils/helper'
+import { getAssignedUserLabel, getDateTime } from '../../../../utils/helper'
 import {
 	CALENDAR_COMMON_SETTINGS,
 	CALENDAR_EVENT_TYPE,
@@ -26,7 +26,8 @@ import {
 	FORM,
 	STRINGS,
 	DEFAULT_DATE_INIT_FORMAT,
-	DEFAULT_TIME_FORMAT
+	DEFAULT_TIME_FORMAT,
+	CALENDAR_VIEW
 } from '../../../../utils/enums'
 import Permissions from '../../../../utils/Permissions'
 
@@ -66,6 +67,8 @@ type Props = {
 	setQuery: (newValues: IUseQueryParams) => void
 	employeesLoading: boolean
 	calendarEmployees: ICalendarEmployeesPayload
+	scrollToTime: (hour: number) => void
+	initOnDemand?: boolean
 }
 
 export type SiderEventManagementRefs = {
@@ -91,7 +94,9 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 		query,
 		setQuery,
 		employeesLoading,
-		calendarEmployees
+		calendarEmployees,
+		scrollToTime,
+		initOnDemand
 	} = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -145,13 +150,42 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 	const initUpdateEventForm = async () => {
 		try {
 			const { data } = await dispatch(getCalendarEventDetail(salonID, query.eventId as string))
-			// pouzijeme zamestnanca z calendarEvents, a
+			// pouzijeme zamestnanca z calendarEvents
 			const employee = employeesOptions.find((option) => option.value === data?.employee.id)
 
+			if (!data || !employee) {
+				return
+			}
+
 			// NOTE: event type v query parametroch musi sediet s event typom zobrazeneho detailu, inak sa zobrazi zly formular
-			if (!data || data.eventType !== query.sidebarView || !employee) {
+			if (data.id === query.eventId && data.eventType !== query.sidebarView) {
 				onCloseSider()
 				return
+			}
+
+			if (!initOnDemand) {
+				// Nascroluje na cas a zamestnanca (vyuziva sa v pripade, ze sa otvara detial po skopirovani URLcky)
+				scrollToTime(dayjs(getDateTime(data.start.date, data.start.time)).hour())
+				if (query.view === CALENDAR_VIEW.DAY) {
+					const employeeColumn = document.querySelector(`[data-resource-id="${data.employee.id}"]`)
+					const employeeOffset = (employeeColumn as HTMLElement)?.offsetLeft
+
+					if (employeeOffset) {
+						const table = document.querySelector('.fc-timegrid > .fc-scrollgrid')
+						const theadScrollers = table?.querySelectorAll('.fc-scrollgrid-section-header .fc-scroller')
+						const tbodyScrollers = table?.querySelectorAll('.fc-scrollgrid-section-body .fc-scroller')
+						const tfootScrollers = table?.querySelectorAll('.fc-scrollgrid-section-footer .fc-scroller')
+
+						if (theadScrollers?.length && tbodyScrollers?.length && tfootScrollers?.length) {
+							const headerSroller = theadScrollers[theadScrollers.length - 1]
+							const bodyScroller = tbodyScrollers[tbodyScrollers.length - 1]
+							const footerSroller = tfootScrollers[tfootScrollers.length - 1]
+							headerSroller.scrollLeft = employeeOffset
+							bodyScroller.scrollLeft = employeeOffset
+							footerSroller.scrollLeft = employeeOffset
+						}
+					}
+				}
 			}
 
 			const repeatOptions: Pick<ICalendarEventForm, 'recurring' | 'repeatOn' | 'every' | 'end'> = data.calendarBulkEvent?.repeatOptions

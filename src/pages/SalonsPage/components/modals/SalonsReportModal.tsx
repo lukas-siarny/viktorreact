@@ -9,7 +9,7 @@ import { formFieldID, optionRenderWithImage, showErrorNotification } from '../..
 import { ENUMERATIONS_KEYS, FORM, SUBMIT_BUTTON_ID, REQUEST_STATUS, STRINGS } from '../../../../utils/enums'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon-modal.svg'
 import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.svg'
 import { ReactComponent as FilesIcon } from '../../../../assets/icons/files-icon.svg'
 

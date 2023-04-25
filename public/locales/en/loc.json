@@ -450,7 +450,7 @@
   "Status": "Status",
   "Stav": "State",
   "Stav konta": "Available balance",
-  "Stav konta OD musí byť menší ako stav konta DO": "The available balance FROM must be less than the available balance TO",
+  "Stav konta OD musí byť menší alebo rovnaký ako stav konta DO": "The available balance FROM must be less than or equal to the available balance TO",
   "Stav recenzie": "Verification status",
   "Stav salónov": "State of salons",
   "Stavy": "States",

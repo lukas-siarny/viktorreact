@@ -63,7 +63,8 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 	const [modalConfig, setModalConfig] = useState<INoteModal>({ title: '', fieldPlaceholderText: '', onSubmit: undefined, visible: false })
 	const [approvalModalVisible, setApprovalModalVisible] = useState(false)
 	const [visibleNotinoUserModal, setVisibleNotinoUserModal] = useState(false)
-
+	const [visibleCouponModal, setVisibleCouponModal] = useState(false)
+	const hasVoucher = 'asdsdfASDsdf548asdadasd' // TODO: z BE tahat
 	const isFormPristine = useSelector(isPristine(FORM.SALON))
 
 	const isSubmittingData = submitting || isRemoving || isSendingConfRequest
@@ -128,6 +129,14 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 			console.error(error.message)
 		} finally {
 			setIsRemoving(false)
+		}
+	}
+
+	const deleteVoucher = () => {
+		try {
+			// TODO: zmazanie kuponu cez PATCH a poslanie hodnoty ako null
+		} catch (e) {
+			console.error(e)
 		}
 	}
 
@@ -629,6 +638,39 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 										disabled={isDeletedSalon || (isPendingPublication && !isNotinoUser)}
 									>
 										{STRINGS(t).addRecord(t('loc:poznámku'))}
+									</Button>
+								)}
+							</Row>
+						}
+						couponModalControlButtons={
+							<Row className={'flex justify-start w-full mt-4 gap-2'}>
+								{/* // TODO ked sa spravi BE naviazat na detail salonu a odpomienkovat */}
+								{hasVoucher ? (
+									<>
+										<div className='w-full'>
+											<h4>{t('loc:Číslo kupónu pre salón')}</h4>
+											<i className='block mb-2 text-base'>{hasVoucher}</i>
+										</div>
+										<Button
+											type={'primary'}
+											size={'middle'}
+											className={'noti-btn m-regular mt-2'}
+											onClick={() => setVisibleCouponModal(true)}
+											disabled={isDeletedSalon || (isPendingPublication && !isNotinoUser)}
+										>
+											{STRINGS(t).edit(t('loc:kupón'))}
+										</Button>
+										<DeleteButton className={'mt-2'} onConfirm={deleteVoucher} entityName={t('loc:kupón')} disabled={isDeletedSalon} />
+									</>
+								) : (
+									<Button
+										type={'primary'}
+										size={'middle'}
+										className={'noti-btn m-regular mt-2'}
+										onClick={() => setVisibleCouponModal(true)}
+										disabled={isDeletedSalon || (isPendingPublication && !isNotinoUser)}
+									>
+										{STRINGS(t).addRecord(t('loc:kupón'))}
 									</Button>
 								)}
 							</Row>

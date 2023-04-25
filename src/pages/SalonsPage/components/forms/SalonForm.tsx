@@ -56,6 +56,7 @@ import { ReactComponent as LocationIcon } from '../../../../assets/icons/locatio
 type ComponentProps = {
 	disabledForm?: boolean
 	noteModalControlButtons?: React.ReactNode
+	couponModalControlButtons?: React.ReactNode
 	notinoUserModalControlButtons?: React.ReactNode
 	deletedSalon?: boolean
 	loadBasicSalon?: (id: string) => void
@@ -107,7 +108,8 @@ const SalonForm: FC<Props> = (props) => {
 		showBasicSalonsSuggestions,
 		deletedSalon,
 		notinoUserModalControlButtons,
-		salonData
+		salonData,
+		couponModalControlButtons
 	} = props
 	const dispatch = useDispatch()
 	const languages = useSelector((state: RootState) => state.languages.languages)
@@ -173,6 +175,7 @@ const SalonForm: FC<Props> = (props) => {
 								)}
 							</Row>
 						</Row>
+						{couponModalControlButtons}
 						<Divider className={'mb-3 mt-3'} />
 						{showBasicSalonsSuggestions ? (
 							<Field

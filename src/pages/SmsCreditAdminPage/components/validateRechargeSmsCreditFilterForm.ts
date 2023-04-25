@@ -9,9 +9,9 @@ const validateRechargeSmsCreditFilterForm = (values?: IRechargeSmsCreditFilter) 
 	if (
 		!isNil(values?.walletAvailableBalanceFrom) &&
 		!isNil(values?.walletAvailableBalanceTo) &&
-		(values?.walletAvailableBalanceFrom || 0) > (values?.walletAvailableBalanceTo || 0)
+		(values?.walletAvailableBalanceFrom || 0) >= (values?.walletAvailableBalanceTo || 0)
 	) {
-		errors.walletAvailableBalanceFrom = i18next.t('loc:Stav konta OD musí byť menší alebo rovnaký ako stav konta DO')
+		errors.walletAvailableBalanceFrom = i18next.t('loc:Stav konta OD musí byť menší ako stav konta DO')
 		errors.walletAvailableBalanceTo = true as any
 	}
 

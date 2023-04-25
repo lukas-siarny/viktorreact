@@ -175,7 +175,6 @@ const SalonForm: FC<Props> = (props) => {
 								)}
 							</Row>
 						</Row>
-						{couponModalControlButtons}
 						<Divider className={'mb-3 mt-3'} />
 						{showBasicSalonsSuggestions ? (
 							<Field
@@ -413,6 +412,7 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 							accept={'image/jpeg,image/png,application/pdf'}
 						/>
+						{couponModalControlButtons}
 					</Col>
 				</Row>
 				<Row>

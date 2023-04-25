@@ -23,7 +23,7 @@ import { ISelectedSalonPayload, selectSalon } from '../../reducers/selectedSalon
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
-import { ILoadingAndFailure, INoteForm, INoteModal, INotinoUserForm, ISalonForm, SalonPageProps } from '../../types/interfaces'
+import { ILoadingAndFailure, INoteForm, INoteModal, INotinoUserForm, ISalonForm, IVoucherForm, SalonPageProps } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
@@ -37,6 +37,7 @@ import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
+import VoucherForm from './components/forms/VoucherForm'
 
 interface EditSalonPageProps extends SalonPageProps {
 	isNotinoUser: boolean
@@ -64,7 +65,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 	const [approvalModalVisible, setApprovalModalVisible] = useState(false)
 	const [visibleNotinoUserModal, setVisibleNotinoUserModal] = useState(false)
 	const [visibleCouponModal, setVisibleCouponModal] = useState(false)
-	const hasVoucher = 'asdsdfASDsdf548asdadasd' // TODO: z BE tahat
+	const hasVoucher = 'undefined' // TODO: z BE tahat
 	const isFormPristine = useSelector(isPristine(FORM.SALON))
 
 	const isSubmittingData = submitting || isRemoving || isSendingConfRequest
@@ -556,6 +557,19 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 		}
 	}
 
+	const onSubmitVoucher = async (values?: IVoucherForm) => {
+		try {
+			// fallback for allowClear true if user removed assigned user send null value
+			// TODO: napojit ked sa spravi BE
+			// await patchReq('/api/b2b/admin/salons/{salonID}/assigned-user', { salonID }, { assignedUserID: (values?.assignedUser?.key as string) || null })
+			setVisibleCouponModal(false)
+			await dispatch(selectSalon(salonID))
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		}
+	}
+
 	return (
 		<>
 			<div className='content-body'>
@@ -648,7 +662,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 								{hasVoucher ? (
 									<>
 										<div className='w-full'>
-											<h4>{t('loc:Číslo kupónu pre salón')}</h4>
+											<h4>{t('loc:Kód kupónu pre salón')}</h4>
 											<i className='block mb-2 text-base'>{hasVoucher}</i>
 										</div>
 										<Button
@@ -702,6 +716,9 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 				closeIcon={<CloseIcon />}
 			>
 				<NoteForm onSubmit={modalConfig.onSubmit} fieldPlaceholderText={modalConfig.fieldPlaceholderText} />
+			</Modal>
+			<Modal title={t('loc:Kupón pre salón')} open={visibleCouponModal} onCancel={() => setVisibleCouponModal(false)} footer={null} closeIcon={<CloseIcon />}>
+				<VoucherForm onSubmit={onSubmitVoucher} />
 			</Modal>
 			<Modal
 				title={t('loc:Priradiť Notino používateľa')}

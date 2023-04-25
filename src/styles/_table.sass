@@ -240,6 +240,7 @@
 				height: 40px
 				padding: 12px
 				font-size: 12px
+				line-height: 14px
 				font-weight: 700
 				color: $textColor-notino-black
 				background: $backgroundColor-notino-white !important
@@ -258,6 +259,29 @@
 					background-color: rgba($backgroundColor-notino-pink, 0.03) !important
 				&.noti-medium-pink-col
 					background-color: rgba($backgroundColor-notino-pink, 0.08) !important
+		&.noti-draggable-table
+			.ant-table
+				table
+					tbody
+						tr.ant-table-row td
+							&:first-child
+								padding-left: 4px
+								svg
+									color: $textColor-notino-black !important
+							&:nth-child(2)
+								padding-left: 4px
+				.ant-table-thead > tr > th
+					&:first-child
+						padding-left: 4px
+						svg
+							display: none !important
+					&:nth-child(2)
+						z-index: 3
+						overflow: visible
+						span
+							padding-left: 15px
+							transform: translateX(-36px)
+							width: calc(100% + 36px)
 
 .ant-table-wrapper .ant-table:not(.ant-table-bordered) .ant-table-tbody >tr:last-child>td
 	border: none

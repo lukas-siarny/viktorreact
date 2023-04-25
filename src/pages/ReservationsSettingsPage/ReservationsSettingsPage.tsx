@@ -25,7 +25,7 @@ import {
 	IBreadcrumbs,
 	IReservationsSettingsNotification,
 	IReservationSystemSettingsForm,
-	PathSettingsBody,
+	PatchSettingsBody,
 	SalonSubPageProps
 } from '../../types/interfaces'
 
@@ -39,7 +39,7 @@ type InitDisabledNotifications = {
 	[key in RS_NOTIFICATION]: IReservationsSettingsNotification
 }
 
-type PatchDisabledNotifications = NonNullable<NonNullable<PathSettingsBody['settings']>['disabledNotifications']>
+type PatchDisabledNotifications = NonNullable<NonNullable<PatchSettingsBody['settings']>['disabledNotifications']>
 
 const transformNotificationsChannelForRequest = (
 	channel: {
@@ -262,7 +262,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 			return [...result, ...items]
 		}, [] as PatchDisabledNotifications)
 
-		const reqData: PathSettingsBody = {
+		const reqData: PatchSettingsBody = {
 			settings: {
 				enabledCustomerReservationNotes: values.enabledCustomerReservationNotes,
 				enabledReservations: values.enabledReservations,

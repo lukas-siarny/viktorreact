@@ -98,7 +98,7 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 								selectedCategoryIDs={selectedCategoryIDs}
 								onSubmit={handleSubmit}
 								disabledForm={categories.isLoading || services.isLoading || isCategoriesFromSubmitting}
-								onShowEventsListPopover={(industryID) => {
+								onClickExtraLabel={(industryID) => {
 									navigate(parentPath + t('paths:industries-and-services/{{industryID}}', { industryID }))
 								}}
 							/>

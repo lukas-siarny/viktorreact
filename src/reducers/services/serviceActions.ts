@@ -29,17 +29,40 @@ interface IGetServiceRootCategory {
 	payload: IServiceRootCategoryPayload
 }
 
-interface ServicesTableData {
+export interface IServicesListService {
 	key: string
+	id: string
 	serviceID: string
 	name: string
 	employees: IUserAvatar[]
 	price: string
 	duration: string
-	categoryFirst: string
-	categorySecond: string
-	isComplete: boolean
-	createdAt: string
+	isAvailableForOnlineReservations: boolean
+	isVisibleInPricelist: boolean
+	automaticApproval: boolean
+}
+
+export type IServicesListCategoryItem<T> = {
+	servicesCount: number
+	servicesAvailableForOnlineReservationsCount: number
+	servicesVisibleInPricelistCount: number
+	data: T[]
+}
+
+export interface IServicesListCategory {
+	id: string
+	name: string
+	services: IServicesListCategoryItem<IServicesListService>
+}
+
+export interface IServicesListInudstry {
+	id: string
+	name: string
+	categories: IServicesListCategoryItem<IServicesListCategory>
+}
+
+export interface ServicesListData {
+	industries: IServicesListCategoryItem<IServicesListInudstry>
 }
 
 export interface IGetServicesQueryParams {
@@ -53,7 +76,7 @@ export interface IGetServiceRootCategoryQueryParams {
 }
 
 export interface IServicesPayload extends ISearchableWithoutPagination<Paths.GetApiB2BAdminServices.Responses.$200> {
-	tableData: ServicesTableData[] | undefined
+	listData: ServicesListData
 	options: ISelectOptionItem[]
 	categoriesOptions: ISelectOptionItem[]
 }
@@ -71,46 +94,128 @@ export const getServices =
 			dispatch({ type: SERVICES.SERVICES_LOAD_START })
 			const { data } = await getReq('/api/b2b/admin/services/', queryParams)
 			const categories = data.groupedServicesByCategory
-			const tableData: ServicesTableData[] = []
-			categories?.forEach((parentCategory) => {
-				parentCategory?.category?.children?.forEach((secondCategory) => {
-					secondCategory?.category?.children?.forEach((thirdCategory) => {
-						const rangePriceAndDurationData = thirdCategory?.service?.rangePriceAndDurationData
-						const currencies = state.enumerationsStore.currencies.data
-						const symbol =
-							currencies?.find((currency) => currency.code === thirdCategory?.service?.rangePriceAndDurationData?.priceFrom?.currency)?.symbol ||
-							thirdCategory?.service?.rangePriceAndDurationData?.priceFrom?.currency
 
-						tableData.push({
-							key: `${thirdCategory?.category?.id}_${thirdCategory?.service?.id}`, // NOTE: zachovat tvar, vyuziva sa ako selector pri testovani nastaveni sluzieb
-							serviceID: thirdCategory?.service?.id,
-							name: thirdCategory?.category?.name || '-',
-							categoryFirst: parentCategory?.category?.name || '-',
-							categorySecond: secondCategory?.category?.name || '-',
-							employees: thirdCategory?.service?.employees?.map((employee) => {
-								const employeeName = getAssignedUserLabel({
-									firstName: employee?.firstName,
-									lastName: employee?.lastName,
-									email: employee?.email,
-									id: employee?.id
-								})
+			const currencies = state.enumerationsStore.currencies.data
 
-								return {
-									src: employee.image?.resizedImages?.thumbnail,
-									fallBackSrc: employee.image?.original,
-									alt: employeeName,
-									text: employeeName,
-									key: employee.id
-								}
-							}),
-							price: getServiceRange(decodePrice(rangePriceAndDurationData?.priceFrom), decodePrice(rangePriceAndDurationData?.priceTo), symbol) || '-',
-							duration: getServiceRange(rangePriceAndDurationData?.durationFrom, rangePriceAndDurationData?.durationTo, i18next.t('loc:min')) || '-',
-							isComplete: thirdCategory?.service?.isComplete,
-							createdAt: thirdCategory?.service?.createdAt
-						})
-					})
-				})
-			})
+			const listData = categories?.reduce(
+				(result, firstLevelCategory) => {
+					const { category: industry } = firstLevelCategory
+					if (industry) {
+						const industryData: IServicesListInudstry = {
+							id: industry.id,
+							name: industry.name || '-',
+							categories: industry.children.reduce(
+								(categoriesResult, secondLevelCategory) => {
+									const { category } = secondLevelCategory
+									if (category) {
+										const categoryData: IServicesListCategory = {
+											id: category.id,
+											name: category.name || '-',
+											services: category.children.reduce(
+												(servicesResult, thirdLevelCategory) => {
+													const { rangePriceAndDurationData } = thirdLevelCategory.service
+													const symbol =
+														currencies?.find((currency) => currency.code === rangePriceAndDurationData.priceFrom?.currency)?.symbol ||
+														rangePriceAndDurationData.priceFrom?.currency
+
+													const isAvailableForOnlineReservations = Math.random() < 0.5
+													const isVisibleInPricelist = Math.random() < 0.5
+
+													const serviceData: IServicesListService = {
+														id: thirdLevelCategory.category.id,
+														key: `${thirdLevelCategory.category.id}_${thirdLevelCategory.service.id}`, // NOTE: zachovat tvar, vyuziva sa ako selector pri testovani nastaveni sluzieb
+														serviceID: thirdLevelCategory.service.id,
+														name: thirdLevelCategory.category.name || '-',
+														employees: thirdLevelCategory.service.employees.map((employee) => {
+															const employeeName = getAssignedUserLabel({
+																firstName: employee.firstName,
+																lastName: employee.lastName,
+																email: employee.email,
+																id: employee.id
+															})
+
+															return {
+																src: employee.image.resizedImages.thumbnail,
+																fallBackSrc: employee.image.original,
+																alt: employeeName,
+																text: employeeName,
+																key: employee.id
+															}
+														}),
+														price:
+															getServiceRange(
+																decodePrice(rangePriceAndDurationData.priceFrom),
+																decodePrice(rangePriceAndDurationData.priceTo),
+																symbol
+															) || '-',
+														duration:
+															getServiceRange(rangePriceAndDurationData.durationFrom, rangePriceAndDurationData.durationTo, i18next.t('loc:min')) ||
+															'-',
+														isAvailableForOnlineReservations,
+														isVisibleInPricelist,
+														automaticApproval: Math.random() < 0.5
+													}
+													return {
+														data: [...servicesResult.data, serviceData],
+														servicesCount: servicesResult.servicesCount + 1,
+														servicesVisibleInPricelistCount: isVisibleInPricelist
+															? servicesResult.servicesVisibleInPricelistCount + 1
+															: servicesResult.servicesVisibleInPricelistCount,
+														servicesAvailableForOnlineReservationsCount: isAvailableForOnlineReservations
+															? servicesResult.servicesAvailableForOnlineReservationsCount + 1
+															: servicesResult.servicesAvailableForOnlineReservationsCount
+													}
+												},
+												{
+													data: [],
+													servicesCount: 0,
+													servicesAvailableForOnlineReservationsCount: 0,
+													servicesVisibleInPricelistCount: 0
+												} as IServicesListCategoryItem<IServicesListService>
+											)
+										}
+										return {
+											data: [...categoriesResult.data, categoryData],
+											servicesCount: categoriesResult.servicesCount + categoryData.services.servicesCount,
+											servicesVisibleInPricelistCount:
+												categoriesResult.servicesVisibleInPricelistCount + categoryData.services.servicesVisibleInPricelistCount,
+											servicesAvailableForOnlineReservationsCount:
+												categoriesResult.servicesAvailableForOnlineReservationsCount + categoryData.services.servicesAvailableForOnlineReservationsCount
+										}
+									}
+									return categoriesResult
+								},
+								{
+									data: [],
+									servicesCount: 0,
+									servicesAvailableForOnlineReservationsCount: 0,
+									servicesVisibleInPricelistCount: 0
+								} as IServicesListCategoryItem<IServicesListCategory>
+							)
+						}
+
+						return {
+							...result,
+							industries: {
+								data: [...result.industries.data, industryData],
+								servicesCount: result.industries.servicesCount + industryData.categories.servicesCount,
+								servicesVisibleInPricelistCount: result.industries.servicesVisibleInPricelistCount + industryData.categories.servicesVisibleInPricelistCount,
+								servicesAvailableForOnlineReservationsCount:
+									result.industries.servicesAvailableForOnlineReservationsCount + industryData.categories.servicesAvailableForOnlineReservationsCount
+							}
+						}
+					}
+					return result
+				},
+				{
+					industries: {
+						data: [],
+						servicesCount: 0,
+						servicesAvailableForOnlineReservationsCount: 0,
+						servicesVisibleInPricelistCount: 0
+					} as IServicesListCategoryItem<IServicesListInudstry>
+				} as ServicesListData
+			)
 
 			const servicesOptions: ISelectOptionItem[] = []
 			const categoriesOptions: ISelectOptionItem[] = []
@@ -143,7 +248,7 @@ export const getServices =
 			)
 			payload = {
 				data,
-				tableData,
+				listData,
 				options: servicesOptions,
 				categoriesOptions
 			}

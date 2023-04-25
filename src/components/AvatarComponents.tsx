@@ -68,7 +68,7 @@ type AvatarGroupProps = Omit<GroupProps, 'maxPopoverPlacement'> & {
 export const AvatarGroup = (props: AvatarGroupProps) => {
 	const { avatars, className, maxCount, maxPopoverPlacement, maxPopoverTrigger, maxStyle, size, popoverContent } = props
 
-	const childrenWithProps = avatars.map((avatarProps, index) => <UserAvatar key={index} {...avatarProps} />)
+	const childrenWithProps = avatars.map((avatarProps, index) => <UserAvatar size={size} key={index} {...avatarProps} />)
 
 	const numOfChildren = avatars.length
 
@@ -86,7 +86,7 @@ export const AvatarGroup = (props: AvatarGroupProps) => {
 			))
 		}
 
-		childrenShow.push(<Avatar key={'max-count-indicator-key'} style={maxStyle}>{`+${numOfChildren - maxCount}`}</Avatar>)
+		childrenShow.push(<Avatar key={'max-count-indicator-key'} size={size} style={maxStyle}>{`+${numOfChildren - maxCount}`}</Avatar>)
 
 		return (
 			<SizeContextProvider size={size}>

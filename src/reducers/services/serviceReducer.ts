@@ -7,7 +7,14 @@ import { SERVICES, SERVICE, SERVICE_ROOT_CATEGORY } from './serviceTypes'
 export const initState = {
 	services: {
 		data: null,
-		tableData: undefined,
+		listData: {
+			industries: {
+				data: [],
+				servicesCount: 0,
+				servicesAvailableForOnlineReservationsCount: 0,
+				servicesVisibleInPricelistCount: 0
+			}
+		},
 		options: [],
 		categoriesOptions: [],
 		isLoading: false,
@@ -51,7 +58,7 @@ export default (state = initState, action: IServiceActions) => {
 				services: {
 					...initState.services,
 					data: action.payload.data,
-					tableData: action.payload.tableData,
+					listData: action.payload.listData,
 					options: action.payload.options,
 					categoriesOptions: action.payload.categoriesOptions
 				}

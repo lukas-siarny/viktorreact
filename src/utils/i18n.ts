@@ -58,7 +58,9 @@ i18n.use(Backend)
 			bindI18n: 'languageChanged loaded',
 			bindI18nStore: 'added removed',
 			nsMode: 'default',
-			useSuspense: true
+			useSuspense: true,
+			transSupportBasicHtmlNodes: true,
+			transKeepBasicHtmlNodesFor: ['br', 'strong', 'i', 'span', 'h1', 'h2']
 		}
 	})
 

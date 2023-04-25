@@ -112,7 +112,7 @@ const ReviewsFilter = (props: Props) => {
 									size={'large'}
 									min={0}
 									max={100}
-									className={'reviews-toxicity-score-input'}
+									className={'input-auto-height'}
 								/>
 							</Col>
 							<Col span={12}>

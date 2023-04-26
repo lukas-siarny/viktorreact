@@ -158,7 +158,9 @@ const ActiveEmployeesTable = (props: Props) => {
 	]
 
 	const handleDrop = useCallback(
-		async (oldIndex: number, newIndex: number) => {
+		async (oldIndexStr: string, newIndexStr: string) => {
+			const oldIndex = Number(oldIndexStr)
+			const newIndex = Number(newIndexStr)
 			try {
 				const employee = find(activeEmployees?.tableData, { orderIndex: oldIndex })
 				// oldIndex je v tomto pripade employee.orderIndex

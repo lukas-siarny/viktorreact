@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { forEach, includes, isEmpty } from 'lodash'
 import cx from 'classnames'
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 
 // Drag and drop
 import type { DragEndEvent } from '@dnd-kit/core'
@@ -15,6 +16,8 @@ import { TableProps } from 'antd/lib/table'
 import CustomPagination from './CustomPagination'
 import { IPagination } from '../types/interfaces'
 import DragableTableRow from './DragableTableRow'
+
+// assets
 import { ReactComponent as DragIcon } from '../assets/icons/drag-icon.svg'
 import { TABLE_DRAG_AND_DROP_KEY } from '../utils/enums'
 
@@ -40,10 +43,11 @@ type ComponentProps<RecordType> = TableProps<RecordType> & {
 	useCustomPagination?: boolean
 	pagination?: IPagination | false
 	wrapperClassName?: string
-	dndDrop?: (oldIndex: number, newIndex: number) => any
+	dndDrop?: (oldIndex: string, newIndex: string) => any
 	dndWithHandler?: boolean
 	dndColWidth?: number
 	customFooterContent?: React.ReactNode
+	useKeyAsOrderIndex?: boolean
 }
 
 const CustomTable = <RecordType extends object = any>(props: ComponentProps<RecordType>) => {
@@ -83,8 +87,8 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 
 	const onDragEnd = useCallback(
 		async ({ active, over }: DragEndEvent) => {
-			const oldIndex = Number(active.id)
-			const newIndex = Number(over?.id)
+			const oldIndex = String(active.id)
+			const newIndex = String(over?.id)
 
 			if (isProcessingDrop) {
 				return
@@ -216,7 +220,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 
 	if (dndDrop) {
 		return (
-			<DndContext onDragEnd={onDragEnd}>
+			<DndContext onDragEnd={onDragEnd} modifiers={[restrictToVerticalAxis]}>
 				<SortableContext
 					// rowKey array
 					items={props.dataSource && (props.dataSource.map((item: any) => item.key) as any)}

@@ -98,6 +98,7 @@ import { ReactComponent as CreditCardIcon } from '../assets/icons/credit-card.sv
 import { ReactComponent as WalletIcon } from '../assets/icons/wallet.svg'
 import { ReactComponent as DollarIcon } from '../assets/icons/dollar.svg'
 import { ReactComponent as CrossedIcon } from '../assets/icons/crossed-red-16.svg'
+import { ReactComponent as ChevronDown } from '../assets/icons/chevron-down.svg'
 // eslint-disable-next-line import/no-cycle
 import { LOCALES } from '../components/LanguagePicker'
 
@@ -1416,3 +1417,17 @@ export const detectBrowserType = (): string => {
 
 	return browserType
 }
+
+export const parseServiceRowKey = (key: string) => {
+	const splittedKey = key.split('_')
+	return { categoryID: splittedKey[0], serviceID: splittedKey[1] }
+}
+
+export const getExpandIcon = (isActive: boolean, iconSize = 24, color = '#000') => (
+	<ChevronDown
+		width={iconSize}
+		height={iconSize}
+		color={color}
+		style={{ transform: isActive ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 200ms ease-in-out', transformOrigin: 'center' }}
+	/>
+)

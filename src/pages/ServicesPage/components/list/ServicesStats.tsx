@@ -1,10 +1,9 @@
 import React, { FC } from 'react'
-import cx from 'classnames'
 import { Divider } from 'antd'
 import { useTranslation } from 'react-i18next'
 
 // assets
-import { ReactComponent as InfoNotinoIcon } from '../../../assets/icons/info-notino-icon.svg'
+import { ReactComponent as InfoNotinoIcon } from '../../../../assets/icons/info-notino-icon.svg'
 
 type Props = {
 	allServicesCount: number

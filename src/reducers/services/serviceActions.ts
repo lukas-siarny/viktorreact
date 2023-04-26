@@ -11,6 +11,7 @@ import { IUserAvatar, ISearchableWithoutPagination, ISelectOptionItem } from '..
 // utils
 import { getReq } from '../../utils/request'
 import { getAssignedUserLabel, decodePrice, getServiceRange } from '../../utils/helper'
+import { SERVICE_ROW_KEY } from '../../utils/enums'
 
 export type IServiceActions = IResetStore | IGetServices | IGetService | IGetServiceRootCategory
 
@@ -32,7 +33,7 @@ interface IGetServiceRootCategory {
 export interface IServicesListService {
 	key: string
 	id: string
-	serviceID: string
+	categoryID: string
 	name: string
 	employees: IUserAvatar[]
 	price: string
@@ -61,7 +62,7 @@ export interface IServicesListInudstry {
 	categories: IServicesListCategoryItem<IServicesListCategory>
 }
 
-export interface ServicesListData {
+export interface IServicesListData {
 	industries: IServicesListCategoryItem<IServicesListInudstry>
 }
 
@@ -76,7 +77,7 @@ export interface IGetServiceRootCategoryQueryParams {
 }
 
 export interface IServicesPayload extends ISearchableWithoutPagination<Paths.GetApiB2BAdminServices.Responses.$200> {
-	listData: ServicesListData
+	listData: IServicesListData
 	options: ISelectOptionItem[]
 	categoriesOptions: ISelectOptionItem[]
 }
@@ -122,9 +123,9 @@ export const getServices =
 													const isVisibleInPricelist = Math.random() < 0.5
 
 													const serviceData: IServicesListService = {
-														id: thirdLevelCategory.category.id,
-														key: `${thirdLevelCategory.category.id}_${thirdLevelCategory.service.id}`, // NOTE: zachovat tvar, vyuziva sa ako selector pri testovani nastaveni sluzieb
-														serviceID: thirdLevelCategory.service.id,
+														id: thirdLevelCategory.service.id,
+														key: SERVICE_ROW_KEY(thirdLevelCategory.category.id, thirdLevelCategory.service.id), // NOTE: zachovat tvar, vyuziva sa ako selector pri testovani nastaveni sluzieb
+														categoryID: thirdLevelCategory.category.id,
 														name: thirdLevelCategory.category.name || '-',
 														employees: thirdLevelCategory.service.employees.map((employee) => {
 															const employeeName = getAssignedUserLabel({
@@ -214,7 +215,7 @@ export const getServices =
 						servicesAvailableForOnlineReservationsCount: 0,
 						servicesVisibleInPricelistCount: 0
 					} as IServicesListCategoryItem<IServicesListInudstry>
-				} as ServicesListData
+				} as IServicesListData
 			)
 
 			const servicesOptions: ISelectOptionItem[] = []

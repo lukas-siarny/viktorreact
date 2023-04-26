@@ -1178,3 +1178,5 @@ export const SMS_STATUS_NAME = (status: SMS_NOTIFICATION_STATUS) => {
 			return ''
 	}
 }
+
+export const SERVICE_ROW_KEY = (categoryID: string, serviceID: string) => `${categoryID}_${serviceID}`

@@ -1016,3 +1016,10 @@ export type DisabledNotificationsArray = Paths.GetApiB2BAdminSalonsSalonId.Respo
 export type PatchSettingsBody = Paths.PatchApiB2BAdminSalonsSalonIdSettings.RequestBody
 
 export type ReservationsEmployees = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200['employees']
+
+export type HandleServicesReorderFunc = (currentIndexes: [number, number?, number?], newIndex: number) => void
+
+export type ServicesActiveKeys = {
+	industries: string[]
+	categories: string[]
+}

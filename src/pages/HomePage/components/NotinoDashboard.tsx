@@ -216,6 +216,17 @@ const optionsForPremiumSalonBar = {
 			titleColor: '#111827',
 			bodyColor: '#404040',
 			cornerRadius: 4
+		},
+		legend: {
+			position: 'right',
+			align: 'center',
+			labels: {
+				color: colors.black,
+				font: {
+					weight: '100'
+				}
+			},
+			display: false
 		}
 	},
 	scales: {

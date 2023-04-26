@@ -463,26 +463,28 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				<div className={'flex'}>
 					<h3 className={'mb-0 mt-0 flex items-center'}>
 						<UploadIcon className={'text-notino-black mr-2'} />
-						{t('loc:Importovať dáta z externých služieb')}
+						{t('loc:Importovať dáta z externých rezervačných systémov')}
 					</h3>
 				</div>
 				<Divider className={'my-3'} />
-				<div>
-					<p className={'text-notino-grayDark'}>{t('loc:Importujte si dáta z externých služieb ako Reservanto, Reservio, …')}</p>
-					<Row>
-						<ImportForm
-							accept={uploadModal.data.accept}
-							title={uploadModal.data.title}
-							label={uploadModal.data.label}
-							requestStatus={uploadModal.requestStatus}
-							setRequestStatus={(status?: REQUEST_STATUS) => setUploadModal({ ...uploadModal, requestStatus: status })}
-							onSubmit={handleSubmitImport}
-							visible={uploadModal.visible}
-							extraContent={
-								<>
-									<Divider className={'mt-1 mb-3'} />
-									<p className={'text-notino-grayDark'}>{t('loc:Vzorové šablóny súborov')}</p>
+				<Row>
+					<ImportForm
+						accept={uploadModal.data.accept}
+						title={uploadModal.data.title}
+						label={uploadModal.data.label}
+						requestStatus={uploadModal.requestStatus}
+						setRequestStatus={(status?: REQUEST_STATUS) => setUploadModal({ ...uploadModal, requestStatus: status })}
+						onSubmit={handleSubmitImport}
+						visible={uploadModal.visible}
+						extraContent={
+							<>
+								<Divider className={'mt-1 mb-3'} />
+								<div className={'ant-form-item'}>
+									<label htmlFor={'noti-customer-template-select'} className={'block mb-2'}>
+										{t('loc:Vzorové šablóny súborov')}
+									</label>
 									<Select
+										id={'noti-customer-template-select'}
 										style={{ zIndex: 999 }}
 										className={'noti-select-input w-full mb-4'}
 										size={'large'}
@@ -499,12 +501,13 @@ const ReservationSystemSettingsForm = (props: Props) => {
 											</Option>
 										))}
 									</Select>
-								</>
-							}
-							setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
-						/>
-						{/* // NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov */}
-						{/* <Button
+								</div>
+							</>
+						}
+						setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
+					/>
+					{/* // NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov */}
+					{/* <Button
 							onClick={() => {
 								setUploadModal({
 									...uploadModal,
@@ -525,29 +528,28 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						>
 							{t('loc:Importovať rezervácie')}
 						</Button> */}
-						<Button
-							onClick={() => {
-								setUploadModal({
-									...uploadModal,
-									visible: true,
-									uploadType: UPLOAD_TYPE.CUSTOMER,
-									data: {
-										accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv',
-										title: t('loc:Importovať zákazníkov'),
-										label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })
-									}
-								})
-							}}
-							disabled={disabled}
-							type='primary'
-							htmlType='button'
-							className={'noti-btn'}
-							icon={<UploadIcon />}
-						>
-							{t('loc:Importovať zákazníkov')}
-						</Button>
-					</Row>
-				</div>
+					<Button
+						onClick={() => {
+							setUploadModal({
+								...uploadModal,
+								visible: true,
+								uploadType: UPLOAD_TYPE.CUSTOMER,
+								data: {
+									accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv',
+									title: t('loc:Importovať zákazníkov'),
+									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })
+								}
+							})
+						}}
+						disabled={disabled}
+						type='primary'
+						htmlType='button'
+						className={'noti-btn'}
+						icon={<UploadIcon />}
+					>
+						{t('loc:Importovať zákazníkov')}
+					</Button>
+				</Row>
 			</Row>
 			<Row justify={'space-between'} className='mt-10'>
 				{/* Notifications */}

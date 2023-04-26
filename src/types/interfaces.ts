@@ -209,57 +209,6 @@ export interface IReviewsFilter {
 	toxicityScoreTo?: number
 }
 
-export interface ISupportContactForm {
-	id: string | null
-	note: string
-	openingHours: OpeningHours
-	sameOpenHoursOverWeek: boolean
-	openOverWeekend: boolean
-	countryCode: string
-	zipCode: string
-	city: string
-	street: string
-	streetNumber: string
-	phones: { phonePrefixCountryCode: string; phone: string }[]
-	emails: { email: string }[]
-}
-
-export interface IRegistrationForm {
-	email: string
-	password: string
-	confirmPassword: string
-	phonePrefixCountryCode: string
-	phone: string
-	gdpr: boolean
-	gtc: boolean
-	marketing: boolean
-}
-
-export interface IForgotPasswordForm {
-	email: string
-}
-
-export interface IActivationForm {
-	code: string
-}
-
-export interface IBillingForm {
-	countryCode?: string
-	zipCode?: string
-	city?: string
-	street?: string
-	streetNumber?: string
-	email?: string
-	firstName?: string
-	lastName?: string
-	phonePrefixCountryCode?: string
-	phone?: string
-	businessID?: string
-	taxID?: string
-	vatID?: string
-	companyName?: string
-}
-
 export interface IJwtPayload {
 	aud: string
 	exp: number

@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useMemo, useRef } from 'react'
+import React, { useEffect, useImperativeHandle, useMemo } from 'react'
 import Sider from 'antd/lib/layout/Sider'
 import { compact, map } from 'lodash'
 import cx from 'classnames'
@@ -14,8 +14,8 @@ import { ICalendarEmployeesPayload, INewCalendarEvent } from '../../../../types/
 import { RootState } from '../../../../reducers'
 
 // schema
-import { ICalendarReservationForm } from '../../../../schemas/reservation'
 import { ICalendarEventForm } from '../../../../schemas/event'
+import { ICalendarReservationForm } from '../../../../schemas/reservation'
 
 // utils
 import { getAssignedUserLabel, getDateTime } from '../../../../utils/helper'

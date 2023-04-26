@@ -44,7 +44,7 @@ import { RootState } from '../../../../reducers'
 import { IUseQueryParams } from '../../../../hooks/useQueryParams'
 
 // schema
-import { ICalendarImportedReservationForm, ICalendarReservationForm } from '../../../../schemas/reservation'
+import { /* ICalendarImportedReservationForm, */ ICalendarReservationForm } from '../../../../schemas/reservation'
 import { ICalendarEventForm } from '../../../../schemas/event'
 
 // utils

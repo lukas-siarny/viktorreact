@@ -5,29 +5,29 @@ import { initialize } from 'redux-form'
 import dayjs from 'dayjs'
 
 // components
-import SalonHistoryFilter, { ISalonHistoryFilter } from './filters/SalonHistoryFilter'
-import CompareComponent from '../../../components/CompareComponent'
-import CustomPagination from '../../../components/CustomPagination'
+import SalonHistoryFilter, { ISalonHistoryFilter } from './components/filters/SalonHistoryFilter'
+import CompareComponent from '../../components/CompareComponent'
+import CustomPagination from '../../components/CustomPagination'
 
 // types
-import { SalonSubPageProps } from '../../../types/interfaces'
+import { SalonSubPageProps } from '../../types/interfaces'
 
 // reducers
-import { getSalonHistory } from '../../../reducers/salons/salonsActions'
-import { RootState } from '../../../reducers'
+import { getSalonHistory } from '../../reducers/salons/salonsActions'
+import { RootState } from '../../reducers'
 
 // utils
-import { FORM, SALON_HISTORY_OPERATIONS, SALON_HISTORY_OPERATIONS_COLORS, TAB_KEYS, DEFAULT_DATE_INIT_FORMAT } from '../../../utils/enums'
-import { formatDateByLocale } from '../../../utils/helper'
+import { FORM, SALON_HISTORY_OPERATIONS, SALON_HISTORY_OPERATIONS_COLORS, DEFAULT_DATE_INIT_FORMAT } from '../../utils/enums'
+import { formatDateByLocale } from '../../utils/helper'
 
 // assets
-import { ReactComponent as CheckIcon } from '../../../assets/icons/check-12.svg'
-import { ReactComponent as ResetIcon } from '../../../assets/icons/reset-icon.svg'
-import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
-import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
+import { ReactComponent as CheckIcon } from '../../assets/icons/check-12.svg'
+import { ReactComponent as ResetIcon } from '../../assets/icons/reset-icon.svg'
+import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 // hooks
-import useQueryParams, { NumberParam, StringParam } from '../../../hooks/useQueryParams'
+import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
 
 const setIcon = (operation: SALON_HISTORY_OPERATIONS): undefined | ReactNode => {
 	switch (operation) {
@@ -44,13 +44,11 @@ const setIcon = (operation: SALON_HISTORY_OPERATIONS): undefined | ReactNode => 
 	}
 }
 
-type ComponentProps = {
-	tabKey: TAB_KEYS
-} & PropsWithChildren<SalonSubPageProps>
+type ComponentProps = {} & PropsWithChildren<SalonSubPageProps>
 
-const SalonHistory: FC<ComponentProps> = (props) => {
+const SalonHistoryPage: FC<ComponentProps> = (props) => {
 	const dispatch = useDispatch()
-	const { salonID, tabKey } = props
+	const { salonID } = props
 	const now = dayjs()
 
 	const [query, setQuery] = useQueryParams({
@@ -62,33 +60,30 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 
 	const salonHistory = useSelector((state: RootState) => state.salons.salonHistory)
 
-	const fetchData = async () => {
-		dispatch(
-			getSalonHistory({
-				dateFrom: query.dateFrom,
-				dateTo: query.dateTo,
-				salonID,
-				page: query.page,
-				limit: query.limit
-			})
-		)
-		dispatch(
-			initialize(FORM.SALON_HISTORY_FILTER, {
-				dateFromTo: {
-					dateFrom: query.dateFrom,
-					dateTo: query.dateTo
-				}
-			})
-		)
-	}
-
 	useEffect(() => {
-		//  fetch data when click on history tab
-		if (tabKey === TAB_KEYS.SALON_HISTORY) {
-			fetchData()
+		const fetchData = async () => {
+			dispatch(
+				getSalonHistory({
+					dateFrom: query.dateFrom,
+					dateTo: query.dateTo,
+					salonID,
+					page: query.page,
+					limit: query.limit
+				})
+			)
+			dispatch(
+				initialize(FORM.SALON_HISTORY_FILTER, {
+					dateFromTo: {
+						dateFrom: query.dateFrom,
+						dateTo: query.dateTo
+					}
+				})
+			)
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, query.page, query.limit, query.dateFrom, query.dateTo, tabKey])
+
+		//  fetch data when click on history tab
+		fetchData()
+	}, [dispatch, query.page, query.limit, query.dateFrom, query.dateTo, salonID])
 
 	const renderValues = (oldValues: any, newValues: any) => {
 		let values: any = {}
@@ -129,7 +124,7 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 	}
 
 	return (
-		<>
+		<div className='content-body'>
 			<div className={'content-header block'}>
 				<SalonHistoryFilter onSubmit={handleSubmit} />
 			</div>
@@ -174,8 +169,8 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 					/>
 				)}
 			</div>
-		</>
+		</div>
 	)
 }
 
-export default SalonHistory
+export default SalonHistoryPage

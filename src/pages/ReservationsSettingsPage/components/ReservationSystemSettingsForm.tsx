@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { change, Field, FieldArray, FormSection, InjectedFormProps, reduxForm, getFormValues, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Divider, Form, Row, Spin } from 'antd'
+import { Button, Divider, Form, Row, Select, Spin } from 'antd'
 import { forEach, includes, isEmpty, map } from 'lodash'
 import { DataNode } from 'antd/lib/tree'
 import { useNavigate } from 'react-router-dom'
@@ -23,7 +23,7 @@ import RemainingSmsCredit from '../../../components/Dashboards/RemainingSmsCredi
 import { IDataUploadForm, IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
-import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, REQUEST_STATUS } from '../../../utils/enums'
+import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, REQUEST_STATUS, TEMPLATE_OPTIONS } from '../../../utils/enums'
 import { formFieldID, optionRenderNotiPinkCheckbox, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
@@ -73,6 +73,8 @@ enum UPLOAD_TYPE {
 	CUSTOMER = 'customer'
 }
 
+const { Option } = Select
+
 const ReservationSystemSettingsForm = (props: Props) => {
 	const { pristine, submitting, excludedB2BNotifications, parentPath, salonID } = props
 	const [t] = useTranslation()
@@ -82,8 +84,8 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const walletID = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.wallet?.id)
 	const formValues: Partial<IReservationSystemSettingsForm> = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
 	const navigate = useNavigate()
+	const [templateValue, setTemplateValue] = useState<{ label: string; value: string } | null>(null)
 	const disabled = !formValues?.enabledReservations
-	const disabledOnlineB2cReservations = !formValues?.enabledB2cReservations
 	const defaultExpandedKeys: any = []
 	forEach(groupedServicesByCategory, (level1) => forEach(level1.category?.children, (level2) => defaultExpandedKeys.push(level2?.category?.id)))
 
@@ -194,7 +196,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 																		component={CheckboxField}
 																		key={`${SERVICE_TYPE.ONLINE_BOOKING}-${level3.service.id}`}
 																		name={level3.service.id}
-																		disabled={disabled || disabledOnlineB2cReservations}
+																		disabled={disabled}
 																		hideChecker
 																		onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 																			onChangeServiceCheck(e.target.checked, SERVICE_TYPE.ONLINE_BOOKING, level3.service.id)
@@ -208,7 +210,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 																		component={CheckboxField}
 																		key={`${SERVICE_TYPE.AUTO_CONFIRM}-${level3.service.id}`}
 																		name={level3.service.id}
-																		disabled={disabled || disabledOnlineB2cReservations}
+																		disabled={disabled}
 																		hideChecker
 																		onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 																			onChangeServiceCheck(e.target.checked, SERVICE_TYPE.AUTO_CONFIRM, level3.service.id)
@@ -234,7 +236,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			}, [] as DataNode[])
 			setServicesDataTree(treeData)
 		}
-	}, [groupedServicesByCategory, groupedServicesByCategoryLoading, dispatch, disabled, disabledOnlineB2cReservations])
+	}, [groupedServicesByCategory, groupedServicesByCategoryLoading, dispatch, disabled])
 
 	const handleSubmitImport = async (values: IDataUploadForm) => {
 		if (!uploadModal.uploadType) {
@@ -247,7 +249,8 @@ const ReservationSystemSettingsForm = (props: Props) => {
 		formData.append('file', values?.file)
 
 		try {
-			if (uploadModal.uploadType === UPLOAD_TYPE.RESERVATION) {
+			// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+			/* if (uploadModal.uploadType === UPLOAD_TYPE.RESERVATION) {
 				await postReq('/api/b2b/admin/imports/salons/{salonID}/calendar-events', { salonID }, formData, {
 					headers
 				})
@@ -255,7 +258,11 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				await postReq('/api/b2b/admin/imports/salons/{salonID}/customers', { salonID }, formData, {
 					headers
 				})
-			}
+			} */
+
+			await postReq('/api/b2b/admin/imports/salons/{salonID}/customers', { salonID }, formData, {
+				headers
+			})
 
 			setUploadModal({ ...uploadModal, requestStatus: REQUEST_STATUS.SUCCESS })
 		} catch {
@@ -281,7 +288,6 @@ const ReservationSystemSettingsForm = (props: Props) => {
 
 		return (
 			<>
-				<p className='x-regular text-notino-grayDark'>{t('loc:Vyberte služby, ktoré bude možné rezervovať si online a ktoré budú automaticky potvrdené.')}</p>
 				<p className='x-regular text-notino-grayDark'>{t('loc:Nastavte službám možnosť online rezervácie, automatického potvrdenia a zadávania poznámok.')}</p>
 				<Row justify={'space-between'} className='mt-7'>
 					<div className={'w-full'}>
@@ -297,23 +303,6 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Povoliť klientom zadávať poznámky k rezerváciám.')}</p>
 					</div>
 				</Row>
-				<Row className='mt-7'>
-					<div className={'w-full'}>
-						<div className={'flex items-center'}>
-							<Field
-								tooltipText={t(
-									'loc:Hlavné nastavenie pre možnosť online rezervácií. Ak táto možnosť je vypnutá, nebude možné vytvoriť žiadnu online rezerváciu pre službu, bez ohľadu na to, či má služba danú možnosť povolenú v sekcii nižšie.'
-								)}
-								name={'enabledB2cReservations'}
-								disabled={disabled}
-								className={'w-full pb-1'}
-								component={SwitchField}
-								label={t('loc:Online rezervácie')}
-							/>
-						</div>
-						<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Povoliť online rezervácie pre služby.')}</p>
-					</div>
-				</Row>
 				<div>
 					<div className={'flex w-full justify-end mb-4 mt-7'}>
 						<div style={{ width: 140 }} className={'flex text-xs'}>
@@ -327,7 +316,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							key={'onlineBookingAll'}
 							name={'onlineBookingAll'}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeCheckAll(e.target.checked, SERVICE_TYPE.ONLINE_BOOKING)}
-							disabled={disabled || disabledOnlineB2cReservations}
+							disabled={disabled}
 							hideChecker
 							optionRender={optionRenderNotiPinkCheckbox}
 							className={'p-0 h-6 mr-8 check-all'}
@@ -338,7 +327,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeCheckAll(e.target.checked, SERVICE_TYPE.AUTO_CONFIRM)}
 							key={'autoConfirmAll'}
 							name={'autoConfirmAll'}
-							disabled={disabled || disabledOnlineB2cReservations}
+							disabled={disabled}
 							hideChecker
 							optionRender={optionRenderNotiPinkCheckbox}
 							className={'p-0 h-6'}
@@ -350,7 +339,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					<Field
 						name={'services'}
 						className={'rs-services-settings-tree'}
-						disabled={disabled || disabledOnlineB2cReservations}
+						disabled={disabled}
 						component={CheckboxGroupNestedField}
 						defaultExpandedKeys={defaultExpandedKeys}
 						dataTree={servicesDataTree}
@@ -474,24 +463,59 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				<div className={'flex'}>
 					<h3 className={'mb-0 mt-0 flex items-center'}>
 						<UploadIcon className={'text-notino-black mr-2'} />
-						{t('loc:Importovať dáta z externých služieb')}
+						{t('loc:Importovať dáta z externých rezervačných systémov')}
 					</h3>
 				</div>
 				<Divider className={'my-3'} />
-				<div>
-					<p className={'text-notino-grayDark'}>{t('loc:Importujte si dáta z externých služieb ako Reservanto, Reservio, …')}</p>
-					<Row>
-						<ImportForm
-							accept={uploadModal.data.accept}
-							title={uploadModal.data.title}
-							label={uploadModal.data.label}
-							requestStatus={uploadModal.requestStatus}
-							setRequestStatus={(status?: REQUEST_STATUS) => setUploadModal({ ...uploadModal, requestStatus: status })}
-							onSubmit={handleSubmitImport}
-							visible={uploadModal.visible}
-							setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
-						/>
-						<Button
+				<Row>
+					<ImportForm
+						accept={uploadModal.data.accept}
+						title={uploadModal.data.title}
+						label={uploadModal.data.label}
+						requestStatus={uploadModal.requestStatus}
+						setRequestStatus={(status?: REQUEST_STATUS) => setUploadModal({ ...uploadModal, requestStatus: status })}
+						onSubmit={handleSubmitImport}
+						visible={uploadModal.visible}
+						extraContent={
+							<>
+								<Divider className={'mt-1 mb-3'} />
+								<div className={'flex items-center justify-between gap-1'}>
+									<div className={'ant-form-item w-full'}>
+										<label htmlFor={'noti-customer-template-select'} className={'block mb-2'}>
+											{t('loc:Vzorové šablóny súborov')}
+										</label>
+										<Select
+											id={'noti-customer-template-select'}
+											style={{ zIndex: 999 }}
+											className={'noti-select-input w-full mb-4'}
+											size={'large'}
+											labelInValue
+											options={TEMPLATE_OPTIONS()}
+											onChange={(val: any) => setTemplateValue(val)}
+											value={templateValue}
+											placeholder={t('loc:Vyberte šablónu na stiahnutie')}
+											getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+										/>
+									</div>
+									<Button
+										className={'noti-btn'}
+										href={`${process.env.PUBLIC_URL}/templates/${templateValue?.value}`}
+										target='_blank'
+										rel='noopener noreferrer'
+										type={'default'}
+										disabled={!templateValue}
+										htmlType={'button'}
+										download
+									>
+										{t('loc:Stiahnuť')}
+									</Button>
+								</div>
+							</>
+						}
+						setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
+					/>
+					{/* // NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov */}
+					{/* <Button
 							onClick={() => {
 								setUploadModal({
 									...uploadModal,
@@ -511,30 +535,29 @@ const ReservationSystemSettingsForm = (props: Props) => {
 							icon={<UploadIcon />}
 						>
 							{t('loc:Importovať rezervácie')}
-						</Button>
-						<Button
-							onClick={() => {
-								setUploadModal({
-									...uploadModal,
-									visible: true,
-									uploadType: UPLOAD_TYPE.CUSTOMER,
-									data: {
-										accept: '.csv',
-										title: t('loc:Importovať zákazníkov'),
-										label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv' })
-									}
-								})
-							}}
-							disabled={disabled}
-							type='primary'
-							htmlType='button'
-							className={'noti-btn'}
-							icon={<UploadIcon />}
-						>
-							{t('loc:Importovať zákazníkov')}
-						</Button>
-					</Row>
-				</div>
+						</Button> */}
+					<Button
+						onClick={() => {
+							setUploadModal({
+								...uploadModal,
+								visible: true,
+								uploadType: UPLOAD_TYPE.CUSTOMER,
+								data: {
+									accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv',
+									title: t('loc:Importovať zákazníkov'),
+									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })
+								}
+							})
+						}}
+						disabled={disabled}
+						type='primary'
+						htmlType='button'
+						className={'noti-btn'}
+						icon={<UploadIcon />}
+					>
+						{t('loc:Importovať zákazníkov')}
+					</Button>
+				</Row>
 			</Row>
 			<Row justify={'space-between'} className='mt-10'>
 				{/* Notifications */}

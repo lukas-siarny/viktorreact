@@ -16,7 +16,7 @@ import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.s
 import { ReactComponent as CategoryIcon } from '../../../../assets/icons/categories-24-icon.svg'
 
 // utils
-import { CHANGE_DEBOUNCE_TIME, ENUMERATIONS_KEYS, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, ENUMERATIONS_KEYS, FIELD_MODE, FORM, ROW_GUTTER_X_M, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
 import { optionRenderWithImage, validationString } from '../../../../utils/helper'
 
 // atoms
@@ -36,7 +36,7 @@ export interface ISalonsFilterDeleted {
 
 type Props = InjectedFormProps<ISalonsFilterDeleted, ComponentProps> & ComponentProps
 
-const fixLength100 = validationString(100)
+const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
 export const checkSalonFiltersSize = (formValues: any) =>
 	size(
@@ -72,7 +72,7 @@ const SalonsFilterDeleted = (props: Props) => {
 				name={'search'}
 				fieldMode={FIELD_MODE.FILTER}
 				search
-				validate={fixLength100}
+				validate={fixLength255}
 			/>
 		),
 		[t]
@@ -81,23 +81,7 @@ const SalonsFilterDeleted = (props: Props) => {
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
 			<Filters search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)} form={FORM.SALONS_FILTER_DELETED}>
-				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={8}>
-						<Field
-							component={SelectField}
-							name={'categoryFirstLevelIDs'}
-							mode={'multiple'}
-							placeholder={t('loc:Odvetvie')}
-							allowClear
-							size={'middle'}
-							filterOptions
-							onDidMountSearch
-							optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
-							options={categories?.enumerationsOptions}
-							loading={categories?.isLoading}
-							disabled={categories?.isLoading}
-						/>
-					</Col>
+				<Row gutter={ROW_GUTTER_X_M}>
 					<Col span={8}>
 						<Field
 							component={SelectField}
@@ -105,12 +89,28 @@ const SalonsFilterDeleted = (props: Props) => {
 							name={'countryCode'}
 							placeholder={t('loc:Krajina')}
 							allowClear
-							size={'middle'}
+							size={'large'}
 							filterOptions
 							onDidMountSearch
 							options={countries?.enumerationsOptions}
 							loading={countries?.isLoading}
 							disabled={countries?.isLoading}
+						/>
+					</Col>
+					<Col span={8}>
+						<Field
+							component={SelectField}
+							name={'categoryFirstLevelIDs'}
+							mode={'multiple'}
+							placeholder={t('loc:Odvetvie')}
+							allowClear
+							size={'large'}
+							filterOptions
+							onDidMountSearch
+							optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
+							options={categories?.enumerationsOptions}
+							loading={categories?.isLoading}
+							disabled={categories?.isLoading}
 						/>
 					</Col>
 				</Row>

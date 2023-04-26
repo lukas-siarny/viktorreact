@@ -10,7 +10,15 @@ import { IQueryParams, ISearchable } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { SALON_CREATE_TYPE, SALON_FILTER_OPENING_HOURS, SALON_FILTER_STATES, SALON_SOURCE_TYPE, SALON_STATES, SALONS_TAB_KEYS } from '../../utils/enums'
+import {
+	SALON_CREATE_TYPE,
+	SALON_FILTER_OPENING_HOURS,
+	SALON_FILTER_STATES,
+	SALON_FILTER_RS,
+	SALON_FILTER_RS_AVAILABLE_ONLINE,
+	SALON_SOURCE_TYPE,
+	SALONS_TAB_KEYS
+} from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
 export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGetBasictSalon | IGetBasicSalons | IGetSalonHistory | IGetRejectedSuggestions
@@ -127,6 +135,8 @@ interface GetSalonsQueryParams extends IQueryParams {
 	assignedUserID?: string
 	walletAvailableBalanceFrom?: number
 	walletAvailableBalanceTo?: number
+	hasAvailableReservationSystem?: SALON_FILTER_RS_AVAILABLE_ONLINE
+	enabledReservationsSetting?: SALON_FILTER_RS
 }
 
 export const getSalons =
@@ -136,6 +146,8 @@ export const getSalons =
 
 		let statuses: any[] = []
 		let hasSetOpeningHours
+		let hasAvailableReservationSystem
+		let enabledReservationsSetting
 
 		if (queryParams.salonState === SALONS_TAB_KEYS.ACTIVE) {
 			statuses = [SALON_FILTER_STATES.NOT_DELETED]
@@ -160,6 +172,18 @@ export const getSalons =
 			hasSetOpeningHours = false
 		}
 
+		if (queryParams.enabledReservationsSetting === SALON_FILTER_RS.ENABLED) {
+			enabledReservationsSetting = true
+		} else if (queryParams.enabledReservationsSetting === SALON_FILTER_RS.NOT_ENABLED) {
+			enabledReservationsSetting = false
+		}
+
+		if (queryParams.hasAvailableReservationSystem === SALON_FILTER_RS_AVAILABLE_ONLINE.AVAILABLE) {
+			hasAvailableReservationSystem = true
+		} else if (queryParams.hasAvailableReservationSystem === SALON_FILTER_RS_AVAILABLE_ONLINE.NOT_AVAILABLE) {
+			hasAvailableReservationSystem = false
+		}
+
 		const editedQueryParams = {
 			page: queryParams.page,
 			limit: queryParams.limit,
@@ -175,6 +199,8 @@ export const getSalons =
 			sourceType: queryParams.sourceType,
 			premiumSourceUserType: queryParams.premiumSourceUserType,
 			assignedUserID: queryParams.assignedUserID,
+			enabledReservationsSetting,
+			hasAvailableReservationSystem,
 			walletAvailableBalanceFrom: queryParams.walletAvailableBalanceFrom,
 			walletAvailableBalanceTo: queryParams.walletAvailableBalanceTo
 		}

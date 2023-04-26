@@ -2,11 +2,11 @@ import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import { compose } from 'redux'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Button, Divider, Row, RowProps, Spin, TablePaginationConfig, Tooltip } from 'antd'
+import { Button, Divider, Row, Spin, TablePaginationConfig, Tooltip } from 'antd'
 import { SorterResult } from 'antd/es/table/interface'
 import { ColumnProps } from 'antd/es/table'
 import { initialize } from 'redux-form'
-import { isEmpty } from 'lodash'
+import { isEmpty, zip } from 'lodash'
 import queryString from 'query-string'
 import { useNavigate } from 'react-router'
 
@@ -23,7 +23,7 @@ import { ReactComponent as CoinsIcon } from '../../assets/icons/coins.svg'
 // utils
 import { ENUMERATIONS_KEYS, FORM, LANGUAGE, PERMISSION, SALON_CREATE_TYPE, SALON_FILTER_STATES } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { normalizeDirectionKeys } from '../../utils/helper'
+import { formatPrice, normalizeDirectionKeys } from '../../utils/helper'
 import { getSalonTagSourceType } from '../SalonsPage/components/salonUtils'
 import { LOCALES } from '../../components/LanguagePicker'
 
@@ -238,7 +238,24 @@ const RechargeSmsCreditAdminPage = () => {
 				ellipsis: true,
 				sorter: false,
 				width: '30%',
-				render: (value) => (!isEmpty(value) ? <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</> : '-')
+				render: (_value, record) => {
+					const value = record.address
+					if (isEmpty(value) || !value) {
+						return '-'
+					}
+					let { street, city } = value
+					const { zipCode, streetNumber } = value
+
+					if ((city || zipCode) && street) {
+						if (zipCode) {
+							city = city ? `${city}, ${zipCode}` : zipCode
+						}
+						street = streetNumber ? `${street} ${streetNumber}` : street
+						return `${street}, ${city}`
+					}
+
+					return '-'
+				}
 			},
 			{
 				title: t('loc:Zdroj vytvorenia'),
@@ -258,7 +275,7 @@ const RechargeSmsCreditAdminPage = () => {
 				width: '20%',
 				render: (_value, record) => {
 					const value = record.wallet
-					return value ? `${value.availableBalance} ${value.currency.symbol}` : '-'
+					return value ? formatPrice(value.availableBalance, value.currency.symbol) : '-'
 				}
 			}
 		]

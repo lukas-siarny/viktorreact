@@ -6,7 +6,7 @@ import { debounce } from 'lodash'
 import { useSelector } from 'react-redux'
 
 // utils
-import { CHANGE_DEBOUNCE_TIME, FIELD_MODE, FORM } from '../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, FIELD_MODE, FORM, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize } from '../../../utils/helper'
 
 // atoms
@@ -29,7 +29,7 @@ interface ICosmeticsFilter {
 
 type Props = InjectedFormProps<ICosmeticsFilter, ComponentProps> & ComponentProps
 
-const fixLength100 = validationString(100)
+const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
 const CosmeticsFilter = (props: Props) => {
 	const { handleSubmit, total, addButton } = props
@@ -52,7 +52,7 @@ const CosmeticsFilter = (props: Props) => {
 			name='search'
 			fieldMode={FIELD_MODE.FILTER}
 			search
-			validate={fixLength100}
+			validate={fixLength255}
 			disabled={isFilterDisabled}
 		/>
 	)

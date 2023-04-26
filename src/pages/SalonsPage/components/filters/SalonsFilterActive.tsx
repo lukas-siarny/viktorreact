@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useMemo, useCallback } from 'react'
+import React, { useMemo, useCallback, useRef, useEffect } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Col, Divider, Dropdown, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -27,7 +27,7 @@ import {
 	FIELD_MODE,
 	FORM,
 	PERMISSION,
-	ROW_GUTTER_X_DEFAULT,
+	ROW_GUTTER_X_M,
 	SALON_CREATE_TYPE,
 	SALON_FILTER_OPENING_HOURS,
 	SALON_FILTER_STATES,
@@ -36,22 +36,38 @@ import {
 	CHANGE_DEBOUNCE_TIME,
 	IMPORT_BUTTON_ID,
 	DOWNLOAD_BUTTON_ID,
-	STRINGS
+	STRINGS,
+	SALON_FILTER_RS,
+	SALON_FILTER_RS_AVAILABLE_ONLINE,
+	VALIDATION_MAX_LENGTH
 } from '../../../../utils/enums'
-import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getRangesForDatePicker, optionRenderWithTag, formFieldID } from '../../../../utils/helper'
+import {
+	getLinkWithEncodedBackUrl,
+	optionRenderWithImage,
+	validationString,
+	getRangesForDatePicker,
+	optionRenderWithTag,
+	formFieldID,
+	optionRenderWithIcon
+} from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import searchWrapper from '../../../../utils/filters'
+import { getCheckerIcon } from '../salonUtils'
 
 // atoms
 import InputField from '../../../../atoms/InputField'
 import SelectField from '../../../../atoms/SelectField'
 import DateRangePickerField from '../../../../atoms/DateRangePickerField'
 import SwitchField from '../../../../atoms/SwitchField'
+
+// hooks
 import useMedia from '../../../../hooks/useMedia'
+import { IUseQueryParams } from '../../../../hooks/useQueryParams'
 
 type ComponentProps = {
 	onImportSalons: () => void
 	onDownloadReport: () => void
+	query: IUseQueryParams
 }
 
 export interface ISalonsFilterActive {
@@ -71,7 +87,7 @@ export interface ISalonsFilterActive {
 
 type Props = InjectedFormProps<ISalonsFilterActive, ComponentProps> & ComponentProps
 
-const fixLength100 = validationString(100)
+const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
 export const checkSalonFiltersSize = (formValues: any) =>
 	size(
@@ -90,10 +106,16 @@ export const checkSalonFiltersSize = (formValues: any) =>
 	)
 
 const SalonsFilterActive = (props: Props) => {
-	const { handleSubmit, onImportSalons, onDownloadReport } = props
+	const { handleSubmit, onImportSalons, onDownloadReport, query } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
+
+	const firstRender = useRef(true)
+
+	useEffect(() => {
+		firstRender.current = false
+	}, [])
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER_ACITVE])
 	const categories = useSelector((state: RootState) => state.categories.categories)
@@ -102,7 +124,7 @@ const SalonsFilterActive = (props: Props) => {
 
 	const searchNotinoUsers = useCallback(
 		async (search: string, page: number) => {
-			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.NOTINO_USER)
+			return searchWrapper(dispatch, { page, search, limit: 100 }, FILTER_ENTITY.NOTINO_USER)
 		},
 		[dispatch]
 	)
@@ -153,6 +175,32 @@ const SalonsFilterActive = (props: Props) => {
 		() => [
 			{ label: t('loc:Má vyplnené otváracie hodiny'), value: SALON_FILTER_OPENING_HOURS.SET, key: SALON_FILTER_OPENING_HOURS.SET },
 			{ label: t('loc:Nemá vyplnené otváracie hodiny'), value: SALON_FILTER_OPENING_HOURS.NOT_SET, key: SALON_FILTER_OPENING_HOURS.NOT_SET }
+		],
+		[t]
+	)
+
+	const rsOptions = useMemo(
+		() => [
+			{ label: t('loc:Zapnutý rezervačný systém'), value: SALON_FILTER_RS.ENABLED, key: SALON_FILTER_RS.ENABLED, icon: getCheckerIcon(true) },
+			{ label: t('loc:Vypnutý rezervačný systém'), value: SALON_FILTER_RS.NOT_ENABLED, key: SALON_FILTER_RS.NOT_ENABLED, icon: getCheckerIcon(false) }
+		],
+		[t]
+	)
+
+	const rsAvailableOnlineOptions = useMemo(
+		() => [
+			{
+				label: t('loc:Dostupné pre online rezervácie'),
+				value: SALON_FILTER_RS_AVAILABLE_ONLINE.AVAILABLE,
+				key: SALON_FILTER_RS_AVAILABLE_ONLINE.AVAILABLE,
+				icon: getCheckerIcon(true)
+			},
+			{
+				label: t('loc:Nedostupné pre online rezervácie'),
+				value: SALON_FILTER_RS_AVAILABLE_ONLINE.NOT_AVAILABLE,
+				key: SALON_FILTER_RS_AVAILABLE_ONLINE.NOT_AVAILABLE,
+				icon: getCheckerIcon(false)
+			}
 		],
 		[t]
 	)
@@ -314,7 +362,7 @@ const SalonsFilterActive = (props: Props) => {
 				name={'search'}
 				fieldMode={FIELD_MODE.FILTER}
 				search
-				validate={fixLength100}
+				validate={fixLength255}
 			/>
 		),
 		[t]
@@ -322,7 +370,7 @@ const SalonsFilterActive = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters customContent={customContent} search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)} form={FORM.SALONS_FILTER_ACITVE}>
+			<Filters customContent={customContent} search={searchInput} activeFilters={checkSalonFiltersSize(form?.values)} form={FORM.SALONS_FILTER_ACITVE} forceRender>
 				<>
 					<Row>
 						<Col span={24}>
@@ -330,26 +378,26 @@ const SalonsFilterActive = (props: Props) => {
 						</Col>
 					</Row>
 
-					<Row gutter={ROW_GUTTER_X_DEFAULT} wrap={false}>
+					<Row gutter={ROW_GUTTER_X_M} wrap={false}>
 						<Col span={3} className={'statuses-filter-all-col'}>
-							<Field component={SwitchField} name={'statuses_all'} size={'middle'} label={t('loc:Všetky')} />
+							<Field component={SwitchField} name={'statuses_all'} size={'large'} label={t('loc:Všetky')} />
 						</Col>
-						<Row className={'flex-1'} gutter={ROW_GUTTER_X_DEFAULT}>
-							<Col span={5}>
+						<Row className={'flex-1'} gutter={ROW_GUTTER_X_M}>
+							<Col span={8}>
 								<Field
 									component={SelectField}
 									name={'statuses_published'}
 									placeholder={t('loc:Publikovaný')}
-									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
 									filterOptions
 									onDidMountSearch
+									className={'select-with-tag-options'}
 									options={publishedOptions}
 									optionRender={optionRenderWithTag}
 								/>
 							</Col>
-							<Col span={5}>
+							<Col span={8}>
 								<Field
 									component={SelectField}
 									name={'statuses_changes'}
@@ -363,7 +411,7 @@ const SalonsFilterActive = (props: Props) => {
 									optionRender={optionRenderWithTag}
 								/>
 							</Col>
-							<Col span={4}>
+							<Col span={8}>
 								<Field
 									component={SelectField}
 									name={'createType'}
@@ -377,113 +425,141 @@ const SalonsFilterActive = (props: Props) => {
 									optionRender={optionRenderWithTag}
 								/>
 							</Col>
-							<Col span={5}>
-								<Field
-									component={SelectField}
-									name={'sourceType'}
-									placeholder={t('loc:Zdroj vytvorenia')}
-									className={'select-with-tag-options'}
-									allowClear
-									size={'large'}
-									filterOptions
-									onDidMountSearch
-									options={sourceOptions}
-									optionRender={optionRenderWithTag}
-								/>
-							</Col>
-							<Col span={5}>
-								<Field
-									component={SelectField}
-									name={'premiumSourceUserType'}
-									placeholder={t('loc:Zdroj PREMIUM')}
-									className={'select-with-tag-options'}
-									allowClear
-									size={'large'}
-									filterOptions
-									onDidMountSearch
-									options={premiumSourceOptions}
-									optionRender={optionRenderWithTag}
-								/>
-							</Col>
 						</Row>
 					</Row>
+
 					<Divider className={'mt-0 mb-4'} />
 
-					<Row gutter={ROW_GUTTER_X_DEFAULT}>
-						<Row className={'flex-1 items-center'} gutter={ROW_GUTTER_X_DEFAULT}>
-							<Col span={5}>
-								<Field
-									component={SelectField}
-									name={'categoryFirstLevelIDs'}
-									mode={'multiple'}
-									placeholder={t('loc:Odvetvie')}
-									allowClear
-									size={'middle'}
-									filterOptions
-									onDidMountSearch
-									optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
-									options={categories?.enumerationsOptions}
-									loading={categories?.isLoading}
-									disabled={categories?.isLoading}
-								/>
-							</Col>
-							<Col span={4}>
-								<Field
-									component={SelectField}
-									optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
-									name={'countryCode'}
-									placeholder={t('loc:Krajina')}
-									allowClear
-									size={'middle'}
-									filterOptions
-									onDidMountSearch
-									options={countries?.enumerationsOptions}
-									loading={countries?.isLoading}
-									disabled={countries?.isLoading}
-								/>
-							</Col>
-							<Col span={5}>
-								<Field
-									className={'w-full'}
-									rangePickerClassName={'w-full'}
-									component={DateRangePickerField}
-									disableFuture
-									placeholder={[t('loc:Úpravy od'), t('loc:Úpravy do')]}
-									allowClear
-									name={'dateFromTo'}
-									presets={getRangesForDatePicker()}
-									dropdownAlign={{ points: ['tl', 'bl'] }}
-									allowEmpty={[false, false]}
-								/>
-							</Col>
-							<Col span={5}>
-								<Field
-									component={SelectField}
-									name={'hasSetOpeningHours'}
-									placeholder={t('loc:Otváracie hodiny')}
-									allowClear
-									size={'middle'}
-									filterOptions
-									onDidMountSearch
-									options={openingHoursOptions}
-								/>
-							</Col>
-							<Col span={5}>
-								<Field
-									component={SelectField}
-									placeholder={t('loc:Priradený Notino používateľ')}
-									name={'assignedUserID'}
-									size={'middle'}
-									showSearch
-									onSearch={searchNotinoUsers}
-									loading={notinoUsers.isLoading}
-									allowInfinityScroll
-									allowClear
-									filterOption={false}
-									onDidMountSearch
-								/>
-							</Col>
-						</Row>
+					<Row className={'items-center'} gutter={ROW_GUTTER_X_M}>
+						<Col span={4}>
+							<Field
+								component={SelectField}
+								optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
+								name={'countryCode'}
+								placeholder={t('loc:Krajina')}
+								allowClear
+								size={'large'}
+								filterOptions
+								onDidMountSearch
+								options={countries?.enumerationsOptions}
+								loading={countries?.isLoading}
+								disabled={countries?.isLoading}
+							/>
+						</Col>
+						<Col span={5}>
+							<Field
+								component={SelectField}
+								name={'categoryFirstLevelIDs'}
+								mode={'multiple'}
+								placeholder={t('loc:Odvetvie')}
+								allowClear
+								size={'large'}
+								filterOptions
+								onDidMountSearch
+								optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
+								options={categories?.enumerationsOptions}
+								loading={categories?.isLoading}
+								disabled={categories?.isLoading}
+							/>
+						</Col>
+						<Col span={5}>
+							<Field
+								component={SelectField}
+								name={'sourceType'}
+								placeholder={t('loc:Zdroj vytvorenia')}
+								className={'select-with-tag-options'}
+								allowClear
+								size={'large'}
+								filterOptions
+								onDidMountSearch
+								options={sourceOptions}
+								optionRender={optionRenderWithTag}
+							/>
+						</Col>
+						<Col span={5}>
+							<Field
+								component={SelectField}
+								name={'premiumSourceUserType'}
+								placeholder={t('loc:Zdroj PREMIUM')}
+								className={'select-with-tag-options'}
+								allowClear
+								size={'large'}
+								filterOptions
+								onDidMountSearch
+								options={premiumSourceOptions}
+								optionRender={optionRenderWithTag}
+							/>
+						</Col>
+						<Col span={5}>
+							<Field
+								className={'w-full'}
+								rangePickerClassName={'w-full'}
+								component={DateRangePickerField}
+								disableFuture
+								placeholder={[t('loc:Úpravy od'), t('loc:Úpravy do')]}
+								allowClear
+								name={'dateFromTo'}
+								presets={getRangesForDatePicker()}
+								dropdownAlign={{ points: ['tr', 'br'] }}
+								allowEmpty={[false, false]}
+								size={'large'}
+							/>
+						</Col>
+					</Row>
+					<Row className={'flex-1 items-center'} gutter={ROW_GUTTER_X_M}>
+						<Col span={6}>
+							<Field
+								component={SelectField}
+								name={'enabledReservationsSetting'}
+								placeholder={t('loc:Rezervačný systém')}
+								allowClear
+								size={'large'}
+								filterOptions
+								onDidMountSearch
+								options={rsOptions}
+								optionRender={(option: any) => optionRenderWithIcon(option, undefined, 24, 24)}
+							/>
+						</Col>
+						<Col span={6}>
+							<Field
+								component={SelectField}
+								name={'hasAvailableReservationSystem'}
+								placeholder={t('loc:Dostupné pre online rezervácie')}
+								allowClear
+								size={'large'}
+								filterOptions
+								onDidMountSearch
+								options={rsAvailableOnlineOptions}
+								optionRender={(option: any) => optionRenderWithIcon(option, undefined, 24, 24)}
+							/>
+						</Col>
+						<Col span={6}>
+							<Field
+								component={SelectField}
+								name={'hasSetOpeningHours'}
+								placeholder={t('loc:Otváracie hodiny')}
+								allowClear
+								size={'large'}
+								filterOptions
+								onDidMountSearch
+								options={openingHoursOptions}
+							/>
+						</Col>
+						<Col span={6}>
+							<Field
+								component={SelectField}
+								placeholder={t('loc:Priradený Notino používateľ')}
+								name={'assignedUserID'}
+								size={'large'}
+								showSearch
+								onSearch={searchNotinoUsers}
+								loading={notinoUsers.isLoading}
+								allowInfinityScroll
+								allowClear
+								filterOption={false}
+								onDidMountSearch={firstRender.current && !!query?.assignedUserID}
+							/>
+						</Col>
 					</Row>
 				</>
 			</Filters>

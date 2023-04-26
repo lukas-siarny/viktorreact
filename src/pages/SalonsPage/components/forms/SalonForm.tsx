@@ -164,12 +164,12 @@ const SalonForm: FC<Props> = (props) => {
 							<Row className={'py-2'} wrap={false}>
 								{!deletedSalon ? (
 									<>
-										{getSalonTagSourceType(formValues?.sourceOfPremium)}
-										{getSalonTagPublished(formValues?.state as SALON_STATES)}
-										{getSalonTagChanges(formValues?.state as SALON_STATES)}
+										{getSalonTagSourceType(salonData?.premiumSourceUserType)}
+										{getSalonTagPublished(salonData?.state as SALON_STATES)}
+										{getSalonTagChanges(salonData?.state as SALON_STATES)}
 									</>
 								) : (
-									getSalonTagDeleted(!!formValues?.deletedAt, true)
+									getSalonTagDeleted(true, true)
 								)}
 							</Row>
 						</Row>
@@ -251,7 +251,6 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 							allowClear
 							allowInfinityScroll
-							onDidMountSearch
 						/>
 						<Field
 							component={ImgUploadField}

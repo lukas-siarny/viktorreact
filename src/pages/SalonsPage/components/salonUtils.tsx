@@ -5,7 +5,7 @@ import i18next from 'i18next'
 
 // types
 import { OpeningHours } from '../../../types/interfaces'
-import { ISalonPayloadData } from '../../../reducers/selectedSalon/selectedSalonActions'
+import { ISelectedSalonPayload } from '../../../reducers/selectedSalon/selectedSalonActions'
 import { IBasicSalon } from '../../../reducers/salons/salonsActions'
 import { Paths } from '../../../types/api'
 
@@ -25,6 +25,10 @@ import {
 // schema
 import { ISalonForm } from '../../../schemas/salon'
 
+// assets
+import { ReactComponent as CheckerIcon } from '../../../assets/icons/check-icon-success.svg'
+import { ReactComponent as CrossIcon } from '../../../assets/icons/cross.svg'
+
 const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	{
 		phonePrefixCountryCode,
@@ -32,7 +36,7 @@ const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	}
 ]
 
-export type SalonInitType = ISalonPayloadData & IBasicSalon
+export type SalonInitType = ISelectedSalonPayload['data'] & IBasicSalon
 
 /**
  *
@@ -55,7 +59,6 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 	// preto maju vsetky inicializacne hodnoty, pre textFieldy a textAreaFieldy fallback || null (pozri impementaciu tychto komponentov, preco sa to tam takto uklada)
 	const initialData = {
 		id: salonData.id || null,
-		deletedAt: !!salonData.deletedAt,
 		state: salonData.state as SALON_STATES,
 		sourceOfPremium: salonData.premiumSourceUserType,
 		name:
@@ -293,3 +296,5 @@ export const getSalonTagSourceType = (sourceType?: string | SALON_SOURCE_TYPE) =
 			return null
 	}
 }
+
+export const getCheckerIcon = (valid?: boolean) => (valid ? <CheckerIcon /> : <CrossIcon width={24} height={24} color={'#BFBFBF'} />)

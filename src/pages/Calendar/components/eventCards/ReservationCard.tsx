@@ -92,7 +92,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		isPlaceholder,
 		isEdit,
 		onReservationClick,
-		onEditEvent,
+		// onEditEvent,
 		timeLeftClassName,
 		isImported
 	} = props
@@ -133,11 +133,12 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 	const cardRef = useRef<HTMLDivElement | null>(null)
 
 	const handleReservationClick = () => {
-		if (isImported && originalEventData.id) {
+		// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+		/* if (isImported && originalEventData.id) {
 			// NOTE: importovanemu eventu nezobrazujeme popover, ale rovno sa otvori sidebar
 			onEditEvent(CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT, originalEventData.id)
 			return
-		}
+		} */
 
 		// NOTE: prevent proti kliknutiu na virutalny event rezervacie neotvori sa popover
 		if (startsWith(originalEventData.id, NEW_ID_PREFIX)) {

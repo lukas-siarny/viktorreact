@@ -59,6 +59,7 @@ import RechargeSmsCreditPage from '../pages/SmsCreditPartnerPage/RechargeSmsCred
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 import ErrorBoundary from '../components/ErrorBoundary'
+import { getPendingReservationsCount } from '../reducers/calendar/calendarActions'
 
 const SalonSubRoutes: FC = () => {
 	const navigate = useNavigate()
@@ -81,6 +82,9 @@ const SalonSubRoutes: FC = () => {
 			// clear salon selection due error 404 - Not Found
 			dispatch(selectSalon())
 			navigate('/404')
+		} else {
+			// NOTE: EP for count of pending reservations which is displayed in Menu item   Prehľad rezervácií (count)
+			dispatch(getPendingReservationsCount(salon.data.deletedAt ? undefined : salonID))
 		}
 	}, [salonID, dispatch, navigate])
 
@@ -104,13 +108,14 @@ const SalonSubRoutes: FC = () => {
 				navigate('/403')
 			}
 		}
-	}, [salonID, fetchSalon, currentUser, selectedSalon?.id, navigate])
+	}, [salonID, fetchSalon, currentUser, selectedSalon?.id, selectedSalon?.deletedAt, navigate])
 
 	return (
 		<Routes>
 			{/* SALON DETAIL */}
 			<Route errorElement={<ErrorBoundary />} element={<AuthRoute layout={MainLayout} page={PAGE.SALONS} />}>
 				<Route index element={<SalonPage salonID={salonID as string} />} />
+				<Route path={t('paths:history')} element={<SalonPage salonID={salonID as string} />} />
 			</Route>
 			{/* CUSTOMERS */}
 			<Route errorElement={<ErrorBoundary />} path={t('paths:customers')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.CUSTOMERS} />}>
@@ -165,7 +170,11 @@ const SalonSubRoutes: FC = () => {
 				<Route index element={<Calendar salonID={salonID} parentPath={parentPath} />} />
 			</Route>
 			{/* RESERVATIONS */}
-			<Route errorElement={<ErrorBoundary />} path={t('paths:reservations')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.RESERVATIONS} />}>
+			<Route
+				errorElement={<ErrorBoundary />}
+				path={t('paths:salon-reservations')}
+				element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.RESERVATIONS} />}
+			>
 				<Route index element={<ReservationsPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* RESERVATIONS SETTINGS */}

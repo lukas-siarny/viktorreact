@@ -844,6 +844,221 @@ declare namespace Paths {
             export type $200 = "";
         }
     }
+    namespace GetApiB2BAdminCalendarEventsReservations {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CategoryFirstLevelIDs = string /* uuid */[];
+            /**
+             * example:
+             * SK
+             */
+            export type CountryCode = string;
+            export type CreatedAtFrom = string; // date-time
+            export type CreatedAtTo = string; // date-time
+            export type DateFrom = string; // date-time
+            export type DateTo = string; // date-time
+            export type Limit = number;
+            /**
+             * Order attributes: startDate, createdAt, salonName
+             * example:
+             * createdAt:desc
+             */
+            export type Order = string;
+            export type Page = number;
+            export type ReservationCreateSourceType = "ONLINE" | "OFFLINE";
+            export type ReservationPaymentMethods = ("CASH" | "CARD" | "OTHER")[];
+            export type ReservationStates = ("PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED")[];
+            export type Search = string | null;
+        }
+        export interface QueryParameters {
+            dateFrom?: Parameters.DateFrom /* date-time */;
+            dateTo?: Parameters.DateTo /* date-time */;
+            createdAtFrom?: Parameters.CreatedAtFrom /* date-time */;
+            createdAtTo?: Parameters.CreatedAtTo /* date-time */;
+            reservationStates?: Parameters.ReservationStates;
+            reservationCreateSourceType?: Parameters.ReservationCreateSourceType;
+            reservationPaymentMethods?: Parameters.ReservationPaymentMethods;
+            categoryFirstLevelIDs?: Parameters.CategoryFirstLevelIDs;
+            countryCode?: /**
+             * example:
+             * SK
+             */
+            Parameters.CountryCode;
+            search?: Parameters.Search;
+            order?: /**
+             * Order attributes: startDate, createdAt, salonName
+             * example:
+             * createdAt:desc
+             */
+            Parameters.Order;
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                reservations?: {
+                    id: string; // uuid
+                    eventType: "RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    salon: {
+                        id?: string; // uuid
+                        name?: string;
+                    };
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
+                    };
+                    customer: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        /**
+                         * example:
+                         * SK
+                         */
+                        phonePrefixCountryCode: string;
+                        /**
+                         * example:
+                         * 906047188
+                         */
+                        phone: string; // ^\d+$
+                        profileImage: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    employee: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        deletedAt?: string; // date-time
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    service: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
+                };
+            }
+        }
+    }
+    namespace GetApiB2BAdminConfig {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        namespace Responses {
+            export interface $200 {
+                importOfClientsTemplates: {
+                    xlsx?: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        isAutogenerated: boolean;
+                    };
+                    csv?: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        isAutogenerated: boolean;
+                    };
+                };
+            }
+        }
+    }
     namespace GetApiB2BAdminCustomers {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -2654,8 +2869,16 @@ declare namespace Paths {
                         sevenDaysAgo: number;
                     };
                     nonBasicSalonsWithoutServices: number;
-                    actualCounEnabledRsB2b: number;
-                    actualCounEnabledRsB2c: number;
+                    unpublishedPremiumSalons: {
+                        premiumDisabledRs: number;
+                        premiumEnabledRsB2b: number;
+                        premiumEnabledRsB2c: number;
+                    };
+                    publishedPremiumSalons: {
+                        premiumDisabledRs: number;
+                        premiumEnabledRsB2b: number;
+                        premiumEnabledRsB2c: number;
+                    };
                 };
             }
         }
@@ -2743,49 +2966,6 @@ declare namespace Paths {
                         newReservationsB2b: number;
                         newReservationsB2c: number;
                         newReservationsTotal: number;
-                    };
-                };
-            }
-        }
-    }
-    namespace GetApiB2BAdminNotinoDashboardSalonRsTimeStats {
-        export interface HeaderParameters {
-            "accept-language"?: /**
-             * example:
-             * sk
-             */
-            Parameters.AcceptLanguage;
-        }
-        namespace Parameters {
-            /**
-             * example:
-             * sk
-             */
-            export type AcceptLanguage = string;
-            /**
-             * example:
-             * SK
-             */
-            export type CountryCode = string | null;
-            export type Month = null | number;
-            export type Year = number;
-        }
-        export interface QueryParameters {
-            month?: Parameters.Month;
-            year: Parameters.Year;
-            countryCode?: /**
-             * example:
-             * SK
-             */
-            Parameters.CountryCode;
-        }
-        namespace Responses {
-            export interface $200 {
-                type: "MONTH" | "YEAR";
-                ranges: {
-                    [name: string]: {
-                        countEnabledRsB2b: number;
-                        countEnabledRsB2c: number;
                     };
                 };
             }
@@ -3119,6 +3299,8 @@ declare namespace Paths {
              */
             export type CountryCode = string;
             export type CreateType = "NON_BASIC" | "BASIC";
+            export type EnabledReservationsSetting = boolean;
+            export type HasAvailableReservationSystem = boolean;
             export type HasSetOpeningHours = boolean;
             export type LastUpdatedAtFrom = string; // date-time
             export type LastUpdatedAtTo = string; // date-time
@@ -3157,6 +3339,8 @@ declare namespace Paths {
             premiumSourceUserType?: Parameters.PremiumSourceUserType;
             walletAvailableBalanceFrom?: Parameters.WalletAvailableBalanceFrom;
             walletAvailableBalanceTo?: Parameters.WalletAvailableBalanceTo;
+            enabledReservationsSetting?: Parameters.EnabledReservationsSetting;
+            hasAvailableReservationSystem?: Parameters.HasAvailableReservationSystem;
             order?: /**
              * Order attributes: name, fillingProgress, createdAt
              * example:
@@ -3174,6 +3358,9 @@ declare namespace Paths {
                     publicationDeclineReason?: string;
                     name?: string;
                     email?: string;
+                    settings: {
+                        enabledReservations: boolean;
+                    };
                     phones: {
                         /**
                          * example:
@@ -3227,6 +3414,7 @@ declare namespace Paths {
                             symbol: string;
                         };
                     };
+                    availableReservationSystem: boolean;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -4188,7 +4376,7 @@ declare namespace Paths {
                     };
                     settings: {
                         enabledReservations: boolean;
-                        enabledB2cReservations: boolean;
+                        enabledB2cReservations?: boolean;
                         maxDaysB2cCreateReservation: number;
                         maxHoursB2cCreateReservationBeforeStart: number;
                         maxHoursB2cCancelReservationBeforeStart: number;
@@ -4538,7 +4726,6 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
-                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -5058,7 +5245,6 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
-                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -5187,7 +5373,10 @@ declare namespace Paths {
                 string?,
                 string?
             ];
+            export type CreatedAtFrom = string; // date-time
+            export type CreatedAtTo = string; // date-time
             export type DateFrom = string; // date-time
+            export type DateTo = string; // date-time
             export type EmployeeIDs = [
                 string?,
                 string?,
@@ -5293,9 +5482,9 @@ declare namespace Paths {
             export type EventTypes = ("RESERVATION_FROM_IMPORT" | "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF")[];
             export type Limit = number;
             /**
-             * Order attributes: startDate
+             * Order attributes: createdAt
              * example:
-             * startDate:asc
+             * createdAt:desc
              */
             export type Order = string;
             export type Page = number;
@@ -5308,7 +5497,10 @@ declare namespace Paths {
             salonID: Parameters.SalonID /* uuid */;
         }
         export interface QueryParameters {
-            dateFrom: Parameters.DateFrom /* date-time */;
+            dateFrom?: Parameters.DateFrom /* date-time */;
+            dateTo?: Parameters.DateTo /* date-time */;
+            createdAtFrom?: Parameters.CreatedAtFrom /* date-time */;
+            createdAtTo?: Parameters.CreatedAtTo /* date-time */;
             eventTypes?: Parameters.EventTypes;
             employeeIDs?: Parameters.EmployeeIDs;
             categoryIDs?: Parameters.CategoryIDs;
@@ -5316,9 +5508,9 @@ declare namespace Paths {
             reservationCreateSourceType?: Parameters.ReservationCreateSourceType;
             reservationPaymentMethods?: Parameters.ReservationPaymentMethods;
             order?: /**
-             * Order attributes: startDate
+             * Order attributes: createdAt
              * example:
-             * startDate:asc
+             * createdAt:desc
              */
             Parameters.Order;
             limit?: Parameters.Limit;
@@ -5346,7 +5538,6 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
-                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -5524,7 +5715,7 @@ declare namespace Paths {
                     };
                     wallet?: {
                         id: string; // uuid
-                        availableBalance: number; // float
+                        availableBalance: string;
                         currency: {
                             /**
                              * example:
@@ -9553,7 +9744,7 @@ declare namespace Paths {
                     settingsSegment: {
                         settings: {
                             enabledReservations: boolean;
-                            enabledB2cReservations: boolean;
+                            enabledB2cReservations?: boolean;
                             maxDaysB2cCreateReservation: number;
                             maxHoursB2cCreateReservationBeforeStart: number;
                             maxHoursB2cCancelReservationBeforeStart: number;
@@ -9926,7 +10117,6 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
-                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -10460,7 +10650,6 @@ declare namespace Paths {
                     };
                     inviteEmail?: string;
                     orderIndex: number;
-                    isVirtual: boolean;
                     deletedAt?: string; // date-time
                 }[];
                 calendarEvents: {
@@ -10638,7 +10827,7 @@ declare namespace Paths {
                     };
                     wallet?: {
                         id: string; // uuid
-                        availableBalance: number; // float
+                        availableBalance: string;
                         currency: {
                             /**
                              * example:
@@ -12622,6 +12811,7 @@ declare namespace Paths {
             export type CosmeticIDs = string /* uuid */[];
             export type CreateType = "NON_BASIC" | "BASIC";
             export type ExactRating = number /* float */[];
+            export type HasAvailableReservationSystem = boolean;
             export type LanguageIDs = string /* uuid */[];
             export type Lat = number; // float
             export type LatMy = number; // float
@@ -12654,6 +12844,7 @@ declare namespace Paths {
             cosmeticIDs?: Parameters.CosmeticIDs;
             liked?: Parameters.Liked;
             createType?: Parameters.CreateType;
+            hasAvailableReservationSystem?: Parameters.HasAvailableReservationSystem;
             order?: /**
              * Order attributes: distance, rating, priceLevel
              * example:
@@ -12982,6 +13173,7 @@ declare namespace Paths {
             export type CosmeticIDs = string /* uuid */[];
             export type CreateType = "NON_BASIC" | "BASIC";
             export type ExactRating = number /* float */[];
+            export type HasAvailableReservationSystem = boolean;
             export type LanguageIDs = string /* uuid */[];
             export type LatMy = number; // float
             export type LatNW = number; // float
@@ -13010,6 +13202,7 @@ declare namespace Paths {
             cosmeticIDs?: Parameters.CosmeticIDs;
             liked?: Parameters.Liked;
             createType?: Parameters.CreateType;
+            hasAvailableReservationSystem?: Parameters.HasAvailableReservationSystem;
         }
         namespace Responses {
             export interface $200 {
@@ -15594,6 +15787,7 @@ declare namespace Paths {
             export type CosmeticIDs = string /* uuid */[];
             export type CreateType = "NON_BASIC" | "BASIC";
             export type ExactRating = number /* float */[];
+            export type HasAvailableReservationSystem = boolean;
             export type LanguageIDs = string /* uuid */[];
             export type Lat = number; // float
             export type LatMy = number; // float
@@ -15626,6 +15820,7 @@ declare namespace Paths {
             cosmeticIDs?: Parameters.CosmeticIDs;
             liked?: Parameters.Liked;
             createType?: Parameters.CreateType;
+            hasAvailableReservationSystem?: Parameters.HasAvailableReservationSystem;
             order?: /**
              * Order attributes: distance, rating, priceLevel
              * example:
@@ -15954,6 +16149,7 @@ declare namespace Paths {
             export type CosmeticIDs = string /* uuid */[];
             export type CreateType = "NON_BASIC" | "BASIC";
             export type ExactRating = number /* float */[];
+            export type HasAvailableReservationSystem = boolean;
             export type LanguageIDs = string /* uuid */[];
             export type LatMy = number; // float
             export type LatNW = number; // float
@@ -15982,6 +16178,7 @@ declare namespace Paths {
             cosmeticIDs?: Parameters.CosmeticIDs;
             liked?: Parameters.Liked;
             createType?: Parameters.CreateType;
+            hasAvailableReservationSystem?: Parameters.HasAvailableReservationSystem;
         }
         namespace Responses {
             export interface $200 {
@@ -39573,7 +39770,7 @@ declare namespace Paths {
                     settingsSegment: {
                         settings: {
                             enabledReservations: boolean;
-                            enabledB2cReservations: boolean;
+                            enabledB2cReservations?: boolean;
                             maxDaysB2cCreateReservation: number;
                             maxHoursB2cCreateReservationBeforeStart: number;
                             maxHoursB2cCancelReservationBeforeStart: number;
@@ -40873,7 +41070,7 @@ declare namespace Paths {
                     settingsSegment: {
                         settings: {
                             enabledReservations: boolean;
-                            enabledB2cReservations: boolean;
+                            enabledB2cReservations?: boolean;
                             maxDaysB2cCreateReservation: number;
                             maxHoursB2cCreateReservationBeforeStart: number;
                             maxHoursB2cCancelReservationBeforeStart: number;
@@ -59282,7 +59479,7 @@ declare namespace Paths {
                     settingsSegment: {
                         settings: {
                             enabledReservations: boolean;
-                            enabledB2cReservations: boolean;
+                            enabledB2cReservations?: boolean;
                             maxDaysB2cCreateReservation: number;
                             maxHoursB2cCreateReservationBeforeStart: number;
                             maxHoursB2cCancelReservationBeforeStart: number;
@@ -61280,6 +61477,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.Responses.$200>
   /**
+   * getApiB2BAdminConfig - permissions: NO
+   */
+  'getApiB2BAdminConfig'(
+    parameters?: Parameters<Paths.GetApiB2BAdminConfig.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminConfig.Responses.$200>
+  /**
    * postApiB2BV1AuthLogin - Endpoint is used for login., permissions: NO
    */
   'postApiB2BV1AuthLogin'(
@@ -62169,8 +62374,8 @@ export interface OperationMethods {
   ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
   /**
    * getApiB2BAdminSalons - Endpoint is used for getting an array of salons.
-   * 	It possible to use search (name, zipCode, city, street, streetNumber, businessID),
-   * 	filter (categoryFirstLevelIDs, statuses, countryCode, pendingPublication, createType, sourceTypes, lastUpdatedAtFrom, lastUpdatedAtTo, hasSetOpeningHours, assignedUserID, premiumSourceUserType),
+   * 	It is possible to use search (name, zipCode, city, street, streetNumber, businessID),
+   * 	filter (categoryFirstLevelIDs, statuses, countryCode, pendingPublication, createType, sourceTypes, lastUpdatedAtFrom, lastUpdatedAtTo, hasSetOpeningHours, assignedUserID, premiumSourceUserType, walletAvailableBalanceFrom, walletAvailableBalanceTo, enabledReservationsSetting, hasAvailableReservationSystem),
    * 	order (name, fillingProgress, createdAt) and pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
    */
   'getApiB2BAdminSalons'(
@@ -62427,14 +62632,6 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonReservationsTimeStats.Responses.$200>
   /**
-   * getApiB2BAdminNotinoDashboardSalonRsTimeStats - Endpoint is used for getting statistics on enabled reservation systems of salons in time., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
-   */
-  'getApiB2BAdminNotinoDashboardSalonRsTimeStats'(
-    parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.Responses.$200>
-  /**
    * getApiB2BAdminNotinoDashboardSmsTimeStats - Endpoint is used for getting statistics of sms notifications in time. It is possible to use filter (month, year, countryCode), permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
    */
   'getApiB2BAdminNotinoDashboardSmsTimeStats'(
@@ -62458,6 +62655,14 @@ export interface OperationMethods {
     data?: Paths.PostApiB2BAdminWalletsTransactions.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminWalletsTransactions.Responses.$200>
+  /**
+   * getApiB2BAdminCalendarEventsReservations - Endpoint is used for getting an array of reservations. It is possible to use search (id, salonName), filter (dateFrom, reservationStates, reservationCreateSourceType, reservationPaymentMethods, categoryFirstLevelIDs, countryCode), order (startDate, createdAt, salonName) and pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+   */
+  'getApiB2BAdminCalendarEventsReservations'(
+    parameters?: Parameters<Paths.GetApiB2BAdminCalendarEventsReservations.QueryParameters & Paths.GetApiB2BAdminCalendarEventsReservations.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminCalendarEventsReservations.Responses.$200>
   /**
    * postApiB2BV1FilesSignUrls - Endpoint is used for signing AWS urls of files., permissions:<ul><li>notino</li><li>partner: [PARTNER]</li></ul>
    */
@@ -63025,7 +63230,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminImportsSalons.Responses.$200>
   /**
-   * postApiB2BAdminImportsSalonsSalonIdCustomers - Endpoint is used for importing customers from a file (.csv)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
+   * postApiB2BAdminImportsSalonsSalonIdCustomers - Endpoint is used for importing customers from a file (.csv, .xlsx)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
    */
   'postApiB2BAdminImportsSalonsSalonIdCustomers'(
     parameters?: Parameters<Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.PathParameters & Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.HeaderParameters> | null,
@@ -63716,6 +63921,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsSmsUnitPricesSmsUnitPriceId.Responses.$200>
+  }
+  ['/api/b2b/admin/config/']: {
+    /**
+     * getApiB2BAdminConfig - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminConfig.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminConfig.Responses.$200>
   }
   ['/api/b2b/v1/auth/login']: {
     /**
@@ -64808,8 +65023,8 @@ export interface PathsDictionary {
   ['/api/b2b/admin/salons/']: {
     /**
      * getApiB2BAdminSalons - Endpoint is used for getting an array of salons.
-     * 	It possible to use search (name, zipCode, city, street, streetNumber, businessID),
-     * 	filter (categoryFirstLevelIDs, statuses, countryCode, pendingPublication, createType, sourceTypes, lastUpdatedAtFrom, lastUpdatedAtTo, hasSetOpeningHours, assignedUserID, premiumSourceUserType),
+     * 	It is possible to use search (name, zipCode, city, street, streetNumber, businessID),
+     * 	filter (categoryFirstLevelIDs, statuses, countryCode, pendingPublication, createType, sourceTypes, lastUpdatedAtFrom, lastUpdatedAtTo, hasSetOpeningHours, assignedUserID, premiumSourceUserType, walletAvailableBalanceFrom, walletAvailableBalanceTo, enabledReservationsSetting, hasAvailableReservationSystem),
      * 	order (name, fillingProgress, createdAt) and pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
      */
     'get'(
@@ -65106,16 +65321,6 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonReservationsTimeStats.Responses.$200>
   }
-  ['/api/b2b/admin/notino-dashboard/salon-rs-time-stats']: {
-    /**
-     * getApiB2BAdminNotinoDashboardSalonRsTimeStats - Endpoint is used for getting statistics on enabled reservation systems of salons in time., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonRsTimeStats.Responses.$200>
-  }
   ['/api/b2b/admin/notino-dashboard/sms-time-stats']: {
     /**
      * getApiB2BAdminNotinoDashboardSmsTimeStats - Endpoint is used for getting statistics of sms notifications in time. It is possible to use filter (month, year, countryCode), permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
@@ -65145,6 +65350,16 @@ export interface PathsDictionary {
       data?: Paths.PostApiB2BAdminWalletsTransactions.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminWalletsTransactions.Responses.$200>
+  }
+  ['/api/b2b/admin/calendar-events/reservations']: {
+    /**
+     * getApiB2BAdminCalendarEventsReservations - Endpoint is used for getting an array of reservations. It is possible to use search (id, salonName), filter (dateFrom, reservationStates, reservationCreateSourceType, reservationPaymentMethods, categoryFirstLevelIDs, countryCode), order (startDate, createdAt, salonName) and pagination., permissions:<ul><li>notino: [NOTINO]</li><li>partner</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminCalendarEventsReservations.QueryParameters & Paths.GetApiB2BAdminCalendarEventsReservations.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminCalendarEventsReservations.Responses.$200>
   }
   ['/api/b2b/v1/files/sign-urls']: {
     /**
@@ -65818,7 +66033,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/imports/salons/{salonID}/customers']: {
     /**
-     * postApiB2BAdminImportsSalonsSalonIdCustomers - Endpoint is used for importing customers from a file (.csv)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
+     * postApiB2BAdminImportsSalonsSalonIdCustomers - Endpoint is used for importing customers from a file (.csv, .xlsx)., permissions:<ul><li>notino: [NOTINO]</li><li>partner: [PARTNER_ADMIN]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.PathParameters & Paths.PostApiB2BAdminImportsSalonsSalonIdCustomers.HeaderParameters> | null,

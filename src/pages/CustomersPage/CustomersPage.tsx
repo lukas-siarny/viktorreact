@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Row, Spin } from 'antd'
+import { Button, Col, Divider, Row, Select, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
@@ -15,7 +15,7 @@ import UserAvatar from '../../components/AvatarComponents'
 import ImportForm from '../../components/ImportForm'
 
 // utils
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, REQUEST_STATUS } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, REQUEST_STATUS, TEMPLATE_OPTIONS, CALENDAR_VIEW } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { postReq } from '../../utils/request'
@@ -30,6 +30,8 @@ import { IBreadcrumbs, ISearchFilter, SalonSubPageProps, Columns, IDataUploadFor
 // hooks
 import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
 
+const { Option } = Select
+
 const CustomersPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const navigate = useNavigate()
@@ -40,6 +42,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 	const [uploadStatus, setRequestStatus] = useState<REQUEST_STATUS | undefined>(undefined)
 	const [customersImportVisible, setCustomersImportVisible] = useState(false)
+	const [templateValue, setTemplateValue] = useState<{ label: string; value: string } | null>(null)
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam(),
@@ -171,12 +174,47 @@ const CustomersPage = (props: SalonSubPageProps) => {
 			<ImportForm
 				setRequestStatus={setRequestStatus}
 				requestStatus={uploadStatus}
-				label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv' })}
-				accept={'.csv'}
+				label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })}
+				accept={'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv'}
 				title={t('loc:Importovať zákazníkov')}
 				visible={customersImportVisible}
 				setVisible={setCustomersImportVisible}
 				onSubmit={clientImportsSubmit}
+				extraContent={
+					<>
+						<Divider className={'mt-1 mb-3'} />
+						<div className={'flex items-center justify-between gap-1'}>
+							<div className={'ant-form-item w-full'}>
+								<label htmlFor={'noti-customer-template-select'} className={'block mb-2'}>
+									{t('loc:Vzorové šablóny súborov')}
+								</label>
+								<Select
+									id={'noti-customer-template-select'}
+									className={'noti-select-input w-full mb-4'}
+									size={'large'}
+									labelInValue
+									options={TEMPLATE_OPTIONS()}
+									onChange={(val: any) => setTemplateValue(val)}
+									value={templateValue}
+									placeholder={t('loc:Vyberte šablónu na stiahnutie')}
+									getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+								/>
+							</div>
+							<Button
+								className={'noti-btn'}
+								href={`${process.env.PUBLIC_URL}/templates/${templateValue?.value}`}
+								target='_blank'
+								rel='noopener noreferrer'
+								type={'default'}
+								disabled={!templateValue}
+								htmlType={'button'}
+								download
+							>
+								{t('loc:Stiahnuť')}
+							</Button>
+						</div>
+					</>
+				}
 			/>
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />

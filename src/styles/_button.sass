@@ -251,6 +251,13 @@
 a.ant-btn.noti-btn // ak ma btn href atributu tak ho zmeni na anchor -> treba vycentrovat
 	display: flex
 	align-items: center
+	&.ant-btn-disabled
+		opacity: 1
+		color: #BFBFBF
+		background: #F5F5F5
+		&:hover
+			color: #BFBFBF
+			background: #F5F5F5
 .noti-segmented-btn
 	display: flex
 	// Ak ma classu block-style znamena to ze su len 2 optiony, ktore si rozdelia priestor na 50 a 50 percent eg. ProducDrawer, ak budu tri tak na 33 33 33 atd...

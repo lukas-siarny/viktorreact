@@ -72,7 +72,7 @@ const RechargeSmsCreditCheck: FC<Props> = (props) => {
 						</span>
 					</li>
 					<li className={'flex justify-between gap-2 mb-2'}>
-						<strong>{t('loc:Počest salónov')}:</strong> {selectedSalonsCount}
+						<strong>{t('loc:Počet salónov')}:</strong> {selectedSalonsCount}
 					</li>
 					<li className={'flex justify-between gap-2'}>
 						<strong>

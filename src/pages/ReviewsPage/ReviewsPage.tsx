@@ -11,7 +11,7 @@ import cx from 'classnames'
 // components
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
-import ReviewsFilter, { IReviewsFilter } from './components/ReviewsFilter'
+import ReviewsFilter from './components/ReviewsFilter'
 import DeleteButton from '../../components/DeleteButton'
 import TabsComponent from '../../components/TabsComponent'
 
@@ -24,9 +24,10 @@ import Permissions, { withPermissions } from '../../utils/Permissions'
 // reducers
 import { RootState } from '../../reducers'
 import { getReviews } from '../../reducers/reviews/reviewsActions'
+import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 
 // types
-import { IBreadcrumbs, Columns } from '../../types/interfaces'
+import { IBreadcrumbs, Columns, IReviewsFilter } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
@@ -40,6 +41,7 @@ const getRowId = (verificationStatus: string, id: string) => `${verificationStat
 const ReviewsPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam(),
@@ -72,7 +74,7 @@ const ReviewsPage = () => {
 				verificationStatus: query.verificationStatus as REVIEW_VERIFICATION_STATUS,
 				toxicityScoreFrom: query.toxicityScoreFrom,
 				toxicityScoreTo: query.toxicityScoreTo,
-				salonCountryCode: query.salonCountryCode
+				salonCountryCode: query.salonCountryCode || selectedCountry
 			})
 		)
 		if (data) {
@@ -85,10 +87,11 @@ const ReviewsPage = () => {
 		query.order,
 		query.search,
 		query.deleted,
+		query.verificationStatus,
 		query.toxicityScoreFrom,
 		query.toxicityScoreTo,
-		query.verificationStatus,
-		query.salonCountryCode
+		query.salonCountryCode,
+		selectedCountry
 	])
 
 	useEffect(() => {
@@ -98,11 +101,11 @@ const ReviewsPage = () => {
 				verificationStatus: query.verificationStatus as REVIEW_VERIFICATION_STATUS,
 				toxicityScoreFrom: query.toxicityScoreFrom,
 				toxicityScoreTo: query.toxicityScoreTo,
-				salonCountryCode: query.salonCountryCode
+				salonCountryCode: query.salonCountryCode || selectedCountry
 			})
 		)
 		fetchReviews()
-	}, [dispatch, query.search, fetchReviews, query.toxicityScoreFrom, query.toxicityScoreTo, query.verificationStatus, query.salonCountryCode])
+	}, [dispatch, query.search, fetchReviews, query.toxicityScoreFrom, query.toxicityScoreTo, query.verificationStatus, query.salonCountryCode, selectedCountry])
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
@@ -130,6 +133,8 @@ const ReviewsPage = () => {
 			...values,
 			page: 1
 		}
+		// update selected country globally based on filter
+		dispatch(setSelectedCountry(values?.salonCountryCode))
 		setQuery(newQuery)
 	}
 
@@ -198,7 +203,7 @@ const ReviewsPage = () => {
 				}
 			},
 			{
-				title: t('loc:Recenzovaný pracovník'),
+				title: t('loc:Recenzovaný kolega'),
 				dataIndex: 'calendarEvent',
 				key: 'calendarEvent',
 				ellipsis: true,

@@ -18,7 +18,7 @@ import SmsUnitPricesForm from './components/SmsUnitPricesForm'
 
 // utils
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, CREATE_BUTTON_ID, D_M_YEAR_FORMAT, DEFAULT_DATE_INIT_FORMAT } from '../../utils/enums'
-import { withPermissions } from '../../utils/Permissions'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { formFieldID, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 
@@ -249,24 +249,33 @@ const SmsUnitPricesDetailPage = () => {
 						<Spin spinning={smsUnitPrices?.isLoading || isRemoving}>
 							<div className={'pt-0 flex gap-4 justify-between items-center'}>
 								<h3 className={'text-base whitespace-nowrap'}>{t('loc:Ceny SMS správ')}</h3>
-								<Button
-									onClick={() => {
-										dispatch(
-											initialize(FORM.SMS_UNIT_PRICES_FORM, {
-												countryCode: countryCode?.toLocaleUpperCase(),
-												validFrom: isEmptyCountry ? dayjs().startOf('month').format(DEFAULT_DATE_INIT_FORMAT) : undefined
-											})
-										)
-										changeFormVisibility(true)
-									}}
-									type='primary'
-									htmlType='button'
-									className={'noti-btn'}
-									icon={<PlusIcon />}
-									id={formFieldID(FORM.SMS_UNIT_PRICES_FORM, CREATE_BUTTON_ID)}
-								>
-									{STRINGS(t).addRecord(t('loc:cenu'))}
-								</Button>
+								<Permissions
+									allowed={[PERMISSION.SMS_UNIT_PRICE_EDIT]}
+									render={(hasPermission, { openForbiddenModal }) => (
+										<Button
+											onClick={() => {
+												if (hasPermission) {
+													dispatch(
+														initialize(FORM.SMS_UNIT_PRICES_FORM, {
+															countryCode: countryCode?.toLocaleUpperCase(),
+															validFrom: isEmptyCountry ? dayjs().startOf('month').format(DEFAULT_DATE_INIT_FORMAT) : undefined
+														})
+													)
+													changeFormVisibility(true)
+												} else {
+													openForbiddenModal()
+												}
+											}}
+											type='primary'
+											htmlType='button'
+											className={'noti-btn'}
+											icon={<PlusIcon />}
+											id={formFieldID(FORM.SMS_UNIT_PRICES_FORM, CREATE_BUTTON_ID)}
+										>
+											{STRINGS(t).addRecord(t('loc:cenu'))}
+										</Button>
+									)}
+								/>
 							</div>
 							<div className={'w-full flex'}>
 								<div className={cx(formClass, { 'mb-4': visibleForm })}>
@@ -316,4 +325,4 @@ const SmsUnitPricesDetailPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(SmsUnitPricesDetailPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.SMS_UNIT_PRICE_EDIT]))(SmsUnitPricesDetailPage)

@@ -16,7 +16,7 @@ import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.s
 import { ReactComponent as CategoryIcon } from '../../../../assets/icons/categories-24-icon.svg'
 
 // utils
-import { CHANGE_DEBOUNCE_TIME, ENUMERATIONS_KEYS, FIELD_MODE, FORM, ROW_GUTTER_X_M } from '../../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, ENUMERATIONS_KEYS, FIELD_MODE, FORM, ROW_GUTTER_X_M, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
 import { optionRenderWithImage, validationString } from '../../../../utils/helper'
 
 // atoms
@@ -36,7 +36,7 @@ export interface ISalonsFilterDeleted {
 
 type Props = InjectedFormProps<ISalonsFilterDeleted, ComponentProps> & ComponentProps
 
-const fixLength100 = validationString(100)
+const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
 export const checkSalonFiltersSize = (formValues: any) =>
 	size(
@@ -72,7 +72,7 @@ const SalonsFilterDeleted = (props: Props) => {
 				name={'search'}
 				fieldMode={FIELD_MODE.FILTER}
 				search
-				validate={fixLength100}
+				validate={fixLength255}
 			/>
 		),
 		[t]

@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { CHANGE_DEBOUNCE_TIME, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
 
 // atoms
@@ -31,7 +31,7 @@ export interface IUsersFilter {
 
 type Props = InjectedFormProps<IUsersFilter, ComponentProps> & ComponentProps
 
-const fixLength100 = validationString(100)
+const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
 const AdminUsersFilter = (props: Props) => {
 	const { handleSubmit, createUser } = props
@@ -49,7 +49,7 @@ const AdminUsersFilter = (props: Props) => {
 			name='search'
 			fieldMode={FIELD_MODE.FILTER}
 			search
-			validate={fixLength100}
+			validate={fixLength255}
 		/>
 	)
 
@@ -69,7 +69,7 @@ const AdminUsersFilter = (props: Props) => {
 							name={'roleID'}
 							placeholder={t('loc:Rola')}
 							allowClear
-							size={'middle'}
+							size={'large'}
 							filterOptions
 							onDidMountSearch
 							options={roles?.data}

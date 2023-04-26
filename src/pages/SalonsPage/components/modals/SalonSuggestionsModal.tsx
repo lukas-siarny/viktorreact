@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash'
 import { useNavigate } from 'react-router-dom'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon-modal.svg'
 
 // reducers
 import { RootState } from '../../../../reducers'

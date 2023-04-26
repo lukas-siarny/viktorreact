@@ -93,9 +93,11 @@ const CategoriesList: FC<CategoriesListProps> = (props) => {
 
 	const onDragEnd = useCallback(
 		async ({ active, over }: DragEndEvent) => {
-			const oldIndex = industry.categories.data.findIndex((i) => i.id === active.id)
-			const newIndex = industry.categories.data.findIndex((i) => i.id === over?.id)
-			handleReorder([parentIndex, oldIndex], newIndex)
+			if (active.id && over?.id) {
+				const oldIndex = industry.categories.data.findIndex((i) => i.id === active.id)
+				const newIndex = industry.categories.data.findIndex((i) => i.id === over.id)
+				handleReorder([parentIndex, oldIndex], newIndex)
+			}
 		},
 		[handleReorder, parentIndex, industry.categories.data]
 	)

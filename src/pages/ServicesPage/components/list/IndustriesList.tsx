@@ -115,9 +115,11 @@ const IndustriesList: FC<IndustriesListProps> = (props) => {
 
 	const onDragEnd = useCallback(
 		async ({ active, over }: DragEndEvent) => {
-			const oldIndex = idustriesData.findIndex((i) => i.id === active.id)
-			const newIndex = idustriesData.findIndex((i) => i.id === over?.id)
-			handleReorder([oldIndex], newIndex)
+			if (active.id && over?.id) {
+				const oldIndex = idustriesData.findIndex((i) => i.id === active.id)
+				const newIndex = idustriesData.findIndex((i) => i.id === over?.id)
+				handleReorder([oldIndex], newIndex)
+			}
 		},
 		[handleReorder, idustriesData]
 	)

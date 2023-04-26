@@ -285,7 +285,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						{
 							key: PAGE.RESERVATIONS,
 							label: t('loc:Prehľad rezervácií {{ reservationsCount }}', { reservationsCount: count }),
-							onClick: () => navigate(getPath(t('paths:reservations'))),
+							onClick: () => navigate(getPath(t('paths:salon-reservations'))),
 							icon: <ReservationsIcon />,
 							id: PAGE.RESERVATIONS
 						}

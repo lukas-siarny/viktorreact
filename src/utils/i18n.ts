@@ -57,10 +57,7 @@ i18n.use(Backend)
 		react: {
 			bindI18n: 'languageChanged loaded',
 			bindI18nStore: 'added removed',
-			nsMode: 'default',
-			useSuspense: true,
-			transSupportBasicHtmlNodes: true,
-			transKeepBasicHtmlNodesFor: ['br', 'strong', 'i', 'span', 'h1', 'h2']
+			nsMode: 'default'
 		}
 	})
 

@@ -874,14 +874,12 @@ export const EVERY_REPEAT_OPTIONS = () => [
 
 export const TEMPLATE_OPTIONS = () => [
 	{
-		value: '.csv',
-		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.csv' }),
-		fileName: 'import_of_clients_template.csv'
+		value: 'import_of_clients_template.csv',
+		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.csv' })
 	},
 	{
-		value: '.xlsx',
-		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' }),
-		fileName: 'import_of_clients_template.xlsx'
+		value: 'import_of_clients_template.xlsx',
+		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' })
 	}
 ]
 

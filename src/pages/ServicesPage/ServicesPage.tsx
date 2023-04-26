@@ -83,13 +83,17 @@ const InfoTooltip: FC<InfoTooltipProps> = React.memo((props) => {
 
 const checkerCell = (checked: boolean, disabled?: boolean) => {
 	return (
-		<div className={cx('w-full h-full flex items-center justify-center', { 'opacity-50': disabled })}>
-			{checked ? <CheckedPinkIcon width={16} height={16} /> : <div className={'w-4 h-4 border border-solid border-notino-grayDark rounded-lg'} />}
+		<div className={cx('w-full h-full flex items-center justify-center transition transition-opacity duration-200', { 'opacity-50': disabled })}>
+			{checked ? (
+				<CheckedPinkIcon width={16} height={16} className={cx('transition duration-200', { 'text-notino-gray': disabled, 'text-notino-pink': !disabled })} />
+			) : (
+				<div className={'w-4 h-4 border border-solid border-notino-grayDark rounded-lg'} />
+			)}
 		</div>
 	)
 }
 
-const getTableColumns = (t: TFunction): ColumnProps<IServicesListService>[] => [
+const getTableColumns = (t: TFunction, disabledRS?: boolean): ColumnProps<IServicesListService>[] => [
 	{
 		title: <span className={'truncate block'}>{t('loc:Služba')}</span>,
 		dataIndex: 'name',
@@ -111,23 +115,24 @@ const getTableColumns = (t: TFunction): ColumnProps<IServicesListService>[] => [
 		className: 'noti-light-pink-col'
 	},
 	{
-		title: t('loc:Zamestnanec'),
+		title: <span className={cx('transition transition-opacity duration-200', { 'opacity-50': disabledRS })}>{t('loc:Zamestnanec')}</span>,
 		dataIndex: 'employees',
 		key: 'employees',
 		className: 'noti-medium-pink-col',
 		render: (_value, record) => {
 			const value = record.employees
-			const disabled = false
-			return (
-				<div className={cx('w-full h-full flex items-center', { 'opacity-50': disabled })}>
+			return value.length ? (
+				<div className={cx('w-full h-full flex items-center transition transition-opacity duration-200', { 'opacity-50': disabledRS })}>
 					<AvatarGroup maxCount={4} avatars={value} maxPopoverPlacement={'right'} size={'small'} />
 				</div>
+			) : (
+				'-'
 			)
 		}
 	},
 	{
 		title: (
-			<div className={'flex items-center gap-1'}>
+			<div className={cx('flex items-center gap-1 transition transition-opacity duration-200', { 'opacity-50': disabledRS })}>
 				<span className={'truncate inline-block'}>{t('loc:Online rezervácie')}</span>
 				<InfoTooltip
 					title={t('loc:Online rezervácie')}
@@ -140,7 +145,7 @@ const getTableColumns = (t: TFunction): ColumnProps<IServicesListService>[] => [
 		dataIndex: 'isAvailableForOnlineReservations',
 		key: 'isAvailableForOnlineReservations',
 		className: 'noti-medium-pink-col',
-		render: (_value, record) => checkerCell(record.isAvailableForOnlineReservations)
+		render: (_value, record) => checkerCell(record.isAvailableForOnlineReservations, disabledRS)
 	},
 	{
 		title: (
@@ -154,7 +159,7 @@ const getTableColumns = (t: TFunction): ColumnProps<IServicesListService>[] => [
 		),
 		dataIndex: 'automaticApproval',
 		key: 'automaticApproval',
-		render: (_value, record) => checkerCell(record.automaticApproval)
+		render: (_value, record) => checkerCell(record.automaticApproval, disabledRS)
 	}
 ]
 
@@ -162,10 +167,11 @@ type SevicesTableProps = {
 	category: IServicesListCategory
 	parentPath?: string
 	reorderView: boolean
+	disabledRS?: boolean
 }
 
 const ServicesTable: FC<SevicesTableProps> = React.memo((props) => {
-	const { category, parentPath, reorderView } = props
+	const { category, parentPath, reorderView, disabledRS } = props
 	const navigate = useNavigate()
 	const [t] = useTranslation()
 
@@ -175,20 +181,26 @@ const ServicesTable: FC<SevicesTableProps> = React.memo((props) => {
 
 	return (
 		<CustomTable<IServicesListService>
-			className='table-fixed noti-services-settings-table'
-			columns={getTableColumns(t)}
+			className={cx('table-fixed noti-services-settings-table', { 'disabled-rs': disabledRS })}
+			columns={getTableColumns(t, disabledRS)}
 			dataSource={category.services.data}
 			pagination={false}
 			rowKey={'key'}
 			dndDrop={reorderView ? handleDrop : undefined}
-			rowClassName={'clickable-row'}
-			onRow={(record) => ({
-				onClick: () => {
-					if (parentPath) {
-						navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:services-settings/{{serviceID}}', { serviceID: record.serviceID })))
-					}
-				}
-			})}
+			rowClassName={reorderView ? undefined : 'clickable-row'}
+			dndWithHandler={false}
+			dndColWidth={36}
+			onRow={
+				reorderView
+					? undefined
+					: (record) => ({
+							onClick: () => {
+								if (parentPath) {
+									navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:services-settings/{{serviceID}}', { serviceID: record.serviceID })))
+								}
+							}
+					  })
+			}
 		/>
 	)
 })
@@ -199,10 +211,11 @@ type CategoriesListProps = {
 	parentPath?: string
 	onChange: (newActiveKeys: string[]) => void
 	reorderView: boolean
+	disabledRS?: boolean
 }
 
 const CategoriesList: FC<CategoriesListProps> = React.memo((props) => {
-	const { onChange, industry, activeKeys, parentPath, reorderView } = props
+	const { onChange, industry, activeKeys, parentPath, reorderView, disabledRS } = props
 	return (
 		<div className={'w-full overflow-x-auto'}>
 			<Collapse
@@ -214,7 +227,7 @@ const CategoriesList: FC<CategoriesListProps> = React.memo((props) => {
 			>
 				{industry.categories.data.map((category) => (
 					<Panel key={category.id} className={'panel panel-category'} header={<h4>{category.name}</h4>}>
-						<ServicesTable category={category} parentPath={parentPath} reorderView={reorderView} />
+						<ServicesTable category={category} parentPath={parentPath} reorderView={reorderView} disabledRS={disabledRS} />
 					</Panel>
 				))}
 			</Collapse>
@@ -237,7 +250,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	const services = useSelector((state: RootState) => state.service.services)
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
-	const [reorderView, setReoderView] = useState(false)
+	const [reorderView, setReoderView] = useState(true)
 	const [activeKeys, setActiveKeys] = useState<ActiveKeys>({ industries: [], categories: [] })
 	const [enabledRS, setEnabledRS] = useState(false)
 
@@ -310,7 +323,8 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	}
 
 	return (
-		<>
+		<div className={'services-setttings-wrapper'}>
+			<Spin spinning={services?.isLoading || selectedSalon.isLoading} />
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
@@ -357,52 +371,51 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			</div>
 
 			<div className={'services-collapse-wrapper'}>
-				<Spin spinning={services?.isLoading}>
-					<Collapse
-						bordered={false}
-						activeKey={activeKeys.industries}
-						onChange={(newKeys) => setActiveKeys((prevState) => ({ ...prevState, industries: typeof newKeys === 'string' ? [newKeys] : newKeys }))}
-						expandIcon={(panelProps) => getExpandIcon(!!panelProps.isActive)}
-					>
-						{servicesListData.industries.data.map((industry) => {
-							return (
-								<Panel
-									key={industry.id}
-									header={
-										<h3>
-											{industry.name} ({industry.categories.servicesCount})
-										</h3>
-									}
-									className={'panel panel-industry'}
-									// forceRender
-								>
-									{!industry.categories.servicesCount ? (
-										<div className={'w-full justify-center text-center p-2'}>
-											<p>{t('loc:K tomuto oboru zatiaľ nemáte priradené žiadne služby.')}</p>
-											<Button
-												type={'primary'}
-												className={'noti-btn'}
-												onClick={() => navigate(parentPath + t('paths:industries-and-services/{{industryID}}', { industryID: industry.id }))}
-											>
-												{STRINGS(t).assign(t('loc:služby'))}
-											</Button>
-										</div>
-									) : (
-										<CategoriesList
-											parentPath={parentPath}
-											industry={industry}
-											activeKeys={activeKeys.categories}
-											onChange={(newKeys: string[]) => setActiveKeys((prevState) => ({ ...prevState, categories: newKeys }))}
-											reorderView={reorderView}
-										/>
-									)}
-								</Panel>
-							)
-						})}
-					</Collapse>
-				</Spin>
+				<Collapse
+					bordered={false}
+					activeKey={activeKeys.industries}
+					onChange={(newKeys) => setActiveKeys((prevState) => ({ ...prevState, industries: typeof newKeys === 'string' ? [newKeys] : newKeys }))}
+					expandIcon={(panelProps) => getExpandIcon(!!panelProps.isActive)}
+				>
+					{servicesListData.industries.data.map((industry) => {
+						return (
+							<Panel
+								key={industry.id}
+								header={
+									<h3>
+										{industry.name} ({industry.categories.servicesCount})
+									</h3>
+								}
+								className={'panel panel-industry'}
+								// forceRender
+							>
+								{!industry.categories.servicesCount ? (
+									<div className={'w-full justify-center text-center p-2'}>
+										<p>{t('loc:K tomuto oboru zatiaľ nemáte priradené žiadne služby.')}</p>
+										<Button
+											type={'primary'}
+											className={'noti-btn'}
+											onClick={() => navigate(parentPath + t('paths:industries-and-services/{{industryID}}', { industryID: industry.id }))}
+										>
+											{STRINGS(t).assign(t('loc:služby'))}
+										</Button>
+									</div>
+								) : (
+									<CategoriesList
+										parentPath={parentPath}
+										industry={industry}
+										activeKeys={activeKeys.categories}
+										onChange={(newKeys: string[]) => setActiveKeys((prevState) => ({ ...prevState, categories: newKeys }))}
+										reorderView={reorderView}
+										disabledRS={!enabledRS}
+									/>
+								)}
+							</Panel>
+						)
+					})}
+				</Collapse>
 			</div>
-		</>
+		</div>
 	)
 }
 

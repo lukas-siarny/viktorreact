@@ -41,11 +41,13 @@ type ComponentProps<RecordType> = TableProps<RecordType> & {
 	pagination?: IPagination | false
 	wrapperClassName?: string
 	dndDrop?: (oldIndex: number, newIndex: number) => any
+	dndWithHandler?: boolean
+	dndColWidth?: number
 	customFooterContent?: React.ReactNode
 }
 
 const CustomTable = <RecordType extends object = any>(props: ComponentProps<RecordType>) => {
-	const { disabled = false, className, useCustomPagination, pagination, dndDrop, wrapperClassName, customFooterContent } = props
+	const { disabled = false, className, useCustomPagination, pagination, dndDrop, wrapperClassName, customFooterContent, dndWithHandler = true, dndColWidth = 25 } = props
 	const [isProcessingDrop, setIsProcessingDrop] = useState(false)
 
 	const onClickOptionSizeChanger = useCallback(
@@ -125,7 +127,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 					...props?.components?.body,
 					// eslint-disable-next-line react/no-unstable-nested-components
 					row(rowProps: any) {
-						return <DragableTableRow disabled={Number(props.dataSource?.length) < 2} {...rowProps} />
+						return <DragableTableRow disabled={Number(props.dataSource?.length) < 2} dndWithHandler={dndWithHandler} {...rowProps} />
 					}
 				}
 			}
@@ -141,11 +143,12 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 		const DND_COL = {
 			key: TABLE_DRAG_AND_DROP_KEY,
 			title: <DragIcon style={{ touchAction: 'none', cursor: 'default' }} className={'w-4 h-4 flex'} />,
-			width: 25,
+			width: dndColWidth,
 			fixed: isFirstColFixed
 		}
 		columns = [DND_COL, ...columns]
 	}
+
 	const onRow = (record: any, index?: number) => {
 		const onRowProp = props?.onRow?.(record, index)
 		const rowProps: any = {

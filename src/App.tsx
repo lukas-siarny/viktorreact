@@ -4,7 +4,7 @@ import { I18nextProvider } from 'react-i18next'
 import { PersistGate } from 'redux-persist/es/integration/react'
 import { Spin, ConfigProvider } from 'antd'
 import { StyleProvider } from '@ant-design/cssinjs'
-import { Locale } from 'antd/lib/locale-provider'
+import { Locale } from 'antd/lib/locale'
 
 import dayjs from 'dayjs'
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom'

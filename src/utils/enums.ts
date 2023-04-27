@@ -696,6 +696,8 @@ export const DOWNLOAD_BUTTON_ID = 'download-btn'
 
 export const ROW_BUTTON_WITH_ID = (id: string) => `row-btn-with-id_${id}`
 
+export const SMS_UNIT_PRICES_TABLE_ID = 'sms-unit-prices-table'
+
 export const MAX_VALUES_PER_PARAMETER = 20
 
 export enum PARAMETERS_VALUE_TYPES {

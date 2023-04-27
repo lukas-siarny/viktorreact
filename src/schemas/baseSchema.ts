@@ -195,7 +195,7 @@ export const emailConstraint = z.string().email().trim().max(VALIDATION_MAX_LENG
 export const passwordConstraint = z.string().regex(passwordRegEx, serializeValidationMessage('loc:Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak'))
 
 /**
- * Constraint for checking checking two characters (min(2) & max(2)) length string (eg: counryCode, phonePrefix...
+ * Constraint for checking two characters (min(2) & max(2)) length string (eg: counryCode, phonePrefix...
  * DEFAULT: required
  */
 export const twoCharsConstraint = z.string().length(VALIDATION_MAX_LENGTH.LENGTH_2)
@@ -204,6 +204,7 @@ export const twoCharsConstraint = z.string().length(VALIDATION_MAX_LENGTH.LENGTH
  * Constraint for array fields where values can be translated into every supported language.
  * Default and required is {@link LANGUAGE.EN EN}
  * @param required boolean
+ * @param maxLength
  * @returns validation schema accepting only values with keys from LANGUAGE
  */
 export const localizedValuesConstraint = (required?: boolean, maxLength = VALIDATION_MAX_LENGTH.LENGTH_100) =>
@@ -317,3 +318,12 @@ export const openingHoursConstraint = () => {
 		})
 	})
 }
+
+/**
+ * Constraint for validation URLs in social media based on regex
+ * @returns validation schema
+ * @param regex RegExp
+ * @param url string
+ */
+export const socialMediaConstraint = (regex: RegExp, url: string) =>
+	z.string().regex(regex, serializeValidationMessage('loc:Zadajte správny formát adresy (napr. {{url}})', { url })).nullish()

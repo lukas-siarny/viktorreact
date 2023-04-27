@@ -61,6 +61,7 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 		id: salonData.id || null,
 		state: salonData.state as SALON_STATES,
 		sourceOfPremium: salonData.premiumSourceUserType,
+		// TODO: zle je naformatovane
 		name:
 			salonData.id && salonData.name
 				? {

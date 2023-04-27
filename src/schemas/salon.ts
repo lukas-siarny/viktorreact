@@ -5,7 +5,7 @@ import {
 	imageConstraint,
 	openingHoursConstraint,
 	phoneNumbersConstraint,
-	serializeValidationMessage,
+	socialMediaConstraint,
 	stringConstraint,
 	twoCharsConstraint,
 	zodErrorsToFormErrors
@@ -16,44 +16,28 @@ import { socialMediaRegex } from '../utils/regex'
 
 // https://notino-admin.goodrequest.dev/api/doc/#/B2b-%3Eadmin/patchApiB2BAdminSalonsSalonId
 export const salonSchema = z.object({
-	name: z.union([
-		stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_255, true),
-		z.object({
-			id: z.string(),
-			name: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_255, true)
-		})
-	]),
+	// name: z.union([
+	// 	stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_255, true),
+	// 	z.object({
+	// 		id: z.string(),
+	// 		name: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_255, true)
+	// 	})
+	// ]),
+
+	name: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_255, true),
 	aboutUsFirst: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1000),
 	openingHours: openingHoursConstraint(),
 	countryCode: twoCharsConstraint,
 	parkingNote: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1000),
 	locationNote: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1000),
 	phones: phoneNumbersConstraint(),
-	email: emailConstraint.optional(),
-	socialLinkFB: z
-		.string()
-		.regex(socialMediaRegex.facebook, serializeValidationMessage('loc:Zadajte správny formát adresy (napr. {{url}})', { url: 'https://www.facebook.com/facebook' }))
-		.nullish(),
-	socialLinkInstagram: z
-		.string()
-		.regex(socialMediaRegex.instagram, serializeValidationMessage('loc:Zadajte správny formát adresy (napr. {{url}})', { url: 'https://www.instagram.com/instagram' }))
-		.nullish(),
-	socialLinkWebPage: z
-		.string()
-		.regex(socialMediaRegex.website, serializeValidationMessage('loc:Zadajte správny formát adresy (napr. {{url}})', { url: 'https://www.notino.com' }))
-		.nullish(),
-	socialLinkYoutube: z
-		.string()
-		.regex(socialMediaRegex.youtube, serializeValidationMessage('loc:Zadajte správny formát adresy (napr. {{url}})', { url: 'https://www.youtube.com/youtube' }))
-		.nullish(),
-	socialLinkTikTok: z
-		.string()
-		.regex(socialMediaRegex.tiktok, serializeValidationMessage('loc:Zadajte správny formát adresy (napr. {{url}})', { url: 'https://www.tiktok.com/tiktok' }))
-		.nullish(),
-	socialLinkPinterest: z
-		.string()
-		.regex(socialMediaRegex.tiktok, serializeValidationMessage('loc:Zadajte správny formát adresy (napr. {{url}})', { url: 'https://www.pinterest.com/pinterest' }))
-		.nullish(),
+	email: emailConstraint.nullable(),
+	socialLinkFB: socialMediaConstraint(socialMediaRegex.facebook, 'https://www.facebook.com/facebook'),
+	socialLinkInstagram: socialMediaConstraint(socialMediaRegex.instagram, 'https://www.instagram.com/instagram'),
+	socialLinkWebPage: socialMediaConstraint(socialMediaRegex.website, 'https://www.notino.com'),
+	socialLinkYoutube: socialMediaConstraint(socialMediaRegex.youtube, 'https://www.youtube.com/youtube'),
+	socialLinkTikTok: socialMediaConstraint(socialMediaRegex.tiktok, 'https://www.tiktok.com/tiktok'),
+	socialLinkPinterest: socialMediaConstraint(socialMediaRegex.pinterest, 'https://www.pinterest.com/pinterest'),
 	payByCard: z.boolean().optional(),
 	payByCash: z.boolean().optional(),
 	otherPaymentMethods: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_500),

@@ -507,7 +507,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 										htmlType={'button'}
 										download
 									>
-										{t('loc:Stiahnuť')}
+										<div>{t('loc:Stiahnuť')}</div>
 									</Button>
 								</div>
 							</>

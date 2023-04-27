@@ -23,19 +23,17 @@ import { RootState } from '../../../reducers'
 // assets
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 
-type ComponentProps = {}
+// validate
+import validateReviewsFilterForm from './validateReviewsFilterForm'
 
-export interface IReviewsFilter {
-	search?: string
-	verificationStatus?: REVIEW_VERIFICATION_STATUS
-	salonCountryCode?: string
-	toxicityScoreFrom?: number
-	toxicityScoreTo?: number
-}
+// types
+import { IReviewsFilter } from '../../../types/interfaces'
+
+type ComponentProps = {}
 
 type Props = InjectedFormProps<IReviewsFilter, ComponentProps> & ComponentProps
 
-const fixLength255 = validationString(255)
+const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
 const ReviewsFilter = (props: Props) => {
 	const { handleSubmit } = props
@@ -54,7 +52,6 @@ const ReviewsFilter = (props: Props) => {
 			fieldMode={FIELD_MODE.FILTER}
 			search
 			validate={fixLength255}
-			maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
 		/>
 	)
 
@@ -108,10 +105,18 @@ const ReviewsFilter = (props: Props) => {
 					<Col span={8}>
 						<Row gutter={ROW_GUTTER_X_DEFAULT}>
 							<Col span={12}>
-								<Field component={InputNumberField} name={'toxicityScoreFrom'} placeholder={t('loc:Toxicita od')} size={'large'} min={1} max={100} />
+								<Field
+									component={InputNumberField}
+									name={'toxicityScoreFrom'}
+									placeholder={t('loc:Toxicita od')}
+									size={'large'}
+									min={0}
+									max={100}
+									className={'input-auto-height'}
+								/>
 							</Col>
 							<Col span={12}>
-								<Field component={InputNumberField} name={'toxicityScoreTo'} placeholder={t('loc:Toxicita do')} size={'large'} min={1} max={100} />
+								<Field component={InputNumberField} name={'toxicityScoreTo'} placeholder={t('loc:Toxicita do')} size={'large'} min={0} max={100} />
 							</Col>
 						</Row>
 					</Col>
@@ -121,7 +126,7 @@ const ReviewsFilter = (props: Props) => {
 	)
 }
 
-const form = reduxForm({
+const form = reduxForm<IReviewsFilter, ComponentProps>({
 	form: FORM.REVIEWS_FILTER,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
@@ -130,7 +135,8 @@ const form = reduxForm({
 			submit()
 		}
 	}, CHANGE_DEBOUNCE_TIME),
-	destroyOnUnmount: true
+	destroyOnUnmount: true,
+	validate: validateReviewsFilterForm
 })(ReviewsFilter)
 
 export default form

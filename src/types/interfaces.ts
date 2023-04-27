@@ -25,7 +25,8 @@ import {
 	CONFIRM_MODAL_DATA_TYPE,
 	CALENDAR_EVENT_DISPLAY_TYPE,
 	PARAMETER_TYPE,
-	RESERVATION_SOURCE_TYPE
+	RESERVATION_SOURCE_TYPE,
+	REVIEW_VERIFICATION_STATUS
 } from '../utils/enums'
 
 // types
@@ -158,6 +159,14 @@ export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null
 
 export interface IEventTypeFilterForm {
 	eventType: CALENDAR_EVENT_TYPE
+}
+
+export interface IReviewsFilter {
+	search?: string
+	verificationStatus?: REVIEW_VERIFICATION_STATUS
+	salonCountryCode?: string
+	toxicityScoreFrom?: number
+	toxicityScoreTo?: number
 }
 
 export interface IJwtPayload {
@@ -428,8 +437,6 @@ export interface IEmployeePayload {
 export type EmployeeService = NonNullable<IEmployeePayload['data']>['employee']['categories'][0]['children'][0]['children'][0]
 
 export interface SalonPageProps {
-	isNotinoUser: boolean
-	backUrl?: string
 	phonePrefixCountryCode: string
 	authUser: IAuthUserPayload & ILoadingAndFailure
 	phonePrefixes: IEnumerationsCountriesPayload & ILoadingAndFailure
@@ -711,6 +718,7 @@ export interface ICalendarDayEventsMap {
 }
 export interface IReservationsFilter {
 	dateFrom: string
+	countryCode?: string
 	employeeIDs?: string[]
 	categoryIDs?: string[]
 	reservationStates?: RESERVATION_STATE[]

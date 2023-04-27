@@ -8,32 +8,27 @@ import { ColumnProps } from 'antd/es/table'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router'
 import { initialize } from 'redux-form'
-import i18next from 'i18next'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
-import SmsTimeStats from '../../components/Dashboards/SmsTimeStats'
-import SelectField from '../../atoms/SelectField'
 import CustomTable from '../../components/CustomTable'
 import SmsUnitPricesFilter from './components/SmsUnitPricesFilter'
+import SmsTimeStatsAdmin from './components/SmsTimeStatsAdmin'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
-import { ReactComponent as GlobeIcon } from '../../assets/icons/globe-24.svg'
 import { ReactComponent as ChevronLeftIcon } from '../../assets/icons/chevron-left-16.svg'
 
 // utils
-import { D_M_YEAR_FORMAT, ENUMERATIONS_KEYS, FORM, LANGUAGE, PERMISSION } from '../../utils/enums'
+import { D_M_YEAR_FORMAT, ENUMERATIONS_KEYS, FORM, PERMISSION } from '../../utils/enums'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, optionRenderWithImage, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
-import { LOCALES } from '../../components/LanguagePicker'
+import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // types
 import { IBreadcrumbs, ISmsUnitPricesFilter } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
 // redux
-import { getSmsTimeStatsForCountry } from '../../reducers/sms/smsActions'
 import { getSmsUnitPricesActual, ISmsUnitPricesActualPayload } from '../../reducers/smsUnitPrices/smsUnitPricesActions'
 
 type TableDataItem = NonNullable<ISmsUnitPricesActualPayload['data']>[0] & { key: string; currencySymbol: string }
@@ -45,23 +40,12 @@ const SmsCreditAdiminPage = () => {
 
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 	const currencies = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.CURRENCIES])
-	const smsTimeStats = useSelector((state: RootState) => state.sms.timeStats)
 	const smsUnitPricesActual = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPricesActual)
-	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
-
-	const [smsStatsDate, setSmsStatsDate] = useState(dayjs())
-	const [smsStatsCountryCode, setSmsStatsCountryCode] = useState(selectedCountry || LOCALES[LANGUAGE.CZ].countryCode)
 
 	const [query, setQuery] = useState({
 		search: '',
 		order: 'country:ASC'
 	})
-
-	useEffect(() => {
-		if (smsStatsCountryCode) {
-			dispatch(getSmsTimeStatsForCountry(smsStatsCountryCode, smsStatsDate.year(), smsStatsDate.month() + 1))
-		}
-	}, [dispatch, smsStatsCountryCode, smsStatsDate])
 
 	useEffect(() => {
 		dispatch(getSmsUnitPricesActual())
@@ -202,7 +186,7 @@ const SmsCreditAdiminPage = () => {
 			<div className='content-body dashboard-content'>
 				<div className={'w-full flex justify-end'}>
 					<Permissions
-						allowed={[PERMISSION.NOTINO, PERMISSION.PARTNER]}
+						allowed={[PERMISSION.NOTINO]}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Button
 								onClick={() => {
@@ -223,32 +207,9 @@ const SmsCreditAdiminPage = () => {
 					/>
 				</div>
 
-				<SmsTimeStats
-					onPickerChange={(date) => {
-						if (date) {
-							setSmsStatsDate(date)
-						}
-					}}
-					title={<h2 className={'mb-0'}>{t('loc:Spotreba SMS kreditu za obdobie')}</h2>}
-					selectedDate={smsStatsDate}
-					smsTimeStats={smsTimeStats}
-					className={'mt-6 mb-16 py-0'}
-					countryPicker={
-						<SelectField
-							input={{ value: smsStatsCountryCode, onChange: (value: any) => setSmsStatsCountryCode(value) } as any}
-							meta={{} as any}
-							optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
-							name={'countryCode'}
-							placeholder={t('loc:Krajina')}
-							size={'middle'}
-							className={'mb-0 pb-0 w-48'}
-							options={countries?.enumerationsOptions}
-							loading={countries?.isLoading}
-							disabled={countries?.isLoading}
-						/>
-					}
-				/>
-
+				<Permissions allowed={[PERMISSION.NOTINO]}>
+					<SmsTimeStatsAdmin countries={countries} />
+				</Permissions>
 				<h3 className={'text-2xl whitespace-nowrap'}>{t('loc:Ceny SMS správ')}</h3>
 
 				<div className='content-body mt-0'>
@@ -286,4 +247,4 @@ const SmsCreditAdiminPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO]))(SmsCreditAdiminPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.SMS_UNIT_PRICE_EDIT]))(SmsCreditAdiminPage)

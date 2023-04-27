@@ -5,7 +5,7 @@ import i18next from 'i18next'
 
 // types
 import { AutocompleteLabelInValue, ISalonForm, OpeningHours } from '../../../types/interfaces'
-import { ISalonPayloadData } from '../../../reducers/selectedSalon/selectedSalonActions'
+import { ISelectedSalonPayload } from '../../../reducers/selectedSalon/selectedSalonActions'
 import { IBasicSalon } from '../../../reducers/salons/salonsActions'
 import { Paths } from '../../../types/api'
 
@@ -33,7 +33,7 @@ const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	}
 ]
 
-export type SalonInitType = ISalonPayloadData & IBasicSalon
+export type SalonInitType = ISelectedSalonPayload['data'] & IBasicSalon
 
 /**
  *

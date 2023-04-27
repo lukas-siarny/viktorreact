@@ -10,7 +10,7 @@ import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
 
 // utils
-import { CHANGE_DEBOUNCE_TIME, CREATE_CUSTOMER_BUTTON_ID, FIELD_MODE, FORM, IMPORT_BUTTON_ID } from '../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, CREATE_CUSTOMER_BUTTON_ID, FIELD_MODE, FORM, IMPORT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize, formFieldID } from '../../../utils/helper'
 
 // atoms
@@ -36,7 +36,7 @@ interface ICustomersFilter {
 
 type Props = InjectedFormProps<ICustomersFilter, ComponentProps> & ComponentProps
 
-const fixLength100 = validationString(100)
+const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
 const CustomersFilter = (props: Props) => {
 	const { handleSubmit, createCustomer, total, openClientImportsModal } = props
@@ -59,14 +59,14 @@ const CustomersFilter = (props: Props) => {
 			name='search'
 			fieldMode={FIELD_MODE.FILTER}
 			search
-			validate={fixLength100}
+			validate={fixLength255}
 			disabled={isFilterDisabled}
 		/>
 	)
 
 	const customContent = (
 		<div className={'flex items-center gap-2'}>
-			<Tooltip title={t('loc:Importujte si svojich klientov z externých služieb ako Reservanto, Reservio, …')}>
+			<Tooltip title={t('loc:Importujte si svojich klientov z externých rezervačných systémov')}>
 				<Button
 					onClick={openClientImportsModal}
 					type='primary'

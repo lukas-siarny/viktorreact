@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom'
 import { RootState } from '../reducers'
 import { PERMISSION, ADMIN_PERMISSIONS, CYPRESS_CLASS_NAMES } from './enums'
 
+import { ReactComponent as CloseIcon } from '../assets/icons/close-icon-modal.svg'
+
 /**
  * NOTE: by default are admin permissions allowed (SUPER_ADMIN, ADMIN). In other case use `except=ADMIN_PERMISSIONS`
  * @param userPermissions permissions from users role and salons role
@@ -69,7 +71,7 @@ export const ForbiddenModal: FC<{ visible: boolean; onCancel: () => void; item?:
 
 	return (
 		<>
-			<Modal title={t('loc:Upozornenie')} open={visible} getContainer={() => document.body} onCancel={onCancel} footer={null}>
+			<Modal title={t('loc:Upozornenie')} open={visible} getContainer={() => document.body} onCancel={onCancel} footer={null} closeIcon={<CloseIcon />}>
 				<Result
 					className={CYPRESS_CLASS_NAMES.FORBIDDEN_MODAL}
 					status='warning'

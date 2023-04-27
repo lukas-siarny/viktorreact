@@ -15,6 +15,9 @@ import { RootState } from '../../../reducers'
 // schema
 import { IEmployeeServiceEditForm } from '../../../schemas/service'
 
+// assets
+import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-modal.svg'
+
 type Props = {
 	visible: boolean
 	setVisible: (visible: boolean) => void
@@ -36,6 +39,7 @@ const ServiceEditModal: FC<Props> = (props) => {
 			forceRender
 			onCancel={() => setVisible(false)}
 			footer={null}
+			closeIcon={<CloseIcon />}
 		>
 			<EmployeeServiceEditForm
 				onSubmit={editEmployeeService}

@@ -277,7 +277,7 @@ const ServiceForm: FC<Props> = (props) => {
 										<Row gutter={[8, 8]}>
 											<Col span={12}>
 												<Field
-													disabled={!hasPermission || !salon.data?.settings.enabledReservations}
+													disabled={!hasPermission || !salon.data?.settings?.enabledReservations}
 													className={'pb-0'}
 													component={SwitchField}
 													label={t('loc:Online rezervácia')}
@@ -290,7 +290,7 @@ const ServiceForm: FC<Props> = (props) => {
 											</Col>
 											<Col span={12}>
 												<Field
-													disabled={!hasPermission || !salon.data?.settings.enabledReservations}
+													disabled={!hasPermission || !salon.data?.settings?.enabledReservations}
 													className={'pb-0'}
 													component={SwitchField}
 													label={t('loc:Automatické potvrdenie')}

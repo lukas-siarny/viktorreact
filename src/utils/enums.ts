@@ -170,6 +170,7 @@ export enum FORM {
 	ADMIN_USERS_FILTER = 'ADMIN_USERS_FILTER',
 	EMPLOYEES_FILTER = 'EMPLOYEES_FILTER',
 	RESERVATIONS_FILTER = 'RESERVATIONS_FILTER',
+	NOTINO_RESERVATIONS_FILTER = 'NOTINO_RESERVATIONS_FILTER',
 	CREATE_SALON_FROM = 'CREATE_SALON_FROM',
 	ROLE_FORM = 'ROLE_FORM',
 	ADMIN_CREATE_USER = 'ADMIN_CREATE_USER',
@@ -287,9 +288,14 @@ export enum SALONS_TAB_KEYS {
 	MISTAKES = 'mistakes'
 }
 
-export enum DASHBOARD_TASB_KEYS {
+export enum DASHBOARD_TAB_KEYS {
 	SALONS_STATE = 'SALONS_STATE',
 	RESERVATION_SYSTEM = 'RESERVATION_SYSTEM'
+}
+
+export enum RESERVATIONS_STATE {
+	PENDING = 'PENDING',
+	ALL = 'ALL'
 }
 
 export enum REVIEWS_TAB_KEYS {
@@ -322,6 +328,7 @@ export enum PAGE {
 	CALENDAR = 'CALENDAR',
 	SALON_SETTINGS = 'SALON_SETTINGS',
 	RESERVATIONS = 'RESERVATIONS',
+	NOTINO_RESERVATIONS = 'NOTINO_RESERVATIONS',
 	REVIEWS = 'REVIEWS',
 	SMS_CREDIT = 'SMS_CREDIT',
 	SMS_CREDITS = 'SMS_CREDITS'
@@ -767,11 +774,6 @@ export enum SALONS_TIME_STATS_TYPE {
 	PREMIUM = 'PREMIUM'
 }
 
-export enum RS_STATS_TYPE {
-	ENABLE_RS_B2B = 'ENABLE_RS_B2B',
-	ENABLE_RS_B2C = 'ENABLE_RS_B2C'
-}
-
 export enum RESERVATIONS_STATS_TYPE {
 	NEW_RS_B2B = 'NEW_RS_B2B',
 	NEW_RS_B2C = 'NEW_RS_B2C'
@@ -869,6 +871,17 @@ export const EVERY_REPEAT_OPTIONS = () => [
 	{
 		key: EVERY_REPEAT.TWO_WEEKS,
 		label: i18next.t('loc:Druhý týždeň')
+	}
+]
+
+export const TEMPLATE_OPTIONS = () => [
+	{
+		value: 'import_of_clients_template.csv',
+		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.csv' })
+	},
+	{
+		value: 'import_of_clients_template.xlsx',
+		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' })
 	}
 ]
 

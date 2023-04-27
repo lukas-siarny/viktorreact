@@ -32,7 +32,7 @@ const UserAvatar = (props: UserAvatarProps) => {
 						setLoadError(true)
 						return true
 					}}
-					style={style}
+					style={{ ...style, flexShrink: 0 }}
 				/>
 			) : (
 				<Avatar
@@ -45,7 +45,7 @@ const UserAvatar = (props: UserAvatarProps) => {
 					draggable={draggable}
 					crossOrigin={crossOrigin}
 					onError={onError}
-					style={style}
+					style={{ ...style, flexShrink: 0 }}
 				>
 					{text}
 				</Avatar>

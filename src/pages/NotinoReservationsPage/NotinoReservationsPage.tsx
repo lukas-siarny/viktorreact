@@ -34,6 +34,7 @@ import { getAssignedUserLabel, normalizeDirectionKeys, translateReservationPayme
 import { RootState } from '../../reducers'
 import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 import { getNotinoReservations } from '../../reducers/calendar/calendarActions'
+import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
 import { Columns, IBreadcrumbs, INotinoReservationsFilter } from '../../types/interfaces'
@@ -54,6 +55,10 @@ const NotinoReservationsPage = () => {
 	const [query, setQuery] = useQueryParams(notinoReservationsQueryParamsSchema, {
 		page: 1
 	})
+
+	useEffect(() => {
+		dispatch(getCategories())
+	}, [dispatch])
 
 	useEffect(() => {
 		dispatch(
@@ -107,7 +112,8 @@ const NotinoReservationsPage = () => {
 	const handleSubmit = (values: INotinoReservationsFilter) => {
 		const newQuery = {
 			...query,
-			...values
+			...values,
+			page: 1
 		}
 		// update selected country globally based on filter
 		dispatch(setSelectedCountry(values?.countryCode || undefined))
@@ -187,7 +193,7 @@ const NotinoReservationsPage = () => {
 			width: '25%',
 			render: (value) => {
 				return (
-					<div className={'flex items-center'}>
+					<div title={getAssignedUserLabel(value)} className={'flex items-center'}>
 						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.profileImage?.resizedImages?.thumbnail} fallBackSrc={value?.profileImage?.original} />
 						<div className={'truncate'}>{getAssignedUserLabel(value)}</div>
 					</div>
@@ -202,7 +208,7 @@ const NotinoReservationsPage = () => {
 			width: '25%',
 			render: (value) => {
 				return (
-					<div className={'flex items-center'}>
+					<div title={value?.name} className={'flex items-center'}>
 						<UserAvatar className='mr-2-5 w-7 h-7' src={value?.icon?.resizedImages?.thumbnail} fallBackSrc={value?.icon?.original} />
 						<div className={'truncate'}>{value?.name}</div>
 					</div>
@@ -217,7 +223,7 @@ const NotinoReservationsPage = () => {
 			width: '25%',
 			render: (value) => {
 				return (
-					<div className={'flex items-center'}>
+					<div title={getAssignedUserLabel(value)} className={'flex items-center'}>
 						<UserAvatar
 							style={value?.deletedAt && { filter: 'grayscale(100)' }}
 							className='mr-2-5 w-7 h-7'
@@ -250,7 +256,7 @@ const NotinoReservationsPage = () => {
 			width: '15%',
 			render: (value) => {
 				return (
-					<div className={'flex items-center'}>
+					<div title={translateReservationState(value as RESERVATION_STATE).text} className={'flex items-center'}>
 						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationState(value as RESERVATION_STATE).icon}</div>
 						<div className={'truncate'}>{translateReservationState(value as RESERVATION_STATE).text}</div>
 					</div>
@@ -265,7 +271,7 @@ const NotinoReservationsPage = () => {
 			width: '10%',
 			render: (value) => {
 				return value ? (
-					<div className={'flex items-center'}>
+					<div title={translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).text} className={'flex items-center'}>
 						<div className={'mr-2 flex items-center w-4 h-4'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).icon}</div>
 						<div className={'truncate'}>{translateReservationPaymentMethod(value as RESERVATION_PAYMENT_METHOD).text}</div>
 					</div>

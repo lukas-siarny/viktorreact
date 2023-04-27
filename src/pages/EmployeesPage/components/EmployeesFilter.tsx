@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { ACCOUNT_STATE, CHANGE_DEBOUNCE_TIME, CREATE_EMPLOYEE_BUTTON_ID, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { ACCOUNT_STATE, CHANGE_DEBOUNCE_TIME, CREATE_EMPLOYEE_BUTTON_ID, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
 
 // atoms
@@ -30,7 +30,7 @@ export type IEmployeesFilter = Pick<IEmployeesPageURLQueryParam, 'search' | 'ser
 
 type Props = InjectedFormProps<IEmployeesFilter, ComponentProps> & ComponentProps
 
-const fixLength100 = validationString(100)
+const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
 const EmployeesFilter = (props: Props) => {
 	const { handleSubmit, createEmployee, hide } = props
@@ -54,7 +54,7 @@ const EmployeesFilter = (props: Props) => {
 			name='search'
 			fieldMode={FIELD_MODE.FILTER}
 			search
-			validate={fixLength100}
+			validate={fixLength255}
 		/>
 	)
 
@@ -75,7 +75,7 @@ const EmployeesFilter = (props: Props) => {
 								name={'accountState'}
 								placeholder={t('loc:Stav konta')}
 								allowClear
-								size={'middle'}
+								size={'large'}
 								filterOptions
 								onDidMountSearch
 								options={accountStateOptions}
@@ -83,7 +83,7 @@ const EmployeesFilter = (props: Props) => {
 						</Col>
 					)}
 					<Col span={8}>
-						<Field component={SelectField} name={'serviceID'} placeholder={t('loc:Služba')} allowClear size={'middle'} onDidMountSearch options={servicesOptions} />
+						<Field component={SelectField} name={'serviceID'} placeholder={t('loc:Služba')} allowClear size={'large'} onDidMountSearch options={servicesOptions} />
 					</Col>
 				</Row>
 			</Filters>

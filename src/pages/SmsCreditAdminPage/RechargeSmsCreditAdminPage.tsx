@@ -22,7 +22,7 @@ import { ReactComponent as CoinsIcon } from '../../assets/icons/coins.svg'
 // utils
 import { ENUMERATIONS_KEYS, FORM, LANGUAGE, PERMISSION, SALON_CREATE_TYPE, SALON_FILTER_STATES } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { normalizeDirectionKeys } from '../../utils/helper'
+import { formatPrice, normalizeDirectionKeys } from '../../utils/helper'
 import { getSalonTagSourceType } from '../SalonsPage/components/salonUtils'
 import { LOCALES } from '../../components/LanguagePicker'
 
@@ -36,7 +36,7 @@ import { getSmsUnitPricesActual } from '../../reducers/smsUnitPrices/smsUnitPric
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
-import useQueryParams, { formatObjToQuery, serializeParams } from '../../hooks/useQueryParamsZod'
+import useQueryParams, { formatObjToQuery } from '../../hooks/useQueryParamsZod'
 
 // schema
 import { rechargeSmsCreditAdminPageSchema } from '../../schemas/queryParams'
@@ -239,7 +239,24 @@ const RechargeSmsCreditAdminPage = () => {
 				ellipsis: true,
 				sorter: false,
 				width: '30%',
-				render: (value) => (!isEmpty(value) ? <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</> : '-')
+				render: (_value, record) => {
+					const value = record.address
+					if (isEmpty(value) || !value) {
+						return '-'
+					}
+					let { street, city } = value
+					const { zipCode, streetNumber } = value
+
+					if ((city || zipCode) && street) {
+						if (zipCode) {
+							city = city ? `${city}, ${zipCode}` : zipCode
+						}
+						street = streetNumber ? `${street} ${streetNumber}` : street
+						return `${street}, ${city}`
+					}
+
+					return '-'
+				}
 			},
 			{
 				title: t('loc:Zdroj vytvorenia'),
@@ -259,7 +276,7 @@ const RechargeSmsCreditAdminPage = () => {
 				width: '20%',
 				render: (_value, record) => {
 					const value = record.wallet
-					return value ? `${value.availableBalance} ${value.currency.symbol}` : '-'
+					return value ? formatPrice(value.availableBalance, value.currency.symbol) : '-'
 				}
 			}
 		]

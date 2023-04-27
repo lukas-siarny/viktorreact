@@ -44,6 +44,7 @@ const ServicesFilter = (props: Props) => {
 						component={SelectField}
 						optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
 						allowClear
+						size={'large'}
 						placeholder={t('loc:Odvetvie')}
 						name='rootCategoryID'
 						options={categories.enumerationsOptions}

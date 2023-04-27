@@ -5,7 +5,7 @@ import { Divider, Form, Button } from 'antd'
 import cx from 'classnames'
 
 // utils
-import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, DELETE_BUTTON_ID, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, DELETE_BUTTON_ID, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import { showErrorNotification, validationString, checkUploadingBeforeSubmit, formFieldID } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -33,7 +33,7 @@ type ComponentProps = {
 
 type Props = InjectedFormProps<ILanguageForm, ComponentProps> & ComponentProps
 
-const fixLength255 = validationString(255)
+const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
 const LanguagesForm: FC<Props> = (props) => {
 	const [t] = useTranslation()

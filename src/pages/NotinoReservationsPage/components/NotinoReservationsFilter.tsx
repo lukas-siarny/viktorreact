@@ -44,6 +44,7 @@ import { INotinoReservationsFilter } from '../../../types/interfaces'
 
 // assets
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
 
 type ComponentProps = {}
 
@@ -85,7 +86,7 @@ const NotinoReservationsFilter = (props: Props) => {
 	const { handleSubmit } = props
 	const [t] = useTranslation()
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.NOTINO_RESERVATIONS_FILTER)(state))
-	const categoriesOptions = useSelector((state: RootState) => state.service.services.categoriesOptions)
+	const categories = useSelector((state: RootState) => state.categories.categories)
 
 	const search = (
 		<Field
@@ -138,18 +139,20 @@ const NotinoReservationsFilter = (props: Props) => {
 							disabled={countries?.isLoading}
 						/>
 					</Col>
-					<Col span={6}>
+					<Col span={8}>
 						<Field
 							component={SelectField}
 							name={'categoryFirstLevelIDs'}
 							mode={'multiple'}
-							placeholder={t('loc:Kategórie')}
+							placeholder={t('loc:Odvetvie')}
 							allowClear
-							showArrow
 							size={'large'}
-							showSearch={false}
+							filterOptions
 							onDidMountSearch
-							options={categoriesOptions}
+							optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
+							options={categories?.enumerationsOptions}
+							loading={categories?.isLoading}
+							disabled={categories?.isLoading}
 						/>
 					</Col>
 					<Col span={6}>
@@ -180,7 +183,7 @@ const NotinoReservationsFilter = (props: Props) => {
 							options={RESERVATION_PAYMENT_METHOD_OPTIONS}
 						/>
 					</Col>
-					<Col span={6}>
+					<Col span={4}>
 						<Field
 							component={SelectField}
 							showSearch={false}

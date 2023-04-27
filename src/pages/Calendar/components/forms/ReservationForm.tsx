@@ -18,7 +18,7 @@ import { EmployeeService, ICalendarEmployeesPayload, ServiceType } from '../../.
 import { ICustomerForm } from '../../../../schemas/customer'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon-modal.svg'
 import { ReactComponent as ServiceIcon } from '../../../../assets/icons/services-24-icon.svg'
 import { ReactComponent as CustomerIcon } from '../../../../assets/icons/customer-24-icon.svg'
 import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-16-current-color.svg'

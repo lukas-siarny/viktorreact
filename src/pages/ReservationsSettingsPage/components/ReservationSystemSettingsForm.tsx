@@ -23,7 +23,7 @@ import RemainingSmsCredit from '../../../components/Dashboards/RemainingSmsCredi
 import { IDataUploadForm, IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
-import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, REQUEST_STATUS } from '../../../utils/enums'
+import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, REQUEST_STATUS, TEMPLATE_OPTIONS } from '../../../utils/enums'
 import { formFieldID, optionRenderNotiPinkCheckbox, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
@@ -84,7 +84,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const walletID = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.wallet?.id)
 	const formValues: Partial<IReservationSystemSettingsForm> = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
 	const navigate = useNavigate()
-	const [templateValue, setTemplateValue] = useState(null)
+	const [templateValue, setTemplateValue] = useState<{ label: string; value: string } | null>(null)
 	const disabled = !formValues?.enabledReservations
 	const defaultExpandedKeys: any = []
 	forEach(groupedServicesByCategory, (level1) => forEach(level1.category?.children, (level2) => defaultExpandedKeys.push(level2?.category?.id)))
@@ -237,24 +237,6 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			setServicesDataTree(treeData)
 		}
 	}, [groupedServicesByCategory, groupedServicesByCategoryLoading, dispatch, disabled])
-
-	const templatesOptions = useMemo(
-		() => [
-			{
-				id: 1,
-				value: '.csv',
-				label: t('loc:Stiahnuť šablónu {{ template }}', { template: '.csv' }),
-				fileName: 'import_of_clients_template.csv'
-			},
-			{
-				id: 2,
-				value: '.xlsx',
-				label: t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' }),
-				fileName: 'import_of_clients_template.xlsx'
-			}
-		],
-		[t]
-	)
 
 	const handleSubmitImport = async (values: IDataUploadForm) => {
 		if (!uploadModal.uploadType) {
@@ -481,48 +463,59 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				<div className={'flex'}>
 					<h3 className={'mb-0 mt-0 flex items-center'}>
 						<UploadIcon className={'text-notino-black mr-2'} />
-						{t('loc:Importovať dáta z externých služieb')}
+						{t('loc:Importovať dáta z externých rezervačných systémov')}
 					</h3>
 				</div>
 				<Divider className={'my-3'} />
-				<div>
-					<p className={'text-notino-grayDark'}>{t('loc:Importujte si dáta z externých služieb ako Reservanto, Reservio, …')}</p>
-					<Row>
-						<ImportForm
-							accept={uploadModal.data.accept}
-							title={uploadModal.data.title}
-							label={uploadModal.data.label}
-							requestStatus={uploadModal.requestStatus}
-							setRequestStatus={(status?: REQUEST_STATUS) => setUploadModal({ ...uploadModal, requestStatus: status })}
-							onSubmit={handleSubmitImport}
-							visible={uploadModal.visible}
-							extraContent={
-								<>
-									<Divider className={'mt-1 mb-3'} />
-									<p className={'text-notino-grayDark'}>{t('loc:Vzorové šablóny súborov')}</p>
-									<Select
-										style={{ zIndex: 999 }}
-										className={'noti-select-input w-full mb-4'}
-										size={'large'}
-										onChange={() => setTemplateValue(null)}
-										value={templateValue}
-										placeholder={t('loc:Vyberte šablónu na stiahnutie')}
-										getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+				<Row>
+					<ImportForm
+						accept={uploadModal.data.accept}
+						title={uploadModal.data.title}
+						label={uploadModal.data.label}
+						requestStatus={uploadModal.requestStatus}
+						setRequestStatus={(status?: REQUEST_STATUS) => setUploadModal({ ...uploadModal, requestStatus: status })}
+						onSubmit={handleSubmitImport}
+						visible={uploadModal.visible}
+						extraContent={
+							<>
+								<Divider className={'mt-1 mb-3'} />
+								<div className={'flex items-center justify-between gap-1'}>
+									<div className={'ant-form-item w-full'}>
+										<label htmlFor={'noti-customer-template-select'} className={'block mb-2'}>
+											{t('loc:Vzorové šablóny súborov')}
+										</label>
+										<Select
+											id={'noti-customer-template-select'}
+											style={{ zIndex: 999 }}
+											className={'noti-select-input w-full mb-4'}
+											size={'large'}
+											labelInValue
+											options={TEMPLATE_OPTIONS()}
+											onChange={(val: any) => setTemplateValue(val)}
+											value={templateValue}
+											placeholder={t('loc:Vyberte šablónu na stiahnutie')}
+											getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+										/>
+									</div>
+									<Button
+										className={'noti-btn'}
+										href={`${process.env.PUBLIC_URL}/templates/${templateValue?.value}`}
+										target='_blank'
+										rel='noopener noreferrer'
+										type={'default'}
+										disabled={!templateValue}
+										htmlType={'button'}
+										download
 									>
-										{templatesOptions?.map((option) => (
-											<Option value={option.value} key={option.id}>
-												<a className={'block'} href={`${process.env.PUBLIC_URL}/templates/${option.fileName}`} download={option.fileName}>
-													{option.label}
-												</a>
-											</Option>
-										))}
-									</Select>
-								</>
-							}
-							setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
-						/>
-						{/* // NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov */}
-						{/* <Button
+										{t('loc:Stiahnuť')}
+									</Button>
+								</div>
+							</>
+						}
+						setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
+					/>
+					{/* // NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov */}
+					{/* <Button
 							onClick={() => {
 								setUploadModal({
 									...uploadModal,
@@ -543,29 +536,28 @@ const ReservationSystemSettingsForm = (props: Props) => {
 						>
 							{t('loc:Importovať rezervácie')}
 						</Button> */}
-						<Button
-							onClick={() => {
-								setUploadModal({
-									...uploadModal,
-									visible: true,
-									uploadType: UPLOAD_TYPE.CUSTOMER,
-									data: {
-										accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv',
-										title: t('loc:Importovať zákazníkov'),
-										label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })
-									}
-								})
-							}}
-							disabled={disabled}
-							type='primary'
-							htmlType='button'
-							className={'noti-btn'}
-							icon={<UploadIcon />}
-						>
-							{t('loc:Importovať zákazníkov')}
-						</Button>
-					</Row>
-				</div>
+					<Button
+						onClick={() => {
+							setUploadModal({
+								...uploadModal,
+								visible: true,
+								uploadType: UPLOAD_TYPE.CUSTOMER,
+								data: {
+									accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv',
+									title: t('loc:Importovať zákazníkov'),
+									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })
+								}
+							})
+						}}
+						disabled={disabled}
+						type='primary'
+						htmlType='button'
+						className={'noti-btn'}
+						icon={<UploadIcon />}
+					>
+						{t('loc:Importovať zákazníkov')}
+					</Button>
+				</Row>
 			</Row>
 			<Row justify={'space-between'} className='mt-10'>
 				{/* Notifications */}

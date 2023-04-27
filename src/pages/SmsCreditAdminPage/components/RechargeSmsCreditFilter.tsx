@@ -6,7 +6,7 @@ import { debounce } from 'lodash'
 import { useSelector } from 'react-redux'
 
 // utils
-import { CHANGE_DEBOUNCE_TIME, FIELD_MODE, FILTER_BUTTON_ID, FORM, RESET_BUTTON_ID, ROW_GUTTER_X_M, SALON_SOURCE_TYPE } from '../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, FIELD_MODE, FILTER_BUTTON_ID, FORM, RESET_BUTTON_ID, ROW_GUTTER_X_M, SALON_SOURCE_TYPE, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, formFieldID, optionRenderWithImage, optionRenderWithTag, validationString } from '../../../utils/helper'
 
 // components
@@ -25,6 +25,9 @@ import { ReactComponent as FilterIcon } from '../../../assets/icons/filter.svg'
 // redux
 import { IEnumerationsCurrenciesPayload } from '../../../reducers/enumerations/enumerationActions'
 
+// validate
+import validateRechargeSmsCreditFilterForm from './validateRechargeSmsCreditFilterForm'
+
 const { Panel } = Collapse
 
 type ComponentProps = {
@@ -36,7 +39,7 @@ type ComponentProps = {
 
 type Props = InjectedFormProps<IRechargeSmsCreditFilter, ComponentProps> & ComponentProps
 
-const fixLength100 = validationString(100)
+const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
 const RechargeSmsCreditFilter = (props: Props) => {
 	const { handleSubmit, form, onResetFilter, countries, currency, disabledFilter } = props
@@ -92,7 +95,7 @@ const RechargeSmsCreditFilter = (props: Props) => {
 									name='search'
 									fieldMode={FIELD_MODE.FILTER}
 									search
-									validate={fixLength100}
+									validate={fixLength255}
 									disabled={disabledFilter}
 								/>
 							</Col>
@@ -103,7 +106,7 @@ const RechargeSmsCreditFilter = (props: Props) => {
 										onClick={onClick}
 										htmlType='button'
 										type='dashed'
-										size={'middle'}
+										size={'large'}
 										className={'noti-btn w-full h-full p-0 flex items-center justify-center'}
 									>
 										<FilterIcon className={'relative top-0 left-0 text-black'} style={{ transform: 'translate(0,0)' }} />
@@ -150,6 +153,7 @@ const RechargeSmsCreditFilter = (props: Props) => {
 												size={'large'}
 												min={0}
 												disabled={disabledFilter}
+												className={'input-auto-height'}
 											/>
 										</Col>
 										<Col span={12}>
@@ -196,7 +200,8 @@ const form = reduxForm({
 			submit()
 		}
 	}, CHANGE_DEBOUNCE_TIME),
-	destroyOnUnmount: true
+	destroyOnUnmount: true,
+	validate: validateRechargeSmsCreditFilterForm
 })(RechargeSmsCreditFilter)
 
 export default form

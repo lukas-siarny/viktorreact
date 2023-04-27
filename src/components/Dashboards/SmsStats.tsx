@@ -28,23 +28,26 @@ const SmsStats = (props: Props) => {
 
 	const stats = useSelector((state: RootState) => state.sms.stats)
 	const smsPriceUnit = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPrice)
+	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
 	const validFrom = smsPriceUnit?.data?.validFrom
 	const validPriceLabel = validFrom ? t('loc:Aktuálna cena SMS platná od {{ validFrom }}', { validFrom: dayjs(validFrom).format(D_M_YEAR_FORMAT) }) : t('loc:Aktuálna cena SMS')
 
 	useEffect(() => {
-		;(async () => {
-			const { data } = await dispatch(getSmsStats(salonID))
-			const priceId = data?.currentSmsUnitPrice?.id
-			if (priceId) {
-				dispatch(getSmsUnitPrice(priceId))
-			}
-		})()
-	}, [dispatch, salonID])
+		if (selectedSalon.data?.id === salonID) {
+			;(async () => {
+				const { data } = await dispatch(getSmsStats(salonID))
+				const priceId = data?.currentSmsUnitPrice?.id
+				if (priceId) {
+					dispatch(getSmsUnitPrice(priceId))
+				}
+			})()
+		}
+	}, [dispatch, salonID, selectedSalon.data?.id])
 
 	return (
 		<div className={cx('p-4 rounded shadow-lg bg-notino-white w-full lg:w-1/2', className)}>
-			<Spin spinning={stats.isLoading || smsPriceUnit.isLoading}>
+			<Spin spinning={stats.isLoading || smsPriceUnit.isLoading || selectedSalon.isLoading}>
 				<h4 className={'mb-0 flex items-center'}>
 					<UsageIcon className={'text-notino-black mr-2'} />
 					{t('loc:Detail spotreby')}

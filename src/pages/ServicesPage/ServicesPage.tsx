@@ -51,9 +51,9 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	const [enabledRS, setEnabledRS] = useState(false)
 
 	const promptMessage = t('loc:Chcete zahodiť vykonané zmeny?')
-	const promptWhen = reorderView && JSON.stringify(servicesListData) !== JSON.stringify(services.listData)
+	const dirty = reorderView && JSON.stringify(servicesListData) !== JSON.stringify(services.listData)
 
-	unstable_usePrompt({ when: promptWhen, message: promptMessage })
+	unstable_usePrompt({ when: dirty, message: promptMessage })
 
 	useEffect(() => {
 		;(async () => {
@@ -67,8 +67,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 		;(async () => {
 			const { listData } = await dispatch(
 				getServices({
-					salonID,
-					rootCategoryID: undefined
+					salonID
 				})
 			)
 
@@ -122,11 +121,23 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	}
 
 	const handleSaveOrder = () => {
-		setReoderView(false)
+		if (dirty) {
+			setTimeout(async () => {
+				await dispatch(
+					getServices({
+						salonID
+					})
+					// setServicesListData
+				)
+				setReoderView(false)
+			}, 1000)
+		} else {
+			setReoderView(false)
+		}
 	}
 
 	const handleCancelOrder = () => {
-		if (promptWhen) {
+		if (dirty) {
 			// eslint-disable-next-line no-alert
 			if (window.confirm(promptMessage)) {
 				setServicesListData(services.listData)

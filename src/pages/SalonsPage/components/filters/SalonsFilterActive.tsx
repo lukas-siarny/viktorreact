@@ -38,7 +38,8 @@ import {
 	DOWNLOAD_BUTTON_ID,
 	STRINGS,
 	SALON_FILTER_RS,
-	SALON_FILTER_RS_AVAILABLE_ONLINE
+	SALON_FILTER_RS_AVAILABLE_ONLINE,
+	VALIDATION_MAX_LENGTH
 } from '../../../../utils/enums'
 import {
 	getLinkWithEncodedBackUrl,
@@ -83,7 +84,7 @@ export type ISalonsFilterActive = Pick<
 
 type Props = InjectedFormProps<ISalonsFilterActive, ComponentProps> & ComponentProps
 
-const fixLength100 = validationString(100)
+const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
 export const checkSalonFiltersSize = (formValues: any) =>
 	size(
@@ -358,7 +359,7 @@ const SalonsFilterActive = (props: Props) => {
 				name={'search'}
 				fieldMode={FIELD_MODE.FILTER}
 				search
-				validate={fixLength100}
+				validate={fixLength255}
 			/>
 		),
 		[t]

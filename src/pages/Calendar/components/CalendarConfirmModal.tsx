@@ -26,7 +26,7 @@ import {
 import { getConfirmModalText } from '../calendarHelpers'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-2.svg'
+import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-modal.svg'
 
 // schema
 import { ICalendarReservationForm } from '../../../schemas/reservation'

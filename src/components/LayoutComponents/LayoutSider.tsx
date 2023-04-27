@@ -192,7 +192,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						}
 					)
 				}
-				if (hasPermissions([PERMISSION.SMS_UNIT_PRICE_EDIT])) {
+				if (hasPermissions([PERMISSION.SMS_UNIT_PRICE_EDIT, PERMISSION.NOTINO])) {
 					mainGroupItems.push({
 						key: PAGE.SMS_CREDITS,
 						label: t('loc:SMS kredity'),
@@ -285,7 +285,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						{
 							key: PAGE.RESERVATIONS,
 							label: t('loc:Prehľad rezervácií {{ reservationsCount }}', { reservationsCount: count }),
-							onClick: () => navigate(getPath(t('paths:reservations'))),
+							onClick: () => navigate(getPath(t('paths:salon-reservations'))),
 							icon: <ReservationsIcon />,
 							id: PAGE.RESERVATIONS
 						}

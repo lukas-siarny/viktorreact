@@ -54,7 +54,7 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	})
 
 	useEffect(() => {
-		if (!walletID) {
+		if (!walletID || salonID !== selectedSalon.data?.id) {
 			return
 		}
 		dispatch(
@@ -68,17 +68,17 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 				dateTo: query.date.endOf('month').format(DEFAULT_DATE_INIT_FORMAT)
 			})
 		)
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.date, salonID, walletID])
+	}, [dispatch, query.page, query.limit, query.search, query.order, query.date, salonID, walletID, selectedSalon.data?.id])
 
 	useEffect(() => {
 		dispatch(initialize(FORM.SMS_HISTORY_FILTER, { search: query.search }))
 	}, [query.search, dispatch])
 
 	useEffect(() => {
-		if (salonID) {
+		if (salonID === selectedSalon.data?.id) {
 			dispatch(getSmsTimeStatsForSalon(salonID, query.date.year(), query.date.month() + 1))
 		}
-	}, [dispatch, salonID, query.date])
+	}, [dispatch, salonID, query.date, selectedSalon.data?.id])
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -118,10 +118,12 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 							icon={<SettingIcon />}
 							onActionItemClick={() => navigate(`${parentPath}${t('paths:reservations-settings')}`)}
 						/>
+
 						<div className={'flex gap-4 mb-10 flex-col lg:flex-row'}>
 							<RemainingSmsCredit salonID={salonID} parentPath={parentPath} walletID={walletID} />
 							<SmsStats salonID={salonID} />
 						</div>
+
 						<SmsTimeStats
 							onPickerChange={(date) => {
 								if (date) {
@@ -134,6 +136,7 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 							selectedDate={query.date}
 							className={'mb-6 pb-0'}
 							smsTimeStats={smsTimeStats}
+							loading={selectedSalon.isLoading}
 						/>
 						<SmsHistory smsHistory={smsHistory} query={query} setQuery={setQuery} />
 					</>

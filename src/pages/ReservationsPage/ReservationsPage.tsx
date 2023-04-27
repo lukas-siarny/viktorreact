@@ -142,7 +142,8 @@ const ReservationsPage = (props: Props) => {
 	const handleSubmit = (values: ISalonReservationsFilter) => {
 		const newQuery = {
 			...query,
-			...values
+			...values,
+			page: 1
 		}
 		setQuery(newQuery)
 	}

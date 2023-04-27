@@ -26,7 +26,7 @@ import {
 	CALENDAR_EVENT_DISPLAY_TYPE,
 	PARAMETER_TYPE,
 	RESERVATION_SOURCE_TYPE,
-	SALON_SOURCE_TYPE
+	REVIEW_VERIFICATION_STATUS
 } from '../utils/enums'
 
 // types
@@ -238,6 +238,14 @@ export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null
 
 export interface IEventTypeFilterForm {
 	eventType: CALENDAR_EVENT_TYPE
+}
+
+export interface IReviewsFilter {
+	search?: string
+	verificationStatus?: REVIEW_VERIFICATION_STATUS
+	salonCountryCode?: string
+	toxicityScoreFrom?: number
+	toxicityScoreTo?: number
 }
 
 export interface IJwtPayload {

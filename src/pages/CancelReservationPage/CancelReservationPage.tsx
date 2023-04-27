@@ -21,7 +21,7 @@ import { decodePrice, getAssignedUserLabel, getCountryPrefix, getServiceRange } 
 import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations.svg'
 import { ReactComponent as DollarIcon } from '../../assets/icons/dollar.svg'
 import { ReactComponent as EmployeeIcon } from '../../assets/icons/employees-16-current-color.svg'
-import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
 import { ReactComponent as PencilIcon } from '../../assets/icons/pencil-icon-16.svg'
 
 // componenets

@@ -56,7 +56,7 @@ import { getSalonRoles } from '../../reducers/roles/rolesActions'
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
 import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.svg'
 

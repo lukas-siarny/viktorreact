@@ -149,7 +149,8 @@ const ReservationsPage = (props: Props) => {
 	const handleSubmit = (values: IReservationsFilter) => {
 		const newQuery = {
 			...query,
-			...values
+			...values,
+			page: 1
 		}
 		setQuery(newQuery)
 	}

@@ -35,8 +35,8 @@ const validateServiceForm = (values?: IServiceForm) => {
 		errors.serviceCategoryParameter = { _error: i18next.t('loc:Musíte zvoliť a nastaviť aspoň jednu hodnotu parametra!') }
 	}
 
-	if (values?.descriptionLocalizations && !values?.descriptionLocalizations[0].value && values?.descriptionLocalizations.some((value, index) => index !== 0 && value.value)) {
-		errors.descriptionLocalizations = [{ value: i18next.t('loc:Toto pole je povinné') }]
+	if (values?.descriptionLocalizations?.use && !values?.descriptionLocalizations?.defualtLanguage) {
+		errors.descriptionLocalizations = { defualtLanguage: i18next.t('loc:Toto pole je povinné') }
 	}
 
 	return errors

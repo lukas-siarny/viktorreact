@@ -254,6 +254,9 @@ const ServiceEditPage = (props: Props) => {
 		if (data) {
 			// union parameter values form service and category detail based on categoryParameterValueID
 			const parameterValues = unionBy(data.service?.serviceCategoryParameter?.values, categoryParameterValues as any, 'categoryParameterValueID')
+			const descDefaultLng = data.service.descriptionLocalizations.find((v) => v.language === SERVICE_DESCRIPTION_LNG.DEFAULT)
+			const descEnLng = data.service.descriptionLocalizations.find((v) => v.language === SERVICE_DESCRIPTION_LNG.EN)
+
 			const initData: IServiceForm = {
 				id: data.service.id,
 				serviceCategoryParameterType: data.service.serviceCategoryParameter?.valueType as PARAMETER_TYPE,
@@ -268,7 +271,11 @@ const ServiceEditPage = (props: Props) => {
 				employees: parseEmployeesInit(data?.service),
 				useCategoryParameter: data.service.useCategoryParameter,
 				settings: data.service.settings,
-				descriptionLocalizations: normalizeNameLocalizations(data.service.descriptionLocalizations, Object.values(SERVICE_DESCRIPTION_LNG), SERVICE_DESCRIPTION_LNG.DEFAULT)
+				descriptionLocalizations: {
+					use: !!descDefaultLng?.value,
+					defualtLanguage: descDefaultLng?.value || null,
+					enLanguage: descEnLng?.value || null
+				}
 			}
 			dispatch(
 				initialize(
@@ -326,11 +333,20 @@ const ServiceEditPage = (props: Props) => {
 				settings: values.settings
 			}
 
-			const descriptionLocalizations = values.descriptionLocalizations.filter((localization) => localization.value)
+			let descriptionLocalizations: any[] | null = []
+			if (values.descriptionLocalizations.use) {
+				descriptionLocalizations.push({ language: SERVICE_DESCRIPTION_LNG.DEFAULT, value: values.descriptionLocalizations.defualtLanguage })
+
+				if (values.descriptionLocalizations.enLanguage) {
+					descriptionLocalizations.push({ language: SERVICE_DESCRIPTION_LNG.EN, value: values.descriptionLocalizations.enLanguage })
+				}
+			} else {
+				descriptionLocalizations = null
+			}
 
 			reqData = {
 				...reqData,
-				descriptionLocalizations: descriptionLocalizations.length ? (descriptionLocalizations as any) : null
+				descriptionLocalizations
 			}
 
 			await patchReq('/api/b2b/admin/services/{serviceID}', { serviceID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)

@@ -246,7 +246,11 @@ export interface IServiceForm {
 		enabledB2cReservations: boolean
 		autoApproveReservations: boolean
 	}
-	descriptionLocalizations: NameLocalizationsItem[]
+	descriptionLocalizations: {
+		use: boolean
+		defualtLanguage: string | null
+		enLanguage: string | null
+	}
 }
 
 export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']

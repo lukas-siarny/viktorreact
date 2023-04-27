@@ -17,6 +17,7 @@ import DeleteButton from '../../../components/DeleteButton'
 import ServicesListField from '../../EmployeesPage/components/ServicesListField'
 import ParameterValuesList from './ParameterValuesList'
 import ServiceBreadcrumbs from './ServiceBreadcrumbs'
+import Localizations from '../../../components/Localizations'
 import TextareaField from '../../../atoms/TextareaField'
 
 // validate
@@ -263,7 +264,7 @@ const ServiceForm: FC<Props> = (props) => {
 											<>
 												<Field
 													component={TextareaField}
-													label={t('loc:Poznámka')}
+													label={`${t('loc:Vlastný popis')} ${salon.data?.address?.countryCode ? `(${salon.data.address.countryCode})` : ''}`.trim()}
 													placeholder={t('loc:Vysvetlite, čo služba zahŕňa')}
 													maxLength={VALIDATION_MAX_LENGTH.LENGTH_1500}
 													showLettersCount
@@ -275,7 +276,7 @@ const ServiceForm: FC<Props> = (props) => {
 												/>
 												<Field
 													component={TextareaField}
-													label={t('loc:Poznámka')}
+													label={`${t('loc:Vlastný popis')} (EN)`}
 													placeholder={t('loc:Vysvetlite, čo služba zahŕňa')}
 													maxLength={VALIDATION_MAX_LENGTH.LENGTH_1500}
 													showLettersCount

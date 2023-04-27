@@ -4,7 +4,7 @@ import { Tag } from 'antd'
 import i18next from 'i18next'
 
 // types
-import { OpeningHours } from '../../../types/interfaces'
+import { AutocompleteLabelInValue, OpeningHours } from '../../../types/interfaces'
 import { ISelectedSalonPayload } from '../../../reducers/selectedSalon/selectedSalonActions'
 import { IBasicSalon } from '../../../reducers/salons/salonsActions'
 import { Paths } from '../../../types/api'
@@ -42,9 +42,10 @@ export type SalonInitType = ISelectedSalonPayload['data'] & IBasicSalon
  *
  * @param salonData
  * @param phonePrefixCountryCode
+ * @param salonNameFromSelect
  * @returns
  */
-export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCountryCode: string) => {
+export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCountryCode: string, salonNameFromSelect = false) => {
 	// stacilo by isEmpty ale aby typescript nehucal tak je aj prva podmienka
 	if (!salonData || isEmpty(salonData)) {
 		return {}
@@ -58,18 +59,18 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 	// napr. ak pride z BE aboutUsFirst: undefined, potom prepisem hodnotu vo formulari a opat ju vymazem, tak do reduxu sa ta prazdna hodnota uz neulozi ako undeifned ale ako null
 	// preto maju vsetky inicializacne hodnoty, pre textFieldy a textAreaFieldy fallback || null (pozri impementaciu tychto komponentov, preco sa to tam takto uklada)
 	const initialData = {
+		salonNameFromSelect,
 		id: salonData.id || null,
 		state: salonData.state as SALON_STATES,
 		sourceOfPremium: salonData.premiumSourceUserType,
 		// TODO: zle je naformatovane
-		name:
-			salonData.id && salonData.name
-				? {
-						key: salonData.id,
-						label: salonData.name,
-						value: salonData.id
-				  }
-				: salonData.name,
+		name: salonNameFromSelect
+			? {
+					key: salonData.id,
+					label: salonData.name,
+					value: salonData.id
+			  }
+			: salonData.name,
 		email: salonData.email,
 		// categoryIDs for basic salon
 		categoryIDs: (isEmpty(!salonData?.categories) ? salonData?.categories.map((category) => category.id) : null) as ISalonForm['categoryIDs'],
@@ -130,8 +131,9 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 	return initialData
 }
 
-export const initEmptySalonFormData = (phonePrefixCountryCode: string) => {
+export const initEmptySalonFormData = (phonePrefixCountryCode: string, salonNameFromSelect = false) => {
 	return {
+		salonNameFromSelect,
 		openOverWeekend: false,
 		sameOpenHoursOverWeek: true,
 		openingHours: initOpeningHours(undefined, true, false),
@@ -151,7 +153,7 @@ export const getSalonDataForSubmission = (data: ISalonForm) => {
 			isCover: image?.isCover ?? false
 		})) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
 		logoID: map(data.logo, (image) => image?.id ?? image?.uid)[0] ?? null,
-		name: get(data, 'name.id') ? get(data, 'name.name') : data.name,
+		name: data.salonNameFromSelect ? (data.name as AutocompleteLabelInValue)?.label : data.name,
 		openingHours: openingHours || [],
 		aboutUsFirst: data.aboutUsFirst,
 		city: data.city,

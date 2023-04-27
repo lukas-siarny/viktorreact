@@ -277,14 +277,7 @@ const ServiceEditPage = (props: Props) => {
 					enLanguage: descEnLng?.value || null
 				}
 			}
-			dispatch(
-				initialize(
-					FORM.SERVICE_FORM,
-					initData || {
-						descriptionLocalizations: normalizeNameLocalizations([], Object.keys(SERVICE_DESCRIPTION_LNG), SERVICE_DESCRIPTION_LNG.DEFAULT)
-					}
-				)
-			)
+			dispatch(initialize(FORM.SERVICE_FORM, initData))
 		}
 	}, [dispatch, serviceID, navigate])
 

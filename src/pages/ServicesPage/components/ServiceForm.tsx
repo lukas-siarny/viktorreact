@@ -17,7 +17,6 @@ import DeleteButton from '../../../components/DeleteButton'
 import ServicesListField from '../../EmployeesPage/components/ServicesListField'
 import ParameterValuesList from './ParameterValuesList'
 import ServiceBreadcrumbs from './ServiceBreadcrumbs'
-import Localizations from '../../../components/Localizations'
 import TextareaField from '../../../atoms/TextareaField'
 
 // validate
@@ -289,31 +288,6 @@ const ServiceForm: FC<Props> = (props) => {
 											</>
 										)}
 									</FormSection>
-									{/* <FieldArray
-										key='descriptionLocalizations'
-										name='descriptionLocalizations'
-										component={Localizations}
-										placeholder={t('loc:Zadajte popis služby')}
-										horizontal
-										fieldComponent={TextareaField}
-										ignoreFieldIndex={0} // do not render "0" field because it is rendered in mainField prop
-										customValidate={fixLength1500}
-										customRows={4}
-										className={'w-full mt-8'}
-										mainField={
-											<Field
-												className='mb-0 pb-0'
-												component={TextareaField}
-												label={`${t('loc:Popis služby')} ${salon.data?.address?.countryCode ? `(${salon.data.address.countryCode})` : ''}`.trim()}
-												placeholder={t('loc:Zadajte popis služby')}
-												key='descriptionLocalizations[0].value'
-												name='descriptionLocalizations[0].value'
-												maxLength={VALIDATION_MAX_LENGTH.LENGTH_1500}
-												rows={4}
-											/>
-										}
-										noSpace
-									/> */}
 								</div>
 								<div>
 									<h3 className={'mb-0 mt-0 flex items-center'}>

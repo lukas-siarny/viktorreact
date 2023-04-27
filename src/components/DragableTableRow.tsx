@@ -22,7 +22,7 @@ const DragableTableRow = ({ children, dndWithHandler = true, ...props }: RowProp
 		...props.style,
 		transform: CSS.Transform.toString(transform && { ...transform, scaleY: 1 }),
 		transition,
-		cursor: 'move',
+		cursor: dndWithHandler ? 'default' : 'move',
 		...(isDragging ? { position: 'relative', zIndex: 9999 } : {})
 	}
 

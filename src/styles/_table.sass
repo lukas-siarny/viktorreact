@@ -229,13 +229,26 @@
 							border-bottom: 1px solid $borderColor-notino-gray
 				tbody
 					tr.ant-table-row
-						height: 36px
-						td:first-child
-							border-radius: 0
-							padding-left: 16px
-						td:last-child
-							border-radius: 0
-							padding-right: 16px
+						td
+							padding: 4px 12px
+							font-size: 12px
+							&.noti-light-pink-col
+								background-color: rgba($backgroundColor-notino-pink, 0.03) !important
+							&.noti-medium-pink-col
+								background-color: rgba($backgroundColor-notino-pink, 0.08) !important
+								height: 36px
+							&:first-child
+								border-radius: 0
+								padding-left: 16px
+							&:last-child
+								border-radius: 0
+								padding-right: 16px
+						&:hover td,
+						&:hover td.ant-table-column-sort
+							&.noti-light-pink-col
+								background-color: rgba($backgroundColor-notino-pink, 0.08) !important
+							&.noti-medium-pink-col
+								background-color: rgba($backgroundColor-notino-pink, 0.15) !important
 			.ant-table-thead > tr > th
 				height: 40px
 				padding: 12px
@@ -248,13 +261,6 @@
 					padding-left: 16px
 				&:last-child
 					padding-right: 16px
-				&.noti-light-pink-col
-					background-color: rgba($backgroundColor-notino-pink, 0.03) !important
-				&.noti-medium-pink-col
-					background-color: rgba($backgroundColor-notino-pink, 0.08) !important
-			.ant-table-tbody > tr > td
-				padding: 4px 12px
-				font-size: 12px
 				&.noti-light-pink-col
 					background-color: rgba($backgroundColor-notino-pink, 0.03) !important
 				&.noti-medium-pink-col

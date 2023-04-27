@@ -4,13 +4,14 @@ import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 import { TFunction } from 'i18next'
 import { ColumnProps } from 'antd/es/table'
+import { useDispatch } from 'react-redux'
 
 // assets
 import { ReactComponent as CheckedPinkIcon } from '../../../../assets/icons/checkbox-checked-pink.svg'
 
 // types
-import { IServicesListCategory, IServicesListService } from '../../../../reducers/services/serviceActions'
-import { HandleServicesReorderFunc } from '../../../../types/interfaces'
+import { IServicesListCategory, IServicesListService, setServicesActiveKeys } from '../../../../reducers/services/serviceActions'
+import { HandleServicesReorderFunc, ServicesActiveKeys } from '../../../../types/interfaces'
 
 // utils
 import { getLinkWithEncodedBackUrl, parseServiceRowKey } from '../../../../utils/helper'
@@ -27,6 +28,8 @@ type SevicesTableProps = {
 	disabledRS?: boolean
 	parentIndexes: [number, number]
 	handleReorder: HandleServicesReorderFunc
+	activeKeys: ServicesActiveKeys
+	salonID: string
 }
 
 const checkerCell = (checked: boolean, disabled?: boolean) => {
@@ -97,7 +100,7 @@ const getTableColumns = (t: TFunction, disabledRS?: boolean): ColumnProps<IServi
 	},
 	{
 		title: (
-			<div className={'flex w-full items-center gap-1'}>
+			<div className={cx('flex w-full items-center gap-1 transition transition-opacity duration-200', { 'opacity-50': disabledRS })}>
 				<span className={'truncate inline-block'}>{t('loc:Auto. schvaľovanie')}</span>
 				<InfoTooltip
 					title={t('loc:Automatické schvaľovanie')}
@@ -112,8 +115,9 @@ const getTableColumns = (t: TFunction, disabledRS?: boolean): ColumnProps<IServi
 ]
 
 const ServicesList: FC<SevicesTableProps> = React.memo((props) => {
-	const { category, parentPath, reorderView, disabledRS, handleReorder, parentIndexes } = props
+	const { category, parentPath, reorderView, disabledRS, handleReorder, parentIndexes, activeKeys, salonID } = props
 	const navigate = useNavigate()
+	const dispatch = useDispatch()
 	const [t] = useTranslation()
 
 	const handleDrop = (oldId: string, newId: string) => {
@@ -131,7 +135,7 @@ const ServicesList: FC<SevicesTableProps> = React.memo((props) => {
 			rowKey={'key'}
 			dndDrop={reorderView ? handleDrop : undefined}
 			rowClassName={reorderView ? undefined : 'clickable-row'}
-			dndWithHandler={false}
+			dndWithHandler={true}
 			dndColWidth={36}
 			onRow={
 				reorderView
@@ -139,6 +143,7 @@ const ServicesList: FC<SevicesTableProps> = React.memo((props) => {
 					: (record) => ({
 							onClick: () => {
 								if (parentPath) {
+									dispatch(setServicesActiveKeys({ ...activeKeys, salonID }))
 									navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:services-settings/{{serviceID}}', { serviceID: record.id })))
 								}
 							}

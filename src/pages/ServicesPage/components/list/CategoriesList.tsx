@@ -10,7 +10,7 @@ import { ReactComponent as DragIcon } from '../../../../assets/icons/drag-icon.s
 
 // types
 import { IServicesListCategory, IServicesListInudstry } from '../../../../reducers/services/serviceActions'
-import { HandleServicesReorderFunc } from '../../../../types/interfaces'
+import { HandleServicesReorderFunc, ServicesActiveKeys } from '../../../../types/interfaces'
 
 // components
 import ServicesList from './ServicesList'
@@ -20,29 +20,32 @@ import { getExpandIcon } from '../../../../utils/helper'
 
 type CategoriesListProps = {
 	industry: IServicesListInudstry
-	activeKeys: string[]
+	activeKeys: ServicesActiveKeys
 	parentPath?: string
 	onChange: (newActiveKeys: string[]) => void
 	reorderView: boolean
 	disabledRS?: boolean
 	parentIndex: number
 	handleReorder: HandleServicesReorderFunc
+	salonID: string
 }
 
 type CategoryPanelProps = {
 	category: IServicesListCategory
+	activeKeys: ServicesActiveKeys
 	parentPath?: string
 	reorderView: boolean
 	disabledRS?: boolean
 	parentIndex: number
 	index: number
 	handleReorder: HandleServicesReorderFunc
+	salonID: string
 } & Omit<CollapsePanelProps, 'header'>
 
 const { Panel } = Collapse
 
 const CategoryPanel: FC<CategoryPanelProps> = React.memo((props) => {
-	const { category, parentPath, reorderView, disabledRS, handleReorder, parentIndex, index, ...panelProps } = props
+	const { category, parentPath, reorderView, disabledRS, handleReorder, parentIndex, index, activeKeys, salonID, ...panelProps } = props
 
 	const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({
 		id: category.id
@@ -74,18 +77,20 @@ const CategoryPanel: FC<CategoryPanelProps> = React.memo((props) => {
 		>
 			<ServicesList
 				category={category}
+				activeKeys={activeKeys}
 				parentPath={parentPath}
 				reorderView={reorderView}
 				disabledRS={disabledRS}
 				parentIndexes={[parentIndex, index]}
 				handleReorder={handleReorder}
+				salonID={salonID}
 			/>
 		</Panel>
 	)
 })
 
 const CategoriesList: FC<CategoriesListProps> = (props) => {
-	const { onChange, industry, activeKeys, parentPath, reorderView, disabledRS, handleReorder, parentIndex } = props
+	const { onChange, industry, activeKeys, parentPath, reorderView, disabledRS, handleReorder, parentIndex, salonID } = props
 
 	const { setNodeRef } = useDroppable({
 		id: industry.id
@@ -105,7 +110,7 @@ const CategoriesList: FC<CategoriesListProps> = (props) => {
 	const collapse = (
 		<Collapse
 			bordered={false}
-			activeKey={activeKeys}
+			activeKey={activeKeys.categories}
 			onChange={(newKeys) => onChange(typeof newKeys === 'string' ? [newKeys] : newKeys)}
 			expandIcon={(panelProps) => getExpandIcon(!!panelProps.isActive, 16)}
 			style={{ minWidth: 800 }}
@@ -114,6 +119,7 @@ const CategoriesList: FC<CategoriesListProps> = (props) => {
 			{industry.categories.data.map((category, categoryIndex) => (
 				<CategoryPanel
 					key={category.id}
+					activeKeys={activeKeys}
 					category={category}
 					parentPath={parentPath}
 					reorderView={reorderView}
@@ -121,6 +127,7 @@ const CategoriesList: FC<CategoriesListProps> = (props) => {
 					parentIndex={parentIndex}
 					index={categoryIndex}
 					handleReorder={handleReorder}
+					salonID={salonID}
 				/>
 			))}
 		</Collapse>

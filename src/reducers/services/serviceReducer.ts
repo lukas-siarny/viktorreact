@@ -1,20 +1,15 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
-import { IServiceActions, IServicesPayload, IServicePayload, IServiceRootCategoryPayload } from './serviceActions'
+import { IServiceActions, IServicesPayload, IServicePayload } from './serviceActions'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { SERVICES, SERVICE, SERVICE_ROOT_CATEGORY } from './serviceTypes'
+import { SERVICES, SERVICE, SET_SERVICES_ACTIVE_KEYS } from './serviceTypes'
+import { SERVICES_LIST_INIT } from '../../utils/enums'
 
 export const initState = {
 	services: {
 		data: null,
-		listData: {
-			industries: {
-				data: [],
-				servicesCount: 0,
-				servicesAvailableForOnlineReservationsCount: 0,
-				servicesVisibleInPricelistCount: 0
-			}
-		},
+		listData: SERVICES_LIST_INIT,
+		servicesActiveKeys: null,
 		options: [],
 		categoriesOptions: [],
 		isLoading: false,
@@ -24,12 +19,7 @@ export const initState = {
 		data: null,
 		isLoading: false,
 		isFailure: false
-	} as IServicePayload & ILoadingAndFailure,
-	serviceRootCategory: {
-		data: null,
-		isLoading: false,
-		isFailure: false
-	} as IServiceRootCategoryPayload & ILoadingAndFailure
+	} as IServicePayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -88,29 +78,13 @@ export default (state = initState, action: IServiceActions) => {
 					data: action.payload.data
 				}
 			}
-		// Service root category
-		case SERVICE_ROOT_CATEGORY.SERVICE_ROOT_CATEGORY_LOAD_START:
+		// set active keys
+		case SET_SERVICES_ACTIVE_KEYS:
 			return {
 				...state,
-				serviceRootCategory: {
-					...state.service,
-					isLoading: true
-				}
-			}
-		case SERVICE_ROOT_CATEGORY.SERVICE_ROOT_CATEGORY_LOAD_FAIL:
-			return {
-				...state,
-				serviceRootCategory: {
-					...initState.service,
-					isFailure: true
-				}
-			}
-		case SERVICE_ROOT_CATEGORY.SERVICE_ROOT_CATEGORY_LOAD_DONE:
-			return {
-				...state,
-				serviceRootCategory: {
-					...initState.service,
-					data: action.payload.data
+				services: {
+					...state.services,
+					servicesActiveKeys: action.payload
 				}
 			}
 		case RESET_STORE:

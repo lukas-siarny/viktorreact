@@ -1180,3 +1180,12 @@ export const SMS_STATUS_NAME = (status: SMS_NOTIFICATION_STATUS) => {
 }
 
 export const SERVICE_ROW_KEY = (categoryID: string, serviceID: string) => `${categoryID}_${serviceID}`
+
+export const SERVICES_LIST_INIT = {
+	industries: {
+		data: [],
+		servicesCount: 0,
+		servicesAvailableForOnlineReservationsCount: 0,
+		servicesVisibleInPricelistCount: 0
+	}
+}

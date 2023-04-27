@@ -25,6 +25,7 @@ type IndustriesListProps = {
 	parentPath?: string
 	disabledRS?: boolean
 	handleReorder: HandleServicesReorderFunc
+	salonID: string
 }
 
 type IndustryPanelProps = {
@@ -38,12 +39,13 @@ type IndustryPanelProps = {
 	t: TFunction
 	activeKeys: ServicesActiveKeys
 	setActiveKeys: (newActiveKeys: ServicesActiveKeys) => void
+	salonID: string
 } & Omit<CollapsePanelProps, 'header'>
 
 const { Panel } = Collapse
 
 const IndustryPanel: FC<IndustryPanelProps> = React.memo((props) => {
-	const { industry, parentPath, reorderView, disabledRS, handleReorder, index, navigate, activeKeys, setActiveKeys, t, ...panelProps } = props
+	const { industry, parentPath, reorderView, disabledRS, handleReorder, index, navigate, activeKeys, setActiveKeys, t, salonID, ...panelProps } = props
 
 	const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({
 		id: industry.id
@@ -92,12 +94,13 @@ const IndustryPanel: FC<IndustryPanelProps> = React.memo((props) => {
 				<CategoriesList
 					parentPath={parentPath}
 					industry={industry}
-					activeKeys={activeKeys.categories}
+					activeKeys={activeKeys}
 					onChange={(newKeys: string[]) => setActiveKeys({ ...activeKeys, categories: newKeys })}
 					reorderView={reorderView}
 					disabledRS={disabledRS}
 					handleReorder={handleReorder}
 					parentIndex={index}
+					salonID={salonID}
 				/>
 			)}
 		</Panel>
@@ -107,7 +110,7 @@ const IndustryPanel: FC<IndustryPanelProps> = React.memo((props) => {
 const IndustriesList: FC<IndustriesListProps> = (props) => {
 	const [t] = useTranslation()
 	const navigate = useNavigate()
-	const { activeKeys, setActiveKeys, idustriesData, reorderView, parentPath, disabledRS, handleReorder } = props
+	const { activeKeys, setActiveKeys, idustriesData, reorderView, parentPath, disabledRS, handleReorder, salonID } = props
 
 	const { setNodeRef } = useDroppable({
 		id: 'parent-droppable'
@@ -146,6 +149,7 @@ const IndustriesList: FC<IndustriesListProps> = (props) => {
 						t={t}
 						activeKeys={activeKeys}
 						setActiveKeys={setActiveKeys}
+						salonID={salonID}
 					/>
 				)
 			})}

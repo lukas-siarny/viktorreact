@@ -73,7 +73,7 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 			: salonData.name,
 		email: salonData.email,
 		// categoryIDs for basic salon
-		categoryIDs: (isEmpty(!salonData?.categories) ? salonData?.categories.map((category) => category.id) : null) as ISalonForm['categoryIDs'],
+		categoryIDs: (!isEmpty(salonData?.categories) ? salonData?.categories.map((category) => category.id) : null) as ISalonForm['categoryIDs'],
 		payByCard: !!salonData.payByCard,
 		payByCash: !!salonData?.payByCash,
 		otherPaymentMethods: salonData.otherPaymentMethods || null,

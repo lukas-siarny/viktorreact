@@ -82,7 +82,7 @@ const CreateSalonPage: FC<SalonPageProps> = (props) => {
 
 			// save categories in case of salon data were loaded from basic salon data and has categories assigned
 			if (showBasicSalonsSuggestions) {
-				if (data?.categoryIDs && !isEmpty(data?.categoryIDs) && data.categoryIDs.length < 100) {
+				if (!isEmpty(data?.categoryIDs) && (data?.categoryIDs?.length || 0) < 100) {
 					await patchReq(
 						'/api/b2b/admin/salons/{salonID}/categories',
 						{ salonID: result.data.salon.id },

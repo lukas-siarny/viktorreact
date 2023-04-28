@@ -91,7 +91,6 @@ export type ISalonForm = z.infer<typeof salonSchema> &
 		sameOpenHoursOverWeek: boolean
 		openOverWeekend: boolean
 		categoryIDs: [string, ...string[]] | null
-		pricelistIDs?: string[]
 		deletedAt?: boolean
 		name: AutocompleteLabelInValue | string | null
 	}

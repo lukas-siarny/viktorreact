@@ -73,6 +73,9 @@ describe('Dynamic tests for roles', () => {
 					case LIST_OF_TESTS_SUITS.REVIEWS:
 						context(`ReviewsCRUD as ${user.role}`, () => reviewsTestSuite(test.actions, user.credentials.user, user.credentials.password))
 						break
+					case LIST_OF_TESTS_SUITS.ADMIN_RESERVATIONS:
+						context(`Admin reservations as ${user.role}`, () => reviewsTestSuite(test.actions, user.credentials.user, user.credentials.password))
+						break
 					case LIST_OF_TESTS_SUITS.SMS_UNIT_PRICES_CRUD:
 						context(`SMSUnitPricesCRUD as ${user.role}`, () => smsUnitPricesCRUDTestSuite(test.actions, user.credentials.user, user.credentials.password))
 						break

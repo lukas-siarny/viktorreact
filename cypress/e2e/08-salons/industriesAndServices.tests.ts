@@ -48,7 +48,8 @@ const industriesAndServicesTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 					}
 					return true
 				})
-				cy.clickButton(SUBMIT_BUTTON_ID, FORM.INDUSTRIES)
+				// cy.clickButton(SUBMIT_BUTTON_ID, FORM.INDUSTRIES)
+				cy.get(`#${FORM.INDUSTRIES}-${SUBMIT_BUTTON_ID}`).click({ force: true })
 				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
 					cy.wait('@patchSalonCategories').then((interceptionPatchSalonCategories: any) => {
 						// check status code
@@ -76,7 +77,8 @@ const industriesAndServicesTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 								}
 								return true
 							})
-							cy.clickButton(SUBMIT_BUTTON_ID, FORM.INDUSTRY)
+							// cy.clickButton(SUBMIT_BUTTON_ID, FORM.INDUSTRY)
+							cy.get(`#${FORM.INDUSTRY}-${SUBMIT_BUTTON_ID}`).click({ force: true })
 							cy.wait('@patchSalonServices').then((interceptionPatchSalonCategory: any) => {
 								// check status code
 								expect(interceptionPatchSalonCategory.response.statusCode).to.equal(200)

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Row, Select, Spin } from 'antd'
+import { Button, Col, Divider, Row, Select, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
@@ -42,7 +42,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 	const [uploadStatus, setRequestStatus] = useState<REQUEST_STATUS | undefined>(undefined)
 	const [customersImportVisible, setCustomersImportVisible] = useState(false)
-	const [templateValue, setTemplateValue] = useState(null)
+	const [templateValue, setTemplateValue] = useState<{ label: string; value: string } | null>(null)
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam(),
@@ -183,28 +183,35 @@ const CustomersPage = (props: SalonSubPageProps) => {
 				extraContent={
 					<>
 						<Divider className={'mt-1 mb-3'} />
-						<div className={'ant-form-item'}>
-							<label htmlFor={'noti-customer-template-select'} className={'block mb-2'}>
-								{t('loc:Vzorové šablóny súborov')}
-							</label>
-							<Select
-								id={'noti-customer-template-select'}
-								style={{ zIndex: 999 }}
-								className={'noti-select-input w-full mb-4'}
-								size={'large'}
-								onChange={() => setTemplateValue(null)}
-								value={templateValue}
-								placeholder={t('loc:Vyberte šablónu na stiahnutie')}
-								getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+						<div className={'flex items-center justify-between gap-1'}>
+							<div className={'ant-form-item w-full'}>
+								<label htmlFor={'noti-customer-template-select'} className={'block mb-2'}>
+									{t('loc:Vzorové šablóny súborov')}
+								</label>
+								<Select
+									id={'noti-customer-template-select'}
+									className={'noti-select-input w-full mb-4'}
+									size={'large'}
+									labelInValue
+									options={TEMPLATE_OPTIONS()}
+									onChange={(val: any) => setTemplateValue(val)}
+									value={templateValue}
+									placeholder={t('loc:Vyberte šablónu na stiahnutie')}
+									getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+								/>
+							</div>
+							<Button
+								className={'noti-btn'}
+								href={`${process.env.PUBLIC_URL}/templates/${templateValue?.value}`}
+								target='_blank'
+								rel='noopener noreferrer'
+								type={'default'}
+								disabled={!templateValue}
+								htmlType={'button'}
+								download
 							>
-								{TEMPLATE_OPTIONS().map((option) => (
-									<Option value={option.value} key={option.value}>
-										<a className={'block'} href={`${process.env.PUBLIC_URL}/templates/${option.fileName}`} download={option.fileName}>
-											{option.label}
-										</a>
-									</Option>
-								))}
-							</Select>
+								{t('loc:Stiahnuť')}
+							</Button>
 						</div>
 					</>
 				}

@@ -282,6 +282,7 @@ const EmployeePage = (props: Props) => {
 	const isInviteFromSubmitting = useSelector(isSubmitting(FORM.INVITE_EMPLOYEE))
 	const currentAuthUser = useSelector((state: RootState) => state.user.authUser)
 	const salonRoles = useSelector((state: RootState) => state.roles.salonRoles)
+	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
 	const filteredSalonRolesByPermission = useMemo(
 		() => filterSalonRolesByPermission(salonID, currentAuthUser?.data, salonRoles?.data || undefined),
@@ -318,6 +319,9 @@ const EmployeePage = (props: Props) => {
 								}
 						  ]
 						: [],
+					phone: employeesData.employee.user?.phone,
+					phonePrefixCountryCode:
+						employeesData.employee.user?.phonePrefixCountryCode || salon?.data?.companyContactPerson?.phonePrefixCountryCode || salon?.data?.address?.countryCode,
 					deletedAt: employeesData.employee.deletedAt,
 					services: parseServices(employeesData, options),
 					salonID: { label: employeesData.employee?.salon?.name, value: employeesData.employee?.salon?.id },

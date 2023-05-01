@@ -6,9 +6,9 @@ import {
 	openingHoursConstraint,
 	phoneNumbersConstraint,
 	serializeValidationMessage,
-	socialMediaConstraint,
 	stringConstraint,
 	twoCharsConstraint,
+	uuidConstraint,
 	zodErrorsToFormErrors
 } from './baseSchema'
 import { FORM, SALON_STATES, VALIDATION_MAX_LENGTH } from '../utils/enums'
@@ -17,6 +17,16 @@ import { socialMediaRegex } from '../utils/regex'
 import { AutocompleteLabelInValue } from '../types/interfaces'
 
 // https://notino-admin.goodrequest.dev/api/doc/#/B2b-%3Eadmin/patchApiB2BAdminSalonsSalonId
+
+/**
+ * Constraint for validation URLs in social media based on regex
+ * @returns validation schema
+ * @param regex RegExp
+ * @param url string
+ */
+export const socialMediaConstraint = (regex: RegExp, url: string) =>
+	z.string().regex(regex, serializeValidationMessage('loc:Zadajte správny formát adresy (napr. {{url}})', { url })).nullish()
+
 export const salonSchema = z
 	.object({
 		salonNameFromSelect: z.boolean().nullable(),
@@ -72,13 +82,14 @@ export const salonSchema = z
 			socialLinkTikTok: socialMediaConstraint(socialMediaRegex.tiktok, 'https://www.tiktok.com/tiktok'),
 			socialLinkPinterest: socialMediaConstraint(socialMediaRegex.pinterest, 'https://www.pinterest.com/pinterest'),
 			payByCard: z.boolean().optional(),
+			sameOpenHoursOverWeek: z.boolean(),
 			payByCash: z.boolean().optional(),
 			otherPaymentMethods: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_500),
 			logo: imageConstraint.array().max(1).nullish(),
 			gallery: imageConstraint.nullish().array().max(100).optional(),
 			pricelists: imageConstraint.array().nullish(),
-			cosmeticIDs: z.string().array().max(VALIDATION_MAX_LENGTH.LENGTH_20).optional(),
-			languageIDs: z.string().array().max(VALIDATION_MAX_LENGTH.LENGTH_10).optional()
+			cosmeticIDs: uuidConstraint.array().max(VALIDATION_MAX_LENGTH.LENGTH_20).optional(),
+			languageIDs: uuidConstraint.array().max(VALIDATION_MAX_LENGTH.LENGTH_10).optional()
 		})
 	)
 
@@ -87,11 +98,8 @@ export type ISalonForm = z.infer<typeof salonSchema> &
 	AddressInputFields & {
 		id: string | null
 		state?: SALON_STATES
-		sourceOfPremium?: string
-		sameOpenHoursOverWeek: boolean
 		openOverWeekend: boolean
 		categoryIDs: [string, ...string[]] | null
-		deletedAt?: boolean
 		name: AutocompleteLabelInValue | string | null
 	}
 

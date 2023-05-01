@@ -318,12 +318,3 @@ export const openingHoursConstraint = () => {
 		})
 	})
 }
-
-/**
- * Constraint for validation URLs in social media based on regex
- * @returns validation schema
- * @param regex RegExp
- * @param url string
- */
-export const socialMediaConstraint = (regex: RegExp, url: string) =>
-	z.string().regex(regex, serializeValidationMessage('loc:Zadajte správny formát adresy (napr. {{url}})', { url })).nullish()

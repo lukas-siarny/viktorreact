@@ -1,5 +1,5 @@
 import React from 'react'
-import { isEmpty, map, get } from 'lodash'
+import { isEmpty, map } from 'lodash'
 import { Tag } from 'antd'
 import i18next from 'i18next'
 
@@ -62,8 +62,6 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 		salonNameFromSelect,
 		id: salonData.id || null,
 		state: salonData.state as SALON_STATES,
-		sourceOfPremium: salonData.premiumSourceUserType,
-		// TODO: zle je naformatovane
 		name: salonNameFromSelect
 			? {
 					key: salonData.id,

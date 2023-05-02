@@ -7,12 +7,10 @@ import {
 	phoneNumbersConstraint,
 	serializeValidationMessage,
 	stringConstraint,
-	twoCharsConstraint,
 	uuidConstraint,
 	zodErrorsToFormErrors
 } from './baseSchema'
-import { FORM, SALON_STATES, VALIDATION_MAX_LENGTH } from '../utils/enums'
-import { AddressInputFields } from '../components/AddressFields'
+import { FORM, MAP, SALON_STATES, VALIDATION_MAX_LENGTH } from '../utils/enums'
 import { socialMediaRegex } from '../utils/regex'
 import { AutocompleteLabelInValue } from '../types/interfaces'
 
@@ -68,9 +66,151 @@ export const salonSchema = z
 	})
 	.and(
 		z.object({
+			// address
+			zipCode: z.string().nullish(),
+			latitude: z.number().nullish(),
+			longitude: z.number().nullish(),
+			country: z.string().nullish(),
+			city: z.string().nullish(),
+			street: z.string().nullish(),
+			streetNumber: z.string().nullish()
+		})
+	)
+	.superRefine((values, ctx) => {
+		if (!values.street) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Toto pole je povinné'),
+				path: ['street']
+			})
+		}
+
+		if (values.street && values.street.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Max. počet znakov je {{max}}', { max: VALIDATION_MAX_LENGTH.LENGTH_100 }),
+				path: ['street']
+			})
+		}
+
+		if (values.streetNumber && values.streetNumber.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Max. počet znakov je {{max}}', { max: VALIDATION_MAX_LENGTH.LENGTH_10 }),
+				path: ['streetNumber']
+			})
+		}
+
+		if (!values.city) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Toto pole je povinné'),
+				path: ['city']
+			})
+		}
+
+		if (values.city && values.city.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Max. počet znakov je {{max}}', { max: VALIDATION_MAX_LENGTH.LENGTH_100 }),
+				path: ['city']
+			})
+		}
+
+		if (!values.zipCode) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Toto pole je povinné'),
+				path: ['zipCode']
+			})
+		}
+
+		if (values.zipCode && values.zipCode.length > VALIDATION_MAX_LENGTH.LENGTH_10) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Max. počet znakov je {{max}}', { max: VALIDATION_MAX_LENGTH.LENGTH_10 }),
+				path: ['zipCode']
+			})
+		}
+
+		if (!values.country) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Toto pole je povinné'),
+				path: ['country']
+			})
+		}
+
+		if (values.country && values.country.length > VALIDATION_MAX_LENGTH.LENGTH_2) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Max. počet znakov je {{max}}', { max: VALIDATION_MAX_LENGTH.LENGTH_2 }),
+				path: ['country']
+			})
+		}
+
+		if (!values.longitude) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Toto pole je povinné'),
+				path: ['longitude']
+			})
+		}
+
+		if (values.longitude && values.longitude > MAP.maxLongitude) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Zadajte maximálne {{max}}', { max: MAP.maxLongitude }),
+				path: ['longitude']
+			})
+		}
+
+		if (values.longitude && values.longitude < MAP.minLongitude) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Zadajte minimálne {{min}}', { min: MAP.minLongitude }),
+				path: ['longitude']
+			})
+		}
+
+		if (!values.latitude) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Toto pole je povinné'),
+				path: ['latitude']
+			})
+		}
+
+		if (values.latitude && values.latitude > MAP.maxLongitude) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Zadajte maximálne {{max}}', { max: MAP.maxLongitude }),
+				path: ['latitude']
+			})
+		}
+
+		if (values.latitude && values.latitude < MAP.minLongitude) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Zadajte minimálne {{min}}', { min: MAP.minLongitude }),
+				path: ['latitude']
+			})
+		}
+
+		if (!(values.zipCode && values.city && values.street && values.latitude && values.longitude && values.country)) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage(
+					'loc:Adresa nie je kompletná. Uistite sa, či je vyplnené - Mesto, Ulica, PSČ a Krajina. Upresniť adresu môžete vo vyhľadávaní alebo priamo v mape.'
+				),
+				path: ['address']
+			})
+		}
+	})
+	.and(
+		z.object({
 			aboutUsFirst: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1000),
 			openingHours: openingHoursConstraint(),
-			countryCode: twoCharsConstraint,
 			parkingNote: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1000),
 			locationNote: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1000),
 			phones: phoneNumbersConstraint(),
@@ -94,13 +234,12 @@ export const salonSchema = z
 	)
 
 // NOTE: adresa je validovana cez inline validacie v AddressFields
-export type ISalonForm = z.infer<typeof salonSchema> &
-	AddressInputFields & {
-		id: string | null
-		state?: SALON_STATES
-		openOverWeekend: boolean
-		categoryIDs: [string, ...string[]] | null
-		name: AutocompleteLabelInValue | string | null
-	}
+export type ISalonForm = z.infer<typeof salonSchema> & {
+	id: string | null
+	state?: SALON_STATES
+	openOverWeekend: boolean
+	categoryIDs: [string, ...string[]] | null
+	name: AutocompleteLabelInValue | string | null
+}
 
 export const validationSalonFn = (values: ISalonForm, props: any) => zodErrorsToFormErrors(salonSchema, FORM.SALON, values, props)

@@ -176,7 +176,7 @@ const fetchSearchData = async ({
 			const mergedData = [...collectedData]
 			// filter duplicate values
 			dataOptions.forEach((data: any) => {
-				if (!mergedData.find((currentData) => currentData.value === data.value)) {
+				if (!mergedData.find((currentData) => currentData.key === data.key)) {
 					mergedData.push(data)
 				}
 			})

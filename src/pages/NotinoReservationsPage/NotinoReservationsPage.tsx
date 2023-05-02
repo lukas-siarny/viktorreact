@@ -28,7 +28,7 @@ import {
 	ROW_GUTTER_X_DEFAULT
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { formatObjToQuery, getAssignedUserLabel, normalizeDirectionKeys, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
+import { getAssignedUserLabel, normalizeDirectionKeys, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -41,6 +41,9 @@ import { Columns, IBreadcrumbs, IReservationsFilter } from '../../types/interfac
 
 // hooks
 import useQueryParams, { ArrayParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
+
+// schema
+import { formatObjToQuery } from '../../hooks/useQueryParamsZod'
 
 const NotinoReservationsPage = () => {
 	const [t] = useTranslation()

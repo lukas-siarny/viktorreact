@@ -145,7 +145,7 @@ const SalonForm: FC<Props> = (props) => {
 	}, [] as any[])
 
 	const searchCosmetics = useCallback(
-		async (search: string, page: string) => {
+		async (search: string, page: number) => {
 			return searchWrapper(dispatch, { search, limit: 100, page }, FILTER_ENTITY.COSMETICS)
 		},
 		[dispatch]

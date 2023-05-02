@@ -167,7 +167,7 @@ const fetchSearchData = async ({
 	try {
 		let collectedData: any[] = []
 		if (page !== 1 && selectState.data) {
-			collectedData = [...selectState.data].filter((data) => !collectedData.find((currentData) => currentData.value === data.value))
+			collectedData = [...selectState.data]
 		}
 
 		const newData: any = await onSearch(value, page, missingValues)

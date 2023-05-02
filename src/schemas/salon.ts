@@ -30,6 +30,7 @@ export const salonSchema = z
 		salonNameFromSelect: z.boolean().nullable(),
 		name: z.any()
 	})
+	// name
 	.superRefine((values, ctx) => {
 		if (!values.salonNameFromSelect) {
 			if (!values.name) {
@@ -233,7 +234,6 @@ export const salonSchema = z
 		})
 	)
 
-// NOTE: adresa je validovana cez inline validacie v AddressFields
 export type ISalonForm = z.infer<typeof salonSchema> & {
 	id: string | null
 	state?: SALON_STATES

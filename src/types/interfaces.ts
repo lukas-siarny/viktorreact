@@ -159,44 +159,6 @@ export interface AutocompleteLabelInValue {
 	label: string | null
 	value: string | null
 }
-export interface ISalonForm {
-	salonNameFromSelect: boolean
-	id: string | null
-	name: AutocompleteLabelInValue | string | null
-	aboutUsFirst: string | null
-	state?: SALON_STATES
-	openingHours: OpeningHours
-	sameOpenHoursOverWeek: boolean
-	openOverWeekend: boolean
-	country: string | null
-	zipCode: string | null
-	city: string | null
-	street: string | null
-	streetNumber: string | null
-	latitude: number | null
-	longitude: number | null
-	parkingNote: string | null
-	phones: { phonePrefixCountryCode: string | null; phone: string | null }[]
-	email: string | null
-	categoryIDs: [string, ...string[]] | null
-	socialLinkFB: string | null
-	socialLinkInstagram: string | null
-	socialLinkWebPage: string | null
-	socialLinkYoutube: string | null
-	socialLinkTikTok: string | null
-	socialLinkPinterest: string | null
-	payByCard: boolean
-	payByCash: boolean
-	otherPaymentMethods: string | null
-	logo: any | null
-	gallery: any | null
-	pricelistIDs?: string[]
-	pricelists?: any
-	locationNote: string | null
-	cosmeticIDs: string[]
-	languageIDs: string[]
-}
-
 export interface IParameterValue {
 	id: string | undefined
 	name: string | undefined
@@ -598,7 +560,7 @@ export type ICalendarMonthlyViewEvent = Omit<Paths.GetApiB2BAdminSalonsSalonIdCa
 	id: string
 	employee: CalendarEmployee
 }
-export type ICalendarMonthlyViewDay = { [key: string]: ICalendarMonthlyViewEvent[]  }
+export type ICalendarMonthlyViewDay = { [key: string]: ICalendarMonthlyViewEvent[] }
 
 export interface ICalendarMonthlyReservationsPayload {
 	data: ICalendarMonthlyViewDay | null

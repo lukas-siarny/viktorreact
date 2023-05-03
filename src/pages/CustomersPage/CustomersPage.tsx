@@ -33,8 +33,6 @@ import useQueryParams from '../../hooks/useQueryParamsZod'
 // schema
 import { customersPagePageURLQueryParams } from '../../schemas/queryParams'
 
-const { Option } = Select
-
 const CustomersPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const navigate = useNavigate()

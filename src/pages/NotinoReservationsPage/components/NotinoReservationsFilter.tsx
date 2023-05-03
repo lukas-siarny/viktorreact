@@ -103,7 +103,7 @@ const NotinoReservationsFilter = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters search={search} activeFilters={checkFiltersSizeWithoutSearch(formValues)}>
+			<Filters search={search} activeFilters={checkFiltersSizeWithoutSearch(formValues)} form={FORM.NOTINO_RESERVATIONS_FILTER}>
 				<Row gutter={ROW_GUTTER_X_M}>
 					<Col span={8}>
 						<Fields

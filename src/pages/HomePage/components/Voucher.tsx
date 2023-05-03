@@ -12,7 +12,7 @@ const { Paragraph } = Typography
 const Voucher = ({ code }: Props) => {
 	const [t] = useTranslation()
 	return (
-		<div className={'relative'}>
+		<div style={{ marginLeft: '-5px' }} className={'relative'}>
 			<VoucherIcon />
 			<div className={'absolute top-[30px] left-[82px]'}>
 				<div className={'text-lg text-black font-bold'}>{t('loc:Notino kupón')}</div>

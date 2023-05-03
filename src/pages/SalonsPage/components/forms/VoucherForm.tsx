@@ -38,6 +38,7 @@ const VoucherForm: FC<Props> = (props) => {
 						size={'large'}
 						prefix={(<VoucherIcon />) as any}
 						placeholder={t('loc:Zadajte kód pre kupón')}
+						required
 						disabled={submitting}
 					/>
 				</Col>

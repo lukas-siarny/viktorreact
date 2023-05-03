@@ -14,6 +14,7 @@ import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/forms/NoteForm'
 import SalonApprovalModal from './components/modals/SalonApprovalModal'
 import NotinoUserForm from './components/forms/NotinoUserForm'
+import VoucherForm from './components/forms/VoucherForm'
 
 // enums
 import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_STATES, STRINGS, SALON_CREATE_TYPE, SUBMIT_BUTTON_ID } from '../../utils/enums'
@@ -37,7 +38,6 @@ import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
-import VoucherForm from './components/forms/VoucherForm'
 
 interface EditSalonPageProps extends SalonPageProps {
 	isNotinoUser: boolean
@@ -80,6 +80,8 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 	const assignedUserLabel = getAssignedUserLabel(salon.data?.assignedUser)
 
 	const dontUpdateFormData = useRef(false)
+
+	const disabledForm = isDeletedSalon || (isPendingPublication && !isNotinoUser)
 
 	// init form
 	useEffect(() => {
@@ -642,7 +644,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 											size={'middle'}
 											className={'noti-btn m-regular mt-2'}
 											onClick={() => setOpeningHoursModalVisble(true)}
-											disabled={isDeletedSalon || (isPendingPublication && !isNotinoUser)}
+											disabled={disabledForm}
 										>
 											{STRINGS(t).edit(t('loc:poznámku'))}
 										</Button>
@@ -654,7 +656,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 										size={'middle'}
 										className={'noti-btn m-regular mt-2'}
 										onClick={() => setOpeningHoursModalVisble(true)}
-										disabled={isDeletedSalon || (isPendingPublication && !isNotinoUser)}
+										disabled={disabledForm}
 									>
 										{STRINGS(t).addRecord(t('loc:poznámku'))}
 									</Button>
@@ -674,7 +676,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 											size={'middle'}
 											className={'noti-btn m-regular mt-2'}
 											onClick={() => setVisibleVoucherModal(true)}
-											disabled={isDeletedSalon || (isPendingPublication && !isNotinoUser)}
+											disabled={disabledForm}
 										>
 											{STRINGS(t).edit(t('loc:kupón'))}
 										</Button>
@@ -686,7 +688,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 										size={'middle'}
 										className={'noti-btn m-regular mt-2'}
 										onClick={() => setVisibleVoucherModal(true)}
-										disabled={isDeletedSalon || (isPendingPublication && !isNotinoUser)}
+										disabled={disabledForm}
 									>
 										{STRINGS(t).addRecord(t('loc:kupón'))}
 									</Button>

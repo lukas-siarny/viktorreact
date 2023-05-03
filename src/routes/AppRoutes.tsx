@@ -64,6 +64,8 @@ import ReviewsPage from '../pages/ReviewsPage/ReviewsPage'
 import SmsCreditAdminPage from '../pages/SmsCreditAdminPage/SmsCreditAdminPage'
 import SmsUnitPricesDetailPage from '../pages/SmsCreditAdminPage/SmsUnitPricesDetailPage'
 
+// Documents
+
 // Cancel reservation page
 import CancelReservationPage from '../pages/CancelReservationPage/CancelReservationPage'
 
@@ -75,6 +77,7 @@ import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 import ErrorBoundary from '../components/ErrorBoundary'
 import RechargeSmsCreditAdminPage from '../pages/SmsCreditAdminPage/RechargeSmsCreditAdminPage'
 import NotinoReservationsPage from '../pages/NotinoReservationsPage/NotinoReservationsPage'
+import DocumentsPage from '../pages/DocumentsPage/DocumentsPage'
 
 const AppRoutes: FC = () => {
 	const [t] = useTranslation()
@@ -147,6 +150,9 @@ const AppRoutes: FC = () => {
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:reviews')} element={<AuthRoute layout={MainLayout} page={PAGE.REVIEWS} />}>
 					<Route index element={<ReviewsPage />} />
+				</Route>
+				<Route errorElement={<ErrorBoundary />} path={t('paths:documents')} element={<AuthRoute layout={MainLayout} page={PAGE.DOCUMENTS} />}>
+					<Route index element={<DocumentsPage />} />
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:reservations')} element={<AuthRoute layout={MainLayout} page={PAGE.NOTINO_RESERVATIONS} />}>
 					<Route index element={<NotinoReservationsPage />} />

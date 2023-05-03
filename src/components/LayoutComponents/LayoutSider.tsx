@@ -33,6 +33,7 @@ import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
 import { ReactComponent as ReservationsIcon } from '../../assets/icons/reservations.svg'
 import { ReactComponent as ReviewsIcon } from '../../assets/icons/reviews-icon.svg'
 import { ReactComponent as SmsUnitPricesIcon } from '../../assets/icons/sms-unit-prices.svg'
+import { ReactComponent as DocumentsIcon } from '../../assets/icons/document-icon.svg'
 
 // utils
 import { CYPRESS_CLASS_NAMES, PAGE, PERMISSION } from '../../utils/enums'
@@ -75,6 +76,7 @@ const MENU_ITEMS_ORDER = [
 	PAGE.REVIEWS,
 	PAGE.SMS_CREDITS,
 	PAGE.NOTINO_RESERVATIONS,
+	PAGE.DOCUMENTS,
 	PAGE.SALONS, // last item for Notino view and second item for Salon view (after homepage)
 	// Salon view
 	PAGE.BILLING_INFO,
@@ -189,6 +191,13 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							onClick: () => navigate(t('paths:reviews')),
 							icon: <ReviewsIcon />,
 							id: PAGE.REVIEWS
+						},
+						{
+							key: PAGE.DOCUMENTS,
+							label: t('loc:Dokumenty'),
+							onClick: () => navigate(t('paths:documents')),
+							icon: <DocumentsIcon />,
+							id: PAGE.DOCUMENTS
 						}
 					)
 				}

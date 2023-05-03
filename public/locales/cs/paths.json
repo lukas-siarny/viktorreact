@@ -13,6 +13,7 @@
   "customers": "/customers",
   "customers/create": "/customers/create",
   "customers/{{customerID}}": "/customers/{{customerID}}",
+  "documents": "/documents",
   "employees": "/employees",
   "employees/create": "/employees/create",
   "employees/{{employeeID}}": "/employees/{{employeeID}}",

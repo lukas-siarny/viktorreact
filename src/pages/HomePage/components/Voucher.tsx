@@ -11,7 +11,6 @@ type Props = {
 const { Paragraph } = Typography
 const Voucher = ({ code }: Props) => {
 	const [t] = useTranslation()
-	console.log('code', code)
 	return code ? (
 		<div style={{ marginLeft: '-5px' }} className={'relative'}>
 			<VoucherIcon />

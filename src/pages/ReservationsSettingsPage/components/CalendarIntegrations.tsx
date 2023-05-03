@@ -1,8 +1,11 @@
+/* eslint-disable prefer-rest-params */
+/* eslint-disable func-names */
 import React, { useMemo, useEffect } from 'react'
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google'
 import { useTranslation } from 'react-i18next'
 import { useMsal } from '@azure/msal-react'
 import { useAuth } from 'react-oidc-context'
+import qs from 'qs'
 
 // utils
 import { useSelector } from 'react-redux'
@@ -28,7 +31,7 @@ const CalendarIntegrations = (props: Props) => {
 	const { salonID }: any = useParams()
 	const { instance, accounts, inProgress } = useMsal()
 
-	useEffect(() => {
+	/* useEffect(() => {
 		if (instance) {
 			instance.handleRedirectPromise().then((authResult) => {
 				if (authResult) {
@@ -37,13 +40,39 @@ const CalendarIntegrations = (props: Props) => {
 				}
 			})
 		}
-	}, [instance])
+	}, [instance]) */
 
-	const auth = useAuth()
+	// const auth = useAuth()
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const icalUrl = get(find(authUser.data?.salons, { id: salonID }), 'employeeIcsLink')
 	const isPartner = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser.data?.uniqPermissions])
+
+	// NOTE: intercept Microsoft auth token request and get code from the payload and send it to our BE
+	const originalFetch = window.fetch
+	window.fetch = async (...args) => {
+		const [url, config] = args
+		if (url === 'https://login.microsoftonline.com/common/oauth2/v2.0/token') {
+			if (typeof config?.body === 'string') {
+				const data = qs.parse(config.body)
+				if (typeof data.code === 'string') {
+					postReq(
+						'/api/b2b/admin/calendar-sync/sync-token',
+						null,
+						{
+							authCode: data.code,
+							calendarType: 'MICROSOFT'
+						},
+						undefined,
+						NOTIFICATION_TYPE.NOTIFICATION,
+						true
+					)
+				}
+			}
+			return Promise.reject()
+		}
+		return originalFetch(url, config)
+	}
 
 	const login = useGoogleLogin({
 		flow: 'auth-code',

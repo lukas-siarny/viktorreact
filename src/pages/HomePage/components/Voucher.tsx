@@ -6,12 +6,13 @@ import { ReactComponent as CopyableIcon } from '../../../assets/icons/copyable-i
 import { ReactComponent as CheckIcon } from '../../../assets/icons/checkbox-checked-icon-16.svg'
 
 type Props = {
-	code: string
+	code?: string | null
 }
 const { Paragraph } = Typography
 const Voucher = ({ code }: Props) => {
 	const [t] = useTranslation()
-	return (
+	console.log('code', code)
+	return code ? (
 		<div style={{ marginLeft: '-5px' }} className={'relative'}>
 			<VoucherIcon />
 			<div className={'absolute top-[30px] left-[82px]'}>
@@ -27,7 +28,7 @@ const Voucher = ({ code }: Props) => {
 				</Paragraph>
 			</div>
 		</div>
-	)
+	) : null
 }
 
 export default Voucher

@@ -149,7 +149,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 									smsTimeStats={smsTimeStats}
 								/>
 								{/* Voucher */}
-								<Voucher code={'Kjdhs89JJ2dsf-f6sv'} />
+								<Voucher code={selectedSalon.data.b2bVoucher} />
 							</>
 						)}
 					</Permissions>

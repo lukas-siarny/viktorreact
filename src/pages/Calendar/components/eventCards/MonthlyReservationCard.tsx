@@ -3,7 +3,6 @@
 import React, { FC, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
-import queryString from 'query-string'
 
 // assets
 import { ReactComponent as CalendarIcon } from '../../../../assets/icons/calendar-24.svg'
@@ -17,7 +16,8 @@ import { getAssignedUserLabel } from '../../../../utils/helper'
 import { CALENDAR_VIEW } from '../../../../utils/enums'
 
 // hooks
-import { IUseQueryParams, serializeParams } from '../../../../hooks/useQueryParams'
+import { IUseQueryParams } from '../../../../hooks/useQueryParams'
+import { formatObjToQuery } from '../../../../hooks/useQueryParamsZod'
 
 interface IMonthlyReservationCardProps {
 	date: string
@@ -51,7 +51,9 @@ const MonthlyReservationCard: FC<IMonthlyReservationCardProps> = (props) => {
 			date
 		}
 
-		return `${parentPath}${t('paths:calendar')}?${queryString.stringify(serializeParams(linkSearchParams))}`
+		console.log({ obj: formatObjToQuery(linkSearchParams) })
+
+		return `${parentPath}${t('paths:calendar')}${formatObjToQuery(linkSearchParams)}`
 	}
 
 	const handleReservationClick = () => {

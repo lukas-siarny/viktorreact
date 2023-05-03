@@ -27,10 +27,7 @@ import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, getSalonT
 import searchWrapper from '../../../../utils/filters'
 
 // types
-import { ISalonForm, ISelectOptionItem } from '../../../../types/interfaces'
-
-// validate
-import validateSalonForm from './validateSalonForm'
+import { ISelectOptionItem } from '../../../../types/interfaces'
 
 // reducers
 import { RootState } from '../../../../reducers'
@@ -52,6 +49,9 @@ import { ReactComponent as CosmeticIcon } from '../../../../assets/icons/cosmeti
 import { ReactComponent as LanguagesIcon } from '../../../../assets/icons/languages-24-icon.svg'
 import { ReactComponent as InfoIcon16 } from '../../../../assets/icons/info-icon-16.svg'
 import { ReactComponent as LocationIcon } from '../../../../assets/icons/location-16.svg'
+
+// schema
+import { ISalonForm, validationSalonFn } from '../../../../schemas/salon'
 
 type ComponentProps = {
 	disabledForm?: boolean
@@ -145,7 +145,7 @@ const SalonForm: FC<Props> = (props) => {
 	}, [] as any[])
 
 	const searchCosmetics = useCallback(
-		async (search: string, page: string) => {
+		async (search: string, page: number) => {
 			return searchWrapper(dispatch, { search, limit: 100, page }, FILTER_ENTITY.COSMETICS)
 		},
 		[dispatch]
@@ -486,7 +486,7 @@ const form = reduxForm<ISalonForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateSalonForm
+	validate: validationSalonFn
 })(withPromptUnsavedChanges(SalonForm))
 
 export default form

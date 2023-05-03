@@ -8,6 +8,7 @@ import { ColumnProps } from 'antd/es/table'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router'
 import { initialize } from 'redux-form'
+import cx from 'classnames'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -20,7 +21,7 @@ import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronLeftIcon } from '../../assets/icons/chevron-left-16.svg'
 
 // utils
-import { D_M_YEAR_FORMAT, ENUMERATIONS_KEYS, FORM, PERMISSION } from '../../utils/enums'
+import { D_M_YEAR_FORMAT, ENUMERATIONS_KEYS, FORM, PERMISSION, SMS_UNIT_PRICES_TABLE_ID } from '../../utils/enums'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
@@ -221,14 +222,14 @@ const SmsCreditAdiminPage = () => {
 						/>
 						<div className={'w-full flex'}>
 							<CustomTable<TableDataItem>
-								className='table-fixed'
+								id={SMS_UNIT_PRICES_TABLE_ID}
+								className={cx('table-fixed', SMS_UNIT_PRICES_TABLE_ID)}
 								columns={columns}
 								onChange={onChangeTable}
 								dataSource={tableData}
 								rowClassName={'clickable-row'}
 								twoToneRows
-								// TODO: update testov
-								rowKey={(record) => (record.actual?.id ? `${record.actual.id}_${record.country.code}` : record.country.code)}
+								rowKey={(record) => record.country.code}
 								pagination={false}
 								onRow={(record) => {
 									return {

@@ -23,7 +23,7 @@ module.exports = {
 				return key
 			}
 
-			return '_NEPRELOZENE_'
+			return 'null'
 		},
 		resource: {
 			loadPath: './src/locales/{{lng}}/{{ns}}.json',

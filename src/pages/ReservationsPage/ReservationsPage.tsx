@@ -13,6 +13,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import UserAvatar from '../../components/AvatarComponents'
 import ReservationsFilter from './components/ReservationsFilter'
+import TabsComponent from '../../components/TabsComponent'
 
 // utils
 import {
@@ -30,8 +31,8 @@ import {
 	RESERVATIONS_STATE,
 	ROW_GUTTER_X_DEFAULT
 } from '../../utils/enums'
+import { formFieldID, getAssignedUserLabel, normalizeDirectionKeys, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { formatObjToQuery, formFieldID, getAssignedUserLabel, normalizeDirectionKeys, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
 import { patchReq } from '../../utils/request'
 
 // reducers
@@ -44,7 +45,7 @@ import { getPaginatedReservations, getPendingReservationsCount } from '../../red
 
 // hooks
 import useQueryParams, { ArrayParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
-import TabsComponent from '../../components/TabsComponent'
+import { formatObjToQuery } from '../../hooks/useQueryParamsZod'
 
 const APPROVE_RESERVATION_PERMISSIONS = [PERMISSION.CALENDAR_EVENT_UPDATE, PERMISSION.PARTNER_ADMIN]
 

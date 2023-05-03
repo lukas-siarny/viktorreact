@@ -74,6 +74,7 @@ const MENU_ITEMS_ORDER = [
 	PAGE.SPECIALIST_CONTACTS,
 	PAGE.REVIEWS,
 	PAGE.SMS_CREDITS,
+	PAGE.NOTINO_RESERVATIONS,
 	PAGE.SALONS, // last item for Notino view and second item for Salon view (after homepage)
 	// Salon view
 	PAGE.BILLING_INFO,
@@ -95,6 +96,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
 	const authUserPermissions = currentUser?.uniqPermissions
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
+	const pendingReservationsCount = useSelector((state: RootState) => state.calendar.pendingReservationsCount.count)
+	const count = pendingReservationsCount > 0 ? `(${pendingReservationsCount})` : ''
 
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
@@ -189,7 +192,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						}
 					)
 				}
-				if (hasPermissions([PERMISSION.SMS_UNIT_PRICE_EDIT])) {
+				if (hasPermissions([PERMISSION.SMS_UNIT_PRICE_EDIT, PERMISSION.NOTINO])) {
 					mainGroupItems.push({
 						key: PAGE.SMS_CREDITS,
 						label: t('loc:SMS kredity'),
@@ -198,14 +201,24 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						id: PAGE.SMS_CREDITS
 					})
 				}
+
 				if (hasPermissions([PERMISSION.NOTINO])) {
-					mainGroupItems.push({
-						key: PAGE.SALONS,
-						label: t('loc:Salóny'),
-						onClick: () => navigate(t('paths:salons')),
-						icon: <SalonIcon />,
-						id: PAGE.SALONS
-					})
+					mainGroupItems.push(
+						{
+							key: PAGE.NOTINO_RESERVATIONS,
+							label: t('loc:Prehľad rezervacií'),
+							onClick: () => navigate(t('paths:reservations')),
+							icon: <ReservationsIcon />,
+							id: PAGE.NOTINO_RESERVATIONS
+						},
+						{
+							key: PAGE.SALONS,
+							label: t('loc:Salóny'),
+							onClick: () => navigate(t('paths:salons')),
+							icon: <SalonIcon />,
+							id: PAGE.SALONS
+						}
+					)
 				}
 			}
 
@@ -271,8 +284,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						},
 						{
 							key: PAGE.RESERVATIONS,
-							label: t('loc:Rezervácie'),
-							onClick: () => navigate(getPath(t('paths:reservations'))),
+							label: t('loc:Prehľad rezervácií {{ reservationsCount }}', { reservationsCount: count }),
+							onClick: () => navigate(getPath(t('paths:salon-reservations'))),
 							icon: <ReservationsIcon />,
 							id: PAGE.RESERVATIONS
 						}
@@ -407,7 +420,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			breakpoint='md'
 			collapsedWidth={56}
 			width={230}
-			trigger={<ChevronRightIcon style={{ transform: !collapsed ? 'rotate(180deg)' : undefined, width: 12, height: 12 }} />}
+			trigger={<ChevronRightIcon style={{ transform: !collapsed ? 'rotate(180deg)' : undefined, width: 12, height: 12, color: '#000' }} />}
 			collapsible
 			collapsed={collapsed}
 			onCollapse={(isCollapsed, type) => {

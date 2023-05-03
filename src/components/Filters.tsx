@@ -14,10 +14,11 @@ type Props = {
 	customSearchContent?: ReactNode
 	disableFilter?: boolean
 	form?: FORM
+	forceRender?: boolean
 }
 
 const Filters = (props: Props) => {
-	const { children, activeFilters, search, customContent, customSearchContent, disableFilter, form } = props
+	const { children, activeFilters, search, customContent, customSearchContent, disableFilter, form, forceRender = false } = props
 	const [visible, setVisible] = useState<undefined | string>(undefined)
 
 	const onClick = useCallback(() => {
@@ -28,8 +29,9 @@ const Filters = (props: Props) => {
 	return (search || customSearchContent) && (customContent || children) ? (
 		<Collapse collapsible={'disabled'} activeKey={visible} ghost className='ghost-filters'>
 			<Panel
+				forceRender={forceRender}
 				header={
-					<Row justify={'space-between'} gutter={ROW_GUTTER_X_DEFAULT}>
+					<Row className={'mb-4'} justify={'space-between'} gutter={ROW_GUTTER_X_DEFAULT}>
 						<Col span={8}>
 							{search && search}
 							{!search && customSearchContent}

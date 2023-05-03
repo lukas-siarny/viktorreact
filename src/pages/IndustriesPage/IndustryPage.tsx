@@ -34,7 +34,7 @@ import { Paths } from '../../types/api'
 import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-icon.svg'
 import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.svg'
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
-import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
 
 type Props = SalonSubPageProps
 type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody

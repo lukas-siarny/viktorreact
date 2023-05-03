@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useMemo } from 'react'
+import React, { useEffect, useImperativeHandle, useMemo, useRef } from 'react'
 import Sider from 'antd/lib/layout/Sider'
 import { compact, map } from 'lodash'
 import cx from 'classnames'
@@ -10,11 +10,11 @@ import dayjs from 'dayjs'
 import { CalendarApi } from '@fullcalendar/react'
 
 // types
-import { ICalendarEmployeesPayload, ICalendarEventForm, ICalendarImportedReservationForm, ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'
+import { ICalendarEmployeesPayload, ICalendarEventForm, /* ICalendarImportedReservationForm, */ ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'
 import { RootState } from '../../../../reducers'
 
 // utils
-import { getAssignedUserLabel, initializeLabelInValueSelect } from '../../../../utils/helper'
+import { getAssignedUserLabel, getDateTime } from '../../../../utils/helper'
 import {
 	CALENDAR_COMMON_SETTINGS,
 	CALENDAR_EVENT_TYPE,
@@ -26,7 +26,8 @@ import {
 	FORM,
 	STRINGS,
 	DEFAULT_DATE_INIT_FORMAT,
-	DEFAULT_TIME_FORMAT
+	DEFAULT_TIME_FORMAT,
+	CALENDAR_VIEW
 } from '../../../../utils/enums'
 import Permissions from '../../../../utils/Permissions'
 
@@ -37,13 +38,14 @@ import { clearEvent, setCalendarApi, setCalendarDateHandler } from '../../../../
 // components
 import ReservationForm from '../forms/ReservationForm'
 import EventForm from '../forms/EventForm'
-import ImportedReservationForm from '../forms/ImportedReservationForm'
+// import ImportedReservationForm from '../forms/ImportedReservationForm'
 import DeleteButton from '../../../../components/DeleteButton'
 import TabsComponent from '../../../../components/TabsComponent'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 import { IUseQueryParams } from '../../../../hooks/useQueryParams'
+import { initLabelInValueSelect } from '../../../../atoms/SelectField'
 
 type Props = {
 	salonID: string
@@ -51,7 +53,8 @@ type Props = {
 	selectedDate: string
 	onCloseSider: () => void
 	handleSubmitReservation: (values: ICalendarReservationForm) => void
-	handleSubmitImportedReservation: (values: ICalendarImportedReservationForm) => void
+	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+	// handleSubmitImportedReservation: (values: ICalendarImportedReservationForm) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
 	handleDeleteEvent: (calendarEventId: string, calendarEventBulkId?: string, eventType?: CALENDAR_EVENT_TYPE) => any
 	eventId?: string | null
@@ -64,6 +67,8 @@ type Props = {
 	setQuery: (newValues: IUseQueryParams) => void
 	employeesLoading: boolean
 	calendarEmployees: ICalendarEmployeesPayload
+	scrollToTime: (hour: number) => void
+	initOnDemand?: boolean
 }
 
 export type SiderEventManagementRefs = {
@@ -75,7 +80,8 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 		onCloseSider,
 		handleSubmitReservation,
 		handleSubmitEvent,
-		handleSubmitImportedReservation,
+		// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+		// handleSubmitImportedReservation,
 		salonID,
 		sidebarView,
 		handleDeleteEvent,
@@ -88,7 +94,9 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 		query,
 		setQuery,
 		employeesLoading,
-		calendarEmployees
+		calendarEmployees,
+		scrollToTime,
+		initOnDemand
 	} = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -99,7 +107,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 		() =>
 			calendarEmployees.options.map((option) => ({
 				...option,
-				disabled: option.extra?.employeeData.isForImportedEvents || option.extra?.employeeData.isDeleted
+				disabled: option.extra?.employeeData.isDeleted
 			})),
 		[calendarEmployees.options]
 	)
@@ -142,13 +150,42 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 	const initUpdateEventForm = async () => {
 		try {
 			const { data } = await dispatch(getCalendarEventDetail(salonID, query.eventId as string))
-			// pouzijeme zamestnanca z calendarEvents, a
+			// pouzijeme zamestnanca z calendarEvents
 			const employee = employeesOptions.find((option) => option.value === data?.employee.id)
 
+			if (!data || !employee) {
+				return
+			}
+
 			// NOTE: event type v query parametroch musi sediet s event typom zobrazeneho detailu, inak sa zobrazi zly formular
-			if (!data || data.eventType !== query.sidebarView || !employee) {
+			if (data.id === query.eventId && data.eventType !== query.sidebarView) {
 				onCloseSider()
 				return
+			}
+
+			if (!initOnDemand) {
+				// Nascroluje na cas a zamestnanca (vyuziva sa v pripade, ze sa otvara detial po skopirovani URLcky)
+				scrollToTime(dayjs(getDateTime(data.start.date, data.start.time)).hour())
+				if (query.view === CALENDAR_VIEW.DAY) {
+					const employeeColumn = document.querySelector(`[data-resource-id="${data.employee.id}"]`)
+					const employeeOffset = (employeeColumn as HTMLElement)?.offsetLeft
+
+					if (employeeOffset) {
+						const table = document.querySelector('.fc-timegrid > .fc-scrollgrid')
+						const theadScrollers = table?.querySelectorAll('.fc-scrollgrid-section-header .fc-scroller')
+						const tbodyScrollers = table?.querySelectorAll('.fc-scrollgrid-section-body .fc-scroller')
+						const tfootScrollers = table?.querySelectorAll('.fc-scrollgrid-section-footer .fc-scroller')
+
+						if (theadScrollers?.length && tbodyScrollers?.length && tfootScrollers?.length) {
+							const headerSroller = theadScrollers[theadScrollers.length - 1]
+							const bodyScroller = tbodyScrollers[tbodyScrollers.length - 1]
+							const footerSroller = tfootScrollers[tfootScrollers.length - 1]
+							headerSroller.scrollLeft = employeeOffset
+							bodyScroller.scrollLeft = employeeOffset
+							footerSroller.scrollLeft = employeeOffset
+						}
+					}
+				}
 			}
 
 			const repeatOptions: Pick<ICalendarEventForm, 'recurring' | 'repeatOn' | 'every' | 'end'> = data.calendarBulkEvent?.repeatOptions
@@ -187,27 +224,38 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 					dispatch(
 						initialize(FORM.CALENDAR_RESERVATION_FORM, {
 							...initData,
-							service: initializeLabelInValueSelect(data?.service?.id as string, data?.service?.name as string, {
-								serviceData: data?.service
-							}),
-							customer: initializeLabelInValueSelect(
-								data?.customer?.id as string,
-								getAssignedUserLabel({
-									id: data?.customer?.id as string,
-									firstName: data?.customer?.firstName,
-									lastName: data?.customer?.lastName,
-									email: data?.customer?.email
-								}),
-								{
-									customerData: data?.customer
-								}
-							),
+							service: data?.service
+								? initLabelInValueSelect({
+										key: data.service.id,
+										value: data.service.id,
+										label: data.service.name || data.service.id,
+										extra: {
+											serviceData: data?.service
+										}
+								  })
+								: undefined,
+							customer: data?.customer
+								? initLabelInValueSelect({
+										key: data.customer.id,
+										value: data.customer.id,
+										label: getAssignedUserLabel({
+											id: data.customer.id,
+											firstName: data.customer.firstName,
+											lastName: data.customer.lastName,
+											email: data?.customer?.email
+										}),
+										extra: {
+											serviceData: data.customer
+										}
+								  })
+								: undefined,
 							noteFromB2CCustomer: data?.noteFromB2CCustomer,
 							reservationData: data?.reservationData
 						})
 					)
 					break
-				case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
+				// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+				/* case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 					dispatch(
 						initialize(FORM.CALENDAR_RESERVATION_FROM_IMPORT_FORM, {
 							eventId: data.id,
@@ -220,7 +268,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 							isImported: true
 						})
 					)
-					break
+					break */
 				default:
 					break
 			}
@@ -269,8 +317,9 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 						employeesLoading={employeesLoading}
 					/>
 				)
-			case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
-				return <ImportedReservationForm eventId={eventId} onSubmit={handleSubmitImportedReservation} loadingData={loadingData} />
+			// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+			/* case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
+				return <ImportedReservationForm eventId={eventId} onSubmit={handleSubmitImportedReservation} loadingData={loadingData} /> */
 			case CALENDAR_EVENT_TYPE.RESERVATION:
 			default:
 				return (
@@ -289,7 +338,9 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 	}
 
 	const showTabs = !(eventId || eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) && sidebarView
-	const sidebarTitle = sidebarView === CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT ? CALENDAR_EVENT_TYPE.RESERVATION : sidebarView
+	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+	// const sidebarTitle = sidebarView === CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT ? CALENDAR_EVENT_TYPE.RESERVATION : sidebarView
+	const sidebarTitle = sidebarView
 
 	return (
 		<Sider className={cx('nc-sider-event-management', { 'without-tabs': !showTabs })} collapsed={!sidebarView} width={240} collapsedWidth={0}>

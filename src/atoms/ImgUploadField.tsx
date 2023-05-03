@@ -190,7 +190,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 								type='button'
 								className='noti-remove-img-button ant-btn ant-btn-text ant-btn-sm ant-btn-icon-only ant-upload-list-item-card-actions-btn flex items-center justify-center fixed top-1 right-1 z-50 p-0 border-none bg-transparent'
 							>
-								<span role='img' aria-label='delete' tabIndex={-1} className='anticon anticon-delete w-full h-full'>
+								<span role='img' aria-label='delete' tabIndex={-1} className={cx('anticon anticon-delete w-full h-full', { 'cursor-not-allowed': disabled })}>
 									<RemoveIcon className='remove-icon-image' width={18} />
 								</span>
 							</button>
@@ -198,7 +198,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 						<Button
 							type={'link'}
 							htmlType={'button'}
-							className={cx('flex items-center justify-center m-0 p-0 w-full h-full', { 'cursor-move': draggable })}
+							className={cx('flex items-center justify-center m-0 p-0 w-full h-full', { 'cursor-move': draggable && !disabled, 'cursor-pointer': disabled })}
 							onClick={() => actions.preview()}
 							target='_blank'
 							rel='noopener noreferrer'
@@ -213,7 +213,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 			</div>
 			{selectable && (
 				<div className={'w-full flex items-center justify-center'}>
-					<Checkbox onChange={selectImage} key={file?.uid} value={file?.uid} checked={file?.uid === selectedValue}>
+					<Checkbox onChange={selectImage} key={file?.uid} value={file?.uid} checked={file?.uid === selectedValue} disabled={disabled}>
 						{t('loc:Titulná foto')}
 					</Checkbox>
 				</div>
@@ -221,7 +221,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 		</>
 	)
 
-	const DragableUploadListItem = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: any, moveRow: any) => {
+	const DragableUploadListItem = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: any, moveRow: any, disabledDnD: boolean) => {
 		const type = 'DragableUploadList'
 		const ref = useRef(null)
 		const index = fileList.indexOf(file)
@@ -239,14 +239,16 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 			},
 			drop: (item: any) => {
 				moveRow(item?.index, index)
-			}
+			},
+			canDrop: () => !disabledDnD
 		})
 		const [, drag] = useDrag({
 			type,
 			item: { index },
 			collect: (monitor) => ({
 				isDragging: monitor.isDragging()
-			})
+			}),
+			canDrag: () => !disabledDnD
 		})
 		drop(drag(ref))
 		return (
@@ -297,7 +299,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 					uploadImage(options, signUrl, category, imagesUrls)
 				}}
 				itemRender={(originNode, file, currFileList, actions) =>
-					draggable ? DragableUploadListItem(originNode, file, currFileList, actions, moveRow) : renderGalleryImage(originNode, file, currFileList, actions)
+					draggable ? DragableUploadListItem(originNode, file, currFileList, actions, moveRow, !!disabled) : renderGalleryImage(originNode, file, currFileList, actions)
 				}
 				// itemRender={renderGalleryImage}
 				fileList={input.value || []}
@@ -323,8 +325,8 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 			>
 				{!staticMode && input.value.length < maxCount && (
 					<div>
-						<UploadIcon className={`text-xl ${touched && error ? 'text-red-600' : 'text-gray-600'}`} />
-						<div className={`text-sm ${touched && error ? 'text-red-600' : 'text-gray-600'}`}>{t('loc:Nahrať')}</div>
+						<UploadIcon className={`text-xl upload-icon ${touched && error ? 'text-red-600' : 'text-gray-600'}`} />
+						<div className={`upload-input text-sm ${touched && error ? 'text-red-600' : 'text-gray-600'}`}>{t('loc:Nahrať')}</div>
 					</div>
 				)}
 			</Upload>

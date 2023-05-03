@@ -24,9 +24,19 @@ import { createSlug, findNodeInTree, formFieldID } from '../utils/helper'
 
 // assets
 import { ReactComponent as LoadingIcon } from '../assets/icons/loading-icon.svg'
+import { ILabelInValue } from '../types/interfaces'
 
 const { Item } = Form
 const { Option } = Select
+
+export const initLabelInValueSelect = <T, ExtraType>({ key, label, value, extra }: { key: string; label: string; value: T; extra?: ExtraType }): ILabelInValue => {
+	return {
+		key,
+		value,
+		label,
+		extra
+	}
+}
 
 type Action = {
 	title: string
@@ -44,7 +54,6 @@ export type Props = {
 	backgroundColor?: string
 	showErrorWhenUntouched?: boolean
 	hideHelp?: boolean
-	hasExtra?: boolean
 	/** Klúč podľa ktorého sa vytiahnu dáta v onSearch */
 	dataSourcePath?: string
 	/** propa urcena predovsetkym pre filtre, kedy mozeme skopirovat URL na novy TAB
@@ -69,6 +78,13 @@ export type Props = {
 	confirmSelection?: boolean
 	confirmModalExtraTitle?: string
 	tooltipSelect?: string | null
+	/**
+	 * niekedy moze nastat situacia, ze vyinicializovane hodnoty v selecte neexistuju v options (napr. pri asynchronnom vyhladavani)
+	 * jedna moznost ako riesit tento scenar je pouzit labelInValue, kedy sa vyinicializuju hodnoty ako objekty a pre spravne zobrazenie nie je potrebne parovanie z options
+	 * problem vsak moze nastat ak pouzivame 'optionRender', kedy vytvarame custom styly pre options. Ak chceme, aby sa custom styly pouzivane pre options aplikovali aj na vyinicializovane hodnoty, vtedy je potrebne, aby sa vyinicializovane hodnoty posielali ako IDcka a existovali k tomu aj options, s ktorymi sa potom sparuju
+	 * options vytvorene pre inicializacne hodnoty mozeme poslat cez propu initialOptions - tie sa mergnu s ostatnymi options tak, aby nedoslo k duplicitam
+	 */
+	initialOptions?: any[]
 } & WrappedFieldProps &
 	SelectProps<any> &
 	FormItemProps
@@ -117,9 +133,17 @@ const renderMenuItemSelectedIcon = (
 	return icon
 }
 
-const getOptions = (optionRender: any, options: any) => {
-	// NOTE: ak existuje v optione children pole tak to zneman ze ma vnorene optiony a bude sa pouzivat OptGroup a druha uroven ako Option
-	return map(options, (option) => {
+const getOptions = (optionRender: any, options?: any, initialOptions?: any) => {
+	// TODO: doriesit options s children
+	const missingAdditionalOptions = initialOptions?.filter((addOpt: any) => {
+		if (options.find((opt: any) => opt.value === addOpt.value)) {
+			return false
+		}
+		return true
+	})
+
+	return map([...(missingAdditionalOptions || []), ...(options || [])], (option) => {
+		// NOTE: ak existuje v optione children pole tak to zneman ze ma vnorene optiony a bude sa pouzivat OptGroup a druha uroven ako Option
 		if (option.children) {
 			return (
 				<Select.OptGroup key={option.key} label={option.label}>
@@ -187,37 +211,34 @@ const customDropdown = (actions: Action[] | null | undefined, menu: React.ReactE
 }
 
 const handleChange = async (data: any) => {
-	const { value, options, antdOptions, autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update } = data
+	const { value, options, antdOptions, autoBlur, input, itemRef, maxTagLength, maxTagsLimit, mode, update } = data
 	let val = value
 	// NOTE condition for checking if select field has 'tags' mode with maxTagLength prop for checking length string of added tag
 	// if input value's length is larger than maxTagLength, filter this value from tags
 	if (mode === 'tags' && maxTagLength && length(last(value)) > maxTagLength) {
 		val = filter(value, (v, i: number) => i !== value.length - 1)
 	}
-	// NOTE: extra data k value, key, label ak potrebujeme poslat ine data -> eg. pri reservacii sa neposiela ID travelera ale cely objekt
-	if (hasExtra) {
-		if (mode === 'tags' || mode === 'multiple') {
-			val = map(value, (valInput) =>
-				typeof valInput === 'object'
-					? {
-							...valInput,
-							extra: find(antdOptions, (item) => item.value === valInput.value)?.extra
-					  }
-					: valInput
-			)
-		} else if (antdOptions?.extra && typeof value === 'object') {
-			val = {
-				...value,
-				extra: antdOptions.extra
+	if (mode === 'tags' || mode === 'multiple') {
+		val = map(val, (valInput) => {
+			if (typeof valInput === 'object') {
+				const andtOption = find(antdOptions, (item) => item.value === (valInput as any)?.value)
+				return initLabelInValueSelect({ key: valInput.key, value: valInput.value, label: valInput.label, extra: andtOption?.extra })
 			}
-		} else if (typeof value === 'object') {
+			return valInput
+		})
+	} else if (typeof value === 'object') {
+		const andtOption = find(antdOptions, (item) => item?.value === (val as any)?.value)
+		let extra
+
+		if (andtOption?.extra) {
+			extra = andtOption.extra
+		} else {
 			// NOTE: v niektorych pripadoch Antd odfiltruje extra objekt z antdOptions
 			const nodeFromOptions = findNodeInTree({ children: options }, value?.value)
-			val = {
-				...val,
-				extra: nodeFromOptions?.extra
-			}
+			extra = nodeFromOptions?.extra
 		}
+
+		val = initLabelInValueSelect({ key: val.key, value: val.value, label: val.label, extra })
 	}
 	if (maxTagsLimit && val?.length > maxTagsLimit) {
 		val = take(val, maxTagsLimit)
@@ -343,13 +364,22 @@ const SelectField = (props: Props) => {
 		maxTagLength,
 		maxTagsLimit,
 		autoBlur,
-		hasExtra,
 		formName,
 		confirmSelection,
 		confirmModalExtraTitle,
 		onClear,
-		tooltipSelect
+		tooltipSelect,
+		initialOptions
 	} = props
+	const warningShown = useRef(false)
+
+	if (optionRender && labelInValue && optionLabelProp !== 'label' && !warningShown.current) {
+		warningShown.current = true
+		// eslint-disable-next-line no-console
+		console.warn(
+			`SelectField[${input.name}]: Using 'labelInValue' in combination with 'optionRender' and 'optionLabelProp=children' can cause a malfunction of the component. To fix this issue, you can either set an 'optionLabelProp=label' or remove 'labelInValue' prop and use 'initialOptions' prop and pass initial values as options there.`
+		)
+	}
 
 	const dispatch = useDispatch()
 	const localItemRef = useRef()
@@ -404,7 +434,6 @@ const SelectField = (props: Props) => {
 				value,
 				antdOptions,
 				autoBlur,
-				hasExtra,
 				input,
 				itemRef,
 				maxTagLength,
@@ -414,22 +443,20 @@ const SelectField = (props: Props) => {
 				options: props.onSearch && filterOption === false ? selectState.data : options
 			})
 		},
-		[autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update, confirmSelection, props.onSearch, filterOption, selectState, options]
+		[autoBlur, input, itemRef, maxTagLength, maxTagsLimit, mode, update, confirmSelection, props.onSearch, filterOption, selectState, options]
 	)
 
 	const onSelectWrap = async (value: any, option: any) => {
 		const { onSelect } = props
 		if (onSelect) {
-			let opt
-			if ((mode === 'tags' || mode === 'multiple') && hasExtra) {
+			let opt = value
+			if (typeof value === 'object') {
 				opt = {
 					...value,
-					extra: find(options, (item) => Number(item.value) === value.value)?.extra
+					extra: option?.extra || find(options, (item) => Number(item.value) === value.value)?.extra
 				}
-			} else {
-				opt = { ...value }
 			}
-			await onSelect(opt, option, input.value)
+			await onSelect(opt, option, value)
 		}
 	}
 
@@ -437,10 +464,10 @@ const SelectField = (props: Props) => {
 		const { onDeselect } = props
 		if (onDeselect) {
 			let val
-			if ((mode === 'tags' || mode === 'multiple') && hasExtra) {
+			if (typeof value === 'object') {
 				val = {
 					...value,
-					extra: find(options, (item) => Number(item.value) === value.value)?.extra
+					extra: option?.extra || find(options, (item) => Number(item.value) === value.value)?.extra
 				}
 			}
 			await onDeselect(val, option)
@@ -557,6 +584,7 @@ const SelectField = (props: Props) => {
 	if (emptyText || selectState.emptyText) {
 		notFound = <Empty className={'m-4'} image={Empty.PRESENTED_IMAGE_SIMPLE} description={selectState.emptyText || emptyText} />
 	}
+
 	const select = (
 		<Select
 			bordered={bordered}
@@ -609,7 +637,7 @@ const SelectField = (props: Props) => {
 			// NOTE: Do not show chrome suggestions dropdown and do not autofill this field when user picks chrome suggestion for other field
 			{...{ autoComplete: 'new-password' }}
 		>
-			{getOptions(optionRender, opt)}
+			{getOptions(optionRender, opt, initialOptions)}
 		</Select>
 	)
 
@@ -649,7 +677,7 @@ const SelectField = (props: Props) => {
 					okText={t('loc:Potvrdiť')}
 					onConfirm={() => {
 						// change input value
-						handleChange({ value: onChangeValue, options: onChangeAntdOptions, autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update })
+						handleChange({ value: onChangeValue, options: onChangeAntdOptions, autoBlur, input, itemRef, maxTagLength, maxTagsLimit, mode, update })
 						// close conf modal
 						setConfVisibility(false)
 					}}

@@ -14,7 +14,7 @@ const billingInformationTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 			}).as('updateBillingInfo')
 			cy.visit(`/salons/${salonID}/billing-info`)
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
-				cy.setInputValue(FORM.SALON_BILLING_INFO, 'companyName', salon.billingInfo.companyName)
+				cy.setInputValue(FORM.SALON_BILLING_INFO, 'companyName', salon.billingInfo.companyName, true, true)
 				cy.setInputValue(FORM.SALON_BILLING_INFO, 'businessID', salon.billingInfo.businessID, true, true)
 				cy.setInputValue(FORM.SALON_BILLING_INFO, 'vatID', salon.billingInfo.vatID, true, true)
 				cy.setInputValue(FORM.SALON_BILLING_INFO, 'taxID', salon.billingInfo.taxID, true, true)

@@ -20,7 +20,7 @@ import { CALENDAR_EVENT_TYPE, DEFAULT_TIME_FORMAT, ENUMERATIONS_KEYS, FORM, PERM
 import { EmployeeService, ICalendarEmployeesPayload, ICalendarReservationForm, ICustomerForm, ServiceType } from '../../../../types/interfaces'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon-modal.svg'
 import { ReactComponent as ServiceIcon } from '../../../../assets/icons/services-24-icon.svg'
 import { ReactComponent as CustomerIcon } from '../../../../assets/icons/customer-24-icon.svg'
 import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-16-current-color.svg'
@@ -189,6 +189,7 @@ const ReservationForm: FC<Props> = (props) => {
 				firstName: values.firstName,
 				lastName: values.lastName,
 				salonID,
+				email: values.email,
 				phone: values.phone,
 				phonePrefixCountryCode: values.phonePrefixCountryCode,
 				profileImageID: (values?.avatar?.[0]?.id ?? values?.avatar?.[0]?.uid) || null
@@ -379,7 +380,6 @@ const ReservationForm: FC<Props> = (props) => {
 							required
 							labelInValue
 							onChange={onChangeService}
-							hasExtra
 						/>
 						<Field
 							name={'date'}
@@ -417,12 +417,10 @@ const ReservationForm: FC<Props> = (props) => {
 							optionLabelProp={'label'}
 							size={'large'}
 							update={(_itemKey: number, ref: any) => ref.blur()}
-							showSearch
 							required
 							className={'pb-0'}
 							labelInValue
 							onChange={onChangeEmployee}
-							hasExtra
 						/>
 						<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 					</Form>

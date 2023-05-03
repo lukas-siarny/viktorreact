@@ -1,46 +1,50 @@
 import React from 'react'
-import { Field, InjectedFormProps, reduxForm } from 'redux-form'
-import { Col, Form } from 'antd'
+import { Field, InjectedFormProps, getFormValues, reduxForm } from 'redux-form'
+import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
+import { useSelector } from 'react-redux'
 
 // utils
-import { CHANGE_DEBOUNCE_TIME, FIELD_MODE, FORM } from '../../../utils/enums'
-import { validationString } from '../../../utils/helper'
+import { CHANGE_DEBOUNCE_TIME, FIELD_MODE, FORM, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
 
-// atoms
+// components
 import InputField from '../../../atoms/InputField'
+import Filters from '../../../components/Filters'
 
 // types
 import { ISmsUnitPricesFilter } from '../../../types/interfaces'
+import { RootState } from '../../../reducers'
 
 type ComponentProps = {}
 
 type Props = InjectedFormProps<ISmsUnitPricesFilter, ComponentProps> & ComponentProps
 
-const fixLength100 = validationString(100)
+const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
 const SmsUnitPricesFilter = (props: Props) => {
 	const { handleSubmit } = props
 	const [t] = useTranslation()
+	const formValues = useSelector((state: RootState) => getFormValues(FORM.SMS_UNIT_PRICES_FILTER)(state))
 
 	return (
-		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0 flex gap-4 justify-between items-center'}>
-			<h3 className={'text-base whitespace-nowrap'}>{t('loc:Ceny SMS správ')}</h3>
-			<div className='flex-1 flex justify-end'>
-				<Col span={24} lg={12} xxl={8}>
+		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0 mb-4'}>
+			<Filters
+				search={
 					<Field
-						className={'h-10 p-0 m-0 w-full'}
+						className={'h-10 p-0 m-0'}
 						component={InputField}
 						size={'large'}
 						placeholder={t('loc:Hľadať podľa krajiny')}
 						name='search'
 						fieldMode={FIELD_MODE.FILTER}
 						search
-						validate={fixLength100}
+						validate={fixLength255}
 					/>
-				</Col>
-			</div>
+				}
+				activeFilters={checkFiltersSizeWithoutSearch(formValues)}
+			/>
 		</Form>
 	)
 }

@@ -3,7 +3,7 @@ import { compose } from 'redux'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Row } from 'antd'
+import { Row, Spin } from 'antd'
 import { useNavigate } from 'react-router'
 import dayjs, { Dayjs } from 'dayjs'
 
@@ -31,7 +31,7 @@ import SmsTimeStats from '../../components/Dashboards/SmsTimeStats'
 import Alert from '../../components/Dashboards/Alert'
 
 // redux
-import { getSmsHistory } from '../../reducers/sms/smsActions'
+import { getSmsHistory, getSmsTimeStatsForSalon } from '../../reducers/sms/smsActions'
 
 // hooks
 import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
@@ -45,6 +45,7 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
+	const smsTimeStats = useSelector((state: RootState) => state.sms.timeStats)
 	const smsHistory = useSelector((state: RootState) => state.sms.history)
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const walletID = selectedSalon?.data?.wallet?.id
@@ -60,7 +61,7 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	const validSelectedDate = useMemo(() => (dayjs(query.date).isValid() ? dayjs(query.date) : dayjs()), [query.date])
 
 	useEffect(() => {
-		if (!walletID) {
+		if (!walletID || salonID !== selectedSalon.data?.id) {
 			return
 		}
 		dispatch(
@@ -74,11 +75,17 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 				dateTo: validSelectedDate.endOf('month').format(DEFAULT_DATE_INIT_FORMAT)
 			})
 		)
-	}, [dispatch, query.page, query.limit, query.search, query.order, validSelectedDate, salonID, walletID])
+	}, [dispatch, query.page, query.limit, query.search, query.order, validSelectedDate, salonID, walletID, selectedSalon.data?.id])
 
 	useEffect(() => {
 		dispatch(initialize(FORM.SMS_HISTORY_FILTER, { search: query.search }))
 	}, [query.search, dispatch])
+
+	useEffect(() => {
+		if (salonID === selectedSalon.data?.id) {
+			dispatch(getSmsTimeStatsForSalon(salonID, validSelectedDate.year(), validSelectedDate.month() + 1))
+		}
+	}, [dispatch, salonID, validSelectedDate, selectedSalon.data?.id])
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -118,10 +125,12 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 							icon={<SettingIcon />}
 							onActionItemClick={() => navigate(`${parentPath}${t('paths:reservations-settings')}`)}
 						/>
+
 						<div className={'flex gap-4 mb-10 flex-col lg:flex-row'}>
 							<RemainingSmsCredit salonID={salonID} parentPath={parentPath} walletID={walletID} />
 							<SmsStats salonID={salonID} />
 						</div>
+
 						<SmsTimeStats
 							onPickerChange={(date) => {
 								if (date) {
@@ -131,9 +140,10 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 									})
 								}
 							}}
-							salonID={salonID}
 							selectedDate={validSelectedDate}
 							className={'mb-6 pb-0'}
+							smsTimeStats={smsTimeStats}
+							loading={selectedSalon.isLoading}
 						/>
 						<SmsHistory smsHistory={smsHistory} query={query} setQuery={setQuery} />
 					</>

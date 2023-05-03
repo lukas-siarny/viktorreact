@@ -34,6 +34,7 @@ import validateSalonForm from './validateSalonForm'
 
 // reducers
 import { RootState } from '../../../../reducers'
+import { ISelectedSalonPayload } from '../../../../reducers/selectedSalon/selectedSalonActions'
 
 // assets
 import { ReactComponent as InstagramIcon } from '../../../../assets/icons/social-instagram-icon.svg'
@@ -61,6 +62,7 @@ type ComponentProps = {
 	clearSalonForm?: () => void
 	searchSalons?: (search: string, page: number) => void
 	showBasicSalonsSuggestions?: boolean
+	salonData?: ISelectedSalonPayload['data']
 }
 
 type Props = InjectedFormProps<ISalonForm, ComponentProps> & ComponentProps
@@ -104,16 +106,47 @@ const SalonForm: FC<Props> = (props) => {
 		searchSalons,
 		showBasicSalonsSuggestions,
 		deletedSalon,
-		notinoUserModalControlButtons
+		notinoUserModalControlButtons,
+		salonData
 	} = props
 	const dispatch = useDispatch()
 	const languages = useSelector((state: RootState) => state.languages.languages)
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 
+	const cosmeticsInitOptions = salonData?.cosmetics?.reduce((acc, cosmetic) => {
+		if (cosmetic !== undefined) {
+			return [
+				...acc,
+				{
+					label: cosmetic?.name || '',
+					value: (cosmetic as any).id,
+					extra: { image: cosmetic.image?.resizedImages.thumbnail },
+					key: `Cosmetic_${(cosmetic as any).id}`
+				}
+			]
+		}
+		return acc
+	}, [] as any[])
+
+	const languagesInitOptions = salonData?.languages?.reduce((acc, lng) => {
+		if (lng !== undefined) {
+			return [
+				...acc,
+				{
+					label: lng?.name || '',
+					value: (lng as any).id,
+					extra: { image: lng.image?.resizedImages.thumbnail },
+					key: `language_${(lng as any).id}`
+				}
+			]
+		}
+		return acc
+	}, [] as any[])
+
 	const searchCosmetics = useCallback(
 		async (search: string, page: string) => {
-			return searchWrapper(dispatch, { search, limit: 1500, page }, FILTER_ENTITY.COSMETICS)
+			return searchWrapper(dispatch, { search, limit: 100, page }, FILTER_ENTITY.COSMETICS)
 		},
 		[dispatch]
 	)
@@ -131,12 +164,12 @@ const SalonForm: FC<Props> = (props) => {
 							<Row className={'py-2'} wrap={false}>
 								{!deletedSalon ? (
 									<>
-										{getSalonTagSourceType(formValues?.sourceOfPremium)}
-										{getSalonTagPublished(formValues?.state as SALON_STATES)}
-										{getSalonTagChanges(formValues?.state as SALON_STATES)}
+										{getSalonTagSourceType(salonData?.premiumSourceUserType)}
+										{getSalonTagPublished(salonData?.state as SALON_STATES)}
+										{getSalonTagChanges(salonData?.state as SALON_STATES)}
 									</>
 								) : (
-									getSalonTagDeleted(!!formValues?.deletedAt, true)
+									getSalonTagDeleted(true, true)
 								)}
 							</Row>
 						</Row>
@@ -189,6 +222,7 @@ const SalonForm: FC<Props> = (props) => {
 						<Field
 							component={SelectField}
 							options={languages.enumerationsOptions}
+							initialOptions={languagesInitOptions}
 							label={t('loc:Jazyky, ktorými sa dá v salóne dohovoriť')}
 							placeholder={t('loc:Vyberte jazyk')}
 							name={'languageIDs'}
@@ -203,6 +237,7 @@ const SalonForm: FC<Props> = (props) => {
 						/>
 						<Field
 							component={SelectField}
+							initialOptions={cosmeticsInitOptions}
 							label={t('loc:Kozmetika')}
 							placeholder={t('loc:Vyberte kozmetiku')}
 							name={'cosmeticIDs'}
@@ -216,7 +251,6 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 							allowClear
 							allowInfinityScroll
-							onDidMountSearch
 						/>
 						<Field
 							component={ImgUploadField}

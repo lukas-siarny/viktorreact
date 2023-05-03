@@ -35,14 +35,17 @@ const RemainingSmsCredit = (props: Props) => {
 	const dispatch = useDispatch()
 
 	const wallet = useSelector((state: RootState) => state.wallet.wallet)
+	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
 	useEffect(() => {
-		dispatch(getWallet(salonID, walletID))
-	}, [dispatch, salonID, walletID])
+		if (selectedSalon.data?.id === salonID) {
+			dispatch(getWallet(salonID, walletID))
+		}
+	}, [dispatch, salonID, walletID, selectedSalon.data?.id])
 
 	return (
 		<div className={cx('p-4 pb-8 rounded shadow-lg bg-notino-white w-full lg:w-1/2', className)}>
-			<Spin spinning={wallet.isLoading}>
+			<Spin spinning={wallet.isLoading || selectedSalon.isLoading}>
 				<h4 className={'mb-0 flex items-center text-lg'}>
 					<MessageIcon className={'text-notino-black mr-2'} />
 					{t('loc:Zostatok SMS kreditu')}

@@ -25,7 +25,8 @@ import {
 	CONFIRM_MODAL_DATA_TYPE,
 	CALENDAR_EVENT_DISPLAY_TYPE,
 	PARAMETER_TYPE,
-	RESERVATION_SOURCE_TYPE
+	RESERVATION_SOURCE_TYPE,
+	REVIEW_VERIFICATION_STATUS
 } from '../utils/enums'
 
 // types
@@ -43,6 +44,12 @@ export interface IPaginationQuery {
 	order?: string | null
 }
 
+export interface ILabelInValue<T = any, ExtraType = any> {
+	label?: string
+	value: T
+	key: string
+	extra?: ExtraType
+}
 export interface IResponsePagination {
 	limit: number
 	page: number
@@ -178,7 +185,6 @@ export interface ISalonForm {
 	name: AutocompleteLabelInValue | string | null
 	aboutUsFirst: string | null
 	state?: SALON_STATES
-	sourceOfPremium?: string
 	openingHours: OpeningHours
 	sameOpenHoursOverWeek: boolean
 	openOverWeekend: boolean
@@ -209,8 +215,6 @@ export interface ISalonForm {
 	locationNote: string | null
 	cosmeticIDs: string[]
 	languageIDs: string[]
-	address: boolean | null
-	deletedAt?: boolean
 }
 
 export interface IParameterValue {
@@ -242,6 +246,7 @@ export interface IServiceForm {
 		enabledB2cReservations: boolean
 		autoApproveReservations: boolean
 	}
+	descriptionLocalizations: NameLocalizationsItem[]
 }
 
 export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
@@ -309,6 +314,14 @@ export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null
 
 export interface IEventTypeFilterForm {
 	eventType: CALENDAR_EVENT_TYPE
+}
+
+export interface IReviewsFilter {
+	search?: string
+	verificationStatus?: REVIEW_VERIFICATION_STATUS
+	salonCountryCode?: string
+	toxicityScoreFrom?: number
+	toxicityScoreTo?: number
 }
 
 export interface ISupportContactForm {
@@ -488,6 +501,15 @@ export interface ISmsUnitPricesFilter {
 	search: string
 }
 
+export interface IRechargeSmsCreditFilter {
+	search?: string
+	countryCode: string
+	sourceType?: string
+	walletAvailableBalanceFrom?: number
+	walletAvailableBalanceTo?: number
+}
+
+
 export interface ISmsHistoryFilter {
 	search: string
 }
@@ -653,7 +675,7 @@ export interface IReservationSystemSettingsForm {
 
 export type NameLocalizationsItem = {
 	language: string
-	value: string
+	value: string | null
 }
 
 export type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdCategories.RequestBody
@@ -708,8 +730,6 @@ export interface IEmployeePayload {
 export type EmployeeService = NonNullable<IEmployeePayload['data']>['employee']['categories'][0]['children'][0]['children'][0]
 
 export interface SalonPageProps {
-	isNotinoUser: boolean
-	backUrl?: string
 	phonePrefixCountryCode: string
 	authUser: IAuthUserPayload & ILoadingAndFailure
 	phonePrefixes: IEnumerationsCountriesPayload & ILoadingAndFailure
@@ -768,7 +788,7 @@ export interface IActiveEmployeesPayload extends ISearchable<Paths.GetApiB2BAdmi
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]
-export type CalendarEmployee = Pick<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0], 'id' | 'color' | 'firstName' | 'lastName' | 'email' | 'image' | 'inviteEmail' | 'orderIndex'> & { orderIndex: number, inviteEmail?: string, isForImportedEvents: boolean; isDeleted?: boolean }
+export type CalendarEmployee = Pick<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0], 'id' | 'color' | 'firstName' | 'lastName' | 'email' | 'image' | 'inviteEmail' | 'orderIndex'> & { orderIndex: number, inviteEmail?: string, isDeleted?: boolean }
 export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
 export type CalendarEvent = CalendarEvents[0] & {
 	startDateTime: string
@@ -912,7 +932,6 @@ export interface IResourceEmployee {
 	isTimeOff: boolean
 	color?: string
 	description?: string
-	isForImportedEvents?: boolean
 	isDeleted?: boolean
 }
 
@@ -992,6 +1011,7 @@ export interface ICalendarDayEventsMap {
 }
 export interface IReservationsFilter {
 	dateFrom: string
+	countryCode?: string
 	employeeIDs?: string[]
 	categoryIDs?: string[]
 	reservationStates?: RESERVATION_STATE[]

@@ -1,61 +1,52 @@
-import React, { useEffect, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Col, Row, Spin, TablePaginationConfig } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useEffect, useState, useMemo } from 'react'
 import { compose } from 'redux'
-import { SorterResult } from 'antd/lib/table/interface'
-import dayjs from 'dayjs'
+import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import { Button, Row, Spin, TablePaginationConfig } from 'antd'
+import { SorterResult } from 'antd/es/table/interface'
 import { ColumnProps } from 'antd/es/table'
+import dayjs from 'dayjs'
 import { useNavigate } from 'react-router'
 import { initialize } from 'redux-form'
+import cx from 'classnames'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import SmsUnitPricesFilter from './components/SmsUnitPricesFilter'
-
-// utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, FORM, D_M_YEAR_FORMAT } from '../../utils/enums'
-import { withPermissions } from '../../utils/Permissions'
-import { normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent, getLinkWithEncodedBackUrl } from '../../utils/helper'
+import SmsTimeStatsAdmin from './components/SmsTimeStatsAdmin'
 
 // assets
+import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronLeftIcon } from '../../assets/icons/chevron-left-16.svg'
 
-// reducers
-import { getSmsUnitPricesActual, ISmsUnitPricesActualPayload } from '../../reducers/smsUnitPrices/smsUnitPricesActions'
+// utils
+import { D_M_YEAR_FORMAT, ENUMERATIONS_KEYS, FORM, PERMISSION, SMS_UNIT_PRICES_TABLE_ID } from '../../utils/enums'
+import Permissions, { withPermissions } from '../../utils/Permissions'
+import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // types
-import { IBreadcrumbs, ISpecialistContactFilter } from '../../types/interfaces'
+import { IBreadcrumbs, ISmsUnitPricesFilter } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
-// hooks
-import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+// redux
+import { getSmsUnitPricesActual, ISmsUnitPricesActualPayload } from '../../reducers/smsUnitPrices/smsUnitPricesActions'
 
 type TableDataItem = NonNullable<ISmsUnitPricesActualPayload['data']>[0] & { key: string; currencySymbol: string }
 
-const SmsUnitPricesPage = () => {
+const SmsCreditAdiminPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-
-	const smsUnitPricesActual = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPricesActual)
-	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
-	const currencies = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.CURRENCIES])
-
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		order: StringParam('country:ASC')
-	})
-
 	const navigate = useNavigate()
 
-	const breadcrumbs: IBreadcrumbs = {
-		items: [
-			{
-				name: t('loc:Zoznam SMS kreditov')
-			}
-		]
-	}
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
+	const currencies = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.CURRENCIES])
+	const smsUnitPricesActual = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPricesActual)
+
+	const [query, setQuery] = useState({
+		search: '',
+		order: 'country:ASC'
+	})
 
 	useEffect(() => {
 		dispatch(getSmsUnitPricesActual())
@@ -64,6 +55,14 @@ const SmsUnitPricesPage = () => {
 	useEffect(() => {
 		dispatch(initialize(FORM.SMS_UNIT_PRICES_FILTER, { search: query.search }))
 	}, [query.search, dispatch])
+
+	const breadcrumbs: IBreadcrumbs = {
+		items: [
+			{
+				name: t('loc:SMS kredity')
+			}
+		]
+	}
 
 	const tableData = useMemo(() => {
 		if (!smsUnitPricesActual.data) {
@@ -106,7 +105,7 @@ const SmsUnitPricesPage = () => {
 				title: t('loc:Krajina'),
 				dataIndex: 'country',
 				key: 'country',
-				width: '20%',
+				width: '25%',
 				sortOrder: setOrder(query.order, 'country'),
 				sorter: {
 					compare: (a, b) => {
@@ -132,7 +131,7 @@ const SmsUnitPricesPage = () => {
 				key: 'amount',
 				ellipsis: true,
 				align: 'right',
-				width: '20%',
+				width: '25%',
 				render: (_value, record) => {
 					const value = record.actual
 
@@ -149,7 +148,7 @@ const SmsUnitPricesPage = () => {
 				key: 'validFrom',
 				ellipsis: true,
 				sorter: false,
-				width: '30%',
+				width: '25%',
 				render: (_value, record) => {
 					return <div style={{ marginLeft: '20%' }}>{record?.actual?.validFrom ? dayjs(record.actual.validFrom).format(D_M_YEAR_FORMAT) : ''}</div>
 				}
@@ -185,44 +184,68 @@ const SmsUnitPricesPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<Row gutter={ROW_GUTTER_X_DEFAULT}>
-				<Col span={24}>
-					<div className='content-body'>
-						<Spin spinning={smsUnitPricesActual?.isLoading}>
-							<SmsUnitPricesFilter
-								onSubmit={(values: ISpecialistContactFilter) => {
-									setQuery({ ...query, search: values.search })
+			<div className='content-body dashboard-content'>
+				<div className={'w-full flex justify-end'}>
+					<Permissions
+						allowed={[PERMISSION.NOTINO]}
+						render={(hasPermission, { openForbiddenModal }) => (
+							<Button
+								onClick={() => {
+									if (hasPermission) {
+										navigate(`${t('paths:sms-credits')}/${t('paths:recharge')}`)
+									} else {
+										openForbiddenModal()
+									}
+								}}
+								type='primary'
+								htmlType='button'
+								className={'noti-btn'}
+								icon={<PlusIcon />}
+							>
+								{t('loc:Dobiť kredity salónom')}
+							</Button>
+						)}
+					/>
+				</div>
+
+				<Permissions allowed={[PERMISSION.NOTINO]}>
+					<SmsTimeStatsAdmin countries={countries} />
+				</Permissions>
+				<h3 className={'text-2xl whitespace-nowrap'}>{t('loc:Ceny SMS správ')}</h3>
+
+				<div className='content-body mt-0'>
+					<Spin spinning={smsUnitPricesActual?.isLoading}>
+						<SmsUnitPricesFilter
+							onSubmit={(values: ISmsUnitPricesFilter) => {
+								setQuery({ ...query, search: values.search })
+							}}
+						/>
+						<div className={'w-full flex'}>
+							<CustomTable<TableDataItem>
+								id={SMS_UNIT_PRICES_TABLE_ID}
+								className={cx('table-fixed', SMS_UNIT_PRICES_TABLE_ID)}
+								columns={columns}
+								onChange={onChangeTable}
+								dataSource={tableData}
+								rowClassName={'clickable-row'}
+								twoToneRows
+								rowKey={(record) => record.country.code}
+								pagination={false}
+								onRow={(record) => {
+									return {
+										className: !record.actual && !record.next ? 'noti-table-row-warning' : undefined,
+										onClick: () => {
+											navigate(getLinkWithEncodedBackUrl(t('paths:sms-credits/{{countryCode}}', { countryCode: record.country.code.toLocaleLowerCase() })))
+										}
+									}
 								}}
 							/>
-							<div className={'w-full flex'}>
-								<CustomTable<TableDataItem>
-									className='table-fixed'
-									columns={columns}
-									onChange={onChangeTable}
-									dataSource={tableData}
-									rowClassName={'clickable-row'}
-									twoToneRows
-									// TODO: update testov
-									rowKey={(record) => (record.actual?.id ? `${record.actual.id}_${record.country.code}` : record.country.code)}
-									pagination={false}
-									onRow={(record) => {
-										return {
-											className: !record.actual && !record.next ? 'noti-table-row-warning' : undefined,
-											onClick: () => {
-												navigate(
-													getLinkWithEncodedBackUrl(t('paths:sms-credits/{{countryCode}}', { countryCode: record.country.code.toLocaleLowerCase() }))
-												)
-											}
-										}
-									}}
-								/>
-							</div>
-						</Spin>
-					</div>
-				</Col>
-			</Row>
+						</div>
+					</Spin>
+				</div>
+			</div>
 		</>
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SMS_UNIT_PRICE_EDIT]))(SmsUnitPricesPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.SMS_UNIT_PRICE_EDIT]))(SmsCreditAdiminPage)

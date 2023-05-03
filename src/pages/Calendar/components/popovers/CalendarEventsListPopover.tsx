@@ -213,7 +213,7 @@ const CalendarEventsListPopover: FC<ICalendarEventsListPopover> = (props) => {
 	return (
 		<Popover
 			open={isOpen}
-			destroyTooltipOnHide={{ keepParent: true }}
+			destroyTooltipOnHide={false}
 			trigger={'click'}
 			placement={'right'}
 			overlayClassName={cx(overlayClassName, 'nc-popover-overlay nc-events-list-popover-overlay', { 'is-hidden': isHidden })}

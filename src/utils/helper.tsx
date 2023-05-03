@@ -81,6 +81,7 @@ import {
 	IPrice,
 	ISelectOptionItem,
 	IStructuredAddress,
+	NameLocalizationsItem,
 	ServicePatchBody,
 	ServicePriceAndDurationData
 } from '../types/interfaces'
@@ -756,27 +757,22 @@ export const isValidDateRange = (from: string, to: string) => {
 	return dateTo.diff(dateFrom) > 0 // 'from' must be smaller than 'to'
 }
 
-export const checkFiltersSizeWithoutSearch = (formValues: any) => size(filter(formValues, (value, key) => (!isNil(value) || !isEmpty(value)) && key !== 'search'))
+export const checkFiltersSizeWithoutSearch = (formValues: any) => size(filter(formValues, (value, key) => !isNil(value) && !isEmpty(value) && key !== 'search'))
 
-export const checkFiltersSize = (formValues: any) => size(filter(formValues, (value) => !isNil(value) || !isEmpty(value)))
-
-type NameLocalizationsItem = {
-	language: string
-	value?: string | null
-}
+export const checkFiltersSize = (formValues: any) => size(filter(formValues, (value) => !isNil(value) && !isEmpty(value)))
 
 /**
  * add default language to the first position
  * or
  * move default language to the first position
  */
-export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsItem[]) => {
-	return Object.keys(LOCALES)
-		.sort((a: string, b: string) => {
-			if (a === DEFAULT_LANGUAGE) {
+export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsItem[], languages: string[] = Object.keys(LOCALES), defaultLanguage: string = DEFAULT_LANGUAGE) => {
+	return languages
+		.sort((a, b) => {
+			if (a === defaultLanguage) {
 				return -1
 			}
-			return b === DEFAULT_LANGUAGE ? 1 : 0
+			return b === defaultLanguage ? 1 : 0
 		})
 		.map((language) => {
 			const value = nameLocalizations.find((localization) => localization.language === language)
@@ -946,7 +942,7 @@ export const optionRenderWithIcon = (itemData: any, fallbackIcon?: React.ReactNo
 			<div style={style} className={'mr-2 flex items-center'}>
 				{icon || fallbackIcon}
 			</div>
-			{label}
+			<span className='truncate inline-block'>{label}</span>
 		</div>
 	)
 }
@@ -1386,18 +1382,6 @@ export const getEmployeeServiceDataForPatch = (values: IEmployeeServiceEditForm,
 	return employeePatchServiceData
 }
 
-// NOTE: treba dodrziat tento shape aby spravne fungoval isPristine selector pre selecty typu labelInValue (maju BE vyhladavanie)
-export const initializeLabelInValueSelect = (key: string | number, label: string, extra?: any, disabled?: boolean, title?: boolean) => {
-	return {
-		disabled,
-		title,
-		key,
-		value: key,
-		label,
-		extra
-	}
-}
-
 export const normalizeDataById = <T extends { id: string }>(data?: T[] | null): { [key: string]: T } => {
 	const normalizedData: { [key: string]: T } = {}
 	data?.forEach((item) => {
@@ -1406,7 +1390,7 @@ export const normalizeDataById = <T extends { id: string }>(data?: T[] | null): 
 	return normalizedData
 }
 
-export const formatPrice = (price: number, symbol?: string) => (!isNil(price) ? `${price} ${symbol || ''}`.trim() : '')
+export const formatPrice = (price: number, symbol?: string) => (!isNil(price) ? `${price.toFixed(2).replace('.', ',')} ${symbol || ''}`.trim() : '')
 
 export const detectBrowserType = (): string => {
 	const parser = new UAParser()

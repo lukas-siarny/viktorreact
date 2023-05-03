@@ -5,7 +5,7 @@ import i18next from 'i18next'
 
 // types
 import { AutocompleteLabelInValue, ISalonForm, OpeningHours } from '../../../types/interfaces'
-import { ISalonPayloadData } from '../../../reducers/selectedSalon/selectedSalonActions'
+import { ISalonPayloadData, ISelectedSalonPayload } from '../../../reducers/selectedSalon/selectedSalonActions'
 import { IBasicSalon } from '../../../reducers/salons/salonsActions'
 import { Paths } from '../../../types/api'
 
@@ -22,6 +22,10 @@ import {
 	orderDaysInWeek
 } from '../../../components/OpeningHours/OpeningHoursUtils'
 
+// assets
+import { ReactComponent as CheckerIcon } from '../../../assets/icons/check-icon-success.svg'
+import { ReactComponent as CrossIcon } from '../../../assets/icons/cross.svg'
+
 const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	{
 		phonePrefixCountryCode,
@@ -29,7 +33,7 @@ const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	}
 ]
 
-export type SalonInitType = ISalonPayloadData & IBasicSalon
+export type SalonInitType = ISelectedSalonPayload['data'] & IBasicSalon
 
 /**
  *
@@ -55,9 +59,7 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 	const initialData: ISalonForm = {
 		salonNameFromSelect,
 		id: salonData.id || null,
-		deletedAt: !!salonData.deletedAt,
 		state: salonData.state as SALON_STATES,
-		sourceOfPremium: salonData.premiumSourceUserType,
 		name: salonNameFromSelect
 			? {
 					key: salonData.id,
@@ -102,9 +104,18 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 					}
 			  ]
 			: null,
-		languageIDs: map(salonData.languages, (lng) => lng?.id).filter((lng) => lng !== undefined) as string[],
-		cosmeticIDs: map(salonData.cosmetics, (cosmetic) => cosmetic?.id).filter((cosmetic) => cosmetic !== undefined) as string[],
-		address: !!salonData.address || null,
+		cosmeticIDs: salonData.cosmetics?.reduce((acc, cosmetic) => {
+			if (cosmetic) {
+				return [...acc, cosmetic.id]
+			}
+			return acc
+		}, [] as string[]),
+		languageIDs: salonData.languages?.reduce((acc, lng) => {
+			if (lng) {
+				return [...acc, lng.id]
+			}
+			return acc
+		}, [] as string[]),
 		socialLinkWebPage: salonData.socialLinkWebPage || null,
 		socialLinkFB: salonData.socialLinkFB || null,
 		socialLinkInstagram: salonData.socialLinkInstagram || null,
@@ -284,3 +295,5 @@ export const getSalonTagSourceType = (sourceType?: string | SALON_SOURCE_TYPE) =
 			return null
 	}
 }
+
+export const getCheckerIcon = (valid?: boolean) => (valid ? <CheckerIcon /> : <CrossIcon width={24} height={24} color={'#BFBFBF'} />)

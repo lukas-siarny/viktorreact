@@ -3,62 +3,57 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Modal, Row, Spin, Tooltip } from 'antd'
 import { destroy, initialize, isPristine, reset, submit } from 'redux-form'
-import { compose } from 'redux'
 import cx from 'classnames'
 import { useNavigate } from 'react-router-dom'
 
 // components
 import DeleteButton from '../../components/DeleteButton'
-import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonForm from './components/forms/SalonForm'
 import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal'
 import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/forms/NoteForm'
-import TabsComponent from '../../components/TabsComponent'
-import SalonHistory from './components/SalonHistory'
 import SalonApprovalModal from './components/modals/SalonApprovalModal'
+import NotinoUserForm from './components/forms/NotinoUserForm'
 
 // enums
-import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_STATES, STRINGS, TAB_KEYS, SALON_CREATE_TYPE, SUBMIT_BUTTON_ID } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_STATES, STRINGS, SALON_CREATE_TYPE, SUBMIT_BUTTON_ID } from '../../utils/enums'
 
 // reducers
-import { RootState } from '../../reducers'
-import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
+import { ISelectedSalonPayload, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
-import { IBreadcrumbs, INoteForm, INoteModal, INotinoUserForm, ISalonForm, SalonPageProps } from '../../types/interfaces'
+import { ILoadingAndFailure, INoteForm, INoteModal, INotinoUserForm, ISalonForm, SalonPageProps } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
-import Permissions, { withPermissions } from '../../utils/Permissions'
+import Permissions from '../../utils/Permissions'
 import { formFieldID, getAssignedUserLabel } from '../../utils/helper'
 import { getSalonDataForSubmission, initSalonFormData } from './components/salonUtils'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
-import NotinoUserForm from './components/forms/NotinoUserForm'
 
-// hooks
-import useQueryParams, { BooleanParam } from '../../hooks/useQueryParams'
-
-const permissions: PERMISSION[] = [PERMISSION.NOTINO, PERMISSION.PARTNER]
+interface EditSalonPageProps extends SalonPageProps {
+	isNotinoUser: boolean
+	salonID: string
+	isDeletedSalon: boolean
+	backUrl?: string
+	salon: ISelectedSalonPayload & ILoadingAndFailure
+}
 
 const pendingStates: string[] = [SALON_STATES.NOT_PUBLISHED_PENDING, SALON_STATES.PUBLISHED_PENDING]
 
-interface SalonEditPageProps extends SalonPageProps {
-	salonID: string
-}
-
-const SalonEditPage: FC<SalonEditPageProps> = (props) => {
+const EditSalonPage: FC<EditSalonPageProps> = (props) => {
+	const navigate = useNavigate()
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const navigate = useNavigate()
-	const { salonID, isNotinoUser, backUrl, phonePrefixes, authUser, phonePrefixCountryCode } = props
+
+	const { salonID, isNotinoUser, backUrl, phonePrefixes, authUser, phonePrefixCountryCode, isDeletedSalon, salon } = props
 
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isSendingConfRequest, setIsSendingConfRequest] = useState<boolean>(false)
@@ -69,12 +64,8 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	const [approvalModalVisible, setApprovalModalVisible] = useState(false)
 	const [visibleNotinoUserModal, setVisibleNotinoUserModal] = useState(false)
 
-	const [tabKey, setTabKey] = useState<TAB_KEYS>(TAB_KEYS.SALON_DETAIL)
-
-	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const isFormPristine = useSelector(isPristine(FORM.SALON))
 
-	const isDeletedSalon = !!salon?.data?.deletedAt && salon?.data?.deletedAt !== null
 	const isSubmittingData = submitting || isRemoving || isSendingConfRequest
 
 	const isLoading = salon.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isSubmittingData
@@ -87,24 +78,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	const assignedUserLabel = getAssignedUserLabel(salon.data?.assignedUser)
 
-	const [query, setQuery] = useQueryParams({
-		history: BooleanParam(false)
-	})
-
 	const dontUpdateFormData = useRef(false)
-
-	// load salon data
-	useEffect(() => {
-		dispatch(selectSalon(salonID))
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch])
-
-	// change tab based on query
-	useEffect(() => {
-		if (query.history) {
-			setTabKey(TAB_KEYS.SALON_HISTORY)
-		}
-	}, [query.history])
 
 	// init form
 	useEffect(() => {
@@ -126,24 +100,6 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			setSubmitting(false)
 			scrollToTopFn()
 		}
-	}
-
-	const breadcrumbDetailItem = {
-		name: tabKey === TAB_KEYS.SALON_DETAIL ? t('loc:Detail salónu') : t('loc:História salónu'),
-		titleName: `${salon.data?.name ?? ''} | ID: ${salon.data?.id}`
-	}
-
-	// View
-	const breadcrumbs: IBreadcrumbs = {
-		items: isNotinoUser
-			? [
-					{
-						name: t('loc:Zoznam salónov'),
-						link: backUrl
-					},
-					breadcrumbDetailItem
-			  ]
-			: [breadcrumbDetailItem]
 	}
 
 	const deleteSalon = async () => {
@@ -568,16 +524,6 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			</div>
 		)
 
-	const onTabChange = (selectedTabKey: string) => {
-		// set query for history tab
-		const newQuery = {
-			...query,
-			history: selectedTabKey === TAB_KEYS.SALON_HISTORY
-		}
-		setQuery(newQuery)
-		setTabKey(selectedTabKey as TAB_KEYS)
-	}
-
 	const approvalButtonDisabled = !salon?.data?.hasAllRequiredSalonApprovalData || isDeletedSalon || isSubmittingData || salon?.isLoading || isPendingPublication
 
 	const getApprovalButtonTooltipMessage = () => {
@@ -601,7 +547,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		}
 	}
 
-	const salonForm = (
+	return (
 		<>
 			<div className='content-body'>
 				<Spin spinning={isLoading}>
@@ -613,6 +559,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 						// edit mode is turned off if salon is in approval process and user is not admin or is deleted 'read mode' only
 						disabledForm={isDeletedSalon || (isPendingPublication && !isNotinoUser)}
 						deletedSalon={isDeletedSalon}
+						salonData={salon?.data}
 						notinoUserModalControlButtons={
 							isNotinoUser && (
 								<Row className={'flex justify-start w-full gap-2 pb-4'}>
@@ -761,39 +708,6 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			/>
 		</>
 	)
-
-	return (
-		<>
-			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
-			</Row>
-			{isNotinoUser && !isDeletedSalon ? (
-				<TabsComponent
-					className={'box-tab'}
-					activeKey={tabKey}
-					onChange={onTabChange}
-					items={[
-						{
-							key: TAB_KEYS.SALON_DETAIL,
-							label: <>{t('loc:Detail salónu')}</>,
-							children: salonForm
-						},
-						{
-							key: TAB_KEYS.SALON_HISTORY,
-							label: <>{t('loc:História salónu')}</>,
-							children: (
-								<div className='content-body'>
-									<SalonHistory salonID={salonID} tabKey={tabKey} />
-								</div>
-							)
-						}
-					]}
-				/>
-			) : (
-				salonForm
-			)}
-		</>
-	)
 }
 
-export default compose(withPermissions(permissions))(SalonEditPage)
+export default EditSalonPage

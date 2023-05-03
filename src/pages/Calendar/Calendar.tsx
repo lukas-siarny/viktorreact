@@ -66,7 +66,6 @@ import {
 	ReservationPopoverData,
 	PopoverTriggerPosition,
 	SalonSubPageProps,
-	ICalendarImportedReservationForm,
 	ICalendarEmployeeOptionItem
 } from '../../types/interfaces'
 
@@ -170,11 +169,21 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const initialScroll = useRef(false)
 	const scrollToDateTimeout = useRef<any>(null)
 
+	const scrollToTimeTimeout = useRef<any>(null)
+
 	/**
 	 * obcasne je potrebne programovo updatenut velkost, pretoze Fullcalednar sam nezaregistruje zmenu, ktora bola vyvolana niekde z vyssieho kontaineru
 	 * napr. ked sa zatvori bocny filter alebo sidebar na upravu eventu
 	 */
 	const updateCalendarSize = useRef(() => calendarRefs?.current?.[validCalendarView]?.getApi()?.updateSize())
+
+	/**
+	 * ak je false, tak sa po otvoreni detailu eventu nascrolluje kalendar tak, aby bol dany event viditelny
+	 * vyuziva sa, ked sa zaobrazuje detial eventu po skopirovani URLcky
+	 * pri programovom otvoreni sidebaru by to malo byt vzdy true, aby zbytocne neposkakovalo view
+	 * teda vsade, kde sa nastavuje sidebarView na nieco ine ako undefined (query = { ...query, sidebarView: view }), tak by sa mala aj tato premenna nastavit na true
+	 */
+	const scrollToTimeAndResourceOnDeman = useRef(false)
 
 	const calendarEmployees = useSelector((state: RootState) => state.calendarEmployees.calendarEmployees || {})
 	const services = useSelector((state: RootState) => state.service.services)
@@ -352,6 +361,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		 */
 		cancelEventsRequestOnDemand()
 		setQuery({ ...query, eventsViewType: newEventsViewType, sidebarView: undefined, eventId: undefined })
+		setTimeout(updateCalendarSize.current, CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE)
 	}
 
 	// fetch new events
@@ -406,9 +416,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		[dispatch, salonID, currentRange.start, currentRange.end, query.employeeIDs, query.categoryIDs, validEventsViewType, validCalendarView]
 	)
 
-	// scroll to time after initialization
-	useEffect(() => {
-		const scrollToTime = (hour: number) => {
+	const scrollToTime = useCallback(
+		(hour: number) => {
 			// scrollID je hodina, na ktoru chceme zascrollovat
 			// od nej sa este odrataju 2 hodiny, aby bolo vidiet aj co sa deje pred tymto casom
 			const scrollTimeId = getTimeScrollId(Math.max(hour - 2, 0))
@@ -422,13 +431,18 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				// v tyzdennom view sa pouzije interny scroll, pretoze sa scrolluje v x-ovej osi a aj v pripade height='auto' je to funkcne
 				calendarRefs?.current?.[validCalendarView]?.getApi().scrollToTime(scrollTimeId)
 			}
-		}
+		},
+		[validCalendarView]
+	)
 
+	// scroll to time after initialization
+	useEffect(() => {
 		/**
 		 * je potrebne trochu pockat, kym sa kalendar vyinicializuje a az tak zavolaz scrollToTime
 		 */
-		setTimeout(() => scrollToTime(dayjs().hour()), CALENDAR_INIT_TIME)
-	}, [validCalendarView])
+		scrollToTimeTimeout.current = setTimeout(() => scrollToTime(dayjs().hour()), CALENDAR_INIT_TIME)
+		return () => clearTimeout(scrollToTimeTimeout.current)
+	}, [scrollToTime])
 
 	useEffect(() => {
 		dispatch(getServices({ salonID }))
@@ -478,6 +492,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				})
 			} else {
 				const newEventType = newView === CALENDAR_EVENT_TYPE.RESERVATION ? CALENDAR_EVENTS_VIEW_TYPE.RESERVATION : CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF
+				scrollToTimeAndResourceOnDeman.current = true
 				setQuery({
 					...query,
 					eventId,
@@ -605,7 +620,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		[closeSiderForm, fetchEvents, salonID, query.eventId]
 	)
 
-	const handleSubmitImportedReservation = useCallback(
+	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+	/* const handleSubmitImportedReservation = useCallback(
 		async (values: ICalendarImportedReservationForm) => {
 			const eventId = values?.updateFromCalendar ? values.eventId : query.eventId
 
@@ -656,7 +672,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			}
 		},
 		[closeSiderForm, fetchEvents, salonID, query.eventId]
-	)
+	) */
 
 	const handleSubmitEvent = useCallback(
 		async (values: ICalendarEventForm, calendarEventID?: string, calendarBulkEventID?: string, updateFromCalendar = false) => {
@@ -858,6 +874,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		setConfirmModalData({ key: CONFIRM_MODAL_DATA_TYPE.UPDATE_RESERVATION_STATE, calendarEventID, state, reason, paymentMethod })
 
 	const onEditEvent = (eventType: CALENDAR_EVENT_TYPE, eventId: string) => {
+		scrollToTimeAndResourceOnDeman.current = true
 		setQuery({
 			...query,
 			eventId,
@@ -868,6 +885,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const onReservationClick = (data?: ReservationPopoverData, position?: PopoverTriggerPosition) => {
+		scrollToTimeAndResourceOnDeman.current = true
 		setReservationPopover({
 			isOpen: true,
 			data: data || null,
@@ -976,7 +994,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						}}
 						handleSubmitReservation={initSubmitReservationData}
 						handleSubmitEvent={initSubmitEventData}
-						handleSubmitImportedReservation={handleSubmitImportedReservation}
+						// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+						// handleSubmitImportedReservation={handleSubmitImportedReservation}
 						onAddEvent={handleAddEvent}
 						clearFetchInterval={clearFetchInterval}
 						restartFetchInterval={restartFetchInterval}
@@ -994,13 +1013,16 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							onCloseSider={closeSiderForm}
 							handleSubmitReservation={initSubmitReservationData}
 							handleSubmitEvent={initSubmitEventData}
-							handleSubmitImportedReservation={handleSubmitImportedReservation}
+							// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+							// handleSubmitImportedReservation={handleSubmitImportedReservation}
 							calendarApi={calendarRefs?.current?.[validCalendarView]?.getApi()}
 							changeCalendarDate={setNewSelectedDate}
 							query={query}
 							setQuery={setQuery}
 							employeesLoading={employeesLoading}
 							calendarEmployees={calendarEmployees}
+							scrollToTime={scrollToTime}
+							initOnDemand={scrollToTimeAndResourceOnDeman.current}
 						/>
 					)}
 				</Layout>

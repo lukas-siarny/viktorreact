@@ -30,8 +30,6 @@ import { IBreadcrumbs, ISearchFilter, SalonSubPageProps, Columns, IDataUploadFor
 // hooks
 import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
 
-const { Option } = Select
-
 const CustomersPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const navigate = useNavigate()

@@ -28,7 +28,7 @@ const supportCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, passwo
 		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
 			cy.intercept({
 				method: 'POST',
-				url: '/api/b2b/admin/enums/support-contacts/'
+				pathname: '/api/b2b/admin/enums/support-contacts/'
 			}).as('createSupportContact')
 			cy.clickButton(CREATE_BUTTON_ID, FORM.SUPPORT_CONTACT)
 			cy.selectOptionDropdownCustom(FORM.SUPPORT_CONTACT, 'countryCode', supportContact.create.countryCode, true)

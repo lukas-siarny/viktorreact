@@ -424,6 +424,10 @@ export interface INoteForm {
 	note: string
 }
 
+export interface IVoucherForm {
+	code: string
+}
+
 export interface INotinoUserForm {
 	assignedUser: ISelectOptionItem
 }

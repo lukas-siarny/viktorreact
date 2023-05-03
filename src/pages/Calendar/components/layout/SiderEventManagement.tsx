@@ -14,9 +14,9 @@ import { ICalendarEmployeesPayload, INewCalendarEvent } from '../../../../types/
 import { RootState } from '../../../../reducers'
 
 // schema
-import { /* ICalendarImportedReservationForm, */ ICalendarReservationForm } from '../../../../schemas/reservation'
 import { ICalendarEventForm } from '../../../../schemas/event'
 import { ICalendarPageURLQueryParams } from '../../../../schemas/queryParams'
+import { ICalendarReservationForm } from '../../../../schemas/reservation'
 
 // utils
 import { getAssignedUserLabel, getDateTime } from '../../../../utils/helper'
@@ -192,7 +192,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 				}
 			}
 
-			const repeatOptions: Pick<ICalendarEventForm, 'recurring' | 'repeatOn' | 'every' | 'end'> | {} = data.calendarBulkEvent?.repeatOptions
+			const repeatOptions: Pick<ICalendarEventForm, 'recurring' | 'repeatOn' | 'every' | 'end'> = data.calendarBulkEvent?.repeatOptions
 				? {
 						recurring: true,
 						repeatOn: compact(map(data.calendarBulkEvent.repeatOptions?.days as any, (item, index) => (item ? index : undefined))) as DAY[],

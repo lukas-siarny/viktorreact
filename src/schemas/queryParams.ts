@@ -224,7 +224,7 @@ export type ICustomersPageURLQueryParam = z.infer<typeof customersPagePageURLQue
  */
 const servicesQueryParamsSchema = z.object({
 	salonID: uuidConstraint,
-	rootCategoryID: uuidConstraint.optional()
+	rootCategoryID: uuidConstraint.nullish()
 })
 
 export type IGetServicesQueryParams = z.infer<typeof servicesQueryParamsSchema>

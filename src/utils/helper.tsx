@@ -73,11 +73,9 @@ import {
 
 import {
 	CountriesData,
-	FormPriceAndDurationData,
 	IAuthUserPayload,
 	IDateTimeFilterOption,
 	IEmployeePayload,
-	IEmployeeServiceEditForm,
 	IPrice,
 	ISelectOptionItem,
 	IStructuredAddress,
@@ -100,6 +98,7 @@ import { ReactComponent as DollarIcon } from '../assets/icons/dollar.svg'
 import { ReactComponent as CrossedIcon } from '../assets/icons/crossed-red-16.svg'
 // eslint-disable-next-line import/no-cycle
 import { LOCALES } from '../components/LanguagePicker'
+import { FormPriceAndDurationData, IEmployeeServiceEditForm } from '../schemas/service'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -1250,12 +1249,12 @@ export const getServicePriceAndDurationData = (
 
 	if (!isNil(decodedPriceFrom)) {
 		decodedPriceTo = decodePrice(priceTo)
-		if (!isNil(decodedPriceTo) && decodedPriceTo !== decodedPriceFrom) {
+		if (!isNil(decodedPriceTo) && decodedPriceTo >= decodedPriceFrom) {
 			variablePrice = true
 		}
 	}
 
-	const variableDuration = !!(!isNil(durationFrom) && !isNil(durationTo) && durationFrom !== durationTo)
+	const variableDuration = !!(!isNil(durationFrom) && !isNil(durationTo) && durationTo >= durationFrom)
 
 	return {
 		durationFrom: durationFrom || null,
@@ -1283,36 +1282,6 @@ export const arePriceAndDurationDataEmpty = (data?: FormPriceAndDurationData) =>
 	}
 
 	return emptyPrice && emptyDuration && !data?.variableDuration && !data?.variablePrice
-}
-
-export const validatePriceAndDurationData = (priceAndDurationData?: FormPriceAndDurationData) => {
-	const employeePriceAndDurationErrors: any = {}
-
-	if (isNil(priceAndDurationData?.priceFrom)) {
-		employeePriceAndDurationErrors.priceFrom = i18next.t('loc:Toto pole je povinné')
-	}
-	if (priceAndDurationData?.variablePrice) {
-		if (isNil(priceAndDurationData?.priceTo)) {
-			employeePriceAndDurationErrors.priceTo = i18next.t('loc:Toto pole je povinné')
-		}
-		if (!isNil(priceAndDurationData?.priceFrom) && !isNil(priceAndDurationData?.priceTo) && priceAndDurationData?.priceFrom >= priceAndDurationData?.priceTo) {
-			employeePriceAndDurationErrors.priceFrom = i18next.t('loc:Chybný rozsah')
-			employeePriceAndDurationErrors.priceTo = true
-		}
-	}
-	if (priceAndDurationData?.variableDuration) {
-		if (isNil(priceAndDurationData?.durationFrom)) {
-			employeePriceAndDurationErrors.durationFrom = i18next.t('loc:Toto pole je povinné')
-		}
-		if (isNil(priceAndDurationData?.durationTo)) {
-			employeePriceAndDurationErrors.durationTo = i18next.t('loc:Toto pole je povinné')
-		}
-		if (!isNil(priceAndDurationData?.durationFrom) && !isNil(priceAndDurationData?.durationTo) && priceAndDurationData?.durationFrom >= priceAndDurationData?.durationTo) {
-			employeePriceAndDurationErrors.durationFrom = i18next.t('loc:Chybný rozsah')
-			employeePriceAndDurationErrors.durationTo = true
-		}
-	}
-	return employeePriceAndDurationErrors
 }
 
 export const getEmployeeServiceDataForPatch = (values: IEmployeeServiceEditForm, resetUserServiceData?: boolean) => {

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { emailConstraint, imageConstraint, stringConstraint, twoCharsConstraint, zodErrorsToFormErrors } from './baseSchema'
+import { emailConstraint, imageConstraint, stringConstraint, twoCharsConstraint, uuidConstraint, zodErrorsToFormErrors } from './baseSchema'
 import { FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
 
 // https://notino-admin.goodrequest.dev/api/doc/#/B2b-%3Eadmin/patchApiB2BAdminUsersUserId
@@ -21,7 +21,7 @@ export const createUserSchema = z.object({
 	email: emailConstraint,
 	phonePrefixCountryCode: twoCharsConstraint,
 	phone: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_20, true),
-	roleID: z.string().uuid(),
+	roleID: uuidConstraint,
 	assignedCountryCode: twoCharsConstraint.optional()
 })
 export type ICreateUserForm = z.infer<typeof createUserSchema>

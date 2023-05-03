@@ -14,16 +14,14 @@ import EmployeeForm from './components/EmployeeForm'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import DeleteButton from '../../components/DeleteButton'
 import InviteForm from './components/InviteForm'
-import EditRoleForm from './components/EditRoleForm'
+import EditEmployeeRoleForm from './components/EditEmployeeRoleForm'
 import ServiceEditModal from './components/ServiceEditModal'
 
 // types
 import {
 	EmployeeService,
-	EmployeeServiceData,
 	IBreadcrumbs,
 	IEmployeePayload,
-	IEmployeeServiceEditForm,
 	ISelectOptionItem,
 	SalonSubPageProps,
 	ServiceCategoryParameter,
@@ -62,7 +60,10 @@ import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.sv
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
-import { IEditRoleForm } from '../../schemas/role'
+import { IEditEmployeeRoleForm } from '../../schemas/role'
+
+// schema
+import { IEmployeeServiceEditForm } from '../../schemas/service'
 
 type Props = SalonSubPageProps
 
@@ -86,7 +87,7 @@ const addService = (servicesOptions: IServicesPayload['options'], employee: IEmp
 		} else if (serviceData && employeeData) {
 			const useCategoryParameter = !!categoryParameter?.values?.length
 
-			let newServiceData: EmployeeServiceData = {
+			let newServiceData: IEmployeeServiceEditForm = {
 				id: serviceData?.key as string,
 				name: serviceData?.label,
 				industry: serviceData?.extra?.firstCategory,
@@ -159,8 +160,8 @@ const getCategoryById = (category: any, serviceCategoryID: string): EmployeeServ
 	return result
 }
 
-const parseServices = (employee?: IEmployeePayload['data'], salonServices?: ISelectOptionItem[]): EmployeeServiceData[] => {
-	const result: EmployeeServiceData[] = []
+const parseServices = (employee?: IEmployeePayload['data'], salonServices?: ISelectOptionItem[]): IEmployeeServiceEditForm[] => {
+	const result: IEmployeeServiceEditForm[] = []
 	const employeeData = employee?.employee
 	const employeeCategories = employeeData?.categories
 	if (employeeCategories) {
@@ -172,7 +173,7 @@ const parseServices = (employee?: IEmployeePayload['data'], salonServices?: ISel
 					const categoryParameter = salonServiceData?.extra?.serviceCategoryParameter as ServiceCategoryParameter
 					const useCategoryParameter = salonServiceData?.extra?.useCategoryParameter
 
-					let formServiceData: EmployeeServiceData = {
+					let formServiceData: IEmployeeServiceEditForm = {
 						id: employeeService?.id,
 						name: employeeService?.category?.name,
 						industry: firstCategory?.name,
@@ -427,7 +428,7 @@ const EmployeePage = (props: Props) => {
 		}
 	}
 
-	const editEmployeeRole = async (data: IEditRoleForm) => {
+	const editEmployeeRole = async (data: IEditEmployeeRoleForm) => {
 		try {
 			setSubmitting(true)
 			await patchReq(
@@ -486,7 +487,7 @@ const EmployeePage = (props: Props) => {
 			{formValues?.hasActiveAccount && (
 				<div className='content-body small mb-8'>
 					<Spin spinning={isLoading}>
-						<EditRoleForm
+						<EditEmployeeRoleForm
 							onSubmit={editEmployeeRole}
 							salonRolesOptions={filteredSalonRolesByPermission}
 							hasPermissionToEdit={hasPermissionToEdit}

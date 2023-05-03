@@ -95,7 +95,6 @@ const CategoriesTree = () => {
 				deletedAt,
 				isParentDeleted,
 				icon: data?.icon?.original ? [{ url: data?.icon?.original, uid: data?.icon?.id }] : undefined,
-				// categoryParameterID: data?.categoryParameter?.id,
 				descriptionLocalizations: level === 2 ? normalizeNameLocalizations(data?.descriptionLocalizations) : undefined,
 				childrenLength: data?.children && data.children.length
 			}

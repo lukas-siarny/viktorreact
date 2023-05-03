@@ -94,7 +94,7 @@ const ReservationsFilter = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters activeFilters={checkFiltersSizeWithoutSearch(formValues)}>
+			<Filters activeFilters={checkFiltersSizeWithoutSearch(formValues)} form={FORM.RESERVATIONS_FILTER}>
 				<>
 					<Row gutter={ROW_GUTTER_X_M}>
 						<Col span={6}>

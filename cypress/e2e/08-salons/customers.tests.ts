@@ -14,6 +14,7 @@ const getCustomer = () => {
 			url: `/api/b2b/admin/${salonID}/customers`
 		}).as('getCustomers')
 		cy.visit('/')
+		cy.wait(5000)
 		cy.get(`#${PAGE.CUSTOMERS}`).click()
 		cy.wait('@getCustomers')
 		cy.intercept({

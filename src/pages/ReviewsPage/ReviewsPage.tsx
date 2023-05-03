@@ -11,7 +11,7 @@ import cx from 'classnames'
 // components
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
-import ReviewsFilter, { IReviewsFilter } from './components/ReviewsFilter'
+import ReviewsFilter from './components/ReviewsFilter'
 import DeleteButton from '../../components/DeleteButton'
 import TabsComponent from '../../components/TabsComponent'
 
@@ -27,7 +27,7 @@ import { getReviews } from '../../reducers/reviews/reviewsActions'
 import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 
 // types
-import { IBreadcrumbs, Columns } from '../../types/interfaces'
+import { IBreadcrumbs, Columns, IReviewsFilter } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
@@ -203,7 +203,7 @@ const ReviewsPage = () => {
 				}
 			},
 			{
-				title: t('loc:Recenzovaný pracovník'),
+				title: t('loc:Recenzovaný kolega'),
 				dataIndex: 'calendarEvent',
 				key: 'calendarEvent',
 				ellipsis: true,

@@ -34,6 +34,7 @@ import { formatObjToQuery, getAssignedUserLabel, normalizeDirectionKeys, transla
 import { RootState } from '../../reducers'
 import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 import { getNotinoReservations } from '../../reducers/calendar/calendarActions'
+import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
 import { Columns, IBreadcrumbs, IReservationsFilter } from '../../types/interfaces'
@@ -62,6 +63,10 @@ const NotinoReservationsPage = () => {
 		limit: NumberParam(),
 		page: NumberParam(1)
 	})
+
+	useEffect(() => {
+		dispatch(getCategories())
+	}, [dispatch])
 
 	useEffect(() => {
 		dispatch(

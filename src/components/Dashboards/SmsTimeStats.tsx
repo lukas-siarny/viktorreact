@@ -25,10 +25,11 @@ type Props = {
 	className?: string
 	title?: React.ReactNode
 	smsTimeStats: ISmsTimeStatsPayload & ILoadingAndFailure
+	loading?: boolean
 }
 
 const SmsTimeStats = (props: Props) => {
-	const { onPickerChange, selectedDate, className, title, smsTimeStats, countryPicker } = props
+	const { onPickerChange, selectedDate, className, title, smsTimeStats, countryPicker, loading = false } = props
 	const [t] = useTranslation()
 
 	const source: TimeStats = useMemo(() => {
@@ -93,7 +94,7 @@ const SmsTimeStats = (props: Props) => {
 			</div>
 
 			<div className='stastics-box py-4 px-6 md:py-8 md:px-12'>
-				<Spin spinning={smsTimeStats.isLoading}>
+				<Spin spinning={smsTimeStats.isLoading || loading}>
 					<div className='flex flex-wrap justify-between w-full'>
 						<h4>{t('loc:Vývoj odoslaných SMS')}</h4>
 					</div>

@@ -196,7 +196,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.DOCUMENTS,
 							label: t('loc:Dokumenty'),
 							onClick: () => navigate(t('paths:documents')),
-							icon: <DocumentsIcon />,
+							icon: <DocumentsIcon className={'text-black'} />,
 							id: PAGE.DOCUMENTS
 						}
 					)

@@ -1,17 +1,18 @@
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Row, Spin } from 'antd'
+import { Col, Modal, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import cx from 'classnames'
 
 // components
+import { getFormValues } from 'redux-form'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // utils
-import { ADMIN_PERMISSIONS, PERMISSION, REVIEW_VERIFICATION_STATUS, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { ADMIN_PERMISSIONS, FORM, PERMISSION, REVIEW_VERIFICATION_STATUS, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys } from '../../utils/helper'
 import { withPermissions } from '../../utils/Permissions'
 
@@ -22,9 +23,13 @@ import { RootState } from '../../reducers'
 import { Columns, IBreadcrumbs } from '../../types/interfaces'
 
 // assets
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 // hooks
 import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
+import ForgottenPasswordForm from '../../components/ForgottenPassword/ForgottenPasswordForm'
+import HeaderSelectCountryForm, { IHeaderCountryForm } from '../../components/HeaderSelectCountryForm'
+import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 
 const getRowId = (verificationStatus: string, id: string) => `${verificationStatus}_${id}`
 
@@ -35,13 +40,14 @@ const DocumentsPage = () => {
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	// TODO: dokumenty
 	const reviews = useSelector((state: RootState) => state.reviews.reviews)
-
+	console.log('selectedCountry', selectedCountry)
 	const [query, setQuery] = useQueryParams({
 		limit: NumberParam(),
 		page: NumberParam(1),
 		order: StringParam('toxicityScore:DESC')
 	})
-
+	const countryFormValues: Partial<IHeaderCountryForm> = useSelector((state: RootState) => getFormValues(FORM.HEADER_COUNTRY_FORM)(state))
+	// console.log('countryFormValues', countryFormValues.countryCode)
 	const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([])
 	const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -116,9 +122,24 @@ const DocumentsPage = () => {
 			}
 		]
 	}
-
+	const [visible, setVisible] = useState(!selectedCountry)
+	const modals = (
+		<Modal
+			className='rounded-fields'
+			title={t('loc:Vyberte krajinu')}
+			centered
+			open={visible}
+			footer={null}
+			onCancel={countryFormValues.countryCode ? () => setVisible(false) : undefined}
+			closeIcon={<CloseIcon />}
+			width={394}
+		>
+			<HeaderSelectCountryForm required onSubmit={(data: IHeaderCountryForm) => dispatch(setSelectedCountry(data.countryCode))} />
+		</Modal>
+	)
 	return (
 		<>
+			{modals}
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>

@@ -45,7 +45,8 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 					cy.wait('@getSalons').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 
 					// filter table
-					cy.clickButton(FILTER_BUTTON_ID, FORM.SALONS_FILTER_ACITVE)
+					// cy.clickButton(FILTER_BUTTON_ID, FORM.SALONS_FILTER_ACITVE)
+					cy.get(`#${FORM.SALONS_FILTER_ACITVE}-${FILTER_BUTTON_ID}`).click({ force: true })
 					// wait for animation
 					cy.wait(1000)
 					cy.selectOptionDropdownCustom(FORM.SALONS_FILTER_ACITVE, 'statuses_published', undefined, true)

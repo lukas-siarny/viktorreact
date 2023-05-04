@@ -21,7 +21,7 @@ import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronLeftIcon } from '../../assets/icons/chevron-left-16.svg'
 
 // utils
-import { D_M_YEAR_FORMAT, ENUMERATIONS_KEYS, FORM, PERMISSION, SMS_UNIT_PRICES_TABLE_ID } from '../../utils/enums'
+import { D_M_YEAR_FORMAT, ENUMERATIONS_KEYS, FORM, PERMISSION, RECHARGE_SMS_CREDIT_BUTTON, SMS_UNIT_PRICES_TABLE_ID } from '../../utils/enums'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
@@ -102,7 +102,7 @@ const SmsCreditAdiminPage = () => {
 	const columns: ColumnProps<TableDataItem>[] = useMemo(() => {
 		return [
 			{
-				title: t('loc:Krajina'),
+				title: <span id={'sortby-country'}>{t('loc:Krajina')}</span>,
 				dataIndex: 'country',
 				key: 'country',
 				width: '25%',
@@ -190,6 +190,7 @@ const SmsCreditAdiminPage = () => {
 						allowed={[PERMISSION.NOTINO]}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Button
+								id={RECHARGE_SMS_CREDIT_BUTTON}
 								onClick={() => {
 									if (hasPermission) {
 										navigate(`${t('paths:sms-credits')}/${t('paths:recharge')}`)

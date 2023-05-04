@@ -17,7 +17,7 @@ import categoriesCRUDTestSuite from '../07-categories/categoriesCRUD.tests'
 import salonTestSuite from '../08-salons/salon.tests'
 import salonsTestSuite from '../08-salons/salons.tests'
 import reviewsTestSuite from '../09-reviews/reviews.tests'
-import smsUnitPricesCRUDTestSuite from '../10-sms-unit-prices/smsUnitPricesCRUD.tests'
+import smsCreditsAdminPageCRUDTestSuite from '../10-sms-credits-admin-page/smsCreditsAdminPageCRUD.tests'
 
 export declare interface ITests {
 	name: SALON_TESTS_SUITS | LIST_OF_TESTS_SUITS
@@ -77,7 +77,7 @@ describe('Dynamic tests for roles', () => {
 						context(`Admin reservations as ${user.role}`, () => reviewsTestSuite(test.actions, user.credentials.user, user.credentials.password))
 						break
 					case LIST_OF_TESTS_SUITS.SMS_UNIT_PRICES_CRUD:
-						context(`SMSUnitPricesCRUD as ${user.role}`, () => smsUnitPricesCRUDTestSuite(test.actions, user.credentials.user, user.credentials.password))
+						context(`SMSUnitPricesCRUD as ${user.role}`, () => smsCreditsAdminPageCRUDTestSuite(test.actions, user.credentials.user, user.credentials.password))
 						break
 					default:
 				}

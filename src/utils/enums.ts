@@ -698,6 +698,14 @@ export const ROW_BUTTON_WITH_ID = (id: string) => `row-btn-with-id_${id}`
 
 export const SMS_UNIT_PRICES_TABLE_ID = 'sms-unit-prices-table'
 
+export const SMS_TIME_STATS_COUNTRY_PICKER_ID = 'sms-time-stats-country-picker'
+
+export const SMS_TIME_STATS_DATE_PICKER_ID = 'sms-time-stats-date-picker'
+
+export const RECHARGE_SMS_CREDIT_CONTINUE_BUTTON = 'recharge-sms-credit-continue-button'
+
+export const RECHARGE_SMS_CREDIT_BUTTON = 'recharge-sms-credit-button'
+
 export const MAX_VALUES_PER_PARAMETER = 20
 
 export enum PARAMETERS_VALUE_TYPES {

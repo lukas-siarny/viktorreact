@@ -34,7 +34,7 @@ export interface IDocumentsPayload {
 }
 
 export const getDocuments =
-	(queryParams: any): ThunkResult<Promise<IDocumentsPayload>> =>
+	(queryParams?: any): ThunkResult<Promise<IDocumentsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IDocumentsPayload
 		try {
@@ -45,22 +45,25 @@ export const getDocuments =
 				documents: [
 					{
 						id: '1',
-						name: 'John'
+						name: 'Podmienky použitia',
+						updatedAt: '2022-11-17T15:07:26.789Z'
 					},
 					{
 						id: '2',
-						name: 'Doe'
+						name: 'Podmienky rezervácie',
+						updatedAt: '2022-11-17T15:07:26.789Z'
 					},
 					{
 						id: '3',
-						name: 'Smith'
+						name: 'Vseobecne podmienky',
+						updatedAt: '2022-11-17T15:07:26.789Z'
 					}
 				]
 			}
-
-			const tableData = map(data.documents, (employee) => ({
-				...employee,
-				key: employee.id
+			// TODO: naparovat s BE
+			const tableData = map(data.documents, (document) => ({
+				...document,
+				key: document.id
 			}))
 
 			payload = {

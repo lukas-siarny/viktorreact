@@ -20,7 +20,7 @@ export const initState = {
 // eslint-disable-next-line default-param-last
 export default (state = initState, action: ICustomerActions) => {
 	switch (action.type) {
-		// Customers
+		// Documents
 		case DOCUMENTS.DOCUMENTS_LOAD_START:
 			return {
 				...state,
@@ -45,7 +45,7 @@ export default (state = initState, action: ICustomerActions) => {
 					data: action.payload.data
 				}
 			}
-		// Customer
+		// Document
 		case DOCUMENT.DOCUMENT_LOAD_START:
 			return {
 				...state,

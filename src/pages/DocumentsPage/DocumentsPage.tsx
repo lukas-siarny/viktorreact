@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Col, Modal, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
@@ -30,6 +30,7 @@ import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryPa
 import ForgottenPasswordForm from '../../components/ForgottenPassword/ForgottenPasswordForm'
 import HeaderSelectCountryForm, { IHeaderCountryForm } from '../../components/HeaderSelectCountryForm'
 import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
+import { getDocuments } from '../../reducers/documents/documentActions'
 
 const getRowId = (verificationStatus: string, id: string) => `${verificationStatus}_${id}`
 
@@ -39,8 +40,8 @@ const DocumentsPage = () => {
 	// TODO: logika na otvorenie modalu so selectom krajiny ak nie je picknuta
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	// TODO: dokumenty
-	const reviews = useSelector((state: RootState) => state.reviews.reviews)
-	console.log('selectedCountry', selectedCountry)
+	const documents = useSelector((state: RootState) => state.documents.documents)
+	console.log('documents', documents)
 	const [query, setQuery] = useQueryParams({
 		limit: NumberParam(),
 		page: NumberParam(1),
@@ -51,7 +52,7 @@ const DocumentsPage = () => {
 	const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([])
 	const [isSubmitting, setIsSubmitting] = useState(false)
 
-	const isLoading = isSubmitting || reviews?.isLoading
+	const isLoading = isSubmitting || documents?.isLoading
 
 	const fetchDocuments = useCallback(async () => {
 		// TODO: get action
@@ -76,6 +77,10 @@ const DocumentsPage = () => {
 		}
 		setQuery(newQuery)
 	}
+
+	useEffect(() => {
+		dispatch(getDocuments())
+	}, [])
 
 	// Delete document
 	// const deleteReview = async (reviewID: string) => {
@@ -151,16 +156,17 @@ const DocumentsPage = () => {
 								className='table-fixed table-expandable'
 								onChange={onChangeTable}
 								columns={getColumns()}
-								dataSource={reviews?.data?.reviews}
-								rowKey={(record) => getRowId(record.verificationStatus, record.id)}
+								dataSource={documents.data.documents}
+								// rowKey={(record) => getRowId(record.verificationStatus, record.id)}
 								twoToneRows
-								pagination={{
-									pageSize: reviews?.data?.pagination?.limit,
-									total: reviews?.data?.pagination?.totalCount,
-									current: reviews?.data?.pagination?.page,
-									onChange: onChangePagination,
-									disabled: reviews?.isLoading
-								}}
+								// TODO: napatovat na backend
+								// pagination={{
+								// 	pageSize: reviews?.data?.pagination?.limit,
+								// 	total: reviews?.data?.pagination?.totalCount,
+								// 	current: reviews?.data?.pagination?.page,
+								// 	onChange: onChangePagination,
+								// 	disabled: reviews?.isLoading
+								// }}
 							/>
 						</Spin>
 					</div>

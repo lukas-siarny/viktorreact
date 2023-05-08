@@ -7,7 +7,7 @@ export enum LIST_OF_TESTS_SUITS {
 	CATEGORY_PARAMETERS_CRUD = 'categoryParameterCRUD',
 	SUPPORT_CRUD = 'supportCRUD',
 	LANGUAGES_CRUD = 'languagesCRUD',
-	SMS_UNIT_PRICES_CRUD = 'smsUnitPricesCRUD',
+	ADMIN_SMS_CREDIT = 'adminSmsCredit',
 	SALON = 'salon',
 	SALONS = 'salons',
 	REVIEWS = 'reviews',
@@ -18,9 +18,9 @@ export enum SALON_TESTS_SUITS {
 	BILLING_INFORMATION = 'billingInformation',
 	CUSTOMER = 'customer',
 	EMPLOYEE = 'employee',
-	INDUSTRIES_AND_SERVICES = 'Industries and services',
+	INDUSTRIES_AND_SERVICES = 'industriesAndServices',
 	RESERVATIONS = 'Reservations',
-	SMS_CREDIT = 'SMS credit'
+	SMS_CREDIT = 'SmsCredit'
 }
 
 export enum CRUD_OPERATIONS {

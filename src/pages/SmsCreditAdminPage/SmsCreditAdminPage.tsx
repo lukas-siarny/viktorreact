@@ -21,7 +21,7 @@ import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronLeftIcon } from '../../assets/icons/chevron-left-16.svg'
 
 // utils
-import { D_M_YEAR_FORMAT, ENUMERATIONS_KEYS, FORM, PERMISSION, RECHARGE_SMS_CREDIT_BUTTON, SMS_UNIT_PRICES_TABLE_ID } from '../../utils/enums'
+import { D_M_YEAR_FORMAT, ENUMERATIONS_KEYS, FORM, PERMISSION, RECHARGE_SMS_CREDIT_BUTTON_ID, SMS_UNIT_PRICES_TABLE_ID } from '../../utils/enums'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
@@ -190,7 +190,7 @@ const SmsCreditAdiminPage = () => {
 						allowed={[PERMISSION.NOTINO]}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Button
-								id={RECHARGE_SMS_CREDIT_BUTTON}
+								id={RECHARGE_SMS_CREDIT_BUTTON_ID}
 								onClick={() => {
 									if (hasPermission) {
 										navigate(`${t('paths:sms-credits')}/${t('paths:recharge')}`)

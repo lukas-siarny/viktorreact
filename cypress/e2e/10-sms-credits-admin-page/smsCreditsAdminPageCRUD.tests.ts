@@ -5,7 +5,7 @@ import smsUnitPrices from '../../fixtures/smsUnitPrices.json'
 import smsCredit from '../../fixtures/smsCredit.json'
 
 // enums
-import { CREATE_BUTTON_ID, FILTER_BUTTON_ID, FORM, RECHARGE_SMS_CREDIT_BUTTON, RECHARGE_SMS_CREDIT_CONTINUE_BUTTON, SMS_TIME_STATS_COUNTRY_PICKER_ID, SMS_TIME_STATS_DATE_PICKER_ID, SMS_UNIT_PRICES_TABLE_ID, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
+import { CREATE_BUTTON_ID, FILTER_BUTTON_ID, FORM, RECHARGE_SMS_CREDIT_BUTTON_ID, RECHARGE_SMS_CREDIT_CONTINUE_BUTTON_ID, SMS_TIME_STATS_COUNTRY_PICKER_ID, SMS_TIME_STATS_DATE_PICKER_ID, SMS_UNIT_PRICES_TABLE_ID, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS } from '../../enums'
 
 const smsCreditsAdminPageCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
@@ -233,7 +233,7 @@ const smsCreditsAdminPageCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: st
 		it('Create transaction', () => {
 			cy.visit('/sms-credits')
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
-				cy.get(`#${RECHARGE_SMS_CREDIT_BUTTON}`).click()
+				cy.get(`#${RECHARGE_SMS_CREDIT_BUTTON_ID}`).click()
 				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
 					cy.intercept({
 						method: 'GET',
@@ -254,7 +254,7 @@ const smsCreditsAdminPageCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: st
 						cy.get('.noti-table .ant-table-thead .ant-table-selection-column .ant-checkbox-input').click({ force: true })
 						// wait for the animation
 						cy.wait(1000)
-						cy.get(`#${RECHARGE_SMS_CREDIT_CONTINUE_BUTTON}`).click()
+						cy.get(`#${RECHARGE_SMS_CREDIT_CONTINUE_BUTTON_ID}`).click()
 						cy.setInputValue(FORM.RECHARGE_SMS_CREDIT, 'amount', smsCredit.update.amount)
 						cy.setInputValue(FORM.RECHARGE_SMS_CREDIT, 'transactionNote', smsCredit.update.transactionNote)
 						cy.clickButton(SUBMIT_BUTTON_ID, FORM.SMS_UNIT_PRICES_FORM)

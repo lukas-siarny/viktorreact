@@ -1,7 +1,7 @@
 import { loginViaApi } from '../../support/e2e'
 
 // enums
-import { FORM, SUBMIT_BUTTON_ID, FILTER_BUTTON_ID, IMPORT_BUTTON_ID } from '../../../src/utils/enums'
+import { FORM, SUBMIT_BUTTON_ID, FILTER_BUTTON_ID, IMPORT_BUTTON_ID, GENERATE_REPORT_BUTTON_ID } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS } from '../../enums'
 
 const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
@@ -95,6 +95,42 @@ const salonsTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: 
 						})
 					} else {
 						cy.clickButton(IMPORT_BUTTON_ID(), FORM.SALONS_FILTER_ACITVE)
+						cy.checkForbiddenModal()
+					}
+				})
+			} else {
+				// check redirect to 403 not allowed page
+				cy.location('pathname').should('eq', '/403')
+			}
+		})
+
+		it('Generate reports', () => {
+			cy.intercept({
+				method: 'GET',
+				pathname: '/api/b2b/admin/salons'
+			}).as('getSalons')
+			cy.intercept({
+				method: 'GET',
+				pathname: '/api/b2b/admin/reports/salons'
+			}).as('generateReport')
+			cy.visit('/salons')
+			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
+				cy.wait('@getSalons').then((interceptionGetSalons: any) => {
+					// check status code
+					expect(interceptionGetSalons.response.statusCode).to.equal(200)
+					cy.clickButton(GENERATE_REPORT_BUTTON_ID, FORM.SALONS_FILTER_ACITVE)
+					if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+						// wait for animation
+						cy.wait(2000)
+						cy.selectOptionDropdownCustom(FORM.SALONS_REPORT, 'countryCode', undefined, true)
+						cy.clickButton(SUBMIT_BUTTON_ID, FORM.SALONS_REPORT)
+						cy.wait('@generateReport').then((interception: any) => {
+							// check status code
+							expect(interception.response.statusCode).to.equal(200)
+							// check conf toast message
+							cy.checkSuccessToastMessage()
+						})
+					} else {
 						cy.checkForbiddenModal()
 					}
 				})

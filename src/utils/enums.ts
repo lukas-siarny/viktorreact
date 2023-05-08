@@ -692,7 +692,7 @@ export const CREATE_CUSTOMER_BUTTON_ID = 'create-customer-btn'
 
 export const IMPORT_BUTTON_ID = (suffix?: string) => `import-btn${suffix ? `-${suffix}` : ''}`
 
-export const DOWNLOAD_BUTTON_ID = 'download-btn'
+export const GENERATE_REPORT_BUTTON_ID = 'generate-report-button'
 
 export const ROW_BUTTON_WITH_ID = (id: string) => `row-btn-with-id_${id}`
 
@@ -702,9 +702,11 @@ export const SMS_TIME_STATS_COUNTRY_PICKER_ID = 'sms-time-stats-country-picker'
 
 export const SMS_TIME_STATS_DATE_PICKER_ID = 'sms-time-stats-date-picker'
 
-export const RECHARGE_SMS_CREDIT_CONTINUE_BUTTON = 'recharge-sms-credit-continue-button'
+export const RECHARGE_SMS_CREDIT_CONTINUE_BUTTON_ID = 'recharge-sms-credit-continue-button'
 
-export const RECHARGE_SMS_CREDIT_BUTTON = 'recharge-sms-credit-button'
+export const RECHARGE_SMS_CREDIT_BUTTON_ID = 'recharge-sms-credit-button'
+
+export const DOWNLOAD_BUTTON_ID = 'download-button'
 
 export const MAX_VALUES_PER_PARAMETER = 20
 

@@ -1,5 +1,5 @@
 import { CRUD_OPERATIONS, CUSTOMER_ID, SALON_ID } from '../../enums'
-import { CREATE_CUSTOMER_BUTTON_ID, DELETE_BUTTON_ID, FORM, PAGE, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
+import { CREATE_CUSTOMER_BUTTON_ID, DELETE_BUTTON_ID, DOWNLOAD_BUTTON_ID, FORM, IMPORT_BUTTON_ID, PAGE, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 
 import { generateRandomInt, generateRandomString } from '../../support/helpers'
 
@@ -115,6 +115,44 @@ const customerTestSuite = (actions: CRUD_OPERATIONS[]): void => {
 				}
 			})
 		})
+	})
+
+	it('Import customers', () => {
+		cy.intercept({
+			method: 'GET',
+			pathname: '/api/b2b/admin/customers'
+		}).as('getCustomers')
+		cy.intercept({
+			method: 'POST',
+			pathname: `/api/b2b/admin/imports/salons/{salonID}/customers`
+		}).as('importCustomers')
+		cy.visit('/salons')
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.READ)) {
+			cy.wait('@getCustomers').then((interceptionGetSalons: any) => {
+				// check status code
+				expect(interceptionGetSalons.response.statusCode).to.equal(200)
+				cy.clickButton(IMPORT_BUTTON_ID(), FORM.CUSTOMERS_FILTER)
+				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+					// wait for animation
+					cy.wait(2000)
+					cy.selectOptionDropdownCustom(undefined, 'noti-customer-template-select', undefined, true)
+					cy.get(`#${DOWNLOAD_BUTTON_ID}`).click()
+					cy.uploadFile('file', '../files/basicsalons.xlsx', FORM.IMPORT_FORM)
+					cy.clickButton(SUBMIT_BUTTON_ID, FORM.IMPORT_FORM)
+					cy.wait('@importCustomers').then((interception: any) => {
+						// check status code
+						expect(interception.response.statusCode).to.equal(200)
+						// check conf toast message
+						cy.checkSuccessToastMessage()
+					})
+				} else {
+					cy.checkForbiddenModal()
+				}
+			})
+		} else {
+			// check redirect to 403 not allowed page
+			cy.location('pathname').should('eq', '/403')
+		}
 	})
 }
 

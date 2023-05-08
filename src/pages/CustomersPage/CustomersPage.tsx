@@ -15,7 +15,7 @@ import UserAvatar from '../../components/AvatarComponents'
 import ImportForm from '../../components/ImportForm'
 
 // utils
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, REQUEST_STATUS, TEMPLATE_OPTIONS } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, REQUEST_STATUS, TEMPLATE_OPTIONS, DOWNLOAD_BUTTON_ID } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { postReq } from '../../utils/request'
@@ -29,8 +29,6 @@ import { IBreadcrumbs, ISearchFilter, SalonSubPageProps, Columns, IDataUploadFor
 
 // hooks
 import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
-
-const { Option } = Select
 
 const CustomersPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
@@ -201,6 +199,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 								/>
 							</div>
 							<Button
+								id={DOWNLOAD_BUTTON_ID}
 								className={'noti-btn'}
 								href={`${process.env.PUBLIC_URL}/templates/${templateValue?.value}`}
 								target='_blank'

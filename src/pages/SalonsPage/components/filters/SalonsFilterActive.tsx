@@ -35,11 +35,11 @@ import {
 	FILTER_ENTITY,
 	CHANGE_DEBOUNCE_TIME,
 	IMPORT_BUTTON_ID,
-	DOWNLOAD_BUTTON_ID,
 	STRINGS,
 	SALON_FILTER_RS,
 	SALON_FILTER_RS_AVAILABLE_ONLINE,
-	VALIDATION_MAX_LENGTH
+	VALIDATION_MAX_LENGTH,
+	GENERATE_REPORT_BUTTON_ID
 } from '../../../../utils/enums'
 import {
 	getLinkWithEncodedBackUrl,
@@ -249,7 +249,7 @@ const SalonsFilterActive = (props: Props) => {
 									htmlType='button'
 									className={'noti-btn w-full'}
 									icon={<FilesIcon />}
-									id={formFieldID(FORM.SALONS_FILTER_ACITVE, DOWNLOAD_BUTTON_ID)}
+									id={formFieldID(FORM.SALONS_FILTER_ACITVE, GENERATE_REPORT_BUTTON_ID)}
 								>
 									{STRINGS(t).generate(t('loc:report'))}
 								</Button>

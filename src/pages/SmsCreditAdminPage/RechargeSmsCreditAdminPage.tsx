@@ -21,7 +21,7 @@ import { ReactComponent as ChevronRightIcon } from '../../assets/icons/chevron-r
 import { ReactComponent as CoinsIcon } from '../../assets/icons/coins.svg'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, LANGUAGE, PERMISSION, RECHARGE_SMS_CREDIT_CONTINUE_BUTTON, SALON_CREATE_TYPE, SALON_FILTER_STATES } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, LANGUAGE, PERMISSION, RECHARGE_SMS_CREDIT_CONTINUE_BUTTON_ID, SALON_CREATE_TYPE, SALON_FILTER_STATES } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { formatPrice, normalizeDirectionKeys } from '../../utils/helper'
 import { getSalonTagSourceType } from '../SalonsPage/components/salonUtils'
@@ -359,7 +359,7 @@ const RechargeSmsCreditAdminPage = () => {
 											})}
 										</p>
 										<Button
-											id={RECHARGE_SMS_CREDIT_CONTINUE_BUTTON}
+											id={RECHARGE_SMS_CREDIT_CONTINUE_BUTTON_ID}
 											type={'primary'}
 											className={'noti-btn'}
 											htmlType={'button'}

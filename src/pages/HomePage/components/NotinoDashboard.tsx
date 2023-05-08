@@ -593,23 +593,31 @@ const NotinoDashboard: FC = () => {
 							{lineContent(
 								t('loc:Vývoj salónov - mesačný'),
 								monthStats,
-								timeStatsFilter((date) => {
-									if (date) {
-										setMonthStatsDate(date)
-										dispatch(getSalonsMonthStats(Number(date.year()), Number(date.month() + 1)))
-									}
-								}, 'MMMM - YYYY', SALON_STATS_MONTHLY_ID),
+								timeStatsFilter(
+									(date) => {
+										if (date) {
+											setMonthStatsDate(date)
+											dispatch(getSalonsMonthStats(Number(date.year()), Number(date.month() + 1)))
+										}
+									},
+									'MMMM - YYYY',
+									SALON_STATS_MONTHLY_ID
+								),
 								salonColumns(monthStats.data?.labels, monthStats.data?.breakIndex)
 							)}
 							{lineContent(
 								t('loc:Vývoj salónov - ročný'),
 								annualStats,
-								timeStatsFilter((date, dateString) => {
-									if (date) {
-										setAnnualStatsDate(date)
-									}
-									dispatch(getSalonsAnnualStats(Number(dateString)))
-								}, undefined, SALON_STATS_ANNUAL_ID),
+								timeStatsFilter(
+									(date, dateString) => {
+										if (date) {
+											setAnnualStatsDate(date)
+										}
+										dispatch(getSalonsAnnualStats(Number(dateString)))
+									},
+									undefined,
+									SALON_STATS_ANNUAL_ID
+								),
 								salonColumns(annualStats.data?.labels, annualStats.data?.breakIndex)
 							)}
 						</>

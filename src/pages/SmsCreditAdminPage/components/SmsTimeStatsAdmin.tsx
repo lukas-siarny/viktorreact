@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
 import { useDispatch, useSelector } from 'react-redux'
+import cx from 'class'
 
 // assets
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
@@ -56,14 +57,13 @@ const SmsTimeStatsAdmin: FC<Props> = (props) => {
 			className={'mt-6 mb-16 py-0'}
 			countryPicker={
 				<SelectField
-					id={SMS_TIME_STATS_COUNTRY_PICKER_ID}
 					input={{ value: smsStatsCountryCode, onChange: (value: any) => setSmsStatsCountryCode(value) } as any}
-					meta={{} as any}
+					meta={{ form: SMS_TIME_STATS_COUNTRY_PICKER_ID } as any}
 					optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
 					name={'countryCode'}
 					placeholder={t('loc:Krajina')}
 					size={'middle'}
-					className={'mb-0 pb-0 w-48'}
+					className={cx('mb-0 pb-0 w-48')}
 					options={countries?.enumerationsOptions}
 					loading={countries?.isLoading}
 					disabled={countries?.isLoading}

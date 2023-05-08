@@ -2,7 +2,7 @@ import { CRUD_OPERATIONS, LIST_OF_TESTS_SUITS, SALON_TESTS_SUITS } from '../enum
 import { PERMISSION, SALON_ROLES } from '../../src/utils/enums'
 
 // eslint-disable-next-line import/no-cycle
-import { ITestConfig } from '../e2e/11-roles/roles.cy'
+import { ITestConfig } from '../e2e/13-roles/roles.cy'
 
 const data: ITestConfig[] = [
 	{
@@ -54,6 +54,10 @@ const data: ITestConfig[] = [
 			},
 			{
 				name: LIST_OF_TESTS_SUITS.ADMIN_RESERVATIONS,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.ADMIN_DASHBOARD,
 				actions: [CRUD_OPERATIONS.ALL]
 			},
 			{
@@ -145,6 +149,10 @@ const data: ITestConfig[] = [
 				actions: [CRUD_OPERATIONS.ALL]
 			},
 			{
+				name: LIST_OF_TESTS_SUITS.ADMIN_DASHBOARD,
+				actions: [CRUD_OPERATIONS.ALL]
+			},
+			{
 				name: LIST_OF_TESTS_SUITS.SALON,
 				actions: [CRUD_OPERATIONS.ALL]
 			},
@@ -201,6 +209,10 @@ const data: ITestConfig[] = [
 			},
 			{
 				name: LIST_OF_TESTS_SUITS.ADMIN_RESERVATIONS,
+				actions: []
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.ADMIN_DASHBOARD,
 				actions: []
 			},
 			{
@@ -288,6 +300,10 @@ const data: ITestConfig[] = [
 			},
 			{
 				name: LIST_OF_TESTS_SUITS.ADMIN_RESERVATIONS,
+				actions: []
+			},
+			{
+				name: LIST_OF_TESTS_SUITS.ADMIN_DASHBOARD,
 				actions: []
 			},
 			{

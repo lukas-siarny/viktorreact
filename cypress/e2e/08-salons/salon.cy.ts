@@ -3,7 +3,7 @@ import salonTestSuite from './salon.tests'
 
 import { CRUD_OPERATIONS, SALON_TESTS_SUITS } from '../../enums'
 
-import { ITests } from '../11-roles/roles.cy'
+import { ITests } from '../13-roles/roles.cy'
 import { PERMISSION } from '../../../src/utils/enums'
 import salonsTestSuite from './salons.tests'
 

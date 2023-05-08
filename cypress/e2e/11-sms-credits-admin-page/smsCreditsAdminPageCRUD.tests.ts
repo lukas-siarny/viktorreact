@@ -48,7 +48,7 @@ const smsCreditsAdminPageCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: st
 					// NOTE: SMS unit price cannot exist in DB for specified date
 					const now = dayjs()
 					const dateValue = now.add(1, 'month').format('YYYY-MM')
-					cy.setDateInputValue(FORM.SMS_UNIT_PRICES_FORM, 'validFrom', dateValue, now.year() === 11)
+					cy.setDateInputValue(FORM.SMS_UNIT_PRICES_FORM, 'validFrom', dateValue, now.month() === 11)
 					cy.clickButton(SUBMIT_BUTTON_ID, FORM.SMS_UNIT_PRICES_FORM)
 					cy.wait('@createSmsUnitPrice').then((interceptionCreate: any) => {
 						// check status code of request
@@ -103,7 +103,7 @@ const smsCreditsAdminPageCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: st
 								// NOTE: SMS unit price cannot exist in DB for specified date
 								const now = dayjs()
 								const dateValueUpdate = now.add(2, 'month').format('YYYY-MM')
-								cy.setDateInputValue(FORM.SMS_UNIT_PRICES_FORM, 'validFrom', dateValueUpdate, now.year() >= 10)
+								cy.setDateInputValue(FORM.SMS_UNIT_PRICES_FORM, 'validFrom', dateValueUpdate, now.month() >= 10)
 								cy.clickButton(SUBMIT_BUTTON_ID, FORM.SMS_UNIT_PRICES_FORM)
 								cy.wait('@updateSmsUnitPrice').then((interceptionCreate: any) => {
 									// check status code of request

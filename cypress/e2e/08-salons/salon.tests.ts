@@ -2,7 +2,7 @@ import { loginViaApi } from '../../support/e2e'
 import { generateRandomString } from '../../support/helpers'
 
 // eslint-disable-next-line import/no-cycle
-import { ITests } from '../11-roles/roles.cy'
+import { ITests } from '../13-roles/roles.cy'
 
 // fixtures
 import salon from '../../fixtures/salon.json'

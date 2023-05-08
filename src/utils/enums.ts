@@ -708,6 +708,12 @@ export const RECHARGE_SMS_CREDIT_BUTTON_ID = 'recharge-sms-credit-button'
 
 export const DOWNLOAD_BUTTON_ID = 'download-button'
 
+export const PUBLISHED_PREMIUM_SALONS_BAR_ID = 'published-premium-salons-bar'
+
+export const SALON_STATS_MONTHLY_ID = 'salon-stats-monthly'
+
+export const SALON_STATS_ANNUAL_ID = 'salon-stats-annual'
+
 export const MAX_VALUES_PER_PARAMETER = 20
 
 export enum PARAMETERS_VALUE_TYPES {

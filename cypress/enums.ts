@@ -7,11 +7,12 @@ export enum LIST_OF_TESTS_SUITS {
 	CATEGORY_PARAMETERS_CRUD = 'categoryParameterCRUD',
 	SUPPORT_CRUD = 'supportCRUD',
 	LANGUAGES_CRUD = 'languagesCRUD',
-	ADMIN_SMS_CREDIT = 'adminSmsCredit',
 	SALON = 'salon',
 	SALONS = 'salons',
 	REVIEWS = 'reviews',
-	ADMIN_RESERVATIONS = 'adminReservations'
+	ADMIN_RESERVATIONS = 'adminReservations',
+	ADMIN_SMS_CREDIT = 'adminSmsCredit',
+	ADMIN_DASHBOARD = 'adminDashboard'
 }
 
 export enum SALON_TESTS_SUITS {

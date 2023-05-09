@@ -26,7 +26,10 @@ import { getSupportContacts } from '../../reducers/supportContacts/supportContac
 import { IBreadcrumbs, Columns } from '../../types/interfaces'
 
 // hooks
-import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
+
+// schema
+import { supportContactsPageURLQueryParams } from '../../schemas/queryParams'
 
 const permissions: PERMISSION[] = [PERMISSION.ENUM_EDIT]
 
@@ -37,9 +40,8 @@ const SupportContactsPage = () => {
 	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
 	const navigate = useNavigate()
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		order: StringParam('country:ASC')
+	const [query, setQuery] = useQueryParams(supportContactsPageURLQueryParams, {
+		order: 'country:ASC'
 	})
 
 	useEffect(() => {

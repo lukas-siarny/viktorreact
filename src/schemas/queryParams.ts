@@ -214,7 +214,7 @@ export const employeesPageURLQueryParams = employeesQueryParamsSchema.omit({ sal
 	employeeState: z.nativeEnum(EMPLOYEES_TAB_KEYS).catch(EMPLOYEES_TAB_KEYS.ACTIVE)
 })
 
-export type IEmployeesPageURLQueryParam = z.infer<typeof employeesPageURLQueryParams>
+export type IEmployeesPageURLQueryParams = z.infer<typeof employeesPageURLQueryParams>
 
 /**
  * Customers
@@ -245,7 +245,85 @@ export type IGetServicesQueryParams = z.infer<typeof servicesQueryParamsSchema>
 // url query params
 export const servicesPageURLQueryParams = servicesQueryParamsSchema.omit({ salonID: true })
 
-export type IServicesPageURLQueryParam = z.infer<typeof servicesPageURLQueryParams>
+export type IServicesPageURLQueryParams = z.infer<typeof servicesPageURLQueryParams>
+
+/**
+ * Support contacts
+ */
+// actions query params
+const supportContactsQueryParamsSchema = z.object({
+	countryCode: twoCharsConstraint.nullish()
+})
+
+export type IGetSupportContactsQueryParams = z.infer<typeof supportContactsQueryParamsSchema>
+
+// url query params
+export const supportContactsPageURLQueryParams = z.object({
+	search: z.string().nullish(),
+	order: z.string().nullish()
+})
+
+export type ISupportContactsPageURLQueryParams = z.infer<typeof supportContactsPageURLQueryParams>
+
+/**
+ * Languages
+ */
+// url query params
+export const languagesPageURLQueryParams = z.object({
+	search: z.string().nullish(),
+	order: z.string().nullish()
+})
+
+export type ILanguagesPageURLQueryParams = z.infer<typeof languagesPageURLQueryParams>
+
+/**
+ * Cosmetics
+ */
+// actions query params
+const cosmeticsQueryParamsSchema = searchableSchema.omit({ order: true })
+
+export type IGetCosmeticsQueryParams = z.infer<typeof cosmeticsQueryParamsSchema>
+
+// url query params
+export const cosmeticsPageURLQueryParams = cosmeticsQueryParamsSchema
+
+export type ICosmeticsPageURLQueryParams = z.infer<typeof cosmeticsPageURLQueryParams>
+
+/**
+ * Category params
+ */
+// url query params
+export const categoryParamsPageURLQueryParams = z.object({
+	search: z.string().nullish(),
+	order: z.string().nullish()
+})
+
+export type ICategoryParamsPageURLQueryParams = z.infer<typeof categoryParamsPageURLQueryParams>
+
+/**
+ * Users
+ */
+// actions query params
+const usersQueryParamsSchema = searchableSchema.extend({
+	roleID: uuidConstraint.nullish()
+})
+
+export type IGetUsersQueryParams = z.infer<typeof usersQueryParamsSchema>
+
+// url query params
+export const usersPageURLQueryParams = usersQueryParamsSchema
+
+export type IUsersPageURLQueryParams = z.infer<typeof usersPageURLQueryParams>
+
+/**
+ * Create password route
+ */
+// url query params
+export const createPasswordPageURLQueryParamsSchema = z.object({
+	t: z.string().nullish()
+})
+
+export type ICreatePasswordPageURLQueryParams = z.infer<typeof createPasswordPageURLQueryParamsSchema>
 
 /**
  * Sms credits
@@ -293,7 +371,7 @@ export const reviewsPageURLQueryParams = reviewsQueryParamsSchema.omit({ deleted
 	reviewState: z.nativeEnum(REVIEWS_TAB_KEYS).catch(REVIEWS_TAB_KEYS.PUBLISHED)
 })
 
-export type IReviewsPageURLQueryParam = z.infer<typeof reviewsPageURLQueryParams>
+export type IReviewsPageURLQueryParams = z.infer<typeof reviewsPageURLQueryParams>
 
 /**
  * Specalist contacts
@@ -303,4 +381,4 @@ export const specialistContactsPageURLQueryParams = z.object({
 	order: z.string().nullish()
 })
 
-export type ISpecialistContactsPageURLQueryParam = z.infer<typeof specialistContactsPageURLQueryParams>
+export type ISpecialistContactsPageURLQueryParams = z.infer<typeof specialistContactsPageURLQueryParams>

@@ -91,53 +91,7 @@ export type ServiceCategoryParameter = ServiceType['serviceCategoryParameter']
 
 export type ServiceDetail = Paths.GetApiB2BAdminServicesServiceId.Responses.$200['service']
 
-export type FormPriceAndDurationData = {
-	durationFrom?: number | null
-	durationTo?: number | null
-	priceFrom?: number | null
-	priceTo?: number | null
-	variableDuration?: boolean
-	variablePrice?: boolean
-}
-
-export type EmployeeServiceData = {
-	id: string
-	employee: {
-		id: string
-		name?: string
-		image?: string
-		fallbackImage?: string
-		email?: string
-		inviteEmail?: string
-		hasActiveAccount?: boolean
-	}
-	name?: string
-	industry?: string
-	category?: string
-	image?: string
-	useCategoryParameter: boolean
-	employeePriceAndDurationData?: FormPriceAndDurationData
-	salonPriceAndDurationData?: FormPriceAndDurationData
-	hasOverriddenPricesAndDurationData?: boolean
-	serviceCategoryParameter?: {
-		id: string
-		name?: string
-		employeePriceAndDurationData?: FormPriceAndDurationData
-		salonPriceAndDurationData: FormPriceAndDurationData
-		hasOverriddenPricesAndDurationData?: boolean
-	}[]
-	serviceCategoryParameterType?: PARAMETER_TYPE
-	serviceCategoryParameterName?: string
-	serviceCategoryParameterId?: string
-}
-
-export type IEmployeeServiceEditForm = EmployeeServiceData & {}
-
-export interface IEditUserRoleForm {
-	roleID: string
-}
-
-// type of BE opening hours data
+// BE opening hours type
 export type RawOpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
 
 type OpeningHoursDay = NonNullable<RawOpeningHours>[0]['day']
@@ -158,37 +112,6 @@ export interface AutocompleteLabelInValue {
 	key: string
 	label: string | null
 	value: string | null
-}
-export interface IParameterValue {
-	id: string | undefined
-	name: string | undefined
-	durationFrom: number | null | undefined
-	durationTo: number | null | undefined
-	variableDuration: boolean
-	priceFrom: number | null | undefined
-	priceTo: number | null | undefined
-	variablePrice: boolean
-	useParameter: boolean
-}
-export interface IServiceForm {
-	id: string
-	durationFrom?: number
-	durationTo?: number
-	variableDuration: boolean
-	priceFrom?: number | null
-	priceTo?: number | null
-	variablePrice: boolean
-	useCategoryParameter: boolean
-	serviceCategoryParameterType?: PARAMETER_TYPE
-	serviceCategoryParameterName?: string
-	serviceCategoryParameter: IParameterValue[]
-	employee?: string[]
-	employees: EmployeeServiceData[]
-	settings: {
-		enabledB2cReservations: boolean
-		autoApproveReservations: boolean
-	}
-	descriptionLocalizations: NameLocalizationsItem[]
 }
 
 export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
@@ -413,8 +336,8 @@ export interface IReservationSystemSettingsForm {
 	}
 }
 
-export type NameLocalizationsItem = {
-	language: string
+export type NameLocalizationsItem<T = string> = {
+	language: T
 	value: string | null
 }
 

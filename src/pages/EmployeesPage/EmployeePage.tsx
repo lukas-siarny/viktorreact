@@ -313,8 +313,6 @@ const EmployeePage = (props: Props) => {
 					firstName: employeesData.employee.firstName,
 					lastName: employeesData.employee.lastName,
 					email: employeesData.employee.email,
-					phonePrefixCountryCode: employeesData.employee.phonePrefixCountryCode || salon?.data?.address?.countryCode,
-					phone: employeesData.employee.phone,
 					avatar: employeesData.employee?.image
 						? [
 								{
@@ -324,7 +322,7 @@ const EmployeePage = (props: Props) => {
 								}
 						  ]
 						: [],
-					phone: employeesData.employee.user?.phone,
+					phone: employeesData.employee.phonePrefixCountryCode || employeesData.employee.user?.phone,
 					phonePrefixCountryCode:
 						employeesData.employee.user?.phonePrefixCountryCode || salon?.data?.companyContactPerson?.phonePrefixCountryCode || salon?.data?.address?.countryCode,
 					deletedAt: employeesData.employee.deletedAt,
@@ -335,7 +333,7 @@ const EmployeePage = (props: Props) => {
 				})
 			)
 		}
-	}, [dispatch, employeeID, salonID, navigate, salon?.data?.address?.countryCode])
+	}, [dispatch, employeeID, salonID, navigate, salon?.data?.companyContactPerson?.phonePrefixCountryCode, salon?.data?.address?.countryCode])
 
 	useEffect(() => {
 		fetchEmployeeAndServicesData()

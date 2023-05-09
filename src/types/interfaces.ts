@@ -36,7 +36,7 @@ import { TooltipPlacement } from 'antd/es/tooltip'
 // schema
 import { ICalendarEventForm } from '../schemas/event'
 import { ICalendarReservationForm } from '../schemas/reservation'
-import { ICalendarPageURLQueryParams, INotinoReservationsPageURLQueryParams, IRechargeSmsCreditAdminPageURLQueryParams, ISalonReservationsPageURLQueryParams, IServicesPageURLQueryParam } from '../schemas/queryParams'
+import { ICalendarPageURLQueryParams, INotinoReservationsPageURLQueryParams, IRechargeSmsCreditAdminPageURLQueryParams, IReviewsPageURLQueryParam, ISalonReservationsPageURLQueryParams, IServicesPageURLQueryParam } from '../schemas/queryParams'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -125,13 +125,7 @@ export interface IEventTypeFilterForm {
 	eventType: CALENDAR_EVENT_TYPE
 }
 
-export interface IReviewsFilter {
-	search?: string
-	verificationStatus?: REVIEW_VERIFICATION_STATUS
-	salonCountryCode?: string
-	toxicityScoreFrom?: number
-	toxicityScoreTo?: number
-}
+export type IReviewsFilter = Pick<IReviewsPageURLQueryParam, 'search' | 'verificationStatus' | 'salonCountryCode' | 'toxicityScoreFrom' | 'toxicityScoreTo'>
 
 export interface IJwtPayload {
 	aud: string

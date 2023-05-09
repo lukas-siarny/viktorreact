@@ -324,6 +324,9 @@ const EmployeePage = (props: Props) => {
 								}
 						  ]
 						: [],
+					phone: employeesData.employee.user?.phone,
+					phonePrefixCountryCode:
+						employeesData.employee.user?.phonePrefixCountryCode || salon?.data?.companyContactPerson?.phonePrefixCountryCode || salon?.data?.address?.countryCode,
 					deletedAt: employeesData.employee.deletedAt,
 					hasActiveAccount: employeesData.employee.hasActiveAccount,
 					services: parseServices(employeesData, options),

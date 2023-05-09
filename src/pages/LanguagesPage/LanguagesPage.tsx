@@ -38,7 +38,7 @@ import useQueryParams from '../../hooks/useQueryParamsZod'
 
 // schema
 import { ILanguageForm } from '../../schemas/language'
-import { languagesPagePageURLQueryParams } from '../../schemas/queryParams'
+import { languagesPageURLQueryParams } from '../../schemas/queryParams'
 
 type Columns = ColumnsType<any>
 
@@ -54,7 +54,7 @@ const LanguagesPage = () => {
 
 	const languages = useSelector((state: RootState) => state.languages.languages)
 
-	const [query, setQuery] = useQueryParams(languagesPagePageURLQueryParams, {
+	const [query, setQuery] = useQueryParams(languagesPageURLQueryParams, {
 		order: 'name:ASC'
 	})
 

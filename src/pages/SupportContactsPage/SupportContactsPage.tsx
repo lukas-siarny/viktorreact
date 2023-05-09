@@ -29,7 +29,7 @@ import { IBreadcrumbs, Columns } from '../../types/interfaces'
 import useQueryParams from '../../hooks/useQueryParamsZod'
 
 // schema
-import { supportContactsPagePageURLQueryParams } from '../../schemas/queryParams'
+import { supportContactsPageURLQueryParams } from '../../schemas/queryParams'
 
 const permissions: PERMISSION[] = [PERMISSION.ENUM_EDIT]
 
@@ -40,7 +40,7 @@ const SupportContactsPage = () => {
 	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
 	const navigate = useNavigate()
 
-	const [query, setQuery] = useQueryParams(supportContactsPagePageURLQueryParams, {
+	const [query, setQuery] = useQueryParams(supportContactsPageURLQueryParams, {
 		order: 'country:ASC'
 	})
 

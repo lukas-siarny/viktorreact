@@ -24,7 +24,7 @@ import { RootState } from '../../reducers'
 
 // types
 import { IBreadcrumbs, Columns } from '../../types/interfaces'
-import { categoryParamsPagePageURLQueryParams } from '../../schemas/queryParams'
+import { categoryParamsPageURLQueryParams } from '../../schemas/queryParams'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
@@ -39,7 +39,7 @@ const CategoryParamsPage = () => {
 	const parameters = useSelector((state: RootState) => state.categoryParams.parameters)
 	const navigate = useNavigate()
 
-	const [query, setQuery] = useQueryParams(categoryParamsPagePageURLQueryParams, {
+	const [query, setQuery] = useQueryParams(categoryParamsPageURLQueryParams, {
 		order: 'name:ASC'
 	})
 

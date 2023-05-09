@@ -29,7 +29,7 @@ import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
 import { IBreadcrumbs, ICosmetic, ICosmeticForm, Columns, ISearchFilter } from '../../types/interfaces'
-import { cosmeticsPagePageURLQueryParams } from '../../schemas/queryParams'
+import { cosmeticsPageURLQueryParams } from '../../schemas/queryParams'
 
 // hooks
 import useQueryParams from '../../hooks/useQueryParamsZod'
@@ -44,7 +44,7 @@ const CosmeticsPage = () => {
 
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 
-	const [query, setQuery] = useQueryParams(cosmeticsPagePageURLQueryParams, {
+	const [query, setQuery] = useQueryParams(cosmeticsPageURLQueryParams, {
 		limit: 25,
 		page: 1
 	})

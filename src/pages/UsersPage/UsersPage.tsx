@@ -29,7 +29,7 @@ import { IBreadcrumbs, Columns } from '../../types/interfaces'
 import useQueryParams from '../../hooks/useQueryParamsZod'
 
 // schema
-import { usersPagePageURLQueryParams } from '../../schemas/queryParams'
+import { usersPageURLQueryParams } from '../../schemas/queryParams'
 
 const UsersPage = () => {
 	const [t] = useTranslation()
@@ -40,7 +40,7 @@ const UsersPage = () => {
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 	const navigate = useNavigate()
 
-	const [query, setQuery] = useQueryParams(usersPagePageURLQueryParams, {
+	const [query, setQuery] = useQueryParams(usersPageURLQueryParams, {
 		page: 1,
 		order: 'fullName:ASC'
 	})

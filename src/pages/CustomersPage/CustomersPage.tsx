@@ -31,7 +31,7 @@ import { IBreadcrumbs, ISearchFilter, SalonSubPageProps, Columns, IDataUploadFor
 import useQueryParams from '../../hooks/useQueryParamsZod'
 
 // schema
-import { customersPagePageURLQueryParams } from '../../schemas/queryParams'
+import { customersPageURLQueryParams } from '../../schemas/queryParams'
 
 const CustomersPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
@@ -45,7 +45,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const [customersImportVisible, setCustomersImportVisible] = useState(false)
 	const [templateValue, setTemplateValue] = useState<{ label: string; value: string } | null>(null)
 
-	const [query, setQuery] = useQueryParams(customersPagePageURLQueryParams, {
+	const [query, setQuery] = useQueryParams(customersPageURLQueryParams, {
 		page: 1,
 		order: 'lastName:ASC'
 	})

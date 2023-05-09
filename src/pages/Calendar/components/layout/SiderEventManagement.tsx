@@ -15,6 +15,7 @@ import { RootState } from '../../../../reducers'
 
 // schema
 import { ICalendarEventForm } from '../../../../schemas/event'
+import { ICalendarPageURLQueryParams } from '../../../../schemas/queryParams'
 import { ICalendarReservationForm } from '../../../../schemas/reservation'
 
 // utils
@@ -48,7 +49,6 @@ import TabsComponent from '../../../../components/TabsComponent'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
-import { IUseQueryParams } from '../../../../hooks/useQueryParams'
 import { initLabelInValueSelect } from '../../../../atoms/SelectField'
 
 type Props = {
@@ -67,8 +67,8 @@ type Props = {
 	changeCalendarDate: (newDate: string) => void
 	phonePrefix?: string
 	loadingData?: boolean
-	query: IUseQueryParams
-	setQuery: (newValues: IUseQueryParams) => void
+	query: ICalendarPageURLQueryParams
+	setQuery: (newValues: ICalendarPageURLQueryParams) => void
 	employeesLoading: boolean
 	calendarEmployees: ICalendarEmployeesPayload
 	scrollToTime: (hour: number) => void
@@ -390,7 +390,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 					className={'nc-sider-event-management-tabs tabs-small'}
 					activeKey={sidebarView}
 					onChange={(type: string) => {
-						setQuery({ ...query, sidebarView: type })
+						setQuery({ ...query, sidebarView: type as CALENDAR_EVENT_TYPE })
 						dispatch(change(FORM.CALENDAR_EVENT_FORM, 'eventType', type))
 					}}
 					items={[

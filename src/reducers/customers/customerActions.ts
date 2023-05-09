@@ -4,17 +4,13 @@ import { ThunkResult } from '../index'
 import { CUSTOMER, CUSTOMERS } from './customerTypes'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { IQueryParams } from '../../types/interfaces'
+import { IGetCustomersQueryParams } from '../../schemas/queryParams'
 
 // utils
 import { getReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
 
 export type ICustomerActions = IResetStore | IGetCustomers | IGetCustomer
-
-interface IGetCustomersQueryParams extends IQueryParams {
-	salonID?: string | undefined | null
-}
 
 interface IGetCustomers {
 	type: CUSTOMERS

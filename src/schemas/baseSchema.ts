@@ -4,7 +4,7 @@ import { z, ZodString, ZodOptional, ZodNullable, ZodTypeAny } from 'zod'
 import { set } from 'lodash'
 import { DAY, FORM, LANGUAGE, MONDAY_TO_FRIDAY, VALIDATION_MAX_LENGTH } from '../utils/enums'
 
-import { passwordRegEx, timeRegex, uuidRegex } from '../utils/regex'
+import { dateRegex, passwordRegEx, timeRegex, uuidRegex } from '../utils/regex'
 
 /**
  * Serialize args for i18next.t function
@@ -318,3 +318,9 @@ export const openingHoursConstraint = () => {
 		})
 	})
 }
+
+/**
+ * Constraint for YYYY-MM-DD date format
+ * @returns validation schema
+ */
+export const dateConstraint = z.string().regex(dateRegex)

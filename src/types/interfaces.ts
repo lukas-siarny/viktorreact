@@ -36,7 +36,7 @@ import { TooltipPlacement } from 'antd/es/tooltip'
 // schema
 import { ICalendarEventForm } from '../schemas/event'
 import { ICalendarReservationForm } from '../schemas/reservation'
-import { IRechargeSmsCreditAdminPageURLQueryParams } from '../schemas/queryParams'
+import { ICalendarPageURLQueryParams, INotinoReservationsPageURLQueryParams, IRechargeSmsCreditAdminPageURLQueryParams, ISalonReservationsPageURLQueryParams, IServicesPageURLQueryParam } from '../schemas/queryParams'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -200,6 +200,8 @@ export type IRechargeSmsCreditFilter = Pick<
 IRechargeSmsCreditAdminPageURLQueryParams,
 'search' | 'sourceType' | 'countryCode' | 'walletAvailableBalanceFrom' | 'walletAvailableBalanceTo'
 >
+
+export type IServicesFilter = IServicesPageURLQueryParam
 
 export interface ISmsHistoryFilter {
 	search: string
@@ -435,10 +437,7 @@ export interface TimeStats extends ILoadingAndFailure {
 	data: TimeStatsData | null
 }
 
-export interface ICalendarFilter {
-	employeeIDs?: string[]
-	categoryIDs?: string[]
-}
+export type ICalendarFilter = Pick<ICalendarPageURLQueryParams, 'employeeIDs' | 'categoryIDs'>
 
 export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {
 	tableData: (Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0] & { key: number })[]
@@ -676,15 +675,11 @@ export interface ICalendarDayEvents {
 export interface ICalendarDayEventsMap {
 	[key: string]: number
 }
-export interface IReservationsFilter {
-	dateFrom: string
-	countryCode?: string
-	employeeIDs?: string[]
-	categoryIDs?: string[]
-	reservationStates?: RESERVATION_STATE[]
-	reservationPaymentMethods?: RESERVATION_PAYMENT_METHOD[]
-	reservationCreateSourceType?: RESERVATION_SOURCE_TYPE
-}
+
+export type ISalonReservationsFilter = Omit<ISalonReservationsPageURLQueryParams, 'state' | 'page' | 'limit'>
+
+export type INotinoReservationsFilter = Omit<INotinoReservationsPageURLQueryParams, 'state' | 'page' | 'limit'>
+
 export type ServicePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody
 
 export type DisabledNotificationsArray = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']

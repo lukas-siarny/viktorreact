@@ -17,19 +17,16 @@ import InputField from '../../../atoms/InputField'
 import Filters from '../../../components/Filters'
 import SelectField from '../../../atoms/SelectField'
 
-// reducers
+// types
 import { RootState } from '../../../reducers'
+import { IEmployeesPageURLQueryParam } from '../../../schemas/queryParams'
 
 type ComponentProps = {
 	createEmployee: Function
 	hide?: boolean
 }
 
-export interface IEmployeesFilter {
-	search: string
-	accountState: ACCOUNT_STATE
-	serviceID: string
-}
+export type IEmployeesFilter = Pick<IEmployeesPageURLQueryParam, 'search' | 'serviceID' | 'accountState'>
 
 type Props = InjectedFormProps<IEmployeesFilter, ComponentProps> & ComponentProps
 

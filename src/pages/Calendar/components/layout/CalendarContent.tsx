@@ -41,11 +41,11 @@ import {
 	PopoverTriggerPosition
 } from '../../../../types/interfaces'
 import { RootState } from '../../../../reducers'
-import { IUseQueryParams } from '../../../../hooks/useQueryParams'
 
 // schema
 import { /* ICalendarImportedReservationForm, */ ICalendarReservationForm } from '../../../../schemas/reservation'
 import { ICalendarEventForm } from '../../../../schemas/event'
+import { ICalendarPageURLQueryParams } from '../../../../schemas/queryParams'
 
 // utils
 import { ForbiddenModal, checkPermissions } from '../../../../utils/Permissions'
@@ -64,8 +64,8 @@ type Props = {
 	onShowEventsListPopover: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean, employeeID?: string) => void
 	clearFetchInterval: () => void
 	restartFetchInterval: () => void
-	query: IUseQueryParams
-	setQuery: (newValues: IUseQueryParams) => void
+	query: ICalendarPageURLQueryParams
+	setQuery: (newValues: ICalendarPageURLQueryParams) => void
 	monthlyReservations: ICalendarMonthlyReservationsPayload['data']
 } & Omit<ICalendarView, 'onEventChange' | 'onEventChangeStart' | 'onEventChangeStop'>
 

@@ -9,14 +9,14 @@ import { ReactComponent as CalendarIcon } from '../../../../assets/icons/calenda
 
 // types
 import { ICalendarMonthlyReservationsCardData, PopoverTriggerPosition } from '../../../../types/interfaces'
+import { ICalendarPageURLQueryParams } from '../../../../schemas/queryParams'
 
 // utils
 import { parseTimeFromMinutes } from '../../calendarHelpers'
 import { getAssignedUserLabel } from '../../../../utils/helper'
-import { CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
 
 // hooks
-import { IUseQueryParams } from '../../../../hooks/useQueryParams'
 import { formatObjToQuery } from '../../../../hooks/useQueryParamsZod'
 
 interface IMonthlyReservationCardProps {
@@ -24,7 +24,7 @@ interface IMonthlyReservationCardProps {
 	eventData?: ICalendarMonthlyReservationsCardData['eventData']
 	isEventsListPopover?: boolean
 	onShowEventsListPopover?: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean, employeeID?: string) => void
-	query: IUseQueryParams
+	query: Pick<ICalendarPageURLQueryParams, 'categoryIDs'>
 	parentPath: string
 }
 
@@ -44,14 +44,13 @@ const MonthlyReservationCard: FC<IMonthlyReservationCardProps> = (props) => {
 		if (!employee) {
 			return ''
 		}
-		const linkSearchParams = {
-			employeeIDs: employee.id,
+		const linkSearchParams: ICalendarPageURLQueryParams = {
+			employeeIDs: [employee.id],
 			categoryIDs: query.categoryIDs,
 			view: CALENDAR_VIEW.DAY,
+			eventsViewType: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
 			date
 		}
-
-		console.log({ obj: formatObjToQuery(linkSearchParams) })
 
 		return `${parentPath}${t('paths:calendar')}${formatObjToQuery(linkSearchParams)}`
 	}

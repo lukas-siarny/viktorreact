@@ -1,12 +1,12 @@
 import { z } from 'zod'
-import { selectObjConstraint, stringConstraint, zodErrorsToFormErrors } from './baseSchema'
+import { dateConstraint, selectObjConstraint, stringConstraint, zodErrorsToFormErrors } from './baseSchema'
 import { VALIDATION_MAX_LENGTH, FORM, CALENDAR_EVENT_TYPE } from '../utils/enums'
 // eslint-disable-next-line import/no-cycle
 import { CalendarEvent, ICalendarEmployeeOptionItem, ICalendarEventDetailPayload, ISelectOptionItem, ServiceType } from '../types/interfaces'
-import { dateRegex, timeRegex } from '../utils/regex'
+import { timeRegex } from '../utils/regex'
 
 export const importedReservationSchema = z.object({
-	date: z.string().regex(dateRegex),
+	date: dateConstraint,
 	timeFrom: z.string().regex(timeRegex),
 	timeTo: z.string().regex(timeRegex),
 	note: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1500)
@@ -28,7 +28,7 @@ export const reservationsSchema = z.object({
 	employee: selectObjConstraint,
 	customer: selectObjConstraint,
 	service: selectObjConstraint,
-	date: z.string().regex(dateRegex),
+	date: dateConstraint,
 	timeFrom: z.string().regex(timeRegex),
 	timeTo: z.string().regex(timeRegex),
 	note: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1500)

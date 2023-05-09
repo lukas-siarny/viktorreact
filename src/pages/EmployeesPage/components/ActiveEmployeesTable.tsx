@@ -30,12 +30,12 @@ import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.s
 
 // types
 import { Columns } from '../../../types/interfaces'
-import { IEmployeesPageURLQueryParam } from '../../../schemas/queryParams'
+import { IEmployeesPageURLQueryParams } from '../../../schemas/queryParams'
 
 type Props = {
 	parentPath?: string
-	query: IEmployeesPageURLQueryParam
-	setQuery: (newValues: IEmployeesPageURLQueryParam) => void
+	query: IEmployeesPageURLQueryParams
+	setQuery: (newValues: IEmployeesPageURLQueryParams) => void
 	salonID: string
 	prefixOptions: any
 }

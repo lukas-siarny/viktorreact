@@ -543,7 +543,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 			// fallback for allowClear true if user removed assigned user send null value
 			await patchReq('/api/b2b/admin/salons/{salonID}/assigned-user', { salonID }, { assignedUserID: (values?.assignedUser?.key as string) || null })
 			setVisibleNotinoUserModal(false)
-			await dispatch(selectSalon(salonID))
+			dispatch(selectSalon(salonID))
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
@@ -554,7 +554,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 		try {
 			await patchReq('/api/b2b/admin/salons/{salonID}/b2b-voucher', { salonID }, { b2bVoucher: values?.code || null })
 			setVisibleVoucherModal(false)
-			await dispatch(selectSalon(salonID))
+			dispatch(selectSalon(salonID))
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
@@ -568,7 +568,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 		setIsRemoving(true)
 		try {
 			await patchReq('/api/b2b/admin/salons/{salonID}/b2b-voucher', { salonID }, { b2bVoucher: null })
-			await dispatch(selectSalon(salonID))
+			dispatch(selectSalon(salonID))
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)

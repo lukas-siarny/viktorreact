@@ -1185,3 +1185,8 @@ export const SMS_STATUS_NAME = (status: SMS_NOTIFICATION_STATUS) => {
 			return ''
 	}
 }
+
+export enum SERVICE_DESCRIPTION_LNG {
+	DEFAULT = 'DEFAULT',
+	EN = 'en'
+}

@@ -37,7 +37,7 @@ import { ReactComponent as EyeIcon } from '../../assets/icons/eye-icon.svg'
 import useQueryParams from '../../hooks/useQueryParamsZod'
 
 // schema
-import { reviewsPagePageURLQueryParams } from '../../schemas/queryParams'
+import { reviewsPageURLQueryParams } from '../../schemas/queryParams'
 
 const getRowId = (verificationStatus: string, id: string) => `${verificationStatus}_${id}`
 
@@ -46,7 +46,7 @@ const ReviewsPage = () => {
 	const dispatch = useDispatch()
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 
-	const [query, setQuery] = useQueryParams(reviewsPagePageURLQueryParams, {
+	const [query, setQuery] = useQueryParams(reviewsPageURLQueryParams, {
 		page: 1,
 		order: 'toxicityScore:desc',
 		reviewState: REVIEWS_TAB_KEYS.PUBLISHED

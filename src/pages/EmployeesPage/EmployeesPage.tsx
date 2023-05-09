@@ -27,14 +27,14 @@ import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 import useQueryParams from '../../hooks/useQueryParamsZod'
 
 // schema
-import { employeesPagePageURLQueryParams } from '../../schemas/queryParams'
+import { employeesPageURLQueryParams } from '../../schemas/queryParams'
 
 const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const { salonID, parentPath } = props
 
-	const [query, setQuery] = useQueryParams(employeesPagePageURLQueryParams, {
+	const [query, setQuery] = useQueryParams(employeesPageURLQueryParams, {
 		page: 1,
 		order: 'orderIndex:asc',
 		employeeState: EMPLOYEES_TAB_KEYS.ACTIVE

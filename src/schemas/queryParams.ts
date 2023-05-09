@@ -210,11 +210,11 @@ const employeesQueryParamsSchema = searchableSchema.extend({
 export type IGetEmployeesQueryParams = z.infer<typeof employeesQueryParamsSchema>
 
 // url query params
-export const employeesPagePageURLQueryParams = employeesQueryParamsSchema.omit({ salonID: true }).extend({
+export const employeesPageURLQueryParams = employeesQueryParamsSchema.omit({ salonID: true }).extend({
 	employeeState: z.nativeEnum(EMPLOYEES_TAB_KEYS).catch(EMPLOYEES_TAB_KEYS.ACTIVE)
 })
 
-export type IEmployeesPageURLQueryParam = z.infer<typeof employeesPagePageURLQueryParams>
+export type IEmployeesPageURLQueryParam = z.infer<typeof employeesPageURLQueryParams>
 
 /**
  * Customers
@@ -227,9 +227,9 @@ const customersQueryParamsSchema = searchableSchema.extend({
 export type IGetCustomersQueryParams = z.infer<typeof customersQueryParamsSchema>
 
 // url query params
-export const customersPagePageURLQueryParams = customersQueryParamsSchema.omit({ salonID: true })
+export const customersPageURLQueryParams = customersQueryParamsSchema.omit({ salonID: true })
 
-export type ICustomersPageURLQueryParams = z.infer<typeof customersPagePageURLQueryParams>
+export type ICustomersPageURLQueryParams = z.infer<typeof customersPageURLQueryParams>
 
 /**
  * Salon services
@@ -243,9 +243,9 @@ const servicesQueryParamsSchema = z.object({
 export type IGetServicesQueryParams = z.infer<typeof servicesQueryParamsSchema>
 
 // url query params
-export const servicesPagePageURLQueryParams = servicesQueryParamsSchema.omit({ salonID: true })
+export const servicesPageURLQueryParams = servicesQueryParamsSchema.omit({ salonID: true })
 
-export type IServicesPageURLQueryParam = z.infer<typeof servicesPagePageURLQueryParams>
+export type IServicesPageURLQueryParam = z.infer<typeof servicesPageURLQueryParams>
 
 /**
  * Sms credits
@@ -289,18 +289,18 @@ const reviewsQueryParamsSchema = searchableSchema.extend({
 export type IGetReviewsQueryParams = z.infer<typeof reviewsQueryParamsSchema>
 
 // url query params
-export const reviewsPagePageURLQueryParams = reviewsQueryParamsSchema.omit({ deleted: true }).extend({
+export const reviewsPageURLQueryParams = reviewsQueryParamsSchema.omit({ deleted: true }).extend({
 	reviewState: z.nativeEnum(REVIEWS_TAB_KEYS).catch(REVIEWS_TAB_KEYS.PUBLISHED)
 })
 
-export type IReviewsPageURLQueryParam = z.infer<typeof reviewsPagePageURLQueryParams>
+export type IReviewsPageURLQueryParam = z.infer<typeof reviewsPageURLQueryParams>
 
 /**
  * Specalist contacts
  */
-export const specialistContactsPagePageURLQueryParams = z.object({
+export const specialistContactsPageURLQueryParams = z.object({
 	search: z.string().nullish(),
 	order: z.string().nullish()
 })
 
-export type ISpecialistContactsPageURLQueryParam = z.infer<typeof specialistContactsPagePageURLQueryParams>
+export type ISpecialistContactsPageURLQueryParam = z.infer<typeof specialistContactsPageURLQueryParams>

@@ -32,7 +32,7 @@ import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circ
 import useQueryParams from '../../hooks/useQueryParamsZod'
 
 // schema
-import { servicesPagePageURLQueryParams } from '../../schemas/queryParams'
+import { servicesPageURLQueryParams } from '../../schemas/queryParams'
 
 const ServicesPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
@@ -46,7 +46,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 		dispatch(getCategories())
 	}, [dispatch])
 
-	const [query, setQuery] = useQueryParams(servicesPagePageURLQueryParams)
+	const [query, setQuery] = useQueryParams(servicesPageURLQueryParams)
 
 	useEffect(() => {
 		dispatch(initialize(FORM.SERVICES_FILTER, { rootCategoryID: query.rootCategoryID }))

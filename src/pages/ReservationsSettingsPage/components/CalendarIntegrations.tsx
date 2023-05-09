@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useMsal } from '@azure/msal-react'
 import { useAuth } from 'react-oidc-context'
 import qs from 'qs'
+import axios from 'axios'
 
 // utils
 import { useSelector } from 'react-redux'
@@ -55,18 +56,27 @@ const CalendarIntegrations = (props: Props) => {
 		if (url === 'https://login.microsoftonline.com/common/oauth2/v2.0/token') {
 			if (typeof config?.body === 'string') {
 				const data = qs.parse(config.body)
+
 				if (typeof data.code === 'string') {
-					postReq(
-						'/api/b2b/admin/calendar-sync/sync-token',
-						null,
+					const response = await axios.post(
+						'https://login.microsoftonline.com/consumers/oauth2/v2.0/token',
 						{
-							authCode: data.code,
-							calendarType: 'MICROSOFT'
+							grant_type: 'authorization_code',
+							client_id: '5a15a7fb-6773-43a9-aaec-b8ecd91862fa',
+							scope: ['offline_access', 'user.read', 'mail.read', 'Calendars.ReadWrite', 'Files.Read', 'offline_access'],
+							redirect_uri: 'http://localhost:3000/ms-oauth2',
+							code_verifier: data.code_verifier,
+							code: data.code
 						},
-						undefined,
-						NOTIFICATION_TYPE.NOTIFICATION,
-						true
+						{
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded'
+							}
+						}
 					)
+
+					// todo sent refresh token
+					console.log({ response })
 				}
 			}
 			return Promise.reject()

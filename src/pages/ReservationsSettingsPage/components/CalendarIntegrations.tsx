@@ -23,8 +23,6 @@ const CalendarIntegrations = () => {
 	const icalUrl = get(find(authUser.data?.salons, { id: salonID }), 'employeeIcsLink')
 	const isPartner = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser.data?.uniqPermissions])
 
-	console.log({ MS_OATH_CONFIG })
-
 	// NOTE: intercept Microsoft auth token request and get code from the payload and send it to our BE
 	const originalFetch = window.fetch
 	window.fetch = async (...args): Promise<any> => {

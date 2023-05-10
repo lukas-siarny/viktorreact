@@ -8,6 +8,7 @@ declare global {
 			REACT_APP_SENTRY_ENV: string
 			REACT_APP_SENTRY_DSN: string
 			REACT_APP_GOOGLE_OAUTH_CLIENT_ID: string
+			REACT_APP_MS_OAUTH_CLIENT_ID: string
 		}
 	}
 }

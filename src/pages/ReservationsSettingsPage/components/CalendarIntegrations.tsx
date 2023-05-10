@@ -1,70 +1,46 @@
-/* eslint-disable prefer-rest-params */
-/* eslint-disable func-names */
-import React, { useMemo, useEffect } from 'react'
-import { GoogleLogin, useGoogleLogin } from '@react-oauth/google'
+import React, { useMemo } from 'react'
+import { useGoogleLogin } from '@react-oauth/google'
 import { useTranslation } from 'react-i18next'
 import { useMsal } from '@azure/msal-react'
-import { useAuth } from 'react-oidc-context'
 import qs from 'qs'
 import axios from 'axios'
 
 // utils
 import { useSelector } from 'react-redux'
-import { Params, useParams } from 'react-router'
+import { useParams } from 'react-router'
 import { find, get } from 'lodash'
 import { postReq } from '../../../utils/request'
-import { NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
+import { MS_OATH_CONFIG, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
 import { RootState } from '../../../reducers'
 import { checkPermissions } from '../../../utils/Permissions'
 
-type Props = {}
-
-const loginRequest = {
-	scopes: ['User.Read', 'offline_access', 'Calendars.ReadWrite.Shared', 'Calendars.ReadWrite', 'Calendars.Read.Shared', 'Calendars.Read']
-}
-
-const graphConfig = {
-	graphMeEndpoint: 'Enter_the_Graph_Endpoint_Here/v1.0/me'
-}
-
-const CalendarIntegrations = (props: Props) => {
+const CalendarIntegrations = () => {
 	const { t } = useTranslation()
 	const { salonID }: any = useParams()
-	const { instance, accounts, inProgress } = useMsal()
-
-	/* useEffect(() => {
-		if (instance) {
-			instance.handleRedirectPromise().then((authResult) => {
-				if (authResult) {
-					// Use the authResult.authorizationCode to exchange for an access token
-					console.log('Authorization result:', authResult)
-				}
-			})
-		}
-	}, [instance]) */
-
-	// const auth = useAuth()
+	const { instance } = useMsal()
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const icalUrl = get(find(authUser.data?.salons, { id: salonID }), 'employeeIcsLink')
 	const isPartner = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser.data?.uniqPermissions])
 
+	console.log({ MS_OATH_CONFIG })
+
 	// NOTE: intercept Microsoft auth token request and get code from the payload and send it to our BE
 	const originalFetch = window.fetch
-	window.fetch = async (...args) => {
+	window.fetch = async (...args): Promise<any> => {
 		const [url, config] = args
-		if (url === 'https://login.microsoftonline.com/common/oauth2/v2.0/token') {
+		if (url === MS_OATH_CONFIG.url) {
 			if (typeof config?.body === 'string') {
 				const data = qs.parse(config.body)
 
 				if (typeof data.code === 'string') {
 					const response = await axios.post(
-						'https://login.microsoftonline.com/consumers/oauth2/v2.0/token',
+						MS_OATH_CONFIG.url,
 						{
-							grant_type: 'authorization_code',
-							client_id: '5a15a7fb-6773-43a9-aaec-b8ecd91862fa',
-							scope: ['offline_access', 'user.read', 'mail.read', 'Calendars.ReadWrite', 'Files.Read', 'offline_access'],
-							redirect_uri: 'http://localhost:3000/ms-oauth2',
+							grant_type: MS_OATH_CONFIG.grand_type,
+							client_id: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
+							scope: MS_OATH_CONFIG.scopes,
+							redirect_uri: MS_OATH_CONFIG.redirect_uri,
 							code_verifier: data.code_verifier,
 							code: data.code
 						},
@@ -75,16 +51,26 @@ const CalendarIntegrations = (props: Props) => {
 						}
 					)
 
-					// todo sent refresh token
-					console.log({ response })
+					return postReq(
+						'/api/b2b/admin/calendar-sync/sync-token',
+						null,
+						{
+							refreshToken: response.data.refresh_token,
+							calendarType: 'MICROSOFT'
+						},
+						undefined,
+						NOTIFICATION_TYPE.NOTIFICATION,
+						true
+					)
 				}
 			}
 			return Promise.reject()
 		}
-		return originalFetch(url, config)
+		// eslint-disable-next-line no-console
+		return originalFetch(url, config).catch((err) => console.error(err))
 	}
 
-	const login = useGoogleLogin({
+	const handleGoogleLogin = useGoogleLogin({
 		flow: 'auth-code',
 		scope: 'email profile https://www.googleapis.com/auth/calendar openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
 		redirect_uri: 'postmessage',
@@ -101,64 +87,16 @@ const CalendarIntegrations = (props: Props) => {
 				true
 			)
 		},
-		onError: (errorResponse) => console.log('Error GAPI: ', errorResponse)
+		// eslint-disable-next-line no-console
+		onError: (errorResponse) => console.error(errorResponse)
 	})
 
-	const handleLogin = () => {
-		// auth.signinRedirect().then(console.log)
-
-		instance
-			.loginPopup(loginRequest)
-			.then((response) => {
-				console.log('🚀 ~ file: CalendarIntegrations.tsx:61 ~ instance.acquireTokenPopup ~ response:', response)
-				// setAccessToken(response.accessToken);
-			})
-			.catch(console.error)
-
-		// instance
-		// 	.acquireTokenPopup({
-		// 		scopes: ['User.Read', 'offline_access', 'Calendars.ReadWrite.Shared', 'Calendars.ReadWrite', 'Calendars.Read.Shared', 'Calendars.Read'],
-		// 		extraQueryParameters: {}
-		// 	})
-		// 	.then((response) => {
-		// 		console.log('🚀 ~ file: CalendarIntegrations.tsx:61 ~ instance.acquireTokenPopup ~ response:', response)
-		// 		// setAccessToken(response.accessToken);
-		// 	})
-		// 	.catch(console.error)
-
-		// instance.loginPopup({
-
-		// }).then(console.log)
-		// const request = {
-		// 	...loginRequest,
-		// 	account: accounts[0]
-		// }
-
-		// instance
-		// 	.acquireTokenSilent({
-		// 		scopes: ['User.Read', 'offline_access', 'Calendars.ReadWrite.Shared', 'Calendars.ReadWrite', 'Calendars.Read.Shared', 'Calendars.Read']
-		// 	})
-		// 	.then((response) => {
-		// 		console.log('🚀 ~ file: CalendarIntegrations.tsx:47 ~ instance.acquireTokenSilent ~ response:', response)
-		// 		// postReq(
-		// 		// 	'/api/b2b/admin/calendar-sync/sync-token',
-		// 		// 	null,
-		// 		// 	{
-		// 		// 		authCode: tokenResponse.code,
-		// 		// 		calendarType: 'GOOGLE'
-		// 		// 	},
-		// 		// 	undefined,
-		// 		// 	NOTIFICATION_TYPE.NOTIFICATION,
-		// 		// 	true
-		// 		// )
-		// 	})
-		// 	.catch((e) => {
-		// 		instance.acquireTokenPopup(request).then((response) => {
-		// 			console.log('🚀 ~ file: CalendarIntegrations.tsx:61 ~ instance.acquireTokenPopup ~ response:', response)
-		// 			// setAccessToken(response.accessToken);
-		// 		})
-		// 	})
+	const handleMSLogin = () => {
+		instance.loginPopup({
+			scopes: MS_OATH_CONFIG.scopes
+		})
 	}
+
 	return (
 		<div>
 			{/* <GoogleLogin
@@ -172,10 +110,10 @@ const CalendarIntegrations = (props: Props) => {
 				type='icon'
 				theme='filled_black'
 			/> */}
-			<button className={'sync-button google mr-2'} onClick={() => login()} type='button'>
+			<button className={'sync-button google mr-2'} onClick={() => handleGoogleLogin()} type='button'>
 				{'Google'}
 			</button>
-			<button className={'sync-button microsoft mr-2'} onClick={handleLogin} type='button'>
+			<button className={'sync-button microsoft mr-2'} onClick={handleMSLogin} type='button'>
 				{t('loc:Sign in')}
 			</button>
 			{isPartner && (

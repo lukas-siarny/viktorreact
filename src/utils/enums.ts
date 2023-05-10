@@ -1178,3 +1178,10 @@ export const SMS_STATUS_NAME = (status: SMS_NOTIFICATION_STATUS) => {
 			return ''
 	}
 }
+
+export const MS_OATH_CONFIG = {
+	redirect_uri: `${window.location.protocol}//${window.location.host}/ms-oauth2`,
+	scopes: ['offline_access', 'user.read', 'Calendars.ReadWrite', 'Files.Read'],
+	url: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+	grand_type: 'authorization_code'
+}

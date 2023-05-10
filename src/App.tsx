@@ -10,7 +10,6 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom'
 import { PublicClientApplication, Configuration } from '@azure/msal-browser'
 import { MsalProvider } from '@azure/msal-react'
-import { AuthProvider } from 'react-oidc-context'
 
 import 'antd/dist/reset.css'
 
@@ -19,7 +18,7 @@ import rootReducer from './reducers'
 // utils
 import configureStore from './utils/configureStore'
 import i18n from './utils/i18n'
-import { LANGUAGE, DEFAULT_LANGUAGE, ANTD_THEME_VARIABLES_OVERRIDE } from './utils/enums'
+import { LANGUAGE, DEFAULT_LANGUAGE, ANTD_THEME_VARIABLES_OVERRIDE, MS_OATH_CONFIG } from './utils/enums'
 
 // components
 import ScrollToTop from './components/ScrollToTop'
@@ -30,8 +29,8 @@ const { store, persistor } = configureStore(rootReducer)
 
 const msalConfig: Configuration = {
 	auth: {
-		clientId: '5a15a7fb-6773-43a9-aaec-b8ecd91862fa',
-		redirectUri: 'http://localhost:3000/ms-oauth2'
+		clientId: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
+		redirectUri: MS_OATH_CONFIG.redirect_uri
 	}
 }
 
@@ -88,25 +87,17 @@ const App = () => {
 						}}
 					>
 						<MsalProvider instance={msalInstance}>
-							<AuthProvider
-								client_id='5a15a7fb-6773-43a9-aaec-b8ecd91862fa'
-								authority='https://login.microsoftonline.com/'
-								redirect_uri='http://localhost:3000/ms-oauth2'
-								response_type='code'
-								scope={'User.Read, offline_access, Calendars.ReadWrite.Shared, Calendars.ReadWrite, Calendars.Read.Shared, Calendars.Read'}
+							<GoogleOAuthProvider
+								clientId={window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
+								onScriptLoadError={() => console.error('GoogleOAuth error')}
+								onScriptLoadSuccess={() => console.log('GoogleOAuth load success')}
 							>
-								<GoogleOAuthProvider
-									clientId={window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
-									onScriptLoadError={() => console.error('GoogleOAuth error')}
-									onScriptLoadSuccess={() => console.log('GoogleOAuth load success')}
-								>
-									<Provider store={store}>
-										<StyleProvider hashPriority={'low'}>
-											<RouterProvider router={router} />
-										</StyleProvider>
-									</Provider>
-								</GoogleOAuthProvider>
-							</AuthProvider>
+								<Provider store={store}>
+									<StyleProvider hashPriority={'low'}>
+										<RouterProvider router={router} />
+									</StyleProvider>
+								</Provider>
+							</GoogleOAuthProvider>
 						</MsalProvider>
 					</ConfigProvider>
 				</PersistGate>

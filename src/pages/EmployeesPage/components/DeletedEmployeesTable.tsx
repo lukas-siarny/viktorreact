@@ -21,14 +21,12 @@ import { RootState } from '../../../reducers'
 
 // types
 import { Columns } from '../../../types/interfaces'
-
-// hooks
-import { IUseQueryParams } from '../../../hooks/useQueryParams'
+import { IEmployeesPageURLQueryParams } from '../../../schemas/queryParams'
 
 type Props = {
 	parentPath?: string
-	query: IUseQueryParams
-	setQuery: (newValues: IUseQueryParams) => void
+	query: IEmployeesPageURLQueryParams
+	setQuery: (newValues: IEmployeesPageURLQueryParams) => void
 	salonID: string
 	prefixOptions: any
 }

@@ -13,7 +13,8 @@ import DeleteButton from '../../components/DeleteButton'
 import CustomerForm from './components/CustomerForm'
 
 // types
-import { IBreadcrumbs, ICustomerForm, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
+import { ICustomerForm } from '../../schemas/customer'
 
 // reducers
 import { getCustomer } from '../../reducers/customers/customerActions'
@@ -55,21 +56,22 @@ const CustomerPage = (props: Props) => {
 			navigate('/404')
 		}
 
-		dispatch(
-			initialize(FORM.CUSTOMER, {
-				...data?.customer,
-				zipCode: data?.customer.address.zipCode,
-				city: data?.customer.address.city,
-				street: data?.customer.address.street,
-				streetNumber: data?.customer.address.streetNumber,
-				countryCode: data?.customer.address.countryCode,
-				salonID: data?.customer.salon.id,
-				gallery: map(data?.customer?.galleryImages, (image) => ({ url: image?.original, thumbnail: image?.resizedImages?.thumbnail, uid: image?.id })),
-				avatar: data?.customer?.profileImage
-					? [{ url: data?.customer?.profileImage?.original, thumbnail: data?.customer?.profileImage?.resizedImages?.thumbnail, uid: data?.customer?.profileImage?.id }]
-					: null
-			})
-		)
+		const initial = {
+			...data?.customer,
+			...data?.customer.address,
+			// zipCode: data?.customer.address.zipCode,
+			// city: data?.customer.address.city,
+			// street: data?.customer.address.street,
+			// streetNumber: data?.customer.address.streetNumber,
+			// countryCode: data?.customer.address.countryCode,
+			salonID: data?.customer.salon.id,
+			gallery: map(data?.customer?.galleryImages, (image) => ({ url: image?.original, thumbnail: image?.resizedImages?.thumbnail, uid: image?.id })),
+			avatar: data?.customer?.profileImage
+				? [{ url: data?.customer?.profileImage?.original, thumbnail: data?.customer?.profileImage?.resizedImages?.thumbnail, uid: data?.customer?.profileImage?.id }]
+				: null
+		}
+
+		dispatch(initialize(FORM.CUSTOMER, initial))
 	}
 
 	useEffect(() => {
@@ -105,7 +107,7 @@ const CustomerPage = (props: Props) => {
 					city: data.city,
 					countryCode: data.countryCode,
 					firstName: data.firstName,
-					gender: data.gender,
+					gender: data.gender as any, // NOTE: In Swagger scheme missing nullable definition, but API accepts null value
 					lastName: data.lastName,
 					note: data.note,
 					street: data.street,

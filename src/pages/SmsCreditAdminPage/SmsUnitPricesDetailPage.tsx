@@ -29,12 +29,16 @@ import { getSmsUnitPrices, ISmsUnitPricesPayload } from '../../reducers/smsUnitP
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
-import { IBreadcrumbs, ISmsUnitPricesForm } from '../../types/interfaces'
+import { IBreadcrumbs } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
 // hooks
-import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
 import useBackUrl from '../../hooks/useBackUrl'
+
+// schema
+import { ISmsUnitPricesForm } from '../../schemas/smsUnitPrices'
+import { smsUnitPricesDetailPageQueryParams } from '../../schemas/queryParams'
 
 type TableDataItem = NonNullable<ISmsUnitPricesPayload['data']>['unitPricesPerCounty'][0]
 
@@ -48,10 +52,10 @@ const SmsUnitPricesDetailPage = () => {
 	const { countryCode: countryCodeUrlParam } = useParams<{ countryCode: string }>()
 	const countryCode = (countryCodeUrlParam as string).toUpperCase()
 
-	const [query, setQuery] = useQueryParams({
-		order: StringParam('validFrom:desc'),
-		limit: NumberParam(25),
-		page: NumberParam(1)
+	const [query, setQuery] = useQueryParams(smsUnitPricesDetailPageQueryParams, {
+		order: 'validFrom:desc',
+		limit: 25,
+		page: 1
 	})
 
 	// undefined - represents new record
@@ -144,10 +148,6 @@ const SmsUnitPricesDetailPage = () => {
 			}
 			fetchData()
 			changeFormVisibility()
-			// reset search in case of newly created entity
-			if (!selectedSmsUnitPrice?.id && query.search) {
-				setQuery({ ...query, search: '' })
-			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

@@ -5,10 +5,11 @@ import { get, map, flatten, uniq, includes } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
-import { IJwtPayload, ISelectOptionItem, IQueryParams, ISearchable, IAuthUserPayload, IUserPayload } from '../../types/interfaces'
+import { IJwtPayload, ISelectOptionItem, ISearchable, IAuthUserPayload, IUserPayload } from '../../types/interfaces'
 import { AUTH_USER, USER, USERS, PENDING_INVITES, NOTINO_USERS } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
+import { IGetUsersQueryParams } from '../../schemas/queryParams'
 
 // utils
 import { setAccessToken, clearAccessToken, clearRefreshToken, isLoggedIn, hasRefreshToken, getRefreshToken, setRefreshToken, getAccessToken } from '../../utils/auth'
@@ -46,10 +47,6 @@ interface IGetNotinoUsers {
 interface IGetPendingInvites {
 	type: PENDING_INVITES
 	payload: IPendingInvitesPayload
-}
-
-export interface IGetUsersQueryParams extends IQueryParams {
-	roleID?: string | undefined | null
 }
 
 export interface IUsersPayload extends ISearchable<Paths.GetApiB2BAdminUsers.Responses.$200> {}

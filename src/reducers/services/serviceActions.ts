@@ -3,16 +3,17 @@ import i18next from 'i18next'
 
 // types
 import { ThunkResult } from '../index'
-import { SERVICES, SERVICE, SERVICE_ROOT_CATEGORY } from './serviceTypes'
+import { SERVICES, SERVICE } from './serviceTypes'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
 import { IUserAvatar, ISearchableWithoutPagination, ISelectOptionItem } from '../../types/interfaces'
+import { IGetServicesQueryParams } from '../../schemas/queryParams'
 
 // utils
 import { getReq } from '../../utils/request'
-import { getAssignedUserLabel, decodePrice, getServiceRange } from '../../utils/helper'
+import { getAssignedUserLabel, decodePrice, getServiceRange, normalizeQueryParams } from '../../utils/helper'
 
-export type IServiceActions = IResetStore | IGetServices | IGetService | IGetServiceRootCategory
+export type IServiceActions = IResetStore | IGetServices | IGetService
 
 interface IGetServices {
 	type: SERVICES
@@ -22,11 +23,6 @@ interface IGetServices {
 interface IGetService {
 	type: SERVICE
 	payload: IServicePayload
-}
-
-interface IGetServiceRootCategory {
-	type: SERVICE_ROOT_CATEGORY
-	payload: IServiceRootCategoryPayload
 }
 
 interface ServicesTableData {
@@ -40,16 +36,6 @@ interface ServicesTableData {
 	categorySecond: string
 	isComplete: boolean
 	createdAt: string
-}
-
-export interface IGetServicesQueryParams {
-	rootCategoryID?: string
-	salonID: string
-}
-
-export interface IGetServiceRootCategoryQueryParams {
-	rootCategoryID: string
-	salonID: string
 }
 
 export interface IServicesPayload extends ISearchableWithoutPagination<Paths.GetApiB2BAdminServices.Responses.$200> {
@@ -69,7 +55,7 @@ export const getServices =
 		const state = getState()
 		try {
 			dispatch({ type: SERVICES.SERVICES_LOAD_START })
-			const { data } = await getReq('/api/b2b/admin/services/', queryParams)
+			const { data } = await getReq('/api/b2b/admin/services/', { ...normalizeQueryParams(queryParams) } as any)
 			const categories = data.groupedServicesByCategory
 			const tableData: ServicesTableData[] = []
 			categories?.forEach((parentCategory) => {
@@ -146,28 +132,6 @@ export const getServices =
 				tableData,
 				options: servicesOptions,
 				categoriesOptions
-			}
-
-			dispatch({ type: SERVICES.SERVICES_LOAD_DONE, payload })
-		} catch (err) {
-			dispatch({ type: SERVICES.SERVICES_LOAD_FAIL })
-			// eslint-disable-next-line no-console
-			console.error(err)
-		}
-
-		return payload
-	}
-
-export const getServiceRootCategory =
-	(queryParams: IGetServiceRootCategoryQueryParams): ThunkResult<Promise<IServiceRootCategoryPayload>> =>
-	async (dispatch) => {
-		let payload = {} as IServiceRootCategoryPayload
-		try {
-			dispatch({ type: SERVICES.SERVICES_LOAD_START })
-			const { data } = await getReq('/api/b2b/admin/services/', queryParams)
-
-			payload = {
-				data: data as IServiceRootCategoryPayload['data']
 			}
 
 			dispatch({ type: SERVICES.SERVICES_LOAD_DONE, payload })

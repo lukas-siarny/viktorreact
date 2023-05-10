@@ -23,10 +23,10 @@ import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
 
 // types
-import { IEnumerationsCountriesPayload, ILoadingAndFailure, ISmsUnitPricesForm } from '../../../types/interfaces'
+import { IEnumerationsCountriesPayload, ILoadingAndFailure } from '../../../types/interfaces'
 
-// validate
-import validateSmsUnitPricesForm from './validateSmsUnitPricesForm'
+// schema
+import { ISmsUnitPricesForm, validationSmsUnitPricesFn } from '../../../schemas/smsUnitPrices'
 
 type ComponentProps = {
 	smsUnitPriceID?: string
@@ -135,7 +135,7 @@ const form = reduxForm<ISmsUnitPricesForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	validate: validateSmsUnitPricesForm,
+	validate: validationSmsUnitPricesFn,
 	onSubmitFail: showErrorNotification
 })(withPromptUnsavedChanges(SmsUnitPricesForm))
 

@@ -6,14 +6,11 @@ import { useTranslation } from 'react-i18next'
 // atoms
 import InputField from '../../atoms/InputField'
 
-// interfaces
-import { IForgotPasswordForm } from '../../types/interfaces'
+// schema
+import { IForgotPasswordForm, validationForgotPasswordFn } from '../../schemas/password'
 
 // utils
 import { FORM, SUBMIT_BUTTON_ID } from '../../utils/enums'
-
-// validate
-import validateForgotPasswordForm from './validateForgotPasswordForm'
 import { formFieldID } from '../../utils/helper'
 
 type ComponentProps = {}
@@ -50,7 +47,7 @@ const form = reduxForm<IForgotPasswordForm, ComponentProps>({
 	touchOnChange: false,
 	touchOnBlur: true,
 	destroyOnUnmount: true,
-	validate: validateForgotPasswordForm
+	validate: validationForgotPasswordFn
 })(ForgottenPasswordForm)
 
 export default form

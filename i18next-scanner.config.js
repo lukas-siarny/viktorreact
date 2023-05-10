@@ -6,7 +6,7 @@ module.exports = {
 	options: {
 		debug: false,
 		func: {
-			list: ['t'],
+			list: ['t', 'serializeValidationMessage'],
 			extensions: ['.js', '.jsx', '.ts', '.tsx']
 		},
 		sort: true,
@@ -29,7 +29,7 @@ module.exports = {
 			if (lng === 'sk') {
 				return key
 			}
-			// NOTE: pre dalsie jazyky nastvi null a potom pouzije fallback EN ak je null
+			// NOTE: pre dalsie jazyky nastvi null a potom pouzije fallback EN ak je _NEPRELOZENE_
 			return null
 		},
 		resource: {

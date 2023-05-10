@@ -288,6 +288,11 @@ export enum SALONS_TAB_KEYS {
 	MISTAKES = 'mistakes'
 }
 
+export enum EMPLOYEES_TAB_KEYS {
+	ACTIVE = 'active',
+	DELETED = 'deleted'
+}
+
 export enum DASHBOARD_TAB_KEYS {
 	SALONS_STATE = 'SALONS_STATE',
 	RESERVATION_SYSTEM = 'RESERVATION_SYSTEM'
@@ -375,6 +380,8 @@ export const INVALID_DATE_FORMAT = 'INVALID_DATE_FORMAT'
 export const INDIVIDUAL_TRANSPORT = 0
 
 export const BACK_DATA_QUERY = 'backData'
+
+export const PIN_LENGTH = 6
 
 export enum ENUMERATIONS_KEYS {
 	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
@@ -1177,4 +1184,9 @@ export const SMS_STATUS_NAME = (status: SMS_NOTIFICATION_STATUS) => {
 		default:
 			return ''
 	}
+}
+
+export enum SERVICE_DESCRIPTION_LNG {
+	DEFAULT = 'DEFAULT',
+	EN = 'en'
 }

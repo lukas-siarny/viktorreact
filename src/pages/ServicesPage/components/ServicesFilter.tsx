@@ -19,14 +19,12 @@ import Filters from '../../../components/Filters'
 import { RootState } from '../../../reducers'
 import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
 
+// types
+import { IServicesFilter } from '../../../types/interfaces'
+
 type ComponentProps = {
 	createNewTemplate?: any
 	total: number
-}
-
-interface IServicesFilter {
-	rootCategoryID: String
-	salonID: String
 }
 
 type Props = InjectedFormProps<IServicesFilter, ComponentProps> & ComponentProps

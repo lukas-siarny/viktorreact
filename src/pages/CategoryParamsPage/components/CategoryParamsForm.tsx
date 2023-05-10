@@ -19,8 +19,8 @@ import { ADD_BUTTON_ID, DELETE_BUTTON_ID, FORM, MAX_VALUES_PER_PARAMETER, PARAME
 import { EMPTY_NAME_LOCALIZATIONS } from '../../../components/LanguagePicker'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
-// validate
-import validateCategoryParamsForm from './validateCategoryParamsForm'
+// schema
+import { validationCategoryParamsFn, ICategoryParamsForm } from '../../../schemas/categoryParams'
 
 // reducers
 import { RootState } from '../../../reducers'
@@ -28,9 +28,6 @@ import { RootState } from '../../../reducers'
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon-16.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
-
-// types
-import { ICategoryParamForm } from '../../../types/interfaces'
 
 const { Item } = Form
 
@@ -41,7 +38,7 @@ type ComponentProps = {
 	onDeleteValue: (categoryParameterValueID?: string, removeIndex?: (index: number) => void, index?: number) => Promise<void>
 }
 
-type Props = InjectedFormProps<ICategoryParamForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ICategoryParamsForm, ComponentProps> & ComponentProps
 
 const LocalizationsArray = (props: any) => {
 	const { fields, required, label, addBtnLabel, maxCount = MAX_VALUES_PER_PARAMETER, nestedFieldName, placeholder, emptyValue, handleDelete } = props
@@ -228,13 +225,13 @@ const CategoryParamsForm: FC<Props> = (props) => {
 	)
 }
 
-const form = reduxForm<ICategoryParamForm, ComponentProps>({
+const form = reduxForm<ICategoryParamsForm, ComponentProps>({
 	form: FORM.CATEGORY_PARAMS,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateCategoryParamsForm
+	validate: validationCategoryParamsFn
 })(withPromptUnsavedChanges(CategoryParamsForm))
 
 export default form

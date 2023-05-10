@@ -4,16 +4,10 @@ import { Field, Fields, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Form, Spin } from 'antd'
 
-// validate
-import validateImportedReservationForm from './validateImportedReservationForm'
-
 // utils
 import { showErrorNotification } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { FORM, CREATE_EVENT_PERMISSIONS, UPDATE_EVENT_PERMISSIONS } from '../../../../utils/enums'
-
-// types
-import { ICalendarImportedReservationForm } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as TimerIcon } from '../../../../assets/icons/clock-icon.svg'
@@ -26,6 +20,9 @@ import TimeRangeField from '../../../../atoms/TimeRangeField'
 
 // redux
 import { RootState } from '../../../../reducers'
+
+// schema
+import { ICalendarImportedReservationForm, validationImportedReservationFn } from '../../../../schemas/reservation'
 
 type ComponentProps = {
 	eventId?: string | null
@@ -112,7 +109,7 @@ const form = reduxForm<ICalendarImportedReservationForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateImportedReservationForm
+	validate: validationImportedReservationFn
 })(ImportedReservationForm)
 
 export default form

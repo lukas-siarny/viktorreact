@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useEffect, useState, ReactElement } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { Field, InjectedFormProps, WrappedFieldProps } from 'redux-form'
 import { Alert, Col, Row } from 'antd'
 import cx from 'classnames'
@@ -12,15 +12,7 @@ import MapContainer from './MapContainer'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, MAP, mapApiConfig, VALIDATION_MAX_LENGTH } from '../utils/enums'
-import {
-	getGoogleMapUrl,
-	parseAddressComponents,
-	validationRequired,
-	optionRenderWithImage,
-	validationRequiredNumber,
-	validationNumberMin,
-	validationNumberMax
-} from '../utils/helper'
+import { getGoogleMapUrl, optionRenderWithImage, parseAddressComponents } from '../utils/helper'
 
 // atoms
 import InputField from '../atoms/InputField'
@@ -34,20 +26,6 @@ import { RootState } from '../reducers'
 // assets
 import { ReactComponent as GlobeIcon } from '../assets/icons/globe-24.svg'
 
-/**
- * Define in props only variables required for form
- */
-export type AddressInputFields = {
-	latitude: number
-	longitude: number
-	city?: string
-	street?: string
-	streetNumber?: string
-	zipCode?: string
-	country?: string
-	address?: string
-}
-
 type LocationSearchElements = {
 	loadingElement: ReactElement<any>
 	containerElement: ReactElement<any>
@@ -58,26 +36,22 @@ type MapContainerElements = {
 } & LocationSearchElements
 
 type Props = WrappedFieldProps & {
-	inputValues: AddressInputFields
+	inputValues: {
+		latitude: number
+		longitude: number
+		city?: string | null
+		street?: string | null
+		streetNumber?: string | null
+		zipCode?: string | null
+		country?: string | null
+		address?: string | null
+	} | null
 	changeFormFieldValue: InjectedFormProps['change']
 	zoom?: number
 	locationSearchElements?: LocationSearchElements
 	mapContainerElements?: MapContainerElements
 	disabled?: boolean
 	form?: FORM
-}
-
-const numberMinLongitude = validationNumberMin(MAP.minLongitude)
-const numberMaxLongitude = validationNumberMax(MAP.maxLongitude)
-const numberMinLatitude = validationNumberMin(MAP.minLatitude)
-const numberMaxLatitude = validationNumberMax(MAP.maxLatitude)
-
-export interface IAddressValues {
-	street?: string
-	streetNumber?: string
-	city?: string
-	country?: string
-	zipCode?: string
 }
 
 const AddressFields = (props: Props) => {
@@ -182,7 +156,6 @@ const AddressFields = (props: Props) => {
 										name={'street'}
 										size={'large'}
 										disabled={disabled}
-										validate={validationRequired}
 										required
 									/>
 									<Field
@@ -205,7 +178,6 @@ const AddressFields = (props: Props) => {
 										name={'city'}
 										size={'large'}
 										disabled={disabled}
-										validate={validationRequired}
 										required
 									/>
 									<Field
@@ -217,7 +189,6 @@ const AddressFields = (props: Props) => {
 										maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 										size={'large'}
 										disabled={disabled}
-										validate={validationRequired}
 										required
 									/>
 								</Row>
@@ -233,7 +204,6 @@ const AddressFields = (props: Props) => {
 										size={'large'}
 										disabled={disabled}
 										loading={countries?.isLoading}
-										validate={validationRequired}
 										required
 									/>
 									<Field
@@ -246,7 +216,6 @@ const AddressFields = (props: Props) => {
 										required
 										maxChars={10}
 										disabled={disabled}
-										validate={[validationRequiredNumber, numberMinLongitude, numberMaxLongitude]}
 									/>
 									<Field
 										className={'w-1/3'}
@@ -258,7 +227,6 @@ const AddressFields = (props: Props) => {
 										required
 										maxChars={10}
 										disabled={disabled}
-										validate={[validationRequiredNumber, numberMinLatitude, numberMaxLatitude]}
 									/>
 								</Row>
 							</Row>
@@ -291,7 +259,6 @@ const AddressFields = (props: Props) => {
 														name={'street'}
 														size={'large'}
 														disabled={disabled}
-														validate={validationRequired}
 														required
 													/>
 													<Field
@@ -301,7 +268,6 @@ const AddressFields = (props: Props) => {
 														name={'city'}
 														size={'large'}
 														disabled={disabled}
-														validate={validationRequired}
 														required
 													/>
 													<Row gutter={[8, 8]}>
@@ -314,7 +280,6 @@ const AddressFields = (props: Props) => {
 																maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 																size={'large'}
 																disabled={disabled}
-																validate={validationRequired}
 																required
 															/>
 														</Col>
@@ -341,7 +306,6 @@ const AddressFields = (props: Props) => {
 														readOnly
 														disabled={disabled}
 														loading={countries?.isLoading}
-														validate={validationRequired}
 														required
 													/>
 												</Col>
@@ -349,8 +313,8 @@ const AddressFields = (props: Props) => {
 													<MapContainer
 														onError={() => setMapError(true)}
 														onLocationChange={changeLocation}
-														lat={get(inputValues, 'latitude')}
-														lng={get(inputValues, 'longitude')}
+														lat={inputValues?.latitude}
+														lng={inputValues?.latitude}
 														zoom={get(inputValues, 'zoom')}
 														disabled={disabled}
 													/>

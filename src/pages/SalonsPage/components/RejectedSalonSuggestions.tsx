@@ -26,11 +26,11 @@ import { Columns, ISearchFilter } from '../../../types/interfaces'
 import { ReactComponent as IconCheck } from '../../../assets/icons/checker-icon.svg'
 
 // hooks
-import { IUseQueryParams } from '../../../hooks/useQueryParams'
+import { ISalonsPageURLQueryParams } from '../../../schemas/queryParams'
 
 type Props = {
-	query: IUseQueryParams
-	setQuery: (newValues: IUseQueryParams) => void
+	query: ISalonsPageURLQueryParams
+	setQuery: (newValues: ISalonsPageURLQueryParams) => void
 }
 
 const RejectedSalonSuggestions: FC<Props> = (props) => {

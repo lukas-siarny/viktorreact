@@ -6,9 +6,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import cx from 'classnames'
 import dayjs from 'dayjs'
 
-// validate
-import validateEventForm from './validateEventForm'
-
 // utils
 import { optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import {
@@ -25,7 +22,7 @@ import {
 import Permissions from '../../../../utils/Permissions'
 
 // types
-import { ICalendarEmployeesPayload, ICalendarEventForm } from '../../../../types/interfaces'
+import { ICalendarEmployeesPayload } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees-16-current-color.svg'
@@ -42,6 +39,9 @@ import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
 // redux
 import { RootState } from '../../../../reducers'
+
+// schema
+import { ICalendarEventForm, validationEventFn } from '../../../../schemas/event'
 
 type ComponentProps = {
 	eventId?: string | null
@@ -229,7 +229,7 @@ const form = reduxForm<ICalendarEventForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateEventForm
+	validate: validationEventFn
 })(EventForm)
 
 export default form

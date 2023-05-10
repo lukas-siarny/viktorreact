@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Row, Select, Spin } from 'antd'
+import { Button, Col, Divider, Row, Select, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
@@ -28,9 +28,10 @@ import { getCustomers } from '../../reducers/customers/customerActions'
 import { IBreadcrumbs, ISearchFilter, SalonSubPageProps, Columns, IDataUploadForm } from '../../types/interfaces'
 
 // hooks
-import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
 
-const { Option } = Select
+// schema
+import { customersPageURLQueryParams } from '../../schemas/queryParams'
 
 const CustomersPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
@@ -42,13 +43,11 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 	const [uploadStatus, setRequestStatus] = useState<REQUEST_STATUS | undefined>(undefined)
 	const [customersImportVisible, setCustomersImportVisible] = useState(false)
-	const [templateValue, setTemplateValue] = useState(null)
+	const [templateValue, setTemplateValue] = useState<{ label: string; value: string } | null>(null)
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		limit: NumberParam(),
-		page: NumberParam(1),
-		order: StringParam('lastName:ASC')
+	const [query, setQuery] = useQueryParams(customersPageURLQueryParams, {
+		page: 1,
+		order: 'lastName:ASC'
 	})
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -174,8 +173,8 @@ const CustomersPage = (props: SalonSubPageProps) => {
 			<ImportForm
 				setRequestStatus={setRequestStatus}
 				requestStatus={uploadStatus}
-				label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv' })}
-				accept={'.csv'}
+				label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.csv, .xlsx' })}
+				accept={'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv'}
 				title={t('loc:Importovať zákazníkov')}
 				visible={customersImportVisible}
 				setVisible={setCustomersImportVisible}
@@ -183,24 +182,36 @@ const CustomersPage = (props: SalonSubPageProps) => {
 				extraContent={
 					<>
 						<Divider className={'mt-1 mb-3'} />
-						<p className={'text-notino-grayDark'}>{t('loc:Vzorové šablóny súborov')}</p>
-						<Select
-							style={{ zIndex: 999 }}
-							className={'noti-select-input w-full mb-4'}
-							size={'large'}
-							onChange={() => setTemplateValue(null)}
-							value={templateValue}
-							placeholder={t('loc:Vyberte šablónu na stiahnutie')}
-							getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
-						>
-							{TEMPLATE_OPTIONS().map((option) => (
-								<Option value={option.value} key={option.value}>
-									<a className={'block'} href={`${process.env.PUBLIC_URL}/templates/${option.fileName}`} download={option.fileName}>
-										{option.label}
-									</a>
-								</Option>
-							))}
-						</Select>
+						<div className={'flex items-center justify-between gap-1'}>
+							<div className={'ant-form-item w-full'}>
+								<label htmlFor={'noti-customer-template-select'} className={'block mb-2'}>
+									{t('loc:Vzorové šablóny súborov')}
+								</label>
+								<Select
+									id={'noti-customer-template-select'}
+									className={'noti-select-input w-full mb-4'}
+									size={'large'}
+									labelInValue
+									options={TEMPLATE_OPTIONS()}
+									onChange={(val: any) => setTemplateValue(val)}
+									value={templateValue}
+									placeholder={t('loc:Vyberte šablónu na stiahnutie')}
+									getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+								/>
+							</div>
+							<Button
+								className={'noti-btn'}
+								href={`${process.env.PUBLIC_URL}/templates/${templateValue?.value}`}
+								target='_blank'
+								rel='noopener noreferrer'
+								type={'default'}
+								disabled={!templateValue}
+								htmlType={'button'}
+								download
+							>
+								{t('loc:Stiahnuť')}
+							</Button>
+						</div>
 					</>
 				}
 			/>

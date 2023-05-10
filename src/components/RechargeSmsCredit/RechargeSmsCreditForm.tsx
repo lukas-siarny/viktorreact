@@ -50,7 +50,7 @@ const RechargeSmsCreditForm: FC<Props> = (props) => {
 						<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 							<Field
 								component={InputNumberField}
-								label={`${t('loc:Zadajte sumu, ktorú chcete salónu dobiť')} ${currencySymbol ? `(${currencySymbol})` : ''}`.trim()}
+								label={`${t('loc:Zadajte sumu, ktorú chcete salónu nakreditovať')} ${currencySymbol ? `(${currencySymbol})` : ''}`.trim()}
 								placeholder={t('loc:Zadajte sumu')}
 								name={'amount'}
 								precision={2}

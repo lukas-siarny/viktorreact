@@ -50,7 +50,8 @@ const DateRangePickerField = (props: Props) => {
 		rangePickerClassName,
 		showTime,
 		dropdownAlign,
-		locale
+		locale,
+		allowClear
 	} = props
 
 	const onFocus = (e: any) => {
@@ -139,6 +140,7 @@ const DateRangePickerField = (props: Props) => {
 					disabled={disabled}
 					presets={presets}
 					locale={locale}
+					allowClear={allowClear}
 				/>
 			</div>
 		</Form.Item>

@@ -14,19 +14,14 @@ import EmployeeForm from './components/EmployeeForm'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import DeleteButton from '../../components/DeleteButton'
 import InviteForm from './components/InviteForm'
-import EditRoleForm from './components/EditRoleForm'
+import EditEmployeeRoleForm from './components/EditEmployeeRoleForm'
 import ServiceEditModal from './components/ServiceEditModal'
 
 // types
 import {
 	EmployeeService,
-	EmployeeServiceData,
 	IBreadcrumbs,
-	IEditEmployeeRoleForm,
-	IEmployeeForm,
 	IEmployeePayload,
-	IEmployeeServiceEditForm,
-	IInviteEmployeeForm,
 	ISelectOptionItem,
 	SalonSubPageProps,
 	ServiceCategoryParameter,
@@ -34,6 +29,9 @@ import {
 	ServiceRootCategory
 } from '../../types/interfaces'
 import { Paths } from '../../types/api'
+
+// schema
+import { IEmployeeForm, IInviteEmployeeForm } from '../../schemas/employee'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
@@ -56,12 +54,16 @@ import { getSalonRoles } from '../../reducers/roles/rolesActions'
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
 import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.svg'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+import { IEditEmployeeRoleForm } from '../../schemas/role'
+
+// schema
+import { IEmployeeServiceEditForm } from '../../schemas/service'
 
 type Props = SalonSubPageProps
 
@@ -85,7 +87,7 @@ const addService = (servicesOptions: IServicesPayload['options'], employee: IEmp
 		} else if (serviceData && employeeData) {
 			const useCategoryParameter = !!categoryParameter?.values?.length
 
-			let newServiceData: EmployeeServiceData = {
+			let newServiceData: IEmployeeServiceEditForm = {
 				id: serviceData?.key as string,
 				name: serviceData?.label,
 				industry: serviceData?.extra?.firstCategory,
@@ -158,8 +160,8 @@ const getCategoryById = (category: any, serviceCategoryID: string): EmployeeServ
 	return result
 }
 
-const parseServices = (employee?: IEmployeePayload['data'], salonServices?: ISelectOptionItem[]): EmployeeServiceData[] => {
-	const result: EmployeeServiceData[] = []
+const parseServices = (employee?: IEmployeePayload['data'], salonServices?: ISelectOptionItem[]): IEmployeeServiceEditForm[] => {
+	const result: IEmployeeServiceEditForm[] = []
 	const employeeData = employee?.employee
 	const employeeCategories = employeeData?.categories
 	if (employeeCategories) {
@@ -171,7 +173,7 @@ const parseServices = (employee?: IEmployeePayload['data'], salonServices?: ISel
 					const categoryParameter = salonServiceData?.extra?.serviceCategoryParameter as ServiceCategoryParameter
 					const useCategoryParameter = salonServiceData?.extra?.useCategoryParameter
 
-					let formServiceData: EmployeeServiceData = {
+					let formServiceData: IEmployeeServiceEditForm = {
 						id: employeeService?.id,
 						name: employeeService?.category?.name,
 						industry: firstCategory?.name,
@@ -282,6 +284,7 @@ const EmployeePage = (props: Props) => {
 	const isInviteFromSubmitting = useSelector(isSubmitting(FORM.INVITE_EMPLOYEE))
 	const currentAuthUser = useSelector((state: RootState) => state.user.authUser)
 	const salonRoles = useSelector((state: RootState) => state.roles.salonRoles)
+	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
 	const filteredSalonRolesByPermission = useMemo(
 		() => filterSalonRolesByPermission(salonID, currentAuthUser?.data, salonRoles?.data || undefined),
@@ -298,7 +301,6 @@ const EmployeePage = (props: Props) => {
 
 	const fetchEmployeeAndServicesData = useCallback(async () => {
 		const { data: employeesData } = await dispatch(getEmployee(employeeID as string))
-
 		if (!employeesData?.employee?.id) {
 			navigate('/404')
 		}
@@ -308,7 +310,9 @@ const EmployeePage = (props: Props) => {
 		if (employeesData?.employee) {
 			dispatch(
 				initialize(FORM.EMPLOYEE, {
-					...employeesData.employee,
+					firstName: employeesData.employee.firstName,
+					lastName: employeesData.employee.lastName,
+					email: employeesData.employee.email,
 					avatar: employeesData.employee?.image
 						? [
 								{
@@ -318,14 +322,18 @@ const EmployeePage = (props: Props) => {
 								}
 						  ]
 						: [],
+					phone: employeesData.employee.phonePrefixCountryCode || employeesData.employee.user?.phone,
+					phonePrefixCountryCode:
+						employeesData.employee.user?.phonePrefixCountryCode || salon?.data?.companyContactPerson?.phonePrefixCountryCode || salon?.data?.address?.countryCode,
 					deletedAt: employeesData.employee.deletedAt,
+					hasActiveAccount: employeesData.employee.hasActiveAccount,
 					services: parseServices(employeesData, options),
 					salonID: { label: employeesData.employee?.salon?.name, value: employeesData.employee?.salon?.id },
 					roleID: employeesData.employee?.role?.id
 				})
 			)
 		}
-	}, [dispatch, employeeID, salonID, navigate])
+	}, [dispatch, employeeID, salonID, navigate, salon?.data?.companyContactPerson?.phonePrefixCountryCode, salon?.data?.address?.countryCode])
 
 	useEffect(() => {
 		fetchEmployeeAndServicesData()
@@ -348,7 +356,7 @@ const EmployeePage = (props: Props) => {
 				lastName: data?.lastName,
 				email: data?.email,
 				imageID: get(data, 'avatar[0].id') || get(data, 'avatar[0].uid'),
-				serviceIDs: data?.services?.map((service: EmployeeServiceData) => service.id)
+				serviceIDs: data?.services?.map((service) => service.id) as any
 			}
 
 			if (data?.phonePrefixCountryCode && data?.phone) {
@@ -406,10 +414,10 @@ const EmployeePage = (props: Props) => {
 				'/api/b2b/admin/employees/invite',
 				{},
 				{
-					inviteEmail: formData?.email,
+					inviteEmail: formData.email,
 					employeeID,
 					salonID,
-					roleID: formData?.roleID
+					roleID: formData.roleID
 				}
 			)
 			navigate(backUrl as string)
@@ -428,7 +436,7 @@ const EmployeePage = (props: Props) => {
 				'/api/b2b/admin/employees/{employeeID}/role',
 				{ employeeID: employeeID as string },
 				{
-					roleID: data?.roleID
+					roleID: data.roleID
 				}
 			)
 			dispatch(getEmployee(employeeID as string))
@@ -480,7 +488,7 @@ const EmployeePage = (props: Props) => {
 			{formValues?.hasActiveAccount && (
 				<div className='content-body small mb-8'>
 					<Spin spinning={isLoading}>
-						<EditRoleForm
+						<EditEmployeeRoleForm
 							onSubmit={editEmployeeRole}
 							salonRolesOptions={filteredSalonRolesByPermission}
 							hasPermissionToEdit={hasPermissionToEdit}

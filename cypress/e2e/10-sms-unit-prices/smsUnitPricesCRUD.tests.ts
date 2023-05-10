@@ -4,7 +4,7 @@ import { loginViaApi } from '../../support/e2e'
 import smsUnitPrices from '../../fixtures/smsUnitPrices.json'
 
 // enums
-import { CREATE_BUTTON_ID, FORM, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
+import { CREATE_BUTTON_ID, FORM, SMS_UNIT_PRICES_TABLE_ID, SUBMIT_BUTTON_ID } from '../../../src/utils/enums'
 import { CRUD_OPERATIONS } from '../../enums'
 
 const smsUnitPricesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, password?: string): void => {
@@ -38,8 +38,9 @@ const smsUnitPricesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, 
 			cy.wait('@getSmsUnitPricesActual').then((interceptionGetSmsPricesActual: any) => {
 				// check status code of request
 				expect(interceptionGetSmsPricesActual.response.statusCode).to.equal(200)
+				cy.wait(5000)
 				// NOTE: at least one SMS unit price should exists in DB
-				cy.get('.ant-table-row:first').click()
+				cy.get(`.${SMS_UNIT_PRICES_TABLE_ID}:first`).click()
 				cy.clickButton(CREATE_BUTTON_ID, FORM.SMS_UNIT_PRICES_FORM)
 				cy.setInputValue(FORM.SMS_UNIT_PRICES_FORM, 'amount', smsUnitPrices.create.amount)
 				// NOTE: SMS unit price cannot exist in DB for specified date
@@ -70,12 +71,13 @@ const smsUnitPricesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, 
 			cy.wait('@getSmsUnitPricesActual').then((interceptionGetSmsPricesActual: any) => {
 				// check status code of request
 				expect(interceptionGetSmsPricesActual.response.statusCode).to.equal(200)
+				cy.wait(5000)
 				// NOTE: at least one SMS unit price should exists in DB
-				cy.get('.ant-table-row:first')
+				cy.get(`.${SMS_UNIT_PRICES_TABLE_ID}:first`)
 					.as('detailRow')
 					.invoke('attr', 'data-row-key')
 					.then((dataRowKey) => {
-						const [, countryCode] = (dataRowKey || '').split('_')
+						const countryCode = dataRowKey || ''
 
 						cy.intercept({
 							method: 'GET',
@@ -124,12 +126,13 @@ const smsUnitPricesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, 
 			cy.wait('@getSmsUnitPricesActual').then((interceptionGetSmsPricesActual: any) => {
 				// check status code of request
 				expect(interceptionGetSmsPricesActual.response.statusCode).to.equal(200)
+				cy.wait(5000)
 				// NOTE: at least one SMS unit price should exists in DB
-				cy.get('.ant-table-row:first')
+				cy.get(`.${SMS_UNIT_PRICES_TABLE_ID}:first`)
 					.as('detailRow')
 					.invoke('attr', 'data-row-key')
 					.then((dataRowKey) => {
-						const [, countryCode] = (dataRowKey || '').split('_')
+						const countryCode = dataRowKey || ''
 
 						cy.intercept({
 							method: 'GET',

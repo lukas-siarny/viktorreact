@@ -4,8 +4,9 @@ import { IResetStore } from '../generalTypes'
 // types
 import { COSMETICS } from './cosmeticsTypes'
 import { ThunkResult } from '../index'
-import { ISelectOptionItem, IQueryParams, ISearchable } from '../../types/interfaces'
+import { ISelectOptionItem, ISearchable } from '../../types/interfaces'
 import { Paths } from '../../types/api'
+import { IGetCosmeticsQueryParams } from '../../schemas/queryParams'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -21,7 +22,7 @@ interface IGetCosmetics {
 export interface ICosmeticsPayload extends ISearchable<Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200> {}
 
 export const getCosmetics =
-	(queryParams?: IQueryParams): ThunkResult<Promise<ICosmeticsPayload>> =>
+	(queryParams?: IGetCosmeticsQueryParams): ThunkResult<Promise<ICosmeticsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ICosmeticsPayload
 

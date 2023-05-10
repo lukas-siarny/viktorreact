@@ -24,12 +24,13 @@ import { RootState } from '../../reducers'
 
 // types
 import { IBreadcrumbs, Columns } from '../../types/interfaces'
+import { categoryParamsPageURLQueryParams } from '../../schemas/queryParams'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // hooks
-import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
 
 const CategoryParamsPage = () => {
 	const { t, i18n } = useTranslation()
@@ -38,9 +39,8 @@ const CategoryParamsPage = () => {
 	const parameters = useSelector((state: RootState) => state.categoryParams.parameters)
 	const navigate = useNavigate()
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		order: StringParam('name:ASC')
+	const [query, setQuery] = useQueryParams(categoryParamsPageURLQueryParams, {
+		order: 'name:ASC'
 	})
 
 	useEffect(() => {

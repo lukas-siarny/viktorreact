@@ -7,21 +7,18 @@ import { useSelector } from 'react-redux'
 // atoms
 import SelectField from '../../../atoms/SelectField'
 
-// interfaces
-import { IEditUserRoleForm } from '../../../types/interfaces'
-
 // utils
 import { FORM, ADMIN_PERMISSIONS, STRINGS } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
-
-// validate
-import validateEditUserRoleForm from './validateEditUserRoleForm'
 
 // assets
 import { ReactComponent as KeyIcon } from '../../../assets/icons/key.svg'
 
 // reducers
 import { RootState } from '../../../reducers'
+
+// schema
+import { IEditUserRoleForm, validationEditUserRoleFn } from '../../../schemas/role'
 
 type ComponentProps = {}
 
@@ -89,7 +86,7 @@ const form = reduxForm<IEditUserRoleForm, ComponentProps>({
 	touchOnChange: false,
 	touchOnBlur: true,
 	destroyOnUnmount: true,
-	validate: validateEditUserRoleForm
+	validate: validationEditUserRoleFn
 })(EditUserRoleForm)
 
 export default form

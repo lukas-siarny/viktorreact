@@ -6,8 +6,8 @@ import { Spin } from 'antd'
 import { LANGUAGE, MAP, mapApiConfig } from '../utils/enums'
 
 type Props = GoogleMapProps & {
-	lat: number
-	lng: number
+	lat?: number
+	lng?: number
 	onLocationChange: (e: any) => void
 	onError: (message: string) => void
 	disabled?: boolean
@@ -34,14 +34,15 @@ const MapContainer = (props: Props) => {
 	}
 
 	useEffect(() => {
-		const validLat = lat < MAP.maxLatitude && lat > MAP.minLatitude
-		const validLng = lng < MAP.maxLongitude && lng > MAP.minLongitude
-
-		if (validLat && validLng) {
-			updatePosition({ lat, lng })
-		} else {
-			const positionByLanguage = MAP.locations[i18n.language as LANGUAGE] ?? MAP.defaultLocation
-			updatePosition({ ...positionByLanguage })
+		if (lat && lng) {
+			const validLat = lat < MAP.maxLatitude && lat > MAP.minLatitude
+			const validLng = lng < MAP.maxLongitude && lng > MAP.minLongitude
+			if (validLat && validLng) {
+				updatePosition({ lat, lng })
+			} else {
+				const positionByLanguage = MAP.locations[i18n.language as LANGUAGE] ?? MAP.defaultLocation
+				updatePosition({ ...positionByLanguage })
+			}
 		}
 	}, [lat, lng, i18n])
 

@@ -16,7 +16,7 @@ import billingInformationTestSuite from './billingInformation.tests'
 import customerTestSuite, { deleteCustomer } from './customers.tests'
 import employeeTestSuite, { deleteEmployee } from './employee.tests'
 import industriesAndServicesTestSuite from './industriesAndServices.tests'
-import reservationsTestSuite from './reservations.test'
+import reservationsTestSuite from './reservations.tests'
 import smsCreditTestSuite from './smsCredit.tests'
 import salonApprovalProcessTestSuite from './salonApprovalProcess.tests'
 
@@ -88,7 +88,7 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 						cy.checkSuccessToastMessage()
 					})
 				} else {
-					// check redirect to 404 notfound page
+					// check redirect to 403 not allowed page
 					cy.location('pathname').should('eq', '/403')
 				}
 			})
@@ -101,6 +101,7 @@ const salonTestSuite = (actions: CRUD_OPERATIONS[], tests: ITests[], role: SALON
 					url: '/api/b2b/admin/salons/*'
 				}).as('getSalon')
 				cy.visit('/')
+				cy.wait(5000)
 				cy.get(`#${PAGE.SALONS}`).click()
 				cy.wait('@getSalon').then((interception: any) => {
 					// check status code

@@ -19,7 +19,10 @@ import EmployeeForm from './components/EmployeeForm'
 import InviteForm from './components/InviteForm'
 
 // types
-import { IBreadcrumbs, IEmployeeForm, IInviteEmployeeForm, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
+
+// schema
+import { IEmployeeForm, IInviteEmployeeForm } from '../../schemas/employee'
 
 // reducers
 import { getSalonRoles } from '../../reducers/roles/rolesActions'
@@ -111,9 +114,9 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				'/api/b2b/admin/employees/invite',
 				{},
 				{
-					inviteEmail: formData?.email,
+					inviteEmail: formData.email,
 					salonID,
-					roleID: formData?.roleID
+					roleID: formData.roleID
 				}
 			)
 			navigate(backUrl as string)

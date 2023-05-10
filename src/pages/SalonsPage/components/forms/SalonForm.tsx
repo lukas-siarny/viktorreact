@@ -56,6 +56,7 @@ import { ISalonForm, validationSalonFn } from '../../../../schemas/salon'
 type ComponentProps = {
 	disabledForm?: boolean
 	noteModalControlButtons?: React.ReactNode
+	voucherModalControlButtons?: React.ReactNode
 	notinoUserModalControlButtons?: React.ReactNode
 	deletedSalon?: boolean
 	loadBasicSalon?: (id: string) => void
@@ -107,7 +108,8 @@ const SalonForm: FC<Props> = (props) => {
 		showBasicSalonsSuggestions,
 		deletedSalon,
 		notinoUserModalControlButtons,
-		salonData
+		salonData,
+		voucherModalControlButtons
 	} = props
 	const dispatch = useDispatch()
 	const languages = useSelector((state: RootState) => state.languages.languages)
@@ -410,6 +412,7 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 							accept={'image/jpeg,image/png,application/pdf'}
 						/>
+						{voucherModalControlButtons}
 					</Col>
 				</Row>
 				<Row>

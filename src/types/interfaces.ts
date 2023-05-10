@@ -155,6 +155,10 @@ export interface IStructuredAddress {
 }
 
 
+export interface IVoucherForm {
+	code: string
+}
+
 export interface INotinoUserForm {
 	assignedUser: ISelectOptionItem
 }

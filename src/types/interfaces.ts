@@ -1,18 +1,14 @@
-import { IUseQueryParams } from './../hooks/useQueryParams'
-import { EventDragStartArg, EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
+import { EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 import { EventDropArg, EventInput } from '@fullcalendar/react'
 
 // utils
 import {
-	GENDER,
 	MSG_TYPE,
 	LANGUAGE,
 	PERMISSION,
 	CALENDAR_EVENTS_VIEW_TYPE,
-	SALON_STATES,
-	EVERY_REPEAT,
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_VIEW,
 	CONFIRM_BULK,
@@ -23,10 +19,7 @@ import {
 	RESERVATION_STATE,
 	RESERVATION_PAYMENT_METHOD,
 	CONFIRM_MODAL_DATA_TYPE,
-	CALENDAR_EVENT_DISPLAY_TYPE,
-	PARAMETER_TYPE,
-	RESERVATION_SOURCE_TYPE,
-	REVIEW_VERIFICATION_STATUS
+	CALENDAR_EVENT_DISPLAY_TYPE
 } from '../utils/enums'
 
 // types
@@ -558,7 +551,7 @@ export interface ICalendarEventsListPopover {
 	isHidden: boolean
 	isLoading?: boolean
 	isUpdatingEvent?: boolean
-	query: IUseQueryParams
+	query: ICalendarPageURLQueryParams
 	parentPath: string
 	employeeID?: string
 }

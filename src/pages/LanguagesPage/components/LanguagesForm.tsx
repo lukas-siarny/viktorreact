@@ -22,11 +22,8 @@ import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.sv
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
 
-// types
-import { ILanguageForm } from '../../../types/interfaces'
-
-// validate
-import validateLanguagesFrom from './validateLanguagesFrom'
+// schema
+import { ILanguageForm, validationLanguageFn } from '../../../schemas/language'
 
 type ComponentProps = {
 	languageID?: string
@@ -112,7 +109,7 @@ const form = reduxForm<ILanguageForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateLanguagesFrom
+	validate: validationLanguageFn
 })(withPromptUnsavedChanges(LanguagesForm))
 
 export default form

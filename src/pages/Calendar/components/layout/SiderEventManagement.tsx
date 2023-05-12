@@ -10,11 +10,16 @@ import dayjs from 'dayjs'
 import { CalendarApi } from '@fullcalendar/react'
 
 // types
-import { ICalendarEmployeesPayload, ICalendarEventForm, /* ICalendarImportedReservationForm, */ ICalendarReservationForm, INewCalendarEvent } from '../../../../types/interfaces'
+import { ICalendarEmployeesPayload, INewCalendarEvent } from '../../../../types/interfaces'
 import { RootState } from '../../../../reducers'
 
+// schema
+import { ICalendarEventForm } from '../../../../schemas/event'
+import { ICalendarPageURLQueryParams } from '../../../../schemas/queryParams'
+import { ICalendarReservationForm } from '../../../../schemas/reservation'
+
 // utils
-import { getAssignedUserLabel } from '../../../../utils/helper'
+import { getAssignedUserLabel, getDateTime } from '../../../../utils/helper'
 import {
 	CALENDAR_COMMON_SETTINGS,
 	CALENDAR_EVENT_TYPE,
@@ -26,7 +31,8 @@ import {
 	FORM,
 	STRINGS,
 	DEFAULT_DATE_INIT_FORMAT,
-	DEFAULT_TIME_FORMAT
+	DEFAULT_TIME_FORMAT,
+	CALENDAR_VIEW
 } from '../../../../utils/enums'
 import Permissions from '../../../../utils/Permissions'
 
@@ -43,7 +49,6 @@ import TabsComponent from '../../../../components/TabsComponent'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
-import { IUseQueryParams } from '../../../../hooks/useQueryParams'
 import { initLabelInValueSelect } from '../../../../atoms/SelectField'
 
 type Props = {
@@ -62,10 +67,12 @@ type Props = {
 	changeCalendarDate: (newDate: string) => void
 	phonePrefix?: string
 	loadingData?: boolean
-	query: IUseQueryParams
-	setQuery: (newValues: IUseQueryParams) => void
+	query: ICalendarPageURLQueryParams
+	setQuery: (newValues: ICalendarPageURLQueryParams) => void
 	employeesLoading: boolean
 	calendarEmployees: ICalendarEmployeesPayload
+	scrollToTime: (hour: number) => void
+	initOnDemand?: boolean
 }
 
 export type SiderEventManagementRefs = {
@@ -91,7 +98,9 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 		query,
 		setQuery,
 		employeesLoading,
-		calendarEmployees
+		calendarEmployees,
+		scrollToTime,
+		initOnDemand
 	} = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -145,13 +154,42 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 	const initUpdateEventForm = async () => {
 		try {
 			const { data } = await dispatch(getCalendarEventDetail(salonID, query.eventId as string))
-			// pouzijeme zamestnanca z calendarEvents, a
+			// pouzijeme zamestnanca z calendarEvents
 			const employee = employeesOptions.find((option) => option.value === data?.employee.id)
 
+			if (!data || !employee) {
+				return
+			}
+
 			// NOTE: event type v query parametroch musi sediet s event typom zobrazeneho detailu, inak sa zobrazi zly formular
-			if (!data || data.eventType !== query.sidebarView || !employee) {
+			if (data.id === query.eventId && data.eventType !== query.sidebarView) {
 				onCloseSider()
 				return
+			}
+
+			if (!initOnDemand) {
+				// Nascroluje na cas a zamestnanca (vyuziva sa v pripade, ze sa otvara detial po skopirovani URLcky)
+				scrollToTime(dayjs(getDateTime(data.start.date, data.start.time)).hour())
+				if (query.view === CALENDAR_VIEW.DAY) {
+					const employeeColumn = document.querySelector(`[data-resource-id="${data.employee.id}"]`)
+					const employeeOffset = (employeeColumn as HTMLElement)?.offsetLeft
+
+					if (employeeOffset) {
+						const table = document.querySelector('.fc-timegrid > .fc-scrollgrid')
+						const theadScrollers = table?.querySelectorAll('.fc-scrollgrid-section-header .fc-scroller')
+						const tbodyScrollers = table?.querySelectorAll('.fc-scrollgrid-section-body .fc-scroller')
+						const tfootScrollers = table?.querySelectorAll('.fc-scrollgrid-section-footer .fc-scroller')
+
+						if (theadScrollers?.length && tbodyScrollers?.length && tfootScrollers?.length) {
+							const headerSroller = theadScrollers[theadScrollers.length - 1]
+							const bodyScroller = tbodyScrollers[tbodyScrollers.length - 1]
+							const footerSroller = tfootScrollers[tfootScrollers.length - 1]
+							headerSroller.scrollLeft = employeeOffset
+							bodyScroller.scrollLeft = employeeOffset
+							footerSroller.scrollLeft = employeeOffset
+						}
+					}
+				}
 			}
 
 			const repeatOptions: Pick<ICalendarEventForm, 'recurring' | 'repeatOn' | 'every' | 'end'> = data.calendarBulkEvent?.repeatOptions
@@ -352,7 +390,7 @@ const SiderEventManagement = React.forwardRef<SiderEventManagementRefs, Props>((
 					className={'nc-sider-event-management-tabs tabs-small'}
 					activeKey={sidebarView}
 					onChange={(type: string) => {
-						setQuery({ ...query, sidebarView: type })
+						setQuery({ ...query, sidebarView: type as CALENDAR_EVENT_TYPE })
 						dispatch(change(FORM.CALENDAR_EVENT_FORM, 'eventType', type))
 					}}
 					items={[

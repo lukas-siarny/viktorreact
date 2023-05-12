@@ -22,7 +22,10 @@ import { withPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 
 // types
-import { CategoriesPatch, IBreadcrumbs, IIndustriesForm, SalonSubPageProps } from '../../types/interfaces'
+import { CategoriesPatch, IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
+
+// schema
+import { IIndustriesForm } from '../../schemas/industry'
 
 const IndustriesPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()

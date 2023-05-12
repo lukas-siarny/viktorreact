@@ -9,7 +9,7 @@ import { formFieldID, optionRenderWithImage, showErrorNotification } from '../..
 import { ENUMERATIONS_KEYS, FORM, SUBMIT_BUTTON_ID, REQUEST_STATUS, STRINGS } from '../../../../utils/enums'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon-modal.svg'
 import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.svg'
 import { ReactComponent as FilesIcon } from '../../../../assets/icons/files-icon.svg'
 
@@ -79,7 +79,7 @@ const SalonsReportModal: FC<Props> = (props) => {
 							<li>{t('loc:základné informácie')}</li>
 							<li>{t('loc:kontaktné údaje')}</li>
 							<li>{t('loc:stav salónu')}</li>
-							<li>{t('loc:informácie ohľadom rezervačného systému')}</li>
+							<li>{t('loc:informácie o rezervačnom systéme')}</li>
 							<li>{t('loc:informácie o ponúkaných službách')}</li>
 							<li>{t('loc:počet kolegov a klientov')}</li>
 						</ul>

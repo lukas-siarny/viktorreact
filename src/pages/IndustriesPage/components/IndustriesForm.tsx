@@ -9,9 +9,6 @@ import i18next from 'i18next'
 import CheckboxGroupImageField from './CheckboxGroupImageField'
 import { getServicesCategoryKeys } from '../IndustryPage'
 
-// validate
-import validateCategoryFrom from './validateIndustriesFrom'
-
 // utils
 import { FORM, PERMISSION, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
@@ -21,13 +18,13 @@ import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 // redux
 import { RootState } from '../../../reducers'
 
-// types
-import { IIndustriesForm } from '../../../types/interfaces'
-
 // assets
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
 import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
+
+// schema
+import { validationIndustriesFn, IIndustriesForm } from '../../../schemas/industry'
 
 type ComponentProps = {
 	selectedCategoryIDs?: string[]
@@ -114,7 +111,7 @@ const form = reduxForm<IIndustriesForm, ComponentProps>({
 			message: i18next.t('loc:Chybne vyplnený formulár'),
 			description: i18next.t('loc:Vyberte aspoň jedno odvetvie')
 		}),
-	validate: validateCategoryFrom
+	validate: validationIndustriesFn
 })(withPromptUnsavedChanges(IndustriesForm))
 
 export default form

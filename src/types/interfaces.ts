@@ -1,36 +1,42 @@
-import { IUseQueryParams } from './../hooks/useQueryParams'
-import { EventDragStartArg, EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
+import { EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 import { EventDropArg, EventInput } from '@fullcalendar/react'
 
 // utils
 import {
-	GENDER,
 	MSG_TYPE,
 	LANGUAGE,
 	PERMISSION,
 	CALENDAR_EVENTS_VIEW_TYPE,
-	SALON_STATES,
-	EVERY_REPEAT,
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_VIEW,
 	CONFIRM_BULK,
 	RS_NOTIFICATION,
 	RS_NOTIFICATION_TYPE,
-	DAY,
 	SERVICE_TYPE,
 	RESERVATION_STATE,
 	RESERVATION_PAYMENT_METHOD,
 	CONFIRM_MODAL_DATA_TYPE,
-	CALENDAR_EVENT_DISPLAY_TYPE,
-	PARAMETER_TYPE,
-	RESERVATION_SOURCE_TYPE
+	SALON_TABS_KEYS,
+	CALENDAR_EVENT_DISPLAY_TYPE
 } from '../utils/enums'
 
 // types
 import { Paths } from './api'
 import { TooltipPlacement } from 'antd/es/tooltip'
+
+// schema
+import { ICalendarEventForm } from '../schemas/event'
+import { ICalendarReservationForm } from '../schemas/reservation'
+import {
+	ICalendarPageURLQueryParams,
+	INotinoReservationsPageURLQueryParams,
+	IRechargeSmsCreditAdminPageURLQueryParams,
+	IReviewsPageURLQueryParams,
+	ISalonReservationsPageURLQueryParams,
+	IServicesPageURLQueryParams
+} from '../schemas/queryParams'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -69,11 +75,6 @@ export interface ISelectOptionItem<ExtraType = any> {
 
 export type Columns = ColumnsType<any>
 
-export interface ILoginForm {
-	email: string
-	password: string
-}
-
 export interface IInviteEmployeeForm {
 	email: string
 	roleID: string
@@ -90,87 +91,21 @@ export type ServiceCategoryParameter = ServiceType['serviceCategoryParameter']
 
 export type ServiceDetail = Paths.GetApiB2BAdminServicesServiceId.Responses.$200['service']
 
-export type FormPriceAndDurationData = {
-	durationFrom?: number | null
-	durationTo?: number | null
-	priceFrom?: number | null
-	priceTo?: number | null
-	variableDuration?: boolean
-	variablePrice?: boolean
-}
-
-export type EmployeeServiceData = {
-	id: string
-	employee: {
-		id: string
-		name?: string
-		image?: string
-		fallbackImage?: string
-		email?: string
-		inviteEmail?: string
-		hasActiveAccount?: boolean
-	}
-	name?: string
-	industry?: string
-	category?: string
-	image?: string
-	useCategoryParameter: boolean
-	employeePriceAndDurationData?: FormPriceAndDurationData
-	salonPriceAndDurationData?: FormPriceAndDurationData
-	hasOverriddenPricesAndDurationData?: boolean
-	serviceCategoryParameter?: {
-		id: string
-		name?: string
-		employeePriceAndDurationData?: FormPriceAndDurationData
-		salonPriceAndDurationData: FormPriceAndDurationData
-		hasOverriddenPricesAndDurationData?: boolean
-	}[]
-	serviceCategoryParameterType?: PARAMETER_TYPE
-	serviceCategoryParameterName?: string
-	serviceCategoryParameterId?: string
-}
-
-export type IEmployeeServiceEditForm = EmployeeServiceData & {}
-export interface IEditEmployeeRoleForm {
-	roleID: string
-}
-
-export interface ICreateUserForm {
-	email: string
-	phonePrefixCountryCode: string
-	phone: string
-	roleID: string
-	assignedCountryCode: string
-}
-
-export interface IEditUserRoleForm {
-	roleID: string
-}
-
-export interface IUserAccountForm {
-	firstName: string
-	lastName: string
-	phonePrefixCountryCode: string
-	phone: string
-	avatar: any
-	assignedCountryCode: string
-}
-
-// type of BE opening hours data
+// BE opening hours type
 export type RawOpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
 
 type OpeningHoursDay = NonNullable<RawOpeningHours>[0]['day']
 
 // type for OpeningHours component
 export type OpeningHoursTimeRanges = {
-	timeFrom: string
-	timeTo: string
+	timeFrom?: string | null
+	timeTo?: string | null
 }[]
 
 export type OpeningHours = {
 	day: OpeningHoursDay
 	timeRanges: OpeningHoursTimeRanges
-	onDemand?: boolean
+	onDemand?: boolean | null
 }[]
 
 export interface AutocompleteLabelInValue {
@@ -178,135 +113,10 @@ export interface AutocompleteLabelInValue {
 	label: string | null
 	value: string | null
 }
-export interface ISalonForm {
-	salonNameFromSelect: boolean
-	id: string | null
-	name: AutocompleteLabelInValue | string | null
-	aboutUsFirst: string | null
-	state?: SALON_STATES
-	openingHours: OpeningHours
-	sameOpenHoursOverWeek: boolean
-	openOverWeekend: boolean
-	country: string | null
-	zipCode: string | null
-	city: string | null
-	street: string | null
-	streetNumber: string | null
-	latitude: number | null
-	longitude: number | null
-	parkingNote: string | null
-	phones: { phonePrefixCountryCode: string | null; phone: string | null }[]
-	email: string | null
-	categoryIDs: [string, ...string[]] | null
-	socialLinkFB: string | null
-	socialLinkInstagram: string | null
-	socialLinkWebPage: string | null
-	socialLinkYoutube: string | null
-	socialLinkTikTok: string | null
-	socialLinkPinterest: string | null
-	payByCard: boolean
-	payByCash: boolean
-	otherPaymentMethods: string | null
-	logo: any | null
-	gallery: any | null
-	pricelistIDs?: string[]
-	pricelists?: any
-	locationNote: string | null
-	cosmeticIDs: string[]
-	languageIDs: string[]
-}
-
-export interface IParameterValue {
-	id: string | undefined
-	name: string | undefined
-	durationFrom: number | null | undefined
-	durationTo: number | null | undefined
-	variableDuration: boolean
-	priceFrom: number | null | undefined
-	priceTo: number | null | undefined
-	variablePrice: boolean
-	useParameter: boolean
-}
-export interface IServiceForm {
-	id: string
-	durationFrom?: number
-	durationTo?: number
-	variableDuration: boolean
-	priceFrom?: number | null
-	priceTo?: number | null
-	variablePrice: boolean
-	useCategoryParameter: boolean
-	serviceCategoryParameterType?: PARAMETER_TYPE
-	serviceCategoryParameterName?: string
-	serviceCategoryParameter: IParameterValue[]
-	employee?: string[]
-	employees: EmployeeServiceData[]
-	settings: {
-		enabledB2cReservations: boolean
-		autoApproveReservations: boolean
-	}
-	descriptionLocalizations: NameLocalizationsItem[]
-}
 
 export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
 export interface ICalendarEventDetailPayload {
 	data: CalendarEventDetail | null
-}
-export interface ICalendarReservationForm {
-	customer: ISelectOptionItem<{
-		customerData?: NonNullable<ICalendarEventDetailPayload['data']>['customer']
-	}>
-	service: ISelectOptionItem<{
-		priceAndDurationData?: ServiceType['priceAndDurationData'],
-		useCategoryParameter?: ServiceType['useCategoryParameter'],
-		serviceCategoryParameter?: ServiceType['serviceCategoryParameter'],
-		categoryId?: string
-		serviceData?: NonNullable<ICalendarEventDetailPayload['data']>['service']
-	}>
-	employee: ICalendarEmployeeOptionItem
-	date: string
-	timeFrom: string
-	timeTo: string
-	note?: string
-	eventId?: string
-	revertEvent?: () => void
-	updateFromCalendar?: boolean
-	noteFromB2CCustomer?: string
-	reservationData?: CalendarEvent['reservationData']
-	isImported?: boolean
-	eventType: CALENDAR_EVENT_TYPE
-}
-export interface ICalendarEventForm {
-	employee: ICalendarEmployeeOptionItem
-	date: string
-	timeFrom: string
-	timeTo: string
-	eventType: CALENDAR_EVENT_TYPE
-	recurring?: boolean
-	repeatOn?: DAY[]
-	every?: EVERY_REPEAT
-	end?: string
-	note?: string
-	allDay?: boolean
-	// NOTE: pre akcie resize a drag and drop
-	eventId?: string | null
-	calendarBulkEventID?: string
-	revertEvent?: () => void
-	updateFromCalendar?: boolean
-	isImported?: boolean
-}
-
-export interface ICalendarImportedReservationForm {
-	date: string
-	timeFrom: string
-	timeTo: string
-	note?: string
-	eventId: string
-	revertEvent?: () => void
-	updateFromCalendar?: boolean
-	employee: ISelectOptionItem
-	isImported?: boolean
-	eventType: CALENDAR_EVENT_TYPE
 }
 
 export type INewCalendarEvent = Omit<ICalendarEventForm, 'eventType'> | null
@@ -315,56 +125,7 @@ export interface IEventTypeFilterForm {
 	eventType: CALENDAR_EVENT_TYPE
 }
 
-export interface ISupportContactForm {
-	id: string | null
-	note: string
-	openingHours: OpeningHours
-	sameOpenHoursOverWeek: boolean
-	openOverWeekend: boolean
-	countryCode: string
-	zipCode: string
-	city: string
-	street: string
-	streetNumber: string
-	phones: { phonePrefixCountryCode: string; phone: string }[]
-	emails: { email: string }[]
-}
-
-export interface IRegistrationForm {
-	email: string
-	password: string
-	confirmPassword: string
-	phonePrefixCountryCode: string
-	phone: string
-	gdpr: boolean
-	gtc: boolean
-	marketing: boolean
-}
-
-export interface IForgotPasswordForm {
-	email: string
-}
-
-export interface IActivationForm {
-	code: string
-}
-
-export interface IBillingForm {
-	countryCode?: string
-	zipCode?: string
-	city?: string
-	street?: string
-	streetNumber?: string
-	email?: string
-	firstName?: string
-	lastName?: string
-	phonePrefixCountryCode?: string
-	phone?: string
-	businessID?: string
-	taxID?: string
-	vatID?: string
-	companyName?: string
-}
+export type IReviewsFilter = Pick<IReviewsPageURLQueryParams, 'search' | 'verificationStatus' | 'salonCountryCode' | 'toxicityScoreFrom' | 'toxicityScoreTo'>
 
 export interface IJwtPayload {
 	aud: string
@@ -372,22 +133,10 @@ export interface IJwtPayload {
 	iat: number
 	uid: string
 }
-export interface ICreatePasswordForm {
-	password: string
-	confirmPassword: string
-}
-export interface IForgotPasswordForm {
-	email: string
-}
 
 export interface ILoadingAndFailure {
 	isLoading: boolean
 	isFailure: boolean
-}
-
-export interface IConfirmUserForm extends ICreatePasswordForm {
-	name: string
-	surname: string
 }
 
 export interface IBreadcrumbItem {
@@ -411,54 +160,16 @@ export interface IStructuredAddress {
 	houseNumber: string | null
 }
 
-export interface INoteForm {
-	note: string
+export interface IVoucherForm {
+	code: string
 }
 
 export interface INotinoUserForm {
 	assignedUser: ISelectOptionItem
 }
 
-export interface IOpenHoursNoteForm {
-	openingHoursNote: string
-}
-
 export interface ISearchFilter {
 	search: string
-}
-
-export interface ICustomerForm {
-	firstName: string
-	lastName: string
-	email?: string
-	phonePrefixCountryCode: string
-	phone: string
-	gender?: GENDER
-	note?: string
-	zipCode?: string
-	city?: string
-	street?: string
-	streetNumber?: string
-	countryCode?: string
-	salonID?: string
-	gallery?: any
-	avatar?: any
-}
-
-export interface IEmployeeForm {
-	firstName: string
-	lastName: string
-	salonID: string
-	email?: string
-	phonePrefixCountryCode?: string
-	phone?: string
-	services?: any
-	service?: string[]
-	avatar?: any
-	role: number
-	hasActiveAccount?: boolean
-	orderIndex?: number
-	deletedAt?: string
 }
 
 export interface ICosmeticForm {
@@ -466,21 +177,8 @@ export interface ICosmeticForm {
 	image: any
 }
 
-export interface ISpecialistContactForm {
-	email?: string
-	phone: string
-	phonePrefixCountryCode: string
-	countryCode: string
-}
-
 export interface ISpecialistContactFilter {
 	search: string
-}
-
-export interface ISmsUnitPricesForm {
-	validFrom: string
-	amount: number
-	countryCode: string
 }
 
 export interface IRechargeSmsCreditForm {
@@ -492,22 +190,15 @@ export interface ISmsUnitPricesFilter {
 	search: string
 }
 
-export interface IRechargeSmsCreditFilter {
-	search?: string
-	countryCode: string
-	sourceType?: string
-	walletAvailableBalanceFrom?: number
-	walletAvailableBalanceTo?: number
-}
+export type IRechargeSmsCreditFilter = Pick<
+	IRechargeSmsCreditAdminPageURLQueryParams,
+	'search' | 'sourceType' | 'countryCode' | 'walletAvailableBalanceFrom' | 'walletAvailableBalanceTo'
+>
 
+export type IServicesFilter = IServicesPageURLQueryParams
 
 export interface ISmsHistoryFilter {
 	search: string
-}
-
-export interface ILanguageForm {
-	image?: string
-	nameLocalizations: NameLocalizationsItem[]
 }
 
 export interface ILanguagePickerForm {
@@ -528,7 +219,7 @@ export interface IUserAvatar {
 }
 
 export interface IQueryParams {
-	page?: number | null | string
+	page?: number | null
 	limit?: any | undefined
 	order?: string | undefined | null
 	search?: string | undefined | null
@@ -575,6 +266,7 @@ export interface ISearchableWithoutPagination<T> {
 export interface SalonSubPageProps {
 	salonID: string
 	parentPath?: string
+	tabKey?: SALON_TABS_KEYS
 }
 
 export interface IPermissions {
@@ -615,25 +307,6 @@ export type ICategoryParameters = Paths.GetApiB2BAdminEnumsCategoryParameters.Re
 
 export type ICategoryParameter = Paths.GetApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200['categoryParameter']
 
-interface ILocalizedValue {
-	valueLocalizations: ICategoryParameter['values']['0']['valueLocalizations']
-}
-
-export interface ICategoryParamForm {
-	nameLocalizations: ICategoryParameter['nameLocalizations']
-	valueType: ICategoryParameter['valueType']
-	localizedValues: ILocalizedValue[]
-	values: Pick<ICategoryParameter['values']['0'], 'value'>[]
-}
-
-export interface IIndustriesForm {
-	categoryIDs: string[]
-}
-
-export interface IIndustryForm {
-	categoryIDs: string[]
-}
-
 export interface IReservationsSettingsNotification {
 	b2bChannels: {
 		[key in RS_NOTIFICATION_TYPE]?: boolean
@@ -664,8 +337,8 @@ export interface IReservationSystemSettingsForm {
 	}
 }
 
-export type NameLocalizationsItem = {
-	language: string
+export type NameLocalizationsItem<T = string> = {
+	language: T
 	value: string | null
 }
 
@@ -759,10 +432,7 @@ export interface TimeStats extends ILoadingAndFailure {
 	data: TimeStatsData | null
 }
 
-export interface ICalendarFilter {
-	employeeIDs?: string[]
-	categoryIDs?: string[]
-}
+export type ICalendarFilter = Pick<ICalendarPageURLQueryParams, 'employeeIDs' | 'categoryIDs'>
 
 export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {
 	tableData: (Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0] & { key: number })[]
@@ -779,7 +449,10 @@ export interface IActiveEmployeesPayload extends ISearchable<Paths.GetApiB2BAdmi
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]
-export type CalendarEmployee = Pick<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0], 'id' | 'color' | 'firstName' | 'lastName' | 'email' | 'image' | 'inviteEmail' | 'orderIndex'> & { orderIndex: number, inviteEmail?: string, isDeleted?: boolean }
+export type CalendarEmployee = Pick<
+	Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0],
+	'id' | 'color' | 'firstName' | 'lastName' | 'email' | 'image' | 'inviteEmail' | 'orderIndex'
+> & { orderIndex: number; inviteEmail?: string; isDeleted?: boolean }
 export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
 export type CalendarEvent = CalendarEvents[0] & {
 	startDateTime: string
@@ -808,7 +481,7 @@ export type ICalendarMonthlyViewEvent = Omit<Paths.GetApiB2BAdminSalonsSalonIdCa
 	id: string
 	employee: CalendarEmployee
 }
-export type ICalendarMonthlyViewDay = { [key: string]: ICalendarMonthlyViewEvent[]  }
+export type ICalendarMonthlyViewDay = { [key: string]: ICalendarMonthlyViewEvent[] }
 
 export interface ICalendarMonthlyReservationsPayload {
 	data: ICalendarMonthlyViewDay | null
@@ -889,7 +562,7 @@ export interface ICalendarEventsListPopover {
 	isHidden: boolean
 	isLoading?: boolean
 	isUpdatingEvent?: boolean
-	query: IUseQueryParams
+	query: ICalendarPageURLQueryParams
 	parentPath: string
 	employeeID?: string
 }
@@ -1000,15 +673,11 @@ export interface ICalendarDayEvents {
 export interface ICalendarDayEventsMap {
 	[key: string]: number
 }
-export interface IReservationsFilter {
-	dateFrom: string
-	countryCode?: string
-	employeeIDs?: string[]
-	categoryIDs?: string[]
-	reservationStates?: RESERVATION_STATE[]
-	reservationPaymentMethods?: RESERVATION_PAYMENT_METHOD[]
-	reservationCreateSourceType?: RESERVATION_SOURCE_TYPE
-}
+
+export type ISalonReservationsFilter = Omit<ISalonReservationsPageURLQueryParams, 'state' | 'page' | 'limit'>
+
+export type INotinoReservationsFilter = Omit<INotinoReservationsPageURLQueryParams, 'state' | 'page' | 'limit'>
+
 export type ServicePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody
 
 export type DisabledNotificationsArray = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']

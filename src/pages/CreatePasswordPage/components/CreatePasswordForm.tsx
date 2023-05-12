@@ -3,9 +3,6 @@ import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 
-// types
-import { ICreatePasswordForm } from '../../../types/interfaces'
-
 // atoms
 import InputPasswordField from '../../../atoms/InputPasswordField'
 import InputField from '../../../atoms/InputField'
@@ -17,9 +14,8 @@ import { formFieldID, showErrorNotification } from '../../../utils/helper'
 // assets
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon-16.svg'
 
-// validate
-
-import validateCreatePasswordForm from './validateCreatePasswordForm'
+// schema
+import { ICreatePasswordForm, validationCreatePasswordFn } from '../../../schemas/password'
 
 type ComponentProps = {
 	showForgottenPasswordModal: () => void
@@ -88,7 +84,7 @@ const form = reduxForm<ICreatePasswordForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateCreatePasswordForm
+	validate: validationCreatePasswordFn
 })(CreatePasswordForm)
 
 export default form

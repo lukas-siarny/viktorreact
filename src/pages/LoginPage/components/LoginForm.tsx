@@ -8,15 +8,12 @@ import { useTranslation } from 'react-i18next'
 import InputPasswordField from '../../../atoms/InputPasswordField'
 import InputField from '../../../atoms/InputField'
 
-// interfaces
-import { ILoginForm } from '../../../types/interfaces'
+// schema
+import { ILoginForm, validationLoginFn } from '../../../schemas/login'
 
 // utils
 import { FORGOT_PASSWORD_BUTTON_ID, FORM, HELP_BUTTON_ID, SIGNUP_BUTTON_ID, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { formFieldID, showErrorNotification } from '../../../utils/helper'
-
-// validate
-import validateLoginForm from './validateLoginForm'
 
 type ComponentProps = {
 	showForgottenPasswordModal: () => void
@@ -84,7 +81,7 @@ const form = reduxForm<ILoginForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateLoginForm
+	validate: validationLoginFn
 })(LoginForm)
 
 export default form

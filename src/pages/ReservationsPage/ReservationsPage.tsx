@@ -13,6 +13,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import UserAvatar from '../../components/AvatarComponents'
 import ReservationsFilter from './components/ReservationsFilter'
+import TabsComponent from '../../components/TabsComponent'
 
 // utils
 import {
@@ -30,8 +31,8 @@ import {
 	RESERVATIONS_STATE,
 	ROW_GUTTER_X_DEFAULT
 } from '../../utils/enums'
+import { formFieldID, getAssignedUserLabel, normalizeDirectionKeys, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { formatObjToQuery, formFieldID, getAssignedUserLabel, normalizeDirectionKeys, translateReservationPaymentMethod, translateReservationState } from '../../utils/helper'
 import { patchReq } from '../../utils/request'
 
 // reducers
@@ -39,12 +40,14 @@ import { RootState } from '../../reducers'
 import { getServices } from '../../reducers/services/serviceActions'
 
 // types
-import { Columns, IBreadcrumbs, IReservationsFilter, SalonSubPageProps } from '../../types/interfaces'
+import { Columns, IBreadcrumbs, ISalonReservationsFilter, SalonSubPageProps } from '../../types/interfaces'
 import { getPaginatedReservations, getPendingReservationsCount } from '../../reducers/calendar/calendarActions'
 
 // hooks
-import useQueryParams, { ArrayParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
-import TabsComponent from '../../components/TabsComponent'
+import useQueryParams, { formatObjToQuery } from '../../hooks/useQueryParamsZod'
+
+// schema
+import { salonReservationsPageURLQueryParams } from '../../schemas/queryParams'
 
 const APPROVE_RESERVATION_PERMISSIONS = [PERMISSION.CALENDAR_EVENT_UPDATE, PERMISSION.PARTNER_ADMIN]
 
@@ -61,20 +64,11 @@ const ReservationsPage = (props: Props) => {
 	const count = pendingReservationsCount > 0 ? `(${pendingReservationsCount})` : ''
 	const [approvingReservation, setApprovingReservation] = useState(false)
 
-	const [query, setQuery] = useQueryParams({
-		dateFrom: StringParam(),
-		dateTo: StringParam(),
-		createdAtFrom: StringParam(),
-		createdAtTo: StringParam(),
-		employeeIDs: ArrayParam(),
-		categoryIDs: ArrayParam(),
-		reservationStates: ArrayParam(),
-		reservationCreateSourceType: StringParam(),
-		state: StringParam(RESERVATIONS_STATE.ALL),
-		reservationPaymentMethods: ArrayParam(),
-		limit: NumberParam(),
-		page: NumberParam(1)
+	const [query, setQuery] = useQueryParams(salonReservationsPageURLQueryParams, {
+		state: RESERVATIONS_STATE.ALL,
+		page: 1
 	})
+
 	const fetchData = useCallback(() => {
 		dispatch(
 			getPaginatedReservations({
@@ -145,7 +139,7 @@ const ReservationsPage = (props: Props) => {
 		dispatch(getServices({ salonID }))
 	}, [salonID, dispatch])
 
-	const handleSubmit = (values: IReservationsFilter) => {
+	const handleSubmit = (values: ISalonReservationsFilter) => {
 		const newQuery = {
 			...query,
 			...values,
@@ -425,7 +419,7 @@ const ReservationsPage = (props: Props) => {
 			</Row>
 			<TabsComponent
 				className={'box-tab'}
-				activeKey={query.state || RESERVATIONS_STATE.ALL}
+				activeKey={query.state}
 				onChange={onTabChange}
 				items={[
 					{

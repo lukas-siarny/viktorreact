@@ -186,6 +186,7 @@ export enum FORM {
 	SUPPORT_CONTACTS_FILTER = 'SUPPORT_CONTACTS_FILTER',
 	SUPPORT_CONTACT = 'SUPPORT_CONTACT',
 	NOTE = 'NOTE',
+	VOUCHER_FORM = 'VOUCHER_FORM',
 	NOTINO_USER = 'NOTINO_USER',
 	EDIT_EMPLOYEE_ROLE = 'EDIT_EMPLOYEE_ROLE',
 	IMPORT_FORM = 'IMPORT_FORM',
@@ -277,15 +278,20 @@ export enum TOKEN_AUDIENCE {
 	CANCEL_RESERVATION = 'CANCEL_RESERVATION'
 }
 
-export enum TAB_KEYS {
+export enum SALON_TABS_KEYS {
 	SALON_DETAIL = 'SALON_DETAIL',
 	SALON_HISTORY = 'SALON_HISTORY'
 }
 
 export enum SALONS_TAB_KEYS {
+	ACTIVE = 'ACTIVE',
+	DELETED = 'DELETED',
+	MISTAKES = 'MISTAKES'
+}
+
+export enum EMPLOYEES_TAB_KEYS {
 	ACTIVE = 'active',
-	DELETED = 'deleted',
-	MISTAKES = 'mistakes'
+	DELETED = 'deleted'
 }
 
 export enum DASHBOARD_TAB_KEYS {
@@ -375,6 +381,8 @@ export const INVALID_DATE_FORMAT = 'INVALID_DATE_FORMAT'
 export const INDIVIDUAL_TRANSPORT = 0
 
 export const BACK_DATA_QUERY = 'backData'
+
+export const PIN_LENGTH = 6
 
 export enum ENUMERATIONS_KEYS {
 	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
@@ -696,6 +704,8 @@ export const DOWNLOAD_BUTTON_ID = 'download-btn'
 
 export const ROW_BUTTON_WITH_ID = (id: string) => `row-btn-with-id_${id}`
 
+export const SMS_UNIT_PRICES_TABLE_ID = 'sms-unit-prices-table'
+
 export const MAX_VALUES_PER_PARAMETER = 20
 
 export enum PARAMETERS_VALUE_TYPES {
@@ -874,14 +884,12 @@ export const EVERY_REPEAT_OPTIONS = () => [
 
 export const TEMPLATE_OPTIONS = () => [
 	{
-		value: '.csv',
-		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.csv' }),
-		fileName: 'import_of_clients_template.csv'
+		value: 'import_of_clients_template.csv',
+		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.csv' })
 	},
 	{
-		value: '.xlsx',
-		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' }),
-		fileName: 'import_of_clients_template.xlsx'
+		value: 'import_of_clients_template.xlsx',
+		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' })
 	}
 ]
 
@@ -1188,4 +1196,9 @@ export const SERVICES_LIST_INIT = {
 		servicesAvailableForOnlineReservationsCount: 0,
 		servicesVisibleInPricelistCount: 0
 	}
+}
+
+export enum SERVICE_DESCRIPTION_LNG {
+	DEFAULT = 'DEFAULT',
+	EN = 'en'
 }

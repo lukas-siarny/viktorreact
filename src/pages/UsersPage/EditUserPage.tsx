@@ -12,7 +12,7 @@ import { withPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 
 // types
-import { IBreadcrumbs, IEditUserRoleForm } from '../../types/interfaces'
+import { IBreadcrumbs } from '../../types/interfaces'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -27,13 +27,16 @@ import { RootState } from '../../reducers'
 import { getUser } from '../../reducers/users/userActions'
 import { getSystemRoles } from '../../reducers/roles/rolesActions'
 
+// schema
+import { IEditUserRoleForm } from '../../schemas/role'
+
 const EditUserPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const { userID } = useParams<{ userID?: string }>() as any
 	const userAccountDetail = useSelector((state: RootState) => state.user.user)
-	const submittingEditRoleForm = useSelector(isSubmitting(FORM.EDIT_USER_ROLE))
+	const submittingEditEmployeeRoleForm = useSelector(isSubmitting(FORM.EDIT_USER_ROLE))
 	const [backUrl] = useBackUrl(t('paths:users'))
 	const [isDeleting, setIsDeleting] = useState<boolean>(false)
 
@@ -43,7 +46,7 @@ const EditUserPage = () => {
 	}, [dispatch, userAccountDetail?.data?.user])
 
 	const editUserRole = async (data: IEditUserRoleForm) => {
-		if (submittingEditRoleForm) {
+		if (submittingEditEmployeeRoleForm) {
 			return
 		}
 		try {
@@ -88,7 +91,7 @@ const EditUserPage = () => {
 					<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 				</Row>
 				<div className='content-body small mb-8'>
-					<Spin spinning={userAccountDetail.isLoading || submittingEditRoleForm || isDeleting}>
+					<Spin spinning={userAccountDetail.isLoading || submittingEditEmployeeRoleForm || isDeleting}>
 						<EditUserRoleForm onSubmit={editUserRole} />
 					</Spin>
 				</div>

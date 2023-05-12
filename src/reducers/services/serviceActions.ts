@@ -7,10 +7,11 @@ import { SERVICES, SERVICE, SET_SERVICES_ACTIVE_KEYS } from './serviceTypes'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
 import { IUserAvatar, ISearchableWithoutPagination, ISelectOptionItem, ServicesActiveKeys } from '../../types/interfaces'
+import { IGetServicesQueryParams } from '../../schemas/queryParams'
 
 // utils
 import { getReq } from '../../utils/request'
-import { getAssignedUserLabel, decodePrice, getServiceRange } from '../../utils/helper'
+import { getAssignedUserLabel, decodePrice, getServiceRange, normalizeQueryParams } from '../../utils/helper'
 import { SERVICES_LIST_INIT, SERVICE_ROW_KEY } from '../../utils/enums'
 
 export type IServiceActions = IResetStore | IGetServices | IGetService | ISetServicesActiveKeys
@@ -65,11 +66,6 @@ export interface IServicesListData {
 	industries: IServicesListCategoryItem<IServicesListInudstry>
 }
 
-export interface IGetServicesQueryParams {
-	rootCategoryID?: string
-	salonID: string
-}
-
 export type ServicesActiveKeysPayload = (ServicesActiveKeys & { salonID: string }) | null
 
 export interface IServicesPayload extends ISearchableWithoutPagination<Paths.GetApiB2BAdminServices.Responses.$200> {
@@ -86,7 +82,7 @@ export const getServices =
 		const state = getState()
 		try {
 			dispatch({ type: SERVICES.SERVICES_LOAD_START })
-			const { data } = await getReq('/api/b2b/admin/services/', queryParams)
+			const { data } = await getReq('/api/b2b/admin/services/', { ...normalizeQueryParams(queryParams) } as any)
 			const categories = data.groupedServicesByCategory
 
 			const currencies = state.enumerationsStore.currencies.data

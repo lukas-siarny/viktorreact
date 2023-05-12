@@ -66,7 +66,7 @@ const CustomersFilter = (props: Props) => {
 
 	const customContent = (
 		<div className={'flex items-center gap-2'}>
-			<Tooltip title={t('loc:Importujte si svojich klientov z externých služieb ako Reservanto, Reservio, …')}>
+			<Tooltip title={t('loc:Importujte si svojich klientov z externých rezervačných systémov')}>
 				<Button
 					onClick={openClientImportsModal}
 					type='primary'

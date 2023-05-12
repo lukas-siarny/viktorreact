@@ -7,18 +7,11 @@ import { BASIC_SALON, BASIC_SALONS, REJECTED_SUGGESTIONS, SALON, SALON_HISTORY, 
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
 import { IQueryParams, ISearchable } from '../../types/interfaces'
+import { IGetSalonsHistoryQueryParams, IGetSalonsQueryParams } from '../../schemas/queryParams'
 
 // utils
 import { getReq } from '../../utils/request'
-import {
-	SALON_CREATE_TYPE,
-	SALON_FILTER_OPENING_HOURS,
-	SALON_FILTER_STATES,
-	SALON_FILTER_RS,
-	SALON_FILTER_RS_AVAILABLE_ONLINE,
-	SALON_SOURCE_TYPE,
-	SALONS_TAB_KEYS
-} from '../../utils/enums'
+import { SALON_FILTER_OPENING_HOURS, SALON_FILTER_STATES, SALON_FILTER_RS, SALON_FILTER_RS_AVAILABLE_ONLINE, SALONS_TAB_KEYS } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
 export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGetBasictSalon | IGetBasicSalons | IGetSalonHistory | IGetRejectedSuggestions
@@ -31,28 +24,6 @@ interface IGetSalons {
 interface IGetSalonHistory {
 	type: SALON_HISTORY
 	payload: ISalonHistoryPayload
-}
-
-export interface IGetSalonsQueryParams extends IQueryParams {
-	categoryFirstLevelIDs?: (string | null)[] | null
-	statuses_all?: boolean | null
-	statuses_published?: string | SALON_FILTER_STATES | null
-	salonState?: string | null
-	statuses_changes?: string | SALON_FILTER_STATES | null
-	countryCode?: string | null
-	createType?: string | null
-	lastUpdatedAtFrom?: string | null
-	lastUpdatedAtTo?: string | null
-	hasSetOpeningHours?: string | null
-	sourceType?: string | null
-	premiumSourceUserType?: string | null
-	assignedUserID?: string | null
-}
-
-export interface IGetSalonsHistoryQueryParams extends IQueryParams {
-	dateFrom: string | null
-	dateTo: string | null
-	salonID: string
 }
 
 export interface IGetSalon {
@@ -119,28 +90,8 @@ interface IGetRejectedSuggestions {
 	payload: IRejectedSuggestionsPayload
 }
 
-interface GetSalonsQueryParams extends IQueryParams {
-	categoryFirstLevelIDs?: string[]
-	statuses_all?: boolean
-	statuses_published?: SALON_FILTER_STATES.PUBLISHED | SALON_FILTER_STATES.NOT_PUBLISHED
-	statuses_changes?: SALON_FILTER_STATES.PENDING_PUBLICATION | SALON_FILTER_STATES.DECLINED
-	salonState?: SALONS_TAB_KEYS.DELETED | SALONS_TAB_KEYS.ACTIVE
-	countryCode?: string
-	createType?: SALON_CREATE_TYPE
-	lastUpdatedAtFrom?: string
-	lastUpdatedAtTo?: string
-	hasSetOpeningHours?: SALON_FILTER_OPENING_HOURS
-	sourceType?: SALON_SOURCE_TYPE
-	premiumSourceUserType?: SALON_SOURCE_TYPE
-	assignedUserID?: string
-	walletAvailableBalanceFrom?: number
-	walletAvailableBalanceTo?: number
-	hasAvailableReservationSystem?: SALON_FILTER_RS_AVAILABLE_ONLINE
-	enabledReservationsSetting?: SALON_FILTER_RS
-}
-
 export const getSalons =
-	(queryParams: GetSalonsQueryParams): ThunkResult<Promise<ISalonsPayload>> =>
+	(queryParams: IGetSalonsQueryParams): ThunkResult<Promise<ISalonsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISalonsPayload
 
@@ -334,7 +285,7 @@ export const getSalonHistory =
 		let payload = {} as ISalonHistoryPayload
 		try {
 			dispatch({ type: SALON_HISTORY.SALON_HISTORY_LOAD_START })
-			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/history', { ...normalizeQueryParams(queryParams) } as any)
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/history', queryParams)
 			payload = {
 				data
 			}

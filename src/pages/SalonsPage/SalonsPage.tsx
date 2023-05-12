@@ -26,7 +26,7 @@ import { getReq, postReq } from '../../utils/request'
 import { getCheckerIcon, getSalonTagChanges, getSalonTagCreateType, getSalonTagSourceType } from './components/salonUtils'
 
 // reducers
-import { emptySalons, getSalons } from '../../reducers/salons/salonsActions'
+import { getSalons } from '../../reducers/salons/salonsActions'
 import { RootState } from '../../reducers'
 import { getCategories } from '../../reducers/categories/categoriesActions'
 import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
@@ -39,22 +39,25 @@ import { Columns, IBreadcrumbs, IDataUploadForm, ISalonsReportForm } from '../..
 import useQueryParams from '../../hooks/useQueryParamsZod'
 
 // schema
-import { ISalonsPageURLQueryParams, salonsPageURLQueryParamsSchema } from '../../schemas/queryParams'
+import { salonsPageURLQueryParamsSchema } from '../../schemas/queryParams'
 
+type Props = {
+	tabKey: SALONS_TAB_KEYS
+}
 const permissions: PERMISSION[] = [PERMISSION.NOTINO]
 
-const SalonsPage = () => {
+const SalonsPage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const salons = useSelector((state: RootState) => state.salons.salons)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
-
 	const [salonImportsModalVisible, setSalonImportsModalVisible] = useState(false)
 	const [requestStatusImport, setRequestStatusImport] = useState<REQUEST_STATUS | undefined>(undefined)
 	const [requestStatusReport, setRequestStatusReport] = useState<REQUEST_STATUS | undefined>(undefined)
 	const [salonsReportModalVisible, setSalonsReportModalVisible] = useState(false)
 
+	const tabKey = props.tabKey || SALONS_TAB_KEYS.ACTIVE
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	const { data } = useSelector((state: RootState) => state.categories.categories)
 	const isFormPristine = useSelector((state: RootState) => isPristine(FORM.SALONS_FILTER_ACITVE)(state))
@@ -77,33 +80,6 @@ const SalonsPage = () => {
 		order: 'createdAt:DESC'
 	})
 
-	const resetQuery = (selectedTabKey: string, rewrite: ISalonsPageURLQueryParams = {}) => {
-		// reset query when switching between tabs
-		setQuery({
-			search: undefined,
-			categoryFirstLevelIDs: undefined,
-			statuses_all: undefined,
-			statuses_published: undefined,
-			statuses_changes: undefined,
-			limit: undefined,
-			page: 1,
-			order: 'createdAt:DESC',
-			// get default selected country form redux store
-			countryCode: selectedCountry,
-			createType: undefined,
-			lastUpdatedAtFrom: undefined,
-			lastUpdatedAtTo: undefined,
-			salonState: selectedTabKey as SALONS_TAB_KEYS,
-			hasSetOpeningHours: undefined,
-			sourceType: undefined,
-			premiumSourceUserType: undefined,
-			assignedUserID: undefined,
-			hasAvailableReservationSystem: undefined,
-			enabledReservationsSetting: undefined,
-			...rewrite
-		})
-	}
-
 	useEffect(() => {
 		let salonsQueries = {
 			...query
@@ -117,7 +93,7 @@ const SalonsPage = () => {
 			}
 		}
 
-		switch (query.salonState) {
+		switch (tabKey) {
 			case SALONS_TAB_KEYS.DELETED:
 				dispatch(
 					initialize(FORM.SALONS_FILTER_DELETED, {
@@ -128,7 +104,7 @@ const SalonsPage = () => {
 						hasAvailableReservationSystem: query.hasAvailableReservationSystem
 					})
 				)
-				dispatch(getSalons(salonsQueries))
+				dispatch(getSalons({ ...salonsQueries, salonState: tabKey }))
 				break
 
 			case SALONS_TAB_KEYS.MISTAKES:
@@ -160,11 +136,12 @@ const SalonsPage = () => {
 				)
 
 				dispatch(initialize(FORM.SALONS_REPORT, { countryCode: salonsQueries.countryCode || ALL_COUNTRIES_OPTION }))
-				dispatch(getSalons(salonsQueries))
+				dispatch(getSalons({ ...salonsQueries, salonState: tabKey }))
 				break
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
+		tabKey,
 		dispatch,
 		query.page,
 		query.limit,
@@ -173,7 +150,6 @@ const SalonsPage = () => {
 		query.categoryFirstLevelIDs,
 		query.statuses_all,
 		query.statuses_published,
-		query.salonState,
 		query.statuses_changes,
 		query.countryCode,
 		query.createType,
@@ -278,15 +254,22 @@ const SalonsPage = () => {
 		  }
 		: undefined
 
-	const onTabChange = (selectedTabKey: string) => {
-		dispatch(emptySalons())
-		resetQuery(selectedTabKey, selectedTabKey === SALONS_TAB_KEYS.MISTAKES ? { countryCode: undefined } : {})
+	const onTabChange = (newTabKey: string) => {
+		if (newTabKey === SALONS_TAB_KEYS.ACTIVE) {
+			navigate(t('paths:salons'))
+		}
+		if (newTabKey === SALONS_TAB_KEYS.DELETED) {
+			navigate(t('paths:salons/deleted'))
+		}
+		if (newTabKey === SALONS_TAB_KEYS.MISTAKES) {
+			navigate(t('paths:salons/rejected'))
+		}
 	}
 
 	// define columns for both tables - active and deleted
 	const tableColumns: { [key: string]: (props?: Columns[0]) => Columns[0] } = useMemo(
 		() => ({
-			id: (props) => ({
+			id: (columnProps) => ({
 				title: t('loc:ID'),
 				dataIndex: 'id',
 				key: 'id',
@@ -298,9 +281,9 @@ const SalonsPage = () => {
 
 					return <Tooltip title={value}>{`${firstThree}...${lastThree}`}</Tooltip>
 				},
-				...props
+				...columnProps
 			}),
-			name: (props) => ({
+			name: (columnProps) => ({
 				title: <span id={'sortby-title'}>{t('loc:Názov')}</span>,
 				dataIndex: 'name',
 				key: 'name',
@@ -308,18 +291,18 @@ const SalonsPage = () => {
 				sorter: true,
 				sortOrder: setOrder(query.order, 'name'),
 				render: (value) => value || '-',
-				...props
+				...columnProps
 			}),
-			address: (props) => ({
+			address: (columnProps) => ({
 				title: t('loc:Adresa'),
 				dataIndex: 'address',
 				key: 'address',
 				ellipsis: true,
 				sorter: false,
 				render: (value) => (!isEmpty(value) ? <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</> : '-'),
-				...props
+				...columnProps
 			}),
-			categories: (props) => ({
+			categories: (columnProps) => ({
 				title: t('loc:Odvetvia'),
 				dataIndex: 'categories',
 				key: 'categories',
@@ -348,17 +331,17 @@ const SalonsPage = () => {
 
 					return '-'
 				},
-				...props
+				...columnProps
 			}),
-			createType: (props) => ({
+			createType: (columnProps) => ({
 				title: t('loc:Typ salónu'),
 				dataIndex: 'createType',
 				key: 'createType',
 				sorter: false,
 				render: (_value, record) => getSalonTagCreateType(record.state, record.createType),
-				...props
+				...columnProps
 			}),
-			createdAt: (props) => ({
+			createdAt: (columnProps) => ({
 				title: t('loc:Vytvorený'),
 				dataIndex: 'createdAt',
 				key: 'createdAt',
@@ -366,27 +349,27 @@ const SalonsPage = () => {
 				sorter: true,
 				sortOrder: setOrder(query.order, 'createdAt'),
 				render: (value) => (value ? formatDateByLocale(value) : '-'),
-				...props
+				...columnProps
 			}),
-			lastUpdatedAt: (props) => ({
+			lastUpdatedAt: (columnProps) => ({
 				title: t('loc:Upravený'),
 				dataIndex: 'lastUpdatedAt',
 				key: 'lastUpdatedAt',
 				ellipsis: true,
 				sorter: false,
 				render: (value) => (value ? formatDateByLocale(value) : '-'),
-				...props
+				...columnProps
 			}),
-			deletedAt: (props) => ({
+			deletedAt: (columnProps) => ({
 				title: t('loc:Vymazaný'),
 				dataIndex: 'deletedAt',
 				key: 'deletedAt',
 				ellipsis: true,
 				sorter: false,
 				render: (value) => (value ? formatDateByLocale(value) : '-'),
-				...props
+				...columnProps
 			}),
-			isPublished: (props) => ({
+			isPublished: (columnProps) => ({
 				title: t('loc:Publikovaný'),
 				key: 'isPublished',
 				ellipsis: true,
@@ -404,56 +387,56 @@ const SalonsPage = () => {
 					}
 					return <div className={'flex items-center'}>{getCheckerIcon(checked)}</div>
 				},
-				...props
+				...columnProps
 			}),
-			changes: (props) => ({
+			changes: (columnProps) => ({
 				title: t('loc:Zmeny'),
 				key: 'changes',
 				ellipsis: true,
 				sorter: false,
 				render: (_value, record) => getSalonTagChanges(record.state),
-				...props
+				...columnProps
 			}),
-			fillingProgress: (props) => ({
+			fillingProgress: (columnProps) => ({
 				title: t('loc:Vyplnenie profilu'),
 				dataIndex: 'fillingProgressSalon',
 				key: 'fillingProgress',
 				sorter: true,
 				sortOrder: setOrder(query.order, 'fillingProgress'),
 				render: (value: number | undefined) => <span className={'w-9 flex-shrink-0'}>{value ? `${value}%` : ''}</span>,
-				...props
+				...columnProps
 			}),
-			assignedUser: (props) => ({
+			assignedUser: (columnProps) => ({
 				title: t('loc:Notino používateľ'),
 				dataIndex: 'assignedUser',
 				key: 'assignedUser',
 				sorter: false,
 				render: (value: any) => <span className={'inline-block truncate w-full'}>{getAssignedUserLabel(value)}</span>,
-				...props
+				...columnProps
 			}),
-			premiumSourceUserType: (props) => ({
+			premiumSourceUserType: (columnProps) => ({
 				title: t('loc:Zdroj PREMIUM'),
 				dataIndex: 'premiumSourceUserType',
 				key: 'premiumSourceUserType',
 				sorter: false,
 				render: (value: string) => getSalonTagSourceType(value),
-				...props
+				...columnProps
 			}),
-			enabledRS: (props) => ({
+			enabledRS: (columnProps) => ({
 				title: t('loc:Rezervačný systém'),
 				dataIndex: 'settings',
 				key: 'settings',
 				sorter: false,
 				render: (value: any) => getCheckerIcon(value?.enabledReservations),
-				...props
+				...columnProps
 			}),
-			availableReservationSystem: (props) => ({
+			availableReservationSystem: (columnProps) => ({
 				title: t('loc:Dostupné pre online rezervácie'),
 				dataIndex: 'availableReservationSystem',
 				key: 'availableReservationSystem',
 				sorter: false,
 				render: (value: boolean) => getCheckerIcon(value),
-				...props
+				...columnProps
 			})
 		}),
 		[query.order, t, industries]
@@ -465,7 +448,7 @@ const SalonsPage = () => {
 
 		switch (selectedTabKey) {
 			case SALONS_TAB_KEYS.MISTAKES:
-				return <RejectedSalonSuggestions query={query} setQuery={setQuery} />
+				return <RejectedSalonSuggestions />
 			case SALONS_TAB_KEYS.DELETED:
 				columns = [
 					tableColumns.id({ width: '8%' }),
@@ -515,7 +498,7 @@ const SalonsPage = () => {
 								onChange={onChangeTable}
 								columns={columns || []}
 								dataSource={salons?.data?.salons}
-								scroll={{ x: query.salonState === SALONS_TAB_KEYS.ACTIVE ? 1200 : 1000 }}
+								scroll={{ x: tabKey === SALONS_TAB_KEYS.ACTIVE ? 1200 : 1000 }}
 								rowKey='id'
 								rowClassName={'clickable-row'}
 								twoToneRows
@@ -562,7 +545,7 @@ const SalonsPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<TabsComponent className={'box-tab'} activeKey={query.salonState || undefined} onChange={onTabChange} items={tabContent} destroyInactiveTabPane />
+			<TabsComponent className={'box-tab'} activeKey={tabKey} onChange={onTabChange} items={tabContent} destroyInactiveTabPane />
 			<ImportForm
 				setRequestStatus={setRequestStatusImport}
 				requestStatus={requestStatusImport}

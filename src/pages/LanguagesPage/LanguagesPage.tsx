@@ -30,11 +30,15 @@ import { getSalonLanguages } from '../../reducers/languages/languagesActions'
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
-import { IBreadcrumbs, ILanguage, ILanguageForm } from '../../types/interfaces'
+import { IBreadcrumbs, ILanguage } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // hooks
-import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
+
+// schema
+import { ILanguageForm } from '../../schemas/language'
+import { languagesPageURLQueryParams } from '../../schemas/queryParams'
 
 type Columns = ColumnsType<any>
 
@@ -50,9 +54,8 @@ const LanguagesPage = () => {
 
 	const languages = useSelector((state: RootState) => state.languages.languages)
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		order: StringParam('name:ASC')
+	const [query, setQuery] = useQueryParams(languagesPageURLQueryParams, {
+		order: 'name:ASC'
 	})
 
 	const breadcrumbs: IBreadcrumbs = {

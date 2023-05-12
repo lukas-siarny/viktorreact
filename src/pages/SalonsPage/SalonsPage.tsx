@@ -36,13 +36,15 @@ import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCount
 import { Columns, IBreadcrumbs, IDataUploadForm, ISalonsReportForm } from '../../types/interfaces'
 
 // hooks
-import useQueryParams, { ArrayParam, BooleanParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO]
+// schema
+import { salonsPageURLQueryParamsSchema } from '../../schemas/queryParams'
 
 type Props = {
 	tabKey: SALONS_TAB_KEYS
 }
+const permissions: PERMISSION[] = [PERMISSION.NOTINO]
 
 const SalonsPage = (props: Props) => {
 	const [t] = useTranslation()
@@ -72,25 +74,10 @@ const SalonsPage = (props: Props) => {
 		dispatch(selectSalon())
 	}, [dispatch])
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		categoryFirstLevelIDs: ArrayParam(),
-		statuses_all: BooleanParam(false),
-		statuses_published: StringParam(),
-		statuses_changes: StringParam(),
-		limit: NumberParam(),
-		page: NumberParam(1),
-		order: StringParam('createdAt:DESC'),
-		countryCode: StringParam(),
-		createType: StringParam(),
-		lastUpdatedAtFrom: StringParam(),
-		lastUpdatedAtTo: StringParam(),
-		hasSetOpeningHours: StringParam(),
-		sourceType: StringParam(),
-		assignedUserID: StringParam(),
-		premiumSourceUserType: StringParam(),
-		hasAvailableReservationSystem: StringParam(),
-		enabledReservationsSetting: StringParam()
+	const [query, setQuery] = useQueryParams(salonsPageURLQueryParamsSchema, {
+		salonState: SALONS_TAB_KEYS.ACTIVE,
+		page: 1,
+		order: 'createdAt:DESC'
 	})
 
 	useEffect(() => {

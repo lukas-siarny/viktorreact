@@ -23,17 +23,16 @@ import { getServices } from '../../reducers/services/serviceActions'
 import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
-import { Columns, IBreadcrumbs, IUserAvatar, SalonSubPageProps } from '../../types/interfaces'
+import { Columns, IBreadcrumbs, IServicesFilter, IUserAvatar, SalonSubPageProps } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
 
 // hooks
-import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
 
-interface IAdminUsersFilter {
-	rootCategoryID: string
-}
+// schema
+import { servicesPageURLQueryParams } from '../../schemas/queryParams'
 
 const ServicesPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
@@ -45,24 +44,21 @@ const ServicesPage = (props: SalonSubPageProps) => {
 
 	useEffect(() => {
 		dispatch(getCategories())
-		// test()
 	}, [dispatch])
 
-	const [query, setQuery] = useQueryParams({
-		rootCategoryID: StringParam()
-	})
+	const [query, setQuery] = useQueryParams(servicesPageURLQueryParams)
 
 	useEffect(() => {
 		dispatch(initialize(FORM.SERVICES_FILTER, { rootCategoryID: query.rootCategoryID }))
 		dispatch(
 			getServices({
 				salonID,
-				rootCategoryID: query.rootCategoryID || undefined
+				rootCategoryID: query.rootCategoryID
 			})
 		)
 	}, [dispatch, salonID, query.rootCategoryID])
 
-	const handleSubmit = (values: IAdminUsersFilter) => {
+	const handleSubmit = (values: IServicesFilter) => {
 		const newQuery = {
 			...query,
 			rootCategoryID: values.rootCategoryID

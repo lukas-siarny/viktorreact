@@ -37,11 +37,11 @@ const SalonHistoryFilter = (props: Props) => {
 					component={DateRangePickerField}
 					disableFuture
 					placeholder={[t('loc:Od'), t('loc:Do')]}
-					allowClear
 					name={'dateFromTo'}
 					presets={getRangesForDatePicker()}
 					dropdownAlign={{ points: ['tl', 'bl'] }}
 					allowEmpty={[false, false]}
+					allowClear={false}
 				/>
 			</div>
 		</Form>

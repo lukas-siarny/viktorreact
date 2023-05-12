@@ -5,9 +5,6 @@ import { useDispatch } from 'react-redux'
 import CreatePasswordForm from './components/CreatePasswordForm'
 import ForgottenPasswordModal from '../../components/ForgottenPassword/ForgottenPasswordModal'
 
-// interfaces
-import { ICreatePasswordForm } from '../../types/interfaces'
-
 // actions
 import { processAuthorizationResult } from '../../reducers/users/userActions'
 
@@ -15,14 +12,16 @@ import { processAuthorizationResult } from '../../reducers/users/userActions'
 import { postReq } from '../../utils/request'
 
 // hooks
-import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
+
+// schema
+import { ICreatePasswordForm } from '../../schemas/password'
+import { createPasswordPageURLQueryParamsSchema } from '../../schemas/queryParams'
 
 const CreatePasswordPage = () => {
 	const [modalVisible, setModalVisible] = useState(false)
 	const dispatch = useDispatch()
-	const [query] = useQueryParams({
-		t: StringParam()
-	})
+	const [query] = useQueryParams(createPasswordPageURLQueryParamsSchema)
 
 	const handleSubmit = async (values: ICreatePasswordForm) => {
 		try {

@@ -14,6 +14,7 @@ import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/forms/NoteForm'
 import SalonApprovalModal from './components/modals/SalonApprovalModal'
 import NotinoUserForm from './components/forms/NotinoUserForm'
+import VoucherForm from './components/forms/VoucherForm'
 
 // enums
 import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_STATES, STRINGS, SALON_CREATE_TYPE, SUBMIT_BUTTON_ID } from '../../utils/enums'
@@ -23,7 +24,11 @@ import { ISelectedSalonPayload, selectSalon } from '../../reducers/selectedSalon
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
-import { ILoadingAndFailure, INoteForm, INoteModal, INotinoUserForm, ISalonForm, SalonPageProps } from '../../types/interfaces'
+import { ILoadingAndFailure, INoteModal, INotinoUserForm, IVoucherForm, SalonPageProps } from '../../types/interfaces'
+
+// schema
+import { INoteForm } from '../../schemas/note'
+import { ISalonForm } from '../../schemas/salon'
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
@@ -32,7 +37,7 @@ import { formFieldID, getAssignedUserLabel } from '../../utils/helper'
 import { getSalonDataForSubmission, initSalonFormData } from './components/salonUtils'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
@@ -54,7 +59,6 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 	const dispatch = useDispatch()
 
 	const { salonID, isNotinoUser, backUrl, phonePrefixes, authUser, phonePrefixCountryCode, isDeletedSalon, salon } = props
-
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isSendingConfRequest, setIsSendingConfRequest] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
@@ -63,7 +67,8 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 	const [modalConfig, setModalConfig] = useState<INoteModal>({ title: '', fieldPlaceholderText: '', onSubmit: undefined, visible: false })
 	const [approvalModalVisible, setApprovalModalVisible] = useState(false)
 	const [visibleNotinoUserModal, setVisibleNotinoUserModal] = useState(false)
-
+	const [visibleVoucherModal, setVisibleVoucherModal] = useState(false)
+	const hasVoucher = salon.data?.b2bVoucher
 	const isFormPristine = useSelector(isPristine(FORM.SALON))
 
 	const isSubmittingData = submitting || isRemoving || isSendingConfRequest
@@ -79,6 +84,8 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 	const assignedUserLabel = getAssignedUserLabel(salon.data?.assignedUser)
 
 	const dontUpdateFormData = useRef(false)
+
+	const disabledForm = isDeletedSalon || (isPendingPublication && !isNotinoUser)
 
 	// init form
 	useEffect(() => {
@@ -540,10 +547,37 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 			// fallback for allowClear true if user removed assigned user send null value
 			await patchReq('/api/b2b/admin/salons/{salonID}/assigned-user', { salonID }, { assignedUserID: (values?.assignedUser?.key as string) || null })
 			setVisibleNotinoUserModal(false)
-			await dispatch(selectSalon(salonID))
+			dispatch(selectSalon(salonID))
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
+		}
+	}
+
+	const onSubmitVoucher = async (values?: IVoucherForm) => {
+		try {
+			await patchReq('/api/b2b/admin/salons/{salonID}/b2b-voucher', { salonID }, { b2bVoucher: values?.code || null })
+			setVisibleVoucherModal(false)
+			dispatch(selectSalon(salonID))
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		}
+	}
+
+	const deleteVoucher = async () => {
+		if (isRemoving) {
+			return
+		}
+		setIsRemoving(true)
+		try {
+			await patchReq('/api/b2b/admin/salons/{salonID}/b2b-voucher', { salonID }, { b2bVoucher: null })
+			dispatch(selectSalon(salonID))
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		} finally {
+			setIsRemoving(false)
 		}
 	}
 
@@ -614,7 +648,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 											size={'middle'}
 											className={'noti-btn m-regular mt-2'}
 											onClick={() => setOpeningHoursModalVisble(true)}
-											disabled={isDeletedSalon || (isPendingPublication && !isNotinoUser)}
+											disabled={disabledForm}
 										>
 											{STRINGS(t).edit(t('loc:poznámku'))}
 										</Button>
@@ -626,9 +660,41 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 										size={'middle'}
 										className={'noti-btn m-regular mt-2'}
 										onClick={() => setOpeningHoursModalVisble(true)}
-										disabled={isDeletedSalon || (isPendingPublication && !isNotinoUser)}
+										disabled={disabledForm}
 									>
 										{STRINGS(t).addRecord(t('loc:poznámku'))}
+									</Button>
+								)}
+							</Row>
+						}
+						voucherModalControlButtons={
+							<Row className={'flex justify-start w-full mt-4 gap-2'}>
+								{hasVoucher ? (
+									<>
+										<div className='w-full'>
+											<h4>{t('loc:Kód kupónu pre salón')}</h4>
+											<i className='block mb-2 text-base'>{hasVoucher}</i>
+										</div>
+										<Button
+											type={'primary'}
+											size={'middle'}
+											className={'noti-btn m-regular mt-2'}
+											onClick={() => setVisibleVoucherModal(true)}
+											disabled={disabledForm}
+										>
+											{STRINGS(t).edit(t('loc:kupón'))}
+										</Button>
+										<DeleteButton className={'mt-2'} onConfirm={deleteVoucher} entityName={t('loc:kupón')} disabled={isDeletedSalon} />
+									</>
+								) : (
+									<Button
+										type={'primary'}
+										size={'middle'}
+										className={'noti-btn m-regular mt-2'}
+										onClick={() => setVisibleVoucherModal(true)}
+										disabled={disabledForm}
+									>
+										{STRINGS(t).addRecord(t('loc:kupón'))}
 									</Button>
 								)}
 							</Row>
@@ -660,6 +726,9 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 				closeIcon={<CloseIcon />}
 			>
 				<NoteForm onSubmit={modalConfig.onSubmit} fieldPlaceholderText={modalConfig.fieldPlaceholderText} />
+			</Modal>
+			<Modal title={t('loc:Kupón pre salón')} open={visibleVoucherModal} onCancel={() => setVisibleVoucherModal(false)} footer={null} closeIcon={<CloseIcon />}>
+				<VoucherForm onSubmit={onSubmitVoucher} />
 			</Modal>
 			<Modal
 				title={t('loc:Priradiť Notino používateľa')}

@@ -43,8 +43,11 @@ import {
 	SALONS_TIME_STATS_TYPE,
 	STRINGS
 } from '../../../utils/enums'
-import { formatObjToQuery } from '../../../utils/helper'
 import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData } from './dashboardUtils'
+
+// schema
+import { formatObjToQuery } from '../../../hooks/useQueryParamsZod'
+import { ISalonsPageURLQueryParams } from '../../../schemas/queryParams'
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin, BarElement)
 
@@ -216,6 +219,17 @@ const optionsForPremiumSalonBar = {
 			titleColor: '#111827',
 			bodyColor: '#404040',
 			cornerRadius: 4
+		},
+		legend: {
+			position: 'right',
+			align: 'center',
+			labels: {
+				color: colors.black,
+				font: {
+					weight: '100'
+				}
+			},
+			display: false
 		}
 	},
 	scales: {
@@ -250,7 +264,7 @@ const NotinoDashboard: FC = () => {
 	const [tabKey, setTabKey] = useState<DASHBOARD_TAB_KEYS>(DASHBOARD_TAB_KEYS.SALONS_STATE)
 
 	const publishedPremiumSalonsData = useMemo(() => {
-		const query = {
+		const query: ISalonsPageURLQueryParams = {
 			salonState: SALONS_TAB_KEYS.ACTIVE,
 			statuses_published: SALON_FILTER_STATES.PUBLISHED,
 			createType: SALON_CREATE_TYPE.NON_BASIC
@@ -279,7 +293,7 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery({ ...query, enabledReservationsSetting: SALON_FILTER_RS.NOT_ENABLED })
+							search: formatObjToQuery<ISalonsPageURLQueryParams>({ ...query, enabledReservationsSetting: SALON_FILTER_RS.NOT_ENABLED })
 						}),
 					backgroundColor: '#144896'
 				},
@@ -289,7 +303,7 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery({ ...query, enabledReservationsSetting: SALON_FILTER_RS.ENABLED })
+							search: formatObjToQuery<ISalonsPageURLQueryParams>({ ...query, enabledReservationsSetting: SALON_FILTER_RS.ENABLED })
 						}),
 					backgroundColor: '#2277F3'
 				},
@@ -299,7 +313,7 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery({
+							search: formatObjToQuery<ISalonsPageURLQueryParams>({
 								...query,
 								enabledReservationsSetting: SALON_FILTER_RS.ENABLED,
 								hasAvailableReservationSystem: SALON_FILTER_RS_AVAILABLE_ONLINE.AVAILABLE
@@ -319,7 +333,7 @@ const NotinoDashboard: FC = () => {
 	])
 
 	const unpublishedPremiumSalonsData = useMemo(() => {
-		const query = {
+		const query: ISalonsPageURLQueryParams = {
 			salonState: SALONS_TAB_KEYS.ACTIVE,
 			statuses_published: SALON_FILTER_STATES.NOT_PUBLISHED,
 			createType: SALON_CREATE_TYPE.NON_BASIC
@@ -348,7 +362,7 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery({ ...query, enabledReservationsSetting: SALON_FILTER_RS.NOT_ENABLED })
+							search: formatObjToQuery<ISalonsPageURLQueryParams>({ ...query, enabledReservationsSetting: SALON_FILTER_RS.NOT_ENABLED })
 						}),
 					backgroundColor: '#144896'
 				},
@@ -358,7 +372,7 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery({ ...query, enabledReservationsSetting: SALON_FILTER_RS.ENABLED })
+							search: formatObjToQuery<ISalonsPageURLQueryParams>({ ...query, enabledReservationsSetting: SALON_FILTER_RS.ENABLED })
 						}),
 					backgroundColor: '#2277F3'
 				},
@@ -368,7 +382,7 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery({
+							search: formatObjToQuery<ISalonsPageURLQueryParams>({
 								...query,
 								enabledReservationsSetting: SALON_FILTER_RS.ENABLED,
 								hasAvailableReservationSystem: SALON_FILTER_RS_AVAILABLE_ONLINE.AVAILABLE

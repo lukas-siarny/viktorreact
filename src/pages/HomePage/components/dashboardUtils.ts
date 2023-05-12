@@ -31,8 +31,13 @@ export const doughnutOptions = (clickHandlers: any[]) => {
 			}
 		},
 		onClick(_event: any, elements: any) {
-			const { index } = elements[0]
-			clickHandlers[index].onClick()
+			if (elements?.length) {
+				const el = elements[0]
+				const handler = clickHandlers[el?.index]
+				if (handler) {
+					handler.onClick()
+				}
+			}
 		},
 		onHover: (event: any, activeEvents: any[]) => {
 			// eslint-disable-next-line no-param-reassign

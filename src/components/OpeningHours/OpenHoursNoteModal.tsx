@@ -12,10 +12,10 @@ import { NOTIFICATION_TYPE, FORM } from '../../utils/enums'
 import { Paths } from '../../types/api'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
 
-// interfaces
-import { IOpenHoursNoteForm } from '../../types/interfaces'
+// schema
+import { IOpenHoursNoteForm } from '../../schemas/openHoursNote'
 
 type Props = {
 	visible?: boolean

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
 
 // utils
-import { CHANGE_DEBOUNCE_TIME, FIELD_MODE, FORM } from '../../../utils/enums'
+import { CHANGE_DEBOUNCE_TIME, FIELD_MODE, FORM, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import { validationString } from '../../../utils/helper'
 
 // atoms
@@ -18,7 +18,7 @@ type ComponentProps = {}
 
 type Props = InjectedFormProps<ISmsHistoryFilter, ComponentProps> & ComponentProps
 
-const fixLength100 = validationString(100)
+const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
 const SmsUnitPricesFilter = (props: Props) => {
 	const { handleSubmit } = props
@@ -37,7 +37,7 @@ const SmsUnitPricesFilter = (props: Props) => {
 						name='search'
 						fieldMode={FIELD_MODE.FILTER}
 						search
-						validate={fixLength100}
+						validate={fixLength255}
 					/>
 				</Col>
 			</div>

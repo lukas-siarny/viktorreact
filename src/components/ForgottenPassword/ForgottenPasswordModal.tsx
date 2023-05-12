@@ -12,10 +12,10 @@ import { postReq } from '../../utils/request'
 import { NOTIFICATION_TYPE, FORM } from '../../utils/enums'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
 
-// interfaces
-import { IForgotPasswordForm } from '../../types/interfaces'
+// schema
+import { IForgotPasswordForm } from '../../schemas/password'
 
 type Props = {
 	onClose: () => void

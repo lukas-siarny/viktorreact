@@ -40,14 +40,15 @@ import Filters from '../../../components/Filters'
 
 // reducers
 import { RootState } from '../../../reducers'
-import { IReservationsFilter } from '../../../types/interfaces'
+import { INotinoReservationsFilter } from '../../../types/interfaces'
 
 // assets
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
 
 type ComponentProps = {}
 
-type Props = InjectedFormProps<IReservationsFilter, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<INotinoReservationsFilter, ComponentProps> & ComponentProps
 
 const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
@@ -85,7 +86,7 @@ const NotinoReservationsFilter = (props: Props) => {
 	const { handleSubmit } = props
 	const [t] = useTranslation()
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.NOTINO_RESERVATIONS_FILTER)(state))
-	const categoriesOptions = useSelector((state: RootState) => state.service.services.categoriesOptions)
+	const categories = useSelector((state: RootState) => state.categories.categories)
 
 	const search = (
 		<Field
@@ -102,7 +103,7 @@ const NotinoReservationsFilter = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters search={search} activeFilters={checkFiltersSizeWithoutSearch(formValues)}>
+			<Filters search={search} activeFilters={checkFiltersSizeWithoutSearch(formValues)} form={FORM.NOTINO_RESERVATIONS_FILTER}>
 				<Row gutter={ROW_GUTTER_X_M}>
 					<Col span={8}>
 						<Fields
@@ -138,18 +139,20 @@ const NotinoReservationsFilter = (props: Props) => {
 							disabled={countries?.isLoading}
 						/>
 					</Col>
-					<Col span={6}>
+					<Col span={8}>
 						<Field
 							component={SelectField}
 							name={'categoryFirstLevelIDs'}
 							mode={'multiple'}
-							placeholder={t('loc:Kategórie')}
+							placeholder={t('loc:Odvetvie')}
 							allowClear
-							showArrow
 							size={'large'}
-							showSearch={false}
+							filterOptions
 							onDidMountSearch
-							options={categoriesOptions}
+							optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
+							options={categories?.enumerationsOptions}
+							loading={categories?.isLoading}
+							disabled={categories?.isLoading}
 						/>
 					</Col>
 					<Col span={6}>
@@ -180,7 +183,7 @@ const NotinoReservationsFilter = (props: Props) => {
 							options={RESERVATION_PAYMENT_METHOD_OPTIONS}
 						/>
 					</Col>
-					<Col span={6}>
+					<Col span={4}>
 						<Field
 							component={SelectField}
 							showSearch={false}
@@ -197,7 +200,7 @@ const NotinoReservationsFilter = (props: Props) => {
 	)
 }
 
-const form = reduxForm<IReservationsFilter, ComponentProps>({
+const form = reduxForm<INotinoReservationsFilter, ComponentProps>({
 	form: FORM.NOTINO_RESERVATIONS_FILTER,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,

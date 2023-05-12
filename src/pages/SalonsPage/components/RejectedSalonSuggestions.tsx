@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
@@ -28,7 +28,7 @@ import { ReactComponent as IconCheck } from '../../../assets/icons/checker-icon.
 // hooks
 import useQueryParams, { NumberParam, StringParam } from '../../../hooks/useQueryParams'
 
-const RejectedSalonSuggestions: FC = () => {
+const RejectedSalonSuggestions = () => {
 	const [t] = useTranslation()
 	const navigate = useNavigate()
 	const dispatch = useDispatch()

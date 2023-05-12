@@ -18,7 +18,7 @@ import SmsUnitPricesForm from './components/SmsUnitPricesForm'
 
 // utils
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, CREATE_BUTTON_ID, D_M_YEAR_FORMAT, DEFAULT_DATE_INIT_FORMAT } from '../../utils/enums'
-import { withPermissions } from '../../utils/Permissions'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { formFieldID, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 
@@ -29,12 +29,16 @@ import { getSmsUnitPrices, ISmsUnitPricesPayload } from '../../reducers/smsUnitP
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
-import { IBreadcrumbs, ISmsUnitPricesForm } from '../../types/interfaces'
+import { IBreadcrumbs } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
 // hooks
-import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
 import useBackUrl from '../../hooks/useBackUrl'
+
+// schema
+import { ISmsUnitPricesForm } from '../../schemas/smsUnitPrices'
+import { smsUnitPricesDetailPageQueryParams } from '../../schemas/queryParams'
 
 type TableDataItem = NonNullable<ISmsUnitPricesPayload['data']>['unitPricesPerCounty'][0]
 
@@ -48,10 +52,10 @@ const SmsUnitPricesDetailPage = () => {
 	const { countryCode: countryCodeUrlParam } = useParams<{ countryCode: string }>()
 	const countryCode = (countryCodeUrlParam as string).toUpperCase()
 
-	const [query, setQuery] = useQueryParams({
-		order: StringParam('validFrom:desc'),
-		limit: NumberParam(25),
-		page: NumberParam(1)
+	const [query, setQuery] = useQueryParams(smsUnitPricesDetailPageQueryParams, {
+		order: 'validFrom:desc',
+		limit: 25,
+		page: 1
 	})
 
 	// undefined - represents new record
@@ -144,10 +148,6 @@ const SmsUnitPricesDetailPage = () => {
 			}
 			fetchData()
 			changeFormVisibility()
-			// reset search in case of newly created entity
-			if (!selectedSmsUnitPrice?.id && query.search) {
-				setQuery({ ...query, search: '' })
-			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -246,24 +246,33 @@ const SmsUnitPricesDetailPage = () => {
 						<Spin spinning={smsUnitPrices?.isLoading || isRemoving}>
 							<div className={'pt-0 flex gap-4 justify-between items-center'}>
 								<h3 className={'text-base whitespace-nowrap'}>{t('loc:Ceny SMS správ')}</h3>
-								<Button
-									onClick={() => {
-										dispatch(
-											initialize(FORM.SMS_UNIT_PRICES_FORM, {
-												countryCode: countryCode?.toLocaleUpperCase(),
-												validFrom: isEmptyCountry ? dayjs().startOf('month').format(DEFAULT_DATE_INIT_FORMAT) : undefined
-											})
-										)
-										changeFormVisibility(true)
-									}}
-									type='primary'
-									htmlType='button'
-									className={'noti-btn'}
-									icon={<PlusIcon />}
-									id={formFieldID(FORM.SMS_UNIT_PRICES_FORM, CREATE_BUTTON_ID)}
-								>
-									{STRINGS(t).addRecord(t('loc:cenu'))}
-								</Button>
+								<Permissions
+									allowed={[PERMISSION.SMS_UNIT_PRICE_EDIT]}
+									render={(hasPermission, { openForbiddenModal }) => (
+										<Button
+											onClick={() => {
+												if (hasPermission) {
+													dispatch(
+														initialize(FORM.SMS_UNIT_PRICES_FORM, {
+															countryCode: countryCode?.toLocaleUpperCase(),
+															validFrom: isEmptyCountry ? dayjs().startOf('month').format(DEFAULT_DATE_INIT_FORMAT) : undefined
+														})
+													)
+													changeFormVisibility(true)
+												} else {
+													openForbiddenModal()
+												}
+											}}
+											type='primary'
+											htmlType='button'
+											className={'noti-btn'}
+											icon={<PlusIcon />}
+											id={formFieldID(FORM.SMS_UNIT_PRICES_FORM, CREATE_BUTTON_ID)}
+										>
+											{STRINGS(t).addRecord(t('loc:cenu'))}
+										</Button>
+									)}
+								/>
 							</div>
 							<div className={'w-full flex'}>
 								<div className={cx(formClass, { 'mb-4': visibleForm })}>
@@ -313,4 +322,4 @@ const SmsUnitPricesDetailPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(SmsUnitPricesDetailPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.SMS_UNIT_PRICE_EDIT]))(SmsUnitPricesDetailPage)

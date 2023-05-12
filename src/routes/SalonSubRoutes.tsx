@@ -170,7 +170,11 @@ const SalonSubRoutes: FC = () => {
 				<Route index element={<Calendar salonID={salonID} parentPath={parentPath} />} />
 			</Route>
 			{/* RESERVATIONS */}
-			<Route errorElement={<ErrorBoundary />} path={t('paths:reservations')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.RESERVATIONS} />}>
+			<Route
+				errorElement={<ErrorBoundary />}
+				path={t('paths:salon-reservations')}
+				element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.RESERVATIONS} />}
+			>
 				<Route index element={<ReservationsPage parentPath={parentPath} salonID={salonID} />} />
 			</Route>
 			{/* RESERVATIONS SETTINGS */}

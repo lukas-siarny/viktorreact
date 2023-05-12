@@ -14,7 +14,7 @@ import { IDataUploadForm } from '../types/interfaces'
 // atoms, pages, components, assets
 import FileUploadField from '../atoms/FileUploadField'
 import UploadSuccess from './RequestSuccess'
-import { ReactComponent as CloseIcon } from '../assets/icons/close-icon.svg'
+import { ReactComponent as CloseIcon } from '../assets/icons/close-icon-modal.svg'
 
 type ComponentProps = {
 	visible: boolean

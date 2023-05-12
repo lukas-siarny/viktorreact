@@ -10,7 +10,8 @@ import { normalizeQueryParams } from '../../utils/helper'
 
 // types
 import { Paths } from '../../types/api'
-import { IQueryParams, ISearchable } from '../../types/interfaces'
+import { ISearchable } from '../../types/interfaces'
+import { IGetSmsUnitPricesQueryParams } from '../../schemas/queryParams'
 
 export type ISmsUnitPricesActions = IResetStore | IGetSmsUnitPricesActual | IGetSmsUnitPrices | IGetSmsUnitPrice
 
@@ -39,10 +40,6 @@ export interface ISmsUnitPricePayload {
 
 export interface ISmsUnitPricesPayload extends ISearchable<Paths.GetApiB2BAdminEnumsSmsUnitPrices.Responses.$200> {}
 
-export interface IGetSmsUnitPricesQueryParams extends IQueryParams {
-	countryCode: string
-}
-
 export const getSmsUnitPricesActual = (): ThunkResult<Promise<ISmsUnitPricesActualPayload>> => async (dispatch) => {
 	let payload = {} as ISmsUnitPricesActualPayload
 	try {
@@ -70,7 +67,7 @@ export const getSmsUnitPrices =
 		try {
 			dispatch({ type: SMS_UNIT_PRICES.SMS_UNIT_PRICES_START })
 			const { data } = await getReq('/api/b2b/admin/enums/sms-unit-prices/', {
-				...normalizeQueryParams({ ...queryParams, countryCode: queryParams.countryCode })
+				...normalizeQueryParams({ ...queryParams })
 			} as any)
 
 			payload = {

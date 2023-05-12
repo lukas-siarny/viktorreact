@@ -154,11 +154,6 @@ export interface IStructuredAddress {
 	houseNumber: string | null
 }
 
-
-export interface IVoucherForm {
-	code: string
-}
-
 export interface INotinoUserForm {
 	assignedUser: ISelectOptionItem
 }

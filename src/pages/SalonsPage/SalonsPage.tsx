@@ -20,7 +20,7 @@ import ImportForm from '../../components/ImportForm'
 
 // utils
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, REQUEST_STATUS, SALON_STATES } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, REQUEST_STATUS, SALON_STATES, SALONS_TAB_KEYS } from '../../utils/enums'
 import { formatDateByLocale, getAssignedUserLabel, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { getReq, postReq } from '../../utils/request'
 import { getCheckerIcon, getSalonTagChanges, getSalonTagCreateType, getSalonTagSourceType } from './components/salonUtils'
@@ -36,15 +36,12 @@ import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCount
 import { Columns, IBreadcrumbs, IDataUploadForm, ISalonsReportForm } from '../../types/interfaces'
 
 // hooks
-import useQueryParams, { ArrayParam, BooleanParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
+
+// schema
+import { ISalonsPageURLQueryParams, salonsPageURLQueryParamsSchema } from '../../schemas/queryParams'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO]
-
-enum TAB_KEYS {
-	ACTIVE = 'active',
-	DELETED = 'deleted',
-	MISTAKES = 'mistakes'
-}
 
 const SalonsPage = () => {
 	const [t] = useTranslation()
@@ -74,29 +71,13 @@ const SalonsPage = () => {
 		dispatch(selectSalon())
 	}, [dispatch])
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		categoryFirstLevelIDs: ArrayParam(),
-		statuses_all: BooleanParam(false),
-		statuses_published: StringParam(),
-		salonState: StringParam(TAB_KEYS.ACTIVE),
-		statuses_changes: StringParam(),
-		limit: NumberParam(),
-		page: NumberParam(1),
-		order: StringParam('createdAt:DESC'),
-		countryCode: StringParam(),
-		createType: StringParam(),
-		lastUpdatedAtFrom: StringParam(),
-		lastUpdatedAtTo: StringParam(),
-		hasSetOpeningHours: StringParam(),
-		sourceType: StringParam(),
-		assignedUserID: StringParam(),
-		premiumSourceUserType: StringParam(),
-		hasAvailableReservationSystem: StringParam(),
-		enabledReservationsSetting: StringParam()
+	const [query, setQuery] = useQueryParams(salonsPageURLQueryParamsSchema, {
+		salonState: SALONS_TAB_KEYS.ACTIVE,
+		page: 1,
+		order: 'createdAt:DESC'
 	})
 
-	const resetQuery = (selectedTabKey: string, rewrite = {}) => {
+	const resetQuery = (selectedTabKey: string, rewrite: ISalonsPageURLQueryParams = {}) => {
 		// reset query when switching between tabs
 		setQuery({
 			search: undefined,
@@ -112,7 +93,7 @@ const SalonsPage = () => {
 			createType: undefined,
 			lastUpdatedAtFrom: undefined,
 			lastUpdatedAtTo: undefined,
-			salonState: selectedTabKey,
+			salonState: selectedTabKey as SALONS_TAB_KEYS,
 			hasSetOpeningHours: undefined,
 			sourceType: undefined,
 			premiumSourceUserType: undefined,
@@ -137,7 +118,7 @@ const SalonsPage = () => {
 		}
 
 		switch (query.salonState) {
-			case TAB_KEYS.DELETED:
+			case SALONS_TAB_KEYS.DELETED:
 				dispatch(
 					initialize(FORM.SALONS_FILTER_DELETED, {
 						search: query.search,
@@ -150,11 +131,11 @@ const SalonsPage = () => {
 				dispatch(getSalons(salonsQueries))
 				break
 
-			case TAB_KEYS.MISTAKES:
+			case SALONS_TAB_KEYS.MISTAKES:
 				dispatch(initialize(FORM.FILTER_REJECTED_SUGGESTIONS, { search: query.search }))
 				break
 
-			case TAB_KEYS.ACTIVE:
+			case SALONS_TAB_KEYS.ACTIVE:
 			default:
 				dispatch(
 					initialize(FORM.SALONS_FILTER_ACITVE, {
@@ -299,7 +280,7 @@ const SalonsPage = () => {
 
 	const onTabChange = (selectedTabKey: string) => {
 		dispatch(emptySalons())
-		resetQuery(selectedTabKey, selectedTabKey === TAB_KEYS.MISTAKES ? { countryCode: undefined } : {})
+		resetQuery(selectedTabKey, selectedTabKey === SALONS_TAB_KEYS.MISTAKES ? { countryCode: undefined } : {})
 	}
 
 	// define columns for both tables - active and deleted
@@ -478,14 +459,14 @@ const SalonsPage = () => {
 		[query.order, t, industries]
 	)
 
-	const getTabContent = (selectedTabKey: TAB_KEYS) => {
+	const getTabContent = (selectedTabKey: SALONS_TAB_KEYS) => {
 		let columns: Columns = []
 		let filters: React.ReactNode = null
 
 		switch (selectedTabKey) {
-			case TAB_KEYS.MISTAKES:
+			case SALONS_TAB_KEYS.MISTAKES:
 				return <RejectedSalonSuggestions query={query} setQuery={setQuery} />
-			case TAB_KEYS.DELETED:
+			case SALONS_TAB_KEYS.DELETED:
 				columns = [
 					tableColumns.id({ width: '8%' }),
 					tableColumns.name({ width: '20%' }),
@@ -534,7 +515,7 @@ const SalonsPage = () => {
 								onChange={onChangeTable}
 								columns={columns || []}
 								dataSource={salons?.data?.salons}
-								scroll={{ x: query.salonState === TAB_KEYS.ACTIVE ? 1200 : 1000 }}
+								scroll={{ x: query.salonState === SALONS_TAB_KEYS.ACTIVE ? 1200 : 1000 }}
 								rowKey='id'
 								rowClassName={'clickable-row'}
 								twoToneRows
@@ -561,19 +542,19 @@ const SalonsPage = () => {
 
 	const tabContent: TabsProps['items'] = [
 		{
-			key: TAB_KEYS.ACTIVE,
+			key: SALONS_TAB_KEYS.ACTIVE,
 			label: <>{t('loc:Aktívne')}</>,
-			children: getTabContent(TAB_KEYS.ACTIVE)
+			children: getTabContent(SALONS_TAB_KEYS.ACTIVE)
 		},
 		{
-			key: TAB_KEYS.DELETED,
+			key: SALONS_TAB_KEYS.DELETED,
 			label: <>{t('loc:Vymazané')}</>,
-			children: getTabContent(TAB_KEYS.DELETED)
+			children: getTabContent(SALONS_TAB_KEYS.DELETED)
 		},
 		{
-			key: TAB_KEYS.MISTAKES,
+			key: SALONS_TAB_KEYS.MISTAKES,
 			label: <>{t('loc:Omylom navrhnuté na spárovanie')}</>,
-			children: getTabContent(TAB_KEYS.MISTAKES)
+			children: getTabContent(SALONS_TAB_KEYS.MISTAKES)
 		}
 	]
 	return (
@@ -581,7 +562,7 @@ const SalonsPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<TabsComponent className={'box-tab'} activeKey={query.salonState} onChange={onTabChange} items={tabContent} destroyInactiveTabPane />
+			<TabsComponent className={'box-tab'} activeKey={query.salonState || undefined} onChange={onTabChange} items={tabContent} destroyInactiveTabPane />
 			<ImportForm
 				setRequestStatus={setRequestStatusImport}
 				requestStatus={requestStatusImport}

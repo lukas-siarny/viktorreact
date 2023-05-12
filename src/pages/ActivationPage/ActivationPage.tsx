@@ -14,8 +14,8 @@ import { postReq } from '../../utils/request'
 import { RootState } from '../../reducers'
 import { getCurrentUser } from '../../reducers/users/userActions'
 
-// interfaces
-import { IActivationForm } from '../../types/interfaces'
+// schema
+import { IActivationForm } from '../../schemas/activation'
 
 const ActivationPage = () => {
 	const { t } = useTranslation()
@@ -28,7 +28,7 @@ const ActivationPage = () => {
 		if (currentUser?.activateAt) {
 			navigate(t('paths:index'))
 		}
-	}, [t, currentUser])
+	}, [t, currentUser, navigate])
 
 	const handleSubmit = async (values: IActivationForm) => {
 		setSubmitting(true)

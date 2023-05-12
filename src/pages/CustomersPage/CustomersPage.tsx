@@ -28,9 +28,10 @@ import { getCustomers } from '../../reducers/customers/customerActions'
 import { IBreadcrumbs, ISearchFilter, SalonSubPageProps, Columns, IDataUploadForm } from '../../types/interfaces'
 
 // hooks
-import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
 
-const { Option } = Select
+// schema
+import { customersPageURLQueryParams } from '../../schemas/queryParams'
 
 const CustomersPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
@@ -44,11 +45,9 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const [customersImportVisible, setCustomersImportVisible] = useState(false)
 	const [templateValue, setTemplateValue] = useState<{ label: string; value: string } | null>(null)
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		limit: NumberParam(),
-		page: NumberParam(1),
-		order: StringParam('lastName:ASC')
+	const [query, setQuery] = useQueryParams(customersPageURLQueryParams, {
+		page: 1,
+		order: 'lastName:ASC'
 	})
 
 	const breadcrumbs: IBreadcrumbs = {

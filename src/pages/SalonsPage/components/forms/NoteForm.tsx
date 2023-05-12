@@ -3,9 +3,6 @@ import { reduxForm, InjectedFormProps, Field } from 'redux-form'
 import { Form, Button, Col, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 
-// validations
-import validateNoteForm from './validateNoteForm'
-
 // utils
 import { FORM, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
 import { formFieldID } from '../../../../utils/helper'
@@ -13,8 +10,8 @@ import { formFieldID } from '../../../../utils/helper'
 // validate
 import TextareaField from '../../../../atoms/TextareaField'
 
-// types
-import { INoteForm } from '../../../../types/interfaces'
+// schema
+import { INoteForm, validationNoteFn } from '../../../../schemas/note'
 
 type ComponentProps = {
 	fieldPlaceholderText?: string
@@ -61,7 +58,7 @@ const form = reduxForm<INoteForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	validate: validateNoteForm
+	validate: validationNoteFn
 })(NoteForm)
 
 export default form

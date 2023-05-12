@@ -1,29 +1,21 @@
 /* eslint-disable import/no-cycle */
 // types
 import { ThunkResult } from '../index'
-import { IQueryParams, ISearchable } from '../../types/interfaces'
+import { ISearchable } from '../../types/interfaces'
 import { REVIEWS } from './reviewsTypes'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
+import { IGetReviewsQueryParams } from '../../schemas/queryParams'
 
 // utils
 import { getReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
-import { REVIEW_VERIFICATION_STATUS } from '../../utils/enums'
 
 export type IReviewsActions = IResetStore | IGetReviews
 
 interface IGetReviews {
 	type: REVIEWS
 	payload: IReviewsPayload
-}
-
-export interface IGeReviewsQueryParams extends IQueryParams {
-	verificationStatus?: REVIEW_VERIFICATION_STATUS | null
-	deleted?: boolean
-	salonCountryCode?: string | null
-	toxicityScoreFrom?: number | null
-	toxicityScoreTo?: number | null
 }
 
 export interface IUserPayload {
@@ -33,7 +25,7 @@ export interface IUserPayload {
 export interface IReviewsPayload extends ISearchable<Paths.GetApiB2BAdminReviews.Responses.$200> {}
 
 export const getReviews =
-	(queryParams: IGeReviewsQueryParams): ThunkResult<Promise<IReviewsPayload>> =>
+	(queryParams: IGetReviewsQueryParams): ThunkResult<Promise<IReviewsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IReviewsPayload
 		try {

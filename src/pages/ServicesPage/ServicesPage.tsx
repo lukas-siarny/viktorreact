@@ -28,12 +28,15 @@ import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 
 // types
 import { IBreadcrumbs, PatchSettingsBody, SalonSubPageProps, ServicesActiveKeys } from '../../types/interfaces'
+import { Paths } from '../../types/api'
 
 // assets
 import { ReactComponent as DragIcon } from '../../assets/icons/drag-icon.svg'
 import { ReactComponent as ChevronPink } from '../../assets/icons/chevron-pink.svg'
 import { ReactComponent as InfoNotinoIcon } from '../../assets/icons/info-notino-icon.svg'
 import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-icon.svg'
+
+type ServicesPatchBody = Paths.PatchApiB2BAdminSalonsSalonIdCategoriesReorder.RequestBody
 
 const ServicesPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
@@ -49,6 +52,9 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	const [reorderView, setReoderView] = useState(false)
 	const [activeKeys, setActiveKeys] = useState<ServicesActiveKeys>({ industries: [], categories: [] })
 	const [enabledRS, setEnabledRS] = useState(false)
+	const [isSubmitting, setIsSubmitting] = useState(false)
+
+	const loading = services?.isLoading || selectedSalon.isLoading || isSubmitting
 
 	const promptMessage = t('loc:Chcete zahodiť vykonané zmeny?')
 	const dirty = reorderView && JSON.stringify(servicesListData) !== JSON.stringify(services.listData)
@@ -74,8 +80,10 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			setServicesListData(cloneDeep(listData))
 
 			if (services.servicesActiveKeys && salonID === services.servicesActiveKeys.salonID) {
+				// ak mame v reduxe ulozene nejake kluce, tak pouzijeme tie
 				setActiveKeys({ industries: services.servicesActiveKeys.industries, categories: services.servicesActiveKeys.categories })
 			} else {
+				// inak vyinicializujeme defualt
 				setActiveKeys(
 					listData.industries.data.reduce(
 						(keys, industry, _index, arr) => {
@@ -87,7 +95,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 									if (keys.industries.length === 0) {
 										industriesKeys = [industry.id]
 									}
-									// ak su vybrate sluzby, tak najdeme prvy obor, ktory ma priradenu nejaku sluzub a ten bude otvoreny
+									// ak su vybrate sluzby, tak najdeme prvy obor, ktory ma priradenu nejaku sluzbu a ten bude otvoreny
 								} else if (keys.industries.length === 0 && industry.categories.data.length) {
 									industriesKeys = [industry.id]
 								}
@@ -109,6 +117,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			}
 			dispatch(setServicesActiveKeys())
 		})()
+		// NOTE: nedavat do dependencies services.servicesActiveKeys, pretoze pri zmene klucov v reduxe to nechceme cele reinicializovat, pozerame sa nato len pri inite
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, salonID])
 
@@ -120,17 +129,40 @@ const ServicesPage = (props: SalonSubPageProps) => {
 		]
 	}
 
-	const handleSaveOrder = () => {
+	const handleSaveOrder = async () => {
 		if (dirty) {
-			setTimeout(async () => {
-				await dispatch(
+			setIsSubmitting(true)
+			try {
+				const requestBody = servicesListData.industries.data.reduce(
+					(acc, industry) => {
+						return {
+							rootCategories: [
+								...acc.rootCategories,
+								{
+									id: industry.id,
+									categoryIDs: industry.categories.data.reduce((catIDs, category) => {
+										return [...catIDs, ...category.services.data.map((service) => service.categoryID)]
+									}, [] as string[])
+								}
+							]
+						} as any
+					},
+					{ rootCategories: [] } as ServicesPatchBody
+				)
+
+				await patchReq('/api/b2b/admin/salons/{salonID}/categories/reorder', { salonID }, requestBody)
+
+				dispatch(
 					getServices({
 						salonID
 					})
-					// setServicesListData
 				)
-				setReoderView(false)
-			}, 1000)
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.error(e)
+			} finally {
+				setIsSubmitting(false)
+			}
 		} else {
 			setReoderView(false)
 		}
@@ -216,7 +248,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 
 	return (
 		<div className={'services-setttings-wrapper'}>
-			<Spin spinning={services?.isLoading || selectedSalon.isLoading} />
+			<Spin spinning={loading} />
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>

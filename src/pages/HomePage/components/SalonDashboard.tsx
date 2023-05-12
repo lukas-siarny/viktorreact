@@ -21,6 +21,7 @@ import Alert from '../../../components/Dashboards/Alert'
 import Statistics from '../../../components/Dashboards/Statistics'
 import Wallet from '../../../components/Dashboards/RemainingSmsCredit'
 import SmsTimeStats from '../../../components/Dashboards/SmsTimeStats'
+import Voucher from './Voucher'
 
 // assets
 import { ReactComponent as EyeOffIcon } from '../../../assets/icons/eye-off-pink.svg'
@@ -147,6 +148,8 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 									className={'mb-6 mt-10 pb-0'}
 									smsTimeStats={smsTimeStats}
 								/>
+								{/* Voucher */}
+								<Voucher code={selectedSalon.data.b2bVoucher} />
 							</>
 						)}
 					</Permissions>

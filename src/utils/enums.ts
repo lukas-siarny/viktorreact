@@ -186,6 +186,7 @@ export enum FORM {
 	SUPPORT_CONTACTS_FILTER = 'SUPPORT_CONTACTS_FILTER',
 	SUPPORT_CONTACT = 'SUPPORT_CONTACT',
 	NOTE = 'NOTE',
+	VOUCHER_FORM = 'VOUCHER_FORM',
 	NOTINO_USER = 'NOTINO_USER',
 	EDIT_EMPLOYEE_ROLE = 'EDIT_EMPLOYEE_ROLE',
 	IMPORT_FORM = 'IMPORT_FORM',
@@ -277,15 +278,20 @@ export enum TOKEN_AUDIENCE {
 	CANCEL_RESERVATION = 'CANCEL_RESERVATION'
 }
 
-export enum TAB_KEYS {
+export enum SALON_TABS_KEYS {
 	SALON_DETAIL = 'SALON_DETAIL',
 	SALON_HISTORY = 'SALON_HISTORY'
 }
 
 export enum SALONS_TAB_KEYS {
+	ACTIVE = 'ACTIVE',
+	DELETED = 'DELETED',
+	MISTAKES = 'MISTAKES'
+}
+
+export enum EMPLOYEES_TAB_KEYS {
 	ACTIVE = 'active',
-	DELETED = 'deleted',
-	MISTAKES = 'mistakes'
+	DELETED = 'deleted'
 }
 
 export enum DASHBOARD_TAB_KEYS {
@@ -375,6 +381,8 @@ export const INVALID_DATE_FORMAT = 'INVALID_DATE_FORMAT'
 export const INDIVIDUAL_TRANSPORT = 0
 
 export const BACK_DATA_QUERY = 'backData'
+
+export const PIN_LENGTH = 6
 
 export enum ENUMERATIONS_KEYS {
 	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
@@ -1184,4 +1192,9 @@ export const MS_OATH_CONFIG = {
 	scopes: ['offline_access', 'user.read', 'Calendars.ReadWrite', 'Files.Read'],
 	url: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
 	grand_type: 'authorization_code'
+}
+
+export enum SERVICE_DESCRIPTION_LNG {
+	DEFAULT = 'DEFAULT',
+	EN = 'en'
 }

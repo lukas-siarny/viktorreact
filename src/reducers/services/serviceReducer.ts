@@ -1,8 +1,8 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
-import { IServiceActions, IServicesPayload, IServicePayload, IServiceRootCategoryPayload } from './serviceActions'
+import { IServiceActions, IServicesPayload, IServicePayload } from './serviceActions'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { SERVICES, SERVICE, SERVICE_ROOT_CATEGORY } from './serviceTypes'
+import { SERVICES, SERVICE } from './serviceTypes'
 
 export const initState = {
 	services: {
@@ -17,12 +17,7 @@ export const initState = {
 		data: null,
 		isLoading: false,
 		isFailure: false
-	} as IServicePayload & ILoadingAndFailure,
-	serviceRootCategory: {
-		data: null,
-		isLoading: false,
-		isFailure: false
-	} as IServiceRootCategoryPayload & ILoadingAndFailure
+	} as IServicePayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -77,31 +72,6 @@ export default (state = initState, action: IServiceActions) => {
 			return {
 				...state,
 				service: {
-					...initState.service,
-					data: action.payload.data
-				}
-			}
-		// Service root category
-		case SERVICE_ROOT_CATEGORY.SERVICE_ROOT_CATEGORY_LOAD_START:
-			return {
-				...state,
-				serviceRootCategory: {
-					...state.service,
-					isLoading: true
-				}
-			}
-		case SERVICE_ROOT_CATEGORY.SERVICE_ROOT_CATEGORY_LOAD_FAIL:
-			return {
-				...state,
-				serviceRootCategory: {
-					...initState.service,
-					isFailure: true
-				}
-			}
-		case SERVICE_ROOT_CATEGORY.SERVICE_ROOT_CATEGORY_LOAD_DONE:
-			return {
-				...state,
-				serviceRootCategory: {
 					...initState.service,
 					data: action.payload.data
 				}

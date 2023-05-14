@@ -2,8 +2,8 @@ import { FormErrors } from 'redux-form'
 import i18next from 'i18next'
 import { isNil } from 'lodash'
 
-// types
-import { ISmsUnitPricesForm } from '../../../types/interfaces'
+// schemas
+import { ISmsUnitPricesForm } from '../../../schemas/smsUnitPrices'
 
 export default (values: ISmsUnitPricesForm) => {
 	const errors: FormErrors<ISmsUnitPricesForm> = {}

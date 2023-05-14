@@ -1,13 +1,18 @@
 {
   "24 hodín": "24 de ore",
   "48 hodín": "48 de ore",
+<<<<<<< HEAD
   "Aby ste mohli používať kreditný systém so všetkými jeho výhodami, najprv musíte mať vyplnenú adresu vášho salóna. Prejdite do nastavení Detailu salóna.": "null",
+=======
+  "Aby ste mohli používať kreditný systém so všetkými jeho výhodami, najprv musíte mať vyplnenú adresu vášho salóna. Prejdite do nastavení Detailu salóna.": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Adresa": "Adresa",
   "Adresa nie je kompletná. Uistite sa, či je vyplnené - Mesto, Ulica, PSČ a Krajina. Upresniť adresu môžete vo vyhľadávaní alebo priamo v mape.": "Adresa nu este completă. Asigurați-vă că ați completat orașul, strada, codul poștal și țara. Puteți preciza țara în secția de căutare sau direct pe hartă.",
   "Adresa salónu": "Adresa salonului",
   "Adresa salónu nie je známa": "Adresa salonului lipsește",
   "Ak chcete salón publikovať, je potrebné požiadať o jeho schválenie.": "Dacă doriți să faceți public profilul salonului, solicitați aprobarea acestuia.",
   "Ak pre nejaké odvetvie chýba služba, ktorú chcete poskytovať, vyplňte formulár.": "Dacă, în vreun domeniu, lipsește serviciul pe care doriți să-l oferiți, completați formularul.",
+<<<<<<< HEAD
   "Akceptovať text": "null",
   "Aktivovať": "Activați",
   "Aktuálna cena SMS": "null",
@@ -18,6 +23,18 @@
   "Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak": "Minimum 8 caractere, 1 cifră, 1 literă mare, 1 literă mică și 1 caracter special",
   "Automatické potvrdenie": "Confirmare automată",
   "Autor recenzie": "null",
+=======
+  "Akceptovať text": null,
+  "Aktivovať": "Activați",
+  "Aktuálna cena SMS": null,
+  "Aktuálna cena SMS platná od {{ validFrom }}": null,
+  "Aktívne": "Activ",
+  "Aktívni": null,
+  "Aké spôsoby platby akceptujete, napr. hotovosť, poukazy, kryptomeny,...": "Ce modalități de plată acceptați. De exemplu numerar, vouchere, cripto monede...",
+  "Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak": "Minimum 8 caractere, 1 cifră, 1 literă mare, 1 literă mică și 1 caracter special",
+  "Automatické potvrdenie": "Confirmare automată",
+  "Autor recenzie": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Avatar": "Avatar",
   "BASIC": "Basic",
   "BASIC salóny": "Saloane basic",
@@ -25,36 +42,59 @@
   "Bez udania dôvodu.": "Fără a prezenta vreun motiv",
   "Boli ste automaticky odhlásený": "Pentru siguranță, v-am deconectat",
   "Boli ste pozvaný do salónu": "Ați primit o invitație la salon",
+<<<<<<< HEAD
   "Celková spotreba kreditu": "null",
   "Celý deň": "Toată ziua",
   "Cena": "Preț",
   "Cena ({{symbol}})": "Prețul ({{symbol}})",
   "Cena SMS v období": "null",
+=======
+  "Celková spotreba kreditu": null,
+  "Celý deň": "Toată ziua",
+  "Cena": "Preț",
+  "Cena ({{symbol}})": "Prețul ({{symbol}})",
+  "Cena SMS v období": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Cena do ({{symbol}})": "Prețul până la ({{symbol}})",
   "Cena od ({{symbol}})": "Prețul de la ({{symbol}})",
   "Cena služby": "Prețul serviciului",
   "Cenníky": "Liste de prețuri",
+<<<<<<< HEAD
   "Ceny SMS správ": "null",
   "Ceny sú uvedené v rámci DPH": "null",
+=======
+  "Ceny SMS správ": null,
+  "Ceny sú uvedené v rámci DPH": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Chcete zahodiť vykonané zmeny?": "Doriți să anulați modificările efectuate?",
   "Chyba": "Eroare",
   "Chyba pripojenia k serveru": "Eroare de conectare la server",
   "Chybne vyplnený formulár": "Formular completat greșit",
   "Chybný rozsah": "Conținut eronat",
   "DIČ": "Cod TVA",
+<<<<<<< HEAD
   "Detail klienta": "null",
   "Detail krajiny": "null",
+=======
+  "Detail klienta": null,
+  "Detail krajiny": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Detail podpory": "Detalii asistență",
   "Detail používateľa": "Detalii utilizator",
   "Detail salónu": "Detalii salon",
   "Detail služby": "Detalii serviciu",
+<<<<<<< HEAD
   "Detail spotreby": "null",
+=======
+  "Detail spotreby": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Detail zamestnanca": "Detalii coleg",
   "Detail zákazníka": "Detalii client",
   "Deň": "Ziua",
   "Dnes": "Astăzi",
   "Dni vopred": "Zile în avans",
   "Do": "Până la",
+<<<<<<< HEAD
   "Dobiť kredit": "null",
   "Dobiť kredity salónom": "null",
   "Dobrý deň, pretože ste skvelý Partner, posielame vám kredity zdarma. Veríme, že padnú vhod.": "null",
@@ -70,6 +110,23 @@
   "Dátum vytvorenia rezervácie": "null",
   "Dôvod zamietnutia": "Motivul refuzului",
   "Editovateľné sú len SMS ceny s platnosťou v budúcnosti": "null",
+=======
+  "Dobiť kredit": null,
+  "Dobiť kredity salónom": null,
+  "Dobrý deň, pretože ste skvelý Partner, posielame vám kredity zdarma. Veríme, že padnú vhod.": null,
+  "Dostupnoť rezervačného kalendára": "Disponibilitatea calendarului de programări",
+  "Dostupné pre online rezervácie": null,
+  "Druhý týždeň": "A doua săptămână",
+  "Dátum": "Data",
+  "Dátum a čas vytvorenia": null,
+  "Dátum nesmie byť v minulosti": "Data nu poate fi în trecut",
+  "Dátum plánovanej rezervácie": null,
+  "Dátum rezervácie": null,
+  "Dátum vytvorenia": null,
+  "Dátum vytvorenia rezervácie": null,
+  "Dôvod zamietnutia": "Motivul refuzului",
+  "Editovateľné sú len SMS ceny s platnosťou v budúcnosti": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Email": "E-mail",
   "Email nie je k dispozícii": "E-mail-ul nu este disponibil",
   "Email nie je platný": "E-mail-ul nu este valid",
@@ -82,7 +139,11 @@
   "Fakturačné údaje": "Informații privind facturarea",
   "Firemné údaje": "Datele companiei",
   "Fotogaléria": "Galerie de fotografii",
+<<<<<<< HEAD
   "Generovať {{entity}}": "null",
+=======
+  "Generovať {{entity}}": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Google mapa je aktuálne nedostupná.": "Harta Google este momentan indisponibilă",
   "Heslo": "Parola",
   "Heslá sa nezhodujú": "Parolele nu corespund",
@@ -90,7 +151,11 @@
   "Hlavná stránka": "Prima pagină",
   "Hodiny vopred": "Ore în avans",
   "Hodnota (EN)": "Valoare (EN)",
+<<<<<<< HEAD
   "Hodnotenie": "null",
+=======
+  "Hodnotenie": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Hodnoty": "Valori",
   "Hodnoty (min)": "Valori (min)",
   "Hodnoty sú uvedené v minútach": "Valorile sunt afișate în minute",
@@ -99,6 +164,7 @@
   "Hľadať podľa meno, e-mail": "Căutare după nume, adresă de e-mail",
   "Hľadať podľa meno, e-mail, tel. číslo": "Căutare după nume, adresă de e-mail, număr de telefon",
   "Hľadať podľa názvu": "Căutare după denumire",
+<<<<<<< HEAD
   "Hľadať podľa názvu alebo ID": "null",
   "Hľadať podľa názvu salónu alebo textu recenzie": "null",
   "Hľadať podľa názvu, adresy": "null",
@@ -121,6 +187,28 @@
   "Importujte si svojich klientov z externých rezervačných systémov": "null",
   "Info": "Informație",
   "Informácie o vašich rezerváciach sa budú automaticky synchronizovať z Notino Partner App do vybraných kalendárov. Platí len pre rezervácie salóna {{ salonName }}.": "_NEPRELOZENE_",
+=======
+  "Hľadať podľa názvu alebo ID": null,
+  "Hľadať podľa názvu salónu alebo textu recenzie": null,
+  "Hľadať podľa názvu, adresy": null,
+  "Hľadať podľa názvu, adresy alebo ID": null,
+  "Hľadať podľa názvu, salónového emailu, mena a priezviska": "Căutare după denumire, adresa de e-mail a salonului, nume și prenume",
+  "Hľadať podľa tel. čísla": null,
+  "ID": null,
+  "Ignorovaná": null,
+  "Ikona": "Pictogramă",
+  "Import": "Import",
+  "Import dát": "Import date",
+  "Importovaná rezervácia": null,
+  "Importovať": "Importați",
+  "Importovať dáta z externých rezervačných systémov": null,
+  "Importovať rezervácie": null,
+  "Importovať salóny": "Importați saloane",
+  "Importovať zákazníkov": null,
+  "Importovať ďalšie": "Importați următorul",
+  "Importujte si svojich klientov z externých rezervačných systémov": null,
+  "Info": "Informație",
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Instagram": "Instagram",
   "Interná": "Intern",
   "Interné notifikácie": "Notificare internă",
@@ -132,9 +220,14 @@
   "Jazyk": "Limba",
   "Jazyky": "Limbi vorbite",
   "Jazyky, ktorými sa dá v salóne dohovoriť": "Vorbim următoarele limbi",
+<<<<<<< HEAD
   "Je potrebné vyplniť povinné údaje pre všetky hodnoty parametra": "null",
   "Jednotková cena SMS": "null",
   "Kalendár": "Calendar",
+=======
+  "Je potrebné vyplniť povinné údaje pre všetky hodnoty parametra": null,
+  "Jednotková cena SMS": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Kalendár neobsahuje žiadne data pre zobrazenie": "Calendarul nu conține nicio informație de afișat",
   "Kalendár sa aktualizuje": "Calendarul se actualizează",
   "Kartou": "Cu cardul",
@@ -142,6 +235,7 @@
   "Kategória služby": "Categorie serviciu",
   "Kategórie": "Categorie",
   "Každý": "În fiecare",
+<<<<<<< HEAD
   "Klient": "null",
   "Klienti budú mať možnosť rezervovať si vybranú službu v aplikácii.": "Clienții își pot programa serviciul în aplicație",
   "Klientske poznámky": "null",
@@ -153,11 +247,25 @@
   "Kontaktné údaje": "Date de contact",
   "Kontaktovať Špecialistu": "Contactați Specialistul",
   "Kontrola": "null",
+=======
+  "Klient": null,
+  "Klienti budú mať možnosť rezervovať si vybranú službu v aplikácii.": "Clienții își pot programa serviciul în aplicație",
+  "Klientske poznámky": null,
+  "Koniec": "Final",
+  "Koniec opakovania": "Finalul repetării",
+  "Koniec opakovania musí byť po dátume {{ date }}": null,
+  "Kontaktná osoba": "Persoană de contact",
+  "Kontaktné informácie salónu": null,
+  "Kontaktné údaje": "Date de contact",
+  "Kontaktovať Špecialistu": "Contactați Specialistul",
+  "Kontrola": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Kozmetika": "Cosmetice",
   "Koľko hodín pred termínom ho bude môcť zákazník zrušiť.": "Cu câte ore înainte de termen poate fi anulat de către client",
   "Koľko hodín pred termínom sa zákazník bude môcť objednať online.": "Cu câte ore înainte de termen se poate programa online clientul",
   "Krajina": "Țara",
   "Krajiny": "Țara",
+<<<<<<< HEAD
   "LINK ochrana osobných údajov": "https://cdn.notinoimg.com/files/8/notino-partner/notino_partner_privacy_policy.pdf",
   "LINK podmienky používania": "https://cdn.notinoimg.com/files/8/notino-partner/notino_partner_terms_conditions.pdf",
   "Logo": "Logo",
@@ -170,6 +278,27 @@
   "Minúty": "Minute",
   "Množstvo": "null",
   "Moderovať": "null",
+=======
+  "Kupón": null,
+  "Kupón pre salón": null,
+  "Kód kupónu pre salón": null,
+  "LINK ochrana osobných údajov": "https://cdn.notinoimg.com/files/8/notino-partner/notino_partner_privacy_policy.pdf",
+  "LINK podmienky používania": "https://cdn.notinoimg.com/files/8/notino-partner/notino_partner_terms_conditions.pdf",
+  "Logo": "Logo",
+  "Max. hodnota je {{max}}": null,
+  "Max. počet prvkov je {{max}}": null,
+  "Max. počet znakov je {{max}}": "Numărul maxim de caractere este de {{max}}",
+  "Meno": "Nume",
+  "Meno a Priezvisko": "Nume și prenume",
+  "Mesiac": null,
+  "Mesto": "Oraș",
+  "Min. hodnota je {{min}}": null,
+  "Min. počet prvkov je {{min}}": null,
+  "Min. počet znakov je {{min}}": "Numărul minim de caractere este de {{min}}",
+  "Minúty": "Minute",
+  "Množstvo": null,
+  "Moderovať": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Moje konto": "Contul meu",
   "Možnosti platby": "Opțiuni de plată",
   "Možnosť opakovania musí obsahovať aspoň jeden platný deň": "Opțiunea de repetare trebuie să conțină cel puțin o zi valabilă",
@@ -178,39 +307,64 @@
   "Má vyplnené otváracie hodiny": "Are programul de funcționare complet ocupat",
   "Máte neuložené zmeny vo formulári. Želáte si pokračovať ďalej?": "Formularul conține modificări nesalvate. Doriți să continuați?",
   "Môj profil": "Profilul meu",
+<<<<<<< HEAD
   "Na kontrolu": "null",
+=======
+  "Na kontrolu": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Na objednávku": "La comandă",
   "Na schválenie": "Pentru aprobare",
   "Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás": "Nu aveți drept de acces la pagina pe care încercați să o vizualizați. Dacă credeți că ar trebui să aveți acces la aceasta, contactați-ne.",
   "Na vašu adresu odošleme link na obnovenie hesla. Prosím zadajte svoju adresu.": "Vă vom trimite prin e-mail un link pentru a vă reseta parola. Introduceți adresa dvs. de e-mail.",
+<<<<<<< HEAD
   "Na vykonanie požadovanej akcie je potrebné mať nastavenú adresu salónu.": "null",
+=======
+  "Na vykonanie požadovanej akcie je potrebné mať nastavenú adresu salónu.": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Na základe vašich kontantkých informácií sme v našej datábaze našli sálony, ktoré by mohli patriť vám": "Pe baza informațiilor dvs. de contact, am găsit și alte saloane care v-ar putea aparține.",
   "Nahrajte maximálne {{maxCount}} súborov": "Încărcați maximum {{maxCount}} fișiere",
   "Nahrať": "Încărcați",
   "Naozaj chcete odstrániť {{entity}} ?": "Sigur doriți să ștergeți {{entity}}?",
   "Naozaj chcete označiť rezerváciu za nezrealizovanú?": "Sigur doriți să marcați programarea ca nerealizată?",
   "Naozaj chcete upraviť rezerváciu?": "Sigur doriți să modificați rezervarea?",
+<<<<<<< HEAD
   "Naozaj chcete vymazať nastavenia služby pre zamestnanca? Zamestnanocvi sa nastavia hodnoty podľa nastavania služby salónu.": "null",
   "Naozaj chcete zamietnuť rezerváciu?": "Sigur doriți să refuzați programarea?",
   "Naozaj chcete zrušiť rezerváciu?": "Sigur doriți să anulați programarea?",
   "Naozaj si prajete zrušiť rezerváciu služby {{ serviceName }} v salóne {{ salonName }} naplánovanú na {{ date }} {{ time }}?": "null",
+=======
+  "Naozaj chcete vymazať nastavenia služby pre zamestnanca? Zamestnanocvi sa nastavia hodnoty podľa nastavania služby salónu.": null,
+  "Naozaj chcete zamietnuť rezerváciu?": "Sigur doriți să refuzați programarea?",
+  "Naozaj chcete zrušiť rezerváciu?": "Sigur doriți să anulați programarea?",
+  "Naozaj si prajete zrušiť rezerváciu služby {{ serviceName }} v salóne {{ salonName }} naplánovanú na {{ date }} {{ time }}?": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Nastala neočakávaná chyba": "A apărut o eroare neașteptată",
   "Nastavenia": "Setări",
   "Nastavenia rezervačného systému": "Setarea sistemului de rezervare",
   "Nastavenia rezervácií": "Setarea sistemului de rezervare",
   "Nastavenie hesla": "Setarea parolei",
   "Nastavenie služieb": "Setarea serviciilor",
+<<<<<<< HEAD
   "Nastaviť SMS notifikácie": "null",
   "Nastaviť adresu": "null",
   "Nastaviť heslo": "Setați parola",
   "Nastavte si SMS notifikácie": "null",
   "Nastavte si adresu salóna": "null",
   "Nastavte službám možnosť online rezervácie, automatického potvrdenia a zadávania poznámok.": "null",
+=======
+  "Nastaviť SMS notifikácie": null,
+  "Nastaviť adresu": null,
+  "Nastaviť heslo": "Setați parola",
+  "Nastavte si SMS notifikácie": null,
+  "Nastavte si adresu salóna": null,
+  "Nastavte službám možnosť online rezervácie, automatického potvrdenia a zadávania poznámok.": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Navrhované salóny": "Saloane sugerate",
   "Načítavam...": "Se încarcă...",
   "Našim zákazníkom chceme priniesť najlepší salón lokátor na trhu. Preto pri schvaľovaní kontrolujeme kvalitu obsahu, pravdivosť a aktuálnosť informácii. Taktiež chceme chrániť vás, majiteľov salónov, pred podvodníkmi a zneužitím informácií.": "Dorim să oferim clienților noștri cel mai bun motor de căutare de pe piață, pentru saloane. De aceea, în cadrul procesului de aprobare, verificăm calitatea conținutului, veridicitatea datelor și actualitatea informațiilor. Astfel vă protejăm și pe dvs., proprietarii de saloane, împotriva escrocilor, care există peste tot în număr mare.",
   "Ne": "Nu",
   "Nedeľa": "Duminică",
+<<<<<<< HEAD
   "Nedoručená": "null",
   "Nedostupné pre online rezervácie": "null",
   "Nemá vyplnené otváracie hodiny": "Nu are programul de funcționare complet ocupat",
@@ -219,6 +373,19 @@
   "Nepodarilo sa zobraziť rezerváciu": "null",
   "Nepublikované": "Nepublicate",
   "Nepublikované Premium salóny": "null",
+=======
+  "Nedoručená": null,
+  "Nedostupné pre online rezervácie": null,
+  "Nemá vyplnené otváracie hodiny": "Nu are programul de funcționare complet ocupat",
+  "Nemôžeš editovať svoju rolu": "Nu vă puteți edita rolul",
+  "Nenastavená zmena": "Schimb de lucru nesetat",
+  "Neplatná URL": null,
+  "Neplatný formát UUID": null,
+  "Neplatný formát zadanej hodnoty": null,
+  "Nepodarilo sa zobraziť rezerváciu": null,
+  "Nepublikované": "Nepublicate",
+  "Nepublikované Premium salóny": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Nepublikovaný": "Nepublicat",
   "Nesprávny formát emailovej adresy": "Adresa de e-mail are un format incorect",
   "Nespárované": "Neasociate",
@@ -227,7 +394,11 @@
   "Nevymazaný": "Nu este șters",
   "Nezrealizovaná": "Neefectuată",
   "Nie": "Nu",
+<<<<<<< HEAD
   "Nie je možné editovať rolu s rovnakými oprávneniami, ako máte pridelené.": "null",
+=======
+  "Nie je možné editovať rolu s rovnakými oprávneniami, ako máte pridelené.": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Nie je validná IP": "Adresă IP nevalidă",
   "Nie je validná číselná hodnota": "Valoare numerară nevalidă",
   "Nie je vybratá služba": "Serviciul nu este selectat",
@@ -235,6 +406,10 @@
   "Nie je vybratý zamestnanec ani služba": "Nici colegul, nici serviciul nu sunt selectate",
   "Nie, toto je nedorozumenie": "Nu, este vorba de o neînțelegere",
   "Notino": "Notino",
+<<<<<<< HEAD
+=======
+  "Notino kupón": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Notino používateľ": "Utilizator Notino",
   "Notino Špecialista": "Specialist Notino",
   "Nový zákaznik": "Client nou",
@@ -247,7 +422,11 @@
   "O nás": "Despre noi",
   "O výsledku vás budeme informovať emailom": "Vă vom informa despre rezultate prin e-mail",
   "Obrázok": "Imagine",
+<<<<<<< HEAD
   "Obslúži vás {{ employeeName }}": "null",
+=======
+  "Obslúži vás {{ employeeName }}": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Od": "Din",
   "Odhlásiť": "Deconectare",
   "Odkaz na Facebook": "Link de Facebook",
@@ -256,9 +435,15 @@
   "Odkaz na TikTok": "Link de TikTok",
   "Odkaz na Youtube": "Link de YouTube",
   "Odkaz na webovú stránku salóna": "Link pentru pagina web a salonului",
+<<<<<<< HEAD
   "Odmietnutá": "null",
   "Odmietnuť": "Refuzat",
   "Odoslané SMS": "null",
+=======
+  "Odmietnutá": null,
+  "Odmietnuť": "Refuzat",
+  "Odoslané SMS": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Odoslať": "Trimitere",
   "Odoslať email": "Trimitere prin e-mail",
   "Odoslať hlásenie o chybe": "Trimitere notificare de eroare",
@@ -290,6 +475,7 @@
   "Pinterest": "Pinterest",
   "Platba kartou": "Plata prin card",
   "Platba v hotovosti": "Plata în numerar",
+<<<<<<< HEAD
   "Platnosť": "null",
   "Platnosť od": "null",
   "Platnosť sa vždy ráta od prvého dňa v mesiaci": "null",
@@ -299,6 +485,18 @@
   "Po - Pia": "Luni - Vineri",
   "Po spracovaní vám na vašu e-mailovú adresu zašleme súhrnnú správu o importe.": "După prelucrare, vă vom trimite la adresa dvs. de e-mail un rezumat al importurilor.",
   "Po úspešnom spracovaní vám na vašu e-mailovú adresu zašleme report salónov vo formáte .xlxs": "null",
+=======
+  "Platnosť": null,
+  "Platnosť od": null,
+  "Platnosť sa vždy ráta od prvého dňa v mesiaci": null,
+  "Platná od": null,
+  "Plánovací kalendár": null,
+  "Plánovaná cena SMS": null,
+  "Po": "Luni",
+  "Po - Pia": "Luni - Vineri",
+  "Po spracovaní vám na vašu e-mailovú adresu zašleme súhrnnú správu o importe.": "După prelucrare, vă vom trimite la adresa dvs. de e-mail un rezumat al importurilor.",
+  "Po úspešnom spracovaní vám na vašu e-mailovú adresu zašleme report salónov vo formáte .xlxs": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Podmienkami používania": "Condiții de utilizare",
   "Podpora": "Asistență",
   "Podpora nebola nájdená": "Asistența nu a fost găsită",
@@ -312,12 +510,20 @@
   "Popis": "Descriere",
   "Popis chyby": "Descrierea erorii",
   "Popis kategórie (EN)": "Descrierea categoriei (EN)",
+<<<<<<< HEAD
   "Popis služby": "null",
+=======
+  "Popis služby": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Popisné číslo": "Numărul clădirii",
   "Poradie fotiek môžete zmeniť ich presunutím pomocou Drag & Drop": "Puteți schimba ordinea fotografiilor cu ajutorul Drag & Drop",
   "Poslať kolegovi pozvánku": "Trimiteți o invitație colegului",
   "Potrebujete pomôcť?": "Aveți nevoie de ajutor?",
+<<<<<<< HEAD
   "Potvrdenie": "null",
+=======
+  "Potvrdenie": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Potvrdenie rezervácie": "Confirmarea programării",
   "Potvrdená": "Confirmată",
   "Potvrdiť": "Confirmare",
@@ -325,7 +531,11 @@
   "Používatelia": "Utilizatori",
   "Používateľ": "Utilizator",
   "Používateľovi chýbajú oprávnenia na akciu": "Utilizatorul nu are dreptul de a efectua operația respectivă",
+<<<<<<< HEAD
   "Povoliť klientom zadávať poznámky k rezerváciám.": "null",
+=======
+  "Povoliť klientom zadávať poznámky k rezerváciám.": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Poznámka": "Mențiune",
   "Poznámka k adrese": "Mențiune privind adresa",
   "Poznámka k parkovaniu": "Mențiune privind parcarea",
@@ -333,33 +543,58 @@
   "Pozvať do tímu": "Invitați în echipă",
   "Pozvánkový email": "Invitație prin e-mail",
   "Počas schvaľovania": "Pe parcursul aprobării",
+<<<<<<< HEAD
   "Počet": "null",
   "Počet aktívnych služieb": "Numărul de servicii active",
   "Počet dní vopred, kedy sa zákazník bude môcť objednať online.": "Numărul de zile în avans, când clientul se poate programa online",
   "Počet odoslaných SMS v období": "null",
   "Počet salónov": "null",
+=======
+  "Počet": null,
+  "Počet aktívnych služieb": "Numărul de servicii active",
+  "Počet dní vopred, kedy sa zákazník bude môcť objednať online.": "Numărul de zile în avans, când clientul se poate programa online",
+  "Počet odoslaných SMS v období": null,
+  "Počet salónov": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Počet zamestnancov": "Numărul de colegi",
   "Počet znakov musí byť {{length}}": "Numărul de caractere trebuie să fie de {{length}}",
   "Počet zákazníkov": "Numărul de clienți",
   "Požiadavka na spracovanie dát bola úspešne vytvorená.": "Solicitarea de prelucrare a datelor a fost generată",
   "Požiadať o novú službu": "Solicitați un serviciu nou",
   "Požiadať o schválenie": "Solicitați aprobare",
+<<<<<<< HEAD
   "Pre pokračovanie označte salóny, ktorým chcete dobiť kredit. Môžete označiť najviac {{ maxCount }} salónov.": "null",
+=======
+  "Pre pokračovanie označte salóny, ktorým chcete dobiť kredit. Môžete označiť najviac {{ maxCount }} salónov.": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Pre prácu s kalendárom je potrebné pridať do salónu aspoň jedného zamestnanca": "Pentru a putea folosi calendarul, este necesar să adăugați la salon cel puțin un coleg",
   "Pre prístup potvrďte základné údaje": "Confirmați informațiile de bază pentru acces",
   "Pre túto akciu nemáte dostatočné oprávnenia.": "Nu aveți drepturi suficiente pentru această acțiune",
   "Prebieha nahrávanie": "Se încarcă...",
+<<<<<<< HEAD
   "Pred editáciou služby zamestnanca je najprv potrebné uložiť rozpracované zmeny vo formulári.": "null",
+=======
+  "Pred editáciou služby zamestnanca je najprv potrebné uložiť rozpracované zmeny vo formulári.": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Pred schválením je potrebné": "Înainte de aprobare este necesar să",
   "Predvolená krajina": "Țara de proveniență",
   "Prehlasujem, že som sa oboznámil s": "Declar că am citit",
   "Prehľad": "Sumarizare",
+<<<<<<< HEAD
   "Prehľad rezervacií": "null",
   "Prehľad rezervácií {{ reservationsCount }}": "null",
   "Prejdite do nastavení rezervačného systému a nastavte si SMS notifikácie podľa vašich preferencií": "null",
   "Premium RS online": "null",
   "Premium bez RS": "null",
   "Premium s RS": "null",
+=======
+  "Prehľad rezervacií": null,
+  "Prehľad rezervácií {{ reservationsCount }}": null,
+  "Prejdite do nastavení rezervačného systému a nastavte si SMS notifikácie podľa vašich preferencií": null,
+  "Premium RS online": null,
+  "Premium bez RS": null,
+  "Premium s RS": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Prestávka": "Pauză",
   "Prezrieť pozvánku": "Vizualizați invitația",
   "Prečo salóny schvaľujeme?": "De ce aprobăm saloanele?",
@@ -377,6 +612,7 @@
   "Priezvisko": "Nume de familie",
   "Prihlásenie": "Conectare",
   "Prihlásiť sa": "Conectare",
+<<<<<<< HEAD
   "Prijatá": "null",
   "Prijať pozvánku": "Acceptați invitația",
   "Pripomenutie rezervácie": "Reamintirea programării",
@@ -385,10 +621,21 @@
   "Priradení zamestnanci": "Colegi alocați",
   "Priradený Notino používateľ": "Utilizator Notino alocat",
   "Priradený kolega je vymazaný zo salónu": "null",
+=======
+  "Prijatá": null,
+  "Prijať pozvánku": "Acceptați invitația",
+  "Pripomenutie rezervácie": "Reamintirea programării",
+  "Pripomienka": null,
+  "Priradené služby": "Servicii alocate",
+  "Priradení zamestnanci": "Colegi alocați",
+  "Priradený Notino používateľ": "Utilizator Notino alocat",
+  "Priradený kolega je vymazaný zo salónu": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Priradiť Notino používateľa": "Alocare utilizator Notino",
   "Priradiť služby": "Alocare servicii",
   "Priradiť {{entity}}": "Alocare {{entity}}",
   "Prosím kontaktujte nás": "Vă rugăm să ne contactați",
+<<<<<<< HEAD
   "Prosím uložte si rozpracované zmeny vo formulári pre úpravu rezervácie": "null",
   "Publikované": "null",
   "Publikované Premium salóny": "null",
@@ -412,11 +659,40 @@
   "SMS kredit": "null",
   "SMS kredity": "null",
   "SMS notifikácie sú spoplatnené podľa aktuálneho cenníka Notino. Suma za SMS sa vám bude odrátavať z celkového SMS kreditu.": "null",
+=======
+  "Prosím uložte si rozpracované zmeny vo formulári pre úpravu rezervácie": null,
+  "Publikované": null,
+  "Publikované Premium salóny": null,
+  "Publikované salóny - Premium vs. Basic": "Saloane publicate - Premium vs. Basic",
+  "Publikovaný": "Publicat",
+  "Publikovať text": null,
+  "Recenzie": null,
+  "Recenzovaný kolega": null,
+  "Registrovať": "Înregistrare",
+  "Registrovať sa": "Înregistrare",
+  "Registrácia": "Înregistrare",
+  "Report pre každý salón zahŕňa": null,
+  "Resetovať": null,
+  "Rezervačný systém": "Sistemul de programări",
+  "Rezervácia už bola zrušená alebo ju už nie je možné zrušiť": null,
+  "Rezervácia čakajúca na schválenie": "Programări în așteptarea confirmării",
+  "Rezervácie": "Programare",
+  "Rola": "Rol",
+  "SMS a notifikácie": null,
+  "SMS história": null,
+  "SMS kredit": null,
+  "SMS kredity": null,
+  "SMS notifikácie sú spoplatnené podľa aktuálneho cenníka Notino. Suma za SMS sa vám bude odrátavať z celkového SMS kreditu.": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Salón": "Salon",
   "Salón bol skrytý z dôvodu": "Salonul a fost ascuns deoarece",
   "Salón bol vymazaný": "Salonul a fost șters",
   "Salón bol zamietnutý z dôvodu": "Salonul a fost respins deoarece",
+<<<<<<< HEAD
   "Salón nemá zprístupnený kreditný systém": "null",
+=======
+  "Salón nemá zprístupnený kreditný systém": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Salón čaká na schválenie zmien. Údaje salónu, po túto dobu nie je možné editovať.": "",
   "Salóny": "Saloane",
   "Salóny čakajúce na schválenie": "Saloane în așteptarea aprobării",
@@ -428,16 +704,25 @@
   "Sem napíšte dôvod zamietnutia": "Completați aici motivul respingerii",
   "Shift": "Schimb",
   "Shifts": "Schimburi",
+<<<<<<< HEAD
   "Sign in": "_NEPRELOZENE_",
   "Skontrolujte správnosť vyplnených polí vo formulári. {{ errors }}": "null",
   "Skrytie salónu": "Ascunderea salonului",
   "Skrytý salón": "Salon ascuns",
   "Skryť salón": "Ascundere salon",
   "Skryť text": "null",
+=======
+  "Skontrolujte správnosť vyplnených polí vo formulári. {{ errors }}": null,
+  "Skrytie salónu": "Ascunderea salonului",
+  "Skrytý salón": "Salon ascuns",
+  "Skryť salón": "Ascundere salon",
+  "Skryť text": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Služba": "Serviciu",
   "Služba {{ label }} je už priradená!": "Serviciul {{ label }} este deja alocat!",
   "Služby": "Servicii",
   "So": "Sâmbătă",
+<<<<<<< HEAD
   "So skrytým textom": "null",
   "Sobota": "Sâmbătă",
   "Sociálne siete": "Rețea socială",
@@ -466,10 +751,40 @@
   "Súbor je príliš veľký (max. {{size}} {{unit}})": "Fișierul este prea mare (max. {{size}} {{unit}})",
   "Súčet": "Total",
   "Tel. číslo": "null",
+=======
+  "So skrytým textom": null,
+  "Sobota": "Sâmbătă",
+  "Sociálne siete": "Rețea socială",
+  "Spoločnosť Notino, s.r.o. je oprávnená kontaktovať registrovaných užívateľov z dôvodu priameho marketingu. Aby sme zamedzili nevyžiadanej pošte, potvrďte, ak toto spracovanie namietate. Viac informácii v": "Compania Notino, s.r.o. (SRL) are dreptul să contacteze utilizatorii înregistrați, în scopul comercializării directe. Pentru a preveni mesajele nedorite, vă rugăm să confirmați dacă refuzați prelucrarea datelor dvs. de contact. Pentru mai multe informații, consultați",
+  "Spotreba SMS kreditu za obdobie": null,
+  "Spotreba kreditu v období": null,
+  "Spravovanie znamená tvorbu, upravovanie a mazanie vybraných údajov a informácii (ak nie je v zátvorke definované inak).": "Administrarea include generarea, modificarea sau ștergerea unor date și informații (dacă nu este definită altfel între paranteze).",
+  "Spárované": "Asociate",
+  "Späť": "Înapoi",
+  "Spôsob úhrady": null,
+  "St": "Miercuri",
+  "Status": null,
+  "Stav": null,
+  "Stav konta": "Situația contului",
+  "Stav konta OD musí byť menší alebo rovnaký ako stav konta DO": null,
+  "Stav recenzie": null,
+  "Stav salónov": "Situația salonului",
+  "Stavy": "Situații",
+  "Ste majiteľom alebo prevádzkovateľom tohoto salónu?": "Sunteți proprietarul sau managerul acestui salon?",
+  "Stiahnuť": null,
+  "Stiahnuť šablónu {{ template }}": null,
+  "Streda": "Miercuri",
+  "Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás": "Pagina pe care încercați să o afișați nu există. Reveniți la pagina principală. Dacă aveți impresia că în aplicație a apărut o eroare, contactați-ne.",
+  "Stále však môžete editovať existujúce": "Aveți însă în continuare posibilitatea de a modifica valoarea curentă a",
+  "Súbor je príliš veľký (max. {{size}} {{unit}})": "Fișierul este prea mare (max. {{size}} {{unit}})",
+  "Súčet": "Total",
+  "Tel. číslo": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Telefón": "Telefon",
   "Telefón používateľa": "Telefonul utilizatorului",
   "Telefónne čísla": "Numere de telefon",
   "Telefónne číslo nie je platné": "Numărul de telefon nu este valabil",
+<<<<<<< HEAD
   "Text SMS": "null",
   "TikTok": "Tiktok",
   "Titulná foto": "Fotografia de copertă",
@@ -479,15 +794,34 @@
   "Toxicita do": "null",
   "Toxicita od": "null",
   "Trvanie": "null",
+=======
+  "Text SMS": null,
+  "TikTok": "Tiktok",
+  "Titulná foto": "Fotografia de copertă",
+  "Toto pole je povinné": "Acest câmp este obligatoriu",
+  "Toxicita": null,
+  "Toxicita OD musí byť menšia alebo rovnaká ako toxicita DO": null,
+  "Toxicita do": null,
+  "Toxicita od": null,
+  "Trvanie": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Trvanie (minúty)": "Durata (minute)",
   "Trvanie do (minúty)": "Durata până la (minute)",
   "Trvanie od (minúty)": "Durata de la (minute)",
   "Trvanie služby": "Durata serviciului",
+<<<<<<< HEAD
   "Typ SMS": "null",
   "Typ salónu": "Tipul salonului",
   "Táto hodnota už je zadaná": "Ați introdus deja această valoare",
   "Táto operácia nie je povolená.": "Această operație nu este permisă",
   "Táto operácia nie je povolená. Hlavnú kategóriu je možné pridať cez tlačidlo \"Pridať kategóriu\".": "null",
+=======
+  "Typ SMS": null,
+  "Typ salónu": "Tipul salonului",
+  "Táto hodnota už je zadaná": "Ați introdus deja această valoare",
+  "Táto operácia nie je povolená.": "Această operație nu este permisă",
+  "Táto operácia nie je povolená. Hlavnú kategóriu je možné pridať cez tlačidlo \"Pridať kategóriu\".": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Týždeň": "Săptămână",
   "Ulica": "Strada",
   "Uložiť": "Salvare",
@@ -496,7 +830,11 @@
   "Upozornenie": "Notificare",
   "Upozornenie!": "Atenție!",
   "Upravený": "Modificat",
+<<<<<<< HEAD
   "Upraviť": "null",
+=======
+  "Upraviť": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Upraviť jazyk": "Modificare limbă",
   "Upraviť kategóriu": "Modificare categorie",
   "Upraviť kozmetiku": "Modificare cosmetice",
@@ -522,10 +860,17 @@
   "Vaša spätná väzba bola odoslaná. Ďakujeme!": "Feedback-ul dvs. a fost trimis. Vă mulțumim!",
   "Vaše právomoci": "Drepturile dvs.",
   "Verifikácia": "Autentificare",
+<<<<<<< HEAD
   "Viac": "null",
   "Vlajka": "Steag",
   "Vo formulári sa nachádza chyba!": "null",
   "Vo formulári sa nachádzajú chyby!": "null",
+=======
+  "Viac": null,
+  "Vlajka": "Steag",
+  "Vo formulári sa nachádza chyba!": null,
+  "Vo formulári sa nachádzajú chyby!": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Voľno": "Liber",
   "Vrátiť sa do administrácie": "Reveniți la administrare",
   "Vybavené": "Echipat",
@@ -536,7 +881,11 @@
   "Vyber zákazníka": "Selectați clientul",
   "Vyberte aspoň jedno odvetvie": "Selectați cel puțin un domeniu",
   "Vyberte aspoň jednu z možností": "Selectați cel puțin o variantă",
+<<<<<<< HEAD
   "Vyberte dátum": "null",
+=======
+  "Vyberte dátum": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Vyberte frekvenciu": "Selectați frecvența",
   "Vyberte interval": "Selectați intervalul",
   "Vyberte jazyk": "Selectați limba",
@@ -549,10 +898,17 @@
   "Vyberte používateľa": "Selectați utilizatorul",
   "Vyberte rolu": "Selectați rolul",
   "Vyberte službu": "Selectați un serviciu",
+<<<<<<< HEAD
   "Vyberte súbor vo formáte {{ formats }}": "null",
   "Vyberte zamestnancov": "Selectați colegii",
   "Vyberte {{entity}}": "Selectați {{entity}}",
   "Vyberte šablónu na stiahnutie": "null",
+=======
+  "Vyberte súbor vo formáte {{ formats }}": null,
+  "Vyberte zamestnancov": "Selectați colegii",
+  "Vyberte {{entity}}": "Selectați {{entity}}",
+  "Vyberte šablónu na stiahnutie": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Vybrať": "Selectare",
   "Vybrať všetko": "Selectați tot",
   "Vybrať všetky": "Selectați-i pe toți",
@@ -564,17 +920,30 @@
   "Vyhľadajte {{entity}}": "Căutați {{entity}}",
   "Vyhľadať": "Căutare",
   "Vymazané": "Șters",
+<<<<<<< HEAD
   "Vymazaní": "null",
+=======
+  "Vymazaní": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Vymazaný": "Șters",
   "Vyplnenie profilu": "Completarea profilului",
   "Vyplnenie služby": "Completarea serviciilor",
   "Vyplnenosť profilu": "Gradul de completare a profilului",
+<<<<<<< HEAD
   "Vypnutý rezervačný systém": "null",
   "Vytvorenie rezervácie": "Generarea programării",
   "Vytvorená": "null",
   "Vytvorené": "Generat",
   "Vytvorený": "Generat",
   "Vytvoril": "null",
+=======
+  "Vypnutý rezervačný systém": null,
+  "Vytvorenie rezervácie": "Generarea programării",
+  "Vytvorená": null,
+  "Vytvorené": "Generat",
+  "Vytvorený": "Generat",
+  "Vytvoril": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Vytvoriť": "Generare",
   "Vytvoriť jazyk": "Generare limbă",
   "Vytvoriť kategóriu": "Generare categorie",
@@ -586,13 +955,17 @@
   "Vytvoriť používateľa": "Generare utilizator",
   "Vytvoriť profil": "Generare profil",
   "Vytvoriť profil kolegu": "Generare profil pentru coleg/colegă",
+<<<<<<< HEAD
   "Vytvoriť salón": "Generare salon",
+=======
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Vytvoriť službu": "Generare serviciu",
   "Vytvoriť zamestnanca": "Generare coleg/colegă",
   "Vytvoriť zákazníka": "Generare client",
   "Vytvoriť {{entity}}": "Generare {{entity}}",
   "Vytvoriť špecialistu": "Generare specialist",
   "Vyžiadať nový odkaz pre nastavenie hesla": "Vreau un link nou pentru setarea parolei",
+<<<<<<< HEAD
   "Vzorové šablóny súborov": "null",
   "Výber role": "Selectarea rolurilor",
   "Vývoj odoslaných SMS": "null",
@@ -600,6 +973,15 @@
   "Vývoj salónov - ročný": "Evoluția salonului - anuală",
   "Všetky": "Toate",
   "Všetky krajiny": "null",
+=======
+  "Vzorové šablóny súborov": null,
+  "Výber role": "Selectarea rolurilor",
+  "Vývoj odoslaných SMS": null,
+  "Vývoj salónov - mesačný": "Evoluția salonului - lunară",
+  "Vývoj salónov - ročný": "Evoluția salonului - anuală",
+  "Všetky": "Toate",
+  "Všetky krajiny": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Všetky publikované": "Toate cele publicate",
   "Webstránka": "Web",
   "Youtube": "YouTube",
@@ -614,29 +996,49 @@
   "Zadajte heslo": "Introduceți parola",
   "Zadajte hodnotu": "Introduceți valoarea",
   "Zadajte hodnotu v minútach": "Introduceți valoarea în minute",
+<<<<<<< HEAD
+=======
+  "Zadajte kód pre kupón": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Zadajte maximálne {{max}}": "Introduceți maximum {{max}}",
   "Zadajte meno": "Completați numele",
   "Zadajte mesto": "Introduceți orașul",
   "Zadajte minimálne {{min}}": "Introduceți minimum {{min}}",
   "Zadajte názov": "Introduceți denumirea",
   "Zadajte popis": "Introduceți descrierea",
+<<<<<<< HEAD
   "Zadajte popis služby": "null",
+=======
+  "Zadajte popis služby": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Zadajte poznámku": "Introduceți o mențiune",
   "Zadajte poznámku k adrese, napr. \"3. poschodie vľavo\"": "Introduceți o precizare privind adresa, de ex. \"etajul 3. pe partea stângă\"",
   "Zadajte poznámku k parkovaniu, napr. \"Parkovanie oproti budove.\"": "Introduceți o precizare privind parcarea, de ex. \"Parcare lângă clădire\"",
   "Zadajte počet dní vopred": "Introduceți numărul de zile în avans",
   "Zadajte počet hodín pred termínom": "Introduceți numărul de ore înaintea termenului",
+<<<<<<< HEAD
   "Zadajte predvoľbu": "Introduceți prefixul",
   "Zadajte priezvisko": "Completați numele de familie",
   "Zadajte smerovacie číslo": "Introduceți codul poștal",
   "Zadajte správny formát adresy (napr. {{url}})": "Introduceți adresa în formatul corect (de ex. {{url}})",
   "Zadajte sumu": "null",
   "Zadajte sumu, ktorú chcete salónu nakreditovať": "null",
+=======
+  "Zadajte priezvisko": "Completați numele de familie",
+  "Zadajte smerovacie číslo": "Introduceți codul poștal",
+  "Zadajte správny formát adresy (napr. {{url}})": "Introduceți adresa în formatul corect (de ex. {{url}})",
+  "Zadajte sumu": null,
+  "Zadajte sumu, ktorú chcete salónu nakreditovať": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Zadajte telefón": "Introduceți numărul de telefon",
   "Zadajte ulicu": "Introduceți strada",
   "Zadajte základné informácie o salóne": "Introduceți informațiile de bază despre salon",
   "Zadajte {{entity}}": "Introduceți {{entity}}",
   "Zadajte číslo": "Introduceți numărul",
+<<<<<<< HEAD
+=======
+  "Zadaná hodnota nie je správna": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Zamestnanci": "Colegii",
   "Zamestnanec": "Colegul/colega",
   "Zamestnanec dostane notifikáciu, že jeho rezervácia bola zmenená.": "Colegul este notificat că programarea sa a fost modificată",
@@ -648,7 +1050,11 @@
   "Zamietnuť": "Refuzat",
   "Zamietnuť {{entity}}": "Refuz {{entity}}",
   "Zaplatená": "Achitat",
+<<<<<<< HEAD
   "Zapnutý rezervačný systém": "null",
+=======
+  "Zapnutý rezervačný systém": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Zapína a vypína rezervačný systém, cez ktorý je možné v kalendári spravovať salónové rezervácie a smeny zamestnancov.": "Activează și dezactivează sistemul de programări, prin care puteți administra programările salonului și schimburile de lucru ale colegilor în calendar",
   "Zatvorené": "Închis",
   "Zatvoriť": "Închidere",
@@ -661,18 +1067,31 @@
   "Zem. šírka": "Latitudinea",
   "Zem. šírka v rozsahu od -90 do 90": "Latitudinea într-un interval de la -90 la 90",
   "Zmazať": "Ștergere",
+<<<<<<< HEAD
   "Zmena": "null",
+=======
+  "Zmena": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Zmena rezervácie": "Modificarea programării",
   "Zmeny": "Modificări",
   "Zmeny v salónoch za": "Modificări în salonului în",
   "Znovu vyžiadať PIN": "Solicitați din nou PIN-ul",
   "Zobraziť": "Afișare",
+<<<<<<< HEAD
   "Zobraziť viac": "null",
   "Zopakujte heslo": "Repetați parola",
   "Zopakujte nové heslo": "Repetați noua parolă",
   "Zostatok SMS kreditu": "null",
   "Zostáva": "null",
   "Zoznam SMS kreditov": "null",
+=======
+  "Zobraziť viac": null,
+  "Zopakujte heslo": "Repetați parola",
+  "Zopakujte nové heslo": "Repetați noua parolă",
+  "Zostatok SMS kreditu": null,
+  "Zostáva": null,
+  "Zoznam SMS kreditov": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Zoznam jazykov v salónoch": "Lista limbilor vorbite în salon",
   "Zoznam je prázdny": "Lista este goală",
   "Zoznam kategórií": "Lista de categorii",
@@ -681,18 +1100,32 @@
   "Zoznam parametrov kategórií": "Lista de parametri ai categoriei",
   "Zoznam podporných centier": "Lista centrelor de asistență",
   "Zoznam používateľov": "Lista de utilizatori",
+<<<<<<< HEAD
   "Zoznam recenzií": "null",
   "Zoznam rezervácií": "null",
+=======
+  "Zoznam recenzií": null,
+  "Zoznam rezervácií": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Zoznam salónov": "Lista de saloane",
   "Zoznam zamestnancov": "Lista colegilor",
   "Zoznam zákazníkov": "Lista clienților",
   "Zoznam špecialistov": "Lista specialiștilor",
+<<<<<<< HEAD
   "Zrušenie": "null",
   "Zrušenie rezervácie": "Anularea programării",
   "Zrušená salónom": "null",
   "Zrušená zákaznikom": "null",
   "Zrušiť": "Anulare",
   "Zrušiť rezerváciu": "null",
+=======
+  "Zrušenie": null,
+  "Zrušenie rezervácie": "Anularea programării",
+  "Zrušená salónom": null,
+  "Zrušená zákaznikom": null,
+  "Zrušiť": "Anulare",
+  "Zrušiť rezerváciu": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Zrušiť {{entity}}": "Anulare {{entity}}",
   "Zvolený dátum nesmie byť pred dátumom {{ compareDate }}": "Data selectată nu poate preceda data de {{ compareDate }}",
   "Zvoľte si krajinu": "Selectați țara",
@@ -705,6 +1138,7 @@
   "Zásadami spracovania osobných údajov": "Principiile privind prelucrarea datelor cu caracter personal",
   "a": "și",
   "a chcem sa zaregistrovať do programu Notino Partner.": "și că doresc să mă înregistrez în programul Notino Partner.",
+<<<<<<< HEAD
   "aktuálne platná {{ price }}": "null",
   "alebo": "sau",
   "cenu": "null",
@@ -720,6 +1154,24 @@
   "kontaktné údaje": "null",
   "kozmetiku": "cosmetice",
   "ktorý sme vám odoslali vo verifikačnom emaily na adresu {{email}}": "pe care le-am trimis în e-mail-ul de verificare la adresa {{email}}",
+=======
+  "aktuálne platná {{ price }}": null,
+  "alebo": "sau",
+  "cenu": null,
+  "cenu SMS": null,
+  "do": null,
+  "email": "e-mail",
+  "hodnotu": "valoare",
+  "importovanú rezerváciu": null,
+  "informácie o ponúkaných službách": null,
+  "informácie o rezervačnom systéme": null,
+  "jazyk": "limbă",
+  "kategóriu": "categorie",
+  "kontaktné údaje": null,
+  "kozmetiku": "cosmetice",
+  "ktorý sme vám odoslali vo verifikačnom emaily na adresu {{email}}": "pe care le-am trimis în e-mail-ul de verificare la adresa {{email}}",
+  "kupón": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "len tento záznam": "doar această înregistrare",
   "mať uvedené aspoň 1 telefónne číslo": "să aibă menționat cel puțin 1 număr de telefon",
   "mať vyplnenú adresu salónu": "să aibă completată adresa salonului",
@@ -727,6 +1179,7 @@
   "min": "min",
   "môže trvať 48 hodín": "poate dura 48 de ore",
   "nami vyplnený profil salónu automaticky schválime": "aprobăm automat profilul salonului",
+<<<<<<< HEAD
   "nastavenia": "null",
   "nebude možné editovať profil salónu": "modificarea profilului salonului nu va fi posibilă",
   "notino používateľa": "utilizator Notino",
@@ -735,10 +1188,21 @@
   "od": "null",
   "od {{ timeFrom }}": "null",
   "označených": "null",
+=======
+  "nastavenia": null,
+  "nebude možné editovať profil salónu": "modificarea profilului salonului nu va fi posibilă",
+  "notino používateľa": "utilizator Notino",
+  "novú cenu SMS": null,
+  "názov": "denumire",
+  "od": null,
+  "od {{ timeFrom }}": null,
+  "označených": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "parameter": "parametru",
   "podporu": "asistență",
   "používateľa": "utilizator",
   "poznámku": "mențiune",
+<<<<<<< HEAD
   "počet kolegov a klientov": "null",
   "prestávku": "pauză",
   "priradiť aspoň 1 zamestnanca do salónu, ktorý má aktívny účet v Notino B2B Partner": "să aibă alocat cel puțin 1 coleg în salonul cu cont activ la Notino Partner",
@@ -746,6 +1210,15 @@
   "recenziu": "null",
   "report": "null",
   "report salónov": "null",
+=======
+  "počet kolegov a klientov": null,
+  "prestávku": "pauză",
+  "priradiť aspoň 1 zamestnanca do salónu, ktorý má aktívny účet v Notino B2B Partner": "să aibă alocat cel puțin 1 coleg în salonul cu cont activ la Notino Partner",
+  "profesionálne vyplnené údaje o salóne,": "completarea informațiilor despre salon la nivel profesionist",
+  "recenziu": null,
+  "report": null,
+  "report salónov": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "rezerváciu": "programare",
   "rolu": "rol",
   "salón": "salon",
@@ -753,10 +1226,17 @@
   "salóna": "salonul",
   "shift-akuzativ": "schimbul",
   "službu": "serviciul",
+<<<<<<< HEAD
   "služby": "null",
   "stav salónu": "null",
   "strana": "partea",
   "súbor": "null",
+=======
+  "služby": null,
+  "stav salónu": null,
+  "strana": "partea",
+  "súbor": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "týždeň": "săptămâna",
   "udalosť": "eveniment",
   "voľno": "liber",
@@ -773,12 +1253,21 @@
   "zvolená krajina": "țara selectată",
   "zvolený salón": "salonul selectat",
   "zákazníka": "clientul",
+<<<<<<< HEAD
   "základné informácie": "null",
   "zásadách zpracovania osobných údajov.": "principiile privind prelucrarea datelor cu caracter personal.",
   "{{ eventType }} nie je možné preradiť na iného zamestnanca.": "null",
   "{{ eventType }} nie je možné preradiť na vymazaného zamestnanca.": "null",
   "{{baseNotificationText}} Zamestnanec aj zákazník dostanú notifikáciu.": "null",
   "{{baseNotificationText}} {{entity}} dostane notifikáciu.": "null",
+=======
+  "základné informácie": null,
+  "zásadách zpracovania osobných údajov.": "principiile privind prelucrarea datelor cu caracter personal.",
+  "{{ eventType }} nie je možné preradiť na iného zamestnanca.": null,
+  "{{ eventType }} nie je možné preradiť na vymazaného zamestnanca.": null,
+  "{{baseNotificationText}} Zamestnanec aj zákazník dostanú notifikáciu.": null,
+  "{{baseNotificationText}} {{entity}} dostane notifikáciu.": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "{{entity}} dostane deň vopred notifikáciu o blížiacom sa termíne rezervácie.": "{{entity}} primește cu o zi înainte o notificare că data programării se apropie",
   "{{entity}} dostane notifikáciu, že jeho rezervácia bola potvrdená.": "{{entity}} primește o notificare că programarea sa a fost confirmată",
   "{{entity}} dostane notifikáciu, že jeho rezervácia bola zamietnutá salónom.": "{{entity}} primește o notificare că programarea sa a fost refuzată de către salon",
@@ -786,15 +1275,24 @@
   "{{from}} - {{to}} z {{total}} záznamov": "{{from}} - {{to}} din {{total}} înregistrări",
   "Áno": "Da",
   "Áno, toto je môj salón": "Da, acesta este salonul meu",
+<<<<<<< HEAD
   "Úprava služby pre zamestnanca": "null",
+=======
+  "Úprava služby pre zamestnanca": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Úpravy do": "Modificări până la",
   "Úpravy od": "Modificări de la",
   "Úspešné": "Corect",
   "účet": "cont",
   "Čakajúca": "În așteptare",
   "Čakajúce": "Așteaptă",
+<<<<<<< HEAD
   "Čakajúce na schválenie {{ pendingReservationsCount }}": "null",
   "Čas rezervácie": "null",
+=======
+  "Čakajúce na schválenie {{ pendingReservationsCount }}": null,
+  "Čas rezervácie": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Časové intervaly medzi rezerváciami.": "Programarea online va putea începe în intervalul specificat (de exemplu, 20 min = începerea programării la 10:20, 10:40, 11:00)",
   "Časové limity": "Limitele de timp ale rezervării online",
   "Čo sa bude diať ďalej?": "Ce se va întâmpla acum?",
@@ -803,7 +1301,11 @@
   "čas od": "oră de la",
   "Ďalšieho špecialistu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jedného.": "Nu poate fi generat un nou specialist. Puteți crea doar unul singur pentru fiecare țară.",
   "Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu.": "Nu poate fi generată o nouă asistență. Puteți crea doar una singură pentru fiecare țară.",
+<<<<<<< HEAD
   "ďalšie": "null",
+=======
+  "ďalšie": null,
+>>>>>>> 7d0854fd35c885a6ca97240a8869e91d6243ea89
   "Ľutujeme, momentálne nie sú k dispozící žiadne support centrá.": "Ne pare rău, dar niciun support center nu este momentan disponibil.",
   "Ľutujeme, momentálne nie sú k dispozící žiadni špecialisti.": "Ne pare rău, dar niciun specialist nu este momentan disponibil.",
   "Ľutujeme, pre zvolenú krajinu moménalne neexistuje žiadna podpora. Ak nás chcete kontaktovať, môžete si zvoliť niektorú z krajín zo zoznamu vyššie.": "Ne pare rău, dar pentru țara specificată nu există asistență. Dacă doriți să ne contactați, vă rugăm să selectați una dintre țările din lista de mai sus.",

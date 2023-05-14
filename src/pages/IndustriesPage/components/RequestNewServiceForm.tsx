@@ -15,18 +15,13 @@ import TextareaField from '../../../atoms/TextareaField'
 import { RootState } from '../../../reducers'
 
 // validations
-import validateRequestNewServiceForm from '../../ServicesPage/components/validateRequestNewServiceForm'
 import { optionRenderWithImage } from '../../../utils/helper'
 
 // assets
 import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
+import { IRequestNewServiceForm, validationRequestNewServiceFn } from '../../../schemas/service'
 
 type ComponentProps = {}
-
-export interface IRequestNewServiceForm {
-	rootCategoryID: string
-	description: string
-}
 
 type Props = InjectedFormProps<IRequestNewServiceForm, ComponentProps> & ComponentProps
 
@@ -82,7 +77,7 @@ const form = reduxForm<IRequestNewServiceForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	validate: validateRequestNewServiceForm
+	validate: validationRequestNewServiceFn
 })(RequestNewService)
 
 export default form

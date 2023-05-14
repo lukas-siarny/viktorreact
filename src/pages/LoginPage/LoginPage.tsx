@@ -8,7 +8,7 @@ import LoginForm from './components/LoginForm'
 import ForgottenPasswordModal from '../../components/ForgottenPassword/ForgottenPasswordModal'
 
 // interfaces
-import { ILoginForm } from '../../types/interfaces'
+import { ILoginForm } from '../../schemas/login'
 
 // actions
 import { processAuthorizationResult } from '../../reducers/users/userActions'

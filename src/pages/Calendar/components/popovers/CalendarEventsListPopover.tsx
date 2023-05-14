@@ -177,7 +177,7 @@ const CalendarEventsListPopover: FC<ICalendarEventsListPopover> = (props) => {
 			return cellDateEvents?.map((dayEmployee) => {
 				return (
 					<React.Fragment key={dayEmployee.employee.id}>
-						<MonthlyReservationCard parentPath={parentPath} date={date} eventData={dayEmployee} query={query} isEventsListPopover />
+						<MonthlyReservationCard parentPath={parentPath} date={date} eventData={dayEmployee} query={{ categoryIDs: query.categoryIDs }} isEventsListPopover />
 					</React.Fragment>
 				)
 			})

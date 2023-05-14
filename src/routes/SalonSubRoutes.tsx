@@ -9,7 +9,7 @@ import { useParams } from 'react-router'
 import AuthRoute from './AuthRoute'
 
 // utils
-import { PAGE, PERMISSION } from '../utils/enums'
+import { PAGE, PERMISSION, SALON_TABS_KEYS } from '../utils/enums'
 import { checkPermissions } from '../utils/Permissions'
 
 // redux
@@ -114,8 +114,8 @@ const SalonSubRoutes: FC = () => {
 		<Routes>
 			{/* SALON DETAIL */}
 			<Route errorElement={<ErrorBoundary />} element={<AuthRoute layout={MainLayout} page={PAGE.SALONS} />}>
-				<Route index element={<SalonPage salonID={salonID as string} />} />
-				<Route path={t('paths:history')} element={<SalonPage salonID={salonID as string} />} />
+				<Route index element={<SalonPage tabKey={SALON_TABS_KEYS.SALON_DETAIL} salonID={salonID as string} />} />
+				<Route path={t('paths:history')} element={<SalonPage tabKey={SALON_TABS_KEYS.SALON_HISTORY} salonID={salonID as string} />} />
 			</Route>
 			{/* CUSTOMERS */}
 			<Route errorElement={<ErrorBoundary />} path={t('paths:customers')} element={<AuthRoute preventShowDeletedSalon layout={MainLayout} page={PAGE.CUSTOMERS} />}>

@@ -8,14 +8,12 @@ import axios from 'axios'
 // utils
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router'
-import { cloneDeep, find, get } from 'lodash'
-import i18next from 'i18next'
-import { buildHeaders, postReq, showErrorNotifications } from '../../../utils/request'
+import { find, get } from 'lodash'
+import { buildHeaders, postReq } from '../../../utils/request'
 import { MS_OATH_CONFIG, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
 import { RootState } from '../../../reducers'
 import { checkPermissions } from '../../../utils/Permissions'
 import showNotifications from '../../../utils/tsxHelpers'
-import { getAccessToken, isLoggedIn } from '../../../utils/auth'
 
 const CalendarIntegrations = () => {
 	const { t } = useTranslation()
@@ -29,8 +27,10 @@ const CalendarIntegrations = () => {
 	// NOTE: intercept Microsoft auth token request and get code from the payload and send it to our BE
 
 	const originalFetch = window.fetch
+
 	window.fetch = async (...args): Promise<any> => {
 		const [url, config] = args
+
 		if (url === MS_OATH_CONFIG.url) {
 			if (typeof config?.body === 'string') {
 				const data = qs.parse(config.body)
@@ -53,17 +53,15 @@ const CalendarIntegrations = () => {
 						}
 					)
 
-					const body = {
-						refreshToken: responseAuth.data.refresh_token,
-						calendarType: 'MICROSOFT'
-					}
-
 					const responseData = await originalFetch('/api/b2b/admin/calendar-sync/sync-token', {
 						method: 'POST',
 						headers: {
 							...buildHeaders()
 						},
-						body: JSON.stringify(body)
+						body: JSON.stringify({
+							refreshToken: responseAuth.data.refresh_token,
+							calendarType: 'MICROSOFT'
+						})
 					})
 
 					const responseDataJson = await responseData.clone().json()
@@ -73,7 +71,6 @@ const CalendarIntegrations = () => {
 			}
 			return Promise.reject()
 		}
-		// eslint-disable-next-line no-console
 		return originalFetch(url, config)
 	}
 

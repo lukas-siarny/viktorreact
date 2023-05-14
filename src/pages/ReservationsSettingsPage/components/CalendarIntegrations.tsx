@@ -8,11 +8,14 @@ import axios from 'axios'
 // utils
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router'
-import { find, get } from 'lodash'
-import { postReq } from '../../../utils/request'
+import { cloneDeep, find, get } from 'lodash'
+import i18next from 'i18next'
+import { buildHeaders, postReq, showErrorNotifications } from '../../../utils/request'
 import { MS_OATH_CONFIG, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
 import { RootState } from '../../../reducers'
 import { checkPermissions } from '../../../utils/Permissions'
+import showNotifications from '../../../utils/tsxHelpers'
+import { getAccessToken, isLoggedIn } from '../../../utils/auth'
 
 const CalendarIntegrations = () => {
 	const { t } = useTranslation()
@@ -24,6 +27,7 @@ const CalendarIntegrations = () => {
 	const isPartner = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser.data?.uniqPermissions])
 
 	// NOTE: intercept Microsoft auth token request and get code from the payload and send it to our BE
+
 	const originalFetch = window.fetch
 	window.fetch = async (...args): Promise<any> => {
 		const [url, config] = args
@@ -32,7 +36,7 @@ const CalendarIntegrations = () => {
 				const data = qs.parse(config.body)
 
 				if (typeof data.code === 'string') {
-					const response = await axios.post(
+					const responseAuth = await axios.post(
 						MS_OATH_CONFIG.url,
 						{
 							grant_type: MS_OATH_CONFIG.grand_type,
@@ -49,23 +53,28 @@ const CalendarIntegrations = () => {
 						}
 					)
 
-					return postReq(
-						'/api/b2b/admin/calendar-sync/sync-token',
-						null,
-						{
-							refreshToken: response.data.refresh_token,
-							calendarType: 'MICROSOFT'
+					const body = {
+						refreshToken: responseAuth.data.refresh_token,
+						calendarType: 'MICROSOFT'
+					}
+
+					const responseData = await originalFetch('/api/b2b/admin/calendar-sync/sync-token', {
+						method: 'POST',
+						headers: {
+							...buildHeaders()
 						},
-						undefined,
-						NOTIFICATION_TYPE.NOTIFICATION,
-						true
-					)
+						body: JSON.stringify(body)
+					})
+
+					const responseDataJson = await responseData.clone().json()
+					showNotifications(responseDataJson.messages, NOTIFICATION_TYPE.NOTIFICATION)
+					return responseData
 				}
 			}
 			return Promise.reject()
 		}
 		// eslint-disable-next-line no-console
-		return originalFetch(url, config).catch((err) => console.error(err))
+		return originalFetch(url, config)
 	}
 
 	const handleGoogleLogin = useGoogleLogin({

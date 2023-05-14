@@ -79,7 +79,7 @@ export interface ICustomConfig extends AxiosRequestConfig {
 	skip404Handler?: boolean
 }
 
-const buildHeaders = () => {
+export const buildHeaders = () => {
 	const headers: Record<string, string> = {
 		'Content-Type': 'application/json',
 		Accept: 'application/json',

@@ -6,7 +6,7 @@ import { compose } from 'redux'
 import { Link, unstable_usePrompt, useNavigate } from 'react-router-dom'
 import cx from 'classnames'
 import { arrayMove } from '@dnd-kit/sortable'
-import { cloneDeep, has } from 'lodash'
+import { cloneDeep } from 'lodash'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -225,7 +225,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 				<Row>
 					<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 				</Row>
-				{!services.listData.industries.data.length ? (
+				{!services.isLoading && !services.listData.industries.data.length ? (
 					<div className={'flex w-full items-center text-center flex-col mt-40'}>
 						<div className={'w-32 h-32 bg-notino-white rounded-full mb-6 flex items-center justify-center'}>
 							<ServiceIcon className={'w-16 h-16'} />

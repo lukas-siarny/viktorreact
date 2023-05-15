@@ -81,7 +81,7 @@ const getTableColumns = (t: TFunction, disabledRS?: boolean): ColumnProps<IServi
 				<InfoTooltip
 					title={t('loc:Online rezervácie')}
 					text={t(
-						'loc:Ak máte zapnutý rezervačný systém, k službe priradeného aspoň 1 kolegu a zapnutú online rezerváciu, zákazníci majú možnosť rezervovať si termín online. '
+						'loc:Ak máte zapnutý rezervačný systém, k službe priradeného aspoň 1 kolegu a zapnutú online rezerváciu, zákazníci majú možnosť rezervovať si termín online.'
 					)}
 				/>
 			</div>
@@ -94,9 +94,9 @@ const getTableColumns = (t: TFunction, disabledRS?: boolean): ColumnProps<IServi
 	{
 		title: (
 			<div className={cx('flex w-full items-center gap-1 transition transition-opacity duration-200', { 'opacity-50': disabledRS })}>
-				<span className={'truncate inline-block'}>{t('loc:Auto. schvaľovanie')}</span>
+				<span className={'truncate inline-block'}>{t('loc:Auto. potvrdenie')}</span>
 				<InfoTooltip
-					title={t('loc:Automatické schvaľovanie')}
+					title={t('loc:Automatické potvrdenie')}
 					text={t('loc:Online rezervácia bude zákazníkovi v Notino aplikácii automaticky schválená, nemusíte ju už ručne potvrdzovať.')}
 				/>
 			</div>

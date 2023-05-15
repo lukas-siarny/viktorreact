@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { Divider } from 'antd'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 
 // assets
 import { ReactComponent as InfoNotinoIcon } from '../../../../assets/icons/info-notino-icon.svg'
@@ -43,12 +43,12 @@ const ServiceStats: FC<Props> = (props) => {
 						<ul className={'pl-4 text-notino-pink mb-0'}>
 							<li className={'mb-2'}>
 								<span className={'text-notino-grayDarker inline-flex gap-1 flex-wrap'}>
-									{t('loc:Vyplňte')} <strong>{t('loc:dĺžku trvania')}</strong>
+									<Trans defaults={t('loc:<strong>Vyplňte</strong> dĺžku trvania')} components={{ strong: <strong /> }} />
 								</span>
 							</li>
 							<li>
 								<span className={'text-notino-grayDarker inline-flex gap-1 flex-wrap'}>
-									{t('loc:Vyplňte')} <strong>{t('loc:cenu služby')}</strong>
+									<Trans defaults={t('loc:<strong>Vyplňte</strong> cenu služby')} components={{ strong: <strong /> }} />
 								</span>
 							</li>
 						</ul>
@@ -71,12 +71,12 @@ const ServiceStats: FC<Props> = (props) => {
 						<ul className={'pl-4 text-notino-pink mb-0'}>
 							<li className={'mb-2'}>
 								<span className={'text-notino-grayDarker inline-flex gap-1 flex-wrap'}>
-									<strong>{t('loc:Priraďte')}</strong> {t('loc:službe aspoň')} <strong>{t('loc:1 kolegu')}</strong>
+									<Trans defaults={t('loc:<strong>Priraďte</strong> službe aspoň <strong>1 kolegu</strong>')} components={{ strong: <strong /> }} />
 								</span>
 							</li>
 							<li>
 								<span className={'text-notino-grayDarker inline-flex gap-1 flex-wrap'}>
-									<strong>{t('loc:Zapnite si')}</strong> {t('loc:online rezerváciu')}
+									<Trans defaults={t('loc:<strong>Zapnite si</strong> online rezerváciu')} components={{ strong: <strong /> }} />
 								</span>
 							</li>
 						</ul>

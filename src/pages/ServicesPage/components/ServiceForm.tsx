@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Field, FieldArray, FormSection, InjectedFormProps, reduxForm } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Col, Divider, Form, Row, Space, Spin } from 'antd'
-import { isEmpty } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 import cx from 'classnames'
 
 // atoms
@@ -17,7 +17,6 @@ import DeleteButton from '../../../components/DeleteButton'
 import ServicesListField from '../../EmployeesPage/components/ServicesListField'
 import ParameterValuesList from './ParameterValuesList'
 import ServiceBreadcrumbs from './ServiceBreadcrumbs'
-import Localizations from '../../../components/Localizations'
 import TextareaField from '../../../atoms/TextareaField'
 
 // utils
@@ -38,9 +37,65 @@ import { ReactComponent as EmployeesIcon } from '../../../assets/icons/employees
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
 import { ReactComponent as PencilIcon } from '../../../assets/icons/pencil-icon-16.svg'
+import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-modal.svg'
+import { ReactComponent as CheckIcon } from '../../../assets/icons/check-current-color.svg'
 
 // schema
-import { validationServiceFn, IServiceForm } from '../../../schemas/service'
+import { validationServiceFn, IServiceForm, FormPriceAndDurationData } from '../../../schemas/service'
+
+const getConditionIcon = (checked?: boolean) => {
+	if (checked) {
+		return <CheckIcon className={'text-notino-pink w-4 h-4 flex-shrink-0'} />
+	}
+
+	return <CloseIcon className={'text-notino-grayDark w-4 h-4 flex-shrink-0'} />
+}
+
+const hasPrice = (data: FormPriceAndDurationData) => {
+	let isFilledIn = false
+
+	if (data?.variablePrice) {
+		isFilledIn = !isNil(data?.priceFrom) && !Number.isNaN(data?.priceFrom) && !isNil(data?.priceTo) && !Number.isNaN(data?.priceTo)
+	} else {
+		isFilledIn = !isNil(data?.priceFrom) && !Number.isNaN(data?.priceFrom)
+	}
+
+	return isFilledIn
+}
+
+const hasDuration = (data: FormPriceAndDurationData) => {
+	let isFilledIn = false
+
+	if (data?.variableDuration) {
+		isFilledIn = !isNil(data?.durationFrom) && !Number.isNaN(data?.durationFrom) && !isNil(data?.durationTo) && !Number.isNaN(data?.durationTo)
+	} else {
+		isFilledIn = !isNil(data?.durationFrom) && !Number.isNaN(data?.durationFrom)
+	}
+
+	return isFilledIn
+}
+
+const getHasPriceFilledIn = (values?: IServiceForm) => {
+	if (values?.useCategoryParameter) {
+		return values?.serviceCategoryParameter?.some((parameterValue) => hasPrice(parameterValue))
+	}
+	return hasPrice({ priceFrom: values?.priceFrom, priceTo: values?.priceTo, variablePrice: values?.variablePrice })
+}
+
+const getHasDurationFilledIn = (values?: IServiceForm) => {
+	if (values?.useCategoryParameter) {
+		return values?.serviceCategoryParameter?.some((parameterValue) => hasDuration(parameterValue))
+	}
+	return hasDuration({ durationFrom: values?.durationFrom, durationTo: values?.durationTo, variableDuration: values?.variableDuration })
+}
+
+const checkConditions = (values?: IServiceForm): { hasDurationFilledIn: boolean; hasPriceFilledIn: boolean; hasEmployee: boolean } => {
+	return {
+		hasDurationFilledIn: getHasDurationFilledIn(values),
+		hasPriceFilledIn: getHasPriceFilledIn(values),
+		hasEmployee: !!values?.employees.length
+	}
+}
 
 const numberMin0 = validationNumberMin(0)
 const fixLength1500 = validationString(VALIDATION_MAX_LENGTH.LENGTH_1500)
@@ -63,6 +118,7 @@ const ServiceForm: FC<Props> = (props) => {
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
 	const formValues = form?.values as IServiceForm
+	const initialFormValues = (form as any)?.initial as IServiceForm
 	const service = useSelector((state: RootState) => state.service.service)
 	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading)
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
@@ -73,6 +129,9 @@ const ServiceForm: FC<Props> = (props) => {
 
 	const variableDuration = formValues?.variableDuration
 	const variablePrice = formValues?.variablePrice
+
+	const { hasDurationFilledIn, hasPriceFilledIn, hasEmployee } = checkConditions(initialFormValues)
+	const disabledRsSettings = !(hasDurationFilledIn && hasPriceFilledIn && hasEmployee)
 
 	const onConfirmDelete = async () => {
 		if (isRemoving || !serviceID) {
@@ -259,7 +318,7 @@ const ServiceForm: FC<Props> = (props) => {
 											size={'middle'}
 										/>
 										<p className={'text-notino-grayDark text-xs mb-4'}>{t('loc:Tento text služby uvidia používatelia v zákazníckej aplikácii Notino.')}</p>
-										{formValues?.descriptionLocalizations.use && (
+										{formValues?.descriptionLocalizations?.use && (
 											<>
 												<Field
 													component={TextareaField}
@@ -349,36 +408,49 @@ const ServiceForm: FC<Props> = (props) => {
 									</h3>
 									<Divider className={'mb-3 mt-3'} />
 									<FormSection name={'settings'}>
-										<Row gutter={[8, 8]}>
-											<Col span={12}>
-												<Field
-													disabled={!hasPermission || !salon.data?.settings?.enabledReservations}
-													className={'pb-0'}
-													component={SwitchField}
-													label={t('loc:Online rezervácia')}
-													name={'enabledB2cReservations'}
-													size={'middle'}
-												/>
-												<div className={'text-xs text-notino-grayDark mt-2'}>
-													{t('loc:Klienti budú mať možnosť rezervovať si vybranú službu v aplikácii.')}
-												</div>
-											</Col>
-											<Col span={12}>
-												<Field
-													disabled={!hasPermission || !salon.data?.settings?.enabledReservations}
-													className={'pb-0'}
-													component={SwitchField}
-													label={t('loc:Automatické potvrdenie')}
-													name={'autoApproveReservations'}
-													size={'middle'}
-												/>
-												<div className={'text-xs text-notino-grayDark mt-2'}>
-													{t(
-														'loc:Online rezervácia bude automaticky schválená, už ju nemusíte potvrdzovať ručne. Rezervácia sa zobrazí vo vašom kalendári ako potvrdená.'
-													)}
-												</div>
-											</Col>
-										</Row>
+										<div className={'text-xs text-notino-grayDark'}>
+											<p className={'mb-3'}>
+												{t('loc:Keď službe zapnete možnosť online rezervácie, vaši klienti si ju budú môcť rezervovať v zákazníckej aplikácii.')}
+											</p>
+											<p className={'mb-2'}>{t('loc:Na zapnutie online rezervácie je najprv potrebné')}:</p>
+											<ul className={'p-0 list-none'}>
+												<li className={'flex items-start gap-3'}>
+													{getConditionIcon(hasDurationFilledIn)} {t('loc:Zadať dĺžku trvania')}
+												</li>
+												<li className={'flex items-start gap-3'}>
+													{getConditionIcon(hasPriceFilledIn)}
+													{t('loc:Zadať cenu')}
+												</li>
+												<li className={'flex items-start gap-3'}>
+													{getConditionIcon(hasEmployee)}
+													{t('loc:Priradiť k službe aspoň 1 kolegu')}
+												</li>
+											</ul>
+										</div>
+										<Field
+											// disabled={!hasPermission || !salon.data?.settings?.enabledReservations}
+											disabled={!hasPermission || disabledRsSettings}
+											className={'w-full'}
+											component={SwitchField}
+											label={t('loc:Online rezervácia')}
+											name={'enabledB2cReservations'}
+											size={'middle'}
+										/>
+
+										<Field
+											// disabled={!hasPermission || !salon.data?.settings?.enabledReservations}
+											disabled={!hasPermission || disabledRsSettings}
+											className={'pb-2 w-full'}
+											component={SwitchField}
+											label={t('loc:Automatické potvrdenie')}
+											name={'autoApproveReservations'}
+											size={'middle'}
+										/>
+										<p className={'text-xs text-notino-grayDark mb-0'}>
+											{t(
+												'loc:Online rezervácia bude automaticky schválená, už ju nemusíte potvrdzovať ručne. Rezervácia sa zobrazí vo vašom kalendári ako potvrdená.'
+											)}
+										</p>
 									</FormSection>
 								</div>
 							</Space>

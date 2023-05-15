@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { forEach, includes, isEmpty } from 'lodash'
 import cx from 'classnames'
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 
 // Drag and drop
-import type { DragEndEvent } from '@dnd-kit/core'
+import { DragEndEvent, closestCenter } from '@dnd-kit/core'
 import { DndContext } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 
 // ant
 import { Empty, Table } from 'antd'
@@ -220,7 +220,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 
 	if (dndDrop) {
 		return (
-			<DndContext onDragEnd={onDragEnd} modifiers={[restrictToVerticalAxis]}>
+			<DndContext onDragEnd={onDragEnd} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter}>
 				<SortableContext
 					// rowKey array
 					items={props.dataSource && (props.dataSource.map((item: any) => item.key) as any)}

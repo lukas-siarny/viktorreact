@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Row, Spin, Button } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,7 +6,7 @@ import { compose } from 'redux'
 import { Link, unstable_usePrompt, useNavigate } from 'react-router-dom'
 import cx from 'classnames'
 import { arrayMove } from '@dnd-kit/sortable'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, has } from 'lodash'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -18,7 +18,7 @@ import IndustriesList from './components/list/IndustriesList'
 
 // utils
 import { PERMISSION, SERVICES_LIST_INIT, STRINGS } from '../../utils/enums'
-import { withPermissions } from '../../utils/Permissions'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 
 // reducers
@@ -50,11 +50,13 @@ const ServicesPage = (props: SalonSubPageProps) => {
 
 	const [servicesListData, setServicesListData] = useState<IServicesListData>(SERVICES_LIST_INIT)
 	const [reorderView, setReoderView] = useState(false)
-	const [activeKeys, setActiveKeys] = useState<ServicesActiveKeys>({ industries: [], categories: [] })
 	const [enabledRS, setEnabledRS] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
 
 	const loading = services?.isLoading || selectedSalon.isLoading || isSubmitting
+
+	const activeKeys = useMemo(() => services.servicesActiveKeys, [services.servicesActiveKeys])
+	const setActiveKeys = useCallback((newActiveKeys: ServicesActiveKeys) => dispatch(setServicesActiveKeys(newActiveKeys)), [dispatch])
 
 	const promptMessage = t('loc:Chcete zahodiť vykonané zmeny?')
 	const dirty = reorderView && JSON.stringify(servicesListData) !== JSON.stringify(services.listData)
@@ -63,63 +65,22 @@ const ServicesPage = (props: SalonSubPageProps) => {
 
 	useEffect(() => {
 		;(async () => {
-			const data = await dispatch(selectSalon(salonID))
-			setEnabledRS(!!data?.data?.settings.enabledB2cReservations)
-		})()
-	}, [dispatch, salonID])
-
-	// load data and set collapse keys on page init
-	useEffect(() => {
-		;(async () => {
-			const { listData } = await dispatch(
-				getServices({
-					salonID
-				})
-			)
-
-			setServicesListData(cloneDeep(listData))
-
-			if (services.servicesActiveKeys && salonID === services.servicesActiveKeys.salonID) {
-				// ak mame v reduxe ulozene nejake kluce, tak pouzijeme tie
-				setActiveKeys({ industries: services.servicesActiveKeys.industries, categories: services.servicesActiveKeys.categories })
-			} else {
-				// inak vyinicializujeme defualt
-				setActiveKeys(
-					listData.industries.data.reduce(
-						(keys, industry, _index, arr) => {
-							let industriesKeys = keys.industries
-							// ak existuje aspon jeden vybraty obor
-							if (arr.length) {
-								// ale nie su vybrate ziadne sluzby, tak bude otvoreny prvy obor
-								if (!listData.industries.servicesCount) {
-									if (keys.industries.length === 0) {
-										industriesKeys = [industry.id]
-									}
-									// ak su vybrate sluzby, tak najdeme prvy obor, ktory ma priradenu nejaku sluzbu a ten bude otvoreny
-								} else if (keys.industries.length === 0 && industry.categories.data.length) {
-									industriesKeys = [industry.id]
-								}
-							}
-
-							return {
-								industries: industriesKeys,
-								categories: [
-									...keys.categories,
-									...industry.categories.data.reduce((categoriesKeys, category) => {
-										return [...categoriesKeys, category.id]
-									}, [] as string[])
-								]
-							}
-						},
-						{ industries: [], categories: [] } as ServicesActiveKeys
-					)
+			dispatch(
+				getServices(
+					{
+						salonID
+					},
+					true
 				)
-			}
-			dispatch(setServicesActiveKeys())
+			)
+			const data = await dispatch(selectSalon(salonID))
+			setEnabledRS(!!data?.data?.settings.enabledReservations)
 		})()
-		// NOTE: nedavat do dependencies services.servicesActiveKeys, pretoze pri zmene klucov v reduxe to nechceme cele reinicializovat, pozerame sa nato len pri inite
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, salonID])
+
+	useEffect(() => {
+		setServicesListData(cloneDeep(services.listData))
+	}, [services.listData])
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -153,9 +114,12 @@ const ServicesPage = (props: SalonSubPageProps) => {
 				await patchReq('/api/b2b/admin/salons/{salonID}/categories/reorder', { salonID }, requestBody)
 
 				dispatch(
-					getServices({
-						salonID
-					})
+					getServices(
+						{
+							salonID
+						},
+						true
+					)
 				)
 			} catch (e) {
 				// eslint-disable-next-line no-console
@@ -180,6 +144,8 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	}
 
 	const handleChangeRsSettings = async (checked: boolean) => {
+		setIsSubmitting(true)
+		// set state immediately so user can see checkbox change
 		setEnabledRS(checked)
 		try {
 			const reqData: PatchSettingsBody = {
@@ -189,10 +155,16 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			}
 
 			await patchReq('/api/b2b/admin/salons/{salonID}/settings', { salonID }, reqData)
-			dispatch(selectSalon(salonID))
+			const newSalonData = await dispatch(selectSalon(salonID))
+			// set state agian just to be sure data are correct
+			setEnabledRS(!!newSalonData?.data?.settings.enabledReservations)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
+			// set to previus value in case there's an error in request
+			setEnabledRS(!checked)
+		} finally {
+			setIsSubmitting(false)
 		}
 	}
 
@@ -248,91 +220,111 @@ const ServicesPage = (props: SalonSubPageProps) => {
 
 	return (
 		<div className={'services-setttings-wrapper'}>
-			<Spin spinning={loading} />
-			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
-			</Row>
-			{!services.listData.industries.data.length ? (
-				<div className={'flex w-full items-center text-center flex-col mt-40'}>
-					<div className={'w-32 h-32 bg-notino-white rounded-full mb-6 flex items-center justify-center'}>
-						<ServiceIcon className={'w-16 h-16'} />
-					</div>
-					<h2 className={'text-2xl mb-3'}>{t('loc:Nemáte vybraté žiadne služby')}</h2>
-					<p className={'text-sm mb-6'}>{t('loc:Najprv prejdite do sekcie Obory a služby, kde si vyberiete, ktoré služby ponúkate.')}</p>
-					<Button type={'primary'} className={'noti-btn'} onClick={() => navigate(parentPath + t('paths:industries-and-services'))}>
-						{t('loc:Vybrať obory a služby')}
-					</Button>
-				</div>
-			) : (
-				<>
-					{/* RS system info */}
-					<Alert
-						className='mb-8'
-						title={
-							<span className={'mb-2 text-notino-grayDarker block text-base'}>
-								{t('loc:Rezervačný systém je')} <strong className={'text-notino-black'}>{enabledRS ? t('loc:zapnutý') : t('loc:vypnutý')}</strong>
-							</span>
-						}
-						subTitle={
-							<Link to={`${parentPath + t('paths:reservations-settings')}`} className={'inline-flex gap-1 items-center text-notino-pink text-sm'}>
-								{t('loc:Viac info  o rezervačnom systéme')} <ChevronPink className={'text-notino-pink'} />
-							</Link>
-						}
-						message={''}
-						icon={<InfoNotinoIcon className={'text-notino-pink'} />}
-						actionItem={<SwitchField input={{ value: enabledRS, onChange: handleChangeRsSettings } as any} meta={{} as any} />}
-					/>
-
-					{/* Services stats cards */}
-					<ServicesStats
-						allServicesCount={servicesListData.industries.servicesCount}
-						servicesAvailableForOnlineReservationsCount={servicesListData.industries.servicesAvailableForOnlineReservationsCount}
-						servicesVisibleInPricelistCount={servicesListData.industries.servicesVisibleInPricelistCount}
-					/>
-
-					{/* Services list */}
-					<div className={'flex items-center justify-between gap-4 mb-4'}>
-						<h2 className={'text-2xl mb-0'}>{`${t('loc:Zoznam služieb')} (${servicesListData.industries.servicesCount})`}</h2>
-						<div className={'flex items-center gap-2'}>
-							{reorderView ? (
-								<>
-									<Button type={'dashed'} className={'noti-btn'} onClick={handleCancelOrder}>
-										{STRINGS(t).cancel('').trim()}
-									</Button>
-									<Button type={'primary'} className={'noti-btn'} onClick={handleSaveOrder}>
-										{STRINGS(t).save('').trim()}
-									</Button>
-								</>
-							) : (
-								<>
-									<Button type={'dashed'} className={'noti-btn'} icon={<DragIcon />} onClick={() => setReoderView(true)}>
-										{t('loc:Zmeniť poradie')}
-									</Button>
-									<InfoTooltip
-										title={t('loc:Zmena poradia')}
-										text={t('loc:Poradie služieb na tejto obrazovke zodpovedá poradiu služieb v zákazníckej aplikácii Notino.')}
-									/>
-								</>
-							)}
+			<div className={'services-setttings-inner-wrapper'}>
+				<Spin spinning={loading} />
+				<Row>
+					<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
+				</Row>
+				{!services.listData.industries.data.length ? (
+					<div className={'flex w-full items-center text-center flex-col mt-40'}>
+						<div className={'w-32 h-32 bg-notino-white rounded-full mb-6 flex items-center justify-center'}>
+							<ServiceIcon className={'w-16 h-16'} />
 						</div>
+						<h2 className={'text-2xl mb-3'}>{t('loc:Nemáte vybraté žiadne služby')}</h2>
+						<p className={'text-sm mb-6'}>{t('loc:Najprv prejdite do sekcie Obory a služby, kde si vyberiete, ktoré služby ponúkate.')}</p>
+						<Button type={'primary'} className={'noti-btn'} onClick={() => navigate(parentPath + t('paths:industries-and-services'))}>
+							{t('loc:Vybrať obory a služby')}
+						</Button>
 					</div>
+				) : (
+					<>
+						{/* RS system info */}
+						<Alert
+							className='mb-8'
+							title={
+								<span className={'mb-2 text-notino-grayDarker block text-base'}>
+									{t('loc:Rezervačný systém je')} <strong className={'text-notino-black'}>{enabledRS ? t('loc:zapnutý') : t('loc:vypnutý')}</strong>
+								</span>
+							}
+							subTitle={
+								<Link to={`${parentPath + t('paths:reservations-settings')}`} className={'inline-flex gap-1 items-center text-notino-pink text-sm font-medium'}>
+									{t('loc:Viac info o rezervačnom systéme')} <ChevronPink className={'text-notino-pink'} />
+								</Link>
+							}
+							message={''}
+							icon={<InfoNotinoIcon className={'text-notino-pink'} />}
+							actionItem={<SwitchField input={{ value: enabledRS, onChange: handleChangeRsSettings } as any} meta={{} as any} />}
+						/>
 
-					<div className={cx('services-collapse-wrapper', { 'reorder-view': reorderView })}>
-						<Spin spinning={services.isLoading}>
-							<IndustriesList
-								idustriesData={servicesListData.industries.data}
-								activeKeys={activeKeys}
-								setActiveKeys={setActiveKeys}
-								reorderView={reorderView}
-								parentPath={parentPath}
-								disabledRS={!enabledRS}
-								handleReorder={handleReorderItems}
-								salonID={salonID}
-							/>
-						</Spin>
-					</div>
-				</>
-			)}
+						{/* Services stats cards */}
+						<ServicesStats
+							allServicesCount={servicesListData.industries.servicesCount}
+							servicesAvailableForOnlineReservationsCount={servicesListData.industries.servicesAvailableForOnlineReservationsCount}
+							servicesVisibleInPricelistCount={servicesListData.industries.servicesVisibleInPricelistCount}
+						/>
+
+						{/* Services list */}
+						<div className={'flex items-center justify-between gap-4 mb-4'}>
+							<h2 className={'text-2xl mb-0'}>{`${t('loc:Zoznam služieb')} (${servicesListData.industries.servicesCount})`}</h2>
+							<div className={'flex items-center gap-2'}>
+								{reorderView ? (
+									<>
+										<Button type={'dashed'} className={'noti-btn'} onClick={handleCancelOrder}>
+											{STRINGS(t).cancel('').trim()}
+										</Button>
+										<Button type={'primary'} className={'noti-btn'} onClick={handleSaveOrder}>
+											{STRINGS(t).save('').trim()}
+										</Button>
+									</>
+								) : (
+									<Permissions
+										allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
+										render={(hasPermission, { openForbiddenModal }) => (
+											<>
+												<Button
+													type={'dashed'}
+													className={'noti-btn'}
+													icon={<DragIcon />}
+													onClick={() => {
+														if (hasPermission) {
+															setReoderView(true)
+														} else {
+															openForbiddenModal()
+														}
+													}}
+												>
+													{t('loc:Zmeniť poradie')}
+												</Button>
+												<InfoTooltip
+													title={t('loc:Zmena poradia')}
+													text={t('loc:Poradie služieb na tejto obrazovke zodpovedá poradiu služieb v zákazníckej aplikácii Notino.')}
+												/>
+											</>
+										)}
+									/>
+								)}
+							</div>
+						</div>
+
+						<div className={cx('services-collapse-wrapper', { 'reorder-view': reorderView })}>
+							<Spin spinning={loading}>
+								{activeKeys && (
+									<IndustriesList
+										idustriesData={servicesListData.industries.data}
+										activeKeys={activeKeys}
+										setActiveKeys={setActiveKeys}
+										reorderView={reorderView}
+										parentPath={parentPath}
+										disabledRS={!enabledRS}
+										handleReorder={handleReorderItems}
+										salonID={salonID}
+									/>
+								)}
+							</Spin>
+						</div>
+					</>
+				)}
+			</div>
 		</div>
 	)
 }

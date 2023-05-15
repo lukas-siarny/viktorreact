@@ -4,14 +4,13 @@ import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 import { TFunction } from 'i18next'
 import { ColumnProps } from 'antd/es/table'
-import { useDispatch } from 'react-redux'
 
 // assets
-import { ReactComponent as CheckedPinkIcon } from '../../../../assets/icons/checkbox-checked-pink.svg'
+import { ReactComponent as CheckedPinkIcon } from '../../../../assets/icons/check-current-color.svg'
 
 // types
-import { IServicesListCategory, IServicesListService, setServicesActiveKeys } from '../../../../reducers/services/serviceActions'
-import { HandleServicesReorderFunc, ServicesActiveKeys } from '../../../../types/interfaces'
+import { IServicesListCategory, IServicesListService } from '../../../../reducers/services/serviceActions'
+import { HandleServicesReorderFunc } from '../../../../types/interfaces'
 
 // utils
 import { getLinkWithEncodedBackUrl, parseServiceRowKey } from '../../../../utils/helper'
@@ -28,19 +27,13 @@ type SevicesTableProps = {
 	disabledRS?: boolean
 	parentIndexes: [number, number]
 	handleReorder: HandleServicesReorderFunc
-	activeKeys: ServicesActiveKeys
-	salonID: string
 }
 
-const checkerCell = (checked: boolean, disabled?: boolean) => {
+const lineIcon = <span className={'text-notino-grayDark'}>{'—'}</span>
+
+const checkerCell = (checked: boolean) => {
 	return (
-		<div className={cx('w-full h-full flex items-center justify-center transition transition-opacity duration-200', { 'opacity-50': disabled })}>
-			{checked ? (
-				<CheckedPinkIcon width={16} height={16} className={cx('transition duration-200', { 'text-notino-gray': disabled, 'text-notino-pink': !disabled })} />
-			) : (
-				<div className={'w-4 h-4 border border-solid border-notino-grayDark rounded-lg'} />
-			)}
-		</div>
+		<div className={cx('w-full h-full flex items-center justify-center')}>{checked ? <CheckedPinkIcon width={16} height={16} className={'text-notino-pink'} /> : lineIcon}</div>
 	)
 }
 
@@ -77,7 +70,7 @@ const getTableColumns = (t: TFunction, disabledRS?: boolean): ColumnProps<IServi
 					<AvatarGroup maxCount={4} avatars={value} maxPopoverPlacement={'right'} size={'small'} />
 				</div>
 			) : (
-				'-'
+				<div className={'w-full h-full flex items-center'}>{lineIcon}</div>
 			)
 		}
 	},
@@ -96,7 +89,7 @@ const getTableColumns = (t: TFunction, disabledRS?: boolean): ColumnProps<IServi
 		dataIndex: 'isAvailableForOnlineReservations',
 		key: 'isAvailableForOnlineReservations',
 		className: 'noti-medium-pink-col',
-		render: (_value, record) => checkerCell(record.isAvailableForOnlineReservations, disabledRS)
+		render: (_value, record) => checkerCell(record.isAvailableForOnlineReservations)
 	},
 	{
 		title: (
@@ -110,14 +103,13 @@ const getTableColumns = (t: TFunction, disabledRS?: boolean): ColumnProps<IServi
 		),
 		dataIndex: 'automaticApproval',
 		key: 'automaticApproval',
-		render: (_value, record) => checkerCell(record.automaticApproval, disabledRS)
+		render: (_value, record) => checkerCell(record.automaticApproval)
 	}
 ]
 
 const ServicesList: FC<SevicesTableProps> = React.memo((props) => {
-	const { category, parentPath, reorderView, disabledRS, handleReorder, parentIndexes, activeKeys, salonID } = props
+	const { category, parentPath, reorderView, disabledRS, handleReorder, parentIndexes } = props
 	const navigate = useNavigate()
-	const dispatch = useDispatch()
 	const [t] = useTranslation()
 
 	const handleDrop = (oldId: string, newId: string) => {
@@ -129,13 +121,14 @@ const ServicesList: FC<SevicesTableProps> = React.memo((props) => {
 	return (
 		<CustomTable<IServicesListService>
 			className={cx('table-fixed noti-services-settings-table', { 'disabled-rs': disabledRS })}
+			wrapperClassName={'overflow-hidden'}
 			columns={getTableColumns(t, disabledRS)}
 			dataSource={category.services.data}
 			pagination={false}
 			rowKey={'key'}
 			dndDrop={reorderView ? handleDrop : undefined}
 			rowClassName={reorderView ? undefined : 'clickable-row'}
-			dndWithHandler={true}
+			dndWithHandler
 			dndColWidth={36}
 			onRow={
 				reorderView
@@ -143,7 +136,6 @@ const ServicesList: FC<SevicesTableProps> = React.memo((props) => {
 					: (record) => ({
 							onClick: () => {
 								if (parentPath) {
-									dispatch(setServicesActiveKeys({ ...activeKeys, salonID }))
 									navigate(getLinkWithEncodedBackUrl(parentPath + t('paths:services-settings/{{serviceID}}', { serviceID: record.id })))
 								}
 							}

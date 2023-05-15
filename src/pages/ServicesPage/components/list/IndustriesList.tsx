@@ -3,9 +3,9 @@ import { Button, Collapse, CollapsePanelProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { NavigateFunction, useNavigate } from 'react-router'
 import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable'
-import { DndContext, DragEndEvent, useDroppable } from '@dnd-kit/core'
+import { DndContext, DragEndEvent, closestCenter, useDroppable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
-import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-kit/modifiers'
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 
 // assets
 import { TFunction } from 'i18next'
@@ -157,7 +157,7 @@ const IndustriesList: FC<IndustriesListProps> = (props) => {
 	)
 
 	return reorderView ? (
-		<DndContext onDragEnd={onDragEnd} modifiers={[restrictToVerticalAxis, restrictToFirstScrollableAncestor]}>
+		<DndContext onDragEnd={onDragEnd} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter}>
 			<SortableContext
 				// industry ids
 				items={idustriesData.map((industry) => industry.id)}

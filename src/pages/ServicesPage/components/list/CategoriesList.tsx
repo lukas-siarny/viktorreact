@@ -1,7 +1,7 @@
 import React, { FC, useCallback } from 'react'
 import { Collapse, CollapsePanelProps } from 'antd'
 import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable'
-import { DndContext, DragEndEvent, useDroppable } from '@dnd-kit/core'
+import { DndContext, DragEndEvent, closestCenter, useDroppable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
 import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-kit/modifiers'
 
@@ -77,13 +77,11 @@ const CategoryPanel: FC<CategoryPanelProps> = React.memo((props) => {
 		>
 			<ServicesList
 				category={category}
-				activeKeys={activeKeys}
 				parentPath={parentPath}
 				reorderView={reorderView}
 				disabledRS={disabledRS}
 				parentIndexes={[parentIndex, index]}
 				handleReorder={handleReorder}
-				salonID={salonID}
 			/>
 		</Panel>
 	)
@@ -134,9 +132,9 @@ const CategoriesList: FC<CategoriesListProps> = (props) => {
 	)
 
 	return (
-		<div className={'w-full overflow-x-auto'}>
+		<div className={'w-full overflow-x-auto overflow-y-hidden'}>
 			{reorderView ? (
-				<DndContext onDragEnd={onDragEnd} modifiers={[restrictToVerticalAxis, restrictToFirstScrollableAncestor]}>
+				<DndContext onDragEnd={onDragEnd} modifiers={[restrictToVerticalAxis, restrictToFirstScrollableAncestor]} collisionDetection={closestCenter}>
 					<SortableContext
 						// category ids
 						items={industry.categories.data.map((category) => category.id)}

@@ -689,6 +689,7 @@ export type ReservationsEmployees = Paths.GetApiB2BAdminSalonsSalonIdCalendarEve
 export type HandleServicesReorderFunc = (currentIndexes: [number, number?, number?], newIndex: number) => void
 
 export type ServicesActiveKeys = {
+	salonID: string
 	industries: string[]
 	categories: string[]
 }

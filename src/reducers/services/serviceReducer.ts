@@ -50,6 +50,7 @@ export default (state = initState, action: IServiceActions) => {
 					data: action.payload.data,
 					listData: action.payload.listData,
 					options: action.payload.options,
+					servicesActiveKeys: action.payload.servicesActiveKeys,
 					categoriesOptions: action.payload.categoriesOptions
 				}
 			}

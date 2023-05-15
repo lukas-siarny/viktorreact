@@ -507,7 +507,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 								<Button
 									id={formFieldID(FORM.SALON, 'accept-salon')}
 									type={'primary'}
-									icon={<CheckIcon />}
+									icon={<CheckIcon color={'#fff'} />}
 									size={'middle'}
 									className={'noti-btn m-regular w-44 xl:w-56'}
 									onClick={(e) => {

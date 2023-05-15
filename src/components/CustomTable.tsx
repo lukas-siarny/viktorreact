@@ -3,8 +3,7 @@ import { forEach, includes, isEmpty } from 'lodash'
 import cx from 'classnames'
 
 // Drag and drop
-import { DragEndEvent, closestCenter } from '@dnd-kit/core'
-import { DndContext } from '@dnd-kit/core'
+import { DragEndEvent, closestCenter, DndContext } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 

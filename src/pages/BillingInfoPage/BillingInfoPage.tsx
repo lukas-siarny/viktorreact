@@ -19,7 +19,8 @@ import { withPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 
 // types
-import { IBreadcrumbs, IBillingForm } from '../../types/interfaces'
+import { IBreadcrumbs } from '../../types/interfaces'
+import { IBillingForm } from '../../schemas/billing'
 
 const BillingInfoPage = () => {
 	const [t] = useTranslation()
@@ -29,7 +30,7 @@ const BillingInfoPage = () => {
 
 	useEffect(() => {
 		if (salon.data) {
-			const initData: IBillingForm = {
+			const initData = {
 				...salon.data.companyInvoiceAddress,
 				...salon.data.companyInfo,
 				...salon.data.companyContactPerson,

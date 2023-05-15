@@ -11,6 +11,7 @@ import CustomPagination from '../../components/CustomPagination'
 
 // types
 import { SalonSubPageProps } from '../../types/interfaces'
+import { salonHistoryPageURLQueryParamsSchema } from '../../schemas/queryParams'
 
 // reducers
 import { getSalonHistory } from '../../reducers/salons/salonsActions'
@@ -27,7 +28,7 @@ import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 // hooks
-import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
 
 const setIcon = (operation: SALON_HISTORY_OPERATIONS): undefined | ReactNode => {
 	switch (operation) {
@@ -51,11 +52,10 @@ const SalonHistoryPage: FC<ComponentProps> = (props) => {
 	const { salonID } = props
 	const now = dayjs()
 
-	const [query, setQuery] = useQueryParams({
-		limit: NumberParam(),
-		page: NumberParam(1),
-		dateFrom: StringParam(now.subtract(1, 'week').format(DEFAULT_DATE_INIT_FORMAT)),
-		dateTo: StringParam(now.format(DEFAULT_DATE_INIT_FORMAT))
+	const [query, setQuery] = useQueryParams(salonHistoryPageURLQueryParamsSchema, {
+		page: 1,
+		dateFrom: now.subtract(1, 'week').format(DEFAULT_DATE_INIT_FORMAT),
+		dateTo: now.format(DEFAULT_DATE_INIT_FORMAT)
 	})
 
 	const salonHistory = useSelector((state: RootState) => state.salons.salonHistory)
@@ -95,11 +95,11 @@ const SalonHistoryPage: FC<ComponentProps> = (props) => {
 
 		return (
 			<>
-				{Object.keys(values)?.map((key: string) => {
+				{Object.keys(values)?.map((key: string, index) => {
 					if (typeof values?.[key] === 'object' && key !== 'fileID') {
-						return <CompareComponent valueKey={key} oldValue={JSON.stringify(oldValues?.[key])} newValue={JSON.stringify(newValues?.[key])} />
+						return <CompareComponent key={index} valueKey={key} oldValue={JSON.stringify(oldValues?.[key])} newValue={JSON.stringify(newValues?.[key])} />
 					}
-					return <CompareComponent valueKey={key} oldValue={oldValues?.[key]} newValue={newValues?.[key]} />
+					return <CompareComponent key={index} valueKey={key} oldValue={oldValues?.[key]} newValue={newValues?.[key]} />
 				})}
 			</>
 		)

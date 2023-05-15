@@ -17,14 +17,17 @@ import { getService } from '../../reducers/services/serviceActions'
 import { getCategory, ICategoryParameterValue } from '../../reducers/categories/categoriesActions'
 
 // types
-import { IServiceForm, SalonSubPageProps, EmployeeServiceData, Employees, ServiceDetail, IEmployeeServiceEditForm, IParameterValue } from '../../types/interfaces'
+import { SalonSubPageProps, Employees, ServiceDetail } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
 import { patchReq } from '../../utils/request'
-import { FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION } from '../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, SERVICE_DESCRIPTION_LNG } from '../../utils/enums'
 import { decodePrice, encodePrice, getAssignedUserLabel, getEmployeeServiceDataForPatch, getServicePriceAndDurationData, normalizeNameLocalizations } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
+
+// schema
+import { IEmployeeServiceEditForm, IParameterValue, IServiceForm } from '../../schemas/service'
 
 type Props = SalonSubPageProps & {
 	serviceID: string
@@ -34,26 +37,21 @@ type ServiceParameterValues = NonNullable<Paths.GetApiB2BAdminServicesServiceId.
 type ServicePatch = Paths.PatchApiB2BAdminServicesServiceId.RequestBody
 type ServiceParameterValuesPatch = ServicePatch['categoryParameterValues']
 
-enum SERVICE_DESCRIPTION_LNG {
-	DEFAULT = 'DEFAULT',
-	EN = 'en'
-}
-
 export const parseEmployeeCreateAndUpdate = (employees: IServiceForm['employees']): any => {
 	return employees?.map((employeeService) => employeeService?.employee?.id)
 }
 
 export const parseParameterValuesCreateAndUpdate = (values: IParameterValue[]): ServiceParameterValuesPatch => {
 	const result: ServiceParameterValuesPatch = []
-	values?.forEach((value: any) => {
-		if (value?.useParameter) {
+	values.forEach((value) => {
+		if (value.useParameter) {
 			result.push({
-				id: value?.id,
+				id: value.id,
 				priceAndDurationData: {
-					durationFrom: value?.durationFrom ?? null,
-					durationTo: value?.variableDuration ? value?.durationTo : null,
-					priceFrom: encodePrice(value?.priceFrom),
-					priceTo: value?.variablePrice ? encodePrice(value?.priceTo) : null
+					durationFrom: value.durationFrom ?? null,
+					durationTo: value.variableDuration ? value.durationTo : null,
+					priceFrom: encodePrice(value.priceFrom as number),
+					priceTo: value.variablePrice && !isNil(value.priceTo) ? encodePrice(value.priceTo) : null
 				}
 			})
 		}
@@ -63,7 +61,7 @@ export const parseParameterValuesCreateAndUpdate = (values: IParameterValue[]): 
 
 export const addEmployee = (dispatch: Dispatch<Action>, employees: Employees, service: ServiceDetail, formValues?: IServiceForm) => {
 	const selectedEmployeeIDs = formValues?.employee
-	const updatedEmployees: EmployeeServiceData[] = []
+	const updatedEmployees: IEmployeeServiceEditForm[] = []
 	// go through selected employees
 	forEach(selectedEmployeeIDs, (employeeId) => {
 		const employeeData = employees?.find((employee) => employee?.id === employeeId)
@@ -82,7 +80,7 @@ export const addEmployee = (dispatch: Dispatch<Action>, employees: Employees, se
 		} else if (employeeData) {
 			const useCategoryParameter = !!service?.useCategoryParameter
 
-			let newServiceData: EmployeeServiceData = {
+			let newServiceData: IEmployeeServiceEditForm = {
 				id: service.id,
 				hasOverriddenPricesAndDurationData: false,
 				employee: {
@@ -167,7 +165,7 @@ const parseEmployeesInit = (service: ServiceDetail) => {
 	return service.employees?.map((employee) => {
 		const useCategoryParameter = service?.useCategoryParameter
 
-		let formEmployeeServiceData: EmployeeServiceData = {
+		let formEmployeeServiceData: IEmployeeServiceEditForm = {
 			id: service.id,
 			industry: service?.category.name,
 			category: service?.category?.child?.name,
@@ -321,7 +319,7 @@ const ServiceEditPage = (props: Props) => {
 							priceFrom: encodePrice(values.priceFrom as number),
 							priceTo: values.variablePrice && !isNil(values.priceTo) ? encodePrice(values.priceTo) : null
 					  }) as any,
-				categoryParameterValues: parseParameterValuesCreateAndUpdate(values.serviceCategoryParameter),
+				categoryParameterValues: values.useCategoryParameter ? parseParameterValuesCreateAndUpdate(values.serviceCategoryParameter) : undefined,
 				employeeIDs: parseEmployeeCreateAndUpdate(values.employees),
 				settings: values.settings
 			}

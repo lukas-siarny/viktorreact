@@ -10,10 +10,8 @@ import { optionRenderWithImage, showErrorNotification } from '../../../utils/hel
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
-import { ICustomerForm, ISelectOptionItem } from '../../../types/interfaces'
-
-// validate
-import validateCustomerForm from './validateCustomerForm'
+import { ISelectOptionItem } from '../../../types/interfaces'
+import { ICustomerForm, validationCustomerFn } from '../../../schemas/customer'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -214,7 +212,7 @@ const form = reduxForm<ICustomerForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateCustomerForm
+	validate: validationCustomerFn
 })(withPromptUnsavedChanges(CustomerForm))
 
 export default form

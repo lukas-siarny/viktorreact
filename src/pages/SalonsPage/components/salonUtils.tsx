@@ -4,8 +4,8 @@ import { Tag } from 'antd'
 import i18next from 'i18next'
 
 // types
-import { AutocompleteLabelInValue, ISalonForm, OpeningHours } from '../../../types/interfaces'
-import { ISalonPayloadData, ISelectedSalonPayload } from '../../../reducers/selectedSalon/selectedSalonActions'
+import { AutocompleteLabelInValue, OpeningHours } from '../../../types/interfaces'
+import { ISelectedSalonPayload } from '../../../reducers/selectedSalon/selectedSalonActions'
 import { IBasicSalon } from '../../../reducers/salons/salonsActions'
 import { Paths } from '../../../types/api'
 
@@ -21,6 +21,9 @@ import {
 	mapRawOpeningHoursToComponentOpeningHours,
 	orderDaysInWeek
 } from '../../../components/OpeningHours/OpeningHoursUtils'
+
+// schema
+import { ISalonForm } from '../../../schemas/salon'
 
 // assets
 import { ReactComponent as CheckerIcon } from '../../../assets/icons/check-icon-success.svg'
@@ -39,7 +42,7 @@ export type SalonInitType = ISelectedSalonPayload['data'] & IBasicSalon
  *
  * @param salonData
  * @param phonePrefixCountryCode
- * @param salonNameFromSelect - pre title salonu sa miesto input fieldu pouziva autocomplete field
+ * @param salonNameFromSelect
  * @returns
  */
 export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCountryCode: string, salonNameFromSelect = false) => {
@@ -55,21 +58,20 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 	// pre sprave zobrazenie informacnych hlasok a disabled stavov submit buttonov je potrebne dat pozor, aby isPristine fungovalo spravne = teda pri pridavani noveho fieldu je to potrebne vzdy skontrolovat
 	// napr. ak pride z BE aboutUsFirst: undefined, potom prepisem hodnotu vo formulari a opat ju vymazem, tak do reduxu sa ta prazdna hodnota uz neulozi ako undeifned ale ako null
 	// preto maju vsetky inicializacne hodnoty, pre textFieldy a textAreaFieldy fallback || null (pozri impementaciu tychto komponentov, preco sa to tam takto uklada)
-
-	const initialData: ISalonForm = {
+	const initialData = {
 		salonNameFromSelect,
 		id: salonData.id || null,
 		state: salonData.state as SALON_STATES,
 		name: salonNameFromSelect
 			? {
 					key: salonData.id,
-					label: salonData.name || null,
-					value: salonData.id || null
-			  } || null
-			: salonData.name || null,
-		email: salonData.email || null,
+					label: salonData.name,
+					value: salonData.id
+			  }
+			: salonData.name,
+		email: salonData.email,
 		// categoryIDs for basic salon
-		categoryIDs: (isEmpty(!salonData?.categories) ? salonData?.categories.map((category) => category.id) : null) as ISalonForm['categoryIDs'],
+		categoryIDs: (!isEmpty(salonData?.categories) ? salonData?.categories.map((category) => category.id) : null) as ISalonForm['categoryIDs'],
 		payByCard: !!salonData.payByCard,
 		payByCash: !!salonData?.payByCash,
 		otherPaymentMethods: salonData.otherPaymentMethods || null,
@@ -93,12 +95,12 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 						phone: phone.phone || null
 				  }))
 				: getPhoneDefaultValue(phonePrefixCountryCode),
-		gallery: map(salonData.images, (image: any) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id, isCover: image?.isCover })),
+		gallery: map(salonData.images, (image) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id, isCover: image?.isCover })),
 		pricelists: map(salonData.pricelists, (file) => ({ url: file?.original, uid: file?.id, name: file?.fileName })),
 		logo: salonData.logo?.id
 			? [
 					{
-						uid: salonData.logo?.id,
+						uid: salonData.logo.id,
 						url: salonData.logo?.original,
 						thumbUrl: salonData.logo?.resizedImages?.thumbnail
 					}

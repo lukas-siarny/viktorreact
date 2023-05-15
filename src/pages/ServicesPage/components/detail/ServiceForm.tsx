@@ -8,38 +8,38 @@ import cx from 'classnames'
 
 // atoms
 import { useNavigate } from 'react-router-dom'
-import SelectField from '../../../atoms/SelectField'
-import InputNumberField from '../../../atoms/InputNumberField'
-import SwitchField from '../../../atoms/SwitchField'
+import SelectField from '../../../../atoms/SelectField'
+import InputNumberField from '../../../../atoms/InputNumberField'
+import SwitchField from '../../../../atoms/SwitchField'
 
 // components
-import DeleteButton from '../../../components/DeleteButton'
-import ServicesListField from '../../EmployeesPage/components/ServicesListField'
+import DeleteButton from '../../../../components/DeleteButton'
+import ServicesListField from '../../../EmployeesPage/components/ServicesListField'
 import ParameterValuesList from './ParameterValuesList'
 import ServiceBreadcrumbs from './ServiceBreadcrumbs'
-import Localizations from '../../../components/Localizations'
-import TextareaField from '../../../atoms/TextareaField'
+import Localizations from '../../../../components/Localizations'
+import TextareaField from '../../../../atoms/TextareaField'
 
 // utils
-import { formFieldID, showErrorNotification, validationNumberMin, validationString } from '../../../utils/helper'
-import { DELETE_BUTTON_ID, FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, STRINGS, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
-import { deleteReq } from '../../../utils/request'
-import searchWrapper from '../../../utils/filters'
-import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
-import Permissions from '../../../utils/Permissions'
+import { formFieldID, showErrorNotification, validationNumberMin, validationString } from '../../../../utils/helper'
+import { DELETE_BUTTON_ID, FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, STRINGS, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
+import { deleteReq } from '../../../../utils/request'
+import searchWrapper from '../../../../utils/filters'
+import { withPromptUnsavedChanges } from '../../../../utils/promptUnsavedChanges'
+import Permissions from '../../../../utils/Permissions'
 
 // types
-import { RootState } from '../../../reducers'
+import { RootState } from '../../../../reducers'
 
 // assets
-import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
-import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
-import { ReactComponent as EmployeesIcon } from '../../../assets/icons/employees.svg'
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
-import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
+import { ReactComponent as CreateIcon } from '../../../../assets/icons/plus-icon.svg'
+import { ReactComponent as EditIcon } from '../../../../assets/icons/edit-icon.svg'
+import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees.svg'
+import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.svg'
+import { ReactComponent as SettingIcon } from '../../../../assets/icons/setting.svg'
 
 // schema
-import { validationServiceFn, IServiceForm } from '../../../schemas/service'
+import { validationServiceFn, IServiceForm } from '../../../../schemas/service'
 
 const numberMin0 = validationNumberMin(0)
 const fixLength1500 = validationString(VALIDATION_MAX_LENGTH.LENGTH_1500)

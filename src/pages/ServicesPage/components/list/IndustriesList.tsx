@@ -6,15 +6,20 @@ import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-
 import { DndContext, DragEndEvent, closestCenter, useDroppable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
+import { TFunction } from 'i18next'
 
 // assets
-import { TFunction } from 'i18next'
 import { ReactComponent as DragIcon } from '../../../../assets/icons/drag-icon.svg'
 
+// types
 import { HandleServicesReorderFunc, ServicesActiveKeys } from '../../../../types/interfaces'
-import { getExpandIcon } from '../../../../utils/helper'
 import { IServicesListInudstry } from '../../../../reducers/services/serviceActions'
+
+// utils
+import { getExpandIcon } from '../../../../utils/helper'
 import { STRINGS } from '../../../../utils/enums'
+
+// components
 import CategoriesList from './CategoriesList'
 
 type IndustriesListProps = {

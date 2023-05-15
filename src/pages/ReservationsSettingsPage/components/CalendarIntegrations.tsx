@@ -3,14 +3,14 @@ import { useGoogleLogin } from '@react-oauth/google'
 import { useTranslation } from 'react-i18next'
 import { useMsal } from '@azure/msal-react'
 import qs from 'qs'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 
 // utils
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { find, get } from 'lodash'
-import { buildHeaders, postReq } from '../../../utils/request'
-import { MS_OATH_CONFIG, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
+import { buildHeaders, postReq, showErrorNotifications } from '../../../utils/request'
+import { MSG_TYPE, MS_OATH_CONFIG, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
 import { RootState } from '../../../reducers'
 import { checkPermissions } from '../../../utils/Permissions'
 import showNotifications from '../../../utils/tsxHelpers'
@@ -25,7 +25,6 @@ const CalendarIntegrations = () => {
 	const isPartner = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser.data?.uniqPermissions])
 
 	// NOTE: intercept Microsoft auth token request and get code from the payload and send it to our BE
-
 	const originalFetch = window.fetch
 
 	window.fetch = async (...args): Promise<any> => {
@@ -36,37 +35,69 @@ const CalendarIntegrations = () => {
 				const data = qs.parse(config.body)
 
 				if (typeof data.code === 'string') {
-					const responseAuth = await axios.post(
-						MS_OATH_CONFIG.url,
-						{
-							grant_type: MS_OATH_CONFIG.grand_type,
-							client_id: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
-							scope: MS_OATH_CONFIG.scopes,
-							redirect_uri: MS_OATH_CONFIG.redirect_uri,
-							code_verifier: data.code_verifier,
-							code: data.code
-						},
-						{
-							headers: {
-								'Content-Type': 'application/x-www-form-urlencoded'
+					try {
+						const responseAuth = await axios.post(
+							MS_OATH_CONFIG.url,
+							{
+								grant_type: MS_OATH_CONFIG.grand_type,
+								client_id: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
+								scope: MS_OATH_CONFIG.scopes,
+								redirect_uri: MS_OATH_CONFIG.redirect_uri,
+								code_verifier: data.code_verifier,
+								code: data.code
+							},
+							{
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded'
+								}
 							}
-						}
-					)
+						)
 
-					const responseData = await originalFetch('/api/b2b/admin/calendar-sync/sync-token', {
-						method: 'POST',
-						headers: {
-							...buildHeaders()
-						},
-						body: JSON.stringify({
-							refreshToken: responseAuth.data.refresh_token,
-							calendarType: 'MICROSOFT'
+						const responseData = await originalFetch('/api/b2b/admin/calendar-sync/sync-token', {
+							method: 'POST',
+							headers: {
+								...buildHeaders()
+							},
+							body: JSON.stringify({
+								refreshToken: responseAuth.data.refresh_token,
+								calendarType: 'MICROSOFT'
+							})
 						})
-					})
 
-					const responseDataJson = await responseData.clone().json()
-					showNotifications(responseDataJson.messages, NOTIFICATION_TYPE.NOTIFICATION)
-					return responseData
+						const responseDataJson = await responseData.clone().json()
+
+						if (responseData.ok) {
+							showNotifications(responseDataJson.messages, NOTIFICATION_TYPE.NOTIFICATION)
+						} else {
+							showErrorNotifications({ response: { status: responseData.status, data: responseDataJson } }, NOTIFICATION_TYPE.NOTIFICATION)
+						}
+						return responseData
+					} catch (e) {
+						// eslint-disable-next-line no-console
+						console.error(e)
+						if (e instanceof AxiosError) {
+							const errorMsg = e.response?.data?.error_description
+							showErrorNotifications(
+								{
+									response: {
+										status: e.response?.status,
+										data: { messages: errorMsg ? [{ type: MSG_TYPE.ERROR, message: e.response?.data?.error_description }] : [] }
+									}
+								},
+								NOTIFICATION_TYPE.NOTIFICATION
+							)
+						} else {
+							// Show general error
+							showErrorNotifications(
+								{
+									response: {
+										data: { messages: [] }
+									}
+								},
+								NOTIFICATION_TYPE.NOTIFICATION
+							)
+						}
+					}
 				}
 			}
 			return Promise.reject()
@@ -95,10 +126,15 @@ const CalendarIntegrations = () => {
 		onError: (errorResponse) => console.error(errorResponse)
 	})
 
-	const handleMSLogin = () => {
-		instance.loginPopup({
-			scopes: MS_OATH_CONFIG.scopes
-		})
+	const handleMSLogin = async () => {
+		try {
+			await instance.loginPopup({
+				scopes: MS_OATH_CONFIG.scopes
+			})
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		}
 	}
 
 	return (

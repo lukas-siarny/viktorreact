@@ -4,16 +4,18 @@ import { useTranslation } from 'react-i18next'
 import { useMsal } from '@azure/msal-react'
 import qs from 'qs'
 import axios, { AxiosError } from 'axios'
-
-// utils
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { find, get } from 'lodash'
+
+// utils
 import { buildHeaders, postReq, showErrorNotifications } from '../../../utils/request'
 import { MSG_TYPE, MS_OATH_CONFIG, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
-import { RootState } from '../../../reducers'
 import { checkPermissions } from '../../../utils/Permissions'
 import showNotifications from '../../../utils/tsxHelpers'
+
+// types
+import { RootState } from '../../../reducers'
 
 const CalendarIntegrations = () => {
 	const { t } = useTranslation()

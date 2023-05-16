@@ -277,8 +277,7 @@ export const getCalendarEvents =
 					employee: employees[event.employee.id],
 					startDateTime: getDateTime(event.start.date, event.start.time),
 					endDateTime: getDateTime(event.end.date, event.end.time),
-					// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-					isImported: false
+					isImported: event.eventType === CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT
 				}
 
 				/**
@@ -381,8 +380,7 @@ export const getCalendarReservations = (
 		CALENDAR_EVENTS_KEYS.RESERVATIONS,
 		{
 			...queryParams,
-			// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-			eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION /* , CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT */],
+			eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT],
 			reservationStates: RESERVATION_STATES
 		},
 		splitMultidayEventsIntoOneDayEvents,

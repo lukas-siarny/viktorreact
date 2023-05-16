@@ -23,7 +23,18 @@ import RemainingSmsCredit from '../../../components/Dashboards/RemainingSmsCredi
 import { IDataUploadForm, IReservationSystemSettingsForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
-import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, REQUEST_STATUS, TEMPLATE_OPTIONS } from '../../../utils/enums'
+import {
+	FORM,
+	NOTIFICATION_CHANNEL,
+	RS_NOTIFICATION,
+	SERVICE_TYPE,
+	STRINGS,
+	PERMISSION,
+	SUBMIT_BUTTON_ID,
+	REQUEST_STATUS,
+	TEMPLATE_OPTIONS_CUSTOMERS,
+	TEMPLATE_OPTIONS_RESERVATIONS
+} from '../../../utils/enums'
 import { formFieldID, optionRenderNotiPinkCheckbox, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
@@ -72,8 +83,6 @@ enum UPLOAD_TYPE {
 	RESERVATION = 'reservation',
 	CUSTOMER = 'customer'
 }
-
-const { Option } = Select
 
 const ReservationSystemSettingsForm = (props: Props) => {
 	const { pristine, submitting, excludedB2BNotifications, parentPath, salonID } = props
@@ -249,8 +258,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 		formData.append('file', values?.file)
 
 		try {
-			// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-			/* if (uploadModal.uploadType === UPLOAD_TYPE.RESERVATION) {
+			if (uploadModal.uploadType === UPLOAD_TYPE.RESERVATION) {
 				await postReq('/api/b2b/admin/imports/salons/{salonID}/calendar-events', { salonID }, formData, {
 					headers
 				})
@@ -258,7 +266,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				await postReq('/api/b2b/admin/imports/salons/{salonID}/customers', { salonID }, formData, {
 					headers
 				})
-			} */
+			}
 
 			await postReq('/api/b2b/admin/imports/salons/{salonID}/customers', { salonID }, formData, {
 				headers
@@ -267,6 +275,8 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			setUploadModal({ ...uploadModal, requestStatus: REQUEST_STATUS.SUCCESS })
 		} catch {
 			setUploadModal({ ...uploadModal, requestStatus: REQUEST_STATUS.ERROR })
+		} finally {
+			setTemplateValue(null)
 		}
 	}
 
@@ -481,22 +491,23 @@ const ReservationSystemSettingsForm = (props: Props) => {
 								<Divider className={'mt-1 mb-3'} />
 								<div className={'flex items-center justify-between gap-1'}>
 									<div className={'ant-form-item w-full'}>
-										<label htmlFor={'noti-customer-template-select'} className={'block mb-2'}>
+										<label htmlFor={'noti-template-select'} className={'block mb-2'}>
 											{t('loc:Vzorové šablóny súborov')}
 										</label>
 										<Select
-											id={'noti-customer-template-select'}
+											id={'noti-template-select'}
 											style={{ zIndex: 999 }}
 											className={'noti-select-input w-full mb-4'}
 											size={'large'}
 											labelInValue
-											options={TEMPLATE_OPTIONS()}
-											onChange={(val: any) => setTemplateValue(val)}
+											options={uploadModal.uploadType === UPLOAD_TYPE.CUSTOMER ? TEMPLATE_OPTIONS_CUSTOMERS() : TEMPLATE_OPTIONS_RESERVATIONS()}
+											onChange={(val) => setTemplateValue(val)}
 											value={templateValue}
 											placeholder={t('loc:Vyberte šablónu na stiahnutie')}
 											getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
 										/>
 									</div>
+
 									<Button
 										className={'noti-btn'}
 										href={`${process.env.PUBLIC_URL}/templates/${templateValue?.value}`}
@@ -512,30 +523,32 @@ const ReservationSystemSettingsForm = (props: Props) => {
 								</div>
 							</>
 						}
-						setVisible={() => setUploadModal(UPLOAD_MODAL_INIT)}
+						setVisible={() => {
+							setTemplateValue(null)
+							setUploadModal(UPLOAD_MODAL_INIT)
+						}}
 					/>
-					{/* // NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov */}
-					{/* <Button
-							onClick={() => {
-								setUploadModal({
-									...uploadModal,
-									visible: true,
-									uploadType: UPLOAD_TYPE.RESERVATION,
-									data: {
-										accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.csv,.ics',
-										title: t('loc:Importovať rezervácie'),
-										label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.xlsx, .csv, .ics' })
-									}
-								})
-							}}
-							disabled={disabled}
-							type='primary'
-							htmlType='button'
-							className={'noti-btn mr-2'}
-							icon={<UploadIcon />}
-						>
-							{t('loc:Importovať rezervácie')}
-						</Button> */}
+					<Button
+						onClick={() => {
+							setUploadModal({
+								...uploadModal,
+								visible: true,
+								uploadType: UPLOAD_TYPE.RESERVATION,
+								data: {
+									accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel',
+									title: t('loc:Importovať rezervácie'),
+									label: t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.xlsx' })
+								}
+							})
+						}}
+						disabled={disabled}
+						type='primary'
+						htmlType='button'
+						className={'noti-btn mr-2'}
+						icon={<UploadIcon />}
+					>
+						{t('loc:Importovať rezervácie')}
+					</Button>
 					<Button
 						onClick={() => {
 							setUploadModal({

@@ -82,8 +82,7 @@ interface IComapreAndSortDayEventsData {
 
 const CALENDAR_EVENT_TYPES_ORDER = {
 	[CALENDAR_EVENT_TYPE.RESERVATION]: 0,
-	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-	// [CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT]: 0,
+	[CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT]: 0,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: 1,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: 2,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: 3

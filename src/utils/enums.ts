@@ -836,9 +836,8 @@ export enum CALENDAR_EVENT_TYPE {
 	RESERVATION = 'RESERVATION',
 	EMPLOYEE_SHIFT = 'EMPLOYEE_SHIFT',
 	EMPLOYEE_TIME_OFF = 'EMPLOYEE_TIME_OFF',
-	EMPLOYEE_BREAK = 'EMPLOYEE_BREAK'
-	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-	// RESERVATION_FROM_IMPORT = 'RESERVATION_FROM_IMPORT'
+	EMPLOYEE_BREAK = 'EMPLOYEE_BREAK',
+	RESERVATION_FROM_IMPORT = 'RESERVATION_FROM_IMPORT'
 }
 
 export enum CALENDAR_EVENTS_VIEW_TYPE {
@@ -882,13 +881,20 @@ export const EVERY_REPEAT_OPTIONS = () => [
 	}
 ]
 
-export const TEMPLATE_OPTIONS = () => [
+export const TEMPLATE_OPTIONS_CUSTOMERS = () => [
 	{
 		value: 'import_of_clients_template.csv',
 		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.csv' })
 	},
 	{
 		value: 'import_of_clients_template.xlsx',
+		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' })
+	}
+]
+
+export const TEMPLATE_OPTIONS_RESERVATIONS = () => [
+	{
+		value: 'import_of_reservations_template.xlsx',
 		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' })
 	}
 ]

@@ -7,7 +7,7 @@ import { D_M_YEAR_FORMAT } from '../../../utils/enums'
 import { postReq } from '../../../utils/request'
 
 // types
-import { IEnumerationsCountriesPayload, IRechargeSmsCreditForm } from '../../../types/interfaces'
+import { IEnumerationsCountriesPayload } from '../../../types/interfaces'
 
 // redux
 import { ISmsUnitPricesActualPayload } from '../../../reducers/smsUnitPrices/smsUnitPricesActions'
@@ -15,6 +15,9 @@ import { IEnumerationsCurrenciesPayload } from '../../../reducers/enumerations/e
 
 // hooks
 import RechargeSmsCredit from '../../../components/RechargeSmsCredit/RechargeSmsCreditForm'
+
+// schemas
+import { IRechargeSmsCreditForm } from '../../../schemas/rechargeSmsCredit'
 
 type Props = {
 	currency?: NonNullable<IEnumerationsCurrenciesPayload['data']>[0]

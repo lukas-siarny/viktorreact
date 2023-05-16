@@ -27,7 +27,7 @@ import { getReviews } from '../../reducers/reviews/reviewsActions'
 import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 
 // types
-import { IBreadcrumbs, Columns, IReviewsFilter } from '../../types/interfaces'
+import { IBreadcrumbs, Columns } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
@@ -38,6 +38,7 @@ import useQueryParams from '../../hooks/useQueryParamsZod'
 
 // schema
 import { reviewsPageURLQueryParams } from '../../schemas/queryParams'
+import { IReviewFilterForm } from '../../schemas/review'
 
 const getRowId = (verificationStatus: string, id: string) => `${verificationStatus}_${id}`
 
@@ -123,7 +124,7 @@ const ReviewsPage = () => {
 		setQuery(newQuery)
 	}
 
-	const handleSubmit = (values: IReviewsFilter) => {
+	const handleSubmit = (values: IReviewFilterForm) => {
 		const newQuery = {
 			...query,
 			...values,

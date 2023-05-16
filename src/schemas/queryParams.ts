@@ -382,3 +382,14 @@ export const specialistContactsPageURLQueryParams = z.object({
 })
 
 export type ISpecialistContactsPageURLQueryParams = z.infer<typeof specialistContactsPageURLQueryParams>
+
+/**
+ * Documents
+ */
+
+export const documentsPageQueryParams = paginationSchema
+export const documentsPageURLQueryParamsSchema = documentsPageQueryParams
+
+export type IDocumentsPageQueryParams = z.infer<typeof documentsPageQueryParams>
+
+export type IDocumentsPageURLQueryParams = z.infer<typeof documentsPageURLQueryParamsSchema>

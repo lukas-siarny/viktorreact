@@ -12,7 +12,7 @@ import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // utils
-import { ADMIN_PERMISSIONS, FORM, PERMISSION, REVIEW_VERIFICATION_STATUS, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { ADMIN_PERMISSIONS, FORM, PAGINATION, PERMISSION, REVIEW_VERIFICATION_STATUS, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys } from '../../utils/helper'
 import { withPermissions } from '../../utils/Permissions'
 
@@ -26,11 +26,11 @@ import { Columns, IBreadcrumbs } from '../../types/interfaces'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 // hooks
-import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
-import ForgottenPasswordForm from '../../components/ForgottenPassword/ForgottenPasswordForm'
 import HeaderSelectCountryForm, { IHeaderCountryForm } from '../../components/HeaderSelectCountryForm'
 import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 import { getDocuments } from '../../reducers/documents/documentActions'
+import useQueryParams from '../../hooks/useQueryParamsZod'
+import { documentsPageURLQueryParamsSchema, IDocumentsPageURLQueryParams } from '../../schemas/queryParams'
 
 const getRowId = (verificationStatus: string, id: string) => `${verificationStatus}_${id}`
 
@@ -42,11 +42,11 @@ const DocumentsPage = () => {
 	// TODO: dokumenty
 	const documents = useSelector((state: RootState) => state.documents.documents)
 	console.log('documents', documents)
-	const [query, setQuery] = useQueryParams({
-		limit: NumberParam(),
-		page: NumberParam(1),
-		order: StringParam('toxicityScore:DESC')
+	const [query, setQuery] = useQueryParams(documentsPageURLQueryParamsSchema, {
+		page: PAGINATION.defaultPageSize,
+		limit: PAGINATION.limit
 	})
+
 	const countryFormValues: Partial<IHeaderCountryForm> = useSelector((state: RootState) => getFormValues(FORM.HEADER_COUNTRY_FORM)(state))
 	// console.log('countryFormValues', countryFormValues.countryCode)
 	const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([])
@@ -79,8 +79,8 @@ const DocumentsPage = () => {
 	}
 
 	useEffect(() => {
-		dispatch(getDocuments())
-	}, [])
+		dispatch(getDocuments(query))
+	}, [dispatch, query])
 
 	// Delete document
 	// const deleteReview = async (reviewID: string) => {
@@ -152,22 +152,22 @@ const DocumentsPage = () => {
 				<Col span={24}>
 					<div className='content-body small'>
 						<Spin spinning={isLoading}>
-							<CustomTable
-								className='table-fixed table-expandable'
-								onChange={onChangeTable}
-								columns={getColumns()}
-								dataSource={documents.data.documents}
-								// rowKey={(record) => getRowId(record.verificationStatus, record.id)}
-								twoToneRows
-								// TODO: napatovat na backend
-								// pagination={{
-								// 	pageSize: reviews?.data?.pagination?.limit,
-								// 	total: reviews?.data?.pagination?.totalCount,
-								// 	current: reviews?.data?.pagination?.page,
-								// 	onChange: onChangePagination,
-								// 	disabled: reviews?.isLoading
-								// }}
-							/>
+							{/* <CustomTable */}
+							{/*	className='table-fixed table-expandable' */}
+							{/*	onChange={onChangeTable} */}
+							{/*	columns={getColumns()} */}
+							{/*	dataSource={documents.data.documents} */}
+							{/*	// rowKey={(record) => getRowId(record.verificationStatus, record.id)} */}
+							{/*	twoToneRows */}
+							{/*	// TODO: napatovat na backend */}
+							{/*	// pagination={{ */}
+							{/*	// 	pageSize: reviews?.data?.pagination?.limit, */}
+							{/*	// 	total: reviews?.data?.pagination?.totalCount, */}
+							{/*	// 	current: reviews?.data?.pagination?.page, */}
+							{/*	// 	onChange: onChangePagination, */}
+							{/*	// 	disabled: reviews?.isLoading */}
+							{/*	// }} */}
+							{/* /> */}
 						</Spin>
 					</div>
 				</Col>

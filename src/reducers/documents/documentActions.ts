@@ -7,6 +7,8 @@ import { IResetStore } from '../generalTypes'
 
 // utils
 import { getReq } from '../../utils/request'
+import { normalizeQueryParams } from '../../utils/helper'
+import { IDocumentsPageQueryParams } from '../../schemas/queryParams'
 
 export type ICustomerActions = IResetStore | IGetDocuments | IGetDocument
 
@@ -34,33 +36,15 @@ export interface IDocumentsPayload {
 }
 
 export const getDocuments =
-	(queryParams?: any): ThunkResult<Promise<IDocumentsPayload>> =>
+	(queryParams: IDocumentsPageQueryParams): ThunkResult<Promise<IDocumentsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IDocumentsPayload
 		try {
 			dispatch({ type: DOCUMENTS.DOCUMENTS_LOAD_START })
+			console.log('queryParams', queryParams)
 			// TODO: naparovat s BE
-			// const { data } = await getReq('/api/b2b/admin/employees/', { ...normalizeQueryParams(queryParams) })
-			const data = {
-				documents: [
-					{
-						id: '1',
-						name: 'Podmienky použitia',
-						updatedAt: '2022-11-17T15:07:26.789Z'
-					},
-					{
-						id: '2',
-						name: 'Podmienky rezervácie',
-						updatedAt: '2022-11-17T15:07:26.789Z'
-					},
-					{
-						id: '3',
-						name: 'Vseobecne podmienky',
-						updatedAt: '2022-11-17T15:07:26.789Z'
-					}
-				]
-			}
-			// TODO: naparovat s BE
+			const { data } = await getReq('/api/b2b/admin/documents/', { ...normalizeQueryParams(queryParams) })
+			console.log('data', data)
 			const tableData = map(data.documents, (document) => ({
 				...document,
 				key: document.id

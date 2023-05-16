@@ -27,7 +27,7 @@ import { getSalonTagSourceType } from '../SalonsPage/components/salonUtils'
 import { LOCALES } from '../../components/LanguagePicker'
 
 // types
-import { IBreadcrumbs, IRechargeSmsCreditFilter } from '../../types/interfaces'
+import { IBreadcrumbs } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
 // redux
@@ -40,6 +40,7 @@ import useQueryParams, { formatObjToQuery } from '../../hooks/useQueryParamsZod'
 
 // schema
 import { rechargeSmsCreditAdminPageSchema } from '../../schemas/queryParams'
+import { IRechargeSmsCreditFilterForm } from '../../schemas/rechargeSmsCredit'
 
 type TableDataItem = NonNullable<ISalonsPayload['data']>['salons'][0]
 type SelectedRow = { id: React.Key; wallet: TableDataItem['wallet'] }
@@ -309,7 +310,7 @@ const RechargeSmsCreditAdminPage = () => {
 						</h3>
 						<Divider className={'my-4'} />
 						<RechargeSmsCreditFilter
-							onSubmit={(values: IRechargeSmsCreditFilter) => {
+							onSubmit={(values: IRechargeSmsCreditFilterForm) => {
 								setSelectedRows({})
 								setQuery({ ...query, ...values })
 							}}

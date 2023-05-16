@@ -428,8 +428,7 @@ export const getCalendarMonthlyViewReservations =
 				salonID: queryParams.salonID,
 				categoryIDs: queryParams.categoryIDs,
 				employeeIDs: queryParams.employeeIDs,
-				// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION /* , CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT */],
+				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT],
 				dateFrom: queryParams.start,
 				dateTo: queryParams.end,
 				reservationStates: RESERVATION_STATES

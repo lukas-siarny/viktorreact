@@ -606,60 +606,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		[closeSiderForm, fetchEvents, salonID, query.eventId]
 	)
 
-	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-	/* const handleSubmitImportedReservation = useCallback(
-		async (values: ICalendarImportedReservationForm) => {
-			const eventId = values?.updateFromCalendar ? values.eventId : query.eventId
-
-			if (!values || !eventId) {
-				return
-			}
-
-			const { revertEvent } = values
-
-			try {
-				cancelEventsRequestOnDemand()
-				setIsUpdatingEvent(true)
-				const reqData = {
-					start: {
-						date: values.date,
-						time: values.timeFrom
-					},
-					end: {
-						date: values.date,
-						time: values.timeTo
-					},
-					note: values.note
-				}
-
-				await patchReq(
-					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/imported-reservation',
-					{ salonID, calendarEventID: eventId },
-					reqData,
-					undefined,
-					NOTIFICATION_TYPE.NOTIFICATION,
-					true
-				)
-				fetchEvents(false) // Po PATCHi ponechat virtualny event ak bol vytvoreny
-
-				// Po UPDATE rezervacie dotiahnut eventy + zatvorit drawer, pri CREATE ostane otvoreny sider pocas updatu len
-				if (query.eventId) {
-					closeSiderForm()
-				}
-			} catch (e) {
-				// eslint-disable-next-line no-console
-				console.error(e)
-				// ak neprejde request, tak sa event v kalendari vráti na pôvodne miesto
-				if (revertEvent) {
-					revertEvent()
-				}
-			} finally {
-				setIsUpdatingEvent(false)
-			}
-		},
-		[closeSiderForm, fetchEvents, salonID, query.eventId]
-	) */
-
 	const handleSubmitEvent = useCallback(
 		async (values: ICalendarEventForm, calendarEventID?: string, calendarBulkEventID?: string, updateFromCalendar = false) => {
 			const { revertEvent } = values
@@ -979,8 +925,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						}}
 						handleSubmitReservation={initSubmitReservationData}
 						handleSubmitEvent={initSubmitEventData}
-						// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-						// handleSubmitImportedReservation={handleSubmitImportedReservation}
 						onAddEvent={handleAddEvent}
 						clearFetchInterval={clearFetchInterval}
 						restartFetchInterval={restartFetchInterval}
@@ -998,8 +942,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							onCloseSider={closeSiderForm}
 							handleSubmitReservation={initSubmitReservationData}
 							handleSubmitEvent={initSubmitEventData}
-							// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-							// handleSubmitImportedReservation={handleSubmitImportedReservation}
 							calendarApi={calendarRefs?.current?.[query.view]?.getApi()}
 							changeCalendarDate={setNewSelectedDate}
 							query={query}

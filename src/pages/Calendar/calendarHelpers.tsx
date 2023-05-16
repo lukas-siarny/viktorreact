@@ -468,8 +468,7 @@ const composeDayViewReservations = (
 				}
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 				case CALENDAR_EVENT_TYPE.RESERVATION:
-					// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-					// case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
+				case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 					composedEvents.push({
 						...calendarEvent
 					})
@@ -679,8 +678,7 @@ const composeWeekViewReservations = (
 				}
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 				case CALENDAR_EVENT_TYPE.RESERVATION:
-					// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-					// case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
+				case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 					composedEvents.push({
 						...calendarEvent
 					})

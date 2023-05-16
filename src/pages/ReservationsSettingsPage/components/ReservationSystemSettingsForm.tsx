@@ -268,10 +268,6 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				})
 			}
 
-			await postReq('/api/b2b/admin/imports/salons/{salonID}/customers', { salonID }, formData, {
-				headers
-			})
-
 			setUploadModal({ ...uploadModal, requestStatus: REQUEST_STATUS.SUCCESS })
 		} catch {
 			setUploadModal({ ...uploadModal, requestStatus: REQUEST_STATUS.ERROR })

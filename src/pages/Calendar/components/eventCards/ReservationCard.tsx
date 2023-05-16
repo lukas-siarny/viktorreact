@@ -29,7 +29,6 @@ interface IReservationCardProps extends IEventCardProps {
 	note?: CalendarEvent['note']
 	noteFromB2CCustomer?: CalendarEvent['noteFromB2CCustomer']
 	onReservationClick: (data: ReservationPopoverData, position: PopoverTriggerPosition) => void
-	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	isImported?: boolean
 }
 
@@ -92,9 +91,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		isPlaceholder,
 		isEdit,
 		onReservationClick,
-		// onEditEvent,
-		timeLeftClassName,
-		isImported
+		timeLeftClassName
 	} = props
 
 	const [t] = useTranslation()
@@ -115,31 +112,23 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		</div>
 	) : null
 
-	const title = isImported
-		? t('loc:Importovaná rezervácia')
-		: getAssignedUserLabel({
-				id: customer?.id || '-',
-				firstName: customer?.firstName,
-				lastName: customer?.lastName,
-				email: customer?.email
-		  })
+	const title = getAssignedUserLabel({
+		id: customer?.id || '-',
+		firstName: customer?.firstName,
+		lastName: customer?.lastName,
+		email: customer?.email
+	})
 
-	const description = isImported ? note : service?.name
+	// const description = isImported ? note : service?.name || '-'
+	const description = service?.name || '-'
 
-	const iconState = getIconState({ isPast, isApproved, isRealized, notRealized, service, isImported })
+	const iconState = getIconState({ isPast, isApproved, isRealized, notRealized, service })
 	const iconPending = isPending && <ClockIcon className={'icon clock'} style={{ color: bgColor }} />
 	const iconAutoAssigned = isEmployeeAutoassigned && <AvatarIcon className={'icon employee'} />
 
 	const cardRef = useRef<HTMLDivElement | null>(null)
 
 	const handleReservationClick = () => {
-		// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-		/* if (isImported && originalEventData.id) {
-			// NOTE: importovanemu eventu nezobrazujeme popover, ale rovno sa otvori sidebar
-			onEditEvent(CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT, originalEventData.id)
-			return
-		} */
-
 		// NOTE: prevent proti kliknutiu na virutalny event rezervacie neotvori sa popover
 		if (startsWith(originalEventData.id, NEW_ID_PREFIX)) {
 			return
@@ -193,8 +182,7 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
 				'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
 				placeholder: isPlaceholder,
-				edit: isEdit || isPlaceholder,
-				'is-imported': isImported
+				edit: isEdit || isPlaceholder
 			})}
 			onClick={handleReservationClick}
 			style={{

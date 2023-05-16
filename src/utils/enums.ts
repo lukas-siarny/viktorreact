@@ -909,6 +909,7 @@ export const EVENT_NAMES = (t: TFunction, eventType?: CALENDAR_EVENT_TYPE, capit
 			string = t('loc:shift-akuzativ')
 			break
 		case CALENDAR_EVENT_TYPE.RESERVATION:
+		case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 			string = t('loc:rezerváciu')
 			break
 		// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov

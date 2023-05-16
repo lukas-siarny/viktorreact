@@ -278,15 +278,15 @@ export enum TOKEN_AUDIENCE {
 	CANCEL_RESERVATION = 'CANCEL_RESERVATION'
 }
 
-export enum TAB_KEYS {
+export enum SALON_TABS_KEYS {
 	SALON_DETAIL = 'SALON_DETAIL',
 	SALON_HISTORY = 'SALON_HISTORY'
 }
 
 export enum SALONS_TAB_KEYS {
-	ACTIVE = 'active',
-	DELETED = 'deleted',
-	MISTAKES = 'mistakes'
+	ACTIVE = 'ACTIVE',
+	DELETED = 'DELETED',
+	MISTAKES = 'MISTAKES'
 }
 
 export enum EMPLOYEES_TAB_KEYS {

@@ -14,11 +14,11 @@ import {
 	CONFIRM_BULK,
 	RS_NOTIFICATION,
 	RS_NOTIFICATION_TYPE,
-	DAY,
 	SERVICE_TYPE,
 	RESERVATION_STATE,
 	RESERVATION_PAYMENT_METHOD,
 	CONFIRM_MODAL_DATA_TYPE,
+	SALON_TABS_KEYS,
 	CALENDAR_EVENT_DISPLAY_TYPE
 } from '../utils/enums'
 
@@ -29,7 +29,14 @@ import { TooltipPlacement } from 'antd/es/tooltip'
 // schema
 import { ICalendarEventForm } from '../schemas/event'
 import { ICalendarReservationForm } from '../schemas/reservation'
-import { ICalendarPageURLQueryParams, INotinoReservationsPageURLQueryParams, IRechargeSmsCreditAdminPageURLQueryParams, IReviewsPageURLQueryParams, ISalonReservationsPageURLQueryParams, IServicesPageURLQueryParams } from '../schemas/queryParams'
+import {
+	ICalendarPageURLQueryParams,
+	INotinoReservationsPageURLQueryParams,
+	IRechargeSmsCreditAdminPageURLQueryParams,
+	IReviewsPageURLQueryParams,
+	ISalonReservationsPageURLQueryParams,
+	IServicesPageURLQueryParams
+} from '../schemas/queryParams'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -130,7 +137,6 @@ export interface ILoadingAndFailure {
 	isFailure: boolean
 }
 
-
 export interface IBreadcrumbItem {
 	name: string
 	link?: string
@@ -151,12 +157,9 @@ export interface IStructuredAddress {
 	country: string | null
 	houseNumber: string | null
 }
-
 export interface INotinoUserForm {
 	assignedUser: ISelectOptionItem
 }
-
-
 
 export interface ISearchFilter {
 	search: string
@@ -246,6 +249,7 @@ export interface ISearchableWithoutPagination<T> {
 export interface SalonSubPageProps {
 	salonID: string
 	parentPath?: string
+	tabKey?: SALON_TABS_KEYS
 }
 
 export interface IPermissions {
@@ -428,7 +432,10 @@ export interface IActiveEmployeesPayload extends ISearchable<Paths.GetApiB2BAdmi
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]
-export type CalendarEmployee = Pick<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0], 'id' | 'color' | 'firstName' | 'lastName' | 'email' | 'image' | 'inviteEmail' | 'orderIndex'> & { orderIndex: number, inviteEmail?: string, isDeleted?: boolean }
+export type CalendarEmployee = Pick<
+	Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0],
+	'id' | 'color' | 'firstName' | 'lastName' | 'email' | 'image' | 'inviteEmail' | 'orderIndex'
+> & { orderIndex: number; inviteEmail?: string; isDeleted?: boolean }
 export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
 export type CalendarEvent = CalendarEvents[0] & {
 	startDateTime: string

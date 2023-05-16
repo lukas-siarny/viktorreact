@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FC } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
@@ -11,7 +11,7 @@ import CustomTable from '../../../components/CustomTable'
 import RejectedSuggestionsFilter from './filters/RejectedSuggestionsFilter'
 
 // utils
-import { FORM, ROW_GUTTER_X_DEFAULT, ROW_BUTTON_WITH_ID } from '../../../utils/enums'
+import { FORM, ROW_BUTTON_WITH_ID, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
 import { formFieldID, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../../utils/helper'
 import { deleteReq } from '../../../utils/request'
 
@@ -26,19 +26,18 @@ import { Columns, ISearchFilter } from '../../../types/interfaces'
 import { ReactComponent as IconCheck } from '../../../assets/icons/checker-icon.svg'
 
 // hooks
-import { ISalonsPageURLQueryParams } from '../../../schemas/queryParams'
+import useQueryParams, { NumberParam, StringParam } from '../../../hooks/useQueryParams'
 
-type Props = {
-	query: ISalonsPageURLQueryParams
-	setQuery: (newValues: ISalonsPageURLQueryParams) => void
-}
-
-const RejectedSalonSuggestions: FC<Props> = (props) => {
+const RejectedSalonSuggestions = () => {
 	const [t] = useTranslation()
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
-	const { query, setQuery } = props
-
+	const [query, setQuery] = useQueryParams({
+		search: StringParam(),
+		limit: NumberParam(),
+		page: NumberParam(1),
+		order: StringParam('userLastName:ASC')
+	})
 	const salons = useSelector((state: RootState) => state.salons.rejectedSuggestions)
 	const [submitting, setSubmitting] = useState(false)
 

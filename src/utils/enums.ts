@@ -4,6 +4,7 @@ import { Gutter } from 'antd/lib/grid/row'
 import { LoadScriptUrlOptions } from '@react-google-maps/api/dist/utils/make-load-script-url'
 import { AliasToken } from 'antd/es/theme/internal'
 import { FormatterInput } from '@fullcalendar/react'
+import { UseGoogleLoginOptionsAuthCodeFlow } from '@react-oauth/google'
 
 export enum CYPRESS_CLASS_NAMES {
 	LOGOUT_BUTTON = 'noti-logout-button',
@@ -1187,11 +1188,23 @@ export const SMS_STATUS_NAME = (status: SMS_NOTIFICATION_STATUS) => {
 	}
 }
 
-export const MS_OATH_CONFIG = {
-	redirect_uri: `${window.location.protocol}//${window.location.host}/ms-oauth2`,
-	scopes: ['offline_access', 'user.read', 'Calendars.ReadWrite', 'Files.Read'],
-	url: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-	grand_type: 'authorization_code'
+export enum EXTERNAL_CALENDAR_TYPE {
+	MICROSOFT = 'MICROSOFT',
+	GOOGLE = 'GOOGLE'
+}
+
+export const EXTERNAL_CALENDAR_CONFIG = {
+	[EXTERNAL_CALENDAR_TYPE.MICROSOFT]: {
+		redirect_uri: `${window.location.protocol}//${window.location.host}/ms-oauth2`,
+		scopes: ['offline_access', 'user.read', 'Calendars.ReadWrite', 'Files.Read'],
+		url: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+		grand_type: 'authorization_code'
+	},
+	[EXTERNAL_CALENDAR_TYPE.GOOGLE]: {
+		flow: 'auth-code',
+		scope: 'email profile https://www.googleapis.com/auth/calendar openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+		redirect_uri: 'postmessage'
+	} as UseGoogleLoginOptionsAuthCodeFlow
 }
 
 export enum SERVICE_DESCRIPTION_LNG {

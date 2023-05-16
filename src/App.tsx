@@ -18,7 +18,7 @@ import rootReducer from './reducers'
 // utils
 import configureStore from './utils/configureStore'
 import i18n from './utils/i18n'
-import { LANGUAGE, DEFAULT_LANGUAGE, ANTD_THEME_VARIABLES_OVERRIDE, MS_OATH_CONFIG } from './utils/enums'
+import { LANGUAGE, DEFAULT_LANGUAGE, ANTD_THEME_VARIABLES_OVERRIDE, EXTERNAL_CALENDAR_CONFIG, EXTERNAL_CALENDAR_TYPE } from './utils/enums'
 
 // components
 import ScrollToTop from './components/ScrollToTop'
@@ -30,7 +30,7 @@ const { store, persistor } = configureStore(rootReducer)
 const msalConfig: Configuration = {
 	auth: {
 		clientId: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
-		redirectUri: MS_OATH_CONFIG.redirect_uri
+		redirectUri: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].redirect_uri
 	}
 }
 
@@ -87,11 +87,7 @@ const App = () => {
 						}}
 					>
 						<MsalProvider instance={msalInstance}>
-							<GoogleOAuthProvider
-								clientId={window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
-								onScriptLoadError={() => console.error('GoogleOAuth error')}
-								onScriptLoadSuccess={() => console.log('GoogleOAuth load success')}
-							>
+							<GoogleOAuthProvider clientId={window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_OAUTH_CLIENT_ID} onScriptLoadError={() => console.error('GoogleOAuth error')}>
 								<Provider store={store}>
 									<StyleProvider hashPriority={'low'}>
 										<RouterProvider router={router} />

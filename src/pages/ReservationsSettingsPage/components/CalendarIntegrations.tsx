@@ -10,7 +10,7 @@ import { find, get } from 'lodash'
 
 // utils
 import { buildHeaders, postReq, showErrorNotifications } from '../../../utils/request'
-import { MSG_TYPE, MS_OATH_CONFIG, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
+import { MSG_TYPE, EXTERNAL_CALENDAR_CONFIG, NOTIFICATION_TYPE, PERMISSION, EXTERNAL_CALENDAR_TYPE } from '../../../utils/enums'
 import { checkPermissions } from '../../../utils/Permissions'
 import showNotifications from '../../../utils/tsxHelpers'
 
@@ -32,19 +32,19 @@ const CalendarIntegrations = () => {
 	window.fetch = async (...args): Promise<any> => {
 		const [url, config] = args
 
-		if (url === MS_OATH_CONFIG.url) {
+		if (url === EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].url) {
 			if (typeof config?.body === 'string') {
 				const data = qs.parse(config.body)
 
 				if (typeof data.code === 'string') {
 					try {
 						const responseAuth = await axios.post(
-							MS_OATH_CONFIG.url,
+							EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].url,
 							{
-								grant_type: MS_OATH_CONFIG.grand_type,
+								grant_type: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].grand_type,
 								client_id: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
-								scope: MS_OATH_CONFIG.scopes,
-								redirect_uri: MS_OATH_CONFIG.redirect_uri,
+								scope: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].scopes,
+								redirect_uri: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].redirect_uri,
 								code_verifier: data.code_verifier,
 								code: data.code
 							},
@@ -54,7 +54,7 @@ const CalendarIntegrations = () => {
 								}
 							}
 						)
-
+						// TODO: doplnit salonIDs
 						const responseData = await originalFetch('/api/b2b/admin/calendar-sync/sync-token', {
 							method: 'POST',
 							headers: {
@@ -62,7 +62,7 @@ const CalendarIntegrations = () => {
 							},
 							body: JSON.stringify({
 								refreshToken: responseAuth.data.refresh_token,
-								calendarType: 'MICROSOFT'
+								calendarType: EXTERNAL_CALENDAR_TYPE.MICROSOFT
 							})
 						})
 
@@ -108,16 +108,15 @@ const CalendarIntegrations = () => {
 	}
 
 	const handleGoogleLogin = useGoogleLogin({
-		flow: 'auth-code',
-		scope: 'email profile https://www.googleapis.com/auth/calendar openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
-		redirect_uri: 'postmessage',
+		...EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.GOOGLE],
 		onSuccess: (tokenResponse) => {
+			// TODO: doplnit salonIDs
 			postReq(
 				'/api/b2b/admin/calendar-sync/sync-token',
 				null,
 				{
 					authCode: tokenResponse.code,
-					calendarType: 'GOOGLE'
+					calendarType: EXTERNAL_CALENDAR_TYPE.GOOGLE
 				},
 				undefined,
 				NOTIFICATION_TYPE.NOTIFICATION,
@@ -131,7 +130,7 @@ const CalendarIntegrations = () => {
 	const handleMSLogin = async () => {
 		try {
 			await instance.loginPopup({
-				scopes: MS_OATH_CONFIG.scopes
+				scopes: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].scopes
 			})
 		} catch (e) {
 			// eslint-disable-next-line no-console
@@ -141,17 +140,6 @@ const CalendarIntegrations = () => {
 
 	return (
 		<div>
-			{/* <GoogleLogin
-				onSuccess={(credentialResponse) => {
-					console.log(credentialResponse)
-				}}
-				onError={() => {
-					console.log('Login Failed')
-				}}
-				locale={i18n.language}
-				type='icon'
-				theme='filled_black'
-			/> */}
 			<button className={'sync-button google mr-2'} onClick={() => handleGoogleLogin()} type='button'>
 				{'Google'}
 			</button>

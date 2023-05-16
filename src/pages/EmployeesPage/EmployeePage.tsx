@@ -37,14 +37,8 @@ import { IEmployeeForm, IInviteEmployeeForm } from '../../schemas/employee'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { DELETE_BUTTON_ID, FORM, PARAMETER_TYPE, PERMISSION, SUBMIT_BUTTON_ID } from '../../utils/enums'
-import {
-	filterSalonRolesByPermission,
-	formFieldID,
-	getAssignedUserLabel,
-	getEmployeeServiceDataForPatch,
-	getServicePriceAndDurationData,
-	hasAuthUserPermissionToEditRole
-} from '../../utils/helper'
+import { filterSalonRolesByPermission, formFieldID, getAssignedUserLabel, hasAuthUserPermissionToEditRole } from '../../utils/helper'
+import { getEmployeeServiceDataForPatch, getServicePriceAndDurationData } from '../ServicesPage/serviceUtils'
 
 // reducers
 import { RootState } from '../../reducers'

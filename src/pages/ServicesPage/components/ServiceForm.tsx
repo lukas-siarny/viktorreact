@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Field, FieldArray, FormSection, InjectedFormProps, reduxForm } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Col, Divider, Form, Row, Space, Spin } from 'antd'
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty } from 'lodash'
 import cx from 'classnames'
 
 // atoms
@@ -26,6 +26,7 @@ import { deleteReq } from '../../../utils/request'
 import searchWrapper from '../../../utils/filters'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 import Permissions from '../../../utils/Permissions'
+import { checkConditions, getConditionIcon } from '../serviceUtils'
 
 // types
 import { RootState } from '../../../reducers'
@@ -37,65 +38,9 @@ import { ReactComponent as EmployeesIcon } from '../../../assets/icons/employees
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
 import { ReactComponent as PencilIcon } from '../../../assets/icons/pencil-icon-16.svg'
-import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-modal.svg'
-import { ReactComponent as CheckIcon } from '../../../assets/icons/check-current-color.svg'
 
 // schema
-import { validationServiceFn, IServiceForm, FormPriceAndDurationData } from '../../../schemas/service'
-
-const getConditionIcon = (checked?: boolean) => {
-	if (checked) {
-		return <CheckIcon className={'text-notino-pink w-4 h-4 flex-shrink-0'} />
-	}
-
-	return <CloseIcon className={'text-notino-grayDark w-4 h-4 flex-shrink-0'} />
-}
-
-const hasPrice = (data: FormPriceAndDurationData) => {
-	let isFilledIn = false
-
-	if (data?.variablePrice) {
-		isFilledIn = !isNil(data?.priceFrom) && !Number.isNaN(data?.priceFrom) && !isNil(data?.priceTo) && !Number.isNaN(data?.priceTo)
-	} else {
-		isFilledIn = !isNil(data?.priceFrom) && !Number.isNaN(data?.priceFrom)
-	}
-
-	return isFilledIn
-}
-
-const hasDuration = (data: FormPriceAndDurationData) => {
-	let isFilledIn = false
-
-	if (data?.variableDuration) {
-		isFilledIn = !isNil(data?.durationFrom) && !Number.isNaN(data?.durationFrom) && !isNil(data?.durationTo) && !Number.isNaN(data?.durationTo)
-	} else {
-		isFilledIn = !isNil(data?.durationFrom) && !Number.isNaN(data?.durationFrom)
-	}
-
-	return isFilledIn
-}
-
-const getHasPriceFilledIn = (values?: IServiceForm) => {
-	if (values?.useCategoryParameter) {
-		return values?.serviceCategoryParameter?.some((parameterValue) => hasPrice(parameterValue))
-	}
-	return hasPrice({ priceFrom: values?.priceFrom, priceTo: values?.priceTo, variablePrice: values?.variablePrice })
-}
-
-const getHasDurationFilledIn = (values?: IServiceForm) => {
-	if (values?.useCategoryParameter) {
-		return values?.serviceCategoryParameter?.some((parameterValue) => hasDuration(parameterValue))
-	}
-	return hasDuration({ durationFrom: values?.durationFrom, durationTo: values?.durationTo, variableDuration: values?.variableDuration })
-}
-
-const checkConditions = (values?: IServiceForm): { hasDurationFilledIn: boolean; hasPriceFilledIn: boolean; hasEmployee: boolean } => {
-	return {
-		hasDurationFilledIn: getHasDurationFilledIn(values),
-		hasPriceFilledIn: getHasPriceFilledIn(values),
-		hasEmployee: !!values?.employees.length
-	}
-}
+import { validationServiceFn, IServiceForm } from '../../../schemas/service'
 
 const numberMin0 = validationNumberMin(0)
 const fixLength1500 = validationString(VALIDATION_MAX_LENGTH.LENGTH_1500)

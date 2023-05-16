@@ -2,9 +2,9 @@ import { z } from 'zod'
 
 import { isEmpty, isNil } from 'lodash'
 import { serializeValidationMessage, stringConstraint, uuidConstraint, zodErrorsToFormErrors } from './baseSchema'
-import { FORM, VALIDATION_MAX_LENGTH, PARAMETER_TYPE, SERVICE_DESCRIPTION_LNG } from '../utils/enums'
+import { FORM, VALIDATION_MAX_LENGTH, PARAMETER_TYPE } from '../utils/enums'
 // eslint-disable-next-line import/no-cycle
-import { arePriceAndDurationDataEmpty } from '../utils/helper'
+import { arePriceAndDurationDataEmpty } from '../pages/ServicesPage/serviceUtils'
 
 const validatePriceAndDurationData = (value: z.infer<typeof priceAndDurationSchema>, ctx: z.RefinementCtx, paths: any[] = []) => {
 	let isError = false

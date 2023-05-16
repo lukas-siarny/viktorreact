@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Field, WrappedFieldArrayProps } from 'redux-form'
 import { Col, Collapse, Row } from 'antd'
-import { isEmpty } from 'lodash'
 import cx from 'classnames'
 
 // atoms
@@ -10,7 +9,8 @@ import InputNumberField from '../../../atoms/InputNumberField'
 import SwitchField from '../../../atoms/SwitchField'
 
 // utils
-import { renderFromTo, validationNumberMin } from '../../../utils/helper'
+import { validationNumberMin } from '../../../utils/helper'
+import { renderFromTo } from '../serviceUtils'
 
 // assets
 import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
@@ -41,7 +41,6 @@ const ParameterValuesList: FC<Props> = (props) => {
 	} = props
 
 	const formErrors = form?.syncErrors?.serviceCategoryParameter || []
-	const formFields = form?.fields?.serviceCategoryParameter || []
 	const isFieldArrayError = invalid && error
 
 	const genExtra = (fieldData: IParameterValue, field: string) => {

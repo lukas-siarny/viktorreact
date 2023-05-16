@@ -132,9 +132,11 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 
 	useEffect(() => {
 		// NOTE: ak neni je povoleny online booking tak sa nastavi disabled state nad kalendarom
+		const body = document.getElementsByClassName('fc-timegrid-cols')[0]
 		if (!enabledSalonReservations) {
-			const body = document.getElementsByClassName('fc-timegrid-cols')[0]
 			body.classList.add('active')
+		} else {
+			body.classList.remove('active')
 		}
 	}, [enabledSalonReservations])
 

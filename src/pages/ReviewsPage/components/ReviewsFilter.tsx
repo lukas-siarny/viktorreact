@@ -6,8 +6,8 @@ import { debounce } from 'lodash'
 import { useSelector } from 'react-redux'
 
 // utils
-import { CHANGE_DEBOUNCE_TIME, ENUMERATIONS_KEYS, FIELD_MODE, FORM, REVIEW_VERIFICATION_STATUS, ROW_GUTTER_X_DEFAULT, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
-import { checkFiltersSizeWithoutSearch, optionRenderWithImage, validationString } from '../../../utils/helper'
+import { CHANGE_DEBOUNCE_TIME, ENUMERATIONS_KEYS, FIELD_MODE, FORM, REVIEW_VERIFICATION_STATUS, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { checkFiltersSizeWithoutSearch, optionRenderWithImage } from '../../../utils/helper'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -23,17 +23,12 @@ import { RootState } from '../../../reducers'
 // assets
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 
-// validate
-import validateReviewsFilterForm from './validateReviewsFilterForm'
-
-// types
-import { IReviewsFilter } from '../../../types/interfaces'
+// schemas
+import { IReviewFilterForm, validationReviewFilterFn } from '../../../schemas/review'
 
 type ComponentProps = {}
 
-type Props = InjectedFormProps<IReviewsFilter, ComponentProps> & ComponentProps
-
-const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
+type Props = InjectedFormProps<IReviewFilterForm, ComponentProps> & ComponentProps
 
 const ReviewsFilter = (props: Props) => {
 	const { handleSubmit } = props
@@ -51,7 +46,6 @@ const ReviewsFilter = (props: Props) => {
 			name='search'
 			fieldMode={FIELD_MODE.FILTER}
 			search
-			validate={fixLength255}
 		/>
 	)
 
@@ -126,7 +120,7 @@ const ReviewsFilter = (props: Props) => {
 	)
 }
 
-const form = reduxForm<IReviewsFilter, ComponentProps>({
+const form = reduxForm<IReviewFilterForm, ComponentProps>({
 	form: FORM.REVIEWS_FILTER,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
@@ -136,7 +130,7 @@ const form = reduxForm<IReviewsFilter, ComponentProps>({
 		}
 	}, CHANGE_DEBOUNCE_TIME),
 	destroyOnUnmount: true,
-	validate: validateReviewsFilterForm
+	validate: validationReviewFilterFn
 })(ReviewsFilter)
 
 export default form

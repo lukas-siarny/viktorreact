@@ -125,8 +125,6 @@ export interface IEventTypeFilterForm {
 	eventType: CALENDAR_EVENT_TYPE
 }
 
-export type IReviewsFilter = Pick<IReviewsPageURLQueryParams, 'search' | 'verificationStatus' | 'salonCountryCode' | 'toxicityScoreFrom' | 'toxicityScoreTo'>
-
 export interface IJwtPayload {
 	aud: string
 	exp: number
@@ -159,11 +157,6 @@ export interface IStructuredAddress {
 	country: string | null
 	houseNumber: string | null
 }
-
-export interface IVoucherForm {
-	code: string
-}
-
 export interface INotinoUserForm {
 	assignedUser: ISelectOptionItem
 }
@@ -181,19 +174,9 @@ export interface ISpecialistContactFilter {
 	search: string
 }
 
-export interface IRechargeSmsCreditForm {
-	amount: number
-	transactionNote?: string
-}
-
 export interface ISmsUnitPricesFilter {
 	search: string
 }
-
-export type IRechargeSmsCreditFilter = Pick<
-	IRechargeSmsCreditAdminPageURLQueryParams,
-	'search' | 'sourceType' | 'countryCode' | 'walletAvailableBalanceFrom' | 'walletAvailableBalanceTo'
->
 
 export type IServicesFilter = IServicesPageURLQueryParams
 

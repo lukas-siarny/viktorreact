@@ -24,7 +24,12 @@ import { ISelectedSalonPayload, selectSalon } from '../../reducers/selectedSalon
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
-import { ILoadingAndFailure, INoteForm, INoteModal, INotinoUserForm, ISalonForm, IVoucherForm, SalonPageProps } from '../../types/interfaces'
+import { ILoadingAndFailure, INoteModal, INotinoUserForm, SalonPageProps } from '../../types/interfaces'
+
+// schema
+import { INoteForm } from '../../schemas/note'
+import { ISalonForm } from '../../schemas/salon'
+import { IVoucherForm } from '../../schemas/voucher'
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
@@ -543,7 +548,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 			// fallback for allowClear true if user removed assigned user send null value
 			await patchReq('/api/b2b/admin/salons/{salonID}/assigned-user', { salonID }, { assignedUserID: (values?.assignedUser?.key as string) || null })
 			setVisibleNotinoUserModal(false)
-			await dispatch(selectSalon(salonID))
+			dispatch(selectSalon(salonID))
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
@@ -554,7 +559,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 		try {
 			await patchReq('/api/b2b/admin/salons/{salonID}/b2b-voucher', { salonID }, { b2bVoucher: values?.code || null })
 			setVisibleVoucherModal(false)
-			await dispatch(selectSalon(salonID))
+			dispatch(selectSalon(salonID))
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
@@ -568,7 +573,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 		setIsRemoving(true)
 		try {
 			await patchReq('/api/b2b/admin/salons/{salonID}/b2b-voucher', { salonID }, { b2bVoucher: null })
-			await dispatch(selectSalon(salonID))
+			dispatch(selectSalon(salonID))
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)

@@ -165,13 +165,22 @@ const fetchSearchData = async ({
 }) => {
 	let newState = {}
 	try {
-		let collectedData = []
-		if (page !== 1 && selectState.data) collectedData = selectState.data
+		let collectedData: any[] = []
+		if (page !== 1 && selectState.data) {
+			collectedData = [...selectState.data]
+		}
 
 		const newData: any = await onSearch(value, page, missingValues)
 		const dataOptions = get(newData, dataSourcePath)
 		if (newData.pagination || dataOptions) {
-			const mergedData = [...collectedData, ...dataOptions]
+			const mergedData = [...collectedData]
+			// filter duplicate values
+			dataOptions.forEach((data: any) => {
+				if (!mergedData.find((currentData) => currentData.key === data.key)) {
+					mergedData.push(data)
+				}
+			})
+
 			newState = { data: mergedData, pagination: newData.pagination, fetching: false }
 		} else if (!allowInfinityScroll && isArray(newData)) {
 			// NOTE: Výsledky sa nedoliepajú

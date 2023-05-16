@@ -3,9 +3,6 @@ import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 
-// validations
-import validateVoucherForm from './validateVoucherForm'
-
 // utils
 import { FORM, SUBMIT_BUTTON_ID } from '../../../../utils/enums'
 import { formFieldID } from '../../../../utils/helper'
@@ -13,11 +10,11 @@ import { formFieldID } from '../../../../utils/helper'
 // assets
 import { ReactComponent as VoucherIcon } from '../../../../assets/icons/coupon.svg'
 
-// types
-import { IVoucherForm } from '../../../../types/interfaces'
-
 // components
 import InputField from '../../../../atoms/InputField'
+
+// schemas
+import { IVoucherForm, validationVoucherFn } from '../../../../schemas/voucher'
 
 type ComponentProps = {}
 
@@ -64,7 +61,7 @@ const form = reduxForm<IVoucherForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	validate: validateVoucherForm
+	validate: validationVoucherFn
 })(VoucherForm)
 
 export default form

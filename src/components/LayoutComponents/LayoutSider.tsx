@@ -65,6 +65,7 @@ const LOGO_HEIGHT = 72
 
 const MENU_ITEMS_ORDER = [
 	PAGE.HOME, // first item for Notino and Salon view
+	'divider-1',
 	// Notino view
 	PAGE.USERS,
 	PAGE.CATEGORIES,
@@ -82,12 +83,13 @@ const MENU_ITEMS_ORDER = [
 	PAGE.BILLING_INFO,
 	PAGE.INDUSTRIES_AND_SERVICES,
 	PAGE.SERVICES_SETTINGS,
-	PAGE.CUSTOMERS,
 	PAGE.EMPLOYEES,
-	PAGE.SMS_CREDIT,
-	PAGE.CALENDAR,
 	PAGE.SALON_SETTINGS,
-	PAGE.RESERVATIONS
+	PAGE.SMS_CREDIT,
+	'divider-2',
+	PAGE.CUSTOMERS,
+	PAGE.RESERVATIONS,
+	PAGE.CALENDAR
 ]
 
 const LayoutSider = (props: LayoutSiderProps) => {
@@ -243,18 +245,16 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							id: PAGE.SALONS
 						},
 						{
+							type: 'divider',
+							key: 'divider-1',
+							className: 'my-1 border-gray-200'
+						},
+						{
 							key: PAGE.BILLING_INFO,
 							label: t('loc:Fakturačné údaje'),
 							onClick: () => navigate(getPath(t('paths:billing-info'))),
 							icon: <InvoiceIcon />,
 							id: PAGE.BILLING_INFO
-						},
-						{
-							key: PAGE.INDUSTRIES_AND_SERVICES,
-							label: t('loc:Odvetvia a služby'),
-							onClick: () => navigate(getPath(t('paths:industries-and-services'))),
-							icon: <IndustiresIcon />,
-							id: PAGE.INDUSTRIES_AND_SERVICES
 						},
 						{
 							key: PAGE.SERVICES_SETTINGS,
@@ -264,25 +264,11 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							id: PAGE.SERVICES_SETTINGS
 						},
 						{
-							key: PAGE.CUSTOMERS,
-							label: t('loc:Zákazníci'),
-							onClick: () => navigate(getPath(t('paths:customers'))),
-							icon: <CustomerIcon className={'text-black'} />,
-							id: PAGE.CUSTOMERS
-						},
-						{
 							key: PAGE.EMPLOYEES,
 							label: t('loc:Zamestnanci'),
 							onClick: () => navigate(getPath(t('paths:employees'))),
 							icon: <EmployeesIcon />,
 							id: PAGE.EMPLOYEES
-						},
-						{
-							key: PAGE.CALENDAR,
-							label: t('loc:Kalendár'),
-							onClick: () => navigate(getPath(t('paths:calendar'))),
-							icon: <CalendarIcon />,
-							id: PAGE.CALENDAR
 						},
 						{
 							key: PAGE.SALON_SETTINGS,
@@ -292,11 +278,37 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							id: PAGE.SALON_SETTINGS
 						},
 						{
+							key: PAGE.INDUSTRIES_AND_SERVICES,
+							label: t('loc:Odvetvia a služby'),
+							onClick: () => navigate(getPath(t('paths:industries-and-services'))),
+							icon: <IndustiresIcon />,
+							id: PAGE.INDUSTRIES_AND_SERVICES
+						},
+						{
+							type: 'divider',
+							key: 'divider-2',
+							className: 'my-1 border-gray-200'
+						},
+						{
+							key: PAGE.CUSTOMERS,
+							label: t('loc:Zákazníci'),
+							onClick: () => navigate(getPath(t('paths:customers'))),
+							icon: <CustomerIcon className={'text-black'} />,
+							id: PAGE.CUSTOMERS
+						},
+						{
 							key: PAGE.RESERVATIONS,
 							label: t('loc:Prehľad rezervácií {{ reservationsCount }}', { reservationsCount: count }),
 							onClick: () => navigate(getPath(t('paths:salon-reservations'))),
 							icon: <ReservationsIcon />,
 							id: PAGE.RESERVATIONS
+						},
+						{
+							key: PAGE.CALENDAR,
+							label: t('loc:Plánovací kalendár'),
+							onClick: () => navigate(getPath(t('paths:calendar'))),
+							icon: <CalendarIcon />,
+							id: PAGE.CALENDAR
 						}
 					)
 				}
@@ -344,7 +356,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			{
 				type: 'divider',
 				key: 'divider1',
-				className: 'my-1'
+				className: 'my-1 border-gray-200'
 			},
 			{
 				key: 'version',
@@ -455,8 +467,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 					className='px-2 flex flex-col flex-grow noti-sider-menu'
 					style={{ height: `calc(100% - ${LOGO_HEIGHT}px` }}
 					inlineIndent={8}
-					selectedKeys={[page as string]}
 					items={getMenuItems()}
+					selectedKeys={[page as string]}
 					getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}
 				/>
 			</div>

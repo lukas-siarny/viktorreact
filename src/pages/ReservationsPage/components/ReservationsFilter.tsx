@@ -36,13 +36,13 @@ import Filters from '../../../components/Filters'
 
 // reducers
 import { RootState } from '../../../reducers'
-import { IReservationsFilter, ReservationsEmployees } from '../../../types/interfaces'
+import { ISalonReservationsFilter, ReservationsEmployees } from '../../../types/interfaces'
 
 type ComponentProps = {
 	reservationState: RESERVATIONS_STATE
 }
 
-type Props = InjectedFormProps<IReservationsFilter, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ISalonReservationsFilter, ComponentProps> & ComponentProps
 
 const employeeIDsOptions = (employees: ReservationsEmployees) =>
 	map(employees, (employee) => {
@@ -193,7 +193,7 @@ const ReservationsFilter = (props: Props) => {
 	)
 }
 
-const form = reduxForm<IReservationsFilter, ComponentProps>({
+const form = reduxForm<ISalonReservationsFilter, ComponentProps>({
 	form: FORM.RESERVATIONS_FILTER,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,

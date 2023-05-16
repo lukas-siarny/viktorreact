@@ -1,9 +1,8 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import i18next from 'i18next'
 import { Field, WrappedFieldArrayProps } from 'redux-form'
 import { Col, Collapse, Row } from 'antd'
-import { get, isEmpty, isNil } from 'lodash'
+import { isEmpty } from 'lodash'
 import cx from 'classnames'
 
 // atoms
@@ -13,28 +12,16 @@ import SwitchField from '../../../atoms/SwitchField'
 // utils
 import { renderFromTo, validationNumberMin } from '../../../utils/helper'
 
-// types
-import { IParameterValue } from '../../../types/interfaces'
-
 // assets
 import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
 import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
 
+// schema
+import { IParameterValue } from '../../../schemas/service'
+
 const { Panel } = Collapse
 
 const numberMin0 = validationNumberMin(0)
-
-const validateParameterValuePriceAndDuration = (value: string, allValues: any, props: any, name: string) => {
-	const [pathToParameterValue, key] = name.split('.')
-	const parameterValueFormValues = get(allValues, pathToParameterValue)
-	if ((!parameterValueFormValues?.variablePrice && key === 'priceTo') || (!parameterValueFormValues?.variableDuration && key === 'durationTo')) {
-		return undefined
-	}
-	if (parameterValueFormValues?.useParameter && isNil(value)) {
-		return i18next.t('loc:Toto pole je povinné')
-	}
-	return undefined
-}
 
 type Props = WrappedFieldArrayProps<IParameterValue> & {
 	showDuration?: boolean
@@ -55,6 +42,7 @@ const ParameterValuesList: FC<Props> = (props) => {
 
 	const formErrors = form?.syncErrors?.serviceCategoryParameter || []
 	const formFields = form?.fields?.serviceCategoryParameter || []
+	const isFieldArrayError = invalid && error
 
 	const genExtra = (fieldData: IParameterValue, field: string) => {
 		return (
@@ -64,12 +52,12 @@ const ParameterValuesList: FC<Props> = (props) => {
 						renderFromTo(
 							fieldData?.durationFrom,
 							fieldData?.durationTo,
-							fieldData?.variableDuration,
+							!!fieldData?.variableDuration,
 							<ClockIcon className={'text-notino-black'} />,
 							t('loc:min'),
 							'mr-3'
 						)}
-					{renderFromTo(fieldData?.priceFrom, fieldData?.priceTo, fieldData?.variablePrice, <CouponIcon />, currencySymbol, 'mr-3')}
+					{renderFromTo(fieldData?.priceFrom, fieldData?.priceTo, !!fieldData?.variablePrice, <CouponIcon />, currencySymbol, 'mr-3')}
 					<Field
 						className={'mb-0 pb-0'}
 						disabled={props.disabled}
@@ -85,19 +73,18 @@ const ParameterValuesList: FC<Props> = (props) => {
 
 	return (
 		<>
-			{invalid && error && (
-				<div role='alert' className='ant-form-item-explain-error'>
+			{isFieldArrayError && (
+				<div role='alert' className='text-danger'>
 					{error}
 				</div>
 			)}
-			<Collapse className={cx('collapse-list', { 'error-border': invalid && error })} bordered={false}>
+			<Collapse className={cx('collapse-list', { 'error-border': isFieldArrayError })} bordered={false}>
 				{fields.map((field, index: number) => {
 					const fieldData = fields.get(index)
 					const variableDuration = fieldData?.variableDuration
 					const variablePrice = fieldData?.variablePrice
 					const useParameter = fieldData?.useParameter
-					const hasError = !isEmpty(formErrors[index])
-					const isTouched = !isEmpty(formFields[index])
+					const hasError = formErrors[index]?.error
 
 					return (
 						<Panel
@@ -110,7 +97,7 @@ const ParameterValuesList: FC<Props> = (props) => {
 							forceRender
 							extra={genExtra(fieldData, field)}
 							collapsible={useParameter ? undefined : 'disabled'}
-							className={cx({ 'collapse-header-has-error': hasError && isTouched })}
+							className={cx({ 'collapse-header-has-error': hasError })}
 						>
 							{showDuration && (
 								<Row gutter={8} align='top' justify='center'>
@@ -135,7 +122,7 @@ const ParameterValuesList: FC<Props> = (props) => {
 											min={0}
 											max={999}
 											size={'large'}
-											validate={[numberMin0, validateParameterValuePriceAndDuration]}
+											validate={[numberMin0]}
 											disabled={!useParameter || props.disabled}
 											required
 										/>
@@ -152,7 +139,7 @@ const ParameterValuesList: FC<Props> = (props) => {
 												min={0}
 												max={999}
 												size={'large'}
-												validate={[numberMin0, validateParameterValuePriceAndDuration]}
+												validate={[numberMin0]}
 												disabled={!useParameter || props.disabled}
 												required
 											/>
@@ -181,7 +168,7 @@ const ParameterValuesList: FC<Props> = (props) => {
 										step={1}
 										min={0}
 										size={'large'}
-										validate={[numberMin0, validateParameterValuePriceAndDuration]}
+										validate={[numberMin0]}
 										disabled={!useParameter || props.disabled}
 										required
 									/>
@@ -197,7 +184,7 @@ const ParameterValuesList: FC<Props> = (props) => {
 											step={1}
 											min={0}
 											size={'large'}
-											validate={[numberMin0, validateParameterValuePriceAndDuration]}
+											validate={[numberMin0]}
 											disabled={!useParameter || props.disabled}
 											required
 										/>

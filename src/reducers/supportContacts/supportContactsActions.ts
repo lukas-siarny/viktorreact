@@ -13,16 +13,13 @@ import i18n from '../../utils/i18n'
 // types
 import { Paths } from '../../types/api'
 import { ISelectOptionItem } from '../../types/interfaces'
+import { IGetSupportContactsQueryParams } from '../../schemas/queryParams'
 
 export type ISupportContactsActions = IResetStore | IGetSupportContacts | IGetSupportContact | IGetSupportContactsOptions
 
 interface IGetSupportContacts {
 	type: SUPPORT_CONTACTS
 	payload: ISupportContactsPayload
-}
-
-export interface IGetSupportContactsQueryParams {
-	countryCode?: string | undefined | null
 }
 
 export interface IGetSupportContact {

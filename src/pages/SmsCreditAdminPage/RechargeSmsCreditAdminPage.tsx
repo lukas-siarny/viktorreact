@@ -6,8 +6,7 @@ import { Button, Divider, Row, Spin, TablePaginationConfig, Tooltip } from 'antd
 import { SorterResult } from 'antd/es/table/interface'
 import { ColumnProps } from 'antd/es/table'
 import { initialize } from 'redux-form'
-import { isEmpty, zip } from 'lodash'
-import queryString from 'query-string'
+import { isEmpty } from 'lodash'
 import { useNavigate } from 'react-router'
 
 // components
@@ -28,7 +27,7 @@ import { getSalonTagSourceType } from '../SalonsPage/components/salonUtils'
 import { LOCALES } from '../../components/LanguagePicker'
 
 // types
-import { IBreadcrumbs, IRechargeSmsCreditFilter } from '../../types/interfaces'
+import { IBreadcrumbs } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
 // redux
@@ -37,7 +36,11 @@ import { getSmsUnitPricesActual } from '../../reducers/smsUnitPrices/smsUnitPric
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
-import useQueryParams, { BooleanParam, NumberParam, serializeParams, StringParam } from '../../hooks/useQueryParams'
+import useQueryParams, { formatObjToQuery } from '../../hooks/useQueryParamsZod'
+
+// schema
+import { rechargeSmsCreditAdminPageSchema } from '../../schemas/queryParams'
+import { IRechargeSmsCreditFilterForm } from '../../schemas/rechargeSmsCredit'
 
 type TableDataItem = NonNullable<ISalonsPayload['data']>['salons'][0]
 type SelectedRow = { id: React.Key; wallet: TableDataItem['wallet'] }
@@ -68,15 +71,11 @@ const RechargeSmsCreditAdminPage = () => {
 	const smsUnitPricesActual = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPricesActual)
 	const defaultSelectedCountryCode = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 
-	const [query, setQuery] = useQueryParams({
-		limit: NumberParam(50),
-		page: NumberParam(1),
-		search: StringParam(),
-		countryCode: StringParam(defaultSelectedCountryCode || LOCALES[LANGUAGE.CZ].countryCode),
-		sourceType: StringParam(),
-		walletAvailableBalanceFrom: NumberParam(),
-		walletAvailableBalanceTo: NumberParam(),
-		showForm: BooleanParam(false)
+	const [query, setQuery] = useQueryParams(rechargeSmsCreditAdminPageSchema, {
+		limit: 50,
+		page: 1,
+		countryCode: defaultSelectedCountryCode || LOCALES[LANGUAGE.CZ].countryCode,
+		showForm: false
 	})
 
 	const selectedCountry = countries.data?.find((country) => country.code === query.countryCode)
@@ -88,7 +87,7 @@ const RechargeSmsCreditAdminPage = () => {
 	const selectedRowKeys: React.Key[] = useMemo(() => getSelectedKeys(selectedRows), [selectedRows])
 
 	const [parentBackUrl] = useBackUrl(t('paths:sms-credits'))
-	const backUrl = `${t('paths:sms-credits')}/${t('paths:recharge')}?${queryString.stringify(serializeParams({ ...query, showForm: false, page: 1 }))}`
+	const backUrl = `${t('paths:sms-credits')}/${t('paths:recharge')}${formatObjToQuery({ ...query, showForm: false, page: 1 })}`
 
 	const loading = salons?.isLoading || smsUnitPricesActual?.isLoading
 
@@ -196,6 +195,9 @@ const RechargeSmsCreditAdminPage = () => {
 	}
 
 	const onSelectChange = (_newSelectedRowKeys: React.Key[], newSelectedRows: TableDataItem[]) => {
+		if (!query.page) {
+			return
+		}
 		const isSubstraction = selectedRows[query.page] && newSelectedRows.length < selectedRows[query.page].length
 
 		let newRows: SelectedRow[] = []
@@ -308,7 +310,7 @@ const RechargeSmsCreditAdminPage = () => {
 						</h3>
 						<Divider className={'my-4'} />
 						<RechargeSmsCreditFilter
-							onSubmit={(values: IRechargeSmsCreditFilter) => {
+							onSubmit={(values: IRechargeSmsCreditFilterForm) => {
 								setSelectedRows({})
 								setQuery({ ...query, ...values })
 							}}

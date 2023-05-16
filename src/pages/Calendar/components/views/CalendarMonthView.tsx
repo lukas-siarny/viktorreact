@@ -14,7 +14,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 import { CalendarEvent, ICalendarMonthlyReservationsPayload, ICalendarMonthlyViewEvent, ICalendarView, PopoverTriggerPosition } from '../../../../types/interfaces'
 import { RootState } from '../../../../reducers'
 import { IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
-import { IUseQueryParams } from '../../../../hooks/useQueryParams'
+import { ICalendarPageURLQueryParams } from '../../../../schemas/queryParams'
 
 // enums
 import {
@@ -195,7 +195,7 @@ interface ICalendarMonthView extends Omit<ICalendarView, 'reservations'> {
 	salonID: string
 	onShowEventsListPopover: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean, employeeID?: string) => void
 	monthlyReservations: ICalendarMonthlyReservationsPayload['data']
-	query: IUseQueryParams
+	query: Pick<ICalendarPageURLQueryParams, 'categoryIDs'>
 	parentPath: string
 }
 

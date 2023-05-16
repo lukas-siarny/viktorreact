@@ -129,7 +129,7 @@ const CalendarIntegrations = () => {
 
 	const handleMSLogin = async () => {
 		try {
-			await instance.loginPopup({
+			await instance.acquireTokenPopup({
 				scopes: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].scopes
 			})
 		} catch (e) {

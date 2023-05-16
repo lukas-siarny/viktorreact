@@ -412,7 +412,7 @@ const ServiceForm: FC<Props> = (props) => {
 											<p className={'mb-3'}>
 												{t('loc:Keď službe zapnete možnosť online rezervácie, vaši klienti si ju budú môcť rezervovať v zákazníckej aplikácii.')}
 											</p>
-											<p className={'mb-2'}>{t('loc:Na zapnutie online rezervácie je najprv potrebné')}:</p>
+											<p className={'mb-2'}>{t('loc:Na zapnutie online rezervácie je najprv potrebné splniť a mať uložené nasledujúce')}:</p>
 											<ul className={'p-0 list-none'}>
 												<li className={'flex items-start gap-3'}>
 													{getConditionIcon(hasDurationFilledIn)} {t('loc:Zadať dĺžku trvania')}
@@ -428,7 +428,6 @@ const ServiceForm: FC<Props> = (props) => {
 											</ul>
 										</div>
 										<Field
-											// disabled={!hasPermission || !salon.data?.settings?.enabledReservations}
 											disabled={!hasPermission || disabledRsSettings}
 											className={'w-full'}
 											component={SwitchField}
@@ -438,8 +437,7 @@ const ServiceForm: FC<Props> = (props) => {
 										/>
 
 										<Field
-											// disabled={!hasPermission || !salon.data?.settings?.enabledReservations}
-											disabled={!hasPermission || disabledRsSettings}
+											disabled={!hasPermission || !formValues?.settings?.enabledB2cReservations}
 											className={'pb-2 w-full'}
 											component={SwitchField}
 											label={t('loc:Automatické potvrdenie')}

@@ -170,6 +170,14 @@ const serviceSchema = priceAndDurationSchema
 		})
 	})
 	.superRefine((val, ctx) => {
+		if (val.descriptionLocalizations.use && !val.descriptionLocalizations.defualtLanguage) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Toto pole je povinné'),
+				path: ['descriptionLocalizations', 'defualtLanguage']
+			})
+		}
+
 		if (!val.useCategoryParameter) {
 			validatePriceAndDurationData(val, ctx)
 		} else {
@@ -178,14 +186,6 @@ const serviceSchema = priceAndDurationSchema
 					code: z.ZodIssueCode.custom,
 					message: serializeValidationMessage('loc:Musíte zvoliť a nastaviť aspoň jednu hodnotu parametra!'),
 					path: ['serviceCategoryParameter', '_error']
-				})
-			}
-
-			if (val.descriptionLocalizations.use && !val.descriptionLocalizations.defualtLanguage) {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: serializeValidationMessage('loc:Toto pole je povinné'),
-					path: ['descriptionLocalizations', 'defualtLanguage']
 				})
 			}
 

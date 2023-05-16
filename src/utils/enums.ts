@@ -971,11 +971,6 @@ export enum RESERVATION_PAYMENT_METHOD {
 	OTHER = 'OTHER'
 }
 
-export enum SERVICE_TYPE {
-	ONLINE_BOOKING = 'ONLINE_BOOKING',
-	AUTO_CONFIRM = 'AUTO_CONFIRM'
-}
-
 export const CALENDAR_DEBOUNCE_DELAY = 300 // in ms
 export const CALENDAR_INIT_TIME = 500 // in ms
 

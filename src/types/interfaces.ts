@@ -14,7 +14,6 @@ import {
 	CONFIRM_BULK,
 	RS_NOTIFICATION,
 	RS_NOTIFICATION_TYPE,
-	SERVICE_TYPE,
 	RESERVATION_STATE,
 	RESERVATION_PAYMENT_METHOD,
 	CONFIRM_MODAL_DATA_TYPE,
@@ -305,18 +304,10 @@ export interface IReservationSystemSettingsForm {
 	maxHoursB2cCreateReservationBeforeStart?: number | null
 	maxHoursB2cCancelReservationBeforeStart?: number | null
 	minutesIntervalB2CReservations?: number | null
-	// Pomocne checky pre chekcnutie all hodnot pre BOOKING / AUTO CONFIRM
-	autoConfirmAll: boolean
 	enabledCustomerReservationNotes?: boolean
 	enabledB2cReservations?: boolean
-	onlineBookingAll: boolean
 	disabledNotifications: {
 		[key in RS_NOTIFICATION]: IReservationsSettingsNotification
-	}
-	servicesSettings: {
-		[key in SERVICE_TYPE]: {
-			[key: string]: boolean
-		}
 	}
 }
 

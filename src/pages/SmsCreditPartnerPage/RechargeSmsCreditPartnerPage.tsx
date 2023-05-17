@@ -19,7 +19,6 @@ import { postReq } from '../../utils/request'
 // types
 import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 import { RootState } from '../../reducers'
-import { IRechargeSmsCredit } from '../../schemas/rechargeSmsCredit'
 
 // assets
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
@@ -31,6 +30,9 @@ import { getSmsStats } from '../../reducers/sms/smsActions'
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
 import RechargeSmsCredit from '../../components/RechargeSmsCredit/RechargeSmsCreditForm'
+
+// schemas
+import { IRechargeSmsCreditForm } from '../../schemas/rechargeSmsCredit'
 
 const RechargeSmsCreditPartnerPage: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath } = props
@@ -65,7 +67,7 @@ const RechargeSmsCreditPartnerPage: FC<SalonSubPageProps> = (props) => {
 		})()
 	}, [dispatch, salonID, walletID])
 
-	const handleRechargeCredit = async (values: IRechargeSmsCredit) => {
+	const handleRechargeCredit = async (values: IRechargeSmsCreditForm) => {
 		if (!walletID || !selectedSalon.data?.currency.code) {
 			return
 		}

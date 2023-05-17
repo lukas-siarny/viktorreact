@@ -68,7 +68,7 @@ const RemainingSmsCredit = (props: Props) => {
 							{t('loc:Zobraziť viac')} <ChevronRightIcon />
 						</Link>
 					) : (
-						<Permissions allowed={[PERMISSION.NOTINO]}>
+						<Permissions>
 							<Button
 								onClick={() => navigate(`${parentPath}${t('paths:sms-credit')}/${t('paths:recharge')}`)}
 								type='primary'

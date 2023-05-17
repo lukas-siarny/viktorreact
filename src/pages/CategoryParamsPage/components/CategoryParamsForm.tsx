@@ -1,8 +1,8 @@
 import React, { FC, useMemo } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, FieldArray, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Divider, Form, Row, Space } from 'antd'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -15,9 +15,10 @@ import Localizations from '../../../components/Localizations'
 
 // utils
 import { formFieldID, showErrorNotification, validationString } from '../../../utils/helper'
-import { ADD_BUTTON_ID, DELETE_BUTTON_ID, FORM, MAX_VALUES_PER_PARAMETER, PARAMETERS_VALUE_TYPES, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { ADD_BUTTON_ID, DELETE_BUTTON_ID, FORM, MAX_VALUES_PER_PARAMETER, PARAMETERS_VALUE_TYPES, PERMISSION, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../../components/LanguagePicker'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
+import Permissions from '../../../utils/Permissions'
 
 // schema
 import { validationCategoryParamsFn, ICategoryParamsForm } from '../../../schemas/categoryParams'
@@ -39,6 +40,8 @@ type ComponentProps = {
 }
 
 type Props = InjectedFormProps<ICategoryParamsForm, ComponentProps> & ComponentProps
+
+const editPermissions: PERMISSION[] = [PERMISSION.CATEGORY_PARAMETER_EDIT]
 
 const LocalizationsArray = (props: any) => {
 	const { fields, required, label, addBtnLabel, maxCount = MAX_VALUES_PER_PARAMETER, nestedFieldName, placeholder, emptyValue, handleDelete } = props
@@ -114,6 +117,7 @@ const LocalizationsArray = (props: any) => {
 
 const CategoryParamsForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
 	const { handleSubmit, pristine, submitting, onDelete, change, onDeleteValue } = props
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.CATEGORY_PARAMS]?.values)
 	const entityName = useMemo(() => t('loc:parameter'), [t])
@@ -199,6 +203,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 				<div className={`flex flex-col gap-2 md:flex-row ${onDelete ? 'md:justify-between' : 'md:justify-center'}`}>
 					{onDelete && (
 						<DeleteButton
+							permissions={editPermissions}
 							className={'w-full md:w-auto md:min-w-50 xl:min-w-60'}
 							onConfirm={onDelete}
 							entityName={t('loc:parameter')}
@@ -207,18 +212,31 @@ const CategoryParamsForm: FC<Props> = (props) => {
 							id={formFieldID(FORM.CATEGORY_PARAMS, DELETE_BUTTON_ID)}
 						/>
 					)}
-					<Button
-						type={'primary'}
-						size={'middle'}
-						className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
-						htmlType={'submit'}
-						disabled={submitting || pristine}
-						loading={submitting}
-						icon={onDelete ? <EditIcon /> : <PlusIcon />}
-						id={formFieldID(FORM.CATEGORY_PARAMS, SUBMIT_BUTTON_ID)}
-					>
-						{onDelete ? STRINGS(t).save(entityName) : STRINGS(t).createRecord(entityName)}
-					</Button>
+					<Permissions
+						allowed={editPermissions}
+						render={(hasPermission, { openForbiddenModal }) => (
+							<Button
+								type={'primary'}
+								size={'middle'}
+								className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
+								htmlType={'submit'}
+								onClick={(e) => {
+									e.preventDefault()
+									if (hasPermission) {
+										dispatch(submit(FORM.CATEGORY_PARAMS))
+									} else {
+										openForbiddenModal()
+									}
+								}}
+								disabled={submitting || pristine}
+								loading={submitting}
+								icon={onDelete ? <EditIcon /> : <PlusIcon />}
+								id={formFieldID(FORM.CATEGORY_PARAMS, SUBMIT_BUTTON_ID)}
+							>
+								{onDelete ? STRINGS(t).save(entityName) : STRINGS(t).createRecord(entityName)}
+							</Button>
+						)}
+					/>
 				</div>
 			</div>
 		</Form>

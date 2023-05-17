@@ -217,4 +217,4 @@ const EditCategoryParamsPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(EditCategoryParamsPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.CATEGORY_PARAMETER_EDIT]))(EditCategoryParamsPage)

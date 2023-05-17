@@ -21,7 +21,7 @@ import { ReactComponent as CoinsIcon } from '../../assets/icons/coins.svg'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, LANGUAGE, PERMISSION, SALON_CREATE_TYPE, SALON_FILTER_STATES } from '../../utils/enums'
-import { withPermissions } from '../../utils/Permissions'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 import { formatPrice, normalizeDirectionKeys } from '../../utils/helper'
 import { getSalonTagSourceType } from '../SalonsPage/components/salonUtils'
 import { LOCALES } from '../../components/LanguagePicker'
@@ -360,16 +360,26 @@ const RechargeSmsCreditAdminPage = () => {
 												maxCount: SELECTION_LIMIT
 											})}
 										</p>
-										<Button
-											type={'primary'}
-											className={'noti-btn'}
-											htmlType={'button'}
-											onClick={() => handleShowForm(true)}
-											icon={<ChevronRightIcon width={16} height={16} />}
-											disabled={loading || !selectedRowKeys.length}
-										>
-											{t('loc:Pokračovať')}
-										</Button>
+										<Permissions
+											render={(hasPermission, { openForbiddenModal }) => (
+												<Button
+													type={'primary'}
+													className={'noti-btn'}
+													htmlType={'button'}
+													onClick={() => {
+														if (hasPermission) {
+															handleShowForm(true)
+														} else {
+															openForbiddenModal()
+														}
+													}}
+													icon={<ChevronRightIcon width={16} height={16} />}
+													disabled={loading || !selectedRowKeys.length}
+												>
+													{t('loc:Pokračovať')}
+												</Button>
+											)}
+										/>
 									</div>
 								}
 							/>

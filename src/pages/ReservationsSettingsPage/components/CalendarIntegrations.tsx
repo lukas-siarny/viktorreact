@@ -61,6 +61,7 @@ const CalendarIntegrations = () => {
 								...buildHeaders()
 							},
 							body: JSON.stringify({
+								salonIDs: [salonID],
 								refreshToken: responseAuth.data.refresh_token,
 								calendarType: EXTERNAL_CALENDAR_TYPE.MICROSOFT
 							})
@@ -115,6 +116,7 @@ const CalendarIntegrations = () => {
 				'/api/b2b/admin/calendar-sync/sync-token',
 				null,
 				{
+					salonIDs: [salonID],
 					authCode: tokenResponse.code,
 					calendarType: EXTERNAL_CALENDAR_TYPE.GOOGLE
 				},

@@ -1,30 +1,44 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useGoogleLogin } from '@react-oauth/google'
 import { useTranslation } from 'react-i18next'
 import { useMsal } from '@azure/msal-react'
 import qs from 'qs'
 import axios, { AxiosError } from 'axios'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { find, get } from 'lodash'
 
 // utils
+import { Modal } from 'antd'
+import { getFormValues, submit } from 'redux-form'
 import { buildHeaders, postReq, showErrorNotifications } from '../../../utils/request'
-import { MSG_TYPE, EXTERNAL_CALENDAR_CONFIG, NOTIFICATION_TYPE, PERMISSION, EXTERNAL_CALENDAR_TYPE } from '../../../utils/enums'
+import { MSG_TYPE, EXTERNAL_CALENDAR_CONFIG, NOTIFICATION_TYPE, PERMISSION, EXTERNAL_CALENDAR_TYPE, FORM } from '../../../utils/enums'
 import { checkPermissions } from '../../../utils/Permissions'
 import showNotifications from '../../../utils/tsxHelpers'
 
 // types
 import { RootState } from '../../../reducers'
+import SalonIdsForm from '../../../components/SalonIdsForm'
+
+// assets
+import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-modal.svg'
+
+enum MODAL_TYPE {
+	MS_MODAL = 'MS_MODAL',
+	GOOGLE_MODAL = 'GOOGLE_MODAL',
+	CANCEL_MODAL = 'CANCEL_MODAL'
+}
 
 const CalendarIntegrations = () => {
 	const { t } = useTranslation()
 	const { salonID }: any = useParams()
 	const { instance } = useMsal()
+	const dispatch = useDispatch()
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const icalUrl = get(find(authUser.data?.salons, { id: salonID }), 'employeeIcsLink')
 	const isPartner = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser.data?.uniqPermissions])
+	const salonIds = useSelector((state: RootState) => getFormValues(FORM.SALON_IDS_FORM)(state))
 
 	// NOTE: intercept Microsoft auth token request and get code from the payload and send it to our BE
 	const originalFetch = window.fetch
@@ -107,7 +121,6 @@ const CalendarIntegrations = () => {
 		}
 		return originalFetch(url, config)
 	}
-
 	const handleGoogleLogin = useGoogleLogin({
 		...EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.GOOGLE],
 		onSuccess: (tokenResponse) => {
@@ -139,13 +152,68 @@ const CalendarIntegrations = () => {
 			console.error(e)
 		}
 	}
+	const [visibleModal, setVisibleModal] = useState<{ type: MODAL_TYPE; title: string; description: string } | undefined>(undefined)
 
+	const handleSubmitSalons = (values: any) => {
+		if (visibleModal?.type === MODAL_TYPE.GOOGLE_MODAL) {
+			// TODO:
+			handleGoogleLogin()
+		} else if (visibleModal?.type === MODAL_TYPE.MS_MODAL) {
+			// TODO:
+		} else {
+			handleMSLogin()
+			// ZRUDENIE
+		}
+		console.log('chckes', values)
+		// TODO: doplnit salonIDs
+	}
+
+	const modals = (
+		<>
+			<Modal
+				className='rounded-fields'
+				title={visibleModal?.title}
+				centered
+				open={!!visibleModal}
+				onCancel={() => setVisibleModal(undefined)}
+				onOk={() => dispatch(submit(FORM.SALON_IDS_FORM))}
+				okText={t('loc:Pokračovať')}
+				cancelText={t('loc:Zrušiť')}
+				width={520}
+				// closeIcon={<CloseIcon />}
+				destroyOnClose
+			>
+				<SalonIdsForm placeholder={visibleModal?.description} onSubmit={handleSubmitSalons} />
+			</Modal>
+		</>
+	)
 	return (
 		<div>
-			<button className={'sync-button google mr-2'} onClick={() => handleGoogleLogin()} type='button'>
+			{modals}
+			<button
+				className={'sync-button google mr-2'}
+				onClick={() =>
+					setVisibleModal({
+						type: MODAL_TYPE.GOOGLE_MODAL,
+						title: t('loc:Synchronizácia Google kalendára'),
+						description: t('loc:Pre synchronizáciu Google kalendára je potrebné vyplniť ID salónov, ktoré chcete synchronizovať.')
+					})
+				}
+				type='button'
+			>
 				{'Google'}
 			</button>
-			<button className={'sync-button microsoft mr-2'} onClick={handleMSLogin} type='button'>
+			<button
+				className={'sync-button microsoft mr-2'}
+				onClick={() =>
+					setVisibleModal({
+						type: MODAL_TYPE.MS_MODAL,
+						title: t('loc:Synchronizácia Microsoft kalendára'),
+						description: t('loc:Pre synchronizáciu Microsoft kalendára je potrebné vyplniť ID salónov, ktoré chcete synchronizovať.')
+					})
+				}
+				type='button'
+			>
 				{t('loc:Sign in')}
 			</button>
 			{isPartner && (

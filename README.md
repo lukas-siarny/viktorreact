@@ -42,11 +42,15 @@ To run tests, run:
 * React
 * TypeScript
 * TailwindCSS
-* Cypress
-* FullCalendar
-* Antd design
-* React router v6
-* Sass
+* Cypress (for testing)
+* FullCalendar (for calendar functionality)
+* Antd design 
+* React router v6 (for routing)
+* Sass (for styling)
+* Zod (for validation) 
+* i18next (for translations)
+* Sentry (for error tracking)
+
 
 ## Scripts
 * ```start```: starts the development server

@@ -17,7 +17,7 @@ import { getLinkWithEncodedBackUrl, parseServiceRowKey } from '../../../../utils
 
 // components
 import { AvatarGroup } from '../../../../components/AvatarComponents'
-import InfoTooltip from '../../../../atoms/InfoTooltip'
+import InfoTooltipLight from '../../../../atoms/InfoTooltipLight'
 import CustomTable from '../../../../components/CustomTable'
 
 type SevicesTableProps = {
@@ -78,7 +78,7 @@ const getTableColumns = (t: TFunction, disabledRS?: boolean): ColumnProps<IServi
 		title: (
 			<div className={cx('flex items-center gap-1 transition transition-opacity duration-200', { 'opacity-50': disabledRS })}>
 				<span className={'truncate inline-block'}>{t('loc:Online rezervácie')}</span>
-				<InfoTooltip
+				<InfoTooltipLight
 					title={t('loc:Online rezervácie')}
 					text={t(
 						'loc:Ak máte zapnutý rezervačný systém, k službe priradeného aspoň 1 kolegu a zapnutú online rezerváciu, zákazníci majú možnosť rezervovať si termín online.'
@@ -95,7 +95,7 @@ const getTableColumns = (t: TFunction, disabledRS?: boolean): ColumnProps<IServi
 		title: (
 			<div className={cx('flex w-full items-center gap-1 transition transition-opacity duration-200', { 'opacity-50': disabledRS })}>
 				<span className={'truncate inline-block'}>{t('loc:Auto. potvrdenie')}</span>
-				<InfoTooltip
+				<InfoTooltipLight
 					title={t('loc:Automatické potvrdenie')}
 					text={t('loc:Online rezervácia bude zákazníkovi v Notino aplikácii automaticky schválená, nemusíte ju už ručne potvrdzovať.')}
 				/>
@@ -112,10 +112,12 @@ const ServicesList: FC<SevicesTableProps> = React.memo((props) => {
 	const navigate = useNavigate()
 	const [t] = useTranslation()
 
-	const handleDrop = (oldId: string, newId: string) => {
-		const oldIndex = category.services.data.findIndex((s) => s.id === parseServiceRowKey(oldId).serviceID)
-		const newIndex = category.services.data.findIndex((s) => s.id === parseServiceRowKey(newId).serviceID)
-		handleReorder([...parentIndexes, oldIndex], newIndex)
+	const handleDrop = (oldId: string, newId?: string) => {
+		if (newId) {
+			const oldIndex = category.services.data.findIndex((s) => s.id === parseServiceRowKey(oldId).serviceID)
+			const newIndex = category.services.data.findIndex((s) => s.id === parseServiceRowKey(newId).serviceID)
+			handleReorder([...parentIndexes, oldIndex], newIndex)
+		}
 	}
 
 	return (

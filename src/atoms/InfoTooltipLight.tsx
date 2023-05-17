@@ -23,9 +23,7 @@ const InfoTooltipLight: FC<Props> = (props) => {
 			title={
 				<>
 					<h4 className={'mb-0 text-xs text-notino-black'}>{title}</h4>
-					<p className={'mb-0 text-xs'} style={{ color: '#6D7483' }}>
-						{text}
-					</p>
+					<p className={'mb-0 text-xs text-notino-grayDark'}>{text}</p>
 				</>
 			}
 		>

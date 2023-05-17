@@ -156,7 +156,7 @@ const ActiveEmployeesTable = (props: Props) => {
 	]
 
 	const handleDrop = useCallback(
-		async (oldIndexStr: string, newIndexStr: string) => {
+		async (oldIndexStr: string, newIndexStr?: string) => {
 			const oldIndex = Number(oldIndexStr)
 			const newIndex = Number(newIndexStr)
 			try {

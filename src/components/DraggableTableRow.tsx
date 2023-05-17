@@ -13,7 +13,7 @@ interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
 	dndWithHandler?: boolean
 }
 
-const DragableTableRow = ({ children, dndWithHandler = true, ...props }: RowProps) => {
+const DraggableTableRow = ({ children, dndWithHandler = true, ...props }: RowProps) => {
 	const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({
 		id: props['data-row-key']
 	})
@@ -31,7 +31,7 @@ const DragableTableRow = ({ children, dndWithHandler = true, ...props }: RowProp
 	return dndWithHandler ? (
 		<tr {...props} ref={setNodeRef} style={style} {...attributes}>
 			{React.Children.map(children, (child) => {
-				if ((child as React.ReactElement).key === 'sort') {
+				if (React.isValidElement(child) && child.key === 'sort') {
 					return React.cloneElement(child as React.ReactElement, {
 						children: (
 							<div className={cx({ 'pointer-events-none': props.disabled })} ref={setActivatorNodeRef} {...listeners}>
@@ -46,7 +46,7 @@ const DragableTableRow = ({ children, dndWithHandler = true, ...props }: RowProp
 	) : (
 		<tr {...props} ref={setNodeRef} style={style} {...attributes} {...listeners}>
 			{React.Children.map(children, (child) => {
-				if ((child as React.ReactElement).key === 'sort') {
+				if (React.isValidElement(child) && child.key === 'sort') {
 					return React.cloneElement(child as React.ReactElement, {
 						children: <div className={cx({ 'pointer-events-none': props.disabled })}>{dndIcon}</div>
 					})
@@ -57,4 +57,4 @@ const DragableTableRow = ({ children, dndWithHandler = true, ...props }: RowProp
 	)
 }
 
-export default DragableTableRow
+export default DraggableTableRow

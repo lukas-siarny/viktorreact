@@ -13,7 +13,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import Alert from '../../components/Dashboards/Alert'
 import SwitchField from '../../atoms/SwitchField'
 import ServicesStats from './components/list/ServicesStats'
-import InfoTooltip from '../../atoms/InfoTooltip'
+import InfoTooltipLight from '../../atoms/InfoTooltipLight'
 import IndustriesList from './components/list/IndustriesList'
 
 // utils
@@ -50,8 +50,9 @@ const ServicesPage = (props: SalonSubPageProps) => {
 
 	const [servicesListData, setServicesListData] = useState<IServicesListData>(SERVICES_LIST_INIT)
 	const [reorderView, setReoderView] = useState(false)
-	const [enabledRS, setEnabledRS] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
+
+	const enabledRS = selectedSalon?.data?.settings.enabledReservations
 
 	const loading = services?.isLoading || selectedSalon.isLoading || isSubmitting
 
@@ -64,18 +65,14 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	unstable_usePrompt({ when: dirty, message: promptMessage })
 
 	useEffect(() => {
-		;(async () => {
-			dispatch(
-				getServices(
-					{
-						salonID
-					},
-					true
-				)
+		dispatch(
+			getServices(
+				{
+					salonID
+				},
+				true
 			)
-			const data = await dispatch(selectSalon(salonID))
-			setEnabledRS(!!data?.data?.settings.enabledReservations)
-		})()
+		)
 	}, [dispatch, salonID])
 
 	useEffect(() => {
@@ -139,14 +136,14 @@ const ServicesPage = (props: SalonSubPageProps) => {
 				setServicesListData(services.listData)
 				setReoderView(false)
 			}
+		} else {
+			setReoderView(false)
 		}
-		setReoderView(false)
 	}
 
 	const handleChangeRsSettings = async (checked: boolean) => {
 		setIsSubmitting(true)
 		// set state immediately so user can see checkbox change
-		setEnabledRS(checked)
 		try {
 			const reqData: PatchSettingsBody = {
 				settings: {
@@ -155,14 +152,10 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			}
 
 			await patchReq('/api/b2b/admin/salons/{salonID}/settings', { salonID }, reqData)
-			const newSalonData = await dispatch(selectSalon(salonID))
-			// set state agian just to be sure data are correct
-			setEnabledRS(!!newSalonData?.data?.settings.enabledReservations)
+			await dispatch(selectSalon(salonID))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
-			// set to previus value in case there's an error in request
-			setEnabledRS(!checked)
 		} finally {
 			setIsSubmitting(false)
 		}
@@ -198,12 +191,13 @@ const ServicesPage = (props: SalonSubPageProps) => {
 				}
 				case 3: {
 					// reorder services
-					const categoryIndex = currentIndexes[1] as number
 					const serviceIndex = currentIndexes[2] as number
 
 					if (serviceIndex === newIndex) {
 						break
 					}
+
+					const categoryIndex = currentIndexes[1] as number
 
 					const servicesData = [...newData.industries.data[industryIndex].categories.data[categoryIndex].services.data]
 					const reorderedData = arrayMove(servicesData, serviceIndex, newIndex)
@@ -269,10 +263,10 @@ const ServicesPage = (props: SalonSubPageProps) => {
 							<div className={'flex items-center gap-2'}>
 								{reorderView ? (
 									<>
-										<Button type={'dashed'} className={'noti-btn'} onClick={handleCancelOrder}>
+										<Button type={'dashed'} className={'noti-btn'} onClick={handleCancelOrder} disabled={loading}>
 											{STRINGS(t).cancel('').trim()}
 										</Button>
-										<Button type={'primary'} className={'noti-btn'} onClick={handleSaveOrder}>
+										<Button type={'primary'} className={'noti-btn'} onClick={handleSaveOrder} disabled={loading || !dirty}>
 											{STRINGS(t).save('').trim()}
 										</Button>
 									</>
@@ -295,7 +289,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 												>
 													{t('loc:Zmeniť poradie')}
 												</Button>
-												<InfoTooltip
+												<InfoTooltipLight
 													title={t('loc:Zmena poradia')}
 													text={t('loc:Poradie služieb na tejto obrazovke zodpovedá poradiu služieb v zákazníckej aplikácii Notino.')}
 												/>

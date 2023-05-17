@@ -14,7 +14,7 @@ import { TableProps } from 'antd/lib/table'
 // components
 import CustomPagination from './CustomPagination'
 import { IPagination } from '../types/interfaces'
-import DragableTableRow from './DragableTableRow'
+import DraggableTableRow from './DraggableTableRow'
 
 // assets
 import { ReactComponent as DragIcon } from '../assets/icons/drag-icon.svg'
@@ -42,7 +42,7 @@ type ComponentProps<RecordType> = TableProps<RecordType> & {
 	useCustomPagination?: boolean
 	pagination?: IPagination | false
 	wrapperClassName?: string
-	dndDrop?: (oldIndex: string, newIndex: string) => any
+	dndDrop?: (oldIndex: string, newIndex?: string) => any
 	dndWithHandler?: boolean
 	dndColWidth?: number
 	customFooterContent?: React.ReactNode
@@ -87,7 +87,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 	const onDragEnd = useCallback(
 		async ({ active, over }: DragEndEvent) => {
 			const oldIndex = String(active.id)
-			const newIndex = String(over?.id)
+			const newIndex = over?.id ? String(over?.id) : undefined
 
 			if (isProcessingDrop) {
 				return
@@ -130,7 +130,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 					...props?.components?.body,
 					// eslint-disable-next-line react/no-unstable-nested-components
 					row(rowProps: any) {
-						return <DragableTableRow disabled={Number(props.dataSource?.length) < 2} dndWithHandler={dndWithHandler} {...rowProps} />
+						return <DraggableTableRow disabled={Number(props.dataSource?.length) < 2} dndWithHandler={dndWithHandler} {...rowProps} />
 					}
 				}
 			}

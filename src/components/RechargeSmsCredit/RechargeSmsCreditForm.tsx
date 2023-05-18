@@ -82,7 +82,8 @@ const RechargeSmsCreditForm: FC<Props> = (props) => {
 										htmlType={'submit'}
 										disabled={submitting || pristine}
 										loading={submitting}
-										onClick={() => {
+										onClick={(e) => {
+											e.preventDefault()
 											if (hasPermission) {
 												dispatch(submit(FORM.RECHARGE_SMS_CREDIT))
 											} else {

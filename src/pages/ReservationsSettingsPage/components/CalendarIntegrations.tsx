@@ -9,10 +9,10 @@ import { useParams } from 'react-router'
 import { find, get } from 'lodash'
 
 // utils
-import { Modal } from 'antd'
-import { getFormValues, submit } from 'redux-form'
+import { Button } from 'antd'
+import { getFormValues, initialize, submit } from 'redux-form'
 import { buildHeaders, postReq, showErrorNotifications } from '../../../utils/request'
-import { MSG_TYPE, EXTERNAL_CALENDAR_CONFIG, NOTIFICATION_TYPE, PERMISSION, EXTERNAL_CALENDAR_TYPE, FORM } from '../../../utils/enums'
+import { EXTERNAL_CALENDAR_CONFIG, EXTERNAL_CALENDAR_TYPE, FORM, MSG_TYPE, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
 import { checkPermissions } from '../../../utils/Permissions'
 import showNotifications from '../../../utils/tsxHelpers'
 
@@ -21,7 +21,8 @@ import { RootState } from '../../../reducers'
 import SalonIdsForm from '../../../components/SalonIdsForm'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-modal.svg'
+import { ReactComponent as CheckIcon } from '../../../assets/icons/checkbox-checked-icon-24.svg'
+import ConfirmModal from '../../../atoms/ConfirmModal'
 
 enum MODAL_TYPE {
 	MS_MODAL = 'MS_MODAL',
@@ -38,11 +39,14 @@ const CalendarIntegrations = () => {
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const icalUrl = get(find(authUser.data?.salons, { id: salonID }), 'employeeIcsLink')
 	const isPartner = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser.data?.uniqPermissions])
-	const salonIds = useSelector((state: RootState) => getFormValues(FORM.SALON_IDS_FORM)(state))
-
+	const salonIdsValues: Partial<{ salonIDs: string[] }> = useSelector((state: RootState) => getFormValues(FORM.SALON_IDS_FORM)(state))
 	// NOTE: intercept Microsoft auth token request and get code from the payload and send it to our BE
 	const originalFetch = window.fetch
-
+	// TODO: init salonoch bna true ak maju calendarSync
+	// TODO: disabled buttonov ak ma konkretny salon zapnutu synchronizaciu asi treba naviazat na typ synchronizacie GOOGLE / MS
+	// TODO: ak figuruje ako zamestnanec iba v 1 salóne, tento krok sa nevykonáva - cize nezobrazi sa modal s vyberom salonov - spravit podmienku
+	// TODO: ak uz ma zapnutu synchonizaciu v nejakom salone tak tento salon je checked na true a neda sa zmenit cize je disabled - spravit podmienku
+	// TODO: spravit isPristine nad formom ak sa nevykona zmena tak bude disabled
 	window.fetch = async (...args): Promise<any> => {
 		const [url, config] = args
 
@@ -129,7 +133,7 @@ const CalendarIntegrations = () => {
 				'/api/b2b/admin/calendar-sync/sync-token',
 				null,
 				{
-					salonIDs: [salonID],
+					salonIDs: salonIdsValues.salonIDs as any,
 					authCode: tokenResponse.code,
 					calendarType: EXTERNAL_CALENDAR_TYPE.GOOGLE
 				},
@@ -155,14 +159,13 @@ const CalendarIntegrations = () => {
 	const [visibleModal, setVisibleModal] = useState<{ type: MODAL_TYPE; title: string; description: string } | undefined>(undefined)
 
 	const handleSubmitSalons = (values: any) => {
+		setVisibleModal(undefined)
 		if (visibleModal?.type === MODAL_TYPE.GOOGLE_MODAL) {
-			// TODO:
 			handleGoogleLogin()
 		} else if (visibleModal?.type === MODAL_TYPE.MS_MODAL) {
-			// TODO:
-		} else {
 			handleMSLogin()
-			// ZRUDENIE
+		} else {
+			// TODO: ZRUDENIE
 		}
 		console.log('chckes', values)
 		// TODO: doplnit salonIDs
@@ -170,48 +173,63 @@ const CalendarIntegrations = () => {
 
 	const modals = (
 		<>
-			<Modal
+			<ConfirmModal
 				className='rounded-fields'
 				title={visibleModal?.title}
 				centered
+				destroyOnClose
+				onOk={() => dispatch(submit(FORM.SALON_IDS_FORM))}
 				open={!!visibleModal}
 				onCancel={() => setVisibleModal(undefined)}
-				onOk={() => dispatch(submit(FORM.SALON_IDS_FORM))}
 				okText={t('loc:Pokračovať')}
 				cancelText={t('loc:Zrušiť')}
-				width={520}
-				// closeIcon={<CloseIcon />}
-				destroyOnClose
 			>
 				<SalonIdsForm placeholder={visibleModal?.description} onSubmit={handleSubmitSalons} />
-			</Modal>
+			</ConfirmModal>
 		</>
 	)
 	return (
 		<div>
 			{modals}
+			{/* // TODO: podmienky kedy sa ma zobrazit */}
+			<div className={'flex items-center mb-4'}>
+				<CheckIcon className={'text-notino-pink mr-2'} />
+				<div>{t('loc:Synchronizácia s Google kalendárom bola spustená.')}</div>
+				<Button type={'ghost'} size={'middle'} className={'text-notino-pink'} htmlType={'button'}>
+					{t('loc:Zrušiť')}
+				</Button>
+			</div>
+			<div className={'flex items-center mb-4'}>
+				<CheckIcon className={'text-notino-pink mr-2'} />
+				<div>{t('loc:Synchronizácia s Microsoft kalendárom bola spustená.')}</div>
+				<Button type={'ghost'} size={'middle'} className={'text-notino-pink'} htmlType={'button'}>
+					{t('loc:Zrušiť')}
+				</Button>
+			</div>
 			<button
 				className={'sync-button google mr-2'}
-				onClick={() =>
+				onClick={() => {
+					dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [salonID] }))
 					setVisibleModal({
 						type: MODAL_TYPE.GOOGLE_MODAL,
 						title: t('loc:Synchronizácia Google kalendára'),
 						description: t('loc:Pre synchronizáciu Google kalendára je potrebné vyplniť ID salónov, ktoré chcete synchronizovať.')
 					})
-				}
+				}}
 				type='button'
 			>
 				{'Google'}
 			</button>
 			<button
 				className={'sync-button microsoft mr-2'}
-				onClick={() =>
+				onClick={() => {
+					dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [salonID] }))
 					setVisibleModal({
 						type: MODAL_TYPE.MS_MODAL,
 						title: t('loc:Synchronizácia Microsoft kalendára'),
 						description: t('loc:Pre synchronizáciu Microsoft kalendára je potrebné vyplniť ID salónov, ktoré chcete synchronizovať.')
 					})
-				}
+				}}
 				type='button'
 			>
 				{t('loc:Sign in')}

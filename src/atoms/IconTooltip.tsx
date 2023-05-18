@@ -8,10 +8,11 @@ type Props = {
 	title: React.ReactNode
 	text: React.ReactNode
 	tooltipProps?: TooltipProps
+	icon?: React.ReactNode
 }
 
-const InfoTooltipLight: FC<Props> = (props) => {
-	const { title, text, tooltipProps = {} } = props
+const IconTooltip: FC<Props> = (props) => {
+	const { title, text, tooltipProps = {}, icon = <InfoIcon16 /> } = props
 
 	return (
 		<Tooltip
@@ -27,9 +28,9 @@ const InfoTooltipLight: FC<Props> = (props) => {
 				</>
 			}
 		>
-			<InfoIcon16 className={'mr-2 cursor-pointer shrink-0'} />
+			<div className={'mr-2 cursor-pointer shrink-0'}>{icon}</div>
 		</Tooltip>
 	)
 }
 
-export default React.memo(InfoTooltipLight)
+export default React.memo(IconTooltip)

@@ -17,7 +17,7 @@ import { getLinkWithEncodedBackUrl, parseServiceRowKey } from '../../../../utils
 
 // components
 import { AvatarGroup } from '../../../../components/AvatarComponents'
-import InfoTooltipLight from '../../../../atoms/InfoTooltipLight'
+import IconTooltip from '../../../../atoms/IconTooltip'
 import CustomTable from '../../../../components/CustomTable'
 
 type SevicesTableProps = {
@@ -78,7 +78,7 @@ const getTableColumns = (t: TFunction, disabledRS?: boolean): ColumnProps<IServi
 		title: (
 			<div className={cx('flex items-center gap-1 transition transition-opacity duration-200', { 'opacity-50': disabledRS })}>
 				<span className={'truncate inline-block'}>{t('loc:Online rezervácie')}</span>
-				<InfoTooltipLight
+				<IconTooltip
 					title={t('loc:Online rezervácie')}
 					text={t(
 						'loc:Ak máte zapnutý rezervačný systém, k službe priradeného aspoň 1 kolegu a zapnutú online rezerváciu, zákazníci majú možnosť rezervovať si termín online.'
@@ -95,7 +95,7 @@ const getTableColumns = (t: TFunction, disabledRS?: boolean): ColumnProps<IServi
 		title: (
 			<div className={cx('flex w-full items-center gap-1 transition transition-opacity duration-200', { 'opacity-50': disabledRS })}>
 				<span className={'truncate inline-block'}>{t('loc:Auto. potvrdenie')}</span>
-				<InfoTooltipLight
+				<IconTooltip
 					title={t('loc:Automatické potvrdenie')}
 					text={t('loc:Online rezervácia bude zákazníkovi v Notino aplikácii automaticky schválená, nemusíte ju už ručne potvrdzovať.')}
 				/>

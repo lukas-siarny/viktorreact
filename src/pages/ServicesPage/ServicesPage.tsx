@@ -13,7 +13,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import Alert from '../../components/Dashboards/Alert'
 import SwitchField from '../../atoms/SwitchField'
 import ServicesStats from './components/list/ServicesStats'
-import InfoTooltipLight from '../../atoms/InfoTooltipLight'
+import IconTooltip from '../../atoms/IconTooltip'
 import IndustriesList from './components/list/IndustriesList'
 
 // utils
@@ -289,7 +289,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 												>
 													{t('loc:Zmeniť poradie')}
 												</Button>
-												<InfoTooltipLight
+												<IconTooltip
 													title={t('loc:Zmena poradia')}
 													text={t('loc:Poradie služieb na tejto obrazovke zodpovedá poradiu služieb v zákazníckej aplikácii Notino.')}
 												/>

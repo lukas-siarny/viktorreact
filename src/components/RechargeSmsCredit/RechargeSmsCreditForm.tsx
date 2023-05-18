@@ -8,18 +8,15 @@ import { FORM, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../utils/enums
 import { formFieldID, showErrorNotification, validationNumberMin, validationRequiredNumber } from '../../utils/helper'
 import { withPromptUnsavedChanges } from '../../utils/promptUnsavedChanges'
 
-// types
-import { IRechargeSmsCreditForm } from '../../types/interfaces'
-
 // assets
 import { ReactComponent as CoinsIcon } from '../../assets/icons/coins.svg'
-
-// validate
-import validateRechargeCreditForm from './validateRechargeSmsCreditForm'
 
 // atoms
 import TextareaField from '../../atoms/TextareaField'
 import InputNumberField from '../../atoms/InputNumberField'
+
+// Schema
+import { IRechargeSmsCreditForm, validationRechargeSmsCreditFn } from '../../schemas/rechargeSmsCredit'
 
 type ComponentProps = FormProps & {
 	description?: React.ReactNode
@@ -96,7 +93,7 @@ const form = reduxForm<IRechargeSmsCreditForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateRechargeCreditForm
+	validate: validationRechargeSmsCreditFn
 })(withPromptUnsavedChanges(RechargeSmsCreditForm))
 
 export default form

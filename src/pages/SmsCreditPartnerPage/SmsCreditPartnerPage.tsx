@@ -75,10 +75,11 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	}, [query.search, dispatch])
 
 	useEffect(() => {
-		if (salonID === selectedSalon.data?.id) {
-			dispatch(getSmsTimeStatsForSalon(salonID, query.date.year(), query.date.month() + 1))
+		if (!walletID || salonID !== selectedSalon.data?.id) {
+			return
 		}
-	}, [dispatch, salonID, query.date, selectedSalon.data?.id])
+		dispatch(getSmsTimeStatsForSalon(salonID, query.date.year(), query.date.month() + 1))
+	}, [dispatch, salonID, query.date, selectedSalon.data?.id, walletID])
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [

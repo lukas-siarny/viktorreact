@@ -5,7 +5,7 @@ import { Button, Col, Divider, Form, FormProps, Row, Spin } from 'antd'
 import { useDispatch } from 'react-redux'
 
 // utils
-import { FORM, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../utils/enums'
+import { FORM, PERMISSION, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../utils/enums'
 import { formFieldID, showErrorNotification, validationNumberMin, validationRequiredNumber } from '../../utils/helper'
 import { withPromptUnsavedChanges } from '../../utils/promptUnsavedChanges'
 import Permissions from '../../utils/Permissions'
@@ -72,6 +72,7 @@ const RechargeSmsCreditForm: FC<Props> = (props) => {
 								className={'mb-4'}
 							/>
 							<Permissions
+								allowed={[PERMISSION.WALLET_TRANSACTION_CREATE]}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
 										id={formFieldID(FORM.RECHARGE_SMS_CREDIT, SUBMIT_BUTTON_ID)}

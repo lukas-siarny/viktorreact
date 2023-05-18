@@ -361,6 +361,7 @@ const RechargeSmsCreditAdminPage = () => {
 											})}
 										</p>
 										<Permissions
+											allowed={[PERMISSION.WALLET_TRANSACTION_CREATE]}
 											render={(hasPermission, { openForbiddenModal }) => (
 												<Button
 													type={'primary'}

@@ -248,4 +248,4 @@ const SmsCreditAdiminPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.SMS_UNIT_PRICE_EDIT]))(SmsCreditAdiminPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.SMS_UNIT_PRICE_EDIT, PERMISSION.WALLET_TRANSACTION_CREATE]))(SmsCreditAdiminPage)

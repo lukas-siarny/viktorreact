@@ -1,33 +1,29 @@
 import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
-import { useTranslation } from 'react-i18next'
 import { Form } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
+import { useParams } from 'react-router'
 
 // utils
-import cx from 'classnames'
-import { useParams } from 'react-router'
-import { showErrorNotification } from '../utils/helper'
-import { FORM, SHORTCUT_DAYS_OPTIONS } from '../utils/enums'
-
-// types
-import { IDataUploadForm } from '../types/interfaces'
+import { FORM } from '../utils/enums'
 
 // atoms, pages, components, assets
 import CheckboxGroupField from '../atoms/CheckboxGroupField'
+
+// types
 import { RootState } from '../reducers'
 
+// schemas
+import { ISalonIdsForm, validationSalonIdsSyncFn } from '../schemas/reservation'
+
 type ComponentProps = {
-	placeholder?: string
+	label?: string
 }
 
-// TODO: pridat zod validaciu nad ides
-type Props = InjectedFormProps<any, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ISalonIdsForm, ComponentProps> & ComponentProps
 
 const SalonIdsForm: FC<Props> = (props) => {
-	const [t] = useTranslation()
-	const dispatch = useDispatch()
-	const { handleSubmit, submitting, pristine, placeholder } = props
+	const { handleSubmit, label } = props
 	const { salonID }: any = useParams()
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 
@@ -39,27 +35,17 @@ const SalonIdsForm: FC<Props> = (props) => {
 
 	return (
 		<Form onSubmitCapture={handleSubmit} layout={'vertical'} className={'form'}>
-			<Field
-				className={'p-0 m-0'}
-				component={CheckboxGroupField}
-				name={'salonIDs'}
-				label={placeholder}
-				options={salonIDs}
-				size={'small'}
-				// horizontal
-				// hideChecker
-				// optionRender={checkboxOptionRender}
-			/>
+			<Field className={'p-0 m-0'} component={CheckboxGroupField} name={'salonIDs'} label={label} options={salonIDs} />
 		</Form>
 	)
 }
 
-const form = reduxForm<any, ComponentProps>({
+const form = reduxForm<ISalonIdsForm, ComponentProps>({
 	form: FORM.SALON_IDS_FORM,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	onSubmitFail: showErrorNotification
+	validate: validationSalonIdsSyncFn
 })(SalonIdsForm)
 
 export default form

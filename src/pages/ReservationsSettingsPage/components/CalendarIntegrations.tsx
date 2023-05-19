@@ -43,7 +43,9 @@ const CalendarIntegrations = () => {
 	const icalUrl = get(find(authUser.data?.salons, { id: salonID }), 'employeeIcsLink')
 	const isPartner = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser.data?.uniqPermissions])
 	const salonIdsValues: Partial<{ salonIDs: string[] }> = useSelector((state: RootState) => getFormValues(FORM.SALON_IDS_FORM)(state))
-	const partnerInOneSalon = authUser?.data?.salons.length === 1 && authUser.data.salons[0].id === salonID
+	// const partnerInOneSalon = authUser?.data?.salons.length === 1 && authUser.data.salons[0].id === salonID
+	const partnerInOneSalon = true
+
 	// NOTE: intercept Microsoft auth token request and get code from the payload and send it to our BE
 	const originalFetch = window.fetch
 	// TODO: init salonoch bna true ak maju calendarSync
@@ -203,48 +205,48 @@ const CalendarIntegrations = () => {
 		<div>
 			{modals}
 			{/* // TODO: podmienky kedy sa ma zobrazit */}
-			<div className={'flex items-center mb-4'}>
-				<CheckIcon className={'text-notino-pink mr-2'} />
-				<div>{t('loc:Synchronizácia s Google kalendárom bola spustená.')}</div>
-				<Button
-					onClick={() => {
-						dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [salonID] }))
-						setVisibleModal({
-							type: MODAL_TYPE.GOOGLE_MODAL,
-							requestType: REQUEST_MODAL_TYPE.DELETE,
-							title: t('loc:Zrušenie Google synchronizácie'),
-							description: t('loc:Vyberte, pre ktoré salóny chcete zrušiť synchronizáciu do vybraných kalendárov.')
-						})
-					}}
-					type={'ghost'}
-					size={'middle'}
-					className={'text-notino-pink'}
-					htmlType={'button'}
-				>
-					{t('loc:Zrušiť')}
-				</Button>
-			</div>
-			<div className={'flex items-center mb-4'}>
-				<CheckIcon className={'text-notino-pink mr-2'} />
-				<div>{t('loc:Synchronizácia s Microsoft kalendárom bola spustená.')}</div>
-				<Button
-					onClick={() => {
-						dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [salonID] }))
-						setVisibleModal({
-							type: MODAL_TYPE.MS_MODAL,
-							requestType: REQUEST_MODAL_TYPE.DELETE,
-							title: t('loc:Zrušenie Microsoft synchronizácie'),
-							description: t('loc:Vyberte, pre ktoré salóny chcete zrušiť synchronizáciu do vybraných kalendárov.')
-						})
-					}}
-					type={'ghost'}
-					size={'middle'}
-					className={'text-notino-pink'}
-					htmlType={'button'}
-				>
-					{t('loc:Zrušiť')}
-				</Button>
-			</div>
+			{/* <div className={'flex items-center mb-4'}> */}
+			{/*	<CheckIcon className={'text-notino-pink mr-2'} /> */}
+			{/*	<div>{t('loc:Synchronizácia s Google kalendárom bola spustená.')}</div> */}
+			{/*	<Button */}
+			{/*		onClick={() => { */}
+			{/*			dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [salonID] })) */}
+			{/*			setVisibleModal({ */}
+			{/*				type: MODAL_TYPE.GOOGLE_MODAL, */}
+			{/*				requestType: REQUEST_MODAL_TYPE.DELETE, */}
+			{/*				title: t('loc:Zrušenie Google synchronizácie'), */}
+			{/*				description: t('loc:Vyberte, pre ktoré salóny chcete zrušiť synchronizáciu do vybraných kalendárov.') */}
+			{/*			}) */}
+			{/*		}} */}
+			{/*		type={'ghost'} */}
+			{/*		size={'middle'} */}
+			{/*		className={'text-notino-pink'} */}
+			{/*		htmlType={'button'} */}
+			{/*	> */}
+			{/*		{t('loc:Zrušiť')} */}
+			{/*	</Button> */}
+			{/* </div> */}
+			{/* <div className={'flex items-center mb-4'}> */}
+			{/*	<CheckIcon className={'text-notino-pink mr-2'} /> */}
+			{/*	<div>{t('loc:Synchronizácia s Microsoft kalendárom bola spustená.')}</div> */}
+			{/*	<Button */}
+			{/*		onClick={() => { */}
+			{/*			dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [salonID] })) */}
+			{/*			setVisibleModal({ */}
+			{/*				type: MODAL_TYPE.MS_MODAL, */}
+			{/*				requestType: REQUEST_MODAL_TYPE.DELETE, */}
+			{/*				title: t('loc:Zrušenie Microsoft synchronizácie'), */}
+			{/*				description: t('loc:Vyberte, pre ktoré salóny chcete zrušiť synchronizáciu do vybraných kalendárov.') */}
+			{/*			}) */}
+			{/*		}} */}
+			{/*		type={'ghost'} */}
+			{/*		size={'middle'} */}
+			{/*		className={'text-notino-pink'} */}
+			{/*		htmlType={'button'} */}
+			{/*	> */}
+			{/*		{t('loc:Zrušiť')} */}
+			{/*	</Button> */}
+			{/* </div> */}
 			<button
 				className={'sync-button google mr-2'}
 				onClick={() => {

@@ -57,8 +57,7 @@ i18n.use(Backend)
 		react: {
 			bindI18n: 'languageChanged loaded',
 			bindI18nStore: 'added removed',
-			nsMode: 'default',
-			useSuspense: true
+			nsMode: 'default'
 		}
 	})
 

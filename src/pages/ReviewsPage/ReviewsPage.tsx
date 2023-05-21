@@ -27,14 +27,18 @@ import { getReviews } from '../../reducers/reviews/reviewsActions'
 import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 
 // types
-import { IBreadcrumbs, Columns, IReviewsFilter } from '../../types/interfaces'
+import { IBreadcrumbs, Columns } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as EyeIcon } from '../../assets/icons/eye-icon.svg'
 
 // hooks
-import useQueryParams, { BooleanParam, NumberParam, StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
+
+// schema
+import { reviewsPageURLQueryParams } from '../../schemas/queryParams'
+import { IReviewFilterForm } from '../../schemas/review'
 
 const getRowId = (verificationStatus: string, id: string) => `${verificationStatus}_${id}`
 
@@ -43,20 +47,13 @@ const ReviewsPage = () => {
 	const dispatch = useDispatch()
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		limit: NumberParam(),
-		page: NumberParam(1),
-		order: StringParam('toxicityScore:DESC'),
-		deleted: BooleanParam(false),
-		toxicityScoreFrom: NumberParam(),
-		toxicityScoreTo: NumberParam(),
-		salonCountryCode: StringParam(),
-		verificationStatus: StringParam()
+	const [query, setQuery] = useQueryParams(reviewsPageURLQueryParams, {
+		page: 1,
+		order: 'toxicityScore:desc',
+		reviewState: REVIEWS_TAB_KEYS.PUBLISHED
 	})
 
 	const reviews = useSelector((state: RootState) => state.reviews.reviews)
-	const tabKey = query.deleted ? REVIEWS_TAB_KEYS.DELETED : REVIEWS_TAB_KEYS.PUBLISHED
 
 	const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([])
 	const [isSubmitting, setIsSubmitting] = useState(false)
@@ -70,7 +67,7 @@ const ReviewsPage = () => {
 				limit: query.limit,
 				order: query.order,
 				search: query.search,
-				deleted: query.deleted,
+				deleted: query.reviewState === REVIEWS_TAB_KEYS.DELETED,
 				verificationStatus: query.verificationStatus as REVIEW_VERIFICATION_STATUS,
 				toxicityScoreFrom: query.toxicityScoreFrom,
 				toxicityScoreTo: query.toxicityScoreTo,
@@ -86,7 +83,7 @@ const ReviewsPage = () => {
 		query.limit,
 		query.order,
 		query.search,
-		query.deleted,
+		query.reviewState,
 		query.verificationStatus,
 		query.toxicityScoreFrom,
 		query.toxicityScoreTo,
@@ -127,7 +124,7 @@ const ReviewsPage = () => {
 		setQuery(newQuery)
 	}
 
-	const handleSubmit = (values: IReviewsFilter) => {
+	const handleSubmit = (values: IReviewFilterForm) => {
 		const newQuery = {
 			...query,
 			...values,
@@ -139,7 +136,7 @@ const ReviewsPage = () => {
 	}
 
 	const onTabChange = (selectedTabKey: string) => {
-		setQuery({ ...query, page: 1, deleted: selectedTabKey === REVIEWS_TAB_KEYS.DELETED })
+		setQuery({ ...query, page: 1, reviewState: selectedTabKey as REVIEWS_TAB_KEYS })
 	}
 
 	const deleteReview = async (reviewID: string) => {
@@ -236,7 +233,7 @@ const ReviewsPage = () => {
 			}
 		]
 
-		if (!query.deleted) {
+		if (query.reviewState === REVIEWS_TAB_KEYS.PUBLISHED) {
 			columns.push({
 				key: 'actions',
 				ellipsis: true,
@@ -364,7 +361,7 @@ const ReviewsPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<TabsComponent className={'box-tab'} activeKey={tabKey} onChange={onTabChange} items={tabContent} destroyInactiveTabPane />
+			<TabsComponent className={'box-tab'} activeKey={query.reviewState} onChange={onTabChange} items={tabContent} destroyInactiveTabPane />
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>

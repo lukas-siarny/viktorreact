@@ -7,15 +7,14 @@ import { find, map } from 'lodash'
 import { ThunkResult } from '../index'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
+import { CalendarEvent, ICalendarEventsPayload, ISearchable, ICalendarEventDetailPayload, ICalendarDayEvents, ICalendarMonthlyReservationsPayload } from '../../types/interfaces'
 import {
-	CalendarEvent,
-	ICalendarEventsPayload,
-	IPaginationQuery,
-	ISearchable,
-	ICalendarEventDetailPayload,
-	ICalendarDayEvents,
-	ICalendarMonthlyReservationsPayload
-} from '../../types/interfaces'
+	ICalendarEventsQueryParams,
+	ICalendarReservationsQueryParams,
+	ICalendarShiftsTimeOffQueryParams,
+	IGetNotinoReservationsQueryParams,
+	IGetSalonReservationsQueryParams
+} from '../../schemas/queryParams'
 
 // enums
 import {
@@ -52,59 +51,6 @@ import { setCalendarEmployees } from '../calendarEmployees/calendarEmployeesActi
 
 // query params types
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
-
-interface IGetSalonReservationsQueryParams extends IPaginationQuery {
-	dateFrom?: string | null
-	dateTo?: string | null
-	createdAtFrom?: string | null
-	createdAtTo?: string | null
-	employeeIDs?: (string | null)[] | null
-	categoryIDs?: (string | null)[] | null
-	reservationStates?: (string | null)[] | null
-	reservationCreateSourceType?: string | null
-	reservationPaymentMethods?: (string | null)[] | null
-	salonID: string
-}
-interface IGetNotinoReservationsQueryParams extends Omit<IGetSalonReservationsQueryParams, 'salonID' | 'categoryIDs' | 'employeeIDs'> {
-	search?: string
-	categoryFirstLevelIDs?: (string | null)[] | null
-	countryCode?: string
-}
-
-interface ICalendarEventsQueryParams {
-	salonID: string
-	start: string
-	end: string
-	employeeIDs?: (string | null)[] | null
-	categoryIDs?: (string | null)[] | null
-	eventTypes?: (string | null)[] | null
-	reservationStates?: (string | null)[] | null
-}
-
-interface ICalendarMonthlyReservationsQueryParams {
-	salonID: string
-	start: string
-	end: string
-	employeeIDs?: (string | null)[] | null
-	categoryIDs?: (string | null)[] | null
-	reservationStates?: (string | null)[] | null
-}
-
-interface ICalendarReservationsQueryParams {
-	salonID: string
-	start: string
-	end: string
-	employeeIDs?: (string | null)[] | null
-	categoryIDs?: (string | null)[] | null
-	reservationStates?: (string | null)[] | null
-}
-
-interface ICalendarShiftsTimeOffQueryParams {
-	salonID: string
-	start: string
-	end: string
-	employeeIDs?: (string | null)[] | null
-}
 
 // action types
 export type ICalendarActions =
@@ -476,7 +422,7 @@ export const clearCalendarMonthlyReservations = (): ThunkResult<Promise<void>> =
 export const clearCalendarShiftsTimeoffs = (): ThunkResult<Promise<void>> => clearCalendarEvents(CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS)
 
 export const getCalendarMonthlyViewReservations =
-	(queryParams: ICalendarMonthlyReservationsQueryParams, clearVirtualEvent?: boolean, storePreviousParams = true): ThunkResult<Promise<ICalendarMonthlyReservationsPayload>> =>
+	(queryParams: ICalendarReservationsQueryParams, clearVirtualEvent?: boolean, storePreviousParams = true): ThunkResult<Promise<ICalendarMonthlyReservationsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ICalendarMonthlyReservationsPayload
 		try {

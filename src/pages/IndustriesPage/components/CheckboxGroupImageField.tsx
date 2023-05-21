@@ -59,7 +59,7 @@ const CheckboxGroupImageField = (props: Props) => {
 			<fieldset className={cx('checkbox-group-image-fieldset', { error: errorMsg, required })}>
 				<div className={'label-error-wrapper'}>
 					<legend className={cx({ required })}>{label}</legend>
-					{errorMsg && <span className={'ant-form-item-explain-error error-msg'}>{errorMsg}</span>}
+					{errorMsg && <span className={'error-msg text-danger'}>{errorMsg}</span>}
 				</div>
 				<div className={cx('checkbox-group-image-wrapper', { error: errorMsg })}>
 					{options?.map((option) => {

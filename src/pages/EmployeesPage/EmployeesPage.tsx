@@ -12,7 +12,7 @@ import ActiveEmployeesTable from './components/ActiveEmployeesTable'
 import DeletedEmployeesTable from './components/DeletedEmployeesTable'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, PERMISSION } from '../../utils/enums'
+import { EMPLOYEES_TAB_KEYS, ENUMERATIONS_KEYS, FORM, PERMISSION } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -24,30 +24,21 @@ import { RootState } from '../../reducers'
 import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 
 // hooks
-import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
 
-enum TAB_KEYS {
-	ACTIVE = 'active',
-	DELETED = 'deleted'
-}
+// schema
+import { employeesPageURLQueryParams } from '../../schemas/queryParams'
 
 const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const { salonID, parentPath } = props
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		limit: NumberParam(),
-		page: NumberParam(1),
-		order: StringParam('orderIndex:asc'),
-		accountState: StringParam(),
-		serviceID: StringParam(),
-		salonID: StringParam(),
-		employeeState: StringParam(TAB_KEYS.ACTIVE)
+	const [query, setQuery] = useQueryParams(employeesPageURLQueryParams, {
+		page: 1,
+		order: 'orderIndex:asc',
+		employeeState: EMPLOYEES_TAB_KEYS.ACTIVE
 	})
-
-	const [tabKey, setTabKey] = useState<TAB_KEYS | undefined>(query.employeeState)
 
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
@@ -64,7 +55,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search, serviceID: query.serviceID, accountState: query.accountState }))
-		if (tabKey === TAB_KEYS.ACTIVE) {
+		if (query.employeeState === EMPLOYEES_TAB_KEYS.ACTIVE) {
 			dispatch(
 				getActiveEmployees({
 					page: query.page,
@@ -89,7 +80,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 				})
 			)
 		}
-	}, [dispatch, query.accountState, query.limit, query.order, query.page, query.search, query.serviceID, salonID, tabKey])
+	}, [dispatch, query.accountState, query.limit, query.order, query.page, query.search, query.serviceID, salonID, query.employeeState])
 
 	useEffect(() => {
 		dispatch(getServices({ salonID }))
@@ -113,16 +104,15 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			serviceID: undefined,
 			employeeState: key
 		})
-		setTabKey(key)
 	}
 	const tabContent: TabsProps['items'] = [
 		{
-			key: TAB_KEYS.ACTIVE,
+			key: EMPLOYEES_TAB_KEYS.ACTIVE,
 			label: <>{t('loc:Aktívni')}</>,
 			children: <ActiveEmployeesTable prefixOptions={prefixOptions} parentPath={parentPath} query={query} setQuery={setQuery} salonID={salonID} />
 		},
 		{
-			key: TAB_KEYS.DELETED,
+			key: EMPLOYEES_TAB_KEYS.DELETED,
 			label: <>{t('loc:Vymazaní')}</>,
 			children: <DeletedEmployeesTable prefixOptions={prefixOptions} parentPath={parentPath} query={query} setQuery={setQuery} salonID={salonID} />
 		}
@@ -133,7 +123,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<TabsComponent className={'box-tab'} activeKey={tabKey} onChange={onTabChange} destroyInactiveTabPane items={tabContent} />
+			<TabsComponent className={'box-tab'} activeKey={query.employeeState} onChange={onTabChange} destroyInactiveTabPane items={tabContent} />
 		</>
 	)
 }

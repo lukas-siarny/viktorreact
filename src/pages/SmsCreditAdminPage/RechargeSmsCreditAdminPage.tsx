@@ -21,7 +21,7 @@ import { ReactComponent as CoinsIcon } from '../../assets/icons/coins.svg'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, LANGUAGE, PERMISSION, SALON_CREATE_TYPE, SALON_FILTER_STATES } from '../../utils/enums'
-import Permissions, { withPermissions } from '../../utils/Permissions'
+import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { formatPrice, normalizeDirectionKeys } from '../../utils/helper'
 import { getSalonTagSourceType } from '../SalonsPage/components/salonUtils'
 import { LOCALES } from '../../components/LanguagePicker'
@@ -71,12 +71,17 @@ const RechargeSmsCreditAdminPage = () => {
 	const smsUnitPricesActual = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPricesActual)
 	const defaultSelectedCountryCode = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 
+	const authUser = useSelector((state: RootState) => state.user.authUser)
+	const hasPermissionToSeeForm = checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.WALLET_TRANSACTION_CREATE])
+
 	const [query, setQuery] = useQueryParams(rechargeSmsCreditAdminPageSchema, {
 		limit: 50,
 		page: 1,
 		countryCode: defaultSelectedCountryCode || LOCALES[LANGUAGE.CZ].countryCode,
 		showForm: false
 	})
+
+	const showForm = query.showForm && hasPermissionToSeeForm
 
 	const selectedCountry = countries.data?.find((country) => country.code === query.countryCode)
 	const smsPriceUnityForSelectedCountry = smsUnitPricesActual?.data?.find((priceUnit) => priceUnit.country.code === query.countryCode)
@@ -101,7 +106,7 @@ const RechargeSmsCreditAdminPage = () => {
 			]
 		}
 
-		if (query.showForm) {
+		if (showForm) {
 			bc = {
 				items: [
 					...bc.items,
@@ -151,7 +156,7 @@ const RechargeSmsCreditAdminPage = () => {
 	}, [fetchSalons])
 
 	useEffect(() => {
-		if (query.showForm) {
+		if (showForm) {
 			return
 		}
 
@@ -164,7 +169,7 @@ const RechargeSmsCreditAdminPage = () => {
 				walletAvailableBalanceTo: query.walletAvailableBalanceTo
 			})
 		)
-	}, [query.search, query.sourceType, query.walletAvailableBalanceFrom, query.walletAvailableBalanceTo, query.countryCode, query.showForm, dispatch])
+	}, [query.search, query.sourceType, query.walletAvailableBalanceFrom, query.walletAvailableBalanceTo, query.countryCode, showForm, dispatch])
 
 	useEffect(() => {
 		dispatch(getSmsUnitPricesActual())
@@ -289,7 +294,7 @@ const RechargeSmsCreditAdminPage = () => {
 				<Breadcrumbs breadcrumbs={breadcrumbs()} backButtonPath={t('paths:index')} />
 			</Row>
 
-			{query.showForm ? (
+			{showForm ? (
 				<RechargeSmsCreditCheck
 					currency={currency}
 					country={selectedCountry}

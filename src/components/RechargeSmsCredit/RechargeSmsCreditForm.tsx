@@ -1,14 +1,12 @@
 import React, { FC } from 'react'
-import { Field, InjectedFormProps, reduxForm, submit } from 'redux-form'
+import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Col, Divider, Form, FormProps, Row, Spin } from 'antd'
-import { useDispatch } from 'react-redux'
 
 // utils
-import { FORM, PERMISSION, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../utils/enums'
+import { FORM, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../utils/enums'
 import { formFieldID, showErrorNotification, validationNumberMin, validationRequiredNumber } from '../../utils/helper'
 import { withPromptUnsavedChanges } from '../../utils/promptUnsavedChanges'
-import Permissions from '../../utils/Permissions'
 
 // assets
 import { ReactComponent as CoinsIcon } from '../../assets/icons/coins.svg'
@@ -32,7 +30,6 @@ const numberMin0 = validationNumberMin(0)
 
 const RechargeSmsCreditForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
 	const { handleSubmit, submitting, pristine, currencySymbol, loading, description } = props
 
 	const isLoading = submitting || loading
@@ -71,30 +68,18 @@ const RechargeSmsCreditForm: FC<Props> = (props) => {
 								rows={8}
 								className={'mb-4'}
 							/>
-							<Permissions
-								allowed={[PERMISSION.WALLET_TRANSACTION_CREATE]}
-								render={(hasPermission, { openForbiddenModal }) => (
-									<Button
-										id={formFieldID(FORM.RECHARGE_SMS_CREDIT, SUBMIT_BUTTON_ID)}
-										type={'primary'}
-										size={'middle'}
-										className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
-										htmlType={'submit'}
-										disabled={submitting || pristine}
-										loading={submitting}
-										onClick={(e) => {
-											e.preventDefault()
-											if (hasPermission) {
-												dispatch(submit(FORM.RECHARGE_SMS_CREDIT))
-											} else {
-												openForbiddenModal()
-											}
-										}}
-									>
-										{t('loc:Potvrdiť')}
-									</Button>
-								)}
-							/>
+
+							<Button
+								id={formFieldID(FORM.RECHARGE_SMS_CREDIT, SUBMIT_BUTTON_ID)}
+								type={'primary'}
+								size={'middle'}
+								className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
+								htmlType={'submit'}
+								disabled={submitting || pristine}
+								loading={submitting}
+							>
+								{t('loc:Potvrdiť')}
+							</Button>
 						</Form>
 					</Row>
 				</Col>

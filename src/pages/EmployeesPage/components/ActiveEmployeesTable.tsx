@@ -225,7 +225,7 @@ const ActiveEmployeesTable = (props: Props) => {
 							columns={columns}
 							dataSource={activeEmployees?.tableData}
 							rowClassName={'clickable-row'}
-							dndDrop={handleDrop}
+							dnd={{ dndDrop: handleDrop }}
 							twoToneRows
 							scroll={{ x: 800 }}
 							onRow={(record) => ({

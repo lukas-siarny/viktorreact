@@ -110,14 +110,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 
 				await patchReq('/api/b2b/admin/salons/{salonID}/categories/reorder', { salonID }, requestBody)
 
-				dispatch(
-					getServices(
-						{
-							salonID
-						},
-						true
-					)
-				)
+				dispatch(getServices({ salonID }, true))
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)

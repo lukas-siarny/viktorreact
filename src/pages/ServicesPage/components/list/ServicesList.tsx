@@ -128,10 +128,15 @@ const ServicesList: FC<SevicesTableProps> = React.memo((props) => {
 			dataSource={category.services.data}
 			pagination={false}
 			rowKey={'key'}
-			dndDrop={reorderView ? handleDrop : undefined}
+			dnd={
+				reorderView
+					? {
+							dndDrop: handleDrop,
+							dndColWidth: 36
+					  }
+					: undefined
+			}
 			rowClassName={reorderView ? undefined : 'clickable-row'}
-			dndWithHandler
-			dndColWidth={36}
 			onRow={
 				reorderView
 					? undefined

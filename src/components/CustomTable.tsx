@@ -5,7 +5,7 @@ import cx from 'classnames'
 // Drag and drop
 import { DragEndEvent, closestCenter, DndContext } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
+import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-kit/modifiers'
 
 // ant
 import { Empty, Table } from 'antd'
@@ -42,15 +42,17 @@ type ComponentProps<RecordType> = TableProps<RecordType> & {
 	useCustomPagination?: boolean
 	pagination?: IPagination | false
 	wrapperClassName?: string
-	dndDrop?: (oldIndex: string, newIndex?: string) => any
-	dndWithHandler?: boolean
-	dndColWidth?: number
+	dnd?: {
+		dndDrop: (oldIndex: string, newIndex?: string) => any
+		dndWithHandler?: boolean
+		dndColWidth?: number
+	}
 	customFooterContent?: React.ReactNode
-	useKeyAsOrderIndex?: boolean
 }
 
 const CustomTable = <RecordType extends object = any>(props: ComponentProps<RecordType>) => {
-	const { disabled = false, className, useCustomPagination, pagination, dndDrop, wrapperClassName, customFooterContent, dndWithHandler = true, dndColWidth = 25 } = props
+	const { disabled = false, className, useCustomPagination, pagination, dnd, wrapperClassName, customFooterContent } = props
+	const { dndDrop, dndWithHandler = true, dndColWidth = 25 } = dnd || {}
 	const [isProcessingDrop, setIsProcessingDrop] = useState(false)
 
 	const onClickOptionSizeChanger = useCallback(
@@ -219,7 +221,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 
 	if (dndDrop) {
 		return (
-			<DndContext onDragEnd={onDragEnd} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter}>
+			<DndContext onDragEnd={onDragEnd} modifiers={[restrictToVerticalAxis, restrictToFirstScrollableAncestor]} collisionDetection={closestCenter}>
 				<SortableContext
 					// rowKey array
 					items={props.dataSource && (props.dataSource.map((item: any) => item.key) as any)}

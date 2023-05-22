@@ -82,7 +82,6 @@ interface IComapreAndSortDayEventsData {
 
 const CALENDAR_EVENT_TYPES_ORDER = {
 	[CALENDAR_EVENT_TYPE.RESERVATION]: 0,
-	[CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT]: 0,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: 1,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: 2,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: 3
@@ -468,7 +467,6 @@ const composeDayViewReservations = (
 				}
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 				case CALENDAR_EVENT_TYPE.RESERVATION:
-				case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 					composedEvents.push({
 						...calendarEvent
 					})
@@ -678,7 +676,6 @@ const composeWeekViewReservations = (
 				}
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 				case CALENDAR_EVENT_TYPE.RESERVATION:
-				case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 					composedEvents.push({
 						...calendarEvent
 					})

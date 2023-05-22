@@ -12,18 +12,6 @@ export const importedReservationSchema = z.object({
 	note: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1500)
 })
 
-export type ICalendarImportedReservationForm = z.infer<typeof importedReservationSchema> & {
-	eventId: string
-	revertEvent?: () => void
-	updateFromCalendar?: boolean
-	employee: ISelectOptionItem
-	isImported?: boolean
-	eventType: CALENDAR_EVENT_TYPE
-}
-
-export const validationImportedReservationFn = (values: ICalendarImportedReservationForm, props: any) =>
-	zodErrorsToFormErrors(importedReservationSchema, FORM.CALENDAR_RESERVATION_FROM_IMPORT_FORM, values, props)
-
 export const reservationsSchema = z.object({
 	employee: selectObjConstraint,
 	customer: selectObjConstraint,

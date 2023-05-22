@@ -41,6 +41,7 @@ import {
 export interface IErrorMessage {
 	type: MSG_TYPE
 	message: string
+	path?: string
 }
 
 export interface IPaginationQuery {
@@ -114,7 +115,7 @@ export interface AutocompleteLabelInValue {
 	value: string | null
 }
 
-export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
+export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent'] & { isImported: boolean }
 export interface ICalendarEventDetailPayload {
 	data: CalendarEventDetail | null
 }

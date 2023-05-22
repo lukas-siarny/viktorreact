@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { change } from 'redux-form'
 import { useNavigate } from 'react-router-dom'
-import { startsWith } from 'lodash'
+import { isEmpty, startsWith } from 'lodash'
 
 // fullcalendar
 import FullCalendar, { DateSpanApi, EventDropArg } from '@fullcalendar/react'
@@ -129,7 +129,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		}
 
 		if (virtualEvent?.id && !virtualEvent?.isNew) {
-			if (virtualEvent.type === CALENDAR_EVENT_TYPE.RESERVATION || virtualEvent.type === CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT) {
+			if (virtualEvent.type === CALENDAR_EVENT_TYPE.RESERVATION) {
 				allSources.reservations = reservations?.filter((item) => item.id !== virtualEvent.id) ?? []
 			} else {
 				allSources.shiftsTimeOffs = shiftsTimeOffs?.filter((item) => item.id !== virtualEvent.id) ?? []

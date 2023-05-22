@@ -107,8 +107,7 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 					timeLeftClassName={timeLeftClassName}
 				/>
 			)
-		case CALENDAR_EVENT_TYPE.RESERVATION:
-		case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT: {
+		case CALENDAR_EVENT_TYPE.RESERVATION: {
 			return (
 				<ReservationCard
 					calendarView={calendarView}

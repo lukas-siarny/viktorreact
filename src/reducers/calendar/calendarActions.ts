@@ -37,7 +37,8 @@ import {
 	RESERVATION_PAYMENT_METHOD,
 	CANCEL_TOKEN_MESSAGES,
 	MONTHLY_RESERVATIONS_KEY,
-	CALENDAR_DATE_FORMAT
+	CALENDAR_DATE_FORMAT,
+	RESERVATION_FROM_IMPORT
 } from '../../utils/enums'
 
 // utils
@@ -277,7 +278,8 @@ export const getCalendarEvents =
 					employee: employees[event.employee.id],
 					startDateTime: getDateTime(event.start.date, event.start.time),
 					endDateTime: getDateTime(event.end.date, event.end.time),
-					isImported: event.eventType === CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT
+					isImported: event.eventType === RESERVATION_FROM_IMPORT,
+					eventType: event.eventType === RESERVATION_FROM_IMPORT ? CALENDAR_EVENT_TYPE.RESERVATION : event.eventType
 				}
 
 				/**
@@ -380,7 +382,7 @@ export const getCalendarReservations = (
 		CALENDAR_EVENTS_KEYS.RESERVATIONS,
 		{
 			...queryParams,
-			eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT],
+			eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, RESERVATION_FROM_IMPORT],
 			reservationStates: RESERVATION_STATES
 		},
 		splitMultidayEventsIntoOneDayEvents,
@@ -428,7 +430,7 @@ export const getCalendarMonthlyViewReservations =
 				salonID: queryParams.salonID,
 				categoryIDs: queryParams.categoryIDs,
 				employeeIDs: queryParams.employeeIDs,
-				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT],
+				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, RESERVATION_FROM_IMPORT],
 				dateFrom: queryParams.start,
 				dateTo: queryParams.end,
 				reservationStates: RESERVATION_STATES
@@ -549,7 +551,11 @@ export const getCalendarEventDetail =
 			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}', { calendarEventID, salonID }, undefined, undefined, undefined, true)
 
 			payload = {
-				data: data.calendarEvent
+				data: {
+					...data.calendarEvent,
+					eventType: data.calendarEvent.eventType === RESERVATION_FROM_IMPORT ? CALENDAR_EVENT_TYPE.RESERVATION : data.calendarEvent.eventType,
+					isImported: data.calendarEvent.eventType === RESERVATION_FROM_IMPORT
+				}
 			}
 
 			dispatch({ type: EVENT_DETAIL.EVENT_DETAIL_LOAD_DONE, payload })

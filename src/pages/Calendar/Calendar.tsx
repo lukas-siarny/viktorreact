@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 import Layout from 'antd/lib/layout/layout'
-import { message } from 'antd'
+import { message, notification } from 'antd'
 import dayjs from 'dayjs'
 import { includes, isArray, isEmpty, omit } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
@@ -552,6 +552,34 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 			const { revertEvent } = values
 
+			// Kontrola pri uprave rezervacie cez DND - v pripade imporotvanej rezervacie nemusi byt vyplnena sluzba alebo klient
+			if (values.updateFromCalendar && revertEvent) {
+				const errors: { message: string; description: string }[] = []
+				const serviceId = values.service.key
+				const customerId = values.customer.key
+
+				if (!serviceId) {
+					errors.push({
+						message: t('loc:Služba nie je zadaná'),
+						description: t('loc:Nie je možné editovať rezerváciu bez zadanej služby')
+					})
+				}
+
+				if (!customerId) {
+					errors.push({
+						message: t('loc:Zákazník nie je zadaný'),
+						description: t('loc:Nie je možné editovať rezerváciu bez zadaného zákazníka')
+					})
+				}
+
+				if (!isEmpty(errors)) {
+					errors.forEach((error) => notification.error(error))
+					clearConfirmModal()
+					revertEvent()
+					return
+				}
+			}
+
 			try {
 				cancelEventsRequestOnDemand()
 				setIsUpdatingEvent(true)
@@ -603,7 +631,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				clearConfirmModal()
 			}
 		},
-		[closeSiderForm, fetchEvents, salonID, query.eventId]
+		[closeSiderForm, fetchEvents, salonID, query.eventId, t]
 	)
 
 	const handleSubmitEvent = useCallback(

@@ -100,18 +100,17 @@ const CategoriesList: FC<CategoriesListProps> = (props) => {
 				let newIndex: number | undefined
 				let oldIndex: number | undefined
 
-				industry.categories.data.forEach((category, index) => {
+				for (let i = 0; i < industry.categories.data.length; i += 1) {
 					if (newIndex !== undefined && oldIndex !== undefined) {
-						return
+						break
 					}
-					if (category.id === active.id) {
-						oldIndex = index
-						return
+					if (industry.categories.data[i].id === active.id) {
+						oldIndex = i
 					}
-					if (category.id === over.id) {
-						newIndex = index
+					if (industry.categories.data[i].id === over.id) {
+						newIndex = i
 					}
-				})
+				}
 				if (oldIndex !== undefined && newIndex !== undefined) {
 					handleReorder([parentIndex, oldIndex], newIndex)
 				}

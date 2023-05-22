@@ -77,7 +77,7 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 
 export interface ICustomConfig extends AxiosRequestConfig {
 	messages?: IErrorMessage[]
-	skipLoginRedirect?: boolean
+	skipRedirectToLoginPage?: boolean
 	skip404Handler?: boolean
 }
 
@@ -192,7 +192,7 @@ export const getReq = async <T extends keyof GetUrls>(
 		return res
 	} catch (e) {
 		if (!axios.isCancel(e) && typeNotification) {
-			showErrorNotifications(e, typeNotification, customConfig?.skipLoginRedirect)
+			showErrorNotifications(e, typeNotification, customConfig?.skipRedirectToLoginPage)
 		}
 		if (hide) {
 			hide()
@@ -272,7 +272,7 @@ export const postReq = async <T extends keyof PostUrls>(
 		return res
 	} catch (e) {
 		if (!axios.isCancel(e) && typeNotification) {
-			showErrorNotifications(e, typeNotification, customConfig?.skipLoginRedirect)
+			showErrorNotifications(e, typeNotification, customConfig?.skipRedirectToLoginPage)
 		}
 		if (hide) {
 			hide()
@@ -350,7 +350,7 @@ export const patchReq = async <T extends keyof PatchUrls>(
 		return res
 	} catch (e) {
 		if (!axios.isCancel(e) && typeNotification) {
-			showErrorNotifications(e, typeNotification, customConfig?.skipLoginRedirect)
+			showErrorNotifications(e, typeNotification, customConfig?.skipRedirectToLoginPage)
 		}
 		if (hide) {
 			hide()
@@ -416,7 +416,7 @@ export const deleteReq = async <T extends keyof DeleteUrls>(
 		}
 
 		if (!axios.isCancel(e) && typeNotification) {
-			showErrorNotifications(e, typeNotification, customConfig?.skipLoginRedirect)
+			showErrorNotifications(e, typeNotification, customConfig?.skipRedirectToLoginPage)
 		}
 		return Promise.reject(e)
 	}

@@ -1,9 +1,10 @@
 import { z } from 'zod'
 import { isEmpty } from 'lodash'
 import dayjs from 'dayjs'
+
 import { dateConstraint, selectObjConstraint, serializeValidationMessage, stringConstraint, zodErrorsToFormErrors } from './baseSchema'
 import { CALENDAR_EVENT_TYPE, DAY, EVERY_REPEAT, FORM, VALIDATION_MAX_LENGTH } from '../utils/enums'
-import { dateRegex, timeRegex } from '../utils/regex'
+import { timeRegex } from '../utils/regex'
 // eslint-disable-next-line import/no-cycle
 import { formatDate } from '../utils/helper'
 import { ICalendarEmployeeOptionItem } from '../types/interfaces'

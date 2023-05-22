@@ -75,8 +75,6 @@ enum UPLOAD_TYPE {
 	CUSTOMER = 'customer'
 }
 
-const { Option } = Select
-
 const ReservationSystemSettingsForm = (props: Props) => {
 	const { pristine, submitting, excludedB2BNotifications, parentPath, salonID } = props
 	const [t] = useTranslation()

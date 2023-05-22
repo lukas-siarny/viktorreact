@@ -1,7 +1,6 @@
 import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Form } from 'antd'
-import { useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 
 // utils
@@ -9,9 +8,6 @@ import { FORM } from '../utils/enums'
 
 // atoms, pages, components, assets
 import CheckboxGroupField from '../atoms/CheckboxGroupField'
-
-// types
-import { RootState } from '../reducers'
 
 // schemas
 import { ISalonIdsForm, validationSalonIdsSyncFn } from '../schemas/reservation'

@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Field, WrappedFieldArrayProps } from 'redux-form'
 import { Col, Collapse, Row } from 'antd'
-import { isEmpty } from 'lodash'
 import cx from 'classnames'
 
 // atoms

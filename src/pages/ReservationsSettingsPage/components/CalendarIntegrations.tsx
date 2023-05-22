@@ -27,11 +27,8 @@ import ConfirmModal from '../../../atoms/ConfirmModal'
 
 // redux
 import { getCurrentUser } from '../../../reducers/users/userActions'
+import { ISalonIdsForm } from '../../../schemas/reservation'
 
-enum MODAL_TYPE {
-	MS_MODAL = 'MS_MODAL',
-	GOOGLE_MODAL = 'GOOGLE_MODAL'
-}
 enum REQUEST_MODAL_TYPE {
 	DELETE = 'DELETE',
 	CREATE = 'CREATE'
@@ -43,7 +40,8 @@ const CalendarIntegrations = () => {
 	const { instance } = useMsal()
 	const dispatch = useDispatch()
 
-	const [visibleModal, setVisibleModal] = useState<{ type: MODAL_TYPE; title: string; description: string; requestType: REQUEST_MODAL_TYPE } | undefined>(undefined)
+	const [visibleModal, setVisibleModal] = useState<{ type: EXTERNAL_CALENDAR_TYPE; title: string; description: string; requestType: REQUEST_MODAL_TYPE } | undefined>(undefined)
+	const [pickedSalonIds, setPickedSalonIds] = useState<string[]>([])
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const icalUrl = get(find(authUser.data?.salons, { id: salonID }), 'employeeIcsLink')
@@ -54,19 +52,12 @@ const CalendarIntegrations = () => {
 	const hasMicrosoftSync = get(signedSalon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.MICROSOFT}].enabledSync`)
 	const googleSyncInitData = authUser.data?.salons.filter((salon) => get(salon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.GOOGLE}].enabledSync`))
 	const microsoftSyncInitData = authUser.data?.salons.filter((salon) => get(salon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.MICROSOFT}].enabledSync`))
-	console.log('authUser', authUser)
-	console.log('googleSyncInitData', googleSyncInitData)
-	// const partnerInOneSalon = true
 
 	// NOTE: intercept Microsoft auth token request and get code from the payload and send it to our BE
 	const originalFetch = window.fetch
-	// TODO: disabled buttonov ak ma konkretny salon zapnutu synchronizaciu asi treba naviazat na typ synchronizacie GOOGLE / MS
-	// TODO: ak uz ma zapnutu synchonizaciu v nejakom salone tak tento salon je checked na true a neda sa zmenit cize je disabled - spravit podmienku
-	// TODO: spravit isPristine nad formom ak sa nevykona zmena tak bude disabled
-	// TODO: ako sa spravi delete v MS?
 	const getOptionsData = () => {
 		if (visibleModal?.requestType === REQUEST_MODAL_TYPE.DELETE) {
-			if (visibleModal.type === MODAL_TYPE.GOOGLE_MODAL) return googleSyncInitData
+			if (visibleModal.type === EXTERNAL_CALENDAR_TYPE.GOOGLE) return googleSyncInitData
 			return microsoftSyncInitData
 		}
 		return authUser?.data?.salons
@@ -84,6 +75,7 @@ const CalendarIntegrations = () => {
 							EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].url,
 							{
 								grant_type: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].grand_type,
+								// eslint-disable-next-line no-underscore-dangle
 								client_id: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
 								scope: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].scopes,
 								redirect_uri: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].redirect_uri,
@@ -102,7 +94,7 @@ const CalendarIntegrations = () => {
 								...buildHeaders()
 							},
 							body: JSON.stringify({
-								salonIDs: salonIdsValues.salonIDs,
+								salonIDs: pickedSalonIds,
 								refreshToken: responseAuth.data.refresh_token,
 								calendarType: EXTERNAL_CALENDAR_TYPE.MICROSOFT
 							})
@@ -115,6 +107,7 @@ const CalendarIntegrations = () => {
 						} else {
 							showErrorNotifications({ response: { status: responseData.status, data: responseDataJson } }, NOTIFICATION_TYPE.NOTIFICATION)
 						}
+						dispatch(getCurrentUser())
 						return responseData
 					} catch (e) {
 						// eslint-disable-next-line no-console
@@ -148,15 +141,16 @@ const CalendarIntegrations = () => {
 		}
 		return originalFetch(url, config)
 	}
+
 	const handleGoogleLogin = useGoogleLogin({
 		...EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.GOOGLE],
-		onSuccess: (tokenResponse) => {
-			console.log('CALLED', salonIdsValues.salonIDs)
-			postReq(
+		onSuccess: async (tokenResponse) => {
+			// NOTE: treba pockat kym sa vykona zmazanie syncu a potom sa zavola EP na aktualizovanie dat v getUser
+			await postReq(
 				'/api/b2b/admin/calendar-sync/sync-token',
 				null,
 				{
-					salonIDs: salonIdsValues.salonIDs as [string],
+					salonIDs: pickedSalonIds as [string],
 					authCode: tokenResponse.code,
 					calendarType: EXTERNAL_CALENDAR_TYPE.GOOGLE
 				},
@@ -164,6 +158,7 @@ const CalendarIntegrations = () => {
 				NOTIFICATION_TYPE.NOTIFICATION,
 				true
 			)
+			dispatch(getCurrentUser())
 		},
 		// eslint-disable-next-line no-console
 		onError: (errorResponse) => console.error(errorResponse)
@@ -180,31 +175,32 @@ const CalendarIntegrations = () => {
 		}
 	}
 
-	const handleSubmitSalons = () => {
+	const handleSubmitSalons = async (values: ISalonIdsForm) => {
 		setVisibleModal(undefined)
-		console.log('visibke modal', visibleModal)
+		setPickedSalonIds(values.salonIDs)
 		try {
-			if (visibleModal?.type === MODAL_TYPE.GOOGLE_MODAL) {
+			if (visibleModal?.type === EXTERNAL_CALENDAR_TYPE.GOOGLE) {
 				if (visibleModal.requestType === REQUEST_MODAL_TYPE.DELETE) {
-					deleteReq('/api/b2b/admin/calendar-sync/sync-token', undefined, undefined, NOTIFICATION_TYPE.NOTIFICATION, false, {
+					// NOTE: treba pockat kym sa vykona zmazanie syncu a potom sa zavola EP na aktualizovanie dat v getUser
+					await deleteReq('/api/b2b/admin/calendar-sync/sync-token', undefined, undefined, NOTIFICATION_TYPE.NOTIFICATION, false, {
 						salonIDs: salonIdsValues.salonIDs,
 						calendarType: EXTERNAL_CALENDAR_TYPE.GOOGLE
 					})
+					dispatch(getCurrentUser())
 				} else {
-					console.log('called else')
 					handleGoogleLogin()
 				}
-			} else if (visibleModal?.type === MODAL_TYPE.MS_MODAL) {
+			} else if (visibleModal?.type === EXTERNAL_CALENDAR_TYPE.MICROSOFT) {
 				if (visibleModal.requestType === REQUEST_MODAL_TYPE.DELETE) {
-					deleteReq('/api/b2b/admin/calendar-sync/sync-token', undefined, undefined, NOTIFICATION_TYPE.NOTIFICATION, false, {
+					await deleteReq('/api/b2b/admin/calendar-sync/sync-token', undefined, undefined, NOTIFICATION_TYPE.NOTIFICATION, false, {
 						salonIDs: salonIdsValues.salonIDs,
 						calendarType: EXTERNAL_CALENDAR_TYPE.MICROSOFT
 					})
+					dispatch(getCurrentUser())
 				} else {
 					handleMSLogin()
 				}
 			}
-			dispatch(getCurrentUser())
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
@@ -247,7 +243,7 @@ const CalendarIntegrations = () => {
 						onClick={() => {
 							dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [salonID] }))
 							setVisibleModal({
-								type: MODAL_TYPE.GOOGLE_MODAL,
+								type: EXTERNAL_CALENDAR_TYPE.GOOGLE,
 								requestType: REQUEST_MODAL_TYPE.DELETE,
 								title: t('loc:Zrušenie Google synchronizácie'),
 								description: t('loc:Vyberte, pre ktoré salóny chcete zrušiť synchronizáciu do vybraných kalendárov.')
@@ -270,7 +266,7 @@ const CalendarIntegrations = () => {
 						onClick={() => {
 							dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [salonID] }))
 							setVisibleModal({
-								type: MODAL_TYPE.MS_MODAL,
+								type: EXTERNAL_CALENDAR_TYPE.MICROSOFT,
 								requestType: REQUEST_MODAL_TYPE.DELETE,
 								title: t('loc:Zrušenie Microsoft synchronizácie'),
 								description: t('loc:Vyberte, pre ktoré salóny chcete zrušiť synchronizáciu do vybraných kalendárov.')
@@ -291,15 +287,16 @@ const CalendarIntegrations = () => {
 					if (partnerInOneSalon) {
 						handleGoogleLogin()
 					} else {
-						dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [googleSyncInitData?.map((salon) => salon.id), salonID] }))
+						dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [...(googleSyncInitData?.map((salon) => salon.id) || []), salonID] }))
 						setVisibleModal({
-							type: MODAL_TYPE.GOOGLE_MODAL,
+							type: EXTERNAL_CALENDAR_TYPE.GOOGLE,
 							requestType: REQUEST_MODAL_TYPE.CREATE,
 							title: t('loc:Synchronizácia Google kalendára'),
 							description: t('loc:Pre synchronizáciu Google kalendára je potrebné vyplniť ID salónov, ktoré chcete synchronizovať.')
 						})
 					}
 				}}
+				disabled={hasGoogleSync}
 				type='button'
 			>
 				{'Google'}
@@ -310,17 +307,16 @@ const CalendarIntegrations = () => {
 					if (partnerInOneSalon) {
 						handleMSLogin()
 					} else {
-						dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [microsoftSyncInitData?.map((salon) => salon.id), salonID] }))
+						dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [...(microsoftSyncInitData?.map((salon) => salon.id) || []), salonID] }))
 						setVisibleModal({
-							type: MODAL_TYPE.MS_MODAL,
+							type: EXTERNAL_CALENDAR_TYPE.MICROSOFT,
 							requestType: REQUEST_MODAL_TYPE.CREATE,
 							title: t('loc:Synchronizácia Microsoft kalendára'),
 							description: t('loc:Pre synchronizáciu Microsoft kalendára je potrebné vyplniť ID salónov, ktoré chcete synchronizovať.')
 						})
 					}
 				}}
-				// TODO: disabled stav + styly spravit
-				// disabled={true}
+				disabled={hasMicrosoftSync}
 				type='button'
 			>
 				{t('loc:Sign in')}

@@ -18,7 +18,7 @@ import { patchReq } from '../../utils/request'
 import { RootState } from '../../reducers'
 import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getServices } from '../../reducers/services/serviceActions'
-import { getCurrentUser, getUser } from '../../reducers/users/userActions'
+import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
 import {

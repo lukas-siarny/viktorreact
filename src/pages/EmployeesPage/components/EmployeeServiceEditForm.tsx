@@ -4,8 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Form, Collapse, Button, Spin, Alert } from 'antd'
 import cx from 'classnames'
-import { isEmpty } from 'lodash'
-import i18next from 'i18next'
 
 // utils
 import { FORM, PARAMETER_TYPE, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'

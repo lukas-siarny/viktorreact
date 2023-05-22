@@ -29,6 +29,7 @@ const { store, persistor } = configureStore(rootReducer)
 
 const msalConfig: Configuration = {
 	auth: {
+		// eslint-disable-next-line no-underscore-dangle
 		clientId: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
 		redirectUri: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].redirect_uri
 	}
@@ -87,6 +88,7 @@ const App = () => {
 						}}
 					>
 						<MsalProvider instance={msalInstance}>
+							{/* eslint-disable-next-line no-underscore-dangle */}
 							<GoogleOAuthProvider clientId={window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_OAUTH_CLIENT_ID} onScriptLoadError={() => console.error('GoogleOAuth error')}>
 								<Provider store={store}>
 									<StyleProvider hashPriority={'low'}>

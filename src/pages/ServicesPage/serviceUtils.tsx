@@ -115,21 +115,18 @@ export const getServicePriceAndDurationData = (
 }
 
 export const arePriceAndDurationDataEmpty = (data?: FormPriceAndDurationData) => {
-	let emptyPrice = true
-	let emptyDuration = true
+	let emptyPrice = isNil(data?.priceFrom) || Number.isNaN(data?.priceFrom)
+	let emptyDuration = isNil(data?.durationFrom) || Number.isNaN(data?.durationFrom)
 
 	if (data?.variableDuration) {
-		emptyDuration = (isNil(data?.durationFrom) || Number.isNaN(data?.durationFrom)) && (isNil(data?.durationTo) || Number.isNaN(data?.durationTo))
-	} else {
-		emptyDuration = isNil(data?.durationFrom) || Number.isNaN(data?.durationFrom)
-	}
-	if (data?.variablePrice) {
-		emptyPrice = (isNil(data?.priceFrom) || Number.isNaN(data?.priceFrom)) && (isNil(data?.priceTo) || Number.isNaN(data?.priceTo))
-	} else {
-		emptyPrice = isNil(data?.priceFrom) || Number.isNaN(data?.priceFrom)
+		emptyDuration = emptyDuration && (isNil(data?.durationTo) || Number.isNaN(data?.durationTo))
 	}
 
-	return emptyPrice && emptyDuration && !data?.variableDuration && !data?.variablePrice
+	if (data?.variablePrice) {
+		emptyPrice = emptyPrice && (isNil(data?.priceTo) || Number.isNaN(data?.priceTo))
+	}
+
+	return emptyPrice && emptyDuration
 }
 
 export const getEmployeeServiceDataForPatch = (values: IEmployeeServiceEditForm, resetUserServiceData?: boolean) => {

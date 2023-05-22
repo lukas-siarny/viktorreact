@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import qs from 'qs'
 import decode from 'jwt-decode'
 import { get } from 'lodash'
@@ -11,11 +11,14 @@ import BaseRoute from './BaseRoute'
 // utils
 import { TOKEN_AUDIENCE } from '../utils/enums'
 import { isLoggedIn } from '../utils/auth'
+import LogoutUser from '../utils/LogoutUser'
 
 type Props = RouteProps & {
 	translatePathKey?: string
 	layout: any
 	className?: string
+	logoutUser?: boolean
+	skipRedirectToLoginPage?: boolean
 }
 
 const CreatePasswordRoute = (props: Props) => {
@@ -24,8 +27,8 @@ const CreatePasswordRoute = (props: Props) => {
 	const indexRedirect = <Navigate to={i18next.t('paths:index')} />
 
 	try {
-		// if user is already logged In redirect to index route
-		if (!isLoggedIn()) {
+		// if user is already logged In redirect him to the index route
+		if (!isLoggedIn() || props.logoutUser) {
 			const payload = decode(t as string)
 			const aud = get(payload, 'aud')
 
@@ -41,4 +44,12 @@ const CreatePasswordRoute = (props: Props) => {
 	return indexRedirect
 }
 
-export default CreatePasswordRoute
+const CreatePasswordRouteWrapper: FC<Props> = (props) => {
+	return (
+		<LogoutUser skipRedirectToLoginPage={props.skipRedirectToLoginPage}>
+			<CreatePasswordRoute {...props} />
+		</LogoutUser>
+	)
+}
+
+export default CreatePasswordRouteWrapper

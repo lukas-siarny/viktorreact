@@ -64,7 +64,7 @@ const CheckboxGroupField = (props: Props) => {
 	})
 	return (
 		<Item
-			label={<div className={'mb-4'}>{label}</div>}
+			label={label}
 			required={required}
 			help={touched && error}
 			className={cx(className, `noti-checkbox-group noti-checkbox-group-${size}`, {

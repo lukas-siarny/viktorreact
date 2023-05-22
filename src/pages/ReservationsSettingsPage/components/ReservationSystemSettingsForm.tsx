@@ -27,7 +27,7 @@ import { IDataUploadForm, IReservationSystemSettingsForm, ISelectOptionItem } fr
 import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, SERVICE_TYPE, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, REQUEST_STATUS, TEMPLATE_OPTIONS } from '../../../utils/enums'
 import { formFieldID, optionRenderNotiPinkCheckbox, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
-import Permissions from '../../../utils/Permissions'
+import Permissions, { checkPermissions } from '../../../utils/Permissions'
 import { postReq } from '../../../utils/request'
 
 // assets
@@ -84,11 +84,14 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const groupedServicesByCategory = useSelector((state: RootState) => state.service.services.data?.groupedServicesByCategory)
 	const groupedServicesByCategoryLoading = useSelector((state: RootState) => state.service.services.isLoading)
 	const walletID = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.wallet?.id)
+	const authUser = useSelector((state: RootState) => state.user.authUser)
+	const isPartner = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser.data?.uniqPermissions])
 	const formValues: Partial<IReservationSystemSettingsForm> = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
 	const navigate = useNavigate()
 	const [templateValue, setTemplateValue] = useState<{ label: string; value: string } | null>(null)
 	const disabled = !formValues?.enabledReservations
 	const defaultExpandedKeys: any = []
+
 	forEach(groupedServicesByCategory, (level1) => forEach(level1.category?.children, (level2) => defaultExpandedKeys.push(level2?.category?.id)))
 	const salonName = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.name)
 
@@ -462,20 +465,24 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				</div>
 			</Row>
 			{/* Integrate RS calendar to: Google, Outlook, iCal */}
-			<div className={'flex mt-10'}>
-				<h3 className={'mb-0 mt-0 flex items-center'}>
-					<CalendarSyncIcon className={'text-notino-black mr-2'} />
-					{t('loc:Synchronizácia kalendára')}
-				</h3>
-			</div>
-			<Divider className={'my-3'} />
-			<p className='x-regular text-notino-grayDark mb-4'>
-				{t(
-					'loc:Informácie o vašich rezerváciach sa budú automaticky synchronizovať z Notino Partner App do vybraných kalendárov. Platí len pre rezervácie salóna {{ salonName }}.',
-					{ salonName }
-				)}
-			</p>
-			<CalendarIntegrations />
+			{isPartner && (
+				<>
+					<div className={'flex mt-10'}>
+						<h3 className={'mb-0 mt-0 flex items-center'}>
+							<CalendarSyncIcon className={'text-notino-black mr-2'} />
+							{t('loc:Synchronizácia kalendára')}
+						</h3>
+					</div>
+					<Divider className={'my-3'} />
+					<p className='x-regular text-notino-grayDark mb-4'>
+						{t(
+							'loc:Informácie o vašich rezerváciach sa budú automaticky synchronizovať z Notino Partner App do vybraných kalendárov. Platí len pre rezervácie salóna {{ salonName }}.',
+							{ salonName }
+						)}
+					</p>
+					<CalendarIntegrations />
+				</>
+			)}
 			<Row justify={'space-between'} className='mt-10'>
 				{/* Imports */}
 				<div className={'flex'}>

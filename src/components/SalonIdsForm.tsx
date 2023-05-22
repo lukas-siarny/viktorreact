@@ -18,16 +18,16 @@ import { ISalonIdsForm, validationSalonIdsSyncFn } from '../schemas/reservation'
 
 type ComponentProps = {
 	label?: string
+	optionsData: any
 }
 
 type Props = InjectedFormProps<ISalonIdsForm, ComponentProps> & ComponentProps
 
 const SalonIdsForm: FC<Props> = (props) => {
-	const { handleSubmit, label } = props
+	const { handleSubmit, label, optionsData } = props
 	const { salonID }: any = useParams()
-	const authUser = useSelector((state: RootState) => state.user.authUser)
 
-	const salonIDs = authUser?.data?.salons.map((salon) => ({
+	const salonIDs = optionsData.map((salon: any) => ({
 		label: salon.name,
 		value: salon.id,
 		disabled: salon.id === salonID

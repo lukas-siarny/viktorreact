@@ -167,7 +167,8 @@ const CalendarIntegrations = () => {
 	const handleMSLogin = async () => {
 		try {
 			await instance.loginPopup({
-				scopes: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].scopes
+				scopes: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].scopes,
+				prompt: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].prompt
 			})
 		} catch (e) {
 			// eslint-disable-next-line no-console

@@ -1199,7 +1199,8 @@ export const EXTERNAL_CALENDAR_CONFIG = {
 		redirect_uri: `${window.location.protocol}//${window.location.host}/ms-oauth2`,
 		scopes: ['offline_access', 'user.read', 'Calendars.ReadWrite', 'Files.Read'],
 		url: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-		grand_type: 'authorization_code'
+		grand_type: 'authorization_code',
+		prompt: 'select_account'
 	},
 	[EXTERNAL_CALENDAR_TYPE.GOOGLE]: {
 		flow: 'auth-code',

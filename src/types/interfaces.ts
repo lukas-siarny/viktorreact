@@ -1,6 +1,6 @@
 import { EventResizeDoneArg, EventResizeStartArg, EventResizeStopArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
-import { PaginationProps } from 'antd'
+import { CheckboxOptionType, PaginationProps } from 'antd'
 import { EventDropArg, EventInput } from '@fullcalendar/react'
 
 // utils
@@ -666,4 +666,12 @@ export type ServicesActiveKeys = {
 	salonID: string
 	industries: string[]
 	categories: string[]
+}
+
+export type IServicesSelectionData = {
+	[key: string]: {
+		options: CheckboxOptionType[]
+		title: string,
+		orderIndex: number
+	}
 }

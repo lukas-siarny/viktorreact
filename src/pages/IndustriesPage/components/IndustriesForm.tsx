@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux'
 // components
 import i18next from 'i18next'
 import CheckboxGroupImageField from './CheckboxGroupImageField'
-import { getServicesCategoryKeys } from '../IndustryPage'
 
 // utils
 import { FORM, PERMISSION, SUBMIT_BUTTON_ID } from '../../../utils/enums'
@@ -43,7 +42,7 @@ const IndustriesForm: FC<Props> = (props) => {
 
 	const categoriesOptions = categories.data?.map((category) => {
 		const rootServicesCategory = services?.data?.groupedServicesByCategory?.find((serviceCategory) => serviceCategory.category?.id === category.id)
-		const selectedServices = getServicesCategoryKeys(rootServicesCategory ? [rootServicesCategory] : []).length
+		const selectedServices = /* getServicesCategoryKeys(rootServicesCategory ? [rootServicesCategory] : []).length */ 0
 
 		return {
 			id: category.id,

@@ -382,3 +382,12 @@ export const specialistContactsPageURLQueryParams = z.object({
 })
 
 export type ISpecialistContactsPageURLQueryParams = z.infer<typeof specialistContactsPageURLQueryParams>
+
+/**
+ * Industry
+ */
+export const industryPageURLQueryParams = z.object({
+	search: z.string().nullish()
+})
+
+export type IIndustryPageURLQueryParams = z.infer<typeof industryPageURLQueryParams>

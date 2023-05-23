@@ -18,7 +18,7 @@ import { EMPTY_NAME_LOCALIZATIONS } from '../../components/LanguagePicker'
 
 // utils
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, DEFAULT_LANGUAGE, CREATE_BUTTON_ID } from '../../utils/enums'
-import { withPermissions } from '../../utils/Permissions'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { formFieldID, normalizeDirectionKeys, normalizeNameLocalizations, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
@@ -226,18 +226,27 @@ const LanguagesPage = () => {
 								total={languages?.data?.length}
 								onSubmit={(values: any) => setQuery({ ...query, search: values.search })}
 								addButton={
-									<Button
-										onClick={() => {
-											changeFormVisibility(true)
-										}}
-										type='primary'
-										htmlType='button'
-										className={'noti-btn'}
-										icon={<PlusIcon />}
-										id={formFieldID(FORM.LANGUAGES, CREATE_BUTTON_ID)}
-									>
-										{STRINGS(t).addRecord(t('loc:jazyk'))}
-									</Button>
+									<Permissions
+										allowed={[PERMISSION.LANGUAGE_EDIT]}
+										render={(hasPermission, { openForbiddenModal }) => (
+											<Button
+												onClick={() => {
+													if (hasPermission) {
+														changeFormVisibility(true)
+													} else {
+														openForbiddenModal()
+													}
+												}}
+												type='primary'
+												htmlType='button'
+												className={'noti-btn'}
+												icon={<PlusIcon />}
+												id={formFieldID(FORM.LANGUAGES, CREATE_BUTTON_ID)}
+											>
+												{STRINGS(t).addRecord(t('loc:jazyk'))}
+											</Button>
+										)}
+									/>
 								}
 							/>
 							<div className={'w-full flex'}>
@@ -270,4 +279,4 @@ const LanguagesPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(LanguagesPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.LANGUAGE_EDIT]))(LanguagesPage)

@@ -147,4 +147,4 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET]))(SmsCreditPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET, PERMISSION.WALLET_TRANSACTION_CREATE]))(SmsCreditPage)

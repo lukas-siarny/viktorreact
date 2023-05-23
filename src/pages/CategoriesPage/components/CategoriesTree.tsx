@@ -19,7 +19,7 @@ import { RootState } from '../../../reducers'
 // utils
 import { deleteReq, patchReq, postReq } from '../../../utils/request'
 import { CREATE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
-import { checkPermissions } from '../../../utils/Permissions'
+import Permissions, { ForbiddenModal, checkPermissions } from '../../../utils/Permissions'
 import { formFieldID, normalizeNameLocalizations } from '../../../utils/helper'
 
 // components
@@ -47,7 +47,7 @@ type TreeCategories = {
 	isParentDeleted: boolean
 }
 
-const editPermissions = [PERMISSION.ENUM_EDIT]
+const editPermissions: PERMISSION[] = [PERMISSION.CATEGORY_EDIT]
 
 const CategoriesTree = () => {
 	const dispatch = useDispatch()
@@ -58,10 +58,13 @@ const CategoriesTree = () => {
 	const [lastOpenedNode, setLastOpenedNode] = useState<any>()
 	const [treeExpandedKeys, setTreeExpandedKeys] = useState<Key[]>([])
 	const [treeSelectedKeys, setTreeSelectedKeys] = useState<Key[]>([])
+	const [visibleForbiddenModal, setVisibleForbiddenModal] = useState(false)
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
+
+	const hasPermissionToEdit = checkPermissions(authUserPermissions, editPermissions)
 
 	const openCategoryCreateDetail = (rootParentId: string, parentId: string, parentTitle: string, childrenLength: number, level = 0) => {
 		setShowForm(true)
@@ -136,7 +139,6 @@ const CategoriesTree = () => {
 
 	const onCategoryClickHandler = (keys: Key[], e: any) => {
 		setTreeSelectedKeys(keys)
-		if (!checkPermissions(authUserPermissions, editPermissions)) return
 		const selectedNode = get(e, 'node')
 		openCategoryUpdateDetail(selectedNode?.id, selectedNode?.level, selectedNode?.deletedAt, selectedNode?.isParentDeleted)
 	}
@@ -220,6 +222,10 @@ const CategoriesTree = () => {
 		// check if dropping category on disabled parent category
 		if (checkIfParentIsDisabled(droppedData.node.pos)) {
 			notifyUser()
+			return
+		}
+		if (!hasPermissionToEdit) {
+			setVisibleForbiddenModal(true)
 			return
 		}
 		try {
@@ -362,19 +368,28 @@ const CategoriesTree = () => {
 		<>
 			<Row className={'gap-2'} justify={'space-between'}>
 				<h3>{t('loc:Kategórie')}</h3>
-				<Button
-					onClick={() => {
-						dispatch(initialize(FORM.CATEGORY, { nameLocalizations: EMPTY_NAME_LOCALIZATIONS, level: 0 }))
-						setShowForm(true)
-					}}
-					type='primary'
-					htmlType='button'
-					className={'noti-btn'}
-					icon={<PlusIcon />}
-					id={formFieldID(FORM.CATEGORY, CREATE_BUTTON_ID)}
-				>
-					{t('loc:Pridať kategóriu')}
-				</Button>
+				<Permissions
+					allowed={editPermissions}
+					render={(hasPermission, { openForbiddenModal }) => (
+						<Button
+							onClick={() => {
+								if (hasPermission) {
+									dispatch(initialize(FORM.CATEGORY, { nameLocalizations: EMPTY_NAME_LOCALIZATIONS, level: 0 }))
+									setShowForm(true)
+								} else {
+									openForbiddenModal()
+								}
+							}}
+							type='primary'
+							htmlType='button'
+							className={'noti-btn'}
+							icon={<PlusIcon />}
+							id={formFieldID(FORM.CATEGORY, CREATE_BUTTON_ID)}
+						>
+							{t('loc:Pridať kategóriu')}
+						</Button>
+					)}
+				/>
 			</Row>
 			<div className={'w-full flex'}>
 				<div className={formClass}>
@@ -407,6 +422,7 @@ const CategoriesTree = () => {
 					</div>
 				) : undefined}
 			</div>
+			<ForbiddenModal visible={visibleForbiddenModal} onCancel={() => setVisibleForbiddenModal(false)} />
 		</>
 	)
 }

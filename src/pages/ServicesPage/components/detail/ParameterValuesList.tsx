@@ -2,22 +2,21 @@ import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Field, WrappedFieldArrayProps } from 'redux-form'
 import { Col, Collapse, Row } from 'antd'
-import { isEmpty } from 'lodash'
 import cx from 'classnames'
 
 // atoms
-import InputNumberField from '../../../atoms/InputNumberField'
-import SwitchField from '../../../atoms/SwitchField'
+import InputNumberField from '../../../../atoms/InputNumberField'
+import SwitchField from '../../../../atoms/SwitchField'
 
 // utils
-import { renderFromTo, validationNumberMin } from '../../../utils/helper'
+import { renderFromTo, validationNumberMin } from '../../../../utils/helper'
 
 // assets
-import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
-import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
+import { ReactComponent as ClockIcon } from '../../../../assets/icons/clock-icon.svg'
+import { ReactComponent as CouponIcon } from '../../../../assets/icons/coupon.svg'
 
 // schema
-import { IParameterValue } from '../../../schemas/service'
+import { IParameterValue } from '../../../../schemas/service'
 
 const { Panel } = Collapse
 

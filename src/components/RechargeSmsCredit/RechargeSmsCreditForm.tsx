@@ -68,6 +68,7 @@ const RechargeSmsCreditForm: FC<Props> = (props) => {
 								rows={8}
 								className={'mb-4'}
 							/>
+
 							<Button
 								id={formFieldID(FORM.RECHARGE_SMS_CREDIT, SUBMIT_BUTTON_ID)}
 								type={'primary'}

@@ -110,8 +110,8 @@ export const handleLanguageChange = (value: any, dispatch: any, reloadPageAfterC
 }
 
 const options = Object.entries(LANGUAGE).map(([key, value]) => ({ label: key, value, icon: LOCALES[value].icon }))
-
-const getLanguageFlag = (countryCode: LANGUAGE) => <Icon className={'language-picker-icon'} component={LOCALES[countryCode].icon} />
+// NOTE: Into `rev` property is passed `null` value due compilation error
+const getLanguageFlag = (countryCode: LANGUAGE) => <Icon className={'language-picker-icon'} component={LOCALES[countryCode].icon} /* rev={null} */ />
 
 export const getLanguagePickerAsSubmenuItem = (dispatch: any, reloadPageAfterChange = true): ItemType => {
 	let currentLanguage: LANGUAGE

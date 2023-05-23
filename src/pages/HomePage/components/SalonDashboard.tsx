@@ -63,8 +63,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 
 	useEffect(() => {
 		if (selectedSalon?.data) {
-			// TODO: pockat az bude mergnuty updatnuty zoznam sluzieb
-			dispatch(getServices({ salonID: selectedSalon.data.id }))
+			dispatch(getServices({ salonID: selectedSalon.data.id }, true))
 			dispatch(getCustomers({ salonID: selectedSalon.data.id, page: 1 }))
 			dispatch(getActiveEmployees({ salonID: selectedSalon.data.id, page: 1 }))
 		}
@@ -116,12 +115,12 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 						/>
 						<Statistics
 							title={t('loc:Služby (všetky)')}
-							count={customers.data?.pagination.totalCount}
+							count={services?.listData?.industries.servicesCount}
 							onActionItemClick={() => navigate(getPath(t('paths:services-settings')))}
 						/>
 						<Statistics
 							title={t('loc:Služby dostupné pre online rezervácie')}
-							count={services?.tableData?.length}
+							count={services?.listData?.industries.servicesAvailableForOnlineReservationsCount}
 							onActionItemClick={() => navigate(getPath(t('paths:services-settings')))}
 						/>
 						<Statistics

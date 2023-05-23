@@ -18,7 +18,7 @@ import { RootState } from '../../../reducers'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SwitchField from '../../../atoms/SwitchField'
 import PopConfirmComponent from '../../../components/PopConfirmComponent'
-import ServiceBreadcrumbs from '../../ServicesPage/components/ServiceBreadcrumbs'
+import ServiceBreadcrumbs from '../../ServicesPage/components/detail/ServiceBreadcrumbs'
 import AvatarComponents from '../../../components/AvatarComponents'
 
 // assets

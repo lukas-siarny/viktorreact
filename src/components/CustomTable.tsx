@@ -3,9 +3,9 @@ import { forEach, includes, isEmpty } from 'lodash'
 import cx from 'classnames'
 
 // Drag and drop
-import type { DragEndEvent } from '@dnd-kit/core'
-import { DndContext } from '@dnd-kit/core'
+import { DragEndEvent, closestCenter, DndContext } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { restrictToFirstScrollableAncestor, restrictToVerticalAxis } from '@dnd-kit/modifiers'
 
 // ant
 import { Empty, Table } from 'antd'
@@ -14,7 +14,9 @@ import { TableProps } from 'antd/lib/table'
 // components
 import CustomPagination from './CustomPagination'
 import { IPagination } from '../types/interfaces'
-import DragableTableRow from './DragableTableRow'
+import DraggableTableRow from './DraggableTableRow'
+
+// assets
 import { ReactComponent as DragIcon } from '../assets/icons/drag-icon.svg'
 import { TABLE_DRAG_AND_DROP_KEY } from '../utils/enums'
 
@@ -40,12 +42,17 @@ type ComponentProps<RecordType> = TableProps<RecordType> & {
 	useCustomPagination?: boolean
 	pagination?: IPagination | false
 	wrapperClassName?: string
-	dndDrop?: (oldIndex: number, newIndex: number) => any
+	dnd?: {
+		dndDrop: (oldIndex: string, newIndex?: string) => any
+		dndWithHandler?: boolean
+		dndColWidth?: number
+	}
 	customFooterContent?: React.ReactNode
 }
 
 const CustomTable = <RecordType extends object = any>(props: ComponentProps<RecordType>) => {
-	const { disabled = false, className, useCustomPagination, pagination, dndDrop, wrapperClassName, customFooterContent } = props
+	const { disabled = false, className, useCustomPagination, pagination, dnd, wrapperClassName, customFooterContent } = props
+	const { dndDrop, dndWithHandler = true, dndColWidth = 25 } = dnd || {}
 	const [isProcessingDrop, setIsProcessingDrop] = useState(false)
 
 	const onClickOptionSizeChanger = useCallback(
@@ -81,8 +88,8 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 
 	const onDragEnd = useCallback(
 		async ({ active, over }: DragEndEvent) => {
-			const oldIndex = Number(active.id)
-			const newIndex = Number(over?.id)
+			const oldIndex = String(active.id)
+			const newIndex = over?.id ? String(over?.id) : undefined
 
 			if (isProcessingDrop) {
 				return
@@ -125,7 +132,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 					...props?.components?.body,
 					// eslint-disable-next-line react/no-unstable-nested-components
 					row(rowProps: any) {
-						return <DragableTableRow disabled={Number(props.dataSource?.length) < 2} {...rowProps} />
+						return <DraggableTableRow disabled={Number(props.dataSource?.length) < 2} dndWithHandler={dndWithHandler} {...rowProps} />
 					}
 				}
 			}
@@ -141,11 +148,12 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 		const DND_COL = {
 			key: TABLE_DRAG_AND_DROP_KEY,
 			title: <DragIcon style={{ touchAction: 'none', cursor: 'default' }} className={'w-4 h-4 flex'} />,
-			width: 25,
+			width: dndColWidth,
 			fixed: isFirstColFixed
 		}
 		columns = [DND_COL, ...columns]
 	}
+
 	const onRow = (record: any, index?: number) => {
 		const onRowProp = props?.onRow?.(record, index)
 		const rowProps: any = {
@@ -187,7 +195,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 				columns={columns}
 				loading={loadingWrap}
 				defaultExpandAllRows
-				className={cx('noti-table', props.className, { 'two-tone-table-style': props.twoToneRows })}
+				className={cx('noti-table', props.className, { 'two-tone-table-style': props.twoToneRows, 'noti-draggable-table': !!dndDrop })}
 				onRow={onRow}
 				components={componentsWrap}
 				pagination={
@@ -213,7 +221,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 
 	if (dndDrop) {
 		return (
-			<DndContext onDragEnd={onDragEnd}>
+			<DndContext onDragEnd={onDragEnd} modifiers={[restrictToVerticalAxis, restrictToFirstScrollableAncestor]} collisionDetection={closestCenter}>
 				<SortableContext
 					// rowKey array
 					items={props.dataSource && (props.dataSource.map((item: any) => item.key) as any)}

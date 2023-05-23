@@ -4,13 +4,13 @@ import { Form } from 'antd'
 import { useParams } from 'react-router'
 
 // utils
-import { FORM } from '../utils/enums'
+import { FORM } from '../../../utils/enums'
 
 // atoms, pages, components, assets
-import CheckboxGroupField from '../atoms/CheckboxGroupField'
+import CheckboxGroupField from '../../../atoms/CheckboxGroupField'
 
 // schemas
-import { ISalonIdsForm, validationSalonIdsSyncFn } from '../schemas/reservation'
+import { ISalonIdsForm, validationSalonIdsSyncFn } from '../../../schemas/reservation'
 
 type ComponentProps = {
 	label?: string

@@ -19,7 +19,7 @@ import showNotifications from '../../../utils/tsxHelpers'
 import { RootState } from '../../../reducers'
 
 // components
-import SalonIdsForm from '../../../components/SalonIdsForm'
+import SalonIdsForm from './SalonIdsForm'
 import ConfirmModal from '../../../atoms/ConfirmModal'
 
 // assets
@@ -74,7 +74,7 @@ const CalendarIntegrations = () => {
 						const responseAuth = await axios.post(
 							EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].url,
 							{
-								grant_type: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].grand_type,
+								grand_type: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].grand_type,
 								// eslint-disable-next-line no-underscore-dangle
 								client_id: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
 								scope: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].scopes,
@@ -293,7 +293,7 @@ const CalendarIntegrations = () => {
 							type: EXTERNAL_CALENDAR_TYPE.GOOGLE,
 							requestType: REQUEST_MODAL_TYPE.CREATE,
 							title: t('loc:Synchronizácia Google kalendára'),
-							description: t('loc:Pre synchronizáciu Google kalendára je potrebné vyplniť ID salónov, ktoré chcete synchronizovať.')
+							description: t('loc:Vyberte, z ktorých salónov chcete automaticky synchronizovať informácie o vašich rezerváciach.')
 						})
 					}
 				}}
@@ -313,7 +313,7 @@ const CalendarIntegrations = () => {
 							type: EXTERNAL_CALENDAR_TYPE.MICROSOFT,
 							requestType: REQUEST_MODAL_TYPE.CREATE,
 							title: t('loc:Synchronizácia Microsoft kalendára'),
-							description: t('loc:Pre synchronizáciu Microsoft kalendára je potrebné vyplniť ID salónov, ktoré chcete synchronizovať.')
+							description: t('loc:Vyberte, z ktorých salónov chcete automaticky synchronizovať informácie o vašich rezerváciach.')
 						})
 					}
 				}}

@@ -76,8 +76,6 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const formValues: Partial<IReservationSystemSettingsForm> = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
 	const disabled = !formValues?.enabledReservations
 
-	const salonName = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.name)
-
 	const [uploadModal, setUploadModal] = useState<{
 		visible: boolean
 		requestStatus: REQUEST_STATUS | undefined
@@ -238,10 +236,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					</div>
 					<Divider className={'my-3'} />
 					<p className='x-regular text-notino-grayDark mb-4'>
-						{t(
-							'loc:Informácie o vašich rezerváciach sa budú automaticky synchronizovať z Notino Partner App do vybraných kalendárov. Platí len pre rezervácie salóna {{ salonName }}.',
-							{ salonName }
-						)}
+						{t('loc:Informácie o vašich rezerváciach sa budú automaticky synchronizovať z Notino Partner App do vybraných kalendárov.')}
 					</p>
 					<CalendarIntegrations />
 				</>

@@ -3,21 +3,20 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize, isSubmitting } from 'redux-form'
 import { Col, Row, Spin } from 'antd'
-import { compact, forEach, includes, isEmpty, reduce } from 'lodash'
+import { compact, includes, isEmpty } from 'lodash'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ReservationSystemSettingsForm from './components/ReservationSystemSettingsForm'
 
 // utils
-import { FORM, NOTIFICATION_TYPES, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE, SERVICE_TYPE } from '../../utils/enums'
+import { FORM, NOTIFICATION_TYPES, PERMISSION, ROW_GUTTER_X_DEFAULT, RS_NOTIFICATION, RS_NOTIFICATION_TYPE } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 
 // reducers
 import { RootState } from '../../reducers'
 import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
-import { getServices } from '../../reducers/services/serviceActions'
 
 // types
 import {
@@ -25,7 +24,7 @@ import {
 	IBreadcrumbs,
 	IReservationsSettingsNotification,
 	IReservationSystemSettingsForm,
-	PathSettingsBody,
+	PatchSettingsBody,
 	SalonSubPageProps
 } from '../../types/interfaces'
 
@@ -39,7 +38,7 @@ type InitDisabledNotifications = {
 	[key in RS_NOTIFICATION]: IReservationsSettingsNotification
 }
 
-type PatchDisabledNotifications = NonNullable<NonNullable<PathSettingsBody['settings']>['disabledNotifications']>
+type PatchDisabledNotifications = NonNullable<NonNullable<PatchSettingsBody['settings']>['disabledNotifications']>
 
 const transformNotificationsChannelForRequest = (
 	channel: {
@@ -136,8 +135,6 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const { salonID } = props
 	const { parentPath } = props
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-	const services = useSelector((state: RootState) => state.service.services)
-	const groupedSettings = services?.data?.groupedServicesByCategory
 	const submitting = useSelector(isSubmitting(FORM.RESEVATION_SYSTEM_SETTINGS))
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -151,59 +148,16 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const fetchData = async () => {
 		const salonRes = await dispatch(selectSalon(salonID))
 
-		const servicesRes = await dispatch(getServices({ salonID }))
-
 		if (salonRes?.data?.settings) {
-			const autoConfirmItems: any = []
-			const onlineReservationItems: any = []
-			forEach(servicesRes.data?.groupedServicesByCategory, (level1) =>
-				forEach(level1.category?.children, (level2) =>
-					forEach(level2.category?.children, (level3) => {
-						autoConfirmItems.push({
-							[level3.service.id]: level3.service.settings.autoApproveReservations
-						})
-						onlineReservationItems.push({
-							[level3.service.id]: level3.service.settings.enabledB2cReservations
-						})
-					})
-				)
-			)
-			const autoConfirmSettings = reduce(
-				autoConfirmItems,
-				(prev: any, item: any) => {
-					return { ...prev, ...item }
-				},
-				{}
-			)
-
-			const onlineBookingSettings = reduce(
-				onlineReservationItems,
-				(prev: any, item: any) => {
-					return { ...prev, ...item }
-				},
-				{}
-			)
-
-			const autoConfirmSettingsHasFalse = includes(Object.values(autoConfirmSettings), false)
-			const onlineBookingSettingsHasFalse = includes(Object.values(onlineBookingSettings), false)
-
-			const servicesSettings = {
-				[SERVICE_TYPE.AUTO_CONFIRM]: autoConfirmSettings,
-				[SERVICE_TYPE.ONLINE_BOOKING]: onlineBookingSettings
-			}
-
 			dispatch(
 				initialize(FORM.RESEVATION_SYSTEM_SETTINGS, {
-					enabledReservations: salonRes?.data?.settings?.enabledReservations,
-					enabledCustomerReservationNotes: salonRes?.data?.settings.enabledCustomerReservationNotes,
-					maxDaysB2cCreateReservation: salonRes?.data?.settings?.maxDaysB2cCreateReservation,
-					maxHoursB2cCreateReservationBeforeStart: salonRes?.data?.settings?.maxHoursB2cCreateReservationBeforeStart,
-					maxHoursB2cCancelReservationBeforeStart: salonRes?.data?.settings?.maxHoursB2cCancelReservationBeforeStart,
-					minutesIntervalB2CReservations: salonRes?.data?.settings?.minutesIntervalB2CReservations,
-					disabledNotifications: initDisabledNotifications(salonRes?.data?.settings?.disabledNotifications),
-					servicesSettings,
-					onlineBookingAll: !onlineBookingSettingsHasFalse,
-					autoConfirmAll: !autoConfirmSettingsHasFalse
+					enabledReservations: salonRes.data.settings.enabledReservations,
+					enabledCustomerReservationNotes: salonRes.data.settings.enabledCustomerReservationNotes,
+					maxDaysB2cCreateReservation: salonRes.data.settings.maxDaysB2cCreateReservation,
+					maxHoursB2cCreateReservationBeforeStart: salonRes.data.settings.maxHoursB2cCreateReservationBeforeStart,
+					maxHoursB2cCancelReservationBeforeStart: salonRes.data.settings.maxHoursB2cCancelReservationBeforeStart,
+					minutesIntervalB2CReservations: salonRes.data.settings.minutesIntervalB2CReservations,
+					disabledNotifications: initDisabledNotifications(salonRes.data.settings.disabledNotifications)
 				})
 			)
 		}
@@ -216,28 +170,6 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	}, [])
 
 	const handleSubmitSettings = async (values: IReservationSystemSettingsForm) => {
-		// Settings
-		const allIds: any = []
-		forEach(groupedSettings, (level1) => forEach(level1.category?.children, (level2) => forEach(level2.category?.children, (level3) => allIds.push(level3.service.id))))
-
-		const allowedAutoConfirmIds: string[] = []
-		const allowedOnlineBookingIds: string[] = []
-		forEach(values.servicesSettings.AUTO_CONFIRM, (item, index) => (item ? allowedAutoConfirmIds.push(index) : undefined))
-		forEach(values.servicesSettings.ONLINE_BOOKING, (item, index) => (item ? allowedOnlineBookingIds.push(index) : undefined))
-
-		const servicesSettings: any[] = []
-		forEach(allIds, (serviceID) => {
-			const enabledB2cReservations = includes(allowedOnlineBookingIds, serviceID)
-			const autoApproveReservations = includes(allowedAutoConfirmIds, serviceID)
-			servicesSettings.push({
-				id: serviceID,
-				settings: {
-					enabledB2cReservations: enabledB2cReservations || false, // ONLINE_BOOKING
-					autoApproveReservations: autoApproveReservations || false // AUTO_CONFIRM
-				}
-			})
-		})
-		// Notifications
 		// find notification which are OFF - relevant for API
 		const disabledNotifications = NOTIFICATIONS.reduce((result: any, item) => {
 			const notificationValues = values.disabledNotifications[item]
@@ -262,7 +194,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 			return [...result, ...items]
 		}, [] as PatchDisabledNotifications)
 
-		const reqData: PathSettingsBody = {
+		const reqData: PatchSettingsBody = {
 			settings: {
 				enabledCustomerReservationNotes: values.enabledCustomerReservationNotes,
 				enabledReservations: values.enabledReservations,
@@ -271,8 +203,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 				maxHoursB2cCreateReservationBeforeStart: values.maxHoursB2cCreateReservationBeforeStart,
 				minutesIntervalB2CReservations: (values.minutesIntervalB2CReservations as any) || undefined,
 				disabledNotifications: disabledNotifications as any
-			},
-			servicesSettings
+			}
 		}
 
 		try {
@@ -292,7 +223,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<Spin spinning={salon.isLoading || services.isLoading || submitting}>
+						<Spin spinning={salon.isLoading || submitting}>
 							<ReservationSystemSettingsForm
 								onSubmit={handleSubmitSettings}
 								salonID={salonID}

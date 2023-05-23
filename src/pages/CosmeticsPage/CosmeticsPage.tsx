@@ -16,7 +16,7 @@ import CosmeticsFilter from './components/CosmeticsFilter'
 
 // utils
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, CREATE_BUTTON_ID } from '../../utils/enums'
-import { withPermissions } from '../../utils/Permissions'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { formFieldID, normalizeDirectionKeys } from '../../utils/helper'
 
@@ -203,19 +203,28 @@ const CosmeticsPage = () => {
 								total={cosmetics?.data?.pagination.totalCount}
 								onSubmit={searchSubmit}
 								addButton={
-									<Button
-										onClick={() => {
-											dispatch(initialize(FORM.COSMETIC, {}))
-											changeFormVisibility(true)
-										}}
-										type='primary'
-										htmlType='button'
-										className={'noti-btn'}
-										icon={<PlusIcon />}
-										id={formFieldID(FORM.COSMETIC, CREATE_BUTTON_ID)}
-									>
-										{STRINGS(t).addRecord(t('loc:kozmetiku'))}
-									</Button>
+									<Permissions
+										allowed={[PERMISSION.COSMETIC_EDIT]}
+										render={(hasPermission, { openForbiddenModal }) => (
+											<Button
+												onClick={() => {
+													if (hasPermission) {
+														dispatch(initialize(FORM.COSMETIC, {}))
+														changeFormVisibility(true)
+													} else {
+														openForbiddenModal()
+													}
+												}}
+												type='primary'
+												htmlType='button'
+												className={'noti-btn'}
+												icon={<PlusIcon />}
+												id={formFieldID(FORM.COSMETIC, CREATE_BUTTON_ID)}
+											>
+												{STRINGS(t).addRecord(t('loc:kozmetiku'))}
+											</Button>
+										)}
+									/>
 								}
 							/>
 							<div className={'w-full flex'}>
@@ -256,4 +265,4 @@ const CosmeticsPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(CosmeticsPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.COSMETIC_EDIT]))(CosmeticsPage)

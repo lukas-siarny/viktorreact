@@ -122,4 +122,4 @@ const CreateCategoryParamsPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(CreateCategoryParamsPage)
+export default compose(withPermissions([PERMISSION.CATEGORY_PARAMETER_EDIT]))(CreateCategoryParamsPage)

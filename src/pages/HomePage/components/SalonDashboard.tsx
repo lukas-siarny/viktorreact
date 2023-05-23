@@ -107,7 +107,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 						/>
 						<Statistics
 							title={t('loc:Počet aktívnych služieb')}
-							count={services?.tableData?.length}
+							count={services?.listData?.industries.servicesCount}
 							onActionItemClick={() => navigate(getPath(t('paths:services-settings')))}
 						/>
 						<Statistics

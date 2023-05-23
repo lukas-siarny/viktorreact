@@ -19,7 +19,7 @@ const SalonRolePermissions: FC<Props> = (props) => {
 	return (
 		<ul className={cx('list-none pl-0 flex flex-col gap-1', className)}>
 			{permissions?.map((permission, i) => {
-				const icon = permission.checked ? <CheckIcon /> : <CrossedIcon />
+				const icon = permission.checked ? <CheckIcon className={'text-notino-pink'} /> : <CrossedIcon />
 				return (
 					<li key={i} className={'flex items-start gap-2'}>
 						<span>{icon}</span>

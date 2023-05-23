@@ -5,19 +5,19 @@ import { Col, Collapse, Row } from 'antd'
 import cx from 'classnames'
 
 // atoms
-import InputNumberField from '../../../atoms/InputNumberField'
-import SwitchField from '../../../atoms/SwitchField'
+import InputNumberField from '../../../../atoms/InputNumberField'
+import SwitchField from '../../../../atoms/SwitchField'
 
 // utils
-import { validationNumberMin } from '../../../utils/helper'
-import { renderFromTo } from '../serviceUtils'
+import { renderFromTo } from '../../serviceUtils'
+import { validationNumberMin } from '../../../../utils/helper'
 
 // assets
-import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
-import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
+import { ReactComponent as ClockIcon } from '../../../../assets/icons/clock-icon.svg'
+import { ReactComponent as CouponIcon } from '../../../../assets/icons/coupon.svg'
 
 // schema
-import { IParameterValue } from '../../../schemas/service'
+import { IParameterValue } from '../../../../schemas/service'
 
 const { Panel } = Collapse
 

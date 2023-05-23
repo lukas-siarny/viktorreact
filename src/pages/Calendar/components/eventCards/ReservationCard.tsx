@@ -119,7 +119,6 @@ const ReservationCard: FC<IReservationCardProps> = (props) => {
 		email: customer?.email
 	})
 
-	// const description = isImported ? note : service?.name || '-'
 	const description = service?.name || '-'
 
 	const iconState = getIconState({ isPast, isApproved, isRealized, notRealized, service })

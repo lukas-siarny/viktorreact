@@ -10,8 +10,9 @@ import i18next from 'i18next'
 
 // utils
 import { FORM, PERMISSION, ROW_BUTTON_WITH_ID } from '../../../utils/enums'
-import { formFieldID, renderPriceAndDurationInfo } from '../../../utils/helper'
+import { formFieldID } from '../../../utils/helper'
 import Permissions from '../../../utils/Permissions'
+import { renderPriceAndDurationInfo } from '../../ServicesPage/serviceUtils'
 
 // components
 import DeleteButton from '../../../components/DeleteButton'

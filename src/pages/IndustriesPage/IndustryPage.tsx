@@ -82,30 +82,6 @@ const getCategoryById = (category: any, serviceCategoryID: string) => {
 	return result
 }
 
-const mapCategoriesForDataTree = (parentId: string | null, children: any[] | undefined, level = 0) => {
-	const childs: NestedMultiselectDataItem[] & any = children
-	const items: DataNode[] = map(childs, (child, index) => {
-		return {
-			className: `noti-tree-node-${level}`,
-			switcherIcon: (props) => {
-				if (level !== 1) {
-					return undefined
-				}
-				return props?.expanded ? <ChevronDown style={{ transform: 'rotate(180deg)' }} /> : <ChevronDown />
-			},
-			id: child.id,
-			title: level === 0 ? i18next.t('loc:Vybrať všetky služby odevetvia') : child.name,
-			key: getCategoryKey(child.id, level),
-			disabled: false,
-			parentId,
-			children: child.children ? mapCategoriesForDataTree(child.id, child.children, level + 1) : undefined,
-			level,
-			index
-		}
-	})
-	return items
-}
-
 const IndustryPage = (props: Props) => {
 	const [t] = useTranslation()
 	const navigate = useNavigate()
@@ -122,12 +98,6 @@ const IndustryPage = (props: Props) => {
 	const rootCategory = categories.data?.find((category) => category.id === industryID)
 	const rootUserCategory = services?.data?.groupedServicesByCategory?.find((category) => category.category?.id === industryID)
 
-	// https://ant.design/components/tree/#Note - nastava problem, ze pokial nie je vygenerovany strom, tak sa vyrendruje collapsnuty, aj ked je nastavena propa defaultExpandAll
-	// preto sa strom setuje cez state az po tom, co sa vytvoria data pre strom (vid useEffect nizzsie)
-	// cize pokial je null, znamena ze strom este nebol vygenerovany a zobrazuje sa loading state
-	const [dataTree, setDataTree] = useState<DataNode[] | null>(null)
-	const isLoadingTree = dataTree === null
-
 	const [isVisible, setIsVisible] = useState<boolean>(false)
 
 	useEffect(() => {
@@ -138,7 +108,7 @@ const IndustryPage = (props: Props) => {
 			if (!root) {
 				navigate('/404')
 			} else {
-				setDataTree(mapCategoriesForDataTree(null, [root]))
+				// setDataTree(mapCategoriesForDataTree(null, [root]))
 			}
 		})()
 	}, [dispatch, industryID, navigate])
@@ -217,61 +187,59 @@ const IndustryPage = (props: Props) => {
 
 	const areThereAnyServiceCategories = rootCategory?.children.some((secondLevelCategory) => secondLevelCategory.children?.length)
 
-	const loading = categories.isLoading || services.isLoading || isLoadingTree
+	const loading = categories.isLoading || services.isLoading
 
 	return (
 		<>
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:industries-and-services')} />
 			</Row>
-			<Row gutter={ROW_GUTTER_X_DEFAULT}>
-				<Col span={24}>
-					<div className='content-body small'>
-						<Spin spinning={loading || submitting}>
-							<Row justify='space-between'>
-								<h3 className={'mb-0 mt-0 flex items-center pr-4'}>
-									<ServiceIcon className={'text-notino-black mr-2'} />
-									{t('loc:Priradiť služby')}
-								</h3>
-								<Permissions
-									allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE]}
-									render={(hasPermission, { openForbiddenModal }) => (
-										<Button
-											onClick={() => {
-												if (hasPermission) {
-													setIsVisible(true)
-												} else {
-													openForbiddenModal()
-												}
-											}}
-											type='primary'
-											htmlType='button'
-											className={'noti-btn'}
-											icon={<PlusIcon />}
-										>
-											{t('loc:Požiadať o novú službu')}
-										</Button>
-									)}
-								/>
-							</Row>
-							<Divider className={'mb-3 mt-3'} />
 
-							<header className={'category-select-header mb-4'}>
-								<div className={'image'} style={{ backgroundImage: `url("${rootCategory?.image?.resizedImages?.small}")` }} />
-								<div className={'count'}>{`${selectedServicesLength} ${t('loc:z')} ${servicesLength}`}</div>
-								<span className={'label'}>{rootCategory?.name}</span>
-							</header>
-							{!loading && !areThereAnyServiceCategories ? (
-								<div className='h-100 w-full flex items-center justify-center'>
-									<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('loc:V tomto odvetví nie sú dostupné na výber žiadne služby')} />
-								</div>
-							) : (
-								<IndustryForm onSubmit={handleSubmit} dataTree={dataTree} isLoadingTree={isLoadingTree} />
+			<div className='content-body small'>
+				<Spin spinning={loading || submitting}>
+					<Row justify='space-between'>
+						<h3 className={'mb-0 mt-0 flex items-center pr-4'}>
+							<ServiceIcon className={'text-notino-black mr-2'} />
+							{t('loc:Priradiť služby')}
+						</h3>
+						<Permissions
+							allowed={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE]}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<Button
+									onClick={() => {
+										if (hasPermission) {
+											setIsVisible(true)
+										} else {
+											openForbiddenModal()
+										}
+									}}
+									type='primary'
+									htmlType='button'
+									className={'noti-btn'}
+									icon={<PlusIcon />}
+								>
+									{t('loc:Požiadať o novú službu')}
+								</Button>
 							)}
-						</Spin>
-					</div>
-				</Col>
-			</Row>
+						/>
+					</Row>
+					<Divider className={'mb-3 mt-3'} />
+
+					<header className={'category-select-header mb-4'}>
+						<div className={'image'} style={{ backgroundImage: `url("${rootCategory?.image?.resizedImages?.small}")` }} />
+						<div className={'count'}>{`${selectedServicesLength} ${t('loc:z')} ${servicesLength}`}</div>
+						<span className={'label'}>{rootCategory?.name}</span>
+					</header>
+					{!loading && !areThereAnyServiceCategories ? (
+						<div className='h-100 w-full flex items-center justify-center'>
+							<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('loc:V tomto odvetví nie sú dostupné na výber žiadne služby')} />
+						</div>
+					) : (
+						<IndustryForm onSubmit={handleSubmit} />
+					)}
+				</Spin>
+			</div>
+
 			<Modal
 				key={'requestNewServiceModal'}
 				title={t('loc:Žiadosť o novú službu')}

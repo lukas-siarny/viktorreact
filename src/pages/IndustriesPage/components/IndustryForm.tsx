@@ -20,20 +20,18 @@ import Permissions from '../../../utils/Permissions'
 import { IIndustryForm, validationIndustryFn } from '../../../schemas/industry'
 
 type ComponentProps = {
-	dataTree?: DataNode[] | null
 	disabledForm?: boolean
-	isLoadingTree?: boolean
 }
 
 type Props = InjectedFormProps<IIndustryForm, ComponentProps> & ComponentProps
 
 const IndustryForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, submitting, pristine, dataTree, disabledForm, isLoadingTree } = props
+	const { handleSubmit, submitting, pristine, disabledForm } = props
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
-			{!isLoadingTree && <Field name={'categoryIDs'} component={CheckboxGroupNestedField} dataTree={dataTree} disabled={disabledForm} />}
+
 			<div className={'content-footer'}>
 				<Row justify='center'>
 					<Permissions
@@ -47,7 +45,7 @@ const IndustryForm: FC<Props> = (props) => {
 								className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 								icon={<EditIcon />}
 								disabled={submitting || pristine}
-								loading={submitting || isLoadingTree}
+								loading={submitting}
 								onClick={(e) => {
 									if (hasPermission) {
 										submit(FORM.INDUSTRY)

@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { uniqueId, startsWith, isEmpty } from 'lodash'
 import Scroll from 'react-scroll'
+import { notification } from 'antd'
 
 // types
 import {
@@ -825,4 +826,28 @@ export const composeMonthViewReservations = (days: ICalendarMonthlyReservationsP
 	}, [] as ICalendarMonthlyReservationsCardData[])
 
 	return composedEvents
+}
+
+export const validateReservationAndShowNoticiation = ({ serviceId, customerId }: { serviceId?: string | number; customerId?: string | number }) => {
+	const errors: { message: string; description: string }[] = []
+
+	if (!serviceId) {
+		errors.push({
+			message: t('loc:Služba nie je zadaná'),
+			description: t('loc:Nie je možné editovať rezerváciu bez zadanej služby')
+		})
+	}
+
+	if (!customerId) {
+		errors.push({
+			message: t('loc:Zákazník nie je zadaný'),
+			description: t('loc:Nie je možné editovať rezerváciu bez zadaného zákazníka')
+		})
+	}
+
+	if (!isEmpty(errors)) {
+		errors.forEach((error) => notification.error(error))
+	}
+
+	return errors
 }

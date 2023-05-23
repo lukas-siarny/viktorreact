@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 import Layout from 'antd/lib/layout/layout'
-import { message, notification } from 'antd'
+import { message } from 'antd'
 import dayjs from 'dayjs'
 import { includes, isArray, isEmpty, omit } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
@@ -24,7 +24,6 @@ import {
 	NOTIFICATION_TYPE,
 	PERMISSION,
 	REFRESH_CALENDAR_INTERVAL,
-	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_STATE,
 	CALENDAR_UPDATE_SIZE_DELAY_AFTER_SIDER_CHANGE,
 	CALENDAR_DAY_EVENTS_LIMIT,
@@ -33,7 +32,15 @@ import {
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { cancelEventsRequestOnDemand, getSelectedDateForCalendar, getSelectedDateRange, getTimeScrollId, isDateInRange, scrollToSelectedDate } from './calendarHelpers'
+import {
+	cancelEventsRequestOnDemand,
+	getSelectedDateForCalendar,
+	getSelectedDateRange,
+	getTimeScrollId,
+	isDateInRange,
+	scrollToSelectedDate,
+	validateReservationAndShowNoticiation
+} from './calendarHelpers'
 
 // reducers
 import {
@@ -64,7 +71,8 @@ import {
 	ReservationPopoverData,
 	PopoverTriggerPosition,
 	SalonSubPageProps,
-	ICalendarEmployeeOptionItem
+	ICalendarEmployeeOptionItem,
+	HandleUpdateReservationStateFunc
 } from '../../types/interfaces'
 
 // hooks
@@ -554,26 +562,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 			// Kontrola pri uprave rezervacie cez DND - v pripade imporotvanej rezervacie nemusi byt vyplnena sluzba alebo klient
 			if (values.updateFromCalendar && revertEvent) {
-				const errors: { message: string; description: string }[] = []
-				const serviceId = values.service.key
-				const customerId = values.customer.key
-
-				if (!serviceId) {
-					errors.push({
-						message: t('loc:Služba nie je zadaná'),
-						description: t('loc:Nie je možné editovať rezerváciu bez zadanej služby')
-					})
-				}
-
-				if (!customerId) {
-					errors.push({
-						message: t('loc:Zákazník nie je zadaný'),
-						description: t('loc:Nie je možné editovať rezerváciu bez zadaného zákazníka')
-					})
-				}
+				const errors = validateReservationAndShowNoticiation({ serviceId: values.service.key, customerId: values.customer.key })
 
 				if (!isEmpty(errors)) {
-					errors.forEach((error) => notification.error(error))
 					clearConfirmModal()
 					revertEvent()
 					return
@@ -631,7 +622,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				clearConfirmModal()
 			}
 		},
-		[closeSiderForm, fetchEvents, salonID, query.eventId, t]
+		[closeSiderForm, fetchEvents, salonID, query.eventId]
 	)
 
 	const handleSubmitEvent = useCallback(
@@ -795,8 +786,16 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		[fetchEvents, isRemoving, query.sidebarView, salonID, closeSiderForm]
 	)
 
-	const handleUpdateReservationState = useCallback(
-		async (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
+	const handleUpdateReservationState: HandleUpdateReservationStateFunc = useCallback(
+		async (calendarEventID, state, reason, paymentMethod, data) => {
+			// Kontrola pri uprave rezervacie - v pripade imporotvanej rezervacie sa moze stat ze nie je vyplnena sluzba, ktora je povinna
+			const errors = validateReservationAndShowNoticiation({ serviceId: data?.serviceId, customerId: data?.customerId })
+
+			if (!isEmpty(errors)) {
+				clearConfirmModal()
+				return
+			}
+
 			try {
 				cancelEventsRequestOnDemand()
 				await patchReq(
@@ -829,8 +828,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const initDeleteEventData = (eventId: string, calendarBulkEventID?: string, eventType?: CALENDAR_EVENT_TYPE) =>
 		setConfirmModalData({ key: CONFIRM_MODAL_DATA_TYPE.DELETE_EVENT, eventId, calendarBulkEventID, eventType })
 
-	const initUpdateReservationStateData = (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) =>
-		setConfirmModalData({ key: CONFIRM_MODAL_DATA_TYPE.UPDATE_RESERVATION_STATE, calendarEventID, state, reason, paymentMethod })
+	const initUpdateReservationStateData: HandleUpdateReservationStateFunc = (calendarEventID, state, reason, paymentMethod, data) => {
+		setConfirmModalData({ key: CONFIRM_MODAL_DATA_TYPE.UPDATE_RESERVATION_STATE, calendarEventID, state, reason, paymentMethod, data })
+	}
 
 	const onEditEvent = (eventType: CALENDAR_EVENT_TYPE, eventId: string) => {
 		scrollToTimeAndResourceOnDeman.current = true

@@ -252,7 +252,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 
 						{/* Services list */}
 						<div className={'flex items-center justify-between gap-4 mb-4'}>
-							<h2 className={'text-2xl mb-0'}>{`${t('loc:Zoznam služieb')} (${servicesListData.industries.servicesCount})`}</h2>
+							<h2 className={'text-2xl mb-0'}>{t('loc:Zoznam služieb ({{ servicesCount }})', { servicesCount: servicesListData.industries.servicesCount })}</h2>
 							<div className={'flex items-center gap-2'}>
 								{reorderView ? (
 									<>

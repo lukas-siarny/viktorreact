@@ -707,7 +707,7 @@
   "Zoznam recenzií": "Lista recenziilor",
   "Zoznam rezervácií": "Lista programărilor",
   "Zoznam salónov": "Lista de saloane",
-  "Zoznam služieb": null,
+  "Zoznam služieb ({{ servicesCount }})": null,
   "Zoznam zamestnancov": "Lista colegilor",
   "Zoznam zákazníkov": "Lista clienților",
   "Zoznam špecialistov": "Lista specialiștilor",

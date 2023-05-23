@@ -707,7 +707,7 @@
   "Zoznam recenzií": "Zoznam recenzií",
   "Zoznam rezervácií": "Zoznam rezervácií",
   "Zoznam salónov": "Zoznam salónov",
-  "Zoznam služieb": "Zoznam služieb",
+  "Zoznam služieb ({{ servicesCount }})": "Zoznam služieb ({{ servicesCount }})",
   "Zoznam zamestnancov": "Zoznam kolegov",
   "Zoznam zákazníkov": "Zoznam klientov",
   "Zoznam špecialistov": "Zoznam špecialistov",

@@ -38,6 +38,8 @@
 		color: $textColor-gray-900
 		font-weight: 500
 		font-size: $input-font-size
+		&.disabled
+			color: $textColor-notino-grayDark
 	.extra-text
 		color: $textColor-gray-600
 		font-weight: 400
@@ -45,6 +47,8 @@
 	&.noti-switch-disabled
 		background: rgba(0, 0, 0, 0.04)
 		cursor: not-allowed
+		.ant-switch-disabled:not(.ant-switch-checked)
+			background-color: $backgroundColor-notino-grayLight
 	&:not(.noti-switch-disabled)
 		&:focus-visible
 			@include focusOutlineStyle()

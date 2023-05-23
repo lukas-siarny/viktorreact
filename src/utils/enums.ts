@@ -976,11 +976,6 @@ export enum RESERVATION_PAYMENT_METHOD {
 	OTHER = 'OTHER'
 }
 
-export enum SERVICE_TYPE {
-	ONLINE_BOOKING = 'ONLINE_BOOKING',
-	AUTO_CONFIRM = 'AUTO_CONFIRM'
-}
-
 export const CALENDAR_DEBOUNCE_DELAY = 300 // in ms
 export const CALENDAR_INIT_TIME = 500 // in ms
 
@@ -1189,6 +1184,17 @@ export const SMS_STATUS_NAME = (status: SMS_NOTIFICATION_STATUS) => {
 			return i18next.t('loc:Ignorovaná')
 		default:
 			return ''
+	}
+}
+
+export const SERVICE_ROW_KEY = (categoryID: string, serviceID: string) => `${categoryID}_${serviceID}`
+
+export const SERVICES_LIST_INIT = {
+	industries: {
+		data: [],
+		servicesCount: 0,
+		servicesAvailableForOnlineReservationsCount: 0,
+		servicesVisibleInPricelistCount: 0
 	}
 }
 

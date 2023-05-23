@@ -14,7 +14,6 @@ import {
 	CONFIRM_BULK,
 	RS_NOTIFICATION,
 	RS_NOTIFICATION_TYPE,
-	SERVICE_TYPE,
 	RESERVATION_STATE,
 	RESERVATION_PAYMENT_METHOD,
 	CONFIRM_MODAL_DATA_TYPE,
@@ -305,18 +304,10 @@ export interface IReservationSystemSettingsForm {
 	maxHoursB2cCreateReservationBeforeStart?: number | null
 	maxHoursB2cCancelReservationBeforeStart?: number | null
 	minutesIntervalB2CReservations?: number | null
-	// Pomocne checky pre chekcnutie all hodnot pre BOOKING / AUTO CONFIRM
-	autoConfirmAll: boolean
 	enabledCustomerReservationNotes?: boolean
 	enabledB2cReservations?: boolean
-	onlineBookingAll: boolean
 	disabledNotifications: {
 		[key in RS_NOTIFICATION]: IReservationsSettingsNotification
-	}
-	servicesSettings: {
-		[key in SERVICE_TYPE]: {
-			[key: string]: boolean
-		}
 	}
 }
 
@@ -665,6 +656,14 @@ export type ServicePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeIdServices
 
 export type DisabledNotificationsArray = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']
 
-export type PathSettingsBody = Paths.PatchApiB2BAdminSalonsSalonIdSettings.RequestBody
+export type PatchSettingsBody = Paths.PatchApiB2BAdminSalonsSalonIdSettings.RequestBody
 
 export type ReservationsEmployees = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200['employees']
+
+export type HandleServicesReorderFunc = (currentIndexes: [number, number?, number?], newIndex: number) => void
+
+export type ServicesActiveKeys = {
+	salonID: string
+	industries: string[]
+	categories: string[]
+}

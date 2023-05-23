@@ -8,7 +8,7 @@ import { forEach, isNil, unionBy } from 'lodash'
 import { useNavigate } from 'react-router-dom'
 
 // components
-import ServiceForm from './components/ServiceForm'
+import ServiceForm from './components/detail/ServiceForm'
 import ServiceEditModal from '../EmployeesPage/components/ServiceEditModal'
 
 // reducers

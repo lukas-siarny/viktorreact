@@ -9,7 +9,8 @@ import InputNumberField from '../../../../atoms/InputNumberField'
 import SwitchField from '../../../../atoms/SwitchField'
 
 // utils
-import { renderFromTo, validationNumberMin } from '../../../../utils/helper'
+import { renderFromTo } from '../../serviceUtils'
+import { validationNumberMin } from '../../../../utils/helper'
 
 // assets
 import { ReactComponent as ClockIcon } from '../../../../assets/icons/clock-icon.svg'
@@ -40,7 +41,6 @@ const ParameterValuesList: FC<Props> = (props) => {
 	} = props
 
 	const formErrors = form?.syncErrors?.serviceCategoryParameter || []
-	const formFields = form?.fields?.serviceCategoryParameter || []
 	const isFieldArrayError = invalid && error
 
 	const genExtra = (fieldData: IParameterValue, field: string) => {

@@ -7,7 +7,8 @@ import cx from 'classnames'
 
 // utils
 import { FORM, PARAMETER_TYPE, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
-import { arePriceAndDurationDataEmpty, formFieldID, renderPriceAndDurationInfo, showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { formFieldID, showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { arePriceAndDurationDataEmpty, renderPriceAndDurationInfo } from '../../ServicesPage/serviceUtils'
 
 // types
 import { RootState } from '../../../reducers'

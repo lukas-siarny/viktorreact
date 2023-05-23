@@ -2,9 +2,9 @@ import { z } from 'zod'
 
 import { isEmpty, isNil } from 'lodash'
 import { serializeValidationMessage, stringConstraint, uuidConstraint, zodErrorsToFormErrors } from './baseSchema'
-import { FORM, VALIDATION_MAX_LENGTH, PARAMETER_TYPE, SERVICE_DESCRIPTION_LNG } from '../utils/enums'
+import { FORM, VALIDATION_MAX_LENGTH, PARAMETER_TYPE } from '../utils/enums'
 // eslint-disable-next-line import/no-cycle
-import { arePriceAndDurationDataEmpty } from '../utils/helper'
+import { arePriceAndDurationDataEmpty } from '../pages/ServicesPage/serviceUtils'
 
 const validatePriceAndDurationData = (value: z.infer<typeof priceAndDurationSchema>, ctx: z.RefinementCtx, paths: any[] = []) => {
 	let isError = false
@@ -163,18 +163,21 @@ const serviceSchema = priceAndDurationSchema
 			autoApproveReservations: z.boolean()
 		}),
 		serviceCategoryParameter: parameterValueSchema.array(),
-		descriptionLocalizations: z.tuple([
-			z.object({
-				language: z.literal(SERVICE_DESCRIPTION_LNG.DEFAULT),
-				value: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1500, false).nullish()
-			}),
-			z.object({
-				language: z.literal(SERVICE_DESCRIPTION_LNG.EN),
-				value: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1500, false).nullish()
-			})
-		])
+		descriptionLocalizations: z.object({
+			use: z.boolean(),
+			defualtLanguage: z.string().nullish(),
+			enLanguage: z.string().nullish()
+		})
 	})
 	.superRefine((val, ctx) => {
+		if (val.descriptionLocalizations.use && !val.descriptionLocalizations.defualtLanguage) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: serializeValidationMessage('loc:Toto pole je povinné'),
+				path: ['descriptionLocalizations', 'defualtLanguage']
+			})
+		}
+
 		if (!val.useCategoryParameter) {
 			validatePriceAndDurationData(val, ctx)
 		} else {
@@ -183,14 +186,6 @@ const serviceSchema = priceAndDurationSchema
 					code: z.ZodIssueCode.custom,
 					message: serializeValidationMessage('loc:Musíte zvoliť a nastaviť aspoň jednu hodnotu parametra!'),
 					path: ['serviceCategoryParameter', '_error']
-				})
-			}
-
-			if (val?.descriptionLocalizations && !val?.descriptionLocalizations[0].value && val?.descriptionLocalizations.some((value, index) => index !== 0 && value.value)) {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: serializeValidationMessage('loc:Toto pole je povinné'),
-					path: ['descriptionLocalizations', 0, 'value']
 				})
 			}
 

@@ -26,7 +26,11 @@ import Voucher from './Voucher'
 // assets
 import { ReactComponent as EyeOffIcon } from '../../../assets/icons/eye-off-pink.svg'
 import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
+
+// schema
 import { ISalonReservationsPageURLQueryParams } from '../../../schemas/queryParams'
+
+// hooks
 import { formatObjToQuery } from '../../../hooks/useQueryParamsZod'
 
 const SMS_TIME_STATS_PERMISSIONS = [PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET]

@@ -10,9 +10,10 @@ import { ReactComponent as DragIcon } from '../assets/icons/drag-icon.svg'
 interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
 	'data-row-key': string
 	disabled?: boolean
+	dndWithHandler?: boolean
 }
 
-const DragableTableRow = ({ children, ...props }: RowProps) => {
+const DraggableTableRow = ({ children, dndWithHandler = true, ...props }: RowProps) => {
 	const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({
 		id: props['data-row-key']
 	})
@@ -21,19 +22,33 @@ const DragableTableRow = ({ children, ...props }: RowProps) => {
 		...props.style,
 		transform: CSS.Transform.toString(transform && { ...transform, scaleY: 1 }),
 		transition,
+		cursor: dndWithHandler ? 'default' : 'move',
 		...(isDragging ? { position: 'relative', zIndex: 9999 } : {})
 	}
 
-	return (
+	const dndIcon = <DragIcon style={{ touchAction: 'none', cursor: 'move' }} className={'text-notino-black w-4 h-4 flex'} />
+
+	return dndWithHandler ? (
 		<tr {...props} ref={setNodeRef} style={style} {...attributes}>
 			{React.Children.map(children, (child) => {
-				if ((child as React.ReactElement).key === 'sort') {
+				if (React.isValidElement(child) && child.key === 'sort') {
 					return React.cloneElement(child as React.ReactElement, {
 						children: (
 							<div className={cx({ 'pointer-events-none': props.disabled })} ref={setActivatorNodeRef} {...listeners}>
-								<DragIcon style={{ touchAction: 'none', cursor: 'move' }} className={'text-notino-pink w-4 h-4 flex'} />
+								{dndIcon}
 							</div>
 						)
+					})
+				}
+				return child
+			})}
+		</tr>
+	) : (
+		<tr {...props} ref={setNodeRef} style={style} {...attributes} {...listeners}>
+			{React.Children.map(children, (child) => {
+				if (React.isValidElement(child) && child.key === 'sort') {
+					return React.cloneElement(child as React.ReactElement, {
+						children: <div className={cx({ 'pointer-events-none': props.disabled })}>{dndIcon}</div>
 					})
 				}
 				return child
@@ -42,4 +57,4 @@ const DragableTableRow = ({ children, ...props }: RowProps) => {
 	)
 }
 
-export default DragableTableRow
+export default DraggableTableRow

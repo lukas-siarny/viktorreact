@@ -38,6 +38,7 @@ module.exports = {
 				grayDarker: '#404040', // neutral-700
 				grayDark: '#808080',
 				gray: '#BFBFBF',
+				grayMedium: '#9F9F9F',
 				grayLight: '#E6E6E6',
 				grayLighter: '#F5F5F5', // neutral-100
 				white: colors.white,

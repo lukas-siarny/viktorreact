@@ -20,13 +20,15 @@ import { RootState } from '../../../reducers'
 
 // components
 import SalonIdsForm from '../../../components/SalonIdsForm'
+import ConfirmModal from '../../../atoms/ConfirmModal'
 
 // assets
 import { ReactComponent as CheckIcon } from '../../../assets/icons/checkbox-checked-icon-24.svg'
-import ConfirmModal from '../../../atoms/ConfirmModal'
 
 // redux
 import { getCurrentUser } from '../../../reducers/users/userActions'
+
+// schemas
 import { ISalonIdsForm } from '../../../schemas/reservation'
 
 enum REQUEST_MODAL_TYPE {
@@ -52,9 +54,6 @@ const CalendarIntegrations = () => {
 	const hasMicrosoftSync = get(signedSalon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.MICROSOFT}].enabledSync`)
 	const googleSyncInitData = authUser.data?.salons.filter((salon) => get(salon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.GOOGLE}].enabledSync`))
 	const microsoftSyncInitData = authUser.data?.salons.filter((salon) => get(salon, `calendarSync.[${EXTERNAL_CALENDAR_TYPE.MICROSOFT}].enabledSync`))
-
-	// NOTE: intercept Microsoft auth token request and get code from the payload and send it to our BE
-	const originalFetch = window.fetch
 	const getOptionsData = () => {
 		if (visibleModal?.requestType === REQUEST_MODAL_TYPE.DELETE) {
 			if (visibleModal.type === EXTERNAL_CALENDAR_TYPE.GOOGLE) return googleSyncInitData
@@ -62,7 +61,8 @@ const CalendarIntegrations = () => {
 		}
 		return authUser?.data?.salons
 	}
-
+	// NOTE: intercept Microsoft auth token request and get code from the payload and send it to our BE
+	const originalFetch = window.fetch
 	window.fetch = async (...args): Promise<any> => {
 		const [url, config] = args
 		if (url === EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].url) {
@@ -234,12 +234,12 @@ const CalendarIntegrations = () => {
 		</>
 	)
 	return (
-		<div>
+		<>
 			{modals}
 			{hasGoogleSync && (
 				<div className={'flex items-center mb-4'}>
 					<CheckIcon className={'text-notino-pink mr-2'} />
-					<div>{t('loc:Synchronizácia s Google kalendárom bola spustená.')}</div>
+					<span>{t('loc:Synchronizácia s Google kalendárom bola spustená.')}</span>
 					<Button
 						onClick={() => {
 							dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [salonID] }))
@@ -262,7 +262,7 @@ const CalendarIntegrations = () => {
 			{hasMicrosoftSync && (
 				<div className={'flex items-center mb-4'}>
 					<CheckIcon className={'text-notino-pink mr-2'} />
-					<div>{t('loc:Synchronizácia s Microsoft kalendárom bola spustená.')}</div>
+					<span>{t('loc:Synchronizácia s Microsoft kalendárom bola spustená.')}</span>
 					<Button
 						onClick={() => {
 							dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [salonID] }))
@@ -326,7 +326,7 @@ const CalendarIntegrations = () => {
 			<a href={icalUrl} className={'sync-button apple'}>
 				{t('loc:Import pomocou .ics súboru')}
 			</a>
-		</div>
+		</>
 	)
 }
 

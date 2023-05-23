@@ -37,8 +37,6 @@ type DeleteUrls = {
 export const showErrorNotifications = (error: AxiosError | Error | unknown, typeNotification = NOTIFICATION_TYPE.NOTIFICATION, skipRedirect = false) => {
 	let messages: IErrorMessage[] = get(error, 'response.data.messages') as any
 
-	console.log({ messages })
-
 	if (get(error, 'response.status') === 401) {
 		if (isLoggedIn()) {
 			messages = [

@@ -16,6 +16,7 @@ import { getServices } from '../../reducers/services/serviceActions'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import IndustryForm from './components/IndustryForm'
 import RequestNewServiceForm from './components/RequestNewServiceForm'
+import IndustryFilter from './components/IndustryFilter'
 
 // utils
 import { FORM, PERMISSION, NOTIFICATION_TYPE } from '../../utils/enums'
@@ -35,7 +36,6 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal
 // schema
 import { IIndustryForm } from '../../schemas/industry'
 import { IRequestNewServiceForm } from '../../schemas/service'
-import IndustryFilter from './components/IndustryFilter'
 
 type Props = SalonSubPageProps
 type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody

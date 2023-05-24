@@ -1,14 +1,14 @@
 import React, { FC, useEffect, useState } from 'react'
-import { Field, InjectedFormProps, reduxForm, submit, FieldArray, WrappedFieldArrayProps, getFormValues, change } from 'redux-form'
+import { Field, InjectedFormProps, reduxForm, submit, getFormValues, change } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Button, CheckboxOptionType, Collapse, Form, Row } from 'antd'
-import cx from 'classnames'
+import { Button, Collapse, Form, Row } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
 // assets
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 
 // components
+import CheckboxGroupField from '../../../atoms/CheckboxGroupField'
 
 // utils
 import { FORM, PERMISSION, SUBMIT_BUTTON_ID } from '../../../utils/enums'
@@ -18,7 +18,8 @@ import Permissions from '../../../utils/Permissions'
 
 // schema
 import { IIndustryForm, validationIndustryFn } from '../../../schemas/industry'
-import CheckboxGroupField from '../../../atoms/CheckboxGroupField'
+
+// types
 import { IServicesSelectionData } from '../../../types/interfaces'
 import { RootState } from '../../../reducers'
 

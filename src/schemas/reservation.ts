@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { dateConstraint, selectObjConstraint, stringConstraint, zodErrorsToFormErrors } from './baseSchema'
+import { dateConstraint, selectObjConstraint, stringConstraint, uuidConstraint, zodErrorsToFormErrors } from './baseSchema'
 import { VALIDATION_MAX_LENGTH, FORM, CALENDAR_EVENT_TYPE } from '../utils/enums'
 // eslint-disable-next-line import/no-cycle
 import { CalendarEvent, ICalendarEmployeeOptionItem, ICalendarEventDetailPayload, ISelectOptionItem, ServiceType } from '../types/interfaces'
@@ -56,3 +56,11 @@ export type ICalendarReservationForm = Omit<z.infer<typeof reservationsSchema>, 
 }
 
 export const validationReservationsFn = (values: ICalendarReservationForm, props: any) => zodErrorsToFormErrors(reservationsSchema, FORM.CALENDAR_RESERVATION_FORM, values, props)
+
+export const salonIds = z.object({
+	salonIDs: uuidConstraint.array()
+})
+
+export type ISalonIdsForm = z.infer<typeof salonIds>
+
+export const validationSalonIdsSyncFn = (values: ISalonIdsForm, props: any) => zodErrorsToFormErrors(salonIds, FORM.SALON_IDS_FORM, values, props)

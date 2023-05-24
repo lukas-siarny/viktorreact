@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Field, FieldArray, InjectedFormProps, reduxForm, getFormValues, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
@@ -11,6 +11,7 @@ import SelectField from '../../../atoms/SelectField'
 
 // components
 import NotificationArrayFields from './NotificationArrayFields'
+import CalendarIntegrations from './CalendarIntegrations'
 import ImportForm from '../../../components/ImportForm'
 import RemainingSmsCredit from '../../../components/Dashboards/RemainingSmsCredit'
 
@@ -22,7 +23,7 @@ import { RootState } from '../../../reducers'
 import { FORM, NOTIFICATION_CHANNEL, RS_NOTIFICATION, STRINGS, PERMISSION, SUBMIT_BUTTON_ID, REQUEST_STATUS, TEMPLATE_OPTIONS } from '../../../utils/enums'
 import { formFieldID, showErrorNotification, validationRequiredNumber } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
-import Permissions from '../../../utils/Permissions'
+import Permissions, { checkPermissions } from '../../../utils/Permissions'
 import { postReq } from '../../../utils/request'
 
 // assets
@@ -31,6 +32,7 @@ import { ReactComponent as SettingsIcon } from '../../../assets/icons/setting.sv
 import { ReactComponent as BellIcon } from '../../../assets/icons/bell-24.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
+import { ReactComponent as CalendarSyncIcon } from '../../../assets/icons/sync-calendar.svg'
 
 type Props = InjectedFormProps<IReservationSystemSettingsForm, ComponentProps> & ComponentProps
 
@@ -69,6 +71,8 @@ const ReservationSystemSettingsForm = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const walletID = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.wallet?.id)
+	const authUser = useSelector((state: RootState) => state.user.authUser)
+	const isPartner = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser.data?.uniqPermissions])
 	const formValues: Partial<IReservationSystemSettingsForm> = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state))
 	const disabled = !formValues?.enabledReservations
 
@@ -134,6 +138,7 @@ const ReservationSystemSettingsForm = (props: Props) => {
 			<p className='x-regular text-notino-grayDark mb-0'>
 				{t('loc:Zapína a vypína rezervačný systém, cez ktorý je možné v kalendári spravovať salónové rezervácie a smeny zamestnancov.')}
 			</p>
+			{/* Time limits */}
 			<div className={'flex mt-10'}>
 				<h3 className={'mb-0 mt-0 flex items-center'}>
 					<SettingsIcon className={'text-notino-black mr-2'} />
@@ -141,7 +146,6 @@ const ReservationSystemSettingsForm = (props: Props) => {
 				</h3>
 			</div>
 			<Divider className={'my-3'} />
-			{/* Time limits */}
 			<Row justify={'space-between'}>
 				<div className={'w-12/25'}>
 					<div className={'flex items-center'}>
@@ -221,6 +225,22 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Časové intervaly medzi rezerváciami.')}</p>
 				</div>
 			</Row>
+			{/* Integrate RS calendar to: Google, Outlook, iCal */}
+			{isPartner && (
+				<>
+					<div className={'flex mt-10'}>
+						<h3 className={'mb-0 mt-0 flex items-center'}>
+							<CalendarSyncIcon className={'text-notino-black mr-2'} />
+							{t('loc:Synchronizácia kalendára')}
+						</h3>
+					</div>
+					<Divider className={'my-3'} />
+					<p className='x-regular text-notino-grayDark mb-4'>
+						{t('loc:Informácie o vašich rezerváciach sa budú automaticky synchronizovať z Notino Partner App do vybraných kalendárov.')}
+					</p>
+					<CalendarIntegrations />
+				</>
+			)}
 			<Row justify={'space-between'} className='mt-10'>
 				{/* Imports */}
 				<div className={'flex'}>

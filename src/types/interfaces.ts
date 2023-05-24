@@ -40,6 +40,7 @@ import {
 export interface IErrorMessage {
 	type: MSG_TYPE
 	message: string
+	path?: string
 }
 
 export interface IPaginationQuery {
@@ -113,7 +114,7 @@ export interface AutocompleteLabelInValue {
 	value: string | null
 }
 
-export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
+export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent'] & { isImported: boolean }
 export interface ICalendarEventDetailPayload {
 	data: CalendarEventDetail | null
 }
@@ -515,12 +516,14 @@ export type PopoverTriggerPosition = {
 	height: number
 }
 
+export type HandleUpdateReservationStateFunc = (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD, data?: { serviceId?: string, customerId?: string }) => void
+
 export interface ICalendarReservationPopover {
 	data: ReservationPopoverData | null
 	position: PopoverTriggerPosition | null
 	isOpen: boolean
 	setIsOpen: (isOpen: boolean) => void
-	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => void
+	handleUpdateReservationState: HandleUpdateReservationStateFunc
 	onEditEvent: (eventType: CALENDAR_EVENT_TYPE, eventId: string) => void
 	placement: TooltipPlacement
 }
@@ -620,7 +623,8 @@ export type ConfirmModalUpdateReservationData = {
 	calendarEventID: string
 	state: RESERVATION_STATE
 	reason?: string
-	paymentMethod?: RESERVATION_PAYMENT_METHOD
+	paymentMethod?: RESERVATION_PAYMENT_METHOD,
+	data?: { serviceId?: string; customerId?: string }
 }
 
 export type ConfirmModalData = ConfirmModalReservationData | ConfirmModalEventnData | ConfirmModalDeleteEventData | ConfirmModalUpdateReservationData | null

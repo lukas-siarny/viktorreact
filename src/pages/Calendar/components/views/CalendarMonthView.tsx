@@ -252,9 +252,11 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 
 	useEffect(() => {
 		// NOTE: ak neni je povoleny online booking tak sa nastavi disabled state nad kalendarom
+		const body = document.getElementsByClassName('fc-daygrid-body')[0]
 		if (!enabledSalonReservations) {
-			const body = document.getElementsByClassName('fc-daygrid-body')[0]
 			body.classList.add('active')
+		} else {
+			body.classList.remove('active')
 		}
 	}, [enabledSalonReservations])
 

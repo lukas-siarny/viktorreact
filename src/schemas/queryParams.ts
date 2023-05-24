@@ -20,7 +20,9 @@ import {
 	EMPLOYEES_TAB_KEYS,
 	REVIEW_VERIFICATION_STATUS,
 	REVIEWS_TAB_KEYS,
-	DEFAULT_DATE_INIT_FORMAT
+	DEFAULT_DATE_INIT_FORMAT,
+	RESERVATION_FROM_IMPORT,
+	CALENDAR_EVENT_TYPE_REQUEST
 } from '../utils/enums'
 import { dateConstraint, twoCharsConstraint, uuidConstraint } from './baseSchema'
 
@@ -123,7 +125,7 @@ const calendarEventsQueryParamsSchema = z.object({
 	end: dateConstraint,
 	employeeIDs: z.string().array().nullish(),
 	categoryIDs: z.string().array().nullish(),
-	eventTypes: z.nativeEnum(CALENDAR_EVENT_TYPE).array().nullish(),
+	eventTypes: z.enum(CALENDAR_EVENT_TYPE_REQUEST).array().nullish(),
 	reservationStates: z.nativeEnum(RESERVATION_STATE).array().nullish()
 })
 

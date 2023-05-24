@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import i18next, { t } from 'i18next'
 import { uniqueId, startsWith, isEmpty } from 'lodash'
 import Scroll from 'react-scroll'
+import { notification } from 'antd'
 
 // types
 import {
@@ -82,8 +83,6 @@ interface IComapreAndSortDayEventsData {
 
 const CALENDAR_EVENT_TYPES_ORDER = {
 	[CALENDAR_EVENT_TYPE.RESERVATION]: 0,
-	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-	// [CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT]: 0,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT]: 1,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]: 2,
 	[CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]: 3
@@ -469,8 +468,6 @@ const composeDayViewReservations = (
 				}
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 				case CALENDAR_EVENT_TYPE.RESERVATION:
-					// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-					// case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 					composedEvents.push({
 						...calendarEvent
 					})
@@ -680,8 +677,6 @@ const composeWeekViewReservations = (
 				}
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 				case CALENDAR_EVENT_TYPE.RESERVATION:
-					// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-					// case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
 					composedEvents.push({
 						...calendarEvent
 					})
@@ -831,4 +826,28 @@ export const composeMonthViewReservations = (days: ICalendarMonthlyReservationsP
 	}, [] as ICalendarMonthlyReservationsCardData[])
 
 	return composedEvents
+}
+
+export const validateReservationAndShowNoticiation = ({ serviceId, customerId }: { serviceId?: string | number; customerId?: string | number }) => {
+	const errors: { message: string; description: string }[] = []
+
+	if (!serviceId) {
+		errors.push({
+			message: t('loc:Služba nie je zadaná'),
+			description: t('loc:Nie je možné editovať rezerváciu bez zadanej služby')
+		})
+	}
+
+	if (!customerId) {
+		errors.push({
+			message: t('loc:Zákazník nie je zadaný'),
+			description: t('loc:Nie je možné editovať rezerváciu bez zadaného zákazníka')
+		})
+	}
+
+	if (!isEmpty(errors)) {
+		errors.forEach((error) => notification.error(error))
+	}
+
+	return errors
 }

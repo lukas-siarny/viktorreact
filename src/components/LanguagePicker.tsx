@@ -30,7 +30,7 @@ import { ReactComponent as EN_Flag } from '../assets/flags/GB.svg'
 import { ReactComponent as CZ_Flag } from '../assets/flags/CZ.svg'
 import { ReactComponent as HU_Flag } from '../assets/flags/HU.svg'
 import { ReactComponent as RO_Flag } from '../assets/flags/RO.svg'
-import { ReactComponent as BgFlag } from '../assets/flags/BG.svg'
+import { ReactComponent as BG_Flag } from '../assets/flags/BG.svg'
 /* import { ReactComponent as IT_Flag } from '../assets/flags/IT.svg' */
 
 // components
@@ -71,7 +71,7 @@ export const LOCALES = {
 	[LANGUAGE.BG]: {
 		ISO_639: 'bg',
 		antD: bg_BG,
-		icon: BgFlag,
+		icon: BG_Flag,
 		countryCode: 'BG'
 	} /* ,
 	[LANGUAGE.IT]: {

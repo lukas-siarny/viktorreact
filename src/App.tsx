@@ -1,15 +1,13 @@
 import React, { Suspense, useEffect, useState } from 'react'
 import { Provider } from 'react-redux'
 import { I18nextProvider } from 'react-i18next'
+import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/es/integration/react'
 import { Spin, ConfigProvider } from 'antd'
 import { StyleProvider } from '@ant-design/cssinjs'
-// import { Locale } from 'antd/lib/locale'
-
-import { Locale } from 'antd/lib/locale-provider'
+import { Locale } from 'antd/lib/locale'
 import dayjs from 'dayjs'
 import { GoogleOAuthProvider } from '@react-oauth/google'
-import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom'
 import { PublicClientApplication, Configuration } from '@azure/msal-browser'
 import { MsalProvider } from '@azure/msal-react'
 

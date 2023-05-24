@@ -81,6 +81,7 @@ const IndustryPage = (props: Props) => {
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.INDUSTRY)(state)) as IIndustryForm
 
 	const rootCategory = categories.data?.find((category) => category.id === industryID)
+	const rootCategorySalonData = services?.data?.groupedServicesByCategory?.find((category) => category.category?.id === industryID)
 
 	const [isVisible, setIsVisible] = useState<boolean>(false)
 	const [servicesSelectionData, setServicesSelectionData] = useState<IServicesSelectionData | null>(null)
@@ -97,44 +98,42 @@ const IndustryPage = (props: Props) => {
 	const loading = categories.isLoading || services.isLoading
 
 	useEffect(() => {
-		;(async () => {
-			const categoriesData = await dispatch(getCategories())
-			const salonCategoriesData = await dispatch(getServices({ salonID }))
-			const rootCategoryData = categoriesData?.data?.find((category) => category.id === industryID)
-			const rootCategorySalonData = salonCategoriesData?.data?.groupedServicesByCategory?.find((category) => category.category?.id === industryID)
+		dispatch(getCategories())
+		dispatch(getServices({ salonID }))
+	}, [dispatch, salonID])
 
-			if (!rootCategoryData) {
-				navigate('/404')
-			} else {
-				let formInitialValues: IIndustryForm = { categoryIDs: {} }
+	useEffect(() => {
+		if (!rootCategory) {
+			navigate('/404')
+		} else {
+			let formInitialValues: IIndustryForm = { categoryIDs: {} }
 
-				rootCategoryData.children.forEach((category) => {
-					const serviceCategoryIDs: string[] = []
-					const categoryDataForm = {
-						serviceCategoryIDs,
-						orderIndex: category.orderIndex
-					}
+			rootCategory.children.forEach((category) => {
+				const serviceCategoryIDs: string[] = []
+				const categoryDataForm = {
+					serviceCategoryIDs,
+					orderIndex: category.orderIndex
+				}
 
-					category.children.forEach((serviceCategory) => {
-						const servicesDataUser = getCategoryById(rootCategorySalonData, serviceCategory.id)
-						if (servicesDataUser?.category?.id) {
-							serviceCategoryIDs.push(servicesDataUser.category.id)
-						}
-					})
-
-					formInitialValues = {
-						...formInitialValues,
-						categoryIDs: {
-							...formInitialValues.categoryIDs,
-							[category.id]: categoryDataForm
-						}
+				category.children.forEach((serviceCategory) => {
+					const servicesDataUser = getCategoryById(rootCategorySalonData, serviceCategory.id)
+					if (servicesDataUser?.category?.id) {
+						serviceCategoryIDs.push(servicesDataUser.category.id)
 					}
 				})
 
-				dispatch(initialize(FORM.INDUSTRY, formInitialValues))
-			}
-		})()
-	}, [dispatch, industryID, salonID, navigate])
+				formInitialValues = {
+					...formInitialValues,
+					categoryIDs: {
+						...formInitialValues.categoryIDs,
+						[category.id]: categoryDataForm
+					}
+				}
+			})
+
+			dispatch(initialize(FORM.INDUSTRY, formInitialValues))
+		}
+	}, [dispatch, navigate, rootCategory, rootCategorySalonData])
 
 	useEffect(() => {
 		if (rootCategory) {

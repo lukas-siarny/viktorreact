@@ -153,12 +153,17 @@
 							border: none
 						&:hover
 							outline: none
-				&:hover,
-				&:focus-visible
-					background-color: $backgroundColor-notino-grayLight
-					.ant-checkbox
-						.ant-checkbox-inner
-							border-color: $backgroundColor-notino-pink
+						&.ant-checkbox-disabled
+							.ant-checkbox-inner
+								background: $backgroundColor-notino-pink
+								opacity: 0.6
+				&:not(.ant-checkbox-wrapper-disabled)
+					&:hover,
+					&:focus-visible
+						background-color: $backgroundColor-notino-grayLight
+						.ant-checkbox
+							.ant-checkbox-inner
+								border-color: $backgroundColor-notino-pink
 
 // checkboxgroup with image
 @keyframes opacityAnimation

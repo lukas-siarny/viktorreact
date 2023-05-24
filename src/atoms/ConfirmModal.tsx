@@ -5,14 +5,20 @@ import cx from 'classnames'
 
 // assets
 import { ReactComponent as CloseIcon } from '../assets/icons/close-icon-modal.svg'
+import PopConfirmComponent from '../components/PopConfirmComponent'
 
 export interface IConfirmModal extends ModalProps {
 	loading?: boolean
 	disabled?: boolean
+	okConfirm?: {
+		title: string
+		okText?: string
+		placement?: string
+	}
 }
 
 const ConfirmModal: FC<IConfirmModal> = (props) => {
-	const { loading, disabled, onOk, onCancel, children, okText, cancelText, ...restProps } = props
+	const { loading, disabled, onOk, onCancel, children, okText, cancelText, okConfirm, ...restProps } = props
 	const [t] = useTranslation()
 
 	return (
@@ -30,17 +36,38 @@ const ConfirmModal: FC<IConfirmModal> = (props) => {
 				>
 					{cancelText || t('loc:Zrušiť')}
 				</Button>
-				<Button
-					type={'primary'}
-					size={'middle'}
-					className={cx(props.okButtonProps?.className, 'noti-btn w-1/2')}
-					htmlType={'button'}
-					onClick={onOk as any}
-					disabled={disabled}
-					loading={loading}
-				>
-					{okText || 'Ok'}
-				</Button>
+				{okConfirm ? (
+					<PopConfirmComponent
+						placement={'top' || okConfirm.placement}
+						title={okConfirm.title}
+						onConfirm={onOk as any}
+						okText={t('loc:Potvrdiť') || okConfirm.okText}
+						allowedButton={
+							<Button
+								type={'primary'}
+								size={'middle'}
+								className={cx(props.okButtonProps?.className, 'noti-btn w-1/2')}
+								htmlType={'button'}
+								disabled={disabled}
+								loading={loading}
+							>
+								{okText || 'Ok'}
+							</Button>
+						}
+					/>
+				) : (
+					<Button
+						type={'primary'}
+						size={'middle'}
+						className={cx(props.okButtonProps?.className, 'noti-btn w-1/2')}
+						htmlType={'button'}
+						onClick={onOk as any}
+						disabled={disabled}
+						loading={loading}
+					>
+						{okText || 'Ok'}
+					</Button>
+				)}
 			</div>
 		</Modal>
 	)

@@ -17,6 +17,7 @@ import { patchReq } from '../../utils/request'
 // reducers
 import { RootState } from '../../reducers'
 import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
+import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
 import {
@@ -132,8 +133,7 @@ const initDisabledNotifications = (notifications: DisabledNotificationsArray): I
 const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { salonID } = props
-	const { parentPath } = props
+	const { parentPath, salonID } = props
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const submitting = useSelector(isSubmitting(FORM.RESEVATION_SYSTEM_SETTINGS))
 
@@ -146,6 +146,7 @@ const ReservationsSettingsPage = (props: SalonSubPageProps) => {
 	}
 
 	const fetchData = async () => {
+		await dispatch(getCurrentUser())
 		const salonRes = await dispatch(selectSalon(salonID))
 
 		if (salonRes?.data?.settings) {

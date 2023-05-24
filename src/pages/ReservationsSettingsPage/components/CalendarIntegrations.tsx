@@ -239,14 +239,14 @@ const CalendarIntegrations = () => {
 			{hasGoogleSync && (
 				<div className={'flex items-center mb-4'}>
 					<CheckIcon className={'text-notino-pink mr-2'} />
-					<span>{t('loc:Synchronizácia s Google kalendárom bola spustená.')}</span>
+					<span>{t('loc:Synchronizácia s {{ calendarType }} kalendárom bola spustená.', { calendarType: 'Google' })}</span>
 					<Button
 						onClick={() => {
 							dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [salonID] }))
 							setVisibleModal({
 								type: EXTERNAL_CALENDAR_TYPE.GOOGLE,
 								requestType: REQUEST_MODAL_TYPE.DELETE,
-								title: t('loc:Zrušenie Google synchronizácie'),
+								title: t('loc:Zrušenie {{ calendarType }} synchronizácie', { calendarType: 'Google' }),
 								description: t('loc:Vyberte, pre ktoré salóny chcete zrušiť synchronizáciu do vybraných kalendárov.')
 							})
 						}}
@@ -262,14 +262,14 @@ const CalendarIntegrations = () => {
 			{hasMicrosoftSync && (
 				<div className={'flex items-center mb-4'}>
 					<CheckIcon className={'text-notino-pink mr-2'} />
-					<span>{t('loc:Synchronizácia s Microsoft kalendárom bola spustená.')}</span>
+					<span>{t('loc:Synchronizácia s {{ calendarType }} kalendárom bola spustená.', { calendarType: 'Microsoft' })}</span>
 					<Button
 						onClick={() => {
 							dispatch(initialize(FORM.SALON_IDS_FORM, { salonIDs: [salonID] }))
 							setVisibleModal({
 								type: EXTERNAL_CALENDAR_TYPE.MICROSOFT,
 								requestType: REQUEST_MODAL_TYPE.DELETE,
-								title: t('loc:Zrušenie Microsoft synchronizácie'),
+								title: t('loc:Zrušenie {{ calendarType }} synchronizácie', { calendarType: 'Microsoft' }),
 								description: t('loc:Vyberte, pre ktoré salóny chcete zrušiť synchronizáciu do vybraných kalendárov.')
 							})
 						}}
@@ -292,7 +292,7 @@ const CalendarIntegrations = () => {
 						setVisibleModal({
 							type: EXTERNAL_CALENDAR_TYPE.GOOGLE,
 							requestType: REQUEST_MODAL_TYPE.CREATE,
-							title: t('loc:Synchronizácia Google kalendára'),
+							title: t('loc:Synchronizácia {{ calendarType }} kalendára', { calendarType: 'Google' }),
 							description: t('loc:Vyberte, z ktorých salónov chcete automaticky synchronizovať informácie o vašich rezerváciach.')
 						})
 					}
@@ -312,7 +312,7 @@ const CalendarIntegrations = () => {
 						setVisibleModal({
 							type: EXTERNAL_CALENDAR_TYPE.MICROSOFT,
 							requestType: REQUEST_MODAL_TYPE.CREATE,
-							title: t('loc:Synchronizácia Microsoft kalendára'),
+							title: t('loc:Synchronizácia {{ calendarType }} kalendára', { calendarType: 'Microsoft' }),
 							description: t('loc:Vyberte, z ktorých salónov chcete automaticky synchronizovať informácie o vašich rezerváciach.')
 						})
 					}

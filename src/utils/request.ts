@@ -195,7 +195,7 @@ export const getReq = async <T extends keyof GetUrls>(
 		if (hide) {
 			hide()
 		}
-		return Promise.reject(e)
+		return Promise.reject(e) as any
 	}
 }
 
@@ -255,12 +255,12 @@ export const postReq = async <T extends keyof PostUrls>(
 	}
 
 	try {
-		const res = await axios.post(fullfilURL, reqBody, config)
+		const res = await (axios.post(fullfilURL, reqBody, config) as Promise<ReturnType<PostUrls[T]['post']>>)
 		if (typeNotification) {
 			if (customConfig && customConfig.messages) {
 				showNotifications(customConfig.messages, typeNotification)
 			} else if (has(res, 'data.messages')) {
-				showNotifications(get(res, 'data.messages'), typeNotification)
+				showNotifications(get(res, 'data.messages') as IErrorMessage[], typeNotification)
 			}
 		}
 
@@ -275,7 +275,7 @@ export const postReq = async <T extends keyof PostUrls>(
 		if (hide) {
 			hide()
 		}
-		return Promise.reject(e)
+		return Promise.reject(e) as any
 	}
 }
 
@@ -353,7 +353,7 @@ export const patchReq = async <T extends keyof PatchUrls>(
 		if (hide) {
 			hide()
 		}
-		return Promise.reject(e)
+		return Promise.reject(e) as any
 	}
 }
 
@@ -416,7 +416,7 @@ export const deleteReq = async <T extends keyof DeleteUrls>(
 		if (!axios.isCancel(e) && typeNotification) {
 			showErrorNotifications(e, typeNotification, customConfig?.skipRedirectToLoginPage)
 		}
-		return Promise.reject(e)
+		return Promise.reject(e) as any
 	}
 }
 

@@ -24,11 +24,12 @@ import { ISelectedSalonPayload, selectSalon } from '../../reducers/selectedSalon
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
-import { ILoadingAndFailure, INoteModal, INotinoUserForm, IVoucherForm, SalonPageProps } from '../../types/interfaces'
+import { ILoadingAndFailure, INoteModal, INotinoUserForm, SalonPageProps } from '../../types/interfaces'
 
 // schema
 import { INoteForm } from '../../schemas/note'
 import { ISalonForm } from '../../schemas/salon'
+import { IVoucherForm } from '../../schemas/voucher'
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
@@ -507,7 +508,7 @@ const EditSalonPage: FC<EditSalonPageProps> = (props) => {
 								<Button
 									id={formFieldID(FORM.SALON, 'accept-salon')}
 									type={'primary'}
-									icon={<CheckIcon />}
+									icon={<CheckIcon color={'#fff'} />}
 									size={'middle'}
 									className={'noti-btn m-regular w-44 xl:w-56'}
 									onClick={(e) => {

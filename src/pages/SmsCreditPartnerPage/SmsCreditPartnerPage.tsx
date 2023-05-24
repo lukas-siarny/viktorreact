@@ -75,10 +75,11 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	}, [query.search, dispatch])
 
 	useEffect(() => {
-		if (salonID === selectedSalon.data?.id) {
-			dispatch(getSmsTimeStatsForSalon(salonID, query.date.year(), query.date.month() + 1))
+		if (!walletID || salonID !== selectedSalon.data?.id) {
+			return
 		}
-	}, [dispatch, salonID, query.date, selectedSalon.data?.id])
+		dispatch(getSmsTimeStatsForSalon(salonID, query.date.year(), query.date.month() + 1))
+	}, [dispatch, salonID, query.date, selectedSalon.data?.id, walletID])
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -146,4 +147,4 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET]))(SmsCreditPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET, PERMISSION.WALLET_TRANSACTION_CREATE]))(SmsCreditPage)

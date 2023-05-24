@@ -21,13 +21,13 @@ import { ReactComponent as CoinsIcon } from '../../assets/icons/coins.svg'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, LANGUAGE, PERMISSION, SALON_CREATE_TYPE, SALON_FILTER_STATES } from '../../utils/enums'
-import { withPermissions } from '../../utils/Permissions'
+import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { formatPrice, normalizeDirectionKeys } from '../../utils/helper'
 import { getSalonTagSourceType } from '../SalonsPage/components/salonUtils'
 import { LOCALES } from '../../components/LanguagePicker'
 
 // types
-import { IBreadcrumbs, IRechargeSmsCreditFilter } from '../../types/interfaces'
+import { IBreadcrumbs } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
 // redux
@@ -40,6 +40,7 @@ import useQueryParams, { formatObjToQuery } from '../../hooks/useQueryParamsZod'
 
 // schema
 import { rechargeSmsCreditAdminPageSchema } from '../../schemas/queryParams'
+import { IRechargeSmsCreditFilterForm } from '../../schemas/rechargeSmsCredit'
 
 type TableDataItem = NonNullable<ISalonsPayload['data']>['salons'][0]
 type SelectedRow = { id: React.Key; wallet: TableDataItem['wallet'] }
@@ -70,12 +71,17 @@ const RechargeSmsCreditAdminPage = () => {
 	const smsUnitPricesActual = useSelector((state: RootState) => state.smsUnitPrices.smsUnitPricesActual)
 	const defaultSelectedCountryCode = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 
+	const authUser = useSelector((state: RootState) => state.user.authUser)
+	const hasPermissionToSeeForm = checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.WALLET_TRANSACTION_CREATE])
+
 	const [query, setQuery] = useQueryParams(rechargeSmsCreditAdminPageSchema, {
 		limit: 50,
 		page: 1,
 		countryCode: defaultSelectedCountryCode || LOCALES[LANGUAGE.CZ].countryCode,
 		showForm: false
 	})
+
+	const showForm = query.showForm && hasPermissionToSeeForm
 
 	const selectedCountry = countries.data?.find((country) => country.code === query.countryCode)
 	const smsPriceUnityForSelectedCountry = smsUnitPricesActual?.data?.find((priceUnit) => priceUnit.country.code === query.countryCode)
@@ -100,7 +106,7 @@ const RechargeSmsCreditAdminPage = () => {
 			]
 		}
 
-		if (query.showForm) {
+		if (showForm) {
 			bc = {
 				items: [
 					...bc.items,
@@ -150,7 +156,7 @@ const RechargeSmsCreditAdminPage = () => {
 	}, [fetchSalons])
 
 	useEffect(() => {
-		if (query.showForm) {
+		if (showForm) {
 			return
 		}
 
@@ -163,7 +169,7 @@ const RechargeSmsCreditAdminPage = () => {
 				walletAvailableBalanceTo: query.walletAvailableBalanceTo
 			})
 		)
-	}, [query.search, query.sourceType, query.walletAvailableBalanceFrom, query.walletAvailableBalanceTo, query.countryCode, query.showForm, dispatch])
+	}, [query.search, query.sourceType, query.walletAvailableBalanceFrom, query.walletAvailableBalanceTo, query.countryCode, showForm, dispatch])
 
 	useEffect(() => {
 		dispatch(getSmsUnitPricesActual())
@@ -288,7 +294,7 @@ const RechargeSmsCreditAdminPage = () => {
 				<Breadcrumbs breadcrumbs={breadcrumbs()} backButtonPath={t('paths:index')} />
 			</Row>
 
-			{query.showForm ? (
+			{showForm ? (
 				<RechargeSmsCreditCheck
 					currency={currency}
 					country={selectedCountry}
@@ -309,7 +315,7 @@ const RechargeSmsCreditAdminPage = () => {
 						</h3>
 						<Divider className={'my-4'} />
 						<RechargeSmsCreditFilter
-							onSubmit={(values: IRechargeSmsCreditFilter) => {
+							onSubmit={(values: IRechargeSmsCreditFilterForm) => {
 								setSelectedRows({})
 								setQuery({ ...query, ...values })
 							}}
@@ -359,16 +365,27 @@ const RechargeSmsCreditAdminPage = () => {
 												maxCount: SELECTION_LIMIT
 											})}
 										</p>
-										<Button
-											type={'primary'}
-											className={'noti-btn'}
-											htmlType={'button'}
-											onClick={() => handleShowForm(true)}
-											icon={<ChevronRightIcon width={16} height={16} />}
-											disabled={loading || !selectedRowKeys.length}
-										>
-											{t('loc:Pokračovať')}
-										</Button>
+										<Permissions
+											allowed={[PERMISSION.WALLET_TRANSACTION_CREATE]}
+											render={(hasPermission, { openForbiddenModal }) => (
+												<Button
+													type={'primary'}
+													className={'noti-btn'}
+													htmlType={'button'}
+													onClick={() => {
+														if (hasPermission) {
+															handleShowForm(true)
+														} else {
+															openForbiddenModal()
+														}
+													}}
+													icon={<ChevronRightIcon width={16} height={16} />}
+													disabled={loading || !selectedRowKeys.length}
+												>
+													{t('loc:Pokračovať')}
+												</Button>
+											)}
+										/>
 									</div>
 								}
 							/>

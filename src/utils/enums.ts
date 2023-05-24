@@ -249,7 +249,12 @@ export enum PERMISSION {
 	CALENDAR_EVENT_UPDATE = 'CALENDAR_EVENT_UPDATE',
 	CALENDAR_EVENT_DELETE = 'CALENDAR_EVENT_DELETE',
 	READ_WALLET = 'READ_WALLET',
-	SMS_UNIT_PRICE_EDIT = 'SMS_UNIT_PRICE_EDIT'
+	SMS_UNIT_PRICE_EDIT = 'SMS_UNIT_PRICE_EDIT',
+	CATEGORY_EDIT = 'CATEGORY_EDIT',
+	CATEGORY_PARAMETER_EDIT = 'CATEGORY_PARAMETER_EDIT',
+	COSMETIC_EDIT = 'COSMETIC_EDIT',
+	LANGUAGE_EDIT = 'LANGUAGE_EDIT',
+	WALLET_TRANSACTION_CREATE = 'WALLET_TRANSACTION_CREATE'
 }
 
 export const ADMIN_PERMISSIONS: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
@@ -278,15 +283,15 @@ export enum TOKEN_AUDIENCE {
 	CANCEL_RESERVATION = 'CANCEL_RESERVATION'
 }
 
-export enum TAB_KEYS {
+export enum SALON_TABS_KEYS {
 	SALON_DETAIL = 'SALON_DETAIL',
 	SALON_HISTORY = 'SALON_HISTORY'
 }
 
 export enum SALONS_TAB_KEYS {
-	ACTIVE = 'active',
-	DELETED = 'deleted',
-	MISTAKES = 'mistakes'
+	ACTIVE = 'ACTIVE',
+	DELETED = 'DELETED',
+	MISTAKES = 'MISTAKES'
 }
 
 export enum EMPLOYEES_TAB_KEYS {
@@ -971,11 +976,6 @@ export enum RESERVATION_PAYMENT_METHOD {
 	OTHER = 'OTHER'
 }
 
-export enum SERVICE_TYPE {
-	ONLINE_BOOKING = 'ONLINE_BOOKING',
-	AUTO_CONFIRM = 'AUTO_CONFIRM'
-}
-
 export const CALENDAR_DEBOUNCE_DELAY = 300 // in ms
 export const CALENDAR_INIT_TIME = 500 // in ms
 
@@ -1184,6 +1184,17 @@ export const SMS_STATUS_NAME = (status: SMS_NOTIFICATION_STATUS) => {
 			return i18next.t('loc:Ignorovaná')
 		default:
 			return ''
+	}
+}
+
+export const SERVICE_ROW_KEY = (categoryID: string, serviceID: string) => `${categoryID}_${serviceID}`
+
+export const SERVICES_LIST_INIT = {
+	industries: {
+		data: [],
+		servicesCount: 0,
+		servicesAvailableForOnlineReservationsCount: 0,
+		servicesVisibleInPricelistCount: 0
 	}
 }
 

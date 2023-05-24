@@ -14,11 +14,10 @@ import {
 	CONFIRM_BULK,
 	RS_NOTIFICATION,
 	RS_NOTIFICATION_TYPE,
-	DAY,
-	SERVICE_TYPE,
 	RESERVATION_STATE,
 	RESERVATION_PAYMENT_METHOD,
 	CONFIRM_MODAL_DATA_TYPE,
+	SALON_TABS_KEYS,
 	CALENDAR_EVENT_DISPLAY_TYPE
 } from '../utils/enums'
 
@@ -29,7 +28,14 @@ import { TooltipPlacement } from 'antd/es/tooltip'
 // schema
 import { ICalendarEventForm } from '../schemas/event'
 import { ICalendarReservationForm } from '../schemas/reservation'
-import { ICalendarPageURLQueryParams, INotinoReservationsPageURLQueryParams, IRechargeSmsCreditAdminPageURLQueryParams, IReviewsPageURLQueryParams, ISalonReservationsPageURLQueryParams, IServicesPageURLQueryParams } from '../schemas/queryParams'
+import {
+	ICalendarPageURLQueryParams,
+	INotinoReservationsPageURLQueryParams,
+	IRechargeSmsCreditAdminPageURLQueryParams,
+	IReviewsPageURLQueryParams,
+	ISalonReservationsPageURLQueryParams,
+	IServicesPageURLQueryParams
+} from '../schemas/queryParams'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -118,8 +124,6 @@ export interface IEventTypeFilterForm {
 	eventType: CALENDAR_EVENT_TYPE
 }
 
-export type IReviewsFilter = Pick<IReviewsPageURLQueryParams, 'search' | 'verificationStatus' | 'salonCountryCode' | 'toxicityScoreFrom' | 'toxicityScoreTo'>
-
 export interface IJwtPayload {
 	aud: string
 	exp: number
@@ -131,7 +135,6 @@ export interface ILoadingAndFailure {
 	isLoading: boolean
 	isFailure: boolean
 }
-
 
 export interface IBreadcrumbItem {
 	name: string
@@ -153,17 +156,9 @@ export interface IStructuredAddress {
 	country: string | null
 	houseNumber: string | null
 }
-
-
-export interface IVoucherForm {
-	code: string
-}
-
 export interface INotinoUserForm {
 	assignedUser: ISelectOptionItem
 }
-
-
 
 export interface ISearchFilter {
 	search: string
@@ -178,19 +173,9 @@ export interface ISpecialistContactFilter {
 	search: string
 }
 
-export interface IRechargeSmsCreditForm {
-	amount: number
-	transactionNote?: string
-}
-
 export interface ISmsUnitPricesFilter {
 	search: string
 }
-
-export type IRechargeSmsCreditFilter = Pick<
-IRechargeSmsCreditAdminPageURLQueryParams,
-'search' | 'sourceType' | 'countryCode' | 'walletAvailableBalanceFrom' | 'walletAvailableBalanceTo'
->
 
 export type IServicesFilter = IServicesPageURLQueryParams
 
@@ -263,6 +248,7 @@ export interface ISearchableWithoutPagination<T> {
 export interface SalonSubPageProps {
 	salonID: string
 	parentPath?: string
+	tabKey?: SALON_TABS_KEYS
 }
 
 export interface IPermissions {
@@ -318,18 +304,10 @@ export interface IReservationSystemSettingsForm {
 	maxHoursB2cCreateReservationBeforeStart?: number | null
 	maxHoursB2cCancelReservationBeforeStart?: number | null
 	minutesIntervalB2CReservations?: number | null
-	// Pomocne checky pre chekcnutie all hodnot pre BOOKING / AUTO CONFIRM
-	autoConfirmAll: boolean
 	enabledCustomerReservationNotes?: boolean
 	enabledB2cReservations?: boolean
-	onlineBookingAll: boolean
 	disabledNotifications: {
 		[key in RS_NOTIFICATION]: IReservationsSettingsNotification
-	}
-	servicesSettings: {
-		[key in SERVICE_TYPE]: {
-			[key: string]: boolean
-		}
 	}
 }
 
@@ -445,7 +423,10 @@ export interface IActiveEmployeesPayload extends ISearchable<Paths.GetApiB2BAdmi
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]
-export type CalendarEmployee = Pick<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0], 'id' | 'color' | 'firstName' | 'lastName' | 'email' | 'image' | 'inviteEmail' | 'orderIndex'> & { orderIndex: number, inviteEmail?: string, isDeleted?: boolean }
+export type CalendarEmployee = Pick<
+	Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['employees'][0],
+	'id' | 'color' | 'firstName' | 'lastName' | 'email' | 'image' | 'inviteEmail' | 'orderIndex'
+> & { orderIndex: number; inviteEmail?: string; isDeleted?: boolean }
 export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
 export type CalendarEvent = CalendarEvents[0] & {
 	startDateTime: string
@@ -675,6 +656,14 @@ export type ServicePatchBody = Paths.PatchApiB2BAdminEmployeesEmployeeIdServices
 
 export type DisabledNotificationsArray = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['settings']['disabledNotifications']
 
-export type PathSettingsBody = Paths.PatchApiB2BAdminSalonsSalonIdSettings.RequestBody
+export type PatchSettingsBody = Paths.PatchApiB2BAdminSalonsSalonIdSettings.RequestBody
 
 export type ReservationsEmployees = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsPaginated.Responses.$200['employees']
+
+export type HandleServicesReorderFunc = (currentIndexes: [number, number?, number?], newIndex: number) => void
+
+export type ServicesActiveKeys = {
+	salonID: string
+	industries: string[]
+	categories: string[]
+}

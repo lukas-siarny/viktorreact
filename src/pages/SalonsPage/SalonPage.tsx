@@ -2,7 +2,7 @@ import React, { FC, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { map } from 'lodash'
-import { useLocation, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import i18next from 'i18next'
 import { Row } from 'antd'
 import { compose } from 'redux'
@@ -19,7 +19,7 @@ import { getPrefixCountryCode } from '../../utils/helper'
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
 
 // enums
-import { ENUMERATIONS_KEYS, FORM, NEW_SALON_ID, PERMISSION, TAB_KEYS } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, NEW_SALON_ID, PERMISSION, SALON_TABS_KEYS, STRINGS } from '../../utils/enums'
 
 // reducers
 import { getSalonLanguages } from '../../reducers/languages/languagesActions'
@@ -33,31 +33,11 @@ import { RootState } from '../../reducers'
 import useBackUrl from '../../hooks/useBackUrl'
 import { useChangeOpeningHoursFormFields } from '../../components/OpeningHours/OpeningHoursUtils'
 
-const getTabView = (pathname: string, salonID: string) => {
-	switch (pathname) {
-		case `${i18next.t('paths:salons')}/${salonID}/${i18next.t('paths:history')}`:
-			return TAB_KEYS.SALON_HISTORY
-		case `${i18next.t('paths:salons')}/${salonID}`:
-		default:
-			return TAB_KEYS.SALON_DETAIL
-	}
-}
-
-const getTabUrl = (selectedTabKey: TAB_KEYS, salonID: string) => {
+const getTabBreadcrumbName = (selectedTabKey: SALON_TABS_KEYS) => {
 	switch (selectedTabKey) {
-		case TAB_KEYS.SALON_HISTORY:
-			return `${i18next.t('paths:salons')}/${salonID}/${i18next.t('paths:history')}`
-		case TAB_KEYS.SALON_DETAIL:
-		default:
-			return `${i18next.t('paths:salons')}/${salonID}`
-	}
-}
-
-const getTabBreadcrumbName = (selectedTabKey: TAB_KEYS) => {
-	switch (selectedTabKey) {
-		case TAB_KEYS.SALON_HISTORY:
+		case SALON_TABS_KEYS.SALON_HISTORY:
 			return i18next.t('loc:História salónu')
-		case TAB_KEYS.SALON_DETAIL:
+		case SALON_TABS_KEYS.SALON_DETAIL:
 		default:
 			return i18next.t('loc:Detail salónu')
 	}
@@ -67,9 +47,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
-	const { pathname } = useLocation()
 
 	const { salonID } = props
+
+	const tabKey = props.tabKey || SALON_TABS_KEYS.SALON_DETAIL
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
@@ -86,8 +67,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const isNewSalon = salonID === NEW_SALON_ID
 
 	const [backUrl] = useBackUrl(t('paths:salons'))
-
-	const activeKey = getTabView(pathname, salonID)
 
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
@@ -110,19 +89,17 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		phonePrefixes
 	}
 
-	const onTabChange = (selectedTabKey: string) => navigate(getTabUrl(selectedTabKey as TAB_KEYS, salonID))
-
 	const salonDetail = <EditSalonPage {...commonProps} salonID={salonID} salon={salon} isNotinoUser={isNotinoUser} isDeletedSalon={isDeletedSalon} backUrl={backUrl} />
 
 	const getBreadcrumbs = () => {
 		let breadcrumbDetailItem
 		if (isNewSalon) {
 			breadcrumbDetailItem = {
-				name: t('loc:Vytvoriť salón')
+				name: STRINGS(t).createRecord(t('loc:salón'))
 			}
 		} else {
 			breadcrumbDetailItem = {
-				name: getTabBreadcrumbName(activeKey),
+				name: getTabBreadcrumbName(tabKey),
 				titleName: `${salon.data?.name ?? ''} | ID: ${salon.data?.id}`
 			}
 		}
@@ -143,6 +120,15 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		return breadcrumbs
 	}
 
+	const onTabChange = (newTabKey: string) => {
+		if (newTabKey === SALON_TABS_KEYS.SALON_DETAIL) {
+			navigate(t('paths:salons/{{salonID}}', { salonID }))
+		}
+		if (newTabKey === SALON_TABS_KEYS.SALON_HISTORY) {
+			navigate(t('paths:salons/{{salonID}}/history', { salonID }))
+		}
+	}
+
 	return (
 		<>
 			<Row>
@@ -155,17 +141,18 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					{isNotinoUser && !isDeletedSalon ? (
 						<TabsComponent
 							className={'box-tab'}
-							activeKey={activeKey}
+							activeKey={tabKey}
+							defaultActiveKey={tabKey}
 							onChange={onTabChange}
 							destroyInactiveTabPane
 							items={[
 								{
-									key: TAB_KEYS.SALON_DETAIL,
+									key: SALON_TABS_KEYS.SALON_DETAIL,
 									label: t('loc:Detail salónu'),
 									children: salonDetail
 								},
 								{
-									key: TAB_KEYS.SALON_HISTORY,
+									key: SALON_TABS_KEYS.SALON_HISTORY,
 									label: t('loc:História salónu'),
 									children: <SalonHistoryPage salonID={salonID} />
 								}

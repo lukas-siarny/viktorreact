@@ -37,7 +37,7 @@ type ExtraProps = {
 	formValues?: IIndustryForm
 }
 
-const Extra: FC<ExtraProps> = (props) => {
+const Extra: FC<ExtraProps> = React.memo((props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -65,7 +65,7 @@ const Extra: FC<ExtraProps> = (props) => {
 			</Button>
 		</div>
 	)
-}
+})
 
 const IndustryForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
@@ -159,4 +159,4 @@ const form = reduxForm<IIndustryForm, ComponentProps>({
 	onSubmitFail: showErrorNotification
 })(/* withPromptUnsavedChanges(IndustryForm) */ IndustryForm)
 
-export default form
+export default React.memo(form)

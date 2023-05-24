@@ -1,7 +1,5 @@
 import React, { FC } from 'react'
 import { Select, Row } from 'antd'
-// eslint-disable-next-line import/no-extraneous-dependencies
-import Icon from '@ant-design/icons'
 import i18next from 'i18next'
 import cx from 'classnames'
 import { useDispatch } from 'react-redux'
@@ -32,8 +30,11 @@ import { ReactComponent as EN_Flag } from '../assets/flags/GB.svg'
 import { ReactComponent as CZ_Flag } from '../assets/flags/CZ.svg'
 import { ReactComponent as HU_Flag } from '../assets/flags/HU.svg'
 import { ReactComponent as RO_Flag } from '../assets/flags/RO.svg'
-import { ReactComponent as BG_Flag } from '../assets/flags/BG.svg'
+import { ReactComponent as BgFlag } from '../assets/flags/BG.svg'
 /* import { ReactComponent as IT_Flag } from '../assets/flags/IT.svg' */
+
+// components
+import FlagIcon from './FlagIcon'
 
 export const LOCALES = {
 	[LANGUAGE.SK]: {
@@ -70,7 +71,7 @@ export const LOCALES = {
 	[LANGUAGE.BG]: {
 		ISO_639: 'bg',
 		antD: bg_BG,
-		icon: BG_Flag,
+		icon: BgFlag,
 		countryCode: 'BG'
 	} /* ,
 	[LANGUAGE.IT]: {
@@ -110,8 +111,6 @@ export const handleLanguageChange = (value: any, dispatch: any, reloadPageAfterC
 }
 
 const options = Object.entries(LANGUAGE).map(([key, value]) => ({ label: key, value, icon: LOCALES[value].icon }))
-// NOTE: Into `rev` property is passed `null` value due compilation error
-const getLanguageFlag = (countryCode: LANGUAGE) => <Icon className={'language-picker-icon'} component={LOCALES[countryCode].icon} rev={null} />
 
 export const getLanguagePickerAsSubmenuItem = (dispatch: any, reloadPageAfterChange = true): ItemType => {
 	let currentLanguage: LANGUAGE
@@ -147,11 +146,11 @@ export const getLanguagePickerAsSubmenuItem = (dispatch: any, reloadPageAfterCha
 		key: 'currentLanguage',
 		className: 'language-picker',
 		label: get(LOCALES[currentLanguage], 'displayAs', currentLanguage).toUpperCase(),
-		icon: getLanguageFlag(currentLanguage),
+		icon: <FlagIcon countryCode={currentLanguage} />,
 		popupOffset: [0, -75],
 		children: options?.map((option: any, index: number) => ({
 			key: index,
-			icon: getLanguageFlag(option.value),
+			icon: <FlagIcon countryCode={option.value} />,
 			label: option.label,
 			onClick: () => handleLanguageChange(option.value, dispatch, reloadPageAfterChange)
 		}))
@@ -174,7 +173,7 @@ const LanguagePicker: FC<Props> = (props) => {
 				{options?.map((option: any, index: number) => (
 					<Option value={option.value} key={index}>
 						<Row className={cx('items-center', { 'justify-center': isSmallDevice })}>
-							{getLanguageFlag(option.value)}
+							<FlagIcon countryCode={option.value} />
 							{!isSmallDevice && option.label}
 						</Row>
 					</Option>

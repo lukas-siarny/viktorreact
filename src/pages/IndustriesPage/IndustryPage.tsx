@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Col, Divider, Empty, Modal, Row, Spin } from 'antd'
+import { Button, Divider, Empty, Modal, Row, Spin } from 'antd'
 import { compose } from 'redux'
 import { getFormValues, initialize, isSubmitting, reset } from 'redux-form'
-import { DataNode } from 'antd/lib/tree'
-import { isEmpty, map } from 'lodash'
-import i18next from 'i18next'
+import { isEmpty } from 'lodash'
 import { useNavigate, useParams } from 'react-router-dom'
 
 // reducers
@@ -20,26 +18,23 @@ import IndustryForm from './components/IndustryForm'
 import RequestNewServiceForm from './components/RequestNewServiceForm'
 
 // utils
-import { ROW_GUTTER_X_DEFAULT, FORM, PERMISSION, NOTIFICATION_TYPE } from '../../utils/enums'
+import { FORM, PERMISSION, NOTIFICATION_TYPE } from '../../utils/enums'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { patchReq, postReq } from '../../utils/request'
 import { flattenTree, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // types
-import { IBreadcrumbs, IServicesSelectionData, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, IIndustryFilter, IServicesSelectionData, SalonSubPageProps } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // assets
 import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-icon.svg'
-import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.svg'
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-modal.svg'
 
 // schema
 import { IIndustryForm } from '../../schemas/industry'
 import { IRequestNewServiceForm } from '../../schemas/service'
-import useQueryParams from '../../hooks/useQueryParamsZod'
-import { IIndustryPageURLQueryParams, industryPageURLQueryParams } from '../../schemas/queryParams'
 import IndustryFilter from './components/IndustryFilter'
 
 type Props = SalonSubPageProps
@@ -69,6 +64,9 @@ export const getServicesCategoryKeys = (array: any[]) => {
 	return output
 }
 
+const getServiceCategoryIdsFromFormValues = (values?: IIndustryForm) =>
+	Object.values(values?.categoryIDs || {}).reduce((acc, cv) => [...acc, ...cv.serviceCategoryIDs], [] as string[])
+
 const IndustryPage = (props: Props) => {
 	const [t] = useTranslation()
 	const navigate = useNavigate()
@@ -80,68 +78,37 @@ const IndustryPage = (props: Props) => {
 	const services = useSelector((state: RootState) => state.service.services)
 	const submitting = useSelector(isSubmitting(FORM.INDUSTRY))
 
-	// const formValues = useSelector((state: RootState) => getFormValues(FORM.INDUSTRY)(state)) as IIndustryForm
+	const formValues = useSelector((state: RootState) => getFormValues(FORM.INDUSTRY)(state)) as IIndustryForm
 
 	const rootCategory = categories.data?.find((category) => category.id === industryID)
-	// const rootUserCategory = services?.data?.groupedServicesByCategory?.find((category) => category.category?.id === industryID)
 
 	const [isVisible, setIsVisible] = useState<boolean>(false)
 	const [servicesSelectionData, setServicesSelectionData] = useState<IServicesSelectionData | null>(null)
 
-	const [query, setQuery] = useQueryParams(industryPageURLQueryParams)
+	const [query, setQuery] = useState<IIndustryFilter>({
+		search: ''
+	})
 
-	/* useEffect(() => {
-		;(async () => {
-			const generalCategories = await dispatch(getCategories())
-			const salonCategories = await dispatch(getServices({ salonID }))
-			const rootCategoryGeneralData = generalCategories?.data?.find((category) => category.id === industryID)
-			const rootCategorySalonData = salonCategories?.data?.groupedServicesByCategory?.find((category) => category.category?.id === industryID)
+	const servicesLength = rootCategory ? flattenTree([rootCategory], (item, level) => ({ ...item, level })).filter((category) => category.level === 2).length : 0
+	const selectedServiceCategoryIDs = getServiceCategoryIdsFromFormValues(formValues)
 
-			if (!rootCategoryGeneralData) {
-				navigate('/404')
-			} else {
-				const formInitialValues = rootCategoryGeneralData.children.reduce(
-					(categoriesAcc, category) => {
-						const serviceCategoryIDs: string[] = []
+	const areThereAnyServiceCategories = rootCategory?.children.some((secondLevelCategory) => secondLevelCategory.children?.length)
 
-						category.children.forEach((serviceCategory) => {
-							const servicesDataUser = getCategoryById(rootCategorySalonData, serviceCategory.id)
-							if (servicesDataUser?.category?.id) {
-								serviceCategoryIDs.push(servicesDataUser.category.id)
-							}
-						})
-
-						return {
-							...categoriesAcc,
-							categoryIDs: {
-								...categoriesAcc.categoryIDs,
-								[category.id]: {
-									serviceCategoryIDs
-								}
-							}
-						}
-					},
-					{ categoryIDs: {} } as IIndustryForm
-				)
-
-				dispatch(initialize(FORM.INDUSTRY, formInitialValues))
-			}
-		})()
-	}, [dispatch, industryID, salonID, navigate]) */
+	const loading = categories.isLoading || services.isLoading
 
 	useEffect(() => {
 		;(async () => {
-			const generalCategories = await dispatch(getCategories())
-			const salonCategories = await dispatch(getServices({ salonID }))
-			const rootCategoryGeneralData = generalCategories?.data?.find((category) => category.id === industryID)
-			const rootCategorySalonData = salonCategories?.data?.groupedServicesByCategory?.find((category) => category.category?.id === industryID)
+			const categoriesData = await dispatch(getCategories())
+			const salonCategoriesData = await dispatch(getServices({ salonID }))
+			const rootCategoryData = categoriesData?.data?.find((category) => category.id === industryID)
+			const rootCategorySalonData = salonCategoriesData?.data?.groupedServicesByCategory?.find((category) => category.category?.id === industryID)
 
-			if (!rootCategoryGeneralData) {
+			if (!rootCategoryData) {
 				navigate('/404')
 			} else {
 				let formInitialValues: IIndustryForm = { categoryIDs: {} }
 
-				rootCategoryGeneralData.children.forEach((category) => {
+				rootCategoryData.children.forEach((category) => {
 					const serviceCategoryIDs: string[] = []
 					const categoryDataForm = {
 						serviceCategoryIDs,
@@ -207,7 +174,7 @@ const IndustryPage = (props: Props) => {
 		dispatch(initialize(FORM.INDUSTRY_FILTER, { search: query.search }))
 	}, [query.search, rootCategory, dispatch])
 
-	const handleSubmitFilter = (values: IIndustryPageURLQueryParams) => {
+	const handleSubmitFilter = (values: IIndustryFilter) => {
 		setQuery({ ...query, search: values.search })
 	}
 
@@ -227,23 +194,22 @@ const IndustryPage = (props: Props) => {
 		}
 	}
 
-	const handleSubmit = async (values?: IIndustryForm) => {
-		const categoryIDs = Object.values(values?.categoryIDs || {}).reduce((acc, cv) => [...acc, ...cv.serviceCategoryIDs], [] as string[])
+	const handleSubmit = async () => {
 		try {
 			await patchReq('/api/b2b/admin/salons/{salonID}/services', { salonID }, {
 				rootCategoryID: industryID,
-				categoryIDs
+				categoryIDs: selectedServiceCategoryIDs
 			} as CategoriesPatch)
 			const updatedServicesData = await dispatch(getServices({ salonID }))
 
 			// redirect to service detail edit page in case it's first selected service in salon
 			const servicesKeys = getServicesCategoryKeys(services.data?.groupedServicesByCategory || [])
 			// check if there were any services saved before (servicesKeys) and if there are any new services to be saved (categoryIDs)
-			if (isEmpty(servicesKeys) && !isEmpty(categoryIDs)) {
+			if (isEmpty(servicesKeys) && !isEmpty(selectedServiceCategoryIDs)) {
 				// find rootCategory from updated service data
 				const updatedUserRootCategory = updatedServicesData.data?.groupedServicesByCategory.find((category) => category.category?.id === industryID)
 				// find service id in a rootCategory tree based on first selected service ID
-				const serviceID = getCategoryById(updatedUserRootCategory, categoryIDs[0])?.service?.id
+				const serviceID = getCategoryById(updatedUserRootCategory, selectedServiceCategoryIDs[0])?.service?.id
 				// redirect
 				if (serviceID) {
 					navigate(parentPath + t('paths:services-settings/{{serviceID}}', { serviceID }))
@@ -251,7 +217,7 @@ const IndustryPage = (props: Props) => {
 			}
 		} catch (e) {
 			// eslint-disable-next-line no-console
-			console.log(e)
+			console.error(e)
 		}
 	}
 
@@ -267,13 +233,6 @@ const IndustryPage = (props: Props) => {
 			}
 		]
 	}
-
-	const servicesLength = rootCategory ? flattenTree([rootCategory], (item, level) => ({ ...item, level })).filter((category) => category.level === 2).length : 0
-	const selectedServicesLength = /* getServiceIdsFromFormValues(formValues)?.length || */ 0
-
-	const areThereAnyServiceCategories = rootCategory?.children.some((secondLevelCategory) => secondLevelCategory.children?.length)
-
-	const loading = categories.isLoading || services.isLoading
 
 	return (
 		<>
@@ -313,7 +272,7 @@ const IndustryPage = (props: Props) => {
 
 					<header className={'category-select-header mb-4'}>
 						<div className={'image'} style={{ backgroundImage: `url("${rootCategory?.image?.resizedImages?.small}")` }} />
-						<div className={'count'}>{`${selectedServicesLength} ${t('loc:z')} ${servicesLength}`}</div>
+						<div className={'count'}>{`${selectedServiceCategoryIDs.length} ${t('loc:z')} ${servicesLength}`}</div>
 						<span className={'label'}>{rootCategory?.name}</span>
 					</header>
 					{!loading && !areThereAnyServiceCategories ? (
@@ -323,7 +282,7 @@ const IndustryPage = (props: Props) => {
 					) : (
 						<>
 							<IndustryFilter onSubmit={handleSubmitFilter} />
-							<IndustryForm onSubmit={handleSubmit} servicesSelectionData={servicesSelectionData} />
+							<IndustryForm onSubmit={handleSubmit} servicesSelectionData={servicesSelectionData} loadingData={loading} />
 						</>
 					)}
 				</Spin>

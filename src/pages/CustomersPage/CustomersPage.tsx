@@ -15,7 +15,7 @@ import UserAvatar from '../../components/AvatarComponents'
 import ImportForm from '../../components/ImportForm'
 
 // utils
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, REQUEST_STATUS, TEMPLATE_OPTIONS } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, REQUEST_STATUS, TEMPLATE_OPTIONS_CUSTOMERS } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { postReq } from '../../utils/request'
@@ -192,7 +192,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 									className={'noti-select-input w-full mb-4'}
 									size={'large'}
 									labelInValue
-									options={TEMPLATE_OPTIONS()}
+									options={TEMPLATE_OPTIONS_CUSTOMERS()}
 									onChange={(val: any) => setTemplateValue(val)}
 									value={templateValue}
 									placeholder={t('loc:Vyberte šablónu na stiahnutie')}

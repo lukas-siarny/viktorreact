@@ -27,6 +27,7 @@ const { Panel } = Collapse
 type ComponentProps = {
 	disabledForm?: boolean
 	servicesSelectionData: IServicesSelectionData | null
+	loadingData?: boolean
 }
 
 type Props = InjectedFormProps<IIndustryForm, ComponentProps> & ComponentProps
@@ -35,13 +36,14 @@ type ExtraProps = {
 	options: IServicesSelectionData[keyof IServicesSelectionData]['options']
 	categoryID: string
 	formValues?: IIndustryForm
+	onSelect: () => void
 }
 
 const Extra: FC<ExtraProps> = React.memo((props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const { options, categoryID, formValues } = props
+	const { options, categoryID, formValues, onSelect } = props
 
 	const selectedValues = formValues?.categoryIDs[categoryID].serviceCategoryIDs || []
 	const visibleSelectedOptions = selectedValues?.filter((value) => options.find((option) => option.value === value))
@@ -59,17 +61,24 @@ const Extra: FC<ExtraProps> = React.memo((props) => {
 	}
 
 	return (
-		<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
-			<Button type={'ghost'} onClick={handleChange}>
-				{label}
-			</Button>
-		</div>
+		<Button
+			type={'ghost'}
+			onClick={(e) => {
+				e.stopPropagation()
+				handleChange()
+				onSelect()
+			}}
+			onKeyPress={(e) => e.stopPropagation()}
+			className={'text-notino-pink'}
+		>
+			{label}
+		</Button>
 	)
 })
 
 const IndustryForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, submitting, pristine, disabledForm, servicesSelectionData } = props
+	const { handleSubmit, submitting, pristine, servicesSelectionData, loadingData } = props
 
 	const [collapseActiveKeys, setCollapseActiveKeys] = useState<string[]>([])
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.INDUSTRY)(state)) as IIndustryForm
@@ -81,7 +90,7 @@ const IndustryForm: FC<Props> = (props) => {
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<Collapse
-				className={cx('collapse-list')}
+				className={'collapse-list noti-collapse-industry'}
 				bordered={false}
 				activeKey={collapseActiveKeys}
 				onChange={(key) => {
@@ -104,14 +113,26 @@ const IndustryForm: FC<Props> = (props) => {
 								}
 								key={categoryID}
 								forceRender
-								extra={<Extra categoryID={categoryID} options={categoryData.options} formValues={formValues} />}
+								showArrow
+								extra={
+									<Extra
+										categoryID={categoryID}
+										options={categoryData.options}
+										formValues={formValues}
+										onSelect={() => {
+											if (!collapseActiveKeys.includes(categoryID)) {
+												setCollapseActiveKeys([...collapseActiveKeys, categoryID])
+											}
+										}}
+									/>
+								}
 							>
 								<Field
-									className={'p-0 m-0'}
+									className={'p-0 m-0 noti-checkbox-group-services'}
 									component={CheckboxGroupField}
 									name={`categoryIDs[${categoryID}]serviceCategoryIDs`}
 									options={categoryData.options}
-									// disabled={loadingData}
+									disabled={loadingData}
 								/>
 							</Panel>
 						)
@@ -157,6 +178,6 @@ const form = reduxForm<IIndustryForm, ComponentProps>({
 	destroyOnUnmount: true,
 	validate: validationIndustryFn,
 	onSubmitFail: showErrorNotification
-})(/* withPromptUnsavedChanges(IndustryForm) */ IndustryForm)
+})(withPromptUnsavedChanges(IndustryForm))
 
 export default React.memo(form)

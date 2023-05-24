@@ -9,7 +9,7 @@ import VIRTUAL_EVENT from './virtualEventTypes'
 import { ThunkResult } from '../index'
 
 // schema
-import { ICalendarImportedReservationForm, ICalendarReservationForm } from '../../schemas/reservation'
+import { ICalendarReservationForm } from '../../schemas/reservation'
 import { ICalendarEventForm } from '../../schemas/event'
 
 // utils
@@ -79,7 +79,7 @@ export const addOrUpdateEvent =
 			return
 		}
 
-		let formData: Partial<ICalendarEventForm & ICalendarReservationForm & ICalendarImportedReservationForm> | undefined
+		let formData: Partial<ICalendarEventForm & ICalendarReservationForm> | undefined
 
 		try {
 			formData = getState().form[formName].values

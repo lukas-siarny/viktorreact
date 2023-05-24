@@ -6,6 +6,7 @@
 		background-color: $backgroundColor-notino-pink
 	.ant-tabs-tab
 		font-size: 1rem
+		padding: 12px 2px
 		color: $textColor-notino-pink
 		&.ant-tabs-tab-active
 			.ant-tabs-tab-btn
@@ -15,8 +16,10 @@
 		.ant-tabs-tab-remove
 			border-radius: 2px
 			@include baseOutlineStyle()
+			outline-offset: 0
 			&:focus-visible
-				@include focusOutlineStyle($textColor-notino-pink)
+				@include focusOutlineStyle($borderColor-notino-pink)
+				outline-offset: 0
 	&.tabs-small
 		height: 32px
 		.ant-tabs-nav
@@ -26,7 +29,7 @@
 		.ant-tabs-tab
 			font-size: 14px
 			line-height: 16px
-			padding: 8px 0
+			padding: 8px 2px
 			& +.ant-tabs-tab
 				margin: 0 0 0 16px
 

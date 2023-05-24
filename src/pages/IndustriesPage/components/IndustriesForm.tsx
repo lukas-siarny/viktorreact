@@ -13,6 +13,7 @@ import { FORM, PERMISSION, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 import { formFieldID, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
+import { getServicesCategoryKeys } from '../IndustryPage'
 
 // redux
 import { RootState } from '../../../reducers'
@@ -42,7 +43,7 @@ const IndustriesForm: FC<Props> = (props) => {
 
 	const categoriesOptions = categories.data?.map((category) => {
 		const rootServicesCategory = services?.data?.groupedServicesByCategory?.find((serviceCategory) => serviceCategory.category?.id === category.id)
-		const selectedServices = /* getServicesCategoryKeys(rootServicesCategory ? [rootServicesCategory] : []).length */ 0
+		const selectedServices = getServicesCategoryKeys(rootServicesCategory ? [rootServicesCategory] : []).length
 
 		return {
 			id: category.id,

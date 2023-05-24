@@ -12,11 +12,11 @@ import { validationString } from '../../../utils/helper'
 import InputField from '../../../atoms/InputField'
 
 // types
-import { IIndustryPageURLQueryParams } from '../../../schemas/queryParams'
+import { IIndustryFilter } from '../../../types/interfaces'
 
 type ComponentProps = {}
 
-type Props = InjectedFormProps<IIndustryPageURLQueryParams, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<IIndustryFilter, ComponentProps> & ComponentProps
 
 const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
@@ -27,7 +27,7 @@ const IndustryFilter = (props: Props) => {
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
 			<Field
-				className={'h-10 p-0 m-0 w-full'}
+				className={'h-10 p-0 mb-4 my-6 w-full'}
 				component={InputField}
 				size={'large'}
 				placeholder={t('loc:Hľadať podľa názvu služby')}

@@ -13,7 +13,7 @@ import { getCustomers } from '../../../reducers/customers/customerActions'
 import { getSmsTimeStatsForSalon } from '../../../reducers/sms/smsActions'
 
 // utils
-import { PERMISSION, SALON_STATES } from '../../../utils/enums'
+import { PERMISSION, RESERVATION_STATE, RESERVATIONS_STATE, SALON_STATES } from '../../../utils/enums'
 import Permissions, { checkPermissions } from '../../../utils/Permissions'
 
 // components
@@ -27,7 +27,18 @@ import Voucher from './Voucher'
 import { ReactComponent as EyeOffIcon } from '../../../assets/icons/eye-off-pink.svg'
 import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
 
+// schema
+import { ISalonReservationsPageURLQueryParams } from '../../../schemas/queryParams'
+
+// hooks
+import { formatObjToQuery } from '../../../hooks/useQueryParamsZod'
+
 const SMS_TIME_STATS_PERMISSIONS = [PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET]
+
+const pendingReservationsQueryString = formatObjToQuery<ISalonReservationsPageURLQueryParams>({
+	state: RESERVATIONS_STATE.PENDING,
+	reservationStates: [RESERVATION_STATE.PENDING]
+})
 
 const SalonDashboard: FC<PropsWithChildren> = (props) => {
 	const [t] = useTranslation()
@@ -40,13 +51,14 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 	const { services } = useSelector((state: RootState) => state.service)
 	const { activeEmployees } = useSelector((state: RootState) => state.employees)
 	const { customers } = useSelector((state: RootState) => state.customers)
+	const pendingReservationsCount = useSelector((state: RootState) => state.calendar.pendingReservationsCount)
 	const smsTimeStats = useSelector((state: RootState) => state.sms.timeStats)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const salonPermission = selectedSalon?.data?.uniqPermissions
 	const salonID = selectedSalon.data?.id
 	const walletID = selectedSalon.data?.wallet?.id
 
-	const loading = selectedSalon?.isLoading || services?.isLoading || activeEmployees?.isLoading || customers?.isLoading
+	const loading = selectedSalon?.isLoading || services?.isLoading || activeEmployees?.isLoading || customers?.isLoading || pendingReservationsCount.isLoading
 	const basePath = t('paths:salons/{{salonID}}', { salonID: selectedSalon?.data?.id })
 
 	const [smsStatsDate, setSmsStatsDate] = useState(dayjs())
@@ -55,7 +67,7 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 
 	useEffect(() => {
 		if (selectedSalon?.data) {
-			dispatch(getServices({ salonID: selectedSalon.data.id }))
+			dispatch(getServices({ salonID: selectedSalon.data.id }, true))
 			dispatch(getCustomers({ salonID: selectedSalon.data.id, page: 1 }))
 			dispatch(getActiveEmployees({ salonID: selectedSalon.data.id, page: 1 }))
 		}
@@ -99,16 +111,26 @@ const SalonDashboard: FC<PropsWithChildren> = (props) => {
 						/>
 					)}
 
-					<div className='grid grid-cols-2 lg:grid-cols-4 gap-4 3xl:gap-8'>
+					<div className='grid grid-cols-2 lg:grid-cols-3 gap-4 3xl:grid-cols-6'>
+						<Statistics
+							title={t('loc:Rezervácie čakajúce na schválenie')}
+							count={pendingReservationsCount.count}
+							onActionItemClick={() => navigate(getPath(`${t('paths:salon-reservations')}${pendingReservationsQueryString}`))}
+						/>
+						<Statistics
+							title={t('loc:Služby (všetky)')}
+							count={services?.listData?.industries.servicesCount}
+							onActionItemClick={() => navigate(getPath(t('paths:services-settings')))}
+						/>
+						<Statistics
+							title={t('loc:Služby dostupné pre online rezervácie')}
+							count={services?.listData?.industries.servicesAvailableForOnlineReservationsCount}
+							onActionItemClick={() => navigate(getPath(t('paths:services-settings')))}
+						/>
 						<Statistics
 							title={t('loc:Počet zákazníkov')}
 							count={customers.data?.pagination.totalCount}
 							onActionItemClick={() => navigate(getPath(t('paths:customers')))}
-						/>
-						<Statistics
-							title={t('loc:Počet aktívnych služieb')}
-							count={services?.listData?.industries.servicesCount}
-							onActionItemClick={() => navigate(getPath(t('paths:services-settings')))}
 						/>
 						<Statistics
 							title={t('loc:Počet zamestnancov')}

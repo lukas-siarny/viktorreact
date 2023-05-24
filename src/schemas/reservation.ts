@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { dateConstraint, selectObjConstraint, stringConstraint, zodErrorsToFormErrors } from './baseSchema'
+import { dateConstraint, selectObjConstraint, stringConstraint, uuidConstraint, zodErrorsToFormErrors } from './baseSchema'
 import { VALIDATION_MAX_LENGTH, FORM, CALENDAR_EVENT_TYPE } from '../utils/enums'
 // eslint-disable-next-line import/no-cycle
 import { CalendarEvent, ICalendarEmployeeOptionItem, ICalendarEventDetailPayload, ISelectOptionItem, ServiceType } from '../types/interfaces'
@@ -11,18 +11,6 @@ export const importedReservationSchema = z.object({
 	timeTo: z.string().regex(timeRegex),
 	note: stringConstraint(VALIDATION_MAX_LENGTH.LENGTH_1500)
 })
-
-export type ICalendarImportedReservationForm = z.infer<typeof importedReservationSchema> & {
-	eventId: string
-	revertEvent?: () => void
-	updateFromCalendar?: boolean
-	employee: ISelectOptionItem
-	isImported?: boolean
-	eventType: CALENDAR_EVENT_TYPE
-}
-
-export const validationImportedReservationFn = (values: ICalendarImportedReservationForm, props: any) =>
-	zodErrorsToFormErrors(importedReservationSchema, FORM.CALENDAR_RESERVATION_FROM_IMPORT_FORM, values, props)
 
 export const reservationsSchema = z.object({
 	employee: selectObjConstraint,
@@ -56,3 +44,11 @@ export type ICalendarReservationForm = Omit<z.infer<typeof reservationsSchema>, 
 }
 
 export const validationReservationsFn = (values: ICalendarReservationForm, props: any) => zodErrorsToFormErrors(reservationsSchema, FORM.CALENDAR_RESERVATION_FORM, values, props)
+
+export const salonIds = z.object({
+	salonIDs: uuidConstraint.array()
+})
+
+export type ISalonIdsForm = z.infer<typeof salonIds>
+
+export const validationSalonIdsSyncFn = (values: ISalonIdsForm, props: any) => zodErrorsToFormErrors(salonIds, FORM.SALON_IDS_FORM, values, props)

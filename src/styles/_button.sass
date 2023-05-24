@@ -143,7 +143,7 @@
 	&.ant-btn-dashed
 		background: $backgroundColor-notino-white
 		border: 1px solid $borderColor-black
-		svg
+		&:not(.ant-btn-loading) svg
 			position: absolute
 			top: 50%
 			transform: translateY(-50%)
@@ -358,6 +358,84 @@ a.ant-btn.noti-btn // ak ma btn href atributu tak ho zmeni na anchor -> treba vy
 	&.is-active
 		width: 350px
 
+.sync-button
+	height: 40px
+	background: #fff
+	border: none
+	border-radius: 2px
+	box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.08), 0px 1px 2px rgba(0, 0, 0, 0.25)
+	font-size: 14px
+	color: $textColor-notino-grayDarker
+	position: relative
+	&:hover
+		cursor: pointer
+	&.google
+		font-size: 15px
+		color: rgba(0, 0, 0, 0.54)
+		padding-left: 52px
+		border: 1px solid #fff
+		&:disabled
+			background: $backgroundColor-notino-grayLight
+			border: none
+			cursor: not-allowed
+			&:after
+				filter: grayscale(1)
+		&:hover:not(:disabled)
+			box-shadow: none
+			border: 1px solid rgba(66, 133, 244, 0.3)
+		&:after
+			content: ''
+			background: url('../assets/icons/google.svg') left no-repeat
+			position: absolute
+			top: 0
+			bottom: 0
+			left: 12px
+			right: 0
+
+	&.microsoft
+		font-size: 15px
+		color: #5E5E5E
+		padding-left: 45px
+		border-radius: 0
+		border: 1px solid #8C8C8C
+		box-shadow: none
+		&:disabled
+			background: $backgroundColor-notino-grayLight
+			border: none
+			cursor: not-allowed
+			&:after
+				filter: grayscale(1)
+		&:hover:not(:disabled)
+			border: 1px solid rgba(66, 133, 244, 0.3)
+		&:after
+			content: ''
+			background: url('../assets/icons/microsoft.svg') left no-repeat
+			position: absolute
+			top: 0
+			bottom: 0
+			left: 12px
+			right: 0
+	&.apple
+		padding-left: 40px
+		display: inline-block
+		height: 40px
+		line-height: 40px
+		padding-right: 10px
+		&:after
+			content: ''
+			background: url('../assets/icons/download-icon.svg') left no-repeat
+			position: absolute
+			top: 0
+			bottom: 0
+			left: 12px
+			right: 0
+	&.disabled
+		cursor: not-allowed
+		box-shadow: none
+		border: 1px solid $borderColor-notino-grayLight
+		background: $backgroundColor-notino-grayLight
+		&:hover
+			border: 1px solid $borderColor-notino-grayLight
 .language-btn
 	z-index: 2
 	@media (min-width: 1195px)

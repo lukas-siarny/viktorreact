@@ -79,7 +79,7 @@ export interface ICustomConfig extends AxiosRequestConfig {
 	skip404Handler?: boolean
 }
 
-const buildHeaders = () => {
+export const buildHeaders = () => {
 	const headers: Record<string, string> = {
 		'Content-Type': 'application/json',
 		Accept: 'application/json',
@@ -365,13 +365,15 @@ export const patchReq = async <T extends keyof PatchUrls>(
  * @param showLoading Boolean show loading
  *
  * Performs delete request to url and returns with result
+ * @param data data to send in request body
  */
 export const deleteReq = async <T extends keyof DeleteUrls>(
 	_url: T,
 	_params: Parameters<DeleteUrls[T]['delete']>[0],
 	customConfig?: ICustomConfig,
 	typeNotification: NOTIFICATION_TYPE | false = NOTIFICATION_TYPE.NOTIFICATION,
-	showLoading = false
+	showLoading = false,
+	data?: any
 ): Promise<ReturnType<DeleteUrls[T]['delete']>> => {
 	const { fullfilURL, queryParams } = fullFillURL(_url, _params)
 	let hide
@@ -384,7 +386,8 @@ export const deleteReq = async <T extends keyof DeleteUrls>(
 		headers: {
 			...buildHeaders(),
 			...get(customConfig, 'headers', {})
-		}
+		},
+		data
 	}
 
 	if (queryParams) {

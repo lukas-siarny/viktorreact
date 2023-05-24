@@ -8,38 +8,39 @@ import cx from 'classnames'
 
 // atoms
 import { useNavigate } from 'react-router-dom'
-import SelectField from '../../../atoms/SelectField'
-import InputNumberField from '../../../atoms/InputNumberField'
-import SwitchField from '../../../atoms/SwitchField'
+import SelectField from '../../../../atoms/SelectField'
+import InputNumberField from '../../../../atoms/InputNumberField'
+import SwitchField from '../../../../atoms/SwitchField'
+import TextareaField from '../../../../atoms/TextareaField'
 
 // components
-import DeleteButton from '../../../components/DeleteButton'
-import ServicesListField from '../../EmployeesPage/components/ServicesListField'
+import DeleteButton from '../../../../components/DeleteButton'
+import ServicesListField from '../../../EmployeesPage/components/ServicesListField'
 import ParameterValuesList from './ParameterValuesList'
 import ServiceBreadcrumbs from './ServiceBreadcrumbs'
-import Localizations from '../../../components/Localizations'
-import TextareaField from '../../../atoms/TextareaField'
 
 // utils
-import { formFieldID, showErrorNotification, validationNumberMin, validationString } from '../../../utils/helper'
-import { DELETE_BUTTON_ID, FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, STRINGS, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
-import { deleteReq } from '../../../utils/request'
-import searchWrapper from '../../../utils/filters'
-import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
-import Permissions from '../../../utils/Permissions'
+import { formFieldID, showErrorNotification, validationNumberMin, validationString } from '../../../../utils/helper'
+import { DELETE_BUTTON_ID, FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, PERMISSION, STRINGS, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
+import { deleteReq } from '../../../../utils/request'
+import searchWrapper from '../../../../utils/filters'
+import { withPromptUnsavedChanges } from '../../../../utils/promptUnsavedChanges'
+import Permissions from '../../../../utils/Permissions'
+import { checkConditions, getConditionIcon } from '../../serviceUtils'
 
 // types
-import { RootState } from '../../../reducers'
+import { RootState } from '../../../../reducers'
 
 // assets
-import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
-import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
-import { ReactComponent as EmployeesIcon } from '../../../assets/icons/employees.svg'
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
-import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
+import { ReactComponent as PencilIcon } from '../../../../assets/icons/pencil-icon-16.svg'
+import { ReactComponent as CreateIcon } from '../../../../assets/icons/plus-icon.svg'
+import { ReactComponent as EditIcon } from '../../../../assets/icons/edit-icon.svg'
+import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees.svg'
+import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.svg'
+import { ReactComponent as SettingIcon } from '../../../../assets/icons/setting.svg'
 
 // schema
-import { validationServiceFn, IServiceForm } from '../../../schemas/service'
+import { validationServiceFn, IServiceForm } from '../../../../schemas/service'
 
 const numberMin0 = validationNumberMin(0)
 const fixLength1500 = validationString(VALIDATION_MAX_LENGTH.LENGTH_1500)
@@ -62,6 +63,7 @@ const ServiceForm: FC<Props> = (props) => {
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
 	const formValues = form?.values as IServiceForm
+	const initialFormValues = (form as any)?.initial as IServiceForm
 	const service = useSelector((state: RootState) => state.service.service)
 	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading)
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
@@ -72,6 +74,9 @@ const ServiceForm: FC<Props> = (props) => {
 
 	const variableDuration = formValues?.variableDuration
 	const variablePrice = formValues?.variablePrice
+
+	const { hasDurationFilledIn, hasPriceFilledIn, hasEmployee } = checkConditions(initialFormValues)
+	const disabledRsSettings = !(hasDurationFilledIn && hasPriceFilledIn && hasEmployee)
 
 	const onConfirmDelete = async () => {
 		if (isRemoving || !serviceID) {
@@ -240,70 +245,52 @@ const ServiceForm: FC<Props> = (props) => {
 												</Row>
 											</div>
 										)}
-										<FieldArray
-											key='descriptionLocalizations'
-											name='descriptionLocalizations'
-											component={Localizations}
-											placeholder={t('loc:Zadajte popis služby')}
-											horizontal
-											fieldComponent={TextareaField}
-											ignoreFieldIndex={0} // do not render "0" field because it is rendered in mainField prop
-											customValidate={fixLength1500}
-											customRows={4}
-											className={'w-full mt-8'}
-											mainField={
-												<Field
-													className='mb-0 pb-0'
-													component={TextareaField}
-													label={`${t('loc:Popis služby')} ${salon.data?.address?.countryCode ? `(${salon.data.address.countryCode})` : ''}`.trim()}
-													placeholder={t('loc:Zadajte popis služby')}
-													key='descriptionLocalizations[0].value'
-													name='descriptionLocalizations[0].value'
-													maxLength={VALIDATION_MAX_LENGTH.LENGTH_1500}
-													rows={4}
-												/>
-											}
-											noSpace
-										/>
 									</>
 								</div>
 								<div>
 									<h3 className={'mb-0 mt-0 flex items-center'}>
-										<GlobeIcon className={'text-notino-black mr-2'} />
-										{t('loc:Online rezervácia')}
+										<PencilIcon className={'text-notino-black mr-2 w-6 h-6'} />
+										{t('loc:Popis služby')}
 									</h3>
 									<Divider className={'mb-3 mt-3'} />
-									<FormSection name={'settings'}>
-										<Row gutter={[8, 8]}>
-											<Col span={12}>
+									<FormSection name={'descriptionLocalizations'}>
+										<Field
+											className={'mb-0 pb-2'}
+											disabled={!hasPermission}
+											component={SwitchField}
+											label={t('loc:Vlastný popis služby')}
+											name={'use'}
+											size={'middle'}
+										/>
+										<p className={'text-notino-grayDark text-xs mb-4'}>{t('loc:Tento text služby uvidia používatelia v zákazníckej aplikácii Notino.')}</p>
+										{formValues?.descriptionLocalizations?.use && (
+											<>
 												<Field
-													disabled={!hasPermission || !salon.data?.settings?.enabledReservations}
-													className={'pb-0'}
-													component={SwitchField}
-													label={t('loc:Online rezervácia')}
-													name={'enabledB2cReservations'}
+													component={TextareaField}
+													label={`${t('loc:Vlastný popis')} ${salon.data?.address?.countryCode ? `(${salon.data.address.countryCode})` : ''}`.trim()}
+													placeholder={t('loc:Vysvetlite, čo služba zahŕňa')}
+													maxLength={VALIDATION_MAX_LENGTH.LENGTH_1500}
+													showLettersCount
+													name={'defualtLanguage'}
 													size={'middle'}
+													rows={4}
+													validate={fixLength1500}
+													required
 												/>
-												<div className={'text-xs text-notino-grayDark mt-2'}>
-													{t('loc:Klienti budú mať možnosť rezervovať si vybranú službu v aplikácii.')}
-												</div>
-											</Col>
-											<Col span={12}>
 												<Field
-													disabled={!hasPermission || !salon.data?.settings?.enabledReservations}
-													className={'pb-0'}
-													component={SwitchField}
-													label={t('loc:Automatické potvrdenie')}
-													name={'autoApproveReservations'}
+													component={TextareaField}
+													label={`${t('loc:Vlastný popis')} (EN)`}
+													placeholder={t('loc:Vysvetlite, čo služba zahŕňa')}
+													maxLength={VALIDATION_MAX_LENGTH.LENGTH_1500}
+													showLettersCount
+													name={'enLanguage'}
 													size={'middle'}
+													rows={4}
+													className={'pb-0'}
+													validate={fixLength1500}
 												/>
-												<div className={'text-xs text-notino-grayDark mt-2'}>
-													{t(
-														'loc:Online rezervácia bude automaticky schválená, už ju nemusíte potvrdzovať ručne. Rezervácia sa zobrazí vo vašom kalendári ako potvrdená.'
-													)}
-												</div>
-											</Col>
-										</Row>
+											</>
+										)}
 									</FormSection>
 								</div>
 								<div>
@@ -358,36 +345,86 @@ const ServiceForm: FC<Props> = (props) => {
 										disabledEditButton={!pristine}
 										disabled={!hasPermission}
 									/>
-									{hasPermission && (
-										<div className={'content-footer pt-0'} id={'content-footer-container'}>
-											<Row className={cx({ 'justify-between': serviceID, 'justify-center': !serviceID }, 'w-full')}>
-												{serviceID ? (
-													<DeleteButton
-														className={'noti-btn mt-2-5 w-52 xl:w-60'}
-														getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-														onConfirm={onConfirmDelete}
-														entityName={t('loc:službu')}
-														permissions={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_DELETE]}
-														id={formFieldID(FORM.SERVICE_FORM, DELETE_BUTTON_ID)}
-													/>
-												) : null}
-
-												<Button
-													type={'primary'}
-													className={'noti-btn mt-2-5 w-52 xl:w-60'}
-													htmlType={'submit'}
-													icon={serviceID ? <EditIcon /> : <CreateIcon />}
-													disabled={submitting || pristine}
-													loading={submitting}
-													id={formFieldID(FORM.SERVICE_FORM, SUBMIT_BUTTON_ID)}
-												>
-													{serviceID ? STRINGS(t).save(t('loc:službu')) : STRINGS(t).createRecord(t('loc:službu'))}
-												</Button>
-											</Row>
+								</div>
+								<div>
+									<h3 className={'mb-0 mt-0 flex items-center'}>
+										<GlobeIcon className={'text-notino-black mr-2'} />
+										{t('loc:Online rezervácia')}
+									</h3>
+									<Divider className={'mb-3 mt-3'} />
+									<FormSection name={'settings'}>
+										<div className={'text-xs text-notino-grayDark'}>
+											<p className={'mb-3'}>
+												{t('loc:Keď službe zapnete možnosť online rezervácie, vaši klienti si ju budú môcť rezervovať v zákazníckej aplikácii.')}
+											</p>
+											<p className={'mb-2'}>{t('loc:Na zapnutie online rezervácie je najprv potrebné splniť a mať uložené nasledujúce')}:</p>
+											<ul className={'p-0 list-none'}>
+												<li className={'flex items-start gap-3'}>
+													{getConditionIcon(hasDurationFilledIn)} {t('loc:Zadať dĺžku trvania')}
+												</li>
+												<li className={'flex items-start gap-3'}>
+													{getConditionIcon(hasPriceFilledIn)}
+													{t('loc:Zadať cenu')}
+												</li>
+												<li className={'flex items-start gap-3'}>
+													{getConditionIcon(hasEmployee)}
+													{t('loc:Priradiť k službe aspoň 1 kolegu')}
+												</li>
+											</ul>
 										</div>
-									)}
+										<Field
+											disabled={!hasPermission || disabledRsSettings}
+											className={'w-full'}
+											component={SwitchField}
+											label={t('loc:Online rezervácia')}
+											name={'enabledB2cReservations'}
+											size={'middle'}
+										/>
+
+										<Field
+											disabled={!hasPermission || !formValues?.settings?.enabledB2cReservations}
+											className={'pb-2 w-full'}
+											component={SwitchField}
+											label={t('loc:Automatické potvrdenie')}
+											name={'autoApproveReservations'}
+											size={'middle'}
+										/>
+										<p className={'text-xs text-notino-grayDark mb-0'}>
+											{t(
+												'loc:Online rezervácia bude automaticky schválená, už ju nemusíte potvrdzovať ručne. Rezervácia sa zobrazí vo vašom kalendári ako potvrdená.'
+											)}
+										</p>
+									</FormSection>
 								</div>
 							</Space>
+							{hasPermission && (
+								<div className={'content-footer pt-0'} id={'content-footer-container'}>
+									<Row className={cx({ 'justify-between': serviceID, 'justify-center': !serviceID }, 'w-full')}>
+										{serviceID ? (
+											<DeleteButton
+												className={'noti-btn mt-2-5 w-52 xl:w-60'}
+												getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+												onConfirm={onConfirmDelete}
+												entityName={t('loc:službu')}
+												permissions={[PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_DELETE]}
+												id={formFieldID(FORM.SERVICE_FORM, DELETE_BUTTON_ID)}
+											/>
+										) : null}
+
+										<Button
+											type={'primary'}
+											className={'noti-btn mt-2-5 w-52 xl:w-60'}
+											htmlType={'submit'}
+											icon={serviceID ? <EditIcon /> : <CreateIcon />}
+											disabled={submitting || pristine}
+											loading={submitting}
+											id={formFieldID(FORM.SERVICE_FORM, SUBMIT_BUTTON_ID)}
+										>
+											{serviceID ? STRINGS(t).save(t('loc:službu')) : STRINGS(t).createRecord(t('loc:službu'))}
+										</Button>
+									</Row>
+								</div>
+							)}
 						</Form>
 					</Spin>
 				</div>

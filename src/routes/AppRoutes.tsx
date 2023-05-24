@@ -92,11 +92,13 @@ const AppRoutes: FC = () => {
 				<Route errorElement={<ErrorBoundary />} element={<PublicRoute layout={PublicLayout} className={'noti-login-page'} />}>
 					<Route path={t('paths:login')} element={<LoginPage />} />
 					<Route path={t('paths:signup')} element={<RegistrationPage />} />
+				</Route>
+				<Route errorElement={<ErrorBoundary />} element={<PublicRoute skipRedirectToLoginPage layout={PublicLayout} className={'noti-login-page'} />}>
 					<Route path={t('paths:invite')} element={<RegistrationPage />} />
 				</Route>
 				<Route
 					errorElement={<ErrorBoundary />}
-					element={<PublicRoute redirectLoggedInUser={false} showBackButton layout={PublicLayout} className={'noti-support-contact-page'} />}
+					element={<PublicRoute skipRedirectToLoginPage showBackButton layout={PublicLayout} className={'noti-support-contact-page'} />}
 				>
 					<Route path={t('paths:contact')} element={<ContactPage />} />
 				</Route>

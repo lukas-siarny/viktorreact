@@ -2,12 +2,14 @@
 import { RESET_STORE } from '../generalTypes'
 import { IServiceActions, IServicesPayload, IServicePayload } from './serviceActions'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { SERVICES, SERVICE } from './serviceTypes'
+import { SERVICES, SERVICE, SET_SERVICES_ACTIVE_KEYS } from './serviceTypes'
+import { SERVICES_LIST_INIT } from '../../utils/enums'
 
 export const initState = {
 	services: {
 		data: null,
-		tableData: undefined,
+		listData: SERVICES_LIST_INIT,
+		servicesActiveKeys: null,
 		options: [],
 		categoriesOptions: [],
 		isLoading: false,
@@ -46,8 +48,9 @@ export default (state = initState, action: IServiceActions) => {
 				services: {
 					...initState.services,
 					data: action.payload.data,
-					tableData: action.payload.tableData,
+					listData: action.payload.listData,
 					options: action.payload.options,
+					servicesActiveKeys: action.payload.servicesActiveKeys,
 					categoriesOptions: action.payload.categoriesOptions
 				}
 			}
@@ -74,6 +77,15 @@ export default (state = initState, action: IServiceActions) => {
 				service: {
 					...initState.service,
 					data: action.payload.data
+				}
+			}
+		// set active keys
+		case SET_SERVICES_ACTIVE_KEYS:
+			return {
+				...state,
+				services: {
+					...state.services,
+					servicesActiveKeys: action.payload
 				}
 			}
 		case RESET_STORE:

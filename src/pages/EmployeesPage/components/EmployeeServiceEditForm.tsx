@@ -4,12 +4,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Form, Collapse, Button, Spin, Alert } from 'antd'
 import cx from 'classnames'
-import { isEmpty } from 'lodash'
-import i18next from 'i18next'
 
 // utils
 import { FORM, PARAMETER_TYPE, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
-import { arePriceAndDurationDataEmpty, formFieldID, renderPriceAndDurationInfo, showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { formFieldID, showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { arePriceAndDurationDataEmpty, renderPriceAndDurationInfo } from '../../ServicesPage/serviceUtils'
 
 // types
 import { RootState } from '../../../reducers'
@@ -18,7 +17,7 @@ import { RootState } from '../../../reducers'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SwitchField from '../../../atoms/SwitchField'
 import PopConfirmComponent from '../../../components/PopConfirmComponent'
-import ServiceBreadcrumbs from '../../ServicesPage/components/ServiceBreadcrumbs'
+import ServiceBreadcrumbs from '../../ServicesPage/components/detail/ServiceBreadcrumbs'
 import AvatarComponents from '../../../components/AvatarComponents'
 
 // assets

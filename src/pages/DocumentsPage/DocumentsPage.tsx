@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Modal, Row, Spin } from 'antd'
+import { Button, Col, Divider, Modal, Row, Select, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
@@ -12,7 +12,7 @@ import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // utils
-import { ADMIN_PERMISSIONS, FORM, PAGINATION, PERMISSION, REVIEW_VERIFICATION_STATUS, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { ADMIN_PERMISSIONS, FORM, PAGINATION, PERMISSION, REQUEST_STATUS, REVIEW_VERIFICATION_STATUS, ROW_GUTTER_X_DEFAULT, TEMPLATE_OPTIONS_CUSTOMERS } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys } from '../../utils/helper'
 import { withPermissions } from '../../utils/Permissions'
 
@@ -20,7 +20,7 @@ import { withPermissions } from '../../utils/Permissions'
 import { RootState } from '../../reducers'
 
 // types
-import { Columns, IBreadcrumbs } from '../../types/interfaces'
+import { Columns, IBreadcrumbs, IDataUploadForm } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
@@ -31,6 +31,8 @@ import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCount
 import { getDocuments } from '../../reducers/documents/documentActions'
 import useQueryParams from '../../hooks/useQueryParamsZod'
 import { documentsPageURLQueryParamsSchema, IDocumentsPageURLQueryParams } from '../../schemas/queryParams'
+import ImportForm from '../../components/ImportForm'
+import { postReq } from '../../utils/request'
 
 const getRowId = (verificationStatus: string, id: string) => `${verificationStatus}_${id}`
 
@@ -142,6 +144,37 @@ const DocumentsPage = () => {
 			<HeaderSelectCountryForm required onSubmit={(data: IHeaderCountryForm) => dispatch(setSelectedCountry(data.countryCode))} />
 		</Modal>
 	)
+	const [uploadStatus, setRequestStatus] = useState<REQUEST_STATUS | undefined>(undefined)
+	const [fileUploadVisible, setFileUploadVisible] = useState(false)
+	const fileUploadSubmit = async (values: any) => {
+		setRequestStatus(REQUEST_STATUS.SUBMITTING)
+		console.log('values', values)
+		const formData = new FormData()
+		formData.append('file', values?.file)
+		console.log('formData', formData)
+		try {
+			await postReq(
+				'/api/b2b/admin/documents/',
+				undefined,
+				{
+					fileIDs: [values.file.uid],
+					message: 'test',
+					countryCode: 'SK',
+					assetType: 'B2B_APP_TERMS_CONDITIONS'
+				},
+				{
+					// headers: {
+					// 	'Content-Type': 'multipart/form-data'
+					// }
+				}
+			)
+
+			setRequestStatus(REQUEST_STATUS.SUCCESS)
+		} catch {
+			setRequestStatus(REQUEST_STATUS.ERROR)
+		}
+	}
+
 	return (
 		<>
 			{modals}
@@ -151,7 +184,64 @@ const DocumentsPage = () => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body small'>
+						<ImportForm
+							setRequestStatus={setRequestStatus}
+							requestStatus={uploadStatus}
+							label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.pdf' })}
+							accept={'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.pdf'}
+							title={t('loc:Importovať zákazníkov')}
+							visible={fileUploadVisible}
+							setVisible={setFileUploadVisible}
+							onSubmit={fileUploadSubmit}
+							// extraContent={
+							// 	<>
+							// 		<Divider className={'mt-1 mb-3'} />
+							// 		<div className={'flex items-center justify-between gap-1'}>
+							// 			<div className={'ant-form-item w-full'}>
+							// 				<label htmlFor={'noti-customer-template-select'} className={'block mb-2'}>
+							// 					{t('loc:Vzorové šablóny súborov')}
+							// 				</label>
+							// 				<Select
+							// 					id={'noti-customer-template-select'}
+							// 					className={'noti-select-input w-full mb-4'}
+							// 					size={'large'}
+							// 					labelInValue
+							// 					options={TEMPLATE_OPTIONS_CUSTOMERS()}
+							// 					onChange={(val: any) => setTemplateValue(val)}
+							// 					value={templateValue}
+							// 					placeholder={t('loc:Vyberte šablónu na stiahnutie')}
+							// 					getPopupContainer={(node) => node.closest('.ant-modal-body') as HTMLElement}
+							// 				/>
+							// 			</div>
+							// 			<Button
+							// 				className={'noti-btn'}
+							// 				href={`${process.env.PUBLIC_URL}/templates/${templateValue?.value}`}
+							// 				target='_blank'
+							// 				rel='noopener noreferrer'
+							// 				type={'default'}
+							// 				disabled={!templateValue}
+							// 				htmlType={'button'}
+							// 				download
+							// 			>
+							// 				<div>{t('loc:Stiahnuť')}</div>
+							// 			</Button>
+							// 		</div>
+							// 	</>
+							// }
+						/>
+
 						<Spin spinning={isLoading}>
+							<Button
+								onClick={() => setFileUploadVisible(true)}
+								// disabled={disabled}
+								type='primary'
+								htmlType='button'
+								className={'noti-btn mr-2'}
+								// icon={<UploadIcon />}
+							>
+								{t('loc:Nahrať súbor')}
+							</Button>
+
 							{/* <CustomTable */}
 							{/*	className='table-fixed table-expandable' */}
 							{/*	onChange={onChangeTable} */}
@@ -176,4 +266,4 @@ const DocumentsPage = () => {
 	)
 }
 // TODO: sprait opravnenia
-export default compose(withPermissions([...ADMIN_PERMISSIONS, PERMISSION.REVIEW_READ]))(DocumentsPage)
+export default compose(withPermissions([...ADMIN_PERMISSIONS]))(DocumentsPage)

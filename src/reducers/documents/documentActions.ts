@@ -8,22 +8,23 @@ import { IResetStore } from '../generalTypes'
 // utils
 import { getReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
-import { IDocumentsPageQueryParams } from '../../schemas/queryParams'
+import { IDocumentsAssetTypesPageQueryParams, IDocumentsPageQueryParams } from '../../schemas/queryParams'
 
-export type ICustomerActions = IResetStore | IGetDocuments | IGetDocument
+export type IDocumentsActions = IResetStore | IGetDocuments | IGetDocumentsByAssetType
 
 interface IGetDocuments {
 	type: DOCUMENTS
 	payload: IDocumentsPayload
 }
 
-interface IGetDocument {
+interface IGetDocumentsByAssetType {
 	type: DOCUMENT
 	payload: IDocumentPayload
 }
 
 export interface IDocumentPayload {
 	data: any
+	tableData: any
 	// TODO: naparovat s BE
 	// data: Paths.GetApiB2BAdminCustomersCustomerId.Responses.$200 | null
 }
@@ -65,20 +66,22 @@ export const getDocuments =
 		return payload
 	}
 
-export const getDocument =
-	(documentID: string): ThunkResult<Promise<IDocumentPayload>> =>
+export const getDocumentsByAssetType =
+	(queryParams: IDocumentsAssetTypesPageQueryParams): ThunkResult<Promise<IDocumentPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IDocumentPayload
 		try {
 			dispatch({ type: DOCUMENT.DOCUMENT_LOAD_START })
-			// TODO: naparovat s BE
-			// const { data } = await getReq('/api/b2b/admin/customers/{customerID}', { customerID })
+			const { data } = await getReq('/api/b2b/admin/documents/asset-types/{assetType}', { ...(normalizeQueryParams(queryParams) as IDocumentsAssetTypesPageQueryParams) })
+
+			const tableData = map(data.documents, (document) => ({
+				...document,
+				key: document.id
+			}))
 
 			payload = {
-				data: {
-					id: '1',
-					name: 'John'
-				}
+				data,
+				tableData
 			}
 
 			dispatch({ type: DOCUMENT.DOCUMENT_LOAD_DONE, payload })

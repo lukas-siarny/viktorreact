@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
-import { ICustomerActions, IDocumentPayload, IDocumentsPayload } from './documentActions'
+import { IDocumentPayload, IDocumentsActions, IDocumentsPayload } from './documentActions'
 import { ILoadingAndFailure } from '../../types/interfaces'
 import { DOCUMENTS, DOCUMENT } from './documentTypes'
 
@@ -8,23 +8,25 @@ export const initState = {
 	documents: {
 		data: null,
 		isLoading: false,
+		tableData: [],
 		isFailure: false
 	} as IDocumentsPayload & ILoadingAndFailure,
 	document: {
 		data: null,
+		tableData: [],
 		isLoading: false,
 		isFailure: false
 	} as IDocumentPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
-export default (state = initState, action: ICustomerActions) => {
+export default (state = initState, action: IDocumentsActions) => {
 	switch (action.type) {
 		// Documents
 		case DOCUMENTS.DOCUMENTS_LOAD_START:
 			return {
 				...state,
-				customers: {
+				documents: {
 					...state.documents,
 					isLoading: true
 				}
@@ -49,7 +51,7 @@ export default (state = initState, action: ICustomerActions) => {
 		case DOCUMENT.DOCUMENT_LOAD_START:
 			return {
 				...state,
-				customer: {
+				document: {
 					...state.document,
 					isLoading: true
 				}

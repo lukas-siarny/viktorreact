@@ -18,7 +18,7 @@ import { ReactComponent as CloseIcon } from '../assets/icons/close-icon-modal.sv
 
 type ComponentProps = {
 	visible: boolean
-	setVisible: React.Dispatch<React.SetStateAction<boolean>>
+	setVisible: React.Dispatch<React.SetStateAction<any>>
 	setRequestStatus: (status?: REQUEST_STATUS) => void
 	requestStatus: REQUEST_STATUS | undefined
 	title: string

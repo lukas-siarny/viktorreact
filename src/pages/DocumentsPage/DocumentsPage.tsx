@@ -4,16 +4,19 @@ import { Button, Col, Modal, Row, Spin, Input } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-
-// components
 import { getFormValues } from 'redux-form'
 import { ColumnsType } from 'antd/lib/table'
+
+// components
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
+import ImportForm from '../../components/ImportForm'
+import HeaderSelectCountryForm, { IHeaderCountryForm } from '../../components/HeaderSelectCountryForm'
 
 // utils
-import { ADMIN_PERMISSIONS, FORM, IMPORT_TYPE, PAGINATION, REQUEST_STATUS, ROW_GUTTER_X_DEFAULT, UPLOAD_IMG_CATEGORIES } from '../../utils/enums'
+import { ADMIN_PERMISSIONS, ASSET_TYPE, FORM, IMPORT_TYPE, PAGINATION, REQUEST_STATUS, ROW_GUTTER_X_DEFAULT, UPLOAD_IMG_CATEGORIES } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys } from '../../utils/helper'
+import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -27,13 +30,14 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 import { ReactComponent as UploadIcon } from '../../assets/icons/upload-icon.svg'
 
 // hooks
-import HeaderSelectCountryForm, { IHeaderCountryForm } from '../../components/HeaderSelectCountryForm'
+import useQueryParams from '../../hooks/useQueryParamsZod'
+
+// redux
 import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
 import { getDocuments } from '../../reducers/documents/documentActions'
-import useQueryParams from '../../hooks/useQueryParamsZod'
+
+// schemas
 import { documentsPageURLQueryParamsSchema } from '../../schemas/queryParams'
-import ImportForm from '../../components/ImportForm'
-import { postReq } from '../../utils/request'
 
 const DocumentsPage = () => {
 	const dispatch = useDispatch()
@@ -42,7 +46,7 @@ const DocumentsPage = () => {
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	// TODO: dokumenty
 	const documents = useSelector((state: RootState) => state.documents.documents)
-	console.log('documents', documents)
+
 	const [query, setQuery] = useQueryParams(documentsPageURLQueryParamsSchema, {
 		page: 1,
 		limit: PAGINATION.limit
@@ -53,9 +57,18 @@ const DocumentsPage = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [visible, setVisible] = useState(!selectedCountry)
 	const [uploadStatus, setRequestStatus] = useState<REQUEST_STATUS | undefined>(undefined)
-	const [fileUploadVisible, setFileUploadVisible] = useState(false)
+	const [fileUploadVisible, setFileUploadVisible] = useState<ASSET_TYPE>()
 	const isLoading = isSubmitting || documents?.isLoading
 	const [message, setMessage] = useState('')
+
+	const breadcrumbs: IBreadcrumbs = {
+		items: [
+			{
+				name: t('loc:Prehľad dokumentov')
+			}
+		]
+	}
+
 	const fetchDocuments = useCallback(async () => {
 		// TODO: get action
 	}, [dispatch, selectedCountry])
@@ -84,23 +97,6 @@ const DocumentsPage = () => {
 		dispatch(getDocuments(query))
 	}, [dispatch, query])
 
-	// Delete document
-	// const deleteReview = async (reviewID: string) => {
-	// 	if (isSubmitting) {
-	// 		return
-	// 	}
-	// 	try {
-	// 		setIsSubmitting(true)
-	// 		await deleteReq('/api/b2b/admin/reviews/{reviewID}', { reviewID })
-	// 		fetchDocuments()
-	// 	} catch (error: any) {
-	// 		// eslint-disable-next-line no-console
-	// 		console.error(error.message)
-	// 	} finally {
-	// 		setIsSubmitting(false)
-	// 	}
-	// }
-
 	const columns: Columns = [
 		{
 			title: t('loc:Názov typu dokumentu'),
@@ -122,15 +118,13 @@ const DocumentsPage = () => {
 	const actions: ColumnsType<any> = [
 		{
 			dataIndex: '',
-			// width: 80,
 			align: 'center',
 			className: 'ignore-cell-click',
 			render(val, record) {
-				console.log('record', record)
 				return (
 					<div className={'space-x-2 flex group-hover:flex'}>
 						<Button
-							onClick={() => setFileUploadVisible(true)}
+							onClick={() => setFileUploadVisible(record.assetType.key)}
 							// disabled={disabled}
 							type='primary'
 							htmlType='button'
@@ -146,14 +140,6 @@ const DocumentsPage = () => {
 	]
 
 	const cols = [...columns, ...actions]
-
-	const breadcrumbs: IBreadcrumbs = {
-		items: [
-			{
-				name: t('loc:Prehľad dokumentov')
-			}
-		]
-	}
 
 	const modals = (
 		<Modal
@@ -182,17 +168,17 @@ const DocumentsPage = () => {
 				],
 				category: UPLOAD_IMG_CATEGORIES.ASSET_DOC_TYPE
 			})
-			if (countryFormValues.countryCode) {
+			if (countryFormValues.countryCode && !!fileUploadVisible) {
 				const fileIDs = data?.files?.map((file) => file.id)
 				postReq('/api/b2b/admin/documents/', undefined, {
 					countryCode: countryFormValues.countryCode,
 					fileIDs: fileIDs as any,
-					message,
-					assetType: 'B2C_PRIVACY_POLICY' // TODO: tahat z detailu
+					message: message || null,
+					assetType: fileUploadVisible
 				})
 				setRequestStatus(REQUEST_STATUS.SUCCESS)
 			}
-			setFileUploadVisible(false)
+			setFileUploadVisible(undefined)
 		} catch {
 			setRequestStatus(REQUEST_STATUS.ERROR)
 		}
@@ -214,7 +200,7 @@ const DocumentsPage = () => {
 							label={t('loc:Vyberte súbor vo formáte {{ formats }}', { formats: '.pdf' })}
 							accept={'.pdf'}
 							title={t('loc:Nahrať dokument')}
-							visible={fileUploadVisible}
+							visible={!!fileUploadVisible}
 							setVisible={setFileUploadVisible}
 							onSubmit={fileUploadSubmit}
 							extraContent={
@@ -223,7 +209,6 @@ const DocumentsPage = () => {
 										<label htmlFor={'noti-message-input'} className={'block mb-2'}>
 											{t('loc:Sprievodná správa')}
 										</label>
-
 										<Input.TextArea
 											id={'noti-message-input'}
 											style={{ zIndex: 999 }}
@@ -261,5 +246,4 @@ const DocumentsPage = () => {
 		</>
 	)
 }
-// TODO: sprait opravnenia
 export default compose(withPermissions([...ADMIN_PERMISSIONS]))(DocumentsPage)

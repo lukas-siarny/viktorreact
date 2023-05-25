@@ -22,7 +22,8 @@ import {
 	REVIEWS_TAB_KEYS,
 	DEFAULT_DATE_INIT_FORMAT,
 	RESERVATION_FROM_IMPORT,
-	CALENDAR_EVENT_TYPE_REQUEST
+	CALENDAR_EVENT_TYPE_REQUEST,
+	ASSET_TYPE
 } from '../utils/enums'
 import { dateConstraint, twoCharsConstraint, uuidConstraint } from './baseSchema'
 
@@ -395,3 +396,17 @@ export const documentsPageURLQueryParamsSchema = documentsPageQueryParams
 export type IDocumentsPageQueryParams = z.infer<typeof documentsPageQueryParams>
 
 export type IDocumentsPageURLQueryParams = z.infer<typeof documentsPageURLQueryParamsSchema>
+
+/**
+ * Documents by asset types
+ */
+
+export const documentsAssetTypesPageQueryParams = paginationSchema.extend({
+	assetType: z.nativeEnum(ASSET_TYPE),
+	countryCode: twoCharsConstraint
+})
+export const documentsAssetTypesPageURLQueryParamsSchema = documentsAssetTypesPageQueryParams
+
+export type IDocumentsAssetTypesPageQueryParams = z.infer<typeof documentsAssetTypesPageQueryParams>
+
+export type IDocumentsAssetTypesPageURLQueryParams = z.infer<typeof documentsAssetTypesPageURLQueryParamsSchema>

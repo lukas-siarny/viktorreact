@@ -70,12 +70,14 @@ const AuthRoute: FC<Props> = (props) => {
 	return (
 		<>
 			{/* NOTE: prevent to have cached app version */}
-			<IdleTimer
-				element={document}
-				onIdle={onIdle}
-				debounce={250}
-				timeout={REFRESH_PAGE_INTERVAL} // refresh page if user is longer time inactive
-			/>
+			{process.env.NODE_ENV !== 'development' && (
+				<IdleTimer
+					element={document}
+					onIdle={onIdle}
+					debounce={250}
+					timeout={REFRESH_PAGE_INTERVAL} // refresh page if user is longer time inactive
+				/>
+			)}
 			<BaseRoute {...(props as any)} showNavigation={page !== PAGE.ACTIVATION} />
 		</>
 	)

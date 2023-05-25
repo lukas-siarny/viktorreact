@@ -1,13 +1,15 @@
 import React, { Suspense, useEffect, useState } from 'react'
 import { Provider } from 'react-redux'
 import { I18nextProvider } from 'react-i18next'
+import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/es/integration/react'
 import { Spin, ConfigProvider } from 'antd'
 import { StyleProvider } from '@ant-design/cssinjs'
-import { Locale } from 'antd/lib/locale-provider'
-
+import { Locale } from 'antd/lib/locale'
 import dayjs from 'dayjs'
-import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom'
+import { GoogleOAuthProvider } from '@react-oauth/google'
+import { PublicClientApplication, Configuration } from '@azure/msal-browser'
+import { MsalProvider } from '@azure/msal-react'
 
 import 'antd/dist/reset.css'
 
@@ -16,7 +18,7 @@ import rootReducer from './reducers'
 // utils
 import configureStore from './utils/configureStore'
 import i18n from './utils/i18n'
-import { LANGUAGE, DEFAULT_LANGUAGE, ANTD_THEME_VARIABLES_OVERRIDE } from './utils/enums'
+import { LANGUAGE, DEFAULT_LANGUAGE, ANTD_THEME_VARIABLES_OVERRIDE, EXTERNAL_CALENDAR_CONFIG, EXTERNAL_CALENDAR_TYPE } from './utils/enums'
 
 // components
 import ScrollToTop from './components/ScrollToTop'
@@ -24,6 +26,16 @@ import { LOCALES } from './components/LanguagePicker'
 import AppRoutes from './routes/AppRoutes'
 
 const { store, persistor } = configureStore(rootReducer)
+
+const msalConfig: Configuration = {
+	auth: {
+		// eslint-disable-next-line no-underscore-dangle
+		clientId: window.__RUNTIME_CONFIG__.REACT_APP_MS_OAUTH_CLIENT_ID,
+		redirectUri: EXTERNAL_CALENDAR_CONFIG[EXTERNAL_CALENDAR_TYPE.MICROSOFT].redirect_uri
+	}
+}
+
+const msalInstance = new PublicClientApplication(msalConfig)
 
 const App = () => {
 	const [antdLocale, setAntdLocale] = useState<Locale | undefined>(undefined)
@@ -75,11 +87,16 @@ const App = () => {
 							token: ANTD_THEME_VARIABLES_OVERRIDE
 						}}
 					>
-						<Provider store={store}>
-							<StyleProvider hashPriority={'low'}>
-								<RouterProvider router={router} />
-							</StyleProvider>
-						</Provider>
+						<MsalProvider instance={msalInstance}>
+							{/* eslint-disable-next-line no-underscore-dangle */}
+							<GoogleOAuthProvider clientId={window.__RUNTIME_CONFIG__.REACT_APP_GOOGLE_OAUTH_CLIENT_ID} onScriptLoadError={() => console.error('GoogleOAuth error')}>
+								<Provider store={store}>
+									<StyleProvider hashPriority={'low'}>
+										<RouterProvider router={router} />
+									</StyleProvider>
+								</Provider>
+							</GoogleOAuthProvider>
+						</MsalProvider>
 					</ConfigProvider>
 				</PersistGate>
 			</I18nextProvider>

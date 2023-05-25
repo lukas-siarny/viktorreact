@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { change } from 'redux-form'
 import { useNavigate } from 'react-router-dom'
-import { startsWith } from 'lodash'
+import { isEmpty, startsWith } from 'lodash'
 
 // fullcalendar
 import FullCalendar, { DateSpanApi, EventDropArg } from '@fullcalendar/react'
@@ -56,8 +56,6 @@ type Props = {
 	loading: boolean
 	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
-	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-	// handleSubmitImportedReservation: (values: ICalendarImportedReservationForm) => void
 	enabledSalonReservations?: boolean
 	parentPath: string
 	salonID: string
@@ -86,8 +84,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		shiftsTimeOffs,
 		handleSubmitReservation,
 		handleSubmitEvent,
-		// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-		// handleSubmitImportedReservation,
 		selectedDate,
 		enabledSalonReservations,
 		salonID,
@@ -133,8 +129,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		}
 
 		if (virtualEvent?.id && !virtualEvent?.isNew) {
-			// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-			if (virtualEvent.type === CALENDAR_EVENT_TYPE.RESERVATION /* || virtualEvent.type === CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT */) {
+			if (virtualEvent.type === CALENDAR_EVENT_TYPE.RESERVATION) {
 				allSources.reservations = reservations?.filter((item) => item.id !== virtualEvent.id) ?? []
 			} else {
 				allSources.shiftsTimeOffs = shiftsTimeOffs?.filter((item) => item.id !== virtualEvent.id) ?? []
@@ -203,9 +198,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		const { eventData } = eventExtenedProps
 		const eventId = eventData?.id
 		const calendarBulkEventID = eventData?.calendarBulkEvent?.id
-		// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-		// const isImportedEvent = eventData?.isImported
-
 		const newEmployee = newResourceExtendedProps?.employee || eventExtenedProps?.eventData?.employee
 		const newEmployeeId = newEmployee?.id
 		const currentEmployeeId = eventExtenedProps?.eventData?.employee?.id
@@ -261,22 +253,6 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 
 		// ak sa zmenil resource, tak updatenut resource (to sa bude diat len pri drope)
 		const employee = newResource ? newResourceExtendedProps?.employee : eventData?.employee
-
-		// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-		/* if (isImportedEvent && eventId && employee) {
-			handleSubmitImportedReservation({
-				date,
-				timeFrom,
-				timeTo,
-				eventId,
-				revertEvent,
-				updateFromCalendar: true,
-				employee: {
-					key: employee.id
-				}
-			} as any)
-			return
-		} */
 
 		const values = {
 			date,

@@ -4,6 +4,7 @@ import { Gutter } from 'antd/lib/grid/row'
 import { LoadScriptUrlOptions } from '@react-google-maps/api/dist/utils/make-load-script-url'
 import { AliasToken } from 'antd/es/theme/internal'
 import { FormatterInput } from '@fullcalendar/react'
+import { UseGoogleLoginOptionsAuthCodeFlow } from '@react-oauth/google'
 
 export enum CYPRESS_CLASS_NAMES {
 	LOGOUT_BUTTON = 'noti-logout-button',
@@ -213,7 +214,8 @@ export enum FORM {
 	SMS_HISTORY_FILTER = 'SMS_HISTORY_FILTER',
 	RECHARGE_SMS_CREDIT = 'RECHARGE_SMS_CREDIT',
 	RECHARGE_SMS_CREDIT_FILTER = 'RECHARGE_SMS_CREDIT_FILTER',
-	SALONS_REPORT = 'SALONS_REPORT'
+	SALONS_REPORT = 'SALONS_REPORT',
+	SALON_IDS_FORM = 'SALON_IDS_FORM'
 }
 
 export enum PERMISSION {
@@ -843,9 +845,11 @@ export enum CALENDAR_EVENT_TYPE {
 	EMPLOYEE_SHIFT = 'EMPLOYEE_SHIFT',
 	EMPLOYEE_TIME_OFF = 'EMPLOYEE_TIME_OFF',
 	EMPLOYEE_BREAK = 'EMPLOYEE_BREAK'
-	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-	// RESERVATION_FROM_IMPORT = 'RESERVATION_FROM_IMPORT'
 }
+
+export const RESERVATION_FROM_IMPORT = 'RESERVATION_FROM_IMPORT'
+
+export const CALENDAR_EVENT_TYPE_REQUEST = [RESERVATION_FROM_IMPORT, ...Object.keys(CALENDAR_EVENT_TYPE)] as const
 
 export enum CALENDAR_EVENTS_VIEW_TYPE {
 	RESERVATION = 'RESERVATION',
@@ -888,13 +892,20 @@ export const EVERY_REPEAT_OPTIONS = () => [
 	}
 ]
 
-export const TEMPLATE_OPTIONS = () => [
+export const TEMPLATE_OPTIONS_CUSTOMERS = () => [
 	{
 		value: 'import_of_clients_template.csv',
 		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.csv' })
 	},
 	{
 		value: 'import_of_clients_template.xlsx',
+		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' })
+	}
+]
+
+export const TEMPLATE_OPTIONS_RESERVATIONS = () => [
+	{
+		value: 'import_of_reservations_template.xlsx',
 		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' })
 	}
 ]
@@ -911,10 +922,6 @@ export const EVENT_NAMES = (t: TFunction, eventType?: CALENDAR_EVENT_TYPE, capit
 		case CALENDAR_EVENT_TYPE.RESERVATION:
 			string = t('loc:rezerváciu')
 			break
-		// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-		/* case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
-			string = t('loc:importovanú rezerváciu')
-			break */
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
 			string = t('loc:voľno')
 			break
@@ -1186,6 +1193,26 @@ export const SMS_STATUS_NAME = (status: SMS_NOTIFICATION_STATUS) => {
 		default:
 			return ''
 	}
+}
+
+export enum EXTERNAL_CALENDAR_TYPE {
+	MICROSOFT = 'MICROSOFT',
+	GOOGLE = 'GOOGLE'
+}
+
+export const EXTERNAL_CALENDAR_CONFIG = {
+	[EXTERNAL_CALENDAR_TYPE.MICROSOFT]: {
+		redirect_uri: `${window.location.protocol}//${window.location.host}/ms-oauth2`,
+		scopes: ['offline_access', 'user.read', 'Calendars.ReadWrite', 'Files.Read'],
+		url: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+		grand_type: 'authorization_code',
+		prompt: 'select_account'
+	},
+	[EXTERNAL_CALENDAR_TYPE.GOOGLE]: {
+		flow: 'auth-code',
+		scope: 'email profile https://www.googleapis.com/auth/calendar openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+		redirect_uri: 'postmessage'
+	} as UseGoogleLoginOptionsAuthCodeFlow
 }
 
 export const SERVICE_ROW_KEY = (categoryID: string, serviceID: string) => `${categoryID}_${serviceID}`

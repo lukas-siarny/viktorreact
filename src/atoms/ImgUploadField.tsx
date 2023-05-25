@@ -93,6 +93,13 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 	const [selectedValue, setSelectedValue] = useState<string>('')
 	const [previewImgIndex, setPreviewImgIndex] = useState<number>(0)
 
+	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
+
+	const hasAllowedRawImages = useMemo(
+		() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_ADMIN, PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO]),
+		[authUserPermissions]
+	)
+
 	useEffect(() => {
 		if (!isEmpty(input.value)) {
 			// filter application/pdf file
@@ -138,6 +145,19 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 		if (isEmpty(info.fileList)) {
 			input.onChange(multiple ? [] : null)
 		}
+	}
+
+	const transformDownloadUrl = () => {
+		const originalUrl = images[previewImgIndex]?.url
+		if (hasAllowedRawImages) {
+			// Extract the file name and file extension from the original URL
+			const fileName = originalUrl?.substring(originalUrl.lastIndexOf('/') + 1)
+			const fileExtension = fileName?.substring(fileName.lastIndexOf('.') + 1)
+			// Append 'raw' to the file name before the file extension
+			const transformedUrl = originalUrl?.replace(`.${fileExtension}`, `-raw.${fileExtension}`)
+			return transformedUrl
+		}
+		return originalUrl
 	}
 
 	const showUploadList = useMemo(
@@ -336,28 +356,6 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 			</Upload>
 		</DndProvider>
 	)
-	// TODO: moze to byt na tejto urovne alebo genericky posielat z hora?
-	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
-
-	const hasAllowedRawImages = useMemo(
-		() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_ADMIN, PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO]),
-		[authUserPermissions]
-	)
-	const transformDownloadUrl = () => {
-		const originalUrl = images[previewImgIndex]?.url
-		if (hasAllowedRawImages) {
-			// Extract the file name and file extension from the original URL
-			const fileName = originalUrl?.substring(originalUrl.lastIndexOf('/') + 1)
-			const fileExtension = fileName?.substring(fileName.lastIndexOf('.') + 1)
-
-			// Append 'raw' to the file name before the file extension
-			const transformedUrl = originalUrl?.replace(`.${fileExtension}`, `-raw.${fileExtension}`)
-
-			// https://d1pfrdq2i86yn4.cloudfront.net/salons/68b4841c-5c64-43ca-bc20-3fe231eba2a8_Screenshot%202022-12-09%20at%2008.48.24.png
-			return transformedUrl
-		}
-		return originalUrl
-	}
 
 	return (
 		<Item

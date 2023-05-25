@@ -46,6 +46,11 @@ export enum BROWSER_TYPE {
 	UNSUPPORTED = 'unsupported'
 }
 
+export enum IMPORT_TYPE {
+	IMPORT = 'IMPORT',
+	UPLOAD = 'UPLOAD'
+}
+
 export const MIN_SUPPORTED_BROWSER_VERSION = (browserName?: string) => {
 	switch (browserName) {
 		case BROWSERS.CHROME:
@@ -651,7 +656,8 @@ export enum UPLOAD_IMG_CATEGORIES {
 	CATEGORY_ICON = 'CATEGORY_ICON',
 	COSMETIC = 'COSMETIC_IMAGE',
 	CUSTOMER = 'CUSTOMER_IMAGE',
-	LANGUAGE_IMAGE = 'LANGUAGE_IMAGE'
+	LANGUAGE_IMAGE = 'LANGUAGE_IMAGE',
+	ASSET_DOC_TYPE = 'ASSET_DOC_TYPE'
 }
 
 export const ANTD_THEME_VARIABLES_OVERRIDE: Partial<AliasToken> = {

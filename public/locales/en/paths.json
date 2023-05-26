@@ -15,6 +15,7 @@
   "customers/{{customerID}}": "/customers/{{customerID}}",
   "deleted": "deleted",
   "documents": "/documents",
+  "documents/{{assetType}}": "/documents/{{assetType}}",
   "employees": "/employees",
   "employees/create": "/employees/create",
   "employees/{{employeeID}}": "/employees/{{employeeID}}",

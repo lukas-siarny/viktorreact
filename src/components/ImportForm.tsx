@@ -53,7 +53,7 @@ const ImportForm: FC<Props> = (props) => {
 		setRequestStatus(undefined)
 		dispatch(reset(FORM.IMPORT_FORM))
 	}
-	console.log('importtype', type)
+
 	const importForm = (
 		<Form onSubmitCapture={handleSubmit} layout={'vertical'} className={'form'}>
 			<Field

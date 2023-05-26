@@ -78,6 +78,7 @@ import ErrorBoundary from '../components/ErrorBoundary'
 import RechargeSmsCreditAdminPage from '../pages/SmsCreditAdminPage/RechargeSmsCreditAdminPage'
 import NotinoReservationsPage from '../pages/NotinoReservationsPage/NotinoReservationsPage'
 import DocumentsPage from '../pages/DocumentsPage/DocumentsPage'
+import DocumentsByAssetTypePage from '../pages/DocumentsPage/DocumentsByAssetTypePage'
 
 const AppRoutes: FC = () => {
 	const [t] = useTranslation()
@@ -155,8 +156,9 @@ const AppRoutes: FC = () => {
 				<Route errorElement={<ErrorBoundary />} path={t('paths:reviews')} element={<AuthRoute layout={MainLayout} page={PAGE.REVIEWS} />}>
 					<Route index element={<ReviewsPage />} />
 				</Route>
-				<Route errorElement={<ErrorBoundary />} path={t('paths:documents')} element={<AuthRoute layout={MainLayout} page={PAGE.DOCUMENTS} />}>
+				<Route path={t('paths:documents')} element={<AuthRoute layout={MainLayout} page={PAGE.DOCUMENTS} />}>
 					<Route index element={<DocumentsPage />} />
+					<Route path={':assetType'} element={<DocumentsByAssetTypePage />} />
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:reservations')} element={<AuthRoute layout={MainLayout} page={PAGE.NOTINO_RESERVATIONS} />}>
 					<Route index element={<NotinoReservationsPage />} />

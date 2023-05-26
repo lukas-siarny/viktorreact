@@ -8,7 +8,7 @@ import { getFormValues } from 'redux-form'
 import { ColumnsType } from 'antd/lib/table'
 
 // components
-import { useNavigate } from 'react-router'
+import { useParams } from 'react-router-dom'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ImportForm from '../../components/ImportForm'
@@ -16,7 +16,7 @@ import HeaderSelectCountryForm, { IHeaderCountryForm } from '../../components/He
 
 // utils
 import { ADMIN_PERMISSIONS, ASSET_TYPE, FORM, IMPORT_TYPE, PAGINATION, REQUEST_STATUS, ROW_GUTTER_X_DEFAULT, UPLOAD_IMG_CATEGORIES } from '../../utils/enums'
-import { formatDateByLocale, getLinkWithEncodedBackUrl, normalizeDirectionKeys } from '../../utils/helper'
+import { formatDateByLocale, normalizeDirectionKeys } from '../../utils/helper'
 import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
 
@@ -35,38 +35,42 @@ import useQueryParams from '../../hooks/useQueryParamsZod'
 
 // redux
 import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
-import { getDocuments } from '../../reducers/documents/documentActions'
+import { getDocumentsByAssetType } from '../../reducers/documents/documentActions'
 
 // schemas
 import { documentsPageURLQueryParamsSchema } from '../../schemas/queryParams'
+import useBackUrl from '../../hooks/useBackUrl'
 
-const DocumentsPage = () => {
+const DocumentsByAssetTypePage = () => {
 	const dispatch = useDispatch()
 	const [t] = useTranslation()
-	const navigate = useNavigate()
+	const { assetType } = useParams<Required<{ assetType: ASSET_TYPE }>>()
 	// TODO: logika na otvorenie modalu so selectom krajiny ak nie je picknuta
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	// TODO: dokumenty
-	const documents = useSelector((state: RootState) => state.documents.documents)
-
+	const documentsByAssetType = useSelector((state: RootState) => state.documents.documentsByAssetType)
 	const [query, setQuery] = useQueryParams(documentsPageURLQueryParamsSchema, {
 		page: 1,
 		limit: PAGINATION.limit
 	})
 
 	const countryFormValues: Partial<IHeaderCountryForm> = useSelector((state: RootState) => getFormValues(FORM.HEADER_COUNTRY_FORM)(state))
-	// console.log('countryFormValues', countryFormValues.countryCode)
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [visible, setVisible] = useState(!selectedCountry)
 	const [uploadStatus, setRequestStatus] = useState<REQUEST_STATUS | undefined>(undefined)
 	const [fileUploadVisible, setFileUploadVisible] = useState<ASSET_TYPE>()
-	const isLoading = isSubmitting || documents?.isLoading
+	const isLoading = isSubmitting || documentsByAssetType?.isLoading
 	const [message, setMessage] = useState('')
+	const [backUrl] = useBackUrl(t('paths:documents'))
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Prehľad dokumentov')
+				name: t('loc:Prehľad dokumentov'),
+				link: backUrl
+			},
+			{
+				name: t('loc:Prehľad dokumentov podľa typu')
 			}
 		]
 	}
@@ -95,9 +99,13 @@ const DocumentsPage = () => {
 		setQuery(newQuery)
 	}
 
+	console.log('assetType', assetType)
+	console.log('selectedCountry', selectedCountry)
 	useEffect(() => {
-		dispatch(getDocuments(query))
-	}, [dispatch, query])
+		if (assetType && selectedCountry) {
+			dispatch(getDocumentsByAssetType({ ...query, countryCode: selectedCountry, assetType }))
+		}
+	}, [assetType, dispatch, query, selectedCountry])
 
 	const columns: Columns = [
 		{
@@ -120,23 +128,22 @@ const DocumentsPage = () => {
 	const actions: ColumnsType<any> = [
 		{
 			dataIndex: '',
-			align: 'right',
+			align: 'center',
 			className: 'ignore-cell-click',
 			render(val, record) {
 				return (
-					<Button
-						onClick={(e) => {
-							e.stopPropagation()
-							setFileUploadVisible(record.assetType.key)
-						}}
-						// disabled={disabled}
-						type='primary'
-						htmlType='button'
-						className={'noti-btn mr-2'}
-						icon={<UploadIcon />}
-					>
-						{t('loc:Aktualizovať súbor')}
-					</Button>
+					<div>
+						<Button
+							onClick={() => setFileUploadVisible(record.assetType.key)}
+							// disabled={disabled}
+							type='primary'
+							htmlType='button'
+							className={'noti-btn mr-2'}
+							icon={<UploadIcon />}
+						>
+							{t('loc:Aktualizovať súbor')}
+						</Button>
+					</div>
 				)
 			}
 		}
@@ -191,7 +198,7 @@ const DocumentsPage = () => {
 		<>
 			{modals}
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:documents')} />
 			</Row>
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
@@ -225,31 +232,27 @@ const DocumentsPage = () => {
 								</div>
 							}
 						/>
-
-						<CustomTable
-							className='table-fixed table-expandable'
-							onChange={onChangeTable}
-							columns={cols}
-							rowClassName={'clickable-row'}
-							loading={isLoading}
-							dataSource={documents.tableData}
-							// rowKey={(record) => getRowId(record.verificationStatus, record.id)}
-							twoToneRows
-							onRow={(record) => ({
-								onClick: () => navigate(getLinkWithEncodedBackUrl(t('paths:documents/{{assetType}}', { assetType: record.assetType.key })))
-							})}
-							pagination={{
-								pageSize: documents?.data?.pagination?.limit,
-								total: documents?.data?.pagination?.totalCount,
-								current: documents?.data?.pagination?.page,
-								onChange: onChangePagination,
-								disabled: documents?.isLoading
-							}}
-						/>
+						<Spin spinning={isLoading}>
+							<CustomTable
+								className='table-fixed table-expandable'
+								onChange={onChangeTable}
+								columns={cols}
+								dataSource={documentsByAssetType.tableData}
+								// rowKey={(record) => getRowId(record.verificationStatus, record.id)}
+								twoToneRows
+								pagination={{
+									pageSize: documentsByAssetType?.data?.pagination?.limit,
+									total: documentsByAssetType?.data?.pagination?.totalCount,
+									current: documentsByAssetType?.data?.pagination?.page,
+									onChange: onChangePagination,
+									disabled: documentsByAssetType?.isLoading
+								}}
+							/>
+						</Spin>
 					</div>
 				</Col>
 			</Row>
 		</>
 	)
 }
-export default compose(withPermissions([...ADMIN_PERMISSIONS]))(DocumentsPage)
+export default compose(withPermissions([...ADMIN_PERMISSIONS]))(DocumentsByAssetTypePage)

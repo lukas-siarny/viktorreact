@@ -382,6 +382,7 @@
   "Prehlasujem, že som sa oboznámil s": "I declare that I have familiarized myself with the",
   "Prehľad": "Overview",
   "Prehľad dokumentov": null,
+  "Prehľad dokumentov podľa typu": null,
   "Prehľad rezervacií": "Overview of reservations",
   "Prehľad rezervácií {{ reservationsCount }}": "Overview of reservations {{ reservationsCount }}",
   "Prejdite do nastavení rezervačného systému a nastavte si SMS notifikácie podľa vašich preferencií": "Go to the reservation system settings and set SMS notifications according to your preferences",

@@ -11,7 +11,7 @@ export const initState = {
 		tableData: [],
 		isFailure: false
 	} as IDocumentsPayload & ILoadingAndFailure,
-	document: {
+	documentsByAssetType: {
 		data: null,
 		tableData: [],
 		isLoading: false,
@@ -44,32 +44,34 @@ export default (state = initState, action: IDocumentsActions) => {
 				...state,
 				documents: {
 					...initState.documents,
-					data: action.payload.data
+					data: action.payload.data,
+					tableData: action.payload.tableData
 				}
 			}
-		// Document
+		// Documents by asset type
 		case DOCUMENT.DOCUMENT_LOAD_START:
 			return {
 				...state,
-				document: {
-					...state.document,
+				documentsByAssetType: {
+					...state.documentsByAssetType,
 					isLoading: true
 				}
 			}
 		case DOCUMENT.DOCUMENT_LOAD_FAIL:
 			return {
 				...state,
-				document: {
-					...initState.document,
+				documentsByAssetType: {
+					...initState.documentsByAssetType,
 					isFailure: true
 				}
 			}
 		case DOCUMENT.DOCUMENT_LOAD_DONE:
 			return {
 				...state,
-				document: {
-					...initState.document,
-					data: action.payload.data
+				documentsByAssetType: {
+					...initState.documentsByAssetType,
+					data: action.payload.data,
+					tableData: action.payload.tableData
 				}
 			}
 		case RESET_STORE:

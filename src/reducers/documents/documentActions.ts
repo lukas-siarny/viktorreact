@@ -42,10 +42,7 @@ export const getDocuments =
 		let payload = {} as IDocumentsPayload
 		try {
 			dispatch({ type: DOCUMENTS.DOCUMENTS_LOAD_START })
-			console.log('queryParams', queryParams)
-			// TODO: naparovat s BE
 			const { data } = await getReq('/api/b2b/admin/documents/', { ...normalizeQueryParams(queryParams) })
-			console.log('data', data)
 			const tableData = map(data.documents, (document) => ({
 				...document,
 				key: document.id

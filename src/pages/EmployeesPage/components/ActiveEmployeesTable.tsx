@@ -174,7 +174,6 @@ const ActiveEmployeesTable = (props: Props) => {
 				}
 				if (oldIndex !== undefined && newIndex !== undefined && newOrderIndex !== undefined) {
 					try {
-						// ordering v dnd libke je od 0 .. n ale na BE je od 1 ... n
 						const reorderedData = arrayMove(activeEmployees?.tableData, oldIndex, newIndex)
 						// Akcia na update data v reduxe
 						dispatch(reorderEmployees(reorderedData))

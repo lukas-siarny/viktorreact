@@ -44,7 +44,7 @@ import { cancelGetTokens } from '../../utils/request'
 // redux
 import { getCalendarEventsCancelTokenKey } from '../../reducers/calendar/calendarActions'
 
-const stringifyOrderIndex = (value: number, numberOfPlaces = 4) => {
+const stringifyNumber = (value: number, numberOfPlaces = 4) => {
 	const stringValue = String(value) // Convert the number to a string
 	const paddingLength = numberOfPlaces - stringValue.length // Calculate the number of zeros needed for padding
 
@@ -575,7 +575,7 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 			id: employee.id,
 			eventBackgroundColor: employee.color,
 			employee: createEmployeeResourceData(employee, !!employeeTimeOff.length, description),
-			title: stringifyOrderIndex(employee.orderIndex) // used for ordering
+			title: stringifyNumber(employee.orderIndex) // used for ordering
 		}
 	})
 }
@@ -616,7 +616,7 @@ export const composeWeekResources = (weekDays: string[], shiftsTimeOffs: ICalend
 				eventBackgroundColor: employee.color,
 				day: weekDay,
 				employee: createEmployeeResourceData(employee, !!timeOffsWeekDay?.filter((timeOff) => timeOff.employee?.id === employee.id).length),
-				title: stringifyOrderIndex(employee.orderIndex) // used for ordering
+				title: stringifyNumber(employee.orderIndex) // used for ordering
 			}
 		})
 		return [...resources, ...weekDayEmployees]

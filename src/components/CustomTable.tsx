@@ -138,7 +138,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 			}
 		}
 		return components
-	}, [dndDrop, props?.components])
+	}, [dndDrop, props?.components, dndWithHandler, props.dataSource?.length])
 
 	let columns = props?.columns || []
 	const isFirstColFixed = props?.columns?.[0]?.fixed ? true : undefined
@@ -224,7 +224,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 			<DndContext onDragEnd={onDragEnd} modifiers={[restrictToVerticalAxis, restrictToFirstScrollableAncestor]} collisionDetection={closestCenter}>
 				<SortableContext
 					// rowKey array
-					items={props.dataSource && (props.dataSource.map((item: any) => item?.key) as any)}
+					items={(props.dataSource && props.dataSource.reduce((acc, item: any) => (item ? [...acc, item.key] : acc), [] as any[])) || []}
 					strategy={verticalListSortingStrategy}
 				>
 					{table}

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Col, Row, Spin } from 'antd'
@@ -45,7 +45,6 @@ const ActiveEmployeesTable = (props: Props) => {
 	const { parentPath, query, setQuery, salonID, prefixOptions } = props
 	const navigate = useNavigate()
 	const activeEmployees = useSelector((state: RootState) => state.employees.activeEmployees)
-	const tableData = useMemo(() => activeEmployees.tableData, [activeEmployees.tableData])
 
 	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
@@ -234,7 +233,7 @@ const ActiveEmployeesTable = (props: Props) => {
 							className='table-fixed'
 							onChange={onChangeTable}
 							columns={columns}
-							dataSource={tableData}
+							dataSource={activeEmployees.tableData}
 							rowClassName={'clickable-row'}
 							dnd={{ dndDrop: handleDrop }}
 							twoToneRows

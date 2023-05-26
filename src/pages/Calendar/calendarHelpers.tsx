@@ -44,6 +44,18 @@ import { cancelGetTokens } from '../../utils/request'
 // redux
 import { getCalendarEventsCancelTokenKey } from '../../reducers/calendar/calendarActions'
 
+const stringifyOrderIndex = (value: number, numberOfPlaces = 4) => {
+	const stringValue = String(value) // Convert the number to a string
+	const paddingLength = numberOfPlaces - stringValue.length // Calculate the number of zeros needed for padding
+
+	if (paddingLength <= 0) {
+		return stringValue // No padding needed if the number of places is smaller or equal to the length of the string
+	}
+
+	const paddingZeros = '0'.repeat(paddingLength) // Create a string of zeros for padding
+	return paddingZeros + stringValue // Concatenate the padding zeros with the string value
+}
+
 /**
  * zrusi prebiehajuci request - pouzivame pre zrusenie background loadu pri urcitych akciach, napr. pri zaciatku resizovania/dnd eventu alebo pred zavolanim updatu dat na BE
  */
@@ -563,7 +575,7 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 			id: employee.id,
 			eventBackgroundColor: employee.color,
 			employee: createEmployeeResourceData(employee, !!employeeTimeOff.length, description),
-			title: `${employee.orderIndex}` // used for ordering
+			title: stringifyOrderIndex(employee.orderIndex) // used for ordering
 		}
 	})
 }
@@ -604,7 +616,7 @@ export const composeWeekResources = (weekDays: string[], shiftsTimeOffs: ICalend
 				eventBackgroundColor: employee.color,
 				day: weekDay,
 				employee: createEmployeeResourceData(employee, !!timeOffsWeekDay?.filter((timeOff) => timeOff.employee?.id === employee.id).length),
-				title: `${employee.orderIndex}` // used for ordering
+				title: stringifyOrderIndex(employee.orderIndex) // used for ordering
 			}
 		})
 		return [...resources, ...weekDayEmployees]

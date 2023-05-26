@@ -59,23 +59,21 @@ body, .ant-layout
 .ant-message-notice .ant-message-loading .anticon
 	color: $textColor-notino-black
 
-.ant-notification-notice
-	border-radius: 0
-	.ant-notification-notice-close
-		background-color: unset
-		&:hover
+
+.ant-notification
+	.ant-notification-notice
+		border-radius: 0
+		.ant-notification-notice-close
 			background-color: unset
-	&.ant-notification-notice-info
-		.ant-notification-notice-icon
+			&:hover
+				background-color: unset
+		.ant-notification-notice-icon-info.anticon
 			color: $textColor-notino-black
-	&.ant-notification-notice-success
-		.ant-notification-notice-icon
+		.ant-notification-notice-icon-success.anticon
 			color: $textColor-notino-success
-	&.ant-notification-notice-error
-		.ant-notification-notice-icon
+		.ant-notification-notice-icon-error.anticon
 			color: $textColor-danger
-	&.ant-notification-notice-warning
-		.ant-notification-notice-icon
+		.ant-notification-notice-icon-warning.anticon
 			color: #d97706
 
 .ant-menu-item:hover, .ant-menu-item-active, .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open, .ant-menu-submenu-active, .ant-menu-submenu-title:hover

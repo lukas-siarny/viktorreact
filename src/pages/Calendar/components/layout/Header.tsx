@@ -203,7 +203,7 @@ const CalendarHeader: FC<Props> = (props) => {
 					onChange={(value) => setCalendarView(value)}
 					className={'p-0'}
 					options={calendarViewOptions}
-					dropdownMatchSelectWidth={false}
+					popupMatchSelectWidth={false}
 				/>
 
 				<TabsComponent

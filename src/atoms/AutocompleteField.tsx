@@ -241,7 +241,7 @@ const AutocompleteField = (props: Props) => {
 		menuItemSelectedIcon,
 		popupClassName,
 		dropdownStyle,
-		dropdownMatchSelectWidth = true,
+		popupMatchSelectWidth = true,
 		listHeight,
 		emptyText,
 		bordered,
@@ -478,9 +478,9 @@ const AutocompleteField = (props: Props) => {
 				onSelect={onSelectWrap}
 				showArrow={showArrow}
 				menuItemSelectedIcon={renderMenuItemSelectedIcon(menuItemSelectedIcon, disableMenuItemSelectedIcon)}
-				popupClassName={cx(`noti-select-dropdown ${popupClassName}`, { 'dropdown-match-select-width': dropdownMatchSelectWidth })}
+				popupClassName={cx(`noti-select-dropdown ${popupClassName}`, { 'dropdown-match-select-width': popupMatchSelectWidth })}
 				dropdownStyle={dropdownStyle}
-				dropdownMatchSelectWidth={dropdownMatchSelectWidth}
+				popupMatchSelectWidth={popupMatchSelectWidth}
 				listHeight={listHeight}
 				autoClearSearchValue={autoClearSearchValue}
 				showAction={showAction}

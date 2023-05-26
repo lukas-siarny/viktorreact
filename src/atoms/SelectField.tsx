@@ -344,7 +344,7 @@ const SelectField = (props: Props) => {
 		menuItemSelectedIcon,
 		popupClassName,
 		dropdownStyle,
-		dropdownMatchSelectWidth = true,
+		popupMatchSelectWidth = true,
 		listHeight,
 		emptyText,
 		bordered,
@@ -624,9 +624,9 @@ const SelectField = (props: Props) => {
 			onSelect={onSelectWrap}
 			showArrow={showArrow}
 			menuItemSelectedIcon={renderMenuItemSelectedIcon(mode, menuItemSelectedIcon, disableMenuItemSelectedIcon)}
-			popupClassName={cx(`noti-select-dropdown ${popupClassName}`, { 'dropdown-match-select-width': dropdownMatchSelectWidth })}
+			popupClassName={cx(`noti-select-dropdown ${popupClassName}`, { 'dropdown-match-select-width': popupMatchSelectWidth })}
 			dropdownStyle={dropdownStyle}
-			dropdownMatchSelectWidth={dropdownMatchSelectWidth}
+			popupMatchSelectWidth={popupMatchSelectWidth}
 			listHeight={listHeight}
 			autoClearSearchValue={autoClearSearchValue}
 			maxTagTextLength={maxTagTextLength}

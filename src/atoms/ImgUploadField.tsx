@@ -2,7 +2,7 @@ import React, { CSSProperties, FC, ReactElement, useEffect, useMemo, useRef, use
 import { autofill, change, WrappedFieldProps } from 'redux-form'
 import { get, isEmpty, map } from 'lodash'
 import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Button, Checkbox, Form, Image, Popconfirm, Upload, UploadProps } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { UploadChangeParam } from 'antd/lib/upload'
@@ -17,8 +17,7 @@ import cx from 'classnames'
 import { uploadImage } from '../utils/request'
 import { formFieldID, getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam, splitArrayByCondition } from '../utils/helper'
 import showNotifications from '../utils/tsxHelpers'
-import { IMAGE_UPLOADING_PROP, MSG_TYPE, NOTIFICATION_TYPE, PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES } from '../utils/enums'
-import { checkPermissions } from '../utils/Permissions'
+import { IMAGE_UPLOADING_PROP, MSG_TYPE, NOTIFICATION_TYPE, STRINGS, UPLOAD_IMG_CATEGORIES } from '../utils/enums'
 
 // assets
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
@@ -26,9 +25,6 @@ import { ReactComponent as EyeIcon } from '../assets/icons/eye-icon.svg'
 import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'
 import { ReactComponent as DownloadIcon } from '../assets/icons/download-icon.svg'
 import { ReactComponent as PdfIcon } from '../assets/icons/pdf-icon.svg'
-
-// types
-import { RootState } from '../reducers'
 
 const { Item } = Form
 
@@ -46,6 +42,7 @@ type Props = WrappedFieldProps &
 		uploaderClassName?: string
 		draggable?: boolean
 		selectable?: boolean
+		hasRawPermissions?: boolean
 	}
 
 interface IPreviewFile {
@@ -82,7 +79,8 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 		uploaderClassName = '',
 		draggable = false,
 		selectable = false,
-		tooltip
+		tooltip,
+		hasRawPermissions = false
 	} = props
 
 	const [t] = useTranslation()
@@ -92,13 +90,6 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 	const [images, setImages] = useState<any[]>([])
 	const [selectedValue, setSelectedValue] = useState<string>('')
 	const [previewImgIndex, setPreviewImgIndex] = useState<number>(0)
-
-	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
-
-	const hasAllowedRawImages = useMemo(
-		() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_ADMIN, PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO]),
-		[authUserPermissions]
-	)
 
 	useEffect(() => {
 		if (!isEmpty(input.value)) {
@@ -149,7 +140,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 
 	const transformDownloadUrl = () => {
 		const originalUrl = images[previewImgIndex]?.url
-		if (hasAllowedRawImages) {
+		if (hasRawPermissions) {
 			// Extract the file name and file extension from the original URL
 			const fileName = originalUrl?.substring(originalUrl.lastIndexOf('/') + 1)
 			const fileExtension = fileName?.substring(fileName.lastIndexOf('.') + 1)

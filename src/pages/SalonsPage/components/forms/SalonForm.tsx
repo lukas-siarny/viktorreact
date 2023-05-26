@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC, useCallback, useMemo } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Space } from 'antd'
@@ -21,10 +21,11 @@ import AutocompleteField from '../../../../atoms/AutocompleteField'
 
 // utils
 import { optionRenderWithImage, showErrorNotification } from '../../../../utils/helper'
-import { FILTER_ENTITY, FORM, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
+import { FILTER_ENTITY, FORM, PERMISSION, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
 import { withPromptUnsavedChanges } from '../../../../utils/promptUnsavedChanges'
 import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, getSalonTagSourceType } from '../salonUtils'
 import searchWrapper from '../../../../utils/filters'
+import { checkPermissions } from '../../../../utils/Permissions'
 
 // types
 import { ISelectOptionItem } from '../../../../types/interfaces'
@@ -115,6 +116,13 @@ const SalonForm: FC<Props> = (props) => {
 	const languages = useSelector((state: RootState) => state.languages.languages)
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
+
+	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
+
+	const hasRawPermissions = useMemo(
+		() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_ADMIN, PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO]),
+		[authUserPermissions]
+	)
 
 	const cosmeticsInitOptions = salonData?.cosmetics?.reduce((acc, cosmetic) => {
 		if (cosmetic !== undefined) {
@@ -272,6 +280,7 @@ const SalonForm: FC<Props> = (props) => {
 							label={t('loc:Fotogaléria')}
 							signUrl={URL_UPLOAD_IMAGES}
 							multiple
+							hasRawPermissions={hasRawPermissions}
 							maxCount={10}
 							category={UPLOAD_IMG_CATEGORIES.SALON_IMAGE}
 							disabled={disabledForm}

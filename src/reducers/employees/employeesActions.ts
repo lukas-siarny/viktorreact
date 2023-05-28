@@ -59,7 +59,7 @@ export const getEmployees =
 
 			const tableData = map(data.employees, (employee) => ({
 				...employee,
-				key: employee.orderIndex
+				key: employee.id
 			}))
 
 			payload = {
@@ -132,7 +132,7 @@ export const getActiveEmployees =
 
 			const tableData = map(data.employees, (employee) => ({
 				...employee,
-				key: employee.orderIndex
+				key: employee.id
 			}))
 
 			payload = {

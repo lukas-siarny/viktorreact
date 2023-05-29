@@ -63,22 +63,22 @@ import ReviewsPage from '../pages/ReviewsPage/ReviewsPage'
 // SMS Credits
 import SmsCreditAdminPage from '../pages/SmsCreditAdminPage/SmsCreditAdminPage'
 import SmsUnitPricesDetailPage from '../pages/SmsCreditAdminPage/SmsUnitPricesDetailPage'
+import RechargeSmsCreditAdminPage from '../pages/SmsCreditAdminPage/RechargeSmsCreditAdminPage'
 
 // Documents
+import DocumentsPage from '../pages/DocumentsPage/DocumentsPage'
+import DocumentsByAssetTypePage from '../pages/DocumentsPage/DocumentsByAssetTypePage'
 
-// Cancel reservation page
+// Reservations
 import CancelReservationPage from '../pages/CancelReservationPage/CancelReservationPage'
+import NotinoReservationsPage from '../pages/NotinoReservationsPage/NotinoReservationsPage'
 
 import AppInit from '../components/AppInit'
 
-// 404, 403
+// 404, 403, Error pages
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 import ErrorBoundary from '../components/ErrorBoundary'
-import RechargeSmsCreditAdminPage from '../pages/SmsCreditAdminPage/RechargeSmsCreditAdminPage'
-import NotinoReservationsPage from '../pages/NotinoReservationsPage/NotinoReservationsPage'
-import DocumentsPage from '../pages/DocumentsPage/DocumentsPage'
-import DocumentsByAssetTypePage from '../pages/DocumentsPage/DocumentsByAssetTypePage'
 
 const AppRoutes: FC = () => {
 	const [t] = useTranslation()

@@ -18,7 +18,7 @@ import { EMPTY_NAME_LOCALIZATIONS } from '../../components/LanguagePicker'
 
 // utils
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, DEFAULT_LANGUAGE, CREATE_BUTTON_ID } from '../../utils/enums'
-import { withPermissions } from '../../utils/Permissions'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { formFieldID, normalizeDirectionKeys, normalizeNameLocalizations, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
@@ -30,11 +30,15 @@ import { getSalonLanguages } from '../../reducers/languages/languagesActions'
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
-import { IBreadcrumbs, ILanguage, ILanguageForm } from '../../types/interfaces'
+import { IBreadcrumbs, ILanguage } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // hooks
-import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
+
+// schema
+import { ILanguageForm } from '../../schemas/language'
+import { languagesPageURLQueryParams } from '../../schemas/queryParams'
 
 type Columns = ColumnsType<any>
 
@@ -50,9 +54,8 @@ const LanguagesPage = () => {
 
 	const languages = useSelector((state: RootState) => state.languages.languages)
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		order: StringParam('name:ASC')
+	const [query, setQuery] = useQueryParams(languagesPageURLQueryParams, {
+		order: 'name:ASC'
 	})
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -223,18 +226,27 @@ const LanguagesPage = () => {
 								total={languages?.data?.length}
 								onSubmit={(values: any) => setQuery({ ...query, search: values.search })}
 								addButton={
-									<Button
-										onClick={() => {
-											changeFormVisibility(true)
-										}}
-										type='primary'
-										htmlType='button'
-										className={'noti-btn'}
-										icon={<PlusIcon />}
-										id={formFieldID(FORM.LANGUAGES, CREATE_BUTTON_ID)}
-									>
-										{STRINGS(t).addRecord(t('loc:jazyk'))}
-									</Button>
+									<Permissions
+										allowed={[PERMISSION.LANGUAGE_EDIT]}
+										render={(hasPermission, { openForbiddenModal }) => (
+											<Button
+												onClick={() => {
+													if (hasPermission) {
+														changeFormVisibility(true)
+													} else {
+														openForbiddenModal()
+													}
+												}}
+												type='primary'
+												htmlType='button'
+												className={'noti-btn'}
+												icon={<PlusIcon />}
+												id={formFieldID(FORM.LANGUAGES, CREATE_BUTTON_ID)}
+											>
+												{STRINGS(t).addRecord(t('loc:jazyk'))}
+											</Button>
+										)}
+									/>
 								}
 							/>
 							<div className={'w-full flex'}>
@@ -267,4 +279,4 @@ const LanguagesPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(LanguagesPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.LANGUAGE_EDIT]))(LanguagesPage)

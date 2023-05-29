@@ -219,6 +219,78 @@
 		margin-top: 16px
 		padding: 0
 
+	&.noti-services-settings-table
+		.ant-table
+			table
+				border-collapse: collapse
+				thead
+					tr
+						th
+							border-bottom: 1px solid $borderColor-notino-gray
+				tbody
+					tr.ant-table-row
+						td
+							padding: 4px 12px
+							font-size: 12px
+							&.noti-light-pink-col
+								background-color: rgba($backgroundColor-notino-pink, 0.03) !important
+							&.noti-medium-pink-col
+								background-color: rgba($backgroundColor-notino-pink, 0.08) !important
+								height: 36px
+							&:first-child
+								border-radius: 0
+								padding-left: 16px
+							&:last-child
+								border-radius: 0
+								padding-right: 16px
+						&:hover td,
+						&:hover td.ant-table-column-sort
+							&.noti-light-pink-col
+								background-color: rgba($backgroundColor-notino-pink, 0.08) !important
+							&.noti-medium-pink-col
+								background-color: rgba($backgroundColor-notino-pink, 0.15) !important
+			.ant-table-thead > tr > th
+				height: 40px
+				padding: 12px
+				font-size: 12px
+				line-height: 14px
+				font-weight: 700
+				color: $textColor-notino-black
+				background: $backgroundColor-notino-white !important
+				&:first-child
+					padding-left: 16px
+				&:last-child
+					padding-right: 16px
+				&.noti-light-pink-col
+					background-color: rgba($backgroundColor-notino-pink, 0.03) !important
+				&.noti-medium-pink-col
+					background-color: rgba($backgroundColor-notino-pink, 0.08) !important
+		&.noti-draggable-table
+			.ant-table
+				table
+					tbody
+						tr.ant-table-row td
+							&:first-child
+								padding-left: 16px
+								svg
+									color: $textColor-notino-black !important
+									width: 12px !important
+									height: 12px !important
+							&:nth-child(2)
+								padding-left: 4px
+				.ant-table-thead > tr > th
+					&:first-child
+						padding-left: 4px
+						svg
+							display: none !important
+					&:nth-child(2)
+						z-index: 3
+						overflow: visible
+						span
+							padding-left: 0
+							transform: translateX(-32px)
+							width: calc(100% + 32px)
+
 .ant-table-wrapper .ant-table:not(.ant-table-bordered) .ant-table-tbody >tr:last-child>td
 	border: none
 
@@ -237,7 +309,7 @@
 
 .ant-table-wrapper
 	.ant-table-thead
-		>tr>th,
+		>tr>th
 .ant-table-wrapper
 	.ant-table-thead
 		>tr>td

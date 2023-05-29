@@ -44,12 +44,61 @@ import {
 	SALON_STATS_MONTHLY_ID,
 	SALONS_TAB_KEYS,
 	SALONS_TIME_STATS_TYPE,
-	STRINGS
+	STRINGS,
+	RESERVATIONS_STATS_TYPE
 } from '../../../utils/enums'
-import { formatObjToQuery } from '../../../utils/helper'
-import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData } from './dashboardUtils'
+import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData, transformToReservationsStatsData } from './dashboardUtils'
+
+// schema
+import { formatObjToQuery } from '../../../hooks/useQueryParamsZod'
+import { ISalonsPageURLQueryParams } from '../../../schemas/queryParams'
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin, BarElement)
+
+const reservationsColumns = (labels: string[] = [], futureBreak = 0): Columns => {
+	return [
+		{
+			key: 'type',
+			dataIndex: 'type',
+			render: (value) => {
+				switch (value) {
+					case RESERVATIONS_STATS_TYPE.NEW_RS_B2B:
+						return (
+							<div className={'flex flex-1 items-center'}>
+								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[200], flex: '0 0 auto' }} />
+								<span className='xs-bold'>{i18next.t('loc:Rezervácie vytvorené salónmi')}</span>
+							</div>
+						)
+					case RESERVATIONS_STATS_TYPE.NEW_RS_B2C:
+						return (
+							<div className={'flex flex-1 items-center'}>
+								<div className='h-2-5 w-2-5 rounded-full mr-1 stats-circle' style={{ backgroundColor: colors.blue[700], flex: '0 0 auto' }} />
+								<span className='xs-bold'>{i18next.t('loc:Rezervácie vytvorené klientmi')}</span>
+							</div>
+						)
+					default:
+						return ''
+				}
+			}
+		},
+		...labels.map((label: string, index: number) => {
+			return {
+				key: index,
+				dataIndex: index,
+				className: cx({ 'future-divider': futureBreak - 0.5 === index }), // 0.5 is delta for display devider between columns
+				title: <span className={cx('xs-semibold', { 'text-notino-gray': futureBreak <= index })}>{label}</span>,
+				render: (value: number) => <span className={cx('xs-regular', { 'text-notino-gray': futureBreak <= index })}>{value}</span>
+			}
+		}),
+		{
+			key: 'summary',
+			dataIndex: 'summary',
+			title: () => <span className='xs-semibold'>{i18next.t('loc:Súčet')}</span>,
+			render: (value) => <span className='xs-regular'>{value}</span>,
+			align: 'center'
+		}
+	]
+}
 
 const salonColumns = (labels: string[] = [], futureBreak = 0): Columns => {
 	return [
@@ -255,8 +304,8 @@ const NotinoDashboard: FC = () => {
 	const dispatch = useDispatch()
 	const [annualStatsDate, setAnnualStatsDate] = useState<Dayjs>(now)
 	const [monthStatsDate, setMonthStatsDate] = useState<Dayjs>(now)
-	// const [monthReservationsStatsDate, setMonthReservationsStatsDate] = useState<Dayjs>(now)
-	const { notino, salonsAnnualStats, salonsMonthStats } = useSelector((state: RootState) => state.dashboard)
+	const [monthReservationsStatsDate, setMonthReservationsStatsDate] = useState<Dayjs>(now)
+	const { notino, salonsAnnualStats, salonsMonthStats, reservationsStats } = useSelector((state: RootState) => state.dashboard)
 
 	const { selectedSalon } = useSelector((state: RootState) => state.selectedSalon)
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
@@ -264,7 +313,7 @@ const NotinoDashboard: FC = () => {
 	const [tabKey, setTabKey] = useState<DASHBOARD_TAB_KEYS>(DASHBOARD_TAB_KEYS.SALONS_STATE)
 
 	const publishedPremiumSalonsData = useMemo(() => {
-		const query = {
+		const query: ISalonsPageURLQueryParams = {
 			salonState: SALONS_TAB_KEYS.ACTIVE,
 			statuses_published: SALON_FILTER_STATES.PUBLISHED,
 			createType: SALON_CREATE_TYPE.NON_BASIC
@@ -293,7 +342,7 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery({ ...query, enabledReservationsSetting: SALON_FILTER_RS.NOT_ENABLED })
+							search: formatObjToQuery<ISalonsPageURLQueryParams>({ ...query, enabledReservationsSetting: SALON_FILTER_RS.NOT_ENABLED })
 						}),
 					backgroundColor: '#144896'
 				},
@@ -303,7 +352,7 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery({ ...query, enabledReservationsSetting: SALON_FILTER_RS.ENABLED })
+							search: formatObjToQuery<ISalonsPageURLQueryParams>({ ...query, enabledReservationsSetting: SALON_FILTER_RS.ENABLED })
 						}),
 					backgroundColor: '#2277F3'
 				},
@@ -313,7 +362,7 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery({
+							search: formatObjToQuery<ISalonsPageURLQueryParams>({
 								...query,
 								enabledReservationsSetting: SALON_FILTER_RS.ENABLED,
 								hasAvailableReservationSystem: SALON_FILTER_RS_AVAILABLE_ONLINE.AVAILABLE
@@ -333,7 +382,7 @@ const NotinoDashboard: FC = () => {
 	])
 
 	const unpublishedPremiumSalonsData = useMemo(() => {
-		const query = {
+		const query: ISalonsPageURLQueryParams = {
 			salonState: SALONS_TAB_KEYS.ACTIVE,
 			statuses_published: SALON_FILTER_STATES.NOT_PUBLISHED,
 			createType: SALON_CREATE_TYPE.NON_BASIC
@@ -362,7 +411,7 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery({ ...query, enabledReservationsSetting: SALON_FILTER_RS.NOT_ENABLED })
+							search: formatObjToQuery<ISalonsPageURLQueryParams>({ ...query, enabledReservationsSetting: SALON_FILTER_RS.NOT_ENABLED })
 						}),
 					backgroundColor: '#144896'
 				},
@@ -372,7 +421,7 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery({ ...query, enabledReservationsSetting: SALON_FILTER_RS.ENABLED })
+							search: formatObjToQuery<ISalonsPageURLQueryParams>({ ...query, enabledReservationsSetting: SALON_FILTER_RS.ENABLED })
 						}),
 					backgroundColor: '#2277F3'
 				},
@@ -382,7 +431,7 @@ const NotinoDashboard: FC = () => {
 					onClick: () =>
 						navigate({
 							pathname: t('paths:salons'),
-							search: formatObjToQuery({
+							search: formatObjToQuery<ISalonsPageURLQueryParams>({
 								...query,
 								enabledReservationsSetting: SALON_FILTER_RS.ENABLED,
 								hasAvailableReservationSystem: SALON_FILTER_RS_AVAILABLE_ONLINE.AVAILABLE
@@ -421,6 +470,10 @@ const NotinoDashboard: FC = () => {
 	const monthStats: TimeStats = useMemo(() => {
 		return transformToStatsData(salonsMonthStats.data, salonsMonthStats.isLoading, salonsMonthStats.isFailure, monthStatsDate)
 	}, [salonsMonthStats, monthStatsDate])
+
+	const reservationsMonthStats: TimeStats = useMemo(() => {
+		return transformToReservationsStatsData(reservationsStats.data, reservationsStats.isLoading, reservationsStats.isFailure, monthReservationsStatsDate)
+	}, [reservationsStats.data, reservationsStats.isLoading, reservationsStats.isFailure, monthReservationsStatsDate])
 
 	const dashboardData: DashboardData = useMemo(() => {
 		const emptyGraphData = {
@@ -633,6 +686,23 @@ const NotinoDashboard: FC = () => {
 				{barContent(publishedPremiumSalonsData)}
 				{barContent(unpublishedPremiumSalonsData)}
 			</Row>
+			{/* Reservations stats */}
+			{lineContent(
+				t('loc:Vývoj rezervácií - mesačný'),
+				reservationsMonthStats,
+				timeStatsFilter((date) => {
+					if (date) {
+						setMonthReservationsStatsDate(date)
+						dispatch(
+							getReservationStats({
+								year: Number(date.year()),
+								month: Number(date.month() + 1)
+							})
+						)
+					}
+				}, 'MMMM - YYYY'),
+				reservationsColumns(reservationsMonthStats.data?.labels, reservationsMonthStats.data?.breakIndex)
+			)}
 		</ReservationsDashboard>
 	)
 	// if salon is not selected, show global (Notino) dashboard content

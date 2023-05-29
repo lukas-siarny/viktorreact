@@ -62,27 +62,24 @@ import SwitchField from '../../../../atoms/SwitchField'
 
 // hooks
 import useMedia from '../../../../hooks/useMedia'
-import { IUseQueryParams } from '../../../../hooks/useQueryParams'
+
+// schema
+import { ISalonsPageURLQueryParams } from '../../../../schemas/queryParams'
 
 type ComponentProps = {
 	onImportSalons: () => void
 	onDownloadReport: () => void
-	query: IUseQueryParams
+	query: ISalonsPageURLQueryParams
 }
 
-export interface ISalonsFilterActive {
-	search: string
+export type ISalonsFilterActive = Pick<
+	ISalonsPageURLQueryParams,
+	'search' | 'statuses_all' | 'statuses_published' | 'statuses_changes' | 'hasSetOpeningHours' | 'categoryFirstLevelIDs' | 'countryCode' | 'createType'
+> & {
 	dateFromTo: {
 		dateFrom: string
 		dateTo: string
 	}
-	statuses_all: boolean
-	statuses_published: string[]
-	statuses_changes: string[]
-	categoryFirstLevelIDs: string[]
-	countryCode: string
-	createType: string
-	hasSetOpeningHours: string
 }
 
 type Props = InjectedFormProps<ISalonsFilterActive, ComponentProps> & ComponentProps
@@ -388,11 +385,11 @@ const SalonsFilterActive = (props: Props) => {
 									component={SelectField}
 									name={'statuses_published'}
 									placeholder={t('loc:Publikovaný')}
+									className={'select-with-tag-options'}
 									allowClear
 									size={'large'}
 									filterOptions
 									onDidMountSearch
-									className={'select-with-tag-options'}
 									options={publishedOptions}
 									optionRender={optionRenderWithTag}
 								/>

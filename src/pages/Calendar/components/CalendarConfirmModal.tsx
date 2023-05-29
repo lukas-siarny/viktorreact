@@ -8,7 +8,7 @@ import ConfirmModal, { IConfirmModal } from '../../../atoms/ConfirmModal'
 import ConfirmBulkForm from './forms/ConfirmBulkForm'
 
 // types
-import { IBulkConfirmForm, ICalendarEventForm, ICalendarReservationForm, ConfirmModalData } from '../../../types/interfaces'
+import { IBulkConfirmForm, ConfirmModalData, HandleUpdateReservationStateFunc } from '../../../types/interfaces'
 import { RootState } from '../../../reducers'
 
 // utils
@@ -19,7 +19,6 @@ import {
 	CONFIRM_MODAL_DATA_TYPE,
 	FORM,
 	REQUEST_TYPE,
-	RESERVATION_PAYMENT_METHOD,
 	RESERVATION_STATE,
 	STRINGS
 } from '../../../utils/enums'
@@ -28,12 +27,16 @@ import { getConfirmModalText } from '../calendarHelpers'
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-modal.svg'
 
+// schema
+import { ICalendarReservationForm } from '../../../schemas/reservation'
+import { ICalendarEventForm } from '../../../schemas/event'
+
 type Props = {
 	data: ConfirmModalData
 	handleSubmitReservation: (values: ICalendarReservationForm, eventId?: string) => void
 	handleSubmitEvent: (values: ICalendarEventForm, calendarEventID?: string, calendarBulkEventID?: string, updateFromCalendar?: boolean) => void
 	handleDeleteEvent: (calendarEventID: string, calendarBulkEventID?: string) => void
-	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => void
+	handleUpdateReservationState: HandleUpdateReservationStateFunc
 	loadingData?: boolean
 	queryEventId?: string | null
 	clearConfirmModal: () => void
@@ -158,7 +161,7 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 		})
 	}
 
-	const handleUpdateReservationStateWrapper = (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
+	const handleUpdateReservationStateWrapper: HandleUpdateReservationStateFunc = (calendarEventID, state, reason, paymentMethod, eventData) => {
 		// wrapper ktory rozhoduje, ci je potrebne potvrdit event alebo rovno submitnut
 		if (state === RESERVATION_STATE.DECLINED || state === RESERVATION_STATE.NOT_REALIZED || state === RESERVATION_STATE.CANCEL_BY_SALON) {
 			let modalProps: IConfirmModalState = {} as IConfirmModalState
@@ -199,14 +202,14 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 
 			setConfirmModal({
 				open: true,
-				onOk: () => handleUpdateReservationState(calendarEventID, state, reason, paymentMethod),
+				onOk: () => handleUpdateReservationState(calendarEventID, state, reason, paymentMethod, eventData),
 				onCancel: () => clearConfirmModal(),
 				okText: t('loc:Áno'),
 				cancelText: t('loc:Nie'),
 				...modalProps
 			})
 		} else {
-			handleUpdateReservationState(calendarEventID, state, reason, paymentMethod)
+			handleUpdateReservationState(calendarEventID, state, reason, paymentMethod, eventData)
 		}
 	}
 
@@ -223,7 +226,7 @@ const CalendarConfirmModal: FC<Props> = (props) => {
 				break
 			}
 			case CONFIRM_MODAL_DATA_TYPE.UPDATE_RESERVATION_STATE: {
-				handleUpdateReservationStateWrapper(data?.calendarEventID, data?.state, data?.reason, data?.paymentMethod)
+				handleUpdateReservationStateWrapper(data?.calendarEventID, data?.state, data?.reason, data?.paymentMethod, data?.data)
 				break
 			}
 			default:

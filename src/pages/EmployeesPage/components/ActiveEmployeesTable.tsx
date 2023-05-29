@@ -30,14 +30,12 @@ import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.s
 
 // types
 import { Columns } from '../../../types/interfaces'
-
-// hooks
-import { IUseQueryParams } from '../../../hooks/useQueryParams'
+import { IEmployeesPageURLQueryParams } from '../../../schemas/queryParams'
 
 type Props = {
 	parentPath?: string
-	query: IUseQueryParams
-	setQuery: (newValues: IUseQueryParams) => void
+	query: IEmployeesPageURLQueryParams
+	setQuery: (newValues: IEmployeesPageURLQueryParams) => void
 	salonID: string
 	prefixOptions: any
 }
@@ -158,7 +156,9 @@ const ActiveEmployeesTable = (props: Props) => {
 	]
 
 	const handleDrop = useCallback(
-		async (oldIndex: number, newIndex: number) => {
+		async (oldIndexStr: string, newIndexStr?: string) => {
+			const oldIndex = Number(oldIndexStr)
+			const newIndex = Number(newIndexStr)
 			try {
 				const employee = find(activeEmployees?.tableData, { orderIndex: oldIndex })
 				// oldIndex je v tomto pripade employee.orderIndex
@@ -225,7 +225,7 @@ const ActiveEmployeesTable = (props: Props) => {
 							columns={columns}
 							dataSource={activeEmployees?.tableData}
 							rowClassName={'clickable-row'}
-							dndDrop={handleDrop}
+							dnd={{ dndDrop: handleDrop }}
 							twoToneRows
 							scroll={{ x: 800 }}
 							onRow={(record) => ({

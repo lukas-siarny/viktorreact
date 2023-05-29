@@ -22,7 +22,10 @@ import { withPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 
 // types
-import { CategoriesPatch, IBreadcrumbs, IIndustriesForm, SalonSubPageProps } from '../../types/interfaces'
+import { CategoriesPatch, IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
+
+// schema
+import { IIndustriesForm } from '../../schemas/industry'
 
 const IndustriesPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
@@ -98,7 +101,7 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 								selectedCategoryIDs={selectedCategoryIDs}
 								onSubmit={handleSubmit}
 								disabledForm={categories.isLoading || services.isLoading || isCategoriesFromSubmitting}
-								onShowEventsListPopover={(industryID) => {
+								onClickExtraLabel={(industryID) => {
 									navigate(parentPath + t('paths:industries-and-services/{{industryID}}', { industryID }))
 								}}
 							/>

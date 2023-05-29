@@ -40,7 +40,7 @@ import Filters from '../../../components/Filters'
 
 // reducers
 import { RootState } from '../../../reducers'
-import { IReservationsFilter } from '../../../types/interfaces'
+import { INotinoReservationsFilter } from '../../../types/interfaces'
 
 // assets
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
@@ -48,7 +48,7 @@ import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories
 
 type ComponentProps = {}
 
-type Props = InjectedFormProps<IReservationsFilter, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<INotinoReservationsFilter, ComponentProps> & ComponentProps
 
 const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
@@ -200,7 +200,7 @@ const NotinoReservationsFilter = (props: Props) => {
 	)
 }
 
-const form = reduxForm<IReservationsFilter, ComponentProps>({
+const form = reduxForm<INotinoReservationsFilter, ComponentProps>({
 	form: FORM.NOTINO_RESERVATIONS_FILTER,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,

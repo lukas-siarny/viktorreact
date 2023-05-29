@@ -1,14 +1,16 @@
 import React, { FC } from 'react'
-import { Field, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Divider, Form, Button, Alert } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import cx from 'classnames'
+import { useDispatch } from 'react-redux'
 
 // utils
-import { DEFAULT_DATE_INIT_FORMAT, DELETE_BUTTON_ID, FORM, MONTH_NAME_YEAR_FORMAT, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
+import { DEFAULT_DATE_INIT_FORMAT, DELETE_BUTTON_ID, FORM, MONTH_NAME_YEAR_FORMAT, PERMISSION, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { formFieldID, optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
+import Permissions from '../../../utils/Permissions'
 
 // components
 import InputNumberField from '../../../atoms/InputNumberField'
@@ -23,10 +25,10 @@ import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
 
 // types
-import { IEnumerationsCountriesPayload, ILoadingAndFailure, ISmsUnitPricesForm } from '../../../types/interfaces'
+import { IEnumerationsCountriesPayload, ILoadingAndFailure } from '../../../types/interfaces'
 
-// validate
-import validateSmsUnitPricesForm from './validateSmsUnitPricesForm'
+// schema
+import { ISmsUnitPricesForm, validationSmsUnitPricesFn } from '../../../schemas/smsUnitPrices'
 
 type ComponentProps = {
 	smsUnitPriceID?: string
@@ -42,6 +44,7 @@ type Props = InjectedFormProps<ISmsUnitPricesForm, ComponentProps> & ComponentPr
 
 const SmsUnitPricesForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
 	const { handleSubmit, change, smsUnitPriceID, changeFormVisibility, onDelete, submitting, pristine, disabledForm, currencySymbol, countries, isEmptyCountry } = props
 
 	return (
@@ -103,6 +106,7 @@ const SmsUnitPricesForm: FC<Props> = (props) => {
 					<div className={cx('flex w-full mt-6 gap-2 flex-wrap', { 'justify-between': smsUnitPriceID, 'justify-center': !smsUnitPriceID })}>
 						{smsUnitPriceID && onDelete && (
 							<DeleteButton
+								permissions={[PERMISSION.SMS_UNIT_PRICE_EDIT]}
 								onConfirm={onDelete}
 								entityName={''}
 								type={'default'}
@@ -111,18 +115,31 @@ const SmsUnitPricesForm: FC<Props> = (props) => {
 								id={formFieldID(FORM.SMS_UNIT_PRICES_FORM, DELETE_BUTTON_ID)}
 							/>
 						)}
-						<Button
-							className={'noti-btn w-full xl:w-auto xl:min-w-40'}
-							size='middle'
-							type='primary'
-							htmlType='submit'
-							disabled={submitting || pristine}
-							loading={submitting}
-							icon={smsUnitPriceID ? <EditIcon /> : <CreateIcon />}
-							id={formFieldID(FORM.SMS_UNIT_PRICES_FORM, SUBMIT_BUTTON_ID)}
-						>
-							{smsUnitPriceID ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:cenu'))}
-						</Button>
+						<Permissions
+							allowed={[PERMISSION.SMS_UNIT_PRICE_EDIT]}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<Button
+									className={'noti-btn w-full xl:w-auto xl:min-w-40'}
+									size='middle'
+									type='primary'
+									htmlType='submit'
+									disabled={submitting || pristine}
+									loading={submitting}
+									onClick={(e) => {
+										e.preventDefault()
+										if (hasPermission) {
+											dispatch(submit(FORM.SMS_UNIT_PRICES_FORM))
+										} else {
+											openForbiddenModal()
+										}
+									}}
+									icon={smsUnitPriceID ? <EditIcon /> : <CreateIcon />}
+									id={formFieldID(FORM.SMS_UNIT_PRICES_FORM, SUBMIT_BUTTON_ID)}
+								>
+									{smsUnitPriceID ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:cenu'))}
+								</Button>
+							)}
+						/>
 					</div>
 				)}
 			</div>
@@ -135,7 +152,7 @@ const form = reduxForm<ISmsUnitPricesForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	validate: validateSmsUnitPricesForm,
+	validate: validationSmsUnitPricesFn,
 	onSubmitFail: showErrorNotification
 })(withPromptUnsavedChanges(SmsUnitPricesForm))
 

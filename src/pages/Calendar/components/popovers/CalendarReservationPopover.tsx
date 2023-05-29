@@ -173,7 +173,11 @@ const PopoverContent: FC<ContentProps> = (props) => {
 										<span className={'text-notino-grayDark text-xxs leading-3'}>{`${getTimeText(start, end)} (${parseTimeFromMinutes(
 											dayjs(end).diff(start, 'minutes')
 										)})`}</span>
-										{service?.name && <span className={'block text-sm text-notino-black leading-4 break-all'}>{service.name}</span>}
+										{service?.name && service?.id ? (
+											<span className={'block text-sm text-notino-black leading-4 break-all'}>{service.name}</span>
+										) : (
+											<span className={'block text-xs text-notino-grayDark break-all italic'}>{t('loc:Služba nie je zadaná')}</span>
+										)}
 									</div>
 									<UserAvatar
 										size={24}
@@ -286,10 +290,10 @@ const CalendarReservationPopover: FC<ICalendarReservationPopover> = (props) => {
 	const handleUpdateState = useCallback(
 		(state: RESERVATION_STATE, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
 			if (id && handleUpdateReservationState) {
-				handleUpdateReservationState(id, state, undefined, paymentMethod)
+				handleUpdateReservationState(id, state, undefined, paymentMethod, { serviceId: data?.service?.id, customerId: data?.customer?.id })
 			}
 		},
-		[id, handleUpdateReservationState]
+		[id, handleUpdateReservationState, data?.service?.id, data?.customer?.id]
 	)
 
 	const getFooterCheckoutButton = () => {

@@ -14,7 +14,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 import { CalendarEvent, ICalendarMonthlyReservationsPayload, ICalendarMonthlyViewEvent, ICalendarView, PopoverTriggerPosition } from '../../../../types/interfaces'
 import { RootState } from '../../../../reducers'
 import { IVirtualEventPayload } from '../../../../reducers/virtualEvent/virtualEventActions'
-import { IUseQueryParams } from '../../../../hooks/useQueryParams'
+import { ICalendarPageURLQueryParams } from '../../../../schemas/queryParams'
 
 // enums
 import {
@@ -195,7 +195,7 @@ interface ICalendarMonthView extends Omit<ICalendarView, 'reservations'> {
 	salonID: string
 	onShowEventsListPopover: (date: string, position?: PopoverTriggerPosition, isReservationsView?: boolean, employeeID?: string) => void
 	monthlyReservations: ICalendarMonthlyReservationsPayload['data']
-	query: IUseQueryParams
+	query: Pick<ICalendarPageURLQueryParams, 'categoryIDs'>
 	parentPath: string
 }
 
@@ -252,9 +252,11 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 
 	useEffect(() => {
 		// NOTE: ak neni je povoleny online booking tak sa nastavi disabled state nad kalendarom
+		const body = document.getElementsByClassName('fc-daygrid-body')[0]
 		if (!enabledSalonReservations) {
-			const body = document.getElementsByClassName('fc-daygrid-body')[0]
 			body.classList.add('active')
+		} else {
+			body.classList.remove('active')
 		}
 	}, [enabledSalonReservations])
 

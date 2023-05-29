@@ -1,13 +1,15 @@
 import React, { FC } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, FieldArray, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Divider, Form, Button } from 'antd'
 import cx from 'classnames'
+import { useDispatch } from 'react-redux'
 
 // utils
-import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, DELETE_BUTTON_ID, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, DELETE_BUTTON_ID, SUBMIT_BUTTON_ID, VALIDATION_MAX_LENGTH, PERMISSION } from '../../../utils/enums'
 import { showErrorNotification, validationString, checkUploadingBeforeSubmit, formFieldID } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
+import Permissions from '../../../utils/Permissions'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -22,11 +24,8 @@ import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.sv
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
 
-// types
-import { ILanguageForm } from '../../../types/interfaces'
-
-// validate
-import validateLanguagesFrom from './validateLanguagesFrom'
+// schema
+import { ILanguageForm, validationLanguageFn } from '../../../schemas/language'
 
 type ComponentProps = {
 	languageID?: string
@@ -38,8 +37,11 @@ type Props = InjectedFormProps<ILanguageForm, ComponentProps> & ComponentProps
 
 const fixLength255 = validationString(VALIDATION_MAX_LENGTH.LENGTH_255)
 
+const editPermissions: PERMISSION[] = [PERMISSION.LANGUAGE_EDIT]
+
 const LanguagesForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
 	const { handleSubmit, languageID, closeForm, onDelete, submitting, pristine } = props
 
 	return (
@@ -80,6 +82,7 @@ const LanguagesForm: FC<Props> = (props) => {
 				<div className={cx('flex w-full mt-6 gap-2 flex-wrap', { 'justify-between': languageID, 'justify-center': !languageID })}>
 					{languageID && (
 						<DeleteButton
+							permissions={editPermissions}
 							onConfirm={onDelete}
 							entityName={''}
 							id={formFieldID(FORM.LANGUAGES, DELETE_BUTTON_ID)}
@@ -88,18 +91,31 @@ const LanguagesForm: FC<Props> = (props) => {
 							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 						/>
 					)}
-					<Button
-						className={'noti-btn w-full xl:w-auto xl:min-w-40'}
-						size='middle'
-						type='primary'
-						htmlType='submit'
-						disabled={submitting || pristine}
-						loading={submitting}
-						id={formFieldID(FORM.LANGUAGES, SUBMIT_BUTTON_ID)}
-						icon={languageID ? <EditIcon /> : <CreateIcon />}
-					>
-						{languageID ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:jazyk'))}
-					</Button>
+					<Permissions
+						allowed={editPermissions}
+						render={(hasPermission, { openForbiddenModal }) => (
+							<Button
+								className={'noti-btn w-full xl:w-auto xl:min-w-40'}
+								size='middle'
+								type='primary'
+								htmlType='submit'
+								onClick={(e) => {
+									e.preventDefault()
+									if (hasPermission) {
+										dispatch(submit(FORM.LANGUAGES))
+									} else {
+										openForbiddenModal()
+									}
+								}}
+								disabled={submitting || pristine}
+								loading={submitting}
+								id={formFieldID(FORM.LANGUAGES, SUBMIT_BUTTON_ID)}
+								icon={languageID ? <EditIcon /> : <CreateIcon />}
+							>
+								{languageID ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:jazyk'))}
+							</Button>
+						)}
+					/>
 				</div>
 			</div>
 		</Form>
@@ -112,7 +128,7 @@ const form = reduxForm<ILanguageForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateLanguagesFrom
+	validate: validationLanguageFn
 })(withPromptUnsavedChanges(LanguagesForm))
 
 export default form

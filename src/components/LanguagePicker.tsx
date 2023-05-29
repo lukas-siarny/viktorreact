@@ -1,7 +1,5 @@
 import React, { FC } from 'react'
 import { Select, Row } from 'antd'
-// eslint-disable-next-line import/no-extraneous-dependencies
-import Icon from '@ant-design/icons'
 import i18next from 'i18next'
 import cx from 'classnames'
 import { useDispatch } from 'react-redux'
@@ -34,6 +32,9 @@ import { ReactComponent as HU_Flag } from '../assets/flags/HU.svg'
 import { ReactComponent as RO_Flag } from '../assets/flags/RO.svg'
 import { ReactComponent as BG_Flag } from '../assets/flags/BG.svg'
 /* import { ReactComponent as IT_Flag } from '../assets/flags/IT.svg' */
+
+// components
+import FlagIcon from './FlagIcon'
 
 export const LOCALES = {
 	[LANGUAGE.SK]: {
@@ -111,8 +112,6 @@ export const handleLanguageChange = (value: any, dispatch: any, reloadPageAfterC
 
 const options = Object.entries(LANGUAGE).map(([key, value]) => ({ label: key, value, icon: LOCALES[value].icon }))
 
-const getLanguageFlag = (countryCode: LANGUAGE) => <Icon className={'language-picker-icon'} component={LOCALES[countryCode].icon} />
-
 export const getLanguagePickerAsSubmenuItem = (dispatch: any, reloadPageAfterChange = true): ItemType => {
 	let currentLanguage: LANGUAGE
 
@@ -147,11 +146,11 @@ export const getLanguagePickerAsSubmenuItem = (dispatch: any, reloadPageAfterCha
 		key: 'currentLanguage',
 		className: 'language-picker',
 		label: get(LOCALES[currentLanguage], 'displayAs', currentLanguage).toUpperCase(),
-		icon: getLanguageFlag(currentLanguage),
+		icon: <FlagIcon countryCode={currentLanguage} />,
 		popupOffset: [0, -75],
 		children: options?.map((option: any, index: number) => ({
 			key: index,
-			icon: getLanguageFlag(option.value),
+			icon: <FlagIcon countryCode={option.value} />,
 			label: option.label,
 			onClick: () => handleLanguageChange(option.value, dispatch, reloadPageAfterChange)
 		}))
@@ -174,7 +173,7 @@ const LanguagePicker: FC<Props> = (props) => {
 				{options?.map((option: any, index: number) => (
 					<Option value={option.value} key={index}>
 						<Row className={cx('items-center', { 'justify-center': isSmallDevice })}>
-							{getLanguageFlag(option.value)}
+							<FlagIcon countryCode={option.value} />
 							{!isSmallDevice && option.label}
 						</Row>
 					</Option>

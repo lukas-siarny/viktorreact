@@ -4,32 +4,30 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Form, Collapse, Button, Spin, Alert } from 'antd'
 import cx from 'classnames'
-import { isEmpty } from 'lodash'
-import i18next from 'i18next'
 
 // utils
 import { FORM, PARAMETER_TYPE, STRINGS, SUBMIT_BUTTON_ID } from '../../../utils/enums'
-import { arePriceAndDurationDataEmpty, formFieldID, renderPriceAndDurationInfo, showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { formFieldID, showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { arePriceAndDurationDataEmpty, renderPriceAndDurationInfo } from '../../ServicesPage/serviceUtils'
 
 // types
-import { IEmployeeServiceEditForm } from '../../../types/interfaces'
 import { RootState } from '../../../reducers'
 
 // components
 import InputNumberField from '../../../atoms/InputNumberField'
 import SwitchField from '../../../atoms/SwitchField'
 import PopConfirmComponent from '../../../components/PopConfirmComponent'
-import ServiceBreadcrumbs from '../../ServicesPage/components/ServiceBreadcrumbs'
+import ServiceBreadcrumbs from '../../ServicesPage/components/detail/ServiceBreadcrumbs'
 import AvatarComponents from '../../../components/AvatarComponents'
-
-// validations
-import validateEmployeeServiceEditForm from './validateEmployeeServiceEditForm'
 
 // assets
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as BinIcon } from '../../../assets/icons/bin-icon.svg'
 import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.svg'
 import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline.svg'
+
+// schema
+import { IEmployeeServiceEditForm, validationEmployeeServiceEditFn } from '../../../schemas/service'
 
 const { Panel } = Collapse
 
@@ -42,13 +40,6 @@ type Props = InjectedFormProps<IEmployeeServiceEditForm, ComponentProps> & Compo
 
 const numberMin0 = validationNumberMin(0)
 
-const validateParameterValues = (_serviceCategoryParameterValues: IEmployeeServiceEditForm['serviceCategoryParameter'], allFormValues: IEmployeeServiceEditForm) => {
-	if (!isEmpty(validateEmployeeServiceEditForm(allFormValues).serviceCategoryParameter)) {
-		return i18next.t('loc:Je potrebné vyplniť povinné údaje pre všetky hodnoty parametra')
-	}
-	return undefined
-}
-
 type FieldData = NonNullable<IEmployeeServiceEditForm['serviceCategoryParameter']>[0]
 
 type ParameterValuesFieldType = WrappedFieldArrayProps<FieldData> & {
@@ -57,7 +48,12 @@ type ParameterValuesFieldType = WrappedFieldArrayProps<FieldData> & {
 }
 
 const ParameterValuesField: FC<ParameterValuesFieldType> = (props) => {
-	const { fields, currencySymbol, form, meta } = props
+	const {
+		fields,
+		currencySymbol,
+		form,
+		meta: { error }
+	} = props
 
 	const formValues = form?.values as IEmployeeServiceEditForm
 
@@ -82,7 +78,7 @@ const ParameterValuesField: FC<ParameterValuesFieldType> = (props) => {
 
 	return (
 		<>
-			{meta.error && <Alert message={meta.error} showIcon type={'error'} className={'noti-alert w-full mb-4'} />}
+			{error && <Alert message={error} showIcon type={'error'} className={'noti-alert w-full mb-4'} />}
 			<Collapse className={'collapse-list'} bordered={false} defaultActiveKey={defaultActiveKeys}>
 				{fields.map((field, index: number) => {
 					const fieldData = fields.get(index)
@@ -238,7 +234,6 @@ const EmployeeServiceEditForm: FC<Props> = (props) => {
 							showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
 							form={form}
 							currencySymbol={salon.data?.currency.symbol}
-							validate={validateParameterValues}
 						/>
 					) : (
 						<>
@@ -380,7 +375,7 @@ const form = reduxForm<IEmployeeServiceEditForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateEmployeeServiceEditForm
+	validate: validationEmployeeServiceEditFn
 })(EmployeeServiceEditForm)
 
 export default form

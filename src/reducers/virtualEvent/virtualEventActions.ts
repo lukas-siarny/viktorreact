@@ -7,7 +7,10 @@ import { destroy } from 'redux-form'
 import { IResetStore } from '../generalTypes'
 import VIRTUAL_EVENT from './virtualEventTypes'
 import { ThunkResult } from '../index'
-import { ICalendarEventForm, ICalendarImportedReservationForm, ICalendarReservationForm } from '../../types/interfaces'
+
+// schema
+import { ICalendarReservationForm } from '../../schemas/reservation'
+import { ICalendarEventForm } from '../../schemas/event'
 
 // utils
 import { CALENDAR_EVENT_TYPE, HANDLE_CALENDAR_ACTIONS, HANDLE_CALENDAR_FORMS, NEW_ID_PREFIX, CALENDAR_DATE_FORMAT } from '../../utils/enums'
@@ -76,7 +79,7 @@ export const addOrUpdateEvent =
 			return
 		}
 
-		let formData: Partial<ICalendarEventForm & ICalendarReservationForm & ICalendarImportedReservationForm> | undefined
+		let formData: Partial<ICalendarEventForm & ICalendarReservationForm> | undefined
 
 		try {
 			formData = getState().form[formName].values

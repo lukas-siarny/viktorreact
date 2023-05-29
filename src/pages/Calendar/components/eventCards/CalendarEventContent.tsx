@@ -107,13 +107,11 @@ const CalendarEventContent: FC<ICalendarEventContent> = (props) => {
 					timeLeftClassName={timeLeftClassName}
 				/>
 			)
-		case CALENDAR_EVENT_TYPE.RESERVATION: /* case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT: */ {
-			// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
+		case CALENDAR_EVENT_TYPE.RESERVATION: {
 			return (
 				<ReservationCard
 					calendarView={calendarView}
 					onReservationClick={onReservationClick}
-					onEditEvent={onEditEvent}
 					resourceId={resourceId}
 					start={start}
 					end={end}

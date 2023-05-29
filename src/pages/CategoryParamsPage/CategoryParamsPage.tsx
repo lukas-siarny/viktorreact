@@ -15,7 +15,7 @@ import CategoryParamsFilter from './components/CategoryParamsFilter'
 
 // utils
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, STRINGS, DEFAULT_LANGUAGE, FORM } from '../../utils/enums'
-import { withPermissions } from '../../utils/Permissions'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 import { setOrder, transformToLowerCaseWithoutAccent, formatDateByLocale, normalizeDirectionKeys, sortData, getLinkWithEncodedBackUrl } from '../../utils/helper'
 
 // reducers
@@ -24,12 +24,13 @@ import { RootState } from '../../reducers'
 
 // types
 import { IBreadcrumbs, Columns } from '../../types/interfaces'
+import { categoryParamsPageURLQueryParams } from '../../schemas/queryParams'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // hooks
-import useQueryParams, { StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
 
 const CategoryParamsPage = () => {
 	const { t, i18n } = useTranslation()
@@ -38,9 +39,8 @@ const CategoryParamsPage = () => {
 	const parameters = useSelector((state: RootState) => state.categoryParams.parameters)
 	const navigate = useNavigate()
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		order: StringParam('name:ASC')
+	const [query, setQuery] = useQueryParams(categoryParamsPageURLQueryParams, {
+		order: 'name:ASC'
 	})
 
 	useEffect(() => {
@@ -154,17 +154,26 @@ const CategoryParamsPage = () => {
 							total={parameters?.data?.length}
 							onSubmit={(values: any) => setQuery({ ...query, search: values.search })}
 							addButton={
-								<Button
-									onClick={() => {
-										navigate(getLinkWithEncodedBackUrl(t('paths:category-parameters/create')))
-									}}
-									type='primary'
-									htmlType='button'
-									className={'noti-btn'}
-									icon={<PlusIcon />}
-								>
-									{STRINGS(t).addRecord(t('loc:parameter'))}
-								</Button>
+								<Permissions
+									allowed={[PERMISSION.CATEGORY_PARAMETER_EDIT]}
+									render={(hasPermission, { openForbiddenModal }) => (
+										<Button
+											onClick={() => {
+												if (hasPermission) {
+													navigate(getLinkWithEncodedBackUrl(t('paths:category-parameters/create')))
+												} else {
+													openForbiddenModal()
+												}
+											}}
+											type='primary'
+											htmlType='button'
+											className={'noti-btn'}
+											icon={<PlusIcon />}
+										>
+											{STRINGS(t).addRecord(t('loc:parameter'))}
+										</Button>
+									)}
+								/>
 							}
 						/>
 						<div className={'w-full flex'}>
@@ -189,4 +198,4 @@ const CategoryParamsPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(CategoryParamsPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.CATEGORY_PARAMETER_EDIT]))(CategoryParamsPage)

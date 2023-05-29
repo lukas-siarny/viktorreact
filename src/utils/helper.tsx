@@ -70,36 +70,21 @@ import {
 	BROWSERS,
 	BROWSER_TYPE
 } from './enums'
-
-import {
-	CountriesData,
-	FormPriceAndDurationData,
-	IAuthUserPayload,
-	IDateTimeFilterOption,
-	IEmployeePayload,
-	IEmployeeServiceEditForm,
-	IPrice,
-	ISelectOptionItem,
-	IStructuredAddress,
-	NameLocalizationsItem,
-	ServicePatchBody,
-	ServicePriceAndDurationData
-} from '../types/interfaces'
+import { LOCALES } from '../components/LanguagePicker'
+import { CountriesData, IAuthUserPayload, IDateTimeFilterOption, IEmployeePayload, IPrice, ISelectOptionItem, IStructuredAddress, NameLocalizationsItem } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
 
 import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
 import { ReactComponent as ClockIcon } from '../assets/icons/clock-icon.svg'
-import { ReactComponent as CouponIcon } from '../assets/icons/coupon.svg'
 import { ReactComponent as NotRealizedIcon } from '../assets/icons/alert-circle.svg'
 import { ReactComponent as CheckSuccessIcon } from '../assets/icons/approwed-icon.svg'
 import { ReactComponent as CreditCardIcon } from '../assets/icons/credit-card.svg'
 import { ReactComponent as WalletIcon } from '../assets/icons/wallet.svg'
 import { ReactComponent as DollarIcon } from '../assets/icons/dollar.svg'
 import { ReactComponent as CrossedIcon } from '../assets/icons/crossed-red-16.svg'
-// eslint-disable-next-line import/no-cycle
-import { LOCALES } from '../components/LanguagePicker'
+import { ReactComponent as ChevronDown } from '../assets/icons/chevron-down.svg'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -129,14 +114,6 @@ export const decodeBackDataQuery = (base64?: string | null) => {
 		decoded = null
 	}
 	return decoded
-}
-
-export const formatObjToQuery = (queryObj: { [key: string]: string }) => {
-	const searchParams = new URLSearchParams()
-	Object.keys(queryObj).forEach((key) => {
-		searchParams.append(key, queryObj[key])
-	})
-	return `?${searchParams.toString()}`
 }
 
 export const getLinkWithEncodedBackUrl = (link: string) => {
@@ -1186,202 +1163,6 @@ export const getAssignedUserLabel = (assignedUser?: Paths.GetApiB2BAdminSalons.R
 	}
 }
 
-export const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: React.ReactNode, extra?: string, className = '') => {
-	if ((!isNil(from) && !Number.isNaN(from)) || (!isNil(to) && !Number.isNaN(to))) {
-		return (
-			<div className={cx('flex items-center gap-1', className)}>
-				{icon}
-				{from}
-				{variable && !isNil(to) && !Number.isNaN(to) && from !== to ? ` - ${to}` : undefined} {extra}
-			</div>
-		)
-	}
-	return undefined
-}
-
-export const renderPriceAndDurationInfo = (
-	salonPriceAndDuration?: FormPriceAndDurationData,
-	employeePriceAndDuration?: FormPriceAndDurationData,
-	hasOverridenData?: boolean,
-	currencySymbol?: string
-) => {
-	return (
-		<div className='flex flex-col items-end'>
-			<div className={cx('flex gap-1 whitespace-nowrap text-xs font-normal text-notino-grayDark', { 'service-original-data-overriden': hasOverridenData })}>
-				{renderFromTo(
-					salonPriceAndDuration?.durationFrom,
-					salonPriceAndDuration?.durationTo,
-					!!salonPriceAndDuration?.variableDuration,
-					<ClockIcon className='w-3 h-3' />,
-					i18next.t('loc:min')
-				)}
-				{renderFromTo(
-					salonPriceAndDuration?.priceFrom,
-					salonPriceAndDuration?.priceTo,
-					!!salonPriceAndDuration?.variablePrice,
-					<CouponIcon className='w-3 h-3' />,
-					currencySymbol
-				)}
-			</div>
-
-			{hasOverridenData && (
-				<div className={'flex gap-1 whitespace-nowrap font-bold text-xs text-notino-pink'}>
-					{renderFromTo(
-						employeePriceAndDuration?.durationFrom,
-						employeePriceAndDuration?.durationTo,
-						!!employeePriceAndDuration?.variableDuration,
-						<ClockIcon className='w-3 h-3' />,
-						i18next.t('loc:min')
-					)}
-					{renderFromTo(
-						employeePriceAndDuration?.priceFrom,
-						employeePriceAndDuration?.priceTo,
-						!!employeePriceAndDuration?.variablePrice,
-						<CouponIcon className='w-3 h-3' />,
-						currencySymbol
-					)}
-				</div>
-			)}
-		</div>
-	)
-}
-
-export const getServicePriceAndDurationData = (
-	durationFrom?: number,
-	durationTo?: number,
-	priceFrom?: ServicePriceAndDurationData['priceFrom'],
-	priceTo?: ServicePriceAndDurationData['priceTo']
-): FormPriceAndDurationData => {
-	const decodedPriceFrom = decodePrice(priceFrom)
-	let decodedPriceTo
-	let variablePrice = false
-
-	if (!isNil(decodedPriceFrom)) {
-		decodedPriceTo = decodePrice(priceTo)
-		if (!isNil(decodedPriceTo) && decodedPriceTo !== decodedPriceFrom) {
-			variablePrice = true
-		}
-	}
-
-	const variableDuration = !!(!isNil(durationFrom) && !isNil(durationTo) && durationFrom !== durationTo)
-
-	return {
-		durationFrom: durationFrom || null,
-		durationTo: durationTo || null,
-		priceFrom: decodedPriceFrom || null,
-		priceTo: decodedPriceTo || null,
-		variableDuration,
-		variablePrice
-	}
-}
-
-export const arePriceAndDurationDataEmpty = (data?: FormPriceAndDurationData) => {
-	let emptyPrice = true
-	let emptyDuration = true
-
-	if (data?.variableDuration) {
-		emptyDuration = (isNil(data?.durationFrom) || Number.isNaN(data?.durationFrom)) && (isNil(data?.durationTo) || Number.isNaN(data?.durationTo))
-	} else {
-		emptyDuration = isNil(data?.durationFrom) || Number.isNaN(data?.durationFrom)
-	}
-	if (data?.variablePrice) {
-		emptyPrice = (isNil(data?.priceFrom) || Number.isNaN(data?.priceFrom)) && (isNil(data?.priceTo) || Number.isNaN(data?.priceTo))
-	} else {
-		emptyPrice = isNil(data?.priceFrom) || Number.isNaN(data?.priceFrom)
-	}
-
-	return emptyPrice && emptyDuration && !data?.variableDuration && !data?.variablePrice
-}
-
-export const validatePriceAndDurationData = (priceAndDurationData?: FormPriceAndDurationData) => {
-	const employeePriceAndDurationErrors: any = {}
-
-	if (isNil(priceAndDurationData?.priceFrom)) {
-		employeePriceAndDurationErrors.priceFrom = i18next.t('loc:Toto pole je povinné')
-	}
-	if (priceAndDurationData?.variablePrice) {
-		if (isNil(priceAndDurationData?.priceTo)) {
-			employeePriceAndDurationErrors.priceTo = i18next.t('loc:Toto pole je povinné')
-		}
-		if (!isNil(priceAndDurationData?.priceFrom) && !isNil(priceAndDurationData?.priceTo) && priceAndDurationData?.priceFrom >= priceAndDurationData?.priceTo) {
-			employeePriceAndDurationErrors.priceFrom = i18next.t('loc:Chybný rozsah')
-			employeePriceAndDurationErrors.priceTo = true
-		}
-	}
-	if (priceAndDurationData?.variableDuration) {
-		if (isNil(priceAndDurationData?.durationFrom)) {
-			employeePriceAndDurationErrors.durationFrom = i18next.t('loc:Toto pole je povinné')
-		}
-		if (isNil(priceAndDurationData?.durationTo)) {
-			employeePriceAndDurationErrors.durationTo = i18next.t('loc:Toto pole je povinné')
-		}
-		if (!isNil(priceAndDurationData?.durationFrom) && !isNil(priceAndDurationData?.durationTo) && priceAndDurationData?.durationFrom >= priceAndDurationData?.durationTo) {
-			employeePriceAndDurationErrors.durationFrom = i18next.t('loc:Chybný rozsah')
-			employeePriceAndDurationErrors.durationTo = true
-		}
-	}
-	return employeePriceAndDurationErrors
-}
-
-export const getEmployeeServiceDataForPatch = (values: IEmployeeServiceEditForm, resetUserServiceData?: boolean) => {
-	let employeePatchServiceData: ServicePatchBody = {}
-
-	if (resetUserServiceData) {
-		employeePatchServiceData = {
-			priceAndDurationData: null,
-			serviceCategoryParameterValues: null
-		}
-	} else if (values?.useCategoryParameter) {
-		const areAllParameterValuesEmpty = !values?.serviceCategoryParameter?.some((parameterValue) => !arePriceAndDurationDataEmpty(parameterValue.employeePriceAndDurationData))
-
-		if (areAllParameterValuesEmpty) {
-			employeePatchServiceData = {
-				...employeePatchServiceData,
-				serviceCategoryParameterValues: null
-			}
-		} else if ((values?.serviceCategoryParameter?.length || 0) <= 100) {
-			const serviceCategoryParameterValues: ServicePatchBody['serviceCategoryParameterValues'] = []
-			values?.serviceCategoryParameter?.forEach((parameterValue) => {
-				serviceCategoryParameterValues.push({
-					id: parameterValue.id,
-					priceAndDurationData: {
-						durationFrom: parameterValue.employeePriceAndDurationData?.durationFrom,
-						durationTo: parameterValue.employeePriceAndDurationData?.variableDuration ? parameterValue.employeePriceAndDurationData?.durationTo : undefined,
-						priceFrom: encodePrice(parameterValue.employeePriceAndDurationData?.priceFrom as number),
-						priceTo:
-							parameterValue.employeePriceAndDurationData?.variablePrice && !isNil(parameterValue.employeePriceAndDurationData?.priceTo)
-								? encodePrice(parameterValue.employeePriceAndDurationData?.priceTo)
-								: undefined
-					}
-				})
-			})
-			employeePatchServiceData = {
-				...employeePatchServiceData,
-				serviceCategoryParameterValues
-			}
-		}
-	} else {
-		const priceAndDurationData = values?.employeePriceAndDurationData
-		if (arePriceAndDurationDataEmpty(priceAndDurationData)) {
-			employeePatchServiceData = {
-				...employeePatchServiceData,
-				priceAndDurationData: null
-			}
-		} else if (!isNil(priceAndDurationData?.priceFrom)) {
-			employeePatchServiceData = {
-				...employeePatchServiceData,
-				priceAndDurationData: {
-					durationFrom: priceAndDurationData?.durationFrom,
-					durationTo: priceAndDurationData?.variableDuration ? priceAndDurationData?.durationTo : undefined,
-					priceFrom: encodePrice(priceAndDurationData?.priceFrom as number),
-					priceTo: priceAndDurationData?.variablePrice && !isNil(priceAndDurationData?.priceTo) ? encodePrice(priceAndDurationData?.priceTo) : undefined
-				}
-			}
-		}
-	}
-	return employeePatchServiceData
-}
-
 export const normalizeDataById = <T extends { id: string }>(data?: T[] | null): { [key: string]: T } => {
 	const normalizedData: { [key: string]: T } = {}
 	data?.forEach((item) => {
@@ -1416,3 +1197,17 @@ export const detectBrowserType = (): string => {
 
 	return browserType
 }
+
+export const parseServiceRowKey = (key: string) => {
+	const splittedKey = key.split('_')
+	return { categoryID: splittedKey[0], serviceID: splittedKey[1] }
+}
+
+export const getExpandIcon = (isActive: boolean, iconSize = 24, color = '#000') => (
+	<ChevronDown
+		width={iconSize}
+		height={iconSize}
+		color={color}
+		style={{ transform: isActive ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 200ms ease-in-out', transformOrigin: 'center' }}
+	/>
+)

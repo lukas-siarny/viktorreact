@@ -15,15 +15,12 @@ import SwitchField from '../../../atoms/SwitchField'
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
-// // interfaces
-import { IRegistrationForm } from '../../../types/interfaces'
+// schema
+import { IRegistrationForm, validationRegistrationFn } from '../../../schemas/registration'
 
-// // utils
+// utils
 import { FORM, SUBMIT_BUTTON_ID } from '../../../utils/enums'
 import { formFieldID, showErrorNotification } from '../../../utils/helper'
-
-// validate
-import validateRegistrationForm from './validateRegistrationForm'
 
 type ComponentProps = {}
 
@@ -59,7 +56,7 @@ const RegistrationForm: FC<Props> = (props) => {
 			<Field
 				className='noti-registration-switch'
 				component={SwitchField}
-				name={'gdpr'}
+				name={'agreeGDPR'}
 				customLabel={
 					<div className='text-notino-grayDark text-xs md:text-sm'>
 						<span>{`${t('loc:Prehlasujem, že som sa oboznámil s')} `}</span>
@@ -146,7 +143,7 @@ const form = reduxForm<IRegistrationForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateRegistrationForm
+	validate: validationRegistrationFn
 })(RegistrationForm)
 
 export default form

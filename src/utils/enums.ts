@@ -4,6 +4,7 @@ import { Gutter } from 'antd/lib/grid/row'
 import { LoadScriptUrlOptions } from '@react-google-maps/api/dist/utils/make-load-script-url'
 import { AliasToken } from 'antd/es/theme/internal'
 import { FormatterInput } from '@fullcalendar/react'
+import { UseGoogleLoginOptionsAuthCodeFlow } from '@react-oauth/google'
 
 export enum CYPRESS_CLASS_NAMES {
 	LOGOUT_BUTTON = 'noti-logout-button',
@@ -186,6 +187,7 @@ export enum FORM {
 	SUPPORT_CONTACTS_FILTER = 'SUPPORT_CONTACTS_FILTER',
 	SUPPORT_CONTACT = 'SUPPORT_CONTACT',
 	NOTE = 'NOTE',
+	VOUCHER_FORM = 'VOUCHER_FORM',
 	NOTINO_USER = 'NOTINO_USER',
 	EDIT_EMPLOYEE_ROLE = 'EDIT_EMPLOYEE_ROLE',
 	IMPORT_FORM = 'IMPORT_FORM',
@@ -212,7 +214,8 @@ export enum FORM {
 	SMS_HISTORY_FILTER = 'SMS_HISTORY_FILTER',
 	RECHARGE_SMS_CREDIT = 'RECHARGE_SMS_CREDIT',
 	RECHARGE_SMS_CREDIT_FILTER = 'RECHARGE_SMS_CREDIT_FILTER',
-	SALONS_REPORT = 'SALONS_REPORT'
+	SALONS_REPORT = 'SALONS_REPORT',
+	SALON_IDS_FORM = 'SALON_IDS_FORM'
 }
 
 export enum PERMISSION {
@@ -248,7 +251,12 @@ export enum PERMISSION {
 	CALENDAR_EVENT_UPDATE = 'CALENDAR_EVENT_UPDATE',
 	CALENDAR_EVENT_DELETE = 'CALENDAR_EVENT_DELETE',
 	READ_WALLET = 'READ_WALLET',
-	SMS_UNIT_PRICE_EDIT = 'SMS_UNIT_PRICE_EDIT'
+	SMS_UNIT_PRICE_EDIT = 'SMS_UNIT_PRICE_EDIT',
+	CATEGORY_EDIT = 'CATEGORY_EDIT',
+	CATEGORY_PARAMETER_EDIT = 'CATEGORY_PARAMETER_EDIT',
+	COSMETIC_EDIT = 'COSMETIC_EDIT',
+	LANGUAGE_EDIT = 'LANGUAGE_EDIT',
+	WALLET_TRANSACTION_CREATE = 'WALLET_TRANSACTION_CREATE'
 }
 
 export const ADMIN_PERMISSIONS: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
@@ -277,15 +285,20 @@ export enum TOKEN_AUDIENCE {
 	CANCEL_RESERVATION = 'CANCEL_RESERVATION'
 }
 
-export enum TAB_KEYS {
+export enum SALON_TABS_KEYS {
 	SALON_DETAIL = 'SALON_DETAIL',
 	SALON_HISTORY = 'SALON_HISTORY'
 }
 
 export enum SALONS_TAB_KEYS {
+	ACTIVE = 'ACTIVE',
+	DELETED = 'DELETED',
+	MISTAKES = 'MISTAKES'
+}
+
+export enum EMPLOYEES_TAB_KEYS {
 	ACTIVE = 'active',
-	DELETED = 'deleted',
-	MISTAKES = 'mistakes'
+	DELETED = 'deleted'
 }
 
 export enum DASHBOARD_TAB_KEYS {
@@ -375,6 +388,8 @@ export const INVALID_DATE_FORMAT = 'INVALID_DATE_FORMAT'
 export const INDIVIDUAL_TRANSPORT = 0
 
 export const BACK_DATA_QUERY = 'backData'
+
+export const PIN_LENGTH = 6
 
 export enum ENUMERATIONS_KEYS {
 	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
@@ -845,9 +860,11 @@ export enum CALENDAR_EVENT_TYPE {
 	EMPLOYEE_SHIFT = 'EMPLOYEE_SHIFT',
 	EMPLOYEE_TIME_OFF = 'EMPLOYEE_TIME_OFF',
 	EMPLOYEE_BREAK = 'EMPLOYEE_BREAK'
-	// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-	// RESERVATION_FROM_IMPORT = 'RESERVATION_FROM_IMPORT'
 }
+
+export const RESERVATION_FROM_IMPORT = 'RESERVATION_FROM_IMPORT'
+
+export const CALENDAR_EVENT_TYPE_REQUEST = [RESERVATION_FROM_IMPORT, ...Object.keys(CALENDAR_EVENT_TYPE)] as const
 
 export enum CALENDAR_EVENTS_VIEW_TYPE {
 	RESERVATION = 'RESERVATION',
@@ -890,13 +907,20 @@ export const EVERY_REPEAT_OPTIONS = () => [
 	}
 ]
 
-export const TEMPLATE_OPTIONS = () => [
+export const TEMPLATE_OPTIONS_CUSTOMERS = () => [
 	{
 		value: 'import_of_clients_template.csv',
 		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.csv' })
 	},
 	{
 		value: 'import_of_clients_template.xlsx',
+		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' })
+	}
+]
+
+export const TEMPLATE_OPTIONS_RESERVATIONS = () => [
+	{
+		value: 'import_of_reservations_template.xlsx',
 		label: i18next.t('loc:Stiahnuť šablónu {{ template }}', { template: '.xlsx' })
 	}
 ]
@@ -913,10 +937,6 @@ export const EVENT_NAMES = (t: TFunction, eventType?: CALENDAR_EVENT_TYPE, capit
 		case CALENDAR_EVENT_TYPE.RESERVATION:
 			string = t('loc:rezerváciu')
 			break
-		// NOTE: docasne pozastaveny import eventov, v buducnositi zmena implementacie => nebude existovat virtualny zamestnanec, ale eventy sa naparuju priamo na zamestnancov
-		/* case CALENDAR_EVENT_TYPE.RESERVATION_FROM_IMPORT:
-			string = t('loc:importovanú rezerváciu')
-			break */
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
 			string = t('loc:voľno')
 			break
@@ -977,11 +997,6 @@ export enum RESERVATION_PAYMENT_METHOD {
 	CASH = 'CASH',
 	CARD = 'CARD',
 	OTHER = 'OTHER'
-}
-
-export enum SERVICE_TYPE {
-	ONLINE_BOOKING = 'ONLINE_BOOKING',
-	AUTO_CONFIRM = 'AUTO_CONFIRM'
 }
 
 export const CALENDAR_DEBOUNCE_DELAY = 300 // in ms
@@ -1193,4 +1208,40 @@ export const SMS_STATUS_NAME = (status: SMS_NOTIFICATION_STATUS) => {
 		default:
 			return ''
 	}
+}
+
+export enum EXTERNAL_CALENDAR_TYPE {
+	MICROSOFT = 'MICROSOFT',
+	GOOGLE = 'GOOGLE'
+}
+
+export const EXTERNAL_CALENDAR_CONFIG = {
+	[EXTERNAL_CALENDAR_TYPE.MICROSOFT]: {
+		redirect_uri: `${window.location.protocol}//${window.location.host}/ms-oauth2`,
+		scopes: ['offline_access', 'user.read', 'Calendars.ReadWrite', 'Files.Read'],
+		url: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+		grand_type: 'authorization_code',
+		prompt: 'select_account'
+	},
+	[EXTERNAL_CALENDAR_TYPE.GOOGLE]: {
+		flow: 'auth-code',
+		scope: 'email profile https://www.googleapis.com/auth/calendar openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+		redirect_uri: 'postmessage'
+	} as UseGoogleLoginOptionsAuthCodeFlow
+}
+
+export const SERVICE_ROW_KEY = (categoryID: string, serviceID: string) => `${categoryID}_${serviceID}`
+
+export const SERVICES_LIST_INIT = {
+	industries: {
+		data: [],
+		servicesCount: 0,
+		servicesAvailableForOnlineReservationsCount: 0,
+		servicesVisibleInPricelistCount: 0
+	}
+}
+
+export enum SERVICE_DESCRIPTION_LNG {
+	DEFAULT = 'DEFAULT',
+	EN = 'en'
 }

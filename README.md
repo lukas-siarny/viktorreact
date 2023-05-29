@@ -23,6 +23,8 @@ After installation, following environment variables must be set in the ```.env``
 * **FULLCALENDAR_LICENSE_KEY**: This variable contains the license key for the FullCalendar library. FullCalendar is a popular JavaScript library for creating interactive calendars and scheduling applications.
 * **REACT_APP_SENTRY_ENV**: This variable sets the environment for Sentry, a popular error tracking service.
 * **REACT_APP_SENTRY_DSN**: This variable contains the Data Source Name (DSN) for Sentry. The DSN is a unique identifier that allows Sentry to receive and track errors from your application.
+* **REACT_APP_GOOGLE_OAUTH_CLIENT_ID**: This variable is required to enable Google authentication in the application. Please obtain a client ID from the Google Developer Console and provide it as the value for this variable.
+* **REACT_APP_MS_OAUTH_CLIENT_ID**: This  variable is required to enable Microsoft authentication in the application. Please obtain a client ID from the Microsoft Azure Portal and provide it as the value for this variable.
 
 To start the development server, run:
 
@@ -42,11 +44,15 @@ To run tests, run:
 * React
 * TypeScript
 * TailwindCSS
-* Cypress
-* FullCalendar
-* Antd design
-* React router v6
-* Sass
+* Cypress (for testing)
+* FullCalendar (for calendar functionality)
+* Antd design 
+* React router v6 (for routing)
+* Sass (for styling)
+* Zod (for validation) 
+* i18next (for translations)
+* Sentry (for error tracking)
+
 
 ## Scripts
 * ```start```: starts the development server

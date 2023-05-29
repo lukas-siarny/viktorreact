@@ -22,8 +22,11 @@ import { normalizeNameLocalizations } from '../../utils/helper'
 import { patchReq, deleteReq, postReq } from '../../utils/request'
 
 // types
-import { IBreadcrumbs, ICategoryParamForm } from '../../types/interfaces'
+import { IBreadcrumbs } from '../../types/interfaces'
 import { RootState } from '../../reducers'
+
+// schema
+import { ICategoryParamsForm } from '../../schemas/categoryParams'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
@@ -70,7 +73,7 @@ const EditCategoryParamsPage = () => {
 		fetchData()
 	}, [fetchData])
 
-	const handleSubmit = async (formData: ICategoryParamForm) => {
+	const handleSubmit = async (formData: ICategoryParamsForm) => {
 		let values: any = []
 		let unitType = null
 
@@ -214,4 +217,4 @@ const EditCategoryParamsPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.ENUM_EDIT]))(EditCategoryParamsPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.CATEGORY_PARAMETER_EDIT]))(EditCategoryParamsPage)

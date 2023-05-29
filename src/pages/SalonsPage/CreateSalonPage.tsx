@@ -23,7 +23,7 @@ import { getBasicSalon, getSuggestedSalons } from '../../reducers/salons/salonsA
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
-import { CategoriesPatch, ISalonForm, SalonPageProps } from '../../types/interfaces'
+import { SalonPageProps } from '../../types/interfaces'
 
 // utils
 import { patchReq, postReq } from '../../utils/request'
@@ -34,6 +34,9 @@ import { formFieldID } from '../../utils/helper'
 // assets
 import { ReactComponent as SpecialistIcon } from '../../assets/icons/specialist-24-icon.svg'
 import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
+
+// schema
+import { ISalonForm } from '../../schemas/salon'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO, PERMISSION.PARTNER]
 
@@ -79,12 +82,12 @@ const CreateSalonPage: FC<SalonPageProps> = (props) => {
 
 			// save categories in case of salon data were loaded from basic salon data and has categories assigned
 			if (showBasicSalonsSuggestions) {
-				if (data?.categoryIDs && !isEmpty(data?.categoryIDs) && data.categoryIDs.length < 100) {
+				if (!isEmpty(data?.categoryIDs) && (data?.categoryIDs?.length || 0) < 100) {
 					await patchReq(
 						'/api/b2b/admin/salons/{salonID}/categories',
 						{ salonID: result.data.salon.id },
 						{
-							categoryIDs: data?.categoryIDs as unknown as CategoriesPatch['categoryIDs']
+							categoryIDs: data?.categoryIDs as any
 						}
 					)
 				}

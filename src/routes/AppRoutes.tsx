@@ -16,7 +16,7 @@ import MainLayout from '../layouts/MainLayout'
 import PublicLayout from '../layouts/PublicLayout'
 
 // utils
-import { NEW_SALON_ID, PAGE } from '../utils/enums'
+import { NEW_SALON_ID, PAGE, SALONS_TAB_KEYS } from '../utils/enums'
 
 // Auth
 import LoginPage from '../pages/LoginPage/LoginPage'
@@ -89,11 +89,13 @@ const AppRoutes: FC = () => {
 				<Route errorElement={<ErrorBoundary />} element={<PublicRoute layout={PublicLayout} className={'noti-login-page'} />}>
 					<Route path={t('paths:login')} element={<LoginPage />} />
 					<Route path={t('paths:signup')} element={<RegistrationPage />} />
+				</Route>
+				<Route errorElement={<ErrorBoundary />} element={<PublicRoute skipRedirectToLoginPage layout={PublicLayout} className={'noti-login-page'} />}>
 					<Route path={t('paths:invite')} element={<RegistrationPage />} />
 				</Route>
 				<Route
 					errorElement={<ErrorBoundary />}
-					element={<PublicRoute redirectLoggedInUser={false} showBackButton layout={PublicLayout} className={'noti-support-contact-page'} />}
+					element={<PublicRoute skipRedirectToLoginPage showBackButton layout={PublicLayout} className={'noti-support-contact-page'} />}
 				>
 					<Route path={t('paths:contact')} element={<ContactPage />} />
 				</Route>
@@ -116,7 +118,9 @@ const AppRoutes: FC = () => {
 					<Route index element={<ActivationPage />} />
 				</Route>
 				<Route errorElement={<ErrorBoundary />} path={t('paths:salons')} element={<AuthRoute layout={MainLayout} page={PAGE.SALONS} />}>
-					<Route index element={<SalonsPage />} />
+					<Route index element={<SalonsPage tabKey={SALONS_TAB_KEYS.ACTIVE} />} />
+					<Route path={t('paths:deleted')} element={<SalonsPage tabKey={SALONS_TAB_KEYS.DELETED} />} />
+					<Route path={t('paths:rejected')} element={<SalonsPage tabKey={SALONS_TAB_KEYS.MISTAKES} />} />
 					<Route path={t('paths:createEntity')} element={<SalonPage salonID={NEW_SALON_ID} />} />
 				</Route>
 				{/* // Salon view */}

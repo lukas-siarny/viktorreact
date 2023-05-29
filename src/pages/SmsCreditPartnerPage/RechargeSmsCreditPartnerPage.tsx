@@ -17,7 +17,7 @@ import { withPermissions } from '../../utils/Permissions'
 import { postReq } from '../../utils/request'
 
 // types
-import { IBreadcrumbs, IRechargeSmsCreditForm, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
 // assets
@@ -30,6 +30,9 @@ import { getSmsStats } from '../../reducers/sms/smsActions'
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
 import RechargeSmsCredit from '../../components/RechargeSmsCredit/RechargeSmsCreditForm'
+
+// schemas
+import { IRechargeSmsCreditForm } from '../../schemas/rechargeSmsCredit'
 
 const RechargeSmsCreditPartnerPage: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath } = props

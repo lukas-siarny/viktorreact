@@ -10,11 +10,9 @@ import i18next from 'i18next'
 
 // utils
 import { FORM, PERMISSION, ROW_BUTTON_WITH_ID } from '../../../utils/enums'
-import { formFieldID, renderPriceAndDurationInfo } from '../../../utils/helper'
+import { formFieldID } from '../../../utils/helper'
 import Permissions from '../../../utils/Permissions'
-
-// types
-import { EmployeeServiceData } from '../../../types/interfaces'
+import { renderPriceAndDurationInfo } from '../../ServicesPage/serviceUtils'
 
 // components
 import DeleteButton from '../../../components/DeleteButton'
@@ -24,6 +22,9 @@ import AvatarComponents from '../../../components/AvatarComponents'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon-16.svg'
 import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.svg'
 import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline.svg'
+
+// schema
+import { IEmployeeServiceEditForm } from '../../../schemas/service'
 
 const { Panel } = Collapse
 
@@ -37,9 +38,9 @@ type ComponentProps = {
 	disabled?: boolean
 }
 
-type Props = WrappedFieldArrayProps<EmployeeServiceData> & ComponentProps
+type Props = WrappedFieldArrayProps<IEmployeeServiceEditForm> & ComponentProps
 
-const panelHeaderRenderCategoryName = (fieldData: EmployeeServiceData) => {
+const panelHeaderRenderCategoryName = (fieldData: IEmployeeServiceEditForm) => {
 	return (
 		<div className='flex flex-col' style={{ gap: 2 }}>
 			<div className={'inline items-center flex-wrap'}>
@@ -55,7 +56,7 @@ const panelHeaderRenderCategoryName = (fieldData: EmployeeServiceData) => {
 	)
 }
 
-const panelHeaderRenderEmployee = (fieldData: EmployeeServiceData) => {
+const panelHeaderRenderEmployee = (fieldData: IEmployeeServiceEditForm) => {
 	const { employee } = fieldData || {}
 	return (
 		<div className={'flex items-center gap-2'}>
@@ -84,7 +85,7 @@ const ServicesListField: FC<Props> = (props) => {
 	} = props
 	const dispatch = useDispatch()
 
-	const genExtra = (index: number, field: EmployeeServiceData) => {
+	const genExtra = (index: number, field: IEmployeeServiceEditForm) => {
 		const salonPriceAndDuration = field?.salonPriceAndDurationData
 		const employeePriceAndDuration = field?.employeePriceAndDurationData
 		const hasOverridenData = field?.hasOverriddenPricesAndDurationData

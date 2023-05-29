@@ -15,7 +15,7 @@ import UserAvatar from '../../components/AvatarComponents'
 import ImportForm from '../../components/ImportForm'
 
 // utils
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, REQUEST_STATUS, TEMPLATE_OPTIONS, DOWNLOAD_BUTTON_ID } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS, REQUEST_STATUS, TEMPLATE_OPTIONS_CUSTOMERS } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { postReq } from '../../utils/request'
@@ -28,7 +28,10 @@ import { getCustomers } from '../../reducers/customers/customerActions'
 import { IBreadcrumbs, ISearchFilter, SalonSubPageProps, Columns, IDataUploadForm } from '../../types/interfaces'
 
 // hooks
-import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
+import useQueryParams from '../../hooks/useQueryParamsZod'
+
+// schema
+import { customersPageURLQueryParams } from '../../schemas/queryParams'
 
 const CustomersPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
@@ -42,11 +45,9 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const [customersImportVisible, setCustomersImportVisible] = useState(false)
 	const [templateValue, setTemplateValue] = useState<{ label: string; value: string } | null>(null)
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		limit: NumberParam(),
-		page: NumberParam(1),
-		order: StringParam('lastName:ASC')
+	const [query, setQuery] = useQueryParams(customersPageURLQueryParams, {
+		page: 1,
+		order: 'lastName:ASC'
 	})
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -191,7 +192,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 									className={'noti-select-input w-full mb-4'}
 									size={'large'}
 									labelInValue
-									options={TEMPLATE_OPTIONS()}
+									options={TEMPLATE_OPTIONS_CUSTOMERS()}
 									onChange={(val: any) => setTemplateValue(val)}
 									value={templateValue}
 									placeholder={t('loc:Vyberte šablónu na stiahnutie')}
@@ -209,7 +210,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 								htmlType={'button'}
 								download
 							>
-								{t('loc:Stiahnuť')}
+								<div>{t('loc:Stiahnuť')}</div>
 							</Button>
 						</div>
 					</>

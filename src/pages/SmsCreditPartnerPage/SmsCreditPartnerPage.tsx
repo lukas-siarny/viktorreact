@@ -1,11 +1,11 @@
-import React, { useEffect, FC, useMemo } from 'react'
+import React, { useEffect, FC, useState } from 'react'
 import { compose } from 'redux'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Row, Spin } from 'antd'
+import { Row } from 'antd'
 import { useNavigate } from 'react-router'
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 
 // redux
 import { RootState } from '../../reducers'
@@ -14,11 +14,12 @@ import { RootState } from '../../reducers'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // utils
-import { PERMISSION, FORM, DEFAULT_DATE_INIT_FORMAT, YEAR_M_FORMAT } from '../../utils/enums'
+import { PERMISSION, FORM, DEFAULT_DATE_INIT_FORMAT } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 
 // types
 import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
+import { ISmsCreditPartnerPageQueryParams } from '../../schemas/queryParams'
 
 // assets
 import { ReactComponent as SettingIcon } from '../../assets/icons/setting.svg'
@@ -33,11 +34,6 @@ import Alert from '../../components/Dashboards/Alert'
 // redux
 import { getSmsHistory, getSmsTimeStatsForSalon } from '../../reducers/sms/smsActions'
 
-// hooks
-import useQueryParams, { NumberParam, StringParam } from '../../hooks/useQueryParams'
-
-const getQueryParamDate = (date: Dayjs) => date.startOf('month').format(YEAR_M_FORMAT)
-
 const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	const { salonID, parentPath } = props
 
@@ -50,15 +46,12 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const walletID = selectedSalon?.data?.wallet?.id
 
-	const [query, setQuery] = useQueryParams({
-		search: StringParam(),
-		order: StringParam('createdAt:desc'),
-		limit: NumberParam(25),
-		page: NumberParam(1),
-		date: StringParam(getQueryParamDate(dayjs()))
+	const [query, setQuery] = useState<ISmsCreditPartnerPageQueryParams>({
+		order: 'createdAt:desc',
+		limit: 25,
+		page: 1,
+		date: dayjs().startOf('month')
 	})
-
-	const validSelectedDate = useMemo(() => (dayjs(query.date).isValid() ? dayjs(query.date) : dayjs()), [query.date])
 
 	useEffect(() => {
 		if (!walletID || salonID !== selectedSalon.data?.id) {
@@ -71,21 +64,22 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 				limit: query.limit,
 				search: query.search,
 				order: query.order,
-				dateFrom: validSelectedDate.startOf('month').format(DEFAULT_DATE_INIT_FORMAT),
-				dateTo: validSelectedDate.endOf('month').format(DEFAULT_DATE_INIT_FORMAT)
+				dateFrom: query.date.startOf('month').format(DEFAULT_DATE_INIT_FORMAT),
+				dateTo: query.date.endOf('month').format(DEFAULT_DATE_INIT_FORMAT)
 			})
 		)
-	}, [dispatch, query.page, query.limit, query.search, query.order, validSelectedDate, salonID, walletID, selectedSalon.data?.id])
+	}, [dispatch, query.page, query.limit, query.search, query.order, query.date, salonID, walletID, selectedSalon.data?.id])
 
 	useEffect(() => {
 		dispatch(initialize(FORM.SMS_HISTORY_FILTER, { search: query.search }))
 	}, [query.search, dispatch])
 
 	useEffect(() => {
-		if (salonID === selectedSalon.data?.id) {
-			dispatch(getSmsTimeStatsForSalon(salonID, validSelectedDate.year(), validSelectedDate.month() + 1))
+		if (!walletID || salonID !== selectedSalon.data?.id) {
+			return
 		}
-	}, [dispatch, salonID, validSelectedDate, selectedSalon.data?.id])
+		dispatch(getSmsTimeStatsForSalon(salonID, query.date.year(), query.date.month() + 1))
+	}, [dispatch, salonID, query.date, selectedSalon.data?.id, walletID])
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -136,11 +130,11 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 								if (date) {
 									setQuery({
 										...query,
-										date: getQueryParamDate(date)
+										date
 									})
 								}
 							}}
-							selectedDate={validSelectedDate}
+							selectedDate={query.date}
 							className={'mb-6 pb-0'}
 							smsTimeStats={smsTimeStats}
 							loading={selectedSalon.isLoading}
@@ -153,4 +147,4 @@ const SmsCreditPage: FC<SalonSubPageProps> = (props) => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET]))(SmsCreditPage)
+export default compose(withPermissions([PERMISSION.NOTINO, PERMISSION.PARTNER_ADMIN, PERMISSION.READ_WALLET, PERMISSION.WALLET_TRANSACTION_CREATE]))(SmsCreditPage)

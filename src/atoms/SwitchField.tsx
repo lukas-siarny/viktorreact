@@ -82,7 +82,7 @@ const SwitchField = (props: Props) => {
 					<div className={'flex items-center justify-between w-full'}>
 						<div className={'noti-switch__label flex items-center w-11/12'}>
 							{customLabel || (
-								<Typography.Paragraph ellipsis={{ rows: 1, tooltip: true }} className={'label'}>
+								<Typography.Paragraph ellipsis={{ rows: 1, tooltip: true }} className={cx('label', { disabled })}>
 									{label}
 								</Typography.Paragraph>
 							)}

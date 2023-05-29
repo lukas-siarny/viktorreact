@@ -75,11 +75,11 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 
 export interface ICustomConfig extends AxiosRequestConfig {
 	messages?: IErrorMessage[]
-	skipLoginRedirect?: boolean
+	skipRedirectToLoginPage?: boolean
 	skip404Handler?: boolean
 }
 
-const buildHeaders = () => {
+export const buildHeaders = () => {
 	const headers: Record<string, string> = {
 		'Content-Type': 'application/json',
 		Accept: 'application/json',
@@ -190,12 +190,12 @@ export const getReq = async <T extends keyof GetUrls>(
 		return res
 	} catch (e) {
 		if (!axios.isCancel(e) && typeNotification) {
-			showErrorNotifications(e, typeNotification, customConfig?.skipLoginRedirect)
+			showErrorNotifications(e, typeNotification, customConfig?.skipRedirectToLoginPage)
 		}
 		if (hide) {
 			hide()
 		}
-		return Promise.reject(e)
+		return Promise.reject(e) as any
 	}
 }
 
@@ -255,12 +255,12 @@ export const postReq = async <T extends keyof PostUrls>(
 	}
 
 	try {
-		const res = await axios.post(fullfilURL, reqBody, config)
+		const res = await (axios.post(fullfilURL, reqBody, config) as Promise<ReturnType<PostUrls[T]['post']>>)
 		if (typeNotification) {
 			if (customConfig && customConfig.messages) {
 				showNotifications(customConfig.messages, typeNotification)
 			} else if (has(res, 'data.messages')) {
-				showNotifications(get(res, 'data.messages'), typeNotification)
+				showNotifications(get(res, 'data.messages') as IErrorMessage[], typeNotification)
 			}
 		}
 
@@ -270,12 +270,12 @@ export const postReq = async <T extends keyof PostUrls>(
 		return res
 	} catch (e) {
 		if (!axios.isCancel(e) && typeNotification) {
-			showErrorNotifications(e, typeNotification, customConfig?.skipLoginRedirect)
+			showErrorNotifications(e, typeNotification, customConfig?.skipRedirectToLoginPage)
 		}
 		if (hide) {
 			hide()
 		}
-		return Promise.reject(e)
+		return Promise.reject(e) as any
 	}
 }
 
@@ -348,12 +348,12 @@ export const patchReq = async <T extends keyof PatchUrls>(
 		return res
 	} catch (e) {
 		if (!axios.isCancel(e) && typeNotification) {
-			showErrorNotifications(e, typeNotification, customConfig?.skipLoginRedirect)
+			showErrorNotifications(e, typeNotification, customConfig?.skipRedirectToLoginPage)
 		}
 		if (hide) {
 			hide()
 		}
-		return Promise.reject(e)
+		return Promise.reject(e) as any
 	}
 }
 
@@ -365,13 +365,15 @@ export const patchReq = async <T extends keyof PatchUrls>(
  * @param showLoading Boolean show loading
  *
  * Performs delete request to url and returns with result
+ * @param data data to send in request body
  */
 export const deleteReq = async <T extends keyof DeleteUrls>(
 	_url: T,
 	_params: Parameters<DeleteUrls[T]['delete']>[0],
 	customConfig?: ICustomConfig,
 	typeNotification: NOTIFICATION_TYPE | false = NOTIFICATION_TYPE.NOTIFICATION,
-	showLoading = false
+	showLoading = false,
+	data?: any
 ): Promise<ReturnType<DeleteUrls[T]['delete']>> => {
 	const { fullfilURL, queryParams } = fullFillURL(_url, _params)
 	let hide
@@ -384,7 +386,8 @@ export const deleteReq = async <T extends keyof DeleteUrls>(
 		headers: {
 			...buildHeaders(),
 			...get(customConfig, 'headers', {})
-		}
+		},
+		data
 	}
 
 	if (queryParams) {
@@ -411,9 +414,9 @@ export const deleteReq = async <T extends keyof DeleteUrls>(
 		}
 
 		if (!axios.isCancel(e) && typeNotification) {
-			showErrorNotifications(e, typeNotification, customConfig?.skipLoginRedirect)
+			showErrorNotifications(e, typeNotification, customConfig?.skipRedirectToLoginPage)
 		}
-		return Promise.reject(e)
+		return Promise.reject(e) as any
 	}
 }
 

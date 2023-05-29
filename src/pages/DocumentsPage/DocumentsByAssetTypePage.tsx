@@ -28,7 +28,7 @@ import useQueryParams from '../../hooks/useQueryParamsZod'
 import useBackUrl from '../../hooks/useBackUrl'
 
 // redux
-import { getDocumentsByAssetType } from '../../reducers/documents/documentActions'
+import { getAssetTypes, getDocumentsByAssetType } from '../../reducers/documents/documentActions'
 
 // schemas
 import { documentsAssetTypesPageURLQueryParamsSchema } from '../../schemas/queryParams'
@@ -41,14 +41,16 @@ const DocumentsByAssetTypePage = () => {
 	const { assetType } = useParams<Required<{ assetType: ASSET_TYPE }>>()
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	const documentsByAssetType = useSelector((state: RootState) => state.documents.documentsByAssetType)
+	const assetTypes = useSelector((state: RootState) => state.documents.assetTypes)
+	const fileName = assetTypes?.data?.assetTypes.find((item) => item.key === assetType)?.name
+	const isLoading = documentsByAssetType?.isLoading
+	const [backUrl] = useBackUrl(t('paths:documents'))
+
 	const [query, setQuery] = useQueryParams(documentsAssetTypesPageURLQueryParamsSchema, {
 		page: 1,
 		limit: PAGINATION.limit,
 		countryCode: selectedCountry || LOCALES[LANGUAGE.CZ].countryCode
 	})
-
-	const isLoading = documentsByAssetType?.isLoading
-	const [backUrl] = useBackUrl(t('paths:documents'))
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -57,8 +59,7 @@ const DocumentsByAssetTypePage = () => {
 				link: backUrl
 			},
 			{
-				// TODO: zmenit podla nazvu dokuemntu
-				name: t('loc:Prehľad dokumentov podľa typu')
+				name: fileName || ''
 			}
 		]
 	}
@@ -82,6 +83,10 @@ const DocumentsByAssetTypePage = () => {
 		}
 		setQuery(newQuery)
 	}
+	useEffect(() => {
+		dispatch(getAssetTypes())
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
 
 	useEffect(() => {
 		if (assetType) {
@@ -168,8 +173,9 @@ const DocumentsByAssetTypePage = () => {
 								className='table-fixed table-expandable'
 								onChange={onChangeTable}
 								columns={columns}
-								dataSource={documentsByAssetType.tableData}
+								dataSource={documentsByAssetType.data?.documents || []}
 								twoToneRows
+								rowKey='id'
 								pagination={{
 									pageSize: documentsByAssetType?.data?.pagination?.limit,
 									total: documentsByAssetType?.data?.pagination?.totalCount,

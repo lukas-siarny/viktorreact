@@ -209,15 +209,15 @@ const DocumentsPage = () => {
 								</div>
 							}
 						/>
-
 						<CustomTable
 							className='table-fixed table-expandable'
 							onChange={onChangeTable}
 							columns={cols}
 							rowClassName={'clickable-row'}
 							loading={isLoading}
-							dataSource={documents.tableData}
+							dataSource={documents.data?.documents || []}
 							twoToneRows
+							rowKey='id'
 							onRow={(record) => ({
 								onClick: () => {
 									const redirectQuery: IDocumentsAssetTypesPageURLQueryParams = {

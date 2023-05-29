@@ -369,7 +369,8 @@ const SelectField = (props: Props) => {
 		confirmModalExtraTitle,
 		onClear,
 		tooltipSelect,
-		initialOptions
+		initialOptions,
+		id
 	} = props
 	const warningShown = useRef(false)
 
@@ -593,7 +594,7 @@ const SelectField = (props: Props) => {
 			tagRender={tagRender}
 			mode={mode}
 			{...input}
-			id={formFieldID(meta.form, input.name)}
+			id={id || formFieldID(meta.form, input.name)}
 			onFocus={onFocus}
 			onChange={onChange}
 			size={size || 'middle'}

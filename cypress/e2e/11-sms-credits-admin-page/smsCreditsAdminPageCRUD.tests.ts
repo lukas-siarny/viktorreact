@@ -216,8 +216,8 @@ const smsCreditsAdminPageCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: st
 				cy.wait('@getSmsTimeStats').then((interceptionGetSmsTimeStats: any) => {
 					// check status code of request
 					expect(interceptionGetSmsTimeStats.response.statusCode).to.equal(200)
-					// cy.selectOptionDropdownCustom(SMS_TIME_STATS_COUNTRY_PICKER_ID, 'countryCode', undefined, true)
-					// cy.wait('@getSmsTimeStats').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
+					cy.selectOptionDropdownCustom(undefined, SMS_TIME_STATS_COUNTRY_PICKER_ID, undefined, true)
+					cy.wait('@getSmsTimeStats').then((interception: any) => expect(interception.response.statusCode).to.equal(200))
 					const now = dayjs()
 					let dateValue
 					if (now.month() === 11) {

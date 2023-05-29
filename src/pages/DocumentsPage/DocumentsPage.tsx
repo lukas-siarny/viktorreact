@@ -1,18 +1,19 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Col, Modal, Row, Spin, Input } from 'antd'
+import { Button, Col, Input, Row } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { getFormValues } from 'redux-form'
 import { ColumnsType } from 'antd/lib/table'
+import { useNavigate } from 'react-router'
 
 // components
-import { useNavigate } from 'react-router'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ImportForm from '../../components/ImportForm'
-import HeaderSelectCountryForm, { IHeaderCountryForm } from '../../components/HeaderSelectCountryForm'
+import { IHeaderCountryForm } from '../../components/HeaderSelectCountryForm'
+import FlagIcon from '../../components/FlagIcon'
 
 // utils
 import { ADMIN_PERMISSIONS, ASSET_TYPE, FORM, IMPORT_TYPE, PAGINATION, REQUEST_STATUS, ROW_GUTTER_X_DEFAULT, UPLOAD_IMG_CATEGORIES } from '../../utils/enums'
@@ -21,21 +22,17 @@ import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
-import { RootState } from '../../reducers'
+import { getDocuments } from '../../reducers/documents/documentActions'
 
 // types
 import { Columns, IBreadcrumbs } from '../../types/interfaces'
+import { RootState } from '../../reducers'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 import { ReactComponent as UploadIcon } from '../../assets/icons/upload-icon.svg'
 
 // hooks
 import useQueryParams from '../../hooks/useQueryParamsZod'
-
-// redux
-import { setSelectedCountry } from '../../reducers/selectedCountry/selectedCountryActions'
-import { getDocuments } from '../../reducers/documents/documentActions'
 
 // schemas
 import { documentsPageURLQueryParamsSchema } from '../../schemas/queryParams'
@@ -44,9 +41,6 @@ const DocumentsPage = () => {
 	const dispatch = useDispatch()
 	const [t] = useTranslation()
 	const navigate = useNavigate()
-	// TODO: logika na otvorenie modalu so selectom krajiny ak nie je picknuta
-	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
-	// TODO: dokumenty
 	const documents = useSelector((state: RootState) => state.documents.documents)
 
 	const [query, setQuery] = useQueryParams(documentsPageURLQueryParamsSchema, {
@@ -55,12 +49,9 @@ const DocumentsPage = () => {
 	})
 
 	const countryFormValues: Partial<IHeaderCountryForm> = useSelector((state: RootState) => getFormValues(FORM.HEADER_COUNTRY_FORM)(state))
-	// console.log('countryFormValues', countryFormValues.countryCode)
-	const [isSubmitting, setIsSubmitting] = useState(false)
-	const [visible, setVisible] = useState(!selectedCountry)
 	const [uploadStatus, setRequestStatus] = useState<REQUEST_STATUS | undefined>(undefined)
 	const [fileUploadVisible, setFileUploadVisible] = useState<ASSET_TYPE>()
-	const isLoading = isSubmitting || documents?.isLoading
+	const isLoading = documents?.isLoading
 	const [message, setMessage] = useState('')
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -70,10 +61,6 @@ const DocumentsPage = () => {
 			}
 		]
 	}
-
-	const fetchDocuments = useCallback(async () => {
-		// TODO: get action
-	}, [dispatch, selectedCountry])
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
@@ -105,10 +92,16 @@ const DocumentsPage = () => {
 			dataIndex: ['assetType', 'name'],
 			key: 'name',
 			ellipsis: true,
-			render: (value) => value || '-'
+			render: (value, record) => {
+				return (
+					<div className={'flex items-center'}>
+						<FlagIcon countryCode={record.countryCode.toLowerCase()} />
+						<span>{value}</span>
+					</div>
+				)
+			}
 		},
 		{
-			// TODO: BE musi dorobit
 			title: t('loc:Dátum poslednej aktualizácie'),
 			dataIndex: 'createdAt',
 			key: 'createdAt',
@@ -144,20 +137,6 @@ const DocumentsPage = () => {
 
 	const cols = [...columns, ...actions]
 
-	const modals = (
-		<Modal
-			className='rounded-fields'
-			title={t('loc:Vyberte krajinu')}
-			centered
-			open={visible}
-			footer={null}
-			onCancel={countryFormValues.countryCode ? () => setVisible(false) : undefined}
-			closeIcon={<CloseIcon />}
-			width={394}
-		>
-			<HeaderSelectCountryForm required onSubmit={(data: IHeaderCountryForm) => dispatch(setSelectedCountry(data.countryCode))} />
-		</Modal>
-	)
 	const fileUploadSubmit = async (values: any) => {
 		setRequestStatus(REQUEST_STATUS.SUBMITTING)
 		try {
@@ -189,7 +168,6 @@ const DocumentsPage = () => {
 
 	return (
 		<>
-			{modals}
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
@@ -233,7 +211,6 @@ const DocumentsPage = () => {
 							rowClassName={'clickable-row'}
 							loading={isLoading}
 							dataSource={documents.tableData}
-							// rowKey={(record) => getRowId(record.verificationStatus, record.id)}
 							twoToneRows
 							onRow={(record) => ({
 								onClick: () => navigate(getLinkWithEncodedBackUrl(t('paths:documents/{{assetType}}', { assetType: record.assetType.key })))

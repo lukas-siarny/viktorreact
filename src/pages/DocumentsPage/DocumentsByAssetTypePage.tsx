@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Row, Spin } from 'antd'
+import { Button, Col, Row, Spin, Typography } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
@@ -9,9 +9,11 @@ import { useParams } from 'react-router-dom'
 // components
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
+import FlagIcon from '../../components/FlagIcon'
+import { LOCALES } from '../../components/LanguagePicker'
 
 // utils
-import { ADMIN_PERMISSIONS, ASSET_TYPE, PAGINATION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { ADMIN_PERMISSIONS, ASSET_TYPE, LANGUAGE, PAGINATION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys } from '../../utils/helper'
 import { withPermissions } from '../../utils/Permissions'
 
@@ -29,7 +31,9 @@ import useBackUrl from '../../hooks/useBackUrl'
 import { getDocumentsByAssetType } from '../../reducers/documents/documentActions'
 
 // schemas
-import { documentsPageURLQueryParamsSchema } from '../../schemas/queryParams'
+import { documentsAssetTypesPageURLQueryParamsSchema } from '../../schemas/queryParams'
+
+const { Paragraph } = Typography
 
 const DocumentsByAssetTypePage = () => {
 	const dispatch = useDispatch()
@@ -37,9 +41,10 @@ const DocumentsByAssetTypePage = () => {
 	const { assetType } = useParams<Required<{ assetType: ASSET_TYPE }>>()
 	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	const documentsByAssetType = useSelector((state: RootState) => state.documents.documentsByAssetType)
-	const [query, setQuery] = useQueryParams(documentsPageURLQueryParamsSchema, {
+	const [query, setQuery] = useQueryParams(documentsAssetTypesPageURLQueryParamsSchema, {
 		page: 1,
-		limit: PAGINATION.limit
+		limit: PAGINATION.limit,
+		countryCode: selectedCountry || LOCALES[LANGUAGE.CZ].countryCode
 	})
 
 	const isLoading = documentsByAssetType?.isLoading
@@ -79,10 +84,10 @@ const DocumentsByAssetTypePage = () => {
 	}
 
 	useEffect(() => {
-		if (assetType && selectedCountry) {
-			dispatch(getDocumentsByAssetType({ ...query, countryCode: selectedCountry, assetType }))
+		if (assetType) {
+			dispatch(getDocumentsByAssetType({ ...query, assetType }))
 		}
-	}, [assetType, dispatch, query, selectedCountry])
+	}, [assetType, dispatch, query])
 
 	const columns: Columns = [
 		{
@@ -90,7 +95,14 @@ const DocumentsByAssetTypePage = () => {
 			dataIndex: ['assetType', 'name'],
 			key: 'name',
 			ellipsis: true,
-			render: (value) => value || '-'
+			render: (value, record) => {
+				return (
+					<div className={'flex items-center'}>
+						<FlagIcon countryCode={record.countryCode.toLowerCase()} />
+						<span>{value}</span>
+					</div>
+				)
+			}
 		},
 		{
 			title: t('loc:Dátum poslednej aktualizácie'),
@@ -98,6 +110,48 @@ const DocumentsByAssetTypePage = () => {
 			key: 'createdAt',
 			ellipsis: true,
 			render: (value) => (value ? formatDateByLocale(value) : '-')
+		},
+		{
+			title: t('loc:Sprievodná správa'),
+			dataIndex: 'message',
+			key: 'message',
+			width: '20%',
+			render: (value) => (
+				<Paragraph
+					className={'m-0 whitespace-pre-wrap'}
+					ellipsis={{
+						rows: 1,
+						expandable: true
+					}}
+					title={value}
+				>
+					{value}
+				</Paragraph>
+			)
+		},
+		{
+			title: t('loc:história aktualizácii dokumentov'),
+			dataIndex: 'files',
+			key: 'files',
+			ellipsis: true,
+			render: (value) => {
+				return value.map((item: any) => {
+					return (
+						<Button
+							key={item.id}
+							className={'noti-btn text-notino-pink'}
+							href={item.original}
+							target='_blank'
+							rel='noopener noreferrer'
+							type={'link'}
+							htmlType={'button'}
+							download
+						>
+							{item.fileName}
+						</Button>
+					)
+				})
+			}
 		}
 	]
 
@@ -108,7 +162,7 @@ const DocumentsByAssetTypePage = () => {
 			</Row>
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
-					<div className='content-body small'>
+					<div className='content-body'>
 						<Spin spinning={isLoading}>
 							<CustomTable
 								className='table-fixed table-expandable'

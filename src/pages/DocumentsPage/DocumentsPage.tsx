@@ -4,7 +4,6 @@ import { Button, Col, Input, Row } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { getFormValues } from 'redux-form'
 import { ColumnsType } from 'antd/lib/table'
 import { useNavigate } from 'react-router'
 
@@ -12,12 +11,21 @@ import { useNavigate } from 'react-router'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ImportForm from '../../components/ImportForm'
-import { IHeaderCountryForm } from '../../components/HeaderSelectCountryForm'
 import FlagIcon from '../../components/FlagIcon'
 
 // utils
-import { ADMIN_PERMISSIONS, ASSET_TYPE, FORM, IMPORT_TYPE, PAGINATION, REQUEST_STATUS, ROW_GUTTER_X_DEFAULT, UPLOAD_IMG_CATEGORIES } from '../../utils/enums'
-import { formatDateByLocale, getLinkWithEncodedBackUrl, normalizeDirectionKeys } from '../../utils/helper'
+import {
+	ADMIN_PERMISSIONS,
+	ASSET_TYPE,
+	IMPORT_TYPE,
+	LANGUAGE,
+	PAGINATION,
+	REQUEST_STATUS,
+	ROW_GUTTER_X_DEFAULT,
+	UPLOAD_IMG_CATEGORIES,
+	VALIDATION_MAX_LENGTH
+} from '../../utils/enums'
+import { formatDateByLocale, normalizeDirectionKeys } from '../../utils/helper'
 import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
 
@@ -32,10 +40,10 @@ import { RootState } from '../../reducers'
 import { ReactComponent as UploadIcon } from '../../assets/icons/upload-icon.svg'
 
 // hooks
-import useQueryParams from '../../hooks/useQueryParamsZod'
+import useQueryParams, { formatObjToQuery } from '../../hooks/useQueryParamsZod'
 
 // schemas
-import { documentsPageURLQueryParamsSchema } from '../../schemas/queryParams'
+import { documentsPageURLQueryParamsSchema, IDocumentsAssetTypesPageURLQueryParams } from '../../schemas/queryParams'
 
 const DocumentsPage = () => {
 	const dispatch = useDispatch()
@@ -47,10 +55,8 @@ const DocumentsPage = () => {
 		page: 1,
 		limit: PAGINATION.limit
 	})
-
-	const countryFormValues: Partial<IHeaderCountryForm> = useSelector((state: RootState) => getFormValues(FORM.HEADER_COUNTRY_FORM)(state))
 	const [uploadStatus, setRequestStatus] = useState<REQUEST_STATUS | undefined>(undefined)
-	const [fileUploadVisible, setFileUploadVisible] = useState<ASSET_TYPE>()
+	const [fileUploadVisible, setFileUploadVisible] = useState<{ assetType: ASSET_TYPE; countryCode: LANGUAGE }>()
 	const isLoading = documents?.isLoading
 	const [message, setMessage] = useState('')
 
@@ -96,7 +102,7 @@ const DocumentsPage = () => {
 				return (
 					<div className={'flex items-center'}>
 						<FlagIcon countryCode={record.countryCode.toLowerCase()} />
-						<span>{value}</span>
+						<span className={'truncate'}>{value}</span>
 					</div>
 				)
 			}
@@ -114,19 +120,18 @@ const DocumentsPage = () => {
 		{
 			dataIndex: '',
 			align: 'right',
-			className: 'ignore-cell-click',
 			render(val, record) {
 				return (
 					<Button
 						onClick={(e) => {
 							e.stopPropagation()
-							setFileUploadVisible(record.assetType.key)
+							setFileUploadVisible({ assetType: record.assetType.key, countryCode: record.countryCode })
 						}}
-						// disabled={disabled}
 						type='primary'
 						htmlType='button'
-						className={'noti-btn mr-2'}
-						icon={<UploadIcon />}
+						size={'small'}
+						className={'noti-btn'}
+						icon={<UploadIcon className={'w-4 h-4 left-2'} />}
 					>
 						{t('loc:Aktualizovať súbor')}
 					</Button>
@@ -150,13 +155,13 @@ const DocumentsPage = () => {
 				],
 				category: UPLOAD_IMG_CATEGORIES.ASSET_DOC_TYPE
 			})
-			if (countryFormValues.countryCode && !!fileUploadVisible) {
+			if (fileUploadVisible?.assetType && fileUploadVisible.countryCode) {
 				const fileIDs = data?.files?.map((file) => file.id)
 				postReq('/api/b2b/admin/documents/', undefined, {
-					countryCode: countryFormValues.countryCode,
+					countryCode: fileUploadVisible.countryCode,
 					fileIDs: fileIDs as any,
 					message: message || null,
-					assetType: fileUploadVisible
+					assetType: fileUploadVisible.assetType
 				})
 				setRequestStatus(REQUEST_STATUS.SUCCESS)
 			}
@@ -191,6 +196,7 @@ const DocumentsPage = () => {
 											{t('loc:Sprievodná správa')}
 										</label>
 										<Input.TextArea
+											maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
 											id={'noti-message-input'}
 											style={{ zIndex: 999 }}
 											className={'noti-input w-full mb-4'}
@@ -213,7 +219,15 @@ const DocumentsPage = () => {
 							dataSource={documents.tableData}
 							twoToneRows
 							onRow={(record) => ({
-								onClick: () => navigate(getLinkWithEncodedBackUrl(t('paths:documents/{{assetType}}', { assetType: record.assetType.key })))
+								onClick: () => {
+									const redirectQuery: IDocumentsAssetTypesPageURLQueryParams = {
+										countryCode: record.countryCode
+									}
+									navigate({
+										pathname: t('paths:documents/{{assetType}}', { assetType: record.assetType.key }),
+										search: formatObjToQuery(redirectQuery)
+									})
+								}
 							})}
 							pagination={{
 								pageSize: documents?.data?.pagination?.limit,

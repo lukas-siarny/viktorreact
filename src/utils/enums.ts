@@ -10,7 +10,8 @@ export enum CYPRESS_CLASS_NAMES {
 	LOGOUT_BUTTON = 'noti-logout-button',
 	MY_ACCOUNT = 'noti-my-account',
 	MY_ACCOUNT_BUTTON = 'noti-my-account-button',
-	FORBIDDEN_MODAL = 'noti-forbidden-modal'
+	FORBIDDEN_MODAL = 'noti-forbidden-modal',
+	ASSIGN_SERVICES_BUTTON = 'noti-assign-services-button'
 }
 
 export enum KEYBOARD_KEY {
@@ -728,6 +729,14 @@ export const PUBLISHED_PREMIUM_SALONS_BAR_ID = 'published-premium-salons-bar'
 export const SALON_STATS_MONTHLY_ID = 'salon-stats-monthly'
 
 export const SALON_STATS_ANNUAL_ID = 'salon-stats-annual'
+
+export const ENABLE_RS_BUTTON_ID = 'enable-rs-button'
+
+export const ENABLE_RS_BUTTON_FAKE_BUTTON_ID = 'enable-rs-fake-button'
+
+export const CHANGE_SERVICES_ORDER_BUTTON_ID = 'change-services-order-button'
+
+export const CHANGE_SERVICES_ORDER_SAVE_BUTTON_ID = 'change-services-order-save-button'
 
 export const MAX_VALUES_PER_PARAMETER = 20
 

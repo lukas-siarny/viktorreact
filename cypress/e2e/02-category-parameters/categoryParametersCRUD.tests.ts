@@ -68,7 +68,7 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}/values/`
 		}).as('createCategoryParameterValue')
 		cy.visit(`/category-parameters/${categoryParameterID}`)
-		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE) || actions.includes(CRUD_OPERATIONS.READ)) {
 			cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
 				// check status code
 				expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
@@ -77,12 +77,16 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 				cy.clickButton(ADD_BUTTON_ID, FORM.CATEGORY_PARAMS)
 				cy.setInputValue(FORM.CATEGORY_PARAMS, 'localizedValues-2-valueLocalizations-0-value', category.value.create['value-3'], false, true)
 				cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY_PARAMS)
-				cy.wait('@createCategoryParameterValue').then((interception: any) => {
-					// check status code of login request
-					expect(interception.response.statusCode).to.equal(200)
-					// check conf toast message
-					cy.checkSuccessToastMessage()
-				})
+				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+					cy.wait('@createCategoryParameterValue').then((interception: any) => {
+						// check status code of login request
+						expect(interception.response.statusCode).to.equal(200)
+						// check conf toast message
+						cy.checkSuccessToastMessage()
+					})
+				} else {
+					cy.checkForbiddenModal()
+				}
 			})
 		} else {
 			// check redirect to 403 unauthorized page
@@ -102,7 +106,7 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 		}).as('updateCategoryParameterValue')
 		cy.visit(`/category-parameters/${categoryParameterID}`)
 
-		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE) || actions.includes(CRUD_OPERATIONS.READ)) {
 			cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
 				// check status code
 				expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
@@ -110,12 +114,16 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 				cy.setInputValue(FORM.CATEGORY_PARAMS, 'localizedValues-1-valueLocalizations-0-value', category.value.update['value-2'], false, true)
 				cy.setInputValue(FORM.CATEGORY_PARAMS, 'localizedValues-2-valueLocalizations-0-value', category.value.update['value-3'], false, true)
 				cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY_PARAMS)
-				cy.wait('@updateCategoryParameterValue').then((interception: any) => {
-					// check status code of login request
-					expect(interception.response.statusCode).to.equal(200)
-					// check conf toast message
-					cy.checkSuccessToastMessage()
-				})
+				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+					cy.wait('@updateCategoryParameterValue').then((interception: any) => {
+						// check status code of login request
+						expect(interception.response.statusCode).to.equal(200)
+						// check conf toast message
+						cy.checkSuccessToastMessage()
+					})
+				} else {
+					cy.checkForbiddenModal()
+				}
 			})
 		} else {
 			// check redirect to 403 unauthorized page
@@ -134,17 +142,22 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}/values/*`
 		}).as('deleteCategoryParameterValue')
 		cy.visit(`/category-parameters/${categoryParameterID}`)
-		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE || actions.includes(CRUD_OPERATIONS.READ))) {
 			cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
 				// check status code
 				expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
 				cy.clickDeleteButtonWithConfCustom(FORM.CATEGORY_PARAMS, `${DELETE_BUTTON_ID}-${0}`)
-				cy.wait('@deleteCategoryParameterValue').then((interception: any) => {
-					// check status code of login request
-					expect(interception.response.statusCode).to.equal(200)
-					// check conf toast message
-					cy.checkSuccessToastMessage()
-				})
+
+				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+					cy.wait('@deleteCategoryParameterValue').then((interception: any) => {
+						// check status code of login request
+						expect(interception.response.statusCode).to.equal(200)
+						// check conf toast message
+						cy.checkSuccessToastMessage()
+					})
+				} else {
+					cy.checkForbiddenModal()
+				}
 			})
 		} else {
 			// check redirect to 403 unauthorized page
@@ -163,18 +176,23 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}`
 		}).as('updateCategoryParameters')
 		cy.visit(`/category-parameters/${categoryParameterID}`)
-		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE) || actions.includes(CRUD_OPERATIONS.READ)) {
 			cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
 				// check status code
 				expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
 				cy.setInputValue(FORM.CATEGORY_PARAMS, 'nameLocalizations-0-value', category.parameter.update.title, false, true)
 				cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY_PARAMS)
-				cy.wait('@updateCategoryParameters').then((interception: any) => {
-					// check status code of login request
-					expect(interception.response.statusCode).to.equal(200)
-					// check conf toast message
-					cy.checkSuccessToastMessage()
-				})
+
+				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.UPDATE)) {
+					cy.wait('@updateCategoryParameters').then((interception: any) => {
+						// check status code of login request
+						expect(interception.response.statusCode).to.equal(200)
+						// check conf toast message
+						cy.checkSuccessToastMessage()
+					})
+				} else {
+					cy.checkForbiddenModal()
+				}
 			})
 		} else {
 			// check redirect to 403 unauthorized page
@@ -193,19 +211,24 @@ const categoryParameterCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: stri
 			url: `/api/b2b/admin/enums/category-parameters/${categoryParameterID}`
 		}).as('deleteCategoryParameters')
 		cy.visit(`/category-parameters/${categoryParameterID}`)
-		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+		if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE) || actions.includes(CRUD_OPERATIONS.READ)) {
 			cy.wait('@getCategoryParameters').then((interceptorGetCategoryParameters: any) => {
 				// check status code
 				expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
 
 				cy.clickDeleteButtonWithConfCustom(FORM.CATEGORY_PARAMS)
-				cy.wait('@deleteCategoryParameters').then((interception: any) => {
-					// check status code
-					expect(interception.response.statusCode).to.equal(200)
-					// check conf toast message
-					cy.checkSuccessToastMessage()
-					cy.location('pathname').should('eq', '/category-parameters')
-				})
+
+				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE)) {
+					cy.wait('@deleteCategoryParameters').then((interception: any) => {
+						// check status code
+						expect(interception.response.statusCode).to.equal(200)
+						// check conf toast message
+						cy.checkSuccessToastMessage()
+						cy.location('pathname').should('eq', '/category-parameters')
+					})
+				} else {
+					cy.checkForbiddenModal()
+				}
 			})
 		} else {
 			// check redirect to 403 unauthorized page

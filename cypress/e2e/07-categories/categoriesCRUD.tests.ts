@@ -31,29 +31,43 @@ const categoriesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pas
 			cy.visit('/categories')
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE) || actions.includes(CRUD_OPERATIONS.READ)) {
 				cy.intercept({
+					method: 'GET',
+					url: '/api/b2b/admin/enums/categories/'
+				}).as('getCategories')
+				cy.intercept({
+					method: 'GET',
+					pathname: '/api/b2b/admin/enums/category-parameters/'
+				}).as('getCategoryParameters')
+				cy.intercept({
 					method: 'POST',
 					url: '/api/b2b/admin/enums/categories/'
 				}).as('createCategory')
-				cy.clickButton(CREATE_BUTTON_ID, FORM.CATEGORY)
-				if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
-					cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.industry.create.title)
-					cy.uploadFile('image', '../images/test.jpg', FORM.CATEGORY)
-					cy.uploadFile('icon', '../images/test.jpg', FORM.CATEGORY)
-					// wait for file to be uploaded
-					cy.wait(4000)
-					cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
-					cy.wait('@createCategory').then((interception: any) => {
-						// check status code of request
-						expect(interception.response.statusCode).to.equal(200)
-						industryID = interception.response.body.category.id
-						// check conf toast message
-						cy.checkSuccessToastMessage()
-					})
-				} else {
-					cy.checkForbiddenModal()
-					// user cannot create a parent category, so he is not able to create any subcategory either
-					hasPermissionToEdit = false
-				}
+				cy.wait(['@getCategories', '@getCategoryParameters']).then(([interceptorGetCategories, interceptorGetCategoryParameters]: any[]) => {
+					expect(interceptorGetCategories.response.statusCode).to.equal(200)
+					expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
+
+					cy.clickButton(CREATE_BUTTON_ID, FORM.CATEGORY)
+					if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.CREATE)) {
+						cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.industry.create.title)
+						cy.uploadFile('image', '../images/test.jpg', FORM.CATEGORY)
+						cy.uploadFile('icon', '../images/test.jpg', FORM.CATEGORY)
+						// wait for file to be uploaded
+						cy.wait(4000).then(() => {
+							cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
+							cy.wait('@createCategory').then((interception: any) => {
+								// check status code of request
+								expect(interception.response.statusCode).to.equal(200)
+								industryID = interception.response.body.category.id
+								// check conf toast message
+								cy.checkSuccessToastMessage()
+							})
+						})
+					} else {
+						cy.checkForbiddenModal()
+						// user cannot create a parent category, so he is not able to create any subcategory either
+						hasPermissionToEdit = false
+					}
+				})
 			} else {
 				// check redirect to 403 unauthorized page
 				cy.location('pathname').should('eq', '/403')
@@ -69,14 +83,20 @@ const categoriesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pas
 				}).as('getCategories')
 				cy.intercept({
 					method: 'GET',
+					pathname: '/api/b2b/admin/enums/category-parameters/'
+				}).as('getCategoryParameters')
+				cy.intercept({
+					method: 'GET',
 					pathname: '/api/b2b/admin/enums/categories/*'
 				}).as('getCategoryDetail')
 				cy.intercept({
 					method: 'POST',
 					url: '/api/b2b/admin/enums/categories/'
 				}).as('createCategory')
-				cy.wait('@getCategories').then((interceptorGetCategories: any) => {
+				cy.wait(['@getCategories', '@getCategoryParameters']).then(([interceptorGetCategories, interceptorGetCategoryParameters]: any[]) => {
 					expect(interceptorGetCategories.response.statusCode).to.equal(200)
+					expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
+
 					if (hasPermissionToEdit) {
 						// user has permission to create a category in the industry created in the previous test
 						cy.get(`.ant-tree-treenode.${industryID} .ant-tree-node-content-wrapper`).click()
@@ -124,32 +144,39 @@ const categoriesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pas
 				}).as('getCategories')
 				cy.intercept({
 					method: 'GET',
+					pathname: '/api/b2b/admin/enums/category-parameters/'
+				}).as('getCategoryParameters')
+				cy.intercept({
+					method: 'GET',
 					pathname: '/api/b2b/admin/enums/categories/*'
 				}).as('getCategoryDetail')
 				cy.intercept({
 					method: 'POST',
 					url: '/api/b2b/admin/enums/categories/'
 				}).as('createCategory')
-				cy.wait('@getCategories').then((interceptorGetCategories: any) => {
+				cy.wait(['@getCategories', '@getCategoryParameters']).then(([interceptorGetCategories, interceptorGetCategoryParameters]: any[]) => {
 					expect(interceptorGetCategories.response.statusCode).to.equal(200)
+					expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
 
 					if (hasPermissionToEdit) {
 						cy.get(`.ant-tree-treenode.${industryID} .ant-tree-switcher`).click()
-						cy.wait(500) // wait for the element to be visible
-						cy.get(`.ant-tree-treenode.${categoryID} .ant-tree-node-content-wrapper`).click()
-						cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
-							expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
+						// wait for the element to be visible
+						cy.wait(500).then(() => {
+							cy.get(`.ant-tree-treenode.${categoryID} .ant-tree-node-content-wrapper`).click()
+							cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
+								expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
 
-							cy.get(`#${FORM.CATEGORY}-create-subcategory-button`).click()
-							cy.selectOptionDropdownCustom(FORM.CATEGORY, 'categoryParameterID')
-							cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.service.create.title)
-							cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
-							cy.wait('@createCategory').then((interception: any) => {
-								// check status code of request
-								expect(interception.response.statusCode).to.equal(200)
-								serviceID = interception.response.body.category.id
-								// check conf toast message
-								cy.checkSuccessToastMessage()
+								cy.get(`#${FORM.CATEGORY}-create-subcategory-button`).click()
+								cy.selectOptionDropdownCustom(FORM.CATEGORY, 'categoryParameterID')
+								cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.service.create.title)
+								cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
+								cy.wait('@createCategory').then((interception: any) => {
+									// check status code of request
+									expect(interception.response.statusCode).to.equal(200)
+									serviceID = interception.response.body.category.id
+									// check conf toast message
+									cy.checkSuccessToastMessage()
+								})
 							})
 						})
 					} else {
@@ -157,15 +184,17 @@ const categoriesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pas
 							if ($body.find('.noti-tree-node-level-0:first').length) {
 								// find first category of first industry and check forbidden modal
 								cy.get('.noti-tree-node-level-0:first .ant-tree-switcher').click()
-								cy.wait(500) // wait for the element to be visible
-								if ($body.find('.noti-tree-node-level-1:first').length) {
-									cy.get('.noti-tree-node-level-1:first .ant-tree-node-content-wrapper').click()
-									cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
-										expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
-										cy.get(`#${FORM.CATEGORY}-create-subcategory-button`).click()
-										cy.checkForbiddenModal()
-									})
-								}
+								// wait for the element to be visible
+								cy.wait(500).then(() => {
+									if ($body.find('.noti-tree-node-level-1:first').length) {
+										cy.get('.noti-tree-node-level-1:first .ant-tree-node-content-wrapper').click()
+										cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
+											expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
+											cy.get(`#${FORM.CATEGORY}-create-subcategory-button`).click()
+											cy.checkForbiddenModal()
+										})
+									}
+								})
 							}
 						})
 					}
@@ -187,14 +216,20 @@ const categoriesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pas
 				}).as('getCategories')
 				cy.intercept({
 					method: 'GET',
+					pathname: '/api/b2b/admin/enums/category-parameters/'
+				}).as('getCategoryParameters')
+				cy.intercept({
+					method: 'GET',
 					pathname: '/api/b2b/admin/enums/categories/*'
 				}).as('getCategoryDetail')
 				cy.intercept({
 					method: 'PATCH',
 					url: `/api/b2b/admin/enums/categories/${industryID}`
 				}).as('updateCategory')
-				cy.wait('@getCategories').then((interceptorGetCategories: any) => {
+				cy.wait(['@getCategories', '@getCategoryParameters']).then(([interceptorGetCategories, interceptorGetCategoryParameters]: any[]) => {
 					expect(interceptorGetCategories.response.statusCode).to.equal(200)
+					expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
+
 					if (hasPermissionToEdit) {
 						cy.get(`.ant-tree-treenode.${industryID} .ant-tree-node-content-wrapper`).click()
 						cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
@@ -238,27 +273,35 @@ const categoriesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pas
 				}).as('getCategories')
 				cy.intercept({
 					method: 'GET',
+					pathname: '/api/b2b/admin/enums/category-parameters/'
+				}).as('getCategoryParameters')
+				cy.intercept({
+					method: 'GET',
 					pathname: '/api/b2b/admin/enums/categories/*'
 				}).as('getCategoryDetail')
 				cy.intercept({
 					method: 'PATCH',
 					url: `/api/b2b/admin/enums/categories/${categoryID}`
 				}).as('updateCategory')
-				cy.wait('@getCategories').then((interceptorGetCategories: any) => {
+				cy.wait(['@getCategories', '@getCategoryParameters']).then(([interceptorGetCategories, interceptorGetCategoryParameters]: any[]) => {
 					expect(interceptorGetCategories.response.statusCode).to.equal(200)
+					expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
+
 					if (hasPermissionToEdit) {
 						cy.get(`.ant-tree-treenode.${industryID} .ant-tree-switcher`).click()
-						cy.wait(200) // wait for the element to be visible
-						cy.get(`.ant-tree-treenode.${categoryID} .ant-tree-node-content-wrapper`).click()
-						cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
-							expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
-							cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.category.update.title, false, true)
-							cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
-							cy.wait('@updateCategory').then((interception: any) => {
-								// check status code of request
-								expect(interception.response.statusCode).to.equal(200)
-								// check conf toast message
-								cy.checkSuccessToastMessage()
+						// wait for the element to be visible
+						cy.wait(500).then(() => {
+							cy.get(`.ant-tree-treenode.${categoryID} .ant-tree-node-content-wrapper`).click()
+							cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
+								expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
+								cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.category.update.title, false, true)
+								cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
+								cy.wait('@updateCategory').then((interception: any) => {
+									// check status code of request
+									expect(interception.response.statusCode).to.equal(200)
+									// check conf toast message
+									cy.checkSuccessToastMessage()
+								})
 							})
 						})
 					} else {
@@ -266,16 +309,18 @@ const categoriesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pas
 							if ($body.find('.noti-tree-node-level-0:first').length) {
 								// find first category of first industry and check forbidden modal
 								cy.get('.noti-tree-node-level-0:first .ant-tree-switcher').click()
-								cy.wait(500) // wait for the element to be visible
-								if ($body.find('.noti-tree-node-level-1:first').length) {
-									cy.get('.noti-tree-node-level-1:first .ant-tree-node-content-wrapper').click()
-									cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
-										expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
-										cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.service.update.title, false, true)
-										cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
-										cy.checkForbiddenModal()
-									})
-								}
+								// wait for the element to be visible
+								cy.wait(500).then(() => {
+									if ($body.find('.noti-tree-node-level-1:first').length) {
+										cy.get('.noti-tree-node-level-1:first .ant-tree-node-content-wrapper').click()
+										cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
+											expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
+											cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.service.update.title, false, true)
+											cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
+											cy.checkForbiddenModal()
+										})
+									}
+								})
 							}
 						})
 					}
@@ -295,31 +340,40 @@ const categoriesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pas
 				}).as('getCategories')
 				cy.intercept({
 					method: 'GET',
+					pathname: '/api/b2b/admin/enums/category-parameters/'
+				}).as('getCategoryParameters')
+				cy.intercept({
+					method: 'GET',
 					pathname: '/api/b2b/admin/enums/categories/*'
 				}).as('getCategoryDetail')
 				cy.intercept({
 					method: 'PATCH',
 					url: `/api/b2b/admin/enums/categories/${serviceID}`
 				}).as('updateCategory')
-				cy.wait('@getCategories').then((interceptorGetCategories: any) => {
+				cy.wait(['@getCategories', '@getCategoryParameters']).then(([interceptorGetCategories, interceptorGetCategoryParameters]: any[]) => {
 					expect(interceptorGetCategories.response.statusCode).to.equal(200)
+					expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
 
 					if (hasPermissionToEdit) {
 						cy.get(`.ant-tree-treenode.${industryID} .ant-tree-switcher`).click()
-						cy.wait(200) // wait for the element to be visible
-						cy.get(`.ant-tree-treenode.${categoryID} .ant-tree-switcher`).click()
-						cy.wait(200) // wait for the element to be visible
-						cy.get(`.ant-tree-treenode.${serviceID} .ant-tree-node-content-wrapper`).click()
-						cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
-							expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
+						// wait for the element to be visible
+						cy.wait(500).then(() => {
+							cy.get(`.ant-tree-treenode.${categoryID} .ant-tree-switcher`).click()
+							// wait for the element to be visible
+							cy.wait(500).then(() => {
+								cy.get(`.ant-tree-treenode.${serviceID} .ant-tree-node-content-wrapper`).click()
+								cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
+									expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
 
-							cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.service.update.title, false, true)
-							cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
-							cy.wait('@updateCategory').then((interception: any) => {
-								// check status code of request
-								expect(interception.response.statusCode).to.equal(200)
-								// check conf toast message
-								cy.checkSuccessToastMessage()
+									cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.service.update.title, false, true)
+									cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
+									cy.wait('@updateCategory').then((interception: any) => {
+										// check status code of request
+										expect(interception.response.statusCode).to.equal(200)
+										// check conf toast message
+										cy.checkSuccessToastMessage()
+									})
+								})
 							})
 						})
 					} else {
@@ -327,20 +381,24 @@ const categoriesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pas
 							if ($body.find('.noti-tree-node-level-0:first').length) {
 								// find first category of first industry and check forbidden modal
 								cy.get('.noti-tree-node-level-0:first .ant-tree-switcher').click()
-								cy.wait(500) // wait for the element to be visible
-								if ($body.find('.noti-tree-node-level-1:first').length) {
-									cy.get('.noti-tree-node-level-1:first .ant-tree-switcher').click()
-									cy.wait(500) // wait for the element to be visible
-									if ($body.find('.noti-tree-node-level-2:first').length) {
-										cy.get('.noti-tree-node-level-2:first .ant-tree-node-content-wrapper').click()
-										cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
-											expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
-											cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.service.update.title, false, true)
-											cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
-											cy.checkForbiddenModal()
+								// wait for the element to be visible
+								cy.wait(500).then(() => {
+									if ($body.find('.noti-tree-node-level-1:first').length) {
+										cy.get('.noti-tree-node-level-1:first .ant-tree-switcher').click()
+										// wait for the element to be visible
+										cy.wait(500).then(() => {
+											if ($body.find('.noti-tree-node-level-2:first').length) {
+												cy.get('.noti-tree-node-level-2:first .ant-tree-node-content-wrapper').click()
+												cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
+													expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
+													cy.setInputValue(FORM.CATEGORY, 'nameLocalizations-0-value', category.service.update.title, false, true)
+													cy.clickButton(SUBMIT_BUTTON_ID, FORM.CATEGORY)
+													cy.checkForbiddenModal()
+												})
+											}
 										})
 									}
-								}
+								})
 							}
 						})
 					}
@@ -362,29 +420,38 @@ const categoriesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pas
 				}).as('getCategories')
 				cy.intercept({
 					method: 'GET',
+					pathname: '/api/b2b/admin/enums/category-parameters/'
+				}).as('getCategoryParameters')
+				cy.intercept({
+					method: 'GET',
 					pathname: '/api/b2b/admin/enums/categories/*'
 				}).as('getCategoryDetail')
 				cy.intercept({
 					method: 'DELETE',
 					url: `/api/b2b/admin/enums/categories/${serviceID}`
 				}).as('deleteCategory')
-				cy.wait('@getCategories').then((interceptorGetCategories: any) => {
+				cy.wait(['@getCategories', '@getCategoryParameters']).then(([interceptorGetCategories, interceptorGetCategoryParameters]: any[]) => {
 					expect(interceptorGetCategories.response.statusCode).to.equal(200)
+					expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
 
 					if (hasPermissionToEdit) {
 						cy.get(`.ant-tree-treenode.${industryID} .ant-tree-switcher`).click()
-						cy.wait(200) // wait for the element to be visible
-						cy.get(`.ant-tree-treenode.${categoryID} .ant-tree-switcher`).click()
-						cy.wait(200) // wait for the element to be visible
-						cy.get(`.ant-tree-treenode.${serviceID} .ant-tree-node-content-wrapper`).click()
-						cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
-							expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
-							cy.clickDeleteButtonWithConfCustom(FORM.CATEGORY)
-							cy.wait('@deleteCategory').then((interception: any) => {
-								// check status code of request
-								expect(interception.response.statusCode).to.equal(200)
-								// check conf toast message
-								cy.checkSuccessToastMessage()
+						// wait for the element to be visible
+						cy.wait(500).then(() => {
+							cy.get(`.ant-tree-treenode.${categoryID} .ant-tree-switcher`).click()
+							// wait for the element to be visible
+							cy.wait(500).then(() => {
+								cy.get(`.ant-tree-treenode.${serviceID} .ant-tree-node-content-wrapper`).click()
+								cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
+									expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
+									cy.clickDeleteButtonWithConfCustom(FORM.CATEGORY)
+									cy.wait('@deleteCategory').then((interception: any) => {
+										// check status code of request
+										expect(interception.response.statusCode).to.equal(200)
+										// check conf toast message
+										cy.checkSuccessToastMessage()
+									})
+								})
 							})
 						})
 					} else {
@@ -392,19 +459,23 @@ const categoriesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pas
 							if ($body.find('.noti-tree-node-level-0:first').length) {
 								// find first category of first industry and check forbidden modal
 								cy.get('.noti-tree-node-level-0:first .ant-tree-switcher').click()
-								cy.wait(500) // wait for the element to be visible
-								if ($body.find('.noti-tree-node-level-1:first').length) {
-									cy.get('.noti-tree-node-level-1:first .ant-tree-switcher').click()
-									cy.wait(500) // wait for the element to be visible
-									if ($body.find('.noti-tree-node-level-2:first').length) {
-										cy.get('.noti-tree-node-level-2:first .ant-tree-node-content-wrapper').click()
-										cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
-											expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
-											cy.get(`#${FORM.CATEGORY}-delete-btn`).click()
-											cy.checkForbiddenModal()
+								// wait for the element to be visible
+								cy.wait(500).then(() => {
+									if ($body.find('.noti-tree-node-level-1:first').length) {
+										cy.get('.noti-tree-node-level-1:first .ant-tree-switcher').click()
+										// wait for the element to be visible
+										cy.wait(500).then(() => {
+											if ($body.find('.noti-tree-node-level-2:first').length) {
+												cy.get('.noti-tree-node-level-2:first .ant-tree-node-content-wrapper').click()
+												cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
+													expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
+													cy.get(`#${FORM.CATEGORY}-delete-btn`).click()
+													cy.checkForbiddenModal()
+												})
+											}
 										})
 									}
-								}
+								})
 							}
 						})
 					}
@@ -422,6 +493,10 @@ const categoriesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pas
 			}).as('getCategories')
 			cy.intercept({
 				method: 'GET',
+				pathname: '/api/b2b/admin/enums/category-parameters/'
+			}).as('getCategoryParameters')
+			cy.intercept({
+				method: 'GET',
 				pathname: '/api/b2b/admin/enums/categories/*'
 			}).as('getCategoryDetail')
 			cy.intercept({
@@ -430,20 +505,24 @@ const categoriesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pas
 			}).as('deleteCategory')
 			cy.visit('/categories')
 			if (actions.includes(CRUD_OPERATIONS.ALL) || actions.includes(CRUD_OPERATIONS.DELETE) || actions.includes(CRUD_OPERATIONS.READ)) {
-				cy.wait('@getCategories').then((interceptorGetCategories: any) => {
+				cy.wait(['@getCategories', '@getCategoryParameters']).then(([interceptorGetCategories, interceptorGetCategoryParameters]: any[]) => {
 					expect(interceptorGetCategories.response.statusCode).to.equal(200)
+					expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
+
 					if (hasPermissionToEdit) {
 						cy.get(`.ant-tree-treenode.${industryID} .ant-tree-switcher`).click()
-						cy.wait(200) // wait for the element to be visible
-						cy.get(`.ant-tree-treenode.${categoryID} .ant-tree-node-content-wrapper`).click()
-						cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
-							expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
-							cy.clickDeleteButtonWithConfCustom(FORM.CATEGORY)
-							cy.wait('@deleteCategory').then((interception: any) => {
-								// check status code of request
-								expect(interception.response.statusCode).to.equal(200)
-								// check conf toast message
-								cy.checkSuccessToastMessage()
+						// wait for the element to be visible
+						cy.wait(500).then(() => {
+							cy.get(`.ant-tree-treenode.${categoryID} .ant-tree-node-content-wrapper`).click()
+							cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
+								expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
+								cy.clickDeleteButtonWithConfCustom(FORM.CATEGORY)
+								cy.wait('@deleteCategory').then((interception: any) => {
+									// check status code of request
+									expect(interception.response.statusCode).to.equal(200)
+									// check conf toast message
+									cy.checkSuccessToastMessage()
+								})
 							})
 						})
 					} else {
@@ -451,15 +530,17 @@ const categoriesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pas
 							if ($body.find('.noti-tree-node-level-0:first').length) {
 								// find first category of first industry and check forbidden modal
 								cy.get('.noti-tree-node-level-0:first .ant-tree-switcher').click()
-								cy.wait(500) // wait for the element to be visible
-								if ($body.find('.noti-tree-node-level-1:first').length) {
-									cy.get('.noti-tree-node-level-1:first .ant-tree-node-content-wrapper').click()
-									cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
-										expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
-										cy.get(`#${FORM.CATEGORY}-delete-btn`).click()
-										cy.checkForbiddenModal()
-									})
-								}
+								// wait for the element to be visible
+								cy.wait(500).then(() => {
+									if ($body.find('.noti-tree-node-level-1:first').length) {
+										cy.get('.noti-tree-node-level-1:first .ant-tree-node-content-wrapper').click()
+										cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
+											expect(interceptionGetCategoryDetail.response.statusCode).to.equal(200)
+											cy.get(`#${FORM.CATEGORY}-delete-btn`).click()
+											cy.checkForbiddenModal()
+										})
+									}
+								})
 							}
 						})
 					}
@@ -479,14 +560,20 @@ const categoriesCRUDTestSuite = (actions: CRUD_OPERATIONS[], email?: string, pas
 				}).as('getCategories')
 				cy.intercept({
 					method: 'GET',
+					pathname: '/api/b2b/admin/enums/category-parameters/'
+				}).as('getCategoryParameters')
+				cy.intercept({
+					method: 'GET',
 					pathname: '/api/b2b/admin/enums/categories/*'
 				}).as('getCategoryDetail')
 				cy.intercept({
 					method: 'DELETE',
 					url: `/api/b2b/admin/enums/categories/${industryID}`
 				}).as('deleteCategory')
-				cy.wait('@getCategories').then((interceptorGetCategories: any) => {
+				cy.wait(['@getCategories', '@getCategoryParameters']).then(([interceptorGetCategories, interceptorGetCategoryParameters]: any[]) => {
 					expect(interceptorGetCategories.response.statusCode).to.equal(200)
+					expect(interceptorGetCategoryParameters.response.statusCode).to.equal(200)
+
 					if (hasPermissionToEdit) {
 						cy.get(`.ant-tree-treenode.${industryID} .ant-tree-node-content-wrapper`).click()
 						cy.wait('@getCategoryDetail').then((interceptionGetCategoryDetail: any) => {
